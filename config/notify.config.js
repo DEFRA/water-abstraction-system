@@ -23,6 +23,7 @@ const config = {
   // In conjunction with the rate limit mentioned above, we have set a delay between requests to notify. This is
   // defaulted to 10 seconds.
   delay: parseInt(process.env.NOTIFICATIONS_BATCH_DELAY) || 10000,
+  rateLimitPause: parseInt(process.env.GOV_UK_NOTIFY_RATE_LIMIT_PAUSE) || 90000,
   timeout: parseInt(process.env.GOV_UK_NOTIFY_TIMEOUT) || 10000,
   url: process.env.GOV_UK_NOTIFY_URL
 }

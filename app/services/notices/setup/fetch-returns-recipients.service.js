@@ -7,6 +7,7 @@
 
 const { db } = require('../../../../db/db.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
@@ -186,13 +187,24 @@ async function _fetchRecipient(session) {
 async function _fetchRecipients(session) {
   const {
     determinedReturnsPeriod: { dueDate, endDate, startDate, quarterly, summer },
+    noticeType,
     removeLicences = ''
   } = session
 
   const excludeLicences = transformStringOfLicencesToArray(removeLicences)
 
+  let dueDateCondition
+
+  if (noticeType === NoticeType.REMINDERS) {
+    dueDateCondition = 'IS NOT NULL'
+  } else if (!featureFlagsConfig.enableNullDueDate) {
+    dueDateCondition = '= ?'
+  } else {
+    dueDateCondition = 'IS NULL'
+  }
+
   const where = `
-    AND rl.due_date ${featureFlagsConfig.enableNullDueDate ? 'IS NULL' : '= ?'}
+    AND rl.due_date ${dueDateCondition}
     AND rl.end_date <= ?
     AND rl.start_date >= ?
     AND rl.metadata->>'isSummer' = ?
@@ -361,9 +373,7 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
       aggregated_contact_data AS (
         SELECT
           contact_hash_id,
-          string_agg(DISTINCT licence_ref, ',' ORDER BY licence_ref) AS licence_refs,
-          -- this will be added in the next change
-          -- JSON_AGG(DISTINCT licence_ref ORDER BY licence_ref) AS licence_refs
+          JSON_AGG(DISTINCT licence_ref ORDER BY licence_ref) AS licence_refs,
           JSON_AGG(DISTINCT return_id ORDER BY return_id) AS return_ids
         FROM all_contacts
         GROUP BY contact_hash_id

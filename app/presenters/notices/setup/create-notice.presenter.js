@@ -8,7 +8,6 @@
 const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { futureDueDate } = require('../base.presenter.js')
-const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
  * Formats a notice `SessionModel` instance into the data needed for a 'notice' record
@@ -58,7 +57,7 @@ function go(session, recipients, auth) {
  */
 function _licences(recipients) {
   return recipients.flatMap((recipient) => {
-    return transformStringOfLicencesToArray(recipient.licence_refs)
+    return recipient.licence_refs
   })
 }
 

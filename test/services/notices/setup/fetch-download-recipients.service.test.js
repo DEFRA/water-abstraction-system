@@ -8,6 +8,8 @@ const Sinon = require('sinon')
 const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+const { NoticeType, NoticeJourney } = require('../../../../app/lib/static-lookups.lib.js')
+
 // Test helpers
 const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
@@ -36,7 +38,8 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
   describe('when the licence is registered ', () => {
     beforeEach(() => {
       session = {
-        journey: 'invitations',
+        journey: NoticeJourney.STANDARD,
+        noticeType: NoticeType.INVITATIONS,
         returnsPeriod: 'allYear',
         determinedReturnsPeriod: {}
       }
@@ -155,7 +158,8 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
   describe('when the licence is unregistered', () => {
     beforeEach(() => {
       session = {
-        journey: 'invitations',
+        journey: NoticeJourney.STANDARD,
+        noticeType: NoticeType.INVITATIONS,
         returnsPeriod: 'allYear',
         determinedReturnsPeriod: {}
       }
@@ -651,7 +655,8 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
   describe('and the due date is set', () => {
     beforeEach(() => {
       session = {
-        journey: 'invitations',
+        journey: NoticeJourney.STANDARD,
+        noticeType: NoticeType.INVITATIONS,
         returnsPeriod: 'allYear',
         determinedReturnsPeriod: {}
       }
@@ -676,12 +681,72 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
     })
   })
 
+  describe('and it is a reminders notice', () => {
+    beforeEach(() => {
+      session = {
+        journey: NoticeJourney.STANDARD,
+        noticeType: NoticeType.REMINDERS,
+        returnsPeriod: 'allYear',
+        determinedReturnsPeriod: {}
+      }
+    })
+
+    describe('and the due date is set and there is a "primary user"', () => {
+      beforeEach(() => {
+        session.determinedReturnsPeriod = {
+          dueDate: seedData.primaryUserDueDate.returnLog.dueDate,
+          endDate: seedData.primaryUserDueDate.returnLog.endDate,
+          quarterly: seedData.primaryUserDueDate.returnLog.quarterly,
+          startDate: seedData.primaryUserDueDate.returnLog.startDate,
+          summer: seedData.primaryUserDueDate.returnLog.metadata.isSummer
+        }
+      })
+
+      it('returns the "primary user" ', async () => {
+        const result = await FetchDownloadRecipientsService.go(session)
+
+        expect(result).to.include([
+          {
+            contact: null,
+            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+            contact_type: 'Primary user',
+            due_date: seedData.primaryUserDueDate.returnLog.dueDate,
+            end_date: seedData.primaryUserDueDate.returnLog.endDate,
+            email: 'primary.user@important.com',
+            licence_ref: seedData.primaryUserDueDate.licenceRef,
+            return_reference: seedData.primaryUserDueDate.returnLog.returnReference,
+            start_date: seedData.primaryUserDueDate.returnLog.startDate
+          }
+        ])
+      })
+    })
+
+    describe('and the due date is not set and there is a "primary user"', () => {
+      beforeEach(() => {
+        session.determinedReturnsPeriod = {
+          dueDate: seedData.primaryUser.returnLog.dueDate,
+          endDate: seedData.primaryUser.returnLog.endDate,
+          quarterly: seedData.primaryUser.returnLog.quarterly,
+          startDate: seedData.primaryUser.returnLog.startDate,
+          summer: seedData.primaryUser.returnLog.metadata.isSummer
+        }
+      })
+
+      it('returns nothing', async () => {
+        const result = await FetchDownloadRecipientsService.go(session)
+
+        expect(result).to.equal([])
+      })
+    })
+  })
+
   describe('and "enableNullDueDate" is false', () => {
     beforeEach(() => {
       Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(false)
 
       session = {
-        journey: 'invitations',
+        journey: NoticeJourney.STANDARD,
+        noticeType: NoticeType.INVITATIONS,
         returnsPeriod: 'allYear',
         determinedReturnsPeriod: {}
       }

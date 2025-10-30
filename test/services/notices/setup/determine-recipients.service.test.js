@@ -256,7 +256,10 @@ describe('Notices - Setup - Determine Recipients service', () => {
             contact_hash_id: '90129f6aa5b98734aa3fefd3f8cf86a',
             contact_type: 'Additional contact',
             email: 'additional.contact@important.com',
-            licence_refs: `${testRecipients.additionalContact.licence_refs},${testRecipients2.additionalContact.licence_refs}`,
+            licence_refs: [
+              ...testRecipients.additionalContact.licence_refs,
+              ...testRecipients2.additionalContact.licence_refs
+            ],
             message_type: 'Email'
           }
         ])

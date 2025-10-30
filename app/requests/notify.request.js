@@ -5,7 +5,10 @@
  * @module NotifyRequest
  */
 
+const { HTTP_STATUS_TOO_MANY_REQUESTS } = require('node:http2').constants
+
 const BaseRequest = require('./base.request.js')
+const { pause } = require('../lib/general.lib.js')
 
 const notifyConfig = require('../../config/notify.config.js')
 
@@ -31,7 +34,15 @@ async function get(path) {
  * @returns {Promise<object>} An object representing the result of the request
  */
 async function post(path, body = {}) {
-  const result = await _sendRequest(path, BaseRequest.post, body)
+  let result = await _sendRequest(path, BaseRequest.post, body)
+
+  // Only Notify POST requests are rated limited (assuming you are not DDoS them!) to 3,000 messages per minute,
+  // calculated on a rolling basis. We should not hit this due to the other precautions we take, but if we do, we wait
+  // by default 90 seconds to allow the limit to reset before retrying.
+  if (result.response.statusCode === HTTP_STATUS_TOO_MANY_REQUESTS) {
+    await pause(notifyConfig.rateLimitPause)
+    result = await _sendRequest(path, BaseRequest.post, body)
+  }
 
   return _parseResult(result)
 }

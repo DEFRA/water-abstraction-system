@@ -20,10 +20,14 @@ const GeneratePreviewRequest = require('../../../../../app/requests/notify/gener
 
 // Thing under test
 const PreviewService = require('../../../../../app/services/notices/setup/preview/preview.service.js')
+const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
 
 describe('Notices Setup - Preview - Preview service', () => {
   let licenceMonitoringStationId
   let recipients
+  let referenceCode
   let session
   let testRecipient
   let testRecipients
@@ -34,6 +38,8 @@ describe('Notices Setup - Preview - Preview service', () => {
 
   describe('when the journey is a return journey', () => {
     beforeEach(async () => {
+      referenceCode = generateReferenceCode()
+
       recipients = RecipientsFixture.recipients()
 
       testRecipients = [recipients.primaryUser]
@@ -51,7 +57,7 @@ describe('Notices Setup - Preview - Preview service', () => {
             summer: 'false',
             startDate: '2022-04-01'
           },
-          referenceCode: 'RINV-0Q7AD8'
+          referenceCode
         }
       })
 
@@ -83,7 +89,7 @@ describe('Notices Setup - Preview - Preview service', () => {
         activeNavBar: 'notices',
         address: 'primary.user@important.com',
         backLink: `/system/notices/setup/${session.id}/check`,
-        caption: 'Notice RINV-0Q7AD8',
+        caption: `Notice ${referenceCode}`,
         contents: 'Dear licence holder,\r\n',
         messageType: 'email',
         pageTitle: 'Returns invitation primary user email',
@@ -94,7 +100,8 @@ describe('Notices Setup - Preview - Preview service', () => {
 
   describe('when the journey is an abstraction alert journey', () => {
     beforeEach(async () => {
-      licenceMonitoringStationId = '36cabf0a-c7a0-4ba3-89a8-79e0620fd2b8'
+      referenceCode = generateReferenceCode('WAA')
+      licenceMonitoringStationId = generateUUID()
       recipients = RecipientsFixture.recipients()
 
       testRecipients = [recipients.primaryUser]
@@ -105,16 +112,16 @@ describe('Notices Setup - Preview - Preview service', () => {
           journey: 'alerts',
           alertType: 'warning',
           noticeType: 'abstractionAlerts',
-          referenceCode: 'WAA-6KN0KF',
+          referenceCode,
           alertEmailAddress: 'environment-officer@wrls.gov.uk',
           monitoringStationName: 'A monitoring station',
           monitoringStationRiverName: '',
           relevantLicenceMonitoringStations: [
             {
               alertType: 'reduce',
-              id: '8c85d9ce-cfb9-4932-8da0-28de4d3dd3aa',
+              id: generateUUID(),
               licence: {
-                licenceRef: '99/999'
+                licenceRef: generateLicenceRef()
               },
               measureType: 'flow',
               notes: null,
@@ -124,9 +131,9 @@ describe('Notices Setup - Preview - Preview service', () => {
             },
             {
               alertType: 'reduce',
-              id: '36cabf0a-c7a0-4ba3-89a8-79e0620fd2b8',
+              id: licenceMonitoringStationId,
               licence: {
-                licenceRef: testRecipient.licence_refs
+                licenceRef: testRecipient.licence_refs[0]
               },
               measureType: 'flow',
               notes: null,
@@ -165,7 +172,7 @@ describe('Notices Setup - Preview - Preview service', () => {
         activeNavBar: 'notices',
         address: 'primary.user@important.com',
         backLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}/check-alert`,
-        caption: 'Notice WAA-6KN0KF',
+        caption: `Notice ${referenceCode}`,
         contents: 'Dear licence contact,\r\n',
         messageType: 'email',
         pageTitle: 'Water abstraction alert reduce warning email',

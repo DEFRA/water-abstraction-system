@@ -67,7 +67,8 @@ function _batchSize(subtype) {
   if (subtype === 'paperReturnForms') {
     return {
       batchSize: 1,
-      delay: 2000
+      // The delay is already handled by GotenbergRequest
+      delay: 0
     }
   }
 
@@ -114,7 +115,9 @@ async function _processBatches(notifications, delay, batchSize, eventId, referen
 
     await _batch(batchNotifications, referenceCode)
 
-    await pause(delay)
+    if (delay) {
+      await pause(delay)
+    }
 
     await ProcessNotificationStatusService.go(eventId)
   }

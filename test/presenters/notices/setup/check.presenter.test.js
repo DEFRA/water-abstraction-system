@@ -71,19 +71,19 @@ describe('Notices - Setup - Check presenter', () => {
       recipients: [
         {
           contact: ['Mr H J Duplicate Licence holder', '4', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-          licences: [testDuplicateRecipients.duplicateLicenceHolder.licence_refs],
+          licences: testDuplicateRecipients.duplicateLicenceHolder.licence_refs,
           method: 'Letter or email - Licence holder',
           previewLink: `/system/notices/setup/${session.id}/preview/${testDuplicateRecipients.duplicateLicenceHolder.contact_hash_id}`
         },
         {
           contact: ['Mr H J Duplicate Returns to', '4', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-          licences: [testDuplicateRecipients.duplicateReturnsTo.licence_refs],
+          licences: testDuplicateRecipients.duplicateReturnsTo.licence_refs,
           method: 'Letter or email - Returns to',
           previewLink: `/system/notices/setup/${session.id}/preview/${testDuplicateRecipients.duplicateReturnsTo.contact_hash_id}`
         },
         {
           contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
-          licences: [testRecipients.licenceHolder.licence_refs],
+          licences: testRecipients.licenceHolder.licence_refs,
           method: 'Letter or email - Licence holder',
           previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolder.contact_hash_id}`
         },
@@ -96,7 +96,7 @@ describe('Notices - Setup - Check presenter', () => {
             'Surrey',
             'WD25 7LR'
           ],
-          licences: testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(','),
+          licences: testRecipients.licenceHolderWithMultipleLicences.licence_refs,
           method: 'Letter or email - Licence holder',
           previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolderWithMultipleLicences.contact_hash_id}`
         },
@@ -109,31 +109,31 @@ describe('Notices - Setup - Check presenter', () => {
             'Little Whinging',
             'Surrey'
           ],
-          licences: [testRecipients.returnsTo.licence_refs],
+          licences: testRecipients.returnsTo.licence_refs,
           method: 'Letter or email - Returns to',
           previewLink: null
         },
         {
           contact: ['primary.user@important.com'],
-          licences: [testRecipients.primaryUser.licence_refs],
+          licences: testRecipients.primaryUser.licence_refs,
           method: 'Letter or email - Primary user',
           previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.primaryUser.contact_hash_id}`
         },
         {
           contact: ['primary.user@important.com'],
-          licences: [testDuplicateRecipients.duplicatePrimaryUser.licence_refs],
+          licences: testDuplicateRecipients.duplicatePrimaryUser.licence_refs,
           method: 'Letter or email - Primary user',
           previewLink: `/system/notices/setup/${session.id}/preview/${testDuplicateRecipients.duplicatePrimaryUser.contact_hash_id}`
         },
         {
           contact: ['returns.agent@important.com'],
-          licences: [testRecipients.returnsAgent.licence_refs],
+          licences: testRecipients.returnsAgent.licence_refs,
           method: 'Letter or email - Returns agent',
           previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.returnsAgent.contact_hash_id}`
         },
         {
           contact: ['returns.agent@important.com'],
-          licences: [testDuplicateRecipients.duplicateReturnsAgent.licence_refs],
+          licences: testDuplicateRecipients.duplicateReturnsAgent.licence_refs,
           method: 'Letter or email - Returns agent',
           previewLink: `/system/notices/setup/${session.id}/preview/${testDuplicateRecipients.duplicateReturnsAgent.contact_hash_id}`
         }
@@ -338,7 +338,7 @@ describe('Notices - Setup - Check presenter', () => {
         it('should return licence numbers as an array', () => {
           const result = CheckPresenter.go(recipients, page, pagination, session)
 
-          expect(result.recipients[2].licences).to.equal([testRecipients.licenceHolder.licence_refs])
+          expect(result.recipients[2].licences).to.equal(testRecipients.licenceHolder.licence_refs)
         })
       })
 
@@ -346,9 +346,7 @@ describe('Notices - Setup - Check presenter', () => {
         it('should return licence numbers as an array', () => {
           const result = CheckPresenter.go(recipients, page, pagination, session)
 
-          expect(result.recipients[3].licences).to.equal(
-            testRecipients.licenceHolderWithMultipleLicences.licence_refs.split(',')
-          )
+          expect(result.recipients[3].licences).to.equal(testRecipients.licenceHolderWithMultipleLicences.licence_refs)
         })
       })
     })

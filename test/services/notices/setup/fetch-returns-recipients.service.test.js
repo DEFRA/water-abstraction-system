@@ -8,6 +8,8 @@ const Sinon = require('sinon')
 const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+const { NoticeType, NoticeJourney } = require('../../../../app/lib/static-lookups.lib.js')
+
 // Test helpers
 const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
@@ -36,7 +38,8 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
   describe('when the licence is registered ', () => {
     beforeEach(() => {
       session = {
-        journey: 'invitations',
+        journey: NoticeJourney.STANDARD,
+        noticeType: NoticeType.INVITATIONS,
         returnsPeriod: 'allYear',
         determinedReturnsPeriod: {}
       }
@@ -62,7 +65,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
             contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
             contact_type: 'Primary user',
             email: 'primary.user@important.com',
-            licence_refs: seedData.primaryUser.licenceRef,
+            licence_refs: [seedData.primaryUser.licenceRef],
             return_log_ids: [seedData.primaryUser.returnLog.returnId]
           }
         ])
@@ -88,7 +91,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
               contact_type: 'Primary user',
               email: 'primary.user@important.com',
-              licence_refs: seedData.primaryUserAndReturnsAgent.licenceRef,
+              licence_refs: [seedData.primaryUserAndReturnsAgent.licenceRef],
               return_log_ids: [seedData.primaryUserAndReturnsAgent.returnLog.returnId]
             },
             {
@@ -96,7 +99,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
               contact_type: 'Returns agent',
               email: 'returns.agent@important.com',
-              licence_refs: seedData.primaryUserAndReturnsAgent.licenceRef,
+              licence_refs: [seedData.primaryUserAndReturnsAgent.licenceRef],
               return_log_ids: [seedData.primaryUserAndReturnsAgent.returnLog.returnId]
             }
           ])
@@ -123,7 +126,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
               contact_type: 'Primary user',
               email: 'primary.user@important.com',
-              licence_refs: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
+              licence_refs: [seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef],
               return_log_ids: [seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnId]
             }
           ])
@@ -168,7 +171,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
             contact_hash_id: '0cad692217f572faede404363b2625c9',
             contact_type: 'Licence holder',
             email: null,
-            licence_refs: seedData.licenceHolder.licenceRef,
+            licence_refs: [seedData.licenceHolder.licenceRef],
             return_log_ids: [seedData.licenceHolder.returnLog.returnId]
           }
         ])
@@ -209,7 +212,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '0cad692217f572faede404363b2625c9',
               contact_type: 'Licence holder',
               email: null,
-              licence_refs: seedData.licenceHolderAndReturnTo.licenceRef,
+              licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
               return_log_ids: [seedData.licenceHolderAndReturnTo.returnLog.returnId]
             },
             {
@@ -232,7 +235,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
               contact_type: 'Returns to',
               email: null,
-              licence_refs: seedData.licenceHolderAndReturnTo.licenceRef,
+              licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
               return_log_ids: [seedData.licenceHolderAndReturnTo.returnLog.returnId]
             }
           ])
@@ -274,7 +277,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
               contact_type: 'Licence holder',
               email: null,
-              licence_refs: seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef,
+              licence_refs: [seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef],
               return_log_ids: [seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.returnId]
             }
           ])
@@ -321,7 +324,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
               contact_type: 'Primary user',
               email: 'primary.user@important.com',
-              licence_refs: seedData.primaryUser.licenceRef,
+              licence_refs: [seedData.primaryUser.licenceRef],
               return_log_ids: [seedData.primaryUser.returnLog.returnId]
             }
           ])
@@ -341,7 +344,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
                 contact_type: 'Primary user',
                 email: 'primary.user@important.com',
-                licence_refs: seedData.primaryUserAndReturnsAgent.licenceRef,
+                licence_refs: [seedData.primaryUserAndReturnsAgent.licenceRef],
                 return_log_ids: [seedData.primaryUserAndReturnsAgent.returnLog.returnId]
               },
               {
@@ -349,7 +352,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
                 contact_type: 'Returns agent',
                 email: 'returns.agent@important.com',
-                licence_refs: seedData.primaryUserAndReturnsAgent.licenceRef,
+                licence_refs: [seedData.primaryUserAndReturnsAgent.licenceRef],
                 return_log_ids: [seedData.primaryUserAndReturnsAgent.returnLog.returnId]
               }
             ])
@@ -370,7 +373,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
                 contact_type: 'Primary user',
                 email: 'primary.user@important.com',
-                licence_refs: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
+                licence_refs: [seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef],
                 return_log_ids: [seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnId]
               }
             ])
@@ -409,7 +412,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_hash_id: '0cad692217f572faede404363b2625c9',
               contact_type: 'Licence holder',
               email: null,
-              licence_refs: seedData.licenceHolder.licenceRef,
+              licence_refs: [seedData.licenceHolder.licenceRef],
               return_log_ids: [seedData.licenceHolder.returnLog.returnId]
             }
           ])
@@ -444,7 +447,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: '0cad692217f572faede404363b2625c9',
                 contact_type: 'Licence holder',
                 email: null,
-                licence_refs: seedData.licenceHolderAndReturnTo.licenceRef,
+                licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
                 return_log_ids: [seedData.licenceHolderAndReturnTo.returnLog.returnId]
               },
               {
@@ -467,7 +470,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
                 contact_type: 'Returns to',
                 email: null,
-                licence_refs: seedData.licenceHolderAndReturnTo.licenceRef,
+                licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
                 return_log_ids: [seedData.licenceHolderAndReturnTo.returnLog.returnId]
               }
             ])
@@ -503,7 +506,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
                 contact_type: 'Licence holder',
                 email: null,
-                licence_refs: seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef,
+                licence_refs: [seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef],
                 return_log_ids: [seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.returnId]
               }
             ])
@@ -516,7 +519,8 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
   describe('when a recipient has multiple return logs for the same recipient', () => {
     beforeEach(() => {
       session = {
-        journey: 'invitations',
+        journey: NoticeJourney.STANDARD,
+        noticeType: NoticeType.INVITATIONS,
         returnsPeriod: 'allYear',
         determinedReturnsPeriod: {}
       }
@@ -541,7 +545,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
           contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
           contact_type: 'Primary user',
           email: 'primary.user@important.com',
-          licence_refs: seedData.primaryUserMultipleReturnLogs.licenceRef,
+          licence_refs: [seedData.primaryUserMultipleReturnLogs.licenceRef],
           // We need to sort the return ids because the order of the return logs is not guaranteed
           return_log_ids: [
             seedData.primaryUserMultipleReturnLogs.returnLog.returnId,
@@ -552,10 +556,11 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
     })
   })
 
-  describe('and the due date is set', () => {
+  describe('and the due date is set on an inviations notice', () => {
     beforeEach(() => {
       session = {
-        journey: 'invitations',
+        journey: NoticeJourney.STANDARD,
+        noticeType: NoticeType.INVITATIONS,
         returnsPeriod: 'allYear',
         determinedReturnsPeriod: {}
       }
@@ -572,7 +577,63 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
         }
       })
 
+      it('returns nothing ', async () => {
+        const result = await FetchReturnsRecipientsService.go(session)
+
+        expect(result).to.equal([])
+      })
+    })
+  })
+
+  describe('and it is a reminders notice', () => {
+    beforeEach(() => {
+      session = {
+        journey: NoticeJourney.STANDARD,
+        noticeType: NoticeType.REMINDERS,
+        returnsPeriod: 'allYear',
+        determinedReturnsPeriod: {}
+      }
+    })
+
+    describe('and the due date is set and there is a "primary user"', () => {
+      beforeEach(() => {
+        session.determinedReturnsPeriod = {
+          dueDate: seedData.primaryUserDueDate.returnLog.dueDate,
+          endDate: seedData.primaryUserDueDate.returnLog.endDate,
+          quarterly: seedData.primaryUserDueDate.returnLog.quarterly,
+          startDate: seedData.primaryUserDueDate.returnLog.startDate,
+          summer: seedData.primaryUserDueDate.returnLog.metadata.isSummer
+        }
+      })
+
       it('returns the "primary user" ', async () => {
+        const result = await FetchReturnsRecipientsService.go(session)
+
+        expect(result).to.equal([
+          {
+            contact: null,
+            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+            contact_type: 'Primary user',
+            email: 'primary.user@important.com',
+            licence_refs: [seedData.primaryUserDueDate.licenceRef],
+            return_log_ids: [seedData.primaryUserDueDate.returnLog.returnId]
+          }
+        ])
+      })
+    })
+
+    describe('and the due date is not set and there is a "primary user"', () => {
+      beforeEach(() => {
+        session.determinedReturnsPeriod = {
+          dueDate: seedData.primaryUser.returnLog.dueDate,
+          endDate: seedData.primaryUser.returnLog.endDate,
+          quarterly: seedData.primaryUser.returnLog.quarterly,
+          startDate: seedData.primaryUser.returnLog.startDate,
+          summer: seedData.primaryUser.returnLog.metadata.isSummer
+        }
+      })
+
+      it('returns nothing', async () => {
         const result = await FetchReturnsRecipientsService.go(session)
 
         expect(result).to.equal([])
@@ -585,7 +646,8 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
       Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(false)
 
       session = {
-        journey: 'invitations',
+        journey: NoticeJourney.STANDARD,
+        noticeType: NoticeType.INVITATIONS,
         returnsPeriod: 'allYear',
         determinedReturnsPeriod: {}
       }
@@ -611,7 +673,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
             contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
             contact_type: 'Primary user',
             email: 'primary.user@important.com',
-            licence_refs: seedData.primaryUserDueDate.licenceRef,
+            licence_refs: [seedData.primaryUserDueDate.licenceRef],
             return_log_ids: [seedData.primaryUserDueDate.returnLog.returnId]
           }
         ])

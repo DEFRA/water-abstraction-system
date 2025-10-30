@@ -186,7 +186,7 @@ function _query() {
   aggregated_contact_data AS (
     SELECT
     contact_hash_id,
-    string_agg(DISTINCT licence_ref, ',' ORDER BY licence_ref) AS licence_refs
+    JSON_AGG(DISTINCT licence_ref ORDER BY licence_ref) AS licence_refs
     FROM all_contacts
     GROUP BY contact_hash_id
   )
@@ -203,7 +203,7 @@ function _query() {
     unique_contact uc
     USING (contact_hash_id)
   ORDER BY
-    licence_refs;
+    licence_refs::text;
 `
 }
 

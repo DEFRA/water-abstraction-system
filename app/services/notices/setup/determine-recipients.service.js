@@ -138,11 +138,11 @@ function _mergeRecipientsForLetter(matches) {
 }
 
 function _mergeLicenceReferences(matches) {
-  const allLicenceRefs = matches.map((match) => {
+  const allLicenceRefs = matches.flatMap((match) => {
     return match.licence_refs
   })
 
-  return [...new Set(allLicenceRefs)].join(',')
+  return [...new Set(allLicenceRefs)]
 }
 
 function _uniqueContactHashIds(contacts) {

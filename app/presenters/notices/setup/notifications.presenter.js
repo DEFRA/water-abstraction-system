@@ -9,7 +9,7 @@ const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { futureDueDate } = require('../base.presenter.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
-const { transformStringOfLicencesToArray, timestampForPostgres } = require('../../../lib/general.lib.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
 const MESSAGE_REFS = {
   invitations: {
@@ -108,7 +108,7 @@ function _email(recipient, returnsPeriod, journey, eventId, noticeType) {
 
   return {
     ..._common(templateId, eventId),
-    licences: transformStringOfLicencesToArray(recipient.licence_refs),
+    licences: recipient.licence_refs,
     messageType,
     messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
@@ -163,7 +163,7 @@ function _letter(recipient, returnsPeriod, journey, eventId, noticeType) {
 
   return {
     ..._common(templateId, eventId),
-    licences: transformStringOfLicencesToArray(recipient.licence_refs),
+    licences: recipient.licence_refs,
     messageType,
     messageRef: _messageRef(noticeType, messageType, recipient.contact_type),
     personalisation: {
