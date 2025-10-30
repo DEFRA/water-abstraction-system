@@ -153,7 +153,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
             ],
             '2023-04-30T00:00:00.000Z': { text: 'Volume must be a number or blank' }
           },
-          backLink: { href: `/system/return-logs/setup/${session.id}/check`, text: 'Back'},
+          backLink: { href: `/system/return-logs/setup/${session.id}/check`, text: 'Back' },
           inputLines: [
             {
               endDate: '2023-04-30T00:00:00.000Z',
