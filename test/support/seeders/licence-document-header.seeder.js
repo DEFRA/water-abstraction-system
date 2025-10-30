@@ -89,6 +89,59 @@ async function seed(date) {
   }
 }
 
+async function _addAdditionalContact(contact, licenceDocumentId, abstractionAlerts = true) {
+  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
+    licenceDocumentId,
+    endDate: null
+  })
+
+  const licenceRole = await LicenceRoleHelper.select('additionalContact')
+
+  const companyContact = await CompanyContactHelper.add({
+    companyId: licenceDocumentRole.companyId,
+    licenceRoleId: licenceRole.id,
+    abstractionAlerts
+  })
+
+  await ContactHelper.add({
+    id: companyContact.contactId,
+    ...contact
+  })
+
+  return licenceDocumentRole
+}
+
+/**
+ * Alerts have the concept of a 'current' 'additional contact'.
+ *
+ * The current additional contact is the one where the "endDate" is null.
+ *
+ * This helper adds 'expired' additional contacts to the licence document.
+ *
+ * This should not be found in the response from the query.
+ *
+ * @private
+ */
+async function _addAdditionalContactEndDatePassed(contact, licenceDocumentId) {
+  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
+    licenceDocumentId,
+    endDate: new Date('2023-01-01')
+  })
+
+  const licenceRole = await LicenceRoleHelper.select('additionalContact')
+
+  const companyContact = await CompanyContactHelper.add({
+    companyId: licenceDocumentRole.companyId,
+    licenceRoleId: licenceRole.id,
+    abstractionAlerts: true
+  })
+
+  await ContactHelper.add({
+    id: companyContact.contactId,
+    ...contact
+  })
+}
+
 async function _addLicenceDocumentHeader() {
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
 
@@ -101,16 +154,16 @@ async function _addLicenceDocumentHeader() {
   })
 }
 
-async function _additionalContact(licenceRef = null) {
-  const licenceDocument = await LicenceDocumentHelper.add({
-    ...(licenceRef && { licenceRef })
+async function _addLicenceEntity(licenceDocumentHeader, entityRole) {
+  const licenceEntity = await LicenceEntityHelper.add({
+    name: entityRole.email
   })
 
-  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
-
-  await _addAdditionalContactEndDatePassed(additionalContactOne, licenceDocument.id)
-
-  return licenceDocument
+  await LicenceEntityRoleHelper.add({
+    companyEntityId: licenceDocumentHeader.companyEntityId,
+    licenceEntityId: licenceEntity.id,
+    role: entityRole.role
+  })
 }
 
 async function _addLicenceHolder() {
@@ -166,6 +219,18 @@ async function _addReturnLog(date, licenceRef, endDate = null) {
   return null
 }
 
+async function _additionalContact(licenceRef = null) {
+  const licenceDocument = await LicenceDocumentHelper.add({
+    ...(licenceRef && { licenceRef })
+  })
+
+  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
+
+  await _addAdditionalContactEndDatePassed(additionalContactOne, licenceDocument.id)
+
+  return licenceDocument
+}
+
 function _contact(name, role) {
   return {
     name,
@@ -183,93 +248,6 @@ function _contact(name, role) {
     town: 'Little Whinging',
     type: 'Person'
   }
-}
-
-async function _multipleAdditionalContact() {
-  const licenceDocument = await LicenceDocumentHelper.add()
-
-  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
-
-  await _addAdditionalContact(additionalContactTwo, licenceDocument.id)
-
-  return licenceDocument
-}
-
-async function _multipleAdditionalContactDifferentLicenceRefs() {
-  const licenceDocument = await LicenceDocumentHelper.add()
-  const licenceDocumentTwo = await LicenceDocumentHelper.add()
-
-  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
-
-  await _addAdditionalContact(additionalContactOne, licenceDocumentTwo.id)
-
-  return {
-    licenceDocument,
-    licenceDocumentTwo
-  }
-}
-
-async function _multipleAdditionalContactWithAndWithoutAlerts() {
-  const licenceDocument = await LicenceDocumentHelper.add()
-
-  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
-
-  await _addAdditionalContact(additionalContactTwo, licenceDocument.id, false)
-
-  return licenceDocument
-}
-
-async function _addAdditionalContact(contact, licenceDocumentId, abstractionAlerts = true) {
-  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
-    licenceDocumentId,
-    endDate: null
-  })
-
-  const licenceRole = await LicenceRoleHelper.select('additionalContact')
-
-  const companyContact = await CompanyContactHelper.add({
-    companyId: licenceDocumentRole.companyId,
-    licenceRoleId: licenceRole.id,
-    abstractionAlerts
-  })
-
-  await ContactHelper.add({
-    id: companyContact.contactId,
-    ...contact
-  })
-
-  return licenceDocumentRole
-}
-
-/**
- * Alerts have the concept of a 'current' 'additional contact'.
- *
- * The current additional contact is the one where the "endDate" is null.
- *
- * This helper adds 'expired' additional contacts to the licence document.
- *
- * This should not be found in the response from the query.
- *
- * @private
- */
-async function _addAdditionalContactEndDatePassed(contact, licenceDocumentId) {
-  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
-    licenceDocumentId,
-    endDate: new Date('2023-01-01')
-  })
-
-  const licenceRole = await LicenceRoleHelper.select('additionalContact')
-
-  const companyContact = await CompanyContactHelper.add({
-    companyId: licenceDocumentRole.companyId,
-    licenceRoleId: licenceRole.id,
-    abstractionAlerts: true
-  })
-
-  await ContactHelper.add({
-    id: companyContact.contactId,
-    ...contact
-  })
 }
 
 async function _licenceHolder(date, endDate = null) {
@@ -313,16 +291,38 @@ async function _licenceHolderWithAdditionalContact() {
   return licenceHolder
 }
 
-async function _addLicenceEntity(licenceDocumentHeader, entityRole) {
-  const licenceEntity = await LicenceEntityHelper.add({
-    name: entityRole.email
-  })
+async function _multipleAdditionalContact() {
+  const licenceDocument = await LicenceDocumentHelper.add()
 
-  await LicenceEntityRoleHelper.add({
-    companyEntityId: licenceDocumentHeader.companyEntityId,
-    licenceEntityId: licenceEntity.id,
-    role: entityRole.role
-  })
+  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
+
+  await _addAdditionalContact(additionalContactTwo, licenceDocument.id)
+
+  return licenceDocument
+}
+
+async function _multipleAdditionalContactDifferentLicenceRefs() {
+  const licenceDocument = await LicenceDocumentHelper.add()
+  const licenceDocumentTwo = await LicenceDocumentHelper.add()
+
+  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
+
+  await _addAdditionalContact(additionalContactOne, licenceDocumentTwo.id)
+
+  return {
+    licenceDocument,
+    licenceDocumentTwo
+  }
+}
+
+async function _multipleAdditionalContactWithAndWithoutAlerts() {
+  const licenceDocument = await LicenceDocumentHelper.add()
+
+  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
+
+  await _addAdditionalContact(additionalContactTwo, licenceDocument.id, false)
+
+  return licenceDocument
 }
 
 async function _primaryUser(date) {
@@ -331,41 +331,6 @@ async function _primaryUser(date) {
   await _addLicenceEntity(licenceDocumentHeader, primaryUser)
 
   const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef)
-
-  return {
-    ...licenceDocumentHeader,
-    returnLog
-  }
-}
-
-async function _primaryUserMultipleReturnLogs(date) {
-  const licenceDocumentHeader = await _addPrimaryUser()
-
-  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef)
-
-  const returnLogTwo = await _addReturnLog(date, licenceDocumentHeader.licenceRef)
-
-  return {
-    ...licenceDocumentHeader,
-    returnLog,
-    returnLogTwo
-  }
-}
-
-async function _primaryUserDueDate(date) {
-  const licenceDocumentHeader = await _addPrimaryUser()
-
-  let returnLog = {}
-
-  if (date) {
-    returnLog = await ReturnLogHelper.add({
-      startDate: date,
-      endDate: date,
-      dueDate: date,
-      licenceRef: licenceDocumentHeader.licenceRef,
-      quarterly: false
-    })
-  }
 
   return {
     ...licenceDocumentHeader,
@@ -406,6 +371,41 @@ async function _primaryUserAndReturnsAgentWithTheSameEmail(date) {
   return {
     ...licenceDocumentHeader,
     returnLog
+  }
+}
+
+async function _primaryUserDueDate(date) {
+  const licenceDocumentHeader = await _addPrimaryUser()
+
+  let returnLog = {}
+
+  if (date) {
+    returnLog = await ReturnLogHelper.add({
+      startDate: date,
+      endDate: date,
+      dueDate: date,
+      licenceRef: licenceDocumentHeader.licenceRef,
+      quarterly: false
+    })
+  }
+
+  return {
+    ...licenceDocumentHeader,
+    returnLog
+  }
+}
+
+async function _primaryUserMultipleReturnLogs(date) {
+  const licenceDocumentHeader = await _addPrimaryUser()
+
+  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef)
+
+  const returnLogTwo = await _addReturnLog(date, licenceDocumentHeader.licenceRef)
+
+  return {
+    ...licenceDocumentHeader,
+    returnLog,
+    returnLogTwo
   }
 }
 
