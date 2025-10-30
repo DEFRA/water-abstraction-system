@@ -144,13 +144,16 @@ describe('Return Logs Setup - Submit Volumes service', () => {
 
         expect(result).to.equal({
           activeNavBar: 'search',
-          error: [
-            {
-              href: '#2023-04-30T00:00:00.000Z',
-              text: 'Volume must be a number or blank'
-            }
-          ],
-          backLink: `/system/return-logs/setup/${session.id}/check`,
+          error: {
+            errorList: [
+              {
+                href: '#2023-04-30T00:00:00.000Z',
+                text: 'Volume must be a number or blank'
+              }
+            ],
+            '2023-04-30T00:00:00.000Z': { text: 'Volume must be a number or blank' }
+          },
+          backLink: { href: `/system/return-logs/setup/${session.id}/check`, text: 'Back'},
           inputLines: [
             {
               endDate: '2023-04-30T00:00:00.000Z',
@@ -160,7 +163,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
             }
           ],
           pageTitle: 'Water abstracted April 2023',
-          caption: 'Return reference 1234',
+          pageTitleCaption: 'Return reference 1234',
           units: 'Cubic metres'
         })
       })
@@ -169,12 +172,15 @@ describe('Return Logs Setup - Submit Volumes service', () => {
         it('includes an error for the radio form element', async () => {
           const result = await SubmitVolumesService.go(session.id, payload, yarStub, yearMonth)
 
-          expect(result.error).to.equal([
-            {
-              href: '#2023-04-30T00:00:00.000Z',
-              text: 'Volume must be a number or blank'
-            }
-          ])
+          expect(result.error).to.equal({
+            errorList: [
+              {
+                href: '#2023-04-30T00:00:00.000Z',
+                text: 'Volume must be a number or blank'
+              }
+            ],
+            '2023-04-30T00:00:00.000Z': { text: 'Volume must be a number or blank' }
+          })
         })
       })
     })
