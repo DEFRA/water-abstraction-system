@@ -32,9 +32,9 @@ async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const { startDate } = session
-  const validationResult = _validate(payload, startDate)
+  const error = _validate(payload, startDate)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
@@ -50,7 +50,7 @@ async function go(sessionId, payload, yar) {
 
   return {
     activeNavBar: 'search',
-    error: validationResult,
+    error,
     ...formattedData
   }
 }

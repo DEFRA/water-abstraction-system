@@ -24,11 +24,11 @@ const SubmissionValidator = require('../../../validators/return-logs/setup/submi
  */
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
   const { returnLogId } = session
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, payload)
 
     const redirect = await _redirect(payload.journey, session)
@@ -43,7 +43,7 @@ async function go(sessionId, payload) {
 
   return {
     activeNavBar: 'search',
-    error: validationResult,
+    error,
     ...formattedData
   }
 }

@@ -37,9 +37,9 @@ async function go(sessionId, payload, yar) {
 
   const _payload = { multipleEntries: SplitMultipleEntriesService.go(payload.multipleEntries) }
 
-  const validationResult = _validate(frequency, measurementType, _payload, session)
+  const error = _validate(frequency, measurementType, _payload, session)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, _payload)
 
     yar.flash('notification', {
@@ -54,7 +54,7 @@ async function go(sessionId, payload, yar) {
 
   return {
     activeNavBar: 'search',
-    error: validationResult,
+    error,
     ...pageData
   }
 }

@@ -29,9 +29,9 @@ const SingleVolumeValidator = require('../../../validators/return-logs/setup/sin
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, payload)
 
     return {
@@ -43,7 +43,7 @@ async function go(sessionId, payload) {
 
   return {
     activeNavBar: 'search',
-    error: validationResult,
+    error,
     ...pageData
   }
 }

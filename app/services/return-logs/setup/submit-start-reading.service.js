@@ -30,9 +30,9 @@ const StartReadingValidator = require('../../../validators/return-logs/setup/sta
 async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload, session)
+  const error = _validate(payload, session)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, payload)
 
     if (session.checkPageVisited) {
@@ -49,7 +49,7 @@ async function go(sessionId, payload, yar) {
 
   return {
     activeNavBar: 'search',
-    error: validationResult,
+    error,
     ...pageData
   }
 }

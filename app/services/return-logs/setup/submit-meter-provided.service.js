@@ -30,9 +30,9 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, payload)
 
     if (session.checkPageVisited && payload.meterProvided === 'no') {
@@ -50,7 +50,7 @@ async function go(sessionId, payload, yar) {
 
   return {
     activeNavBar: 'search',
-    error: validationResult,
+    error,
     ...pageData
   }
 }
