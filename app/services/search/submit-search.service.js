@@ -31,11 +31,12 @@ async function go(payload, yar) {
     return {
       activeNavBar: 'search',
       error: formatValidationResult(validationResult),
-      ...SearchPresenter.go(payload.query)
+      ...SearchPresenter.go(payload.query, payload.resultType)
     }
   }
 
   yar.set('searchQuery', validationResult.value.query)
+  yar.set('searchResultType', validationResult.value.resultType)
 
   let redirect = await FindSingleSearchMatchService.go(validationResult.value.query)
   redirect = null // Temporarily removing this feature to deal with exact matches in search results

@@ -5,7 +5,7 @@
  * @module FetchReturnLogSearchResultsService
  */
 
-const { ref } = require('objection')
+const { raw } = require('objection')
 
 const ReturnLogModel = require('../../models/return-log.model.js')
 
@@ -26,19 +26,22 @@ async function go(query, page, matchFullReturnReference = false) {
 
   const select = ReturnLogModel.query()
     .select([
-      'return_logs.id',
-      'licence_ref',
-      'end_date',
-      'status',
-      'return_reference',
-      'regions.nald_region_id',
-      'regions.display_name as region_display_name'
+      'returnReference',
+      'returnLogs.licenceRef',
+      'returnLogs.returnRequirementId',
+      'licence.id',
+      raw('array_agg(return_logs.id)').as('ids'),
+      raw('array_agg(due_date)').as('dueDates'),
+      raw('array_agg(end_date)').as('endDates'),
+      raw('array_agg(status::TEXT)').as('statuses')
     ])
-    .join('regions', ref('return_logs.metadata:nald.regionCode').castInt(), 'regions.nald_region_id')
+    .joinRelated('licence')
+    .groupBy('returnReference', 'returnLogs.licenceRef', 'returnLogs.returnRequirementId', 'licence.id')
     .orderBy([
       { column: 'returnReference', order: 'asc' },
-      { column: 'endDate', order: 'desc' },
-      { column: 'regions.nald_region_id', order: 'asc' }
+      { column: 'returnLogs.licenceRef', order: 'asc' },
+      { column: 'returnLogs.returnRequirementId', order: 'asc' },
+      { column: 'licence.id', order: 'asc' }
     ])
 
   if (matchFullReturnReference) {

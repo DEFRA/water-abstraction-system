@@ -14,18 +14,20 @@ const { today } = require('../../lib/general.lib.js')
  *
  * @param {string} query - The user-entered search query, if any
  * @param {string} page - The requested page, when displaying search results
+ * @param {string} resultType - The type of search results being displayed
  * @param {string} numberOfPages - The total number of pages available for the search results
  * @param {object} allSearchMatches - All the search matches found
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(query, page, numberOfPages, allSearchMatches) {
+function go(query, resultType, page, numberOfPages, allSearchMatches) {
   // If there's no page number provided, we're just displaying the blank search page, potentially with any search
   // query that the user may have entered but was not searchable, e.g. whitespace or other unsearchable text
   if (!page) {
     return {
       pageTitle: 'Search',
       query,
+      resultType,
       showResults: false
     }
   }
@@ -47,6 +49,7 @@ function go(query, page, numberOfPages, allSearchMatches) {
       returnLogs: _returnLogs(similarSearchResults.returnLogs.results)
     },
     query,
+    resultType,
     showExactResults: exactSearchResults.amountFound !== 0,
     showResults: true
   }
@@ -76,12 +79,12 @@ function _licences(licences) {
 
   return licences.map((licence) => {
     const licenceEnd = licence.$ends()
-    //const { Forename: firstName, Initials: initials, Name: lastName, Salutation: salutation } = licence.metadata
     const { id, licenceRef } = licence
 
-    const holderContact = licence.metadata?.contacts?.find((contact) => {
-      return contact.role === 'Licence holder'
-    }) ?? {}
+    const holderContact =
+      licence.metadata?.contacts?.find((contact) => {
+        return contact.role === 'Licence holder'
+      }) ?? {}
     const { forename: firstName, initials, name: lastName, salutation } = holderContact
 
     // Holder name is either a company name given by Name or made up of any parts of Salutation, Initials, Forename and
@@ -120,16 +123,29 @@ function _returnLogs(returnLogs) {
   }
 
   return returnLogs.map((returnLog) => {
-    const { id, licenceRef, regionDisplayName, returnReference } = returnLog
+    const { dueDates, endDates, id: licenceId, ids, licenceRef, returnReference, statuses } = returnLog
 
-    const statusText = formatReturnLogStatus(returnLog)
+    const returnLogDetail = ids
+      .map((id, index) => {
+        const dueDate = dueDates[index]
+        const endDate = endDates[index]
+        const status = statuses[index]
+
+        return { dueDate, endDate, id, status }
+      })
+      .sort((a, b) => {
+        return b.endDate - a.endDate
+      })[0]
+
+    const statusText = formatReturnLogStatus(returnLogDetail)
+    const { id } = returnLogDetail
 
     return {
-      endDate: formatLongDate(returnLog.endDate),
+      endDate: formatLongDate(returnLogDetail.endDate),
       id,
+      licenceId,
       licenceRef,
       returnReference,
-      regionDisplayName,
       statusText
     }
   })

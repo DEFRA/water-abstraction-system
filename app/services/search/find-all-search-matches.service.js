@@ -22,12 +22,13 @@ const NO_RESULTS = { results: [], total: 0 }
  * if the search query contains any letters.
  *
  * @param {string} query - The value to search for, taken from the session
+ * @param {string} resultType - The type of search result to display
  * @param {number} page - The requested page
  *
  * @returns {Promise<string>} The full set of results
  */
-async function go(query, page) {
-  const allSearchResults = await _allSearchResults(query, page)
+async function go(query, resultType, page) {
+  const allSearchResults = await _allSearchResults(query, resultType, page)
 
   return {
     exactSearchResults: _exactSearchResults(allSearchResults),
@@ -36,14 +37,14 @@ async function go(query, page) {
   }
 }
 
-async function _allSearchResults(query, page) {
+async function _allSearchResults(query, resultType, page) {
   return Promise.all([
-    _fullLicenceSearchResults(query, page),
-    _fullMonitoringStationSearchResults(query, page),
-    _fullReturnLogSearchResults(query, page),
-    _partialLicenceSearchResults(query, page),
-    _partialMonitoringStationSearchResults(query, page),
-    _partialReturnLogSearchResults(query, page)
+    _fullLicenceSearchResults(query, resultType, page),
+    _fullMonitoringStationSearchResults(query, resultType, page),
+    _fullReturnLogSearchResults(query, resultType, page),
+    _partialLicenceSearchResults(query, resultType, page),
+    _partialMonitoringStationSearchResults(query, resultType, page),
+    _partialReturnLogSearchResults(query, resultType, page)
   ])
 }
 
@@ -61,7 +62,11 @@ function _exactSearchResults(allSearchResults) {
   }
 }
 
-async function _fullLicenceSearchResults(query, page) {
+async function _fullLicenceSearchResults(query, resultType, page) {
+  if (resultType && resultType !== 'licence') {
+    return NO_RESULTS
+  }
+
   if (!_matchesFullLicenceRef(query)) {
     return NO_RESULTS
   }
@@ -69,11 +74,19 @@ async function _fullLicenceSearchResults(query, page) {
   return FetchLicenceSearchResultsService.go(query, page, true)
 }
 
-async function _fullMonitoringStationSearchResults(query, page) {
+async function _fullMonitoringStationSearchResults(query, resultType, page) {
+  if (resultType && resultType !== 'monitoring-station') {
+    return NO_RESULTS
+  }
+
   return FetchMonitoringStationSearchResultsService.go(query, page, true)
 }
 
-async function _fullReturnLogSearchResults(query, page) {
+async function _fullReturnLogSearchResults(query, resultType, page) {
+  if (resultType && resultType !== 'return-log') {
+    return NO_RESULTS
+  }
+
   if (!_matchesFullReturnLogReference(query)) {
     return NO_RESULTS
   }
@@ -146,7 +159,11 @@ function _matchesPartialReturnLogReference(query) {
   return query.match(/^\d+$/)
 }
 
-async function _partialLicenceSearchResults(query, page) {
+async function _partialLicenceSearchResults(query, resultType, page) {
+  if (resultType && resultType !== 'licence') {
+    return NO_RESULTS
+  }
+
   if (!_matchesPartialLicenceRef(query)) {
     return NO_RESULTS
   }
@@ -154,11 +171,19 @@ async function _partialLicenceSearchResults(query, page) {
   return FetchLicenceSearchResultsService.go(query, page, false)
 }
 
-async function _partialMonitoringStationSearchResults(query, page) {
+async function _partialMonitoringStationSearchResults(query, resultType, page) {
+  if (resultType && resultType !== 'monitoring-station') {
+    return NO_RESULTS
+  }
+
   return FetchMonitoringStationSearchResultsService.go(query, page, false)
 }
 
-async function _partialReturnLogSearchResults(query, page) {
+async function _partialReturnLogSearchResults(query, resultType, page) {
+  if (resultType && resultType !== 'return-log') {
+    return NO_RESULTS
+  }
+
   if (!_matchesPartialReturnLogReference(query)) {
     return NO_RESULTS
   }
