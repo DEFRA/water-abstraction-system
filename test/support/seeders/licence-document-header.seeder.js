@@ -208,6 +208,7 @@ async function _addPrimaryUser() {
 async function _addReturnLog(date, licenceRef, endDate = null, isCurrent = true) {
   if (date) {
     const defaults = ReturnLogHelper.defaults()
+
     defaults.startDate = date
     defaults.endDate = endDate || date
     defaults.dueDate = null
@@ -255,6 +256,11 @@ function _contact(name, role) {
 async function _licenceHolder(date, endDate = null) {
   const licenceDocumentHeader = await _addLicenceDocumentHeader()
 
+  // NOTE: For this specific scenario we set isCurrent in the return log's metadata to false. There was a time when
+  // these would be excluded from the query because this is what we found in the legacy code we migrated. However, we
+  // were then told this is not correct and they _should_ be included. We dropped the clause but it inadvertently got
+  // put back in. So, now we ensure one of the scenarios creates return logs with isCurrent=false to confirm they
+  // are still included.
   const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate, false)
 
   return {
