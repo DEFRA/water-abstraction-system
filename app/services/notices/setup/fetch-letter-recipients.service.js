@@ -165,7 +165,8 @@ function _query() {
         LOWER(
           concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
       )
-      )) AS contact_hash_id
+      )) AS contact_hash_id,
+      ('Letter') as message_type
       FROM public.licence_document_headers ldh
       INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
       INNER JOIN due_return_logs
@@ -184,7 +185,8 @@ function _query() {
         LOWER(
           concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
       )
-      )) AS contact_hash_id
+      )) AS contact_hash_id,
+      ('Letter') as message_type
       FROM public.licence_document_headers ldh
       INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
       INNER JOIN due_return_logs
@@ -205,6 +207,7 @@ function _query() {
           contact_type,
           email,
           contact,
+          message_type,
           priority
         FROM all_contacts
         ORDER BY contact_hash_id, priority
@@ -223,7 +226,8 @@ function _query() {
       a.licence_refs,
       b.contact_type,
       b.contact,
-      b.contact_hash_id
+      b.contact_hash_id,
+      b.message_type
     FROM
       aggregated_contact_data a
         JOIN

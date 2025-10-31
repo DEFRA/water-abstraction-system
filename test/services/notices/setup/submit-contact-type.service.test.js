@@ -64,7 +64,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
             contact_type: 'Single use',
             email: payload.email,
             licence_ref: session.licenceRef,
-            licence_refs: session.licenceRef
+            licence_refs: [session.licenceRef],
+            message_type: 'Email'
           }
         ])
       })
@@ -116,7 +117,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
             contact_type: 'Single use',
             email: payload.email,
             licence_ref: session.licenceRef,
-            licence_refs: session.licenceRef
+            licence_refs: [session.licenceRef],
+            message_type: 'Email'
           }
         ])
       })
@@ -160,7 +162,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
             contact_type: 'Single use',
             email: 'test@test.gov.uk',
             licence_ref: session.licenceRef,
-            licence_refs: session.licenceRef
+            licence_refs: [session.licenceRef],
+            message_type: 'Email'
           }
         ])
       })
@@ -192,7 +195,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
             contact_type: 'Single use',
             email: 'test@test.gov.uk',
             licence_ref: session.licenceRef,
-            licence_refs: session.licenceRef
+            licence_refs: [session.licenceRef],
+            message_type: 'Email'
           }
         ]
 
@@ -214,14 +218,16 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
             contact_type: 'Single use',
             email: 'test@test.gov.uk',
             licence_ref: session.licenceRef,
-            licence_refs: session.licenceRef
+            licence_refs: [session.licenceRef],
+            message_type: 'Email'
           },
           {
             contact_hash_id: _createMD5Hash(payload.email),
             contact_type: 'Single use',
             email: payload.email,
             licence_ref: session.licenceRef,
-            licence_refs: session.licenceRef
+            licence_refs: [session.licenceRef],
+            message_type: 'Email'
           }
         ])
       })

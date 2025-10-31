@@ -137,7 +137,7 @@ describe('Notices - Setup - Determine Recipients service', () => {
             type: 'Person'
           },
           contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-          contact_type: 'both',
+          contact_type: 'Licence holder',
           email: null,
           licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs,
           message_type: 'Letter',
@@ -146,70 +146,13 @@ describe('Notices - Setup - Determine Recipients service', () => {
         {
           contact: null,
           contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
-          contact_type: 'both',
+          contact_type: 'Primary user',
           email: 'primary.user@important.com',
           licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs,
           message_type: 'Email',
           return_log_ids: testDuplicateRecipients.duplicatePrimaryUser.return_log_ids
         }
       ])
-    })
-
-    describe('when a "Primary user" and a "Returns agent" contact have the same hash ID', () => {
-      it('merges them into one "recipient" with the "contact_type" set to "both"', () => {
-        const result = DetermineRecipientsService.go([
-          testDuplicateRecipients.duplicatePrimaryUser,
-          testDuplicateRecipients.duplicateReturnsAgent
-        ])
-
-        expect(result).to.equal([
-          {
-            contact: null,
-            contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
-            contact_type: 'both',
-            email: 'primary.user@important.com',
-            licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs,
-            message_type: 'Email',
-            return_log_ids: testDuplicateRecipients.duplicatePrimaryUser.return_log_ids
-          }
-        ])
-      })
-    })
-
-    describe('when a "Licence holder" and a "Returns to" contact have the same hash ID', () => {
-      it('merges them into one "recipient" with the contact type set to "both"', () => {
-        const result = DetermineRecipientsService.go([
-          testDuplicateRecipients.duplicateLicenceHolder,
-          testDuplicateRecipients.duplicateReturnsTo
-        ])
-
-        expect(result).to.equal([
-          {
-            contact: {
-              addressLine1: '4',
-              addressLine2: 'Privet Drive',
-              addressLine3: null,
-              addressLine4: null,
-              country: null,
-              county: 'Surrey',
-              forename: 'Harry',
-              initials: 'H J',
-              name: 'Duplicate Licence holder',
-              postcode: 'WD25 7LR',
-              role: 'Licence holder',
-              salutation: 'Mr',
-              town: 'Little Whinging',
-              type: 'Person'
-            },
-            contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-            contact_type: 'both',
-            email: null,
-            licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs,
-            message_type: 'Letter',
-            return_log_ids: testDuplicateRecipients.duplicateLicenceHolder.return_log_ids
-          }
-        ])
-      })
     })
 
     describe('when an "Additional contact" is present', () => {

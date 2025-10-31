@@ -42,6 +42,7 @@ describe('Notices - Setup - Recipients service', () => {
             contact_type: 'Primary user',
             email: 'primary.user@important.com',
             licence_refs: recipientsFixture.primaryUser.licence_refs,
+            message_type: 'Email',
             return_log_ids: recipientsFixture.primaryUser.return_log_ids
           },
           {
@@ -50,6 +51,7 @@ describe('Notices - Setup - Recipients service', () => {
             contact_type: 'Returns agent',
             email: 'returns.agent@important.com',
             licence_refs: recipientsFixture.returnsAgent.licence_refs,
+            message_type: 'Email',
             return_log_ids: recipientsFixture.returnsAgent.return_log_ids
           },
           {
@@ -72,6 +74,7 @@ describe('Notices - Setup - Recipients service', () => {
             contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
             contact_type: 'Licence holder',
             licence_refs: recipientsFixture.licenceHolder.licence_refs,
+            message_type: 'Letter',
             return_log_ids: recipientsFixture.licenceHolder.return_log_ids
           }
         ])
@@ -110,6 +113,7 @@ describe('Notices - Setup - Recipients service', () => {
               contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
               contact_type: 'Licence holder',
               licence_refs: recipientsFixture.licenceHolder.licence_refs,
+              message_type: 'Letter',
               return_log_ids: recipientsFixture.licenceHolder.return_log_ids
             }
           ])
@@ -131,6 +135,7 @@ describe('Notices - Setup - Recipients service', () => {
               contact_type: 'Primary user',
               email: 'primary.user@important.com',
               licence_refs: recipientsFixture.primaryUser.licence_refs,
+              message_type: 'Email',
               return_log_ids: recipientsFixture.primaryUser.return_log_ids
             },
             {
@@ -139,6 +144,7 @@ describe('Notices - Setup - Recipients service', () => {
               contact_type: 'Returns agent',
               email: 'returns.agent@important.com',
               licence_refs: recipientsFixture.returnsAgent.licence_refs,
+              message_type: 'Email',
               return_log_ids: recipientsFixture.returnsAgent.return_log_ids
             }
           ])
@@ -165,6 +171,7 @@ describe('Notices - Setup - Recipients service', () => {
             contact_type: 'Primary user',
             email: 'primary.user@important.com',
             licence_refs: recipientsFixture.primaryUser.licence_refs,
+            message_type: 'Email',
             return_log_ids: recipientsFixture.primaryUser.return_log_ids
           },
           {
@@ -173,6 +180,7 @@ describe('Notices - Setup - Recipients service', () => {
             contact_type: 'Returns agent',
             email: 'returns.agent@important.com',
             licence_refs: recipientsFixture.returnsAgent.licence_refs,
+            message_type: 'Email',
             return_log_ids: recipientsFixture.returnsAgent.return_log_ids
           },
           {
@@ -195,6 +203,7 @@ describe('Notices - Setup - Recipients service', () => {
             contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
             contact_type: 'Licence holder',
             licence_refs: recipientsFixture.licenceHolder.licence_refs,
+            message_type: 'Letter',
             return_log_ids: recipientsFixture.licenceHolder.return_log_ids
           }
         ])
