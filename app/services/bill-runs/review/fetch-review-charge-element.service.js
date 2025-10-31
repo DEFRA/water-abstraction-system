@@ -84,6 +84,7 @@ async function _fetch(reviewChargeElementId) {
         .modifyGraph('returnLog', (returnLogBuilder) => {
           returnLogBuilder.select([
             'id',
+            'returnId',
             ref('metadata:nald.periodStartDay').castInt().as('periodStartDay'),
             ref('metadata:nald.periodStartMonth').castInt().as('periodStartMonth'),
             ref('metadata:nald.periodEndDay').castInt().as('periodEndDay'),

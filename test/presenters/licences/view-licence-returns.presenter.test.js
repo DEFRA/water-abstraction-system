@@ -52,20 +52,18 @@ describe('Licences - View Licence Returns presenter', () => {
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description',
             dueDate: '28 November 2020',
-            link: '/system/return-logs?id=v1:1:01/123:10046821:2020-01-02:2020-02-01',
+            link: '/system/return-logs/c4458436-4766-4271-b978-6af7a0e4fd95',
             purpose: ['Spray Irrigation - Direct (SPRAY IRRIGATION)'],
             reference: '10046821',
-            returnLogId: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
             status: 'complete'
           },
           {
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description',
             dueDate: '28 November 2020',
-            link: '/system/return-logs?id=v1:1:01/123:10046820:2020-01-02:2020-02-01',
+            link: '/system/return-logs/2e35c9c6-5017-46ea-8fa8-8960dc1a8ae7',
             purpose: ['Spray Irrigation - Direct (SPRAY IRRIGATION)'],
             reference: '10046820',
-            returnLogId: 'v1:1:01/123:10046820:2020-01-02:2020-02-01',
             status: 'overdue'
           }
         ]
@@ -130,7 +128,7 @@ describe('Licences - View Licence Returns presenter', () => {
       it('returns a link to the view return log page', () => {
         const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
 
-        expect(result.returns[0].link).to.equal('/system/return-logs?id=v1:1:01/123:10046821:2020-01-02:2020-02-01')
+        expect(result.returns[0].link).to.equal('/system/return-logs/c4458436-4766-4271-b978-6af7a0e4fd95')
       })
 
       describe('when enableSystemReturnsView is set to false', () => {
@@ -276,6 +274,7 @@ function _returnLogs() {
       ],
       description: 'empty description'
     },
+    returnId: 'c4458436-4766-4271-b978-6af7a0e4fd95',
     returnReference: '10046821'
   }
 
@@ -285,6 +284,7 @@ function _returnLogs() {
       ...returnLog,
       id: 'v1:1:01/123:10046820:2020-01-02:2020-02-01',
       status: 'due',
+      returnId: '2e35c9c6-5017-46ea-8fa8-8960dc1a8ae7',
       returnReference: '10046820'
     }
   ]

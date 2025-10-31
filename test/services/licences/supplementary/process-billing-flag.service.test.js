@@ -182,10 +182,10 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
       })
     })
 
-    describe('with a returnId', () => {
+    describe('with a returnLogId', () => {
       before(() => {
         payload = {
-          returnId: 'd92ab68d-25e3-4cb0-8528-5968bba1b85e'
+          returnLogId: 'v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31'
         }
       })
 

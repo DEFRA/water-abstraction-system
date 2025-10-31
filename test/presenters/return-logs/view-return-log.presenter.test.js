@@ -38,7 +38,7 @@ describe('Return Logs - View Return Log presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ViewReturnLogPresenter.go(returnLog, auth)
+    const result = ViewReturnLogPresenter.go(auth, returnLog)
 
     const lines = returnLog.returnSubmissions[0].returnSubmissionLines
     const totalQuantity = lines.reduce((acc, line) => {
@@ -59,7 +59,7 @@ describe('Return Logs - View Return Log presenter', () => {
       displayTable: true,
       displayTotal: true,
       displayUnits: false,
-      downloadCSVLink: `/system/return-logs/download?id=${returnLog.id}&version=1`,
+      downloadCSVLink: `/system/return-logs/${returnLog.returnId}/download?version=1`,
       licenceRef: returnLog.licenceRef,
       meterDetails: null,
       method: 'abstractionVolumes',
@@ -97,7 +97,7 @@ describe('Return Logs - View Return Log presenter', () => {
       versions: [
         {
           createdAt: '16 December 2023',
-          link: `/system/return-logs?id=${returnLog.id}&version=1`,
+          link: `/system/return-logs/${returnLog.returnId}?version=1`,
           notes: null,
           selected: true,
           version: 1,
@@ -111,7 +111,7 @@ describe('Return Logs - View Return Log presenter', () => {
   describe('the "abstractionPeriod" property', () => {
     describe('when the return log has an abstraction period set', () => {
       it('returns the correctly-formatted date', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.abstractionPeriod).to.equal('1 April to 28 April')
       })
@@ -126,7 +126,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns an empty string', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.abstractionPeriod).to.equal('')
       })
@@ -141,7 +141,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns an empty string', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.abstractionPeriod).to.equal('')
       })
@@ -155,7 +155,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.actionButton).to.be.null()
       })
@@ -170,7 +170,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.actionButton).to.be.null()
       })
@@ -183,7 +183,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns "Submit return"', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.actionButton).to.equal({
           value: returnLog.id,
@@ -198,7 +198,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.actionButton).to.be.null()
       })
@@ -220,7 +220,7 @@ describe('Return Logs - View Return Log presenter', () => {
         })
 
         it('returns "Edit return"', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.actionButton).to.equal({
             value: returnLog.id,
@@ -240,7 +240,7 @@ describe('Return Logs - View Return Log presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.actionButton).to.be.null()
         })
@@ -264,7 +264,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns "Go back to summary"', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.backLink).to.equal({
           href: `/system/licences/${returnLog.licence.id}/returns`,
@@ -284,10 +284,10 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns "Go back to the latest version"', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.backLink).to.equal({
-          href: `/system/return-logs?id=${returnLog.id}`,
+          href: `/system/return-logs/${returnLog.returnId}`,
           text: 'Go back to the latest version'
         })
       })
@@ -297,7 +297,7 @@ describe('Return Logs - View Return Log presenter', () => {
   describe('the "displayReadings" property', () => {
     describe('when the return submission method is "abstractionVolumes"', () => {
       it('returns false', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.displayReadings).to.equal(false)
       })
@@ -309,7 +309,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns true', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.displayReadings).to.equal(true)
       })
@@ -325,7 +325,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns false', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.displayTable).to.equal(false)
       })
@@ -339,7 +339,7 @@ describe('Return Logs - View Return Log presenter', () => {
         })
 
         it('returns false', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.displayTable).to.equal(false)
         })
@@ -347,7 +347,7 @@ describe('Return Logs - View Return Log presenter', () => {
 
       describe('which is not a nil return', () => {
         it('returns true', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.displayTable).to.equal(true)
         })
@@ -362,7 +362,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns true', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.displayUnits).to.equal(true)
       })
@@ -370,7 +370,7 @@ describe('Return Logs - View Return Log presenter', () => {
 
     describe('when the unit is cubic metres', () => {
       it('returns false', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.displayUnits).to.equal(false)
       })
@@ -386,7 +386,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.downloadCSVLink).to.be.null()
       })
@@ -400,7 +400,7 @@ describe('Return Logs - View Return Log presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.downloadCSVLink).to.be.null()
         })
@@ -408,9 +408,9 @@ describe('Return Logs - View Return Log presenter', () => {
 
       describe('which is not a nil return', () => {
         it('returns a link to download the selected version', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
-          const expectedLink = `/system/return-logs/download?id=${returnLog.id}&version=${returnLog.returnSubmissions[0].version}`
+          const expectedLink = `/system/return-logs/${returnLog.returnId}/download?version=${returnLog.returnSubmissions[0].version}`
 
           expect(result.downloadCSVLink).to.equal(expectedLink)
         })
@@ -427,7 +427,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns false', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.nilReturn).to.equal(false)
       })
@@ -441,7 +441,7 @@ describe('Return Logs - View Return Log presenter', () => {
         })
 
         it('returns true', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.nilReturn).to.equal(true)
         })
@@ -449,7 +449,7 @@ describe('Return Logs - View Return Log presenter', () => {
 
       describe('which is not a nil return', () => {
         it('returns true', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.nilReturn).to.equal(false)
         })
@@ -467,7 +467,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns null ', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.receivedDate).to.be.null()
       })
@@ -475,7 +475,7 @@ describe('Return Logs - View Return Log presenter', () => {
 
     describe('when a received date is present', () => {
       it('returns the formatted date', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.receivedDate).to.equal('12 April 2023')
       })
@@ -489,7 +489,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns false', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.showUnderQuery).to.be.false()
       })
@@ -504,7 +504,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns false', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.showUnderQuery).to.be.false()
       })
@@ -512,7 +512,7 @@ describe('Return Logs - View Return Log presenter', () => {
 
     describe('when the return log has ended', () => {
       it('returns true', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.showUnderQuery).to.be.true()
       })
@@ -529,7 +529,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.startReading).to.be.null()
       })
@@ -538,7 +538,7 @@ describe('Return Logs - View Return Log presenter', () => {
     describe('when there is a submission', () => {
       describe('but abstraction volumes were recorded', () => {
         it('returns null', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.startReading).to.be.null()
         })
@@ -554,7 +554,7 @@ describe('Return Logs - View Return Log presenter', () => {
         })
 
         it('returns the start reading', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.startReading).to.equal(meteredSubmission.metadata.meters[0].startReading)
         })
@@ -572,7 +572,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.summaryTableData).to.be.null()
       })
@@ -580,7 +580,7 @@ describe('Return Logs - View Return Log presenter', () => {
 
     describe('when there is a submission', () => {
       it('returns generated headers and rows', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         // NOTE: The testing is this simple because we have the 'correctly presents the data' test at the very top plus
         // the generating the headers and the rows is handled by base-return-logs.presenter.js, where they have been
@@ -599,7 +599,7 @@ describe('Return Logs - View Return Log presenter', () => {
 
       describe('and was submitted using abstraction volumes', () => {
         it('returns "Summary of daily abstraction volumes"', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.tableTitle).to.equal('Summary of daily abstraction volumes')
         })
@@ -611,7 +611,7 @@ describe('Return Logs - View Return Log presenter', () => {
         })
 
         it('returns "Summary of daily meter readings"', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.tableTitle).to.equal('Summary of daily meter readings')
         })
@@ -626,7 +626,7 @@ describe('Return Logs - View Return Log presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.summaryTableData).to.be.null()
         })
@@ -640,7 +640,7 @@ describe('Return Logs - View Return Log presenter', () => {
 
       describe('and was submitted using abstraction volumes', () => {
         it('returns "Summary of weekly abstraction volumes"', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.tableTitle).to.equal('Summary of weekly abstraction volumes')
         })
@@ -652,7 +652,7 @@ describe('Return Logs - View Return Log presenter', () => {
         })
 
         it('returns "Summary of weekly meter readings"', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.tableTitle).to.equal('Summary of weekly meter readings')
         })
@@ -667,7 +667,7 @@ describe('Return Logs - View Return Log presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.summaryTableData).to.be.null()
         })
@@ -681,7 +681,7 @@ describe('Return Logs - View Return Log presenter', () => {
 
       describe('and was submitted using abstraction volumes', () => {
         it('returns "Summary of monthly abstraction volumes"', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.tableTitle).to.equal('Summary of monthly abstraction volumes')
         })
@@ -693,7 +693,7 @@ describe('Return Logs - View Return Log presenter', () => {
         })
 
         it('returns "Summary of monthly meter readings"', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.tableTitle).to.equal('Summary of monthly meter readings')
         })
@@ -709,7 +709,7 @@ describe('Return Logs - View Return Log presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.tableTitle).to.be.null()
         })
@@ -724,7 +724,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns "Two-part"', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.tariff).to.equal('Two-part')
       })
@@ -732,7 +732,7 @@ describe('Return Logs - View Return Log presenter', () => {
 
     describe('when the return log is not flagged for "two-part tariff"', () => {
       it('returns "Standard', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.tariff).to.equal('Standard')
       })
@@ -749,7 +749,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns 0 as a string', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.total).to.equal('0')
       })
@@ -765,7 +765,7 @@ describe('Return Logs - View Return Log presenter', () => {
         })
 
         it('returns 0 as a string', () => {
-          const result = ViewReturnLogPresenter.go(returnLog, auth)
+          const result = ViewReturnLogPresenter.go(auth, returnLog)
 
           expect(result.total).to.equal('0')
         })
@@ -780,7 +780,7 @@ describe('Return Logs - View Return Log presenter', () => {
           })
 
           it('returns 0 as a string', () => {
-            const result = ViewReturnLogPresenter.go(returnLog, auth)
+            const result = ViewReturnLogPresenter.go(auth, returnLog)
 
             expect(result.total).to.equal('0')
           })
@@ -799,7 +799,7 @@ describe('Return Logs - View Return Log presenter', () => {
           })
 
           it('returns the formatted total quantity', () => {
-            const result = ViewReturnLogPresenter.go(returnLog, auth)
+            const result = ViewReturnLogPresenter.go(auth, returnLog)
 
             expect(result.total).to.equal(formatNumber(total))
           })
@@ -815,7 +815,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns true', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.underQuery).to.equal(true)
       })
@@ -823,7 +823,7 @@ describe('Return Logs - View Return Log presenter', () => {
 
     describe('when the return log is not under query', () => {
       it('returns false', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.underQuery).to.equal(false)
       })
@@ -844,19 +844,19 @@ describe('Return Logs - View Return Log presenter', () => {
     })
 
     it('returns the return submissions formatted as "versions"', () => {
-      const result = ViewReturnLogPresenter.go(returnLog, auth)
+      const result = ViewReturnLogPresenter.go(auth, returnLog)
 
       expect(result.versions).to.equal(
         [
           {
-            link: `/system/return-logs?id=${returnLog.id}&version=${returnLog.versions[0].version}`,
+            link: `/system/return-logs/${returnLog.returnId}?version=${returnLog.versions[0].version}`,
             notes: 'This was a good one',
             selected: false,
             version: returnLog.versions[0].version,
             user: returnLog.versions[0].userId
           },
           {
-            link: `/system/return-logs?id=${returnLog.id}&version=${returnLog.versions[1].version}`,
+            link: `/system/return-logs/${returnLog.returnId}?version=${returnLog.versions[1].version}`,
             notes: null,
             selected: true,
             version: returnLog.versions[1].version,
@@ -875,7 +875,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns "This return is void and has been replaced. Do not use this data."', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.warning).to.equal('This return is void and has been replaced. Do not use this data.')
       })
@@ -896,7 +896,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.warning).to.be.null()
       })
@@ -913,7 +913,7 @@ describe('Return Logs - View Return Log presenter', () => {
       })
 
       it('returns false', () => {
-        const result = ViewReturnLogPresenter.go(returnLog, auth)
+        const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.warning).to.equal('You are viewing a previous version. This is not the latest submission data.')
       })

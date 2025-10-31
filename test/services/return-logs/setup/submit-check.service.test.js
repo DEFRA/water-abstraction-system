@@ -61,6 +61,7 @@ describe('Return Logs Setup - Submit Check service', () => {
         licenceRef: licence.licenceRef,
         purposes: ['test purpose'],
         reported: 'abstraction-volumes',
+        returnId: returnLog.returnId,
         returnReference: returnLog.returnReference,
         returnLogId: returnLog.id,
         returnSubmissionId: initialReturnSubmission.id,
@@ -194,7 +195,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       it('returns the original returnLogId', async () => {
         const result = await SubmitCheckService.go(session.id, user)
 
-        expect(result).to.equal({ returnLogId: returnLog.id })
+        expect(result).to.equal({ returnId: returnLog.returnId })
       })
     })
   })
