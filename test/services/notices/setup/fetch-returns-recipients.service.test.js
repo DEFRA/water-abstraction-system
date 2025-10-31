@@ -556,7 +556,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
     })
   })
 
-  describe('and the due date is set on an inviations notice', () => {
+  describe('and the due date is set on an invitations notice', () => {
     beforeEach(() => {
       session = {
         journey: NoticeJourney.STANDARD,
