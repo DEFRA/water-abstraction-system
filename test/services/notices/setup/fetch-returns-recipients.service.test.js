@@ -556,7 +556,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
     })
   })
 
-  describe('and the due date is set on an invitations notice', () => {
+  describe('when the due date is set on an invitations notice', () => {
     beforeEach(() => {
       session = {
         journey: NoticeJourney.STANDARD,
@@ -585,7 +585,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
     })
   })
 
-  describe('and it is a reminders notice', () => {
+  describe('when it is a reminders notice', () => {
     beforeEach(() => {
       session = {
         journey: NoticeJourney.STANDARD,
@@ -641,7 +641,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
     })
   })
 
-  describe('and "enableNullDueDate" is false', () => {
+  describe('when "enableNullDueDate" is false', () => {
     beforeEach(() => {
       Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(false)
 
