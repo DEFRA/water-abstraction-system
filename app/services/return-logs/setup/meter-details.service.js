@@ -21,11 +21,11 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const formattedData = MeterDetailsPresenter.go(session)
+  const pageData = MeterDetailsPresenter.go(session)
 
   return {
     activeNavBar: 'search',
-    ...formattedData
+    ...pageData
   }
 }
 

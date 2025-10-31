@@ -33,13 +33,13 @@ function go(session) {
 
   return {
     abstractionPeriod: formatAbstractionPeriod(periodStartDay, periodStartMonth, periodEndDay, periodEndMonth),
-    backLink: `/system/return-logs/setup/${sessionId}/check`,
+    backLink: { href: `/system/return-logs/setup/${sessionId}/check`, text: 'Back' },
     pageTitle: 'You are about to cancel this return submission',
+    pageTitleCaption: `Return reference ${returnReference}`,
     purposes,
     returnLogId,
     returnPeriod: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
     returnReceivedDate: formatLongDate(new Date(receivedDate)),
-    returnReference,
     siteDescription,
     tariff: twoPartTariff ? 'Two-part' : 'Standard'
   }

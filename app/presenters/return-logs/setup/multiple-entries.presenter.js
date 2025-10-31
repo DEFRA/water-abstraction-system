@@ -18,18 +18,18 @@ const { returnRequirementFrequencies } = require('../../../lib/static-lookups.li
 function go(session) {
   const { id: sessionId, lines, multipleEntries, returnReference, returnsFrequency, reported } = session
 
-  const measurementType = reported === 'abstraction-volumes' ? 'volumes' : 'readings'
+  const measurementType = reported === 'abstractionVolumes' ? 'volumes' : 'readings'
   const frequency = returnRequirementFrequencies[returnsFrequency]
 
   return {
-    backLink: `/system/return-logs/setup/${sessionId}/check`,
+    backLink: { href: `/system/return-logs/setup/${sessionId}/check`, text: 'Back' },
     endDate: formatLongDate(new Date(lines[lines.length - 1].startDate)),
     frequency,
     lineCount: lines.length,
     measurementType,
     multipleEntries: multipleEntries ?? null,
     pageTitle: `Enter multiple ${frequency} ${measurementType}`,
-    returnReference,
+    pageTitleCaption: `Return reference ${returnReference}`,
     sessionId,
     startDate: formatLongDate(new Date(lines[0].startDate))
   }

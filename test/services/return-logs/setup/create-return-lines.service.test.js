@@ -47,8 +47,8 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
         meterProvided: 'no',
         returnsFrequency: 'week',
         startReading: null,
-        units: 'cubic-metres',
-        reported: 'abstraction-volumes'
+        units: 'cubicMetres',
+        reported: 'abstractionVolumes'
       }
     })
 
@@ -96,7 +96,7 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
 
     describe('when measured using meter readings', () => {
       beforeEach(() => {
-        session.reported = 'meter-readings'
+        session.reported = 'meterReadings'
         session.startReading = 1000
       })
 
@@ -165,7 +165,7 @@ describe('Return Logs Setup - Create New Return Lines service', () => {
 
     describe('when called for a nil return', () => {
       beforeEach(() => {
-        session.journey = 'nil-return'
+        session.journey = 'nilReturn'
       })
 
       it('returns an empty array', async () => {

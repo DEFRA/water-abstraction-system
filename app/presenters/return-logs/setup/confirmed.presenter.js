@@ -23,7 +23,9 @@ function go(returnLog) {
     pageTitle: _pageTitle(returnReference, status, submissionCount),
     purposeDetails: _purposeDetails(purposes),
     siteDescription,
-    status
+    status,
+    viewReturnsLink: `/system/licences/${licenceId}/returns`,
+    viewThisReturnLink: `/system/return-logs?id=${returnLogId}`
   }
 }
 

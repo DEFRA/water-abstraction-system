@@ -31,21 +31,22 @@ const { leftPadZeroes } = require('../../../presenters/base.presenter.js')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload, startDate) {
-  const { 'received-date-options': selectedOption } = payload
+  const { receivedDateOptions } = payload
 
-  if (selectedOption === 'custom-date') {
-    payload.fullDate = _fullDate(payload)
-
-    return _validateCustomReceivedDate(payload, startDate)
-  }
-  return _validateReceivedDate(payload)
+  return _validate(
+    {
+      date: _fullDate(payload),
+      receivedDateOptions
+    },
+    startDate
+  )
 }
 
 function _fullDate(payload) {
-  const { 'received-date-day': day, 'received-date-month': month, 'received-date-year': year } = payload
+  const { receivedDateDay: day, receivedDateMonth: month, receivedDateYear: year } = payload
 
-  if (!year || !month || !day) {
-    return null
+  if (!year && !month && !day) {
+    return undefined
   }
 
   const paddedMonth = month ? leftPadZeroes(month, 2) : ''
@@ -54,29 +55,26 @@ function _fullDate(payload) {
   return `${year}-${paddedMonth}-${paddedDay}`
 }
 
-function _validateCustomReceivedDate(payload, startDate) {
+function _validate(payload, startDate) {
   const schema = Joi.object({
-    fullDate: Joi.date().format(['YYYY-MM-DD']).required().min(startDate).less('now').messages({
-      'date.base': 'Enter a return received date',
-      'date.format': 'Enter a real received date',
-      'date.min': 'Received date must be the return period start date or after it',
-      'date.less': "Received date must be either today's date or in the past"
-    }),
-    otherwise: Joi.forbidden()
-  })
-
-  return schema.validate(payload, { abortEarly: false, allowUnknown: true })
-}
-
-function _validateReceivedDate(payload) {
-  const schema = Joi.object({
-    'received-date-options': Joi.string().required().messages({
+    receivedDateOptions: Joi.string().required().messages({
       'any.required': 'Select the return received date',
       'string.empty': 'Select the return received date'
+    }),
+    date: Joi.alternatives().conditional('receivedDateOptions', {
+      is: 'customDate',
+      then: Joi.date().format(['YYYY-MM-DD']).required().min(startDate).less('now').messages({
+        'any.required': 'Enter a return received date',
+        'date.base': 'Enter a return received date',
+        'date.format': 'Enter a real received date',
+        'date.min': 'Received date must be the return period start date or after it',
+        'date.less': "Received date must be either today's date or in the past"
+      }),
+      otherwise: Joi.string().optional()
     })
   })
 
-  return schema.validate(payload, { abortEarly: false, allowUnknown: true })
+  return schema.validate(payload)
 }
 
 module.exports = {

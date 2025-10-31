@@ -5,6 +5,8 @@
  * @module SubmitNoteService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+
 const NotePresenter = require('../../../presenters/return-logs/setup/note.presenter.js')
 const NoteValidator = require('../../../validators/return-logs/setup/note.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -28,9 +30,9 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId, payload, user, yar) {
   const session = await SessionModel.query().findById(sessionId)
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     const notification = _notification(session, payload.note)
 
     await _save(session, payload, user)
@@ -46,7 +48,7 @@ async function go(sessionId, payload, user, yar) {
 
   return {
     activeNavBar: 'search',
-    error: validationResult,
+    error,
     ...submittedSessionData
   }
 }
@@ -89,17 +91,9 @@ function _submittedSessionData(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = NoteValidator.go(payload)
+  const validationResult = NoteValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

@@ -16,22 +16,22 @@ function go(session) {
   const { id: sessionId, returnReference, units } = session
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     pageTitle: 'Which units were used?',
-    returnReference,
+    pageTitleCaption: `Return reference ${returnReference}`,
     sessionId,
     units: units ?? null
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {
     return `/system/return-logs/setup/${id}/check`
   }
 
-  if (session.reported === 'meter-readings') {
+  if (session.reported === 'meterReadings') {
     return `/system/return-logs/setup/${id}/start-reading`
   }
 

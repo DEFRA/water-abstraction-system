@@ -26,20 +26,20 @@ function go(session) {
   } = session
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     pageTitle: 'When was the return received?',
+    pageTitleCaption: `Return reference ${returnReference}`,
     receivedDateDay: receivedDateDay ?? null,
     receivedDateMonth: receivedDateMonth ?? null,
     receivedDateOption: receivedDateOptions ?? null,
     receivedDateYear: receivedDateYear ?? null,
-    returnReference,
     sessionId,
     todaysDate: formatLongDate(today()),
     yesterdaysDate: _yesterdaysDate()
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id, returnLogId } = session
 
   if (checkPageVisited) {

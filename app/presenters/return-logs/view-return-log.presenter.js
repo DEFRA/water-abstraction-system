@@ -61,11 +61,12 @@ function go(returnLog, auth) {
     displayTotal: !!selectedReturnSubmission,
     displayUnits: units !== unitNames.CUBIC_METRES,
     downloadCSVLink: _downloadCSVLink(selectedReturnSubmission, id),
-    licenceRef: licence.licenceRef,
     meterDetails: formatMeterDetails(selectedReturnSubmission?.$meter()),
     method,
     nilReturn: selectedReturnSubmission ? selectedReturnSubmission.nilReturn : false,
+    notification: underQuery ? { text: 'This return has been marked under query' } : null,
     pageTitle: 'Abstraction return',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     purpose: formatPurposes(purposes),
     receivedDate: receivedDate ? formatLongDate(receivedDate) : null,
     returnReference,
@@ -271,11 +272,17 @@ function _versions(selectedReturnSubmission, versions, returnLogId) {
 
 function _warning(status, latest) {
   if (status === 'void') {
-    return 'This return is void and has been replaced. Do not use this data.'
+    return {
+      text: 'This return is void and has been replaced. Do not use this data.',
+      iconFallbackText: 'Warning'
+    }
   }
 
   if (!latest) {
-    return 'You are viewing a previous version. This is not the latest submission data.'
+    return {
+      text: 'You are viewing a previous version. This is not the latest submission data.',
+      iconFallbackText: 'Warning'
+    }
   }
 
   return null

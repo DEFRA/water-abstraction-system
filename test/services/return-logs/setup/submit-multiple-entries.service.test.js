@@ -29,7 +29,7 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
           { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
         ],
         returnsFrequency: 'month',
-        reported: 'abstraction-volumes'
+        reported: 'abstractionVolumes'
       }
     }
 
@@ -44,7 +44,7 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
         payload = { multipleEntries: '100, 200' }
       })
 
-      describe('and the user has previously selected "abstraction-volumes" as the reported type', () => {
+      describe('and the user has previously selected "abstractionVolumes" as the reported type', () => {
         it('saves the submitted option', async () => {
           await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
 
@@ -67,7 +67,7 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
         })
       })
 
-      describe('and the user has previously selected "meter-readings" as the reported type', () => {
+      describe('and the user has previously selected "meterReadings" as the reported type', () => {
         beforeEach(async () => {
           sessionData = {
             data: {
@@ -77,7 +77,7 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
                 { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
               ],
               returnsFrequency: 'month',
-              reported: 'meter-readings'
+              reported: 'meterReadings'
             }
           }
 
@@ -118,14 +118,17 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
         expect(result).to.equal(
           {
             activeNavBar: 'search',
-            backLink: `/system/return-logs/setup/${session.id}/check`,
+            backLink: {
+              href: `/system/return-logs/setup/${session.id}/check`,
+              text: 'Back'
+            },
             endDate: '1 May 2023',
             frequency: 'monthly',
             lineCount: 2,
             measurementType: 'volumes',
             multipleEntries: null,
             pageTitle: 'Enter multiple monthly volumes',
-            returnReference: '12345',
+            pageTitleCaption: 'Return reference 12345',
             startDate: '1 April 2023'
           },
           { skip: ['sessionId', 'error'] }
@@ -136,7 +139,17 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
         it('includes an error for the input form element', async () => {
           const result = await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
 
-          expect(result.error).to.equal({ text: 'Enter 2 monthly volumes' })
+          expect(result.error).to.equal({
+            errorList: [
+              {
+                href: '#multipleEntries',
+                text: 'Enter 2 monthly volumes'
+              }
+            ],
+            multipleEntries: {
+              text: 'Enter 2 monthly volumes'
+            }
+          })
         })
       })
     })

@@ -30,7 +30,7 @@ async function go(metadata, session, timestamp, user, trx = null) {
     createdAt: timestamp,
     createdBy: user.id,
     current: true,
-    nilReturn: session.journey === 'nil-return',
+    nilReturn: session.journey === 'nilReturn',
     metadata,
     notes: session.note?.content,
     returnLogId: session.returnLogId,

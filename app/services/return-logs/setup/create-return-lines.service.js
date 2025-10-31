@@ -21,7 +21,7 @@ const { returnUnits } = require('../../../lib/static-lookups.lib.js')
  * @returns {Promise<module:ReturnSubmissionLineModel[]>} - The created return lines (empty if nil return)
  */
 async function go(returnSubmissionId, session, timestamp, trx = null) {
-  if (session.journey === 'nil-return') {
+  if (session.journey === 'nilReturn') {
     return []
   }
 
@@ -77,7 +77,7 @@ function _convertToCubicMetres(quantity, units) {
 }
 
 /**
- * Convert a unit name to the form we persist as `user_unit` ie. from `cubic-metres` to `m³`
+ * Convert a unit name to the form we persist as `user_unit` ie. from `cubicMetres` to `m³`
  *
  * @param {string} unit - The unit name to convert
  *
@@ -95,7 +95,7 @@ function _getUserUnit(unit) {
 
 function _returnLines(returnSubmissionId, session, timestamp) {
   const meter10TimesDisplay = session.meter10TimesDisplay === 'yes'
-  const volumes = session.reported === 'abstraction-volumes'
+  const volumes = session.reported === 'abstractionVolumes'
 
   let previousReading = session.startReading ?? 0
 

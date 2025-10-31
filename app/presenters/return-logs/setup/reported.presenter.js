@@ -16,15 +16,15 @@ function go(session) {
   const { id: sessionId, returnReference, reported } = session
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     pageTitle: 'How was this return reported?',
+    pageTitleCaption: `Return reference ${returnReference}`,
     reported: reported ?? null,
-    returnReference,
     sessionId
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {

@@ -22,7 +22,7 @@ describe('Return Logs Setup - Received Date validator', () => {
     describe('because the user selected the todays date option', () => {
       beforeEach(() => {
         payload = {
-          'received-date-options': 'today'
+          receivedDateOptions: 'today'
         }
       })
 
@@ -36,7 +36,7 @@ describe('Return Logs Setup - Received Date validator', () => {
     describe('because the user selected the yesterdays date option', () => {
       beforeEach(() => {
         payload = {
-          'received-date-options': 'yesterday'
+          receivedDateOptions: 'yesterday'
         }
       })
 
@@ -50,10 +50,10 @@ describe('Return Logs Setup - Received Date validator', () => {
     describe('because the user entered a valid custom date', () => {
       beforeEach(() => {
         payload = {
-          'received-date-options': 'custom-date',
-          'received-date-day': '26',
-          'received-date-month': '11',
-          'received-date-year': '2023'
+          receivedDateOptions: 'customDate',
+          receivedDateDay: '26',
+          receivedDateMonth: '11',
+          receivedDateYear: '2023'
         }
       })
 
@@ -81,14 +81,12 @@ describe('Return Logs Setup - Received Date validator', () => {
 
     describe('because the user selected "Custom date"', () => {
       beforeEach(() => {
-        payload = { 'received-date-options': 'custom-date' }
+        payload = { receivedDateOptions: 'customDate' }
       })
 
       describe('but then entered no values', () => {
         beforeEach(() => {
-          payload['received-date-day'] = null
-          payload['received-date-month'] = null
-          payload['received-date-year'] = null
+          payload = { receivedDateOptions: 'customDate' }
         })
 
         it('fails validation with the message "Enter a return received date"', () => {
@@ -101,24 +99,24 @@ describe('Return Logs Setup - Received Date validator', () => {
 
       describe('but only entered some values', () => {
         beforeEach(() => {
-          payload['received-date-day'] = '6'
-          payload['received-date-month'] = '4'
-          payload['received-date-year'] = null
+          payload.receivedDateDay = '6'
+          payload.receivedDateMonth = '4'
+          payload.receivedDateYear = null
         })
 
         it('fails validation with the message "Enter a real received date"', () => {
           const result = ReceivedDateValidator.go(payload, returnStartDate)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a return received date')
+          expect(result.error.details[0].message).to.equal('Enter a real received date')
         })
       })
 
       describe('but entered text', () => {
         beforeEach(() => {
-          payload['received-date-day'] = 'TT'
-          payload['received-date-month'] = 'ZZ'
-          payload['received-date-year'] = 'LLLL'
+          payload.receivedDateDay = 'TT'
+          payload.receivedDateMonth = 'ZZ'
+          payload.receivedDateYear = 'LLLL'
         })
 
         it('fails validation with the message "Enter a real received date"', () => {
@@ -131,9 +129,9 @@ describe('Return Logs Setup - Received Date validator', () => {
 
       describe('but entered invalid numbers, for example, 13 for the month', () => {
         beforeEach(() => {
-          payload['received-date-day'] = '6'
-          payload['received-date-month'] = '13'
-          payload['received-date-year'] = '2023'
+          payload.receivedDateDay = '6'
+          payload.receivedDateMonth = '13'
+          payload.receivedDateYear = '2023'
         })
 
         it('fails validation with the message "Enter a real received date"', () => {
@@ -146,9 +144,9 @@ describe('Return Logs Setup - Received Date validator', () => {
 
       describe('but entered an invalid date, for example, 2023-02-29', () => {
         beforeEach(() => {
-          payload['received-date-day'] = '29'
-          payload['received-date-month'] = '2'
-          payload['received-date-year'] = '2023'
+          payload.receivedDateDay = '29'
+          payload.receivedDateMonth = '2'
+          payload.receivedDateYear = '2023'
         })
 
         it('fails validation with the message "Enter a real received date"', () => {
@@ -161,9 +159,9 @@ describe('Return Logs Setup - Received Date validator', () => {
 
       describe('but entered a date before the return logs start date', () => {
         beforeEach(() => {
-          payload['received-date-day'] = '31'
-          payload['received-date-month'] = '12'
-          payload['received-date-year'] = '2022'
+          payload.receivedDateDay = '31'
+          payload.receivedDateMonth = '12'
+          payload.receivedDateYear = '2022'
         })
 
         it('fails validation with the message "Received date must be the return period start date or after it"', () => {
@@ -183,9 +181,9 @@ describe('Return Logs Setup - Received Date validator', () => {
           futureDate.setDate(futureDate.getDate() + 1) // Set to tomorrow
 
           // Update the payload with the future date values
-          payload['received-date-day'] = String(futureDate.getDate())
-          payload['received-date-month'] = String(futureDate.getMonth() + 1) // Month (0-based index)
-          payload['received-date-year'] = String(futureDate.getFullYear())
+          payload.receivedDateDay = String(futureDate.getDate())
+          payload.receivedDateMonth = String(futureDate.getMonth() + 1) // Month (0-based index)
+          payload.receivedDateYear = String(futureDate.getFullYear())
         })
 
         it('fails validation with the message "Received date must be either todays date or in the past"', () => {

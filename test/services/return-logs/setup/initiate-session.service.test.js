@@ -89,7 +89,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         beenReceived: true,
         dueDate: null,
         endDate: '2022-06-01T00:00:00.000Z',
-        journey: 'enter-return',
+        journey: 'enterReturn',
         licenceId: licence.id,
         licenceRef: licence.licenceRef,
         lines: [
@@ -115,7 +115,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         receivedDateMonth: '3',
         receivedDateOptions: 'custom-date',
         receivedDateYear: '2025',
-        reported: 'abstraction-volumes',
+        reported: 'abstractionVolumes',
         returnLogId: returnLog.id,
         returnReference: returnLog.returnReference,
         returnsFrequency: 'month',
@@ -125,7 +125,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         submissionType: 'edit',
         twoPartTariff: returnLog.metadata.isTwoPartTariff,
         underQuery: returnLog.underQuery,
-        units: 'cubic-metres'
+        units: 'cubicMetres'
       })
     })
 
@@ -194,14 +194,14 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         returnSubmission = await ReturnSubmissionHelper.add({ returnLogId: returnLog.id })
       })
 
-      it('defaults the unit to cubic-metres', async () => {
+      it('defaults the unit to cubicMetres', async () => {
         const result = await InitiateSessionService.go(returnLog.id)
 
         const sessionId = _getSessionId(result)
 
         const matchingSession = await SessionModel.query().findById(sessionId)
 
-        expect(matchingSession.data.units).to.equal('cubic-metres')
+        expect(matchingSession.data.units).to.equal('cubicMetres')
       })
     })
 
@@ -243,7 +243,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         expect(matchingSession.data.meterMake).to.equal('METER_MAKE')
         expect(matchingSession.data.meterSerialNumber).to.equal('METER_SERIAL_NUMBER')
         expect(matchingSession.data.meterProvided).to.equal('yes')
-        expect(matchingSession.reported).to.equal('meter-readings')
+        expect(matchingSession.reported).to.equal('meterReadings')
       })
     })
 
@@ -269,7 +269,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
 
         const matchingSession = await SessionModel.query().findById(sessionId)
 
-        expect(matchingSession.data.journey).to.equal('nil-return')
+        expect(matchingSession.data.journey).to.equal('nilReturn')
       })
 
       it('populates the lines array with placeholder data', async () => {

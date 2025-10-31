@@ -27,11 +27,11 @@ function go(session, yearMonth) {
   })
 
   return {
-    backLink: `/system/return-logs/setup/${sessionId}/check`,
+    backLink: { href: `/system/return-logs/setup/${sessionId}/check`, text: 'Back' },
     inputLines: _inputLines(requestedMonthLines, returnsFrequency),
     pageTitle: _pageTitle(new Date(requestedMonthLines[0].endDate)),
-    returnReference,
-    units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
+    pageTitleCaption: `Return reference ${returnReference}`,
+    units: units === 'cubicMetres' ? 'Cubic metres' : sentenceCase(units)
   }
 }
 

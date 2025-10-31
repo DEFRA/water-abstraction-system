@@ -14,9 +14,9 @@ describe('Return Logs Setup - Units validator', () => {
   let payload
 
   describe('when a valid payload is provided', () => {
-    describe('because the user selected the "cubic-metres" option', () => {
+    describe('because the user selected the "cubicMetres" option', () => {
       beforeEach(() => {
-        payload = { units: 'cubic-metres' }
+        payload = { units: 'cubicMetres' }
       })
 
       it('confirms the payload is valid', () => {

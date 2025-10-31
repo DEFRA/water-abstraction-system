@@ -25,11 +25,11 @@ describe('Return Logs Setup - Reported presenter', () => {
       const result = ReportedPresenter.go(session)
 
       expect(result).to.equal({
-        pageTitle: 'How was this return reported?',
-        sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        returnReference: '012345',
+        backLink: { href: `/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/submission`, text: 'Back' },
         reported: null,
-        backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/submission'
+        pageTitle: 'How was this return reported?',
+        pageTitleCaption: 'Return reference 012345',
+        sessionId: '61e07498-f309-4829-96a9-72084a54996d'
       })
     })
   })
@@ -43,7 +43,10 @@ describe('Return Logs Setup - Reported presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = ReportedPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink).to.equal({
+          href: `/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check`,
+          text: 'Back'
+        })
       })
     })
 
@@ -51,7 +54,10 @@ describe('Return Logs Setup - Reported presenter', () => {
       it('returns a link back to the "Submission" page', () => {
         const result = ReportedPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/submission')
+        expect(result.backLink).to.equal({
+          href: `/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/submission`,
+          text: 'Back'
+        })
       })
     })
   })
@@ -59,25 +65,25 @@ describe('Return Logs Setup - Reported presenter', () => {
   describe('the "reported" property', () => {
     describe('when the user has previously selected "Meter Readings" as the reported type', () => {
       beforeEach(() => {
-        session.reported = 'meter-readings'
+        session.reported = 'meterReadings'
       })
 
       it('returns the "reported" property populated to re-select the option', () => {
         const result = ReportedPresenter.go(session)
 
-        expect(result.reported).to.equal('meter-readings')
+        expect(result.reported).to.equal('meterReadings')
       })
     })
 
     describe('when the user has previously selected "Abstraction Volumes" as the reported type', () => {
       beforeEach(() => {
-        session.reported = 'abstraction-volumes'
+        session.reported = 'abstractionVolumes'
       })
 
       it('returns the "reported" property populated to re-select the option', () => {
         const result = ReportedPresenter.go(session)
 
-        expect(result.reported).to.equal('abstraction-volumes')
+        expect(result.reported).to.equal('abstractionVolumes')
       })
     })
   })

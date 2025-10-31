@@ -20,7 +20,7 @@ describe('Return Logs Setup - Single Volume service', () => {
     session = await SessionHelper.add({
       data: {
         returnReference: '012345',
-        units: 'cubic-metres'
+        units: 'cubicMetres'
       }
     })
   })
@@ -38,9 +38,9 @@ describe('Return Logs Setup - Single Volume service', () => {
       expect(result).to.equal(
         {
           activeNavBar: 'search',
-          backLink: `/system/return-logs/setup/${session.id}/meter-provided`,
+          backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
           pageTitle: 'Is it a single volume?',
-          returnReference: '012345',
+          pageTitleCaption: 'Return reference 012345',
           singleVolume: null,
           singleVolumeQuantity: null,
           units: 'cubic metres'

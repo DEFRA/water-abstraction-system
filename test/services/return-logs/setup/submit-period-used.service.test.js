@@ -89,13 +89,13 @@ describe('Return Logs Setup - Submit Period Used service', () => {
       describe('because the user entered a custom period', () => {
         beforeEach(async () => {
           payload = {
-            periodDateUsedOptions: 'custom-dates',
-            'period-used-from-day': '15',
-            'period-used-from-month': '08',
-            'period-used-from-year': '2023',
-            'period-used-to-day': '20',
-            'period-used-to-month': '01',
-            'period-used-to-year': '2024'
+            periodDateUsedOptions: 'customDates',
+            periodUsedFromDay: '15',
+            periodUsedFromMonth: '08',
+            periodUsedFromYear: '2023',
+            periodUsedToDay: '20',
+            periodUsedToMonth: '01',
+            periodUsedToYear: '2024'
           }
         })
 
@@ -104,7 +104,7 @@ describe('Return Logs Setup - Submit Period Used service', () => {
 
           const refreshedSession = await session.$query()
 
-          expect(refreshedSession.periodDateUsedOptions).to.equal('custom-dates')
+          expect(refreshedSession.periodDateUsedOptions).to.equal('customDates')
           expect(refreshedSession.periodUsedFromDay).to.equal('15')
           expect(refreshedSession.periodUsedFromMonth).to.equal('08')
           expect(refreshedSession.periodUsedFromYear).to.equal('2023')
@@ -148,9 +148,9 @@ describe('Return Logs Setup - Submit Period Used service', () => {
           {
             abstractionPeriod: '1 April to 31 March',
             activeNavBar: 'search',
-            backLink: `/system/return-logs/setup/${session.id}/single-volume`,
+            backLink: { href: `/system/return-logs/setup/${session.id}/single-volume`, text: 'Back' },
             pageTitle: 'What period was used for this volume?',
-            returnReference: '12345',
+            pageTitleCaption: 'Return reference 12345',
             periodDateUsedOptions: null,
             periodUsedFromDay: null,
             periodUsedFromMonth: null,
@@ -171,11 +171,11 @@ describe('Return Logs Setup - Submit Period Used service', () => {
           expect(result.error).to.equal({
             errorList: [
               {
-                href: '#period-date-used-options',
+                href: '#periodDateUsedOptions',
                 text: 'Select what period was used for this volume'
               }
             ],
-            periodDateUsedOptions: { message: 'Select what period was used for this volume' }
+            periodDateUsedOptions: { text: 'Select what period was used for this volume' }
           })
         })
       })

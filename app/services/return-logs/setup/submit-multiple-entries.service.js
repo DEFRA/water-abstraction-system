@@ -5,10 +5,13 @@
  * @module SubmitMultipleEntriesService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
+
 const MultipleEntriesPresenter = require('../../../presenters/return-logs/setup/multiple-entries.presenter.js')
 const MultipleEntriesValidator = require('../../../validators/return-logs/setup/multiple-entries.validator.js')
+const SplitMultipleEntriesService = require('../../../services/return-logs/setup/split-multiple-entries.service.js')
 const SessionModel = require('../../../models/session.model.js')
-const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/multiple-entries` page
@@ -29,13 +32,15 @@ const { returnRequirementFrequencies } = require('../../../lib/static-lookups.li
 async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const measurementType = session.reported === 'abstraction-volumes' ? 'volumes' : 'meter readings'
+  const measurementType = session.reported === 'abstractionVolumes' ? 'volumes' : 'meter readings'
   const frequency = returnRequirementFrequencies[session.returnsFrequency]
 
-  const validationResult = _validate(frequency, measurementType, payload, session)
+  const _payload = { multipleEntries: SplitMultipleEntriesService.go(payload.multipleEntries) }
 
-  if (!validationResult) {
-    await _save(session, payload)
+  const error = _validate(frequency, measurementType, _payload, session)
+
+  if (!error) {
+    await _save(session, _payload)
 
     yar.flash('notification', {
       text: `${session.lines.length} ${frequency} ${measurementType} have been updated`,
@@ -45,21 +50,21 @@ async function go(sessionId, payload, yar) {
     return {}
   }
 
-  const submittedSessionData = _submittedSessionData(session, payload)
+  const pageData = _submittedSessionData(session, payload)
 
   return {
     activeNavBar: 'search',
-    error: validationResult,
-    ...submittedSessionData
+    error,
+    ...pageData
   }
 }
 
 async function _save(session, payload) {
   session.lines.forEach((line, index) => {
-    if (session.reported === 'abstraction-volumes') {
-      line.quantity = payload.formattedEntries[index]
+    if (session.reported === 'abstractionVolumes') {
+      line.quantity = payload.multipleEntries[index]
     } else {
-      line.reading = payload.formattedEntries[index]
+      line.reading = payload.multipleEntries[index]
     }
   })
 
@@ -74,17 +79,9 @@ function _submittedSessionData(session, payload) {
 
 function _validate(frequency, measurementType, payload, session) {
   const { lines, startReading } = session
-  const validation = MultipleEntriesValidator.go(frequency, lines.length, measurementType, payload, startReading)
+  const validationResult = MultipleEntriesValidator.go(frequency, lines.length, measurementType, payload, startReading)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {
