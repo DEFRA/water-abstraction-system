@@ -255,7 +255,7 @@ function _contact(name, role) {
 async function _licenceHolder(date, endDate = null) {
   const licenceDocumentHeader = await _addLicenceDocumentHeader()
 
-  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate, true)
+  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate, false)
 
   return {
     ...licenceDocumentHeader,
