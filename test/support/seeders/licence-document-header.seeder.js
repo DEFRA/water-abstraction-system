@@ -205,15 +205,18 @@ async function _addPrimaryUser() {
   return licenceDocumentHeader
 }
 
-async function _addReturnLog(date, licenceRef, endDate = null) {
+async function _addReturnLog(date, licenceRef, endDate = null, isCurrent = true) {
   if (date) {
-    return await ReturnLogHelper.add({
-      startDate: date,
-      endDate: endDate || date,
-      dueDate: null,
-      licenceRef,
-      quarterly: false
-    })
+    const defaults = ReturnLogHelper.defaults()
+
+    defaults.startDate = date
+    defaults.endDate = endDate || date
+    defaults.dueDate = null
+    defaults.licenceRef = licenceRef
+    defaults.quarterly = false
+    defaults.metadata.isCurrent = isCurrent
+
+    return await ReturnLogHelper.add(defaults)
   }
 
   return null
@@ -253,7 +256,12 @@ function _contact(name, role) {
 async function _licenceHolder(date, endDate = null) {
   const licenceDocumentHeader = await _addLicenceDocumentHeader()
 
-  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate)
+  // NOTE: For this specific scenario we set isCurrent in the return log's metadata to false. There was a time when
+  // these would be excluded from the query because this is what we found in the legacy code we migrated. However, we
+  // were then told this is not correct and they _should_ be included. We dropped the clause but it inadvertently got
+  // put back in. So, now we ensure one of the scenarios creates return logs with isCurrent=false to confirm they
+  // are still included.
+  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate, false)
 
   return {
     ...licenceDocumentHeader,
