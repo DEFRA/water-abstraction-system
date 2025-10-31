@@ -205,15 +205,17 @@ async function _addPrimaryUser() {
   return licenceDocumentHeader
 }
 
-async function _addReturnLog(date, licenceRef, endDate = null) {
+async function _addReturnLog(date, licenceRef, endDate = null, isCurrent = true) {
   if (date) {
-    return await ReturnLogHelper.add({
-      startDate: date,
-      endDate: endDate || date,
-      dueDate: null,
-      licenceRef,
-      quarterly: false
-    })
+    const defaults = ReturnLogHelper.defaults()
+    defaults.startDate = date
+    defaults.endDate = endDate || date
+    defaults.dueDate = null
+    defaults.licenceRef = licenceRef
+    defaults.quarterly = false
+    defaults.metadata.isCurrent = isCurrent
+
+    return await ReturnLogHelper.add(defaults)
   }
 
   return null
@@ -253,7 +255,7 @@ function _contact(name, role) {
 async function _licenceHolder(date, endDate = null) {
   const licenceDocumentHeader = await _addLicenceDocumentHeader()
 
-  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate)
+  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate, true)
 
   return {
     ...licenceDocumentHeader,
