@@ -5,9 +5,7 @@
  * @module ViewSearchResultsService
  */
 
-const FetchLicenceSearchResultsService = require('./fetch-licence-search-results.service.js')
-const FetchMonitoringStationSearchResultsService = require('./fetch-monitoring-station-search-results.service.js')
-const FetchReturnLogSearchResultsService = require('./fetch-return-log-search-results.service.js')
+const FindAllSearchMatchesService = require('./find-all-search-matches.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const SearchPresenter = require('../../presenters/search/search.presenter.js')
 
@@ -24,34 +22,25 @@ const SearchPresenter = require('../../presenters/search/search.presenter.js')
  * - Otherwise, if there are no results, displays a 'no results' message
  *
  * @param {string} searchQuery - The value to search for, taken from the session
+ * @param {string} searchResultType - The type of search result to display
  * @param {string} page - The requested page
  *
  * @returns {Promise<object>} The view data for the search page
  */
-async function go(searchQuery, page) {
+async function go(searchQuery, searchResultType, page) {
+  const resultType = searchResultType === 'all' ? null : searchResultType
   const pageNumber = Number(page)
 
-  const { results: licences, total: licenceTotal } = await FetchLicenceSearchResultsService.go(searchQuery, pageNumber)
+  const allSearchMatches = await FindAllSearchMatchesService.go(searchQuery, resultType, pageNumber)
 
-  const { results: returnLogs, total: returnLogTotal } = await FetchReturnLogSearchResultsService.go(
-    searchQuery,
-    pageNumber
-  )
-
-  const { results: monitoringStations, total: monitoringStationTotal } =
-    await FetchMonitoringStationSearchResultsService.go(searchQuery, pageNumber)
-
-  const mostResults = Math.max(licenceTotal, returnLogTotal, monitoringStationTotal)
-
-  const pagination = PaginatorPresenter.go(mostResults, pageNumber, `/system/search`)
+  const pagination = PaginatorPresenter.go(allSearchMatches.largestResultCount, pageNumber, `/system/search`)
 
   const formattedData = SearchPresenter.go(
     searchQuery,
+    resultType,
     pageNumber,
     pagination.numberOfPages,
-    licences,
-    returnLogs,
-    monitoringStations
+    allSearchMatches
   )
 
   return {
