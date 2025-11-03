@@ -69,12 +69,6 @@ function _determineRecipient(contactHashId, contacts) {
   return _mergeRecipients(matches)
 }
 
-function _includesContactType(matches, contactType) {
-  return matches.some((match) => {
-    return match.contact_type === contactType
-  })
-}
-
 function _mergeRecipients(matches) {
   const { contact } = matches[0]
 
@@ -85,54 +79,25 @@ function _mergeRecipients(matches) {
 }
 
 function _mergeRecipientsForEmail(matches) {
-  const additionalContact = _includesContactType(matches, 'Additional contact')
-  const primaryUser = _includesContactType(matches, 'Primary user')
-  const returnsAgent = _includesContactType(matches, 'Returns agent')
-
-  let contactType
-
-  if (primaryUser && returnsAgent) {
-    contactType = 'both'
-  } else if (primaryUser) {
-    contactType = 'Primary user'
-  } else if (additionalContact) {
-    contactType = 'Additional contact'
-  } else {
-    contactType = 'Returns agent'
-  }
-
   return {
     licence_refs: _mergeLicenceReferences(matches),
-    contact_type: contactType,
+    contact_type: matches[0].contact_type,
     email: matches[0].email,
     contact: null,
     contact_hash_id: matches[0].contact_hash_id,
-    message_type: 'Email',
+    message_type: matches[0].message_type,
     ...(matches[0].return_log_ids && { return_log_ids: matches[0].return_log_ids })
   }
 }
 
 function _mergeRecipientsForLetter(matches) {
-  const licenceHolder = _includesContactType(matches, 'Licence holder')
-  const returnsTo = _includesContactType(matches, 'Returns to')
-
-  let contactType
-
-  if (licenceHolder && returnsTo) {
-    contactType = 'both'
-  } else if (licenceHolder) {
-    contactType = 'Licence holder'
-  } else {
-    contactType = 'Returns to'
-  }
-
   return {
     licence_refs: _mergeLicenceReferences(matches),
-    contact_type: contactType,
+    contact_type: matches[0].contact_type,
     email: null,
     contact: matches[0].contact,
     contact_hash_id: matches[0].contact_hash_id,
-    message_type: 'Letter',
+    message_type: matches[0].message_type,
     ...(matches[0].return_log_ids && { return_log_ids: matches[0].return_log_ids })
   }
 }

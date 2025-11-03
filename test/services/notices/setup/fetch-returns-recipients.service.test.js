@@ -66,6 +66,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
             contact_type: 'Primary user',
             email: 'primary.user@important.com',
             licence_refs: [seedData.primaryUser.licenceRef],
+            message_type: 'Email',
             return_log_ids: [seedData.primaryUser.returnLog.returnId]
           }
         ])
@@ -92,6 +93,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_type: 'Primary user',
               email: 'primary.user@important.com',
               licence_refs: [seedData.primaryUserAndReturnsAgent.licenceRef],
+              message_type: 'Email',
               return_log_ids: [seedData.primaryUserAndReturnsAgent.returnLog.returnId]
             },
             {
@@ -100,6 +102,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_type: 'Returns agent',
               email: 'returns.agent@important.com',
               licence_refs: [seedData.primaryUserAndReturnsAgent.licenceRef],
+              message_type: 'Email',
               return_log_ids: [seedData.primaryUserAndReturnsAgent.returnLog.returnId]
             }
           ])
@@ -127,6 +130,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_type: 'Primary user',
               email: 'primary.user@important.com',
               licence_refs: [seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef],
+              message_type: 'Email',
               return_log_ids: [seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnId]
             }
           ])
@@ -172,6 +176,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
             contact_type: 'Licence holder',
             email: null,
             licence_refs: [seedData.licenceHolder.licenceRef],
+            message_type: 'Letter',
             return_log_ids: [seedData.licenceHolder.returnLog.returnId]
           }
         ])
@@ -213,6 +218,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_type: 'Licence holder',
               email: null,
               licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
+              message_type: 'Letter',
               return_log_ids: [seedData.licenceHolderAndReturnTo.returnLog.returnId]
             },
             {
@@ -236,6 +242,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_type: 'Returns to',
               email: null,
               licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
+              message_type: 'Letter',
               return_log_ids: [seedData.licenceHolderAndReturnTo.returnLog.returnId]
             }
           ])
@@ -278,6 +285,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_type: 'Licence holder',
               email: null,
               licence_refs: [seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef],
+              message_type: 'Letter',
               return_log_ids: [seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.returnId]
             }
           ])
@@ -325,6 +333,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_type: 'Primary user',
               email: 'primary.user@important.com',
               licence_refs: [seedData.primaryUser.licenceRef],
+              message_type: 'Email',
               return_log_ids: [seedData.primaryUser.returnLog.returnId]
             }
           ])
@@ -345,6 +354,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_type: 'Primary user',
                 email: 'primary.user@important.com',
                 licence_refs: [seedData.primaryUserAndReturnsAgent.licenceRef],
+                message_type: 'Email',
                 return_log_ids: [seedData.primaryUserAndReturnsAgent.returnLog.returnId]
               },
               {
@@ -353,6 +363,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_type: 'Returns agent',
                 email: 'returns.agent@important.com',
                 licence_refs: [seedData.primaryUserAndReturnsAgent.licenceRef],
+                message_type: 'Email',
                 return_log_ids: [seedData.primaryUserAndReturnsAgent.returnLog.returnId]
               }
             ])
@@ -374,6 +385,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_type: 'Primary user',
                 email: 'primary.user@important.com',
                 licence_refs: [seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef],
+                message_type: 'Email',
                 return_log_ids: [seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnId]
               }
             ])
@@ -413,6 +425,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               contact_type: 'Licence holder',
               email: null,
               licence_refs: [seedData.licenceHolder.licenceRef],
+              message_type: 'Letter',
               return_log_ids: [seedData.licenceHolder.returnLog.returnId]
             }
           ])
@@ -448,6 +461,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_type: 'Licence holder',
                 email: null,
                 licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
+                message_type: 'Letter',
                 return_log_ids: [seedData.licenceHolderAndReturnTo.returnLog.returnId]
               },
               {
@@ -471,6 +485,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_type: 'Returns to',
                 email: null,
                 licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
+                message_type: 'Letter',
                 return_log_ids: [seedData.licenceHolderAndReturnTo.returnLog.returnId]
               }
             ])
@@ -507,6 +522,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 contact_type: 'Licence holder',
                 email: null,
                 licence_refs: [seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef],
+                message_type: 'Letter',
                 return_log_ids: [seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.returnId]
               }
             ])
@@ -546,6 +562,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
           contact_type: 'Primary user',
           email: 'primary.user@important.com',
           licence_refs: [seedData.primaryUserMultipleReturnLogs.licenceRef],
+          message_type: 'Email',
           // We need to sort the return ids because the order of the return logs is not guaranteed
           return_log_ids: [
             seedData.primaryUserMultipleReturnLogs.returnLog.returnId,
@@ -616,6 +633,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
             contact_type: 'Primary user',
             email: 'primary.user@important.com',
             licence_refs: [seedData.primaryUserDueDate.licenceRef],
+            message_type: 'Email',
             return_log_ids: [seedData.primaryUserDueDate.returnLog.returnId]
           }
         ])
@@ -674,6 +692,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
             contact_type: 'Primary user',
             email: 'primary.user@important.com',
             licence_refs: [seedData.primaryUserDueDate.licenceRef],
+            message_type: 'Email',
             return_log_ids: [seedData.primaryUserDueDate.returnLog.returnId]
           }
         ])
