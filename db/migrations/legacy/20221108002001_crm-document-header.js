@@ -27,6 +27,7 @@ exports.up = function (knex) {
       useConstraint: true,
       indexName: 'external_key'
     })
+
     table.unique([
       'document_id',
       'regime_entity_id',
@@ -36,6 +37,16 @@ exports.up = function (knex) {
       'company_entity_id',
       'verification_id'
     ])
+
+    table.unique(['system_external_id'], {
+      useConstraint: true,
+      indexName: 'document_header_system_external_id_index'
+    })
+
+    table.unique(['company_entity_id'], {
+      useConstraint: true,
+      indexName: 'idx_document_header_company_id'
+    })
   })
 }
 

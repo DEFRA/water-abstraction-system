@@ -195,12 +195,14 @@ async function _fetchRecipients(session) {
 
   let dueDateCondition
 
-  if (noticeType === NoticeType.REMINDERS) {
-    dueDateCondition = 'IS NOT NULL'
-  } else if (!featureFlagsConfig.enableNullDueDate) {
+  if (!featureFlagsConfig.enableNullDueDate) {
     dueDateCondition = '= ?'
   } else {
-    dueDateCondition = 'IS NULL'
+    if (noticeType === NoticeType.REMINDERS) {
+      dueDateCondition = 'IS NOT NULL'
+    } else {
+      dueDateCondition = 'IS NULL'
+    }
   }
 
   const where = `
@@ -251,7 +253,6 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
         FROM public.return_logs rl
         WHERE
           rl.status = 'due'
-          AND rl.metadata->>'isCurrent' = 'true'
           ${whereReturnLogs}
       ),
 
