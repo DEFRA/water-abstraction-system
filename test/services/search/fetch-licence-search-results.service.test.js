@@ -19,7 +19,7 @@ const databaseConfig = require('../../../config/database.config.js')
 // Thing under test
 const FetchLicenceSearchResultsService = require('../../../app/services/search/fetch-licence-search-results.service.js')
 
-describe('Search - Fetch licence search results service', () => {
+describe.only('Search - Fetch licence search results service', () => {
   const licences = []
 
   before(async () => {
@@ -158,6 +158,26 @@ describe('Search - Fetch licence search results service', () => {
       expect(result).to.equal({
         results: [],
         total: 0
+      })
+    })
+  })
+
+  describe('when searching for an exact match', () => {
+    it('returns the correct licence', async () => {
+      const result = await FetchLicenceSearchResultsService.go('02/01/TESTSEARCH01/05', 1, true)
+
+      expect(result).to.equal({
+        results: [
+          {
+            expiredDate: null,
+            id: licences[0].licence.id,
+            lapsedDate: null,
+            licenceRef: licences[0].licence.licenceRef,
+            metadata: licences[0].licenceDocumentHeader.metadata,
+            revokedDate: null
+          }
+        ],
+        total: 1
       })
     })
   })

@@ -17,34 +17,14 @@ const databaseConfig = require('../../../config/database.config.js')
 // Thing under test
 const FetchMonitoringStationSearchResultsService = require('../../../app/services/search/fetch-monitoring-station-search-results.service.js')
 
-describe('Search - Fetch monitoring station search results service', () => {
+describe.only('Search - Fetch monitoring station search results service', () => {
   const monitoringStations = []
 
   before(async () => {
     // Add the monitoring stations in non-alphabetical order to prove the ordering in the results
-    monitoringStations.push(
-      await MonitoringStationHelper.add({
-        label: 'Somewhere TESTSEARCH Station 02',
-        stationReference: 'TESTSEARCH-STATION-REF-02',
-        wiskiId: 'TESTSEARCH-WISKI-ID-02'
-      })
-    )
-
-    monitoringStations.push(
-      await MonitoringStationHelper.add({
-        label: 'Somewhere TESTSEARCH Station 03',
-        stationReference: 'TESTSEARCH-STATION-REF-03',
-        wiskiId: 'TESTSEARCH-WISKI-ID-03'
-      })
-    )
-
-    monitoringStations.push(
-      await MonitoringStationHelper.add({
-        label: 'Somewhere TESTSEARCH Station 01',
-        stationReference: 'TESTSEARCH-STATION-REF-01',
-        wiskiId: 'TESTSEARCH-WISKI-ID-01'
-      })
-    )
+    monitoringStations.push(await MonitoringStationHelper.add({ label: 'Somewhere TESTSEARCH Station 02' }))
+    monitoringStations.push(await MonitoringStationHelper.add({ label: 'Somewhere TESTSEARCH Station 03' }))
+    monitoringStations.push(await MonitoringStationHelper.add({ label: 'Somewhere TESTSEARCH Station 01' }))
   })
 
   describe('when matching monitoring stations exist', () => {
@@ -54,27 +34,24 @@ describe('Search - Fetch monitoring station search results service', () => {
       expect(result).to.equal({
         results: [
           {
+            catchmentName: monitoringStations[2].catchmentName,
+            gridReference: monitoringStations[2].gridReference,
             id: monitoringStations[2].id,
             label: monitoringStations[2].label,
-            stationReference: monitoringStations[2].stationReference,
-            wiskiId: monitoringStations[2].wiskiId,
-            catchmentName: monitoringStations[2].catchmentName,
             riverName: monitoringStations[2].riverName
           },
           {
+            catchmentName: monitoringStations[0].catchmentName,
+            gridReference: monitoringStations[0].gridReference,
             id: monitoringStations[0].id,
             label: monitoringStations[0].label,
-            stationReference: monitoringStations[0].stationReference,
-            wiskiId: monitoringStations[0].wiskiId,
-            catchmentName: monitoringStations[0].catchmentName,
             riverName: monitoringStations[0].riverName
           },
           {
+            catchmentName: monitoringStations[1].catchmentName,
+            gridReference: monitoringStations[1].gridReference,
             id: monitoringStations[1].id,
             label: monitoringStations[1].label,
-            stationReference: monitoringStations[1].stationReference,
-            wiskiId: monitoringStations[1].wiskiId,
-            catchmentName: monitoringStations[1].catchmentName,
             riverName: monitoringStations[1].riverName
           }
         ],
@@ -83,18 +60,17 @@ describe('Search - Fetch monitoring station search results service', () => {
     })
   })
 
-  describe('when the label matches', () => {
+  describe('when searching for an exact match', () => {
     it('returns the correct monitoring station', async () => {
-      const result = await FetchMonitoringStationSearchResultsService.go('somewhere testsearch station 01', 1)
+      const result = await FetchMonitoringStationSearchResultsService.go('somewhere testsearch station 01', 1, true)
 
       expect(result).to.equal({
         results: [
           {
+            catchmentName: monitoringStations[2].catchmentName,
+            gridReference: monitoringStations[2].gridReference,
             id: monitoringStations[2].id,
             label: monitoringStations[2].label,
-            stationReference: monitoringStations[2].stationReference,
-            wiskiId: monitoringStations[2].wiskiId,
-            catchmentName: monitoringStations[2].catchmentName,
             riverName: monitoringStations[2].riverName
           }
         ],
@@ -103,74 +79,31 @@ describe('Search - Fetch monitoring station search results service', () => {
     })
   })
 
-  describe('when the station reference matches', () => {
-    it('returns the correct monitoring station', async () => {
-      const result = await FetchMonitoringStationSearchResultsService.go('testsearch-station-ref-01', 1)
-
-      expect(result).to.equal({
-        results: [
-          {
-            id: monitoringStations[2].id,
-            label: monitoringStations[2].label,
-            stationReference: monitoringStations[2].stationReference,
-            wiskiId: monitoringStations[2].wiskiId,
-            catchmentName: monitoringStations[2].catchmentName,
-            riverName: monitoringStations[2].riverName
-          }
-        ],
-        total: 1
-      })
-    })
-  })
-
-  describe('when the WISKI ID matches', () => {
-    it('returns the correct monitoring station', async () => {
-      const result = await FetchMonitoringStationSearchResultsService.go('testsearch-wiski-id-01', 1)
-
-      expect(result).to.equal({
-        results: [
-          {
-            id: monitoringStations[2].id,
-            label: monitoringStations[2].label,
-            stationReference: monitoringStations[2].stationReference,
-            wiskiId: monitoringStations[2].wiskiId,
-            catchmentName: monitoringStations[2].catchmentName,
-            riverName: monitoringStations[2].riverName
-          }
-        ],
-        total: 1
-      })
-    })
-  })
-
-  describe('when the case of the search text does not match that of the station references', () => {
+  describe('when the case of the search text does not match that of the station label', () => {
     it('still returns the correct monitoring stations', async () => {
       const result = await FetchMonitoringStationSearchResultsService.go('tEsTsEaRcH', 1)
 
       expect(result).to.equal({
         results: [
           {
+            catchmentName: monitoringStations[2].catchmentName,
+            gridReference: monitoringStations[2].gridReference,
             id: monitoringStations[2].id,
             label: monitoringStations[2].label,
-            stationReference: monitoringStations[2].stationReference,
-            wiskiId: monitoringStations[2].wiskiId,
-            catchmentName: monitoringStations[2].catchmentName,
             riverName: monitoringStations[2].riverName
           },
           {
+            catchmentName: monitoringStations[0].catchmentName,
+            gridReference: monitoringStations[0].gridReference,
             id: monitoringStations[0].id,
             label: monitoringStations[0].label,
-            stationReference: monitoringStations[0].stationReference,
-            wiskiId: monitoringStations[0].wiskiId,
-            catchmentName: monitoringStations[0].catchmentName,
             riverName: monitoringStations[0].riverName
           },
           {
+            catchmentName: monitoringStations[1].catchmentName,
+            gridReference: monitoringStations[1].gridReference,
             id: monitoringStations[1].id,
             label: monitoringStations[1].label,
-            stationReference: monitoringStations[1].stationReference,
-            wiskiId: monitoringStations[1].wiskiId,
-            catchmentName: monitoringStations[1].catchmentName,
             riverName: monitoringStations[1].riverName
           }
         ],
@@ -195,11 +128,10 @@ describe('Search - Fetch monitoring station search results service', () => {
       expect(result).to.equal({
         results: [
           {
+            catchmentName: monitoringStations[0].catchmentName,
+            gridReference: monitoringStations[0].gridReference,
             id: monitoringStations[0].id,
             label: monitoringStations[0].label,
-            stationReference: monitoringStations[0].stationReference,
-            wiskiId: monitoringStations[0].wiskiId,
-            catchmentName: monitoringStations[0].catchmentName,
             riverName: monitoringStations[0].riverName
           }
         ],

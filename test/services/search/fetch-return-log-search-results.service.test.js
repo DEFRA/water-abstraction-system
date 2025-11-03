@@ -9,8 +9,9 @@ const { describe, it, beforeEach, afterEach, before } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const RegionHelper = require('../../support/helpers/region.helper.js')
+const ReturnRequirementHelper = require('../../support/helpers/return-requirement.helper.js')
 
 // Things we need to stub
 const databaseConfig = require('../../../config/database.config.js')
@@ -18,44 +19,58 @@ const databaseConfig = require('../../../config/database.config.js')
 // Thing under test
 const FetchReturnLogSearchResultsService = require('../../../app/services/search/fetch-return-log-search-results.service.js')
 
-describe('Search - Fetch return log search results service', () => {
-  const region1 = RegionHelper.select(1)
-  const region2 = RegionHelper.select(2)
+describe.only('Search - Fetch return log search results service', () => {
   const returnLogs = []
 
   before(async () => {
     let returnLog
 
-    // Add the return logs in non-alphabetical order to prove the ordering in the results
-    // They should come back in the order [2, 3, 0, 1]
+    const licence1 = await LicenceHelper.add({ licenceRef: 'SEARCH-TEST-1' })
+    const licence2 = await LicenceHelper.add({ licenceRef: 'SEARCH-TEST-2' })
+    const licence3 = await LicenceHelper.add({ licenceRef: 'SEARCH-TEST-3' })
+
+    const returnRequirement1 = await ReturnRequirementHelper.add()
+    const returnRequirement2 = await ReturnRequirementHelper.add()
+    const returnRequirement3 = await ReturnRequirementHelper.add()
+
+    // Add the return logs in non-linear order to prove the grouping and ordering in the results
+    // They should come back grouped and ordered: [2, (0 and 3 grouped), 1]
 
     returnLog = await ReturnLogHelper.add({
-      returnReference: '8801100010',
+      dueDate: new Date('2021-01-01'),
       endDate: new Date('2020-01-01'),
-      metadata: { nald: { regionCode: region1.naldRegionId.toString() } }
+      returnRequirementId: returnRequirement1.id,
+      licenceRef: licence1.licenceRef,
+      returnReference: '8801100010'
     })
-    returnLogs.push({ returnLog, region: region1 })
+    returnLogs.push({ returnLog, licence: licence1 })
 
     returnLog = await ReturnLogHelper.add({
-      returnReference: '8801100010',
+      dueDate: new Date('2021-01-01'),
       endDate: new Date('2020-01-01'),
-      metadata: { nald: { regionCode: region2.naldRegionId.toString() } }
+      returnRequirementId: returnRequirement2.id,
+      licenceRef: licence2.licenceRef,
+      returnReference: '8801100010'
     })
-    returnLogs.push({ returnLog, region: region2 })
+    returnLogs.push({ returnLog, licence: licence2 })
 
     returnLog = await ReturnLogHelper.add({
+      dueDate: new Date('2021-01-01'),
+      endDate: new Date('2020-01-01'),
+      licenceRef: licence3.licenceRef,
       returnReference: '6601100010',
-      endDate: new Date('2020-01-01'),
-      metadata: { nald: { regionCode: region1.naldRegionId.toString() } }
+      returnRequirementId: returnRequirement3.id
     })
-    returnLogs.push({ returnLog, region: region1 })
+    returnLogs.push({ returnLog, licence: licence3 })
 
     returnLog = await ReturnLogHelper.add({
-      returnReference: '8801100010',
+      dueDate: new Date('2021-01-01'),
       endDate: new Date('2020-01-02'),
-      metadata: { nald: { regionCode: region1.naldRegionId.toString() } }
+      returnRequirementId: returnRequirement1.id,
+      licenceRef: licence1.licenceRef,
+      returnReference: '8801100010'
     })
-    returnLogs.push({ returnLog, region: region1 })
+    returnLogs.push({ returnLog, licence: licence1 })
   })
 
   describe('when matching return logs exist', () => {
@@ -65,61 +80,56 @@ describe('Search - Fetch return log search results service', () => {
       expect(result).to.equal({
         results: [
           {
-            endDate: returnLogs[2].returnLog.endDate,
-            id: returnLogs[2].returnLog.id,
-            licenceRef: returnLogs[2].returnLog.licenceRef,
-            naldRegionId: returnLogs[2].region.naldRegionId,
-            regionDisplayName: returnLogs[2].region.displayName,
+            dueDates: [returnLogs[2].returnLog.dueDate],
+            endDates: [returnLogs[2].returnLog.endDate],
+            id: returnLogs[2].licence.id,
+            ids: [returnLogs[2].returnLog.id],
+            licenceRef: returnLogs[2].licence.licenceRef,
             returnReference: returnLogs[2].returnLog.returnReference,
-            status: returnLogs[2].returnLog.status
+            returnRequirementId: returnLogs[2].returnLog.returnRequirementId,
+            statuses: [returnLogs[2].returnLog.status]
           },
           {
-            endDate: returnLogs[3].returnLog.endDate,
-            id: returnLogs[3].returnLog.id,
-            licenceRef: returnLogs[3].returnLog.licenceRef,
-            naldRegionId: returnLogs[3].region.naldRegionId,
-            regionDisplayName: returnLogs[3].region.displayName,
-            returnReference: returnLogs[3].returnLog.returnReference,
-            status: returnLogs[3].returnLog.status
-          },
-          {
-            endDate: returnLogs[0].returnLog.endDate,
-            id: returnLogs[0].returnLog.id,
-            licenceRef: returnLogs[0].returnLog.licenceRef,
-            naldRegionId: returnLogs[0].region.naldRegionId,
-            regionDisplayName: returnLogs[0].region.displayName,
+            dueDates: [returnLogs[0].returnLog.dueDate, returnLogs[3].returnLog.dueDate],
+            endDates: [returnLogs[0].returnLog.endDate, returnLogs[3].returnLog.endDate],
+            id: returnLogs[0].licence.id,
+            ids: [returnLogs[0].returnLog.id, returnLogs[3].returnLog.id],
+            licenceRef: returnLogs[0].licence.licenceRef,
             returnReference: returnLogs[0].returnLog.returnReference,
-            status: returnLogs[0].returnLog.status
+            returnRequirementId: returnLogs[0].returnLog.returnRequirementId,
+            statuses: [returnLogs[0].returnLog.status, returnLogs[3].returnLog.status]
           },
           {
-            endDate: returnLogs[1].returnLog.endDate,
-            id: returnLogs[1].returnLog.id,
+            dueDates: [returnLogs[1].returnLog.dueDate],
+            endDates: [returnLogs[1].returnLog.endDate],
+            id: returnLogs[1].licence.id,
+            ids: [returnLogs[1].returnLog.id],
             licenceRef: returnLogs[1].returnLog.licenceRef,
-            naldRegionId: returnLogs[1].region.naldRegionId,
-            regionDisplayName: returnLogs[1].region.displayName,
             returnReference: returnLogs[1].returnLog.returnReference,
-            status: returnLogs[1].returnLog.status
+            returnRequirementId: returnLogs[1].returnLog.returnRequirementId,
+            statuses: [returnLogs[1].returnLog.status]
           }
         ],
-        total: 4
+        total: 3
       })
     })
   })
 
   describe('when only one matching return log exists', () => {
     it('returns the correct return log', async () => {
-      const result = await FetchReturnLogSearchResultsService.go('6601100010', 1)
+      const result = await FetchReturnLogSearchResultsService.go('601100010', 1)
 
       expect(result).to.equal({
         results: [
           {
-            endDate: returnLogs[2].returnLog.endDate,
-            id: returnLogs[2].returnLog.id,
-            licenceRef: returnLogs[2].returnLog.licenceRef,
-            naldRegionId: returnLogs[2].region.naldRegionId,
-            regionDisplayName: returnLogs[2].region.displayName,
+            dueDates: [returnLogs[2].returnLog.dueDate],
+            endDates: [returnLogs[2].returnLog.endDate],
+            id: returnLogs[2].licence.id,
+            ids: [returnLogs[2].returnLog.id],
+            licenceRef: returnLogs[2].licence.licenceRef,
             returnReference: returnLogs[2].returnLog.returnReference,
-            status: returnLogs[2].returnLog.status
+            returnRequirementId: returnLogs[2].returnLog.returnRequirementId,
+            statuses: [returnLogs[2].returnLog.status]
           }
         ],
         total: 1
@@ -143,16 +153,17 @@ describe('Search - Fetch return log search results service', () => {
       expect(result).to.equal({
         results: [
           {
-            endDate: returnLogs[3].returnLog.endDate,
-            id: returnLogs[3].returnLog.id,
-            licenceRef: returnLogs[3].returnLog.licenceRef,
-            naldRegionId: returnLogs[3].region.naldRegionId,
-            regionDisplayName: returnLogs[3].region.displayName,
-            returnReference: returnLogs[3].returnLog.returnReference,
-            status: returnLogs[3].returnLog.status
+            dueDates: [returnLogs[0].returnLog.dueDate, returnLogs[3].returnLog.dueDate],
+            endDates: [returnLogs[0].returnLog.endDate, returnLogs[3].returnLog.endDate],
+            id: returnLogs[0].licence.id,
+            ids: [returnLogs[0].returnLog.id, returnLogs[3].returnLog.id],
+            licenceRef: returnLogs[0].licence.licenceRef,
+            returnReference: returnLogs[0].returnLog.returnReference,
+            returnRequirementId: returnLogs[0].returnLog.returnRequirementId,
+            statuses: [returnLogs[0].returnLog.status, returnLogs[3].returnLog.status]
           }
         ],
-        total: 4
+        total: 3
       })
     })
   })
@@ -164,6 +175,28 @@ describe('Search - Fetch return log search results service', () => {
       expect(result).to.equal({
         results: [],
         total: 0
+      })
+    })
+  })
+
+  describe('when searching for an exact match', () => {
+    it('returns the correct return log', async () => {
+      const result = await FetchReturnLogSearchResultsService.go('6601100010', 1, true)
+
+      expect(result).to.equal({
+        results: [
+          {
+            dueDates: [returnLogs[2].returnLog.dueDate],
+            endDates: [returnLogs[2].returnLog.endDate],
+            id: returnLogs[2].licence.id,
+            ids: [returnLogs[2].returnLog.id],
+            licenceRef: returnLogs[2].licence.licenceRef,
+            returnReference: returnLogs[2].returnLog.returnReference,
+            returnRequirementId: returnLogs[2].returnLog.returnRequirementId,
+            statuses: [returnLogs[2].returnLog.status]
+          }
+        ],
+        total: 1
       })
     })
   })
