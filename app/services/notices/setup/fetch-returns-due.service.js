@@ -6,8 +6,9 @@
  */
 
 const ReturnLogModel = require('../../../models/return-log.model.js')
-const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const { NoticeType } = require('../../../lib/static-lookups.lib.js')
+
+const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 /**
  * Fetches the returns due for the `/notices/setup/remove-licences` page
