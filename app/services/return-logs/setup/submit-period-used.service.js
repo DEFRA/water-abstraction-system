@@ -5,7 +5,6 @@
  * @module SubmitPeriodUsedService
  */
 
-
 const AllocateSingleVolumeToLinesService = require('./allocate-single-volume-to-lines.service.js')
 const PeriodUsedPresenter = require('../../../presenters/return-logs/setup/period-used.presenter.js')
 const PeriodUsedValidator = require('../../../validators/return-logs/setup/period-used.validator.js')
