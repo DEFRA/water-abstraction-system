@@ -5,13 +5,12 @@
  * @module InitiateSessionService
  */
 
-const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
+const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
 const { returnUnits, unitNames } = require('../../../lib/static-lookups.lib.js')
 
 const FeatureFlags = require('../../../../config/feature-flags.config.js')
-
 const UNITS = {
   [unitNames.CUBIC_METRES]: 'cubicMetres',
   [unitNames.LITRES]: 'litres',

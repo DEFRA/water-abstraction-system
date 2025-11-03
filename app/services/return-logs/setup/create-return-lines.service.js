@@ -5,9 +5,8 @@
  * @module CreateReturnLinesService
  */
 
-const { generateUUID } = require('../../../lib/general.lib.js')
 const ReturnSubmissionLineModel = require('../../../models/return-submission-line.model.js')
-
+const { generateUUID } = require('../../../lib/general.lib.js')
 const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**

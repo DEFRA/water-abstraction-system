@@ -5,8 +5,8 @@
  * @module CreateReturnSubmissionService
  */
 
-const { generateUUID } = require('../../../lib/general.lib.js')
 const ReturnSubmissionModel = require('../../../models/return-submission.model.js')
+const { generateUUID } = require('../../../lib/general.lib.js')
 
 /**
  * Creates a new return submission. The version number will be 1 if no previous submission exists for this return log
