@@ -19,7 +19,7 @@
  * will always override the 'single use' recipient.
  *
  * @param {object[]} contacts - A list of contacts (may contain duplicates)
- * 
+ *
  * @returns {object[]} The list of unique recipients
  */
 function go(contacts) {
