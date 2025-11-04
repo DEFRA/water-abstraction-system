@@ -87,7 +87,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
       expect(updatedNotifications).to.equal([
         {
-          alternateNotificationId: null,
+          alternateNoticeId: null,
           createdAt: testNotification.createdAt,
           eventId: event.id,
           id: testNotification.id,
@@ -132,7 +132,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
       expect(updatedNotifications).to.equal([
         {
-          alternateNotificationId: null,
+          alternateNoticeId: null,
           createdAt: testNotification.createdAt,
           eventId: event.id,
           id: testNotification.id,
@@ -200,7 +200,7 @@ describe('Notices - Setup - Batch Notifications service', () => {
 
       expect(updatedNotifications).to.equal([
         {
-          alternateNotificationId: null,
+          alternateNoticeId: null,
           createdAt: testNotification.createdAt,
           eventId: event.id,
           id: testNotification.id,
