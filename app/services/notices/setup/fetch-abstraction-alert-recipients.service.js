@@ -75,7 +75,8 @@ function _query() {
       'Additional contact' AS contact_type,
       con.email,
       NULL::jsonb AS contact,
-      md5(LOWER(con.email)) AS contact_hash_id
+      md5(LOWER(con.email)) AS contact_hash_id,
+      ('Email') as message_type
     FROM
       public.licence_documents ld
       INNER JOIN public.licence_document_roles ldr
@@ -101,7 +102,8 @@ function _query() {
       'Primary user' AS contact_type,
       le.name AS email,
       NULL::jsonb AS contact,
-      md5(LOWER(le.name)) AS contact_hash_id
+      md5(LOWER(le.name)) AS contact_hash_id,
+      ('Email') as message_type
     FROM
       public.licence_document_headers ldh
       INNER JOIN public.licence_entity_roles ler
@@ -133,7 +135,8 @@ function _query() {
         contacts ->> 'county',
         contacts ->> 'postcode',
         contacts ->> 'country'
-      ))) AS contact_hash_id
+      ))) AS contact_hash_id,
+      ('Letter') as message_type
     FROM
       public.licence_document_headers ldh
       INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts
@@ -149,7 +152,8 @@ function _query() {
       contact_type,
       email,
       contact,
-      contact_hash_id
+      contact_hash_id,
+      message_type
     FROM primary_users
     UNION ALL
     SELECT
@@ -157,7 +161,8 @@ function _query() {
       lh.contact_type,
       lh.email,
       lh.contact,
-      lh.contact_hash_id
+      lh.contact_hash_id,
+      message_type
     FROM licence_holders lh
     WHERE NOT EXISTS (
       SELECT 1
@@ -177,7 +182,8 @@ function _query() {
       contact_hash_id,
       contact_type,
       email,
-      contact
+      contact,
+      message_type
     FROM all_contacts
     ORDER BY contact_hash_id
   ),
@@ -196,7 +202,8 @@ function _query() {
     uc.contact_type,
     uc.email,
     uc.contact,
-    uc.contact_hash_id
+    uc.contact_hash_id,
+    uc.message_type
   FROM
     aggregated_contact_data a
       JOIN

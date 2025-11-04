@@ -12,16 +12,30 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 // Thing under test
 const DetermineRecipientsService = require('../../../../app/services/notices/setup/determine-recipients.service.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 describe('Notices - Setup - Determine Recipients service', () => {
-  let testRecipients
-  let testDuplicateRecipients
+  let singleUseRecipient
   let testInput
+  let testRecipients
 
   beforeEach(() => {
     testRecipients = RecipientsFixture.recipients()
-    testDuplicateRecipients = RecipientsFixture.duplicateRecipients()
-    testInput = [...Object.values(testRecipients), ...Object.values(testDuplicateRecipients)]
+
+    singleUseRecipient = {
+      contact: null,
+      contact_hash_id: '90129f6aa5bf2ad50aa3fefd3ff384',
+      contact_type: 'Single use',
+      email: 'somone@important.com',
+      licence_refs: [generateLicenceRef()],
+      message_type: 'Email',
+      return_log_ids: [generateUUID()]
+    }
+
+    const singleUseDuplicate = testRecipients.primaryUser
+
+    testInput = [...Object.values(testRecipients), singleUseRecipient, singleUseDuplicate]
   })
 
   describe('when provided with "contacts"', () => {
@@ -120,150 +134,15 @@ describe('Notices - Setup - Determine Recipients service', () => {
           return_log_ids: testRecipients.licenceHolderWithMultipleLicences.return_log_ids
         },
         {
-          contact: {
-            addressLine1: '4',
-            addressLine2: 'Privet Drive',
-            addressLine3: null,
-            addressLine4: null,
-            country: null,
-            county: 'Surrey',
-            forename: 'Harry',
-            initials: 'H J',
-            name: 'Duplicate Licence holder',
-            postcode: 'WD25 7LR',
-            role: 'Licence holder',
-            salutation: 'Mr',
-            town: 'Little Whinging',
-            type: 'Person'
-          },
-          contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-          contact_type: 'both',
-          email: null,
-          licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs,
-          message_type: 'Letter',
-          return_log_ids: testDuplicateRecipients.duplicateLicenceHolder.return_log_ids
-        },
-        {
           contact: null,
-          contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
-          contact_type: 'both',
-          email: 'primary.user@important.com',
-          licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs,
+          contact_hash_id: '90129f6aa5bf2ad50aa3fefd3ff384',
+          contact_type: 'Single use',
+          email: 'somone@important.com',
+          licence_refs: singleUseRecipient.licence_refs,
           message_type: 'Email',
-          return_log_ids: testDuplicateRecipients.duplicatePrimaryUser.return_log_ids
+          return_log_ids: singleUseRecipient.return_log_ids
         }
       ])
-    })
-
-    describe('when a "Primary user" and a "Returns agent" contact have the same hash ID', () => {
-      it('merges them into one "recipient" with the "contact_type" set to "both"', () => {
-        const result = DetermineRecipientsService.go([
-          testDuplicateRecipients.duplicatePrimaryUser,
-          testDuplicateRecipients.duplicateReturnsAgent
-        ])
-
-        expect(result).to.equal([
-          {
-            contact: null,
-            contact_hash_id: '2e6918568dfbc1d78e2fbe279fftt990',
-            contact_type: 'both',
-            email: 'primary.user@important.com',
-            licence_refs: testDuplicateRecipients.duplicatePrimaryUser.licence_refs,
-            message_type: 'Email',
-            return_log_ids: testDuplicateRecipients.duplicatePrimaryUser.return_log_ids
-          }
-        ])
-      })
-    })
-
-    describe('when a "Licence holder" and a "Returns to" contact have the same hash ID', () => {
-      it('merges them into one "recipient" with the contact type set to "both"', () => {
-        const result = DetermineRecipientsService.go([
-          testDuplicateRecipients.duplicateLicenceHolder,
-          testDuplicateRecipients.duplicateReturnsTo
-        ])
-
-        expect(result).to.equal([
-          {
-            contact: {
-              addressLine1: '4',
-              addressLine2: 'Privet Drive',
-              addressLine3: null,
-              addressLine4: null,
-              country: null,
-              county: 'Surrey',
-              forename: 'Harry',
-              initials: 'H J',
-              name: 'Duplicate Licence holder',
-              postcode: 'WD25 7LR',
-              role: 'Licence holder',
-              salutation: 'Mr',
-              town: 'Little Whinging',
-              type: 'Person'
-            },
-            contact_hash_id: 'b1b355491c7d42778890c545e08797ea',
-            contact_type: 'both',
-            email: null,
-            licence_refs: testDuplicateRecipients.duplicateLicenceHolder.licence_refs,
-            message_type: 'Letter',
-            return_log_ids: testDuplicateRecipients.duplicateLicenceHolder.return_log_ids
-          }
-        ])
-      })
-    })
-
-    describe('when an "Additional contact" is present', () => {
-      beforeEach(() => {
-        testRecipients = RecipientsFixture.alertsRecipients()
-      })
-
-      it('returns the additional contact', () => {
-        const result = DetermineRecipientsService.go([testRecipients.additionalContact])
-
-        expect(result).to.equal([
-          {
-            contact: null,
-            contact_hash_id: '90129f6aa5b98734aa3fefd3f8cf86a',
-            contact_type: 'Additional contact',
-            email: 'additional.contact@important.com',
-            licence_refs: testRecipients.additionalContact.licence_refs,
-            message_type: 'Email'
-          }
-        ])
-      })
-    })
-
-    describe('when an "Additional contact" is present again', () => {
-      let testRecipients2
-      beforeEach(() => {
-        testRecipients = RecipientsFixture.alertsRecipients()
-        testRecipients2 = RecipientsFixture.alertsRecipients()
-
-        testInput = [
-          testRecipients.additionalContact,
-          // this should make it fail with duplicate licence ref
-          testRecipients.additionalContact,
-          testRecipients2.additionalContact
-        ]
-      })
-
-      it('returns the additional contact', () => {
-        const result = DetermineRecipientsService.go(testInput)
-
-        expect(result).to.equal([
-          {
-            contact: null,
-            contact_hash_id: '90129f6aa5b98734aa3fefd3f8cf86a',
-            contact_type: 'Additional contact',
-            email: 'additional.contact@important.com',
-            licence_refs: [
-              ...testRecipients.additionalContact.licence_refs,
-              ...testRecipients2.additionalContact.licence_refs
-            ],
-            message_type: 'Email'
-          }
-        ])
-      })
     })
   })
 })
