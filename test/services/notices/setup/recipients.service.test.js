@@ -73,6 +73,7 @@ describe('Notices - Setup - Recipients service', () => {
             },
             contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
             contact_type: 'Licence holder',
+            email: null,
             licence_refs: recipientsFixture.licenceHolder.licence_refs,
             message_type: 'Letter',
             return_log_ids: recipientsFixture.licenceHolder.return_log_ids
@@ -112,6 +113,7 @@ describe('Notices - Setup - Recipients service', () => {
               },
               contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
               contact_type: 'Licence holder',
+              email: null,
               licence_refs: recipientsFixture.licenceHolder.licence_refs,
               message_type: 'Letter',
               return_log_ids: recipientsFixture.licenceHolder.return_log_ids
@@ -202,6 +204,7 @@ describe('Notices - Setup - Recipients service', () => {
             },
             contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
             contact_type: 'Licence holder',
+            email: null,
             licence_refs: recipientsFixture.licenceHolder.licence_refs,
             message_type: 'Letter',
             return_log_ids: recipientsFixture.licenceHolder.return_log_ids
