@@ -246,7 +246,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
         overallStatus: 'pending',
         referenceCode: 'WAA-123',
         status: 'completed',
-        statusCounts: { cancelled: 0, error: 0, pending: 3, sent: 0 },
+        statusCounts: { cancelled: 0, error: 0, pending: 3, returned: 0, sent: 0 },
         subtype: 'waterAbstractionAlerts'
       })
     })
