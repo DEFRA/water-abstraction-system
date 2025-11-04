@@ -16,10 +16,10 @@ function go(session) {
   const { id: sessionId, note, returnReference } = session
 
   return {
-    backLink: `/system/return-logs/setup/${sessionId}/check`,
+    backLink: { href: `/system/return-logs/setup/${sessionId}/check`, text: 'Back' },
     note: note ? note.content : null,
     pageTitle: 'Add a note',
-    returnReference,
+    pageTitleCaption: `Return reference ${returnReference}`,
     sessionId
   }
 }

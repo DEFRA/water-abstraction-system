@@ -23,7 +23,9 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       beforeEach(() => {
         frequency = 'monthly'
         measurementType = 'meter readings'
-        payload = { multipleEntries: '100, 101, x, 103, 104, 105, x, 107, 108, 109, 110, 111' }
+        payload = {
+          multipleEntries: ['100', '101', null, '103', '104', '105', null, '107', '108', '109', '110', '111']
+        }
       })
 
       it('confirms the payload is valid', () => {
@@ -37,7 +39,9 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       beforeEach(() => {
         frequency = 'weekly'
         measurementType = 'volumes'
-        payload = { multipleEntries: '50, 1000, x, 10.4, 155, 655, 133482, 110.10, 1080, x, 475, 676' }
+        payload = {
+          multipleEntries: ['50', '1000', null, '10.4', '155', '655', '133482', '110.10', '1080', null, '475', '676']
+        }
       })
 
       it('confirms the payload is valid', () => {
@@ -68,7 +72,7 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       beforeEach(() => {
         frequency = 'monthly'
         measurementType = 'meter readings'
-        payload = { multipleEntries: '100, x, 102, 103, 104, 105, 106, 107, 108, 109' }
+        payload = { multipleEntries: ['100', null, '102', '103', '104', '105', '106', '107', '108', '109'] }
       })
 
       it('fails validation with the message "Enter 12 monthly meter readings"', () => {
@@ -83,7 +87,9 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       beforeEach(() => {
         frequency = 'daily'
         measurementType = 'volumes'
-        payload = { multipleEntries: '100, 101, 102, 103, 104, X, 106, 107, 108, 109, 110, -111' }
+        payload = {
+          multipleEntries: ['100', '101', '102', '103', '104', null, '106', '107', '108', '109', '110', '-111']
+        }
       })
 
       it('fails validation with the message "Volumes must be a positive number"', () => {
@@ -98,7 +104,9 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       beforeEach(() => {
         frequency = 'weekly'
         measurementType = 'volumes'
-        payload = { multipleEntries: '100, x, 102, 103, 104, 105, X, 107, 108, 109, 110, hhh' }
+        payload = {
+          multipleEntries: ['100', null, '102', '103', '104', '105', null, '107', '108', '109', '110', 'NaN']
+        }
       })
 
       it('fails validation with the message "Volumes must be a number or x for a blank row"', () => {
@@ -113,7 +121,7 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       beforeEach(() => {
         frequency = 'weekly'
         measurementType = 'meter readings'
-        payload = { multipleEntries: '50, 101, 102, 103, 104, 105, x, 105, 104, 103, X, 120' }
+        payload = { multipleEntries: ['50', '101', '102', '103', '104', '105', null, '105', '104', '103', null, '120'] }
       })
 
       it('fails validation with the message "The meter readings must be greater than or equal to the start reading of 100"', () => {
@@ -130,7 +138,9 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
       beforeEach(() => {
         frequency = 'weekly'
         measurementType = 'meter readings'
-        payload = { multipleEntries: '100, 101, 102, x, 104, 105, 106, 105, 104, 103, 110, 120' }
+        payload = {
+          multipleEntries: ['100', '101', '102', null, '104', '105', '106', '105', '104', '103', '110', '120']
+        }
       })
 
       it('fails validation with the message "Each meter reading must be greater than or equal to the previous reading"', () => {

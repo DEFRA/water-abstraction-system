@@ -42,7 +42,7 @@ describe('Notices - Setup - Create notification service', () => {
 
     expect(createdNotifications).equal([
       {
-        alternateNotificationId: null,
+        alternateNoticeId: null,
         createdAt: createdNotifications[0].createdAt,
         eventId,
         id: result[0].id,
@@ -63,7 +63,7 @@ describe('Notices - Setup - Create notification service', () => {
         templateId: null
       },
       {
-        alternateNotificationId: null,
+        alternateNoticeId: null,
         createdAt: createdNotifications[1].createdAt,
         eventId,
         id: result[1].id,

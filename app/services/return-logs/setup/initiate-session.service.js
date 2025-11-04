@@ -5,15 +5,14 @@
  * @module InitiateSessionService
  */
 
-const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
+const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
 const { returnUnits, unitNames } = require('../../../lib/static-lookups.lib.js')
 
 const FeatureFlags = require('../../../../config/feature-flags.config.js')
-
 const UNITS = {
-  [unitNames.CUBIC_METRES]: 'cubic-metres',
+  [unitNames.CUBIC_METRES]: 'cubicMetres',
   [unitNames.LITRES]: 'litres',
   [unitNames.MEGALITRES]: 'megalitres',
   [unitNames.GALLONS]: 'gallons'
@@ -192,7 +191,7 @@ function _submissionData(lines, returnLog) {
   const method = metadata?.method || null
 
   return {
-    journey: nilReturn ? 'nil-return' : 'enter-return',
+    journey: nilReturn ? 'nilReturn' : 'enterReturn',
     lines: nilReturn ? lines : _submissionLines(returnSubmissionLines),
     nilReturn,
     meter10TimesDisplay: meter.meter10TimesDisplay,
@@ -203,7 +202,7 @@ function _submissionData(lines, returnLog) {
     receivedDateDay: returnLog.receivedDate && `${returnLog.receivedDate.getDate()}`,
     receivedDateMonth: returnLog.receivedDate && `${returnLog.receivedDate.getMonth() + 1}`,
     receivedDateYear: returnLog.receivedDate && `${returnLog.receivedDate.getFullYear()}`,
-    reported: method === 'oneMeter' ? 'meter-readings' : 'abstraction-volumes',
+    reported: method === 'oneMeter' ? 'meterReadings' : 'abstractionVolumes',
     startReading: meter.startReading,
     units: UNITS[metadata.units || unitNames.CUBIC_METRES]
   }

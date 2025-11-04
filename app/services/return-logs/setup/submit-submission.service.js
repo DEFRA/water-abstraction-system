@@ -5,11 +5,12 @@
  * @module SubmitSubmissionService
  */
 
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const SubmissionPresenter = require('../../../presenters/return-logs/setup/submission.presenter.js')
 const SubmissionValidator = require('../../../validators/return-logs/setup/submission.validator.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
  * Handles the user submission for the `/return-logs/setup/{sessionId}/submission` page
@@ -56,11 +57,11 @@ async function _confirmReceipt(session) {
 }
 
 async function _redirect(journey, session) {
-  if (journey === 'nil-return') {
+  if (journey === 'nilReturn') {
     return 'check'
   }
 
-  if (journey === 'record-receipt') {
+  if (journey === 'recordReceipt') {
     await _confirmReceipt(session)
 
     return 'confirm-received'
@@ -80,17 +81,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = SubmissionValidator.go(payload)
+  const validationResult = SubmissionValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

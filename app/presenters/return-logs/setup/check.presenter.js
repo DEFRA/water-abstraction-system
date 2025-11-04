@@ -9,9 +9,9 @@ const { formatAbstractionPeriod, formatLongDate, formatNumber, sentenceCase } = 
 const { convertToCubicMetres, generateSummaryTableHeaders } = require('../base-return-logs.presenter.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
-const ABSTRACTION_VOLUMES_METHOD = 'abstraction-volumes'
+const ABSTRACTION_VOLUMES_METHOD = 'abstractionVolumes'
 const UNIT_NAMES = {
-  'cubic-metres': 'm³',
+  cubicMetres: 'm³',
   litres: 'l',
   megalitres: 'Ml',
   gallons: 'gal'
@@ -27,7 +27,7 @@ const UNIT_NAMES = {
 function go(session) {
   const alwaysRequiredPageData = _alwaysRequiredPageData(session)
 
-  if (session.journey === 'nil-return') {
+  if (session.journey === 'nilReturn') {
     return alwaysRequiredPageData
   }
 
@@ -49,7 +49,7 @@ function go(session) {
   return {
     ...alwaysRequiredPageData,
     displayReadings: reported !== ABSTRACTION_VOLUMES_METHOD,
-    displayUnits: units !== 'cubic-metres',
+    displayUnits: units !== 'cubicMetres',
     enterMultipleLinkText: _enterMultipleLinkText(reported, returnsFrequency),
     meter10TimesDisplay,
     meterMake,
@@ -61,7 +61,7 @@ function go(session) {
     tableTitle: _tableTitle(reported, returnsFrequency),
     totalCubicMetres: convertToCubicMetres(totalQuantity, unitName),
     totalQuantity: formatNumber(totalQuantity),
-    units: units === 'cubic-metres' ? 'Cubic metres' : sentenceCase(units)
+    units: units === 'cubicMetres' ? 'Cubic metres' : sentenceCase(units)
   }
 }
 
@@ -95,7 +95,7 @@ function _alwaysRequiredPageData(session) {
       startReading: `/system/return-logs/setup/${sessionId}/start-reading`,
       units: `/system/return-logs/setup/${sessionId}/units`
     },
-    nilReturn: journey === 'nil-return' ? 'Yes' : 'No',
+    nilReturn: journey === 'nilReturn' ? 'Yes' : 'No',
     note: _note(note),
     pageTitle: 'Check details and enter new volumes or readings',
     pageTitleCaption: `Return reference ${returnReference}`,

@@ -5,8 +5,8 @@
  * @module SubmitViewReturnLogService
  */
 
-const { timestampForPostgres } = require('../../lib/general.lib.js')
 const ReturnLogModel = require('../../models/return-log.model.js')
+const { timestampForPostgres } = require('../../lib/general.lib.js')
 
 /**
  * Handles updating a return log record when the mark/resolve query button is clicked

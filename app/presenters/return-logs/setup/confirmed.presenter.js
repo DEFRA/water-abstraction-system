@@ -21,9 +21,10 @@ function go(returnLog) {
     licenceRef,
     pageTitle: _pageTitle(returnReference, status, submissionCount),
     purposeDetails: _purposeDetails(purposes),
-    returnId,
     siteDescription,
-    status
+    status,
+    viewReturnsLink: `/system/licences/${licenceId}/returns`,
+    viewThisReturnLink: `/system/return-logs/${returnId}`
   }
 }
 

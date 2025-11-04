@@ -25,11 +25,11 @@ describe('Return Logs Setup - Units presenter', () => {
       const result = UnitsPresenter.go(session)
 
       expect(result).to.equal({
+        backLink: { href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported', text: 'Back' },
         pageTitle: 'Which units were used?',
+        pageTitleCaption: 'Return reference 012345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',
-        returnReference: '012345',
-        units: null,
-        backLink: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported'
+        units: null
       })
     })
   })
@@ -43,27 +43,29 @@ describe('Return Logs Setup - Units presenter', () => {
       it('returns a link back to the "check" page', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
+        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/check')
       })
     })
 
-    describe('when the user has come from the "abstraction-volumes" route', () => {
+    describe('when the user has come from the "abstractionVolumes" route', () => {
       it('returns a link back to the "Reported" page on', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported')
+        expect(result.backLink.href).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/reported')
       })
     })
 
-    describe('when the user has come from the "meter-readings" route', () => {
+    describe('when the user has come from the "meterReadings" route', () => {
       beforeEach(() => {
-        session.reported = 'meter-readings'
+        session.reported = 'meterReadings'
       })
 
       it('returns a link back to the "Start reading" page on', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.backLink).to.equal('/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/start-reading')
+        expect(result.backLink.href).to.equal(
+          '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/start-reading'
+        )
       })
     })
   })
@@ -71,13 +73,13 @@ describe('Return Logs Setup - Units presenter', () => {
   describe('the "units" property', () => {
     describe('when the user has previously selected "Cubic Metres" as the reported type', () => {
       beforeEach(() => {
-        session.units = 'cubic-metres'
+        session.units = 'cubicMetres'
       })
 
       it('returns the "units" property populated to re-select the option', () => {
         const result = UnitsPresenter.go(session)
 
-        expect(result.units).to.equal('cubic-metres')
+        expect(result.units).to.equal('cubicMetres')
       })
     })
 

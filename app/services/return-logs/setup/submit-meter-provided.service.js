@@ -9,6 +9,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const MeterProvidedPresenter = require('../../../presenters/return-logs/setup/meter-provided.presenter.js')
 const MeterProvidedValidator = require('../../../validators/return-logs/setup/meter-provided.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/meter-provided` page
@@ -28,9 +29,9 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, payload)
 
     if (session.checkPageVisited && payload.meterProvided === 'no') {
@@ -44,12 +45,12 @@ async function go(sessionId, payload, yar) {
     }
   }
 
-  const formattedData = MeterProvidedPresenter.go(session)
+  const pageData = MeterProvidedPresenter.go(session)
 
   return {
     activeNavBar: 'search',
-    error: validationResult,
-    ...formattedData
+    error,
+    ...pageData
   }
 }
 
@@ -66,17 +67,9 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validation = MeterProvidedValidator.go(payload)
+  const validationResult = MeterProvidedValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {
