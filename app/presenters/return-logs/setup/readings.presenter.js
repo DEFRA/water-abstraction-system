@@ -27,10 +27,10 @@ function go(session, yearMonth) {
   })
 
   return {
-    backLink: `/system/return-logs/setup/${sessionId}/check`,
+    backLink: { href: `/system/return-logs/setup/${sessionId}/check`, text: 'Back' },
     inputLines: _inputLines(requestedMonthLines, returnsFrequency),
     pageTitle: _pageTitle(new Date(requestedMonthLines[0].endDate)),
-    returnReference
+    pageTitleCaption: `Return reference ${returnReference}`
   }
 }
 

@@ -9,6 +9,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const ReadingsPresenter = require('../../../presenters/return-logs/setup/readings.presenter.js')
 const ReadingsValidator = require('../../../validators/return-logs/setup/readings.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/readings/{yearMonth}` page
@@ -26,9 +27,9 @@ async function go(sessionId, payload, yar, yearMonth) {
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
 
-  const validationResult = _validate(payload, requestedYear, requestedMonth, session)
+  const error = _validate(payload, requestedYear, requestedMonth, session)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(payload, session, requestedYear, requestedMonth)
 
     GeneralLib.flashNotification(yar, 'Updated', 'Readings have been updated')
@@ -36,18 +37,18 @@ async function go(sessionId, payload, yar, yearMonth) {
     return {}
   }
 
-  _addValidationResultToSession(payload, session, requestedYear, requestedMonth, validationResult)
+  _addValidationResultToSession(payload, session, requestedYear, requestedMonth, error)
 
   const formattedData = ReadingsPresenter.go(session, yearMonth)
 
   return {
     activeNavBar: 'search',
-    error: validationResult,
+    error,
     ...formattedData
   }
 }
 
-function _addValidationResultToSession(payload, session, requestedYear, requestedMonth, validationResult) {
+function _addValidationResultToSession(payload, session, requestedYear, requestedMonth, error) {
   session.lines.forEach((line) => {
     const endDate = new Date(line.endDate)
 
@@ -55,7 +56,7 @@ function _addValidationResultToSession(payload, session, requestedYear, requeste
       // Unlike when the session is saved, we do not convert the reading to a number here. This is because we want to
       // return what was submitted in the payload to the view following failed validation, which could be a string
       line.reading = payload[line.endDate] ?? null
-      line.error = _lineError(line, validationResult)
+      line.error = _lineError(line, error)
     }
   })
 }
@@ -66,13 +67,13 @@ function _determineRequestedYearAndMonth(yearMonth) {
   return yearMonth.split('-').map(Number)
 }
 
-function _lineError(line, validationResult) {
-  const error = validationResult.find((validationError) => {
+function _lineError(line, error) {
+  const lineError = error.errorList.find((validationError) => {
     return validationError.href === `#${line.endDate}`
   })
 
-  if (error) {
-    return error.text
+  if (lineError) {
+    return lineError.text
   }
 
   return null
@@ -107,16 +108,7 @@ function _validate(payload, requestedYear, requestedMonth, session) {
 
   const validation = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
-  if (!validation.error) {
-    return null
-  }
-
-  return validation.error.details.map((error) => {
-    return {
-      text: error.message,
-      href: `#${error.path[0]}`
-    }
-  })
+  return formatValidationResult(validation)
 }
 
 module.exports = {

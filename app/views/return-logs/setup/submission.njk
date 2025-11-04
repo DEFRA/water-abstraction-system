@@ -1,60 +1,41 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% block breadcrumbs %}
-  {# Back link #}
-  {{
-    govukBackLink({
-      text: 'Back',
-      href: backLink
-    })
-  }}
-{% endblock %}
-
-{% block content %}
-  {# Error message #}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [
-        {
-          text: error.text,
-          href: '#journey'
-        }
-      ]
-      }) }}
-  {% endif %}
-
-  {# Main heading #}
-  <div>
-    <span class="govuk-caption-l"> Return reference {{ returnReference }} </span>
-    <h1 class="govuk-heading-xl">{{ pageTitle }}</h1>
-  </div>
-
-  {# Select what you want to do with this return #}
+{% block pageContent %}
   <form  method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
     {{ govukRadios({
+      id: "journey",
       name: "journey",
-      errorMessage: error,
+      errorMessage: error.journey,
+      fieldset: {
+        legend: {
+          html: pageHeadingHtml
+        }
+      },
       items: [
         {
-          value: "enter-return",
+          id: "enterReturn",
+          name: "enterReturn",
+          value: "enterReturn",
           text: "Enter and submit",
-          checked: journey === "enter-return"
+          checked: journey === "enterReturn"
         },
         {
-          value: "nil-return",
+          id: "nilReturn",
+          name: "nilReturn",
+          value: "nilReturn",
           text: "Enter a nil return",
-          checked: journey === "nil-return"
+          checked: journey === "nilReturn"
         },
         {
-          value: "record-receipt",
+          id: "recordReceipt",
+          name: "recordReceipt",
+          value: "recordReceipt",
           text: "Record receipt",
-          checked: journey === "record-receipt"
+          checked: journey === "recordReceipt"
         } if beenReceived === false
       ]
     }) }}

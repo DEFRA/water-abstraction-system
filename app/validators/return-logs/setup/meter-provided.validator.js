@@ -18,7 +18,6 @@ const VALID_VALUES = ['yes', 'no']
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
-  const meterProvided = payload.meterProvided
   const errorMessage = 'Select if meter details have been provided'
 
   const schema = Joi.object({
@@ -32,7 +31,7 @@ function go(payload) {
       })
   })
 
-  return schema.validate({ meterProvided }, { abortEarly: false })
+  return schema.validate(payload)
 }
 
 module.exports = {

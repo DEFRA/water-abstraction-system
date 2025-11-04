@@ -21,11 +21,11 @@ const UnitsPresenter = require('../../../presenters/return-logs/setup/units.pres
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const formattedData = UnitsPresenter.go(session)
+  const pageData = UnitsPresenter.go(session)
 
   return {
     activeNavBar: 'search',
-    ...formattedData
+    ...pageData
   }
 }
 

@@ -13,7 +13,7 @@ const SubmissionValidator = require('../../../../app/validators/return-logs/setu
 describe('Return Logs Setup - Submission validator', () => {
   describe('when valid data is provided', () => {
     it('confirms the data is valid', () => {
-      const result = SubmissionValidator.go({ journey: 'enter-return' })
+      const result = SubmissionValidator.go({ journey: 'enterReturn' })
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
