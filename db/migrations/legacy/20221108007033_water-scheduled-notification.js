@@ -33,6 +33,7 @@ exports.up = function (knex) {
     table.uuid('template_id')
     table.binary('pdf')
     table.date('returned_at')
+    table.uuid('alternate_notification_id')
     table.uuid('alternate_notice_id')
 
     // Legacy timestamps
