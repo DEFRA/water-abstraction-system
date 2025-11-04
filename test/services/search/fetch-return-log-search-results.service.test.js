@@ -19,7 +19,7 @@ const databaseConfig = require('../../../config/database.config.js')
 // Thing under test
 const FetchReturnLogSearchResultsService = require('../../../app/services/search/fetch-return-log-search-results.service.js')
 
-describe.only('Search - Fetch return log search results service', () => {
+describe('Search - Fetch return log search results service', () => {
   const returnLogs = []
 
   before(async () => {
@@ -77,40 +77,54 @@ describe.only('Search - Fetch return log search results service', () => {
     it('returns the correctly ordered matching return logs', async () => {
       const result = await FetchReturnLogSearchResultsService.go('01100010', 1)
 
-      expect(result).to.equal({
-        results: [
-          {
-            dueDates: [returnLogs[2].returnLog.dueDate],
-            endDates: [returnLogs[2].returnLog.endDate],
-            id: returnLogs[2].licence.id,
-            ids: [returnLogs[2].returnLog.id],
-            licenceRef: returnLogs[2].licence.licenceRef,
-            returnReference: returnLogs[2].returnLog.returnReference,
-            returnRequirementId: returnLogs[2].returnLog.returnRequirementId,
-            statuses: [returnLogs[2].returnLog.status]
-          },
-          {
-            dueDates: [returnLogs[0].returnLog.dueDate, returnLogs[3].returnLog.dueDate],
-            endDates: [returnLogs[0].returnLog.endDate, returnLogs[3].returnLog.endDate],
-            id: returnLogs[0].licence.id,
-            ids: [returnLogs[0].returnLog.id, returnLogs[3].returnLog.id],
-            licenceRef: returnLogs[0].licence.licenceRef,
-            returnReference: returnLogs[0].returnLog.returnReference,
-            returnRequirementId: returnLogs[0].returnLog.returnRequirementId,
-            statuses: [returnLogs[0].returnLog.status, returnLogs[3].returnLog.status]
-          },
-          {
-            dueDates: [returnLogs[1].returnLog.dueDate],
-            endDates: [returnLogs[1].returnLog.endDate],
-            id: returnLogs[1].licence.id,
-            ids: [returnLogs[1].returnLog.id],
-            licenceRef: returnLogs[1].returnLog.licenceRef,
-            returnReference: returnLogs[1].returnLog.returnReference,
-            returnRequirementId: returnLogs[1].returnLog.returnRequirementId,
-            statuses: [returnLogs[1].returnLog.status]
-          }
-        ],
-        total: 3
+      // Ordering within aggregated array values from the database is not guaranteed, so we have to check the contents
+      // of the result individually, rather than doing a straight equality check
+
+      expect(result.total).to.equal(3)
+      expect(result.results.length).to.equal(3)
+
+      expect(result.results[0]).to.equal({
+        dueDates: [returnLogs[2].returnLog.dueDate],
+        endDates: [returnLogs[2].returnLog.endDate],
+        id: returnLogs[2].licence.id,
+        ids: [returnLogs[2].returnLog.id],
+        licenceRef: returnLogs[2].licence.licenceRef,
+        returnReference: returnLogs[2].returnLog.returnReference,
+        returnRequirementId: returnLogs[2].returnLog.returnRequirementId,
+        statuses: [returnLogs[2].returnLog.status]
+      })
+
+      expect(result.results[1]).to.equal(
+        {
+          dueDates: [returnLogs[0].returnLog.dueDate, returnLogs[3].returnLog.dueDate],
+          endDates: [returnLogs[0].returnLog.endDate, returnLogs[3].returnLog.endDate],
+          id: returnLogs[0].licence.id,
+          ids: [returnLogs[0].returnLog.id, returnLogs[3].returnLog.id],
+          licenceRef: returnLogs[0].licence.licenceRef,
+          returnReference: returnLogs[0].returnLog.returnReference,
+          returnRequirementId: returnLogs[0].returnLog.returnRequirementId,
+          statuses: [returnLogs[0].returnLog.status, returnLogs[3].returnLog.status]
+        },
+        { skip: ['dueDates', 'endDates', 'ids', 'statuses'] }
+      )
+      expect(result.results[1].dueDates).to.contain([returnLogs[0].returnLog.dueDate])
+      expect(result.results[1].endDates).to.contain([returnLogs[0].returnLog.endDate])
+      expect(result.results[1].ids).to.contain([returnLogs[0].returnLog.id])
+      expect(result.results[1].statuses).to.contain([returnLogs[0].returnLog.status])
+      expect(result.results[1].dueDates).to.contain([returnLogs[3].returnLog.dueDate])
+      expect(result.results[1].endDates).to.contain([returnLogs[3].returnLog.endDate])
+      expect(result.results[1].ids).to.contain([returnLogs[3].returnLog.id])
+      expect(result.results[1].statuses).to.contain([returnLogs[3].returnLog.status])
+
+      expect(result.results[2]).to.equal({
+        dueDates: [returnLogs[1].returnLog.dueDate],
+        endDates: [returnLogs[1].returnLog.endDate],
+        id: returnLogs[1].licence.id,
+        ids: [returnLogs[1].returnLog.id],
+        licenceRef: returnLogs[1].returnLog.licenceRef,
+        returnReference: returnLogs[1].returnLog.returnReference,
+        returnRequirementId: returnLogs[1].returnLog.returnRequirementId,
+        statuses: [returnLogs[1].returnLog.status]
       })
     })
   })
@@ -148,19 +162,19 @@ describe.only('Search - Fetch return log search results service', () => {
     })
 
     it('correctly returns the requested page of results', async () => {
-      const result = await FetchReturnLogSearchResultsService.go('01100010', 2)
+      const result = await FetchReturnLogSearchResultsService.go('01100010', 3)
 
       expect(result).to.equal({
         results: [
           {
-            dueDates: [returnLogs[0].returnLog.dueDate, returnLogs[3].returnLog.dueDate],
-            endDates: [returnLogs[0].returnLog.endDate, returnLogs[3].returnLog.endDate],
-            id: returnLogs[0].licence.id,
-            ids: [returnLogs[0].returnLog.id, returnLogs[3].returnLog.id],
-            licenceRef: returnLogs[0].licence.licenceRef,
-            returnReference: returnLogs[0].returnLog.returnReference,
-            returnRequirementId: returnLogs[0].returnLog.returnRequirementId,
-            statuses: [returnLogs[0].returnLog.status, returnLogs[3].returnLog.status]
+            dueDates: [returnLogs[1].returnLog.dueDate],
+            endDates: [returnLogs[1].returnLog.endDate],
+            id: returnLogs[1].licence.id,
+            ids: [returnLogs[1].returnLog.id],
+            licenceRef: returnLogs[1].returnLog.licenceRef,
+            returnReference: returnLogs[1].returnLog.returnReference,
+            returnRequirementId: returnLogs[1].returnLog.returnRequirementId,
+            statuses: [returnLogs[1].returnLog.status]
           }
         ],
         total: 3

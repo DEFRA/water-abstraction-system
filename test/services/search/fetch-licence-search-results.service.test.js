@@ -19,7 +19,7 @@ const databaseConfig = require('../../../config/database.config.js')
 // Thing under test
 const FetchLicenceSearchResultsService = require('../../../app/services/search/fetch-licence-search-results.service.js')
 
-describe.only('Search - Fetch licence search results service', () => {
+describe('Search - Fetch licence search results service', () => {
   const licences = []
 
   before(async () => {

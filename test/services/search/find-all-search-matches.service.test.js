@@ -16,7 +16,7 @@ const FetchReturnLogSearchResultsService = require('../../../app/services/search
 // Thing under test
 const FindAllSearchMatchesService = require('../../../app/services/search/find-all-search-matches.service.js')
 
-describe.only('Search - Find all search matches service', () => {
+describe('Search - Find all search matches service', () => {
   const licenceResults = {
     results: [
       {
@@ -25,7 +25,7 @@ describe.only('Search - Find all search matches service', () => {
         },
         id: 'licence-1',
         licenceRef: '01/123',
-        metadata: { contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder',  salutation: 'Mr' }] }
+        metadata: { contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr' }] }
       }
     ],
     total: 1
@@ -80,7 +80,7 @@ describe.only('Search - Find all search matches service', () => {
   describe('when called', () => {
     beforeEach(() => {
       page = 1
-      resultType = 'all'
+      resultType = null
       searchQuery = '1231231231'
     })
 
@@ -109,7 +109,7 @@ describe.only('Search - Find all search matches service', () => {
     beforeEach(() => {
       page = 1
       resultType = 'licence'
-      searchQuery = '1231231231'
+      searchQuery = '123/1231231'
     })
 
     it('returns only licence data', async () => {

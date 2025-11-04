@@ -17,7 +17,7 @@ const databaseConfig = require('../../../config/database.config.js')
 // Thing under test
 const FetchMonitoringStationSearchResultsService = require('../../../app/services/search/fetch-monitoring-station-search-results.service.js')
 
-describe.only('Search - Fetch monitoring station search results service', () => {
+describe('Search - Fetch monitoring station search results service', () => {
   const monitoringStations = []
 
   before(async () => {

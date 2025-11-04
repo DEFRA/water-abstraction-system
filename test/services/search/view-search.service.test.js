@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ViewSearchService = require('../../../app/services/search/view-search.service.js')
 
-describe.only('Search - View Search service', () => {
+describe('Search - View Search service', () => {
   describe('when called', () => {
     it('returns page data for the view', async () => {
       const result = await ViewSearchService.go()

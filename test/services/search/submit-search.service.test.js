@@ -42,14 +42,15 @@ describe('Search - Submit search service', () => {
 
   describe('when called with a valid query', () => {
     beforeEach(() => {
-      payload = { query: 'searchthis' }
+      payload = { query: 'searchthis', resultType: 'all' }
       Sinon.stub(FindSingleSearchMatchService, 'go').resolves()
     })
 
     it('sets the session value and returns a redirect to the search results page', async () => {
       const result = await SubmitSearchService.go(payload, yar)
 
-      expect(yarSpy.calledOnceWithExactly('searchQuery', 'searchthis')).to.be.true()
+      expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).to.be.true()
+      expect(yarSpy.calledWithExactly('searchResultType', 'all')).to.be.true()
       expect(result).to.equal({ redirect: '/system/search?page=1' })
     })
   })
@@ -67,24 +68,11 @@ describe('Search - Submit search service', () => {
         error: EXPECTED_ERROR,
         pageTitle: 'Search',
         query: undefined,
+        resultType: undefined,
         showResults: false
       })
 
       expect(yarSpy.called).to.be.false()
-    })
-  })
-
-  describe('when called with a query that matches a single record that should be redirected', () => {
-    beforeEach(() => {
-      payload = { query: 'searchthis' }
-      Sinon.stub(FindSingleSearchMatchService, 'go').resolves('/system/licences/licence-1/summary')
-    })
-
-    it('sets the session value and returns a redirect to the required page', async () => {
-      const result = await SubmitSearchService.go(payload, yar)
-
-      expect(yarSpy.calledOnceWithExactly('searchQuery', 'searchthis')).to.be.true()
-      expect(result).to.equal({ redirect: '/system/licences/licence-1/summary' })
     })
   })
 })

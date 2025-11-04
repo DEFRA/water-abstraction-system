@@ -5,7 +5,6 @@
  * @module SubmitSearchService
  */
 
-const FindSingleSearchMatchService = require('./find-single-search-match.service.js')
 const SearchPresenter = require('../../presenters/search/search.presenter.js')
 const SearchValidator = require('../../validators/search/search.validator.js')
 const { formatValidationResult } = require('../../presenters/base.presenter.js')
@@ -38,13 +37,7 @@ async function go(payload, yar) {
   yar.set('searchQuery', validationResult.value.query)
   yar.set('searchResultType', validationResult.value.resultType)
 
-  let redirect = await FindSingleSearchMatchService.go(validationResult.value.query)
-  redirect = null // Temporarily removing this feature to deal with exact matches in search results
-  if (!redirect) {
-    redirect = '/system/search?page=1'
-  }
-
-  return { redirect }
+  return { redirect: '/system/search?page=1' }
 }
 
 module.exports = {

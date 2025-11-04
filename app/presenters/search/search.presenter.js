@@ -55,6 +55,14 @@ function go(query, resultType, page, numberOfPages, allSearchMatches) {
   }
 }
 
+function _holderContact(licence) {
+  return (
+    licence.metadata.contacts?.find((contact) => {
+      return contact.role === 'Licence holder'
+    }) ?? {}
+  )
+}
+
 function _licenceEndDetails(licenceEnd) {
   let licenceEndDate = null
   let licenceEndedText = null
@@ -81,11 +89,7 @@ function _licences(licences) {
     const licenceEnd = licence.$ends()
     const { id, licenceRef } = licence
 
-    const holderContact =
-      licence.metadata?.contacts?.find((contact) => {
-        return contact.role === 'Licence holder'
-      }) ?? {}
-    const { forename: firstName, initials, name: lastName, salutation } = holderContact
+    const { forename: firstName, initials, name: lastName, salutation } = _holderContact(licence)
 
     // Holder name is either a company name given by Name or made up of any parts of Salutation, Initials, Forename and
     // Name that are populated, where Name provides the surname for a person.
