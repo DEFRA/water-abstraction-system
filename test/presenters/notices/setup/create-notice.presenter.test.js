@@ -86,7 +86,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
         overallStatus: 'pending',
         referenceCode: 'RINV-123',
         status: 'completed',
-        statusCounts: { cancelled: 0, error: 0, pending: 5, sent: 0 },
+        statusCounts: { cancelled: 0, error: 0, pending: 5, returned: 0, sent: 0 },
         subtype: 'returnInvitation'
       })
     })
