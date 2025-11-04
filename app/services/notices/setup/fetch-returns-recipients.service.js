@@ -7,6 +7,7 @@
 
 const { db } = require('../../../../db/db.js')
 const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
@@ -186,13 +187,26 @@ async function _fetchRecipient(session) {
 async function _fetchRecipients(session) {
   const {
     determinedReturnsPeriod: { dueDate, endDate, startDate, quarterly, summer },
+    noticeType,
     removeLicences = ''
   } = session
 
   const excludeLicences = transformStringOfLicencesToArray(removeLicences)
 
+  let dueDateCondition
+
+  if (!featureFlagsConfig.enableNullDueDate) {
+    dueDateCondition = '= ?'
+  } else {
+    if (noticeType === NoticeType.REMINDERS) {
+      dueDateCondition = 'IS NOT NULL'
+    } else {
+      dueDateCondition = 'IS NULL'
+    }
+  }
+
   const where = `
-    AND rl.due_date ${featureFlagsConfig.enableNullDueDate ? 'IS NULL' : '= ?'}
+    AND rl.due_date ${dueDateCondition}
     AND rl.end_date <= ?
     AND rl.start_date >= ?
     AND rl.metadata->>'isSummer' = ?
@@ -239,7 +253,6 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
         FROM public.return_logs rl
         WHERE
           rl.status = 'due'
-          AND rl.metadata->>'isCurrent' = 'true'
           ${whereReturnLogs}
       ),
 
@@ -250,7 +263,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
           le."name" AS email,
           NULL::jsonb AS contact,
           md5(LOWER(le."name")) AS contact_hash_id,
-          rl.return_id
+          rl.return_id,
+          ('Email') as message_type
         FROM public.licence_document_headers ldh
             INNER JOIN public.licence_entity_roles ler
                 ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
@@ -269,7 +283,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
           le."name" AS email,
           NULL::jsonb AS contact,
           md5(LOWER(le."name")) AS contact_hash_id,
-          rl.return_id
+          rl.return_id,
+          ('Email') as message_type
         FROM public.licence_document_headers ldh
             INNER JOIN public.licence_entity_roles ler
                 ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
@@ -297,7 +312,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
               concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
             )
           )) AS contact_hash_id,
-          rl.return_id
+          rl.return_id,
+          ('Letter') as message_type
         FROM public.licence_document_headers ldh
           INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
           INNER JOIN due_return_logs rl
@@ -322,7 +338,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
               concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
             )
           )) AS contact_hash_id,
-          rl.return_id
+          rl.return_id,
+          ('Letter') as message_type
         FROM public.licence_document_headers ldh
           INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
           INNER JOIN due_return_logs rl
@@ -352,6 +369,7 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
           contact_type,
           email,
           contact,
+          message_type,
           priority
         FROM all_contacts
         ORDER BY contact_hash_id, priority
@@ -361,9 +379,7 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
       aggregated_contact_data AS (
         SELECT
           contact_hash_id,
-          string_agg(DISTINCT licence_ref, ',' ORDER BY licence_ref) AS licence_refs,
-          -- this will be added in the next change
-          -- JSON_AGG(DISTINCT licence_ref ORDER BY licence_ref) AS licence_refs
+          JSON_AGG(DISTINCT licence_ref ORDER BY licence_ref) AS licence_refs,
           JSON_AGG(DISTINCT return_id ORDER BY return_id) AS return_ids
         FROM all_contacts
         GROUP BY contact_hash_id
@@ -375,7 +391,8 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
       b.email,
       b.contact,
       b.contact_hash_id,
-      a.return_ids as return_log_ids
+      a.return_ids as return_log_ids,
+      b.message_type
     FROM
       aggregated_contact_data a
         JOIN

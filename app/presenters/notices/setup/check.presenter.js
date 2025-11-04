@@ -60,7 +60,7 @@ function _formatRecipients(noticeType, recipients, sessionId) {
 
     return {
       contact,
-      licences: recipient.licence_refs.split(','),
+      licences: recipient.licence_refs,
       method: `${recipient.message_type} - ${recipient.contact_type}`,
       previewLink: _previewLink(noticeType, recipient, sessionId, contact)
     }

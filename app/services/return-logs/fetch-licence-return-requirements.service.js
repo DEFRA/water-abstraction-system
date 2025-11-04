@@ -5,9 +5,9 @@
  * @module FetchLicenceReturnRequirementsService
  */
 
-const { db } = require('../../../db/db.js')
 const ReturnRequirementModel = require('../../models/return-requirement.model.js')
 const ReturnVersionModel = require('../../models/return-version.model.js')
+const { db } = require('../../../db/db.js')
 
 /**
  * Fetches return requirements for a given licence with an end date after the provided date

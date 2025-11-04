@@ -6,6 +6,7 @@
  */
 
 const { randomInt, randomUUID } = require('node:crypto')
+const { setTimeout } = require('node:timers/promises')
 
 /**
  * Calculates and logs the time taken in milliseconds between the provided `startTime` and the current time
@@ -157,6 +158,22 @@ function generateRandomInteger(min, max) {
  */
 function generateUUID() {
   return randomUUID({ disableEntropyCache: true })
+}
+
+/**
+ * Pause execution for a given number of milliseconds
+ *
+ * We know it is considered an anti-pattern for JavaScript, but there are times when we just need to pause execution.
+ *
+ * Typically, this is because of external services, for example, Notify and its rate limit, waiting for the Charging
+ * Module API to generate a bill run, or the legacy apps and their flakiness!
+ *
+ * For these times, we have this helper function.
+ *
+ * @param {number} pauseInMilliseconds - Milliseconds to wait
+ */
+async function pause(pauseInMilliseconds) {
+  await setTimeout(pauseInMilliseconds)
 }
 
 /**
@@ -384,6 +401,7 @@ module.exports = {
   flashNotification,
   generateRandomInteger,
   generateUUID,
+  pause,
   periodsOverlap,
   splitArrayIntoGroups,
   timestampForPostgres,

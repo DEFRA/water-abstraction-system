@@ -5,10 +5,9 @@
  * @module ChargingModuleWaitForStatusRequest
  */
 
-const { setTimeout } = require('node:timers/promises')
-
 const ExpandedError = require('../../errors/expanded.error.js')
 const ViewBillRunStatusRequest = require('./view-bill-run-status.request.js')
+const { pause } = require('../../lib/general.lib.js')
 
 const billingConfig = require('../../../config/billing.config.js')
 
@@ -64,7 +63,8 @@ async function send(billRunId, statusesToWaitFor, maximumAttempts = 120) {
       break
     }
 
-    await _pause()
+    // Pause between requests so that we are not bombarding the Charging Module
+    await pause(billingConfig.waitForStatusPauseInMs)
   }
 
   return {
@@ -72,17 +72,6 @@ async function send(billRunId, statusesToWaitFor, maximumAttempts = 120) {
     status,
     attempts
   }
-}
-
-/**
- * Pause between requests so that we are not bombarding the Charging Module
- *
- * The default is 1 second but we make this configurable mainly to allow us to override the pause in unit tests
- *
- * @private
- */
-function _pause() {
-  return setTimeout(billingConfig.waitForStatusPauseInMs)
 }
 
 function _requestFailed(billRunId, result) {

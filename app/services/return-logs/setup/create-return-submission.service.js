@@ -5,8 +5,8 @@
  * @module CreateReturnSubmissionService
  */
 
-const { generateUUID } = require('../../../lib/general.lib.js')
 const ReturnSubmissionModel = require('../../../models/return-submission.model.js')
+const { generateUUID } = require('../../../lib/general.lib.js')
 
 /**
  * Creates a new return submission. The version number will be 1 if no previous submission exists for this return log
@@ -30,7 +30,7 @@ async function go(metadata, session, timestamp, user, trx = null) {
     createdAt: timestamp,
     createdBy: user.id,
     current: true,
-    nilReturn: session.journey === 'nil-return',
+    nilReturn: session.journey === 'nilReturn',
     metadata,
     notes: session.note?.content,
     returnLogId: session.returnLogId,

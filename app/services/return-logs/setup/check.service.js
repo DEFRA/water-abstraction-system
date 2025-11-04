@@ -5,8 +5,8 @@
  * @module CheckService
  */
 
-const SessionModel = require('../../../models/session.model.js')
 const CheckPresenter = require('../../../presenters/return-logs/setup/check.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/check` page

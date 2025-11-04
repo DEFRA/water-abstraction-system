@@ -14,9 +14,9 @@ describe('Return Logs Setup - Reported validator', () => {
   let payload
 
   describe('when a valid payload is provided', () => {
-    describe('because the user selected the "meter-readings" option', () => {
+    describe('because the user selected the "meterReadings" option', () => {
       beforeEach(() => {
-        payload = { reported: 'meter-readings' }
+        payload = { reported: 'meterReadings' }
       })
 
       it('confirms the payload is valid', () => {
@@ -26,9 +26,9 @@ describe('Return Logs Setup - Reported validator', () => {
       })
     })
 
-    describe('because the user selected the "abstraction-volumes" option', () => {
+    describe('because the user selected the "abstractionVolumes" option', () => {
       beforeEach(() => {
-        payload = { reported: 'abstraction-volumes' }
+        payload = { reported: 'abstractionVolumes' }
       })
 
       it('confirms the payload is valid', () => {

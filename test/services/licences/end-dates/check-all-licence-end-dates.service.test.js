@@ -10,9 +10,9 @@ const { expect } = Code
 
 // Things we need to stub
 const FetchLicencesService = require('../../../../app/services/licences/end-dates/fetch-licences.service.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const LicencesConfig = require('../../../../config/licences.config.js')
 const CheckLicenceEndDatesService = require('../../../../app/services/licences/end-dates/check-licence-end-dates.service.js')
+const { generateUUID, pause } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const CheckAllLicenceEndDatesService = require('../../../../app/services/licences/end-dates/check-all-licence-end-dates.service.js')
@@ -97,11 +97,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
       const delayInMilliseconds = 250 // 0.25 seconds
 
       processLicenceStub = Sinon.stub(CheckLicenceEndDatesService, 'go').callsFake(() => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            resolve()
-          }, delayInMilliseconds)
-        })
+        return pause(delayInMilliseconds)
       })
     })
 

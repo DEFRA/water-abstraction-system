@@ -5,15 +5,15 @@
  * @module SubmitCheckService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const CheckPresenter = require('../../../presenters/return-logs/setup/check.presenter.js')
 const CheckValidator = require('../../../validators/return-logs/setup/check.validator.js')
 const CreateReturnLinesService = require('./create-return-lines.service.js')
 const CreateReturnSubmissionService = require('./create-return-submission.service.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
 const GenerateReturnSubmissionMetadata = require('./generate-return-submission-metadata.service.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 
 /**
  * Service to handle the submission of the check page in the return logs setup flow.

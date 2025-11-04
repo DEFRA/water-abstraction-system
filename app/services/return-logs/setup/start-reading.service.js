@@ -18,11 +18,11 @@ const StartReadingPresenter = require('../../../presenters/return-logs/setup/sta
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const formattedData = StartReadingPresenter.go(session)
+  const pageData = StartReadingPresenter.go(session)
 
   return {
     activeNavBar: 'search',
-    ...formattedData
+    ...pageData
   }
 }
 

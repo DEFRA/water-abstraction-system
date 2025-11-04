@@ -18,6 +18,7 @@ const Joi = require('joi')
 function go(payload) {
   const errorMessage = 'Enter details'
   const maxErrorMessage = 'Enter no more than 500 characters'
+
   const schema = Joi.object({
     note: Joi.string().required().max(500).messages({
       'any.required': errorMessage,

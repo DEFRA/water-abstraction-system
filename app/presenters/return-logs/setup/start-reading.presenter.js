@@ -16,15 +16,15 @@ function go(session) {
   const { id: sessionId, returnReference, startReading } = session
 
   return {
-    backLink: _backLink(session),
+    backLink: { href: _backLinkHref(session), text: 'Back' },
     pageTitle: 'Enter the start meter reading',
-    returnReference,
+    pageTitleCaption: `Return reference ${returnReference}`,
     sessionId,
     startReading: _savedValue(startReading)
   }
 }
 
-function _backLink(session) {
+function _backLinkHref(session) {
   const { checkPageVisited, id } = session
 
   if (checkPageVisited) {

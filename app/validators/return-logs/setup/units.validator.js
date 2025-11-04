@@ -7,7 +7,7 @@
 
 const Joi = require('joi')
 
-const VALID_VALUES = ['cubic-metres', 'litres', 'megalitres', 'gallons']
+const VALID_VALUES = ['cubicMetres', 'litres', 'megalitres', 'gallons']
 
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/units` page

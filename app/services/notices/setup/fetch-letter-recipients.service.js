@@ -153,7 +153,6 @@ function _query() {
       FROM public.return_logs rl
       WHERE
         rl.status = 'due'
-        AND rl.metadata->>'isCurrent' = 'true'
     ),
 
     licence_holder as (
@@ -166,7 +165,8 @@ function _query() {
         LOWER(
           concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
       )
-      )) AS contact_hash_id
+      )) AS contact_hash_id,
+      ('Letter') as message_type
       FROM public.licence_document_headers ldh
       INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
       INNER JOIN due_return_logs
@@ -185,7 +185,8 @@ function _query() {
         LOWER(
           concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
       )
-      )) AS contact_hash_id
+      )) AS contact_hash_id,
+      ('Letter') as message_type
       FROM public.licence_document_headers ldh
       INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
       INNER JOIN due_return_logs
@@ -206,6 +207,7 @@ function _query() {
           contact_type,
           email,
           contact,
+          message_type,
           priority
         FROM all_contacts
         ORDER BY contact_hash_id, priority
@@ -215,9 +217,7 @@ function _query() {
       aggregated_contact_data AS (
         SELECT
           contact_hash_id,
-          string_agg(DISTINCT licence_ref, ',' ORDER BY licence_ref) AS licence_refs
-          -- this will be added in the next change
-          -- JSON_AGG(DISTINCT licence_ref ORDER BY licence_ref) AS licence_refs
+          JSON_AGG(DISTINCT licence_ref ORDER BY licence_ref) AS licence_refs
         FROM all_contacts
         GROUP BY contact_hash_id
       )
@@ -226,7 +226,8 @@ function _query() {
       a.licence_refs,
       b.contact_type,
       b.contact,
-      b.contact_hash_id
+      b.contact_hash_id,
+      b.message_type
     FROM
       aggregated_contact_data a
         JOIN

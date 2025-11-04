@@ -9,8 +9,8 @@ const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
 const REPORTED = {
-  VOLUMES: 'abstraction-volumes',
-  READINGS: 'meter-readings'
+  VOLUMES: 'abstractionVolumes',
+  READINGS: 'meterReadings'
 }
 
 /**
@@ -22,7 +22,7 @@ const REPORTED = {
  */
 function go(session) {
   // Metadata is not required for nil returns
-  if (session.journey === 'nil-return') {
+  if (session.journey === 'nilReturn') {
     return {}
   }
 
