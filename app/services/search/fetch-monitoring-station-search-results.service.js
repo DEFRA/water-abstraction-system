@@ -19,11 +19,10 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * @returns {Promise<object>} The search results and total number of matching rows in the database
  */
 async function go(query, page, matchFullIdentifier = false) {
-  const fullIdentifier = query.replaceAll('\\', '\\\\').replaceAll('%', '\\%').replaceAll('_', '\\_')
+  const fullIdentifier = _fullIdentifier(query)
   const partialIdentifier = `%${fullIdentifier}%`
 
   const select = MonitoringStationModel.query()
-    // .select(['id', 'label', 'wiski_id', 'station_reference', 'catchment_name', 'river_name', 'grid_reference'])
     .select(['id', 'label', 'catchmentName', 'riverName', 'gridReference'])
     .orderBy([{ column: 'label', order: 'asc' }])
     .page(page - 1, DatabaseConfig.defaultPageSize)
@@ -36,6 +35,13 @@ async function go(query, page, matchFullIdentifier = false) {
     .whereNot('label', 'ilike', fullIdentifier)
     .where('label', 'ilike', partialIdentifier)
     .page(page - 1, DatabaseConfig.defaultPageSize)
+}
+
+function _fullIdentifier(query) {
+  return query
+    .replaceAll('\\', '\\\\')
+    .replaceAll('%', String.raw`\%`)
+    .replaceAll('_', String.raw`\_`)
 }
 
 module.exports = {

@@ -21,7 +21,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * @returns {Promise<object>} The search results and total number of matching rows in the database
  */
 async function go(query, page, matchFullReturnReference = false) {
-  const fullReturnReference = query.replaceAll('\\', '\\\\').replaceAll('%', '\\%').replaceAll('_', '\\_')
+  const fullReturnReference = _fullReturnReference(query)
   const partialReturnReference = `%${fullReturnReference}%`
 
   const select = ReturnLogModel.query()
@@ -52,6 +52,13 @@ async function go(query, page, matchFullReturnReference = false) {
     .whereNot('returnReference', 'ilike', fullReturnReference)
     .where('returnReference', 'ilike', partialReturnReference)
     .page(page - 1, DatabaseConfig.defaultPageSize)
+}
+
+function _fullReturnReference(query) {
+  return query
+    .replaceAll('\\', '\\\\')
+    .replaceAll('%', String.raw`\%`)
+    .replaceAll('_', String.raw`\_`)
 }
 
 module.exports = {

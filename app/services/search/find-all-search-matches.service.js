@@ -116,7 +116,7 @@ function _matchesFullLicenceRef(query) {
   }
 
   // If it contains a slash followed by at least two digits, it could be a full licence reference
-  if (query.match(/.+\/\d{2}.+/)) {
+  if (query.match(/^.+\/\d{2}.+$/)) {
     return true
   }
 
@@ -135,12 +135,7 @@ function _matchesFullReturnLogReference(query) {
 
 function _matchesPartialLicenceRef(query) {
   // If there are three consecutive letters, it's not a licence reference
-  if (query.match(/[a-z]{3}/i)) {
-    return false
-  }
-
-  // Otherwise, we have to assume that it could be a licence reference
-  return true
+  return !query.match(/[a-z]{3}/i)
 }
 
 function _matchesPartialReturnLogReference(query) {

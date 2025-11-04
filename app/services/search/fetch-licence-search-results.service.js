@@ -19,7 +19,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * @returns {Promise<object>} The search results and total number of matching rows in the database
  */
 async function go(query, page, matchFullLicenceRef = false) {
-  const fullLicenceRef = query.replaceAll('\\', '\\\\').replaceAll('%', '\\%').replaceAll('_', '\\_')
+  const fullLicenceRef = _fullLicenceRef(query)
   const partialLicenceRef = `%${fullLicenceRef}%`
 
   const select = LicenceModel.query()
@@ -35,6 +35,13 @@ async function go(query, page, matchFullLicenceRef = false) {
     .whereNot('licences.licenceRef', 'ilike', fullLicenceRef)
     .where('licences.licenceRef', 'ilike', partialLicenceRef)
     .page(page - 1, DatabaseConfig.defaultPageSize)
+}
+
+function _fullLicenceRef(query) {
+  return query
+    .replaceAll('\\', '\\\\')
+    .replaceAll('%', String.raw`\%`)
+    .replaceAll('_', String.raw`\_`)
 }
 
 module.exports = {

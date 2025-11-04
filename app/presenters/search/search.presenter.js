@@ -24,34 +24,31 @@ function go(query, resultType, page, numberOfPages, allSearchMatches) {
   // If there's no page number provided, we're just displaying the blank search page, potentially with any search
   // query that the user may have entered but was not searchable, e.g. whitespace or other unsearchable text
   if (!page) {
-    return {
-      pageTitle: 'Search',
-      query,
-      resultType,
-      showResults: false
-    }
+    return _blankSearchPage(query, resultType)
   }
 
   const { exactSearchResults, similarSearchResults } = allSearchMatches
+
   return {
-    exactMatches: {
-      licences: _licences(exactSearchResults.licences.results),
-      monitoringStations: _monitoringStations(exactSearchResults.monitoringStations.results),
-      returnLogs: _returnLogs(exactSearchResults.returnLogs.results)
-    },
+    exactMatches: _matches(exactSearchResults),
     noPartialResults: similarSearchResults.amountFound === 0,
     noResults: exactSearchResults.amountFound === 0 && similarSearchResults.amountFound === 0,
     page,
     pageTitle: _pageTitle(numberOfPages, page),
-    partialMatches: {
-      licences: _licences(similarSearchResults.licences.results),
-      monitoringStations: _monitoringStations(similarSearchResults.monitoringStations.results),
-      returnLogs: _returnLogs(similarSearchResults.returnLogs.results)
-    },
+    partialMatches: _matches(similarSearchResults),
     query,
     resultType,
     showExactResults: exactSearchResults.amountFound !== 0,
     showResults: true
+  }
+}
+
+function _blankSearchPage(query, resultType) {
+  return {
+    pageTitle: 'Search',
+    query,
+    resultType,
+    showResults: false
   }
 }
 
@@ -105,6 +102,14 @@ function _licences(licences) {
   })
 }
 
+function _matches(searchResults) {
+  return {
+    licences: _licences(searchResults.licences.results),
+    monitoringStations: _monitoringStations(searchResults.monitoringStations.results),
+    returnLogs: _returnLogs(searchResults.returnLogs.results)
+  }
+}
+
 function _monitoringStations(monitoringStations) {
   if (monitoringStations.length === 0) {
     return null
@@ -121,6 +126,20 @@ function _pageTitle(numberOfPages, selectedPageNumber) {
   return `Search results (page ${selectedPageNumber} of ${numberOfPages})`
 }
 
+function _returnLogDetail(ids, dueDates, endDates, statuses) {
+  return ids
+    .map((id, index) => {
+      const dueDate = dueDates[index]
+      const endDate = endDates[index]
+      const status = statuses[index]
+
+      return { dueDate, endDate, id, status }
+    })
+    .sort((a, b) => {
+      return b.endDate - a.endDate
+    })[0]
+}
+
 function _returnLogs(returnLogs) {
   if (returnLogs.length === 0) {
     return null
@@ -129,17 +148,7 @@ function _returnLogs(returnLogs) {
   return returnLogs.map((returnLog) => {
     const { dueDates, endDates, id: licenceId, ids, licenceRef, returnReference, statuses } = returnLog
 
-    const returnLogDetail = ids
-      .map((id, index) => {
-        const dueDate = dueDates[index]
-        const endDate = endDates[index]
-        const status = statuses[index]
-
-        return { dueDate, endDate, id, status }
-      })
-      .sort((a, b) => {
-        return b.endDate - a.endDate
-      })[0]
+    const returnLogDetail = _returnLogDetail(ids, dueDates, endDates, statuses)
 
     const statusText = formatReturnLogStatus(returnLogDetail)
     const { id } = returnLogDetail
