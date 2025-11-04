@@ -5,8 +5,8 @@
  * @module VoidNoReturnRequiredLicenceReturnLogsService
  */
 
-const { timestampForPostgres } = require('../../lib/general.lib.js')
 const ReturnLogModel = require('../../models/return-log.model.js')
+const { timestampForPostgres } = require('../../lib/general.lib.js')
 
 /**
  * Handles voiding the return logs for a licence after a no returns required return version has been created

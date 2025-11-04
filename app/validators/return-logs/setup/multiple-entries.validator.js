@@ -7,8 +7,6 @@
 
 const Joi = require('joi')
 
-const SplitMultipleEntriesService = require('../../../services/return-logs/setup/split-multiple-entries.service.js')
-
 /**
  * Validates data submitted for the `/return-logs/{sessionId}/multiple-entries` page
  *
@@ -22,38 +20,35 @@ const SplitMultipleEntriesService = require('../../../services/return-logs/setup
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(frequency, length, measurementType, payload, startReading) {
-  if (payload.multipleEntries) {
-    const formattedEntries = SplitMultipleEntriesService.go(payload.multipleEntries)
+  const schema = Joi.object({
+    multipleEntries: Joi.array()
+      .required()
+      .length(length)
+      .items(
+        Joi.number()
+          .min(0)
+          .allow(null)
+          .messages({
+            'number.base': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be a number or x for a blank row`,
+            'number.min': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be a positive number`
+          })
+      )
+      .custom((value, helpers) => {
+        // If the measurement type is meter readings we need to check the values are in increasing order
+        if (measurementType === 'meter readings') {
+          return _meterReadingsInIncreasingOrder(value, helpers, startReading)
+        }
 
-    payload.formattedEntries = formattedEntries
-  }
+        return value
+      })
+      .messages({
+        'array.base': `Enter ${length} ${frequency} ${measurementType}`,
+        'array.length': `Enter ${length} ${frequency} ${measurementType}`,
+        'any.required': `Enter ${length} ${frequency} ${measurementType}`
+      })
+  })
 
-  const schema = Joi.array()
-    .length(length)
-    .items(
-      Joi.number()
-        .min(0)
-        .allow(null)
-        .messages({
-          'number.base': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be a number or x for a blank row`,
-          'number.min': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be a positive number`
-        })
-    )
-    .custom((value, helpers) => {
-      // If the measurement type is meter readings we need to check the values are in increasing order
-      if (measurementType === 'meter readings') {
-        return _meterReadingsInIncreasingOrder(value, helpers, startReading)
-      }
-
-      return value
-    })
-    .required()
-    .messages({
-      'array.length': `Enter ${length} ${frequency} ${measurementType}`,
-      'any.required': `Enter ${length} ${frequency} ${measurementType}`
-    })
-
-  return schema.validate(payload.formattedEntries, { abortEarly: false })
+  return schema.validate(payload)
 }
 
 function _meterReadingsInIncreasingOrder(value, helpers, startReading) {

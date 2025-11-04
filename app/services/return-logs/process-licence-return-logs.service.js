@@ -5,11 +5,11 @@
  * @module ProcessLicenceReturnLogsService
  */
 
-const { determineEarliestDate } = require('../../lib/dates.lib.js')
 const CreateReturnLogsService = require('./create-return-logs.service.js')
 const FetchLicenceReturnRequirementsService = require('./fetch-licence-return-requirements.service.js')
 const ReturnCycleModel = require('../../models/return-cycle.model.js')
 const VoidLicenceReturnLogsService = require('./void-licence-return-logs.service.js')
+const { determineEarliestDate } = require('../../lib/dates.lib.js')
 
 /**
  * Process voiding and reissuing return logs for a given licence reference
