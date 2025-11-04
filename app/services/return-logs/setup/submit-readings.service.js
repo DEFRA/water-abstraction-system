@@ -5,12 +5,11 @@
  * @module SubmitReadingsService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
 const GeneralLib = require('../../../lib/general.lib.js')
 const ReadingsPresenter = require('../../../presenters/return-logs/setup/readings.presenter.js')
 const ReadingsValidator = require('../../../validators/return-logs/setup/readings.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/readings/{yearMonth}` page

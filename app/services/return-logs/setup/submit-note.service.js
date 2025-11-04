@@ -5,11 +5,10 @@
  * @module SubmitNoteService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
 const NotePresenter = require('../../../presenters/return-logs/setup/note.presenter.js')
 const NoteValidator = require('../../../validators/return-logs/setup/note.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/note` page
