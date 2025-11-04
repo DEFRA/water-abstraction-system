@@ -8,9 +8,6 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Things to stub
-const FindSingleSearchMatchService = require('../../../app/services/search/find-single-search-match.service.js')
-
 // Thing under test
 const SubmitSearchService = require('../../../app/services/search/submit-search.service.js')
 
@@ -43,7 +40,6 @@ describe('Search - Submit search service', () => {
   describe('when called with a valid query', () => {
     beforeEach(() => {
       payload = { query: 'searchthis', resultType: 'monitoringStation' }
-      Sinon.stub(FindSingleSearchMatchService, 'go').resolves()
     })
 
     it('sets the session value and returns a redirect to the search results page', async () => {
@@ -79,7 +75,6 @@ describe('Search - Submit search service', () => {
   describe('when called called to clear the filter', () => {
     beforeEach(() => {
       payload = { query: 'searchthis', resultType: 'monitoringStation', clearFilter: 'reset' }
-      Sinon.stub(FindSingleSearchMatchService, 'go').resolves()
     })
 
     it('sets the session value and returns a redirect to the search results page', async () => {
