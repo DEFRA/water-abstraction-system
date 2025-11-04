@@ -46,13 +46,11 @@ async function go(sessionId, payload) {
 }
 
 async function _fetchValidLicences(session, payload) {
-  const {
-    determinedReturnsPeriod: { dueDate, summer }
-  } = session
+  const { determinedReturnsPeriod, noticeType } = session
 
   const removeLicences = transformStringOfLicencesToArray(payload.removeLicences)
 
-  return FetchReturnsDueService.go(removeLicences, dueDate, summer)
+  return FetchReturnsDueService.go(removeLicences, determinedReturnsPeriod, noticeType)
 }
 
 async function _save(session, payload) {

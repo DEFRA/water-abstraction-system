@@ -4,54 +4,78 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
+const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
 
 // Thing under test
 const FetchReturnsDueService = require('../../../../app/services/notices/setup/fetch-returns-due.service.js')
 
 describe('Notices - Setup - Fetch returns due service', () => {
-  const dueDate = '2024-04-28' // This needs to differ from any other returns log tests
-  const isSummer = 'false'
-
+  let licenceDocumentHeader
   let licenceRefs
-  let returnLog
+  let noticeType
+  let returnsPeriod
 
   before(async () => {
-    const defaults = ReturnLogHelper.defaults()
-
-    returnLog = await ReturnLogHelper.add({
-      dueDate,
-      metadata: {
-        ...defaults.metadata,
-        isSummer
-      }
-    })
-
-    // Add an additional returns log
-    await ReturnLogHelper.add({
-      dueDate,
-      metadata: {
-        ...defaults.metadata,
-        isSummer
-      }
-    })
-
-    licenceRefs = [returnLog.licenceRef]
+    licenceDocumentHeader = await LicenceDocumentHeaderSeeder.seed('2025-04-')
   })
 
   describe('when there are licences', () => {
+    beforeEach(() => {
+      const returnLog = licenceDocumentHeader.licenceHolder.returnLog
+
+      licenceRefs = [licenceDocumentHeader.licenceHolder.licenceRef]
+
+      returnsPeriod = {
+        dueDate: returnLog.dueDate,
+        startDate: returnLog.startDate,
+        endDate: returnLog.endDate,
+        summer: returnLog.metadata.isSummer
+      }
+
+      noticeType = 'invitations'
+    })
+
     it('correctly returns the matching licences', async () => {
-      const result = await FetchReturnsDueService.go(licenceRefs, dueDate, isSummer)
+      const result = await FetchReturnsDueService.go(licenceRefs, returnsPeriod, noticeType)
 
       expect(result).to.equal([
         {
-          licenceRef: returnLog.licenceRef
+          licenceRef: licenceDocumentHeader.licenceHolder.licenceRef
         }
       ])
+    })
+  })
+
+  describe('when the "noticeType" is "reminders"', () => {
+    beforeEach(() => {
+      const returnLog = licenceDocumentHeader.primaryUserDueDate.returnLog
+
+      licenceRefs = [licenceDocumentHeader.primaryUserDueDate.licenceRef]
+
+      returnsPeriod = {
+        dueDate: returnLog.dueDate,
+        startDate: returnLog.startDate,
+        endDate: returnLog.endDate,
+        summer: returnLog.metadata.isSummer
+      }
+
+      noticeType = 'reminders'
+    })
+
+    describe('and there are licences', () => {
+      it('correctly returns the matching licences', async () => {
+        const result = await FetchReturnsDueService.go(licenceRefs, returnsPeriod, noticeType)
+
+        expect(result).to.equal([
+          {
+            licenceRef: licenceDocumentHeader.primaryUserDueDate.licenceRef
+          }
+        ])
+      })
     })
   })
 })
