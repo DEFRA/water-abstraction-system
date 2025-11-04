@@ -145,13 +145,13 @@ describe('Notices - Setup - Batch Notifications service', () => {
           notifyStatus: 'created',
           pdf: null,
           personalisation: {
-            address_line_1: 'Mr H J Licence holder',
+            address_line_1: 'Mr H J Potter',
             address_line_2: '1',
             address_line_3: 'Privet Drive',
             address_line_4: 'Little Whinging',
             address_line_5: 'Surrey',
             address_line_6: 'WD25 7LR',
-            name: 'Mr H J Licence holder',
+            name: 'Mr H J Potter',
             periodEndDate: '31 March 2023',
             periodStartDate: '1 April 2022',
             returnDueDate: '28 April 2025'
@@ -333,10 +333,10 @@ function _notifications(eventId, licences) {
       messageRef: 'returns_invitation_licence_holder_letter',
       messageType: 'letter',
       personalisation: {
-        name: 'Mr H J Licence holder',
+        name: 'Mr H J Potter',
         periodEndDate: '31 March 2023',
         returnDueDate: '28 April 2025',
-        address_line_1: 'Mr H J Licence holder',
+        address_line_1: 'Mr H J Potter',
         address_line_2: '1',
         address_line_3: 'Privet Drive',
         address_line_4: 'Little Whinging',

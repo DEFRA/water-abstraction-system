@@ -11,10 +11,10 @@ const { formatLongDate } = require('../base.presenter.js')
  *
  * ```javascript
  * // Full address
- * ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR', 'UK']
+ * ['Mr H J Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR', 'UK']
  *
  * // Address missing some lines
- * ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', '']
+ * ['Mr H J Potter', '1', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', '']
  * ```
  *
  * @param {object} address
