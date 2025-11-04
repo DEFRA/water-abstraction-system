@@ -42,7 +42,7 @@ describe('Search - Submit search service', () => {
 
   describe('when called with a valid query', () => {
     beforeEach(() => {
-      payload = { query: 'searchthis', resultType: 'all' }
+      payload = { query: 'searchthis', resultType: 'monitoringStation' }
       Sinon.stub(FindSingleSearchMatchService, 'go').resolves()
     })
 
@@ -50,7 +50,7 @@ describe('Search - Submit search service', () => {
       const result = await SubmitSearchService.go(payload, yar)
 
       expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).to.be.true()
-      expect(yarSpy.calledWithExactly('searchResultType', 'all')).to.be.true()
+      expect(yarSpy.calledWithExactly('searchResultType', 'monitoringStation')).to.be.true()
       expect(result).to.equal({ redirect: '/system/search?page=1' })
     })
   })
@@ -73,6 +73,21 @@ describe('Search - Submit search service', () => {
       })
 
       expect(yarSpy.called).to.be.false()
+    })
+  })
+
+  describe('when called called to clear the filter', () => {
+    beforeEach(() => {
+      payload = { query: 'searchthis', resultType: 'monitoringStation', clearFilter: 'reset' }
+      Sinon.stub(FindSingleSearchMatchService, 'go').resolves()
+    })
+
+    it('sets the session value and returns a redirect to the search results page', async () => {
+      const result = await SubmitSearchService.go(payload, yar)
+
+      expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).to.be.true()
+      expect(yarSpy.calledWithExactly('searchResultType', 'all')).to.be.true()
+      expect(result).to.equal({ redirect: '/system/search?page=1' })
     })
   })
 })

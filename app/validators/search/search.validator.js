@@ -24,6 +24,7 @@ const MAX_LENGTH = 100
  */
 function go(payload) {
   const schema = Joi.object({
+    clearFilter: Joi.string(),
     query: Joi.string()
       .trim()
       .required()

@@ -35,7 +35,11 @@ async function go(payload, yar) {
   }
 
   yar.set('searchQuery', validationResult.value.query)
-  yar.set('searchResultType', validationResult.value.resultType)
+  if (validationResult.value.clearFilter === 'reset') {
+    yar.set('searchResultType', 'all')
+  } else {
+    yar.set('searchResultType', validationResult.value.resultType)
+  }
 
   return { redirect: '/system/search?page=1' }
 }

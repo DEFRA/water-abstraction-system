@@ -75,7 +75,7 @@ async function _fullLicenceSearchResults(query, resultType, page) {
 }
 
 async function _fullMonitoringStationSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'monitoring-station') {
+  if (resultType && resultType !== 'monitoringStation') {
     return NO_RESULTS
   }
 
@@ -83,7 +83,7 @@ async function _fullMonitoringStationSearchResults(query, resultType, page) {
 }
 
 async function _fullReturnLogSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'return-log') {
+  if (resultType && resultType !== 'returnLog') {
     return NO_RESULTS
   }
 
@@ -161,7 +161,7 @@ async function _partialLicenceSearchResults(query, resultType, page) {
 }
 
 async function _partialMonitoringStationSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'monitoring-station') {
+  if (resultType && resultType !== 'monitoringStation') {
     return NO_RESULTS
   }
 
@@ -169,7 +169,7 @@ async function _partialMonitoringStationSearchResults(query, resultType, page) {
 }
 
 async function _partialReturnLogSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'return-log') {
+  if (resultType && resultType !== 'returnLog') {
     return NO_RESULTS
   }
 

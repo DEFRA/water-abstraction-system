@@ -136,7 +136,7 @@ describe('Search - Find all search matches service', () => {
   describe('when only monitoring stations are requested', () => {
     beforeEach(() => {
       page = 1
-      resultType = 'monitoring-station'
+      resultType = 'monitoringStation'
       searchQuery = '1231231231'
     })
 
@@ -164,7 +164,7 @@ describe('Search - Find all search matches service', () => {
   describe('when only return logs are requested', () => {
     beforeEach(() => {
       page = 1
-      resultType = 'return-log'
+      resultType = 'returnLog'
       searchQuery = '1231231231'
     })
 
@@ -254,7 +254,7 @@ describe('Search - Find all search matches service', () => {
   describe('when the search is not a full return reference', () => {
     beforeEach(() => {
       page = 1
-      resultType = 'return-log'
+      resultType = 'returnLog'
     })
 
     describe('because it has a leading zero', () => {
@@ -273,7 +273,7 @@ describe('Search - Find all search matches service', () => {
   describe('when the search is not a partial return reference', () => {
     beforeEach(() => {
       page = 1
-      resultType = 'return-log'
+      resultType = 'returnLog'
     })
 
     describe('because it contains non-numeric characters', () => {

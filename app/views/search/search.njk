@@ -91,27 +91,37 @@
     },
     items: [
       {
-        value: "all",
-        text: "All types",
-        checked: not resultType
-      },
-      {
         value: "licence",
         text: "Licences",
         checked: resultType === 'licence'
       },
       {
-        value: "monitoring-station",
+        value: "monitoringStation",
         text: "Monitoring stations",
-        checked: resultType === 'monitoring-station'
+        checked: resultType === 'monitoringStation'
       },
       {
-        value: "return-log",
+        value: "returnLog",
         text: "Return logs",
-        checked: resultType === 'return-log'
+        checked: resultType === 'returnLog'
       }
     ]
   }) }}
+
+  <div class="govuk-button-group">
+    {{ govukButton({
+      preventDoubleClick: true,
+      text: "Apply filter"
+    }) }}
+
+    {{ govukButton({
+      classes: "govuk-button--secondary",
+      name: "clearFilter",
+      preventDoubleClick: true,
+      text: "Clear filter",
+      value: 'reset'
+    }) }}
+  </div>
 {% endset %}
 
 {% block pageContent %}
