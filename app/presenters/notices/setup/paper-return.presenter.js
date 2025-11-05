@@ -18,7 +18,7 @@ function go(session) {
   const { checkPageVisited, dueReturns, id: sessionId, selectedReturns } = session
 
   return {
-    backLink: { href: _backLink(sessionId, checkPageVisited), text: 'Back' },
+    backLink: _backLink(sessionId, checkPageVisited),
     pageTitle: 'Select the returns for the paper return',
     returns: _returns(dueReturns, selectedReturns)
   }

@@ -15,7 +15,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitContactTypeService = require('../../../../app/services/notices/setup/submit-contact-type.service.js')
 
-describe('Notices - Setup - Submit Contact Type Service', () => {
+describe.only('Notices - Setup - Submit Contact Type Service', () => {
   let payload
   let session
   let sessionData

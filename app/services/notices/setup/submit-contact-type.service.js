@@ -37,7 +37,7 @@ async function go(sessionId, payload, yar) {
   }
 
   session.contactType = payload?.type ?? null
-  session.name = payload?.name ?? null
+  session.contactName = payload?.contactName ?? null
 
   const pageData = ContactTypePresenter.go(session)
 
