@@ -51,14 +51,13 @@ describe('Notices - Setup - Prepare Paper return Service', () => {
         licence_ref: licenceRef,
         naldAreaCode: 'MIDLT',
         purpose: 'Mineral Washing',
-        qr_url: dueReturnLog.returnLogId,
+        qr_url: dueReturnLog.returnId,
         region_code: '1',
         region_name: 'North West',
         returns_frequency: dueReturnLog.returnsFrequency,
         site_description: 'BOREHOLE AT AVALON',
         start_date: dueReturnLog.startDate
-      },
-      returnLogIds: [dueReturnLog.returnId]
+      }
     }
 
     Sinon.stub(GeneratePaperReturnRequest, 'send').resolves({
@@ -123,7 +122,6 @@ describe('Notices - Setup - Prepare Paper return Service', () => {
         regionAndArea: 'North West / Lower Trent',
         regionCode: '1',
         returnId: dueReturnLog.returnId,
-        returnLogId: dueReturnLog.returnLogId,
         returnsFrequency: 'month',
         returnReference: dueReturnLog.returnReference,
         siteDescription: 'BOREHOLE AT AVALON',

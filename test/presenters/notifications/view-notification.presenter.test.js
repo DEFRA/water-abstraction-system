@@ -296,7 +296,7 @@ describe('Notifications - View Notification presenter', () => {
 
           expect(result.paperForm).to.equal({
             downloadLink: null,
-            link: `/system/return-logs?id=${notification.personalisation.qr_url}`,
+            link: `/system/return-logs/${notification.personalisation.qr_url}`,
             period: '1 April 2024 to 31 March 2025',
             purpose: 'Potable Water Supply - Direct',
             reference: notification.personalisation.format_id,
@@ -315,7 +315,7 @@ describe('Notifications - View Notification presenter', () => {
 
           expect(result.paperForm).to.equal({
             downloadLink: `/system/notifications/${notification.id}/download`,
-            link: `/system/return-logs?id=${notification.personalisation.qr_url}`,
+            link: `/system/return-logs/${notification.personalisation.qr_url}`,
             period: '1 April 2024 to 31 March 2025',
             purpose: 'Potable Water Supply - Direct',
             reference: notification.personalisation.format_id,
