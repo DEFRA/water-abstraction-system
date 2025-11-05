@@ -36,18 +36,14 @@
     }) }}
   {% endset -%}
 
+  {{ pageHeadingHtml }}
+
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
       name: 'contactType',
       value: contactType,
-      fieldset: {
-        legend: {
-          html: pageHeadingHtml,
-          isPageHeading: true
-        }
-      },
       items: [
         {
           value: 'email',

@@ -28,18 +28,14 @@
     <a class="govuk-link" href="{{setupAddress.href}}">{{ setupAddress.text }}</a>
   {% endset %}
 
+  {{ pageHeadingHtml }}
+
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukCheckboxes({
       name: "recipients",
       errorMessage: error.recipients,
-      fieldset: {
-        legend: {
-          html: pageHeadingHtml,
-          isPageHeading: true
-        }
-      },
       hint: {
         classes: 'govuk-!-margin-bottom-7',
         html: innerHintHtml
