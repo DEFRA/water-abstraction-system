@@ -2,10 +2,11 @@
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% block pageContent %}
-  <h2 class="govuk-heading-xl">{{ pageTitle }}</h2>
+  {{ pageHeadingHtml }}
 
   {{ govukSummaryList({
     rows: [

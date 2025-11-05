@@ -1,88 +1,58 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{% block breadcrumbs %}
-  {{
-  govukBackLink({
-    text: 'Back',
-    href: backLink
-  })
-  }}
-{% endblock %}
-
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: [{
-        text: error.text,
-        href: anchor
-      }]
+{% block pageContent %}
+  {% set textHtml %}
+    {{ govukInput({
+      id: "otherUser",
+      name: "otherUser",
+      classes: "govuk-!-width-one-third",
+      errorMessage: error.otherUser,
+      label: {
+        text: "Email address"
+      },
+      hint: {
+        text: "This is usually your area’s team email address"
+      },
+      value: alertEmailAddressOptions.otherUserEmailAddressInput
     }) }}
-  {%endif%}
+  {% endset %}
 
-  <div>
-    {% set textHtml %}
-      {% if error.emailAddressInputFormError %}
-        {% set errorClass = 'govuk-input--error' %}
-      {% else %}
-        {% set errorClass = '' %}
-      {% endif %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukInput({
-        id: "other-user",
-        name: "otherUser",
-        classes: "govuk-!-width-one-third " + errorClass,
-        errorMessage: error.emailAddressInputFormError,
-        label: {
-          text: "Email address"
+    {{ govukRadios({
+      name: 'alertEmailAddressType',
+      errorMessage: error.alertEmailAddressType,
+      fieldset: {
+        legend: {
+          html: pageHeadingHtml,
+          isPageHeading: true
+        }
+      },
+      items: [
+        {
+          value: 'username',
+          text: username,
+          checked: alertEmailAddressOptions.usernameChecked
         },
-        hint: {
-          text: "This is usually your area’s team email address"
+        {
+          divider: 'or'
         },
-        value: alertEmailAddressOptions.otherUserEmailAddressInput
-      }) }}
-    {% endset %}
-
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-      <span class="govuk-caption-l">{{caption}}</span>
-
-      {{ govukRadios({
-        name: 'alertEmailAddressType',
-        errorMessage: error.radioFormError,
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: 'govuk-fieldset__legend--l govuk-!-margin-bottom-6'
+        {
+          value: 'other',
+          text: 'Use another email address',
+          checked: alertEmailAddressOptions.otherUserChecked,
+          conditional: {
+            html: textHtml
           }
-        },
-        items: [
-          {
-            value: 'username',
-            text: username,
-            checked: alertEmailAddressOptions.usernameChecked
-          },
-          {
-            divider: 'or'
-          },
-          {
-            value: 'other',
-            text: 'Use another email address',
-            checked: alertEmailAddressOptions.otherUserChecked,
-            conditional: {
-              html: textHtml
-            }
-          }
-        ]
-      }) }}
+        }
+      ]
+    }) }}
 
-      {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
-    </form>
-  </div>
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
 {% endblock %}

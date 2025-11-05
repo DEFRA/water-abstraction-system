@@ -16,9 +16,9 @@ const { sentenceCase } = require('../../../base.presenter.js')
  */
 function go(session) {
   return {
-    backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
-    caption: session.monitoringStationName,
+    backLink: { href: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`, text: 'Back' },
     pageTitle: 'You are about to cancel this alert',
+    pageTitleCaption: session.monitoringStationName,
     summaryList: _summaryList(session)
   }
 }

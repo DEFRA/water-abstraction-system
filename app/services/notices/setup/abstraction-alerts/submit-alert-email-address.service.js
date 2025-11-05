@@ -9,6 +9,7 @@
 const AlertEmailAddressPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-email-address.presenter.js')
 const AlertEmailAddressValidator = require('../../../../validators/notices/setup/abstraction-alerts/alert-email-address.validator.js')
 const SessionModel = require('../../../../models/session.model.js')
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
@@ -94,19 +95,9 @@ function _submittedSessionData(session, auth, validationResult, payload) {
  * need to be displayed
  */
 function _validate(payload) {
-  const validation = AlertEmailAddressValidator.go(payload)
+  const validationResult = AlertEmailAddressValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message, context } = validation.error.details[0]
-
-  return {
-    text: message,
-    radioFormError: context.label === 'alertEmailAddressType' ? { text: message } : null,
-    emailAddressInputFormError: context.label === 'otherUser' ? { text: message } : null
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {
