@@ -3,13 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const CancelService = require('../../../../app/services/notices/setup/cancel.service.js')
@@ -18,11 +18,7 @@ describe('Notices - Setup - Cancel service', () => {
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { licenceRef: '01/111', referenceCode: 'RNIV-1234' } })
-  })
-
-  afterEach(() => {
-    Sinon.restore()
+    session = await SessionHelper.add({ data: { licenceRef: '01/111', referenceCode: generateReferenceCode() } })
   })
 
   describe('when called', () => {
@@ -31,9 +27,12 @@ describe('Notices - Setup - Cancel service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'notices',
-        backLink: `/system/notices/setup/${session.id}/check`,
+        backLink: {
+          href: `/system/notices/setup/${session.id}/check`,
+          text: 'Back'
+        },
         pageTitle: 'You are about to cancel this notice',
-        referenceCode: 'RNIV-1234',
+        pageTitleCaption: `Notice ${session.referenceCode}`,
         summaryList: {
           text: 'Licence number',
           value: '01/111'

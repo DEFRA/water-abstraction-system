@@ -28,11 +28,11 @@ async function go(contactHashId, noticeType, notification, sessionId, licenceMon
 
   return {
     address: messageType === 'letter' ? _address(personalisation) : recipient,
-    backLink: _backLink(contactHashId, noticeType, sessionId),
-    caption: `Notice ${referenceCode}`,
+    backLink: { href: _backLink(contactHashId, noticeType, sessionId), text: 'Back' },
     contents: await _notifyPreview(personalisation, templateId),
     messageType,
     pageTitle: sentenceCase(messageRef.replace(/_/g, ' ')),
+    pageTitleCaption: `Notice ${referenceCode}`,
     refreshPageLink: _refreshPageLink(contactHashId, noticeType, licenceMonitoringStationId, sessionId)
   }
 }
