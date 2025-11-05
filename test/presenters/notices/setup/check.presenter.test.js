@@ -57,27 +57,20 @@ describe('Notices - Setup - Check presenter', () => {
       readyToSend: 'Returns invitations are ready to send.',
       recipients: [
         {
-          contact: ['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
+          contact: ['Mr H J Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
           licences: testRecipients.licenceHolder.licence_refs,
           method: 'Letter - Licence holder',
           previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolder.contact_hash_id}`
         },
         {
-          contact: [
-            'Mr H J Licence holder with multiple licences',
-            '3',
-            'Privet Drive',
-            'Little Whinging',
-            'Surrey',
-            'WD25 7LR'
-          ],
+          contact: ['Mr H J Potter', '3', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
           licences: testRecipients.licenceHolderWithMultipleLicences.licence_refs,
           method: 'Letter - Licence holder',
           previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolderWithMultipleLicences.contact_hash_id}`
         },
         {
           contact: [
-            'Mr H J Returns to',
+            'Mr H J Weasley',
             'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
             '2',
             'Privet Drive',
@@ -104,7 +97,7 @@ describe('Notices - Setup - Check presenter', () => {
       tableCaption: 'Showing all 5 recipients',
       warning: {
         iconFallbackText: 'Warning',
-        text: 'A notification will not be sent for Mr H J Returns to because the address is invalid.'
+        text: 'A notification will not be sent for Mr H J Weasley because the address is invalid.'
       }
     })
   })
@@ -269,7 +262,7 @@ describe('Notices - Setup - Check presenter', () => {
             const result = CheckPresenter.go(recipients, page, pagination, session)
 
             expect(result.recipients[0].contact).to.equal([
-              'Mr H J Licence holder',
+              'Mr H J Potter',
               '1',
               'Privet Drive',
               'Little Whinging',
@@ -284,7 +277,7 @@ describe('Notices - Setup - Check presenter', () => {
             const result = CheckPresenter.go(recipients, page, pagination, session)
 
             expect(result.recipients[2].contact).to.equal([
-              'Mr H J Returns to',
+              'Mr H J Weasley',
               'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
               '2',
               'Privet Drive',
@@ -537,7 +530,7 @@ describe('Notices - Setup - Check presenter', () => {
 
         expect(result.warning).to.equal({
           iconFallbackText: 'Warning',
-          text: 'A notification will not be sent for Mr H J Returns to because the address is invalid.'
+          text: 'A notification will not be sent for Mr H J Weasley because the address is invalid.'
         })
       })
     })
@@ -552,7 +545,7 @@ describe('Notices - Setup - Check presenter', () => {
 
         expect(result.warning).to.equal({
           iconFallbackText: 'Warning',
-          text: 'Notifications will not be sent for the following recipients with invalid addresses: Mr H J Licence holder, Mr H J Returns to'
+          text: 'Notifications will not be sent for the following recipients with invalid addresses: Mr H J Potter, Mr H J Weasley'
         })
       })
     })

@@ -42,7 +42,7 @@ describe('Notices - Setup - Paper Return Notification Presenter', () => {
         messageRef: 'pdf.return_form',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'Mr H J Licence holder',
+          address_line_1: 'Mr H J Potter',
           address_line_2: '1',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
