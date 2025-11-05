@@ -1,41 +1,57 @@
 'use strict'
 
 /**
- * Formats recipients into notifications for a paper return
- * @module PaperReturnNotificationPresenter
+ * Formats recipients and return logs into notifications for a paper return
+ * @module PaperReturnNotificationsPresenter
  */
 
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
- * Formats recipients into notifications for a paper return
+ * Formats recipients and return logs into notifications for a paper return
  *
- * The 'pageData' is the result of the presenter used when creating the PDF file. It uses different keys, and returns
- * different values specific to creating the file. We cannot just save its 'personalisation' to the DB as it differs
- * from what the legacy code persisted and uses. So, we use this presenter to map that output to what is needed when
- * saving the notification.
+ * @param {object} session - The session instance containing all due return logs for the licence, and which ones have
+ * been selected for sending as a paper return notification
+ * @param {object[]} recipients - List of recipients, each containing details such as the address of the recipient
+ * @param {string} noticeId - The UUID of the notice these notifications should be linked to
  *
- * @param {object} recipient - A single recipient with the contact / address
- * @param {string} licenceRef - The reference of the licence that the return log relates to
- * @param {string} eventId - The event if that joins all the notifications
- * @param {object} dueReturnLog - The return log to populate the form data
- *
- * @returns {object} The data formatted persisting as a `notice` record
+ * @returns {object[]} the recipients and return logs transformed into notifications
  */
-function go(recipient, licenceRef, eventId, dueReturnLog) {
+function go(session, recipients, noticeId) {
+  const notifications = []
+
+  const { licenceRef } = session
+  const selectedReturnLogs = _selectedReturnLogs(session)
+
+  for (const selectedReturnLog of selectedReturnLogs) {
+    for (const recipient of recipients) {
+      const notification = _notification(recipient, selectedReturnLog, noticeId, licenceRef)
+
+      notifications.push(notification)
+    }
+  }
+
+  return notifications
+}
+
+function _address(recipient) {
+  return NotifyAddressPresenter.go(recipient.contact)
+}
+
+function _notification(recipient, selectedReturnLog, noticeId, licenceRef) {
   return {
-    eventId,
+    eventId: noticeId,
     licences: [licenceRef],
     messageRef: 'pdf.return_form',
     messageType: 'letter',
-    personalisation: _personalisation(dueReturnLog, recipient, licenceRef),
-    returnLogIds: [dueReturnLog.returnId],
+    personalisation: _personalisation(recipient, selectedReturnLog, licenceRef),
+    returnLogIds: [selectedReturnLog.returnId],
     status: 'pending'
   }
 }
 
-function _personalisation(dueReturnLog, recipient, licenceRef) {
+function _personalisation(recipient, selectedReturnLog, licenceRef) {
   const {
     dueDate,
     endDate,
@@ -49,7 +65,7 @@ function _personalisation(dueReturnLog, recipient, licenceRef) {
     siteDescription,
     startDate,
     twoPartTariff
-  } = dueReturnLog
+  } = selectedReturnLog
 
   return {
     ..._address(recipient),
@@ -69,8 +85,12 @@ function _personalisation(dueReturnLog, recipient, licenceRef) {
   }
 }
 
-function _address(recipient) {
-  return NotifyAddressPresenter.go(recipient.contact)
+function _selectedReturnLogs(session) {
+  const { dueReturns: dueReturnLogs, selectedReturns: selectedReturnLogIds } = session
+
+  return dueReturnLogs.filter((dueReturnLog) => {
+    return selectedReturnLogIds.includes(dueReturnLog.returnId)
+  })
 }
 
 module.exports = {

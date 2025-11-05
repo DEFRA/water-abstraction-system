@@ -12,32 +12,49 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const PaperReturnNotificationPresenter = require('../../../../app/presenters/notices/setup/paper-return-notification.presenter.js')
+const PaperReturnNotificationsPresenter = require('../../../../app/presenters/notices/setup/paper-return-notifications.presenter.js')
 
-describe('Notices - Setup - Paper Return Notification Presenter', () => {
-  const eventId = generateUUID()
+describe('Notices - Setup - Paper Return Notifications Presenter', () => {
+  const noticeId = '32f4cab2-ce0c-4711-aac8-fb4941f3b59a'
 
-  let dueReturnLog
+  let dueReturns
   let licenceRef
-  let recipient
+  let recipients
+  let session
 
   beforeEach(async () => {
     licenceRef = generateLicenceRef()
 
-    recipient = RecipientsFixture.recipients().licenceHolder
+    const fixtureData = RecipientsFixture.recipients()
 
-    dueReturnLog = ReturnLogFixture.dueReturn()
+    recipients = [fixtureData.licenceHolder, fixtureData.returnsTo]
+
+    dueReturns = [
+      {
+        ...ReturnLogFixture.dueReturn(),
+        licenceRef
+      },
+      {
+        ...ReturnLogFixture.dueReturn(),
+        licenceRef
+      }
+    ]
+
+    session = {
+      licenceRef,
+      dueReturns,
+      selectedReturns: [dueReturns[0].returnId]
+    }
   })
 
-  describe('when called', () => {
-    it('returns the data re-formatted as a notification', () => {
-      const result = PaperReturnNotificationPresenter.go(recipient, licenceRef, eventId, dueReturnLog)
+  it('correctly presents the data', () => {
+    const result = PaperReturnNotificationsPresenter.go(session, recipients, noticeId)
 
-      expect(result).to.equal({
-        eventId,
+    expect(result).to.equal([
+      {
+        eventId: noticeId,
         licences: [licenceRef],
         messageRef: 'pdf.return_form',
         messageType: 'letter',
@@ -48,23 +65,52 @@ describe('Notices - Setup - Paper Return Notification Presenter', () => {
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
-          due_date: formatLongDate(dueReturnLog.dueDate),
+          due_date: formatLongDate(dueReturns[0].dueDate),
           end_date: '31 March 2023',
-          format_id: dueReturnLog.returnReference,
+          format_id: dueReturns[0].returnReference,
           is_two_part_tariff: false,
           licence_ref: licenceRef,
           naldAreaCode: 'MIDLT',
           purpose: 'Mineral Washing',
-          qr_url: dueReturnLog.returnId,
+          qr_url: dueReturns[0].returnId,
           region_code: '1',
           region_name: 'North West',
           returns_frequency: 'month',
           site_description: 'BOREHOLE AT AVALON',
           start_date: '1 April 2022'
         },
-        returnLogIds: [dueReturnLog.returnId],
+        returnLogIds: [dueReturns[0].returnId],
         status: 'pending'
-      })
-    })
+      },
+      {
+        eventId: noticeId,
+        licences: [licenceRef],
+        messageRef: 'pdf.return_form',
+        messageType: 'letter',
+        personalisation: {
+          address_line_1: 'Mr H J Weasley',
+          address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
+          address_line_3: '2',
+          address_line_4: 'Privet Drive',
+          address_line_5: 'Little Whinging',
+          address_line_6: 'Surrey',
+          due_date: formatLongDate(dueReturns[0].dueDate),
+          end_date: '31 March 2023',
+          format_id: dueReturns[0].returnReference,
+          is_two_part_tariff: false,
+          licence_ref: licenceRef,
+          naldAreaCode: 'MIDLT',
+          purpose: 'Mineral Washing',
+          qr_url: dueReturns[0].returnId,
+          region_code: '1',
+          region_name: 'North West',
+          returns_frequency: 'month',
+          site_description: 'BOREHOLE AT AVALON',
+          start_date: '1 April 2022'
+        },
+        returnLogIds: [dueReturns[0].returnId],
+        status: 'pending'
+      }
+    ])
   })
 })
