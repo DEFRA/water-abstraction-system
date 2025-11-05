@@ -4,18 +4,14 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block pageContent %}
+  {{ pageHeadingHtml }}
+
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
       name: 'alertType',
       errorMessage: error.alertType,
-      fieldset: {
-        legend: {
-          html: pageHeadingHtml,
-          isPageHeading: true
-        }
-      },
       items: alertTypeOptions
     }) }}
 

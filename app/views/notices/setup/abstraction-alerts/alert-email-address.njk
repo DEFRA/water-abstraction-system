@@ -21,18 +21,14 @@
     }) }}
   {% endset %}
 
+  {{ pageHeadingHtml }}
+
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
       name: 'alertEmailAddressType',
       errorMessage: error.alertEmailAddressType,
-      fieldset: {
-        legend: {
-          html: pageHeadingHtml,
-          isPageHeading: true
-        }
-      },
       items: [
         {
           value: 'username',
