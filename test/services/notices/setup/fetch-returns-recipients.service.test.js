@@ -700,7 +700,7 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
     })
   })
 
-  describe('when a recipients belongs to multiple licence', () => {
+  describe('when a recipient is linked to multiple licences', () => {
     beforeEach(() => {
       session = {
         journey: NoticeJourney.STANDARD,
