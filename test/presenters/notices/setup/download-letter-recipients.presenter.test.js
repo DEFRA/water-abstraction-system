@@ -64,9 +64,9 @@ describe('Notices - Setup - Download Letter Recipients presenter', () => {
         // Headers
         'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           // Row - Licence holder
-          `"${licenceRef}","${returnReference}",2018-01-01,2019-01-01,2021-01-01,"Return forms","letter","Licence holder","Mr H J Licence holder","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n` +
+          `"${licenceRef}","${returnReference}",2018-01-01,2019-01-01,2021-01-01,"Return forms","letter","Licence holder","Mr H J Potter","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n` +
           // Row - Returns to
-          `"${licenceRef}","${returnReference}",2018-01-01,2019-01-01,2021-01-01,"Return forms","letter","Returns to","Mr H J Returns to","INVALID ADDRESS - Needs a valid postcode or country outside the UK","2","Privet Drive","Little Whinging","Surrey",\n`
+          `"${licenceRef}","${returnReference}",2018-01-01,2019-01-01,2021-01-01,"Return forms","letter","Returns to","Mr H J Weasley","INVALID ADDRESS - Needs a valid postcode or country outside the UK","2","Privet Drive","Little Whinging","Surrey",\n`
       )
     })
 
@@ -116,7 +116,7 @@ describe('Notices - Setup - Download Letter Recipients presenter', () => {
                 '"Return forms",' + // Notification type
                 '"letter",' + // Message type
                 '"Licence holder",' + // Contact type
-                '"Mr H J Licence holder",' + // Address line 1
+                '"Mr H J Potter",' + // Address line 1
                 '"1",' + // Address line 2
                 '"Privet Drive",' + // Address line 3
                 '"Little Whinging",' + // Address line 4
@@ -145,7 +145,7 @@ describe('Notices - Setup - Download Letter Recipients presenter', () => {
                 '"Return forms",' + // Notification type
                 '"letter",' + // Message type
                 '"Returns to",' + // Contact type
-                '"Mr H J Returns to",' + // Address line 1
+                '"Mr H J Weasley",' + // Address line 1
                 '"INVALID ADDRESS - Needs a valid postcode or country outside the UK",' + // Address line 2
                 '"2",' + // Address line 3
                 '"Privet Drive",' + // Address line 4

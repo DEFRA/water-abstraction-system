@@ -43,7 +43,7 @@ describe('Notices - Base presenter', () => {
 
           expect(result.length).to.equal(7)
           expect(result).to.equal([
-            'Mr H J Licence holder',
+            'Mr H J Potter',
             '1',
             'Privet Drive',
             'The Cupboard Under the Stairs',
@@ -67,7 +67,7 @@ describe('Notices - Base presenter', () => {
           const result = BasePresenter.addressToCSV(recipient)
 
           expect(result.length).to.equal(7)
-          expect(result).to.equal(['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', ''])
+          expect(result).to.equal(['Mr H J Potter', '1', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', ''])
         })
       })
     })

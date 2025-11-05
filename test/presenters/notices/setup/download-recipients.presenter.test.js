@@ -37,7 +37,7 @@ describe('Notices - Setup - Download Recipients presenter', () => {
           // Row - Primary user
           '"123/46","2434",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","email","Primary user","primary.user@important.com",,,,,,,\n' +
           // Row - Licence holder
-          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n' +
+          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Licence holder",,"Mr J Potter","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n' +
           // Row - Returns to
           '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns invitation","letter","Returns to",,"Mr J Returns to (same licence ref as licence holder)","4","Privet Drive","Line 3","Line 4","Surrey","WD25 7LR"\n' +
           //  Row - Licence holder - organisation
@@ -122,7 +122,7 @@ describe('Notices - Setup - Download Recipients presenter', () => {
                 '"letter",' + // Message type
                 '"Licence holder",' + // Contact type
                 ',' + // Email
-                '"Mr J Licence holder only",' + // Address line 1
+                '"Mr J Potter",' + // Address line 1
                 '"4",' + // Address line 2
                 '"Privet Drive",' + // Address line 3
                 '"Line 3",' + // Address line 4
@@ -220,7 +220,7 @@ function _recipients() {
         county: 'Surrey',
         forename: 'Harry',
         initials: 'J',
-        name: 'Licence holder only',
+        name: 'Potter',
         postcode: 'WD25 7LR',
         role: 'Licence holder',
         salutation: 'Mr',

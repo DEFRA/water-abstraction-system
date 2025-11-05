@@ -165,14 +165,14 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
               county: 'Surrey',
               forename: 'Harry',
               initials: 'J',
-              name: 'Licence holder',
+              name: 'Potter',
               postcode: 'WD25 7LR',
               role: 'Licence holder',
               salutation: null,
               town: 'Little Whinging',
               type: 'Person'
             },
-            contact_hash_id: '0cad692217f572faede404363b2625c9',
+            contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
             contact_type: 'Licence holder',
             email: null,
             licence_refs: [seedData.licenceHolder.licenceRef],
@@ -207,14 +207,14 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 county: 'Surrey',
                 forename: 'Harry',
                 initials: 'J',
-                name: 'Licence holder',
+                name: 'Potter',
                 postcode: 'WD25 7LR',
                 role: 'Licence holder',
                 salutation: null,
                 town: 'Little Whinging',
                 type: 'Person'
               },
-              contact_hash_id: '0cad692217f572faede404363b2625c9',
+              contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
               contact_type: 'Licence holder',
               email: null,
               licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
@@ -231,14 +231,14 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 county: 'Surrey',
                 forename: 'Harry',
                 initials: 'J',
-                name: 'Returns to',
+                name: 'Weasley',
                 postcode: 'WD25 7LR',
                 role: 'Returns to',
                 salutation: null,
                 town: 'Little Whinging',
                 type: 'Person'
               },
-              contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
+              contact_hash_id: 'a4737b69f58b3f3b01933a42b46ddf96',
               contact_type: 'Returns to',
               email: null,
               licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
@@ -414,14 +414,14 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                 county: 'Surrey',
                 forename: 'Harry',
                 initials: 'J',
-                name: 'Licence holder',
+                name: 'Potter',
                 postcode: 'WD25 7LR',
                 role: 'Licence holder',
                 salutation: null,
                 town: 'Little Whinging',
                 type: 'Person'
               },
-              contact_hash_id: '0cad692217f572faede404363b2625c9',
+              contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
               contact_type: 'Licence holder',
               email: null,
               licence_refs: [seedData.licenceHolder.licenceRef],
@@ -450,14 +450,14 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                   county: 'Surrey',
                   forename: 'Harry',
                   initials: 'J',
-                  name: 'Licence holder',
+                  name: 'Potter',
                   postcode: 'WD25 7LR',
                   role: 'Licence holder',
                   salutation: null,
                   town: 'Little Whinging',
                   type: 'Person'
                 },
-                contact_hash_id: '0cad692217f572faede404363b2625c9',
+                contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
                 contact_type: 'Licence holder',
                 email: null,
                 licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
@@ -474,14 +474,14 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
                   county: 'Surrey',
                   forename: 'Harry',
                   initials: 'J',
-                  name: 'Returns to',
+                  name: 'Weasley',
                   postcode: 'WD25 7LR',
                   role: 'Returns to',
                   salutation: null,
                   town: 'Little Whinging',
                   type: 'Person'
                 },
-                contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
+                contact_hash_id: 'a4737b69f58b3f3b01933a42b46ddf96',
                 contact_type: 'Returns to',
                 email: null,
                 licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
@@ -697,6 +697,60 @@ describe('Notices - Setup - Fetch returns recipients service', () => {
           }
         ])
       })
+    })
+  })
+
+  describe('when a recipient is linked to multiple licences', () => {
+    beforeEach(() => {
+      session = {
+        journey: NoticeJourney.STANDARD,
+        noticeType: NoticeType.INVITATIONS,
+        returnsPeriod: 'allYear',
+        determinedReturnsPeriod: {
+          dueDate: seedData.multipleLicenceRefs.returnLog.dueDate,
+          endDate: seedData.multipleLicenceRefs.returnLog.endDate,
+          quarterly: seedData.multipleLicenceRefs.returnLog.quarterly,
+          startDate: seedData.multipleLicenceRefs.returnLog.startDate,
+          summer: seedData.multipleLicenceRefs.returnLog.metadata.isSummer
+        }
+      }
+    })
+
+    it('returns the "licence holder" ', async () => {
+      const result = await FetchReturnsRecipientsService.go(session)
+
+      expect(result).to.equal([
+        {
+          contact: {
+            addressLine1: '4',
+            addressLine2: 'Privet Drive',
+            addressLine3: null,
+            addressLine4: null,
+            country: null,
+            county: 'Surrey',
+            forename: 'Harry',
+            initials: 'J',
+            name: 'Potter',
+            postcode: 'WD25 7LR',
+            role: 'Licence holder',
+            salutation: null,
+            town: 'Little Whinging',
+            type: 'Person'
+          },
+          contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
+          contact_type: 'Licence holder',
+          email: null,
+          licence_refs: [
+            seedData.multipleLicenceRefs.licenceRef,
+            seedData.multipleLicenceRefs.returnLogTwo.licenceRef
+          ].sort(),
+          message_type: 'Letter',
+          return_log_ids: [
+            seedData.multipleLicenceRefs.returnLog.returnId,
+            seedData.multipleLicenceRefs.returnLogTwo.returnId
+          ].sort()
+        }
+      ])
     })
   })
 })

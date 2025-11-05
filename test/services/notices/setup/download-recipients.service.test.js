@@ -56,7 +56,7 @@ describe('Notices - Setup - Download Recipients service', () => {
           // Headers
           'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           // Row - licence holder
-          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns reminder","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n',
+          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns reminder","letter","Licence holder",,"Mr J Potter","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n',
         filename: `Returns reminder - ${referenceCode}.csv`,
         type: 'text/csv'
       })
@@ -92,7 +92,7 @@ describe('Notices - Setup - Download Recipients service', () => {
           // Headers
           'Licence,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           // Row - licence holder
-          '"1/343/3","Returns reminder","letter","Licence holder",,"Mr J Licence holder only","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n',
+          '"1/343/3","Returns reminder","letter","Licence holder",,"Mr J Potter","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n',
         filename: `Returns reminder - ${referenceCode}.csv`,
         type: 'text/csv'
       })
@@ -141,7 +141,7 @@ describe('Notices - Setup - Download Recipients service', () => {
             // Headers
             'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             // Row - licence holder
-            `"${licenceRef}","${returnReference}",2018-01-01,2019-01-01,2021-01-01,"Return forms","letter","Licence holder","Mr H J Licence holder","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n`,
+            `"${licenceRef}","${returnReference}",2018-01-01,2019-01-01,2021-01-01,"Return forms","letter","Licence holder","Mr H J Potter","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n`,
           filename: `Paper returns - ${referenceCode}.csv`,
           type: 'text/csv'
         })
@@ -184,7 +184,7 @@ describe('Notices - Setup - Download Recipients service', () => {
             // Headers
             'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             // Row - licence holder
-            `"${recipients.licenceHolder.licence_refs}","1 February to 1 January","level","1000m","Abstraction alert","letter","Licence holder",,"Mr H J Licence holder","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n`,
+            `"${recipients.licenceHolder.licence_refs}","1 February to 1 January","level","1000m","Abstraction alert","letter","Licence holder",,"Mr H J Potter","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n`,
           filename: `Abstraction alert - ${referenceCode}.csv`,
           type: 'text/csv'
         })
@@ -247,7 +247,7 @@ describe('Notices - Setup - Download Recipients service', () => {
             // Headers
             'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             // Row - licence holder
-            `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","letter","Licence holder",,"Mr H J Licence holder","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n` +
+            `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","letter","Licence holder",,"Mr H J Potter","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n` +
             // Row - additional contact for same recipient - with unique licence ref
             `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,\n` +
             // Row - Primary user
@@ -274,7 +274,7 @@ function _recipients() {
         county: 'Surrey',
         forename: 'Harry',
         initials: 'J',
-        name: 'Licence holder only',
+        name: 'Potter',
         postcode: 'WD25 7LR',
         role: 'Licence holder',
         salutation: 'Mr',

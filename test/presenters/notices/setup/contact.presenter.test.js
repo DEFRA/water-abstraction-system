@@ -33,7 +33,7 @@ describe('Notices - Setup - Contact presenter', () => {
       it('should return the postal address', () => {
         const result = ContactPresenter.go(recipients.licenceHolder)
 
-        expect(result).to.equal(['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'])
+        expect(result).to.equal(['Mr H J Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'])
       })
     })
 
@@ -46,7 +46,7 @@ describe('Notices - Setup - Contact presenter', () => {
         const result = ContactPresenter.go(recipients.licenceHolder)
 
         expect(result).to.equal([
-          'Mr H J Licence holder',
+          'Mr H J Potter',
           'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
           '1',
           'Privet Drive',

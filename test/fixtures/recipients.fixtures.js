@@ -46,7 +46,7 @@ function _addAdditionalContact() {
 
 function _addLicenceHolder() {
   return {
-    contact: _contact('1', 'Licence holder', 'Licence holder'),
+    contact: _contact('1', 'Potter', 'Licence holder'),
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
     contact_type: 'Licence holder',
     email: null,
@@ -83,7 +83,7 @@ function _addReturnsAgent() {
 function _addReturnTo() {
   // NOTE: By removing the postcode from this one contact, we know we'll get a recipient that when passed to the
   // presenters will result in the address being flagged as INVALID. This allows us to write tests for this scenario.
-  const contact = _contact('2', 'Returns to', 'Returns to')
+  const contact = _contact('2', 'Weasley', 'Returns to')
 
   contact.postcode = null
 
@@ -100,7 +100,7 @@ function _addReturnTo() {
 
 function _addLicenceHolderWithMultipleLicences() {
   return {
-    contact: _contact('3', 'Licence holder with multiple licences', 'Licence holder'),
+    contact: _contact('3', 'Potter', 'Licence holder'),
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed09878075',
     contact_type: 'Licence holder',
     email: null,

@@ -68,9 +68,9 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
             value: 'resume'
           }
         ],
-        backLink: `/system/monitoring-stations/${sessionData.monitoringStationId}`,
-        caption: 'Death star',
-        pageTitle: 'Select the type of alert you need to send'
+        backLink: { href: `/system/monitoring-stations/${sessionData.monitoringStationId}`, text: 'Back' },
+        pageTitle: 'Select the type of alert you need to send',
+        pageTitleCaption: 'Death star'
       })
     })
   })

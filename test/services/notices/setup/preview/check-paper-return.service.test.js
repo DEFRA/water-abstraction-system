@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -32,7 +33,7 @@ describe('Notices - Setup - Preview - Check Paper Return Service', () => {
 
     sessionData = {
       dueReturns: [dueReturn],
-      referenceCode: 'PRTF-WJUKBX',
+      referenceCode: generateReferenceCode('PRTF'),
       selectedReturns: [dueReturn.returnId]
     }
 
@@ -45,9 +46,12 @@ describe('Notices - Setup - Preview - Check Paper Return Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'notices',
-        backLink: `/system/notices/setup/${session.id}/check`,
-        caption: 'Notice PRTF-WJUKBX',
+        backLink: {
+          href: `/system/notices/setup/${session.id}/check`,
+          text: 'Back'
+        },
         pageTitle: 'Check the recipient previews',
+        pageTitleCaption: `Notice ${session.referenceCode}`,
         returnLogs: [
           {
             action: {

@@ -43,10 +43,12 @@ describe('Alert Email Address Service', () => {
           otherUserEmailAddressInput: '',
           usernameChecked: false
         },
-        anchor: null,
-        backLink: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
-        caption: 'Death star',
+        backLink: {
+          href: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
+          text: 'Back'
+        },
         pageTitle: 'Select an email address to include in the alerts',
+        pageTitleCaption: 'Death star',
         username: 'admin@defra.gov.uk'
       })
     })

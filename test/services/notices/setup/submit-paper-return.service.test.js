@@ -184,7 +184,6 @@ describe('Notices - Setup - Submit Paper Return service', () => {
               text: 'Select the returns for the paper return'
             }
           },
-
           pageTitle: 'Select the returns for the paper return',
           returns: [
             {
