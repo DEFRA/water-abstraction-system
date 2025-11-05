@@ -1,20 +1,10 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% from "macros/page-heading.njk" import pageHeading %}
-
-{% block breadcrumbs %}
-  {{ govukBackLink({
-    text: 'Back',
-    href: backLink
-  }) }}
-{% endblock %}
-
-{% block content %}
-  {{ pageHeading(pageTitle, caption, "govuk-heading-l govuk-!-margin-bottom-3") }}
+{% block pageContent %}
+  {{ pageHeadingHtml }}
 
   {% set tableRows = [] %}
 
@@ -58,7 +48,6 @@
     {% set tableRows = (tableRows.push(tableRow), tableRows) %}
   {% endfor %}
 
-  {# Recipient previews table #}
   {{ govukTable({
     firstCellIsHeader: false,
     head: [

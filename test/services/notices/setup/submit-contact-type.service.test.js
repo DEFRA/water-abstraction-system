@@ -42,8 +42,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     describe('email payload', () => {
       beforeEach(async () => {
         payload = {
-          type: 'email',
-          email: 'test@test.gov.uk'
+          contactType: 'email',
+          contactEmail: 'test@test.gov.uk'
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -60,9 +60,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.contactType).to.equal(undefined)
         expect(refreshedSession.additionalRecipients).to.equal([
           {
-            contact_hash_id: _createMD5Hash(payload.email),
+            contact_hash_id: _createMD5Hash(payload.contactEmail),
             contact_type: 'Single use',
-            email: payload.email,
+            email: payload.contactEmail,
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],
             message_type: 'Email'
@@ -75,7 +75,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.selectedRecipients).to.equal(['123', _createMD5Hash(payload.email)])
+        expect(refreshedSession.selectedRecipients).to.equal(['123', _createMD5Hash(payload.contactEmail)])
       })
 
       it('continues the journey', async () => {
@@ -87,7 +87,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
-          type: 'email'
+          contactType: 'email'
         })
       })
     })
@@ -95,8 +95,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     describe('email payload with no existing additionalRecipients', () => {
       beforeEach(async () => {
         payload = {
-          type: 'email',
-          email: 'test@test.gov.uk'
+          contactType: 'email',
+          contactEmail: 'test@test.gov.uk'
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -113,9 +113,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(refreshedSession.contactType).to.equal(undefined)
         expect(refreshedSession.additionalRecipients).to.equal([
           {
-            contact_hash_id: _createMD5Hash(payload.email),
+            contact_hash_id: _createMD5Hash(payload.contactEmail),
             contact_type: 'Single use',
-            email: payload.email,
+            email: payload.contactEmail,
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],
             message_type: 'Email'
@@ -132,7 +132,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
-          type: 'email'
+          contactType: 'email'
         })
       })
     })
@@ -140,8 +140,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     describe('email payload with no existing additionalRecipients with the address capitalised', () => {
       beforeEach(async () => {
         payload = {
-          type: 'email',
-          email: 'TEST@TEST.GOV.UK'
+          contactType: 'email',
+          contactEmail: 'TEST@TEST.GOV.UK'
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -177,7 +177,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
-          type: 'email'
+          contactType: 'email'
         })
       })
     })
@@ -185,8 +185,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     describe('email payload with an existing additionalRecipients', () => {
       beforeEach(async () => {
         payload = {
-          type: 'email',
-          email: 'other.test@test.gov.uk'
+          contactType: 'email',
+          contactEmail: 'other.test@test.gov.uk'
         }
 
         sessionData.additionalRecipients = [
@@ -222,9 +222,9 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
             message_type: 'Email'
           },
           {
-            contact_hash_id: _createMD5Hash(payload.email),
+            contact_hash_id: _createMD5Hash(payload.contactEmail),
             contact_type: 'Single use',
-            email: payload.email,
+            email: payload.contactEmail,
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],
             message_type: 'Email'
@@ -241,7 +241,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
         expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
 
         expect(result).to.equal({
-          type: 'email'
+          contactType: 'email'
         })
       })
     })
@@ -249,8 +249,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     describe('post payload', () => {
       beforeEach(async () => {
         payload = {
-          type: 'post',
-          name: 'Fake Name'
+          contactType: 'post',
+          contactName: 'Fake Name'
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -261,8 +261,8 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.contactType).to.equal(payload.type)
-        expect(refreshedSession.contactName).to.equal(payload.name)
+        expect(refreshedSession.contactType).to.equal(payload.contactType)
+        expect(refreshedSession.contactName).to.equal(payload.contactName)
       })
 
       it('continues the journey', async () => {
@@ -270,7 +270,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
 
         expect(yarStub.flash.called).to.be.false()
         expect(result).to.equal({
-          type: 'post'
+          contactType: 'post'
         })
       })
     })
@@ -294,22 +294,22 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
             href: `/system/notices/setup/${session.id}/select-recipients`,
             text: 'Back'
           },
-          email: null,
+          contactEmail: null,
+          contactName: null,
+          contactType: null,
           error: {
             errorList: [
               {
-                href: '#type',
+                href: '#contactType',
                 text: 'Select how to contact the recipient'
               }
             ],
-            type: {
+            contactType: {
               text: 'Select how to contact the recipient'
             }
           },
-          name: null,
           pageTitle: 'Select how to contact the recipient',
-          pageTitleCaption: 'Notice RINV-CPFRQ4',
-          type: null
+          pageTitleCaption: 'Notice RINV-CPFRQ4'
         })
       })
     })
@@ -317,7 +317,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     describe('when validation fails because type is email but no email is entered', () => {
       beforeEach(async () => {
         payload = {
-          type: 'email'
+          contactType: 'email'
         }
         sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
@@ -333,22 +333,22 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
             href: `/system/notices/setup/${session.id}/select-recipients`,
             text: 'Back'
           },
-          email: null,
+          contactEmail: null,
+          contactName: null,
+          contactType: 'email',
           error: {
             errorList: [
               {
-                href: '#email',
+                href: '#contactEmail',
                 text: 'Enter an email address'
               }
             ],
-            email: {
+            contactEmail: {
               text: 'Enter an email address'
             }
           },
-          name: null,
           pageTitle: 'Select how to contact the recipient',
-          pageTitleCaption: 'Notice RINV-CPFRQ4',
-          type: 'email'
+          pageTitleCaption: 'Notice RINV-CPFRQ4'
         })
       })
     })
@@ -356,7 +356,7 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
     describe('when validation fails because type is post but no name is entered', () => {
       beforeEach(async () => {
         payload = {
-          type: 'post'
+          contactType: 'post'
         }
         sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
@@ -372,22 +372,22 @@ describe('Notices - Setup - Submit Contact Type Service', () => {
             href: `/system/notices/setup/${session.id}/select-recipients`,
             text: 'Back'
           },
-          email: null,
+          contactEmail: null,
+          contactName: null,
+          contactType: 'post',
           error: {
             errorList: [
               {
-                href: '#name',
+                href: '#contactName',
                 text: 'Enter the recipients name'
               }
             ],
-            name: {
+            contactName: {
               text: 'Enter the recipients name'
             }
           },
-          name: null,
           pageTitle: 'Select how to contact the recipient',
-          pageTitleCaption: 'Notice RINV-CPFRQ4',
-          type: 'post'
+          pageTitleCaption: 'Notice RINV-CPFRQ4'
         })
       })
     })
