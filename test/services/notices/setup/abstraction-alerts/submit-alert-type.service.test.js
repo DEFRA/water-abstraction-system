@@ -20,7 +20,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
   let sessionData
 
   beforeEach(() => {
-    payload = { 'alert-type': 'stop' }
+    payload = { alertType: 'stop' }
     sessionData = AbstractionAlertSessionData.get()
   })
 
@@ -135,19 +135,27 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
               value: 'resume'
             }
           ],
-          backLink: `/system/monitoring-stations/${sessionData.monitoringStationId}`,
-          caption: 'Death star',
+          backLink: { href: `/system/monitoring-stations/${sessionData.monitoringStationId}`, text: 'Back' },
           error: {
-            text: 'Select the type of alert you need to send'
+            alertType: {
+              text: 'Select the type of alert you need to send'
+            },
+            errorList: [
+              {
+                href: '#alertType',
+                text: 'Select the type of alert you need to send'
+              }
+            ]
           },
-          pageTitle: 'Select the type of alert you need to send'
+          pageTitle: 'Select the type of alert you need to send',
+          pageTitleCaption: 'Death star'
         })
       })
     })
 
     describe('and "stop" or "reduce" have been selected but no thresholds have that alert type', () => {
       beforeEach(async () => {
-        payload = { 'alert-type': 'stop' }
+        payload = { alertType: 'stop' }
 
         sessionData.licenceMonitoringStations = [
           {
@@ -198,12 +206,20 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
               value: 'resume'
             }
           ],
-          backLink: `/system/monitoring-stations/${sessionData.monitoringStationId}`,
-          caption: 'Death star',
+          backLink: { href: `/system/monitoring-stations/${sessionData.monitoringStationId}`, text: 'Back' },
           error: {
-            text: 'There are no thresholds with the stop restriction type, Select the type of alert you need to send'
+            alertType: {
+              text: 'There are no thresholds with the stop restriction type, Select the type of alert you need to send'
+            },
+            errorList: [
+              {
+                href: '#alertType',
+                text: 'There are no thresholds with the stop restriction type, Select the type of alert you need to send'
+              }
+            ]
           },
-          pageTitle: 'Select the type of alert you need to send'
+          pageTitle: 'Select the type of alert you need to send',
+          pageTitleCaption: 'Death star'
         })
       })
     })
