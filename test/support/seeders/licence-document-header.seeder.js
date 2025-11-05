@@ -428,7 +428,7 @@ async function _primaryUserWithAdditionalContact() {
  * A contact can have multiple licences / licence refs. We need to merge the licence refs into a single recipient.
  *
  * This seeder ensures we can check a recipient with the same contact hash contains both of the licence refs and return
- * log in the response.
+ * logs in the response.
  *
  *@private
  */
