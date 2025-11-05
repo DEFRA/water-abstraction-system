@@ -14,7 +14,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Validator', () =
   let payload
 
   beforeEach(() => {
-    payload = { 'alert-thresholds': ['0'] }
+    payload = { alertThresholds: ['0'] }
   })
 
   describe('when called with valid data', () => {
@@ -28,7 +28,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Validator', () =
     describe('and the "alert-thresholds"', () => {
       describe('is an array', () => {
         beforeEach(() => {
-          payload = { 'alert-thresholds': ['0'] }
+          payload = { alertThresholds: ['0'] }
         })
 
         it('returns with errors', () => {
@@ -59,7 +59,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Thresholds Validator', () =
 
       describe('is an array with no items', () => {
         beforeEach(() => {
-          payload = { 'alert-thresholds': [undefined] }
+          payload = { alertThresholds: [undefined] }
         })
 
         it('returns with errors', () => {

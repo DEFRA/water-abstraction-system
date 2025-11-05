@@ -20,7 +20,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
 
   beforeEach(() => {
     payload = {
-      'alert-type': 'reduce'
+      alertType: 'reduce'
     }
 
     licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
@@ -40,7 +40,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
       describe('and the alert type is "stop"', () => {
         beforeEach(() => {
           payload = {
-            'alert-type': 'stop'
+            alertType: 'stop'
           }
 
           licenceMonitoringStationsData = [{ ...licenceMonitoringStations.one, restrictionType: 'stop_or_reduce' }]
@@ -91,7 +91,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
   describe('when the alert type is "stop"', () => {
     beforeEach(() => {
       payload = {
-        'alert-type': 'stop'
+        alertType: 'stop'
       }
     })
 
@@ -105,7 +105,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
     })
 
     describe('when called with invalid data', () => {
-      describe('and the "alert-type" is not available', () => {
+      describe('and the "alertType" is not available', () => {
         beforeEach(() => {
           licenceMonitoringStationsData = [
             {
@@ -147,7 +147,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
   describe('when the alert type is "reduce"', () => {
     beforeEach(() => {
       payload = {
-        'alert-type': 'reduce'
+        alertType: 'reduce'
       }
     })
 
@@ -161,7 +161,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
     })
 
     describe('when called with invalid data', () => {
-      describe('and the "alert-type" is not available', () => {
+      describe('and the "alertType" is not available', () => {
         beforeEach(() => {
           licenceMonitoringStationsData = [
             {
@@ -203,7 +203,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
   describe('when the alert type is "warning"', () => {
     beforeEach(() => {
       payload = {
-        'alert-type': 'warning'
+        alertType: 'warning'
       }
     })
 
@@ -238,7 +238,7 @@ describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
   describe('when the alert type is "resume"', () => {
     beforeEach(() => {
       payload = {
-        'alert-type': 'resume'
+        alertType: 'resume'
       }
     })
 
