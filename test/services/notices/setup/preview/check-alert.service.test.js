@@ -16,6 +16,7 @@ const SessionHelper = require('../../../../support/helpers/session.helper.js')
 // Things we need to stub
 const DetermineRecipientsService = require('../../../../../app/services/notices/setup/determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('../../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
+const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const CheckAlertService = require('../../../../../app/services/notices/setup/preview/check-alert.service.js')
@@ -39,7 +40,7 @@ describe('Notices Setup - Preview - Check Alert service', () => {
         licenceMonitoringStations.two.thresholdGroup,
         licenceMonitoringStations.three.thresholdGroup
       ],
-      referenceCode: 'WAA-XM0WMH'
+      referenceCode: generateReferenceCode('WAA')
     }
 
     session = await SessionHelper.add({ data: sessionData })
@@ -65,9 +66,12 @@ describe('Notices Setup - Preview - Check Alert service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'notices',
-        backLink: `/system/notices/setup/${session.id}/check`,
-        caption: 'Notice WAA-XM0WMH',
+        backLink: {
+          href: `/system/notices/setup/${session.id}/check`,
+          text: 'Back'
+        },
         pageTitle: 'Check the recipient previews',
+        pageTitleCaption: `Notice ${session.referenceCode}`,
         restrictionHeading: 'Flow restriction type and threshold',
         restrictions: [
           {

@@ -17,12 +17,12 @@ const DetermineRecipientsService = require('../../../../../app/services/notices/
 const FetchAbstractionAlertRecipientsService = require('../../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 const FetchReturnsRecipientsService = require('../../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 const GeneratePreviewRequest = require('../../../../../app/requests/notify/generate-preview.request.js')
+const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
+const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Thing under test
 const PreviewService = require('../../../../../app/services/notices/setup/preview/preview.service.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
-const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
 
 describe('Notices Setup - Preview - Preview service', () => {
   let licenceMonitoringStationId
@@ -88,11 +88,14 @@ describe('Notices Setup - Preview - Preview service', () => {
       expect(result).to.equal({
         activeNavBar: 'notices',
         address: 'primary.user@important.com',
-        backLink: `/system/notices/setup/${session.id}/check`,
-        caption: `Notice ${referenceCode}`,
+        backLink: {
+          href: `/system/notices/setup/${session.id}/check`,
+          text: 'Back'
+        },
         contents: 'Dear licence holder,\r\n',
         messageType: 'email',
         pageTitle: 'Returns invitation primary user email',
+        pageTitleCaption: `Notice ${referenceCode}`,
         refreshPageLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}`
       })
     })
@@ -171,11 +174,14 @@ describe('Notices Setup - Preview - Preview service', () => {
       expect(result).to.equal({
         activeNavBar: 'notices',
         address: 'primary.user@important.com',
-        backLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}/check-alert`,
-        caption: `Notice ${referenceCode}`,
+        backLink: {
+          href: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}/check-alert`,
+          text: 'Back'
+        },
         contents: 'Dear licence contact,\r\n',
         messageType: 'email',
         pageTitle: 'Water abstraction alert reduce warning email',
+        pageTitleCaption: `Notice ${referenceCode}`,
         refreshPageLink: `/system/notices/setup/${session.id}/preview/${testRecipient.contact_hash_id}/alert/${licenceMonitoringStationId}`
       })
     })
