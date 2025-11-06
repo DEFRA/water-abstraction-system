@@ -74,6 +74,7 @@ describe('Return Logs - View Return Log presenter', () => {
       siteDescription: 'BOREHOLE AT AVALON',
       startReading: null,
       status: 'complete',
+      succeeded: false,
       summaryTableData: {
         headers: [{ text: 'Month' }, { text: 'Cubic metres', format: 'numeric' }],
         rows: [
