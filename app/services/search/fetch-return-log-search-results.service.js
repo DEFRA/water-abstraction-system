@@ -45,11 +45,11 @@ async function go(query, page, matchFullReturnReference = false) {
     ])
 
   if (matchFullReturnReference) {
-    return select.where('returnReference', 'ilike', fullReturnReference).page(page - 1, 1000)
+    return select.where('returnReference', '=', fullReturnReference).page(page - 1, 1000)
   }
 
   return select
-    .whereNot('returnReference', 'ilike', fullReturnReference)
+    .where('returnReference', '!=', fullReturnReference)
     .where('returnReference', 'ilike', partialReturnReference)
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
