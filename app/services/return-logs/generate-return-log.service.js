@@ -113,7 +113,7 @@ function _metadata(returnRequirement, endDate) {
 
   return {
     description: siteDescription,
-    isCurrent: returnVersion.reason !== 'succession-or-transfer-of-licence',
+    isCurrent: true,
     isFinal: endDate < determineCycleEndDate(summer),
     isSummer: summer,
     isTwoPartTariff: twoPartTariff,
