@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -17,7 +19,7 @@ describe('Notices - Setup - Notify Update presenter', () => {
     notifyResult = {
       succeeded: true,
       response: {
-        statusCode: 200,
+        statusCode: HTTP_STATUS_OK,
         body: {
           content: {
             body: 'Dear licence holder,\r\n',
@@ -55,7 +57,7 @@ describe('Notices - Setup - Notify Update presenter', () => {
       notifyResult = {
         succeeded: false,
         response: {
-          statusCode: 400,
+          statusCode: HTTP_STATUS_BAD_REQUEST,
           body: {
             errors: [
               {
@@ -63,7 +65,7 @@ describe('Notices - Setup - Notify Update presenter', () => {
                 message: 'Missing personalisation: returnDueDate'
               }
             ],
-            status_code: 400
+            status_code: HTTP_STATUS_BAD_REQUEST
           }
         }
       }

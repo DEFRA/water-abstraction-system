@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -93,7 +95,7 @@ describe('Notifications controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain(`Licence ${licence.licenceRef}`)
             expect(response.payload).to.contain('Returns invitation')
           })
@@ -126,7 +128,7 @@ describe('Notifications controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.headers['content-type']).to.equal('application/pdf')
             expect(response.headers['content-disposition']).to.contain('inline; filename="letter.pdf"')
 
@@ -163,7 +165,7 @@ describe('Notifications controller', () => {
           it('returns a 204 response', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(204)
+            expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
           })
         })
 
@@ -185,7 +187,7 @@ describe('Notifications controller', () => {
           it('returns a 404 response', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(404)
+            expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
           })
         })
       })

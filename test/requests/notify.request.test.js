@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_TOO_MANY_REQUESTS } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -51,7 +53,7 @@ describe('Notify Request', () => {
         Sinon.stub(BaseRequest, 'get').resolves({
           succeeded: true,
           response: {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: { testObject: { test: 'yes' } }
           }
         })
@@ -89,7 +91,7 @@ describe('Notify Request', () => {
       it('returns the status code', async () => {
         const result = await NotifyRequest.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(200)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
       })
     })
 
@@ -98,9 +100,9 @@ describe('Notify Request', () => {
         Sinon.stub(BaseRequest, 'get').resolves({
           succeeded: false,
           response: {
-            statusCode: 404,
+            statusCode: HTTP_STATUS_NOT_FOUND,
             statusMessage: 'Not Found',
-            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
           }
         })
       })
@@ -120,7 +122,7 @@ describe('Notify Request', () => {
       it('returns the status code', async () => {
         const result = await NotifyRequest.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
       })
     })
   })
@@ -131,7 +133,7 @@ describe('Notify Request', () => {
         Sinon.stub(BaseRequest, 'post').resolves({
           succeeded: true,
           response: {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: { testObject: { test: 'yes' } }
           }
         })
@@ -170,7 +172,7 @@ describe('Notify Request', () => {
       it('returns the status code', async () => {
         const result = await NotifyRequest.post(testRoute, { test: 'yes' })
 
-        expect(result.response.statusCode).to.equal(200)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
       })
     })
 
@@ -180,11 +182,11 @@ describe('Notify Request', () => {
           Sinon.stub(BaseRequest, 'post').resolves({
             succeeded: false,
             response: {
-              statusCode: 400,
+              statusCode: HTTP_STATUS_BAD_REQUEST,
               statusMessage: 'Bad Request',
               body: {
                 errors: [{ error: 'BadRequestError', message: 'email_address Not a valid email address' }],
-                status_code: 400
+                status_code: HTTP_STATUS_BAD_REQUEST
               }
             }
           })
@@ -207,7 +209,7 @@ describe('Notify Request', () => {
         it('returns the status code', async () => {
           const result = await NotifyRequest.post(testRoute, { test: 'yes' })
 
-          expect(result.response.statusCode).to.equal(400)
+          expect(result.response.statusCode).to.equal(HTTP_STATUS_BAD_REQUEST)
         })
       })
 
@@ -220,7 +222,7 @@ describe('Notify Request', () => {
             .resolves({
               succeeded: false,
               response: {
-                statusCode: 429,
+                statusCode: HTTP_STATUS_TOO_MANY_REQUESTS,
                 statusMessage: 'Too Many Requests',
                 body: {
                   errors: [
@@ -229,7 +231,7 @@ describe('Notify Request', () => {
                       message: 'Exceeded rate limit for key type live of 3000 requests per 60 seconds'
                     }
                   ],
-                  status_code: 429
+                  status_code: HTTP_STATUS_TOO_MANY_REQUESTS
                 }
               }
             })
@@ -237,7 +239,7 @@ describe('Notify Request', () => {
             .resolves({
               succeeded: true,
               response: {
-                statusCode: 200,
+                statusCode: HTTP_STATUS_OK,
                 body: { testObject: { test: 'yes' } }
               }
             })
@@ -248,7 +250,7 @@ describe('Notify Request', () => {
 
           expect(baseRequestStub.calledTwice).to.be.true()
           expect(result.succeeded).to.be.true()
-          expect(result.response.statusCode).to.equal(200)
+          expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(result.response.body.testObject.test).to.equal('yes')
         })
       })

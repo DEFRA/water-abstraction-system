@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -138,7 +140,7 @@ describe('Return Versions - Setup - Initiate Session service', () => {
 
         const { statusCode, error: errorType, message } = error.output.payload
 
-        expect(statusCode).to.equal(404)
+        expect(statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
         expect(errorType).to.equal('Not Found')
         expect(message).to.equal('Licence for new return requirement not found')
       })

@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -51,7 +53,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
         // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full representation
         // look at test/requests/notify/notify-status.request.test.js
         response = {
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: {
             status: 'delivered'
           }
@@ -284,7 +286,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
         })
 
         response = {
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: {
             status: 'temporary-failure'
           }
@@ -371,7 +373,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
       })
 
       response = {
-        statusCode: 404,
+        statusCode: HTTP_STATUS_NOT_FOUND,
         body: {
           errors: [
             {
@@ -379,7 +381,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
               message: 'No result found'
             }
           ],
-          status_code: 404
+          status_code: HTTP_STATUS_NOT_FOUND
         }
       }
 

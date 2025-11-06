@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -40,7 +42,7 @@ describe('Charging Module Send Bill Run request', () => {
             gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
             dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
           },
-          statusCode: 204,
+          statusCode: HTTP_STATUS_NO_CONTENT,
           body: null
         }
       })

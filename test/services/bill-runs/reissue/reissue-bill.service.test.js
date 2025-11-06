@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_CONFLICT } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -265,7 +267,7 @@ describe('Reissue Bill service', () => {
             body: {
               error: 'Conflict',
               message: 'Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.',
-              statusCode: 409
+              statusCode: HTTP_STATUS_CONFLICT
             }
           }
         })
@@ -292,7 +294,7 @@ describe('Reissue Bill service', () => {
         expect(errorResult.responseBody.message).to.equal(
           'Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.'
         )
-        expect(errorResult.responseBody.statusCode).to.equal(409)
+        expect(errorResult.responseBody.statusCode).to.equal(HTTP_STATUS_CONFLICT)
       })
     })
 
@@ -305,7 +307,7 @@ describe('Reissue Bill service', () => {
             body: {
               error: 'Conflict',
               message: 'Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.',
-              statusCode: 409
+              statusCode: HTTP_STATUS_CONFLICT
             }
           }
         })
@@ -334,7 +336,7 @@ describe('Reissue Bill service', () => {
         expect(errorResult.responseBody.message).to.equal(
           'Invoice 2274cd48-2a61-4b73-a9c0-bc5696c5218d has already been rebilled.'
         )
-        expect(errorResult.responseBody.statusCode).to.equal(409)
+        expect(errorResult.responseBody.statusCode).to.equal(HTTP_STATUS_CONFLICT)
       })
     })
   })

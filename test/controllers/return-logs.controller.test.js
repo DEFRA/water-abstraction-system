@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -52,7 +54,7 @@ describe('Return Logs controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions())
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Abstraction return')
         })
 
@@ -97,7 +99,7 @@ describe('Return Logs controller', () => {
         it('redirects back to the "view return log" page', async () => {
           const response = await server.inject(_postOptions({ returnLogId: 'RETURN_LOG_ID' }))
 
-          expect(response.statusCode).to.equal(302)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal('/system/return-logs?id=RETURN_LOG_ID')
         })
       })
@@ -127,7 +129,7 @@ describe('Return Logs controller', () => {
         it('returns the file successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.headers['content-type']).to.equal('type/csv')
           expect(response.headers['content-disposition']).to.equal('attachment; filename="test.csv"')
           expect(response.payload).to.equal('test')

@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -75,7 +77,7 @@ describe('Hapi Pino Serializers service', () => {
 
       beforeEach(() => {
         responseObject = {
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           headers: {
             'strict-transport-security': 'max-age=15768000',
             'x-frame-options': 'DENY',
@@ -97,7 +99,7 @@ describe('Hapi Pino Serializers service', () => {
         const { res } = HapiPinoSerializersService.go()
 
         expect(res(responseObject)).to.equal({
-          statusCode: 200
+          statusCode: HTTP_STATUS_OK
         })
       })
     })

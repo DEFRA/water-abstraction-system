@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -69,7 +71,7 @@ describe('Billing Accounts controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Billing account for Ferns Surfacing Limited')
           })
         })
@@ -95,7 +97,7 @@ describe('Billing Accounts controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Billing account for Ferns Surfacing Limited')
           })
         })
@@ -121,7 +123,7 @@ describe('Billing Accounts controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Billing account for Ferns Surfacing Limited')
           })
         })
@@ -159,7 +161,7 @@ describe('Billing Accounts controller', () => {
         const response = await server.inject(options)
         const payload = JSON.parse(response.payload)
 
-        expect(response.statusCode).to.equal(201)
+        expect(response.statusCode).to.equal(HTTP_STATUS_CREATED)
         expect(payload).to.equal(validResponse)
       })
     })
@@ -180,7 +182,7 @@ describe('Billing Accounts controller', () => {
           const response = await server.inject(options)
           const payload = JSON.parse(response.payload)
 
-          expect(response.statusCode).to.equal(400)
+          expect(response.statusCode).to.equal(HTTP_STATUS_BAD_REQUEST)
           expect(payload.message).to.equal('"address" is required')
         })
       })
@@ -189,7 +191,7 @@ describe('Billing Accounts controller', () => {
         beforeEach(async () => {
           options.payload = { ...validPayload }
 
-          Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
+          Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR }))
           Sinon.stub(ChangeAddressService, 'go').rejects()
         })
 
@@ -197,7 +199,7 @@ describe('Billing Accounts controller', () => {
           const response = await server.inject(options)
           const payload = JSON.parse(response.payload)
 
-          expect(response.statusCode).to.equal(500)
+          expect(response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
           expect(payload.message).to.equal('An internal server error occurred')
         })
       })

@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -56,7 +58,7 @@ describe('Data controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('billingPeriods')
         })
       })
@@ -84,7 +86,7 @@ describe('Data controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('De-duplicate a licence')
         })
       })
@@ -103,7 +105,7 @@ describe('Data controller', () => {
         it('redirects to the search page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(302)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/licences?query=${licenceRef}`)
         })
       })
@@ -120,7 +122,7 @@ describe('Data controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('There is a problem')
           expect(response.payload).to.contain('Enter a licence reference to de-dupe')
         })
@@ -145,7 +147,7 @@ describe('Data controller', () => {
         it('returns a 200 status and the results', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.equal('{"regions":["d0a4123d-1e19-480d-9dd4-f70f3387c4b9"]}')
         })
       })
@@ -159,7 +161,7 @@ describe('Data controller', () => {
           it('returns a 500 status', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(500)
+            expect(response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
           })
         })
       })
@@ -181,7 +183,7 @@ describe('Data controller', () => {
         it('displays the correct message', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(204)
+          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
         })
       })
 
@@ -194,7 +196,7 @@ describe('Data controller', () => {
           it('returns a 500 status', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(500)
+            expect(response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
           })
         })
       })
@@ -216,7 +218,7 @@ describe('Data controller', () => {
         it('returns a 204 status', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(204)
+          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
         })
       })
 
@@ -229,7 +231,7 @@ describe('Data controller', () => {
           it('returns a 500 status', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(500)
+            expect(response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
           })
         })
       })

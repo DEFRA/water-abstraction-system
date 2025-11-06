@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -24,7 +26,7 @@ describe('ReSP API Token request', () => {
       Sinon.stub(BaseRequest, 'post').resolves({
         succeeded: true,
         response: {
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: '{"access_token":"reallylong.stringoflettersandnumbers.in3parts","expires_in":3600,"token_type":"Bearer"}'
         }
       })
@@ -43,7 +45,7 @@ describe('ReSP API Token request', () => {
       Sinon.stub(BaseRequest, 'post').resolves({
         succeeded: false,
         response: {
-          statusCode: 500,
+          statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
           body: 'Kaboom'
         }
       })

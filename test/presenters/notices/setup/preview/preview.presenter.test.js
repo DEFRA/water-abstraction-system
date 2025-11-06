@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -64,7 +66,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           }
 
           response = {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: {
               body: 'Dear Clean Water Limited,\r\n',
               html: null,
@@ -128,7 +130,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           }
 
           response = {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: {
               body: 'Dear licence holder,\r\n',
               html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence holder,</p>',
@@ -205,7 +207,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           }
 
           response = {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: {
               body: 'Dear licence contact,\r\n',
               html: null,
@@ -275,7 +277,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           }
 
           response = {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: {
               body: 'Dear licence contact,\r\n',
               html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence contact,</p>',
@@ -335,7 +337,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
       }
 
       response = {
-        statusCode: 400,
+        statusCode: HTTP_STATUS_BAD_REQUEST,
         body: {
           errors: [
             {
@@ -343,7 +345,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               message: 'Missing personalisation: returnDueDate'
             }
           ],
-          status_code: 400
+          status_code: HTTP_STATUS_BAD_REQUEST
         }
       }
 

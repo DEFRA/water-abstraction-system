@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -25,11 +27,11 @@ let InfoService // = require('../../app/services/health/info.service')
 
 describe('Health - Info service', () => {
   const goodRequestResults = {
-    addressFacade: { succeeded: true, response: { statusCode: 200, body: 'hola' } },
+    addressFacade: { succeeded: true, response: { statusCode: HTTP_STATUS_OK, body: 'hola' } },
     chargingModule: {
       succeeded: true,
       response: {
-        statusCode: 200,
+        statusCode: HTTP_STATUS_OK,
         info: {
           gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
           dockerTag: 'v0.19.1'
@@ -50,7 +52,7 @@ describe('Health - Info service', () => {
           git_commit: '9a404353ee55a7f7cb3b8348b169ad00cc2d540a',
           status: 'ok'
         },
-        statusCode: 200
+        statusCode: HTTP_STATUS_OK
       }
     },
     resp: {
@@ -61,10 +63,10 @@ describe('Health - Info service', () => {
           result: [],
           source: 'ReSP'
         },
-        statusCode: 200
+        statusCode: HTTP_STATUS_OK
       }
     },
-    app: { succeeded: true, response: { statusCode: 200, body: { version: '9.0.99', commit: '99d0e8c' } } }
+    app: { succeeded: true, response: { statusCode: HTTP_STATUS_OK, body: { version: '9.0.99', commit: '99d0e8c' } } }
   }
 
   let addressFacadeViewStatusRequestStub
@@ -370,7 +372,7 @@ describe('Health - Info service', () => {
 
     describe('returns a 5xx response', () => {
       beforeEach(async () => {
-        const badResult = { succeeded: false, response: { statusCode: 500, body: { message: 'Kaboom' } } }
+        const badResult = { succeeded: false, response: { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR, body: { message: 'Kaboom' } } }
 
         addressFacadeViewStatusRequestStub.resolves(badResult)
 

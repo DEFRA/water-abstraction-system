@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -72,7 +74,7 @@ describe('Keep Yar Alive plugin', () => {
     it('touches the Yar session to update the TTL and keep it alive', async () => {
       const response = await server.inject('/')
 
-      expect(response.statusCode).to.equal(200)
+      expect(response.statusCode).to.equal(HTTP_STATUS_OK)
       expect(response.result).to.equal('ok')
 
       expect(yarStub.touch.called).to.be.true()
@@ -93,7 +95,7 @@ describe('Keep Yar Alive plugin', () => {
     it('skips touching the Yar session', async () => {
       const res = await server.inject('/skip')
 
-      expect(res.statusCode).to.equal(200)
+      expect(res.statusCode).to.equal(HTTP_STATUS_OK)
       expect(res.result).to.equal('skipped')
 
       expect(yarStub.touch.called).to.be.false()
@@ -106,7 +108,7 @@ describe('Keep Yar Alive plugin', () => {
     it('skips touching the Yar session', async () => {
       const res = await server.inject('/skip')
 
-      expect(res.statusCode).to.equal(200)
+      expect(res.statusCode).to.equal(HTTP_STATUS_OK)
       expect(res.result).to.equal('skipped')
 
       expect(yarStub.touch.called).to.be.false()
@@ -127,7 +129,7 @@ describe('Keep Yar Alive plugin', () => {
     it('handles Yar errors gracefully', async () => {
       const response = await server.inject('/')
 
-      expect(response.statusCode).to.equal(200)
+      expect(response.statusCode).to.equal(HTTP_STATUS_OK)
       expect(response.result).to.equal('ok')
 
       expect(global.GlobalNotifier.omfg.firstCall.args[0]).to.include('Failed to keep session alive')

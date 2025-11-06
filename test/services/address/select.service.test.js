@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -60,7 +62,7 @@ describe('Address - Select service', () => {
         lookupPostcodeRequestStub.resolves({
           succeeded: true,
           response: {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: {
               results: [match]
             }
@@ -102,7 +104,7 @@ describe('Address - Select service', () => {
         lookupPostcodeRequestStub.resolves({
           succeeded: true,
           response: {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: {
               results: []
             }
@@ -123,8 +125,8 @@ describe('Address - Select service', () => {
         lookupPostcodeRequestStub.resolves({
           succeeded: false,
           response: {
-            statusCode: 500,
-            body: { statusCode: 500, error: 'Computer says no', message: 'Computer says no' }
+            statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
+            body: { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR, error: 'Computer says no', message: 'Computer says no' }
           },
           matches: []
         })

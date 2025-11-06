@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -88,7 +90,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path, requirementIndex))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Enter the abstraction period for the requirements for returns')
         })
       })
@@ -104,7 +106,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -117,7 +119,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/returns-cycle/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               '/system/return-versions/setup/' + sessionId + '/returns-cycle/0'
             )
@@ -132,7 +134,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
@@ -156,7 +158,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select any additional submission options for the return requirements')
         })
       })
@@ -178,7 +180,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Add a note')
         })
       })
@@ -193,7 +195,7 @@ describe('Return Versions controller', () => {
         it('redirects to the "check" page', async () => {
           const response = await server.inject(_postOptions(path, {}))
 
-          expect(response.statusCode).to.equal(302)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/return-versions/setup/${sessionId}/check`)
         })
       })
@@ -207,7 +209,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -230,7 +232,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path, requirementIndex))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select agreements and exceptions for the return requirement')
         })
       })
@@ -246,7 +248,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -259,7 +261,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
@@ -275,7 +277,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Requirements for returns approved')
         })
       })
@@ -297,7 +299,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('You are about to cancel these requirements for returns')
         })
       })
@@ -319,7 +321,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Check the return requirements for')
         })
       })
@@ -340,7 +342,7 @@ describe('Return Versions controller', () => {
       it('redirects on success', async () => {
         const result = await server.inject(_getOptions(path))
 
-        expect(result.statusCode).to.equal(302)
+        expect(result.statusCode).to.equal(HTTP_STATUS_FOUND)
         expect(result.headers.location).to.equal(`/system/return-versions/setup/${sessionId}/check`)
       })
     })
@@ -361,7 +363,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Use previous requirements for returns')
         })
       })
@@ -377,7 +379,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -390,7 +392,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
@@ -413,7 +415,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path, requirementIndex))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select how often readings or volumes are collected')
         })
       })
@@ -429,7 +431,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -442,7 +444,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/frequency-reported/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               '/system/return-versions/setup/' + sessionId + '/frequency-reported/0'
             )
@@ -457,7 +459,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
@@ -480,7 +482,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path, requirementIndex))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select how often readings or volumes are reported')
         })
       })
@@ -496,7 +498,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -509,7 +511,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/agreements-exceptions/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               '/system/return-versions/setup/' + sessionId + '/agreements-exceptions/0'
             )
@@ -524,7 +526,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
@@ -547,7 +549,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('How do you want to set up the requirements for returns?')
         })
       })
@@ -563,7 +565,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -576,7 +578,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/{pageData.redirect}', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               '/system/return-versions/setup/' + sessionId + '/page-data-redirect'
             )
@@ -601,7 +603,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Why are no returns required?')
         })
       })
@@ -617,7 +619,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
@@ -630,7 +632,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -653,7 +655,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path, requirementIndex))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select the points for the requirements for returns')
         })
       })
@@ -669,7 +671,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -682,7 +684,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/abstraction-period/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               '/system/return-versions/setup/' + sessionId + '/abstraction-period/0'
             )
@@ -697,7 +699,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
@@ -720,7 +722,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path, requirementIndex))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select the purpose for the requirement for returns')
         })
       })
@@ -736,7 +738,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -749,7 +751,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/points/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/points/0')
           })
         })
@@ -762,7 +764,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
@@ -785,7 +787,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select the reason for the requirements for returns')
         })
       })
@@ -801,7 +803,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -814,7 +816,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/method', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/method')
           })
         })
@@ -827,7 +829,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
@@ -850,7 +852,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path, requirementIndex))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('You are about to remove these requirements for returns')
         })
       })
@@ -872,7 +874,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path, requirementIndex))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select the returns cycle for the return requirement')
         })
       })
@@ -888,7 +890,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -901,7 +903,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/site-description/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               '/system/return-versions/setup/' + sessionId + '/site-description/0'
             )
@@ -916,7 +918,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
@@ -939,7 +941,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path, requirementIndex))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Enter a site description for the requirements for returns')
         })
       })
@@ -955,7 +957,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -968,7 +970,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/frequency-collected/{requirementIndex}', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               '/system/return-versions/setup/' + sessionId + '/frequency-collected/0'
             )
@@ -983,7 +985,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(_postOptions(path, requirementIndex))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
@@ -1006,7 +1008,7 @@ describe('Return Versions controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select the start date for the requirements for returns')
         })
       })
@@ -1022,7 +1024,7 @@ describe('Return Versions controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(postRequestOptions(`/return-versions/setup/${sessionId}/${path}`))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -1035,7 +1037,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/reason', async () => {
             const response = await server.inject(postRequestOptions(`/return-versions/setup/${sessionId}/${path}`))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/reason')
           })
         })
@@ -1048,7 +1050,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/no-returns-required', async () => {
             const response = await server.inject(postRequestOptions(`/return-versions/setup/${sessionId}/${path}`))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               '/system/return-versions/setup/' + sessionId + '/no-returns-required'
             )
@@ -1063,7 +1065,7 @@ describe('Return Versions controller', () => {
           it('redirects to /system/return-versions/setup/{sessionId}/check', async () => {
             const response = await server.inject(postRequestOptions(`/return-versions/setup/${sessionId}/${path}`))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/return-versions/setup/' + sessionId + '/check')
           })
         })
