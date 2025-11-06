@@ -1,6 +1,7 @@
 'use strict'
 
-const { HTTP_STATUS_FOUND, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
+const { HTTP_STATUS_FOUND, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } =
+  require('node:http2').constants
 
 // Test framework dependencies
 const Lab = require('@hapi/lab')

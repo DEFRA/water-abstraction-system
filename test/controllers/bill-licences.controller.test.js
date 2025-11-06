@@ -131,7 +131,9 @@ describe('Bill Licences controller', () => {
       describe('when the request fails', () => {
         describe('because the removing service threw an error', () => {
           beforeEach(async () => {
-            Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR }))
+            Sinon.stub(Boom, 'badImplementation').returns(
+              new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
+            )
             Sinon.stub(SubmitRemoveBillLicenceService, 'go').rejects()
           })
 

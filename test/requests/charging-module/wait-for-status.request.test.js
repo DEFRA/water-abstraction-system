@@ -145,7 +145,11 @@ describe('Charging Module Wait For Status request', () => {
       expect(error).to.be.instanceOf(ExpandedError)
       expect(error.message).to.equal('Charging Module wait for status request failed')
       expect(error.billRunExternalId).to.equal(billRunId)
-      expect(error.responseBody).to.equal({ statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' })
+      expect(error.responseBody).to.equal({
+        statusCode: HTTP_STATUS_NOT_FOUND,
+        error: 'Not Found',
+        message: 'Not Found'
+      })
     })
   })
 })

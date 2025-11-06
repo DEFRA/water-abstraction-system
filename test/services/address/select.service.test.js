@@ -126,7 +126,11 @@ describe('Address - Select service', () => {
           succeeded: false,
           response: {
             statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
-            body: { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR, error: 'Computer says no', message: 'Computer says no' }
+            body: {
+              statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
+              error: 'Computer says no',
+              message: 'Computer says no'
+            }
           },
           matches: []
         })

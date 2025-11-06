@@ -1,6 +1,7 @@
 'use strict'
 
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } =
+  require('node:http2').constants
 
 // Test framework dependencies
 const Lab = require('@hapi/lab')
@@ -191,7 +192,9 @@ describe('Billing Accounts controller', () => {
         beforeEach(async () => {
           options.payload = { ...validPayload }
 
-          Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR }))
+          Sinon.stub(Boom, 'badImplementation').returns(
+            new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
+          )
           Sinon.stub(ChangeAddressService, 'go').rejects()
         })
 

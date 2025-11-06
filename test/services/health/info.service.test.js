@@ -372,7 +372,10 @@ describe('Health - Info service', () => {
 
     describe('returns a 5xx response', () => {
       beforeEach(async () => {
-        const badResult = { succeeded: false, response: { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR, body: { message: 'Kaboom' } } }
+        const badResult = {
+          succeeded: false,
+          response: { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR, body: { message: 'Kaboom' } }
+        }
 
         addressFacadeViewStatusRequestStub.resolves(badResult)
 
