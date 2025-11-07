@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const billingConfig = require('../../../config/billing.config.js')
 const ExpandedError = require('../../../app/errors/expanded.error.js')
 
@@ -130,9 +131,9 @@ describe('Charging Module Wait For Status request', () => {
             'x-cma-git-commit': '273604040a47e0977b0579a0fef0f09726d95e39',
             'x-cma-docker-tag': 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
           },
-          statusCode: 404,
+          statusCode: HTTP_STATUS_NOT_FOUND,
           statusMessage: 'Not Found',
-          body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+          body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
         }
       })
     })
@@ -143,7 +144,11 @@ describe('Charging Module Wait For Status request', () => {
       expect(error).to.be.instanceOf(ExpandedError)
       expect(error.message).to.equal('Charging Module wait for status request failed')
       expect(error.billRunExternalId).to.equal(billRunId)
-      expect(error.responseBody).to.equal({ statusCode: 404, error: 'Not Found', message: 'Not Found' })
+      expect(error.responseBody).to.equal({
+        statusCode: HTTP_STATUS_NOT_FOUND,
+        error: 'Not Found',
+        message: 'Not Found'
+      })
     })
   })
 })
@@ -156,7 +161,7 @@ function _testResponse(status = 'processing') {
         gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
         dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
       },
-      statusCode: 200,
+      statusCode: HTTP_STATUS_OK,
       body: {
         status
       }

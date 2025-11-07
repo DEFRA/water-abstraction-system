@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -28,7 +30,7 @@ describe('Legacy Delete Bill request', () => {
       Sinon.stub(LegacyRequest, 'delete').resolves({
         succeeded: true,
         response: {
-          statusCode: 204,
+          statusCode: HTTP_STATUS_NO_CONTENT,
           body: null
         }
       })
@@ -43,7 +45,7 @@ describe('Legacy Delete Bill request', () => {
     it('returns a 204 - ok', async () => {
       const result = await DeleteBillRequest.send(billRunId, billId, user)
 
-      expect(result.response.statusCode).to.equal(204)
+      expect(result.response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
       expect(result.response.body).to.be.null()
     })
   })
@@ -54,9 +56,9 @@ describe('Legacy Delete Bill request', () => {
         Sinon.stub(LegacyRequest, 'delete').resolves({
           succeeded: false,
           response: {
-            statusCode: 401,
+            statusCode: HTTP_STATUS_UNAUTHORIZED,
             body: {
-              statusCode: 401,
+              statusCode: HTTP_STATUS_UNAUTHORIZED,
               error: 'Unauthorized',
               message: 'Invalid JWT: Token format not valid',
               attributes: { error: 'Invalid JWT: Token format not valid' }
@@ -74,7 +76,7 @@ describe('Legacy Delete Bill request', () => {
       it('returns the error in the "response"', async () => {
         const result = await DeleteBillRequest.send(billRunId, billId, user)
 
-        expect(result.response.body.statusCode).to.equal(401)
+        expect(result.response.body.statusCode).to.equal(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).to.equal('Unauthorized')
         expect(result.response.body.message).to.equal('Invalid JWT: Token format not valid')
       })

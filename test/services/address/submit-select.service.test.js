@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const SessionHelper = require('../../support/helpers/session.helper.js')
 
@@ -73,7 +74,7 @@ describe('Address - Submit Select Service', () => {
           lookupUPRNRequestStub.resolves({
             succeeded: true,
             response: {
-              statusCode: 200,
+              statusCode: HTTP_STATUS_OK,
               body: {
                 results: [match]
               }
@@ -114,7 +115,7 @@ describe('Address - Submit Select Service', () => {
           lookupUPRNRequestStub.resolves({
             succeeded: true,
             response: {
-              statusCode: 200,
+              statusCode: HTTP_STATUS_OK,
               body: {
                 results: [noOrganisation]
               }
@@ -155,7 +156,7 @@ describe('Address - Submit Select Service', () => {
           lookupUPRNRequestStub.resolves({
             succeeded: true,
             response: {
-              statusCode: 200,
+              statusCode: HTTP_STATUS_OK,
               body: {
                 results: [noPremises]
               }
@@ -196,7 +197,7 @@ describe('Address - Submit Select Service', () => {
           lookupUPRNRequestStub.resolves({
             succeeded: true,
             response: {
-              statusCode: 200,
+              statusCode: HTTP_STATUS_OK,
               body: {
                 results: [noPremises]
               }
@@ -237,7 +238,7 @@ describe('Address - Submit Select Service', () => {
           lookupUPRNRequestStub.resolves({
             succeeded: true,
             response: {
-              statusCode: 200,
+              statusCode: HTTP_STATUS_OK,
               body: {
                 results: [noPremises]
               }
@@ -271,9 +272,9 @@ describe('Address - Submit Select Service', () => {
           lookupUPRNRequestStub.resolves({
             succeeded: false,
             response: {
-              statusCode: 404,
+              statusCode: HTTP_STATUS_NOT_FOUND,
               body: {
-                facade_status_code: 404,
+                facade_status_code: HTTP_STATUS_NOT_FOUND,
                 facade_error_message: 'HTTP 404 Not Found',
                 facade_error_code: 'address_service_error_11',
                 supplier_was_called: null,
@@ -299,7 +300,7 @@ describe('Address - Submit Select Service', () => {
           lookupUPRNRequestStub.resolves({
             succeeded: true,
             response: {
-              statusCode: 200,
+              statusCode: HTTP_STATUS_OK,
               body: {
                 results: []
               }
@@ -331,7 +332,7 @@ describe('Address - Submit Select Service', () => {
             lookupPostcodeRequestStub.resolves({
               succeeded: true,
               response: {
-                statusCode: 200,
+                statusCode: HTTP_STATUS_OK,
                 body: {
                   results: [match]
                 }
@@ -382,8 +383,8 @@ describe('Address - Submit Select Service', () => {
             lookupPostcodeRequestStub.resolves({
               succeeded: false,
               response: {
-                statusCode: 404,
-                body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+                statusCode: HTTP_STATUS_NOT_FOUND,
+                body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
               },
               matches: []
             })
@@ -403,7 +404,7 @@ describe('Address - Submit Select Service', () => {
             lookupPostcodeRequestStub.resolves({
               succeeded: true,
               response: {
-                statusCode: 200,
+                statusCode: HTTP_STATUS_OK,
                 body: {
                   results: []
                 }
