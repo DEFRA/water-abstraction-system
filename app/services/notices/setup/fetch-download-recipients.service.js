@@ -124,14 +124,11 @@ function _filterByPeriod(session) {
     bindings.push(dueDate)
   }
 
-  let whereLicenceRefs = 'TRUE'
-  if (removeLicences !== '') {
-    whereLicenceRefs = 'NOT (ldh.licence_ref = ANY (?))'
-    bindings.push(transformStringOfLicencesToArray(removeLicences))
-    bindings.push(transformStringOfLicencesToArray(removeLicences))
-    bindings.push(transformStringOfLicencesToArray(removeLicences))
-    bindings.push(transformStringOfLicencesToArray(removeLicences))
-  }
+  const whereLicenceRefs = 'NOT (ldh.licence_ref = ANY (?))'
+  bindings.push(transformStringOfLicencesToArray(removeLicences))
+  bindings.push(transformStringOfLicencesToArray(removeLicences))
+  bindings.push(transformStringOfLicencesToArray(removeLicences))
+  bindings.push(transformStringOfLicencesToArray(removeLicences))
 
   return {
     bindings,
@@ -298,7 +295,7 @@ function _query(whereReturnLogs, whereLicenceRefs) {
       ),
 
       best_contact_type AS (
-        SELECT DISTINCT ON (contact_hash_id)
+        SELECT DISTINCT ON (licence_ref, contact_hash_id)
           licence_ref,
           contact_hash_id,
           contact_type,
@@ -310,7 +307,7 @@ function _query(whereReturnLogs, whereLicenceRefs) {
           return_reference,
           priority
         FROM all_contacts
-        ORDER BY contact_hash_id, priority
+        ORDER BY licence_ref, contact_hash_id, priority
       )
 
     SELECT
