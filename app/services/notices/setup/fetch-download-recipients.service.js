@@ -150,6 +150,7 @@ function _query(whereReturnLogs, whereLicenceRefs) {
         FROM public.return_logs rl
         WHERE
           rl.status = 'due'
+          AND rl.metadata->>'isCurrent' = 'true'
           ${whereReturnLogs}
       ),
 

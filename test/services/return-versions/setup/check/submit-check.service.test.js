@@ -5,11 +5,13 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const { generateUUID, generateRandomInteger } = require('../../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
 const GenerateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/generate-return-version.service.js')
@@ -21,98 +23,222 @@ const VoidNoReturnRequiredLicenceReturnLogsService = require('../../../../../app
 const SubmitCheckService = require('../../../../../app/services/return-versions/setup/check/submit-check.service.js')
 
 describe('Return Versions Setup - Submit Check service', () => {
+  let generateReturnVersionStub
+  let licenceData
+  let licenceVersionData
+  let persistReturnVersionStub
+  let processLicenceReturnLogsStub
+  let returnVersionData
   let session
+  let sessionData
+  let userId
+  let voidNoReturnRequiredLicenceReturnLogsStub
 
-  describe('Return Versions Setup - return-required', () => {
-    beforeEach(async () => {
-      session = await SessionHelper.add({
-        data: {
-          checkPageVisited: false,
-          licence: {
-            id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+  beforeEach(() => {
+    userId = generateRandomInteger(5000, 9999)
+
+    returnVersionData = {
+      id: generateUUID(),
+      reason: null,
+      modLogs: [],
+      startDate: '2022-04-01T00:00:00.000Z'
+    }
+
+    licenceData = {
+      id: generateUUID(),
+      currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+      endDate: null,
+      licenceRef: generateLicenceRef(),
+      licenceHolder: 'Turbo Kid',
+      returnVersions: [{ ...returnVersionData }],
+      startDate: '1994-04-01T00:00:00.000Z',
+      waterUndertaker: false
+    }
+
+    licenceVersionData = {
+      id: generateUUID(),
+      copyableReturnVersions: [{ ...returnVersionData }],
+      endDate: null,
+      startDate: returnVersionData.startDate
+    }
+
+    processLicenceReturnLogsStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
+    voidNoReturnRequiredLicenceReturnLogsStub = Sinon.stub(
+      VoidNoReturnRequiredLicenceReturnLogsService,
+      'go'
+    ).resolves()
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+  })
+
+  describe('when the "return-required" journey is used', () => {
+    beforeEach(() => {
+      sessionData = {
+        checkPageVisited: false,
+        licence: { ...licenceData },
+        licenceVersion: { ...licenceVersionData },
+        journey: 'returns-required',
+        method: 'useExistingRequirements',
+        multipleUpload: true,
+        quarterlyReturns: false,
+        requirements: [{}],
+        returnVersionStartDate: licenceData.startDate,
+        startDateOptions: 'licenceStartDate'
+      }
+    })
+
+    describe('and the reason is NOT "succession-or-transfer-of-licence"', () => {
+      beforeEach(async () => {
+        sessionData.reason = 'minor-change'
+        session = await SessionHelper.add({ data: sessionData })
+
+        generateReturnVersionStub = Sinon.stub(GenerateReturnVersionService, 'go').resolves({
+          returnVersion: {
+            createdBy: userId,
             endDate: null,
-            licenceRef: '01/ABC',
-            licenceHolder: 'Turbo Kid',
-            returnVersions: [],
-            startDate: '2022-04-01T00:00:00.000Z'
-          },
-          journey: 'returns-required',
-          requirements: [{}],
-          startDateOptions: 'licenceStartDate',
-          reason: 'major-change'
-        }
+            licenceId: licenceData.id,
+            multipleUpload: sessionData.multipleUpload,
+            notes: undefined,
+            quarterlyReturns: sessionData.quarterlyReturns,
+            reason: sessionData.reason,
+            startDate: licenceData.startDate,
+            status: 'current',
+            version: 2
+          }
+        })
+
+        persistReturnVersionStub = Sinon.stub(PersistReturnVersionService, 'go').resolves({
+          createdBy: userId,
+          endDate: null,
+          licenceId: licenceData.id,
+          multipleUpload: sessionData.multipleUpload,
+          notes: undefined,
+          quarterlyReturns: sessionData.quarterlyReturns,
+          reason: sessionData.reason,
+          startDate: licenceData.startDate,
+          status: 'current',
+          version: 2,
+          id: generateUUID()
+        })
       })
 
-      Sinon.stub(GenerateReturnVersionService, 'go').resolves({
-        returnVersion: {
-          licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          startDate: '2022-04-01T00:00:00.000Z'
-        }
-      })
-      Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
-      Sinon.stub(PersistReturnVersionService, 'go').resolves()
-    })
+      it('creates the new return version including requirements, deals with existing ones, processes the return logs and returns the licence ID', async () => {
+        const result = await SubmitCheckService.go(session.id, userId)
 
-    afterEach(() => {
-      Sinon.restore()
-    })
-
-    describe('When called with a licence that has not ended', () => {
-      it('returns a valid licence', async () => {
-        const result = await SubmitCheckService.go(session.id)
+        expect(generateReturnVersionStub.called).to.be.true()
+        expect(persistReturnVersionStub.called).to.be.true()
+        expect(processLicenceReturnLogsStub.called).to.be.true()
+        expect(voidNoReturnRequiredLicenceReturnLogsStub.called).to.be.false()
 
         expect(result).to.equal(session.licence.id)
       })
     })
 
-    describe('When called with an licence that has ended (expired, lapsed or revoked)', () => {
-      it('returns a valid licence', async () => {
-        const result = await SubmitCheckService.go(session.id)
+    describe('and the reason is "succession-or-transfer-of-licence"', () => {
+      beforeEach(async () => {
+        sessionData.reason = 'succession-or-transfer-of-licence'
+        session = await SessionHelper.add({ data: sessionData })
+
+        generateReturnVersionStub = Sinon.stub(GenerateReturnVersionService, 'go').resolves({
+          returnVersion: {
+            createdBy: userId,
+            endDate: null,
+            licenceId: licenceData.id,
+            multipleUpload: sessionData.multipleUpload,
+            notes: undefined,
+            quarterlyReturns: sessionData.quarterlyReturns,
+            reason: sessionData.reason,
+            startDate: licenceData.startDate,
+            status: 'current',
+            version: 2
+          }
+        })
+
+        persistReturnVersionStub = Sinon.stub(PersistReturnVersionService, 'go').resolves({
+          createdBy: userId,
+          endDate: null,
+          licenceId: licenceData.id,
+          multipleUpload: sessionData.multipleUpload,
+          notes: undefined,
+          quarterlyReturns: sessionData.quarterlyReturns,
+          reason: sessionData.reason,
+          startDate: licenceData.startDate,
+          status: 'current',
+          version: 2,
+          id: generateUUID()
+        })
+      })
+
+      it('creates the new return version including requirements, deals with existing ones, processes the return logs and returns the licence ID', async () => {
+        const result = await SubmitCheckService.go(session.id, userId)
+
+        expect(generateReturnVersionStub.called).to.be.true()
+        expect(persistReturnVersionStub.called).to.be.true()
+        expect(processLicenceReturnLogsStub.called).to.be.true()
+        expect(voidNoReturnRequiredLicenceReturnLogsStub.called).to.be.false()
 
         expect(result).to.equal(session.licence.id)
       })
     })
   })
 
-  describe('Return Versions Setup - no-return-required', () => {
-    describe('When called with an no returns required version', () => {
-      before(async () => {
-        session = await SessionHelper.add({
-          data: {
-            checkPageVisited: false,
-            licence: {
-              id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-              currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-              endDate: null,
-              licenceRef: '01/ABC',
-              licenceHolder: 'Turbo Kid',
-              returnVersions: [],
-              startDate: '2022-04-01T00:00:00.000Z'
-            },
-            journey: 'no-returns-required',
-            requirements: [{}],
-            startDateOptions: 'licenceStartDate',
-            reason: 'major-change'
-          }
-        })
+  describe('when the "no-returns-required" journey is used', () => {
+    beforeEach(async () => {
+      sessionData = {
+        checkPageVisited: false,
+        licence: { ...licenceData },
+        licenceVersion: { ...licenceVersionData },
+        journey: 'no-returns-required',
+        multipleUpload: true,
+        reason: 'succession-or-transfer-of-licence',
+        requirements: [{}],
+        returnVersionStartDate: licenceData.startDate,
+        startDateOptions: 'licenceStartDate'
+      }
 
-        Sinon.stub(GenerateReturnVersionService, 'go').resolves({
-          returnVersion: {
-            licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-            startDate: '2022-04-01T00:00:00.000Z'
-          }
-        })
-        Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
-        Sinon.stub(PersistReturnVersionService, 'go').resolves('8b7f78ba-f3ad-4cb6-a058-78abc4d1383d')
-        Sinon.stub(VoidNoReturnRequiredLicenceReturnLogsService, 'go').resolves()
+      session = await SessionHelper.add({ data: sessionData })
+
+      generateReturnVersionStub = Sinon.stub(GenerateReturnVersionService, 'go').resolves({
+        returnVersion: {
+          createdBy: userId,
+          endDate: null,
+          licenceId: licenceData.id,
+          multipleUpload: sessionData.multipleUpload,
+          notes: undefined,
+          quarterlyReturns: sessionData.quarterlyReturns,
+          reason: sessionData.reason,
+          startDate: licenceData.startDate,
+          status: 'current',
+          version: 2
+        }
       })
 
-      it('returns a valid licence', async () => {
-        const result = await SubmitCheckService.go(session.id)
-
-        expect(result).to.equal(session.licence.id)
+      persistReturnVersionStub = Sinon.stub(PersistReturnVersionService, 'go').resolves({
+        createdBy: userId,
+        endDate: null,
+        licenceId: licenceData.id,
+        multipleUpload: sessionData.multipleUpload,
+        notes: undefined,
+        quarterlyReturns: sessionData.quarterlyReturns,
+        reason: sessionData.reason,
+        startDate: licenceData.startDate,
+        status: 'current',
+        version: 2,
+        id: generateUUID()
       })
+    })
+
+    it('creates the new return version including requirements, deals with existing ones, processes the return logs and returns the licence ID', async () => {
+      const result = await SubmitCheckService.go(session.id, userId)
+
+      expect(generateReturnVersionStub.called).to.be.true()
+      expect(persistReturnVersionStub.called).to.be.true()
+      expect(processLicenceReturnLogsStub.called).to.be.true()
+      expect(voidNoReturnRequiredLicenceReturnLogsStub.called).to.be.true()
+
+      expect(result).to.equal(session.licence.id)
     })
   })
 })
