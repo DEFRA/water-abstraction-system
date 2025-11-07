@@ -219,9 +219,9 @@ describe('Notices - Setup - Notifications Presenter', () => {
           })
         })
 
-        describe('and the "contact_type" is for "both"', () => {
+        describe('and the "contact_type" is for "Single use"', () => {
           beforeEach(() => {
-            testRecipients = [{ ...recipients.primaryUser, contact_type: 'both' }]
+            testRecipients = [{ ...recipients.primaryUser, contact_type: 'Single use' }]
           })
 
           it('correctly transforms the recipient to a notification', () => {
@@ -320,9 +320,9 @@ describe('Notices - Setup - Notifications Presenter', () => {
           })
         })
 
-        describe('and the "contact_type" is for "both"', () => {
+        describe('and the "contact_type" is for "Single use"', () => {
           beforeEach(() => {
-            testRecipients = [{ ...recipients.licenceHolder, contact_type: 'both' }]
+            testRecipients = [{ ...recipients.licenceHolder, contact_type: 'Single use' }]
           })
 
           it('correctly transforms the recipient to a notification', () => {
@@ -421,9 +421,9 @@ describe('Notices - Setup - Notifications Presenter', () => {
           })
         })
 
-        describe('and the "contact_type" is for "both"', () => {
+        describe('and the "contact_type" is for "Single use"', () => {
           beforeEach(() => {
-            testRecipients = [{ ...recipients.primaryUser, contact_type: 'both' }]
+            testRecipients = [{ ...recipients.primaryUser, contact_type: 'Single use' }]
           })
 
           it('correctly transforms the recipient to a notification', () => {
@@ -522,9 +522,9 @@ describe('Notices - Setup - Notifications Presenter', () => {
           })
         })
 
-        describe('and the "contact_type" is for "both"', () => {
+        describe('and the "contact_type" is for "Single use"', () => {
           beforeEach(() => {
-            testRecipients = [{ ...recipients.licenceHolder, contact_type: 'both' }]
+            testRecipients = [{ ...recipients.licenceHolder, contact_type: 'Single use' }]
           })
 
           it('correctly transforms the recipient to a notification', () => {
@@ -628,9 +628,9 @@ describe('Notices - Setup - Notifications Presenter', () => {
           })
         })
 
-        describe('and the "contact_type" is for "both"', () => {
+        describe('and the "contact_type" is for "Single use"', () => {
           beforeEach(() => {
-            testRecipients = [{ ...recipients.primaryUser, contact_type: 'both' }]
+            testRecipients = [{ ...recipients.primaryUser, contact_type: 'Single use' }]
           })
 
           it('correctly transforms the recipient to a notification', () => {
@@ -741,9 +741,9 @@ describe('Notices - Setup - Notifications Presenter', () => {
           })
         })
 
-        describe('and the "contact_type" is for "both"', () => {
+        describe('and the "contact_type" is for "Single use"', () => {
           beforeEach(() => {
-            testRecipients = [{ ...recipients.licenceHolder, contact_type: 'both' }]
+            testRecipients = [{ ...recipients.licenceHolder, contact_type: 'Single use' }]
           })
 
           it('correctly transforms the recipient to a notification', () => {
@@ -857,9 +857,9 @@ describe('Notices - Setup - Notifications Presenter', () => {
           })
         })
 
-        describe('and the "contact_type" is for "both"', () => {
+        describe('and the "contact_type" is for "Single use"', () => {
           beforeEach(() => {
-            testRecipients = [{ ...recipients.primaryUser, contact_type: 'both' }]
+            testRecipients = [{ ...recipients.primaryUser, contact_type: 'Single use' }]
           })
 
           it('correctly transforms the recipient to a notification', () => {
@@ -970,9 +970,9 @@ describe('Notices - Setup - Notifications Presenter', () => {
           })
         })
 
-        describe('and the "contact_type" is for "both"', () => {
+        describe('and the "contact_type" is for "Single use"', () => {
           beforeEach(() => {
-            testRecipients = [{ ...recipients.licenceHolder, contact_type: 'both' }]
+            testRecipients = [{ ...recipients.licenceHolder, contact_type: 'Single use' }]
           })
 
           it('correctly transforms the recipient to a notification', () => {
