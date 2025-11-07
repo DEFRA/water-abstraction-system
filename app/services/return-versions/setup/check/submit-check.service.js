@@ -11,7 +11,6 @@ const ProcessLicenceReturnLogsService = require('../../../return-logs/process-li
 const SessionModel = require('../../../../models/session.model.js')
 const VoidReturnLogsService = require('../../../return-logs/void-return-logs.service.js')
 const { db } = require('../../../../../db/db.js')
-const { timestampForPostgres } = require('../../../../lib/general.lib.js')
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 
@@ -57,7 +56,7 @@ async function _processReturnVersion(session, userId) {
   await ProcessLicenceReturnLogsService.go(newReturnVersion.licenceId, changeDate, newReturnVersion.endDate)
 
   if (newReturnVersion.reason === 'succession-or-transfer-of-licence') {
-    await _updateSucceededReturnLogs(session.data.licence.licenceRef, newReturnVersion.startDate)
+    await _updateSucceededReturnLogs(session.data.licence.licenceRef)
   }
 }
 
@@ -72,7 +71,13 @@ async function _processReturnVersion(session, userId) {
  * came up with is to use a flag. Whilst `isCurrent=true` return logs can be seen in the external UI.
  *
  * When a new return version with the reason 'succession-or-transfer-of-licence' is added all existing return logs with
- * a start date less than the return version's need to have this set to false.
+ * a start date less than the latest transferred return version's need to have this set to false.
+ *
+ * > In theory someone could add a historic return version with the reason 'succession-or-transfer-of-licence', _before_
+ * > an existing one. Those new return logs generated still need to be set to `isCurrent=false`, because the rule is
+ * > _all_ return logs that start before the _latest_ transferred return version need to be flagged as false.
+ * > This is why the update query looks for the latest, rather than uses the start date of the return version being
+ * > added.
  *
  * Its crude, because it also means the the previous licensee can no longer see them. Only internal users can view and
  * manage them.
@@ -83,17 +88,30 @@ async function _processReturnVersion(session, userId) {
  *
  * @private
  */
-async function _updateSucceededReturnLogs(licenceRef, startDate) {
-  const bindings = [timestampForPostgres(), licenceRef, startDate]
+async function _updateSucceededReturnLogs(licenceRef) {
+  const bindings = [licenceRef]
 
   const query = `
     UPDATE public.return_logs rl
     SET
-      updated_at = ?,
+      updated_at = NOW(),
       metadata = jsonb_set(metadata, '{isCurrent}', 'false')
+    FROM (
+      SELECT DISTINCT ON (rv.licence_id)
+        l.licence_ref,
+        rv.start_date AS latest_start_date
+      FROM
+        public.return_versions rv
+      INNER JOIN public.licences l
+        ON l.id = rv.licence_id
+      WHERE
+        rv.reason = 'succession-or-transfer-of-licence'
+        AND l.licence_ref = ?
+      ORDER BY rv.licence_id, rv.start_date DESC
+    ) latest
     WHERE
-      rl.licence_ref = ?
-      AND rl.start_date < ?;
+      rl.licence_ref = latest.licence_ref
+      AND rl.start_date < latest.latest_start_date;
   `
 
   await db.raw(query, bindings)
