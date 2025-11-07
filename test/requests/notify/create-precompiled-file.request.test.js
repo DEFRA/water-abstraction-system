@@ -9,6 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED } = require('node:http2').constants
 const { generateReferenceCode } = require('../../support/helpers/notification.helper.js')
 
 // Things we need to stub
@@ -32,7 +33,7 @@ describe('Notify - Create precompiled file request', () => {
       content = new TextEncoder().encode('Test data').buffer
 
       response = {
-        statusCode: 201,
+        statusCode: HTTP_STATUS_CREATED,
         body: {
           id: 'f39a18b7-f12a-4149-9aad-da18d6972b48',
           postage: 'second',
@@ -71,7 +72,7 @@ describe('Notify - Create precompiled file request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         response = {
-          statusCode: 400,
+          statusCode: HTTP_STATUS_BAD_REQUEST,
           body: {
             errors: [
               {
@@ -79,7 +80,7 @@ describe('Notify - Create precompiled file request', () => {
                 message: 'Letter content is not a valid PDF'
               }
             ],
-            status_code: 400
+            status_code: HTTP_STATUS_BAD_REQUEST
           }
         }
 

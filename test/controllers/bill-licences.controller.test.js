@@ -9,6 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
@@ -57,7 +58,7 @@ describe('Bill Licences controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Transactions for WA/055/0017/999')
 
             // Only the presroc view has this data attribute tag
@@ -73,7 +74,7 @@ describe('Bill Licences controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Transactions for 03/28/72/0099/1')
 
             // Only the SROC view has this data attribute tag
@@ -98,7 +99,7 @@ describe('Bill Licences controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('about to remove AT/SROC/SUPB/02 from the bill run')
         })
       })
@@ -119,7 +120,7 @@ describe('Bill Licences controller', () => {
         it('redirects to the legacy processing bill run page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(302)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(
             '/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing?invoiceId=9a87e3ee-038e-4e58-99f2-1081292a7710'
           )
@@ -129,14 +130,16 @@ describe('Bill Licences controller', () => {
       describe('when the request fails', () => {
         describe('because the removing service threw an error', () => {
           beforeEach(async () => {
-            Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
+            Sinon.stub(Boom, 'badImplementation').returns(
+              new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
+            )
             Sinon.stub(SubmitRemoveBillLicenceService, 'go').rejects()
           })
 
           it('returns the error page', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Sorry, there is a problem with the service')
           })
         })

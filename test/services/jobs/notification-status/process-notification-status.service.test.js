@@ -9,6 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 
@@ -51,7 +52,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
         // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full representation
         // look at test/requests/notify/notify-status.request.test.js
         response = {
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: {
             status: 'delivered'
           }
@@ -284,7 +285,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
         })
 
         response = {
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: {
             status: 'temporary-failure'
           }
@@ -371,7 +372,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
       })
 
       response = {
-        statusCode: 404,
+        statusCode: HTTP_STATUS_NOT_FOUND,
         body: {
           errors: [
             {
@@ -379,7 +380,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
               message: 'No result found'
             }
           ],
-          status_code: 404
+          status_code: HTTP_STATUS_NOT_FOUND
         }
       }
 

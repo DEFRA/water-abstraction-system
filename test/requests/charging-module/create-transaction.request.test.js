@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -31,7 +33,7 @@ describe('Charging Module Create Transaction request', () => {
             gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
             dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
           },
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: {
             transaction: {
               id: 'fd88e6c5-8da8-4e4f-b22f-c66554cd5bf3',
@@ -66,9 +68,9 @@ describe('Charging Module Create Transaction request', () => {
               gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
               dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
             },
-            statusCode: 401,
+            statusCode: HTTP_STATUS_UNAUTHORIZED,
             body: {
-              statusCode: 401,
+              statusCode: HTTP_STATUS_UNAUTHORIZED,
               error: 'Unauthorized',
               message: 'Invalid JWT: Token format not valid',
               attributes: { error: 'Invalid JWT: Token format not valid' }
@@ -86,7 +88,7 @@ describe('Charging Module Create Transaction request', () => {
       it('returns the error in the "response"', async () => {
         const result = await CreateTransactionRequest.send(billRunId, transactionData)
 
-        expect(result.response.body.statusCode).to.equal(401)
+        expect(result.response.body.statusCode).to.equal(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).to.equal('Unauthorized')
         expect(result.response.body.message).to.equal('Invalid JWT: Token format not valid')
       })

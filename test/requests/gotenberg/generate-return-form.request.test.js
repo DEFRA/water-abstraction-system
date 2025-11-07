@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -40,7 +42,7 @@ describe('Gotenberg - Generate Paper return Request', () => {
       gotenbergRequestStub.resolves({
         succeeded: true,
         response: {
-          statusCode: 204,
+          statusCode: HTTP_STATUS_NO_CONTENT,
           body: pdfBytes
         }
       })
@@ -56,7 +58,7 @@ describe('Gotenberg - Generate Paper return Request', () => {
       const result = await GeneratePaperReturnRequest.send(pageData)
 
       expect(result.response).to.equal({
-        statusCode: 204,
+        statusCode: HTTP_STATUS_NO_CONTENT,
         body: pdfBytes
       })
     })

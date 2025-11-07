@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_CREATED, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -30,7 +32,7 @@ describe('GotWrapperLib', () => {
     it('calls back with response and body', async () => {
       const result = await wrapRequest(request, 'http://example.com/get')
 
-      expect(result.res.statusCode).to.equal(200)
+      expect(result.res.statusCode).to.equal(HTTP_STATUS_OK)
       expect(result.body).to.equal('hello world')
     })
   })
@@ -48,7 +50,7 @@ describe('GotWrapperLib', () => {
         headers: { 'content-type': 'text/plain' }
       })
 
-      expect(result.res.statusCode).to.equal(201)
+      expect(result.res.statusCode).to.equal(HTTP_STATUS_CREATED)
       expect(result.body).to.equal('created')
     })
   })

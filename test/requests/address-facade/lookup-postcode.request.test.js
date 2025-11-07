@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -37,7 +39,7 @@ describe('Address Facade - Lookup Postcode request', () => {
       Sinon.stub(AddressFacadeRequest, 'get').resolves({
         succeeded: true,
         response: {
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: {
             results: []
           }
@@ -73,8 +75,8 @@ describe('Address Facade - Lookup Postcode request', () => {
         Sinon.stub(AddressFacadeRequest, 'get').resolves({
           succeeded: false,
           response: {
-            statusCode: 404,
-            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+            statusCode: HTTP_STATUS_NOT_FOUND,
+            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
           },
           matches: []
         })
@@ -90,7 +92,7 @@ describe('Address Facade - Lookup Postcode request', () => {
         const result = await LookupPostcodeRequest.send(postcode)
 
         expect(result.response.body).to.equal({
-          statusCode: 404,
+          statusCode: HTTP_STATUS_NOT_FOUND,
           error: 'Not Found',
           message: 'Not Found'
         })

@@ -5,7 +5,7 @@
  * @module CheckController
  */
 
-const NO_CONTENT_STATUS_CODE = 204
+const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
 
 /**
  * A test end point for checking functionality
@@ -22,7 +22,7 @@ async function placeholder(request, h) {
 
   global.GlobalNotifier.omg('Placeholder endpoint called', { id })
 
-  return h.response().code(NO_CONTENT_STATUS_CODE)
+  return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 module.exports = {

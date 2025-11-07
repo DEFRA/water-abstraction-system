@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -24,7 +26,7 @@ describe('Notify - View Health request', () => {
   describe('when the request succeeds', () => {
     beforeEach(() => {
       response = {
-        statusCode: 200,
+        statusCode: HTTP_STATUS_OK,
         body: {
           build_time: '2025-08-20:07:53:38',
           db_version: '0511_process_type_nullable',
@@ -56,7 +58,7 @@ describe('Notify - View Health request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         response = {
-          statusCode: 404,
+          statusCode: HTTP_STATUS_NOT_FOUND,
           body: {
             message:
               'The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.',

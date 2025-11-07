@@ -5,6 +5,9 @@
  * @module ErrorPagesService
  */
 
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } =
+  require('node:http2').constants
+
 /**
  * Determines if a response is an error and and whether an error page should be returned
  *
@@ -60,9 +63,9 @@ function _extractStatusCode(request) {
 function _logError(statusCode, request) {
   const { response } = request
 
-  if (statusCode === 404) {
+  if (statusCode === HTTP_STATUS_NOT_FOUND) {
     global.GlobalNotifier.omg('Page not found', { path: request.path })
-  } else if (statusCode === 403) {
+  } else if (statusCode === HTTP_STATUS_FORBIDDEN) {
     global.GlobalNotifier.omg('Not authorised', { path: request.path })
   } else if (response.isBoom) {
     global.GlobalNotifier.omfg(response.message, {}, response)
@@ -114,7 +117,7 @@ function _stopResponse(request) {
  */
 function _determineSafeStatusCode(statusCode) {
   // The status code will be a 2xx or 3xx so safe to return as is
-  if (statusCode < 400) {
+  if (statusCode < HTTP_STATUS_BAD_REQUEST) {
     return statusCode
   }
 
@@ -122,14 +125,14 @@ function _determineSafeStatusCode(statusCode) {
   // other than 404 could be seen as confirmation the page exists and used in an enumeration attack.
   // Returning 404 is the accepted response when you want to keep the targetted resource hidden
   // https://www.rfc-editor.org/rfc/rfc9110.html#name-403-forbidden
-  if ([404, 403].includes(statusCode)) {
-    return 404
+  if ([HTTP_STATUS_NOT_FOUND, HTTP_STATUS_FORBIDDEN].includes(statusCode)) {
+    return HTTP_STATUS_NOT_FOUND
   }
 
   // If it's any other status code it will reflect an error has occurred. Our F5 Silverline Managed Web Application
   // Firewall (WAF) will block the response and serve its own error page. We don't want this so we have to return a
   // 'safe' 200.
-  return 200
+  return HTTP_STATUS_OK
 }
 
 module.exports = {
