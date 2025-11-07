@@ -1,7 +1,5 @@
 'use strict'
 
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -13,6 +11,7 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Test helpers
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { generateReferenceCode } = require('../support/helpers/notification.helper.js')
 
 // Things we need to stub

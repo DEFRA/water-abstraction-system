@@ -1,7 +1,5 @@
 'use strict'
 
-const { HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
-
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -11,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
 const LicenceModel = require('../../../../app/models/licence.model.js')
 
 // Things we need to stub

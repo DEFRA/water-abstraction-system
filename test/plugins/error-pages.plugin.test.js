@@ -1,8 +1,5 @@
 'use strict'
 
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } =
-  require('node:http2').constants
-
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -12,6 +9,8 @@ const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = La
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } =
+  require('node:http2').constants
 const Boom = require('@hapi/boom')
 
 // For running our service

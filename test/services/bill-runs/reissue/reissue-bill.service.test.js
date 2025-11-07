@@ -1,7 +1,5 @@
 'use strict'
 
-const { HTTP_STATUS_CONFLICT } = require('node:http2').constants
-
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -11,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_CONFLICT } = require('node:http2').constants
 const BillHelper = require('../../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../../support/helpers/bill-licence.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')

@@ -1,7 +1,5 @@
 'use strict'
 
-const { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK } = require('node:http2').constants
-
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -11,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK } = require('node:http2').constants
 const BillRunModel = require('../../../app/models/bill-run.model.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 

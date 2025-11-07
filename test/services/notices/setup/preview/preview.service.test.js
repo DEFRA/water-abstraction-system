@@ -1,7 +1,5 @@
 'use strict'
 
-const { HTTP_STATUS_OK } = require('node:http2').constants
-
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -11,6 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_OK } = require('node:http2').constants
 const RecipientsFixture = require('../../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../../support/helpers/session.helper.js')
 

@@ -1,7 +1,5 @@
 'use strict'
 
-const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
-
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -11,6 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
 const NoticesFixture = require('../fixtures/notices.fixture.js')
 const NotificationsFixture = require('../fixtures/notifications.fixture.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
