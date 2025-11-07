@@ -29,6 +29,7 @@ function applyFetchReturnLogFields(returnLog) {
   returnLog.periodEndDay = returnLog.metadata.nald.periodEndDay
   returnLog.periodEndMonth = returnLog.metadata.nald.periodEndMonth
   returnLog.purposes = returnLog.metadata.purposes
+  returnLog.current = returnLog.metadata.isCurrent
   returnLog.twoPartTariff = returnLog.metadata.isTwoPartTariff
 }
 

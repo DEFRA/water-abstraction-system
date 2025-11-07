@@ -153,6 +153,7 @@ function _query() {
       FROM public.return_logs rl
       WHERE
         rl.status = 'due'
+        AND rl.metadata->>'isCurrent' = 'true'
     ),
 
     licence_holder as (

@@ -20,7 +20,7 @@ const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 // Thing under test
 const ViewReturnLogService = require('../../../app/services/return-logs/view-return-log.service.js')
 
-describe('View Return Log service', () => {
+describe('Return Logs - View Return Log service', () => {
   beforeEach(() => {
     const mockReturnLog = ReturnLogModel.fromJson({
       ...ReturnLogHelper.defaults({

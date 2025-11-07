@@ -35,6 +35,7 @@ async function _fetch(licenceRefs, returnsPeriod, noticeType) {
     .andWhere('status', 'due')
     .andWhere('startDate', '>=', returnsPeriod.startDate)
     .andWhere('endDate', '<=', returnsPeriod.endDate)
+    .whereJsonPath('metadata', '$.isCurrent', '=', 'true')
     .whereJsonPath('metadata', '$.isSummer', '=', returnsPeriod.summer)
     .distinctOn('licenceRef')
 
