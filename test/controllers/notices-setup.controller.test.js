@@ -1393,7 +1393,7 @@ describe('Notices Setup controller', () => {
         describe('and the validation succeeds and they chose the post option', () => {
           beforeEach(async () => {
             Sinon.stub(SubmitContactTypeService, 'go').returns({
-              type: 'post',
+              contactType: 'post',
               pageTile: 'Select how to contact the recipient'
             })
             postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {})
@@ -1410,7 +1410,7 @@ describe('Notices Setup controller', () => {
         describe('and the validation succeeds and they chose the email option', () => {
           beforeEach(async () => {
             Sinon.stub(SubmitContactTypeService, 'go').returns({
-              type: 'email',
+              contactType: 'email',
               pageTile: 'Select how to contact the recipient'
             })
             postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {})
