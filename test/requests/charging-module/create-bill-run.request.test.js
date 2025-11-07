@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
 // Things we need to stub
@@ -37,7 +38,7 @@ describe('Charging Module Create Bill Run request', () => {
             gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
             dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
           },
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: {
             billRun: {
               id: '2bbbe459-966e-4026-b5d2-2f10867bdddd',
@@ -72,9 +73,9 @@ describe('Charging Module Create Bill Run request', () => {
               gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
               dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
             },
-            statusCode: 401,
+            statusCode: HTTP_STATUS_UNAUTHORIZED,
             body: {
-              statusCode: 401,
+              statusCode: HTTP_STATUS_UNAUTHORIZED,
               error: 'Unauthorized',
               message: 'Invalid JWT: Token format not valid',
               attributes: { error: 'Invalid JWT: Token format not valid' }
@@ -92,7 +93,7 @@ describe('Charging Module Create Bill Run request', () => {
       it('returns the error in the "response"', async () => {
         const result = await CreateBillRunRequest.send(testRegion.id, 'sroc')
 
-        expect(result.response.body.statusCode).to.equal(401)
+        expect(result.response.body.statusCode).to.equal(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).to.equal('Unauthorized')
         expect(result.response.body.message).to.equal('Invalid JWT: Token format not valid')
       })

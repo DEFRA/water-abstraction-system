@@ -9,6 +9,8 @@ const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = La
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } =
+  require('node:http2').constants
 const Boom = require('@hapi/boom')
 
 // For running our service
@@ -53,7 +55,7 @@ describe('Error Pages plugin', () => {
         it('returns our 404 error HTML page', async () => {
           const response = await server.inject({ method: 'GET', url: path })
 
-          expect(response.statusCode).to.equal(404)
+          expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
           expect(response.statusMessage).to.equal('Not Found')
           expect(response.payload).startsWith('<!DOCTYPE html>')
           expect(response.payload).contains('Page not found')
@@ -69,7 +71,7 @@ describe('Error Pages plugin', () => {
         it('returns a plain response', async () => {
           const response = await server.inject({ method: 'GET', url: path })
 
-          expect(response.statusCode).to.equal(404)
+          expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
           expect(response.statusMessage).to.equal('Not Found')
           expect(response.payload).not.to.startWith('<!DOCTYPE html>')
           expect(response.payload).contains('where has my boom gone?')
@@ -93,7 +95,7 @@ describe('Error Pages plugin', () => {
         it('returns our 404 error HTML page', async () => {
           const response = await server.inject({ method: 'GET', url: path })
 
-          expect(response.statusCode).to.equal(404)
+          expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
           expect(response.statusMessage).to.equal('Not Found')
           expect(response.payload).startsWith('<!DOCTYPE html>')
           expect(response.payload).contains('Page not found')
@@ -109,7 +111,7 @@ describe('Error Pages plugin', () => {
         it('returns a plain response', async () => {
           const response = await server.inject({ method: 'GET', url: path })
 
-          expect(response.statusCode).to.equal(403)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FORBIDDEN)
           expect(response.statusMessage).to.equal('Forbidden')
           expect(response.payload).not.to.startWith('<!DOCTYPE html>')
           expect(response.payload).contains("can't touch this")
@@ -133,7 +135,7 @@ describe('Error Pages plugin', () => {
         it('returns our 500 (there is a problem) error HTML page', async () => {
           const response = await server.inject({ method: 'GET', url: path })
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.statusMessage).to.equal('OK')
           expect(response.payload).startsWith('<!DOCTYPE html>')
           expect(response.payload).contains('Sorry, there is a problem with the service')
@@ -149,7 +151,7 @@ describe('Error Pages plugin', () => {
         it('returns a plain response', async () => {
           const response = await server.inject({ method: 'GET', url: path })
 
-          expect(response.statusCode).to.equal(400)
+          expect(response.statusCode).to.equal(HTTP_STATUS_BAD_REQUEST)
           expect(response.statusMessage).to.equal('Bad Request')
           expect(response.payload).not.to.startWith('<!DOCTYPE html>')
           expect(response.payload).contains('computer says no')
@@ -174,7 +176,7 @@ describe('Error Pages plugin', () => {
       it('lets the response continue without change', async () => {
         const response = await server.inject({ method: 'GET', url: path })
 
-        expect(response.statusCode).to.equal(200)
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
         expect(response.payload).equal('{"hello":"world"}')
       })
     })
@@ -188,7 +190,7 @@ describe('Error Pages plugin', () => {
       it('lets the response continue without change', async () => {
         const response = await server.inject({ method: 'GET', url: path })
 
-        expect(response.statusCode).to.equal(200)
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
         expect(response.payload).equal('{"hello":"world"}')
       })
     })

@@ -5,6 +5,8 @@
  * @module HealthController
  */
 
+const { HTTP_STATUS_OK } = require('node:http2').constants
+
 const DatabaseHealthCheckService = require('../services/health/database-health-check.service.js')
 const InfoService = require('../services/health/info.service.js')
 
@@ -27,7 +29,7 @@ async function airbrake(request, _h) {
 async function database(_request, h) {
   const result = await DatabaseHealthCheckService.go()
 
-  return h.response(result).code(200)
+  return h.response(result).code(HTTP_STATUS_OK)
 }
 
 async function info(_request, h) {

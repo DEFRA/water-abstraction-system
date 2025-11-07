@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
 const LicenceModel = require('../../../../app/models/licence.model.js')
 
 // Things we need to stub
@@ -138,7 +139,7 @@ describe('Return Versions - Setup - Initiate Session service', () => {
 
         const { statusCode, error: errorType, message } = error.output.payload
 
-        expect(statusCode).to.equal(404)
+        expect(statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
         expect(errorType).to.equal('Not Found')
         expect(message).to.equal('Licence for new return requirement not found')
       })

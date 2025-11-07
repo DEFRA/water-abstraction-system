@@ -5,6 +5,8 @@
  * @module JobsController
  */
 
+const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
+
 const ExportService = require('../services/jobs/export/export.service.js')
 const ProcessCleanService = require('../services/jobs/clean/process-clean.service.js')
 const ProcessCustomerFilesService = require('../services/jobs/customer-files/process-customer-files.service.js')
@@ -13,13 +15,10 @@ const ProcessNotificationStatusService = require('../services/jobs/notification-
 const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
 const ProcessTimeLimitedLicencesService = require('../services/jobs/time-limited/process-time-limited-licences.service.js')
 
-const NO_CONTENT_STATUS_CODE = 204
-const NOT_FOUND_STATUS_CODE = 404
-
 async function clean(_request, h) {
   ProcessCleanService.go()
 
-  return h.response().code(NO_CONTENT_STATUS_CODE)
+  return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 async function customerFiles(request, h) {
@@ -27,7 +26,7 @@ async function customerFiles(request, h) {
 
   ProcessCustomerFilesService.go(days)
 
-  return h.response().code(NO_CONTENT_STATUS_CODE)
+  return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 /**
@@ -42,37 +41,37 @@ async function customerFiles(request, h) {
 async function exportDb(_request, h) {
   ExportService.go()
 
-  return h.response().code(NO_CONTENT_STATUS_CODE)
+  return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 async function licenceUpdates(_request, h) {
   ProcessLicenceUpdatesService.go()
 
-  return h.response().code(NO_CONTENT_STATUS_CODE)
+  return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 async function notificationStatus(_request, h) {
   ProcessNotificationStatusService.go()
 
-  return h.response().code(NO_CONTENT_STATUS_CODE)
+  return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 async function returnLogs(request, h) {
   const { cycle } = request.params
 
   if (!['summer', 'all-year'].includes(cycle)) {
-    return h.response().code(NOT_FOUND_STATUS_CODE)
+    return h.response().code(HTTP_STATUS_NOT_FOUND)
   }
 
   ProcessReturnLogsService.go(cycle)
 
-  return h.response().code(NO_CONTENT_STATUS_CODE)
+  return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 async function timeLimited(_request, h) {
   ProcessTimeLimitedLicencesService.go()
 
-  return h.response().code(NO_CONTENT_STATUS_CODE)
+  return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 module.exports = {

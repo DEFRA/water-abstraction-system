@@ -9,6 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
@@ -68,7 +69,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
         it('redirects to the returned page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(302)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(
             `/system/licence-monitoring-station/setup/${sessionId}/threshold-and-unit`
           )
@@ -93,7 +94,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('What is the licence hands-off flow or level threshold?')
         })
       })
@@ -109,7 +110,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           it('redirects to the "stop-or-reduce" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`
             )
@@ -124,7 +125,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(`/system/licence-monitoring-station/setup/${sessionId}/check`)
           })
         })
@@ -145,7 +146,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Enter a threshold')
             expect(response.payload).to.contain('There is a problem')
           })
@@ -173,7 +174,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Does the licence holder need to stop or reduce at this threshold?')
         })
       })
@@ -189,7 +190,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           it('redirects to the "licence-number" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               `/system/licence-monitoring-station/setup/${sessionId}/licence-number`
             )
@@ -204,7 +205,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(`/system/licence-monitoring-station/setup/${sessionId}/check`)
           })
         })
@@ -228,7 +229,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Select if the licence holder needs to stop or reduce')
             expect(response.payload).to.contain('There is a problem')
           })
@@ -254,7 +255,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Enter the licence number this threshold applies to')
         })
       })
@@ -270,7 +271,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           it('redirects to the "licence-number" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               `/system/licence-monitoring-station/setup/${sessionId}/full-condition`
             )
@@ -285,7 +286,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(`/system/licence-monitoring-station/setup/${sessionId}/check`)
           })
         })
@@ -304,7 +305,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Enter a valid licence number')
             expect(response.payload).to.contain('There is a problem')
           })
@@ -330,7 +331,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select the full condition for licence 01/234')
         })
       })
@@ -346,7 +347,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           it('redirects to the "abstraction-period" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               `/system/licence-monitoring-station/setup/${sessionId}/abstraction-period`
             )
@@ -361,7 +362,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           it('redirects to the "check" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(`/system/licence-monitoring-station/setup/${sessionId}/check`)
           })
         })
@@ -380,7 +381,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Select a condition')
             expect(response.payload).to.contain('There is a problem')
           })
@@ -406,7 +407,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Enter an abstraction period for licence 01/234')
         })
       })
@@ -421,7 +422,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
         it('redirects to the "check" page', async () => {
           const response = await server.inject(_postOptions(path, {}))
 
-          expect(response.statusCode).to.equal(302)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/licence-monitoring-station/setup/${sessionId}/check`)
         })
       })
@@ -464,7 +465,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
         it('returns the page successfully with the error summary banner', async () => {
           const response = await server.inject(_postOptions(path, {}))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('There is a problem')
           expect(response.payload).to.contain('Enter a real start date')
           expect(response.payload).to.contain('Enter a real end date')

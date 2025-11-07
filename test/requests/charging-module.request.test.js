@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -57,7 +59,7 @@ describe('Charging Module Request', () => {
           succeeded: true,
           response: {
             headers,
-            statusCode: 204,
+            statusCode: HTTP_STATUS_NO_CONTENT,
             body: {}
           }
         })
@@ -95,7 +97,7 @@ describe('Charging Module Request', () => {
       it('returns the status code', async () => {
         const result = await ChargingModuleRequest.delete(testRoute)
 
-        expect(result.response.statusCode).to.equal(204)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
       })
 
       it('returns the information about the running Charging Module API', async () => {
@@ -114,9 +116,9 @@ describe('Charging Module Request', () => {
           succeeded: false,
           response: {
             headers,
-            statusCode: 404,
+            statusCode: HTTP_STATUS_NOT_FOUND,
             statusMessage: 'Not Found',
-            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
           }
         })
       })
@@ -136,7 +138,7 @@ describe('Charging Module Request', () => {
       it('returns the status code', async () => {
         const result = await ChargingModuleRequest.delete(testRoute)
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
       })
 
       it('returns the information about the running Charging Module API', async () => {
@@ -157,7 +159,7 @@ describe('Charging Module Request', () => {
           succeeded: true,
           response: {
             headers,
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: { testObject: { test: 'yes' } }
           }
         })
@@ -195,7 +197,7 @@ describe('Charging Module Request', () => {
       it('returns the status code', async () => {
         const result = await ChargingModuleRequest.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(200)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
       })
 
       it('returns the information about the running Charging Module API', async () => {
@@ -214,9 +216,9 @@ describe('Charging Module Request', () => {
           succeeded: false,
           response: {
             headers,
-            statusCode: 404,
+            statusCode: HTTP_STATUS_NOT_FOUND,
             statusMessage: 'Not Found',
-            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
           }
         })
       })
@@ -236,7 +238,7 @@ describe('Charging Module Request', () => {
       it('returns the status code', async () => {
         const result = await ChargingModuleRequest.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
       })
 
       it('returns the information about the running Charging Module API', async () => {
@@ -257,7 +259,7 @@ describe('Charging Module Request', () => {
           succeeded: true,
           response: {
             headers,
-            statusCode: 204,
+            statusCode: HTTP_STATUS_NO_CONTENT,
             body: {}
           }
         })
@@ -295,7 +297,7 @@ describe('Charging Module Request', () => {
       it('returns the status code', async () => {
         const result = await ChargingModuleRequest.patch(testRoute)
 
-        expect(result.response.statusCode).to.equal(204)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
       })
 
       it('returns the information about the running Charging Module API', async () => {
@@ -314,9 +316,9 @@ describe('Charging Module Request', () => {
           succeeded: false,
           response: {
             headers,
-            statusCode: 404,
+            statusCode: HTTP_STATUS_NOT_FOUND,
             statusMessage: 'Not Found',
-            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
           }
         })
       })
@@ -336,7 +338,7 @@ describe('Charging Module Request', () => {
       it('returns the status code', async () => {
         const result = await ChargingModuleRequest.patch(testRoute)
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
       })
 
       it('returns the information about the running Charging Module API', async () => {
@@ -357,7 +359,7 @@ describe('Charging Module Request', () => {
           succeeded: true,
           response: {
             headers,
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: { testObject: { test: 'yes' } }
           }
         })
@@ -396,7 +398,7 @@ describe('Charging Module Request', () => {
       it('returns the status code', async () => {
         const result = await ChargingModuleRequest.post(testRoute, { test: 'yes' })
 
-        expect(result.response.statusCode).to.equal(200)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
       })
 
       it('returns the information about the running Charging Module API', async () => {
@@ -415,9 +417,9 @@ describe('Charging Module Request', () => {
           succeeded: false,
           response: {
             headers,
-            statusCode: 404,
+            statusCode: HTTP_STATUS_NOT_FOUND,
             statusMessage: 'Not Found',
-            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
           }
         })
       })
@@ -437,7 +439,7 @@ describe('Charging Module Request', () => {
       it('returns the status code', async () => {
         const result = await ChargingModuleRequest.post(testRoute, { test: 'yes' })
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
       })
 
       it('returns the information about the running Charging Module API', async () => {

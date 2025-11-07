@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
 const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
 const BillingAccountModel = require('../../../../app/models/billing-account.model.js')
 
@@ -56,7 +57,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
             gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
             dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.1'
           },
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: [
             {
               id: '9523ff61-bd21-4800-aa7d-d97aa6c923aa',
@@ -127,7 +128,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
             gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
             dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.1'
           },
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: []
         }
       })
@@ -166,7 +167,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
             gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
             dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.1'
           },
-          statusCode: 500,
+          statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
           body: []
         }
       })
