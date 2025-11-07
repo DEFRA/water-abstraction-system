@@ -99,6 +99,8 @@ function _filterByPeriod(session) {
     removeLicences = ''
   } = session
 
+  const excludeLicences = transformStringOfLicencesToArray(removeLicences)
+
   let dueDateCondition
 
   if (!featureFlagsConfig.enableNullDueDate) {
@@ -111,24 +113,30 @@ function _filterByPeriod(session) {
     }
   }
 
-  const bindings = [startDate, endDate, summer, quarterly]
   const whereReturnLogs = `
-    AND start_date >= ?
-    AND end_date <= ?
-    AND metadata->>'isSummer' = ?
-    AND quarterly = ?
     AND due_date ${dueDateCondition}
+    AND rl.end_date <= ?
+    AND rl.start_date >= ?
+    AND rl.metadata->>'isSummer' = ?
+    AND rl.quarterly = ?
   `
 
-  if (!featureFlagsConfig.enableNullDueDate) {
-    bindings.push(dueDate)
-  }
-
   const whereLicenceRefs = 'NOT (ldh.licence_ref = ANY (?))'
-  bindings.push(transformStringOfLicencesToArray(removeLicences))
-  bindings.push(transformStringOfLicencesToArray(removeLicences))
-  bindings.push(transformStringOfLicencesToArray(removeLicences))
-  bindings.push(transformStringOfLicencesToArray(removeLicences))
+
+  const bindings = [
+    endDate,
+    startDate,
+    summer,
+    quarterly,
+    excludeLicences,
+    excludeLicences,
+    excludeLicences,
+    excludeLicences
+  ]
+
+  if (!featureFlagsConfig.enableNullDueDate) {
+    bindings.unshift(dueDate)
+  }
 
   return {
     bindings,

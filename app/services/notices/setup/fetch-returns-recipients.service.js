@@ -205,13 +205,15 @@ async function _fetchRecipients(session) {
     }
   }
 
-  const where = `
+  const whereReturnLogs = `
     AND rl.due_date ${dueDateCondition}
     AND rl.end_date <= ?
     AND rl.start_date >= ?
     AND rl.metadata->>'isSummer' = ?
     AND rl.quarterly = ?
   `
+  const whereLicenceRef = `NOT (ldh.licence_ref = ANY (?))`
+
   const bindings = [
     endDate,
     startDate,
@@ -227,9 +229,7 @@ async function _fetchRecipients(session) {
     bindings.unshift(dueDate)
   }
 
-  const whereLicenceRef = `NOT (ldh.licence_ref = ANY (?))`
-
-  const { rows } = await _fetch(bindings, whereLicenceRef, where)
+  const { rows } = await _fetch(bindings, whereLicenceRef, whereReturnLogs)
 
   return rows
 }
