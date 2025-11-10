@@ -9,6 +9,8 @@
 
 {% from "macros/return-status-tag.njk" import statusTag %}
 
+{% set exactMatchParagraph %}<p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>{% endset %}
+
 {% macro resultCard(col1, col2, col3) %}
   <!--result card-->
   <hr class="govuk-section-break govuk-section-break--visible">
@@ -29,15 +31,16 @@
 {% endmacro %}
 
 {% macro resultCardTerm(text) %}<dt class="govuk-!-margin-right-3 govuk-!-display-inline-block govuk-!-font-size-16">{{ text | safe }}</dt>{% endmacro %}
+{% macro resultCardLargeTerm(text) %}<dt class="govuk-!-margin-right-3 govuk-!-display-inline-block">{{ text | safe }}</dt>{% endmacro %}
 {% macro resultCardDetail(text) %}<dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ text | safe }}</dd>{% endmacro %}
 {% macro resultCardLargeDetail(text) %}<dd class="govuk-!-display-inline-block govuk-!-margin-left-0">{{ text | safe }}</dd>{% endmacro %}
 {% macro resultCardLink(text, href) %}<a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="{{ href }}">{{ text }}</a>{% endmacro %}
 
-{% macro licenceResultCard(licence) %}
+{% macro licenceResultCard(licence, exactMatch) %}
   {% set link = resultCardLink(licence.licenceRef, '/system/licences/' + licence.id + '/summary') %}
   {% set endDateContent %}{{ licence.licenceEndDate }} {{ govukTag({ text: licence.licenceEndedText, classes: 'govuk-tag--grey' }) if licence.licenceEndedText }}{% endset %}
   {% set col1 %}
-    {{ resultCardTerm('Licence:') }}{{ resultCardLargeDetail(link) | safe }}
+    {{ resultCardLargeTerm('Licence:') }}{{ resultCardLargeDetail(link) | safe }}{{ exactMatchParagraph | safe if exactMatch }}
   {% endset %}
   {% set col2 %}
     {{ resultCardTerm('Licence holder:') }}{{ resultCardDetail(licence.licenceHolderName) }}
@@ -45,13 +48,13 @@
   {% set col3 %}
     {{ resultCardTerm('End date:') }}{{ resultCardDetail(endDateContent) | safe }}
   {% endset %}
-  {{ resultCard(col1, col2, col3 )}}
+  {{ resultCard(col1, col2, col3) }}
 {% endmacro %}
 
-{% macro monitoringStationResultCard(monitoringStation) %}
+{% macro monitoringStationResultCard(monitoringStation, exactMatch) %}
   {% set link = resultCardLink(monitoringStation.label, '/system/monitoring-stations/' + monitoringStation.id) %}
   {% set col1 %}
-    {{ resultCardTerm('Monitoring station:') }}{{ resultCardLargeDetail(link) | safe }}
+    {{ resultCardLargeTerm('Monitoring station:') }}{{ resultCardLargeDetail(link) | safe }}{{ exactMatchParagraph | safe if exactMatch }}
   {% endset %}
   {% set col2 %}
     {{ resultCardTerm('River:') }}{{ resultCardDetail(monitoringStation.riverName) }}
@@ -62,15 +65,15 @@
   {{ resultCard(col1, col2, col3 )}}
 {% endmacro %}
 
-{% macro returnLogResultCard(returnLog) %}
+{% macro returnLogResultCard(returnLog, exactMatch) %}
   {% set link = resultCardLink(returnLog.returnReference, '/system/return-logs?id=' + returnLog.id) %}
   {% set licenceLink = resultCardLink(returnLog.licenceRef, '/system/licences/' + returnLog.licenceId + '/returns') %}
   {% set endDateContent %}{{ returnLog.endDate }} {{ statusTag(returnLog.statusText, true) if returnLog.statusText }}{% endset %}
   {% set col1 %}
-    {{ resultCardTerm('Return reference:') }}{{ resultCardLargeDetail(link) | safe }}
+    {{ resultCardLargeTerm('Return reference:') }}{{ resultCardLargeDetail(link) | safe }}{{ exactMatchParagraph | safe if exactMatch }}
   {% endset %}
   {% set col2 %}
-    {{ resultCardTerm('Licence:') }}{{ resultCardDetail(licenceLink) | safe }}
+    {{ resultCardTerm('Licence returns:') }}{{ resultCardDetail(licenceLink) | safe }}
   {% endset %}
   {% set col3 %}
     {{ resultCardTerm('End date:') }}{{ resultCardDetail(endDateContent) | safe }}
@@ -79,12 +82,14 @@
 {% endmacro %}
 
 {% set filterContent %}
+  <h2 class="govuk-heading-m govuk-!-margin-bottom-5">Filter matches by</h2>
+
   {{ govukRadios({
     classes: "govuk-radios--small",
     name: "resultType",
     fieldset: {
       legend: {
-        text: "Select the type of result to show",
+        text: "Match type",
         isPageHeading: false,
         classes: "govuk-fieldset__legend--s"
       }
@@ -126,12 +131,15 @@
 
 {% block pageContent %}
 
-  <div class="govuk-grid-row">
+  <div class="govuk-grid-row govuk-!-margin-top-9">
     <div class="govuk-grid-column-full">
-      <h1 class="govuk-heading-xl"> {{ pageTitle }}</h1>
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">
+        {{ pageTitle }}
+        <span class="govuk-caption-l">{{ pageTitleCaption }}</span>
+      </h1>
 
       <form method="post">
-        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+        <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
 
         <div class="govuk-form-group {{ 'govuk-form-group--error' if error.query }}">
           <label class="govuk-label" for="query">
@@ -149,14 +157,18 @@
             classes: 'govuk-!-display-inline-block govuk-!-padding-right-6 govuk-!-padding-left-6',
             text: "Search", preventDoubleClick: true
           }) }}
-        </div>
 
-        {{ govukDetails({
-          classes: "govuk-!-margin-bottom-2",
-          html: filterContent,
-          open: resultType,
-          summaryText: "Filter results"
-        }) }}
+          {{ govukDetails({
+            classes: "govuk-!-margin-bottom-2",
+            html: filterContent,
+            open: resultType,
+            summaryText: "Filter matches"
+          }) }}
+
+          {% if showResults %}
+            <p class="govuk-body">Showing {{ resultTypeText }}</p>
+          {% endif %}
+        </div>
       </form>
     </div>
   </div>
@@ -169,50 +181,29 @@
         </div>
       </div>
     {% else %}
+      <hr class="govuk-section-break govuk-section-break--visible">
+
       {% if showExactResults %}
-        <h3 class="govuk-heading-m">Exact matches</h3>
-
-        <hr class="govuk-section-break govuk-section-break--visible">
-
         {% if exactMatches.licences %}
           {% for licence in exactMatches.licences %}
-            {{ licenceResultCard(licence) }}
+            {{ licenceResultCard(licence, true) }}
           {% endfor %}
         {% endif %}
 
         {% if exactMatches.monitoringStations %}
           {% for monitoringStation in exactMatches.monitoringStations %}
-            {{ monitoringStationResultCard(monitoringStation) }}
+            {{ monitoringStationResultCard(monitoringStation, true) }}
           {% endfor %}
         {% endif %}
 
         {% if exactMatches.returnLogs %}
           {% for returnLog in exactMatches.returnLogs %}
-            {{ returnLogResultCard(returnLog) }}
+            {{ returnLogResultCard(returnLog, true) }}
           {% endfor %}
         {% endif %}
-
-        <hr class="govuk-section-break govuk-section-break--visible">
-
-        <div class="govuk-grid-row govuk-!-margin-top-9">
-          <div class="govuk-grid-column-full">
-            <p></p>
-          </div>
-        </div>
-
       {% endif %}
 
-      <h3 class="govuk-heading-m">Partial matches</h3>
-
-      {% if noPartialResults %}
-        <div class="govuk-grid-row govuk-!-margin-top-9">
-          <div class="govuk-grid-column-full">
-            <p>No partial matches</p>
-          </div>
-        </div>
-      {% else %}
-        <hr class="govuk-section-break govuk-section-break--visible">
-
+      {% if not noPartialResults %}
         {% if partialMatches.licences %}
           {% for licence in partialMatches.licences %}
             {{ licenceResultCard(licence) }}
@@ -230,10 +221,9 @@
             {{ returnLogResultCard(returnLog) }}
           {% endfor %}
         {% endif %}
-
-        <hr class="govuk-section-break govuk-section-break--visible">
-
       {% endif %}
+
+      <hr class="govuk-section-break govuk-section-break--visible">
 
       {% if pagination.numberOfPages > 1 %}
         <div class="govuk-grid-row govuk-!-margin-top-9">

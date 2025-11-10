@@ -184,7 +184,8 @@ describe('Search - View search results service', () => {
         noPartialResults: false,
         noResults: false,
         page: 1,
-        pageTitle: 'Search results',
+        pageTitle: 'Search results for "1231231231"',
+        pageTitleCaption: null,
         pagination: {
           numberOfPages: 1
         },
@@ -227,6 +228,7 @@ describe('Search - View search results service', () => {
         },
         query: '1231231231',
         resultType: null,
+        resultTypeText: 'all matches',
         showExactResults: true,
         showResults: true
       })
@@ -284,7 +286,8 @@ describe('Search - View search results service', () => {
         noPartialResults: false,
         noResults: false,
         page: 1,
-        pageTitle: 'Search results',
+        pageTitle: 'Search results for "1231231231"',
+        pageTitleCaption: null,
         pagination: {
           numberOfPages: 1
         },
@@ -327,6 +330,7 @@ describe('Search - View search results service', () => {
         },
         query: '1231231231',
         resultType: null,
+        resultTypeText: 'all matches',
         showExactResults: true,
         showResults: true
       })

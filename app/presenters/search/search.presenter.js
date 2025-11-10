@@ -9,6 +9,12 @@ const ContactModel = require('../../models/contact.model.js')
 const { formatLongDate, formatReturnLogStatus } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
+const resultTypes = {
+  licence: 'licences',
+  monitoringStation: 'monitoring stations',
+  returnLog: 'return logs'
+}
+
 /**
  * Formats data for the `/search` page
  *
@@ -34,10 +40,12 @@ function go(query, resultType, page, numberOfPages, allSearchMatches) {
     noPartialResults: similarSearchResults.amountFound === 0,
     noResults: exactSearchResults.amountFound === 0 && similarSearchResults.amountFound === 0,
     page,
-    pageTitle: _pageTitle(numberOfPages, page),
+    pageTitle: `Search results for "${query}"`,
+    pageTitleCaption: _pageTitleCaption(numberOfPages, page),
     partialMatches: _matches(similarSearchResults),
     query,
     resultType,
+    resultTypeText: resultTypes[resultType] || 'all matches',
     showExactResults: exactSearchResults.amountFound !== 0,
     showResults: true
   }
@@ -118,12 +126,12 @@ function _monitoringStations(monitoringStations) {
   return monitoringStations
 }
 
-function _pageTitle(numberOfPages, selectedPageNumber) {
+function _pageTitleCaption(numberOfPages, selectedPageNumber) {
   if (numberOfPages < 2) {
-    return 'Search results'
+    return null
   }
 
-  return `Search results (page ${selectedPageNumber} of ${numberOfPages})`
+  return `Page ${selectedPageNumber} of ${numberOfPages}`
 }
 
 function _returnLogDetail(ids, dueDates, endDates, statuses) {

@@ -19,7 +19,7 @@ describe('Search - Search presenter', () => {
 
   beforeEach(() => {
     query = 'searchthis'
-    resultType = 'all'
+    resultType = null
 
     numberOfPages = 1
     page = 1
@@ -152,7 +152,8 @@ describe('Search - Search presenter', () => {
       noPartialResults: false,
       noResults: false,
       page: 1,
-      pageTitle: 'Search results',
+      pageTitle: 'Search results for "searchthis"',
+      pageTitleCaption: null,
       partialMatches: {
         licences: [
           {
@@ -184,7 +185,8 @@ describe('Search - Search presenter', () => {
         ]
       },
       query: 'searchthis',
-      resultType: 'all',
+      resultType: null,
+      resultTypeText: 'all matches',
       showExactResults: true,
       showResults: true
     })
@@ -377,29 +379,114 @@ describe('Search - Search presenter', () => {
       })
     })
 
+    describe('when there are search results', () => {
+      it('returns "Search results" with the text being searched for', () => {
+        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.pageTitle).to.equal('Search results for "searchthis"')
+      })
+    })
+  })
+
+  describe('the "pageTitleCaption" property', () => {
+    describe('when the blank search page is shown', () => {
+      beforeEach(() => {
+        allSearchMatches = undefined
+        numberOfPages = undefined
+        page = undefined
+        query = undefined
+      })
+
+      it('is not displayed', () => {
+        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.pageTitleCaption).to.be.undefined()
+      })
+    })
+
     describe('when there are multiple pages of results', () => {
       beforeEach(() => {
         numberOfPages = 6
         page = 2
       })
 
-      it('returns "Search results" with the page number and total page count', () => {
+      it('returns the page number and total page count', () => {
         const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
 
-        expect(result.pageTitle).to.equal('Search results (page 2 of 6)')
+        expect(result.pageTitleCaption).to.equal('Page 2 of 6')
       })
     })
 
     describe('when there is a single page of results', () => {
-      it('returns "Search results"', () => {
+      it('returns "null"', () => {
         const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
 
-        expect(result.pageTitle).to.equal('Search results')
+        expect(result.pageTitleCaption).to.be.null()
       })
     })
   })
 
-  describe('the "partialMatches" property', () => {})
+  describe('the "resultTypeText" property', () => {
+    describe('when the result type is "all"', () => {
+      beforeEach(() => {
+        resultType = 'all'
+      })
+
+      it('returns "all matches"', () => {
+        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.resultTypeText).to.equal('all matches')
+      })
+    })
+
+    describe('when the result type is "licence"', () => {
+      beforeEach(() => {
+        resultType = 'licence'
+      })
+
+      it('returns "licences"', () => {
+        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.resultTypeText).to.equal('licences')
+      })
+    })
+
+    describe('when the result type is "monitoringStation"', () => {
+      beforeEach(() => {
+        resultType = 'monitoringStation'
+      })
+
+      it('returns "monitoring stations"', () => {
+        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.resultTypeText).to.equal('monitoring stations')
+      })
+    })
+
+    describe('when the result type is "returnLog"', () => {
+      beforeEach(() => {
+        resultType = 'returnLog'
+      })
+
+      it('returns "return logs"', () => {
+        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.resultTypeText).to.equal('return logs')
+      })
+    })
+
+    describe('when the result type is not provided', () => {
+      beforeEach(() => {
+        resultType = undefined
+      })
+
+      it('returns "all matches"', () => {
+        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.resultTypeText).to.equal('all matches')
+      })
+    })
+  })
 
   describe('the "showExactResults" property', () => {
     describe('when there are no exact matches', () => {
