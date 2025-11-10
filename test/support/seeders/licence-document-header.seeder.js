@@ -54,7 +54,6 @@ async function seed(date) {
     dates = {
       one: `${date}01`,
       two: `${date}02`,
-      three: `${date}03`,
       four: `${date}04`,
       five: `${date}05`,
       seven: `${date}07`,
@@ -72,7 +71,6 @@ async function seed(date) {
     additionalContact: await _additionalContact(),
     licenceHolder: await _licenceHolder(dates.one),
     licenceHolderAndReturnTo: await _licenceHolderAndReturnTo(dates.two),
-    licenceHolderAndReturnToLetter: await _licenceHolderAndReturnTo(dates.three),
     licenceHolderAndReturnToLetterWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(dates.four),
     licenceHolderAndReturnToWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(dates.five),
     licenceHolderReturnLogGreaterThanToday: await _licenceHolder(dates.ten, '4000-01-01'),
