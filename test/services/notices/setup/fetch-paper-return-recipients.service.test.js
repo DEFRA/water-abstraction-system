@@ -25,7 +25,7 @@ describe('Notices - Setup - Fetch Paper Return Recipients service', () => {
 
   describe('when there is a "licence holder"', () => {
     beforeEach(async () => {
-      session.licenceRef = seedData.licenceHolder.licenceRef
+      session.licenceRef = seedData.licenceHolderTransferredReturnLog.licenceRef
     })
 
     it('returns the "licence holder" ', async () => {
@@ -51,7 +51,7 @@ describe('Notices - Setup - Fetch Paper Return Recipients service', () => {
           },
           contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
           contact_type: 'Licence holder',
-          licence_refs: [seedData.licenceHolder.licenceRef],
+          licence_refs: [seedData.licenceHolderTransferredReturnLog.licenceRef],
           message_type: 'Letter'
         }
       ])
@@ -59,7 +59,7 @@ describe('Notices - Setup - Fetch Paper Return Recipients service', () => {
 
     describe('and a "returns to" with different contacts', () => {
       beforeEach(async () => {
-        session.licenceRef = seedData.licenceHolderAndReturnTo.licenceRef
+        session.licenceRef = seedData.licenceHolderAndReturnToTransferredReturnLog.licenceRef
       })
 
       it('returns the "licence holder" and "returns to"', async () => {
@@ -85,7 +85,7 @@ describe('Notices - Setup - Fetch Paper Return Recipients service', () => {
             },
             contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
             contact_type: 'Licence holder',
-            licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
+            licence_refs: [seedData.licenceHolderAndReturnToTransferredReturnLog.licenceRef],
             message_type: 'Letter'
           },
           {
@@ -107,7 +107,7 @@ describe('Notices - Setup - Fetch Paper Return Recipients service', () => {
             },
             contact_hash_id: 'a4737b69f58b3f3b01933a42b46ddf96',
             contact_type: 'Returns to',
-            licence_refs: [seedData.licenceHolderAndReturnTo.licenceRef],
+            licence_refs: [seedData.licenceHolderAndReturnToTransferredReturnLog.licenceRef],
             message_type: 'Letter'
           }
         ])
