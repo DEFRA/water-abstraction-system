@@ -64,7 +64,8 @@ async function seed(date) {
       ten: `${date}10`,
       eleven: `${date}11`,
       twelve: `${date}12`,
-      thirteen: `${date}13`
+      thirteen: `${date}13`,
+      fourteen: `${date}14`
     }
   }
 
@@ -87,7 +88,8 @@ async function seed(date) {
     primaryUserAndReturnsAgentWithTheSameEmail: await _primaryUserAndReturnsAgentWithTheSameEmail(dates.nine),
     primaryUserDueDate: await _primaryUserDueDate(dates.eleven),
     primaryUserMultipleReturnLogs: await _primaryUserMultipleReturnLogs(dates.twelve),
-    primaryUserWithAdditionalContact: await _primaryUserWithAdditionalContact()
+    primaryUserWithAdditionalContact: await _primaryUserWithAdditionalContact(),
+    licenceHolderTransferredReturnLog: await _licenceHolderTransferredReturnLog(dates.fourteen)
   }
 }
 
@@ -204,7 +206,7 @@ async function _addPrimaryUser() {
   return licenceDocumentHeader
 }
 
-async function _addReturnLog(date, licenceRef, endDate = null) {
+async function _addReturnLog(date, licenceRef, endDate = null, isCurrent = true) {
   if (date) {
     const defaults = ReturnLogHelper.defaults()
 
@@ -213,6 +215,7 @@ async function _addReturnLog(date, licenceRef, endDate = null) {
     defaults.dueDate = null
     defaults.licenceRef = licenceRef
     defaults.quarterly = false
+    defaults.metadata.isCurrent = isCurrent
 
     return await ReturnLogHelper.add(defaults)
   }
@@ -280,6 +283,17 @@ async function _licenceHolderAndReturnToWithTheSameAddress(date) {
 
   return {
     ...licenceHolder,
+    returnLog
+  }
+}
+
+async function _licenceHolderTransferredReturnLog(date, endDate = null) {
+  const licenceDocumentHeader = await _addLicenceHolder()
+
+  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate, false)
+
+  return {
+    ...licenceDocumentHeader,
     returnLog
   }
 }
