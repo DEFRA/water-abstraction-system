@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -17,19 +17,22 @@ const FetchReturnsDueByLicenceRefService = require('../../../../app/services/not
 
 describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
   let licenceRef
-  let returnLog
+  let returnLogs
   let region
 
-  beforeEach(async () => {
+  before(async () => {
     licenceRef = generateLicenceRef()
 
     region = RegionHelper.select()
 
-    returnLog = await ReturnLogHelper.add({
+    returnLogs = []
+
+    const returnLogData = {
+      endDate: new Date('2024-03-31'),
       licenceRef,
       metadata: {
         description: 'Water park',
-        isCurrent: 'true',
+        isCurrent: true,
         nald: {
           areaCode: 'SE',
           regionCode: `${region.naldRegionId}`
@@ -39,20 +42,45 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
             tertiary: { description: 'Potable Water Supply - Direct' }
           }
         ]
-      }
-    })
+      },
+      startDate: new Date('2023-04-01'),
+      status: 'due'
+    }
 
-    // Add a record not due
-    await ReturnLogHelper.add({
-      licenceRef,
+    // Add first return log which is flagged as transferred (isCurrent=false)
+    let returnLog = await ReturnLogHelper.add({
+      ...returnLogData, metadata: { ...returnLogData.metadata, isCurrent: false }
+    })
+    returnLogs.push(returnLog)
+
+    // Add a second return log for the same licence which is not transferred (isCurrent=true)
+    returnLog = await ReturnLogHelper.add({
+      ...returnLogData,
+      endDate: new Date('2025-03-31'),
+      startDate: new Date('2024-04-01')
+    })
+    returnLogs.push(returnLog)
+
+    // Add a return log that is not due
+    returnLog = await ReturnLogHelper.add({
+      ...returnLogData,
       status: 'void'
     })
+    returnLogs.push(returnLog)
 
-    // Add a record due but after the endDate
-    await ReturnLogHelper.add({
-      licenceRef,
-      endDate: '3000-01-01'
+    // Add a return log that ends in the future
+    returnLog = await ReturnLogHelper.add({
+      ...returnLogData,
+      endDate: new Date('2125-03-31'),
+      startDate: new Date('2124-04-01'),
     })
+    returnLogs.push(returnLog)
+  })
+
+  after(async () => {
+    for (const returnLog of returnLogs) {
+      await returnLog.$query().delete()
+    }
   })
 
   describe('when called', () => {
@@ -62,17 +90,17 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
       expect(result).to.equal([
         {
           dueDate: null,
-          endDate: new Date('2023-03-31'),
+          endDate: returnLogs[1].endDate,
           naldAreaCode: 'SE',
           purpose: 'Potable Water Supply - Direct',
           regionCode: region.naldRegionId,
           regionName: region.displayName,
-          returnId: returnLog.returnId,
-          returnLogId: returnLog.id,
-          returnReference: returnLog.returnReference,
+          returnId: returnLogs[1].returnId,
+          returnLogId: returnLogs[1].id,
+          returnReference: returnLogs[1].returnReference,
           returnsFrequency: 'month',
           siteDescription: 'Water park',
-          startDate: new Date('2022-04-01'),
+          startDate: returnLogs[1].startDate,
           twoPartTariff: null
         }
       ])
