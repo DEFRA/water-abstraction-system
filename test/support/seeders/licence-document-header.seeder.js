@@ -54,15 +54,15 @@ async function seed(date) {
     dates = {
       one: `${date}01`,
       two: `${date}02`,
+      three: `${date}03`,
+      four: `${date}04`,
       five: `${date}05`,
+      six: `${date}06`,
       seven: `${date}07`,
       eight: `${date}08`,
       nine: `${date}09`,
       ten: `${date}10`,
-      eleven: `${date}11`,
-      twelve: `${date}12`,
-      thirteen: `${date}13`,
-      fourteen: `${date}14`
+      eleven: `${date}11`
     }
   }
 
@@ -70,20 +70,20 @@ async function seed(date) {
     additionalContact: await _additionalContact(),
     licenceHolder: await _licenceHolder(dates.one),
     licenceHolderAndReturnTo: await _licenceHolderAndReturnTo(dates.two),
-    licenceHolderAndReturnToWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(dates.five),
-    licenceHolderReturnLogGreaterThanToday: await _licenceHolder(dates.ten, '4000-01-01'),
+    licenceHolderAndReturnToWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(dates.three),
+    licenceHolderReturnLogGreaterThanToday: await _licenceHolder(dates.seven, '4000-01-01'),
     licenceHolderWithAdditionalContact: await _licenceHolderWithAdditionalContact(),
     multipleAdditionalContact: await _multipleAdditionalContact(),
     multipleAdditionalContactDifferentLicenceRefs: await _multipleAdditionalContactDifferentLicenceRefs(),
     multipleAdditionalContactWithAndWithoutAlerts: await _multipleAdditionalContactWithAndWithoutAlerts(),
-    multipleLicenceRefs: await _multipleLicenceRefs(dates.thirteen),
-    primaryUser: await _primaryUser(dates.seven),
-    primaryUserAndReturnsAgent: await _primaryUserAndReturnsAgent(dates.eight),
-    primaryUserAndReturnsAgentWithTheSameEmail: await _primaryUserAndReturnsAgentWithTheSameEmail(dates.nine),
-    primaryUserDueDate: await _primaryUserDueDate(dates.eleven),
-    primaryUserMultipleReturnLogs: await _primaryUserMultipleReturnLogs(dates.twelve),
+    multipleLicenceRefs: await _multipleLicenceRefs(dates.ten),
+    primaryUser: await _primaryUser(dates.four),
+    primaryUserAndReturnsAgent: await _primaryUserAndReturnsAgent(dates.five),
+    primaryUserAndReturnsAgentWithTheSameEmail: await _primaryUserAndReturnsAgentWithTheSameEmail(dates.six),
+    primaryUserDueDate: await _primaryUserDueDate(dates.eight),
+    primaryUserMultipleReturnLogs: await _primaryUserMultipleReturnLogs(dates.nine),
     primaryUserWithAdditionalContact: await _primaryUserWithAdditionalContact(),
-    licenceHolderTransferredReturnLog: await _licenceHolderTransferredReturnLog(dates.fourteen)
+    licenceHolderTransferredReturnLog: await _licenceHolderTransferredReturnLog(dates.eleven)
   }
 }
 
