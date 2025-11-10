@@ -116,7 +116,7 @@ describe('Notices - Setup - Fetch Paper Return Recipients service', () => {
 
     describe('and a "returns to" with the same contact', () => {
       beforeEach(async () => {
-        session.licenceRef = seedData.licenceHolderAndReturnToLetterWithTheSameAddress.licenceRef
+        session.licenceRef = seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef
       })
 
       it('returns the "licence holder"', async () => {
@@ -142,7 +142,7 @@ describe('Notices - Setup - Fetch Paper Return Recipients service', () => {
             },
             contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
             contact_type: 'Licence holder',
-            licence_refs: [seedData.licenceHolderAndReturnToLetterWithTheSameAddress.licenceRef],
+            licence_refs: [seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef],
             message_type: 'Letter'
           }
         ])
