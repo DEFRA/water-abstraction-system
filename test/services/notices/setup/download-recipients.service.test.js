@@ -19,7 +19,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 const FetchDownloadRecipientsService = require('../../../../app/services/notices/setup/fetch-download-recipients.service.js')
-const FetchLetterRecipientsService = require('../../../../app/services/notices/setup/fetch-letter-recipients.service.js')
+const FetchPaperReturnRecipientsService = require('../../../../app/services/notices/setup/fetch-paper-return-recipients.service.js')
 
 // Thing under test
 const DownloadRecipientsService = require('../../../../app/services/notices/setup/download-recipients.service.js')
@@ -130,7 +130,7 @@ describe('Notices - Setup - Download Recipients service', () => {
         })
 
         testRecipients = RecipientsFixture.recipients()
-        Sinon.stub(FetchLetterRecipientsService, 'go').resolves([testRecipients.licenceHolder])
+        Sinon.stub(FetchPaperReturnRecipientsService, 'go').resolves([testRecipients.licenceHolder])
       })
 
       it('correctly returns the csv string, filename and type', async () => {

@@ -11,9 +11,9 @@ const { expect } = Code
 const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
 
 // Thing under test
-const FetchLetterRecipientsService = require('../../../../app/services/notices/setup/fetch-letter-recipients.service.js')
+const FetchPaperReturnRecipientsService = require('../../../../app/services/notices/setup/fetch-paper-return-recipients.service.js')
 
-describe('Notices - Setup - Fetch letter recipients service', () => {
+describe('Notices - Setup - Fetch Paper Return Recipients service', () => {
   let seedData
   let session
 
@@ -29,7 +29,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
     })
 
     it('returns the "licence holder" ', async () => {
-      const result = await FetchLetterRecipientsService.go(session)
+      const result = await FetchPaperReturnRecipientsService.go(session)
 
       expect(result).to.equal([
         {
@@ -63,7 +63,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
       })
 
       it('returns the "licence holder" and "returns to"', async () => {
-        const result = await FetchLetterRecipientsService.go(session)
+        const result = await FetchPaperReturnRecipientsService.go(session)
 
         expect(result).to.equal([
           {
@@ -120,7 +120,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
       })
 
       it('returns the "licence holder"', async () => {
-        const result = await FetchLetterRecipientsService.go(session)
+        const result = await FetchPaperReturnRecipientsService.go(session)
 
         expect(result).to.equal([
           {

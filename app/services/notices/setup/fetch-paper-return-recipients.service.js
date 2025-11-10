@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches the letter recipients data for the `/notices/setup/check` page
- * @module FetchLetterRecipientsService
+ * Fetches the paper return recipients data for the `/notices/setup/check` page
+ * @module FetchPaperReturnRecipientsService
  */
 
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches the letter recipients data for the `/notices/setup/check` page
+ * Fetches the paper return recipients data for the `/notices/setup/check` page
  *
  * > IMPORTANT! The source for notification contacts is `crm.document_headers` (view `licence_document_headers`), not
  * > the tables in `crm_v2`.
