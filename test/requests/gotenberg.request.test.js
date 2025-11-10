@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -47,7 +49,7 @@ describe('Gotenberg Request', () => {
         Sinon.stub(BaseRequest, 'get').resolves({
           succeeded: true,
           response: {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: { testObject: { test: 'yes' } }
           }
         })
@@ -84,7 +86,7 @@ describe('Gotenberg Request', () => {
       it('returns the status code', async () => {
         const result = await GotenbergRequest.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(200)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
       })
     })
 
@@ -93,7 +95,7 @@ describe('Gotenberg Request', () => {
         Sinon.stub(BaseRequest, 'get').resolves({
           succeeded: false,
           response: {
-            statusCode: 404,
+            statusCode: HTTP_STATUS_NOT_FOUND,
             body: 'Not Found'
           }
         })
@@ -114,7 +116,7 @@ describe('Gotenberg Request', () => {
       it('returns the status code', async () => {
         const result = await GotenbergRequest.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
       })
     })
   })
@@ -126,7 +128,7 @@ describe('Gotenberg Request', () => {
           succeeded: true,
           response: {
             headers,
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: pdfBytes
           }
         })
@@ -165,7 +167,7 @@ describe('Gotenberg Request', () => {
       it('returns the status code', async () => {
         const result = await GotenbergRequest.post(testRoute, formData)
 
-        expect(result.response.statusCode).to.equal(200)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
       })
     })
 
@@ -175,9 +177,9 @@ describe('Gotenberg Request', () => {
           succeeded: false,
           response: {
             headers,
-            statusCode: 404,
+            statusCode: HTTP_STATUS_NOT_FOUND,
             statusMessage: 'Not Found',
-            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
           }
         })
       })
@@ -197,7 +199,7 @@ describe('Gotenberg Request', () => {
       it('returns the status code', async () => {
         const result = await GotenbergRequest.post(testRoute, formData)
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
       })
     })
   })

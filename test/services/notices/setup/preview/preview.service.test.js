@@ -9,6 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_OK } = require('node:http2').constants
 const RecipientsFixture = require('../../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../../support/helpers/session.helper.js')
 
@@ -68,7 +69,7 @@ describe('Notices Setup - Preview - Preview service', () => {
       Sinon.stub(GeneratePreviewRequest, 'send').resolves({
         succeeded: true,
         response: {
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: {
             body: 'Dear licence holder,\r\n',
             html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence holder,</p>',
@@ -154,7 +155,7 @@ describe('Notices Setup - Preview - Preview service', () => {
       Sinon.stub(GeneratePreviewRequest, 'send').resolves({
         succeeded: true,
         response: {
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: {
             body: 'Dear licence contact,\r\n',
             html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence contact,</p>',

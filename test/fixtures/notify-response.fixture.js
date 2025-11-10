@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_OK } = require('node:http2').constants
+
 const { notifyTemplates } = require('../../app/lib/notify-templates.lib.js')
 
 /**
@@ -14,7 +16,7 @@ function successfulResponse(referenceCode) {
     email: {
       succeeded: true,
       response: {
-        statusCode: 200,
+        statusCode: HTTP_STATUS_OK,
         body: {
           content: {
             body: 'Dear licence holder,\r\n',
@@ -37,7 +39,7 @@ function successfulResponse(referenceCode) {
     letter: {
       succeeded: true,
       response: {
-        statusCode: 200,
+        statusCode: HTTP_STATUS_OK,
         body: {
           content: {
             body: 'Dear Licence holder,\r\n',
@@ -58,7 +60,7 @@ function successfulResponse(referenceCode) {
     pdf: {
       succeeded: true,
       response: {
-        statusCode: 200,
+        statusCode: HTTP_STATUS_OK,
         body: {
           id: 'fff6c2a9-77fc-4553-8265-546109a45044',
           reference: referenceCode

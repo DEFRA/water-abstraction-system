@@ -175,7 +175,7 @@ describe('Return Logs Setup - Submit Check service', () => {
 
     describe('and it is a nil return', () => {
       beforeEach(async () => {
-        sessionData.data.journey = 'nil-return'
+        sessionData.data.journey = 'nilReturn'
         sessionData.data.lines = [
           {
             startDate: '2023-01-01T00:00:00.000Z',

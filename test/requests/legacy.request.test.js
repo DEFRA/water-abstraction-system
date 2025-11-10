@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
 const legacyConfig = require('../../config/legacy.config.js')
 
 // Things we need to stub
@@ -30,7 +31,7 @@ describe('Legacy Request', () => {
         Sinon.stub(BaseRequest, 'delete').resolves({
           succeeded: true,
           response: {
-            statusCode: 204,
+            statusCode: HTTP_STATUS_NO_CONTENT,
             body: {}
           }
         })
@@ -62,7 +63,7 @@ describe('Legacy Request', () => {
       it('returns the status code', async () => {
         const result = await LegacyRequest.delete('import', testPath)
 
-        expect(result.response.statusCode).to.equal(204)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
       })
 
       it('can handle none API requests', async () => {
@@ -87,9 +88,9 @@ describe('Legacy Request', () => {
         Sinon.stub(BaseRequest, 'delete').resolves({
           succeeded: false,
           response: {
-            statusCode: 404,
+            statusCode: HTTP_STATUS_NOT_FOUND,
             statusMessage: 'Not Found',
-            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
           }
         })
       })
@@ -109,7 +110,7 @@ describe('Legacy Request', () => {
       it('returns the status code', async () => {
         const result = await LegacyRequest.delete('import', testPath)
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
       })
     })
 
@@ -129,7 +130,7 @@ describe('Legacy Request', () => {
         Sinon.stub(BaseRequest, 'get').resolves({
           succeeded: true,
           response: {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: { version: '3.1.2', commit: '70708cff586cc410c11af25cf8fd296f987d7f36' }
           }
         })
@@ -163,7 +164,7 @@ describe('Legacy Request', () => {
       it('returns the status code', async () => {
         const result = await LegacyRequest.get('import', testPath)
 
-        expect(result.response.statusCode).to.equal(200)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
       })
 
       it('can handle none API requests', async () => {
@@ -188,9 +189,9 @@ describe('Legacy Request', () => {
         Sinon.stub(BaseRequest, 'get').resolves({
           succeeded: false,
           response: {
-            statusCode: 404,
+            statusCode: HTTP_STATUS_NOT_FOUND,
             statusMessage: 'Not Found',
-            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
           }
         })
       })
@@ -210,7 +211,7 @@ describe('Legacy Request', () => {
       it('returns the status code', async () => {
         const result = await LegacyRequest.get('import', testPath)
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
       })
     })
 
@@ -229,7 +230,7 @@ describe('Legacy Request', () => {
         Sinon.stub(BaseRequest, 'post').resolves({
           succeeded: true,
           response: {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: { version: '3.1.2', commit: '70708cff586cc410c11af25cf8fd296f987d7f36' }
           }
         })
@@ -263,7 +264,7 @@ describe('Legacy Request', () => {
       it('returns the status code', async () => {
         const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
-        expect(result.response.statusCode).to.equal(200)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
       })
 
       it('can handle none API requests', async () => {
@@ -288,9 +289,9 @@ describe('Legacy Request', () => {
         Sinon.stub(BaseRequest, 'post').resolves({
           succeeded: false,
           response: {
-            statusCode: 404,
+            statusCode: HTTP_STATUS_NOT_FOUND,
             statusMessage: 'Not Found',
-            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
           }
         })
       })
@@ -310,7 +311,7 @@ describe('Legacy Request', () => {
       it('returns the status code', async () => {
         const result = await LegacyRequest.post('import', testPath, null, true, requestBody)
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
       })
     })
 

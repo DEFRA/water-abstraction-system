@@ -10,6 +10,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
 const serverConfig = require('../../config/server.config.js')
 
 // Thing under test
@@ -66,7 +67,7 @@ describe('Base Request', () => {
           const result = await BaseRequest.delete(testDomain)
 
           expect(result.response).to.exist()
-          expect(result.response.statusCode).to.equal(200)
+          expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(result.response.body).to.equal('{"data":"hello world"}')
         })
       })
@@ -89,7 +90,7 @@ describe('Base Request', () => {
           expect(logDataArg.additionalOptions).to.equal({})
           expect(logDataArg.result.succeeded).to.be.false()
           expect(logDataArg.result.response).to.equal({
-            statusCode: 500,
+            statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
             body: '{"data":"hello world"}'
           })
         })
@@ -105,7 +106,7 @@ describe('Base Request', () => {
             const result = await BaseRequest.delete(testDomain)
 
             expect(result.response).to.exist()
-            expect(result.response.statusCode).to.equal(500)
+            expect(result.response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
             expect(result.response.body).to.equal('{"data":"hello world"}')
           })
         })
@@ -191,7 +192,7 @@ describe('Base Request', () => {
               const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
-              expect(result.response.statusCode).to.equal(200)
+              expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
               expect(result.response.body).to.equal('{"data":"econnreset hello world"}')
             })
           })
@@ -287,7 +288,7 @@ describe('Base Request', () => {
               const result = await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
-              expect(result.response.statusCode).to.equal(200)
+              expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
               expect(result.response.body).to.equal('{"data":"delayed hello world"}')
             })
           })
@@ -346,7 +347,7 @@ describe('Base Request', () => {
           const result = await BaseRequest.get(testDomain)
 
           expect(result.response).to.exist()
-          expect(result.response.statusCode).to.equal(200)
+          expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(result.response.body).to.equal('{"data":"hello world"}')
         })
       })
@@ -369,7 +370,7 @@ describe('Base Request', () => {
           expect(logDataArg.additionalOptions).to.equal({})
           expect(logDataArg.result.succeeded).to.be.false()
           expect(logDataArg.result.response).to.equal({
-            statusCode: 500,
+            statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
             body: '{"data":"hello world"}'
           })
         })
@@ -385,7 +386,7 @@ describe('Base Request', () => {
             const result = await BaseRequest.get(testDomain)
 
             expect(result.response).to.exist()
-            expect(result.response.statusCode).to.equal(500)
+            expect(result.response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
             expect(result.response.body).to.equal('{"data":"hello world"}')
           })
         })
@@ -471,7 +472,7 @@ describe('Base Request', () => {
               const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
-              expect(result.response.statusCode).to.equal(200)
+              expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
               expect(result.response.body).to.equal('{"data":"econnreset hello world"}')
             })
           })
@@ -567,7 +568,7 @@ describe('Base Request', () => {
               const result = await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
-              expect(result.response.statusCode).to.equal(200)
+              expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
               expect(result.response.body).to.equal('{"data":"delayed hello world"}')
             })
           })
@@ -626,7 +627,7 @@ describe('Base Request', () => {
           const result = await BaseRequest.patch(testDomain)
 
           expect(result.response).to.exist()
-          expect(result.response.statusCode).to.equal(200)
+          expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(result.response.body).to.equal('{"data":"hello world"}')
         })
       })
@@ -649,7 +650,7 @@ describe('Base Request', () => {
           expect(logDataArg.additionalOptions).to.equal({})
           expect(logDataArg.result.succeeded).to.be.false()
           expect(logDataArg.result.response).to.equal({
-            statusCode: 500,
+            statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
             body: '{"data":"hello world"}'
           })
         })
@@ -665,7 +666,7 @@ describe('Base Request', () => {
             const result = await BaseRequest.patch(testDomain)
 
             expect(result.response).to.exist()
-            expect(result.response.statusCode).to.equal(500)
+            expect(result.response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
             expect(result.response.body).to.equal('{"data":"hello world"}')
           })
         })
@@ -751,7 +752,7 @@ describe('Base Request', () => {
               const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
-              expect(result.response.statusCode).to.equal(200)
+              expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
               expect(result.response.body).to.equal('{"data":"econnreset hello world"}')
             })
           })
@@ -847,7 +848,7 @@ describe('Base Request', () => {
               const result = await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
-              expect(result.response.statusCode).to.equal(200)
+              expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
               expect(result.response.body).to.equal('{"data":"delayed hello world"}')
             })
           })
@@ -906,7 +907,7 @@ describe('Base Request', () => {
           const result = await BaseRequest.post(testDomain)
 
           expect(result.response).to.exist()
-          expect(result.response.statusCode).to.equal(200)
+          expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(result.response.body).to.equal('{"data":"hello world"}')
         })
       })
@@ -929,7 +930,7 @@ describe('Base Request', () => {
           expect(logDataArg.additionalOptions).to.equal({})
           expect(logDataArg.result.succeeded).to.be.false()
           expect(logDataArg.result.response).to.equal({
-            statusCode: 500,
+            statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR,
             body: '{"data":"hello world"}'
           })
         })
@@ -945,7 +946,7 @@ describe('Base Request', () => {
             const result = await BaseRequest.post(testDomain)
 
             expect(result.response).to.exist()
-            expect(result.response.statusCode).to.equal(500)
+            expect(result.response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
             expect(result.response.body).to.equal('{"data":"hello world"}')
           })
         })
@@ -1031,7 +1032,7 @@ describe('Base Request', () => {
               const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
-              expect(result.response.statusCode).to.equal(200)
+              expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
               expect(result.response.body).to.equal('{"data":"econnreset hello world"}')
             })
           })
@@ -1127,7 +1128,7 @@ describe('Base Request', () => {
               const result = await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
               expect(result.response).to.exist()
-              expect(result.response.statusCode).to.equal(200)
+              expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
               expect(result.response.body).to.equal('{"data":"delayed hello world"}')
             })
           })

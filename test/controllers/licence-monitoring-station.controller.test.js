@@ -9,6 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
@@ -53,7 +54,7 @@ describe('Licence Monitoring Station - Controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions(path))
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('You’re about to remove the tag for this licence')
         })
       })
@@ -70,7 +71,7 @@ describe('Licence Monitoring Station - Controller', () => {
         it('redirects to the view monitoring station page', async () => {
           const response = await server.inject(_postOptions(path, { monitoringStationId }))
 
-          expect(response.statusCode).to.equal(302)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/monitoring-stations/${monitoringStationId}`)
         })
       })

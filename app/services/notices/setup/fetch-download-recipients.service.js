@@ -150,6 +150,7 @@ function _query(whereReturnLogs, whereLicenceRefs) {
       public.return_logs rl
     WHERE
       rl.status = 'due'
+      AND rl.metadata->>'isCurrent' = 'true'
       ${whereReturnLogs}
   ),
   filtered_licence_document_headers AS (

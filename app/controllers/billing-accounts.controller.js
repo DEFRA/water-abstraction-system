@@ -6,6 +6,7 @@
  */
 
 const Boom = require('@hapi/boom')
+const { HTTP_STATUS_CREATED } = require('node:http2').constants
 
 const ChangeAddressService = require('../services/billing-accounts/change-address.service.js')
 const ChangeAddressValidator = require('../validators/change-address.validator.js')
@@ -22,7 +23,7 @@ async function changeAddress(request, h) {
 
   const result = await ChangeAddressService.go(request.params.billingAccountId, address, agentCompany, contact)
 
-  return h.response(result).code(201)
+  return h.response(result).code(HTTP_STATUS_CREATED)
 }
 
 async function view(request, h) {

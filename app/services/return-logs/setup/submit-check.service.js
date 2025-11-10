@@ -74,7 +74,7 @@ async function _save(session, user) {
 }
 
 function _validate(session) {
-  if (session.journey === 'nil-return') {
+  if (session.journey === 'nilReturn') {
     return null
   }
 

@@ -42,6 +42,7 @@ async function _fetch(licenceRef) {
                   ON r.nald_region_id = (rl.metadata->'nald'->>'regionCode')::integer
     WHERE rl.licence_ref = ?
     AND rl.status = 'due'
+    AND rl.metadata->>'isCurrent' = 'true'
     AND rl.end_date <= ?
     ORDER BY rl.start_date DESC, rl.return_reference ASC;
   `

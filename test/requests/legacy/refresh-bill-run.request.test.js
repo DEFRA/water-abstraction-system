@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -26,7 +28,7 @@ describe('Legacy Refresh Bill Run request', () => {
       Sinon.stub(LegacyRequest, 'post').resolves({
         succeeded: true,
         response: {
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: null
         }
       })
@@ -41,7 +43,7 @@ describe('Legacy Refresh Bill Run request', () => {
     it('returns a 200 - ok', async () => {
       const result = await RefreshBillRunRequest.send(billRunId)
 
-      expect(result.response.statusCode).to.equal(200)
+      expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
       expect(result.response.body).to.be.null()
     })
   })
@@ -52,9 +54,9 @@ describe('Legacy Refresh Bill Run request', () => {
         Sinon.stub(LegacyRequest, 'post').resolves({
           succeeded: false,
           response: {
-            statusCode: 401,
+            statusCode: HTTP_STATUS_UNAUTHORIZED,
             body: {
-              statusCode: 401,
+              statusCode: HTTP_STATUS_UNAUTHORIZED,
               error: 'Unauthorized',
               message: 'Invalid JWT: Token format not valid',
               attributes: { error: 'Invalid JWT: Token format not valid' }
@@ -72,7 +74,7 @@ describe('Legacy Refresh Bill Run request', () => {
       it('returns the error in the "response"', async () => {
         const result = await RefreshBillRunRequest.send(billRunId)
 
-        expect(result.response.body.statusCode).to.equal(401)
+        expect(result.response.body.statusCode).to.equal(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).to.equal('Unauthorized')
         expect(result.response.body.message).to.equal('Invalid JWT: Token format not valid')
       })

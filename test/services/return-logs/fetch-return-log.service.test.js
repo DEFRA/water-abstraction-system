@@ -68,6 +68,7 @@ describe('Return Logs - Fetch Return Log service', () => {
         returnReference: testReturnLog.returnReference,
         siteDescription: testReturnLog.metadata.description,
         periodStartDay: testReturnLog.metadata.nald.periodStartDay,
+        current: testReturnLog.metadata.isCurrent,
         twoPartTariff: testReturnLog.metadata.isTwoPartTariff
       })
       expect(result).to.be.an.instanceOf(ReturnLogModel)

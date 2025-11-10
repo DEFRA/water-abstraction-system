@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } = require('node:http2').constants
 const BillRunsReviewFixture = require('../../../fixtures/bill-runs-review.fixture.js')
 
 // Things we need to stub
@@ -50,7 +51,7 @@ describe('Bill Runs Review - Preview service', () => {
                 gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
                 dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
               },
-              statusCode: 200,
+              statusCode: HTTP_STATUS_OK,
               body: {
                 calculation: {
                   chargeValue: 2000,
@@ -165,9 +166,9 @@ describe('Bill Runs Review - Preview service', () => {
             succeeded: false,
             response: {
               info: { gitCommit: undefined, dockerTag: undefined },
-              statusCode: 422,
+              statusCode: HTTP_STATUS_UNPROCESSABLE_ENTITY,
               body: {
-                statusCode: 422,
+                statusCode: HTTP_STATUS_UNPROCESSABLE_ENTITY,
                 error: 'Unprocessable Entity',
                 message: '"section127Agreement" must be [true]'
               }

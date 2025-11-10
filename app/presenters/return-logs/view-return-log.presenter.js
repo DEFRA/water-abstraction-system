@@ -29,6 +29,7 @@ const { returnRequirementFrequencies, unitNames } = require('../../lib/static-lo
  */
 function go(auth, returnLog) {
   const {
+    current,
     endDate,
     id,
     licence,
@@ -76,6 +77,7 @@ function go(auth, returnLog) {
     siteDescription,
     startReading: _startReading(selectedReturnSubmission),
     status: formattedStatus,
+    succeeded: !current,
     summaryTableData,
     tableTitle: _tableTitle(summaryTableData, returnsFrequency, method),
     tariff: twoPartTariff ? 'Two-part' : 'Standard',

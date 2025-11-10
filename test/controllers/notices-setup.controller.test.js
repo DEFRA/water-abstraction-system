@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -108,7 +110,7 @@ describe('Notices Setup controller', () => {
           it('redirects successfully', async () => {
             const response = await server.inject(getOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               `/system/notices/setup/${session.id}/abstraction-alerts/alert-type`
             )
@@ -138,7 +140,7 @@ describe('Notices Setup controller', () => {
           it('redirects successfully', async () => {
             const response = await server.inject(getOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/returns-period`)
           })
         })
@@ -166,7 +168,7 @@ describe('Notices Setup controller', () => {
           it('redirects successfully', async () => {
             const response = await server.inject(getOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/licence`)
           })
         })
@@ -197,7 +199,7 @@ describe('Notices Setup controller', () => {
           const response = await server.inject(getOptions)
 
           const pageData = _viewCancel()
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain(pageData.pageTitle)
           expect(response.payload).to.contain(pageData.referenceCode)
         })
@@ -214,7 +216,7 @@ describe('Notices Setup controller', () => {
         it('redirects the to the next page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(302)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal('/system/notices')
         })
       })
@@ -244,7 +246,7 @@ describe('Notices Setup controller', () => {
 
           const pageData = _viewCheck()
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -264,7 +266,7 @@ describe('Notices Setup controller', () => {
         it('redirects the to the next page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(302)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/notices/setup/${eventId}/confirmation`)
         })
       })
@@ -294,7 +296,7 @@ describe('Notices Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Check the notice type')
         })
       })
@@ -310,7 +312,7 @@ describe('Notices Setup controller', () => {
       it('redirects to the "check" page', async () => {
         const response = await server.inject(postOptions)
 
-        expect(response.statusCode).to.equal(302)
+        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
         expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
       })
     })
@@ -343,7 +345,7 @@ describe('Notices Setup controller', () => {
 
           const pageData = _viewConfirmation()
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -371,7 +373,7 @@ describe('Notices Setup controller', () => {
         it('returns the file successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.headers['content-type']).to.equal('type/csv')
           expect(response.headers['content-disposition']).to.equal('attachment; filename="test.csv"')
           expect(response.payload).to.equal('test')
@@ -402,7 +404,7 @@ describe('Notices Setup controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(getOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Email Address page')
           })
         })
@@ -421,7 +423,7 @@ describe('Notices Setup controller', () => {
           it('redirects to the next page', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
           })
         })
@@ -441,7 +443,7 @@ describe('Notices Setup controller', () => {
           it('re-renders the page with an error message', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Email Address page')
             expect(response.payload).to.contain('There is a problem')
           })
@@ -470,7 +472,7 @@ describe('Notices Setup controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(getOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Threshold page')
           })
         })
@@ -489,7 +491,7 @@ describe('Notices Setup controller', () => {
           it('redirects to the next page', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`
             )
@@ -511,7 +513,7 @@ describe('Notices Setup controller', () => {
           it('re-renders the page with an error message', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Threshold page')
             expect(response.payload).to.contain('There is a problem')
           })
@@ -540,7 +542,7 @@ describe('Notices Setup controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(getOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Alert page')
           })
         })
@@ -559,7 +561,7 @@ describe('Notices Setup controller', () => {
           it('redirects to the next page', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               `/system/notices/setup/${session.id}/abstraction-alerts/alert-thresholds`
             )
@@ -581,7 +583,7 @@ describe('Notices Setup controller', () => {
           it('re-renders the page with an error message', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Alert page')
             expect(response.payload).to.contain('There is a problem')
           })
@@ -610,7 +612,7 @@ describe('Notices Setup controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(getOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Cancel page')
           })
         })
@@ -631,7 +633,7 @@ describe('Notices Setup controller', () => {
           it('redirects to the next page', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(`/system/monitoring-stations/${monitoringStationId}`)
           })
         })
@@ -659,7 +661,7 @@ describe('Notices Setup controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(getOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Check licence page')
           })
         })
@@ -678,7 +680,7 @@ describe('Notices Setup controller', () => {
           it('redirects to the next page', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               `/system/notices/setup/${session.id}/abstraction-alerts/alert-email-address`
             )
@@ -708,7 +710,7 @@ describe('Notices Setup controller', () => {
           it('redirects the to the next page', async () => {
             const response = await server.inject(getOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
               `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`
             )
@@ -739,7 +741,7 @@ describe('Notices Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Enter a licence number')
         })
       })
@@ -756,7 +758,7 @@ describe('Notices Setup controller', () => {
         it('returns the same page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(302)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/notice-type`)
         })
       })
@@ -784,7 +786,7 @@ describe('Notices Setup controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Enter a licence number')
           expect(response.payload).to.contain('There is a problem')
         })
@@ -815,7 +817,7 @@ describe('Notices Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Preview notice')
         })
       })
@@ -846,7 +848,7 @@ describe('Notices Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Preview notice')
         })
       })
@@ -876,7 +878,7 @@ describe('Notices Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Check the recipient previews')
         })
       })
@@ -906,7 +908,7 @@ describe('Notices Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Preview notice')
         })
       })
@@ -938,7 +940,7 @@ describe('Notices Setup controller', () => {
         it('returns the PDF successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.headers['content-type']).to.equal('application/pdf')
           expect(response.headers['content-disposition']).to.contain('inline; filename="example.pdf"')
 
@@ -970,7 +972,7 @@ describe('Notices Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select the notice type')
         })
       })
@@ -987,7 +989,7 @@ describe('Notices Setup controller', () => {
         it('returns the same page', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(302)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check-notice-type`)
         })
       })
@@ -1005,7 +1007,7 @@ describe('Notices Setup controller', () => {
         it('re-renders the page with an error message', async () => {
           const response = await server.inject(postOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select the notice type')
           expect(response.payload).to.contain('There is a problem')
         })
@@ -1034,7 +1036,7 @@ describe('Notices Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Recipients name')
         })
       })
@@ -1054,7 +1056,7 @@ describe('Notices Setup controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -1070,7 +1072,7 @@ describe('Notices Setup controller', () => {
           it('redirects the to the next page', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(`/system/address/${session.id}/postcode`)
           })
         })
@@ -1102,7 +1104,7 @@ describe('Notices Setup controller', () => {
 
           const pageData = _viewRemoveLicence()
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -1123,7 +1125,7 @@ describe('Notices Setup controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -1137,7 +1139,7 @@ describe('Notices Setup controller', () => {
           it('redirects the to the next page', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/notices/setup/check')
           })
         })
@@ -1168,7 +1170,7 @@ describe('Notices Setup controller', () => {
 
           const pageData = _viewReturnsPeriod()
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain(pageData.pageTitle)
         })
       })
@@ -1189,7 +1191,7 @@ describe('Notices Setup controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -1203,7 +1205,7 @@ describe('Notices Setup controller', () => {
           it('redirects the to the next page', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/notices/setup/send-notice')
           })
         })
@@ -1233,7 +1235,7 @@ describe('Notices Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select the returns for the paper forms')
         })
       })
@@ -1253,7 +1255,7 @@ describe('Notices Setup controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -1269,7 +1271,7 @@ describe('Notices Setup controller', () => {
           it('redirects the to the next page', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check-notice-type`)
           })
         })
@@ -1298,7 +1300,7 @@ describe('Notices Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select recipients')
         })
       })
@@ -1317,7 +1319,7 @@ describe('Notices Setup controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -1333,7 +1335,7 @@ describe('Notices Setup controller', () => {
           it('redirects the to the next page', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
           })
         })
@@ -1363,7 +1365,7 @@ describe('Notices Setup controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select how to contact the recipient')
         })
       })
@@ -1383,7 +1385,7 @@ describe('Notices Setup controller', () => {
           it('returns the page successfully with the error summary banner', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -1391,7 +1393,7 @@ describe('Notices Setup controller', () => {
         describe('and the validation succeeds and they chose the post option', () => {
           beforeEach(async () => {
             Sinon.stub(SubmitContactTypeService, 'go').returns({
-              type: 'post',
+              contactType: 'post',
               pageTile: 'Select how to contact the recipient'
             })
             postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {})
@@ -1400,7 +1402,7 @@ describe('Notices Setup controller', () => {
           it('redirects the to the next page', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(`/system/address/${session.id}/postcode`)
           })
         })
@@ -1408,7 +1410,7 @@ describe('Notices Setup controller', () => {
         describe('and the validation succeeds and they chose the email option', () => {
           beforeEach(async () => {
             Sinon.stub(SubmitContactTypeService, 'go').returns({
-              type: 'email',
+              contactType: 'email',
               pageTile: 'Select how to contact the recipient'
             })
             postOptions = postRequestOptions(basePath + `/${session.id}/contact-type`, {})
@@ -1417,7 +1419,7 @@ describe('Notices Setup controller', () => {
           it('redirects the to the next page', async () => {
             const response = await server.inject(postOptions)
 
-            expect(response.statusCode).to.equal(302)
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
           })
         })
@@ -1446,7 +1448,7 @@ describe('Notices Setup controller', () => {
         it('redirects to the check recipient page', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(302)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/notices/setup/${session.id}/check`)
         })
       })

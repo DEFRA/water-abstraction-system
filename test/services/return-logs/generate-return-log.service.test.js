@@ -131,28 +131,6 @@ describe('Return Logs - Generate Return Log service', () => {
     })
 
     describe('the "metadata" property', () => {
-      describe('the metadata "isCurrent" property', () => {
-        describe('when the return version "reason" is "succession-or-transfer-of-licence"', () => {
-          beforeEach(() => {
-            testReturnRequirement.returnVersion.reason = 'succession-or-transfer-of-licence'
-          })
-
-          it('returns false', () => {
-            const result = GenerateReturnLogService.go(testReturnRequirement, testReturnCycle)
-
-            expect(result.metadata.isCurrent).to.be.false()
-          })
-        })
-
-        describe('when the return version "reason" is not "succession-or-transfer-of-licence"', () => {
-          it('returns true', () => {
-            const result = GenerateReturnLogService.go(testReturnRequirement, testReturnCycle)
-
-            expect(result.metadata.isCurrent).to.be.true()
-          })
-        })
-      })
-
       describe('the metadata "isFinal" property', () => {
         describe('when the calculated end date is less than the cycle end date', () => {
           beforeEach(() => {

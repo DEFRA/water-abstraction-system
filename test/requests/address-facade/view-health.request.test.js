@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -29,7 +31,7 @@ describe('Address Facade - View Health request', () => {
   describe('when the request succeeds', () => {
     beforeEach(() => {
       response = {
-        statusCode: 200,
+        statusCode: HTTP_STATUS_OK,
         body: 'hola'
       }
 
@@ -58,9 +60,9 @@ describe('Address Facade - View Health request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         response = {
-          statusCode: 404,
+          statusCode: HTTP_STATUS_NOT_FOUND,
           body: {
-            facade_status_code: 404,
+            facade_status_code: HTTP_STATUS_NOT_FOUND,
             facade_error_message: 'HTTP 404 Not Found',
             facade_error_code: 'address_service_error_11',
             supplier_was_called: null,

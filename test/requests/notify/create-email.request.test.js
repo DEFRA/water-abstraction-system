@@ -9,6 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
 const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
 
 // Things we need to stub
@@ -45,7 +46,7 @@ describe('Notify - Create Email request', () => {
   describe('when the request succeeds', () => {
     beforeEach(() => {
       response = {
-        statusCode: 200,
+        statusCode: HTTP_STATUS_OK,
         body: {
           content: {
             body: 'Dear licence holder,\r\n',
@@ -88,7 +89,7 @@ describe('Notify - Create Email request', () => {
     describe('because the request did not return a 2xx/3xx response', () => {
       beforeEach(async () => {
         response = {
-          statusCode: 400,
+          statusCode: HTTP_STATUS_BAD_REQUEST,
           body: {
             errors: [
               {
@@ -96,7 +97,7 @@ describe('Notify - Create Email request', () => {
                 message: 'Missing personalisation: returnDueDate'
               }
             ],
-            status_code: 400
+            status_code: HTTP_STATUS_BAD_REQUEST
           }
         }
 

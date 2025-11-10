@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -30,7 +32,7 @@ describe('Charging Module Delete Bill Run request', () => {
             gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
             dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
           },
-          statusCode: 204,
+          statusCode: HTTP_STATUS_NO_CONTENT,
           body: null
         }
       })
@@ -45,7 +47,7 @@ describe('Charging Module Delete Bill Run request', () => {
     it('returns a 204 - no content', async () => {
       const result = await DeleteBillRunRequest.send(billRunId)
 
-      expect(result.response.statusCode).to.equal(204)
+      expect(result.response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
       expect(result.response.body).to.be.null()
     })
   })
@@ -60,9 +62,9 @@ describe('Charging Module Delete Bill Run request', () => {
               gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
               dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
             },
-            statusCode: 401,
+            statusCode: HTTP_STATUS_UNAUTHORIZED,
             body: {
-              statusCode: 401,
+              statusCode: HTTP_STATUS_UNAUTHORIZED,
               error: 'Unauthorized',
               message: 'Invalid JWT: Token format not valid',
               attributes: { error: 'Invalid JWT: Token format not valid' }
@@ -80,7 +82,7 @@ describe('Charging Module Delete Bill Run request', () => {
       it('returns the error in the "response"', async () => {
         const result = await DeleteBillRunRequest.send(billRunId)
 
-        expect(result.response.body.statusCode).to.equal(401)
+        expect(result.response.body.statusCode).to.equal(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).to.equal('Unauthorized')
         expect(result.response.body.message).to.equal('Invalid JWT: Token format not valid')
       })

@@ -54,6 +54,7 @@ async function _fetch(returnId, selectedReturnSubmission) {
       ref('metadata:nald.periodEndDay').as('periodEndDay'),
       ref('metadata:nald.periodEndMonth').as('periodEndMonth'),
       ref('metadata:purposes').as('purposes'),
+      ref('metadata:isCurrent').castBool().as('current'),
       ref('metadata:isTwoPartTariff').castBool().as('twoPartTariff')
     ])
     .where('returnId', returnId)
