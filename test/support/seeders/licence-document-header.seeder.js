@@ -62,14 +62,17 @@ async function seed(date) {
       eight: `${date}08`,
       nine: `${date}09`,
       ten: `${date}10`,
-      eleven: `${date}11`
+      eleven: `${date}11`,
+      twelve: `${date}12`
     }
   }
 
   return {
     additionalContact: await _additionalContact(),
     licenceHolder: await _licenceHolder(dates.one),
+    licenceHolderTransferredReturnLog: await _licenceHolder(dates.eleven, false),
     licenceHolderAndReturnTo: await _licenceHolderAndReturnTo(dates.two),
+    licenceHolderAndReturnToTransferredReturnLog: await _licenceHolderAndReturnTo(dates.twelve, false),
     licenceHolderAndReturnToWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(dates.three),
     licenceHolderReturnLogGreaterThanToday: await _licenceHolder(dates.seven, '4000-01-01'),
     licenceHolderWithAdditionalContact: await _licenceHolderWithAdditionalContact(),
@@ -82,8 +85,7 @@ async function seed(date) {
     primaryUserAndReturnsAgentWithTheSameEmail: await _primaryUserAndReturnsAgentWithTheSameEmail(dates.six),
     primaryUserDueDate: await _primaryUserDueDate(dates.eight),
     primaryUserMultipleReturnLogs: await _primaryUserMultipleReturnLogs(dates.nine),
-    primaryUserWithAdditionalContact: await _primaryUserWithAdditionalContact(),
-    licenceHolderTransferredReturnLog: await _licenceHolderTransferredReturnLog(dates.eleven)
+    primaryUserWithAdditionalContact: await _primaryUserWithAdditionalContact()
   }
 }
 
@@ -248,10 +250,10 @@ function _contact(name, role) {
   }
 }
 
-async function _licenceHolder(date, endDate = null) {
+async function _licenceHolder(date, endDate = null, isCurrent = true) {
   const licenceDocumentHeader = await _addLicenceHolder()
 
-  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate)
+  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate, isCurrent)
 
   return {
     ...licenceDocumentHeader,
@@ -259,10 +261,10 @@ async function _licenceHolder(date, endDate = null) {
   }
 }
 
-async function _licenceHolderAndReturnTo(date) {
+async function _licenceHolderAndReturnTo(date, isCurrent = true) {
   const licenceHolder = await _addLicenceHolderAndReturnTo()
 
-  const returnLog = await _addReturnLog(date, licenceHolder.licenceRef)
+  const returnLog = await _addReturnLog(date, licenceHolder.licenceRef, null, isCurrent)
 
   return {
     ...licenceHolder,
@@ -270,24 +272,13 @@ async function _licenceHolderAndReturnTo(date) {
   }
 }
 
-async function _licenceHolderAndReturnToWithTheSameAddress(date) {
+async function _licenceHolderAndReturnToWithTheSameAddress(date, isCurrent = true) {
   const licenceHolder = await _addLicenceHolderAndReturnToSameAddress()
 
-  const returnLog = await _addReturnLog(date, licenceHolder.licenceRef)
+  const returnLog = await _addReturnLog(date, licenceHolder.licenceRef, null, isCurrent)
 
   return {
     ...licenceHolder,
-    returnLog
-  }
-}
-
-async function _licenceHolderTransferredReturnLog(date, endDate = null) {
-  const licenceDocumentHeader = await _addLicenceHolder()
-
-  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate, false)
-
-  return {
-    ...licenceDocumentHeader,
     returnLog
   }
 }
