@@ -37,14 +37,18 @@ async function _fetch(licenceRef) {
       rl.metadata->'nald'->>'areaCode' AS "naldAreaCode",
       r.display_name AS "regionName",
       r.nald_region_id AS "regionCode"
-    FROM return_logs as rl
-        INNER JOIN regions as r
-                  ON r.nald_region_id = (rl.metadata->'nald'->>'regionCode')::integer
-    WHERE rl.licence_ref = ?
-    AND rl.status = 'due'
-    AND rl.metadata->>'isCurrent' = 'true'
-    AND rl.end_date <= ?
-    ORDER BY rl.start_date DESC, rl.return_reference ASC;
+    FROM
+      return_logs as rl
+    INNER JOIN regions as r
+      ON r.nald_region_id = (rl.metadata->'nald'->>'regionCode')::integer
+    WHERE
+      rl.licence_ref = ?
+      AND rl.status = 'due'
+      AND rl.metadata->>'isCurrent' = 'true'
+      AND rl.end_date <= ?
+    ORDER BY
+      rl.start_date DESC,
+      rl.return_reference ASC;
   `
 
   return db.raw(query, [licenceRef, timestampForPostgres()])
