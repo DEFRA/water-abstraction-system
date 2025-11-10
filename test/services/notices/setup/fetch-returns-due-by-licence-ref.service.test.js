@@ -49,7 +49,8 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
 
     // Add first return log which is flagged as transferred (isCurrent=false)
     let returnLog = await ReturnLogHelper.add({
-      ...returnLogData, metadata: { ...returnLogData.metadata, isCurrent: false }
+      ...returnLogData,
+      metadata: { ...returnLogData.metadata, isCurrent: false }
     })
     returnLogs.push(returnLog)
 
@@ -72,7 +73,7 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
     returnLog = await ReturnLogHelper.add({
       ...returnLogData,
       endDate: new Date('2125-03-31'),
-      startDate: new Date('2124-04-01'),
+      startDate: new Date('2124-04-01')
     })
     returnLogs.push(returnLog)
   })
@@ -101,6 +102,21 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
           returnsFrequency: 'month',
           siteDescription: 'Water park',
           startDate: returnLogs[1].startDate,
+          twoPartTariff: null
+        },
+        {
+          dueDate: null,
+          endDate: returnLogs[0].endDate,
+          naldAreaCode: 'SE',
+          purpose: 'Potable Water Supply - Direct',
+          regionCode: region.naldRegionId,
+          regionName: region.displayName,
+          returnId: returnLogs[0].returnId,
+          returnLogId: returnLogs[0].id,
+          returnReference: returnLogs[0].returnReference,
+          returnsFrequency: 'month',
+          siteDescription: 'Water park',
+          startDate: returnLogs[0].startDate,
           twoPartTariff: null
         }
       ])
