@@ -1,6 +1,7 @@
 'use strict'
 
 const NotifyAddressPresenter = require('./setup/notify-address.presenter.js')
+const { today } = require('../../lib/general.lib.js')
 const { formatLongDate } = require('../base.presenter.js')
 
 /**
@@ -40,22 +41,25 @@ function addressToCSV(address) {
 }
 
 /**
- * Provides a date in the future for a due date.
+ * Determines the due date for a notification
  *
- * This is determined by the business to be 28 days from 'today'.
+ * This is determined by the business to be 'today' plus 28 days for email, and 29 days for letters. For example, if
+ * today is 2025-11-01 then
  *
- * When the 'messageType' is a 'letter', then we allow an additional day.
+ * - Email due date is 2025-11-29
+ * - Letter due date is 2025-11-30
  *
- * @param {string} [messageType] - Should be either 'letter' or 'email'
+ * The extra day for letters is to allow the extra time it takes Notify to send the letter for printing and mailing.
  *
- * @returns {Date} - A date either 28 or 29 days from the 'today'
+ *
+ * @param {string} [messageType=email] - Either 'letter' or 'email'. Defaults to 'email'.
+ *
+ * @returns {Date} A date either 28 or 29 days from 'today'
  */
-function futureDueDate(messageType) {
-  const dueDate = new Date()
-  const twentyEightDays = 28 // The days to add when sending an email
-  const twentyNineDays = 29 // The days to add when sending a letter
+function futureDueDate(messageType = 'email') {
+  const dueDate = today()
+  const daysToAdd = messageType === 'letter' ? 29 : 28
 
-  const daysToAdd = messageType === 'letter' ? twentyNineDays : twentyEightDays
   dueDate.setDate(dueDate.getDate() + daysToAdd)
 
   return dueDate

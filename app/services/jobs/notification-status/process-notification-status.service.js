@@ -5,15 +5,10 @@
  * @module ProcessNotificationStatusService
  */
 
+const CheckNotificationStatusService = require('../../notifications/check-notification-status.service.js')
 const FetchNotificationsService = require('./fetch-notifications.service.js')
-const NotifyStatusPresenter = require('../../../presenters/jobs/notifications/notify-status.presenter.js')
-const ViewMessageDataRequest = require('../../../requests/notify/view-message-data.request.js')
-const UpdateAbstractionAlertsService = require('./update-abstraction-alerts.service.js')
 const UpdateEventService = require('./update-event.service.js')
-const UpdateNotificationsService = require('./update-notifications.service.js')
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds, pause } = require('../../../lib/general.lib.js')
-
-const notifyConfig = require('../../../../config/notify.config.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates the process of fetching and updating the status of 'notification' from the Notify service.
@@ -38,26 +33,15 @@ const notifyConfig = require('../../../../config/notify.config.js')
  *
  * If the request to Notify for the message details fails, the notification is not updated. This means we can try again
  * later.
- *
- * @param {string | null} [eventId] - When an event id is provided we check the status only for the event.
- *
  */
-async function go(eventId = null) {
+async function go() {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const { batchSize, delay } = notifyConfig
+    const notifications = await FetchNotificationsService.go()
 
-    const notifications = await FetchNotificationsService.go(eventId)
-
-    for (let i = 0; i < notifications.length; i += batchSize) {
-      const batchNotifications = notifications.slice(i, i + batchSize)
-
-      const updatedNotifications = await _batch(batchNotifications)
-
-      await UpdateAbstractionAlertsService.go(updatedNotifications)
-
-      await pause(delay)
+    for (const notification of notifications) {
+      await CheckNotificationStatusService.go(notification)
     }
 
     await _updateEventErrorCount(notifications)
@@ -68,33 +52,6 @@ async function go(eventId = null) {
   }
 }
 
-async function _batch(notifications) {
-  const toUpdateNotifications = _toUpdateNotifications(notifications)
-
-  const updatedNotifications = await _updateNotifications(toUpdateNotifications)
-
-  await UpdateNotificationsService.go(updatedNotifications)
-
-  return updatedNotifications
-}
-
-async function _notificationStatus(notification) {
-  const notifyResult = await ViewMessageDataRequest.send(notification.notifyId)
-
-  const { response, succeeded } = notifyResult
-
-  if (succeeded) {
-    const notifyStatus = NotifyStatusPresenter.go(response.body.status, notification)
-
-    return {
-      ...notification,
-      ...notifyStatus
-    }
-  }
-
-  return notification
-}
-
 /**
  * We need to dedupe the eventIds to ensure a performant query. Otherwise, we could have hundreds / thousands of
  * notifications with the same event id all triggering the same update.
@@ -102,31 +59,13 @@ async function _notificationStatus(notification) {
  * @private
  */
 async function _updateEventErrorCount(notifications) {
-  const eventIds = notifications.map((sn) => {
-    return sn.eventId
+  const eventIds = notifications.map((notification) => {
+    return notification.eventId
   })
 
   const dedupeEventIds = [...new Set(eventIds)]
 
   await UpdateEventService.go(dedupeEventIds)
-}
-
-async function _updateNotifications(toSendNotifications) {
-  const settledPromises = await Promise.allSettled(toSendNotifications)
-
-  return settledPromises.map((settledPromise) => {
-    return settledPromise.value
-  })
-}
-
-function _toUpdateNotifications(notifications) {
-  const updateNotifications = []
-
-  for (const notification of notifications) {
-    updateNotifications.push(_notificationStatus(notification))
-  }
-
-  return updateNotifications
 }
 
 module.exports = {

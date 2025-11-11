@@ -15,14 +15,14 @@ const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup preview page
  *
- * @param {string} contactHashId - The recipients unique identifier
  * @param {string} sessionId - The UUID of the returns notices session record
+ * @param {string} contactHashId - The recipient's unique identifier
  * @param {string} [licenceMonitoringStationId=null] - The UUID of the licence monitoring station record (This is only
  * populated for abstraction alerts)
  *
  * @returns {Promise<object>} The view data for the preview page
  */
-async function go(contactHashId, sessionId, licenceMonitoringStationId) {
+async function go(sessionId, contactHashId, licenceMonitoringStationId = null) {
   const session = await SessionModel.query().findById(sessionId)
 
   const recipient = await _recipient(contactHashId, session)
@@ -47,24 +47,22 @@ function _notification(recipient, session, licenceMonitoringStationId) {
   let notification
 
   if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
-    const unfilteredNotifications = AbstractionAlertNotificationsPresenter.go(recipient, session)
+    const unfilteredNotifications = AbstractionAlertNotificationsPresenter.go(session, [recipient], null)
 
-    notification = unfilteredNotifications.filter((unfilteredNotification) => {
+    notification = unfilteredNotifications.find((unfilteredNotification) => {
       return unfilteredNotification.personalisation.licenceGaugingStationId === licenceMonitoringStationId
     })
   } else {
-    notification = NotificationsPresenter.go(recipient, session)
+    notification = NotificationsPresenter.go(session, [recipient], null)[0]
   }
 
-  // The `notifications` array will always only contain one record so we return it as an object rather than an array
-  return notification[0]
+  return notification
 }
 
 async function _recipient(contactHashId, session) {
   const recipients = await FetchRecipientsService.go(session)
 
-  // Using `filter` rather than `find` ensures we return an array which makes it simpler to reuse existing logic
-  return recipients.filter((recipient) => {
+  return recipients.find((recipient) => {
     return recipient.contact_hash_id === contactHashId
   })
 }

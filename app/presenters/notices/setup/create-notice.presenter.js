@@ -5,9 +5,9 @@
  * @module CreateNoticePresenter
  */
 
-const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
-const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
 const { futureDueDate } = require('../base.presenter.js')
+const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
+const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Formats a notice `SessionModel` instance into the data needed for a 'notice' record
@@ -17,15 +17,15 @@ const { futureDueDate } = require('../base.presenter.js')
  *
  * @param {SessionModel} session - The session instance
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
- * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {string} issuer - The username of the person issuing the notice
  *
- * @returns {object} The data formatted persisting as a `notice` record
+ * @returns {object} The data formatted for persisting as a `notice` record
  */
-function go(session, recipients, auth) {
+function go(session, recipients, issuer) {
   const { referenceCode, subType, name } = session
 
   const notice = {
-    issuer: auth.credentials.user.username,
+    issuer,
     licences: _licences(recipients),
     metadata: {
       name,
@@ -34,8 +34,9 @@ function go(session, recipients, auth) {
     overallStatus: 'pending',
     referenceCode,
     status: 'completed',
-    statusCounts: { cancelled: 0, error: 0, pending: recipients.length, sent: 0 },
-    subtype: subType
+    statusCounts: { cancelled: 0, error: 0, pending: recipients.length, returned: 0, sent: 0 },
+    subtype: subType,
+    type: 'notification'
   }
 
   if (session.journey === NoticeJourney.ALERTS) {

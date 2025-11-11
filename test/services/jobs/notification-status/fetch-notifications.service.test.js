@@ -3,153 +3,131 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const EventHelper = require('../../../support/helpers/event.helper.js')
+const NoticesFixture = require('../../../fixtures/notices.fixture.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
+const NotificationModel = require('../../../../app/models/notification.model.js')
+const NotificationsFixture = require('../../../fixtures/notifications.fixture.js')
 const { today } = require('../../../../app/lib/general.lib.js')
+const { yesterday } = require('../../../support/general.js')
+
+// Things we need to stub
+const notifyConfig = require('../../../../config/notify.config.js')
 
 // Thing under test
 const FetchNotificationsService = require('../../../../app/services/jobs/notification-status/fetch-notifications.service.js')
 
+const DAYS_OF_RETENTION = 7
+
 describe('Job - Notification Status - Fetch Notifications service', () => {
-  let event
-  let notification
-  let unlikelyEvent
-  let olderThanRetentionEvent
+  let abstractionAlert
+  let notPending
+  let olderThanRetentionPeriod
+  let returnsInvitation
+  let oneDayBeforeRetentionStartDate
 
-  beforeEach(async () => {
-    event = await EventHelper.add({
-      type: 'notification',
-      status: 'completed'
-    })
+  before(async () => {
+    const retentionStartDate = today()
 
-    notification = await NotificationHelper.add({
-      eventId: event.id,
-      messageRef: 'returns_invitation_licence_holder_letter',
-      messageType: 'letter',
+    retentionStartDate.setDate(retentionStartDate.getDate() - DAYS_OF_RETENTION)
+
+    oneDayBeforeRetentionStartDate = today()
+    oneDayBeforeRetentionStartDate.setDate(oneDayBeforeRetentionStartDate.getDate() - (DAYS_OF_RETENTION + 1))
+
+    let notice = NoticesFixture.returnsInvitation()
+
+    // Created today and is pending - should be in results
+    returnsInvitation = await NotificationHelper.add({
+      ...NotificationsFixture.returnsInvitationEmail(notice),
+      createdAt: today(),
       status: 'pending'
     })
 
-    // The 'notification' status is 'error'
-    unlikelyEvent = await EventHelper.add({
-      type: 'notification',
-      status: 'completed'
+    // Created on the retention start date and is pending - should be in the results
+    notice = NoticesFixture.alertStop()
+    abstractionAlert = await NotificationHelper.add({
+      ...NotificationsFixture.abstractionAlertLetter(notice),
+      createdAt: retentionStartDate,
+      status: 'pending'
     })
 
-    await NotificationHelper.add({
-      eventId: unlikelyEvent.id,
+    // Created one day before the retention start date and is pending - should NOT be in the results
+    notice = NoticesFixture.legacyHandsOffFlow()
+    olderThanRetentionPeriod = await NotificationHelper.add({
+      ...NotificationsFixture.legacyHandsOfFlow(notice),
+      createdAt: oneDayBeforeRetentionStartDate,
+      status: 'pending'
+    })
+
+    // Created yesterday and is NOT pending - should NOT be in the results
+    notice = NoticesFixture.returnsReminder()
+    notPending = await NotificationHelper.add({
+      ...NotificationsFixture.returnsReminderLetter(notice),
+      createdAt: yesterday(),
       status: 'error'
     })
-
-    // The 'notification' status is older than 7 days (notify retention period)
-    olderThanRetentionEvent = await EventHelper.add({
-      status: 'completed',
-      type: 'notification'
-    })
-
-    const todaysDate = today()
-    const eightDaysAgo = today()
-    eightDaysAgo.setDate(todaysDate.getDate() - 8)
-
-    await NotificationHelper.add({
-      eventId: olderThanRetentionEvent.id,
-      status: 'sending',
-      createdAt: eightDaysAgo
-    })
   })
 
-  describe('an event has "notifications"', () => {
-    it('returns the event marked for "sending"', async () => {
-      const result = await FetchNotificationsService.go()
-
-      const foundEvent = result.find((resultEvent) => {
-        return resultEvent.eventId === event.id
-      })
-
-      expect(foundEvent).to.equal({
-        createdAt: notification.createdAt,
-        eventId: event.id,
-        id: notification.id,
-        licenceMonitoringStationId: null,
-        messageRef: 'returns_invitation_licence_holder_letter',
-        messageType: 'letter',
-        notifyError: null,
-        notifyId: null,
-        notifyStatus: null,
-        personalisation: null,
-        status: 'pending'
-      })
-    })
-
-    describe('and an event id is provided', () => {
-      describe('and there are email notifications', () => {
-        beforeEach(async () => {
-          notification = await NotificationHelper.add({
-            eventId: event.id,
-            messageRef: 'returns_invitation_primary_user_email',
-            messageType: 'email',
-            status: 'pending'
-          })
-        })
-
-        it('returns the event marked for "sending"', async () => {
-          const result = await FetchNotificationsService.go(event.id)
-
-          const foundEvent = result.find((resultEvent) => {
-            return resultEvent.eventId === event.id
-          })
-
-          expect(foundEvent).to.equal({
-            createdAt: notification.createdAt,
-            eventId: event.id,
-            id: notification.id,
-            licenceMonitoringStationId: null,
-            messageRef: 'returns_invitation_primary_user_email',
-            messageType: 'email',
-            notifyError: null,
-            notifyId: null,
-            notifyStatus: null,
-            personalisation: null,
-            status: 'pending'
-          })
-        })
-      })
-
-      describe('and there are no email notifications', () => {
-        it('returns an empty array', async () => {
-          const result = await FetchNotificationsService.go(event.id)
-
-          expect(result).to.equal([])
-        })
-      })
-    })
+  beforeEach(() => {
+    // As this can change, we stub it so the tests can assert with confidence
+    Sinon.stub(notifyConfig, 'daysOfRetention').value(DAYS_OF_RETENTION)
   })
 
-  describe('and the notification status is "error"', () => {
-    it('does not return the event', async () => {
-      const result = await FetchNotificationsService.go()
-
-      const foundEvent = result.find((resultEvent) => {
-        return resultEvent.eventId === unlikelyEvent.id
-      })
-
-      expect(foundEvent).to.be.undefined()
-    })
+  afterEach(() => {
+    Sinon.restore()
   })
 
-  describe('and the notification is older than 7 days', () => {
-    it('does not return the event', async () => {
-      const result = await FetchNotificationsService.go()
+  after(async () => {
+    await abstractionAlert.$query().delete()
+    await notPending.$query().delete()
+    await olderThanRetentionPeriod.$query().delete()
+    await returnsInvitation.$query().delete()
+  })
 
-      const foundEvent = result.find((resultEvent) => {
-        return resultEvent.eventId === olderThanRetentionEvent.id
-      })
+  it('returns "pending" notifications created within the Notify retention period', async () => {
+    const results = await FetchNotificationsService.go()
 
-      expect(foundEvent).to.be.undefined()
-    })
+    for (const result of results) {
+      expect(result.status).to.equal('pending')
+      expect(result.createdAt).to.be.at.least(oneDayBeforeRetentionStartDate)
+    }
+  })
+
+  it('contains the test records we expect and excludes those we do not', async () => {
+    const results = await FetchNotificationsService.go()
+
+    expect(results).contains(_transformToResult(returnsInvitation))
+
+    expect(results).contains(_transformToResult(abstractionAlert))
+
+    expect(results).not.contains(_transformToResult(olderThanRetentionPeriod))
+
+    expect(results).not.contains(_transformToResult(notPending))
   })
 })
+
+/**
+ * Helper method to transform a test record we've created into a result instance we can then use in our assertions
+ *
+ * @private
+ */
+function _transformToResult(notification) {
+  return NotificationModel.fromJson({
+    createdAt: notification.createdAt,
+    eventId: notification.eventId,
+    id: notification.id,
+    licenceMonitoringStationId: notification.licenceMonitoringStationId,
+    messageRef: notification.messageRef,
+    messageType: notification.messageType,
+    notifyId: notification.notifyId,
+    notifyStatus: notification.notifyStatus,
+    notifyError: notification.notifyError,
+    personalisation: notification.personalisation,
+    status: notification.status
+  })
+}
