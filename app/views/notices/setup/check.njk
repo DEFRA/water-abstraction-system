@@ -11,6 +11,8 @@
 {% set rows = [] %}
 
 {% for recipient in recipients %}
+  {% set rowIndex = loop.index0 %}
+
   {% set licenceNumbers %}
     {% if recipient.licences.length > 5 %}
       {{ govukDetails({
@@ -25,15 +27,19 @@
 
   {% set rows = (rows.push([
     {
+      attributes: { 'data-test': 'recipient-contact' + rowIndex  },
       text: newLineArrayItems(recipient.contact)
     },
     {
+      attributes: { 'data-test': 'recipient-licence-numbers' + rowIndex  },
       html: licenceNumbers
     },
     {
+      attributes: { 'data-test': 'recipient-method' + rowIndex  },
       text: recipient.method
     },
     {
+      attributes: { 'data-test': 'recipient-action' + rowIndex  },
       html: '<a href="' + recipient.previewLink + '">Preview</a>'
     } if recipient.previewLink
   ]), rows) %}
@@ -74,6 +80,7 @@
     </div>
 
     {{ govukTable({
+      attributes: { 'data-test': 'recipients' },
       caption: tableCaption,
       captionClasses: "govuk-table__caption--s govuk-!-margin-bottom-2",
       firstCellIsHeader: false,
