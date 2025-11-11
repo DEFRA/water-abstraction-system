@@ -43,11 +43,13 @@ function _determineRequestedYearAndMonth(yearMonth) {
 function _inputLines(lines, returnsFrequency) {
   return lines.map((line) => {
     const { endDate, reading } = line
+    const label = _lineLabel(endDate, returnsFrequency)
 
     const lineData = {
       endDate,
-      label: _lineLabel(endDate, returnsFrequency),
-      reading: typeof line.reading === 'number' ? reading.toString() : line.reading
+      label,
+      reading: typeof line.reading === 'number' ? reading.toString() : line.reading,
+      viewId: label.replace(/\s+/g, '') // removes all whitespace
     }
 
     if (line.error) {
