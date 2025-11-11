@@ -6,7 +6,7 @@
  */
 
 const { db } = require('../../../../db/db.js')
-const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
+const { timestampForPostgres, transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
@@ -165,38 +165,53 @@ const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
  * @returns {Promise<object[]>} The contact data for all the outstanding return logs
  */
 async function go(session) {
+  let filter
+
   if (session.licenceRef) {
-    return _fetchRecipient(session)
+    filter = _filterByLicence(session)
+  } else {
+    filter = _filterByPeriod(session)
   }
 
-  return _fetchRecipients(session)
-}
-
-async function _fetchRecipient(session) {
-  const { licenceRef } = session
-
-  const whereLicenceRef = `ldh.licence_ref = ?`
-
-  const bindings = [licenceRef, licenceRef, licenceRef, licenceRef]
-
-  const { rows } = await _fetch(bindings, whereLicenceRef)
+  const { rows } = await _fetch(filter)
 
   return rows
 }
 
-async function _fetchRecipients(session) {
+async function _fetch(filter) {
+  const { bindings, where } = filter
+  const query = _query(where)
+
+  return db.raw(query, bindings)
+}
+
+function _filterByLicence(session) {
+  const { licenceRef } = session
+
+  const bindings = [timestampForPostgres(), licenceRef]
+
+  const where = `
+    AND rl.end_date <= ?
+    AND rl.licence_ref = ?
+  `
+
+  return { bindings, where }
+}
+
+function _filterByPeriod(session) {
   const {
     determinedReturnsPeriod: { dueDate, endDate, startDate, quarterly, summer },
     noticeType,
     removeLicences = ''
   } = session
-
   const excludeLicences = transformStringOfLicencesToArray(removeLicences)
+  const bindings = [endDate, startDate, summer, quarterly, excludeLicences]
 
   let dueDateCondition
 
   if (!featureFlagsConfig.enableNullDueDate) {
     dueDateCondition = '= ?'
+    bindings.push(dueDate)
   } else {
     if (noticeType === NoticeType.REMINDERS) {
       dueDateCondition = 'IS NOT NULL'
@@ -205,42 +220,19 @@ async function _fetchRecipients(session) {
     }
   }
 
-  const whereReturnLogs = `
-    AND rl.due_date ${dueDateCondition}
-    AND rl.end_date <= ?
+  const where = `
     AND rl.start_date >= ?
+    AND rl.end_date <= ?
     AND rl.metadata->>'isSummer' = ?
     AND rl.quarterly = ?
+    AND NOT (rl.licence_ref = ANY (?))
+    AND rl.due_date ${dueDateCondition}
   `
-  const whereLicenceRef = `NOT (ldh.licence_ref = ANY (?))`
 
-  const bindings = [
-    endDate,
-    startDate,
-    summer,
-    quarterly,
-    excludeLicences,
-    excludeLicences,
-    excludeLicences,
-    excludeLicences
-  ]
-
-  if (!featureFlagsConfig.enableNullDueDate) {
-    bindings.unshift(dueDate)
-  }
-
-  const { rows } = await _fetch(bindings, whereLicenceRef, whereReturnLogs)
-
-  return rows
+  return { bindings, where }
 }
 
-async function _fetch(bindings, whereLicenceRef, whereReturnLogs) {
-  const query = _query(whereLicenceRef, whereReturnLogs)
-
-  return db.raw(query, bindings)
-}
-
-function _query(whereLicenceRef, whereReturnLogs = '') {
+function _query(where) {
   return `
     WITH
       due_return_logs as (
@@ -254,7 +246,7 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
         WHERE
           rl.status = 'due'
           AND rl.metadata->>'isCurrent' = 'true'
-          ${whereReturnLogs}
+          ${where}
       ),
 
       primary_user as (
@@ -264,17 +256,16 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
           le."name" AS email,
           NULL::jsonb AS contact,
           md5(LOWER(le."name")) AS contact_hash_id,
-          rl.return_id,
+          drl.return_id,
           ('Email') as message_type
-        FROM public.licence_document_headers ldh
-            INNER JOIN public.licence_entity_roles ler
-                ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
-            INNER JOIN public.licence_entities le
-                ON le.id = ler.licence_entity_id
-            INNER JOIN due_return_logs rl
-                ON rl.licence_ref = ldh.licence_ref
-        WHERE
-          ${whereLicenceRef}
+        FROM
+          public.licence_document_headers ldh
+        INNER JOIN public.licence_entity_roles ler
+          ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
+        INNER JOIN public.licence_entities le
+          ON le.id = ler.licence_entity_id
+        INNER JOIN due_return_logs drl
+          ON drl.licence_ref = ldh.licence_ref
       ),
 
       returns_agent as (
@@ -284,17 +275,16 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
           le."name" AS email,
           NULL::jsonb AS contact,
           md5(LOWER(le."name")) AS contact_hash_id,
-          rl.return_id,
+          drl.return_id,
           ('Email') as message_type
-        FROM public.licence_document_headers ldh
-            INNER JOIN public.licence_entity_roles ler
-                ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
-            INNER JOIN public.licence_entities le
-                ON le.id = ler.licence_entity_id
-            INNER JOIN due_return_logs rl
-                ON rl.licence_ref = ldh.licence_ref
-        WHERE
-          ${whereLicenceRef}
+        FROM
+          public.licence_document_headers ldh
+        INNER JOIN public.licence_entity_roles ler
+          ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
+        INNER JOIN public.licence_entities le
+          ON le.id = ler.licence_entity_id
+        INNER JOIN due_return_logs drl
+          ON drl.licence_ref = ldh.licence_ref
       ),
 
       -- set of licences that are registered (have a primary user)
@@ -313,15 +303,15 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
               concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
             )
           )) AS contact_hash_id,
-          rl.return_id,
+          drl.return_id,
           ('Letter') as message_type
-        FROM public.licence_document_headers ldh
-          INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
-          INNER JOIN due_return_logs rl
-            ON rl.licence_ref = ldh.licence_ref
+        FROM
+          public.licence_document_headers ldh
+        INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
+        INNER JOIN due_return_logs drl
+          ON drl.licence_ref = ldh.licence_ref
         WHERE
-          ${whereLicenceRef}
-          AND contacts->>'role' = 'Licence holder'
+          contacts->>'role' = 'Licence holder'
           AND NOT EXISTS (
             SELECT 1 FROM registered_licences r
             WHERE r.licence_ref = ldh.licence_ref
@@ -339,15 +329,15 @@ function _query(whereLicenceRef, whereReturnLogs = '') {
               concat(contacts->>'salutation', contacts->>'forename', contacts->>'initials', contacts->>'name', contacts->>'addressLine1', contacts->>'addressLine2', contacts->>'addressLine3', contacts->>'addressLine4', contacts->>'town', contacts->>'county', contacts->>'postcode', contacts->>'country')
             )
           )) AS contact_hash_id,
-          rl.return_id,
+          drl.return_id,
           ('Letter') as message_type
-        FROM public.licence_document_headers ldh
-          INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
-          INNER JOIN due_return_logs rl
-            ON rl.licence_ref = ldh.licence_ref
+        FROM
+          public.licence_document_headers ldh
+        INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
+        INNER JOIN due_return_logs drl
+          ON drl.licence_ref = ldh.licence_ref
         WHERE
-          ${whereLicenceRef}
-          AND contacts->>'role' = 'Returns to'
+          contacts->>'role' = 'Returns to'
           AND NOT EXISTS (
             SELECT 1 FROM registered_licences r
             WHERE r.licence_ref = ldh.licence_ref
