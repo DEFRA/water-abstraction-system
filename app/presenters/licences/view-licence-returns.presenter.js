@@ -5,7 +5,6 @@
  * @module ViewLicenceReturnsPresenter
  */
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatLongDate, formatPurposes, formatReturnLogStatus } = require('../base.presenter.js')
 
 /**
