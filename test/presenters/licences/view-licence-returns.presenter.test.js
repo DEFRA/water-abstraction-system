@@ -3,47 +3,25 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
-
-// Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const ViewLicenceReturnsPresenter = require('../../../app/presenters/licences/view-licence-returns.presenter.js')
 
 describe('Licences - View Licence Returns presenter', () => {
-  let auth
   let returnLogs
   let hasRequirements
 
   beforeEach(() => {
-    auth = {
-      isValid: true,
-      credentials: {
-        user: { id: 123 },
-        roles: ['returns'],
-        groups: [],
-        scope: ['returns'],
-        permissions: { abstractionReform: false, billRuns: true, manage: true }
-      }
-    }
-
     hasRequirements = true
     returnLogs = _returnLogs()
-
-    Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsView').value(true)
-  })
-
-  afterEach(() => {
-    Sinon.restore()
   })
 
   describe('when provided with returns data', () => {
     it('correctly presents the data', () => {
-      const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+      const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
 
       expect(result).to.equal({
         noReturnsMessage: null,
@@ -72,7 +50,7 @@ describe('Licences - View Licence Returns presenter', () => {
 
     describe('the "dates" property', () => {
       it('returns the start and end date in long format (2 January 2020 to 1 February 2020)', () => {
-        const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+        const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
 
         expect(result.returns[0].dates).to.equal('2 January 2020 to 1 February 2020')
       })
@@ -81,7 +59,7 @@ describe('Licences - View Licence Returns presenter', () => {
     describe('the "description" property', () => {
       describe('when description in the metadata is set', () => {
         it('returns an empty string', () => {
-          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
 
           expect(result.returns[0].description).to.equal('empty description')
         })
@@ -95,7 +73,7 @@ describe('Licences - View Licence Returns presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
 
           expect(result.returns[0].description).to.equal('')
         })
@@ -105,7 +83,7 @@ describe('Licences - View Licence Returns presenter', () => {
     describe('the "dueDate" property', () => {
       describe('when the due date is set', () => {
         it('returns the formatted due date', () => {
-          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
 
           expect(result.returns[0].dueDate).to.equal('28 November 2020')
         })
@@ -117,95 +95,9 @@ describe('Licences - View Licence Returns presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+          const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
 
           expect(result.returns[0].dueDate).to.equal('')
-        })
-      })
-    })
-
-    describe('the "link" property', () => {
-      it('returns a link to the view return log page', () => {
-        const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
-
-        expect(result.returns[0].link).to.equal('/system/return-logs/c4458436-4766-4271-b978-6af7a0e4fd95')
-      })
-
-      describe('when enableSystemReturnsView is set to false', () => {
-        beforeEach(() => {
-          Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsView').value(false)
-        })
-
-        describe('and the return log has a status of "completed"', () => {
-          it('returns a link to the view return log page', () => {
-            const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
-
-            expect(result.returns[0].link).to.equal('/returns/return?id=v1:1:01/123:10046821:2020-01-02:2020-02-01')
-          })
-        })
-
-        describe('and the return log has a status of "due"', () => {
-          describe('and the user is permitted to submit and edit returns', () => {
-            it('returns a link to the edit return log page', () => {
-              const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
-
-              expect(result.returns[1].link).to.equal(
-                '/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01'
-              )
-            })
-          })
-
-          describe('and the user is not permitted to submit and edit returns', () => {
-            beforeEach(() => {
-              auth.credentials.scope = []
-            })
-
-            it('returns null', () => {
-              const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
-
-              expect(result.returns[1].link).to.be.null()
-            })
-          })
-        })
-
-        describe('and the return log has a status of "received"', () => {
-          beforeEach(() => {
-            returnLogs[1].status = 'received'
-          })
-
-          describe('and the user is permitted to submit and edit returns', () => {
-            it('returns a link to the edit return log page', () => {
-              const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
-
-              expect(result.returns[1].link).to.equal(
-                '/return/internal?returnId=v1:1:01/123:10046820:2020-01-02:2020-02-01'
-              )
-            })
-          })
-
-          describe('and the user is not permitted to submit and edit returns', () => {
-            beforeEach(() => {
-              auth.credentials.scope = []
-            })
-
-            it('returns null', () => {
-              const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
-
-              expect(result.returns[1].link).to.be.null()
-            })
-          })
-        })
-
-        describe('and the return log has a status of "void"', () => {
-          beforeEach(() => {
-            returnLogs[1].status = 'void'
-          })
-
-          it('returns a link to the view return log page', () => {
-            const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
-
-            expect(result.returns[1].link).to.equal('/returns/return?id=v1:1:01/123:10046820:2020-01-02:2020-02-01')
-          })
         })
       })
     })
@@ -214,7 +106,7 @@ describe('Licences - View Licence Returns presenter', () => {
   describe('the "noReturnsMessage" property', () => {
     describe('when a licence has returns and requirements', () => {
       it('returns null', () => {
-        const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+        const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
 
         expect(result.noReturnsMessage).to.be.null()
       })
@@ -227,7 +119,7 @@ describe('Licences - View Licence Returns presenter', () => {
       })
 
       it('returns the message "No requirements for returns have been set up for this licence."', () => {
-        const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+        const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
 
         expect(result.noReturnsMessage).to.equal('No requirements for returns have been set up for this licence.')
       })
@@ -239,7 +131,7 @@ describe('Licences - View Licence Returns presenter', () => {
       })
 
       it('returns the message "No returns for this licence."', () => {
-        const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements, auth)
+        const result = ViewLicenceReturnsPresenter.go(returnLogs, hasRequirements)
 
         expect(result.noReturnsMessage).to.equal('No returns for this licence.')
       })
