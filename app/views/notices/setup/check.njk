@@ -27,7 +27,7 @@
 
   {% set rows = (rows.push([
     {
-      attributes: { 'data-test': 'recipient-contact' + rowIndex  },
+      attributes: { 'data-test': 'recipient-contact-' + rowIndex  },
       text: newLineArrayItems(recipient.contact)
     },
     {
