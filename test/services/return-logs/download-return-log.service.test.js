@@ -29,7 +29,7 @@ describe('Return Logs - Download Return Log Service', () => {
   })
 
   it('correctly returns the csv string, filename and type', async () => {
-    const result = await DownloadReturnLogService.go(returnLog.id)
+    const result = await DownloadReturnLogService.go(returnLog.returnId)
 
     const { endDate, returnReference, returnSubmissions, startDate } = returnLog
 

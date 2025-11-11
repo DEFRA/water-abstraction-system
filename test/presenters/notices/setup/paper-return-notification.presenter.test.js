@@ -55,7 +55,7 @@ describe('Notices - Setup - Paper Return Notification Presenter', () => {
           licence_ref: licenceRef,
           naldAreaCode: 'MIDLT',
           purpose: 'Mineral Washing',
-          qr_url: dueReturnLog.returnLogId,
+          qr_url: dueReturnLog.returnId,
           region_code: '1',
           region_name: 'North West',
           returns_frequency: 'month',

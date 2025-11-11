@@ -32,6 +32,7 @@ async function _fetch(licenceId, page) {
       'returnLogs.dueDate',
       'returnLogs.endDate',
       'returnLogs.metadata',
+      'returnLogs.returnId',
       'returnLogs.returnReference',
       'returnLogs.startDate',
       'returnLogs.status'

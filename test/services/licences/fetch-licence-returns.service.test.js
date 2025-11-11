@@ -84,6 +84,7 @@ describe('Licences - Fetch licence returns service', () => {
           endDate: returnLogs[2].endDate,
           id: returnLogs[2].id,
           metadata: returnLogs[2].metadata,
+          returnId: returnLogs[2].returnId,
           returnReference: returnLogs[2].returnReference,
           startDate: returnLogs[2].startDate,
           status: returnLogs[2].status
@@ -93,6 +94,7 @@ describe('Licences - Fetch licence returns service', () => {
           endDate: returnLogs[1].endDate,
           id: returnLogs[1].id,
           metadata: returnLogs[1].metadata,
+          returnId: returnLogs[1].returnId,
           returnReference: returnLogs[1].returnReference,
           startDate: returnLogs[1].startDate,
           status: returnLogs[1].status
@@ -102,6 +104,7 @@ describe('Licences - Fetch licence returns service', () => {
           endDate: returnLogs[0].endDate,
           id: returnLogs[0].id,
           metadata: returnLogs[0].metadata,
+          returnId: returnLogs[0].returnId,
           returnReference: returnLogs[0].returnReference,
           startDate: returnLogs[0].startDate,
           status: returnLogs[0].status

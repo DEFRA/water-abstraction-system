@@ -116,7 +116,7 @@ function _paperForm(notification) {
 
   return {
     downloadLink: hasPdf ? `/system/notifications/${id}/download` : null,
-    link: `/system/return-logs?id=${personalisation.qr_url}`,
+    link: `/system/return-logs/${personalisation.qr_url}`,
     period: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
     purpose: personalisation.purpose,
     reference: personalisation.format_id,
