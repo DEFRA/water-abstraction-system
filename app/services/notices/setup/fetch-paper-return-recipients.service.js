@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches the letter recipients data for the `/notices/setup/check` page
- * @module FetchLetterRecipientsService
+ * Fetches the paper return recipients data for the `/notices/setup/check` page
+ * @module FetchPaperReturnRecipientsService
  */
 
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches the letter recipients data for the `/notices/setup/check` page
+ * Fetches the paper return recipients data for the `/notices/setup/check` page
  *
  * > IMPORTANT! The source for notification contacts is `crm.document_headers` (view `licence_document_headers`), not
  * > the tables in `crm_v2`.
@@ -128,7 +128,7 @@ async function go(session) {
 }
 
 async function _fetchRecipient(licenceRef) {
-  const bindings = [licenceRef, licenceRef]
+  const bindings = [licenceRef]
 
   const { rows } = await _fetch(bindings)
 
@@ -153,7 +153,7 @@ function _query() {
       FROM public.return_logs rl
       WHERE
         rl.status = 'due'
-        AND rl.metadata->>'isCurrent' = 'true'
+        AND rl.licence_ref = ?
     ),
 
     licence_holder as (
@@ -168,12 +168,13 @@ function _query() {
       )
       )) AS contact_hash_id,
       ('Letter') as message_type
-      FROM public.licence_document_headers ldh
+      FROM
+        public.licence_document_headers ldh
       INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
       INNER JOIN due_return_logs
         ON due_return_logs.licence_ref = ldh.licence_ref
-      WHERE ldh.licence_ref = ?
-        AND contacts->>'role' = 'Licence holder'
+      WHERE
+        contacts->>'role' = 'Licence holder'
     ),
 
     returns_to as (
@@ -192,8 +193,8 @@ function _query() {
       INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
       INNER JOIN due_return_logs
         ON due_return_logs.licence_ref = ldh.licence_ref
-      WHERE ldh.licence_ref = ?
-        AND contacts->>'role' = 'Returns to'
+      WHERE
+        contacts->>'role' = 'Returns to'
     ),
 
     all_contacts AS (

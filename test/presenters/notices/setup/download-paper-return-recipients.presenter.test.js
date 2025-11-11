@@ -13,9 +13,9 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const DownloadLetterRecipientsPresenter = require('../../../../app/presenters/notices/setup/download-letter-recipients.presenter.js')
+const DownloadPaperReturnRecipientsPresenter = require('../../../../app/presenters/notices/setup/download-paper-return-recipients.presenter.js')
 
-describe('Notices - Setup - Download Letter Recipients presenter', () => {
+describe('Notices - Setup - Download Paper Return Recipients presenter', () => {
   const notificationType = 'Returns invitation'
   const returnReference = '376439279'
 
@@ -58,7 +58,10 @@ describe('Notices - Setup - Download Letter Recipients presenter', () => {
 
   describe('when provided with "recipients"', () => {
     it('correctly formats the data to a csv string', () => {
-      const result = DownloadLetterRecipientsPresenter.go([recipients.licenceHolder, recipients.returnsTo], session)
+      const result = DownloadPaperReturnRecipientsPresenter.go(
+        [recipients.licenceHolder, recipients.returnsTo],
+        session
+      )
 
       expect(result).to.equal(
         // Headers
@@ -71,7 +74,7 @@ describe('Notices - Setup - Download Letter Recipients presenter', () => {
     })
 
     it('correctly formats the headers', () => {
-      const result = DownloadLetterRecipientsPresenter.go([recipients.licenceHolder], session)
+      const result = DownloadPaperReturnRecipientsPresenter.go([recipients.licenceHolder], session)
 
       let [headers] = result.split('\n')
       // We want to test the header includes the new line
@@ -101,7 +104,7 @@ describe('Notices - Setup - Download Letter Recipients presenter', () => {
       describe('and the "contact" is a "person"', () => {
         describe('and the "person" is a "Licence holder"', () => {
           it('correctly formats the row', () => {
-            const result = DownloadLetterRecipientsPresenter.go([recipients.licenceHolder], session)
+            const result = DownloadPaperReturnRecipientsPresenter.go([recipients.licenceHolder], session)
 
             let [, row] = result.split('\n')
             // We want to test the row includes the new line
@@ -130,7 +133,7 @@ describe('Notices - Setup - Download Letter Recipients presenter', () => {
 
         describe('and the "person" is a "Returns to"', () => {
           it('correctly formats the row', () => {
-            const result = DownloadLetterRecipientsPresenter.go([recipients.returnsTo], session)
+            const result = DownloadPaperReturnRecipientsPresenter.go([recipients.returnsTo], session)
 
             let [, row] = result.split('\n')
             // We want to test the row includes the new line

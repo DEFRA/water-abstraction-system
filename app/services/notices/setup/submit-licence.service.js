@@ -32,7 +32,9 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
 async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validationResult = await _validate(payload)
+  const dueReturns = await _dueReturns(payload)
+
+  const validationResult = await _validate(payload, dueReturns)
 
   if (!validationResult) {
     if (session.checkPageVisited && payload.licenceRef !== session.licenceRef) {
@@ -41,7 +43,7 @@ async function go(sessionId, payload, yar) {
       session.checkPageVisited = false
     }
 
-    await _save(session, payload)
+    await _save(session, payload, dueReturns)
 
     return {
       redirectUrl: _redirect(session.checkPageVisited)
@@ -59,10 +61,12 @@ async function go(sessionId, payload, yar) {
   }
 }
 
-async function _dueReturnsExist(licenceRef) {
-  const dueReturns = await FetchReturnsDueByLicenceRefService.go(licenceRef)
+async function _dueReturns(payload) {
+  if (!payload.licenceRef) {
+    return []
+  }
 
-  return dueReturns.length > 0
+  return FetchReturnsDueByLicenceRefService.go(payload.licenceRef)
 }
 
 async function _licenceExists(licenceRef) {
@@ -71,10 +75,10 @@ async function _licenceExists(licenceRef) {
   return !!licence
 }
 
-async function _save(session, payload) {
+async function _save(session, payload, dueReturns) {
   session.licenceRef = payload.licenceRef
 
-  session.dueReturns = await FetchReturnsDueByLicenceRefService.go(payload.licenceRef)
+  session.dueReturns = dueReturns
 
   return session.$update()
 }
@@ -87,16 +91,16 @@ function _redirect(checkPageVisited) {
   return 'notice-type'
 }
 
-async function _validate(payload) {
+async function _validate(payload, dueReturns) {
+  const dueReturnsExist = dueReturns.length > 0
+
   let licenceExists = false
-  let dueReturns = false
 
   if (payload.licenceRef) {
     licenceExists = await _licenceExists(payload.licenceRef)
-    dueReturns = await _dueReturnsExist(payload.licenceRef)
   }
 
-  const validationResult = LicenceValidator.go(payload, licenceExists, dueReturns)
+  const validationResult = LicenceValidator.go(payload, licenceExists, dueReturnsExist)
 
   return formatValidationResult(validationResult)
 }
