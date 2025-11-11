@@ -17,7 +17,7 @@ const SEVEN_DAYS = 7
  *
  * Notify has a retention period of 7 days, so we only want 'notifications' created within the last 7 days.
  *
- * @param {string | null} eventId - When an event id is provided we check the status only for the event and only for emails.
+ * @param {string} [eventId] - When an event id is provided we check the status only for the event and only for emails.
  *
  * @returns {Promise<object[]>} - an array of 'notifications'
  */
