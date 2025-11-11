@@ -7,7 +7,7 @@
 
 const DetermineRecipientsService = require('./determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
-const FetchLetterRecipientsService = require('./fetch-letter-recipients.service.js')
+const FetchPaperReturnRecipientsService = require('./fetch-paper-return-recipients.service.js')
 const FetchReturnsRecipientsService = require('./fetch-returns-recipients.service.js')
 const RecipientsService = require('./recipients.service.js')
 const { NoticeType } = require('../../../lib/static-lookups.lib.js')
@@ -33,7 +33,7 @@ async function _recipientsData(session) {
   if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
     return FetchAbstractionAlertRecipientsService.go(session)
   } else if (session.noticeType === NoticeType.PAPER_RETURN) {
-    return FetchLetterRecipientsService.go(session)
+    return FetchPaperReturnRecipientsService.go(session)
   } else {
     return FetchReturnsRecipientsService.go(session)
   }

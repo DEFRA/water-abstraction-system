@@ -11,9 +11,9 @@ const { expect } = Code
 const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
 
 // Thing under test
-const FetchLetterRecipientsService = require('../../../../app/services/notices/setup/fetch-letter-recipients.service.js')
+const FetchPaperReturnRecipientsService = require('../../../../app/services/notices/setup/fetch-paper-return-recipients.service.js')
 
-describe('Notices - Setup - Fetch letter recipients service', () => {
+describe('Notices - Setup - Fetch Paper Return Recipients service', () => {
   let seedData
   let session
 
@@ -25,11 +25,11 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
 
   describe('when there is a "licence holder"', () => {
     beforeEach(async () => {
-      session.licenceRef = seedData.licenceHolderLetter.licenceRef
+      session.licenceRef = seedData.licenceHolderTransferredReturnLog.licenceRef
     })
 
     it('returns the "licence holder" ', async () => {
-      const result = await FetchLetterRecipientsService.go(session)
+      const result = await FetchPaperReturnRecipientsService.go(session)
 
       expect(result).to.equal([
         {
@@ -51,7 +51,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
           },
           contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
           contact_type: 'Licence holder',
-          licence_refs: [seedData.licenceHolderLetter.licenceRef],
+          licence_refs: [seedData.licenceHolderTransferredReturnLog.licenceRef],
           message_type: 'Letter'
         }
       ])
@@ -59,11 +59,11 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
 
     describe('and a "returns to" with different contacts', () => {
       beforeEach(async () => {
-        session.licenceRef = seedData.licenceHolderAndReturnToLetter.licenceRef
+        session.licenceRef = seedData.licenceHolderAndReturnToTransferredReturnLog.licenceRef
       })
 
       it('returns the "licence holder" and "returns to"', async () => {
-        const result = await FetchLetterRecipientsService.go(session)
+        const result = await FetchPaperReturnRecipientsService.go(session)
 
         expect(result).to.equal([
           {
@@ -85,7 +85,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
             },
             contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
             contact_type: 'Licence holder',
-            licence_refs: [seedData.licenceHolderAndReturnToLetter.licenceRef],
+            licence_refs: [seedData.licenceHolderAndReturnToTransferredReturnLog.licenceRef],
             message_type: 'Letter'
           },
           {
@@ -107,7 +107,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
             },
             contact_hash_id: 'a4737b69f58b3f3b01933a42b46ddf96',
             contact_type: 'Returns to',
-            licence_refs: [seedData.licenceHolderAndReturnToLetter.licenceRef],
+            licence_refs: [seedData.licenceHolderAndReturnToTransferredReturnLog.licenceRef],
             message_type: 'Letter'
           }
         ])
@@ -116,11 +116,11 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
 
     describe('and a "returns to" with the same contact', () => {
       beforeEach(async () => {
-        session.licenceRef = seedData.licenceHolderAndReturnToLetterWithTheSameAddress.licenceRef
+        session.licenceRef = seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef
       })
 
       it('returns the "licence holder"', async () => {
-        const result = await FetchLetterRecipientsService.go(session)
+        const result = await FetchPaperReturnRecipientsService.go(session)
 
         expect(result).to.equal([
           {
@@ -142,7 +142,7 @@ describe('Notices - Setup - Fetch letter recipients service', () => {
             },
             contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
             contact_type: 'Licence holder',
-            licence_refs: [seedData.licenceHolderAndReturnToLetterWithTheSameAddress.licenceRef],
+            licence_refs: [seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef],
             message_type: 'Letter'
           }
         ])

@@ -7,11 +7,11 @@
 
 const AbstractionAlertDownloadRecipientsPresenter = require('../../../presenters/notices/setup/abstraction-alert-download-recipients.presenter.js')
 const DownloadAdHocRecipientsPresenter = require('../../../presenters/notices/setup/download-adhoc-recipients.presenter.js')
-const DownloadLetterRecipientsPresenter = require('../../../presenters/notices/setup/download-letter-recipients.presenter.js')
+const DownloadPaperReturnRecipientsPresenter = require('../../../presenters/notices/setup/download-paper-return-recipients.presenter.js')
 const DownloadRecipientsPresenter = require('../../../presenters/notices/setup/download-recipients.presenter.js')
 const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
-const FetchLetterRecipientsService = require('./fetch-letter-recipients.service.js')
+const FetchPaperReturnRecipientsService = require('./fetch-paper-return-recipients.service.js')
 const RecipientsService = require('./recipients.service.js')
 const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 
@@ -74,11 +74,11 @@ async function _recipients(session) {
 }
 
 async function _paperReturn(session) {
-  const letterRecipientsData = await FetchLetterRecipientsService.go(session)
+  const letterRecipientsData = await FetchPaperReturnRecipientsService.go(session)
 
   const letterRecipients = RecipientsService.go(session, letterRecipientsData)
 
-  return DownloadLetterRecipientsPresenter.go(letterRecipients, session)
+  return DownloadPaperReturnRecipientsPresenter.go(letterRecipients, session)
 }
 
 module.exports = {
