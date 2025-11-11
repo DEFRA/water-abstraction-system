@@ -117,7 +117,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitCheckService, 'go').resolves({ returnId: 'TEST_RETURN_ID' })
+          Sinon.stub(SubmitCheckService, 'go').resolves({ returnId: '168026d8-f29b-4165-8726-734c6b14adec' })
         })
 
         it('redirects to the confirmed page on success', async () => {
@@ -126,7 +126,9 @@ describe('Return Logs - Setup - Controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/return-logs/setup/confirmed/TEST_RETURN_ID')
+          expect(response.headers.location).to.equal(
+            '/system/return-logs/setup/confirmed/168026d8-f29b-4165-8726-734c6b14adec'
+          )
         })
       })
 

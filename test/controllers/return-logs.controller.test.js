@@ -89,7 +89,7 @@ describe('Return Logs controller', () => {
           const response = await server.inject(_postOptions())
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/return-logs/RETURN_ID')
+          expect(response.headers.location).to.equal('/system/return-logs/168026d8-f29b-4165-8726-734c6b14adec')
         })
       })
     })
@@ -102,7 +102,7 @@ describe('Return Logs controller', () => {
       beforeEach(() => {
         getOptions = {
           method: 'GET',
-          url: `/return-logs/RETURN_ID/download?version=1`,
+          url: `/return-logs/168026d8-f29b-4165-8726-734c6b14adec/download?version=1`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['billing'] }
@@ -148,7 +148,7 @@ function _postOptions(payload) {
 }
 
 function _url(version) {
-  const url = new URL('/return-logs/RETURN_ID', 'http://example.com')
+  const url = new URL('/return-logs/168026d8-f29b-4165-8726-734c6b14adec', 'http://example.com')
 
   if (version) {
     url.searchParams.append('version', version)
