@@ -7,79 +7,9 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
-{% from "macros/return-status-tag.njk" import statusTag %}
+{% from "macros/return-status-tag.njk" import statusTag as returnStatusTag %}
 
-{% set exactMatchParagraph %}<p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>{% endset %}
-
-{% macro resultCard(col1, col2, col3) %}
-  <!--result card-->
-  <hr class="govuk-section-break govuk-section-break--visible">
-  <div class="govuk-grid-row govuk-!-margin-top-0">
-    <dl class="govuk-body govuk-!-margin-0">
-      <div class="govuk-grid-column-one-third govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2 ">
-        {{ col1 | safe }}
-      </div>
-      <div class="govuk-grid-column-one-third govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2">
-        {{ col2 | safe }}
-      </div>
-      <div class="govuk-grid-column-one-third govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2">
-        {{ col3 | safe }}
-      </div>
-    </dl>
-  </div>
-  <hr class="govuk-section-break govuk-section-break--visible">
-{% endmacro %}
-
-{% macro resultCardTerm(text) %}<dt class="govuk-!-margin-right-3 govuk-!-display-inline-block govuk-!-font-size-16">{{ text | safe }}</dt>{% endmacro %}
-{% macro resultCardLargeTerm(text) %}<dt class="govuk-!-margin-right-3 govuk-!-display-inline-block">{{ text | safe }}</dt>{% endmacro %}
-{% macro resultCardDetail(text) %}<dd class="govuk-!-display-inline-block govuk-!-margin-left-0 govuk-!-font-size-16">{{ text | safe }}</dd>{% endmacro %}
-{% macro resultCardLargeDetail(text) %}<dd class="govuk-!-display-inline-block govuk-!-margin-left-0">{{ text | safe }}</dd>{% endmacro %}
-{% macro resultCardLink(text, href) %}<a class="govuk-link govuk-link--no-underline govuk-link--no-visited-state" href="{{ href }}">{{ text }}</a>{% endmacro %}
-
-{% macro licenceResultCard(licence, exactMatch) %}
-  {% set link = resultCardLink(licence.licenceRef, '/system/licences/' + licence.id + '/summary') %}
-  {% set endDateContent %}{{ licence.licenceEndDate }} {{ govukTag({ text: licence.licenceEndedText, classes: 'govuk-tag--grey' }) if licence.licenceEndedText }}{% endset %}
-  {% set col1 %}
-    {{ resultCardLargeTerm('Licence:') }}{{ resultCardLargeDetail(link) | safe }}{{ exactMatchParagraph | safe if exactMatch }}
-  {% endset %}
-  {% set col2 %}
-    {{ resultCardTerm('Licence holder:') }}{{ resultCardDetail(licence.licenceHolderName) }}
-  {% endset %}
-  {% set col3 %}
-    {{ resultCardTerm('End date:') }}{{ resultCardDetail(endDateContent) | safe }}
-  {% endset %}
-  {{ resultCard(col1, col2, col3) }}
-{% endmacro %}
-
-{% macro monitoringStationResultCard(monitoringStation, exactMatch) %}
-  {% set link = resultCardLink(monitoringStation.label, '/system/monitoring-stations/' + monitoringStation.id) %}
-  {% set col1 %}
-    {{ resultCardLargeTerm('Monitoring station:') }}{{ resultCardLargeDetail(link) | safe }}{{ exactMatchParagraph | safe if exactMatch }}
-  {% endset %}
-  {% set col2 %}
-    {{ resultCardTerm('River:') }}{{ resultCardDetail(monitoringStation.riverName) }}
-  {% endset %}
-  {% set col3 %}
-    {{ resultCardTerm('Grid reference:') }}{{ resultCardDetail(monitoringStation.gridReference) }}
-  {% endset %}
-  {{ resultCard(col1, col2, col3 )}}
-{% endmacro %}
-
-{% macro returnLogResultCard(returnLog, exactMatch) %}
-  {% set link = resultCardLink(returnLog.returnReference, '/system/return-logs?id=' + returnLog.id) %}
-  {% set licenceLink = resultCardLink(returnLog.licenceRef, '/system/licences/' + returnLog.licenceId + '/returns') %}
-  {% set endDateContent %}{{ returnLog.endDate }} {{ statusTag(returnLog.statusText, true) if returnLog.statusText }}{% endset %}
-  {% set col1 %}
-    {{ resultCardLargeTerm('Return reference:') }}{{ resultCardLargeDetail(link) | safe }}{{ exactMatchParagraph | safe if exactMatch }}
-  {% endset %}
-  {% set col2 %}
-    {{ resultCardTerm('Licence returns:') }}{{ resultCardDetail(licenceLink) | safe }}
-  {% endset %}
-  {% set col3 %}
-    {{ resultCardTerm('End date:') }}{{ resultCardDetail(endDateContent) | safe }}
-  {% endset %}
-  {{ resultCard(col1, col2, col3 )}}
-{% endmacro %}
+{% macro licenceStatusTag(text) %}{{ govukTag({ text: text, classes: 'govuk-tag--grey' }) }}{% endmacro %}
 
 {% set filterContent %}
   <h2 class="govuk-heading-m govuk-!-margin-bottom-5">Filter matches by</h2>
@@ -181,24 +111,66 @@
         </div>
       </div>
     {% else %}
-      <hr class="govuk-section-break govuk-section-break--visible">
+      <hr class="searchresult-separator">
 
       {% if showExactResults %}
         {% if exactMatches.licences %}
           {% for licence in exactMatches.licences %}
-            {{ licenceResultCard(licence, true) }}
+            <hr class="searchresult-separator">
+            <div class="searchresult-row">
+              <dl class="searchresult-list">
+                <div class="searchresult-column">
+                  <dt class="searchresult-term-l">Licence:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a></dd><p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Licence holder:</dt><dd class="searchresult-detail">{{ licence.licenceHolderName }}</dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">End date:</dt><dd class="searchresult-detail">{{ licence.licenceEndDate }} {{ licenceStatusTag(licence.licenceEndedText) if licence.licenceEndedText }}</dd>
+                </div>
+              </dl>
+            </div>
+            <hr class="searchresult-separator">
           {% endfor %}
         {% endif %}
 
         {% if exactMatches.monitoringStations %}
           {% for monitoringStation in exactMatches.monitoringStations %}
-            {{ monitoringStationResultCard(monitoringStation, true) }}
+            <hr class="searchresult-separator">
+            <div class="searchresult-row">
+              <dl class="searchresult-list">
+                <div class="searchresult-column">
+                  <dt class="searchresult-term-l">Monitoring station:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/monitoring-stations/{{ monitoringStation.id }}">{{ monitoringStation.label }}</a></dd><p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">River:</dt><dd class="searchresult-detail">{{ monitoringStation.riverName }}</dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Grid reference:</dt><dd class="searchresult-detail">{{ monitoringStation.gridReference }}</dd>
+                </div>
+              </dl>
+            </div>
+            <hr class="searchresult-separator">
           {% endfor %}
         {% endif %}
 
         {% if exactMatches.returnLogs %}
           {% for returnLog in exactMatches.returnLogs %}
-            {{ returnLogResultCard(returnLog, true) }}
+            <hr class="searchresult-separator">
+            <div class="searchresult-row">
+              <dl class="searchresult-list">
+                <div class="searchresult-column">
+                  <dt class="searchresult-term-l">Return reference:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/return-logs?id={{ returnLog.id }}">{{ returnLog.returnReference }}</a></dd><p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Licence returns:</dt><dd class="searchresult-detail"><a class="searchresult-link" href="/system/licences/{{ returnLog.licenceId }}/returns">{{ returnLog.licenceRef }}</a></dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">End date:</dt><dd class="searchresult-detail">{{ returnLog.endDate }} {{ returnStatusTag(returnLog.statusText, true) if returnLog.statusText }}</dd>
+                </div>
+              </dl>
+            </div>
+            <hr class="searchresult-separator">
           {% endfor %}
         {% endif %}
       {% endif %}
@@ -206,24 +178,66 @@
       {% if not noPartialResults %}
         {% if partialMatches.licences %}
           {% for licence in partialMatches.licences %}
-            {{ licenceResultCard(licence) }}
+            <hr class="searchresult-separator">
+            <div class="searchresult-row">
+              <dl class="searchresult-list">
+                <div class="searchresult-column">
+                  <dt class="searchresult-term-l">Licence:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a></dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Licence holder:</dt><dd class="searchresult-detail">{{ licence.licenceHolderName }}</dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">End date:</dt><dd class="searchresult-detail">{{ licence.licenceEndDate }} {{ licenceStatusTag(licence.licenceEndedText) if licence.licenceEndedText }}</dd>
+                </div>
+              </dl>
+            </div>
+            <hr class="searchresult-separator">
           {% endfor %}
         {% endif %}
 
         {% if partialMatches.monitoringStations %}
           {% for monitoringStation in partialMatches.monitoringStations %}
-            {{ monitoringStationResultCard(monitoringStation) }}
+            <hr class="searchresult-separator">
+            <div class="searchresult-row">
+              <dl class="searchresult-list">
+                <div class="searchresult-column">
+                  <dt class="searchresult-term-l">Monitoring station:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/monitoring-stations/{{ monitoringStation.id }}">{{ monitoringStation.label }}</a></dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">River:</dt><dd class="searchresult-detail">{{ monitoringStation.riverName }}</dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Grid reference:</dt><dd class="searchresult-detail">{{ monitoringStation.gridReference }}</dd>
+                </div>
+              </dl>
+            </div>
+            <hr class="searchresult-separator">
           {% endfor %}
         {% endif %}
 
         {% if partialMatches.returnLogs %}
           {% for returnLog in partialMatches.returnLogs %}
-            {{ returnLogResultCard(returnLog) }}
+            <hr class="searchresult-separator">
+            <div class="searchresult-row">
+              <dl class="searchresult-list">
+                <div class="searchresult-column">
+                  <dt class="searchresult-term-l">Return reference:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/return-logs?id={{ returnLog.id }}">{{ returnLog.returnReference }}</a></dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Licence returns:</dt><dd class="searchresult-detail"><a class="searchresult-link" href="/system/licences/{{ returnLog.licenceId }}/returns">{{ returnLog.licenceRef }}</a></dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">End date:</dt><dd class="searchresult-detail">{{ returnLog.endDate }} {{ returnStatusTag(returnLog.statusText, true) if returnLog.statusText }}</dd>
+                </div>
+              </dl>
+            </div>
+            <hr class="searchresult-separator">
           {% endfor %}
         {% endif %}
       {% endif %}
 
-      <hr class="govuk-section-break govuk-section-break--visible">
+      <hr class="searchresult-separator">
 
       {% if pagination.numberOfPages > 1 %}
         <div class="govuk-grid-row govuk-!-margin-top-9">
