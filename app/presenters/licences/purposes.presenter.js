@@ -2,7 +2,7 @@
 
 /**
  * Formats the licence and related licenceVersionPurposes data for the view licence purposes page
- * @module ViewLicencePurposesPresenter
+ * @module PurposesPresenter
  */
 
 const { formatAbstractionPeriod } = require('../base.presenter.js')
@@ -17,11 +17,16 @@ const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
  * @returns {object} licence and licenceVersionPurposes data needed by the view template
  */
 function go(licence) {
+  const { id, licenceRef, licenceVersions } = licence
+
   return {
-    id: licence.id,
-    licencePurposes: _formatLicencePurposes(licence.licenceVersions[0].licenceVersionPurposes),
-    licenceRef: licence.licenceRef,
-    pageTitle: 'Licence purpose details'
+    backLink: {
+      href: `/system/licences/${id}/summary`,
+      text: 'Go back to summary'
+    },
+    licencePurposes: _formatLicencePurposes(licenceVersions[0].licenceVersionPurposes),
+    pageTitle: 'Licence purpose details',
+    pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 

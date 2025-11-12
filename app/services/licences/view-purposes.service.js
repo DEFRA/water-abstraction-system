@@ -2,11 +2,11 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence purposes page
- * @module ViewLicencePurposesService
+ * @module ViewPurposesService
  */
 
 const FetchLicencePurposesService = require('../licences/fetch-licence-purposes.service.js')
-const ViewLicencePurposesPresenter = require('../../presenters/licences/view-licence-purposes.presenter.js')
+const PurposesPresenter = require('../../presenters/licences/purposes.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence purposes page
@@ -18,7 +18,7 @@ const ViewLicencePurposesPresenter = require('../../presenters/licences/view-lic
 async function go(licenceId) {
   const licencePurposes = await FetchLicencePurposesService.go(licenceId)
 
-  const pageData = ViewLicencePurposesPresenter.go(licencePurposes)
+  const pageData = PurposesPresenter.go(licencePurposes)
 
   return {
     activeNavBar: 'search',
