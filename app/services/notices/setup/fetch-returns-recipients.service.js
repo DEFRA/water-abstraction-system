@@ -205,7 +205,7 @@ function _filterByPeriod(session) {
     removeLicences = ''
   } = session
   const excludeLicences = transformStringOfLicencesToArray(removeLicences)
-  const bindings = [endDate, startDate, summer, quarterly, excludeLicences]
+  const bindings = [startDate, endDate, summer, quarterly, excludeLicences]
 
   let dueDateCondition
 
@@ -220,8 +220,7 @@ function _filterByPeriod(session) {
     }
   }
 
-  const where = `
-    AND rl.start_date >= ?
+  const where = `AND rl.start_date >= ?
     AND rl.end_date <= ?
     AND rl.metadata->>'isSummer' = ?
     AND rl.quarterly = ?
@@ -390,7 +389,7 @@ function _query(where) {
       best_contact_type b
       USING (contact_hash_id)
     ORDER BY
-      b.email NULLS LAST
+      b.email NULLS LAST;
 `
 }
 

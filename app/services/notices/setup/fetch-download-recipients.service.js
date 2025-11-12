@@ -97,7 +97,7 @@ function _filterByPeriod(session) {
     removeLicences = ''
   } = session
   const excludeLicences = transformStringOfLicencesToArray(removeLicences)
-  const bindings = [endDate, startDate, summer, quarterly, excludeLicences]
+  const bindings = [startDate, endDate, summer, quarterly, excludeLicences]
 
   let dueDateCondition
 
