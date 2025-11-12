@@ -10,6 +10,8 @@ const { expect } = Code
 
 // Test helpers
 const LicenceModel = require('../../../app/models/licence.model.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchLicencePurposesService = require('../../../app/services/licences/fetch-licence-purposes.service.js')
@@ -18,17 +20,26 @@ const FetchLicencePurposesService = require('../../../app/services/licences/fetc
 const ViewLicencePurposesService = require('../../../app/services/licences/view-licence-purposes.service.js')
 
 describe('Licences - View Licence Purposes service', () => {
+  let licenceId
+  let licenceRef
+
   beforeEach(() => {
-    Sinon.stub(FetchLicencePurposesService, 'go').returns(_testFetchLicencePurposes())
+    licenceId = generateUUID()
+    licenceRef = generateLicenceRef()
+
+    Sinon.stub(FetchLicencePurposesService, 'go').returns(_testFetchLicencePurposes(licenceId, licenceRef))
   })
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewLicencePurposesService.go('761bc44f-80d5-49ae-ab46-0a90495417b5')
+      const result = await ViewLicencePurposesService.go(licenceId)
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
+        backLink: {
+          href: `/system/licences/${licenceId}/summary`,
+          text: 'Go back to summary'
+        },
         licencePurposes: [
           {
             abstractionAmounts: [
@@ -46,27 +57,27 @@ describe('Licences - View Licence Purposes service', () => {
             purposeDescription: 'Spray Irrigation - Storage'
           }
         ],
-        licenceRef: '01/123',
-        pageTitle: 'Licence purpose details'
+        pageTitle: 'Licence purpose details',
+        pageTitleCaption: `Licence ${licenceRef}`
       })
     })
   })
 })
 
-function _testFetchLicencePurposes() {
+function _testFetchLicencePurposes(licenceId, licenceRef) {
   return LicenceModel.fromJson({
-    id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
-    licenceRef: '01/123',
+    id: licenceId,
+    licenceRef,
     licenceVersions: [
       {
         createdAt: new Date('2022-06-05'),
-        id: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
+        id: generateUUID(),
         reason: 'new-licence',
         status: 'current',
         startDate: new Date('2022-04-01'),
         licenceVersionPurposes: [
           {
-            id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+            id: generateUUID(),
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
@@ -81,19 +92,19 @@ function _testFetchLicencePurposes() {
               }
             ],
             purpose: {
-              id: '0316229a-e76d-4785-bc2c-65075a1a8f50',
+              id: generateUUID(),
               description: 'Spray Irrigation - Storage'
             },
             points: [
               {
-                id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+                id: generateUUID(),
                 description: null,
                 ngr1: 'TL 23198 88603',
                 ngr2: null,
                 ngr3: null,
                 ngr4: null,
                 source: {
-                  id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db',
+                  id: generateUUID(),
                   description: 'SURFACE WATER SOURCE OF SUPPLY'
                 }
               }

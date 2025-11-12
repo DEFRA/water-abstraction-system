@@ -10,15 +10,23 @@ const { expect } = Code
 // Test helpers
 const LicenceModel = require('../../../app/models/licence.model.js')
 const PointModel = require('../../../app/models/point.model.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const ViewLicencePurposePresenter = require('../../../app/presenters/licences/view-licence-purposes.presenter.js')
 
 describe('Licences - View Licence Purpose presenter', () => {
+  let licenceId
+  let licenceRef
+
   let licence
 
   beforeEach(() => {
-    licence = _testLicence()
+    licenceId = generateUUID()
+    licenceRef = generateLicenceRef()
+
+    licence = _testLicence(licenceId, licenceRef)
   })
 
   describe('when provided with populated licence purposes', () => {
@@ -26,7 +34,10 @@ describe('Licences - View Licence Purpose presenter', () => {
       const result = ViewLicencePurposePresenter.go(licence)
 
       expect(result).to.equal({
-        id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
+        backLink: {
+          href: `/system/licences/${licenceId}/summary`,
+          text: 'Go back to summary'
+        },
         licencePurposes: [
           {
             abstractionAmounts: [
@@ -44,8 +55,8 @@ describe('Licences - View Licence Purpose presenter', () => {
             purposeDescription: 'Spray Irrigation - Storage'
           }
         ],
-        licenceRef: '01/123',
-        pageTitle: 'Licence purpose details'
+        pageTitle: 'Licence purpose details',
+        pageTitleCaption: `Licence ${licenceRef}`
       })
     })
   })
@@ -231,14 +242,14 @@ describe('Licences - View Licence Purpose presenter', () => {
       describe('when the licence has more than one value in the abstractionPoints array', () => {
         beforeEach(() => {
           const point = PointModel.fromJson({
-            id: '21d8e899-68de-4a63-9ee7-f1ee56e4b58c',
+            id: generateUUID(),
             description: null,
             ngr1: 'TL 22198 84603',
             ngr2: null,
             ngr3: null,
             ngr4: null,
             source: {
-              id: 'd5fdb3ca-3f03-43ef-96ca-5c3e97e7f112',
+              id: generateUUID(),
               description: 'Tidal Water Midlands Region'
             }
           })
@@ -266,33 +277,33 @@ describe('Licences - View Licence Purpose presenter', () => {
   })
 })
 
-function _testLicence() {
+function _testLicence(licenceId, licenceRef) {
   const point = PointModel.fromJson({
-    id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+    id: generateUUID(),
     description: null,
     ngr1: 'TL 23198 88603',
     ngr2: null,
     ngr3: null,
     ngr4: null,
     source: {
-      id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db',
+      id: generateUUID(),
       description: 'SURFACE WATER SOURCE OF SUPPLY'
     }
   })
 
   return LicenceModel.fromJson({
-    id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
-    licenceRef: '01/123',
+    id: licenceId,
+    licenceRef,
     licenceVersions: [
       {
         createdAt: new Date('2022-06-05'),
-        id: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
+        id: generateUUID(),
         reason: 'new-licence',
         status: 'current',
         startDate: new Date('2022-04-01'),
         licenceVersionPurposes: [
           {
-            id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+            id: generateUUID(),
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
@@ -307,7 +318,7 @@ function _testLicence() {
               }
             ],
             purpose: {
-              id: '0316229a-e76d-4785-bc2c-65075a1a8f50',
+              id: generateUUID(),
               description: 'Spray Irrigation - Storage'
             },
             points: [point]
