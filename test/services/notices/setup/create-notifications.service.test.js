@@ -9,6 +9,8 @@ const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
+const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
@@ -416,7 +418,7 @@ describe('Notices - Setup - Create Notifications service', () => {
             name: 'Mr H J Potter',
             periodEndDate: null,
             periodStartDate: null,
-            returnDueDate: '10 December 2025'
+            returnDueDate: formatLongDate(futureDueDate('letter'))
           },
           recipient: null,
           returnLogIds: recipients[0].return_log_ids,
@@ -444,7 +446,7 @@ describe('Notices - Setup - Create Notifications service', () => {
             name: 'Mr H J Weasley',
             periodEndDate: null,
             periodStartDate: null,
-            returnDueDate: '10 December 2025'
+            returnDueDate: formatLongDate(futureDueDate('letter'))
           },
           recipient: null,
           returnLogIds: recipients[1].return_log_ids,
