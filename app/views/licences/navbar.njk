@@ -1,7 +1,7 @@
 <style>
   /* =========================================
      GOV.UK-style vertical sub-navigation
-     Based on x-govuk-sub-navigation
+     with nested sections
      ========================================= */
 
   .x-govuk-sub-navigation {
@@ -20,7 +20,7 @@
     padding-left: 0.75rem;
   }
 
-  .x-govuk-sub-navigation__section-item a {
+  .x-govuk-sub-navigation__link {
     display: block;
     text-decoration: none;
     color: #1d70b8; /* GOV.UK blue */
@@ -29,11 +29,11 @@
     padding: 0.25rem 0;
   }
 
-  .x-govuk-sub-navigation__section-item a:hover {
+  .x-govuk-sub-navigation__link:hover {
     text-decoration: underline;
   }
 
-  .x-govuk-sub-navigation__section-item a:focus {
+  .x-govuk-sub-navigation__link:focus {
     outline: 3px solid #ffdd00; /* GOV.UK yellow */
     outline-offset: 0;
     background-color: #ffdd00;
@@ -44,11 +44,40 @@
     border-left-color: #1d70b8;
   }
 
-  .x-govuk-sub-navigation__section-item--current a {
+  .x-govuk-sub-navigation__section-item--current > .x-govuk-sub-navigation__link {
     font-weight: bold;
     color: #0b0c0c;
     text-decoration: none;
   }
+
+  /* Nested section styling */
+  .x-govuk-sub-navigation__section--nested {
+    margin-top: 0.25rem;
+    margin-bottom: 0.5rem;
+    padding-left: 1.25rem; /* deeper indent for child list */
+    border-left: 1px solid #b1b4b6; /* subtle visual connection */
+  }
+
+  .x-govuk-sub-navigation__section--nested .x-govuk-sub-navigation__section-item {
+    border: none;
+    margin-bottom: 0.25rem;
+    padding-left: 0;
+  }
+
+  .x-govuk-sub-navigation__section--nested .x-govuk-sub-navigation__link {
+    font-size: 15px;
+    color: #1d70b8;
+  }
+
+  .x-govuk-sub-navigation__section--nested
+  .x-govuk-sub-navigation__section-item--current
+  > .x-govuk-sub-navigation__link {
+    font-weight: bold;
+    color: #0b0c0c;
+    text-decoration: none;
+  }
+
+
 </style>
 
 <nav class="x-govuk-sub-navigation" aria-labelledby="sub-navigation-heading">
@@ -59,6 +88,25 @@
       <a class="x-govuk-sub-navigation__link" href="summary" aria-current="{{ 'page' if activeTab === 'summary' }}">
         Licence summary
       </a>
+
+      <ul class="x-govuk-sub-navigation__section x-govuk-sub-navigation__section--nested">
+        <li class="x-govuk-sub-navigation__section-item x-govuk-sub-navigation__section-item--current">
+          <a class="x-govuk-sub-navigation__link" href="purposes" aria-current="true">
+            Purposes, periods and amounts
+          </a>
+        </li>
+        <li class="x-govuk-sub-navigation__section-item">
+          <a class="x-govuk-sub-navigation__link" href="points">
+            Points
+          </a>
+        </li>
+        <li class="x-govuk-sub-navigation__section-item">
+          <a class="x-govuk-sub-navigation__link" href="conditions">
+            Conditions
+          </a>
+        </li>
+      </ul>
+
     </li>
 
     <li class="x-govuk-sub-navigation__section-item {% if activeTab === 'contact-details' %}x-govuk-sub-navigation__section-item--current{% endif %}">
