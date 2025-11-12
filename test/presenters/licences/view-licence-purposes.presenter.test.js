@@ -19,7 +19,6 @@ const ViewLicencePurposePresenter = require('../../../app/presenters/licences/vi
 describe('Licences - View Licence Purpose presenter', () => {
   let licenceId
   let licenceRef
-
   let licence
 
   beforeEach(() => {
