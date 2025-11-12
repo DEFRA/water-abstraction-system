@@ -7,7 +7,7 @@
 
 const Joi = require('joi')
 
-const errorMessage = 'Select at least one financial year'
+const ERROR_MESSAGE = 'Select at least one financial year'
 
 /**
  * Validates data submitted for the `licences/{licenceId}/mark-for-supplementary-billing` page
@@ -27,8 +27,8 @@ function go(payload) {
       .single() // allows string to be treated as [string]
       .required()
       .messages({
-        'any.required': errorMessage,
-        'array.sparse': errorMessage
+        'any.required': ERROR_MESSAGE,
+        'array.sparse': ERROR_MESSAGE
       })
   })
 
