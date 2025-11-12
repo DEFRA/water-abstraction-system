@@ -1,0 +1,98 @@
+<style>
+  /* =========================================
+     GOV.UK-style vertical sub-navigation
+     Based on x-govuk-sub-navigation
+     ========================================= */
+
+  .x-govuk-sub-navigation {
+    margin-bottom: 2rem;
+  }
+
+  .x-govuk-sub-navigation__section {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .x-govuk-sub-navigation__section-item {
+    border-left: 4px solid transparent;
+    margin-bottom: 0.5rem;
+    padding-left: 0.75rem;
+  }
+
+  .x-govuk-sub-navigation__section-item a {
+    display: block;
+    text-decoration: none;
+    color: #1d70b8; /* GOV.UK blue */
+    font-size: 16px;
+    line-height: 1.25;
+    padding: 0.25rem 0;
+  }
+
+  .x-govuk-sub-navigation__section-item a:hover {
+    text-decoration: underline;
+  }
+
+  .x-govuk-sub-navigation__section-item a:focus {
+    outline: 3px solid #ffdd00; /* GOV.UK yellow */
+    outline-offset: 0;
+    background-color: #ffdd00;
+    color: #0b0c0c;
+  }
+
+  .x-govuk-sub-navigation__section-item--current {
+    border-left-color: #1d70b8;
+  }
+
+  .x-govuk-sub-navigation__section-item--current a {
+    font-weight: bold;
+    color: #0b0c0c;
+    text-decoration: none;
+  }
+</style>
+
+<nav class="x-govuk-sub-navigation" aria-labelledby="sub-navigation-heading">
+  <h2 class="govuk-visually-hidden" id="sub-navigation-heading">Pages in this section</h2>
+
+  <ul class="x-govuk-sub-navigation__section">
+    <li class="x-govuk-sub-navigation__section-item {% if activeTab === 'summary' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+      <a class="x-govuk-sub-navigation__link" href="summary" aria-current="{{ 'page' if activeTab === 'summary' }}">
+        Licence summary
+      </a>
+    </li>
+
+    <li class="x-govuk-sub-navigation__section-item {% if activeTab === 'contact-details' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+      <a class="x-govuk-sub-navigation__link" href="contact-details" aria-current="{{ 'page' if activeTab === 'contact-details' }}">
+        Contact details
+      </a>
+    </li>
+
+    <li class="x-govuk-sub-navigation__section-item {% if activeTab === 'returns' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+      <a class="x-govuk-sub-navigation__link" href="returns" aria-current="{{ 'page' if activeTab === 'returns' }}">
+        Returns
+      </a>
+    </li>
+
+    <li class="x-govuk-sub-navigation__section-item {% if activeTab === 'communications' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+      <a class="x-govuk-sub-navigation__link" href="communications" aria-current="{{ 'page' if activeTab === 'communications' }}">
+        Communications
+      </a>
+    </li>
+
+    {% if 'billing' in roles %}
+      <li class="x-govuk-sub-navigation__section-item {% if activeTab === 'bills' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+        <a class="x-govuk-sub-navigation__link" href="bills" aria-current="{{ 'page' if activeTab === 'bills' }}">
+          Bills
+        </a>
+      </li>
+    {% endif %}
+
+    {% if 'view_charge_versions' in roles %}
+      <li class="x-govuk-sub-navigation__section-item {% if activeTab === 'set-up' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+        <a class="x-govuk-sub-navigation__link" href="set-up" aria-current="{{ 'page' if activeTab === 'set-up' }}">
+          Licence set up
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>

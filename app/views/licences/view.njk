@@ -1,7 +1,5 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/tabs/macro.njk" import govukTabs %}
-
 {% if notification %}
   {% set notification = {
     html: '<strong>' + notification + '</strong>'
@@ -9,6 +7,59 @@
 {% endif %}
 
 {% block pageContent %}
+  <style>
+    /* =========================================
+       GOV.UK-style vertical sub-navigation
+       Based on x-govuk-sub-navigation
+       ========================================= */
+
+    .x-govuk-sub-navigation {
+      margin-bottom: 2rem;
+    }
+
+    .x-govuk-sub-navigation__section {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .x-govuk-sub-navigation__section-item {
+      border-left: 4px solid transparent;
+      margin-bottom: 0.5rem;
+      padding-left: 0.75rem;
+    }
+
+    .x-govuk-sub-navigation__section-item a {
+      display: block;
+      text-decoration: none;
+      color: #1d70b8; /* GOV.UK blue */
+      font-size: 16px;
+      line-height: 1.25;
+      padding: 0.25rem 0;
+    }
+
+    .x-govuk-sub-navigation__section-item a:hover {
+      text-decoration: underline;
+    }
+
+    .x-govuk-sub-navigation__section-item a:focus {
+      outline: 3px solid #ffdd00; /* GOV.UK yellow */
+      outline-offset: 0;
+      background-color: #ffdd00;
+      color: #0b0c0c;
+    }
+
+    .x-govuk-sub-navigation__section-item--current {
+      border-left-color: #1d70b8;
+    }
+
+    .x-govuk-sub-navigation__section-item--current a {
+      font-weight: bold;
+      color: #0b0c0c;
+      text-decoration: none;
+    }
+  </style>
+
   {% if (workflowWarning === true) and (('billing' in roles) or ('view_charge_versions' in roles)) %}
     {{ govukWarningText({
       text: "This licence has changed and needs the set up reviewed before it can be billed.",
@@ -22,56 +73,14 @@
     <p>Registered to <a href="/user/{{ primaryUser.id }}/status">{{ primaryUser.username }}</a></p>
   {% endif %}
 
-  <div class="govuk-tabs">
-    <h2 class="govuk-tabs__title">
-      Contents
-    </h2>
-    <ul class="govuk-tabs__list">
-      <li class="govuk-tabs__list-item {% if activeTab === 'summary' %} govuk-tabs__list-item--selected {% endif %}"
-          data-test="#tab_summary">
-        <a class="govuk-tabs__tab" href="summary">
-          Summary
-        </a>
-      </li>
-      <li
-        class="govuk-tabs__list-item {% if activeTab === 'contact-details' %} govuk-tabs__list-item--selected {% endif %}"
-        data-test="#tab_contact">
-        <a class="govuk-tabs__tab" href="contact-details">
-          Contact details
-        </a>
-      </li>
-      <li class="govuk-tabs__list-item {% if activeTab === 'returns' %} govuk-tabs__list-item--selected {% endif %}"
-          data-test="#tab_returns">
-        <a class="govuk-tabs__tab" href="returns">
-          Returns
-        </a>
-      </li>
-      <li
-        class="govuk-tabs__list-item {% if activeTab === 'communications' %} govuk-tabs__list-item--selected {% endif %}"
-        data-test="#tab_communications">
-        <a class="govuk-tabs__tab" href="communications">
-          Communications
-        </a>
-      </li>
-      {% if 'billing' in roles %}
-        <li class="govuk-tabs__list-item {% if activeTab === 'bills' %} govuk-tabs__list-item--selected {% endif %}"
-            data-test="#tab_bills">
-          <a class="govuk-tabs__tab" href="bills">
-            Bills
-          </a>
-        </li>
-      {% endif %}
-      {% if 'view_charge_versions' in roles %}
-        <li class="govuk-tabs__list-item {% if activeTab === 'set-up' %} govuk-tabs__list-item--selected {% endif %}"
-            data-test="#tab_licence_set_up">
-          <a class="govuk-tabs__tab" href="set-up">
-            Licence set up
-          </a>
-        </li>
-      {% endif %}
-    </ul>
+  <div class="govuk-grid-row govuk-!-margin-top-6">
+    <!-- Side navigation -->
+    <div class="govuk-grid-column-one-quarter">
+      {% include "licences/navbar.njk" %}
+    </div>
 
-    <div class="govuk-tabs__panel" id="{{ activeTab }}">
+    <!-- Main content area -->
+    <div class="govuk-grid-column-three-quarters">
       {% if activeTab === 'summary' %}
         {% include "licences/tabs/summary.njk" %}
       {% endif %}
