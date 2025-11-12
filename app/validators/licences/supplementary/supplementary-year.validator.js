@@ -7,6 +7,8 @@
 
 const Joi = require('joi')
 
+const errorMessage = 'Select at least one financial year'
+
 /**
  * Validates data submitted for the `licences/{licenceId}/mark-for-supplementary-billing` page
  *
@@ -19,22 +21,18 @@ const Joi = require('joi')
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
-  let years = payload.supplementaryYears
-
-  if (!Array.isArray(years)) {
-    years = [years]
-  }
-
-  const errorMessage = 'Select at least one financial year'
-
   const schema = Joi.object({
-    years: Joi.array().items(Joi.string()).required().messages({
-      'any.required': errorMessage,
-      'array.sparse': errorMessage
-    })
+    supplementaryYears: Joi.array()
+      .items(Joi.string())
+      .single() // allows string to be treated as [string]
+      .required()
+      .messages({
+        'any.required': errorMessage,
+        'array.sparse': errorMessage
+      })
   })
 
-  return schema.validate({ years }, { abortEarly: true })
+  return schema.validate(payload, { abortEarly: true })
 }
 
 module.exports = {

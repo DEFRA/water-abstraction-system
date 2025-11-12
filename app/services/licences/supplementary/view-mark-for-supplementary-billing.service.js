@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates flagging a licence for supplementary billing
- * @module MarkForSupplementaryBillingService
+ * @module ViewMarkForSupplementaryBillingService
  */
 
 const LicenceModel = require('../../../../app/models/licence.model.js')
@@ -19,11 +19,11 @@ const MarkForSupplementaryBillingPresenter = require('../../../presenters/licenc
 async function go(licenceId) {
   const licenceData = await _fetchLicenceData(licenceId)
 
-  const formattedData = MarkForSupplementaryBillingPresenter.go(licenceData)
+  const pageData = MarkForSupplementaryBillingPresenter.go(licenceData)
 
   return {
     activeNavBar: 'search',
-    ...formattedData
+    ...pageData
   }
 }
 

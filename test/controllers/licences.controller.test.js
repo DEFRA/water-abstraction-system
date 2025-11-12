@@ -17,8 +17,8 @@ const { postRequestOptions } = require('../support/general.js')
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/return-versions/setup/initiate-session.service.js')
 const LicenceSupplementaryProcessBillingFlagService = require('../../app/services/licences/supplementary/process-billing-flag.service.js')
-const MarkedForSupplementaryBillingService = require('../../app/services/licences/supplementary/marked-for-supplementary-billing.service.js')
-const MarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/mark-for-supplementary-billing.service.js')
+const ViewMarkedForSupplementaryBillingService = require('../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
+const ViewMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
 const SubmitMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
 const ViewLicenceConditionsService = require('../../app/services/licences/view-licence-conditions.service.js')
@@ -516,7 +516,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(MarkForSupplementaryBillingService, 'go').resolves(_markForSupplementaryBilling())
+          Sinon.stub(ViewMarkForSupplementaryBillingService, 'go').resolves(_markForSupplementaryBilling())
         })
 
         it('returns the page successfully', async () => {
@@ -553,7 +553,17 @@ describe('Licences controller', () => {
           Sinon.stub(SubmitMarkForSupplementaryBillingService, 'go').resolves({
             activeNavBar: 'search',
             pageTitle: 'Mark for the supplementary bill run',
-            error: { text: 'Select at least one financial year' },
+            error: {
+              errorList: [
+                {
+                  href: '#supplementaryYears',
+                  text: 'Select at least one financial year'
+                }
+              ],
+              supplementaryYears: {
+                text: 'Select at least one financial year'
+              }
+            },
             licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
             licenceRef: '01/Test',
             financialYears: [
@@ -591,7 +601,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(MarkedForSupplementaryBillingService, 'go').resolves({
+          Sinon.stub(ViewMarkedForSupplementaryBillingService, 'go').resolves({
             licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
             licenceRef: '01/test',
             pageTitle: "You've marked this licence for the next supplementary bill run"
