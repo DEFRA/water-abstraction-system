@@ -20,13 +20,13 @@ function go(licence) {
   const { id, licenceRef, licenceVersions } = licence
 
   return {
-    licencePurposes: _formatLicencePurposes(licenceVersions[0].licenceVersionPurposes),
-    pageTitle: 'Licence purpose details',
-    pageTitleCaption: `Licence ${licenceRef}`,
     backLink: {
       href: `/system/licences/${id}/summary`,
       text: 'Go back to summary'
-    }
+    },
+    licencePurposes: _formatLicencePurposes(licenceVersions[0].licenceVersionPurposes),
+    pageTitle: 'Licence purpose details',
+    pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 
