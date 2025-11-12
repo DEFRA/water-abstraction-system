@@ -18,9 +18,9 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const FetchLicencePointsService = require('../../../app/services/licences/fetch-licence-points.service.js')
 
 // Thing under test
-const ViewLicencePointsService = require('../../../app/services/licences/view-licence-points.service.js')
+const ViewPointsService = require('../../../app/services/licences/view-points.service.js')
 
-describe('View Licence Points service', () => {
+describe('Licences - View Points service', () => {
   let licenceId
   let licenceRef
 
@@ -33,7 +33,7 @@ describe('View Licence Points service', () => {
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewLicencePointsService.go('761bc44f-80d5-49ae-ab46-0a90495417b5')
+      const result = await ViewPointsService.go('761bc44f-80d5-49ae-ab46-0a90495417b5')
 
       expect(result).to.equal({
         activeNavBar: 'search',

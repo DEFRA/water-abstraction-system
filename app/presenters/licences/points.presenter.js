@@ -2,7 +2,7 @@
 
 /**
  * Formats the licence and related points data for the view licence points page
- * @module ViewLicencePointsPresenter
+ * @module PointsPresenter
  */
 
 const PointModel = require('../../models/point.model.js')
