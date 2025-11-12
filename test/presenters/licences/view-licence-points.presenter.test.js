@@ -10,15 +10,22 @@ const { expect } = Code
 // Test helpers
 const LicenceModel = require('../../../app/models/licence.model.js')
 const PointModel = require('../../../app/models/point.model.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const ViewLicencePointPresenter = require('../../../app/presenters/licences/view-licence-points.presenter.js')
 
 describe('View Licence Point presenter', () => {
   let data
+  let licenceId
+  let licenceRef
 
   beforeEach(() => {
-    data = _testData()
+    licenceId = generateUUID()
+    licenceRef = generateLicenceRef()
+
+    data = _testData(licenceId, licenceRef)
   })
 
   describe('when provided with a populated licence and points', () => {
@@ -26,7 +33,10 @@ describe('View Licence Point presenter', () => {
       const result = ViewLicencePointPresenter.go(data)
 
       expect(result).to.equal({
-        id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
+        backLink: {
+          href: `/system/licences/${licenceId}/summary`,
+          text: 'Go back to summary'
+        },
         licencePoints: [
           {
             bgsReference: 'TL 14/123',
@@ -47,8 +57,8 @@ describe('View Licence Point presenter', () => {
             wellReference: '81312'
           }
         ],
-        licenceRef: '01/123',
-        pageTitle: 'Licence abstraction points'
+        pageTitle: 'Licence abstraction points',
+        pageTitleCaption: `Licence ${licenceRef}`
       })
     })
   })
@@ -332,7 +342,7 @@ describe('View Licence Point presenter', () => {
   })
 })
 
-function _testData() {
+function _testData(licenceId, licenceRef) {
   const point = PointModel.fromJson({
     bgsReference: 'TL 14/123',
     category: 'Single Point',
@@ -341,7 +351,7 @@ function _testData() {
     hydroInterceptDistance: 8.01,
     hydroReference: 'TL 14/133',
     hydroOffsetDistance: 5.56,
-    id: 'e225a2a3-7225-4cdd-ad26-61218ba0e1cb',
+    id: generateUUID(),
     locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
     ngr1: 'SD 963 193',
     ngr2: 'SD 963 193',
@@ -356,8 +366,8 @@ function _testData() {
   })
 
   const licence = LicenceModel.fromJson({
-    id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
-    licenceRef: '01/123'
+    id: licenceId,
+    licenceRef
   })
 
   return {

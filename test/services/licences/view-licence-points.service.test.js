@@ -11,6 +11,8 @@ const { expect } = Code
 // Test helpers
 const LicenceModel = require('../../../app/models/licence.model.js')
 const PointModel = require('../../../app/models/point.model.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchLicencePointsService = require('../../../app/services/licences/fetch-licence-points.service.js')
@@ -19,8 +21,14 @@ const FetchLicencePointsService = require('../../../app/services/licences/fetch-
 const ViewLicencePointsService = require('../../../app/services/licences/view-licence-points.service.js')
 
 describe('View Licence Points service', () => {
+  let licenceId
+  let licenceRef
+
   beforeEach(() => {
-    Sinon.stub(FetchLicencePointsService, 'go').returns(_testFetchLicencePoints())
+    licenceId = generateUUID()
+    licenceRef = generateLicenceRef()
+
+    Sinon.stub(FetchLicencePointsService, 'go').returns(_testFetchLicencePoints(licenceId, licenceRef))
   })
 
   describe('when a licence with a matching ID exists', () => {
@@ -29,7 +37,10 @@ describe('View Licence Points service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
+        backLink: {
+          href: `/system/licences/${licenceId}/summary`,
+          text: 'Go back to summary'
+        },
         licencePoints: [
           {
             bgsReference: 'TL 14/123',
@@ -50,14 +61,14 @@ describe('View Licence Points service', () => {
             wellReference: '81312'
           }
         ],
-        licenceRef: '01/123',
-        pageTitle: 'Licence abstraction points'
+        pageTitle: 'Licence abstraction points',
+        pageTitleCaption: `Licence ${licenceRef}`
       })
     })
   })
 })
 
-function _testFetchLicencePoints() {
+function _testFetchLicencePoints(licenceId, licenceRef) {
   const point = PointModel.fromJson({
     bgsReference: 'TL 14/123',
     category: 'Single Point',
@@ -66,7 +77,7 @@ function _testFetchLicencePoints() {
     hydroInterceptDistance: 8.01,
     hydroReference: 'TL 14/133',
     hydroOffsetDistance: 5.56,
-    id: 'e225a2a3-7225-4cdd-ad26-61218ba0e1cb',
+    id: generateUUID(),
     locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
     ngr1: 'SD 963 193',
     ngr2: 'SD 963 193',
@@ -81,8 +92,8 @@ function _testFetchLicencePoints() {
   })
 
   const licence = LicenceModel.fromJson({
-    id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
-    licenceRef: '01/123'
+    id: licenceId,
+    licenceRef
   })
 
   return {
