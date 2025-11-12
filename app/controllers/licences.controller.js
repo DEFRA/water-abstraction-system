@@ -18,10 +18,10 @@ const ViewLicenceConditionsService = require('../services/licences/view-licence-
 const ViewLicenceContactDetailsService = require('../services/licences/view-licence-contact-details.service.js')
 const ViewLicenceContactsService = require('../services/licences/view-licence-contacts.service.js')
 const ViewLicenceHistoryService = require('../services/licences/view-licence-history.service.js')
-const ViewLicencePointsService = require('../services/licences/view-licence-points.service.js')
 const ViewLicenceReturnsService = require('../services/licences/view-licence-returns.service.js')
 const ViewLicenceSetUpService = require('../services/licences/view-licence-set-up.service.js')
 const ViewLicenceSummaryService = require('../services/licences/view-licence-summary.service.js')
+const ViewPointsService = require('../services/licences/view-points.service.js')
 const ViewPurposesService = require('../services/licences/view-purposes.service.js')
 
 const ViewLicencePage = 'licences/view.njk'
@@ -130,7 +130,7 @@ async function viewLicenceContacts(request, h) {
 async function viewLicencePoints(request, h) {
   const { id: licenceId } = request.params
 
-  const pageData = await ViewLicencePointsService.go(licenceId)
+  const pageData = await ViewPointsService.go(licenceId)
 
   return h.view('licences/points.njk', pageData)
 }

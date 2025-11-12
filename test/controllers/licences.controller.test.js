@@ -26,11 +26,11 @@ const ViewLicenceConditionsService = require('../../app/services/licences/view-l
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
 const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
 const ViewLicenceHistoryService = require('../../app/services/licences/view-licence-history.service.js')
-const ViewLicencePointsService = require('../../app/services/licences/view-licence-points.service.js')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
 const ViewLicenceSetUpService = require('../../app/services/licences/view-licence-set-up.service.js')
 const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service.js')
 const ViewPurposesService = require('../../app/services/licences/view-purposes.service.js')
+const ViewPointsService = require('../../app/services/licences/view-points.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -298,7 +298,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicencePointsService, 'go').resolves(_viewLicencePoints())
+          Sinon.stub(ViewPointsService, 'go').resolves(_viewLicencePoints())
         })
 
         it('returns the page successfully', async () => {

@@ -2,7 +2,7 @@
 
 /**
  * Formats the licence and related points data for the view licence points page
- * @module ViewLicencePointsPresenter
+ * @module PointsPresenter
  */
 
 const PointModel = require('../../models/point.model.js')
@@ -15,15 +15,21 @@ const PointModel = require('../../models/point.model.js')
  * @returns {object} licence and points data needed by the view template
  */
 function go(data) {
-  const { licence, points } = data
+  const {
+    licence: { id: licenceId, licenceRef },
+    points
+  } = data
 
   const licencePoints = _formatLicencePoints(points)
 
   return {
-    id: licence.id,
+    backLink: {
+      href: `/system/licences/${licenceId}/summary`,
+      text: 'Go back to summary'
+    },
     licencePoints,
-    licenceRef: licence.licenceRef,
-    pageTitle: 'Licence abstraction points'
+    pageTitle: 'Licence abstraction points',
+    pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 
