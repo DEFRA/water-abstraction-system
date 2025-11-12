@@ -20,12 +20,16 @@ const config = {
   // sending 125 emails and then checking the status for all 125 emails in one go.
   batchSize: parseInt(process.env.NOTIFICATIONS_BATCH_SIZE) || 125,
   callbackToken: process.env.GOV_UK_NOTIFY_AUTH_TOKEN,
-  // In conjunction with the rate limit mentioned above, we have set a delay between requests to notify. This is
-  // defaulted to 10 seconds.
-  delay: parseInt(process.env.NOTIFICATIONS_BATCH_DELAY) || 10000,
+  // At the time of adding this the service has a retention of 90 days where as Notify's default is 7
+  daysOfRetention: parseInt(process.env.GOV_UK_NOTIFY_DAYS_OF_RETENTION) || 7,
+  // Notify limits you to sending 3,000 messages per minute. This limit is calculated on a rolling basis, per API key
+  // type. A delay of 20 milliseconds after each request would result in just under 3,000 requests a minute. We go with
+  // a default of 30ms which results in approx. 2,000 requests per minute, assuming we can send them that fast!
+  delay: parseInt(process.env.GOV_UK_NOTIFY_DELAY) || 30,
   rateLimitPause: parseInt(process.env.GOV_UK_NOTIFY_RATE_LIMIT_PAUSE) || 90000,
   timeout: parseInt(process.env.GOV_UK_NOTIFY_TIMEOUT) || 10000,
-  url: process.env.GOV_UK_NOTIFY_URL
+  url: process.env.GOV_UK_NOTIFY_URL,
+  waitForStatus: parseInt(process.env.GOV_UK_NOTIFY_WAIT_FOR_STATUS) || 5000
 }
 
 module.exports = config

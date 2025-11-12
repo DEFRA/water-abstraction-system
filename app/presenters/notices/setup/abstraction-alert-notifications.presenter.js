@@ -6,14 +6,16 @@
  */
 
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
 
 /**
  * Formats recipients into notifications for an abstraction alert
  *
+ * The notifications returned are intended to both be persisted to the DB and used to formulate the request to Notify.
+ *
  * Iterates over all relevant licence monitoring stations in the session and matches recipients based on licence
  * references.
+ *
  * For each matching recipient, it generates either an email or a letter notification, depending on the presence of the
  * recipient's email.
  *
@@ -25,15 +27,13 @@ const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
  * Each licence monitoring station has a licence, multiple stations can be related to the same licence, This means that
  * a recipient can / will receive multiple notifications from different licence monitoring stations.
  *
- * The output of this function is designed to be used directly for both notification delivery and persistent storage.
+ * @param {object} session - The session instance
+ * @param {object[]} recipients - List of recipients, each containing details like email or address of the recipient
+ * @param {string} noticeId - The UUID of the notice these notifications should be linked to
  *
- * @param {object[]} recipients
- * @param {SessionModel} session - The session instance
- * @param {string} eventId
- *
- * @returns {object[]} notifications
+ * @returns {object[]} the recipients transformed into notifications
  */
-function go(recipients, session, eventId) {
+function go(session, recipients, noticeId) {
   const notifications = []
 
   const {
@@ -56,15 +56,15 @@ function go(recipients, session, eventId) {
     const matchingRecipients = _matchingRecipients(recipients, station)
 
     for (const matchingRecipient of matchingRecipients) {
+      let notification
+
       if (matchingRecipient.email) {
-        notifications.push(
-          _email(matchingRecipient, eventId, commonPersonalisation, alertType, station.restrictionType)
-        )
+        notification = _email(matchingRecipient, noticeId, commonPersonalisation, alertType, station.restrictionType)
       } else {
-        notifications.push(
-          _letter(matchingRecipient, eventId, commonPersonalisation, alertType, station.restrictionType)
-        )
+        notification = _letter(matchingRecipient, noticeId, commonPersonalisation, alertType, station.restrictionType)
       }
+
+      notifications.push(notification)
     }
   }
 
@@ -157,12 +157,9 @@ function _conditionText(notes) {
  * @private
  */
 function _email(recipient, eventId, commonPersonalisation, alertType, restrictionType) {
-  const createdAt = timestampForPostgres()
-
   const messageType = 'email'
 
   return {
-    createdAt,
     eventId,
     licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
     licences: [commonPersonalisation.licenceRef],
@@ -203,12 +200,10 @@ function _emailMessageRef(alertType, restrictionType) {
  * @private
  */
 function _letter(recipient, eventId, commonPersonalisation, alertType, restrictionType) {
-  const createdAt = timestampForPostgres()
   const messageType = 'letter'
   const address = NotifyAddressPresenter.go(recipient.contact)
 
   return {
-    createdAt,
     eventId,
     licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
     licences: [commonPersonalisation.licenceRef],

@@ -2,11 +2,11 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence points page
- * @module ViewLicencePointsService
+ * @module ViewPointsService
  */
 
 const FetchLicencePointsService = require('../licences/fetch-licence-points.service.js')
-const ViewLicencePointsPresenter = require('../../presenters/licences/view-licence-points.presenter.js')
+const PointsPresenter = require('../../presenters/licences/points.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence points page
@@ -18,7 +18,7 @@ const ViewLicencePointsPresenter = require('../../presenters/licences/view-licen
 async function go(licenceId) {
   const licencePoints = await FetchLicencePointsService.go(licenceId)
 
-  const pageData = ViewLicencePointsPresenter.go(licencePoints)
+  const pageData = PointsPresenter.go(licencePoints)
 
   return {
     activeNavBar: 'search',

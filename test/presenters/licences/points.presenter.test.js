@@ -10,23 +10,33 @@ const { expect } = Code
 // Test helpers
 const LicenceModel = require('../../../app/models/licence.model.js')
 const PointModel = require('../../../app/models/point.model.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const ViewLicencePointPresenter = require('../../../app/presenters/licences/view-licence-points.presenter.js')
+const PointsPresenter = require('../../../app/presenters/licences/points.presenter.js')
 
-describe('View Licence Point presenter', () => {
+describe('Licences - Points presenter', () => {
   let data
+  let licenceId
+  let licenceRef
 
   beforeEach(() => {
-    data = _testData()
+    licenceId = generateUUID()
+    licenceRef = generateLicenceRef()
+
+    data = _testData(licenceId, licenceRef)
   })
 
   describe('when provided with a populated licence and points', () => {
     it('returns the expected licence points details', () => {
-      const result = ViewLicencePointPresenter.go(data)
+      const result = PointsPresenter.go(data)
 
       expect(result).to.equal({
-        id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
+        backLink: {
+          href: `/system/licences/${licenceId}/summary`,
+          text: 'Go back to summary'
+        },
         licencePoints: [
           {
             bgsReference: 'TL 14/123',
@@ -47,8 +57,8 @@ describe('View Licence Point presenter', () => {
             wellReference: '81312'
           }
         ],
-        licenceRef: '01/123',
-        pageTitle: 'Licence abstraction points'
+        pageTitle: 'Licence abstraction points',
+        pageTitleCaption: `Licence ${licenceRef}`
       })
     })
   })
@@ -61,7 +71,7 @@ describe('View Licence Point presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].bgsReference).to.equal('')
         })
@@ -69,7 +79,7 @@ describe('View Licence Point presenter', () => {
 
       describe('when the point has a populated bgs reference', () => {
         it('returns the point bgs reference', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].bgsReference).to.equal('TL 14/123')
         })
@@ -83,7 +93,7 @@ describe('View Licence Point presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].category).to.equal('')
         })
@@ -91,7 +101,7 @@ describe('View Licence Point presenter', () => {
 
       describe('when the point has a populated category', () => {
         it('returns the point category', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].category).to.equal('Single Point')
         })
@@ -100,7 +110,7 @@ describe('View Licence Point presenter', () => {
 
     describe('the "depth" property', () => {
       it('returns the point depth as a string', () => {
-        const result = ViewLicencePointPresenter.go(data)
+        const result = PointsPresenter.go(data)
 
         expect(result.licencePoints[0].depth).to.equal('123')
       })
@@ -113,7 +123,7 @@ describe('View Licence Point presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].description).to.equal('')
         })
@@ -121,7 +131,7 @@ describe('View Licence Point presenter', () => {
 
       describe('when the point has a populated description', () => {
         it('returns the point description', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].description).to.equal('RIVER OUSE AT BLETSOE')
         })
@@ -130,7 +140,7 @@ describe('View Licence Point presenter', () => {
 
     describe('the "gridReference" property', () => {
       it('returns the point grid reference', () => {
-        const result = ViewLicencePointPresenter.go(data)
+        const result = PointsPresenter.go(data)
 
         expect(result.licencePoints[0].gridReference).to.equal(
           'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (RIVER OUSE AT BLETSOE)'
@@ -140,7 +150,7 @@ describe('View Licence Point presenter', () => {
 
     describe('the "hydroInterceptDistance" property', () => {
       it('returns the hydro intercept distance as a string', () => {
-        const result = ViewLicencePointPresenter.go(data)
+        const result = PointsPresenter.go(data)
 
         expect(result.licencePoints[0].hydroInterceptDistance).to.equal('8.01')
       })
@@ -153,7 +163,7 @@ describe('View Licence Point presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].hydroReference).to.equal('')
         })
@@ -161,7 +171,7 @@ describe('View Licence Point presenter', () => {
 
       describe('when the point has a populated hydro reference', () => {
         it('returns the point hydro reference', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].hydroReference).to.equal('TL 14/133')
         })
@@ -170,7 +180,7 @@ describe('View Licence Point presenter', () => {
 
     describe('the "hydroOffsetDistance" property', () => {
       it('returns the hydro offset distance as a string', () => {
-        const result = ViewLicencePointPresenter.go(data)
+        const result = PointsPresenter.go(data)
 
         expect(result.licencePoints[0].hydroOffsetDistance).to.equal('5.56')
       })
@@ -183,7 +193,7 @@ describe('View Licence Point presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].locationNote).to.equal('')
         })
@@ -191,7 +201,7 @@ describe('View Licence Point presenter', () => {
 
       describe('when the point has a populated location note', () => {
         it('returns the point location note', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].locationNote).to.equal('Castle Farm, The Loke, Gresham, Norfolk')
         })
@@ -205,7 +215,7 @@ describe('View Licence Point presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].note).to.equal('')
         })
@@ -213,7 +223,7 @@ describe('View Licence Point presenter', () => {
 
       describe('when the point has a populated note', () => {
         it('returns the point note', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].note).to.equal('WELL IS SPRING-FED')
         })
@@ -227,7 +237,7 @@ describe('View Licence Point presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].primaryType).to.equal('')
         })
@@ -235,7 +245,7 @@ describe('View Licence Point presenter', () => {
 
       describe('when the point has a populated primary type', () => {
         it('returns the point primary type', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].primaryType).to.equal('Groundwater')
         })
@@ -249,7 +259,7 @@ describe('View Licence Point presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].secondaryType).to.equal('')
         })
@@ -257,7 +267,7 @@ describe('View Licence Point presenter', () => {
 
       describe('when the point has a populated secondary type', () => {
         it('returns the point secondary type', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].secondaryType).to.equal('Borehole')
         })
@@ -271,7 +281,7 @@ describe('View Licence Point presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].sourceDescription).to.equal('')
         })
@@ -279,7 +289,7 @@ describe('View Licence Point presenter', () => {
 
       describe('when the point has a linked source with a populated source description', () => {
         it('returns the point source description', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].sourceDescription).to.equal('SURFACE WATER SOURCE OF SUPPLY')
         })
@@ -293,7 +303,7 @@ describe('View Licence Point presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].sourceType).to.equal('')
         })
@@ -301,7 +311,7 @@ describe('View Licence Point presenter', () => {
 
       describe('when the point has a linked source with a populated source type', () => {
         it('returns the point source type', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].sourceType).to.equal('Borehole')
         })
@@ -315,7 +325,7 @@ describe('View Licence Point presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].wellReference).to.equal('')
         })
@@ -323,7 +333,7 @@ describe('View Licence Point presenter', () => {
 
       describe('when the point has a populated well reference', () => {
         it('returns the point well reference', () => {
-          const result = ViewLicencePointPresenter.go(data)
+          const result = PointsPresenter.go(data)
 
           expect(result.licencePoints[0].wellReference).to.equal('81312')
         })
@@ -332,7 +342,7 @@ describe('View Licence Point presenter', () => {
   })
 })
 
-function _testData() {
+function _testData(licenceId, licenceRef) {
   const point = PointModel.fromJson({
     bgsReference: 'TL 14/123',
     category: 'Single Point',
@@ -341,7 +351,7 @@ function _testData() {
     hydroInterceptDistance: 8.01,
     hydroReference: 'TL 14/133',
     hydroOffsetDistance: 5.56,
-    id: 'e225a2a3-7225-4cdd-ad26-61218ba0e1cb',
+    id: generateUUID(),
     locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
     ngr1: 'SD 963 193',
     ngr2: 'SD 963 193',
@@ -356,8 +366,8 @@ function _testData() {
   })
 
   const licence = LicenceModel.fromJson({
-    id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
-    licenceRef: '01/123'
+    id: licenceId,
+    licenceRef
   })
 
   return {
