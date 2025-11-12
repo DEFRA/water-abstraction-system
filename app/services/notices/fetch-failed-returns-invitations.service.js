@@ -5,8 +5,6 @@
  * @module FetchFailedReturnsInvitationsService
  */
 
-const { ref } = require('objection')
-
 const NotificationModel = require('../../models/notification.model.js')
 
 /**
@@ -18,31 +16,46 @@ const NotificationModel = require('../../models/notification.model.js')
  *
  * @param {string} eventId - The event id to check.
  *
- * @returns {Promise<object[]>} - an array of 'notifications'
+ * @returns {string[]} - an array of unique 'returnLogIds'
  */
 async function go(eventId) {
-  return NotificationModel.query()
-    .select([
-      'createdAt',
-      'eventId',
-      'id',
-      'licences',
-      'messageRef',
-      'messageType',
-      'notifyId',
-      'notifyStatus',
-      'notify_error',
-      'personalisation',
-      'status'
-    ])
-    .where('status', 'error')
-    .andWhere('messageRef', 'returns_invitation_primary_user_email')
-    .andWhere('eventId', eventId)
-    .andWhere('messageType', 'email')
-    .andWhereIsNull('alternateNotificationId')
+  const results = await _query(eventId)
+
+  if (results.length === 0) {
+    return []
+  }
+
+  const licences = []
+  const returnIds = []
+
+  for (const result of results) {
+    licences.push(...result.licences)
+    returnIds.push(...result.returnLogIds)
+  }
+
+  return {
+    failedLicenceRefs: [...new Set(licences)],
+    failedReturnIds: [...new Set(returnIds)]
+  }
 }
 
-// TODO - combine all of the licnces from this and return an array of unque licenceRefs
+/**
+ * We are only interested in return invitation emails that have failed.
+ *
+ * The alternateNoticeId is set when we have successfully created a new notification to replace the failed one. Hence we
+ * only look for ones that have not been set. This enables us to retry sending them if something has gone wrong.
+ *
+ * @private
+ */
+async function _query(eventId) {
+  return NotificationModel.query()
+    .select(['licences', 'returnLogIds'])
+    .where('status', 'error')
+    .where('messageRef', 'returns_invitation_primary_user_email')
+    .where('eventId', eventId)
+    .where('messageType', 'email')
+    .whereNull('alternateNoticeId')
+}
 
 module.exports = {
   go

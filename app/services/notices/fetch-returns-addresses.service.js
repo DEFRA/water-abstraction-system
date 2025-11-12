@@ -14,39 +14,25 @@ const featureFlagsConfig = require('../../../config/feature-flags.config.js')
  *
  * The function returns the address for the licence holder.
  *
- * @param {string[]} licenceRefs - The licence id to retrieve the address from.
- * @param {string} returnPeriod - The return period details.
+ * @param {string[]} returnIds - The return log ids whose licence holders need to be notified by post.
  *
- * @returns {Promise<object[]>} - an array of licence references and their addresses
+ * @returns {Promise<object[]>} - an array of licence holder deteails for sending paper return invitations
  */
-async function go(licenceRefs, returnPeriod) {
-  const { rows } = await _fetch(licenceRefs, returnPeriod)
+async function go(returnIds) {
+  const { rows } = await _fetch(returnIds)
 
   return rows
 }
 
-async function _fetch(licenceRefs, returnPeriod) {
-  const { endDate, startDate, summer, quarterly, dueDate } = returnPeriod
+async function _fetch(returnIds) {
+  const bindings = [returnIds]
 
-  const where = `
-    AND rl.due_date ${featureFlagsConfig.enableNullDueDate ? 'IS NULL' : '= ?'}
-    AND rl.end_date <= ?
-    AND rl.start_date >= ?
-    AND rl.metadata->>'isSummer' = ?
-    AND rl.quarterly = ?
-  `
-  const bindings = [endDate, startDate, summer, quarterly, licenceRefs]
-
-  if (!featureFlagsConfig.enableNullDueDate) {
-    bindings.unshift(dueDate)
-  }
-
-  const query = _query(where)
+  const query = _query()
 
   return db.raw(query, bindings)
 }
 
-function _query(whereReturnLogs) {
+function _query() {
   return `
     WITH
       due_return_logs as (
@@ -60,7 +46,7 @@ function _query(whereReturnLogs) {
         WHERE
           rl.status = 'due'
           AND rl.metadata->>'isCurrent' = 'true'
-          ${whereReturnLogs}
+          AND rl.return_id = ANY (?)
       ),
 
       licence_holder as (
@@ -79,8 +65,16 @@ function _query(whereReturnLogs) {
           INNER JOIN due_return_logs rl
             ON rl.licence_ref = ldh.licence_ref
         WHERE
-          ldh.licence_ref = ANY (?)
-          AND contacts->>'role' = 'Licence holder'
+          contacts->>'role' = 'Licence holder'
+      ),
+
+      best_contact_type AS (
+        SELECT DISTINCT ON (contact_hash_id)
+          contact_hash_id,
+          contact_type,
+          contact
+        FROM licence_holder
+        ORDER BY contact_hash_id
       ),
 
       -- Aggregate per contact_hash_id
@@ -95,16 +89,16 @@ function _query(whereReturnLogs) {
 
     SELECT
       a.licence_refs,
-      lh.contact,
-      lh.contact_type,
+      b.contact,
+      b.contact_type,
       a.return_ids as return_log_ids
     FROM
       aggregated_contact_data a
         JOIN
-      licence_holder lh
+      best_contact_type b
       USING (contact_hash_id)
     ORDER BY
-      lh.contact NULLS LAST
+      b.contact NULLS LAST
 `
 }
 

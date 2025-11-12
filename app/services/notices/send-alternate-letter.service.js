@@ -15,11 +15,11 @@ const CreateNotificationsService = require('./setup/create-notifications.service
 const DetermineNoticeTypeService = require('./setup/determine-notice-type.service.js')
 const EventModel = require('../../models/event.model.js')
 const FetchFailedReturnsInvitationsService = require('./fetch-failed-returns-invitations.service.js')
-const FetchNotificationsService = require('./fetch-notifications.service.js')
+const FetchNotificationsService = require('./setup/fetch-notifications.service.js')
 const FetchReturnsAddressesService = require('./fetch-returns-addresses.service.js')
 const NotificationsPresenter = require('../../presenters/notices/setup/notifications.presenter.js')
 
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../lib/general.lib.js')
 const { NoticeType, NoticeJourney } = require('../../lib/static-lookups.lib.js')
 
 const notifyConfig = require('../../../config/notify.config.js')
@@ -36,30 +36,30 @@ async function go(event) {
     const { batchSize, delay } = notifyConfig
 
     // get the notifications that failed
-    const failedNotifications = await FetchFailedReturnsInvitationsService.go(event.id)
+    const { failedLicenceRefs, failedReturnIds } = await FetchFailedReturnsInvitationsService.go(event.id)
 
     const noticeType = DetermineNoticeTypeService.go(NoticeType.INVITATIONS)
 
     // get their address details
-    const recipients = await FetchReturnsAddressesService.go(failedNotifications.licences)
+    const recipients = await FetchReturnsAddressesService.go(failedReturnIds)
 
     // create the event/notice
-    const notice = await _notice(event, noticeType, recipients)
+    const notice = await _notice(event, noticeType, recipients, failedLicenceRefs)
 
     // create the notifications
-    const notifications = await _notifications(eventDetails, recipients, notice.id)
+    const notifications = await _notifications(notice, recipients)
+console.log(notifications)
+    // await BatchNotificationsService.go(notifications, notice, noticeType.referenceCode)
 
-    await BatchNotificationsService.go(notifications, notice, noticeType.referenceCode)
+    // for (let i = 0; i < notifications.length; i += batchSize) {
+    //   const batchNotifications = notifications.slice(i, i + batchSize)
 
-    for (let i = 0; i < notifications.length; i += batchSize) {
-      const batchNotifications = notifications.slice(i, i + batchSize)
+    //   const updatedNotifications = await _batch(batchNotifications)
 
-      const updatedNotifications = await _batch(batchNotifications)
+    //   await _delay(delay)
+    // }
 
-      await _delay(delay)
-    }
-
-    await _updateEventErrorCount(notifications)
+    // await _updateEventErrorCount(notifications)
 
     // TODO update the preivous notifications with the new event id
 
@@ -69,16 +69,12 @@ async function go(event) {
   }
 }
 
-async function _notice(event, noticeType, recipients) {
-  // const event = CreateNoticePresenter.go(session, recipients, auth)
-
+async function _notice(event, noticeType, recipients, licenceRefs) {
   const _event = {
-    alternateNotificationId: event.id,
     issuer: event.issuer,
-    licences: event.licences,
+    licences: licenceRefs,
     metadata: {
       ...event.metadata,
-      sent: 0,
       error: 0,
       options: {
         excludedLicences: []
@@ -89,25 +85,20 @@ async function _notice(event, noticeType, recipients) {
     referenceCode: noticeType.referenceCode,
     status: 'completed',
     statusCounts: { cancelled: 0, error: 0, pending: recipients.length, sent: 0 },
-    subtype: event.subType
+    subtype: noticeType.subType
   }
 
   return CreateNoticeService.go(_event)
 }
 
-/**
- * Determine the notifications to send for the recipients.
- *
- * Save the notifications as 'pending' (we are about to start batching).
- *
- * Return the saved notifications with the notification id (this will be used to update the status of the notification
- * during the batch process).
- *
- * @private
- */
-async function _notifications(event, recipients, eventId) {
+async function _notifications(notice, recipients) {
+  const {
+    id: eventId,
+    metadata: { returnCycle: returnPeriod }
+  } = notice
+
   const eventDetails = {
-    determinedReturnsPeriod: event.metadata.returnCycle,
+    determinedReturnsPeriod: returnPeriod,
     journey: NoticeJourney.STANDARD,
     noticeType: NoticeType.INVITATIONS
   }
