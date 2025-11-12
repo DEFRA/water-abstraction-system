@@ -19,9 +19,9 @@ function go(session, contactHashId) {
   const { dueReturns, referenceCode, selectedReturns, id: sessionId } = session
 
   return {
-    backLink: `/system/notices/setup/${sessionId}/check`,
-    caption: `Notice ${referenceCode}`,
+    backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
     pageTitle: 'Check the recipient previews',
+    pageTitleCaption: `Notice ${referenceCode}`,
     returnLogs: _returnLogs(dueReturns, selectedReturns, sessionId, contactHashId)
   }
 }

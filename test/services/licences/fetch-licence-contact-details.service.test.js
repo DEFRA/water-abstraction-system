@@ -53,7 +53,7 @@ describe('Fetch Licence Contact Details service', () => {
                 county: 'Surrey',
                 forename: 'Harry',
                 initials: 'J',
-                name: 'Licence holder',
+                name: 'Potter',
                 postcode: 'WD25 7LR',
                 role: 'Licence holder',
                 salutation: null,

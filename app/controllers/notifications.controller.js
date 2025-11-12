@@ -5,11 +5,11 @@
  * @module NotificationsController
  */
 
+const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
+
 const DownloadNotificationService = require('../services/notifications/download-notification.service.js')
 const ProcessReturnedLetterService = require('../services/notifications/process-returned-letter.service.js')
 const ViewNotificationService = require('../services/notifications/view-notification.service.js')
-
-const NO_CONTENT_STATUS_CODE = 204
 
 async function download(request, h) {
   const { id: notificationId } = request.params
@@ -22,7 +22,7 @@ async function download(request, h) {
 async function returnedLetter(request, h) {
   await ProcessReturnedLetterService.go(request.payload)
 
-  return h.response().code(NO_CONTENT_STATUS_CODE)
+  return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 async function view(request, h) {

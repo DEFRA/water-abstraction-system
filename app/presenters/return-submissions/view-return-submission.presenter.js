@@ -41,10 +41,10 @@ function go(returnSubmission, yearMonth) {
 
 function _backLink(returnSubmission) {
   if (returnSubmission.current) {
-    return `/system/return-logs?id=${returnSubmission.returnLogId}`
+    return `/system/return-logs/${returnSubmission.returnLog.returnId}`
   }
 
-  return `/system/return-logs?id=${returnSubmission.returnLogId}&version=${returnSubmission.version}`
+  return `/system/return-logs/${returnSubmission.returnLog.returnId}?version=${returnSubmission.version}`
 }
 
 function _backLinkText(returnSubmission) {

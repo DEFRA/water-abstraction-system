@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
-const FetchLetterRecipientsService = require('../../../../app/services/notices/setup/fetch-letter-recipients.service.js')
+const FetchPaperReturnRecipientsService = require('../../../../app/services/notices/setup/fetch-paper-return-recipients.service.js')
 const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 
 // Thing under test
@@ -97,7 +97,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
                 county: 'Surrey',
                 forename: 'Harry',
                 initials: 'H J',
-                name: 'Licence holder',
+                name: 'Potter',
                 postcode: 'WD25 7LR',
                 role: 'Licence holder',
                 salutation: 'Mr',
@@ -201,7 +201,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
               county: 'Surrey',
               forename: 'Harry',
               initials: 'H J',
-              name: 'Licence holder',
+              name: 'Potter',
               postcode: 'WD25 7LR',
               role: 'Licence holder',
               salutation: 'Mr',
@@ -259,7 +259,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
         }
       })
 
-      Sinon.stub(FetchLetterRecipientsService, 'go').resolves([recipients.licenceHolder])
+      Sinon.stub(FetchPaperReturnRecipientsService, 'go').resolves([recipients.licenceHolder])
     })
 
     it('returns only letter recipients', async () => {
@@ -276,7 +276,7 @@ describe('Notices - Setup - Fetch recipients service', () => {
             county: 'Surrey',
             forename: 'Harry',
             initials: 'H J',
-            name: 'Licence holder',
+            name: 'Potter',
             postcode: 'WD25 7LR',
             role: 'Licence holder',
             salutation: 'Mr',

@@ -13,9 +13,9 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const DownloadLetterRecipientsPresenter = require('../../../../app/presenters/notices/setup/download-letter-recipients.presenter.js')
+const DownloadPaperReturnRecipientsPresenter = require('../../../../app/presenters/notices/setup/download-paper-return-recipients.presenter.js')
 
-describe('Notices - Setup - Download Letter Recipients presenter', () => {
+describe('Notices - Setup - Download Paper Return Recipients presenter', () => {
   const notificationType = 'Returns invitation'
   const returnReference = '376439279'
 
@@ -58,20 +58,23 @@ describe('Notices - Setup - Download Letter Recipients presenter', () => {
 
   describe('when provided with "recipients"', () => {
     it('correctly formats the data to a csv string', () => {
-      const result = DownloadLetterRecipientsPresenter.go([recipients.licenceHolder, recipients.returnsTo], session)
+      const result = DownloadPaperReturnRecipientsPresenter.go(
+        [recipients.licenceHolder, recipients.returnsTo],
+        session
+      )
 
       expect(result).to.equal(
         // Headers
         'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           // Row - Licence holder
-          `"${licenceRef}","${returnReference}",2018-01-01,2019-01-01,2021-01-01,"Return forms","letter","Licence holder","Mr H J Licence holder","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n` +
+          `"${licenceRef}","${returnReference}",2018-01-01,2019-01-01,2021-01-01,"Return forms","letter","Licence holder","Mr H J Potter","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n` +
           // Row - Returns to
-          `"${licenceRef}","${returnReference}",2018-01-01,2019-01-01,2021-01-01,"Return forms","letter","Returns to","Mr H J Returns to","INVALID ADDRESS - Needs a valid postcode or country outside the UK","2","Privet Drive","Little Whinging","Surrey",\n`
+          `"${licenceRef}","${returnReference}",2018-01-01,2019-01-01,2021-01-01,"Return forms","letter","Returns to","Mr H J Weasley","INVALID ADDRESS - Needs a valid postcode or country outside the UK","2","Privet Drive","Little Whinging","Surrey",\n`
       )
     })
 
     it('correctly formats the headers', () => {
-      const result = DownloadLetterRecipientsPresenter.go([recipients.licenceHolder], session)
+      const result = DownloadPaperReturnRecipientsPresenter.go([recipients.licenceHolder], session)
 
       let [headers] = result.split('\n')
       // We want to test the header includes the new line
@@ -101,7 +104,7 @@ describe('Notices - Setup - Download Letter Recipients presenter', () => {
       describe('and the "contact" is a "person"', () => {
         describe('and the "person" is a "Licence holder"', () => {
           it('correctly formats the row', () => {
-            const result = DownloadLetterRecipientsPresenter.go([recipients.licenceHolder], session)
+            const result = DownloadPaperReturnRecipientsPresenter.go([recipients.licenceHolder], session)
 
             let [, row] = result.split('\n')
             // We want to test the row includes the new line
@@ -116,7 +119,7 @@ describe('Notices - Setup - Download Letter Recipients presenter', () => {
                 '"Return forms",' + // Notification type
                 '"letter",' + // Message type
                 '"Licence holder",' + // Contact type
-                '"Mr H J Licence holder",' + // Address line 1
+                '"Mr H J Potter",' + // Address line 1
                 '"1",' + // Address line 2
                 '"Privet Drive",' + // Address line 3
                 '"Little Whinging",' + // Address line 4
@@ -130,7 +133,7 @@ describe('Notices - Setup - Download Letter Recipients presenter', () => {
 
         describe('and the "person" is a "Returns to"', () => {
           it('correctly formats the row', () => {
-            const result = DownloadLetterRecipientsPresenter.go([recipients.returnsTo], session)
+            const result = DownloadPaperReturnRecipientsPresenter.go([recipients.returnsTo], session)
 
             let [, row] = result.split('\n')
             // We want to test the row includes the new line
@@ -145,7 +148,7 @@ describe('Notices - Setup - Download Letter Recipients presenter', () => {
                 '"Return forms",' + // Notification type
                 '"letter",' + // Message type
                 '"Returns to",' + // Contact type
-                '"Mr H J Returns to",' + // Address line 1
+                '"Mr H J Weasley",' + // Address line 1
                 '"INVALID ADDRESS - Needs a valid postcode or country outside the UK",' + // Address line 2
                 '"2",' + // Address line 3
                 '"Privet Drive",' + // Address line 4

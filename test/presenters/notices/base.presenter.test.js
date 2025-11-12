@@ -17,12 +17,10 @@ const BasePresenter = require('../../../app/presenters/notices/base.presenter.js
 describe('Notices - Base presenter', () => {
   let clock
 
-  beforeEach(() => {
-    clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
-  })
-
   afterEach(() => {
-    clock.restore()
+    if (clock) {
+      clock.restore()
+    }
   })
 
   describe('#addressToCSV()', () => {
@@ -43,7 +41,7 @@ describe('Notices - Base presenter', () => {
 
           expect(result.length).to.equal(7)
           expect(result).to.equal([
-            'Mr H J Licence holder',
+            'Mr H J Potter',
             '1',
             'Privet Drive',
             'The Cupboard Under the Stairs',
@@ -67,7 +65,7 @@ describe('Notices - Base presenter', () => {
           const result = BasePresenter.addressToCSV(recipient)
 
           expect(result.length).to.equal(7)
-          expect(result).to.equal(['Mr H J Licence holder', '1', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', ''])
+          expect(result).to.equal(['Mr H J Potter', '1', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', ''])
         })
       })
     })
@@ -84,17 +82,22 @@ describe('Notices - Base presenter', () => {
 
   describe('#futureDueDate()', () => {
     describe('when the "messageType" is "letter', () => {
-      it('should set the date to 29 days in the future', () => {
-        const result = BasePresenter.futureDueDate('letter')
+      describe('and the current date is the start of the month', () => {
+        beforeEach(() => {
+          clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
+        })
 
-        const expectedDate = new Date(`2025-01-30`)
+        it('should set the date to 29 days in the future', () => {
+          const result = BasePresenter.futureDueDate('letter')
 
-        expect(result).to.equal(expectedDate)
+          const expectedDate = new Date(`2025-01-30`)
+
+          expect(result).to.equal(expectedDate)
+        })
       })
 
-      describe('when calculating across month boundaries', () => {
+      describe('and the current date is towards the end of the month', () => {
         beforeEach(() => {
-          clock.restore()
           clock = Sinon.useFakeTimers(new Date(`2025-01-15`))
         })
 
@@ -107,9 +110,8 @@ describe('Notices - Base presenter', () => {
         })
       })
 
-      describe('when calculating across year boundaries', () => {
+      describe('and the current date is towards the end of the year', () => {
         beforeEach(() => {
-          clock.restore()
           clock = Sinon.useFakeTimers(new Date(`2024-12-15`))
         })
 
@@ -124,17 +126,22 @@ describe('Notices - Base presenter', () => {
     })
 
     describe('when the "messageType" is "email"', () => {
-      it('should set the date to 28 days in the future', () => {
-        const result = BasePresenter.futureDueDate('email')
+      describe('and the current date is the start of the month', () => {
+        beforeEach(() => {
+          clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
+        })
 
-        const expectedDate = new Date(`2025-01-29`)
+        it('should set the date to 28 days in the future', () => {
+          const result = BasePresenter.futureDueDate('email')
 
-        expect(result).to.equal(expectedDate)
+          const expectedDate = new Date(`2025-01-29`)
+
+          expect(result).to.equal(expectedDate)
+        })
       })
 
-      describe('when calculating across month boundaries', () => {
+      describe('and the current date is towards the end of the month', () => {
         beforeEach(() => {
-          clock.restore()
           clock = Sinon.useFakeTimers(new Date(`2025-01-15`))
         })
 
@@ -147,9 +154,8 @@ describe('Notices - Base presenter', () => {
         })
       })
 
-      describe('when calculating across year boundaries', () => {
+      describe('and the current date is towards the end of the year', () => {
         beforeEach(() => {
-          clock.restore()
           clock = Sinon.useFakeTimers(new Date(`2024-12-15`))
         })
 
@@ -164,12 +170,46 @@ describe('Notices - Base presenter', () => {
     })
 
     describe('when no "messageType" is provided', () => {
-      it('should set the date to 28 days in the future', () => {
-        const result = BasePresenter.futureDueDate()
+      describe('and the current date is the start of the month', () => {
+        beforeEach(() => {
+          clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
+        })
 
-        const expectedDate = new Date(`2025-01-29`)
+        it('should set the date to 28 days in the future', () => {
+          const result = BasePresenter.futureDueDate()
 
-        expect(result).to.equal(expectedDate)
+          const expectedDate = new Date(`2025-01-29`)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('and the current date is towards the end of the month', () => {
+        beforeEach(() => {
+          clock = Sinon.useFakeTimers(new Date(`2025-01-15`))
+        })
+
+        it('should correctly calculate date across month boundary', () => {
+          const result = BasePresenter.futureDueDate()
+
+          const expectedDate = new Date(`2025-02-12`)
+
+          expect(result).to.equal(expectedDate)
+        })
+      })
+
+      describe('and the current date is towards the end of the year', () => {
+        beforeEach(() => {
+          clock = Sinon.useFakeTimers(new Date(`2024-12-15`))
+        })
+
+        it('should correctly calculate date across year boundary', () => {
+          const result = BasePresenter.futureDueDate()
+
+          const expectedDate = new Date(`2025-01-12`)
+
+          expect(result).to.equal(expectedDate)
+        })
       })
     })
   })

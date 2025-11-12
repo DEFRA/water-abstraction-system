@@ -9,29 +9,48 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const EventHelper = require('../../../support/helpers/event.helper.js')
-const NotificationHelper = require('../../../support/helpers/notification.helper.js')
+const NoticesFixture = require('../../../fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../../fixtures/notifications.fixture.js')
 
 // Things we need to stub
+const CheckNotificationStatusService = require('../../../../app/services/notifications/check-notification-status.service.js')
 const FetchNotificationsService = require('../../../../app/services/jobs/notification-status/fetch-notifications.service.js')
-const NotifyConfig = require('../../../../config/notify.config.js')
-const ViewMessageDataRequest = require('../../../../app/requests/notify/view-message-data.request.js')
+const UpdateEventService = require('../../../../app/services/jobs/notification-status/update-event.service.js')
 
 // Thing under test
 const ProcessNotificationStatusService = require('../../../../app/services/jobs/notification-status/process-notification-status.service.js')
 
 describe('Job - Notifications - Process Notification Status service', () => {
-  const ONE_HUNDRED_MILLISECONDS = 100
-
-  let event
-  let notification
+  let noticeA
+  let noticeB
   let notifierStub
-  let response
+  let updateEventStub
 
   beforeEach(async () => {
-    // By setting the delay to 100ms we can keep the tests fast whilst assuring our batch mechanism is delaying
-    // correctly. We do not want increase the timeout for the test as we want them to fail if a timeout occurs
-    Sinon.stub(NotifyConfig, 'delay').value(ONE_HUNDRED_MILLISECONDS)
+    const notifications = []
+
+    let notification
+    // NOTE: We create multiple notifications a cross two notices so we can demonstrate that we are providing
+    // UpdateEventService with a distinct list of notices to update, rather than passing it _every_ notice ID on _every_
+    // notification being processed
+    noticeA = NoticesFixture.returnsInvitation()
+
+    notification = NotificationsFixture.returnsInvitationLetter(noticeA)
+    notification.status = 'pending'
+    notifications.push(_transformNotificationToResult(notification))
+
+    notification = NotificationsFixture.returnsInvitationEmail(noticeA)
+    notification.status = 'pending'
+    notifications.push(_transformNotificationToResult(notification))
+
+    noticeB = NoticesFixture.alertStop()
+
+    notification = NotificationsFixture.abstractionAlertEmail(noticeB)
+    notifications.push(_transformNotificationToResult(notification))
+
+    Sinon.stub(FetchNotificationsService, 'go').resolves(notifications)
+
+    updateEventStub = Sinon.stub(UpdateEventService, 'go').resolves()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -45,403 +64,39 @@ describe('Job - Notifications - Process Notification Status service', () => {
     delete global.GlobalNotifier
   })
 
-  describe('when the request to Notify for the message details is successful', () => {
-    describe('and the returned message "status" is not an error', () => {
-      beforeEach(async () => {
-        // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full representation
-        // look at test/requests/notify/notify-status.request.test.js
-        response = {
-          statusCode: 200,
-          body: {
-            status: 'delivered'
-          }
-        }
-
-        Sinon.stub(ViewMessageDataRequest, 'send').resolves({
-          succeeded: true,
-          response
-        })
-      })
-
-      describe('and the notification was not an abstraction alert', () => {
-        beforeEach(async () => {
-          event = await EventHelper.add({
-            metadata: {},
-            licences: '["11/111"]',
-            referenceCode: 'RINV-LX4P57',
-            status: 'completed',
-            subtype: 'returnInvitation',
-            type: 'notification'
-          })
-
-          notification = await NotificationHelper.add({
-            eventId: event.id,
-            licences: '["11/111"]',
-            messageRef: 'returns_invitation_primary_user_email',
-            messageType: 'email',
-            notifyId: '62f1299a-bf0c-4d89-8240-232cdb24c0f8',
-            notifyStatus: 'created',
-            plaintext: 'Dear Clean Water Limited,\r\n',
-            recipient: 'hello@example.com',
-            status: 'pending'
-          })
-        })
-
-        it('updates the matching notification record and logs the time taken', { timeout: 3000 }, async () => {
-          await ProcessNotificationStatusService.go()
-
-          const refreshedNotification = await notification.$query()
-
-          expect(refreshedNotification).to.equal(
-            {
-              alternateNoticeId: null,
-              eventId: event.id,
-              id: notification.id,
-              licenceMonitoringStationId: null,
-              licences: ['11/111'],
-              notifyError: null,
-              messageRef: 'returns_invitation_primary_user_email',
-              messageType: 'email',
-              notifyId: '62f1299a-bf0c-4d89-8240-232cdb24c0f8',
-              notifyStatus: 'delivered',
-              pdf: null,
-              personalisation: null,
-              plaintext: 'Dear Clean Water Limited,\r\n',
-              recipient: 'hello@example.com',
-              returnedAt: null,
-              returnLogIds: null,
-              status: 'sent',
-              templateId: null
-            },
-            { skip: ['createdAt'] }
-          )
-
-          const logDataArg = notifierStub.omg.firstCall.args[1]
-
-          expect(notifierStub.omg.calledWith('Notification status job complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.count).to.exist()
-        })
-      })
-
-      describe('and the notification was for an abstraction alert', () => {
-        beforeEach(async () => {
-          event = await EventHelper.add({
-            metadata: {},
-            licences: '["11/111"]',
-            referenceCode: 'WAA-8GD4ZQ',
-            status: 'completed',
-            subtype: 'waterAbstractionAlerts',
-            type: 'notification'
-          })
-
-          notification = await NotificationHelper.add({
-            eventId: event.id,
-            licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
-            licences: '["11/111"]',
-            messageRef: 'water_abstraction_alert_resume_email',
-            messageType: 'email',
-            notifyId: '7d15c0c3-a1e6-4291-a59b-e09f49d577ed',
-            notifyStatus: 'created',
-            personalisation: {
-              alertType: 'stop',
-              licenceGaugingStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
-              sending_alert_type: 'resume'
-            },
-            plaintext: 'Dear licence contact,\r\n',
-            recipient: 'hello@example.com',
-            status: 'pending'
-          })
-        })
-
-        it('updates the matching notification record and logs the time taken', { timeout: 3000 }, async () => {
-          await ProcessNotificationStatusService.go()
-
-          const refreshedNotification = await notification.$query()
-
-          expect(refreshedNotification).to.equal(
-            {
-              alternateNoticeId: null,
-              eventId: event.id,
-              id: notification.id,
-              licenceMonitoringStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
-              licences: ['11/111'],
-              messageRef: 'water_abstraction_alert_resume_email',
-              messageType: 'email',
-              notifyError: null,
-              notifyId: '7d15c0c3-a1e6-4291-a59b-e09f49d577ed',
-              notifyStatus: 'delivered',
-              pdf: null,
-              personalisation: {
-                alertType: 'stop',
-                licenceGaugingStationId: '76a03738-0c65-4541-99a7-8a454be1f621',
-                sending_alert_type: 'resume'
-              },
-              plaintext: 'Dear licence contact,\r\n',
-              recipient: 'hello@example.com',
-              returnedAt: null,
-              returnLogIds: null,
-              status: 'sent',
-              templateId: null
-            },
-            { skip: ['createdAt'] }
-          )
-
-          const logDataArg = notifierStub.omg.firstCall.args[1]
-
-          expect(notifierStub.omg.calledWith('Notification status job complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.count).to.exist()
-        })
-      })
-
-      describe('and an event id is provided', () => {
-        beforeEach(async () => {
-          event = await EventHelper.add({
-            metadata: {},
-            licences: '["11/111"]',
-            referenceCode: 'RINV-LX4P57',
-            status: 'completed',
-            subtype: 'returnInvitation',
-            type: 'notification'
-          })
-
-          notification = await NotificationHelper.add({
-            eventId: event.id,
-            licences: '["11/111"]',
-            messageRef: 'returns_invitation_primary_user_email',
-            messageType: 'email',
-            notifyId: '62f1299a-bf0c-4d89-8240-232cdb24c0f8',
-            notifyStatus: 'created',
-            plaintext: 'Dear Clean Water Limited,\r\n',
-            recipient: 'hello@example.com',
-            status: 'pending'
-          })
-        })
-
-        it('updates the matching notification record and logs the time taken', { timeout: 3000 }, async () => {
-          await ProcessNotificationStatusService.go(event.id)
-
-          const refreshedNotification = await notification.$query()
-
-          expect(refreshedNotification).to.equal(
-            {
-              alternateNoticeId: null,
-              eventId: event.id,
-              id: notification.id,
-              licenceMonitoringStationId: null,
-              licences: ['11/111'],
-              notifyError: null,
-              messageRef: 'returns_invitation_primary_user_email',
-              messageType: 'email',
-              notifyId: '62f1299a-bf0c-4d89-8240-232cdb24c0f8',
-              notifyStatus: 'delivered',
-              pdf: null,
-              personalisation: null,
-              plaintext: 'Dear Clean Water Limited,\r\n',
-              recipient: 'hello@example.com',
-              returnLogIds: null,
-              returnedAt: null,
-              status: 'sent',
-              templateId: null
-            },
-            { skip: ['createdAt'] }
-          )
-
-          const logDataArg = notifierStub.omg.firstCall.args[1]
-
-          expect(notifierStub.omg.calledWith('Notification status job complete')).to.be.true()
-          expect(logDataArg.timeTakenMs).to.exist()
-          expect(logDataArg.timeTakenSs).to.exist()
-          expect(logDataArg.count).to.exist()
-        })
-      })
+  describe('when the notification status check does not error', () => {
+    beforeEach(() => {
+      Sinon.stub(CheckNotificationStatusService, 'go').resolves()
     })
 
-    describe('but the returned "status" is an error', () => {
-      beforeEach(async () => {
-        event = await EventHelper.add({
-          metadata: {},
-          licences: '["11/111"]',
-          referenceCode: 'RINV-LX4P57',
-          status: 'completed',
-          subtype: 'returnInvitation',
-          type: 'notification'
-        })
-
-        notification = await NotificationHelper.add({
-          eventId: event.id,
-          licences: '["11/111"]',
-          messageRef: 'returns_invitation_primary_user_email',
-          messageType: 'email',
-          notifyId: '9cf707f1-f4b0-466a-9879-f40953b8fecb8',
-          notifyStatus: 'created',
-          plaintext: 'Dear Clean Water Limited,\r\n',
-          recipient: 'hello@example.com',
-          status: 'pending'
-        })
-
-        response = {
-          statusCode: 200,
-          body: {
-            status: 'temporary-failure'
-          }
-        }
-
-        Sinon.stub(ViewMessageDataRequest, 'send').resolves({
-          succeeded: true,
-          response
-        })
-      })
-
-      it('updates the matching notification record and updates the event error count', { timeout: 3000 }, async () => {
-        await ProcessNotificationStatusService.go()
-
-        const refreshedNotification = await notification.$query()
-
-        expect(refreshedNotification).to.equal(
-          {
-            alternateNoticeId: null,
-            eventId: event.id,
-            id: notification.id,
-            licenceMonitoringStationId: null,
-            licences: ['11/111'],
-            notifyError: null,
-            messageRef: 'returns_invitation_primary_user_email',
-            messageType: 'email',
-            notifyId: '9cf707f1-f4b0-466a-9879-f40953b8fecb8',
-            notifyStatus: 'temporary-failure',
-            pdf: null,
-            personalisation: null,
-            plaintext: 'Dear Clean Water Limited,\r\n',
-            recipient: 'hello@example.com',
-            returnLogIds: null,
-            returnedAt: null,
-            status: 'error',
-            templateId: null
-          },
-          { skip: ['createdAt'] }
-        )
-
-        const refreshedEvent = await event.$query()
-
-        expect(refreshedEvent).to.equal(
-          {
-            entities: null,
-            id: event.id,
-            issuer: 'test.user@defra.gov.uk',
-            licences: ['11/111'],
-            metadata: { error: 1 },
-            referenceCode: 'RINV-LX4P57',
-            status: 'completed',
-            statusCounts: { cancelled: 0, error: 1, pending: 0, returned: 0, sent: 0 },
-            overallStatus: 'error',
-            subtype: 'returnInvitation',
-            type: 'notification'
-          },
-          { skip: ['createdAt', 'updatedAt'] }
-        )
-      })
-    })
-  })
-
-  describe('when the request to Notify for the message details fails', () => {
-    beforeEach(async () => {
-      event = await EventHelper.add({
-        metadata: {},
-        licences: '["11/111"]',
-        referenceCode: 'RINV-402AGB',
-        status: 'completed',
-        subtype: 'returnInvitation',
-        type: 'notification'
-      })
-
-      notification = await NotificationHelper.add({
-        eventId: event.id,
-        licences: '["11/111"]',
-        messageRef: 'returns_invitation_primary_user_email',
-        messageType: 'email',
-        notifyId: '10076fd4-da11-43d9-b85a-f4564507d135',
-        notifyStatus: 'created',
-        plaintext: 'Dear Clean Water Limited,\r\n',
-        recipient: 'hello@example.com',
-        status: 'pending'
-      })
-
-      response = {
-        statusCode: 404,
-        body: {
-          errors: [
-            {
-              error: 'NoResultFound',
-              message: 'No result found'
-            }
-          ],
-          status_code: 404
-        }
-      }
-
-      Sinon.stub(ViewMessageDataRequest, 'send').resolves({
-        succeeded: false,
-        response
-      })
-    })
-
-    it('does not update the matching notification record or the event error count', async () => {
+    it('updates the linked notices overall status and counts', async () => {
       await ProcessNotificationStatusService.go()
 
-      const refreshedNotification = await notification.$query()
+      expect(updateEventStub.called).to.be.true()
+      expect(updateEventStub.firstCall.args[0]).to.equal([noticeA.id, noticeB.id])
+    })
 
-      expect(refreshedNotification).to.equal(
-        {
-          alternateNoticeId: null,
-          eventId: event.id,
-          id: notification.id,
-          licences: ['11/111'],
-          licenceMonitoringStationId: null,
-          notifyError: null,
-          messageRef: 'returns_invitation_primary_user_email',
-          messageType: 'email',
-          notifyId: '10076fd4-da11-43d9-b85a-f4564507d135',
-          notifyStatus: 'created',
-          pdf: null,
-          personalisation: null,
-          plaintext: 'Dear Clean Water Limited,\r\n',
-          recipient: 'hello@example.com',
-          returnLogIds: null,
-          returnedAt: null,
-          status: 'pending',
-          templateId: null
-        },
-        { skip: ['createdAt'] }
-      )
+    it('logs the time taken in milliseconds and seconds', async () => {
+      await ProcessNotificationStatusService.go()
 
-      const refreshedEvent = await event.$query()
+      const logDataArg = notifierStub.omg.firstCall.args[1]
 
-      expect(refreshedEvent).to.equal(
-        {
-          entities: null,
-          id: event.id,
-          issuer: 'test.user@defra.gov.uk',
-          licences: ['11/111'],
-          metadata: { error: 0 },
-          overallStatus: 'pending',
-          referenceCode: 'RINV-402AGB',
-          status: 'completed',
-          statusCounts: { cancelled: 0, error: 0, pending: 1, returned: 0, sent: 0 },
-          subtype: 'returnInvitation',
-          type: 'notification'
-        },
-        { skip: ['createdAt', 'updatedAt'] }
-      )
+      expect(notifierStub.omg.calledWith('Notification status job complete')).to.be.true()
+      expect(logDataArg.timeTakenMs).to.exist()
+      expect(logDataArg.timeTakenSs).to.exist()
+      expect(logDataArg.count).to.equal(3)
     })
   })
 
-  describe('when there is an error', () => {
+  describe('when the notification status check errors', () => {
     beforeEach(() => {
-      Sinon.stub(FetchNotificationsService, 'go').rejects()
+      Sinon.stub(CheckNotificationStatusService, 'go').rejects()
+    })
+
+    it('does not update the linked notices', async () => {
+      await ProcessNotificationStatusService.go()
+
+      expect(updateEventStub.called).to.be.false()
     })
 
     it('handles the error', async () => {
@@ -455,3 +110,19 @@ describe('Job - Notifications - Process Notification Status service', () => {
     })
   })
 })
+
+function _transformNotificationToResult(notification) {
+  return {
+    createdAt: notification.createdAt,
+    eventId: notification.eventId,
+    id: notification.id,
+    licenceMonitoringStationId: notification.licenceMonitoringStationId,
+    messageRef: notification.messageRef,
+    messageType: notification.messageType,
+    notifyId: notification.notifyId,
+    notifyStatus: notification.notifyStatus,
+    notifyError: notification.notifyError,
+    personalisation: notification.personalisation,
+    status: notification.status
+  }
+}

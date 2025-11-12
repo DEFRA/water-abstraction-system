@@ -32,12 +32,12 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload, yar)
 
     return {
-      type: payload.type
+      contactType: payload.contactType
     }
   }
 
-  session.contactType = payload?.type ?? null
-  session.name = payload?.name ?? null
+  session.contactType = payload?.contactType ?? null
+  session.contactName = payload?.contactName ?? null
 
   const pageData = ContactTypePresenter.go(session)
 
@@ -73,8 +73,8 @@ function _createMD5Hash(email) {
 }
 
 async function _save(session, payload, yar) {
-  if (payload.type === 'email') {
-    const email = payload.email.toLowerCase()
+  if (payload.contactType === 'email') {
+    const email = payload.contactEmail.toLowerCase()
 
     const recipient = {
       contact_hash_id: _createMD5Hash(email),
@@ -99,8 +99,8 @@ async function _save(session, payload, yar) {
     return session.$update()
   }
 
-  session.contactName = payload.name
-  session.contactType = payload.type
+  session.contactName = payload.contactName
+  session.contactType = payload.contactType
 
   return session.$update()
 }

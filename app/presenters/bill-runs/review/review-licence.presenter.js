@@ -14,7 +14,6 @@ const {
 const { generateBillRunTitle } = require('../../billing.presenter.js')
 const {
   calculateTotalBillableReturns,
-  determineReturnLink,
   formatChargePeriod,
   formatChargePeriods,
   formatIssues,
@@ -189,7 +188,7 @@ function _formatReviewReturns(reviewReturns) {
       purpose: formatPurposes(purposes).join(', '),
       reference: returnReference,
       returnId,
-      returnLink: determineReturnLink(reviewReturn),
+      returnLink: `/system/return-logs/${returnLog.returnId}`,
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
       returnStatus: formatReturnStatus(reviewReturn),
       returnTotal: formatReturnTotals(reviewReturn)

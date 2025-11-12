@@ -3,1017 +3,625 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
+const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
+const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 
 // Thing under test
 const NotificationsPresenter = require('../../../../app/presenters/notices/setup/notifications.presenter.js')
 
 describe('Notices - Setup - Notifications Presenter', () => {
-  const eventId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
+  const noticeId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
-  let clock
   let determinedReturnsPeriod
+  let dynamicEmailDueDate
+  let dynamicLetterDueDate
   let recipients
   let session
-  let testRecipients
 
   beforeEach(() => {
+    dynamicEmailDueDate = formatLongDate(futureDueDate())
+    dynamicLetterDueDate = formatLongDate(futureDueDate('letter'))
+
     determinedReturnsPeriod = {
-      dueDate: new Date('2025-04-28'),
+      dueDate: null,
       endDate: new Date('2025-03-31'),
       name: 'quarterFour',
       startDate: new Date('2025-01-01'),
       summer: 'false'
     }
 
-    recipients = RecipientsFixture.recipients()
+    const fixtureData = RecipientsFixture.recipients()
+    const singleUseEmail = {
+      ...fixtureData.primaryUser,
+      contact_hash_id: 'ba3cbb0311b78e79a9aed711cf20a9e8',
+      contact_type: 'Single use',
+      email: 'single.use@important.com'
+    }
+    const singleUseLetter = {
+      ...fixtureData.licenceHolder,
+      contact: { ...fixtureData.licenceHolder.contact, addressLine1: '4', name: 'Hermione' },
+      contact_hash_id: '2cfae110bb4c6611261169ddc1f26c34',
+      contact_type: 'Single use'
+    }
 
-    testRecipients = [...Object.values(recipients)]
+    recipients = [
+      fixtureData.primaryUser,
+      fixtureData.returnsAgent,
+      fixtureData.licenceHolder,
+      fixtureData.returnsTo,
+      fixtureData.licenceHolderWithMultipleLicences,
+      singleUseEmail,
+      singleUseLetter
+    ]
 
     session = {
       determinedReturnsPeriod,
       journey: 'standard',
       noticeType: 'invitations'
     }
-
-    clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
   })
 
-  afterEach(() => {
-    clock.restore()
-  })
-
-  it('correctly transform the recipients into notifications', () => {
-    const result = NotificationsPresenter.go(testRecipients, session, eventId)
+  it('correctly presents the data', () => {
+    const result = NotificationsPresenter.go(session, recipients, noticeId)
 
     expect(result).to.equal([
       {
-        createdAt: '2025-01-01T00:00:00.000Z',
-        eventId,
-        licences: recipients.primaryUser.licence_refs,
+        eventId: noticeId,
+        licences: recipients[0].licence_refs,
         messageRef: 'returns_invitation_primary_user_email',
         messageType: 'email',
         personalisation: {
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
-          returnDueDate: '28 April 2025'
+          returnDueDate: dynamicEmailDueDate
         },
         recipient: 'primary.user@important.com',
-        returnLogIds: recipients.primaryUser.return_log_ids,
+        returnLogIds: recipients[0].return_log_ids,
         status: 'pending',
-        templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
+        templateId: notifyTemplates.standard.invitations.primaryUserEmail
       },
       {
-        createdAt: '2025-01-01T00:00:00.000Z',
-        eventId,
-        licences: recipients.returnsAgent.licence_refs,
+        eventId: noticeId,
+        licences: recipients[1].licence_refs,
         messageRef: 'returns_invitation_returns_agent_email',
         messageType: 'email',
         personalisation: {
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
-          returnDueDate: '28 April 2025'
+          returnDueDate: dynamicEmailDueDate
         },
         recipient: 'returns.agent@important.com',
-        returnLogIds: recipients.returnsAgent.return_log_ids,
+        returnLogIds: recipients[1].return_log_ids,
         status: 'pending',
-        templateId: '41c45bd4-8225-4d7e-a175-b48b613b5510'
+        templateId: notifyTemplates.standard.invitations.returnsAgentEmail
       },
       {
-        createdAt: '2025-01-01T00:00:00.000Z',
-        eventId,
-        licences: recipients.licenceHolder.licence_refs,
+        eventId: noticeId,
+        licences: recipients[2].licence_refs,
         messageRef: 'returns_invitation_licence_holder_letter',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'Mr H J Licence holder',
+          address_line_1: 'Mr H J Potter',
           address_line_2: '1',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
-          name: 'Mr H J Licence holder',
+          name: 'Mr H J Potter',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
-          returnDueDate: '28 April 2025'
+          returnDueDate: dynamicLetterDueDate
         },
-        returnLogIds: recipients.licenceHolder.return_log_ids,
+        returnLogIds: recipients[2].return_log_ids,
         status: 'pending',
-        templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
+        templateId: notifyTemplates.standard.invitations.licenceHolderLetter
       },
       {
-        createdAt: '2025-01-01T00:00:00.000Z',
-        eventId,
-        licences: recipients.returnsTo.licence_refs,
+        eventId: noticeId,
+        licences: recipients[3].licence_refs,
         messageRef: 'returns_invitation_returns_to_letter',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'Mr H J Returns to',
+          address_line_1: 'Mr H J Weasley',
           address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
           address_line_3: '2',
           address_line_4: 'Privet Drive',
           address_line_5: 'Little Whinging',
           address_line_6: 'Surrey',
-          name: 'Mr H J Returns to',
+          name: 'Mr H J Weasley',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
-          returnDueDate: '28 April 2025'
+          returnDueDate: dynamicLetterDueDate
         },
-        returnLogIds: recipients.returnsTo.return_log_ids,
+        returnLogIds: recipients[3].return_log_ids,
         status: 'pending',
-        templateId: '0e535549-99a2-44a9-84a7-589b12d00879'
+        templateId: notifyTemplates.standard.invitations.returnsToLetter
       },
       {
-        createdAt: '2025-01-01T00:00:00.000Z',
-        eventId,
-        licences: recipients.licenceHolderWithMultipleLicences.licence_refs,
+        eventId: noticeId,
+        licences: recipients[4].licence_refs,
         messageRef: 'returns_invitation_licence_holder_letter',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'Mr H J Licence holder with multiple licences',
+          address_line_1: 'Mr H J Potter',
           address_line_2: '3',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
-          name: 'Mr H J Licence holder with multiple licences',
+          name: 'Mr H J Potter',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
-          returnDueDate: '28 April 2025'
+          returnDueDate: dynamicLetterDueDate
         },
-        returnLogIds: recipients.licenceHolderWithMultipleLicences.return_log_ids,
+        returnLogIds: recipients[4].return_log_ids,
         status: 'pending',
-        templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
+        templateId: notifyTemplates.standard.invitations.licenceHolderLetter
+      },
+      {
+        eventId: noticeId,
+        licences: recipients[5].licence_refs,
+        messageRef: 'returns_invitation_primary_user_email',
+        messageType: 'email',
+        personalisation: {
+          periodEndDate: '31 March 2025',
+          periodStartDate: '1 January 2025',
+          returnDueDate: dynamicEmailDueDate
+        },
+        recipient: 'single.use@important.com',
+        returnLogIds: recipients[5].return_log_ids,
+        status: 'pending',
+        templateId: notifyTemplates.standard.invitations.primaryUserEmail
+      },
+      {
+        eventId: noticeId,
+        licences: recipients[6].licence_refs,
+        messageRef: 'returns_invitation_licence_holder_letter',
+        messageType: 'letter',
+        personalisation: {
+          address_line_1: 'Mr H J Hermione',
+          address_line_2: '4',
+          address_line_3: 'Privet Drive',
+          address_line_4: 'Little Whinging',
+          address_line_5: 'Surrey',
+          address_line_6: 'WD25 7LR',
+          name: 'Mr H J Hermione',
+          periodEndDate: '31 March 2025',
+          periodStartDate: '1 January 2025',
+          returnDueDate: dynamicLetterDueDate
+        },
+        returnLogIds: recipients[6].return_log_ids,
+        status: 'pending',
+        templateId: notifyTemplates.standard.invitations.licenceHolderLetter
       }
     ])
   })
 
-  describe('when the journey is for "standard"', () => {
-    describe('when the "noticeType" is for "invitations"', () => {
-      beforeEach(() => {
-        session.noticeType = 'invitations'
-      })
+  describe('the "messageRef" property', () => {
+    describe('when the notice is a "returns invitation"', () => {
+      describe('and the notification is an email', () => {
+        describe('and the recipient is the "Primary user"', () => {
+          it('returns the correct "messageRef"', () => {
+            const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-      describe('when the notifications is an email', () => {
-        describe('and the "contact_type" is for a "Primary user"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.primaryUser]
-          })
-
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.primaryUser.licence_refs,
-                messageRef: 'returns_invitation_primary_user_email',
-                messageType: 'email',
-                personalisation: {
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
-                },
-                recipient: 'primary.user@important.com',
-                returnLogIds: recipients.primaryUser.return_log_ids,
-                status: 'pending',
-                templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
-              }
-            ])
+            expect(result[0].messageRef).to.equal('returns_invitation_primary_user_email')
           })
         })
 
-        describe('and the "contact_type" is for a "Returns Agent"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.returnsAgent]
-          })
+        describe('and the recipient is a "Returns agent"', () => {
+          it('returns the correct "messageRef"', () => {
+            const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.returnsAgent.licence_refs,
-                messageRef: 'returns_invitation_returns_agent_email',
-                messageType: 'email',
-                personalisation: {
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
-                },
-                recipient: 'returns.agent@important.com',
-                returnLogIds: recipients.returnsAgent.return_log_ids,
-                status: 'pending',
-                templateId: '41c45bd4-8225-4d7e-a175-b48b613b5510'
-              }
-            ])
+            expect(result[1].messageRef).to.equal('returns_invitation_returns_agent_email')
           })
         })
 
-        describe('and the "contact_type" is for "both"', () => {
-          beforeEach(() => {
-            testRecipients = [{ ...recipients.primaryUser, contact_type: 'both' }]
-          })
+        describe('and the recipient is a "Single use"', () => {
+          it('returns the correct "messageRef"', () => {
+            const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.primaryUser.licence_refs,
-                messageRef: 'returns_invitation_primary_user_email',
-                messageType: 'email',
-                personalisation: {
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
-                },
-                recipient: 'primary.user@important.com',
-                returnLogIds: recipients.primaryUser.return_log_ids,
-                status: 'pending',
-                templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
-              }
-            ])
+            expect(result[5].messageRef).to.equal('returns_invitation_primary_user_email')
           })
         })
       })
 
       describe('when the notifications is a letter', () => {
-        describe('and the "contact_type" is for a "Licence Holder"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.licenceHolder]
-          })
+        describe('and the recipient is the "Licence holder"', () => {
+          it('returns the correct "messageRef"', () => {
+            const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.licenceHolder.licence_refs,
-                messageRef: 'returns_invitation_licence_holder_letter',
-                messageType: 'letter',
-                personalisation: {
-                  address_line_1: 'Mr H J Licence holder',
-                  address_line_2: '1',
-                  address_line_3: 'Privet Drive',
-                  address_line_4: 'Little Whinging',
-                  address_line_5: 'Surrey',
-                  address_line_6: 'WD25 7LR',
-                  name: 'Mr H J Licence holder',
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
-                },
-                returnLogIds: recipients.licenceHolder.return_log_ids,
-                status: 'pending',
-                templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
-              }
-            ])
+            expect(result[2].messageRef).to.equal('returns_invitation_licence_holder_letter')
           })
         })
 
-        describe('and the "contact_type" is for a "Returns To"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.returnsTo]
-          })
+        describe('and the recipient is a "Returns to"', () => {
+          it('returns the correct "messageRef"', () => {
+            const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.returnsTo.licence_refs,
-                messageRef: 'returns_invitation_returns_to_letter',
-                messageType: 'letter',
-                personalisation: {
-                  address_line_1: 'Mr H J Returns to',
-                  address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
-                  address_line_3: '2',
-                  address_line_4: 'Privet Drive',
-                  address_line_5: 'Little Whinging',
-                  address_line_6: 'Surrey',
-                  name: 'Mr H J Returns to',
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
-                },
-                returnLogIds: recipients.returnsTo.return_log_ids,
-                status: 'pending',
-                templateId: '0e535549-99a2-44a9-84a7-589b12d00879'
-              }
-            ])
+            expect(result[3].messageRef).to.equal('returns_invitation_returns_to_letter')
           })
         })
 
-        describe('and the "contact_type" is for "both"', () => {
-          beforeEach(() => {
-            testRecipients = [{ ...recipients.licenceHolder, contact_type: 'both' }]
-          })
+        describe('and the recipient is a "Single use"', () => {
+          it('returns the correct "messageRef"', () => {
+            const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.licenceHolder.licence_refs,
-                messageRef: 'returns_invitation_licence_holder_letter',
-                messageType: 'letter',
-                personalisation: {
-                  address_line_1: 'Mr H J Licence holder',
-                  address_line_2: '1',
-                  address_line_3: 'Privet Drive',
-                  address_line_4: 'Little Whinging',
-                  address_line_5: 'Surrey',
-                  address_line_6: 'WD25 7LR',
-                  name: 'Mr H J Licence holder',
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
-                },
-                status: 'pending',
-                returnLogIds: recipients.licenceHolder.return_log_ids,
-                templateId: '4fe80aed-c5dd-44c3-9044-d0289d635019'
-              }
-            ])
+            expect(result[6].messageRef).to.equal('returns_invitation_licence_holder_letter')
           })
         })
       })
     })
 
-    describe('when the "noticeType" is for "reminders"', () => {
+    describe('when the notice is a "returns reminder"', () => {
       beforeEach(() => {
         session.noticeType = 'reminders'
       })
 
-      describe('when the notifications is an email', () => {
-        describe('and the "contact_type" is for a "Primary user"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.primaryUser]
-          })
+      describe('and the notification is an email', () => {
+        describe('and the recipient is the "Primary user"', () => {
+          it('returns the correct "messageRef"', () => {
+            const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.primaryUser.licence_refs,
-                messageRef: 'returns_reminder_primary_user_email',
-                messageType: 'email',
-                personalisation: {
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
-                },
-                recipient: 'primary.user@important.com',
-                returnLogIds: recipients.primaryUser.return_log_ids,
-                status: 'pending',
-                templateId: 'f1144bc7-8bdc-4e82-87cb-1a6c69445836'
-              }
-            ])
+            expect(result[0].messageRef).to.equal('returns_reminder_primary_user_email')
           })
         })
 
-        describe('and the "contact_type" is for a "Returns Agent"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.returnsAgent]
-          })
+        describe('and the recipient is a "Returns agent"', () => {
+          it('returns the correct "messageRef"', () => {
+            const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.returnsAgent.licence_refs,
-                messageRef: 'returns_reminder_returns_agent_email',
-                messageType: 'email',
-                personalisation: {
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
-                },
-                recipient: 'returns.agent@important.com',
-                returnLogIds: recipients.returnsAgent.return_log_ids,
-                status: 'pending',
-                templateId: '038e1807-d1b5-4f09-a5a6-d7eee9030a7a'
-              }
-            ])
+            expect(result[1].messageRef).to.equal('returns_reminder_returns_agent_email')
           })
         })
 
-        describe('and the "contact_type" is for "both"', () => {
-          beforeEach(() => {
-            testRecipients = [{ ...recipients.primaryUser, contact_type: 'both' }]
-          })
+        describe('and the recipient is a "Single use"', () => {
+          it('returns the correct "messageRef"', () => {
+            const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.primaryUser.licence_refs,
-                messageRef: 'returns_reminder_primary_user_email',
-                messageType: 'email',
-                personalisation: {
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
-                },
-                recipient: 'primary.user@important.com',
-                returnLogIds: recipients.primaryUser.return_log_ids,
-                status: 'pending',
-                templateId: 'f1144bc7-8bdc-4e82-87cb-1a6c69445836'
-              }
-            ])
+            expect(result[5].messageRef).to.equal('returns_reminder_primary_user_email')
           })
         })
       })
 
       describe('when the notifications is a letter', () => {
-        describe('and the "contact_type" is for a "Licence Holder"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.licenceHolder]
-          })
+        describe('and the recipient is the "Licence holder"', () => {
+          it('returns the correct "messageRef"', () => {
+            const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.licenceHolder.licence_refs,
-                messageRef: 'returns_reminder_licence_holder_letter',
-                messageType: 'letter',
-                personalisation: {
-                  address_line_1: 'Mr H J Licence holder',
-                  address_line_2: '1',
-                  address_line_3: 'Privet Drive',
-                  address_line_4: 'Little Whinging',
-                  address_line_5: 'Surrey',
-                  address_line_6: 'WD25 7LR',
-                  name: 'Mr H J Licence holder',
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
-                },
-                returnLogIds: recipients.licenceHolder.return_log_ids,
-                status: 'pending',
-                templateId: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba'
-              }
-            ])
+            expect(result[2].messageRef).to.equal('returns_reminder_licence_holder_letter')
           })
         })
 
-        describe('and the "contact_type" is for a "Returns To"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.returnsTo]
-          })
+        describe('and the recipient is a "Returns To"', () => {
+          it('returns the correct "messageRef"', () => {
+            const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.returnsTo.licence_refs,
-                messageRef: 'returns_reminder_returns_to_letter',
-                messageType: 'letter',
-                personalisation: {
-                  address_line_1: 'Mr H J Returns to',
-                  address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
-                  address_line_3: '2',
-                  address_line_4: 'Privet Drive',
-                  address_line_5: 'Little Whinging',
-                  address_line_6: 'Surrey',
-                  name: 'Mr H J Returns to',
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
-                },
-                returnLogIds: recipients.returnsTo.return_log_ids,
-                status: 'pending',
-                templateId: 'e9f132c7-a550-4e18-a5c1-78375f07aa2d'
-              }
-            ])
+            expect(result[3].messageRef).to.equal('returns_reminder_returns_to_letter')
           })
         })
 
-        describe('and the "contact_type" is for "both"', () => {
-          beforeEach(() => {
-            testRecipients = [{ ...recipients.licenceHolder, contact_type: 'both' }]
-          })
+        describe('and the recipient is a "Single use"', () => {
+          it('returns the correct "messageRef"', () => {
+            const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.licenceHolder.licence_refs,
-                messageRef: 'returns_reminder_licence_holder_letter',
-                messageType: 'letter',
-                personalisation: {
-                  address_line_1: 'Mr H J Licence holder',
-                  address_line_2: '1',
-                  address_line_3: 'Privet Drive',
-                  address_line_4: 'Little Whinging',
-                  address_line_5: 'Surrey',
-                  address_line_6: 'WD25 7LR',
-                  name: 'Mr H J Licence holder',
-                  periodEndDate: '31 March 2025',
-                  periodStartDate: '1 January 2025',
-                  returnDueDate: '28 April 2025'
-                },
-                returnLogIds: recipients.licenceHolder.return_log_ids,
-                status: 'pending',
-                templateId: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba'
-              }
-            ])
+            expect(result[6].messageRef).to.equal('returns_reminder_licence_holder_letter')
           })
         })
       })
     })
   })
 
-  describe('when the journey is for "adhoc"', () => {
-    describe('when the "noticeType" is for "invitations"', () => {
-      beforeEach(() => {
-        session.journey = 'adhoc'
-        session.noticeType = 'invitations'
+  describe('the "personalisation" property', () => {
+    describe('when the notification is an email', () => {
+      describe('and the session does not have a due date for the return period', () => {
+        it('returns the expected "personalisation"', () => {
+          const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-        delete session.determinedReturnsPeriod
-      })
-
-      describe('when the notifications is an email', () => {
-        describe('and the "contact_type" is for a "Primary user"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.primaryUser]
-          })
-
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.primaryUser.licence_refs,
-                messageRef: 'returns_invitation_primary_user_email',
-                messageType: 'email',
-                personalisation: {
-                  periodEndDate: null,
-                  periodStartDate: null,
-                  returnDueDate: '29 January 2025'
-                },
-                recipient: 'primary.user@important.com',
-                returnLogIds: recipients.primaryUser.return_log_ids,
-                status: 'pending',
-                templateId: '7bb89469-1dbc-458a-9526-fad8ab71285f'
-              }
-            ])
-          })
-        })
-
-        describe('and the "contact_type" is for a "Returns Agent"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.returnsAgent]
-          })
-
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.returnsAgent.licence_refs,
-                messageRef: 'returns_invitation_returns_agent_email',
-                messageType: 'email',
-                personalisation: {
-                  periodEndDate: null,
-                  periodStartDate: null,
-                  returnDueDate: '29 January 2025'
-                },
-                recipient: 'returns.agent@important.com',
-                returnLogIds: recipients.returnsAgent.return_log_ids,
-                status: 'pending',
-                templateId: 'cbc4efe2-f3b5-4642-8f6d-3532df73ee94'
-              }
-            ])
-          })
-        })
-
-        describe('and the "contact_type" is for "both"', () => {
-          beforeEach(() => {
-            testRecipients = [{ ...recipients.primaryUser, contact_type: 'both' }]
-          })
-
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.primaryUser.licence_refs,
-                messageRef: 'returns_invitation_primary_user_email',
-                messageType: 'email',
-                personalisation: {
-                  periodEndDate: null,
-                  periodStartDate: null,
-                  returnDueDate: '29 January 2025'
-                },
-                recipient: 'primary.user@important.com',
-                returnLogIds: recipients.primaryUser.return_log_ids,
-                status: 'pending',
-                templateId: '7bb89469-1dbc-458a-9526-fad8ab71285f'
-              }
-            ])
-          })
-        })
-
-        describe('the "returnDueDate" property', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.primaryUser]
-          })
-
-          it('should be 28 days past the current date', () => {
-            const [result] = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result.personalisation.returnDueDate).to.equal('29 January 2025')
+          expect(result[0].personalisation).to.equal({
+            periodEndDate: '31 March 2025',
+            periodStartDate: '1 January 2025',
+            returnDueDate: dynamicEmailDueDate
           })
         })
       })
 
-      describe('when the notifications is a letter', () => {
-        describe('and the "contact_type" is for a "Licence Holder"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.licenceHolder]
-          })
-
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.licenceHolder.licence_refs,
-                messageRef: 'returns_invitation_licence_holder_letter',
-                messageType: 'letter',
-                personalisation: {
-                  address_line_1: 'Mr H J Licence holder',
-                  address_line_2: '1',
-                  address_line_3: 'Privet Drive',
-                  address_line_4: 'Little Whinging',
-                  address_line_5: 'Surrey',
-                  address_line_6: 'WD25 7LR',
-                  name: 'Mr H J Licence holder',
-                  returnDueDate: '30 January 2025',
-                  periodEndDate: null,
-                  periodStartDate: null
-                },
-                returnLogIds: recipients.licenceHolder.return_log_ids,
-                status: 'pending',
-                templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
-              }
-            ])
-          })
+      describe('and the session has a due date for the return period', () => {
+        beforeEach(() => {
+          session.determinedReturnsPeriod.dueDate = new Date('2025-04-28')
         })
 
-        describe('and the "contact_type" is for a "Returns To"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.returnsTo]
-          })
+        it('returns the expected "personalisation"', () => {
+          const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.returnsTo.licence_refs,
-                messageRef: 'returns_invitation_returns_to_letter',
-                messageType: 'letter',
-                personalisation: {
-                  address_line_1: 'Mr H J Returns to',
-                  address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
-                  address_line_3: '2',
-                  address_line_4: 'Privet Drive',
-                  address_line_5: 'Little Whinging',
-                  address_line_6: 'Surrey',
-                  name: 'Mr H J Returns to',
-                  returnDueDate: '30 January 2025',
-                  periodEndDate: null,
-                  periodStartDate: null
-                },
-                returnLogIds: recipients.returnsTo.return_log_ids,
-                status: 'pending',
-                templateId: '73b4c395-4423-4976-8ab4-c82e2cb6beee'
-              }
-            ])
-          })
-        })
-
-        describe('and the "contact_type" is for "both"', () => {
-          beforeEach(() => {
-            testRecipients = [{ ...recipients.licenceHolder, contact_type: 'both' }]
-          })
-
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.licenceHolder.licence_refs,
-                messageRef: 'returns_invitation_licence_holder_letter',
-                messageType: 'letter',
-                personalisation: {
-                  address_line_1: 'Mr H J Licence holder',
-                  address_line_2: '1',
-                  address_line_3: 'Privet Drive',
-                  address_line_4: 'Little Whinging',
-                  address_line_5: 'Surrey',
-                  address_line_6: 'WD25 7LR',
-                  name: 'Mr H J Licence holder',
-                  periodEndDate: null,
-                  periodStartDate: null,
-                  returnDueDate: '30 January 2025'
-                },
-                returnLogIds: recipients.licenceHolder.return_log_ids,
-                status: 'pending',
-                templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
-              }
-            ])
-          })
-        })
-
-        describe('the "returnDueDate" property', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.licenceHolder]
-          })
-
-          it('should be 29 days past the current date', () => {
-            const [result] = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result.personalisation.returnDueDate).to.equal('30 January 2025')
+          expect(result[0].personalisation).to.equal({
+            periodEndDate: '31 March 2025',
+            periodStartDate: '1 January 2025',
+            returnDueDate: '28 April 2025'
           })
         })
       })
     })
 
-    describe('when the "noticeType" is for "reminders"', () => {
+    describe('when the notification is a letter', () => {
+      describe('and the session does not have a due date for the return period', () => {
+        it('returns the expected "personalisation"', () => {
+          const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+          expect(result[2].personalisation).to.equal({
+            address_line_1: 'Mr H J Potter',
+            address_line_2: '1',
+            address_line_3: 'Privet Drive',
+            address_line_4: 'Little Whinging',
+            address_line_5: 'Surrey',
+            address_line_6: 'WD25 7LR',
+            periodEndDate: '31 March 2025',
+            periodStartDate: '1 January 2025',
+            returnDueDate: dynamicLetterDueDate,
+            name: 'Mr H J Potter'
+          })
+        })
+      })
+
+      describe('and the session has a due date for the return period', () => {
+        beforeEach(() => {
+          session.determinedReturnsPeriod.dueDate = new Date('2025-04-28')
+        })
+
+        it('returns the expected "personalisation"', () => {
+          const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+          expect(result[2].personalisation).to.equal({
+            address_line_1: 'Mr H J Potter',
+            address_line_2: '1',
+            address_line_3: 'Privet Drive',
+            address_line_4: 'Little Whinging',
+            address_line_5: 'Surrey',
+            address_line_6: 'WD25 7LR',
+            periodEndDate: '31 March 2025',
+            periodStartDate: '1 January 2025',
+            returnDueDate: '28 April 2025',
+            name: 'Mr H J Potter'
+          })
+        })
+      })
+    })
+  })
+
+  describe('the "templateId" property', () => {
+    describe('when the setup journey is "standard"', () => {
+      describe('and the notice is a "returns invitation"', () => {
+        describe('and the notification is an email', () => {
+          describe('and the recipient is the "Primary user"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[0].templateId).to.equal(notifyTemplates.standard.invitations.primaryUserEmail)
+            })
+          })
+
+          describe('and the recipient is a "Returns agent"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[1].templateId).to.equal(notifyTemplates.standard.invitations.returnsAgentEmail)
+            })
+          })
+
+          describe('and the recipient is a "Single use"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[5].templateId).to.equal(notifyTemplates.standard.invitations.primaryUserEmail)
+            })
+          })
+        })
+
+        describe('when the notifications is a letter', () => {
+          describe('and the recipient is the "Licence holder"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[2].templateId).to.equal(notifyTemplates.standard.invitations.licenceHolderLetter)
+            })
+          })
+
+          describe('and the recipient is a "Returns to"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[3].templateId).to.equal(notifyTemplates.standard.invitations.returnsToLetter)
+            })
+          })
+
+          describe('and the recipient is a "Single use"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[6].templateId).to.equal(notifyTemplates.standard.invitations.licenceHolderLetter)
+            })
+          })
+        })
+      })
+
+      describe('and the notice is a "returns reminder"', () => {
+        beforeEach(() => {
+          session.noticeType = 'reminders'
+        })
+
+        describe('and the notification is an email', () => {
+          describe('and the recipient is the "Primary user"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[0].templateId).to.equal(notifyTemplates.standard.reminders.primaryUserEmail)
+            })
+          })
+
+          describe('and the recipient is a "Returns agent"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[1].templateId).to.equal(notifyTemplates.standard.reminders.returnsAgentEmail)
+            })
+          })
+
+          describe('and the recipient is a "Single use"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[5].templateId).to.equal(notifyTemplates.standard.reminders.primaryUserEmail)
+            })
+          })
+        })
+
+        describe('when the notifications is a letter', () => {
+          describe('and the recipient is the "Licence holder"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[2].templateId).to.equal(notifyTemplates.standard.reminders.licenceHolderLetter)
+            })
+          })
+
+          describe('and the recipient is a "Returns to"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[3].templateId).to.equal(notifyTemplates.standard.reminders.returnsToLetter)
+            })
+          })
+
+          describe('and the recipient is a "Single use"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[6].templateId).to.equal(notifyTemplates.standard.reminders.licenceHolderLetter)
+            })
+          })
+        })
+      })
+    })
+
+    describe('when the setup journey is "ad-hoc"', () => {
       beforeEach(() => {
         session.journey = 'adhoc'
-        session.noticeType = 'reminders'
-
-        delete session.determinedReturnsPeriod
       })
 
-      describe('when the notifications is an email', () => {
-        describe('and the "contact_type" is for a "Primary user"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.primaryUser]
+      describe('and the notice is a "returns invitation"', () => {
+        describe('and the notification is an email', () => {
+          describe('and the recipient is the "Primary user"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[0].templateId).to.equal(notifyTemplates.adhoc.invitations.primaryUserEmail)
+            })
           })
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
+          describe('and the recipient is a "Returns agent"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.primaryUser.licence_refs,
-                messageRef: 'returns_reminder_primary_user_email',
-                messageType: 'email',
-                personalisation: {
-                  periodEndDate: null,
-                  periodStartDate: null,
-                  returnDueDate: '29 January 2025'
-                },
-                recipient: 'primary.user@important.com',
-                returnLogIds: recipients.primaryUser.return_log_ids,
-                status: 'pending',
-                templateId: '87dceeb3-aa2b-4ff5-aff9-97755a71532b'
-              }
-            ])
+              expect(result[1].templateId).to.equal(notifyTemplates.adhoc.invitations.returnsAgentEmail)
+            })
+          })
+
+          describe('and the recipient is a "Single use"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[5].templateId).to.equal(notifyTemplates.adhoc.invitations.primaryUserEmail)
+            })
           })
         })
 
-        describe('and the "contact_type" is for a "Returns Agent"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.returnsAgent]
+        describe('when the notifications is a letter', () => {
+          describe('and the recipient is the "Licence holder"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[2].templateId).to.equal(notifyTemplates.adhoc.invitations.licenceHolderLetter)
+            })
           })
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
+          describe('and the recipient is a "Returns to"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.returnsAgent.licence_refs,
-                messageRef: 'returns_reminder_returns_agent_email',
-                messageType: 'email',
-                personalisation: {
-                  periodEndDate: null,
-                  periodStartDate: null,
-                  returnDueDate: '29 January 2025'
-                },
-                recipient: 'returns.agent@important.com',
-                returnLogIds: recipients.returnsAgent.return_log_ids,
-                status: 'pending',
-                templateId: 'c8076bbd-7d93-4743-81b3-755a5c5f1d50'
-              }
-            ])
-          })
-        })
-
-        describe('and the "contact_type" is for "both"', () => {
-          beforeEach(() => {
-            testRecipients = [{ ...recipients.primaryUser, contact_type: 'both' }]
+              expect(result[3].templateId).to.equal(notifyTemplates.adhoc.invitations.returnsToLetter)
+            })
           })
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
+          describe('and the recipient is a "Single use"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.primaryUser.licence_refs,
-                messageRef: 'returns_reminder_primary_user_email',
-                messageType: 'email',
-                personalisation: {
-                  periodEndDate: null,
-                  periodStartDate: null,
-                  returnDueDate: '29 January 2025'
-                },
-                recipient: 'primary.user@important.com',
-                returnLogIds: recipients.primaryUser.return_log_ids,
-                status: 'pending',
-                templateId: '87dceeb3-aa2b-4ff5-aff9-97755a71532b'
-              }
-            ])
-          })
-        })
-
-        describe('the "returnDueDate" property', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.primaryUser]
-          })
-
-          it('should be 28 days past the current date', () => {
-            const [result] = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result.personalisation.returnDueDate).to.equal('29 January 2025')
+              expect(result[6].templateId).to.equal(notifyTemplates.adhoc.invitations.licenceHolderLetter)
+            })
           })
         })
       })
 
-      describe('when the notifications is a letter', () => {
-        describe('and the "contact_type" is for a "Licence Holder"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.licenceHolder]
+      describe('and the notice is a "returns reminder"', () => {
+        beforeEach(() => {
+          session.noticeType = 'reminders'
+        })
+
+        describe('and the notification is an email', () => {
+          describe('and the recipient is the "Primary user"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[0].templateId).to.equal(notifyTemplates.adhoc.reminders.primaryUserEmail)
+            })
           })
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
+          describe('and the recipient is a "Returns agent"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.licenceHolder.licence_refs,
-                messageRef: 'returns_reminder_licence_holder_letter',
-                messageType: 'letter',
-                personalisation: {
-                  address_line_1: 'Mr H J Licence holder',
-                  address_line_2: '1',
-                  address_line_3: 'Privet Drive',
-                  address_line_4: 'Little Whinging',
-                  address_line_5: 'Surrey',
-                  address_line_6: 'WD25 7LR',
-                  name: 'Mr H J Licence holder',
-                  returnDueDate: '30 January 2025',
-                  periodEndDate: null,
-                  periodStartDate: null
-                },
-                returnLogIds: recipients.licenceHolder.return_log_ids,
-                status: 'pending',
-                templateId: '62224316-35c4-4b02-98c2-81332817f3dc'
-              }
-            ])
+              expect(result[1].templateId).to.equal(notifyTemplates.adhoc.reminders.returnsAgentEmail)
+            })
+          })
+
+          describe('and the recipient is a "Single use"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[5].templateId).to.equal(notifyTemplates.adhoc.reminders.primaryUserEmail)
+            })
           })
         })
 
-        describe('and the "contact_type" is for a "Returns To"', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.returnsTo]
+        describe('when the notifications is a letter', () => {
+          describe('and the recipient is the "Licence holder"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
+
+              expect(result[2].templateId).to.equal(notifyTemplates.adhoc.reminders.licenceHolderLetter)
+            })
           })
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
+          describe('and the recipient is a "Returns to"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.returnsTo.licence_refs,
-                messageRef: 'returns_reminder_returns_to_letter',
-                messageType: 'letter',
-                personalisation: {
-                  address_line_1: 'Mr H J Returns to',
-                  address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
-                  address_line_3: '2',
-                  address_line_4: 'Privet Drive',
-                  address_line_5: 'Little Whinging',
-                  address_line_6: 'Surrey',
-                  name: 'Mr H J Returns to',
-                  returnDueDate: '30 January 2025',
-                  periodEndDate: null,
-                  periodStartDate: null
-                },
-                returnLogIds: recipients.returnsTo.return_log_ids,
-                status: 'pending',
-                templateId: 'eca3e1d0-a8a6-4eb1-b166-23891fe3a9e5'
-              }
-            ])
-          })
-        })
-
-        describe('and the "contact_type" is for "both"', () => {
-          beforeEach(() => {
-            testRecipients = [{ ...recipients.licenceHolder, contact_type: 'both' }]
+              expect(result[3].templateId).to.equal(notifyTemplates.adhoc.reminders.returnsToLetter)
+            })
           })
 
-          it('correctly transforms the recipient to a notification', () => {
-            const result = NotificationsPresenter.go(testRecipients, session, eventId)
+          describe('and the recipient is a "Single use"', () => {
+            it('returns the correct "templateId"', () => {
+              const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result).to.equal([
-              {
-                createdAt: '2025-01-01T00:00:00.000Z',
-                eventId,
-                licences: recipients.licenceHolder.licence_refs,
-                messageRef: 'returns_reminder_licence_holder_letter',
-                messageType: 'letter',
-                personalisation: {
-                  address_line_1: 'Mr H J Licence holder',
-                  address_line_2: '1',
-                  address_line_3: 'Privet Drive',
-                  address_line_4: 'Little Whinging',
-                  address_line_5: 'Surrey',
-                  address_line_6: 'WD25 7LR',
-                  name: 'Mr H J Licence holder',
-                  periodEndDate: null,
-                  periodStartDate: null,
-                  returnDueDate: '30 January 2025'
-                },
-                returnLogIds: recipients.licenceHolder.return_log_ids,
-                status: 'pending',
-                templateId: '62224316-35c4-4b02-98c2-81332817f3dc'
-              }
-            ])
-          })
-        })
-
-        describe('the "returnDueDate" property', () => {
-          beforeEach(() => {
-            testRecipients = [recipients.licenceHolder]
-          })
-
-          it('should be 29 days past the current date', () => {
-            const [result] = NotificationsPresenter.go(testRecipients, session, eventId)
-
-            expect(result.personalisation.returnDueDate).to.equal('30 January 2025')
+              expect(result[6].templateId).to.equal(notifyTemplates.adhoc.reminders.licenceHolderLetter)
+            })
           })
         })
       })

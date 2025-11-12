@@ -132,7 +132,8 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
               periodStartDay: 1,
               periodStartMonth: 4,
               periodEndDay: 28,
-              periodEndMonth: 4
+              periodEndMonth: 4,
+              returnId: returnLog.returnId
             }
           }
         ]

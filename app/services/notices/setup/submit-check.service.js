@@ -1,24 +1,20 @@
 'use strict'
 
 /**
- * Orchestrates handling the data for `/notices/setup/{sessionId}/check` page
+ * Orchestrates creating the notice and sending the notifications when `/notices/setup/{sessionId}/check` page submitted
  * @module SubmitCheckService
  */
 
-const BatchNotificationsService = require('./batch-notifications.service.js')
-const CreateNoticePresenter = require('../../../presenters/notices/setup/create-notice.presenter.js')
 const CreateNoticeService = require('./create-notice.service.js')
 const CreateNotificationsService = require('./create-notifications.service.js')
-const DetermineNotificationsService = require('./determine-notifications.service.js')
-const FetchNotificationsService = require('./fetch-notifications.service.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
+const SendNoticeService = require('./send-notice.service.js')
 const SessionModel = require('../../../models/session.model.js')
-const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 
 /**
- * Orchestrates handling the data for `/notices/setup/{sessionId}/check` page
+ * Orchestrates creating the notice and sending the notifications when `/notices/setup/{sessionId}/check` page submitted
  *
- * This service will transform the recipients into notifications and start processing notifications.
+ * This service will transform the recipients into notifications and start sending them as notifications.
  *
  * @param {string} sessionId - The UUID for the notice setup session record
  * @param {object} auth - The auth object taken from `request.auth` containing user details
@@ -38,45 +34,23 @@ async function go(sessionId, auth) {
 
   const notifications = await _notifications(sessionCopy, recipients, notice.id)
 
-  _processNotifications(notifications, notice, sessionCopy.referenceCode)
+  // We do not await the result of this service. Sending paper returns can take a few seconds due to the need to
+  // generate the PDFs. Returns invitations and reminders can take a few minutes because there can be thousands of
+  // notifications to send. We've created the records by this point so we are safe to redirect the user to the
+  // confirmation page, and from there the view notice page.
+  //
+  // But if we were to await the result they would see a timeout. So, we kick it off and then return to the controller.
+  SendNoticeService.go(notice, notifications)
 
   return notice.id
 }
 
-/**
- * Determine the notifications to send for the recipients.
- *
- * Save the notifications as 'pending' (we are about to start batching).
- *
- * Return the saved notifications with the notification id (this will be used to update the status of the notification
- * during the batch process).
- *
- * @private
- */
-async function _notifications(session, recipients, eventId) {
-  const notifications = DetermineNotificationsService.go(session, recipients, eventId)
-
-  await CreateNotificationsService.go(notifications)
-
-  return FetchNotificationsService.go(eventId)
+async function _notifications(session, recipients, noticeId) {
+  return CreateNotificationsService.go(session, recipients, noticeId)
 }
 
 async function _notice(session, recipients, auth) {
-  const event = CreateNoticePresenter.go(session, recipients, auth)
-
-  return CreateNoticeService.go(event)
-}
-
-async function _processNotifications(notifications, notice, referenceCode) {
-  try {
-    const startTime = currentTimeInNanoseconds()
-
-    await BatchNotificationsService.go(notifications, notice, referenceCode)
-
-    calculateAndLogTimeTaken(startTime, 'Send notifications complete', {})
-  } catch (error) {
-    global.GlobalNotifier.omfg('Send notifications failed', { notice }, error)
-  }
+  return CreateNoticeService.go(session, recipients, auth.credentials.user.username)
 }
 
 module.exports = {

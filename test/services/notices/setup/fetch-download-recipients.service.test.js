@@ -126,30 +126,19 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
         it('returns the "primary user" ', async () => {
           const result = await FetchDownloadRecipientsService.go(session)
 
-          expect(result).to.include({
-            contact: null,
-            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-            contact_type: 'Primary user',
-            due_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate,
-            end_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.endDate,
-            email: 'primary.user@important.com',
-            licence_ref: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
-            return_reference: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnReference,
-            start_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.startDate
-          })
-
-          // Returns agent contact hash / email match the primary user
-          expect(result).to.include({
-            contact: null,
-            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-            contact_type: 'Returns agent',
-            due_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate,
-            end_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.endDate,
-            email: 'primary.user@important.com',
-            licence_ref: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
-            return_reference: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnReference,
-            start_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.startDate
-          })
+          expect(result).to.equal([
+            {
+              contact: null,
+              contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+              contact_type: 'Primary user',
+              due_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate,
+              end_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.endDate,
+              email: 'primary.user@important.com',
+              licence_ref: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
+              return_reference: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnReference,
+              start_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.startDate
+            }
+          ])
         })
       })
     })
@@ -190,14 +179,14 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
               county: 'Surrey',
               forename: 'Harry',
               initials: 'J',
-              name: 'Licence holder',
+              name: 'Potter',
               postcode: 'WD25 7LR',
               role: 'Licence holder',
               salutation: null,
               town: 'Little Whinging',
               type: 'Person'
             },
-            contact_hash_id: '0cad692217f572faede404363b2625c9',
+            contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
             contact_type: 'Licence holder',
             due_date: seedData.licenceHolder.returnLog.dueDate,
             email: null,
@@ -234,14 +223,14 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                 county: 'Surrey',
                 forename: 'Harry',
                 initials: 'J',
-                name: 'Licence holder',
+                name: 'Potter',
                 postcode: 'WD25 7LR',
                 role: 'Licence holder',
                 salutation: null,
                 town: 'Little Whinging',
                 type: 'Person'
               },
-              contact_hash_id: '0cad692217f572faede404363b2625c9',
+              contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
               contact_type: 'Licence holder',
               due_date: seedData.licenceHolderAndReturnTo.returnLog.dueDate,
               email: null,
@@ -260,14 +249,14 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                 county: 'Surrey',
                 forename: 'Harry',
                 initials: 'J',
-                name: 'Returns to',
+                name: 'Weasley',
                 postcode: 'WD25 7LR',
                 role: 'Returns to',
                 salutation: null,
                 town: 'Little Whinging',
                 type: 'Person'
               },
-              contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
+              contact_hash_id: 'a4737b69f58b3f3b01933a42b46ddf96',
               contact_type: 'Returns to',
               due_date: seedData.licenceHolderAndReturnTo.returnLog.dueDate,
               email: null,
@@ -314,32 +303,6 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
               },
               contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
               contact_type: 'Licence holder',
-              due_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.dueDate,
-              email: null,
-              end_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.endDate,
-              licence_ref: seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef,
-              return_reference: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.returnReference,
-              start_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.startDate
-            },
-            {
-              contact: {
-                addressLine1: '4',
-                addressLine2: 'Privet Drive',
-                addressLine3: null,
-                addressLine4: null,
-                country: null,
-                county: 'Surrey',
-                forename: 'Harry',
-                initials: 'J',
-                name: 'Potter',
-                postcode: 'WD25 7LR',
-                role: 'Returns to',
-                salutation: null,
-                town: 'Little Whinging',
-                type: 'Person'
-              },
-              contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
-              contact_type: 'Returns to',
               due_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.dueDate,
               email: null,
               end_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.endDate,
@@ -440,29 +403,19 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
           it('returns the "primary user"', async () => {
             const result = await FetchDownloadRecipientsService.go(session)
 
-            expect(result).to.include({
-              contact: null,
-              contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-              contact_type: 'Primary user',
-              due_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate,
-              end_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.endDate,
-              email: 'primary.user@important.com',
-              licence_ref: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
-              return_reference: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnReference,
-              start_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.startDate
-            })
-
-            expect(result).to.include({
-              contact: null,
-              contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-              contact_type: 'Returns agent',
-              due_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate,
-              end_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.endDate,
-              email: 'primary.user@important.com',
-              licence_ref: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
-              return_reference: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnReference,
-              start_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.startDate
-            })
+            expect(result).to.equal([
+              {
+                contact: null,
+                contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
+                contact_type: 'Primary user',
+                due_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.dueDate,
+                end_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.endDate,
+                email: 'primary.user@important.com',
+                licence_ref: seedData.primaryUserAndReturnsAgentWithTheSameEmail.licenceRef,
+                return_reference: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.returnReference,
+                start_date: seedData.primaryUserAndReturnsAgentWithTheSameEmail.returnLog.startDate
+              }
+            ])
           })
         })
       })
@@ -488,14 +441,14 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                 county: 'Surrey',
                 forename: 'Harry',
                 initials: 'J',
-                name: 'Licence holder',
+                name: 'Potter',
                 postcode: 'WD25 7LR',
                 role: 'Licence holder',
                 salutation: null,
                 town: 'Little Whinging',
                 type: 'Person'
               },
-              contact_hash_id: '0cad692217f572faede404363b2625c9',
+              contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
               contact_type: 'Licence holder',
               due_date: seedData.licenceHolder.returnLog.dueDate,
               email: null,
@@ -526,14 +479,14 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                   county: 'Surrey',
                   forename: 'Harry',
                   initials: 'J',
-                  name: 'Licence holder',
+                  name: 'Potter',
                   postcode: 'WD25 7LR',
                   role: 'Licence holder',
                   salutation: null,
                   town: 'Little Whinging',
                   type: 'Person'
                 },
-                contact_hash_id: '0cad692217f572faede404363b2625c9',
+                contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
                 contact_type: 'Licence holder',
                 due_date: seedData.licenceHolderAndReturnTo.returnLog.dueDate,
                 email: null,
@@ -552,14 +505,14 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                   county: 'Surrey',
                   forename: 'Harry',
                   initials: 'J',
-                  name: 'Returns to',
+                  name: 'Weasley',
                   postcode: 'WD25 7LR',
                   role: 'Returns to',
                   salutation: null,
                   town: 'Little Whinging',
                   type: 'Person'
                 },
-                contact_hash_id: 'b046e48491a53f02ea02c4f05e1b0711',
+                contact_hash_id: 'a4737b69f58b3f3b01933a42b46ddf96',
                 contact_type: 'Returns to',
                 due_date: seedData.licenceHolderAndReturnTo.returnLog.dueDate,
                 email: null,
@@ -600,32 +553,6 @@ describe('Notices - Setup - Fetch Download Recipients service', () => {
                 },
                 contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
                 contact_type: 'Licence holder',
-                due_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.dueDate,
-                email: null,
-                end_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.endDate,
-                licence_ref: seedData.licenceHolderAndReturnToWithTheSameAddress.licenceRef,
-                return_reference: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.returnReference,
-                start_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.startDate
-              },
-              {
-                contact: {
-                  addressLine1: '4',
-                  addressLine2: 'Privet Drive',
-                  addressLine3: null,
-                  addressLine4: null,
-                  country: null,
-                  county: 'Surrey',
-                  forename: 'Harry',
-                  initials: 'J',
-                  name: 'Potter',
-                  postcode: 'WD25 7LR',
-                  role: 'Returns to',
-                  salutation: null,
-                  town: 'Little Whinging',
-                  type: 'Person'
-                },
-                contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
-                contact_type: 'Returns to',
                 due_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.dueDate,
                 email: null,
                 end_date: seedData.licenceHolderAndReturnToWithTheSameAddress.returnLog.endDate,

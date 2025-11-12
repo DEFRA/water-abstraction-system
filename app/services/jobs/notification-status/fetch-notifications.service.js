@@ -1,31 +1,31 @@
 'use strict'
 
 /**
- * Fetches the notifications with the status 'sending'.
+ * Fetches pending notifications awaiting a status update from Notify
  * @module FetchNotificationsService
  */
 
 const NotificationModel = require('../../../models/notification.model.js')
 const { today } = require('../../../lib/general.lib.js')
 
-const SEVEN_DAYS = 7
+const notifyConfig = require('../../../../config/notify.config.js')
 
 /**
- * Fetches the notifications with the status 'sending'.
+ * Fetches pending notifications awaiting a status update from Notify
  *
- * The function returns a list of 'notifications' that have a status of 'sending' and are less than 7 days old.
+ * It is only notifications with a status of 'pending' we care about, because any others will either have failed when
+ * sending to Notify, or we've already gotten a response from confirming whether the notification was sent or not.
  *
- * Notify has a retention period of 7 days, so we only want 'notifications' created within the last 7 days.
+ * Notify also has a configurable data retention period for messages. By default this is 7 days so we only fetch
+ * pending notifications created in the last 7 days.
  *
- * @param {string | null} eventId - When an event id is provided we check the status only for the event and only for emails.
- *
- * @returns {Promise<object[]>} - an array of 'notifications'
+ * @returns {Promise<object[]>} the 'pending' notifications that need their status checking with Notify
  */
-async function go(eventId) {
+async function go() {
   const todaysDate = today()
-  const sevenDaysAgo = today()
+  const retentionStartDate = today()
 
-  sevenDaysAgo.setDate(todaysDate.getDate() - SEVEN_DAYS)
+  retentionStartDate.setDate(todaysDate.getDate() - notifyConfig.daysOfRetention)
 
   const query = NotificationModel.query()
     .select([
@@ -37,17 +37,12 @@ async function go(eventId) {
       'messageType',
       'notifyId',
       'notifyStatus',
-      'notify_error',
+      'notifyError',
       'personalisation',
       'status'
     ])
     .where('status', 'pending')
-    .andWhere('createdAt', '>=', sevenDaysAgo)
-
-  if (eventId) {
-    query.andWhere('eventId', eventId)
-    query.andWhere('messageType', 'email')
-  }
+    .andWhere('createdAt', '>=', retentionStartDate)
 
   return query
 }

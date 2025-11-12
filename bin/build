@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sass --load-path=./ --quiet-deps --no-source-map client/sass/application.scss app/public/build/stylesheets/application.css
+sass --load-path=./ --quiet-deps --no-source-map --style=compressed client/sass/application.scss app/public/build/stylesheets/application.css

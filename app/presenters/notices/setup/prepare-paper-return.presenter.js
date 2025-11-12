@@ -57,17 +57,14 @@ function go(notification) {
       licence_ref: licenceRef,
       naldAreaCode,
       purpose,
-      qr_url: returnLogId,
+      qr_url: returnId,
       region_code: regionCode,
       region_name: regionName,
       returns_frequency: returnsFrequency,
       site_description: siteDescription,
       start_date: startDate
-    },
-    returnLogIds
+    }
   } = notification
-
-  const [returnId] = returnLogIds
 
   return {
     address: {
@@ -87,7 +84,6 @@ function go(notification) {
     regionAndArea: _regionAndArea(regionName, naldAreaCode),
     regionCode,
     returnId,
-    returnLogId,
     returnReference,
     returnsFrequency,
     siteDescription,

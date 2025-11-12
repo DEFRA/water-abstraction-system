@@ -30,6 +30,7 @@ describe('Return Logs - Setup - Submit Submission service', () => {
         beenReceived: false,
         receivedDateOptions: 'today',
         receivedDate: new Date('2025-02-14'),
+        returnId: '4010bc46-e556-4e1f-b66b-1388f3fe5340',
         returnLogId,
         returnReference: ReturnRequirementHelper.generateReference()
       }

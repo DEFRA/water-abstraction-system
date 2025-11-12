@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK } = require('node:http2').constants
 const BillRunModel = require('../../../app/models/bill-run.model.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
@@ -56,7 +57,7 @@ describe('Initiate Bill Run service', () => {
             gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
             dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
           },
-          statusCode: 200,
+          statusCode: HTTP_STATUS_OK,
           body: responseBody
         }
       })
@@ -100,9 +101,9 @@ describe('Initiate Bill Run service', () => {
               gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
               dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
             },
-            statusCode: 403,
+            statusCode: HTTP_STATUS_FORBIDDEN,
             body: {
-              statusCode: 403,
+              statusCode: HTTP_STATUS_FORBIDDEN,
               error: 'Forbidden',
               message: "Unauthorised for regime 'wrls'"
             }

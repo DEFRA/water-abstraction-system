@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
 const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
 
 // Things we need to stub
@@ -64,7 +65,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           }
 
           response = {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: {
               body: 'Dear Clean Water Limited,\r\n',
               html: null,
@@ -102,11 +103,11 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               'CAMBRIDGESHIRE',
               'CB23 1ZZ'
             ],
-            backLink: `/system/notices/setup/${sessionId}/check`,
-            caption: `Notice ${referenceCode}`,
+            backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
             contents: 'Dear Clean Water Limited,\r\n',
             messageType: 'letter',
             pageTitle: 'Returns invitation licence holder letter',
+            pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
           })
         })
@@ -128,7 +129,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           }
 
           response = {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: {
               body: 'Dear licence holder,\r\n',
               html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence holder,</p>',
@@ -158,11 +159,11 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
 
           expect(result).to.equal({
             address: 'hello@example.com',
-            backLink: `/system/notices/setup/${sessionId}/check`,
-            caption: `Notice ${referenceCode}`,
+            backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
             contents: 'Dear licence holder,\r\n',
             messageType: 'email',
             pageTitle: 'Returns invitation primary user email',
+            pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
           })
         })
@@ -205,7 +206,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           }
 
           response = {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: {
               body: 'Dear licence contact,\r\n',
               html: null,
@@ -242,11 +243,11 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               'CAMBRIDGESHIRE',
               'CB23 1ZZ'
             ],
-            backLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`,
-            caption: `Notice ${referenceCode}`,
+            backLink: { href: `/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`, text: 'Back' },
             contents: 'Dear licence contact,\r\n',
             messageType: 'letter',
             pageTitle: 'Water abstraction alert stop warning',
+            pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`
           })
         })
@@ -275,7 +276,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
           }
 
           response = {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: {
               body: 'Dear licence contact,\r\n',
               html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence contact,</p>',
@@ -305,11 +306,11 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
 
           expect(result).to.equal({
             address: 'hello@example.com',
-            backLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`,
-            caption: `Notice ${referenceCode}`,
+            backLink: { href: `/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`, text: 'Back' },
             contents: 'Dear licence contact,\r\n',
             messageType: 'email',
             pageTitle: 'Water abstraction alert reduce or stop warning email',
+            pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`
           })
         })
@@ -335,7 +336,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
       }
 
       response = {
-        statusCode: 400,
+        statusCode: HTTP_STATUS_BAD_REQUEST,
         body: {
           errors: [
             {
@@ -343,7 +344,7 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
               message: 'Missing personalisation: returnDueDate'
             }
           ],
-          status_code: 400
+          status_code: HTTP_STATUS_BAD_REQUEST
         }
       }
 
@@ -365,11 +366,11 @@ describe('Notices - Setup - Preview - Preview presenter', () => {
 
       expect(result).to.equal({
         address: 'hello@example.com',
-        backLink: `/system/notices/setup/${sessionId}/check`,
-        caption: `Notice ${referenceCode}`,
+        backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
         contents: 'error',
         messageType: 'email',
         pageTitle: 'Returns invitation primary user email',
+        pageTitleCaption: `Notice ${referenceCode}`,
         refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
       })
     })

@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -43,7 +45,7 @@ describe('ReSP API Request', () => {
         Sinon.stub(BaseRequest, 'get').resolves({
           succeeded: true,
           response: {
-            statusCode: 200,
+            statusCode: HTTP_STATUS_OK,
             body: { testObject: { test: 'yes' } }
           }
         })
@@ -73,7 +75,7 @@ describe('ReSP API Request', () => {
       it('returns the status code', async () => {
         const result = await RespRequest.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(200)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
       })
     })
 
@@ -82,9 +84,9 @@ describe('ReSP API Request', () => {
         Sinon.stub(BaseRequest, 'get').resolves({
           succeeded: false,
           response: {
-            statusCode: 404,
+            statusCode: HTTP_STATUS_NOT_FOUND,
             statusMessage: 'Not Found',
-            body: { statusCode: 404, error: 'Not Found', message: 'Not Found' }
+            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
           }
         })
       })
@@ -104,7 +106,7 @@ describe('ReSP API Request', () => {
       it('returns the status code', async () => {
         const result = await RespRequest.get(testRoute)
 
-        expect(result.response.statusCode).to.equal(404)
+        expect(result.response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
       })
     })
   })

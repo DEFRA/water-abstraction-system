@@ -5,6 +5,8 @@
  * @module LicencesController
  */
 
+const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
+
 const InitiateSessionService = require('../services/return-versions/setup/initiate-session.service.js')
 const LicenceSupplementaryProcessBillingFlagService = require('../services/licences/supplementary/process-billing-flag.service.js')
 const MarkedForSupplementaryBillingService = require('../services/licences/supplementary/marked-for-supplementary-billing.service.js')
@@ -71,7 +73,7 @@ async function submitMarkForSupplementaryBilling(request, h) {
 async function supplementary(request, h) {
   await LicenceSupplementaryProcessBillingFlagService.go(request.payload)
 
-  return h.response().code(204)
+  return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
 async function viewBills(request, h) {

@@ -26,7 +26,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
     sessionData = {
       data: {
         licenceId: 'cd190dc7-912a-46a5-9421-2750fb1c7ac8',
-        returnLogId: 'v1:1:01/12/123:10065476:2025-01-06:2025-10-31',
+        returnId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
         returnReference: '12345',
         startDate: '2023-04-01T00:00:00.000Z'
       }
@@ -154,7 +154,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
             receivedDateYear: null,
             receivedDateOption: null,
             backLink: {
-              href: `/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31`,
+              href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3',
               text: 'Back'
             },
             pageTitleCaption: 'Return reference 12345'

@@ -3,29 +3,14 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
-
-// Test helpers
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-
-// Things we need to stub
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 // Thing under test
 const BaseReviewPresenter = require('../../../../app/presenters/bill-runs/review/base-review.presenter.js')
 
 describe('Bill Runs Review - Base Review presenter', () => {
-  beforeEach(() => {
-    Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsView').value(true)
-  })
-
-  afterEach(() => {
-    Sinon.restore()
-  })
-
   describe('#calculateTotalBillableReturns()', () => {
     const reviewChargeElements = [
       { amendedAllocated: 11.513736 },
@@ -39,66 +24,6 @@ describe('Bill Runs Review - Base Review presenter', () => {
       const result = BaseReviewPresenter.calculateTotalBillableReturns(reviewChargeElements)
 
       expect(result).to.equal(63.500502)
-    })
-  })
-
-  describe('#determineReturnLink()', () => {
-    const returnId = ReturnLogHelper.generateReturnLogId()
-
-    let reviewReturn
-
-    describe('when the function is called', () => {
-      beforeEach(() => {
-        reviewReturn = { returnId, returnStatus: 'completed' }
-      })
-
-      it('returns the link to the view return logs page', () => {
-        const result = BaseReviewPresenter.determineReturnLink(reviewReturn)
-
-        expect(result).to.equal(`/system/return-logs?id=${returnId}`)
-      })
-    })
-
-    describe('when enableSystemReturnsView flag is false', () => {
-      beforeEach(() => {
-        Sinon.stub(FeatureFlagsConfig, 'enableSystemReturnsView').value(false)
-
-        describe('when the review return has a status of "due"', () => {
-          beforeEach(() => {
-            reviewReturn = { returnId, returnStatus: 'due' }
-          })
-
-          it('returns the link to edit the return', () => {
-            const result = BaseReviewPresenter.determineReturnLink(reviewReturn)
-
-            expect(result).to.equal(`/system/return-logs/setup?returnLogId=${returnId}`)
-          })
-        })
-
-        describe('when the review return has a status of "received"', () => {
-          beforeEach(() => {
-            reviewReturn = { returnId, returnStatus: 'received' }
-          })
-
-          it('returns the link to edit the return', () => {
-            const result = BaseReviewPresenter.determineReturnLink(reviewReturn)
-
-            expect(result).to.equal(`/system/return-logs/setup?returnLogId=${returnId}`)
-          })
-        })
-
-        describe('when the review return has any other status', () => {
-          beforeEach(() => {
-            reviewReturn = { returnId, returnStatus: 'completed' }
-          })
-
-          it('returns the link to view the return', () => {
-            const result = BaseReviewPresenter.determineReturnLink(reviewReturn)
-
-            expect(result).to.equal(`/returns/return?id=${returnId}`)
-          })
-        })
-      })
     })
   })
 
