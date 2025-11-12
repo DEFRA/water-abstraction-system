@@ -2,7 +2,7 @@
 
 /**
  * Formats the licence and related licenceVersionPurposes data for the view licence purposes page
- * @module ViewLicencePurposesPresenter
+ * @module PurposesPresenter
  */
 
 const { formatAbstractionPeriod } = require('../base.presenter.js')

@@ -17,9 +17,9 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const FetchLicencePurposesService = require('../../../app/services/licences/fetch-licence-purposes.service.js')
 
 // Thing under test
-const ViewLicencePurposesService = require('../../../app/services/licences/view-licence-purposes.service.js')
+const ViewPurposesService = require('../../../app/services/licences/view-purposes.service.js')
 
-describe('Licences - View Licence Purposes service', () => {
+describe('Licences - View Purposes service', () => {
   let licenceId
   let licenceRef
 
@@ -32,7 +32,7 @@ describe('Licences - View Licence Purposes service', () => {
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewLicencePurposesService.go(licenceId)
+      const result = await ViewPurposesService.go(licenceId)
 
       expect(result).to.equal({
         activeNavBar: 'search',
