@@ -32,7 +32,8 @@ describe('Return Logs Setup - Readings presenter', () => {
           {
             endDate: '2023-05-31T00:00:00.000Z',
             label: 'May 2023',
-            reading: undefined
+            reading: undefined,
+            viewId: 'May2023'
           }
         ],
         pageTitle: 'Water abstracted May 2023',
@@ -54,7 +55,8 @@ describe('Return Logs Setup - Readings presenter', () => {
           {
             endDate: '2023-04-30T00:00:00.000Z',
             label: 'April 2023',
-            reading: '100'
+            reading: '100',
+            viewId: 'April2023'
           }
         ])
       })
@@ -106,9 +108,10 @@ describe('Return Logs Setup - Readings presenter', () => {
           expect(result.inputLines).to.equal([
             {
               endDate: '2023-04-30T00:00:00.000Z',
+              error: 'There is an error on this line',
               label: 'April 2023',
               reading: '100',
-              error: 'There is an error on this line'
+              viewId: 'April2023'
             }
           ])
         })
