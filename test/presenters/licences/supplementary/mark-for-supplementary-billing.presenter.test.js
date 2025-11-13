@@ -8,6 +8,10 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+
 // Thing under test
 const MarkForSupplementaryBillingPresenter = require('../../../../app/presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js')
 
@@ -23,14 +27,7 @@ describe('Mark For Supplementary Billing presenter', () => {
     let licence
 
     beforeEach(() => {
-      licence = { id: 'test-id', licenceRef: '01/Test' }
-    })
-
-    it('correctly presents the data', () => {
-      const result = MarkForSupplementaryBillingPresenter.go(licence)
-
-      expect(result.licenceId).to.equal('test-id')
-      expect(result.licenceRef).to.equal('01/Test')
+      licence = { id: generateUUID(), licenceRef: generateLicenceRef() }
     })
 
     describe('and the current date is before April', () => {
@@ -47,8 +44,10 @@ describe('Mark For Supplementary Billing presenter', () => {
         const result = MarkForSupplementaryBillingPresenter.go(licence)
 
         expect(result).to.equal({
-          licenceId: 'test-id',
-          licenceRef: '01/Test',
+          backLink: {
+            href: `/system/licences/${licence.id}/set-up`,
+            text: 'Back'
+          },
           financialYears: [
             { text: '2023 to 2024', value: 2024, attributes: { 'data-test': 'sroc-years-2024' } },
             { text: '2022 to 2023', value: 2023, attributes: { 'data-test': 'sroc-years-2023' } },
@@ -59,7 +58,8 @@ describe('Mark For Supplementary Billing presenter', () => {
               attributes: { 'data-test': 'pre-sroc-years' }
             }
           ],
-          pageTitle: 'Mark for the supplementary bill run'
+          pageTitle: 'Select which years you need to recalculate bills for',
+          pageTitleCaption: `Licence ${licence.licenceRef}`
         })
       })
     })
@@ -78,8 +78,10 @@ describe('Mark For Supplementary Billing presenter', () => {
         const result = MarkForSupplementaryBillingPresenter.go(licence)
 
         expect(result).to.equal({
-          licenceId: 'test-id',
-          licenceRef: '01/Test',
+          backLink: {
+            href: `/system/licences/${licence.id}/set-up`,
+            text: 'Back'
+          },
           financialYears: [
             { text: '2024 to 2025', value: 2025, attributes: { 'data-test': 'sroc-years-2025' } },
             { text: '2023 to 2024', value: 2024, attributes: { 'data-test': 'sroc-years-2024' } },
@@ -91,7 +93,8 @@ describe('Mark For Supplementary Billing presenter', () => {
               attributes: { 'data-test': 'pre-sroc-years' }
             }
           ],
-          pageTitle: 'Mark for the supplementary bill run'
+          pageTitle: 'Select which years you need to recalculate bills for',
+          pageTitleCaption: `Licence ${licence.licenceRef}`
         })
       })
     })
@@ -110,8 +113,10 @@ describe('Mark For Supplementary Billing presenter', () => {
         const result = MarkForSupplementaryBillingPresenter.go(licence)
 
         expect(result).to.equal({
-          licenceId: 'test-id',
-          licenceRef: '01/Test',
+          backLink: {
+            href: `/system/licences/${licence.id}/set-up`,
+            text: 'Back'
+          },
           financialYears: [
             { text: '2027 to 2028', value: 2028, attributes: { 'data-test': 'sroc-years-2028' } },
             { text: '2026 to 2027', value: 2027, attributes: { 'data-test': 'sroc-years-2027' } },
@@ -120,7 +125,8 @@ describe('Mark For Supplementary Billing presenter', () => {
             { text: '2023 to 2024', value: 2024, attributes: { 'data-test': 'sroc-years-2024' } },
             { text: '2022 to 2023', value: 2023, attributes: { 'data-test': 'sroc-years-2023' } }
           ],
-          pageTitle: 'Mark for the supplementary bill run'
+          pageTitle: 'Select which years you need to recalculate bills for',
+          pageTitleCaption: `Licence ${licence.licenceRef}`
         })
       })
     })
