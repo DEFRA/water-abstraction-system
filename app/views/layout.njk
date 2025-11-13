@@ -63,11 +63,12 @@
     {{ govukNotificationBanner(notification) }}
   {% endif %}
 
+  {{ pageHeading(pageTitle, pageTitleCaption) }}
+
   {% if warning %}
     {{ govukWarningText(warning) }}
   {% endif %}
 
-  {{ pageHeading(pageTitle, pageTitleCaption) % }}
 
   {% block pageContent %}
   {% endblock %}
