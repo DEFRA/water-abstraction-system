@@ -6,7 +6,7 @@
  */
 
 const { formatAbstractionPeriod, formatLongDate, formatNumber, sentenceCase } = require('../../base.presenter.js')
-const { convertToCubicMetres, generateSummaryTableHeaders } = require('../base-return-logs.presenter.js')
+const { formatToCubicMetres, generateSummaryTableHeaders } = require('../base-return-logs.presenter.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 const ABSTRACTION_VOLUMES_METHOD = 'abstractionVolumes'
@@ -59,7 +59,7 @@ function go(session) {
     startReading,
     summaryTableData: _summaryTableData(formattedLines, session, unitName),
     tableTitle: _tableTitle(reported, returnsFrequency),
-    totalCubicMetres: convertToCubicMetres(totalQuantity, unitName),
+    totalCubicMetres: formatToCubicMetres(totalQuantity, unitName),
     totalQuantity: formatNumber(totalQuantity),
     units: units === 'cubicMetres' ? 'Cubic metres' : sentenceCase(units)
   }
@@ -236,7 +236,7 @@ function _summaryTableRows(formattedLines, method, returnsFrequency, sessionId) 
     const rowData = {
       link: _linkDetails(endDate, method, returnsFrequency, sessionId),
       month: endDate.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }),
-      monthlyTotal: convertToCubicMetres(quantity, unitName),
+      monthlyTotal: formatToCubicMetres(quantity, unitName),
       unitTotal: formatNumber(quantity)
     }
 
