@@ -9,162 +9,141 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const EventModel = require('../../../../app/models/event.model.js')
-const NotificationModel = require('../../../../app/models/notification.model.js')
+const NoticesFixture = require('../../../fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../../fixtures/notifications.fixture.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Things we need to stub
-const BatchNotificationsService = require('../../../../app/services/notices/setup/batch-notifications.service.js')
-const DetermineRecipientsService = require('../../../../app/services/notices/setup/determine-recipients.service.js')
-const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
+const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
+const CreateNotificationsService = require('../../../../app/services/notices/setup/create-notifications.service.js')
+const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const SendNoticeService = require('../../../../app/services/notices/setup/send-notice.service.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/notices/setup/submit-check.service.js')
 
 describe('Notices - Setup - Submit Check service', () => {
-  let auth
-  let notifierStub
-  let referenceCode
-  let session
-  let testRecipients
-
-  beforeEach(async () => {
-    auth = {
-      credentials: {
-        user: {
-          username: 'hello@world.com'
-        }
+  const auth = {
+    credentials: {
+      user: {
+        username: 'hello@world.com'
       }
     }
+  }
 
-    const recipients = RecipientsFixture.recipients()
+  let createNoticeStub
+  let createNotificationsStub
+  let referenceCode
+  let recipients
+  let sendNoticeStub
+  let session
 
-    testRecipients = [recipients.primaryUser]
+  beforeEach(async () => {
+    const fixtureData = RecipientsFixture.recipients()
+    const sessionId = generateUUID()
+    const licenceRef = generateLicenceRef()
+    const dueReturns = [
+      {
+        dueDate: '2025-04-28T00:00:00.000Z',
+        endDate: '2025-03-31T00:00:00.000Z',
+        naldAreaCode: 'RIDIN',
+        purpose: 'Spray Irrigation - Direct',
+        regionCode: 3,
+        regionName: 'North East',
+        returnId: generateUUID(),
+        returnLogId: `v1:3:${licenceRef}:10059610:2024-04-01:2025-03-31`,
+        returnReference: '10059610',
+        returnsFrequency: 'month',
+        siteDescription: 'BOREHOLE AT AVALON',
+        startDate: '2024-04-01T00:00:00.000Z',
+        twoPartTariff: false
+      }
+    ]
 
-    referenceCode = generateReferenceCode()
+    recipients = [
+      {
+        ...fixtureData.primaryUser,
+        licence_refs: [licenceRef],
+        return_log_ids: [dueReturns[0].returnId]
+      }
+    ]
+    Sinon.stub(FetchRecipientsService, 'go').resolves(recipients)
 
+    referenceCode = generateReferenceCode('RINV-')
     session = await SessionHelper.add({
+      id: sessionId,
       data: {
-        journey: 'standard',
-        referenceCode,
-        returnsPeriod: 'quarterFour',
-        determinedReturnsPeriod: {
-          name: 'allYear',
-          dueDate: '2025-04-28',
-          endDate: '2023-03-31',
-          summer: 'false',
-          startDate: '2022-04-01'
+        addressJourney: {
+          address: {},
+          backLink: {
+            href: `/system/notices/setup/${sessionId}/recipient-name`,
+            text: 'Back'
+          },
+          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`,
+          activeNavBar: 'notices',
+          pageTitleCaption: `Notice ${referenceCode}`
         },
+        checkPageVisited: true,
+        dueReturns,
+        licenceRef,
+        journey: 'adhoc',
+        name: 'Returns: invitation',
+        notificationType: 'Returns invitation',
         noticeType: 'invitations',
-        subType: 'returnInvitation',
-        name: 'A person'
+        referenceCode,
+        selectedRecipients: [...recipients[0].contact_hash_id],
+        subType: 'returnInvitation'
       }
     })
 
-    Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
-    Sinon.stub(FetchReturnsRecipientsService, 'go').resolves(testRecipients)
+    const notice = NoticesFixture.returnsInvitation()
 
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    notice.referenceCode = session.referenceCode
+    notice.metadata.recipients = 1
+    createNoticeStub = Sinon.stub(CreateNoticeService, 'go').resolves(notice)
+
+    const notification = NotificationsFixture.returnsInvitationEmail(notice)
+
+    createNotificationsStub = Sinon.stub(CreateNotificationsService, 'go').resolves([notification])
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
-  describe('when a successful batch process has been triggered', () => {
+  describe('when called', () => {
     beforeEach(() => {
-      Sinon.stub(BatchNotificationsService, 'go').resolves({ sent: 1, error: 0 })
+      sendNoticeStub = Sinon.stub(SendNoticeService, 'go').resolves()
     })
 
-    it('should batch notifications', async () => {
-      const result = await SubmitCheckService.go(session.id, auth)
-
-      const notifications = await NotificationModel.query().where({
-        eventId: result
-      })
-
-      const notice = await EventModel.query().findById(result)
-
-      const args = BatchNotificationsService.go.firstCall.args
-
-      expect(args[0]).to.equal([
-        {
-          id: notifications[0].id,
-          messageRef: 'returns_invitation_primary_user_email',
-          messageType: 'email',
-          pdf: null,
-          personalisation: {
-            periodEndDate: '31 March 2023',
-            returnDueDate: '28 April 2025',
-            periodStartDate: '1 April 2022'
-          },
-          recipient: 'primary.user@important.com',
-          returnLogIds: notifications[0].returnLogIds,
-          templateId: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
-        }
-      ])
-
-      expect(args[1]).to.equal(
-        {
-          id: notice.id,
-          issuer: 'hello@world.com',
-          licences: notice.licences,
-          metadata: {
-            name: 'A person',
-            recipients: 1,
-            options: { excludeLicences: [] },
-            returnCycle: {
-              dueDate: '2025-04-28',
-              endDate: '2023-03-31',
-              startDate: '2022-04-01',
-              isSummer: false
-            }
-          },
-          overallStatus: 'pending',
-          referenceCode: notice.referenceCode,
-          status: 'completed',
-          statusCounts: { cancelled: 0, error: 0, pending: 1, sent: 0 },
-          subtype: 'returnInvitation',
-          type: 'notification'
-        },
-        { skip: ['createdAt', 'updatedAt'] }
-      )
-
-      expect(args[2]).to.equal(referenceCode)
-    })
-
-    it('correctly returns the event id', async () => {
-      const result = await SubmitCheckService.go(session.id, auth)
-
-      const event = await EventModel.query().findById(result)
-
-      expect(result).to.equal(event.id)
-    })
-
-    it('should not throw an error', async () => {
+    it('creates a notice record', async () => {
       await SubmitCheckService.go(session.id, auth)
 
-      expect(notifierStub.omfg.called).to.be.false()
-    })
-  })
-
-  describe('when a batch process fails', { timeout: 1000000 }, () => {
-    beforeEach(() => {
-      const specificError = new Error('Batch failed due to XYZ reason')
-
-      Sinon.stub(BatchNotificationsService, 'go').rejects(specificError)
+      expect(createNoticeStub.called).to.be.true()
     })
 
-    it('should throw an error', async () => {
+    it('creates notification records', async () => {
       await SubmitCheckService.go(session.id, auth)
 
-      expect(notifierStub.omfg.called).to.be.true()
+      expect(createNotificationsStub.called).to.be.true()
+    })
 
-      expect(notifierStub.omfg.calledWith('Send notifications failed')).to.be.true()
+    it('deletes the session record', async () => {
+      await SubmitCheckService.go(session.id, auth)
+
+      const refreshedSession = session.$query()
+
+      expect(refreshedSession.id).to.be.undefined()
+    })
+
+    it('sends the notice', async () => {
+      await SubmitCheckService.go(session.id, auth)
+
+      expect(sendNoticeStub.called).to.be.true()
     })
   })
 })

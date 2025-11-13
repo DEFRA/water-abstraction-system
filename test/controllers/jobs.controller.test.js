@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -56,7 +58,7 @@ describe('Jobs controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(204)
+          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -76,7 +78,7 @@ describe('Jobs controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(204)
+          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -96,7 +98,7 @@ describe('Jobs controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(204)
+          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -116,7 +118,7 @@ describe('Jobs controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(204)
+          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -136,7 +138,7 @@ describe('Jobs controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(204)
+          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -156,7 +158,7 @@ describe('Jobs controller', () => {
         it('returns a 204 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(204)
+          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
         })
       })
     })
@@ -177,7 +179,7 @@ describe('Jobs controller', () => {
           it('returns a 204 response', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(204)
+            expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
           })
         })
       })
@@ -197,7 +199,7 @@ describe('Jobs controller', () => {
           it('returns a 204 response', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(204)
+            expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
           })
         })
       })
@@ -212,7 +214,7 @@ describe('Jobs controller', () => {
         it('returns a 404 response', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(404)
+          expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
         })
       })
     })

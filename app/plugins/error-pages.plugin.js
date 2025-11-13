@@ -5,6 +5,8 @@
  * @module RequestNotifierPlugin
  */
 
+const { HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
+
 const ErrorPagesService = require('../services/plugins/error-pages.service.js')
 
 const ErrorPagesPlugin = {
@@ -18,7 +20,7 @@ const ErrorPagesPlugin = {
           return h.continue
         }
 
-        if (statusCode === 404) {
+        if (statusCode === HTTP_STATUS_NOT_FOUND) {
           return h.view('404').code(statusCode)
         }
 

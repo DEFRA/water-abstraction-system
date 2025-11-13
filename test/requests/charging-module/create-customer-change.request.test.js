@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_CREATED, HTTP_STATUS_UNAUTHORIZED } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -41,7 +43,7 @@ describe('Charging Module Create Customer Change request', () => {
             gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
             dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
           },
-          statusCode: 201
+          statusCode: HTTP_STATUS_CREATED
         }
       })
     })
@@ -63,9 +65,9 @@ describe('Charging Module Create Customer Change request', () => {
               gitCommit: '273604040a47e0977b0579a0fef0f09726d95e39',
               dockerTag: 'ghcr.io/defra/sroc-charging-module-api:v0.19.0'
             },
-            statusCode: 401,
+            statusCode: HTTP_STATUS_UNAUTHORIZED,
             body: {
-              statusCode: 401,
+              statusCode: HTTP_STATUS_UNAUTHORIZED,
               error: 'Unauthorized',
               message: 'Invalid JWT: Token format not valid',
               attributes: { error: 'Invalid JWT: Token format not valid' }
@@ -83,7 +85,7 @@ describe('Charging Module Create Customer Change request', () => {
       it('returns the error in the "response"', async () => {
         const result = await CreateCustomerChangeRequest.send(requestData)
 
-        expect(result.response.body.statusCode).to.equal(401)
+        expect(result.response.body.statusCode).to.equal(HTTP_STATUS_UNAUTHORIZED)
         expect(result.response.body.error).to.equal('Unauthorized')
         expect(result.response.body.message).to.equal('Invalid JWT: Token format not valid')
       })

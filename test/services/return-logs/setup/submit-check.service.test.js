@@ -61,6 +61,7 @@ describe('Return Logs Setup - Submit Check service', () => {
         licenceRef: licence.licenceRef,
         purposes: ['test purpose'],
         reported: 'abstractionVolumes',
+        returnId: returnLog.returnId,
         returnReference: returnLog.returnReference,
         returnLogId: returnLog.id,
         returnSubmissionId: initialReturnSubmission.id,
@@ -174,7 +175,7 @@ describe('Return Logs Setup - Submit Check service', () => {
 
     describe('and it is a nil return', () => {
       beforeEach(async () => {
-        sessionData.data.journey = 'nil-return'
+        sessionData.data.journey = 'nilReturn'
         sessionData.data.lines = [
           {
             startDate: '2023-01-01T00:00:00.000Z',
@@ -194,7 +195,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       it('returns the original returnLogId', async () => {
         const result = await SubmitCheckService.go(session.id, user)
 
-        expect(result).to.equal({ returnLogId: returnLog.id })
+        expect(result).to.equal({ returnId: returnLog.returnId })
       })
     })
   })

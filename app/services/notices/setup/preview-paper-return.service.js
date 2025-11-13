@@ -1,52 +1,51 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnId}' page
+ * Orchestrates fetching and presenting the data for previewing a paper return
  *
  * @module PreviewPaperReturnService
  */
 
 const FetchRecipientsService = require('./fetch-recipients.service.js')
-const PaperReturnNotificationPresenter = require('../../../presenters/notices/setup/paper-return-notification.presenter.js')
+const PaperReturnNotificationsPresenter = require('../../../presenters/notices/setup/paper-return-notifications.presenter.js')
 const PreparePaperReturnService = require('./prepare-paper-return.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnId}' page
+ * Orchestrates fetching and presenting the data for previewing a paper return
  *
- * This service returns the file to be display in the browser. This will likely be the built-in pdf viewer.
+ * This service returns the file data for the PDF. We return that to the browser to be displayed. Most browsers have
+ * some form of in-built PDF display (certainly the ones our users use do), else they'll prompt the user for a decision.
  *
  * @param {string} sessionId - The UUID of the current session
- * @param {string} contactHashId - The recipients unique identifier
- * @param {string} returnId - The UUID of the return log
+ * @param {string} contactHashId - The unique identifier of the recipient to preview
+ * @param {string} returnLogId - The UUID of the return log to preview
  *
  * @returns {Promise<ArrayBuffer>} - Resolves with the generated form file as an ArrayBuffer.
  */
-async function go(sessionId, contactHashId, returnId) {
+async function go(sessionId, contactHashId, returnLogId) {
   const session = await SessionModel.query().findById(sessionId)
-  const { licenceRef, dueReturns } = session
 
-  const [recipient] = await _recipient(session, contactHashId)
+  // NOTE: The notifications the presenter generates are based on the combination of recipients and selected return logs
+  // that have been set during setup. We're using the same presenter to generate our preview notification, so for this
+  // to work we have to set the return log we're previewing as the 'selected' return.
+  session.selectedReturns = [returnLogId]
 
-  const dueReturnLog = _dueReturnLog(dueReturns, returnId)
+  const selectedRecipient = await _selectedRecipient(session, contactHashId)
 
-  const notification = PaperReturnNotificationPresenter.go(recipient, licenceRef, null, dueReturnLog)
+  // The presenter returns an array because it is also used when sending the paper return. But in this case we just want
+  // to look at a single recipient and return log so we know we'll just get one notification back in the array.
+  const notifications = PaperReturnNotificationsPresenter.go(session, [selectedRecipient], null)
 
-  const returnFormRequest = await PreparePaperReturnService.go(notification)
+  const returnFormRequest = await PreparePaperReturnService.go(notifications[0])
 
   return returnFormRequest.response.body
 }
 
-function _dueReturnLog(dueReturns, returnId) {
-  return dueReturns.find((dueReturn) => {
-    return dueReturn.returnId === returnId
-  })
-}
-
-async function _recipient(session, contactHashId) {
+async function _selectedRecipient(session, contactHashId) {
   const recipients = await FetchRecipientsService.go(session)
 
-  return recipients.filter((recipient) => {
+  return recipients.find((recipient) => {
     return recipient.contact_hash_id === contactHashId
   })
 }

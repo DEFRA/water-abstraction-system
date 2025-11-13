@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -27,7 +29,7 @@ describe('Root controller: GET /', () => {
     const response = await server.inject(options)
     const payload = JSON.parse(response.payload)
 
-    expect(response.statusCode).to.equal(200)
+    expect(response.statusCode).to.equal(HTTP_STATUS_OK)
     expect(payload.status).to.equal('alive')
   })
 })

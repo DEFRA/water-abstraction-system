@@ -21,7 +21,7 @@ describe('Return Logs - Setup - Received presenter', () => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
       licenceId: 'a96ce5c6-2c42-4b3f-946d-0428b5f07ce6',
-      returnLogId: 'v1:1:01/12/123:10065476:2025-01-06:2025-10-31',
+      returnId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
       returnReference: '012345'
     }
   })
@@ -39,7 +39,7 @@ describe('Return Logs - Setup - Received presenter', () => {
         receivedDateMonth: null,
         receivedDateYear: null,
         backLink: {
-          href: '/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31',
+          href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3',
           text: 'Back'
         },
         todaysDate: formatLongDate(today()),
@@ -69,7 +69,7 @@ describe('Return Logs - Setup - Received presenter', () => {
         const result = ReceivedPresenter.go(session)
 
         expect(result.backLink).to.equal({
-          href: '/system/return-logs?id=v1:1:01/12/123:10065476:2025-01-06:2025-10-31',
+          href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3',
           text: 'Back'
         })
       })

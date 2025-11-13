@@ -46,7 +46,7 @@ describe('Fetch Download Return Log service', () => {
     })
 
     it('returns the return log with its related return submission and return submission lines', async () => {
-      const result = await FetchDownloadReturnLogService.go(returnLog.id, 2)
+      const result = await FetchDownloadReturnLogService.go(returnLog.returnId, 2)
 
       expect(result).to.equal({
         id: returnLog.id,
@@ -65,7 +65,7 @@ describe('Fetch Download Return Log service', () => {
     })
 
     it('orders submission lines by start date', async () => {
-      const result = await FetchDownloadReturnLogService.go(returnLog.id, 1)
+      const result = await FetchDownloadReturnLogService.go(returnLog.returnId, 1)
       const lines = result.returnSubmissions[0].returnSubmissionLines
 
       expect(lines).to.have.length(2)
@@ -120,7 +120,7 @@ describe('Fetch Download Return Log service', () => {
     })
 
     it('returns the return log with the submission lines populated with the meter readings', async () => {
-      const result = await FetchDownloadReturnLogService.go(returnLog.id, 1)
+      const result = await FetchDownloadReturnLogService.go(returnLog.returnId, 1)
       const lines = result.returnSubmissions[0].returnSubmissionLines
 
       expect(lines).to.have.length(2)

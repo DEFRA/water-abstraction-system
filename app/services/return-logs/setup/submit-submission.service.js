@@ -25,7 +25,7 @@ async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
   const error = _validate(payload)
 
-  const { returnLogId } = session
+  const { returnId, returnLogId } = session
 
   if (!error) {
     await _save(session, payload)
@@ -34,6 +34,7 @@ async function go(sessionId, payload) {
 
     return {
       redirect,
+      returnId,
       returnLogId
     }
   }

@@ -1,5 +1,8 @@
 'use strict'
 
+const { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } =
+  require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -16,26 +19,26 @@ describe('Error pages service', () => {
     message: "can't touch this",
     isBoom: true,
     output: {
-      statusCode: 403
+      statusCode: HTTP_STATUS_FORBIDDEN
     }
   }
   const boom404Response = {
     message: 'where has my boom gone?',
     isBoom: true,
     output: {
-      statusCode: 404
+      statusCode: HTTP_STATUS_NOT_FOUND
     }
   }
   const boom500Response = {
     message: 'tick, tick, tick, tick boom!',
     isBoom: true,
     output: {
-      statusCode: 500
+      statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR
     }
   }
   const path = '/health/info'
   const standardResponse = {
-    statusCode: 200
+    statusCode: HTTP_STATUS_OK
   }
 
   let notifierStub
@@ -80,7 +83,7 @@ describe('Error pages service', () => {
       it('returns the original status code', () => {
         const result = ErrorPagesService.go(request)
 
-        expect(result.statusCode).to.equal(500)
+        expect(result.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
       })
     })
 
@@ -94,7 +97,7 @@ describe('Error pages service', () => {
       it('returns a "safe" status code', () => {
         const result = ErrorPagesService.go(request)
 
-        expect(result.statusCode).to.equal(200)
+        expect(result.statusCode).to.equal(HTTP_STATUS_OK)
       })
     })
   })
@@ -111,7 +114,7 @@ describe('Error pages service', () => {
     it('returns the correct status code', () => {
       const result = ErrorPagesService.go(request)
 
-      expect(result.statusCode).to.equal(404)
+      expect(result.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
     })
 
     it('logs a message', () => {
@@ -170,7 +173,7 @@ describe('Error pages service', () => {
       it('returns the original status code', () => {
         const result = ErrorPagesService.go(request)
 
-        expect(result.statusCode).to.equal(403)
+        expect(result.statusCode).to.equal(HTTP_STATUS_FORBIDDEN)
       })
     })
 
@@ -184,7 +187,7 @@ describe('Error pages service', () => {
       it('returns a "safe" status code', () => {
         const result = ErrorPagesService.go(request)
 
-        expect(result.statusCode).to.equal(404)
+        expect(result.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
       })
     })
   })

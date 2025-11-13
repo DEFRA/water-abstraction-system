@@ -4,7 +4,6 @@ const Big = require('big.js')
 
 const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
 const { formatLongDate } = require('../../base.presenter.js')
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 /**
  * Calculates the total allocated volume across all review change elements
@@ -19,27 +18,6 @@ function calculateTotalBillableReturns(reviewChargeElements) {
 
     return Big(total).plus(amendedAllocated).toNumber()
   }, 0)
-}
-
-/**
- * Determine the link for a return, for example, should it go to the edit or view page?
- *
- * @param {module:ReviewReturnModel} reviewReturn - instance of `ReviewReturn` to determine the link for
- *
- * @returns {string} the relative URL the view template should use to link to the return
- */
-function determineReturnLink(reviewReturn) {
-  const { returnId, returnStatus } = reviewReturn
-
-  if (FeatureFlagsConfig.enableSystemReturnsView) {
-    return `/system/return-logs?id=${returnId}`
-  }
-
-  if (['due', 'received'].includes(returnStatus)) {
-    return `/return/internal?returnId=${returnId}`
-  }
-
-  return `/returns/return?id=${returnId}`
 }
 
 /**
@@ -254,7 +232,6 @@ function _chargePeriod(reviewChargeVersion) {
 
 module.exports = {
   calculateTotalBillableReturns,
-  determineReturnLink,
   formatAdditionalCharges,
   formatAdjustments,
   formatChargePeriod,

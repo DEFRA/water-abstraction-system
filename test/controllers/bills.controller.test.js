@@ -9,6 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
@@ -66,7 +67,7 @@ describe('Bills controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Bill for Mr B Blobby')
             expect(response.payload).to.contain('2 licences')
           })
@@ -80,7 +81,7 @@ describe('Bills controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Bill for Mr B Blobby')
             expect(response.payload).to.contain('2 transactions')
             expect(response.payload).to.contain('Current')
@@ -95,7 +96,7 @@ describe('Bills controller', () => {
           it('returns the page successfully', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Bill for Mr B Blobby')
             expect(response.payload).to.contain('2 transactions')
             expect(response.payload).to.contain('Old')
@@ -126,7 +127,7 @@ describe('Bills controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('about to remove the bill for T65757520A from the bill run')
         })
       })
@@ -147,7 +148,7 @@ describe('Bills controller', () => {
         it('redirects to the legacy processing bill run page', async () => {
           const response = await server.inject(options)
 
-          expect(response.statusCode).to.equal(302)
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal('/billing/batch/c04ea618-d1ad-494b-bdc4-1bfa670876d0/processing')
         })
       })
@@ -155,14 +156,16 @@ describe('Bills controller', () => {
       describe('when the request fails', () => {
         describe('because the removing service threw an error', () => {
           beforeEach(async () => {
-            Sinon.stub(Boom, 'badImplementation').returns(new Boom.Boom('Bang', { statusCode: 500 }))
+            Sinon.stub(Boom, 'badImplementation').returns(
+              new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
+            )
             Sinon.stub(SubmitRemoveBillService, 'go').rejects()
           })
 
           it('returns the error page', async () => {
             const response = await server.inject(options)
 
-            expect(response.statusCode).to.equal(200)
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Sorry, there is a problem with the service')
           })
         })

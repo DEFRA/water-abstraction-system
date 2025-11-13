@@ -17,7 +17,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
     returnLog = {
       licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
       licenceRef: '01/117',
-      returnLogId: 'v1:6:01/117:10032788:2019-04-01:2019-05-12',
+      returnId: '1f4287ca-b8c5-4034-957f-5d642cdf19d5',
       returnReference: '10032788',
       status: 'received',
       submissionCount: 0,
@@ -49,7 +49,6 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
       expect(result).to.equal({
         licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
         licenceRef: '01/117',
-        returnLogId: 'v1:6:01/117:10032788:2019-04-01:2019-05-12',
         pageTitle: 'Return 10032788 received',
         purposeDetails: {
           label: 'Purpose',
@@ -58,7 +57,7 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
         siteDescription: 'Addington Sandpits',
         status: 'received',
         viewReturnsLink: '/system/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/returns',
-        viewThisReturnLink: '/system/return-logs?id=v1:6:01/117:10032788:2019-04-01:2019-05-12'
+        viewThisReturnLink: '/system/return-logs/1f4287ca-b8c5-4034-957f-5d642cdf19d5'
       })
     })
   })

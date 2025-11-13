@@ -19,7 +19,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 const FetchDownloadRecipientsService = require('../../../../app/services/notices/setup/fetch-download-recipients.service.js')
-const FetchLetterRecipientsService = require('../../../../app/services/notices/setup/fetch-letter-recipients.service.js')
+const FetchPaperReturnRecipientsService = require('../../../../app/services/notices/setup/fetch-paper-return-recipients.service.js')
 
 // Thing under test
 const DownloadRecipientsService = require('../../../../app/services/notices/setup/download-recipients.service.js')
@@ -90,9 +90,9 @@ describe('Notices - Setup - Download Recipients service', () => {
       expect(result).to.equal({
         data:
           // Headers
-          'Licence,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return reference,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           // Row - licence holder
-          '"1/343/3","Returns reminder","letter","Licence holder",,"Mr J Potter","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n',
+          '"1/343/3","376439279","Returns reminder","letter","Licence holder",,"Mr J Potter","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n',
         filename: `Returns reminder - ${referenceCode}.csv`,
         type: 'text/csv'
       })
@@ -130,7 +130,7 @@ describe('Notices - Setup - Download Recipients service', () => {
         })
 
         testRecipients = RecipientsFixture.recipients()
-        Sinon.stub(FetchLetterRecipientsService, 'go').resolves([testRecipients.licenceHolder])
+        Sinon.stub(FetchPaperReturnRecipientsService, 'go').resolves([testRecipients.licenceHolder])
       })
 
       it('correctly returns the csv string, filename and type', async () => {

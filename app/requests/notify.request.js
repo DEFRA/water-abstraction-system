@@ -42,6 +42,10 @@ async function post(path, body = {}) {
   if (result.response.statusCode === HTTP_STATUS_TOO_MANY_REQUESTS) {
     await pause(notifyConfig.rateLimitPause)
     result = await _sendRequest(path, BaseRequest.post, body)
+  } else {
+    // Assuming the default delay of 30 ms is used, we can theoretically send 2,000 requests a minute, leaving a cushion
+    // of 1,000.
+    await pause(notifyConfig.delay)
   }
 
   return _parseResult(result)

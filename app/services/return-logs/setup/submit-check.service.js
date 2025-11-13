@@ -36,7 +36,7 @@ async function go(sessionId, user) {
   if (!error) {
     await _save(session, user)
 
-    return { returnLogId: session.returnLogId }
+    return { returnId: session.returnId }
   }
 
   const formattedData = CheckPresenter.go(session)
@@ -74,7 +74,7 @@ async function _save(session, user) {
 }
 
 function _validate(session) {
-  if (session.journey === 'nil-return') {
+  if (session.journey === 'nilReturn') {
     return null
   }
 

@@ -37,12 +37,12 @@ async function go(returnId, version = 0) {
 
 async function _fetch(returnId, selectedReturnSubmission) {
   const query = ReturnLogModel.query()
-    .findById(returnId)
     .select([
       'dueDate',
       'endDate',
       'id',
       'receivedDate',
+      'returnId',
       'returnsFrequency',
       'returnReference',
       'startDate',
@@ -54,12 +54,15 @@ async function _fetch(returnId, selectedReturnSubmission) {
       ref('metadata:nald.periodEndDay').as('periodEndDay'),
       ref('metadata:nald.periodEndMonth').as('periodEndMonth'),
       ref('metadata:purposes').as('purposes'),
+      ref('metadata:isCurrent').castBool().as('current'),
       ref('metadata:isTwoPartTariff').castBool().as('twoPartTariff')
     ])
+    .where('returnId', returnId)
     .withGraphFetched('licence')
     .modifyGraph('licence', (licenceBuilder) => {
       licenceBuilder.select(['id', 'licenceRef'])
     })
+    .first()
 
   if (selectedReturnSubmission) {
     query.withGraphFetched('returnSubmissions').modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
@@ -80,9 +83,16 @@ async function _fetch(returnId, selectedReturnSubmission) {
 
 async function _fetchAllReturnSubmissions(returnId) {
   return ReturnSubmissionModel.query()
-    .select(['createdAt', 'id', 'notes', 'version', 'userId'])
-    .where('returnLogId', returnId)
-    .orderBy('version', 'desc')
+    .select([
+      'returnSubmissions.createdAt',
+      'returnSubmissions.id',
+      'returnSubmissions.notes',
+      'returnSubmissions.version',
+      'returnSubmissions.userId'
+    ])
+    .joinRelated('returnLog')
+    .where('returnLog.returnId', returnId)
+    .orderBy('returnSubmissions.version', 'desc')
 }
 
 function _returnSubmission(allReturnSubmissions, version) {

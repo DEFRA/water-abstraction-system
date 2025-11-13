@@ -1,5 +1,7 @@
 'use strict'
 
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
@@ -46,7 +48,7 @@ describe('Health controller', () => {
     it('returns a 500 error', async () => {
       const response = await server.inject(options)
 
-      expect(response.statusCode).to.equal(500)
+      expect(response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
     })
 
     it('causes Airbrake to send a notification', async () => {
@@ -70,7 +72,7 @@ describe('Health controller', () => {
       it('returns stats about each table', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(200)
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
       })
     })
   })
@@ -100,7 +102,7 @@ describe('Health controller', () => {
       it('returns stats about each table', async () => {
         const response = await server.inject(options)
 
-        expect(response.statusCode).to.equal(200)
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
       })
     })
   })

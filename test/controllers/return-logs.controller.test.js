@@ -9,6 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
@@ -27,7 +28,7 @@ describe('Return Logs controller', () => {
     server = await init()
   })
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // We silence any calls to server.logger.error and info to try and keep the test output as clean as possible
     Sinon.stub(server.logger, 'error')
     Sinon.stub(server.logger, 'info')
@@ -42,7 +43,7 @@ describe('Return Logs controller', () => {
 
   describe('/system/return-logs', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         Sinon.stub(ViewReturnLogService, 'go').resolves({
           pageTitle: 'Abstraction return'
         })
@@ -52,13 +53,13 @@ describe('Return Logs controller', () => {
         it('returns the page successfully', async () => {
           const response = await server.inject(_getOptions())
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Abstraction return')
         })
 
         describe('and a version is passed as a query parameter', () => {
           it('passes the version to the service', async () => {
-            await server.inject(_getOptions(true, 1))
+            await server.inject(_getOptions(1))
 
             const calls = ViewReturnLogService.go.firstCall
 
@@ -76,16 +77,6 @@ describe('Return Logs controller', () => {
           })
         })
       })
-
-      describe('when the request fails', () => {
-        describe('because no id was passed', () => {
-          it('returns an error', async () => {
-            const response = await server.inject(_getOptions(false))
-
-            expect(response.payload).to.contain('Sorry, there is a problem with the service')
-          })
-        })
-      })
     })
 
     describe('POST', () => {
@@ -95,10 +86,10 @@ describe('Return Logs controller', () => {
         })
 
         it('redirects back to the "view return log" page', async () => {
-          const response = await server.inject(_postOptions({ returnLogId: 'RETURN_LOG_ID' }))
+          const response = await server.inject(_postOptions())
 
-          expect(response.statusCode).to.equal(302)
-          expect(response.headers.location).to.equal('/system/return-logs?id=RETURN_LOG_ID')
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal('/system/return-logs/168026d8-f29b-4165-8726-734c6b14adec')
         })
       })
     })
@@ -108,10 +99,10 @@ describe('Return Logs controller', () => {
     describe('GET', () => {
       let getOptions
 
-      beforeEach(async () => {
+      beforeEach(() => {
         getOptions = {
           method: 'GET',
-          url: `/return-logs/download?id=RETURN_LOG_ID&version=1`,
+          url: `/return-logs/168026d8-f29b-4165-8726-734c6b14adec/download?version=1`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['billing'] }
@@ -120,14 +111,14 @@ describe('Return Logs controller', () => {
       })
 
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(DownloadReturnLogService, 'go').returns({ data: 'test', type: 'type/csv', filename: 'test.csv' })
         })
 
         it('returns the file successfully', async () => {
           const response = await server.inject(getOptions)
 
-          expect(response.statusCode).to.equal(200)
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.headers['content-type']).to.equal('type/csv')
           expect(response.headers['content-disposition']).to.equal('attachment; filename="test.csv"')
           expect(response.payload).to.equal('test')
@@ -137,8 +128,8 @@ describe('Return Logs controller', () => {
   })
 })
 
-function _getOptions(includeReturnLogId = true, version) {
-  const url = _url(includeReturnLogId, version)
+function _getOptions(version) {
+  const url = _url(version)
 
   return {
     method: 'GET',
@@ -151,17 +142,13 @@ function _getOptions(includeReturnLogId = true, version) {
 }
 
 function _postOptions(payload) {
-  const url = _url(true, null)
+  const url = _url()
 
-  return postRequestOptions(`${url.pathname}${url.search}`, payload)
+  return postRequestOptions(url.pathname, payload)
 }
 
-function _url(includeReturnLogId, version) {
-  const url = new URL('/return-logs', 'http://example.com')
-
-  if (includeReturnLogId) {
-    url.searchParams.append('id', 'RETURN_LOG_ID')
-  }
+function _url(version) {
+  const url = new URL('/return-logs/168026d8-f29b-4165-8726-734c6b14adec', 'http://example.com')
 
   if (version) {
     url.searchParams.append('version', version)

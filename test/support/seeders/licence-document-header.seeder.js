@@ -63,30 +63,28 @@ async function seed(date) {
       nine: `${date}09`,
       ten: `${date}10`,
       eleven: `${date}11`,
-      twelve: `${date}12`,
-      thirteen: `${date}13`
+      twelve: `${date}12`
     }
   }
 
   return {
     additionalContact: await _additionalContact(),
     licenceHolder: await _licenceHolder(dates.one),
+    licenceHolderTransferredReturnLog: await _licenceHolder(dates.eleven, false),
     licenceHolderAndReturnTo: await _licenceHolderAndReturnTo(dates.two),
-    licenceHolderAndReturnToLetter: await _licenceHolderAndReturnTo(dates.three),
-    licenceHolderAndReturnToLetterWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(dates.four),
-    licenceHolderAndReturnToWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(dates.five),
-    licenceHolderLetter: await _licenceHolder(dates.six),
-    licenceHolderReturnLogGreaterThanToday: await _licenceHolder(dates.ten, '4000-01-01'),
+    licenceHolderAndReturnToTransferredReturnLog: await _licenceHolderAndReturnTo(dates.twelve, false),
+    licenceHolderAndReturnToWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(dates.three),
+    licenceHolderReturnLogGreaterThanToday: await _licenceHolder(dates.seven, '4000-01-01'),
     licenceHolderWithAdditionalContact: await _licenceHolderWithAdditionalContact(),
     multipleAdditionalContact: await _multipleAdditionalContact(),
     multipleAdditionalContactDifferentLicenceRefs: await _multipleAdditionalContactDifferentLicenceRefs(),
     multipleAdditionalContactWithAndWithoutAlerts: await _multipleAdditionalContactWithAndWithoutAlerts(),
-    multipleLicenceRefs: await _multipleLicenceRefs(dates.thirteen),
-    primaryUser: await _primaryUser(dates.seven),
-    primaryUserAndReturnsAgent: await _primaryUserAndReturnsAgent(dates.eight),
-    primaryUserAndReturnsAgentWithTheSameEmail: await _primaryUserAndReturnsAgentWithTheSameEmail(dates.nine),
-    primaryUserDueDate: await _primaryUserDueDate(dates.eleven),
-    primaryUserMultipleReturnLogs: await _primaryUserMultipleReturnLogs(dates.twelve),
+    multipleLicenceRefs: await _multipleLicenceRefs(dates.ten),
+    primaryUser: await _primaryUser(dates.four),
+    primaryUserAndReturnsAgent: await _primaryUserAndReturnsAgent(dates.five),
+    primaryUserAndReturnsAgentWithTheSameEmail: await _primaryUserAndReturnsAgentWithTheSameEmail(dates.six),
+    primaryUserDueDate: await _primaryUserDueDate(dates.eight),
+    primaryUserMultipleReturnLogs: await _primaryUserMultipleReturnLogs(dates.nine),
     primaryUserWithAdditionalContact: await _primaryUserWithAdditionalContact()
   }
 }
@@ -252,15 +250,10 @@ function _contact(name, role) {
   }
 }
 
-async function _licenceHolder(date, endDate = null) {
+async function _licenceHolder(date, endDate = null, isCurrent = true) {
   const licenceDocumentHeader = await _addLicenceHolder()
 
-  // NOTE: For this specific scenario we set isCurrent in the return log's metadata to false. There was a time when
-  // these would be excluded from the query because this is what we found in the legacy code we migrated. However, we
-  // were then told this is not correct and they _should_ be included. We dropped the clause but it inadvertently got
-  // put back in. So, now we ensure one of the scenarios creates return logs with isCurrent=false to confirm they
-  // are still included.
-  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate, false)
+  const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate, isCurrent)
 
   return {
     ...licenceDocumentHeader,
@@ -268,10 +261,10 @@ async function _licenceHolder(date, endDate = null) {
   }
 }
 
-async function _licenceHolderAndReturnTo(date) {
+async function _licenceHolderAndReturnTo(date, isCurrent = true) {
   const licenceHolder = await _addLicenceHolderAndReturnTo()
 
-  const returnLog = await _addReturnLog(date, licenceHolder.licenceRef)
+  const returnLog = await _addReturnLog(date, licenceHolder.licenceRef, null, isCurrent)
 
   return {
     ...licenceHolder,
@@ -279,10 +272,10 @@ async function _licenceHolderAndReturnTo(date) {
   }
 }
 
-async function _licenceHolderAndReturnToWithTheSameAddress(date) {
+async function _licenceHolderAndReturnToWithTheSameAddress(date, isCurrent = true) {
   const licenceHolder = await _addLicenceHolderAndReturnToSameAddress()
 
-  const returnLog = await _addReturnLog(date, licenceHolder.licenceRef)
+  const returnLog = await _addReturnLog(date, licenceHolder.licenceRef, null, isCurrent)
 
   return {
     ...licenceHolder,

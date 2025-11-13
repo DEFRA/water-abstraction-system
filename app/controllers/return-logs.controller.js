@@ -5,18 +5,19 @@
  * @module ReturnLogsController
  */
 
-const Boom = require('@hapi/boom')
-
 const DownloadReturnLogService = require('../services/return-logs/download-return-log.service.js')
 const SubmitViewReturnLogService = require('../services/return-logs/submit-view-return-log.service.js')
 const ViewReturnLogService = require('../services/return-logs/view-return-log.service.js')
 
 async function download(request, h) {
-  const { query } = request
+  const {
+    params: { returnId },
+    query
+  } = request
 
   const version = Number(query.version)
 
-  const { data, type, filename } = await DownloadReturnLogService.go(query.id, version)
+  const { data, type, filename } = await DownloadReturnLogService.go(returnId, version)
 
   return h
     .response(data)
@@ -27,25 +28,25 @@ async function download(request, h) {
 }
 
 async function view(request, h) {
-  const { auth, query } = request
-
-  if (!query.id) {
-    return Boom.badImplementation('Id is required')
-  }
+  const {
+    auth,
+    params: { returnId },
+    query
+  } = request
 
   const version = query.version ? Number(query.version) : 0
 
-  const pageData = await ViewReturnLogService.go(query.id, version, auth)
+  const pageData = await ViewReturnLogService.go(auth, returnId, version)
 
   return h.view('return-logs/view.njk', pageData)
 }
 
 async function submitView(request, h) {
-  const { id } = request.query
+  const { returnId } = request.params
 
-  await SubmitViewReturnLogService.go(id, request.payload)
+  await SubmitViewReturnLogService.go(request.payload, returnId)
 
-  return h.redirect(`/system/return-logs?id=${id}`)
+  return h.redirect(`/system/return-logs/${returnId}`)
 }
 
 module.exports = {

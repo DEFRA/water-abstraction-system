@@ -92,7 +92,7 @@ async function downloadRecipients(request, h) {
 async function preview(request, h) {
   const { contactHashId, licenceMonitoringStationId, sessionId } = request.params
 
-  const pageData = await PreviewService.go(contactHashId, sessionId, licenceMonitoringStationId)
+  const pageData = await PreviewService.go(sessionId, contactHashId, licenceMonitoringStationId)
 
   return h.view('notices/setup/preview/preview.njk', pageData)
 }
@@ -393,7 +393,7 @@ async function submitContactType(request, h) {
     return h.view(`notices/setup/contact-type.njk`, pageData)
   }
 
-  if (pageData.type === 'post') {
+  if (pageData.contactType === 'post') {
     return h.redirect(`/system/address/${sessionId}/postcode`)
   }
 

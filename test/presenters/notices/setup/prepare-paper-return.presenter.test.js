@@ -47,14 +47,13 @@ describe('Notices - Setup - Prepare Paper Return Presenter', () => {
         licence_ref: licenceRef,
         naldAreaCode: 'MIDLT',
         purpose: 'Mineral Washing',
-        qr_url: dueReturnLog.returnLogId,
+        qr_url: dueReturnLog.returnId,
         region_code: '1',
         region_name: 'North West',
         returns_frequency: dueReturnLog.returnsFrequency,
         site_description: 'BOREHOLE AT AVALON',
         start_date: dueReturnLog.startDate
-      },
-      returnLogIds: [dueReturnLog.returnId]
+      }
     }
 
     clock = Sinon.useFakeTimers(new Date(`2025-01-01`))
@@ -88,7 +87,6 @@ describe('Notices - Setup - Prepare Paper Return Presenter', () => {
         regionAndArea: 'North West / Lower Trent',
         regionCode: '1',
         returnId: dueReturnLog.returnId,
-        returnLogId: dueReturnLog.returnLogId,
         returnReference: dueReturnLog.returnReference,
         returnsFrequency: 'month',
         siteDescription: 'BOREHOLE AT AVALON',
