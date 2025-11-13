@@ -65,11 +65,11 @@
 
   {% set pageHeadingHtml = pageHeading(pageTitle, pageTitleCaption) %}
 
-  {{ pageHeadingHtml }}
-
   {% if warning %}
     {{ govukWarningText(warning) }}
   {% endif %}
+
+  {{ pageHeadingHtml }}
 
   {% block pageContent %}
   {% endblock %}
