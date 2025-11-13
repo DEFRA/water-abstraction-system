@@ -3,8 +3,6 @@
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% block pageContent %}
-  {{ pageHeadingHtml }}
-
   {% if contents === 'error' %}
     <p>Failed to generate a preview for this notice. <a href="{{ refreshPageLink }}" class="govuk-link">Try again</a>.</p>
   {% else %}
