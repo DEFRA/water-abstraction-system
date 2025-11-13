@@ -14,19 +14,34 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @param {string} query - The value to search for, taken from the session
  * @param {number} page - The requested page
+ * @param {boolean} matchFullIdentifier - Whether to perform a full match or just a partial match (the default)
  *
  * @returns {Promise<object>} The search results and total number of matching rows in the database
  */
-async function go(query, page) {
-  const likeQuery = `%${query}%`
+async function go(query, page, matchFullIdentifier = false) {
+  const fullIdentifier = _fullIdentifier(query)
+  const partialIdentifier = `%${fullIdentifier}%`
 
-  return MonitoringStationModel.query()
-    .select(['id', 'label', 'wiski_id', 'station_reference', 'catchment_name', 'river_name'])
-    .where('station_reference', 'ilike', likeQuery)
-    .orWhere('wiski_id', 'ilike', likeQuery)
-    .orWhere('label', 'ilike', likeQuery)
+  const select = MonitoringStationModel.query()
+    .select(['id', 'label', 'catchmentName', 'riverName', 'gridReference'])
     .orderBy([{ column: 'label', order: 'asc' }])
     .page(page - 1, DatabaseConfig.defaultPageSize)
+
+  if (matchFullIdentifier) {
+    return select.where('label', 'ilike', fullIdentifier).page(page - 1, 1000)
+  }
+
+  return select
+    .whereNot('label', 'ilike', fullIdentifier)
+    .where('label', 'ilike', partialIdentifier)
+    .page(page - 1, DatabaseConfig.defaultPageSize)
+}
+
+function _fullIdentifier(query) {
+  return query
+    .replaceAll('\\', '\\\\')
+    .replaceAll('%', String.raw`\%`)
+    .replaceAll('_', String.raw`\_`)
 }
 
 module.exports = {

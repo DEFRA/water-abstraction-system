@@ -5,8 +5,11 @@
  * @module GeneralLib
  */
 
+const Big = require('big.js')
 const { randomInt, randomUUID } = require('node:crypto')
 const { setTimeout } = require('node:timers/promises')
+
+const { returnUnits } = require('./static-lookups.lib.js')
 
 /**
  * Calculates and logs the time taken in milliseconds between the provided `startTime` and the current time
@@ -43,6 +46,28 @@ function calculateAndLogTimeTaken(startTime, message, data = {}) {
   }
 
   global.GlobalNotifier.omg(message, logData)
+}
+
+/**
+ * Converts a quantity from a given unit to cubic metres
+ *
+ * We use **Big.js** to mitigate issues with
+ * {@link https://en.wikipedia.org/wiki/Floating-point_error_mitigation | floating-point errors}.
+ *
+ * The classic example of this in JavaScript is `0.1 + 0.2`. You expect `0.3` but in fact the result is
+ * `0.30000000000000004`.
+ *
+ * @param {number} quantity - the quantity to be formatted and converted to cubic metres
+ * @param {string} units - the unit of the quantity
+ *
+ * @returns {number|null} The converted quantity or null if the quantity is null or undefined
+ */
+function convertToCubicMetres(quantity, units) {
+  if (quantity === null || quantity === undefined) {
+    return null
+  }
+
+  return Big(quantity).div(returnUnits[units].multiplier).toNumber()
 }
 
 /**
@@ -396,6 +421,7 @@ function transformStringOfLicencesToArray(licences) {
 
 module.exports = {
   calculateAndLogTimeTaken,
+  convertToCubicMetres,
   currentTimeInNanoseconds,
   determineCurrentFinancialYear,
   flashNotification,

@@ -1,24 +1,8 @@
 'use strict'
 
 const { formatNumber, formatQuantity, sentenceCase } = require('../base.presenter.js')
+const { convertToCubicMetres } = require('../../lib/general.lib.js')
 const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
-
-/**
- * Converts a quantity from a given unit to cubic metres and formats it
- *
- * @param {number} quantity - the quantity to be formatted and converted to cubic metres
- * @param {string} units - the unit of the quantity
- *
- * @returns {number|null} The converted quantity or null if the quantity is null or undefined
- */
-function convertToCubicMetres(quantity, units) {
-  if (quantity === null || quantity === undefined) {
-    return null
-  }
-  const convertedQuantity = quantity / returnUnits[units].multiplier
-
-  return formatNumber(convertedQuantity)
-}
 
 /**
  * Formats the details of a return submission meter
@@ -39,6 +23,20 @@ function formatMeterDetails(meter) {
     serialNumber,
     xDisplay: multiplier === 1 ? 'No' : 'Yes'
   }
+}
+
+/**
+ * Converts a quantity from a given unit to cubic metres and formats it
+ *
+ * @param {number} quantity - the quantity to be converted to cubic metres and formatted
+ * @param {string} units - the unit of the quantity
+ *
+ * @returns {string|null} The converted and formatted quantity or null
+ */
+function formatToCubicMetres(quantity, units) {
+  const convertedQuantity = convertToCubicMetres(quantity, units)
+
+  return formatNumber(convertedQuantity)
 }
 
 /**
@@ -198,8 +196,8 @@ function _linkDetails(id, method, frequency, endDate, rootPath) {
 }
 
 module.exports = {
-  convertToCubicMetres,
   formatMeterDetails,
+  formatToCubicMetres,
   generateSummaryTableHeaders,
   generateSummaryTableRows
 }
