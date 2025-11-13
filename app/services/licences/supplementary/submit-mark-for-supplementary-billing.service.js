@@ -10,6 +10,7 @@ const LicenceModel = require('../../../models/licence.model.js')
 const MarkForSupplementaryBillingPresenter = require('../../../presenters/licences/supplementary/mark-for-supplementary-billing.presenter.js')
 const PersistSupplementaryBillingFlagsService = require('./persist-supplementary-billing-flags.service.js')
 const SupplementaryYearValidator = require('../../../validators/licences/supplementary/supplementary-year.validator.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Handles the submission to mark a licence for supplementary billing.
@@ -118,17 +119,9 @@ async function _getPageData(licenceId) {
 }
 
 function _validate(payload) {
-  const validation = SupplementaryYearValidator.go(payload)
+  const validationResult = SupplementaryYearValidator.go(payload)
 
-  if (!validation.error) {
-    return null
-  }
-
-  const { message } = validation.error.details[0]
-
-  return {
-    text: message
-  }
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

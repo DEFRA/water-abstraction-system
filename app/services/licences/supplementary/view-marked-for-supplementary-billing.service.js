@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the marked for supplementary billing confirmation page
- * @module MarkedForSupplementaryBillingService
+ * @module ViewMarkedForSupplementaryBillingService
  */
 
 const LicenceModel = require('../../../../app/models/licence.model.js')
@@ -21,8 +21,8 @@ async function go(licenceId) {
   return {
     activeNavBar: 'search',
     licenceRef: licenceData.licenceRef,
-    licenceId: licenceData.id,
-    pageTitle: "You've marked this licence for the next supplementary bill run"
+    pageTitle: "You've marked this licence for the next supplementary bill run",
+    redirectLink: `/system/licences/${licenceId}/set-up`
   }
 }
 
