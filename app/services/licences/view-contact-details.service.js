@@ -6,7 +6,7 @@
  */
 
 const FetchLicenceContactDetailsService = require('./fetch-licence-contact-details.service.js')
-const ContactDetailsPresenter = require('../../presenters/licences/licence-contact-details.presenter.js')
+const ContactDetailsPresenter = require('../../presenters/licences/contact-details.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the contact details link page

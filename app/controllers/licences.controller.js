@@ -113,7 +113,7 @@ async function viewLicenceContactDetails(request, h) {
 
   const pageData = await ViewContactDetailsService.go(id)
 
-  return h.view('licences/licence-contact-details.njk', pageData)
+  return h.view('licences/contact-details.njk', pageData)
 }
 
 async function viewLicenceContacts(request, h) {

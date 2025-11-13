@@ -12,7 +12,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
-const ContactDetailsPresenter = require('../../../app/presenters/licences/licence-contact-details.presenter.js')
+const ContactDetailsPresenter = require('../../../app/presenters/licences/contact-details.presenter.js')
 
 describe('Licences - Contact Details presenter', () => {
   let licenceContactDetailsData
