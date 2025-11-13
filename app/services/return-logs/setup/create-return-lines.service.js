@@ -6,7 +6,7 @@
  */
 
 const ReturnSubmissionLineModel = require('../../../models/return-submission-line.model.js')
-const { generateUUID } = require('../../../lib/general.lib.js')
+const { convertToCubicMetres, generateUUID } = require('../../../lib/general.lib.js')
 const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -60,22 +60,6 @@ function _calculateLineQuantity(line, meter10TimesDisplay, previousReading, volu
 }
 
 /**
- * Converts a quantity to cubic metres based on the provided unit, as we store quantities in the db in cubic metres
- *
- * @param {number} quantity - The quantity to convert
- * @param {string} units - The unit of measurement for the quantity
- *
- * @returns {number} The converted quantity in cubic metres
- */
-function _convertToCubicMetres(quantity, units) {
-  const { multiplier } = Object.values(returnUnits).find((unit) => {
-    return unit.name === units
-  })
-
-  return quantity / multiplier
-}
-
-/**
  * Convert a unit name to the form we persist as `user_unit` ie. from `cubicMetres` to `m³`
  *
  * @param {string} unit - The unit name to convert
@@ -106,15 +90,17 @@ function _returnLines(returnSubmissionId, session, timestamp) {
     // We use destructuring to remove the reading property as this is not a valid column in the db
     const { reading, ...restOfLine } = line
 
+    const userUnit = _getUserUnit(session.units)
+
     return {
       ...restOfLine,
       id: generateUUID(),
       createdAt: timestamp,
-      quantity: rawQuantity ? _convertToCubicMetres(rawQuantity, session.units) : rawQuantity,
+      quantity: rawQuantity ? convertToCubicMetres(rawQuantity, userUnit) : rawQuantity,
       readingType: session.meterProvided === 'yes' ? 'measured' : 'estimated',
       returnSubmissionId,
       timePeriod: session.returnsFrequency,
-      userUnit: _getUserUnit(session.units)
+      userUnit
     }
   })
 }
