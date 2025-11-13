@@ -20,7 +20,7 @@ const LicenceSupplementaryProcessBillingFlagService = require('../../app/service
 const SubmitMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
-const ViewLicenceConditionsService = require('../../app/services/licences/view-licence-conditions.service.js')
+const ViewConditionsService = require('../../app/services/licences/view-conditions.service.js')
 const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
 const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
 const ViewLicenceHistoryService = require('../../app/services/licences/view-licence-history.service.js')
@@ -100,7 +100,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has conditions', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceConditionsService, 'go').resolves(_viewLicenceConditions())
+          Sinon.stub(ViewConditionsService, 'go').resolves(_viewLicenceConditions())
         })
 
         it('returns the page successfully', async () => {

@@ -2,11 +2,11 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence conditions page
- * @module ViewLicenceConditionsService
+ * @module ViewConditionsService
  */
 
 const FetchLicenceConditionsService = require('./fetch-licence-conditions.service.js')
-const ViewLicenceConditionsPresenter = require('../../presenters/licences/view-licence-conditions.presenter.js')
+const ConditionsPresenter = require('../../presenters/licences/conditions.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence conditions page
@@ -18,7 +18,7 @@ const ViewLicenceConditionsPresenter = require('../../presenters/licences/view-l
 async function go(licenceId) {
   const licenceVersionPurposeConditionTypes = await FetchLicenceConditionsService.go(licenceId)
 
-  const pageData = ViewLicenceConditionsPresenter.go(licenceVersionPurposeConditionTypes)
+  const pageData = ConditionsPresenter.go(licenceVersionPurposeConditionTypes)
 
   return {
     activeNavBar: 'search',
