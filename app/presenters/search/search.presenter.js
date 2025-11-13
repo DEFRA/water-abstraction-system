@@ -10,6 +10,7 @@ const { formatLongDate, formatReturnLogStatus } = require('../base.presenter.js'
 const { today } = require('../../lib/general.lib.js')
 
 const resultTypes = {
+  billingAccount: 'billing accounts',
   licence: 'licences',
   monitoringStation: 'monitoring stations',
   returnLog: 'return logs'
@@ -18,6 +19,7 @@ const resultTypes = {
 /**
  * Formats data for the `/search` page
  *
+ * @param {string[]} userScopes - The user's scopes
  * @param {string} query - The user-entered search query, if any
  * @param {string} page - The requested page, when displaying search results
  * @param {string} resultType - The type of search results being displayed
@@ -26,17 +28,18 @@ const resultTypes = {
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(query, resultType, page, numberOfPages, allSearchMatches) {
+function go(userScopes, query, resultType, page, numberOfPages, allSearchMatches) {
   // If there's no page number provided, we're just displaying the blank search page, potentially with any search
   // query that the user may have entered but was not searchable, e.g. whitespace or other unsearchable text
   if (!page) {
-    return _blankSearchPage(query, resultType)
+    return _blankSearchPage(userScopes, query, resultType)
   }
 
   const { exactSearchResults, similarSearchResults } = allSearchMatches
 
   return {
     exactMatches: _matches(exactSearchResults),
+    filterItems: _filterItems(userScopes, resultType),
     noPartialResults: similarSearchResults.amountFound === 0,
     noResults: exactSearchResults.amountFound === 0 && similarSearchResults.amountFound === 0,
     page,
@@ -51,13 +54,44 @@ function go(query, resultType, page, numberOfPages, allSearchMatches) {
   }
 }
 
-function _blankSearchPage(query, resultType) {
+function _billingAccounts(billingAccounts) {
+  if (billingAccounts.length === 0) {
+    return null
+  }
+
+  return billingAccounts.map((billingAccount) => {
+    const { accountNumber, createdAt, id, name } = billingAccount
+
+    return {
+      accountNumber,
+      createdAt: formatLongDate(createdAt),
+      id,
+      name
+    }
+  })
+}
+
+function _blankSearchPage(userScopes, query, resultType) {
   return {
+    filterItems: _filterItems(userScopes, resultType),
     pageTitle: 'Search',
     query,
     resultType,
     showResults: false
   }
+}
+
+function _filterItems(userScopes, resultType) {
+  const items = []
+
+  if (userScopes.includes('billing')) {
+    items.push({ checked: resultType === 'billingAccount', value: 'billingAccount', text: 'Billing accounts' })
+  }
+  items.push({ checked: resultType === 'licence', value: 'licence', text: 'Licences' })
+  items.push({ checked: resultType === 'monitoringStation', value: 'monitoringStation', text: 'Monitoring stations' })
+  items.push({ checked: resultType === 'returnLog', value: 'returnLog', text: 'Return logs' })
+
+  return items
 }
 
 function _holderContact(licence) {
@@ -112,6 +146,7 @@ function _licences(licences) {
 
 function _matches(searchResults) {
   return {
+    billingAccounts: _billingAccounts(searchResults.billingAccounts.results),
     licences: _licences(searchResults.licences.results),
     monitoringStations: _monitoringStations(searchResults.monitoringStations.results),
     returnLogs: _returnLogs(searchResults.returnLogs.results),

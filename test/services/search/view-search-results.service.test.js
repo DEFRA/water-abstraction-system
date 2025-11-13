@@ -16,15 +16,42 @@ const ViewSearchResultsService = require('../../../app/services/search/view-sear
 
 describe('Search - View search results service', () => {
   let page
-  let searchResultType
   let searchQuery
+  let searchResultType
+
+  const auth = { credentials: { scope: ['billing'] } }
+
+  const yar = {
+    get: (key) => {
+      if (key === 'searchQuery') {
+        return searchQuery
+      }
+
+      if (key === 'searchResultType') {
+        return searchResultType
+      }
+
+      return null
+    }
+  }
 
   beforeEach(() => {
     page = 1
 
     Sinon.stub(FindAllSearchMatchesService, 'go').resolves({
       exactSearchResults: {
-        amountFound: 5,
+        amountFound: 6,
+        billingAccounts: {
+          results: [
+            {
+              accountNumber: 'A12345678A',
+              createdAt: new Date('2000-01-01T00:00:00.000Z'),
+              id: 'billing-account-1',
+              name: 'Company 1'
+            }
+          ],
+          total: 1
+        },
         licences: {
           results: [
             {
@@ -87,7 +114,18 @@ describe('Search - View search results service', () => {
       },
       largestResultCount: 2,
       similarSearchResults: {
-        amountFound: 5,
+        amountFound: 6,
+        billingAccounts: {
+          results: [
+            {
+              accountNumber: 'A12345678A',
+              createdAt: new Date('2000-01-01T00:00:00.000Z'),
+              id: 'billing-account-1',
+              name: 'Company 1'
+            }
+          ],
+          total: 1
+        },
         licences: {
           results: [
             {
@@ -162,11 +200,19 @@ describe('Search - View search results service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ViewSearchResultsService.go(searchQuery, searchResultType, page)
+      const result = await ViewSearchResultsService.go(auth, yar, page)
 
       expect(result).to.equal({
         activeNavBar: 'search',
         exactMatches: {
+          billingAccounts: [
+            {
+              accountNumber: 'A12345678A',
+              createdAt: '1 January 2000',
+              id: 'billing-account-1',
+              name: 'Company 1'
+            }
+          ],
           licences: [
             {
               id: 'licence-1',
@@ -211,6 +257,28 @@ describe('Search - View search results service', () => {
             }
           ]
         },
+        filterItems: [
+          {
+            checked: false,
+            text: 'Billing accounts',
+            value: 'billingAccount'
+          },
+          {
+            checked: false,
+            text: 'Licences',
+            value: 'licence'
+          },
+          {
+            checked: false,
+            text: 'Monitoring stations',
+            value: 'monitoringStation'
+          },
+          {
+            checked: false,
+            text: 'Return logs',
+            value: 'returnLog'
+          }
+        ],
         noPartialResults: false,
         noResults: false,
         page: 1,
@@ -220,6 +288,14 @@ describe('Search - View search results service', () => {
           numberOfPages: 1
         },
         partialMatches: {
+          billingAccounts: [
+            {
+              accountNumber: 'A12345678A',
+              createdAt: '1 January 2000',
+              id: 'billing-account-1',
+              name: 'Company 1'
+            }
+          ],
           licences: [
             {
               id: 'licence-1',
@@ -280,11 +356,19 @@ describe('Search - View search results service', () => {
     })
 
     it('still returns page data for the view', async () => {
-      const result = await ViewSearchResultsService.go(searchQuery, searchResultType, page)
+      const result = await ViewSearchResultsService.go(auth, yar, page)
 
       expect(result).to.equal({
         activeNavBar: 'search',
         exactMatches: {
+          billingAccounts: [
+            {
+              accountNumber: 'A12345678A',
+              createdAt: '1 January 2000',
+              id: 'billing-account-1',
+              name: 'Company 1'
+            }
+          ],
           licences: [
             {
               id: 'licence-1',
@@ -329,6 +413,28 @@ describe('Search - View search results service', () => {
             }
           ]
         },
+        filterItems: [
+          {
+            checked: false,
+            text: 'Billing accounts',
+            value: 'billingAccount'
+          },
+          {
+            checked: false,
+            text: 'Licences',
+            value: 'licence'
+          },
+          {
+            checked: false,
+            text: 'Monitoring stations',
+            value: 'monitoringStation'
+          },
+          {
+            checked: false,
+            text: 'Return logs',
+            value: 'returnLog'
+          }
+        ],
         noPartialResults: false,
         noResults: false,
         page: 1,
@@ -338,6 +444,14 @@ describe('Search - View search results service', () => {
           numberOfPages: 1
         },
         partialMatches: {
+          billingAccounts: [
+            {
+              accountNumber: 'A12345678A',
+              createdAt: '1 January 2000',
+              id: 'billing-account-1',
+              name: 'Company 1'
+            }
+          ],
           licences: [
             {
               id: 'licence-1',

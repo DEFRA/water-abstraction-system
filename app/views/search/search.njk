@@ -24,28 +24,7 @@
         classes: "govuk-fieldset__legend--s"
       }
     },
-    items: [
-      {
-        value: "licence",
-        text: "Licences",
-        checked: resultType === 'licence'
-      },
-      {
-        value: "monitoringStation",
-        text: "Monitoring stations",
-        checked: resultType === 'monitoringStation'
-      },
-      {
-        value: "returnLog",
-        text: "Return logs",
-        checked: resultType === 'returnLog'
-      },
-      {
-        value: "user",
-        text: "Users",
-        checked: resultType === 'user'
-      }
-    ]
+    items: filterItems
   }) }}
 
   <div class="govuk-button-group">
@@ -179,6 +158,27 @@
           {% endfor %}
         {% endif %}
 
+        {% if exactMatches.billingAccounts %}
+          {% for billingAccount in exactMatches.billingAccounts %}
+            <hr class="searchresult-separator">
+            <div class="searchresult-row">
+              <dl class="searchresult-list">
+                <div class="searchresult-column">
+                  <dt class="searchresult-term-l">Billing account:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/billing-accounts/{{ billingAccount.id }}">{{ billingAccount.accountNumber }}</a></dd><p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Holder:</dt><dd class="searchresult-detail">{{ billingAccount.name }}</dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Created date:</dt><dd class="searchresult-detail">{{ billingAccount.createdAt }}</dd>
+                </div>
+              </dl>
+            </div>
+            <hr class="searchresult-separator">
+          {% endfor %}
+        {% endif %}
+
+
         {% if exactMatches.users %}
           {% for user in exactMatches.users %}
             <hr class="searchresult-separator">
@@ -255,6 +255,26 @@
                 </div>
                 <div class="searchresult-column">
                   <dt class="searchresult-term">End date:</dt><dd class="searchresult-detail">{{ returnLog.endDate }} {{ returnStatusTag(returnLog.statusText, true) if returnLog.statusText }}</dd>
+                </div>
+              </dl>
+            </div>
+            <hr class="searchresult-separator">
+          {% endfor %}
+        {% endif %}
+
+        {% if partialMatches.billingAccounts %}
+          {% for billingAccount in partialMatches.billingAccounts %}
+            <hr class="searchresult-separator">
+            <div class="searchresult-row">
+              <dl class="searchresult-list">
+                <div class="searchresult-column">
+                  <dt class="searchresult-term-l">Billing account:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/billing-accounts/{{ billingAccount.id }}">{{ billingAccount.accountNumber }}</a></dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Holder:</dt><dd class="searchresult-detail">{{ billingAccount.name }}</dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Created date:</dt><dd class="searchresult-detail">{{ billingAccount.createdAt }}</dd>
                 </div>
               </dl>
             </div>

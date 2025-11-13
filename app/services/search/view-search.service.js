@@ -12,10 +12,14 @@ const SearchPresenter = require('../../presenters/search/search.presenter.js')
  *
  * This service just displays a blank search page.
  *
+ * @param {object} auth - The authentication object
+ *
  * @returns {Promise<object>} The view data for the search page
  */
-async function go() {
-  const formattedData = SearchPresenter.go()
+async function go(auth) {
+  const userScopes = auth.credentials.scope
+
+  const formattedData = SearchPresenter.go(userScopes)
 
   return {
     activeNavBar: 'search',
