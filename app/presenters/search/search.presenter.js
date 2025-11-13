@@ -9,39 +9,63 @@ const ContactModel = require('../../models/contact.model.js')
 const { formatLongDate, formatReturnLogStatus } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
+const resultTypes = {
+  licence: 'licences',
+  monitoringStation: 'monitoring stations',
+  returnLog: 'return logs'
+}
+
 /**
  * Formats data for the `/search` page
  *
  * @param {string} query - The user-entered search query, if any
  * @param {string} page - The requested page, when displaying search results
+ * @param {string} resultType - The type of search results being displayed
  * @param {string} numberOfPages - The total number of pages available for the search results
- * @param {object[]} licences - The list of licences matching the search criteria
- * @param {object[]} returnLogs - The list of return logs matching the search criteria
- * @param {object[]} monitoringStations - The list of monitoring stations matching the search criteria
+ * @param {object} allSearchMatches - All the search matches found
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(query, page, numberOfPages, licences, returnLogs, monitoringStations) {
+function go(query, resultType, page, numberOfPages, allSearchMatches) {
   // If there's no page number provided, we're just displaying the blank search page, potentially with any search
   // query that the user may have entered but was not searchable, e.g. whitespace or other unsearchable text
   if (!page) {
-    return {
-      pageTitle: 'Search',
-      query,
-      showResults: false
-    }
+    return _blankSearchPage(query, resultType)
   }
 
+  const { exactSearchResults, similarSearchResults } = allSearchMatches
+
   return {
-    licences: _licences(licences),
-    monitoringStations: _monitoringStations(monitoringStations),
-    noResults: licences.length === 0 && returnLogs.length === 0 && monitoringStations.length === 0,
+    exactMatches: _matches(exactSearchResults),
+    noPartialResults: similarSearchResults.amountFound === 0,
+    noResults: exactSearchResults.amountFound === 0 && similarSearchResults.amountFound === 0,
     page,
-    pageTitle: _pageTitle(numberOfPages, page),
+    pageTitle: `Search results for "${query}"`,
+    pageTitleCaption: _pageTitleCaption(numberOfPages, page),
+    partialMatches: _matches(similarSearchResults),
     query,
-    returnLogs: _returnLogs(returnLogs),
+    resultType,
+    resultTypeText: resultTypes[resultType] || 'all matches',
+    showExactResults: exactSearchResults.amountFound !== 0,
     showResults: true
   }
+}
+
+function _blankSearchPage(query, resultType) {
+  return {
+    pageTitle: 'Search',
+    query,
+    resultType,
+    showResults: false
+  }
+}
+
+function _holderContact(licence) {
+  return (
+    licence.metadata.contacts?.find((contact) => {
+      return contact.role === 'Licence holder'
+    }) ?? {}
+  )
 }
 
 function _licenceEndDetails(licenceEnd) {
@@ -68,8 +92,9 @@ function _licences(licences) {
 
   return licences.map((licence) => {
     const licenceEnd = licence.$ends()
-    const { Forename: firstName, Initials: initials, Name: lastName, Salutation: salutation } = licence.metadata
     const { id, licenceRef } = licence
+
+    const { forename: firstName, initials, name: lastName, salutation } = _holderContact(licence)
 
     // Holder name is either a company name given by Name or made up of any parts of Salutation, Initials, Forename and
     // Name that are populated, where Name provides the surname for a person.
@@ -85,6 +110,14 @@ function _licences(licences) {
   })
 }
 
+function _matches(searchResults) {
+  return {
+    licences: _licences(searchResults.licences.results),
+    monitoringStations: _monitoringStations(searchResults.monitoringStations.results),
+    returnLogs: _returnLogs(searchResults.returnLogs.results)
+  }
+}
+
 function _monitoringStations(monitoringStations) {
   if (monitoringStations.length === 0) {
     return null
@@ -93,12 +126,26 @@ function _monitoringStations(monitoringStations) {
   return monitoringStations
 }
 
-function _pageTitle(numberOfPages, selectedPageNumber) {
+function _pageTitleCaption(numberOfPages, selectedPageNumber) {
   if (numberOfPages < 2) {
-    return 'Search results'
+    return null
   }
 
-  return `Search results (page ${selectedPageNumber} of ${numberOfPages})`
+  return `Page ${selectedPageNumber} of ${numberOfPages}`
+}
+
+function _returnLogDetail(ids, dueDates, endDates, statuses) {
+  return ids
+    .map((id, index) => {
+      const dueDate = dueDates[index]
+      const endDate = endDates[index]
+      const status = statuses[index]
+
+      return { dueDate, endDate, id, status }
+    })
+    .sort((a, b) => {
+      return b.endDate - a.endDate
+    })[0]
 }
 
 function _returnLogs(returnLogs) {
@@ -107,16 +154,19 @@ function _returnLogs(returnLogs) {
   }
 
   return returnLogs.map((returnLog) => {
-    const { id, licenceRef, regionDisplayName, returnReference } = returnLog
+    const { dueDates, endDates, id: licenceId, ids, licenceRef, returnReference, statuses } = returnLog
 
-    const statusText = formatReturnLogStatus(returnLog)
+    const returnLogDetail = _returnLogDetail(ids, dueDates, endDates, statuses)
+
+    const statusText = formatReturnLogStatus(returnLogDetail)
+    const { id } = returnLogDetail
 
     return {
-      endDate: formatLongDate(returnLog.endDate),
+      endDate: formatLongDate(returnLogDetail.endDate),
       id,
+      licenceId,
       licenceRef,
       returnReference,
-      regionDisplayName,
       statusText
     }
   })

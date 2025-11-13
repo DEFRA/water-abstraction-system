@@ -161,4 +161,24 @@ describe('Search - Fetch licence search results service', () => {
       })
     })
   })
+
+  describe('when searching for an exact match', () => {
+    it('returns the correct licence', async () => {
+      const result = await FetchLicenceSearchResultsService.go('02/01/TESTSEARCH01/05', 1, true)
+
+      expect(result).to.equal({
+        results: [
+          {
+            expiredDate: null,
+            id: licences[0].licence.id,
+            lapsedDate: null,
+            licenceRef: licences[0].licence.licenceRef,
+            metadata: licences[0].licenceDocumentHeader.metadata,
+            revokedDate: null
+          }
+        ],
+        total: 1
+      })
+    })
+  })
 })
