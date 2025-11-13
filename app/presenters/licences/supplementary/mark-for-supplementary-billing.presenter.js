@@ -19,11 +19,16 @@ const PREVIOUS_SIX_YEARS = 6
  * @returns {object} - The data formatted for the view template
  */
 function go(licence) {
+  const { id, licenceRef } = licence
+
   return {
-    licenceId: licence.id,
-    licenceRef: licence.licenceRef,
+    backLink: {
+      href: '/system/licences/' + id + '/set-up',
+      text: 'Back'
+    },
     financialYears: _yearsToDisplay(),
-    pageTitle: 'Mark for the supplementary bill run'
+    pageTitle: 'Select which years you need to recalculate bills for',
+    pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 

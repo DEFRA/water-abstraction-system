@@ -19,6 +19,7 @@ describe('Search - View Search service', () => {
         activeNavBar: 'search',
         pageTitle: 'Search',
         query: undefined,
+        resultType: undefined,
         showResults: false
       })
     })

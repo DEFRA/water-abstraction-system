@@ -31,6 +31,7 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
     beforeEach(async () => {
       licence = await LicenceHelper.add()
+
       Sinon.stub(DetermineExistingBillRunYearsService, 'go').resolves([2023])
     })
 
@@ -143,10 +144,21 @@ describe('Submit Mark For Supplementary Billing Service', () => {
 
           expect(result).to.equal({
             activeNavBar: 'search',
-            pageTitle: 'Mark for the supplementary bill run',
-            error: { text: 'Select at least one financial year' },
-            licenceId: licence.id,
-            licenceRef: licence.licenceRef,
+            backLink: {
+              href: `/system/licences/${licence.id}/set-up`,
+              text: 'Back'
+            },
+            error: {
+              errorList: [
+                {
+                  href: '#supplementaryYears',
+                  text: 'Select at least one financial year'
+                }
+              ],
+              supplementaryYears: {
+                text: 'Select at least one financial year'
+              }
+            },
             financialYears: [
               { text: '2023 to 2024', value: 2024, attributes: { 'data-test': 'sroc-years-2024' } },
               { text: '2022 to 2023', value: 2023, attributes: { 'data-test': 'sroc-years-2023' } },
@@ -156,7 +168,9 @@ describe('Submit Mark For Supplementary Billing Service', () => {
                 hint: { text: 'Old charge scheme' },
                 attributes: { 'data-test': 'pre-sroc-years' }
               }
-            ]
+            ],
+            pageTitle: 'Select which years you need to recalculate bills for',
+            pageTitleCaption: `Licence ${licence.licenceRef}`
           })
         })
       })
