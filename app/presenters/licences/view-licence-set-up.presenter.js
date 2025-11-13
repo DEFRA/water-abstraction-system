@@ -190,10 +190,7 @@ function _reason(returnVersion) {
 }
 
 function _recalculateBills(agreements, auth, commonData) {
-  if (
-    auth.credentials.scope.includes(ROLES.billing) &&
-    _hasTwoPartTariffAgreement(agreements)
-  ) {
+  if (auth.credentials.scope.includes(ROLES.billing) && _hasTwoPartTariffAgreement(agreements)) {
     return { markForSupplementaryBilling: `/system/licences/${commonData.licenceId}/mark-for-supplementary-billing` }
   }
 
