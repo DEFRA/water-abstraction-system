@@ -32,6 +32,7 @@ async function viewSearch(request, h) {
   } = request
 
   const searchQuery = yar.get('searchQuery')
+  const searchResultType = yar.get('searchResultType')
 
   // GET requests sent to the /search page might be either to just show the search page or to view search results, so we
   // need to check whether this is just an initial request to display the page (i.e. no page parameter is present) or
@@ -42,7 +43,7 @@ async function viewSearch(request, h) {
     return h.view(VIEW_PAGE, viewPageData)
   }
 
-  const pageData = await ViewSearchResultsService.go(searchQuery, page)
+  const pageData = await ViewSearchResultsService.go(searchQuery, searchResultType, page)
 
   return h.view(VIEW_PAGE, pageData)
 }
