@@ -24,6 +24,7 @@ const MAX_LENGTH = 100
  */
 function go(payload) {
   const schema = Joi.object({
+    clearFilter: Joi.string(),
     query: Joi.string()
       .trim()
       .required()
@@ -33,7 +34,8 @@ function go(payload) {
         'string.base': ERROR_MESSAGE,
         'string.empty': ERROR_MESSAGE,
         'string.max': `Search query must be ${MAX_LENGTH} characters or less`
-      })
+      }),
+    resultType: Joi.string()
   })
 
   return schema.validate(payload, { abortEarly: true })
