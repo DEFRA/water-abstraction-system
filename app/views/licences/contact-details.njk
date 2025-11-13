@@ -1,0 +1,118 @@
+{% extends 'licences/layout.njk' %}
+
+{% macro displayAddress(address) %}
+  {% if address.address1 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address1 }}</p>
+  {% endif %}
+  {% if address.address2 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address2 }}</p>
+  {% endif %}
+  {% if address.address3 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address3 }}</p>
+  {% endif %}
+  {% if address.address4 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address4 }}</p>
+  {% endif %}
+  {% if address.address5 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address5 }}</p>
+  {% endif %}
+  {% if address.address6 %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address6 }}</p>
+  {% endif %}
+  {% if address.country %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.country }}</p>
+  {% endif %}
+  {% if address.postcode %}
+    <p class="govuk-body govuk-!-margin-bottom-0">{{ address.postcode }}</p>
+  {% endif %}
+{% endmacro %}
+
+{% block subPageContent %}
+  <h2 class="govuk-heading-l">Contact details</h2>
+
+  {% set tableHeaders = [
+    { text: 'Name' },
+    { text: 'Communication type' },
+    { text: 'Send to' }
+  ] %}
+
+  {% set licenceContactsTableRows = [] %}
+
+  {% for licenceContact in licenceContacts %}
+    {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+    {% set rowIndex = loop.index0 %}
+
+    {% set transactionRow = [
+      {
+        text: licenceContact.name,
+        attributes: { 'data-test': 'licence-contact-name-' + rowIndex }
+      },
+      {
+        text: licenceContact.communicationType,
+        attributes: { 'data-test': 'licence-contact-type-' + rowIndex }
+      },
+      {
+        html: displayAddress(licenceContact.address),
+        attributes: { 'data-test': 'licence-contact-send-to-' + rowIndex }
+      }
+    ] %}
+
+    {% set licenceContactsTableRows = (licenceContactsTableRows.push(transactionRow), licenceContactsTableRows) %}
+  {% endfor %}
+
+  {{ govukTable({
+    attributes: { 'data-test': 'licence-contacts-table' },
+    caption: "Licence contacts",
+    captionClasses: "govuk-table__caption--m",
+    firstCellIsHeader: false,
+    head: tableHeaders if licenceContacts.length > 0,
+    rows: licenceContactsTableRows if licenceContacts.length > 0
+  }) }}
+
+  {% if licenceContacts.length === 0 %}
+    <p>No licence contacts found.</p>
+  {% endif %}
+
+  {% if customerId %}
+    {% set customerContactsCaption = 'Customer contacts for this licence<p class="govuk-body"><a class="govuk-link" href="/customer/' + customerId + '/#contacts">Go to customer contacts</a></p>' %}
+  {% else %}
+    {% set customerContactsCaption = 'Customer contacts for this licence' %}
+  {% endif %}
+
+  {% set customerContactsTableRows = [] %}
+
+  {% for customerContact in customerContacts %}
+    {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+    {% set rowIndex = loop.index0 %}
+
+    {% set transactionRow = [
+      {
+        text: customerContact.name,
+        attributes: { 'data-test': 'customer-contact-name-' + rowIndex }
+      },
+      {
+        text: customerContact.communicationType,
+        attributes: { 'data-test': 'customer-contact-type-' + rowIndex }
+      },
+      {
+        text: customerContact.email,
+        attributes: { 'data-test': 'customer-contact-send-to-' + rowIndex }
+      }
+    ] %}
+
+    {% set customerContactsTableRows = (customerContactsTableRows.push(transactionRow), customerContactsTableRows) %}
+  {% endfor %}
+
+  {{ govukTable({
+    attributes: { 'data-test': 'customer-contacts-table' },
+    caption: customerContactsCaption|safe,
+    captionClasses: "govuk-table__caption--m",
+    firstCellIsHeader: false,
+    head: tableHeaders if customerContacts.length > 0,
+    rows: customerContactsTableRows if customerContacts.length > 0
+  }) }}
+
+  {% if customerContacts.length === 0 %}
+    <p>No customer contacts found.</p>
+  {% endif %}
+{% endblock %}

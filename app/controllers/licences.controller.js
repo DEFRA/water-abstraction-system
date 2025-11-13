@@ -24,8 +24,6 @@ const ViewMarkedForSupplementaryBillingService = require('../services/licences/s
 const ViewPointsService = require('../services/licences/view-points.service.js')
 const ViewPurposesService = require('../services/licences/view-purposes.service.js')
 
-const ViewLicencePage = 'licences/view.njk'
-
 async function markedForSupplementaryBilling(request, h) {
   const { id: licenceId } = request.params
 
@@ -85,7 +83,7 @@ async function viewBills(request, h) {
 
   const pageData = await ViewLicenceBillsService.go(id, auth, page)
 
-  return h.view(ViewLicencePage, pageData)
+  return h.view('licences/bills.njk', pageData)
 }
 
 async function viewCommunications(request, h) {
@@ -97,7 +95,7 @@ async function viewCommunications(request, h) {
 
   const pageData = await ViewLicenceCommunicationsService.go(id, auth, page)
 
-  return h.view(ViewLicencePage, pageData)
+  return h.view('licences/communications.njk', pageData)
 }
 
 async function viewLicenceConditions(request, h) {
@@ -124,7 +122,7 @@ async function viewLicenceContacts(request, h) {
 
   const pageData = await ViewLicenceContactsService.go(id, auth)
 
-  return h.view(ViewLicencePage, pageData)
+  return h.view('licences/contact-details.njk', pageData)
 }
 
 async function viewLicencePoints(request, h) {
@@ -163,7 +161,7 @@ async function viewReturns(request, h) {
 
   const pageData = await ViewLicenceReturnsService.go(id, auth, page)
 
-  return h.view(ViewLicencePage, pageData)
+  return h.view('licences/returns.njk', pageData)
 }
 
 async function viewSetUp(request, h) {
@@ -174,7 +172,7 @@ async function viewSetUp(request, h) {
 
   const pageData = await ViewLicenceSetUpService.go(id, auth)
 
-  return h.view(ViewLicencePage, pageData)
+  return h.view('licences/set-up.njk', pageData)
 }
 
 async function viewSummary(request, h) {
@@ -185,7 +183,7 @@ async function viewSummary(request, h) {
 
   const pageData = await ViewLicenceSummaryService.go(id, auth)
 
-  return h.view(ViewLicencePage, pageData)
+  return h.view('licences/summary.njk', pageData)
 }
 
 module.exports = {
