@@ -19,9 +19,9 @@
   {{ govukPanel({ titleText: pageTitle, html: panelContent }) }}
 
   {% if status === 'received' %}
-    <a href="{{ viewReturnsLink }}" class="govuk-link govuk-!-font-size-19">View returns for {{ licenceRef }}</a>
+    <a href="{{ viewReturnsLink }}" class="govuk-link govuk-!-font-size-19" id="viewReturns">View returns for {{ licenceRef }}</a>
   {% else %}
-    <a href="{{ viewThisReturnLink }}" class="govuk-link govuk-!-font-size-19">View this return</a>
+    <a href="{{ viewThisReturnLink }}" class="govuk-link govuk-!-font-size-19" id="viewThisReturn">View this return</a>
     <p class="govuk-!-margin-top-4">or</p>
 
     <form method="post">

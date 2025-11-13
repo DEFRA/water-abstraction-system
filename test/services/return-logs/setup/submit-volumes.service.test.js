@@ -159,7 +159,8 @@ describe('Return Logs Setup - Submit Volumes service', () => {
               endDate: '2023-04-30T00:00:00.000Z',
               error: 'Volume must be a number or blank',
               label: 'April 2023',
-              quantity: 'INVALID'
+              quantity: 'INVALID',
+              viewId: 'April2023'
             }
           ],
           pageTitle: 'Water abstracted April 2023',
