@@ -5,7 +5,6 @@
  * @module SubmitSearchService
  */
 
-const FindSingleSearchMatchService = require('./find-single-search-match.service.js')
 const SearchPresenter = require('../../presenters/search/search.presenter.js')
 const SearchValidator = require('../../validators/search/search.validator.js')
 const { formatValidationResult } = require('../../presenters/base.presenter.js')
@@ -31,18 +30,18 @@ async function go(payload, yar) {
     return {
       activeNavBar: 'search',
       error: formatValidationResult(validationResult),
-      ...SearchPresenter.go(payload.query)
+      ...SearchPresenter.go(payload.query, payload.resultType)
     }
   }
 
   yar.set('searchQuery', validationResult.value.query)
-
-  let redirect = await FindSingleSearchMatchService.go(validationResult.value.query)
-  if (!redirect) {
-    redirect = '/system/search?page=1'
+  if (validationResult.value.clearFilter === 'reset') {
+    yar.set('searchResultType', 'all')
+  } else {
+    yar.set('searchResultType', validationResult.value.resultType)
   }
 
-  return { redirect }
+  return { redirect: '/system/search?page=1' }
 }
 
 module.exports = {
