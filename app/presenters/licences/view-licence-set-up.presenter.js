@@ -39,34 +39,33 @@ const AGREEMENTS = {
  */
 function go(chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
   const enableRequirementsForReturns = FeatureFlagsConfig.enableRequirementsForReturns
-  const enableTwoPartSupplementary = FeatureFlagsConfig.enableTwoPartTariffSupplementary
 
   return {
     links: {
       chargeInformation: _chargeInformationLinks(auth, commonData),
       agreements: _agreementLinks(auth, commonData),
       returnVersions: _returnVersionsLinks(commonData, enableRequirementsForReturns, auth),
-      recalculateBills: _recalculateBills(agreements, auth, commonData, enableTwoPartSupplementary)
+      recalculateBills: _recalculateBills(agreements, auth, commonData)
     },
-    agreements: _agreements(commonData, agreements, auth, enableTwoPartSupplementary),
+    agreements: _agreements(commonData, agreements, auth),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
     returnVersions: _returnVersions(returnVersions)
   }
 }
 
-function _agreements(commonData, agreements, auth, enableTwoPartSupplementary) {
+function _agreements(commonData, agreements, auth) {
   return agreements.map((agreement, index) => {
     return {
       startDate: formatLongDate(agreement.startDate),
       endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '',
       description: AGREEMENTS[_financialAgreementCode(agreement)],
       signedOn: agreement.signedOn ? formatLongDate(agreement.signedOn) : '',
-      action: _agreementActionLinks(commonData, agreement, auth, enableTwoPartSupplementary, index)
+      action: _agreementActionLinks(commonData, agreement, auth, index)
     }
   })
 }
 
-function _agreementActionLinks(commonData, agreement, auth, enableTwoPartSupplementary, index) {
+function _agreementActionLinks(commonData, agreement, auth, index) {
   if (!auth.credentials.scope.includes(ROLES.manageAgreements)) {
     return []
   }
@@ -92,25 +91,6 @@ function _agreementActionLinks(commonData, agreement, auth, enableTwoPartSupplem
       text: 'End',
       link: `/licences/${commonData.licenceId}/agreements/${agreement.id}/end`
     })
-  }
-
-  // Feature flag for the new two-part tariff supplementary
-  if (!enableTwoPartSupplementary) {
-    const is2PTAgreement = _financialAgreementCode(agreement) === 'S127'
-    const isNotMarkedForSupplementaryBilling = commonData.includeInPresrocBilling === 'no'
-
-    if (
-      hasNotEnded &&
-      is2PTAgreement &&
-      isNotMarkedForSupplementaryBilling &&
-      auth.credentials.scope.includes(ROLES.billing)
-    ) {
-      actionLinks.push({
-        dataTest: `recalculate-agreement-${index}`,
-        text: 'Recalculate bills',
-        link: `/licences/${commonData.licenceId}/mark-for-supplementary-billing`
-      })
-    }
   }
 
   return actionLinks
@@ -209,11 +189,10 @@ function _reason(returnVersion) {
   return reason ?? ''
 }
 
-function _recalculateBills(agreements, auth, commonData, enableTwoPartSupplementary) {
+function _recalculateBills(agreements, auth, commonData) {
   if (
     auth.credentials.scope.includes(ROLES.billing) &&
-    _hasTwoPartTariffAgreement(agreements) &&
-    enableTwoPartSupplementary
+    _hasTwoPartTariffAgreement(agreements)
   ) {
     return { markForSupplementaryBilling: `/system/licences/${commonData.licenceId}/mark-for-supplementary-billing` }
   }

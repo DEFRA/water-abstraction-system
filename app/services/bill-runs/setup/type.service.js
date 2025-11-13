@@ -27,7 +27,6 @@ async function go(sessionId) {
 
   return {
     activeNavBar: 'bill-runs',
-    enableTwoPartTariffSupplementary: FeatureFlagsConfig.enableTwoPartTariffSupplementary,
     ...pageData
   }
 }
