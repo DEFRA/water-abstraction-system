@@ -29,7 +29,8 @@ describe('Return Logs Setup - Volumes presenter', () => {
           {
             endDate: '2023-05-31T00:00:00.000Z',
             label: 'May 2023',
-            quantity: undefined
+            quantity: undefined,
+            viewId: 'May2023'
           }
         ],
         pageTitle: 'Water abstracted May 2023',
@@ -52,7 +53,8 @@ describe('Return Logs Setup - Volumes presenter', () => {
           {
             endDate: '2023-04-30T00:00:00.000Z',
             label: 'April 2023',
-            quantity: '100'
+            quantity: '100',
+            viewId: 'April2023'
           }
         ])
       })
@@ -104,9 +106,10 @@ describe('Return Logs Setup - Volumes presenter', () => {
           expect(result.inputLines).to.equal([
             {
               endDate: '2023-04-30T00:00:00.000Z',
+              error: 'There is an error on this line',
               label: 'April 2023',
               quantity: '100',
-              error: 'There is an error on this line'
+              viewId: 'April2023'
             }
           ])
         })
