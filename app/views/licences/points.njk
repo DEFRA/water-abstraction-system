@@ -5,6 +5,8 @@
 {% block pageContent %}
   {{ pageHeadingHtml }}
 
+  <p> {{ showingPoints }} </p>
+
   {% for licencePoint in licencePoints %}
     {# Set an easier to use index. #}
     {% set rowIndex = loop.index0 %}
