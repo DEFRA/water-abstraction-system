@@ -54,7 +54,7 @@ describe('Licences - Purposes presenter', () => {
             purposeDescription: 'Spray Irrigation - Storage'
           }
         ],
-        pageTitle: 'Licence purpose details',
+        pageTitle: 'Purposes, periods and amounts',
         pageTitleCaption: `Licence ${licenceRef}`,
         showingPurposes: 'Showing 1 purposes'
       })
