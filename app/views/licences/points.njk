@@ -3,6 +3,8 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block pageContent %}
+  <p> {{ showingPoints }} </p>
+
   {% for licencePoint in licencePoints %}
     {# Set an easier to use index. #}
     {% set rowIndex = loop.index0 %}
