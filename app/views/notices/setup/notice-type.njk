@@ -9,13 +9,6 @@
       {{ govukRadios({
         name: "noticeType",
         errorMessage: error.noticeType,
-        fieldset: {
-          legend: {
-            text: pageTitle,
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--l"
-          }
-        },
         items: options
       }) }}
 
