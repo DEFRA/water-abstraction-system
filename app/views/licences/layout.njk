@@ -1,5 +1,7 @@
 {% extends 'layout.njk' %}
 
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
 
 {% if notification %}
@@ -70,24 +72,8 @@
     </ul>
 
     <div class="govuk-tabs__panel" id="{{ activeTab }}">
-      {% if activeTab === 'summary' %}
-        {% include "licences/tabs/summary.njk" %}
-      {% endif %}
-      {% if activeTab === 'contact-details' %}
-        {% include "licences/tabs/contact-details.njk" %}
-      {% endif %}
-      {% if activeTab === 'returns' %}
-        {% include "licences/tabs/returns.njk" %}
-      {% endif %}
-      {% if activeTab === 'communications' %}
-        {% include "licences/tabs/communications.njk" %}
-      {% endif %}
-      {% if activeTab === 'bills' %}
-        {% include "licences/tabs/bills.njk" %}
-      {% endif %}
-      {% if activeTab === 'set-up' %}
-        {% include "licences/tabs/set-up.njk" %}
-      {% endif %}
+      {% block subPageContent %}
+      {% endblock %}
     </div>
   </div>
 {% endblock %}
