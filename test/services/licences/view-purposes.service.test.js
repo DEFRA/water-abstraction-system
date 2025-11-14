@@ -58,7 +58,8 @@ describe('Licences - View Purposes service', () => {
           }
         ],
         pageTitle: 'Licence purpose details',
-        pageTitleCaption: `Licence ${licenceRef}`
+        pageTitleCaption: `Licence ${licenceRef}`,
+        showingPurposes: 'Showing 1 purposes'
       })
     })
   })
