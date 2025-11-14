@@ -5,7 +5,7 @@
  * @module FetchFailedReturnsInvitationsService
  */
 
-const NotificationModel = require('../../models/notification.model.js')
+const NotificationModel = require('../../../models/notification.model.js')
 
 /**
  * Fetches the notifications which notify failed to send.

@@ -6,12 +6,15 @@
  */
 
 const CheckNotificationStatusService = require('../../notifications/check-notification-status.service.js')
+const CreateAlternateNoticeService = require('./create-alternate-notice.service.js')
 const NotificationModel = require('../../../../app/models/notification.model.js')
 const SendEmailService = require('./batch/send-email.service.js')
 const SendLetterService = require('./batch/send-letter.service.js')
 const SendPaperReturnService = require('./batch/send-paper-return.service.js')
 const UpdateEventService = require('../../jobs/notification-status/update-event.service.js')
+
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds, pause } = require('../../../lib/general.lib.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 const notifyConfig = require('../../../../config/notify.config.js')
 
@@ -25,7 +28,7 @@ async function go(notice, notifications) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const { id: noticeId, referenceCode } = notice
+    const { id: noticeId, referenceCode, subtype } = notice
 
     const sentNotifications = await _sendNotifications(notifications, referenceCode)
 
@@ -36,6 +39,15 @@ async function go(notice, notifications) {
     await _checkNotifications(sentNotifications)
 
     await UpdateEventService.go([noticeId])
+
+    if (subtype === NoticeType.INVITATIONS) {
+      const { notifications: lettersToBeSent, referenceCode: lettersReferenceCode } =
+        await CreateAlternateNoticeService.go(notice)
+
+      if (lettersToBeSent.length > 0) {
+        await _sendNotifications(lettersToBeSent, lettersReferenceCode)
+      }
+    }
 
     calculateAndLogTimeTaken(startTime, 'Send notice complete', { count: notifications.length, noticeId })
   } catch (error) {

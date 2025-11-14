@@ -8,11 +8,11 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const EventHelper = require('../../support/helpers/event.helper.js')
-const NotificationHelper = require('../../support/helpers/notification.helper.js')
+const EventHelper = require('../../../support/helpers/event.helper.js')
+const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
-const FetchFailedReturnsInvitationsService = require('../../../app/services/notices/fetch-failed-returns-invitations.service.js')
+const FetchFailedReturnsInvitationsService = require('../../../../app/services/notices/setup/fetch-failed-returns-invitations.service.js')
 
 describe('Notices - Fetch Failed Returns Invitations service', () => {
   let event

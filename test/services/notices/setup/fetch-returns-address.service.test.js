@@ -9,10 +9,10 @@ const { describe, it, afterEach, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceDocumentHeaderSeeder = require('../../support/seeders/licence-document-header.seeder.js')
+const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
 
 // Thing under test
-const FetchReturnsAddressService = require('../../../app/services/notices/fetch-returns-addresses.service.js')
+const FetchReturnsAddressService = require('../../../../app/services/notices/setup/fetch-returns-addresses.service.js')
 
 describe('Notices - Fetch returns address service', () => {
   let seedData

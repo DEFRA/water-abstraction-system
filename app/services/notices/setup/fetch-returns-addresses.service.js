@@ -5,9 +5,7 @@
  * @module FetchReturnsAddressesService
  */
 
-const { db } = require('../../../db/db.js')
-
-const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+const { db } = require('../../../../db/db.js')
 
 /**
  * Fetches the addresses to send a paper return invitations to.

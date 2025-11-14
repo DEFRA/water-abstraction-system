@@ -35,6 +35,11 @@ const MESSAGE_REFS = {
       'Single use': 'returns_invitation_licence_holder_letter'
     }
   },
+  failedInvitations: {
+    letter: {
+      'Licence holder': 'returns_invitation_licence_holder_letter'
+    }
+  },
   reminders: {
     email: {
       'Primary user': 'returns_reminder_primary_user_email',
