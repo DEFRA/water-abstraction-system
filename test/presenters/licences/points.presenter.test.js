@@ -57,7 +57,7 @@ describe('Licences - Points presenter', () => {
             wellReference: '81312'
           }
         ],
-        pageTitle: 'Licence abstraction points',
+        pageTitle: 'Points',
         pageTitleCaption: `Licence ${licenceRef}`,
         showingPoints: 'Showing 1 abstraction points'
       })

@@ -305,7 +305,7 @@ describe('Licences controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Licence abstraction points')
+          expect(response.payload).to.contain('Points')
         })
       })
     })
@@ -333,7 +333,7 @@ describe('Licences controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Licence purpose details')
+          expect(response.payload).to.contain('Purposes, periods and amounts')
         })
       })
     })
@@ -756,7 +756,7 @@ function _viewLicencePoints() {
       }
     ],
     licenceRef: '03/28/07/0006',
-    pageTitle: 'Licence abstraction points'
+    pageTitle: 'Points'
   }
 }
 
@@ -776,7 +776,7 @@ function _viewLicencePurposes() {
         purposeDescription: 'Transfer Between Sources (Pre Water Act 2003)'
       }
     ],
-    pageTitle: 'Licence purpose details'
+    pageTitle: 'Purposes, periods and amounts'
   }
 }
 
