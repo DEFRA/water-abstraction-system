@@ -12,8 +12,6 @@
 {% from "macros/notice-status-tag.njk" import statusTag %}
 
 {% block pageContent %}
-  {{ pageHeadingHtml }}
-
   <p>{{ statusTag(status, false) }}</p>
 
   {{ govukSummaryList({
