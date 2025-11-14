@@ -208,7 +208,7 @@ function _licenceVersions(licenceVersions) {
       endDate: licenceVersion.endDate ? formatLongDate(licenceVersion.endDate) : '',
       reason: licenceVersion.$reason() ?? '',
       startDate: formatLongDate(licenceVersion.startDate),
-      changeType: licenceVersion.administrative ? 'administrative' : 'substantive'
+      changeType: licenceVersion.administrative ? 'no licence issued' : 'licence issued'
     }
   })
 }

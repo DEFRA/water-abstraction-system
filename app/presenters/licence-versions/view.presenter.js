@@ -21,7 +21,7 @@ function go(licenceVersion) {
 
   return {
     backLink: { href: `/system/licences/${licence.id}/set-up`, text: 'Go back to summary' },
-    changeType: administrative ? 'administrative' : 'substantive',
+    changeType: administrative ? 'no licence issued' : 'licence issued',
     createdBy: licenceVersion.$createdBy() ?? '',
     createdDate: formatLongDate(licenceVersion.$createdAt()),
     endDate: endDate ? formatLongDate(endDate) : null,
