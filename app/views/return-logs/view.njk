@@ -10,8 +10,6 @@
 {% from "macros/return-status-tag.njk" import statusTag %}
 
 {% block pageContent %}
-  {{ pageHeadingHtml }}
-
   <div class="govuk-grid-row govuk-!-margin-bottom-0">
     <div class="govuk-grid-column-full">
       <p>{{ statusTag(status, false) }}</p>

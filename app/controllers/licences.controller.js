@@ -10,6 +10,7 @@ const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
 const InitiateSessionService = require('../services/return-versions/setup/initiate-session.service.js')
 const LicenceSupplementaryProcessBillingFlagService = require('../services/licences/supplementary/process-billing-flag.service.js')
 const SubmitMarkForSupplementaryBillingService = require('../services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
+const ViewContactDetailsService = require('../services/licences/view-contact-details.service.js')
 const ViewConditionsService = require('../services/licences/view-conditions.service.js')
 const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../services/licences/view-licence-communications.service.js')
@@ -111,9 +112,9 @@ async function viewLicenceConditions(request, h) {
 async function viewLicenceContactDetails(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewLicenceContactDetailsService.go(id)
+  const pageData = await ViewContactDetailsService.go(id)
 
-  return h.view('licences/licence-contact-details.njk', pageData)
+  return h.view('licences/contact-details.njk', pageData)
 }
 
 async function viewLicenceContacts(request, h) {

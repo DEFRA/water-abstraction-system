@@ -62,7 +62,8 @@ describe('Licences - View Points service', () => {
           }
         ],
         pageTitle: 'Licence abstraction points',
-        pageTitleCaption: `Licence ${licenceRef}`
+        pageTitleCaption: `Licence ${licenceRef}`,
+        showingPoints: 'Showing 1 abstraction points'
       })
     })
   })

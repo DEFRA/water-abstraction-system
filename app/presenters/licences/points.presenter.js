@@ -29,7 +29,8 @@ function go(data) {
     },
     licencePoints,
     pageTitle: 'Licence abstraction points',
-    pageTitleCaption: `Licence ${licenceRef}`
+    pageTitleCaption: `Licence ${licenceRef}`,
+    showingPoints: `Showing ${licencePoints.length} abstraction points`
   }
 }
 
