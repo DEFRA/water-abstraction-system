@@ -17,20 +17,20 @@ const { postRequestOptions } = require('../support/general.js')
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/return-versions/setup/initiate-session.service.js')
 const LicenceSupplementaryProcessBillingFlagService = require('../../app/services/licences/supplementary/process-billing-flag.service.js')
-const MarkedForSupplementaryBillingService = require('../../app/services/licences/supplementary/marked-for-supplementary-billing.service.js')
-const MarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/mark-for-supplementary-billing.service.js')
 const SubmitMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
-const ViewLicenceConditionsService = require('../../app/services/licences/view-licence-conditions.service.js')
 const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
+const ViewLicenceConditionsService = require('../../app/services/licences/view-licence-conditions.service.js')
+const ViewContactDetailsService = require('../../app/services/licences/view-contact-details.service.js')
 const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
-const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
 const ViewLicenceHistoryService = require('../../app/services/licences/view-licence-history.service.js')
-const ViewLicencePointsService = require('../../app/services/licences/view-licence-points.service.js')
-const ViewLicencePurposesService = require('../../app/services/licences/view-licence-purposes.service.js')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
 const ViewLicenceSetUpService = require('../../app/services/licences/view-licence-set-up.service.js')
 const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service.js')
+const ViewMarkedForSupplementaryBillingService = require('../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
+const ViewMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
+const ViewPurposesService = require('../../app/services/licences/view-purposes.service.js')
+const ViewPointsService = require('../../app/services/licences/view-points.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -212,7 +212,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has contacts', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves(_viewLicenceContactDetails())
+          Sinon.stub(ViewContactDetailsService, 'go').resolves(_viewLicenceContactDetails())
         })
 
         it('returns the page successfully', async () => {
@@ -298,7 +298,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicencePointsService, 'go').resolves(_viewLicencePoints())
+          Sinon.stub(ViewPointsService, 'go').resolves(_viewLicencePoints())
         })
 
         it('returns the page successfully', async () => {
@@ -326,7 +326,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicencePurposesService, 'go').resolves(_viewLicencePurposes())
+          Sinon.stub(ViewPurposesService, 'go').resolves(_viewLicencePurposes())
         })
 
         it('returns the page successfully', async () => {
@@ -516,7 +516,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(MarkForSupplementaryBillingService, 'go').resolves(_markForSupplementaryBilling())
+          Sinon.stub(ViewMarkForSupplementaryBillingService, 'go').resolves(_markForSupplementaryBilling())
         })
 
         it('returns the page successfully', async () => {
@@ -553,7 +553,17 @@ describe('Licences controller', () => {
           Sinon.stub(SubmitMarkForSupplementaryBillingService, 'go').resolves({
             activeNavBar: 'search',
             pageTitle: 'Mark for the supplementary bill run',
-            error: { text: 'Select at least one financial year' },
+            error: {
+              errorList: [
+                {
+                  href: '#supplementaryYears',
+                  text: 'Select at least one financial year'
+                }
+              ],
+              supplementaryYears: {
+                text: 'Select at least one financial year'
+              }
+            },
             licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
             licenceRef: '01/Test',
             financialYears: [
@@ -591,7 +601,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(MarkedForSupplementaryBillingService, 'go').resolves({
+          Sinon.stub(ViewMarkedForSupplementaryBillingService, 'go').resolves({
             licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
             licenceRef: '01/test',
             pageTitle: "You've marked this licence for the next supplementary bill run"

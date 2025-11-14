@@ -14,7 +14,7 @@ const ReturnSubmissionLineModel = require('../../../../app/models/return-submiss
 // Thing under test
 const CreateReturnLinesService = require('../../../../app/services/return-logs/setup/create-return-lines.service.js')
 
-describe('Return Logs Setup - Create New Return Lines service', () => {
+describe('Return Logs - Setup - Create New Return Lines service', () => {
   const timestamp = timestampForPostgres()
 
   let returnSubmissionId

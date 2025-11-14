@@ -5,8 +5,6 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 
 {% block pageContent %}
-  {{ pageHeadingHtml }}
-
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
@@ -23,7 +21,7 @@
             text: line.label
           },
           classes: "govuk-input--width-10",
-          id: line.endDate,
+          id: line.viewId,
           name: line.endDate,
           value: line.reading,
           inputmode: 'numeric',

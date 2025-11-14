@@ -200,3 +200,56 @@ $govuk-global-styles: true;
   font-size: 64px !important;
   font-size: 4rem !important;
 }
+
+// ========== ========== ========== ========== ==========
+// Search results (on the /search page)
+// ========== ========== ========== ========== ==========
+.searchresult-column {
+  @extend .govuk-body;
+  @extend .govuk-grid-column-one-third;
+  @extend .govuk-\!-margin-bottom-2;
+  @extend .govuk-\!-margin-top-2;
+}
+
+.searchresult-detail {
+  @extend .govuk-\!-display-inline-block;
+  @extend .govuk-\!-font-size-16;
+  @extend .govuk-\!-margin-left-0;
+}
+
+.searchresult-detail-l {
+  @extend .govuk-\!-display-inline-block;
+  @extend .govuk-\!-margin-left-0;
+}
+
+.searchresult-link {
+  @extend .govuk-link;
+  @extend .govuk-link--no-underline;
+  @extend .govuk-link--no-visited-state;
+}
+
+.searchresult-list {
+  @extend .govuk-body;
+  @extend .govuk-\!-margin-0;
+}
+
+.searchresult-row {
+  @extend .govuk-grid-row;
+  @extend .govuk-\!-margin-top-0;
+}
+
+.searchresult-separator {
+  @extend .govuk-section-break;
+  @extend .govuk-section-break--visible;
+}
+
+.searchresult-term {
+  @extend .govuk-\!-display-inline-block;
+  @extend .govuk-\!-font-size-16;
+  @extend .govuk-\!-margin-right-3;
+}
+
+.searchresult-term-l {
+  @extend .govuk-\!-display-inline-block;
+  @extend .govuk-\!-margin-right-3;
+}
