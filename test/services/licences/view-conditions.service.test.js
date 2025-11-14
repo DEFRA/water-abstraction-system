@@ -15,18 +15,26 @@ const LicencesFixture = require('../../fixtures/licences.fixture.js')
 const FetchLicenceConditionsService = require('../../../app/services/licences/fetch-licence-conditions.service.js')
 
 // Thing under test
-const ViewLicenceConditionsService = require('../../../app/services/licences/view-licence-conditions.service.js')
+const ViewConditionsService = require('../../../app/services/licences/view-conditions.service.js')
 
-describe('View Licence Conditions service', () => {
+describe('Licences - View Conditions service', () => {
+  let licencesFixture
+
   beforeEach(() => {
-    Sinon.stub(FetchLicenceConditionsService, 'go').returns(LicencesFixture.licenceConditions())
+    licencesFixture = LicencesFixture.licenceConditions()
+
+    Sinon.stub(FetchLicenceConditionsService, 'go').returns(licencesFixture)
   })
 
   it('correctly presents the data', async () => {
-    const result = await ViewLicenceConditionsService.go('761bc44f-80d5-49ae-ab46-0a90495417b5')
+    const result = await ViewConditionsService.go('761bc44f-80d5-49ae-ab46-0a90495417b5')
 
     expect(result).to.equal({
       activeNavBar: 'search',
+      backLink: {
+        href: `/system/licences/${licencesFixture.licence.id}/summary`,
+        text: 'Go back to summary'
+      },
       conditionTypes: [
         {
           conditions: [
@@ -54,9 +62,12 @@ describe('View Licence Conditions service', () => {
           displayTitle: 'Political cessation condition'
         }
       ],
-      licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
-      licenceRef: '01/123',
-      pageTitle: 'Licence abstraction conditions'
+      pageTitle: 'Licence abstraction conditions',
+      pageTitleCaption: `Licence ${licencesFixture.licence.licenceRef}`,
+      warning: {
+        iconFallbackText: 'Warning',
+        text: 'We may not be able to show a full list of the conditions, because we do not hold all of the licence information on our system yet. You should refer to the paper copy of the licence to view all conditions.'
+      }
     })
   })
 })

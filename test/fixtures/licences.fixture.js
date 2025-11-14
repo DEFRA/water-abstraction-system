@@ -2,6 +2,8 @@
 
 const LicenceModel = require('../../app/models/licence.model.js')
 const PointModel = require('../../app/models/point.model.js')
+const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
 
 /**
  * Represents a complete response from `FetchLicenceConditionsService`
@@ -32,14 +34,14 @@ function licenceConditions() {
   })
 
   const licence = LicenceModel.fromJson({
-    id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
-    licenceRef: '01/123'
+    id: generateUUID(),
+    licenceRef: generateLicenceRef()
   })
 
   return {
     conditions: [
       {
-        id: 'c8350eeb-fedd-48ea-bdc2-4f8a01d0f470',
+        id: generateUUID(),
         displayTitle: 'Political cessation condition',
         description: 'Cessation Condition',
         subcodeDescription: 'Political - Hosepipe Ban',
@@ -47,19 +49,19 @@ function licenceConditions() {
         param2Label: 'End date',
         licenceVersionPurposeConditions: [
           {
-            id: '8a853274-923d-431c-aec4-9208bcd86fd8',
+            id: generateUUID(),
             param1: '01/05',
             param2: '30/09',
             notes: 'DROUGHT CONDITION',
             licenceVersionPurpose: {
-              id: 'fd5d9886-ced9-4f19-8995-3194dee9e2a8',
+              id: generateUUID(),
               purpose: {
-                id: 'd6e83943-a034-4291-8704-734e5696e6a8',
+                id: generateUUID(),
                 description: 'Animal Watering & General Use In Non Farming Situations'
               },
               licenceVersionPurposePoints: [
                 {
-                  id: '2b35c123-a07e-4b11-a4bf-27099a9ac192',
+                  id: generateUUID(),
                   point
                 }
               ]

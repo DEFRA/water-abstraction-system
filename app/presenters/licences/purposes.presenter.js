@@ -27,7 +27,7 @@ function go(licence) {
       text: 'Go back to summary'
     },
     licencePurposes,
-    pageTitle: 'Licence purpose details',
+    pageTitle: 'Purposes, periods and amounts',
     pageTitleCaption: `Licence ${licenceRef}`,
     showingPurposes: `Showing ${licencePurposes.length} purposes`
   }
