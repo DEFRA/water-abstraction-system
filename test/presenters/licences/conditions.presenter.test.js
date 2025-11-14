@@ -12,20 +12,24 @@ const LicencesFixture = require('../../fixtures/licences.fixture.js')
 const PointModel = require('../../../app/models/point.model.js')
 
 // Thing under test
-const ViewLicenceConditionsPresenter = require('../../../app/presenters/licences/view-licence-conditions.presenter.js')
+const ConditionsPresenter = require('../../../app/presenters/licences/conditions.presenter.js')
 
-describe('View Licence Conditions presenter', () => {
-  let data
+describe('Licences - Conditions presenter', () => {
+  let licencesFixture
 
   beforeEach(() => {
-    data = LicencesFixture.licenceConditions()
+    licencesFixture = LicencesFixture.licenceConditions()
   })
 
   describe('when provided with a populated licence with licence conditions', () => {
     it('returns the expected licence conditions', () => {
-      const result = ViewLicenceConditionsPresenter.go(data)
+      const result = ConditionsPresenter.go(licencesFixture)
 
       expect(result).to.equal({
+        backLink: {
+          href: `/system/licences/${licencesFixture.licence.id}/summary`,
+          text: 'Go back to summary'
+        },
         conditionTypes: [
           {
             conditions: [
@@ -53,9 +57,12 @@ describe('View Licence Conditions presenter', () => {
             displayTitle: 'Political cessation condition'
           }
         ],
-        licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
-        licenceRef: '01/123',
-        pageTitle: 'Licence abstraction conditions'
+        pageTitle: 'Licence abstraction conditions',
+        pageTitleCaption: `Licence ${licencesFixture.licence.licenceRef}`,
+        warning: {
+          iconFallbackText: 'Warning',
+          text: 'We may not be able to show a full list of the conditions, because we do not hold all of the licence information on our system yet. You should refer to the paper copy of the licence to view all conditions.'
+        }
       })
     })
   })
@@ -65,7 +72,7 @@ describe('View Licence Conditions presenter', () => {
       describe('the "abstractionPoints" property', () => {
         describe('the "descriptions" property', () => {
           it('returns an array of the abstraction point descriptions', () => {
-            const result = ViewLicenceConditionsPresenter.go(data)
+            const result = ConditionsPresenter.go(licencesFixture)
 
             expect(result.conditionTypes[0].conditions[0].abstractionPoints.descriptions).to.equal([
               'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (RIVER OUSE AT BLETSOE)'
@@ -76,7 +83,7 @@ describe('View Licence Conditions presenter', () => {
         describe('the "label" property', () => {
           describe('when the licence has one abstraction points descriptions', () => {
             it('returns the string "Abstraction point"', () => {
-              const result = ViewLicenceConditionsPresenter.go(data)
+              const result = ConditionsPresenter.go(licencesFixture)
 
               expect(result.conditionTypes[0].conditions[0].abstractionPoints.label).to.equal('Abstraction point')
             })
@@ -84,7 +91,7 @@ describe('View Licence Conditions presenter', () => {
 
           describe('when the licence has multiple abstraction points descriptions', () => {
             beforeEach(() => {
-              data.conditions[0].licenceVersionPurposeConditions[0].licenceVersionPurpose.licenceVersionPurposePoints.push(
+              licencesFixture.conditions[0].licenceVersionPurposeConditions[0].licenceVersionPurpose.licenceVersionPurposePoints.push(
                 {
                   id: '0316061a-bf21-45f5-9d6b-3488c1d15ba4',
                   point: PointModel.fromJson({
@@ -113,7 +120,7 @@ describe('View Licence Conditions presenter', () => {
             })
 
             it('returns the string "Abstraction points"', () => {
-              const result = ViewLicenceConditionsPresenter.go(data)
+              const result = ConditionsPresenter.go(licencesFixture)
 
               expect(result.conditionTypes[0].conditions[0].abstractionPoints.label).to.equal('Abstraction points')
             })
@@ -123,7 +130,7 @@ describe('View Licence Conditions presenter', () => {
 
       describe('the "conditionType" property', () => {
         it('returns the licence version purpose condition type description value', () => {
-          const result = ViewLicenceConditionsPresenter.go(data)
+          const result = ConditionsPresenter.go(licencesFixture)
 
           expect(result.conditionTypes[0].conditions[0].conditionType).to.equal('Cessation Condition')
         })
@@ -131,7 +138,7 @@ describe('View Licence Conditions presenter', () => {
 
       describe('the "otherInformation" property', () => {
         it('returns the licence version purpose condition note value', () => {
-          const result = ViewLicenceConditionsPresenter.go(data)
+          const result = ConditionsPresenter.go(licencesFixture)
 
           expect(result.conditionTypes[0].conditions[0].otherInformation).to.equal('DROUGHT CONDITION')
         })
@@ -140,12 +147,12 @@ describe('View Licence Conditions presenter', () => {
       describe('the "param1" property', () => {
         describe('when the licence has null values for the param1 and param1Label values', () => {
           beforeEach(() => {
-            data.conditions[0].param1Label = null
-            data.conditions[0].licenceVersionPurposeConditions[0].param1 = null
+            licencesFixture.conditions[0].param1Label = null
+            licencesFixture.conditions[0].licenceVersionPurposeConditions[0].param1 = null
           })
 
           it('returns "param1" property as null', () => {
-            const result = ViewLicenceConditionsPresenter.go(data)
+            const result = ConditionsPresenter.go(licencesFixture)
 
             expect(result.conditionTypes[0].conditions[0].param1).to.be.null()
           })
@@ -153,11 +160,11 @@ describe('View Licence Conditions presenter', () => {
 
         describe('when the licence has a null param1Label value but a populated param1 value', () => {
           beforeEach(() => {
-            data.conditions[0].param1Label = null
+            licencesFixture.conditions[0].param1Label = null
           })
 
           it('returns the label as "Note 1" and value as the param1 value', () => {
-            const result = ViewLicenceConditionsPresenter.go(data)
+            const result = ConditionsPresenter.go(licencesFixture)
 
             expect(result.conditionTypes[0].conditions[0].param1.label).to.equal('Note 1')
             expect(result.conditionTypes[0].conditions[0].param1.value).to.equal('01/05')
@@ -166,7 +173,7 @@ describe('View Licence Conditions presenter', () => {
 
         describe('when the licence has both the param1Label and param1 values populated', () => {
           it('returns the param1Label value as the label and param1 as the value', () => {
-            const result = ViewLicenceConditionsPresenter.go(data)
+            const result = ConditionsPresenter.go(licencesFixture)
 
             expect(result.conditionTypes[0].conditions[0].param1.label).to.equal('Start date')
             expect(result.conditionTypes[0].conditions[0].param1.value).to.equal('01/05')
@@ -177,12 +184,12 @@ describe('View Licence Conditions presenter', () => {
       describe('the "param2" property', () => {
         describe('when the licence has null values for the param2 and param2Label values', () => {
           beforeEach(() => {
-            data.conditions[0].param2Label = null
-            data.conditions[0].licenceVersionPurposeConditions[0].param2 = null
+            licencesFixture.conditions[0].param2Label = null
+            licencesFixture.conditions[0].licenceVersionPurposeConditions[0].param2 = null
           })
 
           it('returns "param2" property as null', () => {
-            const result = ViewLicenceConditionsPresenter.go(data)
+            const result = ConditionsPresenter.go(licencesFixture)
 
             expect(result.conditionTypes[0].conditions[0].param2).to.be.null()
           })
@@ -190,11 +197,11 @@ describe('View Licence Conditions presenter', () => {
 
         describe('when the licence has a null param2Label value but a populated param2 value', () => {
           beforeEach(() => {
-            data.conditions[0].param2Label = null
+            licencesFixture.conditions[0].param2Label = null
           })
 
           it('returns the label as "Note 2" and value as the param2 value', () => {
-            const result = ViewLicenceConditionsPresenter.go(data)
+            const result = ConditionsPresenter.go(licencesFixture)
 
             expect(result.conditionTypes[0].conditions[0].param2.label).to.equal('Note 2')
             expect(result.conditionTypes[0].conditions[0].param2.value).to.equal('30/09')
@@ -203,7 +210,7 @@ describe('View Licence Conditions presenter', () => {
 
         describe('when the licence has both the param2Label and param2 values populated', () => {
           it('returns the param2Label value as the label and param2 as the value', () => {
-            const result = ViewLicenceConditionsPresenter.go(data)
+            const result = ConditionsPresenter.go(licencesFixture)
 
             expect(result.conditionTypes[0].conditions[0].param2.label).to.equal('End date')
             expect(result.conditionTypes[0].conditions[0].param2.value).to.equal('30/09')
@@ -213,7 +220,7 @@ describe('View Licence Conditions presenter', () => {
 
       describe('the "purpose" property', () => {
         it('returns the licences purpose description value', () => {
-          const result = ViewLicenceConditionsPresenter.go(data)
+          const result = ConditionsPresenter.go(licencesFixture)
 
           expect(result.conditionTypes[0].conditions[0].purpose).to.equal(
             'Animal Watering & General Use In Non Farming Situations'
@@ -223,7 +230,7 @@ describe('View Licence Conditions presenter', () => {
 
       describe('the "subcodeDescription" property', () => {
         it('returns the licences subcode description value', () => {
-          const result = ViewLicenceConditionsPresenter.go(data)
+          const result = ConditionsPresenter.go(licencesFixture)
 
           expect(result.conditionTypes[0].conditions[0].subcodeDescription).to.equal('Political - Hosepipe Ban')
         })
@@ -232,7 +239,7 @@ describe('View Licence Conditions presenter', () => {
 
     describe('the "displayTitle" property', () => {
       it('returns the licenceVersionPurposeConditionType "displayTitle" value', () => {
-        const result = ViewLicenceConditionsPresenter.go(data)
+        const result = ConditionsPresenter.go(licencesFixture)
 
         expect(result.conditionTypes[0].displayTitle).to.equal('Political cessation condition')
       })
