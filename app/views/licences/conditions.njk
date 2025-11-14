@@ -7,6 +7,8 @@
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% block pageContent %}
+  <p> {{ showingConditions }} </p>
+
   <div class="govuk-grid-row ">
     <div class="govuk-grid-column-full">
       {% for conditionType in conditionTypes %}
