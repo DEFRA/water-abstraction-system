@@ -6,8 +6,6 @@
 {% from 'macros/licence-monitoring-station-restrictions-table.njk' import licenceMonitoringStationRestrictionsTable %}
 
 {% block pageContent %}
-  {{ pageHeadingHtml }}
-
   {{ licenceMonitoringStationRestrictionsTable(restrictions, restrictionHeading) }}
 
   <form method="post">
