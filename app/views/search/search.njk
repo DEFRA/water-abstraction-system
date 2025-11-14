@@ -39,6 +39,11 @@
         value: "returnLog",
         text: "Return logs",
         checked: resultType === 'returnLog'
+      },
+      {
+        value: "user",
+        text: "Users",
+        checked: resultType === 'user'
       }
     ]
   }) }}
@@ -173,6 +178,27 @@
             <hr class="searchresult-separator">
           {% endfor %}
         {% endif %}
+
+        {% if exactMatches.users %}
+          {% for user in exactMatches.users %}
+            <hr class="searchresult-separator">
+            <div class="searchresult-row">
+              <dl class="searchresult-list">
+                <div class="searchresult-column">
+                  <dt class="searchresult-term-l">User:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/user/{{ user.id }}/status">{{ user.username }}</a></dd><p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Type:</dt><dd class="searchresult-detail">{{ user.type }}</dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Last signed in:</dt><dd class="searchresult-detail">{{ user.lastLogin }}</dd>
+                </div>
+              </dl>
+            </div>
+            <hr class="searchresult-separator">
+          {% endfor %}
+        {% endif %}
+
       {% endif %}
 
       {% if not noPartialResults %}
@@ -229,6 +255,26 @@
                 </div>
                 <div class="searchresult-column">
                   <dt class="searchresult-term">End date:</dt><dd class="searchresult-detail">{{ returnLog.endDate }} {{ returnStatusTag(returnLog.statusText, true) if returnLog.statusText }}</dd>
+                </div>
+              </dl>
+            </div>
+            <hr class="searchresult-separator">
+          {% endfor %}
+        {% endif %}
+
+        {% if partialMatches.users %}
+          {% for user in partialMatches.users %}
+            <hr class="searchresult-separator">
+            <div class="searchresult-row">
+              <dl class="searchresult-list">
+                <div class="searchresult-column">
+                  <dt class="searchresult-term-l">User:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/user/{{ user.id }}/status">{{ user.username }}</a></dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Type:</dt><dd class="searchresult-detail">{{ user.type }}</dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Last signed in:</dt><dd class="searchresult-detail">{{ user.lastLogin }}</dd>
                 </div>
               </dl>
             </div>

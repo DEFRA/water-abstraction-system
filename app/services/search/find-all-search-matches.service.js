@@ -8,6 +8,7 @@
 const FetchLicenceSearchResultsService = require('./fetch-licence-search-results.service.js')
 const FetchMonitoringStationSearchResultsService = require('./fetch-monitoring-station-search-results.service.js')
 const FetchReturnLogSearchResultsService = require('./fetch-return-log-search-results.service.js')
+const FetchUserSearchResultsService = require('./fetch-user-search-results.service.js')
 
 const NO_RESULTS = { results: [], total: 0 }
 
@@ -29,11 +30,13 @@ const NO_RESULTS = { results: [], total: 0 }
  */
 async function go(query, resultType, page) {
   const allSearchResults = await _allSearchResults(query, resultType, page)
+  const fullMatches = allSearchResults.slice(0, 4)
+  const partialMatches = allSearchResults.slice(4)
 
   return {
-    exactSearchResults: _exactSearchResults(allSearchResults),
-    largestResultCount: _largestResultCount(allSearchResults),
-    similarSearchResults: _similarSearchResults(allSearchResults)
+    exactSearchResults: _searchResults(fullMatches),
+    largestResultCount: _largestResultCount(partialMatches),
+    similarSearchResults: _searchResults(partialMatches)
   }
 }
 
@@ -42,24 +45,12 @@ async function _allSearchResults(query, resultType, page) {
     _fullLicenceSearchResults(query, resultType, page),
     _fullMonitoringStationSearchResults(query, resultType, page),
     _fullReturnLogSearchResults(query, resultType, page),
+    _fullUserSearchResults(query, resultType, page),
     _partialLicenceSearchResults(query, resultType, page),
     _partialMonitoringStationSearchResults(query, resultType, page),
-    _partialReturnLogSearchResults(query, resultType, page)
+    _partialReturnLogSearchResults(query, resultType, page),
+    _partialUserSearchResults(query, resultType, page)
   ])
-}
-
-function _exactSearchResults(allSearchResults) {
-  const [fullLicenceSearchResults, fullMonitoringStationSearchResults, fullReturnLogSearchResults] = allSearchResults
-
-  return {
-    amountFound:
-      fullLicenceSearchResults.results.length +
-      fullMonitoringStationSearchResults.results.length +
-      fullReturnLogSearchResults.results.length,
-    licences: fullLicenceSearchResults,
-    monitoringStations: fullMonitoringStationSearchResults,
-    returnLogs: fullReturnLogSearchResults
-  }
 }
 
 async function _fullLicenceSearchResults(query, resultType, page) {
@@ -94,15 +85,22 @@ async function _fullReturnLogSearchResults(query, resultType, page) {
   return FetchReturnLogSearchResultsService.go(query, page, true)
 }
 
-function _largestResultCount(allSearchResults) {
-  const [, , , partialLicenceSearchResults, partialMonitoringStationSearchResults, partialReturnLogSearchResults] =
-    allSearchResults
+async function _fullUserSearchResults(query, resultType, page) {
+  if (resultType && resultType !== 'user') {
+    return NO_RESULTS
+  }
 
-  return Math.max(
-    partialLicenceSearchResults.total,
-    partialMonitoringStationSearchResults.total,
-    partialReturnLogSearchResults.total
-  )
+  if (!_matchesFullUsername(query)) {
+    return NO_RESULTS
+  }
+
+  return FetchUserSearchResultsService.go(query, page, true)
+}
+
+function _largestResultCount(searchResults) {
+  const [licences, monitoringStations, returnLogs, users] = searchResults
+
+  return Math.max(licences.total, monitoringStations.total, returnLogs.total, users.total)
 }
 
 function _matchesFullLicenceRef(query) {
@@ -131,6 +129,11 @@ function _matchesFullLicenceRef(query) {
 function _matchesFullReturnLogReference(query) {
   // Return log references are just numeric, without leading zeros
   return query.match(/^[1-9]\d*$/)
+}
+
+function _matchesFullUsername(query) {
+  // Usernames will have at least one character before the @ sign and we expect at least five characters after
+  return query.match(/^.+@.{5,}$/)
 }
 
 function _matchesPartialLicenceRef(query) {
@@ -175,18 +178,24 @@ async function _partialReturnLogSearchResults(query, resultType, page) {
   return FetchReturnLogSearchResultsService.go(query, page, false)
 }
 
-function _similarSearchResults(allSearchResults) {
-  const [, , , partialLicenceSearchResults, partialMonitoringStationSearchResults, partialReturnLogSearchResults] =
-    allSearchResults
+async function _partialUserSearchResults(query, resultType, page) {
+  if (resultType && resultType !== 'user') {
+    return NO_RESULTS
+  }
+
+  return FetchUserSearchResultsService.go(query, page, false)
+}
+
+function _searchResults(searchResults) {
+  const [licences, monitoringStations, returnLogs, users] = searchResults
 
   return {
     amountFound:
-      partialLicenceSearchResults.results.length +
-      partialMonitoringStationSearchResults.results.length +
-      partialReturnLogSearchResults.results.length,
-    licences: partialLicenceSearchResults,
-    monitoringStations: partialMonitoringStationSearchResults,
-    returnLogs: partialReturnLogSearchResults
+      licences.results.length + monitoringStations.results.length + returnLogs.results.length + users.results.length,
+    licences,
+    monitoringStations,
+    returnLogs,
+    users
   }
 }
 

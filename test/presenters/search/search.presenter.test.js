@@ -26,7 +26,7 @@ describe('Search - Search presenter', () => {
 
     allSearchMatches = {
       exactSearchResults: {
-        amountFound: 3,
+        amountFound: 4,
         licences: {
           results: [
             {
@@ -63,6 +63,17 @@ describe('Search - Search presenter', () => {
               returnReference: '123',
               returnRequirementId: 'return-requirement-1',
               statuses: ['completed']
+            }
+          ],
+          total: 1
+        },
+        users: {
+          results: [
+            {
+              application: 'water_admin',
+              id: 'user-1',
+              lastLogin: new Date('2001-01-01T00:00:00Z'),
+              username: 'TESTSEARCH01@wrls.gov.uk'
             }
           ],
           total: 1
@@ -70,7 +81,7 @@ describe('Search - Search presenter', () => {
       },
       largestResultCount: 1,
       similarSearchResults: {
-        amountFound: 3,
+        amountFound: 4,
         licences: {
           results: [
             {
@@ -107,6 +118,17 @@ describe('Search - Search presenter', () => {
               returnReference: '123',
               returnRequirementId: 'return-requirement-1',
               statuses: ['completed']
+            }
+          ],
+          total: 1
+        },
+        users: {
+          results: [
+            {
+              application: 'water_admin',
+              id: 'user-1',
+              lastLogin: new Date('2001-01-01T00:00:00Z'),
+              username: 'TESTSEARCH01@wrls.gov.uk'
             }
           ],
           total: 1
@@ -147,6 +169,14 @@ describe('Search - Search presenter', () => {
             returnReference: '123',
             statusText: 'complete'
           }
+        ],
+        users: [
+          {
+            id: 'user-1',
+            lastLogin: '1 January 2001',
+            type: 'Internal',
+            username: 'TESTSEARCH01@wrls.gov.uk'
+          }
         ]
       },
       noPartialResults: false,
@@ -182,6 +212,14 @@ describe('Search - Search presenter', () => {
             returnReference: '123',
             statusText: 'complete'
           }
+        ],
+        users: [
+          {
+            id: 'user-1',
+            lastLogin: '1 January 2001',
+            type: 'Internal',
+            username: 'TESTSEARCH01@wrls.gov.uk'
+          }
         ]
       },
       query: 'searchthis',
@@ -197,7 +235,7 @@ describe('Search - Search presenter', () => {
       describe('when no exactly matching licences have been found', () => {
         beforeEach(() => {
           allSearchMatches.exactSearchResults.licences = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 2
+          allSearchMatches.exactSearchResults.amountFound = 3
         })
 
         it('returns "null"', () => {
@@ -221,7 +259,7 @@ describe('Search - Search presenter', () => {
       describe('when no exactly matching monitoring stations have been found', () => {
         beforeEach(() => {
           allSearchMatches.exactSearchResults.monitoringStations = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 2
+          allSearchMatches.exactSearchResults.amountFound = 3
         })
 
         it('returns "null"', () => {
@@ -245,7 +283,7 @@ describe('Search - Search presenter', () => {
       describe('when no exactly matching return logs have been found', () => {
         beforeEach(() => {
           allSearchMatches.exactSearchResults.returnLogs = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 2
+          allSearchMatches.exactSearchResults.amountFound = 3
         })
 
         it('returns "null"', () => {
@@ -264,6 +302,30 @@ describe('Search - Search presenter', () => {
         })
       })
     })
+
+    describe('the "exactMatches.users" property', () => {
+      describe('when no exactly matching users have been found', () => {
+        beforeEach(() => {
+          allSearchMatches.exactSearchResults.users = { results: [], total: 0 }
+          allSearchMatches.exactSearchResults.amountFound = 3
+        })
+
+        it('returns "null"', () => {
+          const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+
+          expect(result.exactMatches.users).to.be.null()
+        })
+      })
+
+      describe('when some exactly matching users have been found', () => {
+        it('returns an array', () => {
+          const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+
+          expect(result.exactMatches.users[0]).to.exist()
+          expect(result.exactMatches.users.length).to.equal(1)
+        })
+      })
+    })
   })
 
   describe('the "noPartialResults" property', () => {
@@ -273,7 +335,8 @@ describe('Search - Search presenter', () => {
           amountFound: 0,
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
-          returnLogs: { results: [], total: 0 }
+          returnLogs: { results: [], total: 0 },
+          users: { results: [], total: 0 }
         }
       })
 
@@ -301,14 +364,16 @@ describe('Search - Search presenter', () => {
             amountFound: 0,
             licences: { results: [], total: 0 },
             monitoringStations: { results: [], total: 0 },
-            returnLogs: { results: [], total: 0 }
+            returnLogs: { results: [], total: 0 },
+            users: { results: [], total: 0 }
           },
           largestResultCount: 0,
           similarSearchResults: {
             amountFound: 0,
             licences: { results: [], total: 0 },
             monitoringStations: { results: [], total: 0 },
-            returnLogs: { results: [], total: 0 }
+            returnLogs: { results: [], total: 0 },
+            users: { results: [], total: 0 }
           }
         }
       })
@@ -326,7 +391,8 @@ describe('Search - Search presenter', () => {
           amountFound: 0,
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
-          returnLogs: { results: [], total: 0 }
+          returnLogs: { results: [], total: 0 },
+          users: { results: [], total: 0 }
         }
       })
 
@@ -343,7 +409,8 @@ describe('Search - Search presenter', () => {
           amountFound: 0,
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
-          returnLogs: { results: [], total: 0 }
+          returnLogs: { results: [], total: 0 },
+          users: { results: [], total: 0 }
         }
       })
 
@@ -495,7 +562,8 @@ describe('Search - Search presenter', () => {
           amountFound: 0,
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
-          returnLogs: { results: [], total: 0 }
+          returnLogs: { results: [], total: 0 },
+          users: { results: [], total: 0 }
         }
       })
 
@@ -627,6 +695,28 @@ describe('Search - Search presenter', () => {
         expect(result.exactMatches.returnLogs[0].endDate).to.equal('31 December 2001')
         expect(result.exactMatches.returnLogs[0].id).to.equal('v1:1:1/2/3:1:2001-01-01:2001-12-31')
         expect(result.exactMatches.returnLogs[0].statusText).to.equal('overdue')
+      })
+    })
+  })
+
+  describe('the "type" property of users', () => {
+    describe('when a user is external', () => {
+      beforeEach(() => {
+        allSearchMatches.exactSearchResults.users.results[0].application = 'water_vml'
+      })
+
+      it('returns "External"', () => {
+        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.exactMatches.users[0].type).to.equal('External')
+      })
+    })
+
+    describe('when a user is not external', () => {
+      it('returns "Internal"', () => {
+        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.exactMatches.users[0].type).to.equal('Internal')
       })
     })
   })
