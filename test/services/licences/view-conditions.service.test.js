@@ -18,21 +18,21 @@ const FetchLicenceConditionsService = require('../../../app/services/licences/fe
 const ViewConditionsService = require('../../../app/services/licences/view-conditions.service.js')
 
 describe('Licences - View Conditions service', () => {
-  let licencesFixture
+  let licenceFixture
 
   beforeEach(() => {
-    licencesFixture = LicencesFixture.licenceConditions()
+    licenceFixture = LicencesFixture.licence()
 
-    Sinon.stub(FetchLicenceConditionsService, 'go').returns(licencesFixture)
+    Sinon.stub(FetchLicenceConditionsService, 'go').returns(licenceFixture)
   })
 
   it('correctly presents the data', async () => {
-    const result = await ViewConditionsService.go('761bc44f-80d5-49ae-ab46-0a90495417b5')
+    const result = await ViewConditionsService.go(licenceFixture.licence.id)
 
     expect(result).to.equal({
       activeNavBar: 'search',
       backLink: {
-        href: `/system/licences/${licencesFixture.licence.id}/summary`,
+        href: `/system/licences/${licenceFixture.licence.id}/summary`,
         text: 'Go back to summary'
       },
       conditionTypes: [
@@ -63,7 +63,7 @@ describe('Licences - View Conditions service', () => {
         }
       ],
       pageTitle: 'Conditions',
-      pageTitleCaption: `Licence ${licencesFixture.licence.licenceRef}`,
+      pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
       showingConditions: 'Showing 1 types of further conditions',
       warning: {
         iconFallbackText: 'Warning',
