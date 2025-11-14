@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats the licence and related conditions data for the view licence conditions page
- * @module ViewLicenceConditionsPresenter
+ * Formats the licence and related conditions data for the licence conditions page
+ * @module ConditionsPresenter
  */
 
 /**
- * Formats the licence and related conditions data for the view licence conditions page
+ * Formats the licence and related conditions data for the licence conditions page
  *
  * @param {object} licenceVersionPurposeConditionTypes - The licence and related conditions data returned by `FetchLicenceConditionsService`
  *
@@ -17,10 +17,17 @@ function go(licenceVersionPurposeConditionTypes) {
   const conditionTypes = _conditionTypes(licenceVersionPurposeConditionTypes.conditions)
 
   return {
+    backLink: {
+      href: `/system/licences/${licenceId}/summary`,
+      text: 'Go back to summary'
+    },
     conditionTypes,
-    licenceId,
-    licenceRef,
-    pageTitle: 'Licence abstraction conditions'
+    pageTitle: 'Licence abstraction conditions',
+    pageTitleCaption: `Licence ${licenceRef}`,
+    warning: {
+      text: 'We may not be able to show a full list of the conditions, because we do not hold all of the licence information on our system yet. You should refer to the paper copy of the licence to view all conditions.',
+      iconFallbackText: 'Warning'
+    }
   }
 }
 
