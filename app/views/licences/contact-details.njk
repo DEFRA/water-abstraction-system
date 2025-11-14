@@ -1,20 +1,8 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% block breadcrumbs %}
-  {{ govukBackLink({
-    text: 'Go back to summary',
-    href: '/system/licences/' + licenceId + '/summary'
-  }) }}
-{% endblock %}
-
-{% block content %}
-  <h1 class="govuk-heading-l">
-    <span class="govuk-caption-l">Licence {{ licenceRef }}</span>
-    {{ pageTitle }}
-  </h1>
-
+{% block pageContent %}
   {% macro displayAddress(address) %}
     {% for item in address %}
       <p class="govuk-body govuk-!-margin-bottom-0"> {{ item }} </p>

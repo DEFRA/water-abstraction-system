@@ -1,11 +1,11 @@
 'use strict'
 
-const { filteredContactDetailsByRole } = require('../crm.presenter.js')
-
 /**
- * Formats data for the `/licences/{id}/licence-contact` view licence contact details link page
- * @module ViewLicenceContactDetailsPresenter
+ * Formats data for the `/licences/{id}/licence-contact` licence contact details link page
+ * @module ContactDetailsPresenter
  */
+
+const { filteredContactDetailsByRole } = require('../crm.presenter.js')
 
 const ENTITY_ROLES = {
   primary_user: 'Primary user',
@@ -13,7 +13,7 @@ const ENTITY_ROLES = {
 }
 
 /**
- * Formats data for the `/licences/{id}/licence-contact` view licence contact details link page
+ * Formats data for the `/licences/{id}/licence-contact` licence contact details link page
  *
  * @param {module:LicenceModel} licence - The licence and related licenceDocumentHeader
  *
@@ -23,10 +23,13 @@ function go(licence) {
   const { id: licenceId, licenceDocumentHeader, licenceRef } = licence
 
   return {
-    licenceId,
-    licenceRef,
+    backLink: {
+      href: `/system/licences/${licenceId}/summary`,
+      text: 'Go back to summary'
+    },
     licenceContactDetails: _licenceContactDetails(licenceDocumentHeader),
-    pageTitle: 'Licence contact details'
+    pageTitle: 'Licence contact details',
+    pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 
