@@ -3,8 +3,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block pageContent %}
-  {{ pageHeadingHtml }}
-
   {% macro displayAddress(address) %}
     {% for item in address %}
       <p class="govuk-body govuk-!-margin-bottom-0"> {{ item }} </p>
