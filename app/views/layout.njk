@@ -63,11 +63,11 @@
     {{ govukNotificationBanner(notification) }}
   {% endif %}
 
+  {{ pageHeading(pageTitle, pageTitleCaption) }}
+
   {% if warning %}
     {{ govukWarningText(warning) }}
   {% endif %}
-
-  {% set pageHeadingHtml = pageHeading(pageTitle, pageTitleCaption) %}
 
   {% block pageContent %}
   {% endblock %}

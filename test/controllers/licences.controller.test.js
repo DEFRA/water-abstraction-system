@@ -21,7 +21,7 @@ const SubmitMarkForSupplementaryBillingService = require('../../app/services/lic
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
 const ViewLicenceConditionsService = require('../../app/services/licences/view-licence-conditions.service.js')
-const ViewLicenceContactDetailsService = require('../../app/services/licences/view-licence-contact-details.service.js')
+const ViewContactDetailsService = require('../../app/services/licences/view-contact-details.service.js')
 const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
 const ViewLicenceHistoryService = require('../../app/services/licences/view-licence-history.service.js')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
@@ -212,7 +212,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has contacts', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceContactDetailsService, 'go').resolves(_viewLicenceContactDetails())
+          Sinon.stub(ViewContactDetailsService, 'go').resolves(_viewLicenceContactDetails())
         })
 
         it('returns the page successfully', async () => {
