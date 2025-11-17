@@ -19,7 +19,6 @@ const config = {
   enableLicencePurposesView: String(process.env.ENABLE_LICENCE_PURPOSES_VIEW) === 'true' || false,
   enableMonitoringStationsView: String(process.env.ENABLE_MONITORING_STATIONS_VIEW) === 'true' || false,
   enableNullDueDate: String(process.env.ENABLE_NULL_DUE_DATE) === 'true' || false,
-  enableReissuingBillingBatches: String(process.env.ENABLE_REISSUING_BILLING_BATCHES) === 'true' || false,
   enableRequirementsForReturns: String(process.env.ENABLE_REQUIREMENTS_FOR_RETURNS) === 'true' || false,
   enableSystemLicenceView: String(process.env.ENABLE_SYSTEM_LICENCE_VIEW) === 'true' || false,
   enableSystemProfiles: String(process.env.ENABLE_SYSTEM_PROFILES) === 'true' || false
