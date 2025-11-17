@@ -271,11 +271,7 @@ async function submitCancel(request, h) {
 
   await SubmitCancel.go(sessionId)
 
-  if (FeatureFlagsConfig.enableSystemLicenceView) {
-    return h.redirect(`/system/licences/${licenceId}/set-up`)
-  } else {
-    return h.redirect(`/licences/${licenceId}#charge`)
-  }
+  return h.redirect(`/system/licences/${licenceId}/set-up`)
 }
 
 async function submitCheck(request, h) {
