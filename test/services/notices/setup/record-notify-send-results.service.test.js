@@ -73,6 +73,7 @@ describe('Notices - Setup - Record notify send results service', () => {
         {
           alternateNoticeId: null,
           createdAt: notification.createdAt,
+          dueDate: null,
           eventId,
           id: notification.id,
           licenceMonitoringStationId: null,
@@ -94,6 +95,7 @@ describe('Notices - Setup - Record notify send results service', () => {
         {
           alternateNoticeId: null,
           createdAt: notificationTwo.createdAt,
+          dueDate: null,
           eventId,
           id: notificationTwo.id,
           licenceMonitoringStationId: null,
@@ -142,6 +144,7 @@ describe('Notices - Setup - Record notify send results service', () => {
         {
           alternateNoticeId: null,
           createdAt: notification.createdAt,
+          dueDate: null,
           eventId,
           id: notification.id,
           licenceMonitoringStationId: null,
@@ -163,6 +166,7 @@ describe('Notices - Setup - Record notify send results service', () => {
         {
           alternateNoticeId: null,
           createdAt: notificationTwo.createdAt,
+          dueDate: null,
           eventId,
           id: notificationTwo.id,
           licenceMonitoringStationId: null,

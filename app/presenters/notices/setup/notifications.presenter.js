@@ -82,18 +82,21 @@ function go(session, recipients, noticeId) {
   return notifications
 }
 
-function _email(recipient, returnsPeriod, journey, noticeId, noticeType) {
-  const templateId = _emailTemplate(recipient.contact_type, journey, noticeType)
-
+function _email(recipient, determinedReturnsPeriod, journey, noticeId, noticeType) {
   const messageType = 'email'
+  const templateId = _emailTemplate(recipient.contact_type, journey, noticeType)
+  const dueDate = determinedReturnsPeriod?.dueDate ?? futureDueDate(messageType)
 
   return {
+    dueDate,
     eventId: noticeId,
     licences: recipient.licence_refs,
     messageType,
     messageRef: MESSAGE_REFS[noticeType][messageType][recipient.contact_type],
     personalisation: {
-      ..._returnsPeriods(returnsPeriod, messageType)
+      periodEndDate: formatLongDate(determinedReturnsPeriod?.endDate),
+      periodStartDate: formatLongDate(determinedReturnsPeriod?.startDate),
+      returnDueDate: formatLongDate(dueDate)
     },
     recipient: recipient.email,
     returnLogIds: recipient.return_log_ids,
@@ -110,19 +113,23 @@ function _emailTemplate(contactType, journey, noticeType) {
   return notifyTemplates[journey][noticeType].primaryUserEmail
 }
 
-function _letter(recipient, returnsPeriod, journey, noticeId, noticeType) {
-  const templateId = _letterTemplate(recipient.contact_type, journey, noticeType)
+function _letter(recipient, determinedReturnsPeriod, journey, noticeId, noticeType) {
   const messageType = 'letter'
+  const templateId = _letterTemplate(recipient.contact_type, journey, noticeType)
   const address = NotifyAddressPresenter.go(recipient.contact)
+  const dueDate = determinedReturnsPeriod?.dueDate ?? futureDueDate(messageType)
 
   return {
+    dueDate,
     eventId: noticeId,
     licences: recipient.licence_refs,
     messageType,
     messageRef: MESSAGE_REFS[noticeType][messageType][recipient.contact_type],
     personalisation: {
       ...address,
-      ..._returnsPeriods(returnsPeriod, messageType),
+      periodEndDate: formatLongDate(determinedReturnsPeriod?.endDate),
+      periodStartDate: formatLongDate(determinedReturnsPeriod?.startDate),
+      returnDueDate: formatLongDate(dueDate),
       // NOTE: Address line 1 is always set to the recipient's name
       name: address.address_line_1
     },
@@ -138,14 +145,6 @@ function _letterTemplate(contactType, journey, noticeType) {
   }
 
   return notifyTemplates[journey][noticeType].licenceHolderLetter
-}
-
-function _returnsPeriods(returnsPeriod, messageType) {
-  return {
-    periodEndDate: formatLongDate(returnsPeriod?.endDate),
-    periodStartDate: formatLongDate(returnsPeriod?.startDate),
-    returnDueDate: formatLongDate(returnsPeriod?.dueDate) ?? formatLongDate(futureDueDate(messageType))
-  }
 }
 
 module.exports = {

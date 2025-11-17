@@ -41,6 +41,7 @@ function _address(recipient) {
 
 function _notification(recipient, selectedReturnLog, noticeId, licenceRef) {
   return {
+    dueDate: selectedReturnLog.dueDate,
     eventId: noticeId,
     licences: [licenceRef],
     messageRef: 'pdf.return_form',
