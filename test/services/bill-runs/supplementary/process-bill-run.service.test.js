@@ -14,7 +14,6 @@ const BillRunError = require('../../../../app/errors/bill-run.error.js')
 // Things we need to stub
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ChargingModuleGenerateBillRunRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/supplementary/fetch-charge-versions.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 const LegacyRefreshBillRunRequest = require('../../../../app/requests/legacy/refresh-bill-run.request.js')
@@ -54,9 +53,6 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
-
-    // We set the `enableReissuingBillingBatches` feature flag to `true` to ensure that we always perform reissuing
-    Sinon.replace(FeatureFlagsConfig, 'enableReissuingBillingBatches', true)
   })
 
   afterEach(() => {
