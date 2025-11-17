@@ -24,7 +24,7 @@ describe('Search - View search results service', () => {
 
     Sinon.stub(FindAllSearchMatchesService, 'go').resolves({
       exactSearchResults: {
-        amountFound: 4,
+        amountFound: 5,
         licences: {
           results: [
             {
@@ -69,6 +69,17 @@ describe('Search - View search results service', () => {
               returnReference: '123',
               returnRequirementId: 'return-requirement-1',
               statuses: ['completed']
+            }
+          ],
+          total: 1
+        },
+        users: {
+          results: [
+            {
+              application: 'water_admin',
+              id: 'user-1',
+              lastLogin: new Date('2001-01-01T00:00:00Z'),
+              username: 'TESTSEARCH01@wrls.gov.uk'
             }
           ],
           total: 1
@@ -76,7 +87,7 @@ describe('Search - View search results service', () => {
       },
       largestResultCount: 2,
       similarSearchResults: {
-        amountFound: 4,
+        amountFound: 5,
         licences: {
           results: [
             {
@@ -121,6 +132,17 @@ describe('Search - View search results service', () => {
               returnReference: '123',
               returnRequirementId: 'return-requirement-1',
               statuses: ['completed']
+            }
+          ],
+          total: 1
+        },
+        users: {
+          results: [
+            {
+              application: 'water_admin',
+              id: 'user-1',
+              lastLogin: new Date('2001-01-01T00:00:00Z'),
+              username: 'TESTSEARCH01@wrls.gov.uk'
             }
           ],
           total: 1
@@ -179,6 +201,14 @@ describe('Search - View search results service', () => {
               returnReference: '123',
               statusText: 'complete'
             }
+          ],
+          users: [
+            {
+              id: 'user-1',
+              lastLogin: '1 January 2001',
+              type: 'Internal',
+              username: 'TESTSEARCH01@wrls.gov.uk'
+            }
           ]
         },
         noPartialResults: false,
@@ -223,6 +253,14 @@ describe('Search - View search results service', () => {
               licenceRef: '01/123',
               returnReference: '123',
               statusText: 'complete'
+            }
+          ],
+          users: [
+            {
+              id: 'user-1',
+              lastLogin: '1 January 2001',
+              type: 'Internal',
+              username: 'TESTSEARCH01@wrls.gov.uk'
             }
           ]
         },
@@ -281,6 +319,14 @@ describe('Search - View search results service', () => {
               returnReference: '123',
               statusText: 'complete'
             }
+          ],
+          users: [
+            {
+              id: 'user-1',
+              lastLogin: '1 January 2001',
+              type: 'Internal',
+              username: 'TESTSEARCH01@wrls.gov.uk'
+            }
           ]
         },
         noPartialResults: false,
@@ -325,6 +371,14 @@ describe('Search - View search results service', () => {
               licenceRef: '01/123',
               returnReference: '123',
               statusText: 'complete'
+            }
+          ],
+          users: [
+            {
+              id: 'user-1',
+              lastLogin: '1 January 2001',
+              type: 'Internal',
+              username: 'TESTSEARCH01@wrls.gov.uk'
             }
           ]
         },
