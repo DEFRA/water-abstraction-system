@@ -8,10 +8,12 @@
   {% set notification = null %}
   {% set warning = null %}
 {% else %}
-  {% set notification = {
-    text: notification,
-    titleText: 'Important'
-  } %}
+  {% if notification %}
+    {% set notification = {
+      text: notification,
+      titleText: 'Important'
+    } %}
+  {% endif %}
 {% endif %}
 
 {% block beforeContent %}
