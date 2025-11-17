@@ -1,0 +1,81 @@
+{% extends 'licences/layout.njk' %}
+
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+{% from "macros/return-status-tag.njk" import statusTag %}
+
+{% macro referenceColumn(return) %}
+  {% if return.link %}
+    <a href="{{ return.link }}" class="govuk-link">{{ return.reference }} </a>
+  {% else %}
+    <div>{{ return.reference }}</div>
+  {% endif %}
+
+  <p class="govuk-body-s">{{ return.dates }}</p>
+{% endmacro %}
+
+{% block subPageContent %}
+  <h2 class="govuk-heading-l">Returns</h2>
+
+  {% if noReturnsMessage %}
+    <p>{{ noReturnsMessage }}</p>
+  {% else %}
+    {% set tableRows = [] %}
+
+    {% for returnItem in  returns %}
+      {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+      {% set rowIndex = loop.index0 %}
+
+      {# Purpose sits above site description in the output. In the few cases it is missing in the return log, if we don't
+      set it &nbsp; then the site description sits where purpose normally is and it is no longer clear purpose is
+      missing #}
+      {% if returnItem.purpose %}
+        {% set purpose = returnItem.purpose %}
+      {% else %}
+        {% set purpose = '&nbsp;' %}
+      {% endif %}
+
+      {% set row = [
+        {
+          html: referenceColumn(returnItem),
+          attributes: { 'data-test': 'return-reference-' + rowIndex }
+        },
+        {
+          html:  newLineArrayItems(purpose) +  "<p class=\"govuk-body-s\">" + returnItem.description + "</p>",
+          attributes: { 'data-test': 'return-purpose-' + rowIndex }
+        },
+        {
+          text: returnItem.dueDate,
+          attributes: { 'data-test': 'return-due-date-' + rowIndex }
+        },
+        {
+          html: statusTag(returnItem.status, true),
+          attributes: { 'data-test': 'return-status-' + rowIndex }
+        }
+      ] %}
+
+      {% set tableRows = (tableRows.push(row), tableRows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      head: [
+        {
+          text: 'Return reference and dates'
+        },
+        {
+          text: 'Purpose and description'
+        },
+        {
+          text: 'Due date'
+        },
+        {
+          text: 'Status'
+        }
+      ],
+      rows: tableRows
+    }) }}
+
+    {% if pagination.numberOfPages > 1 %}
+      {{ govukPagination(pagination.component) }}
+    {% endif %}
+  {% endif %}
+{% endblock %}

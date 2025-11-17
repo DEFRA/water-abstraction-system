@@ -7,24 +7,34 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Thing under test
-const ViewLicenceContactDetailsPresenter = require('../../../app/presenters/licences/view-licence-contact-details.presenter.js')
+// Test helpers
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
-describe('View Licence Contact Details presenter', () => {
+// Thing under test
+const ContactDetailsPresenter = require('../../../app/presenters/licences/contact-details.presenter.js')
+
+describe('Licences - Contact Details presenter', () => {
   let licenceContactDetailsData
+  let licenceId
+  let licenceRef
 
   beforeEach(() => {
-    licenceContactDetailsData = _testFetchLicenceContactDetailsData()
+    licenceId = generateUUID()
+    licenceRef = generateLicenceRef()
+
+    licenceContactDetailsData = _testFetchLicenceContactDetailsData(licenceId, licenceRef)
   })
 
   describe('when provided with populated licence contact details data', () => {
     it('correctly presents the data', () => {
-      const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
+      const result = ContactDetailsPresenter.go(licenceContactDetailsData)
 
       expect(result).to.equal({
-        licenceId: '0a4ebb93-2e90-4e35-acd5-a5aa73466508',
-        licenceRef: '00/111/222',
-        pageTitle: 'Licence contact details',
+        backLink: {
+          href: `/system/licences/${licenceId}/summary`,
+          text: 'Go back to summary'
+        },
         licenceContactDetails: [
           {
             address: ['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'DEANERY ROAD', 'BRISTOL', 'BS1 5AH', 'United Kingdom'],
@@ -49,7 +59,9 @@ describe('View Licence Contact Details presenter', () => {
             email: 'returns.agent@important.com',
             role: 'Returns agent'
           }
-        ]
+        ],
+        pageTitle: 'Licence contact details',
+        pageTitleCaption: `Licence ${licenceRef}`
       })
     })
 
@@ -57,7 +69,7 @@ describe('View Licence Contact Details presenter', () => {
       describe('when the licence contact is a "contact"', () => {
         describe('the "licenceContactDetails.address" property', () => {
           it('returns the address of the property', () => {
-            const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
+            const result = ContactDetailsPresenter.go(licenceContactDetailsData)
 
             expect(result.licenceContactDetails[0].address).to.equal([
               'ENVIRONMENT AGENCY',
@@ -73,7 +85,7 @@ describe('View Licence Contact Details presenter', () => {
         describe('the "licenceContactDetails.role" property', () => {
           describe('when one of the licence contact details has the role type of "Enforcement officer"', () => {
             it('returns licenceContactDetails without the contact with the role type of "Enforcement officer"', () => {
-              const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
+              const result = ContactDetailsPresenter.go(licenceContactDetailsData)
 
               const hasEnforcementOfficer = result.licenceContactDetails.some((contact) => {
                 return contact.role === 'Enforcement officer'
@@ -91,7 +103,7 @@ describe('View Licence Contact Details presenter', () => {
             })
 
             it("returns the licence contact's forename and name", () => {
-              const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
+              const result = ContactDetailsPresenter.go(licenceContactDetailsData)
 
               expect(result.licenceContactDetails[2].name).to.equal('Mr Noel Edmonds')
             })
@@ -99,7 +111,7 @@ describe('View Licence Contact Details presenter', () => {
 
           describe('when the initials are not null', () => {
             it("returns the licence contact's forename and name", () => {
-              const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
+              const result = ContactDetailsPresenter.go(licenceContactDetailsData)
 
               expect(result.licenceContactDetails[2].name).to.equal('Mr N Edmonds')
             })
@@ -111,7 +123,7 @@ describe('View Licence Contact Details presenter', () => {
         describe('the "licenceContactDetails" property', () => {
           describe('and the role is "primary_user"', () => {
             it('returns the email and formatted role', () => {
-              const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
+              const result = ContactDetailsPresenter.go(licenceContactDetailsData)
 
               expect(result.licenceContactDetails[3]).to.equal({
                 email: 'primary.user@important.com',
@@ -122,7 +134,7 @@ describe('View Licence Contact Details presenter', () => {
 
           describe('and the role is "user_returns"', () => {
             it('returns the email and formatted role', () => {
-              const result = ViewLicenceContactDetailsPresenter.go(licenceContactDetailsData)
+              const result = ContactDetailsPresenter.go(licenceContactDetailsData)
 
               expect(result.licenceContactDetails[4]).to.equal({
                 email: 'returns.agent@important.com',
@@ -136,12 +148,12 @@ describe('View Licence Contact Details presenter', () => {
   })
 })
 
-function _testFetchLicenceContactDetailsData() {
+function _testFetchLicenceContactDetailsData(licenceId, licenceRef) {
   return {
-    id: '0a4ebb93-2e90-4e35-acd5-a5aa73466508',
-    licenceRef: '00/111/222',
+    id: licenceId,
+    licenceRef,
     licenceDocumentHeader: {
-      id: '0a4ebb93-12345-4e35-acd5-987654321abc',
+      id: generateUUID(),
       metadata: {
         contacts: [
           {

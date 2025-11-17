@@ -19,14 +19,17 @@ const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
 function go(licence) {
   const { id, licenceRef, licenceVersions } = licence
 
+  const licencePurposes = _formatLicencePurposes(licenceVersions[0].licenceVersionPurposes)
+
   return {
     backLink: {
       href: `/system/licences/${id}/summary`,
       text: 'Go back to summary'
     },
-    licencePurposes: _formatLicencePurposes(licenceVersions[0].licenceVersionPurposes),
-    pageTitle: 'Licence purpose details',
-    pageTitleCaption: `Licence ${licenceRef}`
+    licencePurposes,
+    pageTitle: 'Purposes, periods and amounts',
+    pageTitleCaption: `Licence ${licenceRef}`,
+    showingPurposes: `Showing ${licencePurposes.length} purposes`
   }
 }
 

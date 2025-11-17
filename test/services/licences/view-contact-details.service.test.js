@@ -5,28 +5,42 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Test helpers
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
 const FetchLicenceContactDetailsService = require('../../../app/services/licences/fetch-licence-contact-details.service.js')
 
 // Thing under test
-const ViewLicenceContactDetailsService = require('../../../app/services/licences/view-licence-contact-details.service.js')
+const ViewContactDetailsService = require('../../../app/services/licences/view-contact-details.service.js')
 
-describe('View Licence Contact Details service', () => {
-  const licenceId = 'fea88a95-d81f-4c5c-b497-00e5891a5861'
+describe('Licences - View Contact Details service', () => {
+  let licenceId
+  let licenceRef
 
-  before(() => {
-    Sinon.stub(FetchLicenceContactDetailsService, 'go').returns(_testFetchLicenceContactDetailsData())
+  beforeEach(() => {
+    licenceId = generateUUID()
+    licenceRef = generateLicenceRef()
+
+    Sinon.stub(FetchLicenceContactDetailsService, 'go').returns(
+      _testFetchLicenceContactDetailsData(licenceId, licenceRef)
+    )
   })
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewLicenceContactDetailsService.go(licenceId)
+      const result = await ViewContactDetailsService.go(licenceId)
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        backLink: {
+          href: `/system/licences/${licenceId}/summary`,
+          text: 'Go back to summary'
+        },
         licenceContactDetails: [
           {
             address: ['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'DEANERY ROAD', 'BRISTOL', 'AVON', 'BS1 5AH'],
@@ -34,20 +48,19 @@ describe('View Licence Contact Details service', () => {
             role: 'Licence holder'
           }
         ],
-        licenceId: 'fea88a95-d81f-4c5c-b497-00e5891a5861',
-        licenceRef: '01/123',
-        pageTitle: 'Licence contact details'
+        pageTitle: 'Licence contact details',
+        pageTitleCaption: `Licence ${licenceRef}`
       })
     })
   })
 })
 
-function _testFetchLicenceContactDetailsData() {
+function _testFetchLicenceContactDetailsData(licenceId, licenceRef) {
   return {
-    id: 'fea88a95-d81f-4c5c-b497-00e5891a5861',
-    licenceRef: '01/123',
+    id: licenceId,
+    licenceRef,
     licenceDocumentHeader: {
-      id: 'e27682b4-8c28-4db0-bb0a-685380537bc5',
+      id: generateUUID(),
       metadata: {
         Name: 'GUPTA',
         Town: 'BRISTOL',
