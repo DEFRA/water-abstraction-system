@@ -114,7 +114,8 @@ function _matches(searchResults) {
   return {
     licences: _licences(searchResults.licences.results),
     monitoringStations: _monitoringStations(searchResults.monitoringStations.results),
-    returnLogs: _returnLogs(searchResults.returnLogs.results)
+    returnLogs: _returnLogs(searchResults.returnLogs.results),
+    users: _users(searchResults.users.results)
   }
 }
 
@@ -168,6 +169,23 @@ function _returnLogs(returnLogs) {
       licenceRef,
       returnReference,
       statusText
+    }
+  })
+}
+
+function _users(users) {
+  if (users.length === 0) {
+    return null
+  }
+
+  return users.map((user) => {
+    const { application, id, lastLogin, username } = user
+
+    return {
+      id,
+      lastLogin: formatLongDate(lastLogin),
+      type: application === 'water_vml' ? 'External' : 'Internal',
+      username
     }
   })
 }
