@@ -8,33 +8,38 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateAccountNumber } = require('../../../support/helpers/billing-account.helper.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+
 // Things we need to stub
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/supplementary/fetch-billing-accounts.service.js')
 
 // Thing under test
 const PreGenerateBillingDataService = require('../../../../app/services/bill-runs/supplementary/pre-generate-billing-data.service.js')
 
-describe('Pre-generate billing data service', () => {
+describe('Bill Runs - Supplementary - Pre-generate Billing Data service', () => {
   const billingPeriod = {
     startDate: new Date('2022-04-01'),
     endDate: new Date('2023-03-31')
   }
-  const billRunId = '027b69aa-b0f7-46d0-86ce-ab577932fc5b'
+  const billRunId = generateUUID()
 
   const billingAccounts = [
     {
-      id: '235bae72-01f7-4a21-b8a3-d2b5fb2eff91',
-      accountNumber: 'T12345678A'
+      id: generateUUID(),
+      accountNumber: generateAccountNumber()
     },
     {
-      id: '1d407b9c-457a-487d-bfe1-a54b72ef0bb5',
-      accountNumber: 'T87654321A'
+      id: generateUUID(),
+      accountNumber: generateAccountNumber()
     }
   ]
 
   const licences = [
-    { id: 'caf6d22b-f235-4f82-9867-b98c884432b6', licenceRef: 'AT/CURR/MONTHLY/01' },
-    { id: 'e35636a1-9115-4e69-830d-48eb80738838', licenceRef: 'AT/CURR/MONTHLY/02' }
+    { id: generateUUID(), licenceRef: generateLicenceRef() },
+    { id: generateUUID(), licenceRef: generateLicenceRef() }
   ]
 
   let chargeVersions

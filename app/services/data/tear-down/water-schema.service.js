@@ -464,7 +464,7 @@ async function _deleteAllTestData() {
       OR EXISTS (
         SELECT 1
         FROM jsonb_array_elements_text("e"."licences") AS l
-        WHERE l = ANY(array['AT/CURR/DAILY/01', 'AT/CURR/WEEKLY/01', 'AT/CURR/MONTHLY/01', 'AT/CURR/MONTHLY/02'])
+        WHERE l = ANY(array['AT/TEST/01', 'AT/TEST/02', 'AT/TEST/03', 'AT/TEST/04'])
       )
     )
     AND "sn"."event_id" = "e"."event_id";
@@ -479,7 +479,7 @@ async function _deleteAllTestData() {
       OR EXISTS (
         SELECT 1
         FROM jsonb_array_elements_text("licences") AS l
-        WHERE l = ANY(array['AT/CURR/DAILY/01', 'AT/CURR/WEEKLY/01', 'AT/CURR/MONTHLY/01', 'AT/CURR/MONTHLY/02'])
+        WHERE l = ANY(array['AT/TEST/01', 'AT/TEST/02', 'AT/TEST/03', 'AT/TEST/04'])
       )
   );
 
