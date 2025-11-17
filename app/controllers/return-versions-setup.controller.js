@@ -13,7 +13,6 @@ const CancelService = require('../services/return-versions/setup/cancel.service.
 const CheckService = require('../services/return-versions/setup/check/check.service.js')
 const DeleteNoteService = require('../services/return-versions/setup/delete-note.service.js')
 const ExistingService = require('../services/return-versions/setup/existing/existing.service.js')
-const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
 const FrequencyCollectedService = require('../services/return-versions/setup/frequency-collected.service.js')
 const FrequencyReportedService = require('../services/return-versions/setup/frequency-reported.service.js')
 const MethodService = require('../services/return-versions/setup/method/method.service.js')
