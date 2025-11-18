@@ -73,14 +73,6 @@ async function downloadRecipients(request, h) {
     .header('Content-Disposition', `attachment; filename="${filename}"`)
 }
 
-async function preview(request, h) {
-  const { contactHashId, licenceMonitoringStationId, sessionId } = request.params
-
-  const pageData = await PreviewService.go(sessionId, contactHashId, licenceMonitoringStationId)
-
-  return h.view('notices/setup/preview/preview.njk', pageData)
-}
-
 async function previewPaperReturn(request, h) {
   const { contactHashId, sessionId, returnId } = request.params
 
@@ -474,6 +466,14 @@ async function viewPaperReturn(request, h) {
   return h.view(`notices/setup/paper-return.njk`, pageData)
 }
 
+async function viewPreview(request, h) {
+  const { contactHashId, licenceMonitoringStationId, sessionId } = request.params
+
+  const pageData = await PreviewService.go(sessionId, contactHashId, licenceMonitoringStationId)
+
+  return h.view('notices/setup/preview/preview.njk', pageData)
+}
+
 async function viewRemoveLicences(request, h) {
   const {
     params: { sessionId }
@@ -513,7 +513,6 @@ async function viewSelectRecipients(request, h) {
 module.exports = {
   addRecipient,
   downloadRecipients,
-  preview,
   previewPaperReturn,
   removeThreshold,
   setup,
@@ -548,6 +547,7 @@ module.exports = {
   viewLicence,
   viewNoticeType,
   viewPaperReturn,
+  viewPreview,
   viewRecipientName,
   viewRemoveLicences,
   viewReturnsPeriod,

@@ -319,7 +319,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}',
     options: {
-      handler: NoticesSetupController.preview,
+      handler: NoticesSetupController.viewPreview,
       auth: {
         access: {
           scope: ['returns']
@@ -331,7 +331,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}/alert/{licenceMonitoringStationId}',
     options: {
-      handler: NoticesSetupController.preview,
+      handler: NoticesSetupController.viewPreview,
       auth: {
         access: {
           scope: ['hof_notifications', 'returns']
