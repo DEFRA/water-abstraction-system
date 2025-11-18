@@ -23,7 +23,7 @@ const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.j
  * @returns {Promise<object>} - the created notifications and reference code
  */
 async function go(notice) {
-  const { failedLicenceRefs, failedReturnIds } = FetchFailedReturnsInvitationsService.go(notice.id)
+  const { failedLicenceRefs, failedReturnIds } = await FetchFailedReturnsInvitationsService.go(notice.id)
 
   if (failedReturnIds.length === 0) {
     return { notifications: [], referenceCode: null }
