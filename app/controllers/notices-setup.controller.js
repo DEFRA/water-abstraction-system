@@ -474,6 +474,14 @@ async function viewPreview(request, h) {
   return h.view('notices/setup/preview/preview.njk', pageData)
 }
 
+async function viewRecipientName(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await RecipientNameService.go(sessionId)
+
+  return h.view(`notices/setup/recipient-name.njk`, pageData)
+}
+
 async function viewRemoveLicences(request, h) {
   const {
     params: { sessionId }
@@ -492,14 +500,6 @@ async function viewReturnsPeriod(request, h) {
   const pageData = await ReturnsPeriodService.go(sessionId)
 
   return h.view(`notices/setup/returns-period.njk`, pageData)
-}
-
-async function viewRecipientName(request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await RecipientNameService.go(sessionId)
-
-  return h.view(`notices/setup/recipient-name.njk`, pageData)
 }
 
 async function viewSelectRecipients(request, h) {
