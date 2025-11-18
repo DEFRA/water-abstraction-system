@@ -114,6 +114,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
 function _transformNotificationToResult(notification) {
   return {
     createdAt: notification.createdAt,
+    dueDate: notification.dueDate,
     eventId: notification.eventId,
     id: notification.id,
     licenceMonitoringStationId: notification.licenceMonitoringStationId,
@@ -123,6 +124,7 @@ function _transformNotificationToResult(notification) {
     notifyStatus: notification.notifyStatus,
     notifyError: notification.notifyError,
     personalisation: notification.personalisation,
+    returnLogIds: notification.returnLogIds,
     status: notification.status
   }
 }
