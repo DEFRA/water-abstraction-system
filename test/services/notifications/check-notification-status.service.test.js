@@ -15,6 +15,7 @@ const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
 // Things we need to stub
 const LicenceMonitoringStationModel = require('../../../app/models/licence-monitoring-station.model.js')
 const NotificationModel = require('../../../app/models/notification.model.js')
+const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const ViewMessageDataRequest = require('../../../app/requests/notify/view-message-data.request.js')
 
 // Thing under test
@@ -26,6 +27,8 @@ describe('Notifications - Check Notification Status service', () => {
   let notification
   let notificationPatchStub
   let notifierStub
+  let returnLogPatchStub
+  let returnLogWhereInStub
 
   beforeEach(() => {
     notificationPatchStub = Sinon.stub().returnsThis()
@@ -38,6 +41,14 @@ describe('Notifications - Check Notification Status service', () => {
     Sinon.stub(LicenceMonitoringStationModel, 'query').returns({
       patch: licenceMonitoringStationPatchStub,
       findById: Sinon.stub().resolves()
+    })
+
+    returnLogPatchStub = Sinon.stub().returnsThis()
+    returnLogWhereInStub = Sinon.stub().resolves()
+    Sinon.stub(ReturnLogModel, 'query').returns({
+      patch: returnLogPatchStub,
+      whereNull: Sinon.stub().returnsThis(),
+      whereIn: returnLogWhereInStub
     })
 
     notifierStub = { omfg: Sinon.stub() }
@@ -80,6 +91,7 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.false()
           expect(licenceMonitoringStationPatchStub.called).to.be.false()
+          expect(returnLogPatchStub.called).to.be.false()
         })
       })
 
@@ -103,6 +115,20 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.true()
           expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'received', status: 'sent' })
+        })
+
+        it('sets the due date for the linked return log records which do not have one already', async () => {
+          await CheckNotificationStatusService.go(notification)
+
+          expect(returnLogPatchStub.called).to.be.true()
+          expect(returnLogPatchStub.firstCall.args[0]).to.equal(
+            { dueDate: notification.dueDate },
+            { skip: ['updatedAt'] }
+          )
+
+          expect(returnLogWhereInStub.called).to.be.true()
+          expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+          expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
         })
       })
 
@@ -148,6 +174,7 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.false()
           expect(licenceMonitoringStationPatchStub.called).to.be.false()
+          expect(returnLogPatchStub.called).to.be.false()
         })
       })
     })
@@ -176,6 +203,7 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.false()
           expect(licenceMonitoringStationPatchStub.called).to.be.false()
+          expect(returnLogPatchStub.called).to.be.false()
         })
       })
 
@@ -242,6 +270,7 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.false()
           expect(licenceMonitoringStationPatchStub.called).to.be.false()
+          expect(returnLogPatchStub.called).to.be.false()
         })
       })
     })
@@ -278,6 +307,7 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.false()
           expect(licenceMonitoringStationPatchStub.called).to.be.false()
+          expect(returnLogPatchStub.called).to.be.false()
         })
       })
 
@@ -346,6 +376,7 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.false()
           expect(licenceMonitoringStationPatchStub.called).to.be.false()
+          expect(returnLogPatchStub.called).to.be.false()
         })
       })
     })
@@ -374,6 +405,7 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.false()
           expect(licenceMonitoringStationPatchStub.called).to.be.false()
+          expect(returnLogPatchStub.called).to.be.false()
         })
       })
 
@@ -440,6 +472,7 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.false()
           expect(licenceMonitoringStationPatchStub.called).to.be.false()
+          expect(returnLogPatchStub.called).to.be.false()
         })
       })
     })
@@ -474,6 +507,7 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.false()
           expect(licenceMonitoringStationPatchStub.called).to.be.false()
+          expect(returnLogPatchStub.called).to.be.false()
         })
       })
 
@@ -556,6 +590,7 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.false()
           expect(licenceMonitoringStationPatchStub.called).to.be.false()
+          expect(returnLogPatchStub.called).to.be.false()
         })
       })
     })
@@ -584,6 +619,7 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.false()
           expect(licenceMonitoringStationPatchStub.called).to.be.false()
+          expect(returnLogPatchStub.called).to.be.false()
         })
       })
 
@@ -666,6 +702,7 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.false()
           expect(licenceMonitoringStationPatchStub.called).to.be.false()
+          expect(returnLogPatchStub.called).to.be.false()
         })
       })
     })
@@ -698,6 +735,7 @@ describe('Notifications - Check Notification Status service', () => {
 
         expect(notificationPatchStub.called).to.be.false()
         expect(licenceMonitoringStationPatchStub.called).to.be.false()
+        expect(returnLogPatchStub.called).to.be.false()
       })
     })
 
@@ -790,6 +828,7 @@ describe('Notifications - Check Notification Status service', () => {
 
         expect(notificationPatchStub.called).to.be.false()
         expect(licenceMonitoringStationPatchStub.called).to.be.false()
+        expect(returnLogPatchStub.called).to.be.false()
       })
     })
   })
@@ -818,6 +857,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       expect(notificationPatchStub.called).to.be.false()
       expect(licenceMonitoringStationPatchStub.called).to.be.false()
+      expect(returnLogPatchStub.called).to.be.false()
     })
 
     it('logs the failure', async () => {

@@ -7,7 +7,9 @@
 
 const LicenceMonitoringStationModel = require('../../models/licence-monitoring-station.model.js')
 const NotificationModel = require('../../models/notification.model.js')
+const ReturnLogModel = require('../../models/return-log.model.js')
 const ViewMessageDataRequest = require('../../requests/notify/view-message-data.request.js')
+const { timestampForPostgres } = require('../../lib/general.lib.js')
 
 const NOTIFICATIONS_STATUS = {
   cancelled: 'cancelled',
@@ -82,6 +84,7 @@ async function go(notification) {
 
   await _recordStatus(notification, notifyStatus, status)
   await _recordAlert(status, notification)
+  await _recordDueDate(status, notification)
 }
 
 async function _notifyStatus(notifyId) {
@@ -113,6 +116,21 @@ async function _recordAlert(status, notification) {
       statusUpdatedAt: createdAt
     })
     .findById(licenceMonitoringStationId)
+}
+
+async function _recordDueDate(status, notification) {
+  const { dueDate, messageRef, returnLogIds } = notification
+
+  // We only record the due date against the linked return log IDs if the notification is 'sent' and the it's a returns
+  // invitation
+  if (status !== NOTIFICATIONS_STATUS.sent || !messageRef.startsWith('returns_invitation')) {
+    return
+  }
+
+  await ReturnLogModel.query()
+    .patch({ dueDate, updatedAt: timestampForPostgres() })
+    .whereNull('dueDate')
+    .whereIn('returnId', returnLogIds)
 }
 
 async function _recordStatus(notification, notifyStatus, status) {
