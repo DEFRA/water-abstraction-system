@@ -307,7 +307,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnId}',
     options: {
-      handler: NoticesSetupController.viewPreviewPaperReturn,
+      handler: NoticesSetupController.previewPaperReturn,
       auth: {
         access: {
           scope: ['returns']
