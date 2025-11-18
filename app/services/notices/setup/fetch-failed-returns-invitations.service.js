@@ -16,7 +16,7 @@ const NotificationModel = require('../../../models/notification.model.js')
  *
  * @param {string} eventId - The event id to check.
  *
- * @returns {object{}} - an object with an array of failed return log ids and an array of failed licence refs
+ * @returns {object} - an object with an array of failed return log ids and an array of failed licence refs
  */
 async function go(eventId) {
   const results = await _query(eventId)
