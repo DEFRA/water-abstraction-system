@@ -44,12 +44,6 @@ describe('Notifications - Check Notification Status service', () => {
     })
 
     returnLogPatchStub = Sinon.stub().returnsThis()
-    returnLogWhereInStub = Sinon.stub().resolves()
-    Sinon.stub(ReturnLogModel, 'query').returns({
-      patch: returnLogPatchStub,
-      whereNull: Sinon.stub().returnsThis(),
-      whereIn: returnLogWhereInStub
-    })
 
     notifierStub = { omfg: Sinon.stub() }
     global.GlobalNotifier = notifierStub
@@ -63,6 +57,13 @@ describe('Notifications - Check Notification Status service', () => {
   describe('when the notification is a returns invitation', () => {
     beforeEach(() => {
       notice = NoticesFixture.returnsInvitation()
+
+      returnLogWhereInStub = Sinon.stub().resolves()
+      Sinon.stub(ReturnLogModel, 'query').returns({
+        patch: returnLogPatchStub,
+        whereNull: Sinon.stub().returnsThis(),
+        whereIn: returnLogWhereInStub
+      })
     })
 
     describe('and is a letter', () => {
@@ -879,7 +880,7 @@ describe('Notifications - Check Notification Status service', () => {
 
       const errorLogArgs = notifierStub.omfg.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Failed to check Notify status')).to.be.true()
+      expect(notifierStub.omfg.calledWith('Check notification status failed')).to.be.true()
       expect(errorLogArgs[1]).to.equal({
         notifyId: notification.notifyId,
         response: {
@@ -896,6 +897,43 @@ describe('Notifications - Check Notification Status service', () => {
         }
       })
       expect(errorLogArgs[2]).to.be.undefined()
+    })
+  })
+
+  describe('when persisting the changes fails', () => {
+    const error = new Error('Boom')
+
+    beforeEach(() => {
+      notice = NoticesFixture.returnsInvitation()
+      notification = NotificationsFixture.returnsInvitationEmail(notice)
+      notification.status = 'pending'
+
+      Sinon.stub(ViewMessageDataRequest, 'send').resolves({
+        succeeded: true,
+        response: {
+          statusCode: 200,
+          body: {
+            status: 'delivered'
+          }
+        }
+      })
+
+      returnLogWhereInStub = Sinon.stub().rejects(error)
+      Sinon.stub(ReturnLogModel, 'query').returns({
+        patch: returnLogPatchStub,
+        whereNull: Sinon.stub().returnsThis(),
+        whereIn: returnLogWhereInStub
+      })
+    })
+
+    it('makes no changes and logs the failure', async () => {
+      await CheckNotificationStatusService.go(notification)
+
+      const errorLogArgs = notifierStub.omfg.firstCall.args
+
+      expect(notifierStub.omfg.calledWith('Check notification status failed')).to.be.true()
+      expect(errorLogArgs[1]).to.equal(notification)
+      expect(errorLogArgs[2]).to.equal(error)
     })
   })
 })
