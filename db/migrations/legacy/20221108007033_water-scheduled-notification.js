@@ -33,8 +33,8 @@ exports.up = function (knex) {
     table.uuid('template_id')
     table.binary('pdf')
     table.date('returned_at')
-    table.uuid('alternate_notification_id')
     table.uuid('alternate_notice_id')
+    table.date('due_date')
 
     // Legacy timestamps
     table.timestamp('date_created', { useTz: false }).defaultTo(knex.fn.now())
