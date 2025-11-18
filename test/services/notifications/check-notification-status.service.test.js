@@ -122,7 +122,7 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(returnLogPatchStub.called).to.be.true()
           expect(returnLogPatchStub.firstCall.args[0]).to.equal(
-            { dueDate: notification.dueDate },
+            { dueDate: notification.dueDate, sentDate: notification.createdAt },
             { skip: ['updatedAt'] }
           )
 
@@ -225,6 +225,20 @@ describe('Notifications - Check Notification Status service', () => {
 
           expect(notificationPatchStub.called).to.be.true()
           expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'delivered', status: 'sent' })
+        })
+
+        it('sets the due date for the linked return log records which do not have one already', async () => {
+          await CheckNotificationStatusService.go(notification)
+
+          expect(returnLogPatchStub.called).to.be.true()
+          expect(returnLogPatchStub.firstCall.args[0]).to.equal(
+            { dueDate: notification.dueDate, sentDate: notification.createdAt },
+            { skip: ['updatedAt'] }
+          )
+
+          expect(returnLogWhereInStub.called).to.be.true()
+          expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+          expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
         })
       })
 

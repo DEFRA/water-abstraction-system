@@ -84,7 +84,7 @@ async function go(notification) {
 
   await _recordStatus(notification, notifyStatus, status)
   await _recordAlert(status, notification)
-  await _recordDueDate(status, notification)
+  await _recordReturnLogs(status, notification)
 }
 
 async function _notifyStatus(notifyId) {
@@ -118,17 +118,16 @@ async function _recordAlert(status, notification) {
     .findById(licenceMonitoringStationId)
 }
 
-async function _recordDueDate(status, notification) {
-  const { dueDate, messageRef, returnLogIds } = notification
+async function _recordReturnLogs(status, notification) {
+  const { createdAt, dueDate, messageRef, returnLogIds } = notification
 
-  // We only record the due date against the linked return log IDs if the notification is 'sent' and it's a returns
-  // invitation
+  // We only update the linked return logs if the notification is 'sent' and it's a returns invitation
   if (status !== NOTIFICATIONS_STATUS.sent || !messageRef.startsWith('returns_invitation')) {
     return
   }
 
   await ReturnLogModel.query()
-    .patch({ dueDate, updatedAt: timestampForPostgres() })
+    .patch({ dueDate, sentDate: createdAt, updatedAt: timestampForPostgres() })
     .whereNull('dueDate')
     .whereIn('returnId', returnLogIds)
 }
