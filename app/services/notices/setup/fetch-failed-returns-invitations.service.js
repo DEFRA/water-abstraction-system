@@ -10,13 +10,13 @@ const NotificationModel = require('../../../models/notification.model.js')
 /**
  * Fetches the notifications which notify failed to send.
  *
- * The function returns a list of email 'notifications' from an event that GovNoitify returned an error for.
+ * The function checks an event for failed return invitation emails.
  *
  * This could have been because of a temporary issue or an invalid email address.
  *
  * @param {string} eventId - The event id to check.
  *
- * @returns {string[]} - an array of unique 'returnLogIds'
+ * @returns {object{}} - an object with an array of failed return log ids and an array of failed licence refs
  */
 async function go(eventId) {
   const results = await _query(eventId)

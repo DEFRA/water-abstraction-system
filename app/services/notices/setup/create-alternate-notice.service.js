@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates sending out return invitation letters for returns invitation emails that failed
+ * Orchestrates creating a new notice and notifications for returns invitation emails that failed
  *
  * @module SendAlternateLetterService
  */
@@ -55,6 +55,7 @@ async function _notice(notice, noticeType, recipients, licenceRefs) {
     status: 'completed',
     statusCounts: { cancelled: 0, error: 0, pending: recipients.length, sent: 0 },
     subtype: noticeType.subType,
+    triggerNoticeId: notice.id,
     type: 'notification'
   }
 

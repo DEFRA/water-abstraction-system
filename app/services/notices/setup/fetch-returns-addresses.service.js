@@ -10,11 +10,9 @@ const { db } = require('../../../../db/db.js')
 /**
  * Fetches the addresses to send a paper return invitations to.
  *
- * The function returns the address for the licence holder.
+ * @param {string[]} returnIds - The return log ids which failed to receive an email.
  *
- * @param {string[]} returnIds - The return log ids whose licence holders need to be notified by post.
- *
- * @returns {Promise<object[]>} - an array of licence holder deteails for sending paper return invitations
+ * @returns {Promise<object[]>} - an array of licence holder deteails.
  */
 async function go(returnIds) {
   const { rows } = await _fetch(returnIds)

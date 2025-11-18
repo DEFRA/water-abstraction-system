@@ -94,7 +94,7 @@ describe('Notices - Fetch Failed Returns Invitations service', () => {
       })
     })
 
-    it('returns the unique list of licence references that have an error with no alternateNoticeId', async () => {
+    it('returns an array of licence references and return log ids that have been depuplicated', async () => {
       const result = await FetchFailedReturnsInvitationsService.go(event.id)
 
       expect(result).to.equal({

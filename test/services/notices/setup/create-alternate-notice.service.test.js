@@ -106,7 +106,7 @@ describe('Notices - Create Alternate notice service', () => {
       Sinon.stub(CreateNotificationsService, 'go').resolves(notifications)
     })
 
-    it('creates a new event to send letters to the licence holders', async () => {
+    it('returns a list of notifications to be sent and the reference code for the new notice', async () => {
       const result = await CreateAlternateNoticeService.go(noticeWithErrors)
 
       expect(result).to.equal({
@@ -121,7 +121,7 @@ describe('Notices - Create Alternate notice service', () => {
       Sinon.stub(FetchFailedReturnsInvitationsService, 'go').resolves({ failedLicenceRefs: [], failedReturnIds: [] })
     })
 
-    it('creates a new event to send letters to the licence holders', async () => {
+    it('returns an empty array and a null reference code', async () => {
       const result = await CreateAlternateNoticeService.go(noticeWithErrors)
 
       expect(result).to.equal({
