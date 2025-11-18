@@ -3,7 +3,7 @@
 const notifyTemplates = {
   standard: {
     failedInvitations: {
-      licenceHolderLetter: '4087edb4-5192-4296-b388-18f5ecd5a76c'
+      licenceHolderLetter: '791ba6a9-e821-4df6-b49f-4ab3bb15248f'
     },
     invitations: {
       primaryUserEmail: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f',
@@ -20,7 +20,7 @@ const notifyTemplates = {
   },
   adhoc: {
     failedInvitations: {
-      licenceHolderLetter: '4087edb4-5192-4296-b388-18f5ecd5a76c'
+      licenceHolderLetter: '791ba6a9-e821-4df6-b49f-4ab3bb15248f'
     },
     invitations: {
       primaryUserEmail: '7bb89469-1dbc-458a-9526-fad8ab71285f',

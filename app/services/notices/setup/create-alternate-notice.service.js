@@ -12,7 +12,7 @@ const EventModel = require('../../../models/event.model.js')
 const FetchFailedReturnsInvitationsService = require('./fetch-failed-returns-invitations.service.js')
 const FetchReturnsAddressesService = require('./fetch-returns-addresses.service.js')
 
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+const { generateUUID, timestampForPostgres } = require('../../../lib/general.lib.js')
 const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -54,7 +54,8 @@ async function _notice(notice, noticeType, recipients, licenceRefs) {
     referenceCode: noticeType.referenceCode,
     status: 'completed',
     statusCounts: { cancelled: 0, error: 0, pending: recipients.length, sent: 0 },
-    subtype: noticeType.subType
+    subtype: noticeType.subType,
+    type: 'notification'
   }
 
   return EventModel.query().insert({ ..._notice, createdAt: timestamp, updatedAt: timestamp })
@@ -69,7 +70,7 @@ async function _notifications(notice, recipients) {
   const noticeDetails = {
     determinedReturnsPeriod: returnPeriod,
     journey: NoticeJourney.STANDARD,
-    noticeType: NoticeType.FAILED_INVITATIONS
+    noticeType: NoticeType.FAILED_INVITATION
   }
 
   return CreateNotificationsService.go(noticeDetails, recipients, noticeId)

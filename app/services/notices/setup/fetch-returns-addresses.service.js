@@ -79,7 +79,7 @@ function _query() {
       aggregated_contact_data AS (
         SELECT
           contact_hash_id,
-          string_agg(DISTINCT licence_ref, ',' ORDER BY licence_ref) AS licence_refs,
+          JSON_AGG(DISTINCT licence_ref ORDER BY licence_ref) AS licence_refs,
           JSON_AGG(DISTINCT return_id ORDER BY return_id) AS return_ids
         FROM licence_holder
         GROUP BY contact_hash_id

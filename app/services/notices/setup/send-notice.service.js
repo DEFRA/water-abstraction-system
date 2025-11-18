@@ -14,7 +14,6 @@ const SendPaperReturnService = require('./batch/send-paper-return.service.js')
 const UpdateEventService = require('../../jobs/notification-status/update-event.service.js')
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds, pause } = require('../../../lib/general.lib.js')
-const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 const notifyConfig = require('../../../../config/notify.config.js')
 
@@ -40,12 +39,13 @@ async function go(notice, notifications) {
 
     await UpdateEventService.go([noticeId])
 
-    if (subtype === NoticeType.INVITATIONS) {
+    if (subtype === 'returnInvitation') {
       const { notifications: lettersToBeSent, referenceCode: lettersReferenceCode } =
         await CreateAlternateNoticeService.go(notice)
 
       if (lettersToBeSent.length > 0) {
         await _sendNotifications(lettersToBeSent, lettersReferenceCode)
+        await _updateFailedEmailInvitations(noticeId)
       }
     }
 
@@ -102,6 +102,16 @@ async function _sendNotifications(notifications, referenceCode) {
   }
 
   return sentNotifications
+}
+
+async function _updateFailedEmailInvitations(noticeId) {
+  return NotificationModel.query()
+    .patch({ alternateNoticeId: noticeId })
+    .where('status', 'error')
+    .where('messageRef', 'returns_invitation_primary_user_email')
+    .where('eventId', noticeId)
+    .where('messageType', 'email')
+    .whereNull('alternateNoticeId')
 }
 
 module.exports = {

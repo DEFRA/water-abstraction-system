@@ -46,7 +46,9 @@ describe('Notices - Fetch returns address service', () => {
   describe('when the licence is unregistered', () => {
     describe('and there is a "licence holder" but the return log isCurrent=false', () => {
       it('returns an empty array', async () => {
-        const result = await FetchReturnsAddressService.go([seedData.licenceHolder.returnLog.returnId])
+        const result = await FetchReturnsAddressService.go([
+          seedData.licenceHolderAndReturnToTransferredReturnLog.returnLog.returnId
+        ])
 
         expect(result).to.equal([])
       })
@@ -84,7 +86,7 @@ function _licenceHolderAddress(seedData, seedDataUser) {
       county: 'Surrey',
       forename: 'Harry',
       initials: 'J',
-      name: 'Licence holder',
+      name: seedData[seedDataUser].metadata.contacts[0].name,
       postcode: 'WD25 7LR',
       role: 'Licence holder',
       salutation: null,
@@ -92,7 +94,7 @@ function _licenceHolderAddress(seedData, seedDataUser) {
       type: 'Person'
     },
     contact_type: 'Licence holder',
-    licence_refs: seedData[seedDataUser].licenceRef,
+    licence_refs: [seedData[seedDataUser].licenceRef],
     return_log_ids: [
       seedData[seedDataUser].returnLog.returnId,
       ...(seedData[seedDataUser].returnLogTwo ? [seedData[seedDataUser].returnLogTwo.returnId] : [])

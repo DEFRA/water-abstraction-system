@@ -29,8 +29,8 @@ async function go(eventId) {
   const returnIds = []
 
   for (const result of results) {
-    licences.push(...result.licences)
-    returnIds.push(...result.returnLogIds)
+    licences.push(...(Array.isArray(result.licences) ? result.licences : [result.licences]))
+    returnIds.push(...(Array.isArray(result.returnLogIds) ? result.returnLogIds : [result.returnLogIds]))
   }
 
   return {

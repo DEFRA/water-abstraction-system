@@ -38,7 +38,7 @@ async function send(templateId, emailAddress, options) {
   const path = 'v2/notifications/email'
 
   const body = {
-    email_address: emailAddress,
+    email_address: 'external@example', // emailAddress,
     template_id: templateId,
     ...options
   }
