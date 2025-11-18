@@ -36,6 +36,7 @@ async function go(session, recipients, noticeId) {
       })
       .returning([
         'createdAt',
+        'dueDate',
         'id',
         'licenceMonitoringStationId',
         'messageRef',
