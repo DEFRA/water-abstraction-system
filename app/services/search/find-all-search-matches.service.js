@@ -32,8 +32,8 @@ const NO_RESULTS = { results: [], total: 0 }
  */
 async function go(query, resultType, page, userScopes) {
   const allSearchResults = await _allSearchResults(query, resultType, page, userScopes)
-  const fullMatches = allSearchResults.slice(0, 5)
-  const partialMatches = allSearchResults.slice(5)
+  const fullMatches = allSearchResults.slice(0, allSearchResults.length / 2)
+  const partialMatches = allSearchResults.slice(allSearchResults.length / 2)
 
   return {
     exactSearchResults: _searchResults(fullMatches),
