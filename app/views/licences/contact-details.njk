@@ -1,5 +1,7 @@
 {% extends 'layout-licences.njk' %}
 
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
 {% macro displayAddress(address) %}
   {% if address.address1 %}
     <p class="govuk-body govuk-!-margin-bottom-0">{{ address.address1 }}</p>
