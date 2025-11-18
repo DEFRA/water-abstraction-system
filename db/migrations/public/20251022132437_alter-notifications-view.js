@@ -30,8 +30,7 @@ exports.up = function (knex) {
         'return_log_ids',
         'template_id',
         'pdf',
-        'returned_at',
-        'alternate_notification_id'
+        'returned_at'
       ])
     )
   })

@@ -26,8 +26,8 @@ describe('Notices - Setup - Notifications Presenter', () => {
   let session
 
   beforeEach(() => {
-    dynamicEmailDueDate = formatLongDate(futureDueDate())
-    dynamicLetterDueDate = formatLongDate(futureDueDate('letter'))
+    dynamicEmailDueDate = futureDueDate()
+    dynamicLetterDueDate = futureDueDate('letter')
 
     determinedReturnsPeriod = {
       dueDate: null,
@@ -73,6 +73,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
 
     expect(result).to.equal([
       {
+        dueDate: dynamicEmailDueDate,
         eventId: noticeId,
         licences: recipients[0].licence_refs,
         messageRef: 'returns_invitation_primary_user_email',
@@ -80,7 +81,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
         personalisation: {
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
-          returnDueDate: dynamicEmailDueDate
+          returnDueDate: formatLongDate(dynamicEmailDueDate)
         },
         recipient: 'primary.user@important.com',
         returnLogIds: recipients[0].return_log_ids,
@@ -88,6 +89,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
         templateId: notifyTemplates.standard.invitations.primaryUserEmail
       },
       {
+        dueDate: dynamicEmailDueDate,
         eventId: noticeId,
         licences: recipients[1].licence_refs,
         messageRef: 'returns_invitation_returns_agent_email',
@@ -95,7 +97,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
         personalisation: {
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
-          returnDueDate: dynamicEmailDueDate
+          returnDueDate: formatLongDate(dynamicEmailDueDate)
         },
         recipient: 'returns.agent@important.com',
         returnLogIds: recipients[1].return_log_ids,
@@ -103,6 +105,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
         templateId: notifyTemplates.standard.invitations.returnsAgentEmail
       },
       {
+        dueDate: dynamicLetterDueDate,
         eventId: noticeId,
         licences: recipients[2].licence_refs,
         messageRef: 'returns_invitation_licence_holder_letter',
@@ -117,13 +120,14 @@ describe('Notices - Setup - Notifications Presenter', () => {
           name: 'Mr H J Potter',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
-          returnDueDate: dynamicLetterDueDate
+          returnDueDate: formatLongDate(dynamicLetterDueDate)
         },
         returnLogIds: recipients[2].return_log_ids,
         status: 'pending',
         templateId: notifyTemplates.standard.invitations.licenceHolderLetter
       },
       {
+        dueDate: dynamicLetterDueDate,
         eventId: noticeId,
         licences: recipients[3].licence_refs,
         messageRef: 'returns_invitation_returns_to_letter',
@@ -138,13 +142,14 @@ describe('Notices - Setup - Notifications Presenter', () => {
           name: 'Mr H J Weasley',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
-          returnDueDate: dynamicLetterDueDate
+          returnDueDate: formatLongDate(dynamicLetterDueDate)
         },
         returnLogIds: recipients[3].return_log_ids,
         status: 'pending',
         templateId: notifyTemplates.standard.invitations.returnsToLetter
       },
       {
+        dueDate: dynamicLetterDueDate,
         eventId: noticeId,
         licences: recipients[4].licence_refs,
         messageRef: 'returns_invitation_licence_holder_letter',
@@ -159,13 +164,14 @@ describe('Notices - Setup - Notifications Presenter', () => {
           name: 'Mr H J Potter',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
-          returnDueDate: dynamicLetterDueDate
+          returnDueDate: formatLongDate(dynamicLetterDueDate)
         },
         returnLogIds: recipients[4].return_log_ids,
         status: 'pending',
         templateId: notifyTemplates.standard.invitations.licenceHolderLetter
       },
       {
+        dueDate: dynamicEmailDueDate,
         eventId: noticeId,
         licences: recipients[5].licence_refs,
         messageRef: 'returns_invitation_primary_user_email',
@@ -173,7 +179,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
         personalisation: {
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
-          returnDueDate: dynamicEmailDueDate
+          returnDueDate: formatLongDate(dynamicEmailDueDate)
         },
         recipient: 'single.use@important.com',
         returnLogIds: recipients[5].return_log_ids,
@@ -181,6 +187,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
         templateId: notifyTemplates.standard.invitations.primaryUserEmail
       },
       {
+        dueDate: dynamicLetterDueDate,
         eventId: noticeId,
         licences: recipients[6].licence_refs,
         messageRef: 'returns_invitation_licence_holder_letter',
@@ -195,7 +202,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
           name: 'Mr H J Hermione',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
-          returnDueDate: dynamicLetterDueDate
+          returnDueDate: formatLongDate(dynamicLetterDueDate)
         },
         returnLogIds: recipients[6].return_log_ids,
         status: 'pending',
@@ -327,7 +334,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
           expect(result[0].personalisation).to.equal({
             periodEndDate: '31 March 2025',
             periodStartDate: '1 January 2025',
-            returnDueDate: dynamicEmailDueDate
+            returnDueDate: formatLongDate(dynamicEmailDueDate)
           })
         })
       })
@@ -363,7 +370,7 @@ describe('Notices - Setup - Notifications Presenter', () => {
             address_line_6: 'WD25 7LR',
             periodEndDate: '31 March 2025',
             periodStartDate: '1 January 2025',
-            returnDueDate: dynamicLetterDueDate,
+            returnDueDate: formatLongDate(dynamicLetterDueDate),
             name: 'Mr H J Potter'
           })
         })
