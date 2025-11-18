@@ -121,7 +121,7 @@ async function _recordAlert(status, notification) {
 async function _recordDueDate(status, notification) {
   const { dueDate, messageRef, returnLogIds } = notification
 
-  // We only record the due date against the linked return log IDs if the notification is 'sent' and the it's a returns
+  // We only record the due date against the linked return log IDs if the notification is 'sent' and it's a returns
   // invitation
   if (status !== NOTIFICATIONS_STATUS.sent || !messageRef.startsWith('returns_invitation')) {
     return
