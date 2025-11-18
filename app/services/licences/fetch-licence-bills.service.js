@@ -6,6 +6,7 @@
  */
 
 const BillModel = require('../../models/bill.model.js')
+const LicenceModel = require('../../models/licence.model.js')
 
 const DatabaseConfig = require('../../../config/database.config.js')
 
@@ -20,7 +21,13 @@ const DatabaseConfig = require('../../../config/database.config.js')
 async function go(licenceId, page) {
   const { results, total } = await _fetch(licenceId, page)
 
-  return { bills: results, pagination: { total } }
+  const licence = await _fetchLicence(licenceId)
+
+  return { bills: results, licence, pagination: { total } }
+}
+
+async function _fetchLicence(licenceId) {
+  return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
 }
 
 async function _fetch(licenceId, page) {

@@ -8,6 +8,11 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateAccountNumber } = require('../../support/helpers/billing-account.helper.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+
 // Things we need to stub
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
@@ -15,11 +20,28 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view-licence-bills.presenter.js')
 
 describe('View Licence Bills presenter', () => {
-  const licenceId = '4e596c10-e092-48b3-944f-8771e7013648'
-
+  let auth
+  let licence
   let bill
 
   beforeEach(() => {
+    auth = {
+      credentials: {
+        roles: [
+          {
+            role: 'billing'
+          }
+        ]
+      }
+    }
+
+    bill = _bill()
+
+    licence = {
+      id: generateUUID(),
+      licenceRef: generateLicenceRef()
+    }
+
     Sinon.stub(FeatureFlagsConfig, 'enableBillingAccountView').value(true)
   })
 
@@ -28,21 +50,16 @@ describe('View Licence Bills presenter', () => {
   })
 
   describe('when provided with a bills data', () => {
-    beforeEach(() => {
-      bill = _bill()
-    })
-
     it('correctly presents the data', () => {
-      const result = ViewLicenceBillsPresenter.go(licenceId, [bill])
+      const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
 
       expect(result).to.equal({
         bills: [
           {
-            accountNumber: 'BA1234443S',
-            billingAccountId: '2563bda0-73d8-4055-b3e7-421cf188d4dc',
-            billingAccountLink:
-              '/system/billing-accounts/2563bda0-73d8-4055-b3e7-421cf188d4dc?licence-id=4e596c10-e092-48b3-944f-8771e7013648',
-            billId: 'dfed8cdd-05c0-4f03-9a95-a7bae74fe7be',
+            accountNumber: bill.accountNumber,
+            billingAccountId: bill.billingAccountId,
+            billingAccountLink: `/system/billing-accounts/${bill.billingAccountId}?licence-id=${licence.id}`,
+            billId: bill.id,
             billNumber: 'WAC0003872T',
             billRunType: 'Annual',
             credit: false,
@@ -50,7 +67,10 @@ describe('View Licence Bills presenter', () => {
             financialYearEnding: '2021',
             total: '£1,234,567.89'
           }
-        ]
+        ],
+        pageTitle: 'Bills',
+        pageTitleCaption: `Licence ${licence.licenceRef}`,
+        roles: ['billing']
       })
     })
 
@@ -58,7 +78,7 @@ describe('View Licence Bills presenter', () => {
       describe('for each bill returned', () => {
         describe('when the invoice number exists', () => {
           it('correctly formats the "billNumber" to the invoice number', () => {
-            const result = ViewLicenceBillsPresenter.go(licenceId, [bill])
+            const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
 
             expect(result.bills[0].billNumber).to.equal('WAC0003872T')
           })
@@ -67,10 +87,10 @@ describe('View Licence Bills presenter', () => {
         describe('the "billingAccountLink" property', () => {
           describe('when the "enableBillingAccountView" flag is true', () => {
             it('returns the system link', () => {
-              const result = ViewLicenceBillsPresenter.go(licenceId, [bill])
+              const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
 
               expect(result.bills[0].billingAccountLink).to.equal(
-                `/system/billing-accounts/${bill.billingAccountId}?licence-id=4e596c10-e092-48b3-944f-8771e7013648`
+                `/system/billing-accounts/${bill.billingAccountId}?licence-id=${licence.id}`
               )
             })
           })
@@ -81,7 +101,7 @@ describe('View Licence Bills presenter', () => {
             })
 
             it('returns the legacy link', () => {
-              const result = ViewLicenceBillsPresenter.go(licenceId, [bill])
+              const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
 
               expect(result.bills[0].billingAccountLink).to.equal(`/billing-accounts/${bill.billingAccountId}`)
             })
@@ -95,7 +115,7 @@ describe('View Licence Bills presenter', () => {
           })
 
           it('correctly formats the "billNumber" to "De minimis bill"', () => {
-            const result = ViewLicenceBillsPresenter.go(licenceId, [bill])
+            const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
 
             expect(result.bills[0].billNumber).to.equal('De minimis bill')
           })
@@ -108,7 +128,7 @@ describe('View Licence Bills presenter', () => {
           })
 
           it('correctly formats the "billNumber" to "NALD revised bill"', () => {
-            const result = ViewLicenceBillsPresenter.go(licenceId, [bill])
+            const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
 
             expect(result.bills[0].billNumber).to.equal('NALD revised bill')
           })
@@ -121,7 +141,7 @@ describe('View Licence Bills presenter', () => {
           })
 
           it('correctly formats the "billNumber" to "Zero value bill"', () => {
-            const result = ViewLicenceBillsPresenter.go(licenceId, [bill])
+            const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
 
             expect(result.bills[0].billNumber).to.equal('Zero value bill')
           })
@@ -133,7 +153,7 @@ describe('View Licence Bills presenter', () => {
           })
 
           it('returns an empty string', () => {
-            const result = ViewLicenceBillsPresenter.go(licenceId, [bill])
+            const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
 
             expect(result.bills[0].billNumber).to.equal('')
           })
@@ -145,14 +165,14 @@ describe('View Licence Bills presenter', () => {
 
 function _bill() {
   return {
-    accountNumber: 'BA1234443S',
+    accountNumber: generateAccountNumber(),
     billRun: { batchType: 'annual', scheme: 'sroc', summer: false },
-    billingAccountId: '2563bda0-73d8-4055-b3e7-421cf188d4dc',
+    billingAccountId: generateUUID(),
     createdAt: new Date('2020-01-01'),
     credit: false,
     deminimis: false,
     financialYearEnding: '2021',
-    id: 'dfed8cdd-05c0-4f03-9a95-a7bae74fe7be',
+    id: generateUUID(),
     invoiceNumber: 'WAC0003872T',
     legacyId: null,
     netAmount: 123456789
