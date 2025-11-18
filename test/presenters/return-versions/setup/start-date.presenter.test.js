@@ -3,13 +3,11 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const StartDatePresenter = require('../../../../app/presenters/return-versions/setup/start-date.presenter.js')
 
 describe('Return Versions Setup - Start Date presenter', () => {
@@ -30,8 +28,6 @@ describe('Return Versions Setup - Start Date presenter', () => {
       journey: 'returns-required',
       requirements: [{}]
     }
-
-    Sinon.stub(FeatureFlagsConfig, 'enableSystemLicenceView').value(true)
   })
 
   describe('when provided with a session', () => {
