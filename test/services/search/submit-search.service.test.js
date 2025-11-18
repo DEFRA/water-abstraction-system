@@ -76,6 +76,11 @@ describe('Search - Submit search service', () => {
           },
           {
             checked: false,
+            text: 'Licence holders',
+            value: 'licenceHolder'
+          },
+          {
+            checked: false,
             text: 'Licences',
             value: 'licence'
           },
@@ -88,6 +93,11 @@ describe('Search - Submit search service', () => {
             checked: false,
             text: 'Return logs',
             value: 'returnLog'
+          },
+          {
+            checked: false,
+            text: 'Users',
+            value: 'user'
           }
         ],
         error: EXPECTED_ERROR,

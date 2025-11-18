@@ -28,7 +28,7 @@ describe('Search - Search presenter', () => {
 
     allSearchMatches = {
       exactSearchResults: {
-        amountFound: 5,
+        amountFound: 6,
         billingAccounts: {
           results: [
             {
@@ -36,6 +36,17 @@ describe('Search - Search presenter', () => {
               createdAt: new Date('2000-01-01T00:00:00.000Z'),
               id: 'billing-account-1',
               name: 'Company 1'
+            }
+          ],
+          total: 1
+        },
+        licenceHolders: {
+          results: [
+            {
+              holderName: 'Mr F Surname',
+              holderType: 'Person',
+              id: 'licence-1',
+              licenceRef: '01/123'
             }
           ],
           total: 1
@@ -94,7 +105,7 @@ describe('Search - Search presenter', () => {
       },
       largestResultCount: 1,
       similarSearchResults: {
-        amountFound: 5,
+        amountFound: 6,
         billingAccounts: {
           results: [
             {
@@ -102,6 +113,17 @@ describe('Search - Search presenter', () => {
               createdAt: new Date('2000-01-01T00:00:00.000Z'),
               id: 'billing-account-1',
               name: 'Company 1'
+            }
+          ],
+          total: 1
+        },
+        licenceHolders: {
+          results: [
+            {
+              holderName: 'Mr F Surname',
+              holderType: 'Person',
+              id: 'licence-1',
+              licenceRef: '01/123'
             }
           ],
           total: 1
@@ -174,6 +196,14 @@ describe('Search - Search presenter', () => {
             name: 'Company 1'
           }
         ],
+        licenceHolders: [
+          {
+            holderName: 'Mr F Surname',
+            holderType: 'Person',
+            id: 'licence-1',
+            licenceRef: '01/123'
+          }
+        ],
         licences: [
           {
             id: 'licence-1',
@@ -219,6 +249,11 @@ describe('Search - Search presenter', () => {
         },
         {
           checked: false,
+          text: 'Licence holders',
+          value: 'licenceHolder'
+        },
+        {
+          checked: false,
           text: 'Licences',
           value: 'licence'
         },
@@ -231,6 +266,11 @@ describe('Search - Search presenter', () => {
           checked: false,
           text: 'Return logs',
           value: 'returnLog'
+        },
+        {
+          checked: false,
+          text: 'Users',
+          value: 'user'
         }
       ],
       noPartialResults: false,
@@ -245,6 +285,14 @@ describe('Search - Search presenter', () => {
             id: 'billing-account-1',
             createdAt: '1 January 2000',
             name: 'Company 1'
+          }
+        ],
+        licenceHolders: [
+          {
+            holderName: 'Mr F Surname',
+            holderType: 'Person',
+            id: 'licence-1',
+            licenceRef: '01/123'
           }
         ],
         licences: [
@@ -297,7 +345,7 @@ describe('Search - Search presenter', () => {
       describe('when no exactly matching billing accounts have been found', () => {
         beforeEach(() => {
           allSearchMatches.exactSearchResults.billingAccounts = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 3
+          allSearchMatches.exactSearchResults.amountFound = 4
         })
 
         it('returns "null"', () => {
@@ -317,11 +365,35 @@ describe('Search - Search presenter', () => {
       })
     })
 
+    describe('the "exactMatches.licenceHolders" property', () => {
+      describe('when no exactly matching licence holders have been found', () => {
+        beforeEach(() => {
+          allSearchMatches.exactSearchResults.licenceHolders = { results: [], total: 0 }
+          allSearchMatches.exactSearchResults.amountFound = 5
+        })
+
+        it('returns "null"', () => {
+          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+
+          expect(result.exactMatches.licenceHolders).to.be.null()
+        })
+      })
+
+      describe('when some exactly matching licence holders have been found', () => {
+        it('returns an array', () => {
+          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+
+          expect(result.exactMatches.licenceHolders[0]).to.exist()
+          expect(result.exactMatches.licenceHolders.length).to.equal(1)
+        })
+      })
+    })
+
     describe('the "exactMatches.licences" property', () => {
       describe('when no exactly matching licences have been found', () => {
         beforeEach(() => {
           allSearchMatches.exactSearchResults.licences = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 4
+          allSearchMatches.exactSearchResults.amountFound = 5
         })
 
         it('returns "null"', () => {
@@ -345,7 +417,7 @@ describe('Search - Search presenter', () => {
       describe('when no exactly matching monitoring stations have been found', () => {
         beforeEach(() => {
           allSearchMatches.exactSearchResults.monitoringStations = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 4
+          allSearchMatches.exactSearchResults.amountFound = 5
         })
 
         it('returns "null"', () => {
@@ -369,7 +441,7 @@ describe('Search - Search presenter', () => {
       describe('when no exactly matching return logs have been found', () => {
         beforeEach(() => {
           allSearchMatches.exactSearchResults.returnLogs = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 4
+          allSearchMatches.exactSearchResults.amountFound = 5
         })
 
         it('returns "null"', () => {
@@ -393,7 +465,7 @@ describe('Search - Search presenter', () => {
       describe('when no exactly matching users have been found', () => {
         beforeEach(() => {
           allSearchMatches.exactSearchResults.users = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 3
+          allSearchMatches.exactSearchResults.amountFound = 4
         })
 
         it('returns "null"', () => {
@@ -431,6 +503,11 @@ describe('Search - Search presenter', () => {
           },
           {
             checked: false,
+            text: 'Licence holders',
+            value: 'licenceHolder'
+          },
+          {
+            checked: false,
             text: 'Licences',
             value: 'licence'
           },
@@ -443,6 +520,11 @@ describe('Search - Search presenter', () => {
             checked: false,
             text: 'Return logs',
             value: 'returnLog'
+          },
+          {
+            checked: false,
+            text: 'Users',
+            value: 'user'
           }
         ])
       })
@@ -464,6 +546,11 @@ describe('Search - Search presenter', () => {
           },
           {
             checked: false,
+            text: 'Licence holders',
+            value: 'licenceHolder'
+          },
+          {
+            checked: false,
             text: 'Licences',
             value: 'licence'
           },
@@ -476,6 +563,11 @@ describe('Search - Search presenter', () => {
             checked: false,
             text: 'Return logs',
             value: 'returnLog'
+          },
+          {
+            checked: false,
+            text: 'Users',
+            value: 'user'
           }
         ])
       })
@@ -497,6 +589,11 @@ describe('Search - Search presenter', () => {
           },
           {
             checked: false,
+            text: 'Licence holders',
+            value: 'licenceHolder'
+          },
+          {
+            checked: false,
             text: 'Licences',
             value: 'licence'
           },
@@ -509,6 +606,11 @@ describe('Search - Search presenter', () => {
             checked: false,
             text: 'Return logs',
             value: 'returnLog'
+          },
+          {
+            checked: false,
+            text: 'Users',
+            value: 'user'
           }
         ])
       })
@@ -525,6 +627,11 @@ describe('Search - Search presenter', () => {
         expect(result.filterItems).to.equal([
           {
             checked: false,
+            text: 'Licence holders',
+            value: 'licenceHolder'
+          },
+          {
+            checked: false,
             text: 'Licences',
             value: 'licence'
           },
@@ -537,6 +644,11 @@ describe('Search - Search presenter', () => {
             checked: false,
             text: 'Return logs',
             value: 'returnLog'
+          },
+          {
+            checked: false,
+            text: 'Users',
+            value: 'user'
           }
         ])
       })
@@ -549,6 +661,7 @@ describe('Search - Search presenter', () => {
         allSearchMatches.similarSearchResults = {
           amountFound: 0,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },
@@ -579,6 +692,7 @@ describe('Search - Search presenter', () => {
           exactSearchResults: {
             amountFound: 0,
             billingAccounts: { results: [], total: 0 },
+            licenceHolders: { results: [], total: 0 },
             licences: { results: [], total: 0 },
             monitoringStations: { results: [], total: 0 },
             returnLogs: { results: [], total: 0 },
@@ -588,6 +702,7 @@ describe('Search - Search presenter', () => {
           similarSearchResults: {
             amountFound: 0,
             billingAccounts: { results: [], total: 0 },
+            licenceHolders: { results: [], total: 0 },
             licences: { results: [], total: 0 },
             monitoringStations: { results: [], total: 0 },
             returnLogs: { results: [], total: 0 },
@@ -608,6 +723,7 @@ describe('Search - Search presenter', () => {
         allSearchMatches.similarSearchResults = {
           amountFound: 0,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },
@@ -627,6 +743,7 @@ describe('Search - Search presenter', () => {
         allSearchMatches.exactSearchResults = {
           amountFound: 0,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },
@@ -738,6 +855,18 @@ describe('Search - Search presenter', () => {
       })
     })
 
+    describe('when the result type is "licenceHolder"', () => {
+      beforeEach(() => {
+        resultType = 'licenceHolder'
+      })
+
+      it('returns "licence holders"', () => {
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.resultTypeText).to.equal('licence holders')
+      })
+    })
+
     describe('when the result type is "licence"', () => {
       beforeEach(() => {
         resultType = 'licence'
@@ -774,6 +903,18 @@ describe('Search - Search presenter', () => {
       })
     })
 
+    describe('when the result type is "user"', () => {
+      beforeEach(() => {
+        resultType = 'user'
+      })
+
+      it('returns "users"', () => {
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.resultTypeText).to.equal('users')
+      })
+    })
+
     describe('when the result type is not provided', () => {
       beforeEach(() => {
         resultType = undefined
@@ -793,6 +934,7 @@ describe('Search - Search presenter', () => {
         allSearchMatches.exactSearchResults = {
           amountFound: 0,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },

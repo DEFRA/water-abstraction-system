@@ -40,7 +40,7 @@ describe('Search - View search service', () => {
 
     Sinon.stub(FindAllSearchMatchesService, 'go').resolves({
       exactSearchResults: {
-        amountFound: 6,
+        amountFound: 7,
         billingAccounts: {
           results: [
             {
@@ -48,6 +48,17 @@ describe('Search - View search service', () => {
               createdAt: new Date('2000-01-01T00:00:00.000Z'),
               id: 'billing-account-1',
               name: 'Company 1'
+            }
+          ],
+          total: 1
+        },
+        licenceHolders: {
+          results: [
+            {
+              holderName: 'Mr F Surname',
+              holderType: 'Person',
+              id: 'licence-1',
+              licenceRef: '01/123'
             }
           ],
           total: 1
@@ -114,7 +125,7 @@ describe('Search - View search service', () => {
       },
       largestResultCount: 2,
       similarSearchResults: {
-        amountFound: 6,
+        amountFound: 7,
         billingAccounts: {
           results: [
             {
@@ -122,6 +133,17 @@ describe('Search - View search service', () => {
               createdAt: new Date('2000-01-01T00:00:00.000Z'),
               id: 'billing-account-1',
               name: 'Company 1'
+            }
+          ],
+          total: 1
+        },
+        licenceHolders: {
+          results: [
+            {
+              holderName: 'Mr F Surname',
+              holderType: 'Person',
+              id: 'licence-1',
+              licenceRef: '01/123'
             }
           ],
           total: 1
@@ -213,6 +235,14 @@ describe('Search - View search service', () => {
               name: 'Company 1'
             }
           ],
+          licenceHolders: [
+            {
+              holderName: 'Mr F Surname',
+              holderType: 'Person',
+              id: 'licence-1',
+              licenceRef: '01/123'
+            }
+          ],
           licences: [
             {
               id: 'licence-1',
@@ -265,6 +295,11 @@ describe('Search - View search service', () => {
           },
           {
             checked: false,
+            text: 'Licence holders',
+            value: 'licenceHolder'
+          },
+          {
+            checked: false,
             text: 'Licences',
             value: 'licence'
           },
@@ -277,6 +312,11 @@ describe('Search - View search service', () => {
             checked: false,
             text: 'Return logs',
             value: 'returnLog'
+          },
+          {
+            checked: false,
+            text: 'Users',
+            value: 'user'
           }
         ],
         noPartialResults: false,
@@ -294,6 +334,14 @@ describe('Search - View search service', () => {
               createdAt: '1 January 2000',
               id: 'billing-account-1',
               name: 'Company 1'
+            }
+          ],
+          licenceHolders: [
+            {
+              holderName: 'Mr F Surname',
+              holderType: 'Person',
+              id: 'licence-1',
+              licenceRef: '01/123'
             }
           ],
           licences: [
@@ -367,6 +415,11 @@ describe('Search - View search service', () => {
           },
           {
             checked: false,
+            text: 'Licence holders',
+            value: 'licenceHolder'
+          },
+          {
+            checked: false,
             text: 'Licences',
             value: 'licence'
           },
@@ -379,6 +432,11 @@ describe('Search - View search service', () => {
             checked: false,
             text: 'Return logs',
             value: 'returnLog'
+          },
+          {
+            checked: false,
+            text: 'Users',
+            value: 'user'
           }
         ],
         pageTitle: 'Search',
@@ -407,6 +465,14 @@ describe('Search - View search service', () => {
               createdAt: '1 January 2000',
               id: 'billing-account-1',
               name: 'Company 1'
+            }
+          ],
+          licenceHolders: [
+            {
+              holderName: 'Mr F Surname',
+              holderType: 'Person',
+              id: 'licence-1',
+              licenceRef: '01/123'
             }
           ],
           licences: [
@@ -461,6 +527,11 @@ describe('Search - View search service', () => {
           },
           {
             checked: false,
+            text: 'Licence holders',
+            value: 'licenceHolder'
+          },
+          {
+            checked: false,
             text: 'Licences',
             value: 'licence'
           },
@@ -473,6 +544,11 @@ describe('Search - View search service', () => {
             checked: false,
             text: 'Return logs',
             value: 'returnLog'
+          },
+          {
+            checked: false,
+            text: 'Users',
+            value: 'user'
           }
         ],
         noPartialResults: false,
@@ -490,6 +566,14 @@ describe('Search - View search service', () => {
               createdAt: '1 January 2000',
               id: 'billing-account-1',
               name: 'Company 1'
+            }
+          ],
+          licenceHolders: [
+            {
+              holderName: 'Mr F Surname',
+              holderType: 'Person',
+              id: 'licence-1',
+              licenceRef: '01/123'
             }
           ],
           licences: [
