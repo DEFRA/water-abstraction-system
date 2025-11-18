@@ -40,6 +40,7 @@ async function go() {
       'notifyStatus',
       'notifyError',
       'personalisation',
+      'returnLogIds',
       'status'
     ])
     .where('status', 'pending')

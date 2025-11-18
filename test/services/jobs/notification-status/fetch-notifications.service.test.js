@@ -129,6 +129,7 @@ function _transformToResult(notification) {
     notifyStatus: notification.notifyStatus,
     notifyError: notification.notifyError,
     personalisation: notification.personalisation,
+    returnLogIds: notification.returnLogIds,
     status: notification.status
   })
 }

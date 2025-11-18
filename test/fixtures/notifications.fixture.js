@@ -349,7 +349,7 @@ function returnsInvitationEmail(notice) {
       '^ You’ll need to submit your returns by 1 April 2025.\n',
     recipient: 'grace.hopper@acme.co.uk',
     returnedAt: null,
-    returnLogIds: null,
+    returnLogIds: [generateUUID(), generateUUID()],
     status: 'sent'
   }
 
@@ -390,7 +390,7 @@ function returnsInvitationLetter(notice) {
       '^ You’ll need to submit your returns by 1 April 2025.\n',
     recipient: null,
     returnedAt: null,
-    returnLogIds: null,
+    returnLogIds: [generateUUID(), generateUUID()],
     status: 'sent'
   }
 
@@ -429,7 +429,7 @@ function returnsReminderEmail(notice) {
       '^ You’ll need to submit your returns by 1 April 2025.\n',
     recipient: 'grace.hopper@acme.co.uk',
     returnedAt: null,
-    returnLogIds: null,
+    returnLogIds: [generateUUID(), generateUUID()],
     status: 'sent'
   }
 
@@ -472,7 +472,7 @@ function returnsReminderLetter(notice) {
       'We asked you to submit your returns by 1 April 2025.\n',
     recipient: null,
     returnedAt: null,
-    returnLogIds: null,
+    returnLogIds: [generateUUID(), generateUUID()],
     status: 'sent'
   }
 
