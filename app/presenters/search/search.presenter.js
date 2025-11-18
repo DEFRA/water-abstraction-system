@@ -9,11 +9,22 @@ const ContactModel = require('../../models/contact.model.js')
 const { formatLongDate, formatReturnLogStatus } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
+const filterItems = [
+  ['billingAccount', 'Billing accounts'],
+  ['licenceHolder', 'Licence holders'],
+  ['licence', 'Licences'],
+  ['monitoringStation', 'Monitoring stations'],
+  ['returnLog', 'Return logs'],
+  ['user', 'Users']
+]
+
 const resultTypes = {
   billingAccount: 'billing accounts',
   licence: 'licences',
+  licenceHolder: 'licence holders',
   monitoringStation: 'monitoring stations',
-  returnLog: 'return logs'
+  returnLog: 'return logs',
+  user: 'users'
 }
 
 /**
@@ -82,16 +93,19 @@ function _blankSearchPage(userScopes, query, resultType) {
 }
 
 function _filterItems(userScopes, resultType) {
-  const items = []
-
-  if (userScopes.includes('billing')) {
-    items.push({ checked: resultType === 'billingAccount', value: 'billingAccount', text: 'Billing accounts' })
-  }
-  items.push({ checked: resultType === 'licence', value: 'licence', text: 'Licences' })
-  items.push({ checked: resultType === 'monitoringStation', value: 'monitoringStation', text: 'Monitoring stations' })
-  items.push({ checked: resultType === 'returnLog', value: 'returnLog', text: 'Return logs' })
-
-  return items
+  return filterItems
+    .filter(([value]) => {
+      // Only show the billing account filter option if the user has billing scope
+      // All other items are always shown
+      return value !== 'billingAccount' || userScopes.includes('billing')
+    })
+    .map(([value, text]) => {
+      return {
+        checked: value === resultType,
+        value,
+        text
+      }
+    })
 }
 
 function _holderContact(licence) {
@@ -117,6 +131,14 @@ function _licenceEndDetails(licenceEnd) {
   }
 
   return { licenceEndDate, licenceEndedText }
+}
+
+function _licenceHolders(licenceHolders) {
+  if (licenceHolders.length === 0) {
+    return null
+  }
+
+  return licenceHolders
 }
 
 function _licences(licences) {
@@ -147,6 +169,7 @@ function _licences(licences) {
 function _matches(searchResults) {
   return {
     billingAccounts: _billingAccounts(searchResults.billingAccounts.results),
+    licenceHolders: _licenceHolders(searchResults.licenceHolders.results),
     licences: _licences(searchResults.licences.results),
     monitoringStations: _monitoringStations(searchResults.monitoringStations.results),
     returnLogs: _returnLogs(searchResults.returnLogs.results),
