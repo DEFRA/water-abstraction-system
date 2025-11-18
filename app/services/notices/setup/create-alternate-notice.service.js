@@ -12,7 +12,7 @@ const EventModel = require('../../../models/event.model.js')
 const FetchFailedReturnsInvitationsService = require('./fetch-failed-returns-invitations.service.js')
 const FetchReturnsAddressesService = require('./fetch-returns-addresses.service.js')
 
-const { generateUUID, timestampForPostgres } = require('../../../lib/general.lib.js')
+const { timestampForPostgres } = require('../../../lib/general.lib.js')
 const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 
 /**
