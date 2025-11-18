@@ -24,11 +24,18 @@ const EXPECTED_ERROR = {
 }
 
 describe('Search - Submit search service', () => {
+  let auth
   let payload
   let yar
   let yarSpy
 
   beforeEach(() => {
+    auth = {
+      credentials: {
+        scope: ['billing']
+      }
+    }
+
     yarSpy = Sinon.spy()
     yar = { set: yarSpy }
   })
@@ -43,7 +50,7 @@ describe('Search - Submit search service', () => {
     })
 
     it('sets the session value and returns a redirect to the search results page', async () => {
-      const result = await SubmitSearchService.go(payload, yar)
+      const result = await SubmitSearchService.go(auth, payload, yar)
 
       expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).to.be.true()
       expect(yarSpy.calledWithExactly('searchResultType', 'monitoringStation')).to.be.true()
@@ -57,10 +64,32 @@ describe('Search - Submit search service', () => {
     })
 
     it('returns an error message', async () => {
-      const result = await SubmitSearchService.go(payload, yar)
+      const result = await SubmitSearchService.go(auth, payload, yar)
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        filterItems: [
+          {
+            checked: false,
+            text: 'Billing accounts',
+            value: 'billingAccount'
+          },
+          {
+            checked: false,
+            text: 'Licences',
+            value: 'licence'
+          },
+          {
+            checked: false,
+            text: 'Monitoring stations',
+            value: 'monitoringStation'
+          },
+          {
+            checked: false,
+            text: 'Return logs',
+            value: 'returnLog'
+          }
+        ],
         error: EXPECTED_ERROR,
         pageTitle: 'Search',
         query: undefined,
@@ -78,7 +107,7 @@ describe('Search - Submit search service', () => {
     })
 
     it('sets the session value and returns a redirect to the search results page', async () => {
-      const result = await SubmitSearchService.go(payload, yar)
+      const result = await SubmitSearchService.go(auth, payload, yar)
 
       expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).to.be.true()
       expect(yarSpy.calledWithExactly('searchResultType', 'all')).to.be.true()
