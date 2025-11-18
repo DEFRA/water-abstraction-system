@@ -97,6 +97,17 @@ async function preview(request, h) {
   return h.view('notices/setup/preview/preview.njk', pageData)
 }
 
+async function removeThreshold(request, h) {
+  const {
+    params: { sessionId, licenceMonitoringStationId },
+    yar
+  } = request
+
+  await RemoveThresholdService.go(sessionId, licenceMonitoringStationId, yar)
+
+  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
+}
+
 async function viewAlertEmailAddress(request, h) {
   const {
     auth,
@@ -245,17 +256,6 @@ async function viewRecipientName(request, h) {
   const pageData = await RecipientNameService.go(sessionId)
 
   return h.view(`notices/setup/recipient-name.njk`, pageData)
-}
-
-async function viewRemoveThreshold(request, h) {
-  const {
-    params: { sessionId, licenceMonitoringStationId },
-    yar
-  } = request
-
-  await RemoveThresholdService.go(sessionId, licenceMonitoringStationId, yar)
-
-  return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
 
 async function viewPaperReturn(request, h) {
@@ -515,6 +515,7 @@ module.exports = {
   checkAlert,
   downloadRecipients,
   preview,
+  removeThreshold,
   viewAlertEmailAddress,
   viewAlertThresholds,
   viewAlertType,
@@ -532,7 +533,6 @@ module.exports = {
   viewPreviewPaperReturn,
   viewRecipientName,
   viewRemoveLicences,
-  viewRemoveThreshold,
   viewReturnsPeriod,
   viewSelectRecipients,
   setup,
