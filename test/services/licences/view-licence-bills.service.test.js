@@ -58,6 +58,10 @@ describe('View Licence service bills', () => {
 
         expect(result).to.equal({
           activeTab: 'bills',
+          backLink: {
+            href: '/licences',
+            text: 'Go back to search'
+          },
           bills: [],
           pageTitle: 'Bills',
           pageTitleCaption: `Licence ${licenceRef}`,

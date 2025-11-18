@@ -20,21 +20,10 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view-licence-bills.presenter.js')
 
 describe('View Licence Bills presenter', () => {
-  let auth
   let licence
   let bill
 
   beforeEach(() => {
-    auth = {
-      credentials: {
-        roles: [
-          {
-            role: 'billing'
-          }
-        ]
-      }
-    }
-
     bill = _bill()
 
     licence = {
@@ -51,9 +40,13 @@ describe('View Licence Bills presenter', () => {
 
   describe('when provided with a bills data', () => {
     it('correctly presents the data', () => {
-      const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
+      const result = ViewLicenceBillsPresenter.go(licence, [bill])
 
       expect(result).to.equal({
+        backLink: {
+          href: '/licences',
+          text: 'Go back to search'
+        },
         bills: [
           {
             accountNumber: bill.accountNumber,
@@ -69,8 +62,7 @@ describe('View Licence Bills presenter', () => {
           }
         ],
         pageTitle: 'Bills',
-        pageTitleCaption: `Licence ${licence.licenceRef}`,
-        roles: ['billing']
+        pageTitleCaption: `Licence ${licence.licenceRef}`
       })
     })
 
@@ -78,7 +70,7 @@ describe('View Licence Bills presenter', () => {
       describe('for each bill returned', () => {
         describe('when the invoice number exists', () => {
           it('correctly formats the "billNumber" to the invoice number', () => {
-            const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
+            const result = ViewLicenceBillsPresenter.go(licence, [bill])
 
             expect(result.bills[0].billNumber).to.equal('WAC0003872T')
           })
@@ -87,7 +79,7 @@ describe('View Licence Bills presenter', () => {
         describe('the "billingAccountLink" property', () => {
           describe('when the "enableBillingAccountView" flag is true', () => {
             it('returns the system link', () => {
-              const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
+              const result = ViewLicenceBillsPresenter.go(licence, [bill])
 
               expect(result.bills[0].billingAccountLink).to.equal(
                 `/system/billing-accounts/${bill.billingAccountId}?licence-id=${licence.id}`
@@ -101,7 +93,7 @@ describe('View Licence Bills presenter', () => {
             })
 
             it('returns the legacy link', () => {
-              const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
+              const result = ViewLicenceBillsPresenter.go(licence, [bill])
 
               expect(result.bills[0].billingAccountLink).to.equal(`/billing-accounts/${bill.billingAccountId}`)
             })
@@ -115,7 +107,7 @@ describe('View Licence Bills presenter', () => {
           })
 
           it('correctly formats the "billNumber" to "De minimis bill"', () => {
-            const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
+            const result = ViewLicenceBillsPresenter.go(licence, [bill])
 
             expect(result.bills[0].billNumber).to.equal('De minimis bill')
           })
@@ -128,7 +120,7 @@ describe('View Licence Bills presenter', () => {
           })
 
           it('correctly formats the "billNumber" to "NALD revised bill"', () => {
-            const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
+            const result = ViewLicenceBillsPresenter.go(licence, [bill])
 
             expect(result.bills[0].billNumber).to.equal('NALD revised bill')
           })
@@ -141,7 +133,7 @@ describe('View Licence Bills presenter', () => {
           })
 
           it('correctly formats the "billNumber" to "Zero value bill"', () => {
-            const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
+            const result = ViewLicenceBillsPresenter.go(licence, [bill])
 
             expect(result.bills[0].billNumber).to.equal('Zero value bill')
           })
@@ -153,7 +145,7 @@ describe('View Licence Bills presenter', () => {
           })
 
           it('returns an empty string', () => {
-            const result = ViewLicenceBillsPresenter.go(licence, [bill], auth)
+            const result = ViewLicenceBillsPresenter.go(licence, [bill])
 
             expect(result.bills[0].billNumber).to.equal('')
           })
