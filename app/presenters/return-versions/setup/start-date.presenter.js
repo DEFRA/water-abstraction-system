@@ -5,7 +5,6 @@
  * @module StartDatePresenter
  */
 
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const { formatLongDate } = require('../../base.presenter.js')
 
 /**
@@ -38,11 +37,9 @@ function _backLinkHref(session) {
 
   if (checkPageVisited) {
     return `/system/return-versions/setup/${id}/check`
-  } else if (FeatureFlagsConfig.enableSystemLicenceView) {
-    return `/system/licences/${licence.id}/set-up`
   }
 
-  return `/licences/${licence.id}#charge`
+  return `/system/licences/${licence.id}/set-up`
 }
 
 function _licenceVersionStartDate(licence) {
