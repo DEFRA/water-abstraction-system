@@ -99,7 +99,7 @@ describe('Licences - Base Licences presenter', () => {
     })
 
     describe('when the user has roles', () => {
-      it('should the roles', () => {
+      it('should return the roles', () => {
         const result = BaseLicencesPresenter.userRoles(auth)
 
         expect(result).to.equal(['role1', 'role2'])
