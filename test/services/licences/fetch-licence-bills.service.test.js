@@ -20,33 +20,29 @@ const FetchLicenceBillService = require('../../../app/services/licences/fetch-li
 describe('Fetch Licence Bills service', () => {
   const createdDate = new Date('2022-01-01')
 
-  let billId
+  let billLicence
   let billRunId
   let billingAccountId
   let licence
 
   beforeEach(async () => {
-    billId = generateUUID()
     billingAccountId = generateUUID()
     billRunId = generateUUID()
 
     licence = await LicenceHelper.add()
+
+    billLicence = await BillLicenceHelper.add({
+      licenceId: licence.id
+    })
   })
 
   describe('when the licence has bills', () => {
-    beforeEach(async () => {
-      await BillLicenceHelper.add({
-        licenceId: licence.id,
-        billId
-      })
-    })
-
     describe("and they are linked to a 'sent' bill run", () => {
       beforeEach(async () => {
         await BillRunHelper.add({ id: billRunId, status: 'sent' })
 
         await BillHelper.add({
-          id: billId,
+          id: billLicence.billId,
           billRunId,
           invoiceNumber: '123',
           accountNumber: 'T21404193A',
@@ -77,7 +73,7 @@ describe('Fetch Licence Bills service', () => {
               credit: null,
               deminimis: false,
               financialYearEnding: 2023,
-              id: billId,
+              id: billLicence.billId,
               invoiceNumber: '123',
               legacyId: null,
               netAmount: 12345
@@ -99,7 +95,7 @@ describe('Fetch Licence Bills service', () => {
         await BillRunHelper.add({ id: billRunId })
 
         await BillHelper.add({
-          id: billId,
+          id: billLicence.billId,
           billRunId,
           invoiceNumber: '123',
           accountNumber: 'T21404193A',
@@ -132,8 +128,7 @@ describe('Fetch Licence Bills service', () => {
   describe('when the licence has no bills', () => {
     beforeEach(async () => {
       await BillRunHelper.add({ id: billRunId, status: 'sent' })
-      await BillHelper.add({ id: billId, billRunId })
-      await BillLicenceHelper.add({ billId })
+      await BillHelper.add({ id: billLicence.id, billRunId })
     })
 
     it('returns no results', async () => {
