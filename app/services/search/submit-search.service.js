@@ -16,6 +16,7 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
  *
  * Otherwise, the search value will be stored in the session and the user redirected to the appropriate page.
  *
+ * @param {object} auth - The authentication object
  * @param {object} payload - The request payload containing the search query
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller, where we will store the
  * search query
@@ -23,14 +24,17 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
  * @returns {Promise<object>} The view data for the search page if there are validation errors or a redirect to the next
  * page to display, which could be the search results or the display page for a specific record
  */
-async function go(payload, yar) {
+async function go(auth, payload, yar) {
   const validationResult = SearchValidator.go(payload)
 
   if (validationResult.error) {
+    const { query, resultType } = payload
+    const userScopes = auth.credentials.scope
+
     return {
       activeNavBar: 'search',
       error: formatValidationResult(validationResult),
-      ...SearchPresenter.go(payload.query, payload.resultType)
+      ...SearchPresenter.go(userScopes, query, resultType)
     }
   }
 

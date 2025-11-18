@@ -26,6 +26,19 @@
               {% if activeTab === 'summary' %}aria-current="page"{% endif %}>
             Licence summary
           </a>
+          {% if activeTab === 'summary' %}
+          <ul class="x-govuk-sub-navigation__section x-govuk-sub-navigation__section--nested">
+            <li class="x-govuk-sub-navigation__section-item">
+              <a class="x-govuk-sub-navigation__link" href="/system/licences/{{ licenceId }}/purposes">Purposes, periods and amounts</a>
+            </li>
+            <li class="x-govuk-sub-navigation__section-item">
+              <a class="x-govuk-sub-navigation__link" href="/system/licences/{{ licenceId }}/points">Points</a>
+            </li>
+            <li class="x-govuk-sub-navigation__section-item">
+              <a class="x-govuk-sub-navigation__link" href="/system/licences/{{ licenceId }}/conditions">Conditions</a>
+            </li>
+          </ul>
+          {% endif %}
         </li>
 
         <li

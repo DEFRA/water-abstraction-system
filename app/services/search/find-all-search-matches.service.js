@@ -5,6 +5,7 @@
  * @module FindAllSearchMatchesService
  */
 
+const FetchBillingAccountSearchResultsService = require('./fetch-billing-account-search-results.service.js')
 const FetchLicenceSearchResultsService = require('./fetch-licence-search-results.service.js')
 const FetchMonitoringStationSearchResultsService = require('./fetch-monitoring-station-search-results.service.js')
 const FetchReturnLogSearchResultsService = require('./fetch-return-log-search-results.service.js')
@@ -25,13 +26,14 @@ const NO_RESULTS = { results: [], total: 0 }
  * @param {string} query - The value to search for, taken from the session
  * @param {string} resultType - The type of search result to display
  * @param {number} page - The requested page
+ * @param {string[]} userScopes - The user's scopes
  *
  * @returns {Promise<string>} The full set of results
  */
-async function go(query, resultType, page) {
-  const allSearchResults = await _allSearchResults(query, resultType, page)
-  const fullMatches = allSearchResults.slice(0, 4)
-  const partialMatches = allSearchResults.slice(4)
+async function go(query, resultType, page, userScopes) {
+  const allSearchResults = await _allSearchResults(query, resultType, page, userScopes)
+  const fullMatches = allSearchResults.slice(0, allSearchResults.length / 2)
+  const partialMatches = allSearchResults.slice(allSearchResults.length / 2)
 
   return {
     exactSearchResults: _searchResults(fullMatches),
@@ -40,17 +42,35 @@ async function go(query, resultType, page) {
   }
 }
 
-async function _allSearchResults(query, resultType, page) {
+async function _allSearchResults(query, resultType, page, userScopes) {
   return Promise.all([
+    _fullBillingAccountSearchResults(query, resultType, page, userScopes),
     _fullLicenceSearchResults(query, resultType, page),
     _fullMonitoringStationSearchResults(query, resultType, page),
     _fullReturnLogSearchResults(query, resultType, page),
     _fullUserSearchResults(query, resultType, page),
+    _partialBillingAccountSearchResults(query, resultType, page, userScopes),
     _partialLicenceSearchResults(query, resultType, page),
     _partialMonitoringStationSearchResults(query, resultType, page),
     _partialReturnLogSearchResults(query, resultType, page),
     _partialUserSearchResults(query, resultType, page)
   ])
+}
+
+async function _fullBillingAccountSearchResults(query, resultType, page, userScopes) {
+  if (!userScopes.includes('billing')) {
+    return NO_RESULTS
+  }
+
+  if (resultType && resultType !== 'billingAccount') {
+    return NO_RESULTS
+  }
+
+  if (!_matchesFullBillingAccountReference(query)) {
+    return NO_RESULTS
+  }
+
+  return FetchBillingAccountSearchResultsService.go(query, page, true)
 }
 
 async function _fullLicenceSearchResults(query, resultType, page) {
@@ -98,9 +118,14 @@ async function _fullUserSearchResults(query, resultType, page) {
 }
 
 function _largestResultCount(searchResults) {
-  const [licences, monitoringStations, returnLogs, users] = searchResults
+  const [billingAccounts, licences, monitoringStations, returnLogs, users] = searchResults
 
-  return Math.max(licences.total, monitoringStations.total, returnLogs.total, users.total)
+  return Math.max(billingAccounts.total, licences.total, monitoringStations.total, returnLogs.total, users.total)
+}
+
+function _matchesFullBillingAccountReference(query) {
+  // Billing account references are of the format "A12345678A" where the first letter is a charge region
+  return query.match(/^[ABENSTWY][0-9]{8}A$/i)
 }
 
 function _matchesFullLicenceRef(query) {
@@ -136,6 +161,12 @@ function _matchesFullUsername(query) {
   return query.match(/^.+@.{5,}$/)
 }
 
+function _matchesPartialBillingAccountReference(query) {
+  // If it's longer than 10 characters or contains any characters that aren't allowed in a billing account reference
+  // then it can't be part of a billing account reference
+  return query.match(/^[ABENSTWY0-9]{1,10}$/i)
+}
+
 function _matchesPartialLicenceRef(query) {
   // If there are three consecutive letters, it's not a licence reference
   return !query.match(/[a-z]{3}/i)
@@ -144,6 +175,22 @@ function _matchesPartialLicenceRef(query) {
 function _matchesPartialReturnLogReference(query) {
   // Return log references contain only numerical digits
   return query.match(/^\d+$/)
+}
+
+async function _partialBillingAccountSearchResults(query, resultType, page, userScopes) {
+  if (!userScopes.includes('billing')) {
+    return NO_RESULTS
+  }
+
+  if (resultType && resultType !== 'billingAccount') {
+    return NO_RESULTS
+  }
+
+  if (!_matchesPartialBillingAccountReference(query)) {
+    return NO_RESULTS
+  }
+
+  return FetchBillingAccountSearchResultsService.go(query, page, false)
 }
 
 async function _partialLicenceSearchResults(query, resultType, page) {
@@ -187,11 +234,16 @@ async function _partialUserSearchResults(query, resultType, page) {
 }
 
 function _searchResults(searchResults) {
-  const [licences, monitoringStations, returnLogs, users] = searchResults
+  const [billingAccounts, licences, monitoringStations, returnLogs, users] = searchResults
 
   return {
     amountFound:
-      licences.results.length + monitoringStations.results.length + returnLogs.results.length + users.results.length,
+      billingAccounts.results.length +
+      licences.results.length +
+      monitoringStations.results.length +
+      returnLogs.results.length +
+      users.results.length,
+    billingAccounts,
     licences,
     monitoringStations,
     returnLogs,

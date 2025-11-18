@@ -30,6 +30,7 @@ async function go() {
   const query = NotificationModel.query()
     .select([
       'createdAt',
+      'dueDate',
       'eventId',
       'id',
       'licenceMonitoringStationId',
@@ -39,6 +40,7 @@ async function go() {
       'notifyStatus',
       'notifyError',
       'personalisation',
+      'returnLogIds',
       'status'
     ])
     .where('status', 'pending')
