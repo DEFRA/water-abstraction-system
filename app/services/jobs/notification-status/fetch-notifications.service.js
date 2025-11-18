@@ -30,6 +30,7 @@ async function go() {
   const query = NotificationModel.query()
     .select([
       'createdAt',
+      'dueDate',
       'eventId',
       'id',
       'licenceMonitoringStationId',

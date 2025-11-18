@@ -119,6 +119,7 @@ describe('Job - Notification Status - Fetch Notifications service', () => {
 function _transformToResult(notification) {
   return NotificationModel.fromJson({
     createdAt: notification.createdAt,
+    dueDate: notification.dueDate,
     eventId: notification.eventId,
     id: notification.id,
     licenceMonitoringStationId: notification.licenceMonitoringStationId,
