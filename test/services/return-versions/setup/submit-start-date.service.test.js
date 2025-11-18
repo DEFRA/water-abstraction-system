@@ -12,7 +12,6 @@ const { expect } = Code
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const DetermineRelevantLicenceVersionService = require('../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js')
 
 // Thing under test
@@ -344,8 +343,6 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
     describe('with an invalid payload', () => {
       beforeEach(async () => {
         payload = {}
-
-        Sinon.stub(FeatureFlagsConfig, 'enableSystemLicenceView').value(true)
       })
 
       it('returns the page data for the view', async () => {
