@@ -9,7 +9,6 @@ const DetermineLicenceHasReturnVersionsService = require('./determine-licence-ha
 const FetchLicenceReturnsService = require('./fetch-licence-returns.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const ViewLicenceReturnsPresenter = require('../../presenters/licences/view-licence-returns.presenter.js')
-const ViewLicenceService = require('./view-licence.service.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
@@ -21,25 +20,25 @@ const ViewLicenceService = require('./view-licence.service.js')
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
 async function go(licenceId, auth, page) {
-  const commonData = await ViewLicenceService.go(licenceId, auth)
-
   const hasRequirements = await DetermineLicenceHasReturnVersionsService.go(licenceId)
 
-  const returnsData = await FetchLicenceReturnsService.go(licenceId, page)
-  const pageData = ViewLicenceReturnsPresenter.go(returnsData.returns, hasRequirements)
+  const { returns, licence, pagination } = await FetchLicenceReturnsService.go(licenceId, page)
+  const pageData = ViewLicenceReturnsPresenter.go(returns, hasRequirements, licence)
 
-  const pagination = PaginatorPresenter.go(
-    returnsData.pagination.total,
-    Number(page),
-    `/system/licences/${licenceId}/returns`
-  )
+  const paginationData = PaginatorPresenter.go(pagination.total, Number(page), `/system/licences/${licenceId}/returns`)
 
   return {
-    activeTab: 'returns',
     ...pageData,
-    ...commonData,
-    pagination
+    activeTab: 'returns',
+    pagination: paginationData,
+    roles: _roles(auth)
   }
+}
+
+function _roles(auth) {
+  return auth.credentials.roles.map((role) => {
+    return role.role
+  })
 }
 
 module.exports = {

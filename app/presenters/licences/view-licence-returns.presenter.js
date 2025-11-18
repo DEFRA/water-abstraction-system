@@ -12,17 +12,25 @@ const { formatLongDate, formatPurposes, formatReturnLogStatus } = require('../ba
  *
  * @param {module:ReturnLogModel[]} returnLogs - The results from `FetchLicenceReturnsService` to be formatted
  * @param {boolean} hasRequirements - True if the licence has return requirements else false
- *
+ * @param {object} licence
  * @returns {object} The data formatted for the view template
  */
-function go(returnLogs, hasRequirements) {
+function go(returnLogs, hasRequirements, licence) {
   const returns = _returns(returnLogs)
+
+  const { licenceRef } = licence
 
   const hasReturns = returns.length > 0
 
   return {
+    backLink: {
+      text: 'Go back to search',
+      href: '/licences'
+    },
     returns,
-    noReturnsMessage: _noReturnsMessage(hasReturns, hasRequirements)
+    noReturnsMessage: _noReturnsMessage(hasReturns, hasRequirements),
+    pageTitle: 'Returns',
+    pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 

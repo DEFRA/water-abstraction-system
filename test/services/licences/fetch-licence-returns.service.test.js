@@ -69,47 +69,52 @@ describe('Licences - Fetch licence returns service', () => {
     it('returns results', async () => {
       const result = await FetchLicenceReturnsService.go(licence.id, 1)
 
-      expect(result.pagination).to.equal({
-        total: 3
+      expect(result).to.equal({
+        licence: {
+          licenceRef: licence.licenceRef
+        },
+        pagination: {
+          total: 3
+        },
+        //  This should be ordered first by start date, then by return reference
+        //
+        // - 2020-05-01 - 123
+        // - 2020-02-01 - 10334004
+        // - 2020-02-01 - 9999990
+        //
+        returns: [
+          {
+            dueDate: returnLogs[2].dueDate,
+            endDate: returnLogs[2].endDate,
+            id: returnLogs[2].id,
+            metadata: returnLogs[2].metadata,
+            returnId: returnLogs[2].returnId,
+            returnReference: returnLogs[2].returnReference,
+            startDate: returnLogs[2].startDate,
+            status: returnLogs[2].status
+          },
+          {
+            dueDate: returnLogs[1].dueDate,
+            endDate: returnLogs[1].endDate,
+            id: returnLogs[1].id,
+            metadata: returnLogs[1].metadata,
+            returnId: returnLogs[1].returnId,
+            returnReference: returnLogs[1].returnReference,
+            startDate: returnLogs[1].startDate,
+            status: returnLogs[1].status
+          },
+          {
+            dueDate: returnLogs[0].dueDate,
+            endDate: returnLogs[0].endDate,
+            id: returnLogs[0].id,
+            metadata: returnLogs[0].metadata,
+            returnId: returnLogs[0].returnId,
+            returnReference: returnLogs[0].returnReference,
+            startDate: returnLogs[0].startDate,
+            status: returnLogs[0].status
+          }
+        ]
       })
-      //  This should be ordered first by start date, then by return reference
-      //
-      // - 2020-05-01 - 123
-      // - 2020-02-01 - 10334004
-      // - 2020-02-01 - 9999990
-      //
-      expect(result.returns).to.equal([
-        {
-          dueDate: returnLogs[2].dueDate,
-          endDate: returnLogs[2].endDate,
-          id: returnLogs[2].id,
-          metadata: returnLogs[2].metadata,
-          returnId: returnLogs[2].returnId,
-          returnReference: returnLogs[2].returnReference,
-          startDate: returnLogs[2].startDate,
-          status: returnLogs[2].status
-        },
-        {
-          dueDate: returnLogs[1].dueDate,
-          endDate: returnLogs[1].endDate,
-          id: returnLogs[1].id,
-          metadata: returnLogs[1].metadata,
-          returnId: returnLogs[1].returnId,
-          returnReference: returnLogs[1].returnReference,
-          startDate: returnLogs[1].startDate,
-          status: returnLogs[1].status
-        },
-        {
-          dueDate: returnLogs[0].dueDate,
-          endDate: returnLogs[0].endDate,
-          id: returnLogs[0].id,
-          metadata: returnLogs[0].metadata,
-          returnId: returnLogs[0].returnId,
-          returnReference: returnLogs[0].returnReference,
-          startDate: returnLogs[0].startDate,
-          status: returnLogs[0].status
-        }
-      ])
     })
   })
 })

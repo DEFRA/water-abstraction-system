@@ -5,7 +5,7 @@
  * @module FetchLicenceReturnsService
  */
 
-const ReturnLogModel = require('../../models/return-log.model.js')
+const LicenceModel = require('../../models/licence.model.js')
 
 const DatabaseConfig = require('../../../config/database.config.js')
 
@@ -18,29 +18,28 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * @returns {Promise<object>} the data needed to populate the view licence page's returns tab
  */
 async function go(licenceId, page) {
-  const { results, total } = await _fetch(licenceId, page)
+  const { returnLogs, ...licence } = await _fetch(licenceId, page)
 
-  return { returns: results, pagination: { total } }
+  const result = await _fetch(licenceId, page)
+
+  console.log('HERE', result)
+
+  return { returns: returnLogs, pagination: { total: returnLogs.total }, licence }
 }
 
 async function _fetch(licenceId, page) {
-  // NOTE: Because the return references are held in a varchar field, we have to convert them to an integer in our
-  // order by for the results to be ordered as expected. Hence, we need to use orderByRaw()
-  return ReturnLogModel.query()
-    .select([
-      'returnLogs.id',
-      'returnLogs.dueDate',
-      'returnLogs.endDate',
-      'returnLogs.metadata',
-      'returnLogs.returnId',
-      'returnLogs.returnReference',
-      'returnLogs.startDate',
-      'returnLogs.status'
-    ])
-    .innerJoinRelated('licence')
-    .where('licence.id', licenceId)
-    .orderByRaw('return_logs.start_date desc, return_logs.return_reference::integer desc')
-    .page(page - 1, DatabaseConfig.defaultPageSize)
+  return LicenceModel.query()
+    .findById(licenceId)
+    .select(['licenceRef'])
+    .withGraphFetched('returnLogs')
+    .modifyGraph('returnLogs', (builder) => {
+      builder
+        .select(['id', 'dueDate', 'endDate', 'metadata', 'returnId', 'returnReference', 'startDate', 'status'])
+        // NOTE: Because the return references are held in a varchar field, we have to convert them to an integer in our
+        // order by for the results to be ordered as expected. Hence, we need to use orderByRaw()
+        .orderByRaw('return_logs.start_date desc, return_logs.return_reference::integer desc')
+        .page(page - 1, DatabaseConfig.defaultPageSize)
+    })
 }
 
 module.exports = {
