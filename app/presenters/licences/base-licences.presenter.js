@@ -33,6 +33,20 @@ function formatAbstractionAmounts(licenceVersionPurpose) {
   return details
 }
 
+/**
+ * Flatten the 'auth.credentials.roles' to and array of roles e.g. ['returns', 'billing']
+ *
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
+ *
+ * @returns {string[]} An array of roles
+ */
+function userRoles(auth) {
+  return auth.credentials.roles.map((role) => {
+    return role.role
+  })
+}
+
 module.exports = {
-  formatAbstractionAmounts
+  formatAbstractionAmounts,
+  userRoles
 }
