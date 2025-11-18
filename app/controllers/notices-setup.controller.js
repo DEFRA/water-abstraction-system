@@ -58,14 +58,6 @@ async function addRecipient(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
 
-async function checkAlert(request, h) {
-  const { contactHashId, sessionId } = request.params
-
-  const pageData = await CheckAlertService.go(contactHashId, sessionId)
-
-  return h.view('notices/setup/preview/check-alert.njk', pageData)
-}
-
 async function viewCheckPaperReturn(request, h) {
   const { contactHashId, sessionId } = request.params
 
@@ -151,6 +143,14 @@ async function viewCancelAlerts(request, h) {
   const pageData = await CancelAlertsService.go(sessionId)
 
   return h.view(`notices/setup/abstraction-alerts/cancel-alerts.njk`, pageData)
+}
+
+async function viewCheckAlert(request, h) {
+  const { contactHashId, sessionId } = request.params
+
+  const pageData = await CheckAlertService.go(contactHashId, sessionId)
+
+  return h.view('notices/setup/preview/check-alert.njk', pageData)
 }
 
 async function viewCheckLicenceMatches(request, h) {
@@ -512,7 +512,6 @@ async function submitSelectRecipients(request, h) {
 
 module.exports = {
   addRecipient,
-  checkAlert,
   downloadRecipients,
   preview,
   removeThreshold,
@@ -522,6 +521,7 @@ module.exports = {
   viewCancel,
   viewCancelAlerts,
   viewCheck,
+  viewCheckAlert,
   viewCheckLicenceMatches,
   viewCheckNoticeType,
   viewCheckPaperReturn,

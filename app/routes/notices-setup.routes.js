@@ -343,7 +343,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-alert',
     options: {
-      handler: NoticesSetupController.checkAlert,
+      handler: NoticesSetupController.viewCheckAlert,
       auth: {
         access: {
           scope: ['hof_notifications']
