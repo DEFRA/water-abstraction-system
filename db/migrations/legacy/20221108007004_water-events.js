@@ -19,6 +19,7 @@ exports.up = function (knex) {
     table.string('status')
     table.string('overall_status')
     table.jsonb('status_counts')
+    table.uuid('trigger_notice_id')
 
     // Legacy timestamps
     table.timestamp('created', { precision: 0, useTz: false }).notNullable().defaultTo(knex.fn.now())

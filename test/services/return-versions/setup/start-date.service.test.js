@@ -3,13 +3,11 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -42,8 +40,6 @@ describe('Return Versions Setup - Start Date service', () => {
         requirements: [{}]
       }
     })
-
-    Sinon.stub(FeatureFlagsConfig, 'enableSystemLicenceView').value(true)
   })
 
   describe('when called', () => {

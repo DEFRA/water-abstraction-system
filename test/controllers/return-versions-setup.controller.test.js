@@ -34,6 +34,7 @@ const SiteDescriptionService = require('../../app/services/return-versions/setup
 const StartDateService = require('../../app/services/return-versions/setup/start-date.service.js')
 const SubmitAbstractionPeriod = require('../../app/services/return-versions/setup/submit-abstraction-period.service.js')
 const SubmitAgreementsExceptions = require('../../app/services/return-versions/setup/submit-agreements-exceptions.service.js')
+const SubmitCancelService = require('../../app/services/return-versions/setup/submit-cancel.service.js')
 const SubmitExistingService = require('../../app/services/return-versions/setup/existing/submit-existing.service.js')
 const SubmitFrequencyCollectedService = require('../../app/services/return-versions/setup/submit-frequency-collected.service.js')
 const SubmitFrequencyReportedService = require('../../app/services/return-versions/setup/submit-frequency-reported.service.js')
@@ -300,6 +301,25 @@ describe('Return Versions controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('You are about to cancel these requirements for returns')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        const licenceId = '2c6d79e7-f25c-48ad-9af6-9ab5520a4b73'
+
+        beforeEach(() => {
+          Sinon.stub(SubmitCancelService, 'go').resolves()
+        })
+
+        it('redirects to the "check" page', async () => {
+          const response = await server.inject(
+            postRequestOptions(`/return-versions/setup/${sessionId}/${path}`, { licenceId })
+          )
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/licences/${licenceId}/set-up`)
         })
       })
     })
