@@ -20,10 +20,6 @@ const DatabaseConfig = require('../../../config/database.config.js')
 async function go(licenceId, page) {
   const { returnLogs, ...licence } = await _fetch(licenceId, page)
 
-  const result = await _fetch(licenceId, page)
-
-  console.log('HERE', result)
-
   return { returns: returnLogs, pagination: { total: returnLogs.total }, licence }
 }
 
