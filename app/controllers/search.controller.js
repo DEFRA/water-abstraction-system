@@ -6,7 +6,6 @@
  */
 
 const SubmitSearchService = require('../services/search/submit-search.service.js')
-const ViewSearchResultsService = require('../services/search/view-search-results.service.js')
 const ViewSearchService = require('../services/search/view-search.service.js')
 
 const VIEW_PAGE = 'search/search.njk'
@@ -32,16 +31,7 @@ async function viewSearch(request, h) {
     yar
   } = request
 
-  // GET requests sent to the /search page might be either to just show the search page or to view search results, so we
-  // need to check whether this is just an initial request to display the page (i.e. no page parameter is present) or
-  // whether it is a request for a page of results
-  if (!page) {
-    const viewPageData = await ViewSearchService.go(auth)
-
-    return h.view(VIEW_PAGE, viewPageData)
-  }
-
-  const pageData = await ViewSearchResultsService.go(auth, yar, page)
+  const pageData = await ViewSearchService.go(auth, yar, page)
 
   return h.view(VIEW_PAGE, pageData)
 }

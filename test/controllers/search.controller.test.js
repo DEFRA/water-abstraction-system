@@ -15,7 +15,6 @@ const { postRequestOptions } = require('../support/general.js')
 // Things we need to stub
 const SubmitSearchService = require('../../app/services/search/submit-search.service.js')
 const ViewSearchService = require('../../app/services/search/view-search.service.js')
-const ViewSearchResultsService = require('../../app/services/search/view-search-results.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -69,7 +68,7 @@ describe('Search controller', () => {
         describe('and shows search results', () => {
           beforeEach(async () => {
             getOptions.url = '/search?page=1'
-            Sinon.stub(ViewSearchResultsService, 'go').resolves({
+            Sinon.stub(ViewSearchService, 'go').resolves({
               activeNavBar: 'search',
               pageTitle: 'Search results (page 1 of 2)',
               pagination: { numberOfPages: 2 },
