@@ -23,7 +23,7 @@ const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.j
  * @returns {Promise<object>} - the created notifications and reference code
  */
 async function go(notice) {
-  const { failedLicenceRefs, failedReturnIds } = await FetchFailedReturnsInvitationsService.go(notice.id)
+  const { failedLicenceRefs, failedReturnIds } = FetchFailedReturnsInvitationsService.go(notice.id)
 
   if (failedReturnIds.length === 0) {
     return { notifications: [], referenceCode: null }
@@ -39,7 +39,7 @@ async function go(notice) {
 
 async function _notice(notice, noticeType, recipients, licenceRefs) {
   const timestamp = timestampForPostgres()
-  const _notice = {
+  const _noticeDetails = {
     issuer: notice.issuer,
     licences: licenceRefs,
     metadata: {
@@ -59,7 +59,7 @@ async function _notice(notice, noticeType, recipients, licenceRefs) {
     type: 'notification'
   }
 
-  return EventModel.query().insert({ ..._notice, createdAt: timestamp, updatedAt: timestamp })
+  return EventModel.query().insert({ ..._noticeDetails, createdAt: timestamp, updatedAt: timestamp })
 }
 
 async function _notifications(notice, recipients) {
