@@ -27,6 +27,7 @@ exports.up = function (knex) {
     table.boolean('is_test').notNullable().defaultTo(false)
     table.uuid('return_cycle_id')
     table.boolean('quarterly').notNullable().defaultTo(false)
+    table.date('sent_date')
 
     // Legacy timestamps
     // NOTE: They are not automatically set
