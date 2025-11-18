@@ -11,6 +11,7 @@ const { expect } = Code
 // Test helpers
 const BillRunError = require('../../../app/errors/bill-run.error.js')
 const BillRunModel = require('../../../app/models/bill-run.model.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
 const ChargingModuleCreateTransactionRequest = require('../../../app/requests/charging-module/create-transaction.request.js')
@@ -18,12 +19,12 @@ const ChargingModuleCreateTransactionRequest = require('../../../app/requests/ch
 // Thing under test
 const SendTransactionsService = require('../../../app/services/bill-runs/send-transactions.service.js')
 
-describe('Send Transactions service', () => {
+describe('Bill Runs - Send Transactions service', () => {
   const accountNumber = 'ABC123'
   const billRunExternalId = '4f3710ca-75b1-4828-8fe9-f7c1edecbbf3'
   const licence = {
     historicalAreaCode: 'DALES',
-    licenceRef: 'AT/CURR/MONTHLY/02',
+    licenceRef: generateLicenceRef(),
     regionalChargeArea: 'Yorkshire',
     region: { chargeRegionId: 'N' }
   }

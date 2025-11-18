@@ -12,6 +12,7 @@ const { expect } = Code
 const FetchLicenceSearchResultsService = require('../../../app/services/search/fetch-licence-search-results.service.js')
 const FetchMonitoringStationSearchResultsService = require('../../../app/services/search/fetch-monitoring-station-search-results.service.js')
 const FetchReturnLogSearchResultsService = require('../../../app/services/search/fetch-return-log-search-results.service.js')
+const FetchUserSearchResultsService = require('../../../app/services/search/fetch-user-search-results.service.js')
 
 // Thing under test
 const FindAllSearchMatchesService = require('../../../app/services/search/find-all-search-matches.service.js')
@@ -63,6 +64,18 @@ describe('Search - Find all search matches service', () => {
     total: 1
   }
 
+  const userResults = {
+    results: [
+      {
+        application: 'water_admin',
+        id: 'user-1',
+        lastLogin: new Date('2001-01-01T00:00:00Z'),
+        username: 'TESTSEARCH01@wrls.gov.uk'
+      }
+    ],
+    total: 1
+  }
+
   let page
   let resultType
   let searchQuery
@@ -71,6 +84,7 @@ describe('Search - Find all search matches service', () => {
     Sinon.stub(FetchLicenceSearchResultsService, 'go').resolves(licenceResults)
     Sinon.stub(FetchMonitoringStationSearchResultsService, 'go').resolves(monitoringStationResults)
     Sinon.stub(FetchReturnLogSearchResultsService, 'go').resolves(returnLogResults)
+    Sinon.stub(FetchUserSearchResultsService, 'go').resolves(userResults)
   })
 
   afterEach(() => {
@@ -84,7 +98,7 @@ describe('Search - Find all search matches service', () => {
       searchQuery = '1231231231'
     })
 
-    it('returns all the data', async () => {
+    it('returns all the matching data', async () => {
       const result = await FindAllSearchMatchesService.go(searchQuery, resultType, page)
 
       expect(result).to.equal({
@@ -92,14 +106,16 @@ describe('Search - Find all search matches service', () => {
           amountFound: 3,
           licences: licenceResults,
           monitoringStations: monitoringStationResults,
-          returnLogs: returnLogResults
+          returnLogs: returnLogResults,
+          users: { results: [], total: 0 }
         },
         largestResultCount: 1,
         similarSearchResults: {
-          amountFound: 3,
+          amountFound: 4,
           licences: licenceResults,
           monitoringStations: monitoringStationResults,
-          returnLogs: returnLogResults
+          returnLogs: returnLogResults,
+          users: userResults
         }
       })
     })
@@ -120,14 +136,16 @@ describe('Search - Find all search matches service', () => {
           amountFound: 1,
           licences: licenceResults,
           monitoringStations: { results: [], total: 0 },
-          returnLogs: { results: [], total: 0 }
+          returnLogs: { results: [], total: 0 },
+          users: { results: [], total: 0 }
         },
         largestResultCount: 1,
         similarSearchResults: {
           amountFound: 1,
           licences: licenceResults,
           monitoringStations: { results: [], total: 0 },
-          returnLogs: { results: [], total: 0 }
+          returnLogs: { results: [], total: 0 },
+          users: { results: [], total: 0 }
         }
       })
     })
@@ -148,14 +166,16 @@ describe('Search - Find all search matches service', () => {
           amountFound: 1,
           licences: { results: [], total: 0 },
           monitoringStations: monitoringStationResults,
-          returnLogs: { results: [], total: 0 }
+          returnLogs: { results: [], total: 0 },
+          users: { results: [], total: 0 }
         },
         largestResultCount: 1,
         similarSearchResults: {
           amountFound: 1,
           licences: { results: [], total: 0 },
           monitoringStations: monitoringStationResults,
-          returnLogs: { results: [], total: 0 }
+          returnLogs: { results: [], total: 0 },
+          users: { results: [], total: 0 }
         }
       })
     })
@@ -176,14 +196,46 @@ describe('Search - Find all search matches service', () => {
           amountFound: 1,
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
-          returnLogs: returnLogResults
+          returnLogs: returnLogResults,
+          users: { results: [], total: 0 }
         },
         largestResultCount: 1,
         similarSearchResults: {
           amountFound: 1,
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
-          returnLogs: returnLogResults
+          returnLogs: returnLogResults,
+          users: { results: [], total: 0 }
+        }
+      })
+    })
+  })
+
+  describe('when only users are requested', () => {
+    beforeEach(() => {
+      page = 1
+      resultType = 'user'
+      searchQuery = 'a@bb.com'
+    })
+
+    it('returns only user data', async () => {
+      const result = await FindAllSearchMatchesService.go(searchQuery, resultType, page)
+
+      expect(result).to.equal({
+        exactSearchResults: {
+          amountFound: 1,
+          licences: { results: [], total: 0 },
+          monitoringStations: { results: [], total: 0 },
+          returnLogs: { results: [], total: 0 },
+          users: userResults
+        },
+        largestResultCount: 1,
+        similarSearchResults: {
+          amountFound: 1,
+          licences: { results: [], total: 0 },
+          monitoringStations: { results: [], total: 0 },
+          returnLogs: { results: [], total: 0 },
+          users: userResults
         }
       })
     })
@@ -286,6 +338,51 @@ describe('Search - Find all search matches service', () => {
 
         expect(result.similarSearchResults.amountFound).to.equal(0)
       })
+    })
+  })
+
+  describe('when the search is not a full username', () => {
+    beforeEach(() => {
+      page = 1
+      resultType = 'user'
+    })
+
+    describe('because it does not contain enough characters', () => {
+      beforeEach(() => {
+        searchQuery = 'a@b.c'
+      })
+
+      it('returns no exact matches', async () => {
+        const result = await FindAllSearchMatchesService.go(searchQuery, resultType, page)
+
+        expect(result.exactSearchResults.amountFound).to.equal(0)
+      })
+    })
+
+    describe('because it does not contain an @ sign', () => {
+      beforeEach(() => {
+        searchQuery = 'a.bb.com'
+      })
+
+      it('returns no exact matches', async () => {
+        const result = await FindAllSearchMatchesService.go(searchQuery, resultType, page)
+
+        expect(result.exactSearchResults.amountFound).to.equal(0)
+      })
+    })
+  })
+
+  describe('when the search is a full username', () => {
+    beforeEach(() => {
+      page = 1
+      resultType = 'user'
+      searchQuery = 'a@bb.com'
+    })
+
+    it('returns exact matches', async () => {
+      const result = await FindAllSearchMatchesService.go(searchQuery, resultType, page)
+
+      expect(result.exactSearchResults.users).to.equal(userResults)
     })
   })
 })

@@ -31,7 +31,8 @@ exports.up = function (knex) {
         'template_id',
         'pdf',
         'returned_at',
-        'alternate_notice_id'
+        'alternate_notice_id',
+        'due_date'
       ])
     )
   })
@@ -68,7 +69,8 @@ exports.down = function (knex) {
         'return_log_ids',
         'template_id',
         'pdf',
-        'returned_at'
+        'returned_at',
+        'alternate_notice_id'
       ])
     )
   })

@@ -20,8 +20,8 @@ const LicenceSupplementaryProcessBillingFlagService = require('../../app/service
 const SubmitMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
 const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
 const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
-const ViewLicenceConditionsService = require('../../app/services/licences/view-licence-conditions.service.js')
 const ViewContactDetailsService = require('../../app/services/licences/view-contact-details.service.js')
+const ViewConditionsService = require('../../app/services/licences/view-conditions.service.js')
 const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
 const ViewLicenceHistoryService = require('../../app/services/licences/view-licence-history.service.js')
 const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
@@ -100,7 +100,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has conditions', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceConditionsService, 'go').resolves(_viewLicenceConditions())
+          Sinon.stub(ViewConditionsService, 'go').resolves(_viewLicenceConditions())
         })
 
         it('returns the page successfully', async () => {
@@ -305,7 +305,7 @@ describe('Licences controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Licence abstraction points')
+          expect(response.payload).to.contain('Points')
         })
       })
     })
@@ -333,7 +333,7 @@ describe('Licences controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Licence purpose details')
+          expect(response.payload).to.contain('Purposes, periods and amounts')
         })
       })
     })
@@ -756,7 +756,7 @@ function _viewLicencePoints() {
       }
     ],
     licenceRef: '03/28/07/0006',
-    pageTitle: 'Licence abstraction points'
+    pageTitle: 'Points'
   }
 }
 
@@ -776,7 +776,7 @@ function _viewLicencePurposes() {
         purposeDescription: 'Transfer Between Sources (Pre Water Act 2003)'
       }
     ],
-    pageTitle: 'Licence purpose details'
+    pageTitle: 'Purposes, periods and amounts'
   }
 }
 
