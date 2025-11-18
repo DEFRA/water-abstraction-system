@@ -16,8 +16,10 @@ describe('Search - Search presenter', () => {
   let page
   let query
   let resultType
+  let userScopes
 
   beforeEach(() => {
+    userScopes = ['billing']
     query = 'searchthis'
     resultType = null
 
@@ -26,7 +28,18 @@ describe('Search - Search presenter', () => {
 
     allSearchMatches = {
       exactSearchResults: {
-        amountFound: 4,
+        amountFound: 5,
+        billingAccounts: {
+          results: [
+            {
+              accountNumber: 'A12345678A',
+              createdAt: new Date('2000-01-01T00:00:00.000Z'),
+              id: 'billing-account-1',
+              name: 'Company 1'
+            }
+          ],
+          total: 1
+        },
         licences: {
           results: [
             {
@@ -81,7 +94,18 @@ describe('Search - Search presenter', () => {
       },
       largestResultCount: 1,
       similarSearchResults: {
-        amountFound: 4,
+        amountFound: 5,
+        billingAccounts: {
+          results: [
+            {
+              accountNumber: 'A12345678A',
+              createdAt: new Date('2000-01-01T00:00:00.000Z'),
+              id: 'billing-account-1',
+              name: 'Company 1'
+            }
+          ],
+          total: 1
+        },
         licences: {
           results: [
             {
@@ -138,10 +162,18 @@ describe('Search - Search presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+    const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
     expect(result).to.equal({
       exactMatches: {
+        billingAccounts: [
+          {
+            accountNumber: 'A12345678A',
+            createdAt: '1 January 2000',
+            id: 'billing-account-1',
+            name: 'Company 1'
+          }
+        ],
         licences: [
           {
             id: 'licence-1',
@@ -179,12 +211,42 @@ describe('Search - Search presenter', () => {
           }
         ]
       },
+      filterItems: [
+        {
+          checked: false,
+          text: 'Billing accounts',
+          value: 'billingAccount'
+        },
+        {
+          checked: false,
+          text: 'Licences',
+          value: 'licence'
+        },
+        {
+          checked: false,
+          text: 'Monitoring stations',
+          value: 'monitoringStation'
+        },
+        {
+          checked: false,
+          text: 'Return logs',
+          value: 'returnLog'
+        }
+      ],
       noPartialResults: false,
       noResults: false,
       page: 1,
       pageTitle: 'Search results for "searchthis"',
       pageTitleCaption: null,
       partialMatches: {
+        billingAccounts: [
+          {
+            accountNumber: 'A12345678A',
+            id: 'billing-account-1',
+            createdAt: '1 January 2000',
+            name: 'Company 1'
+          }
+        ],
         licences: [
           {
             id: 'licence-1',
@@ -231,15 +293,39 @@ describe('Search - Search presenter', () => {
   })
 
   describe('the "exactMatches" property', () => {
-    describe('the "exactMatches.licences" property', () => {
-      describe('when no exactly matching licences have been found', () => {
+    describe('the "exactMatches.billingAccounts" property', () => {
+      describe('when no exactly matching billing accounts have been found', () => {
         beforeEach(() => {
-          allSearchMatches.exactSearchResults.licences = { results: [], total: 0 }
+          allSearchMatches.exactSearchResults.billingAccounts = { results: [], total: 0 }
           allSearchMatches.exactSearchResults.amountFound = 3
         })
 
         it('returns "null"', () => {
-          const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+
+          expect(result.exactMatches.billingAccounts).to.be.null()
+        })
+      })
+
+      describe('when some exactly matching billing accounts have been found', () => {
+        it('returns an array', () => {
+          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+
+          expect(result.exactMatches.billingAccounts[0]).to.exist()
+          expect(result.exactMatches.billingAccounts.length).to.equal(1)
+        })
+      })
+    })
+
+    describe('the "exactMatches.licences" property', () => {
+      describe('when no exactly matching licences have been found', () => {
+        beforeEach(() => {
+          allSearchMatches.exactSearchResults.licences = { results: [], total: 0 }
+          allSearchMatches.exactSearchResults.amountFound = 4
+        })
+
+        it('returns "null"', () => {
+          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
           expect(result.exactMatches.licences).to.be.null()
         })
@@ -247,7 +333,7 @@ describe('Search - Search presenter', () => {
 
       describe('when some exactly matching licences have been found', () => {
         it('returns an array', () => {
-          const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
           expect(result.exactMatches.licences[0]).to.exist()
           expect(result.exactMatches.licences.length).to.equal(1)
@@ -259,11 +345,11 @@ describe('Search - Search presenter', () => {
       describe('when no exactly matching monitoring stations have been found', () => {
         beforeEach(() => {
           allSearchMatches.exactSearchResults.monitoringStations = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 3
+          allSearchMatches.exactSearchResults.amountFound = 4
         })
 
         it('returns "null"', () => {
-          const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
           expect(result.exactMatches.monitoringStations).to.be.null()
         })
@@ -271,7 +357,7 @@ describe('Search - Search presenter', () => {
 
       describe('when some exactly matching monitoring stations have been found', () => {
         it('returns an array', () => {
-          const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
           expect(result.exactMatches.monitoringStations[0]).to.exist()
           expect(result.exactMatches.monitoringStations.length).to.equal(1)
@@ -283,11 +369,11 @@ describe('Search - Search presenter', () => {
       describe('when no exactly matching return logs have been found', () => {
         beforeEach(() => {
           allSearchMatches.exactSearchResults.returnLogs = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 3
+          allSearchMatches.exactSearchResults.amountFound = 4
         })
 
         it('returns "null"', () => {
-          const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
           expect(result.exactMatches.returnLogs).to.be.null()
         })
@@ -295,7 +381,7 @@ describe('Search - Search presenter', () => {
 
       describe('when some exactly matching return logs have been found', () => {
         it('returns an array', () => {
-          const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
           expect(result.exactMatches.returnLogs[0]).to.exist()
           expect(result.exactMatches.returnLogs.length).to.equal(1)
@@ -311,7 +397,7 @@ describe('Search - Search presenter', () => {
         })
 
         it('returns "null"', () => {
-          const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
           expect(result.exactMatches.users).to.be.null()
         })
@@ -319,11 +405,140 @@ describe('Search - Search presenter', () => {
 
       describe('when some exactly matching users have been found', () => {
         it('returns an array', () => {
-          const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
           expect(result.exactMatches.users[0]).to.exist()
           expect(result.exactMatches.users.length).to.equal(1)
         })
+      })
+    })
+  })
+
+  describe('the "filterItems" property', () => {
+    describe('when the result type is "all"', () => {
+      beforeEach(() => {
+        resultType = 'all'
+      })
+
+      it('returns no selected items', () => {
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.filterItems).to.equal([
+          {
+            checked: false,
+            text: 'Billing accounts',
+            value: 'billingAccount'
+          },
+          {
+            checked: false,
+            text: 'Licences',
+            value: 'licence'
+          },
+          {
+            checked: false,
+            text: 'Monitoring stations',
+            value: 'monitoringStation'
+          },
+          {
+            checked: false,
+            text: 'Return logs',
+            value: 'returnLog'
+          }
+        ])
+      })
+    })
+
+    describe('when the result type is "billingAccount"', () => {
+      beforeEach(() => {
+        resultType = 'billingAccount'
+      })
+
+      it('returns the selected item', () => {
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.filterItems).to.equal([
+          {
+            checked: true,
+            text: 'Billing accounts',
+            value: 'billingAccount'
+          },
+          {
+            checked: false,
+            text: 'Licences',
+            value: 'licence'
+          },
+          {
+            checked: false,
+            text: 'Monitoring stations',
+            value: 'monitoringStation'
+          },
+          {
+            checked: false,
+            text: 'Return logs',
+            value: 'returnLog'
+          }
+        ])
+      })
+    })
+
+    describe('when the result type is not provided', () => {
+      beforeEach(() => {
+        resultType = undefined
+      })
+
+      it('returns no selected items', () => {
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.filterItems).to.equal([
+          {
+            checked: false,
+            text: 'Billing accounts',
+            value: 'billingAccount'
+          },
+          {
+            checked: false,
+            text: 'Licences',
+            value: 'licence'
+          },
+          {
+            checked: false,
+            text: 'Monitoring stations',
+            value: 'monitoringStation'
+          },
+          {
+            checked: false,
+            text: 'Return logs',
+            value: 'returnLog'
+          }
+        ])
+      })
+    })
+
+    describe('when the user does not have the "billing" scope', () => {
+      beforeEach(() => {
+        userScopes = ['not-billing']
+      })
+
+      it('does not include the "billingAccount" item', () => {
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.filterItems).to.equal([
+          {
+            checked: false,
+            text: 'Licences',
+            value: 'licence'
+          },
+          {
+            checked: false,
+            text: 'Monitoring stations',
+            value: 'monitoringStation'
+          },
+          {
+            checked: false,
+            text: 'Return logs',
+            value: 'returnLog'
+          }
+        ])
       })
     })
   })
@@ -333,6 +548,7 @@ describe('Search - Search presenter', () => {
       beforeEach(() => {
         allSearchMatches.similarSearchResults = {
           amountFound: 0,
+          billingAccounts: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },
@@ -341,7 +557,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "true"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.noPartialResults).to.be.true()
       })
@@ -349,7 +565,7 @@ describe('Search - Search presenter', () => {
 
     describe('when some partial matches have been found', () => {
       it('returns "false"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.noPartialResults).to.be.false()
       })
@@ -362,6 +578,7 @@ describe('Search - Search presenter', () => {
         allSearchMatches = {
           exactSearchResults: {
             amountFound: 0,
+            billingAccounts: { results: [], total: 0 },
             licences: { results: [], total: 0 },
             monitoringStations: { results: [], total: 0 },
             returnLogs: { results: [], total: 0 },
@@ -370,6 +587,7 @@ describe('Search - Search presenter', () => {
           largestResultCount: 0,
           similarSearchResults: {
             amountFound: 0,
+            billingAccounts: { results: [], total: 0 },
             licences: { results: [], total: 0 },
             monitoringStations: { results: [], total: 0 },
             returnLogs: { results: [], total: 0 },
@@ -379,7 +597,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "true"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.noResults).to.be.true()
       })
@@ -389,6 +607,7 @@ describe('Search - Search presenter', () => {
       beforeEach(() => {
         allSearchMatches.similarSearchResults = {
           amountFound: 0,
+          billingAccounts: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },
@@ -397,7 +616,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.noResults).to.be.false()
       })
@@ -407,6 +626,7 @@ describe('Search - Search presenter', () => {
       beforeEach(() => {
         allSearchMatches.exactSearchResults = {
           amountFound: 0,
+          billingAccounts: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },
@@ -415,7 +635,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.noResults).to.be.false()
       })
@@ -423,7 +643,7 @@ describe('Search - Search presenter', () => {
 
     describe('when all searches have results', () => {
       it('returns "false"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.noResults).to.be.false()
       })
@@ -440,7 +660,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "Search"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.pageTitle).to.equal('Search')
       })
@@ -448,7 +668,7 @@ describe('Search - Search presenter', () => {
 
     describe('when there are search results', () => {
       it('returns "Search results" with the text being searched for', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.pageTitle).to.equal('Search results for "searchthis"')
       })
@@ -465,7 +685,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('is not displayed', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.pageTitleCaption).to.be.undefined()
       })
@@ -478,7 +698,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns the page number and total page count', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.pageTitleCaption).to.equal('Page 2 of 6')
       })
@@ -486,7 +706,7 @@ describe('Search - Search presenter', () => {
 
     describe('when there is a single page of results', () => {
       it('returns "null"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.pageTitleCaption).to.be.null()
       })
@@ -500,9 +720,21 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "all matches"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.resultTypeText).to.equal('all matches')
+      })
+    })
+
+    describe('when the result type is "billingAccount"', () => {
+      beforeEach(() => {
+        resultType = 'billingAccount'
+      })
+
+      it('returns "billing accounts"', () => {
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.resultTypeText).to.equal('billing accounts')
       })
     })
 
@@ -512,7 +744,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "licences"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.resultTypeText).to.equal('licences')
       })
@@ -524,7 +756,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "monitoring stations"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.resultTypeText).to.equal('monitoring stations')
       })
@@ -536,7 +768,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "return logs"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.resultTypeText).to.equal('return logs')
       })
@@ -548,7 +780,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "all matches"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.resultTypeText).to.equal('all matches')
       })
@@ -560,6 +792,7 @@ describe('Search - Search presenter', () => {
       beforeEach(() => {
         allSearchMatches.exactSearchResults = {
           amountFound: 0,
+          billingAccounts: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },
@@ -568,7 +801,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.showExactResults).to.be.false()
       })
@@ -576,7 +809,7 @@ describe('Search - Search presenter', () => {
 
     describe('when there are exact matches', () => {
       it('returns "true"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.showExactResults).to.be.true()
       })
@@ -590,7 +823,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.showResults).to.be.false()
       })
@@ -598,7 +831,7 @@ describe('Search - Search presenter', () => {
 
     describe('when a search result page is requested', () => {
       it('returns "true"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.showResults).to.be.true()
       })
@@ -617,7 +850,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns the `reason` value', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.exactMatches.licences[0].licenceEndedText).to.equal('revoked')
       })
@@ -637,7 +870,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns an empty value', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.exactMatches.licences[0].licenceEndedText).to.not.exist()
       })
@@ -651,7 +884,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns a blank name', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.exactMatches.licences[0].licenceHolderName).to.equal('')
       })
@@ -665,7 +898,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns a blank name', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.exactMatches.licences[0].licenceHolderName).to.equal('')
       })
@@ -690,7 +923,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns the latest id, end date and status', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.exactMatches.returnLogs[0].endDate).to.equal('31 December 2001')
         expect(result.exactMatches.returnLogs[0].id).to.equal('v1:1:1/2/3:1:2001-01-01:2001-12-31')
@@ -706,7 +939,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "External"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.exactMatches.users[0].type).to.equal('External')
       })
@@ -714,7 +947,7 @@ describe('Search - Search presenter', () => {
 
     describe('when a user is not external', () => {
       it('returns "Internal"', () => {
-        const result = SearchPresenter.go(query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.exactMatches.users[0].type).to.equal('Internal')
       })

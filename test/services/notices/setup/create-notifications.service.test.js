@@ -101,6 +101,7 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       expect(results[0]).to.equal(
         {
+          dueDate: null,
           eventId: noticeId,
           licenceMonitoringStationId: session.licenceMonitoringStations[0].id,
           licences: recipients[0].licence_refs,
@@ -132,6 +133,7 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       expect(results[1]).to.equal(
         {
+          dueDate: null,
           eventId: noticeId,
           licenceMonitoringStationId: session.licenceMonitoringStations[1].id,
           licences: recipients[1].licence_refs,
@@ -242,7 +244,7 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       expect(results[0]).to.equal(
         {
-          dueDate: session.dueReturns[0].dueDate,
+          dueDate: new Date(session.dueReturns[0].dueDate),
           eventId: noticeId,
           licenceMonitoringStationId: null,
           licences: recipients[0].licence_refs,
@@ -280,7 +282,7 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       expect(results[1]).to.equal(
         {
-          dueDate: session.dueReturns[0].dueDate,
+          dueDate: new Date(session.dueReturns[0].dueDate),
           eventId: noticeId,
           licenceMonitoringStationId: null,
           licences: recipients[1].licence_refs,
