@@ -9,6 +9,7 @@ const DetermineLicenceHasReturnVersionsService = require('./determine-licence-ha
 const FetchLicenceReturnsService = require('./fetch-licence-returns.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const ViewLicenceReturnsPresenter = require('../../presenters/licences/view-licence-returns.presenter.js')
+const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
@@ -31,14 +32,8 @@ async function go(licenceId, auth, page) {
     ...pageData,
     activeTab: 'returns',
     pagination: paginationData,
-    roles: _roles(auth)
+    roles: userRoles(auth)
   }
-}
-
-function _roles(auth) {
-  return auth.credentials.roles.map((role) => {
-    return role.role
-  })
 }
 
 module.exports = {
