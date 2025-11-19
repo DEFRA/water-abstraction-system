@@ -12,7 +12,8 @@ const { formatLongDate, formatPurposes, formatReturnLogStatus } = require('../ba
  *
  * @param {module:ReturnLogModel[]} returnLogs - The results from `FetchLicenceReturnsService` to be formatted
  * @param {boolean} hasRequirements - True if the licence has return requirements else false
- * @param {object} licence
+ * @param {object} licence - The id and licence ref of the licence
+ *
  * @returns {object} The data formatted for the view template
  */
 function go(returnLogs, hasRequirements, licence) {
