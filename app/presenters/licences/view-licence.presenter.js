@@ -12,11 +12,10 @@ const { today } = require('../../lib/general.lib.js')
  * Formats data for common licence data `/licences/{id}` page's
  *
  * @param {module:LicenceModel} licence - The licence where the data will be extracted for from
- * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licence, auth) {
+function go(licence) {
   const { id, includeInPresrocBilling, licenceDocumentHeader, licenceRef, workflows } = licence
 
   const primaryUser = licence.$primaryUser()
@@ -36,7 +35,6 @@ function go(licence, auth) {
     pageTitle: `Licence number ${licenceRef}`,
     pageTitleCaption: _licenceName(primaryUser, licence),
     primaryUser,
-    roles: _roles(auth),
     warning: _warning(ends),
     workflowWarning: _workflowWarning(workflows)
   }
@@ -72,12 +70,6 @@ function _notification(licence) {
   }
 
   return null
-}
-
-function _roles(auth) {
-  return auth.credentials.roles.map((role) => {
-    return role.role
-  })
 }
 
 function _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling) {
