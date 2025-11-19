@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const CheckPaperReturnPresenter = require('../../../../../app/presenters/notices/setup/preview/check-paper-return.presenter.js')
+const PreviewCheckPaperReturnPresenter = require('../../../../app/presenters/notices/setup/preview-check-paper-return.presenter.js')
 
-describe('Notices - Setup - Preview - Check Paper Return Presenter', () => {
+describe('Notices - Setup - Check Paper Return presenter', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
   const sessionId = '7334a25e-9723-4732-a6e1-8e30c5f3732e'
 
@@ -39,7 +39,7 @@ describe('Notices - Setup - Preview - Check Paper Return Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CheckPaperReturnPresenter.go(session, contactHashId)
+      const result = PreviewCheckPaperReturnPresenter.go(session, contactHashId)
 
       expect(result).to.equal({
         backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
@@ -80,7 +80,7 @@ describe('Notices - Setup - Preview - Check Paper Return Presenter', () => {
           })
 
           it('returns page data for the view', () => {
-            const result = CheckPaperReturnPresenter.go(session, contactHashId)
+            const result = PreviewCheckPaperReturnPresenter.go(session, contactHashId)
 
             expect(result.returnLogs).to.equal([
               {
@@ -112,7 +112,7 @@ describe('Notices - Setup - Preview - Check Paper Return Presenter', () => {
           })
 
           it('returns page data for the view - with only the selected returns', () => {
-            const result = CheckPaperReturnPresenter.go(session, contactHashId)
+            const result = PreviewCheckPaperReturnPresenter.go(session, contactHashId)
 
             expect(result.returnLogs).to.equal([
               {

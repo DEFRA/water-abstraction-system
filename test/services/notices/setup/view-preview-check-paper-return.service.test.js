@@ -8,14 +8,14 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../../support/helpers/session.helper.js')
-const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const CheckPaperReturnService = require('../../../../../app/services/notices/setup/preview/check-paper-return.service.js')
+const ViewPreviewCheckPaperReturnService = require('../../../../app/services/notices/setup/view-preview-check-paper-return.service.js')
 
-describe('Notices - Setup - Preview - Check Paper Return Service', () => {
+describe('Notices - Setup - View Preview Check Paper Return service', () => {
   const contactHashId = '9df5923f179a0ed55c13173c16651ed9'
 
   let dueReturn
@@ -42,7 +42,7 @@ describe('Notices - Setup - Preview - Check Paper Return Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await CheckPaperReturnService.go(session.id, contactHashId)
+      const result = await ViewPreviewCheckPaperReturnService.go(session.id, contactHashId)
 
       expect(result).to.equal({
         activeNavBar: 'notices',

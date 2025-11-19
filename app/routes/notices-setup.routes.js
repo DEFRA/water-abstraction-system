@@ -257,18 +257,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return',
-    options: {
-      handler: NoticesSetupController.viewCheckPaperReturn,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: '/notices/setup/{eventId}/confirmation',
     options: {
       handler: NoticesSetupController.viewConfirmation,
@@ -407,6 +395,18 @@ const routes = [
       auth: {
         access: {
           scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return',
+    options: {
+      handler: NoticesSetupController.viewPreviewCheckPaperReturn,
+      auth: {
+        access: {
+          scope: ['returns']
         }
       }
     }

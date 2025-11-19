@@ -3,11 +3,11 @@
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return` page
  *
- * @module CheckPaperReturnService
+ * @module ViewPreviewCheckPaperReturnService
  */
 
-const CheckPaperReturnPresenter = require('../../../../presenters/notices/setup/preview/check-paper-return.presenter.js')
-const SessionModel = require('../../../../models/session.model.js')
+const CheckPaperReturnPresenter = require('../../../presenters/notices/setup/preview-check-paper-return.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return` page

@@ -2,10 +2,10 @@
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return` page
- * @module CheckPaperReturnPresenter
+ * @module PreviewCheckPaperReturnPresenter
  */
 
-const { formatLongDate } = require('../../../base.presenter.js')
+const { formatLongDate } = require('../../base.presenter.js')
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return` page

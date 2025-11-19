@@ -16,7 +16,6 @@ const { postRequestOptions } = require('../support/general.js')
 const AddRecipientService = require('../../app/services/notices/setup/add-recipient.service.js')
 const CancelService = require('../../app/services/notices/setup/cancel.service.js')
 const CheckNoticeTypeService = require('../../app/services/notices/setup/check-notice-type.service.js')
-const CheckPaperReturnService = require('../../app/services/notices/setup/preview/check-paper-return.service.js')
 const CheckService = require('../../app/services/notices/setup/check.service.js')
 const ConfirmationService = require('../../app/services/notices/setup/confirmation.service.js')
 const ContactTypeService = require('../../app/services/notices/setup/contact-type.service.js')
@@ -53,6 +52,7 @@ const ViewAlertTypeService = require('../../app/services/notices/setup/view-aler
 const ViewCancelAlertsService = require('../../app/services/notices/setup/view-cancel-alerts.service.js')
 const ViewCheckLicenceMatchesService = require('../../app/services/notices/setup/view-check-licence-matches.service.js')
 const ViewPreviewCheckAlert = require('../../app/services/notices/setup/view-preview-check-alert.service.js')
+const ViewPreviewCheckPaperReturnService = require('../../app/services/notices/setup/view-preview-check-paper-return.service.js')
 const ViewReturnsPeriodService = require('../../app/services/notices/setup/view-returns-period.service.js')
 
 // For running our service
@@ -899,7 +899,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(CheckPaperReturnService, 'go').resolves({
+        Sinon.stub(ViewPreviewCheckPaperReturnService, 'go').resolves({
           pageTitle: 'Preview notice'
         })
       })
