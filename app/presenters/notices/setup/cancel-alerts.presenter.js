@@ -5,7 +5,7 @@
  * @module CancelAlertsPresenter
  */
 
-const { sentenceCase } = require('../../../base.presenter.js')
+const { sentenceCase } = require('../../base.presenter.js')
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/cancel` page

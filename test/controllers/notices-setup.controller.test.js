@@ -14,7 +14,6 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const AddRecipientService = require('../../app/services/notices/setup/add-recipient.service.js')
-const CancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
 const CancelService = require('../../app/services/notices/setup/cancel.service.js')
 const CheckAlert = require('../../app/services/notices/setup/preview/check-alert.service.js')
 const CheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
@@ -38,7 +37,7 @@ const SelectRecipientsService = require('../../app/services/notices/setup/select
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../../app/services/notices/setup/submit-alert-type.service.js')
-const SubmitCancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
+const SubmitCancelAlertsService = require('../../app/services/notices/setup/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
 const SubmitCheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
 const SubmitCheckNoticeTypeService = require('../../app/services/notices/setup/submit-check-notice-type.service.js')
@@ -54,6 +53,7 @@ const SubmitSelectRecipientsService = require('../../app/services/notices/setup/
 const ViewAlertEmailAddressService = require('../../app/services/notices/setup/view-alert-email-address.service.js')
 const ViewAlertThresholdsService = require('../../app/services/notices/setup/view-alert-thresholds.service.js')
 const ViewAlertTypeService = require('../../app/services/notices/setup/view-alert-type.service.js')
+const ViewCancelAlertsService = require('../../app/services/notices/setup/view-cancel-alerts.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -603,7 +603,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(CancelAlertsService, 'go').resolves({
+          Sinon.stub(ViewCancelAlertsService, 'go').resolves({
             pageTitle: 'Cancel page'
           })
         })

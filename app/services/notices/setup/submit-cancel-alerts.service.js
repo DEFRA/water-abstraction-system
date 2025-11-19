@@ -6,7 +6,7 @@
  * @module SubmitCancelAlertsService
  */
 
-const SessionModel = require('../../../../models/session.model.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates cancelling the data for `/notices/setup/{sessionId}/abstraction-alerts/` journey

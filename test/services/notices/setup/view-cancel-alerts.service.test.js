@@ -8,26 +8,31 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-alert-session-data.fixture.js')
+const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const CancelAlertsPresenter = require('../../../../../app/presenters/notices/setup/abstraction-alerts/cancel-alerts.presenter.js')
+const ViewCancelAlertsService = require('../../../../app/services/notices/setup/view-cancel-alerts.service.js')
 
-describe('Cancel Alerts Presenter', () => {
+describe('Notices - Setup - View Cancel Alerts service', () => {
   let session
+  let sessionData
 
-  beforeEach(() => {
-    session = {
+  beforeEach(async () => {
+    sessionData = {
       ...AbstractionAlertSessionData.get(),
       alertType: 'resume'
     }
+
+    session = await SessionHelper.add({ data: sessionData })
   })
 
   describe('when called', () => {
-    it('returns page data for the view', () => {
-      const result = CancelAlertsPresenter.go(session)
+    it('returns page data for the view', async () => {
+      const result = await ViewCancelAlertsService.go(session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'notices',
         backLink: {
           href: `/system/notices/setup/${session.id}/abstraction-alerts/check-licence-matches`,
           text: 'Back'

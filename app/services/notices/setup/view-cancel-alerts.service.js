@@ -3,11 +3,11 @@
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/cancel` page
  *
- * @module CancelAlertsService
+ * @module ViewCancelAlertsService
  */
 
-const CancelAlertsPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/cancel-alerts.presenter.js')
-const SessionModel = require('../../../../models/session.model.js')
+const CancelAlertsPresenter = require('../../../presenters/notices/setup/cancel-alerts.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/cancel` page

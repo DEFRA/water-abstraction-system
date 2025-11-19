@@ -6,7 +6,6 @@
  */
 
 const AddRecipientService = require('../services/notices/setup/add-recipient.service.js')
-const CancelAlertsService = require('../services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
 const CancelService = require('../services/notices/setup/cancel.service.js')
 const CheckAlertService = require('../services/notices/setup/preview/check-alert.service.js')
 const CheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
@@ -30,7 +29,7 @@ const SelectRecipientsService = require('../services/notices/setup/select-recipi
 const SubmitAlertEmailAddressService = require('../services/notices/setup/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../services/notices/setup/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../services/notices/setup/submit-alert-type.service.js')
-const SubmitCancelAlertsService = require('../services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
+const SubmitCancelAlertsService = require('../services/notices/setup/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
 const SubmitCheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
 const SubmitCheckNoticeTypeService = require('../services/notices/setup/submit-check-notice-type.service.js')
@@ -46,6 +45,7 @@ const SubmitSelectRecipientsService = require('../services/notices/setup/submit-
 const ViewAlertEmailAddressService = require('../services/notices/setup/view-alert-email-address.service.js')
 const ViewAlertThresholdsService = require('../services/notices/setup/view-alert-thresholds.service.js')
 const ViewAlertTypeService = require('../services/notices/setup/view-alert-type.service.js')
+const ViewCancelAlertsService = require('../services/notices/setup/view-cancel-alerts.service.js')
 
 async function addRecipient(request, h) {
   const {
@@ -368,9 +368,9 @@ async function viewCancel(request, h) {
 async function viewCancelAlerts(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await CancelAlertsService.go(sessionId)
+  const pageData = await ViewCancelAlertsService.go(sessionId)
 
-  return h.view(`notices/setup/abstraction-alerts/cancel-alerts.njk`, pageData)
+  return h.view(`notices/setup/cancel-alerts.njk`, pageData)
 }
 
 async function viewCheck(request, h) {

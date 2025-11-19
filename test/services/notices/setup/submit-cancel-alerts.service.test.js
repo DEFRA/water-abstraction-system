@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../../support/helpers/session.helper.js')
-const SessionModel = require('../../../../../app/models/session.model.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModel = require('../../../../app/models/session.model.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const SubmitCancelAlertsService = require('../../../../../app/services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
+const SubmitCancelAlertsService = require('../../../../app/services/notices/setup/submit-cancel-alerts.service.js')
 
 describe('Cancel Alerts Service', () => {
   const monitoringStationId = generateUUID()
