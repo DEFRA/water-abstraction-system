@@ -83,7 +83,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
 
     describe('and a single volume that cannot be divided equally', () => {
       beforeEach(() => {
-        singleVolume = 1001
+        singleVolume = 1001.111123
         fromDate = new Date('2023-04-01').toISOString()
         toDate = new Date('2023-09-30').toISOString()
         lines = _lines()
@@ -92,12 +92,12 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
       it('handles rounding errors by adjusting the last line', () => {
         AllocateSingleVolumeToLinesService.go(lines, fromDate, toDate, singleVolume)
 
-        expect(lines[0].quantity).to.equal(166.83333333333334)
-        expect(lines[1].quantity).to.equal(166.83333333333334)
-        expect(lines[2].quantity).to.equal(166.83333333333334)
-        expect(lines[3].quantity).to.equal(166.83333333333334)
-        expect(lines[4].quantity).to.equal(166.83333333333334)
-        expect(lines[5].quantity).to.equal(166.83333333333323)
+        expect(lines[0].quantity).to.equal(166.851854)
+        expect(lines[1].quantity).to.equal(166.851854)
+        expect(lines[2].quantity).to.equal(166.851854)
+        expect(lines[3].quantity).to.equal(166.851854)
+        expect(lines[4].quantity).to.equal(166.851854)
+        expect(lines[5].quantity).to.equal(166.851853)
       })
 
       it('allocates the single volume across lines so their total matches the single volume', () => {
@@ -109,7 +109,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
           return sum + quantity
         }, 0)
 
-        expect(linesTotal).to.equal(1001)
+        expect(linesTotal).to.equal(1001.111123)
       })
 
       it('ignores lines outside the abstraction period', () => {

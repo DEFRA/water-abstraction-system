@@ -5,6 +5,8 @@
  * @module AllocateSingleVolumeToLinesService
  */
 
+const Big = require('big.js')
+
 /**
  * Orchestrates allocating a single volume to return submission lines using the abstraction period dates given.
  *
@@ -26,28 +28,34 @@
 function go(lines, fromDate, toDate, singleVolume) {
   const linesInsideAbstractionPeriod = _linesInsideAbstractionPeriod(lines, fromDate, toDate)
 
-  const individualLineQuantity = singleVolume / linesInsideAbstractionPeriod.length
+  const individualLineQuantity = _individualLineQuantity(linesInsideAbstractionPeriod, singleVolume)
 
   _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuantity, singleVolume)
 }
 
 function _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuantity, singleVolume) {
-  let allocatedLineTotal = 0
-
   // Apply the quantity to each line within the abstraction period. Since volume is divided across multiple lines,
-  // rounding errors may occur, causing the total to deviate from the original volume. To prevent this, we track the
-  // cumulative sum using `allocatedLineTotal` and record the index of the last applicable line (`lastIndex`). After
+  // rounding errors may occur, causing the total to deviate from the original volume. To prevent this, we calculate the
+  // cumulative total using `allocatedLineTotal` and record the index of the last applicable line (`lastIndex`). After
   // processing all lines, we adjust the last line's quantity if needed to ensure the total matches the original volume.
   linesInsideAbstractionPeriod.forEach((line) => {
     line.quantity = individualLineQuantity
-    allocatedLineTotal += individualLineQuantity
   })
+
+  const allocatedLineTotal = Big(individualLineQuantity).times(linesInsideAbstractionPeriod.length).toNumber()
 
   if (allocatedLineTotal !== Number(singleVolume)) {
     const roundingError = singleVolume - allocatedLineTotal
     const lastIndex = linesInsideAbstractionPeriod.length - 1
     linesInsideAbstractionPeriod[lastIndex].quantity += roundingError
   }
+}
+
+function _individualLineQuantity(linesInsideAbstractionPeriod, singleVolume) {
+  Big.DP = 6 // Set decimal places to 6
+  Big.RM = Big.roundHalfUp // Set rounding mode to round half up
+
+  return Big(singleVolume).div(linesInsideAbstractionPeriod.length).toNumber()
 }
 
 function _linesInsideAbstractionPeriod(lines, fromDate, toDate) {
