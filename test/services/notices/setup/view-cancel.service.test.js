@@ -12,9 +12,9 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
-const CancelService = require('../../../../app/services/notices/setup/cancel.service.js')
+const ViewCancelService = require('../../../../app/services/notices/setup/view-cancel.service.js')
 
-describe('Notices - Setup - Cancel service', () => {
+describe('Notices - Setup - View Cancel service', () => {
   let session
 
   beforeEach(async () => {
@@ -23,7 +23,7 @@ describe('Notices - Setup - Cancel service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await CancelService.go(session.id)
+      const result = await ViewCancelService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'notices',

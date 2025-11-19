@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates presenting the data for `/notices/setup/{sessionId}/cancel` page
- * @module CancelService
+ * @module ViewCancelService
  */
 
 const CancelPresenter = require('../../../presenters/notices/setup/cancel.presenter.js')

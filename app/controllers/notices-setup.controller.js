@@ -6,7 +6,6 @@
  */
 
 const AddRecipientService = require('../services/notices/setup/add-recipient.service.js')
-const CancelService = require('../services/notices/setup/cancel.service.js')
 const CheckNoticeTypeService = require('../services/notices/setup/check-notice-type.service.js')
 const CheckService = require('../services/notices/setup/check.service.js')
 const ConfirmationService = require('../services/notices/setup/confirmation.service.js')
@@ -40,6 +39,7 @@ const SubmitSelectRecipientsService = require('../services/notices/setup/submit-
 const ViewAlertEmailAddressService = require('../services/notices/setup/view-alert-email-address.service.js')
 const ViewAlertThresholdsService = require('../services/notices/setup/view-alert-thresholds.service.js')
 const ViewAlertTypeService = require('../services/notices/setup/view-alert-type.service.js')
+const ViewCancelService = require('../services/notices/setup/view-cancel.service.js')
 const ViewCancelAlertsService = require('../services/notices/setup/view-cancel-alerts.service.js')
 const ViewCheckLicenceMatchesService = require('../services/notices/setup/view-check-licence-matches.service.js')
 const ViewPreviewService = require('../services/notices/setup/view-preview.service.js')
@@ -360,7 +360,7 @@ async function viewAlertType(request, h) {
 async function viewCancel(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await CancelService.go(sessionId)
+  const pageData = await ViewCancelService.go(sessionId)
 
   return h.view(`notices/setup/cancel.njk`, pageData)
 }
