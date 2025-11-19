@@ -9,50 +9,73 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const LicenceModel = require('../../../app/models/licence.model.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
 const FetchChargeVersionsService = require('../../../app/services/licences/fetch-charge-versions.service.js')
+const FetchLicenceRefService = require('../../../app/services/licences/fetch-licence-ref.service.js')
 const FetchReturnVersionsService = require('../../../app/services/licences/fetch-return-versions.service.js')
 const FetchWorkflowsService = require('../../../app/services/licences/fetch-workflows.service.js')
-const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
 // Thing under test
 const ViewLicenceSetUpService = require('../../../app/services/licences/view-licence-set-up.service.js')
 
-describe('View Licence Set Up service', () => {
-  const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
-
-  let auth = {}
+describe('Licences - View Licence Set Up service', () => {
+  let agreement
+  let auth
+  let chargeVersion
+  let licence
+  let returnVersion
+  let workflow
 
   beforeEach(() => {
-    Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
+    licence = LicenceModel.fromJson({
+      id: generateUUID(),
+      licenceRef: generateLicenceRef()
+    })
 
-    Sinon.stub(FetchAgreementsService, 'go').returns([
-      {
-        id: 'ca41d547-2cb6-4995-8af4-90117839bf86',
-        startDate: new Date('2020-01-01'),
-        endDate: null,
-        signedOn: null,
-        financialAgreement: { id: 'f766a058-99e0-4cb3-8b63-53856dd60cf9', code: 'S127' }
+    auth = {
+      isValid: true,
+      credentials: {
+        user: { id: 123 },
+        roles: [
+          {
+            role: 'billing'
+          },
+          {
+            role: 'charge_version_workflow_editor'
+          }
+        ],
+        groups: [],
+        scope: ['billing', 'charge_version_workflow_editor'],
+        permissions: { abstractionReform: false, billRuns: true, manage: true }
       }
-    ])
+    }
 
-    Sinon.stub(FetchChargeVersionsService, 'go').returns([
-      {
-        changeReason: { description: 'Missing thing' },
-        endDate: new Date('2020-09-01'),
-        id: 'c0601335-b6ad-4651-b54b-c586f8d22ac3',
-        licenceId: '456',
-        startDate: new Date('2020-01-01'),
-        status: 'current'
-      }
-    ])
+    agreement = {
+      id: generateUUID(),
+      startDate: new Date('2020-01-01'),
+      endDate: null,
+      signedOn: null,
+      financialAgreement: { id: generateUUID(), code: 'S127' }
+    }
 
-    const returnVersion = ReturnVersionModel.fromJson({
-      id: '0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
+    chargeVersion = {
+      id: generateUUID(),
+      startDate: new Date('2020-01-01'),
+      endDate: new Date('2020-09-01'),
+      status: 'current',
+      changeReason: { description: 'Missing thing' },
+      licenceId: licence.id
+    }
+
+    returnVersion = ReturnVersionModel.fromJson({
+      id: generateUUID(),
       startDate: new Date('2025-01-01'),
       endDate: new Date('2025-02-01'),
       status: 'current',
@@ -60,38 +83,30 @@ describe('View Licence Set Up service', () => {
       modLogs: []
     })
 
+    workflow = {
+      id: generateUUID(),
+      createdAt: new Date('2020-01-01'),
+      status: 'review',
+      data: {
+        chargeVersion: {
+          changeReason: { description: 'changed something' },
+          dateRange: { startDate: '2022-04-01' }
+        }
+      },
+      licenceId: licence.id
+    }
+
+    Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
+
+    Sinon.stub(FetchAgreementsService, 'go').returns([agreement])
+
+    Sinon.stub(FetchChargeVersionsService, 'go').returns([chargeVersion])
+
     Sinon.stub(FetchReturnVersionsService, 'go').returns([returnVersion])
 
-    Sinon.stub(FetchWorkflowsService, 'go').returns([
-      {
-        id: 'f3fe1275-50ff-4f69-98cb-5a35c17654f3',
-        createdAt: new Date('2020-01-01'),
-        status: 'review',
-        data: {
-          chargeVersion: {
-            changeReason: { description: 'changed something' },
-            dateRange: { startDate: '2022-04-01' }
-          }
-        },
-        licenceId: '456'
-      }
-    ])
+    Sinon.stub(FetchWorkflowsService, 'go').returns([workflow])
 
-    Sinon.stub(ViewLicenceService, 'go').resolves({
-      licenceName: 'fake licence',
-      licenceId: testId
-    })
-
-    auth = {
-      isValid: true,
-      credentials: {
-        user: { id: 123 },
-        roles: ['billing', 'charge_version_workflow_editor'],
-        groups: [],
-        scope: ['billing', 'charge_version_workflow_editor'],
-        permissions: { abstractionReform: false, billRuns: true, manage: true }
-      }
-    }
+    Sinon.stub(FetchLicenceRefService, 'go').resolves(licence)
   })
 
   afterEach(() => {
@@ -100,10 +115,14 @@ describe('View Licence Set Up service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicenceSetUpService.go(testId, auth)
+      const result = await ViewLicenceSetUpService.go(licence.id, auth)
 
       expect(result).to.equal({
         activeTab: 'set-up',
+        backLink: {
+          href: '/licences',
+          text: 'Go back to search'
+        },
         agreements: [
           {
             action: [],
@@ -117,7 +136,7 @@ describe('View Licence Set Up service', () => {
           {
             action: [],
             endDate: '',
-            id: 'f3fe1275-50ff-4f69-98cb-5a35c17654f3',
+            id: workflow.id,
             reason: 'changed something',
             startDate: '1 April 2022',
             status: 'review'
@@ -126,38 +145,36 @@ describe('View Licence Set Up service', () => {
             action: [
               {
                 dataTest: 'charge-version-0',
-                link: '/licences/456/charge-information/c0601335-b6ad-4651-b54b-c586f8d22ac3/view',
+                link: `/licences/${licence.id}/charge-information/${chargeVersion.id}/view`,
                 text: 'View'
               }
             ],
             endDate: '1 September 2020',
-            id: 'c0601335-b6ad-4651-b54b-c586f8d22ac3',
+            id: chargeVersion.id,
             reason: 'Missing thing',
             startDate: '1 January 2020',
             status: 'current'
           }
         ],
-        licenceId: testId,
-        licenceName: 'fake licence',
         links: {
           agreements: {},
           chargeInformation: {
-            makeLicenceNonChargeable:
-              '/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/charge-information/non-chargeable-reason?start=1',
-            setupNewCharge: '/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/charge-information/create'
+            makeLicenceNonChargeable: `/licences/${licence.id}/charge-information/non-chargeable-reason?start=1`,
+            setupNewCharge: `/licences/${licence.id}/charge-information/create`
           },
           recalculateBills: {
-            markForSupplementaryBilling:
-              '/system/licences/2c80bd22-a005-4cf4-a2a2-73812a9861de/mark-for-supplementary-billing'
+            markForSupplementaryBilling: `/system/licences/${licence.id}/mark-for-supplementary-billing`
           },
           returnVersions: {}
         },
+        pageTitle: 'Licence set up',
+        pageTitleCaption: `Licence ${licence.licenceRef}`,
         returnVersions: [
           {
             action: [
               {
                 dataTest: 'return-version-0',
-                link: '/system/return-versions/0312e5eb-67ae-44fb-922c-b1a0b81bc08d',
+                link: `/system/return-versions/${returnVersion.id}`,
                 text: 'View'
               }
             ],
@@ -166,7 +183,8 @@ describe('View Licence Set Up service', () => {
             startDate: '1 January 2025',
             status: 'current'
           }
-        ]
+        ],
+        roles: ['billing', 'charge_version_workflow_editor']
       })
     })
   })
