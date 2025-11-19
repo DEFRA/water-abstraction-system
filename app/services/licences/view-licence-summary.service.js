@@ -6,7 +6,7 @@
  */
 
 const FetchLicenceSummaryService = require('./fetch-licence-summary.service.js')
-const ViewLicencePresenter = require('../../presenters/licences/view-licence.presenter.js')
+const ViewLicenceSummaryContentPresenter = require('../../presenters/licences/view-licence-summary-content.presenter.js')
 const ViewLicenceSummaryPresenter = require('../../presenters/licences/view-licence-summary.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
@@ -21,14 +21,14 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
 async function go(licenceId, auth) {
   const licenceData = await FetchLicenceSummaryService.go(licenceId)
 
-  const licenceSummaryData = ViewLicenceSummaryPresenter.go(licenceData)
-  const pageData = ViewLicencePresenter.go(licenceData)
+  const licenceSummaryContentData = ViewLicenceSummaryContentPresenter.go(licenceData)
+  const pageData = ViewLicenceSummaryPresenter.go(licenceData)
 
   return {
+    ...licenceSummaryContentData,
+    ...pageData,
     activeNavBar: 'search',
     activeTab: 'summary',
-    ...pageData,
-    ...licenceSummaryData,
     roles: userRoles(auth)
   }
 }
