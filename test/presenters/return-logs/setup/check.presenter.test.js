@@ -352,7 +352,7 @@ describe('Return Logs Setup - Check presenter', () => {
             {
               endDate: '2023-04-30T00:00:00.000Z',
               startDate: '2023-04-01T00:00:00.000Z',
-              quantity: 10.123567
+              quantity: 10.1234567
             },
             {
               endDate: '2023-05-31T00:00:00.000Z',
@@ -393,8 +393,8 @@ describe('Return Logs Setup - Check presenter', () => {
                   text: 'Enter monthly volumes'
                 },
                 month: 'April 2023',
-                monthlyTotal: '10.124',
-                unitTotal: '10.124'
+                monthlyTotal: '10.123457',
+                unitTotal: '10.123457'
               },
               {
                 link: {
@@ -444,8 +444,8 @@ describe('Return Logs Setup - Check presenter', () => {
                   text: 'Enter monthly volumes'
                 },
                 month: 'April 2023',
-                monthlyTotal: '10,123.567',
-                unitTotal: '10.124'
+                monthlyTotal: '10,123.4567',
+                unitTotal: '10.123457'
               },
               {
                 link: {
@@ -476,7 +476,7 @@ describe('Return Logs Setup - Check presenter', () => {
             {
               endDate: '2023-04-01T00:00:00.000Z',
               startDate: '2023-04-01T00:00:00.000Z',
-              quantity: 10.123567
+              quantity: 10.1234567
             },
             {
               endDate: '2023-04-02T00:00:00.000Z',
@@ -517,8 +517,8 @@ describe('Return Logs Setup - Check presenter', () => {
                   text: 'Enter daily volumes'
                 },
                 month: 'April 2023',
-                monthlyTotal: '1,010.124',
-                unitTotal: '1,010.124'
+                monthlyTotal: '1,010.123457',
+                unitTotal: '1,010.123457'
               }
             ])
           })
@@ -550,8 +550,8 @@ describe('Return Logs Setup - Check presenter', () => {
                   text: 'Enter daily volumes'
                 },
                 month: 'April 2023',
-                monthlyTotal: '4.592',
-                unitTotal: '1,010.124'
+                monthlyTotal: '4.592112',
+                unitTotal: '1,010.123457'
               }
             ])
           })
@@ -852,7 +852,7 @@ describe('Return Logs Setup - Check presenter', () => {
                   text: 'Enter daily readings'
                 },
                 month: 'April 2023',
-                monthlyTotal: '0.455',
+                monthlyTotal: '0.454609',
                 unitTotal: '100',
                 reading: 200
               }
@@ -944,7 +944,7 @@ describe('Return Logs Setup - Check presenter', () => {
       it('returns the "totalQuantity" to 3 decimal places formatted as a string', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.totalCubicMetres).to.equal('1,000.123')
+        expect(result.totalCubicMetres).to.equal('1,000.123456')
       })
     })
 
@@ -986,7 +986,7 @@ describe('Return Logs Setup - Check presenter', () => {
       it('returns the "totalQuantity" to 3 decimal places formatted as a string', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.totalQuantity).to.equal('1,010.124')
+        expect(result.totalQuantity).to.equal('1,010.123567')
       })
     })
 
