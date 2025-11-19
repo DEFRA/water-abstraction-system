@@ -32,7 +32,7 @@ function go(licence) {
     licenceId: id,
     licenceRef,
     notification: _notification(licence),
-    pageTitle: `Licence number ${licenceRef}`,
+    pageTitle: `Licence summary ${licenceRef}`,
     pageTitleCaption: _licenceName(primaryUser, licence),
     primaryUser,
     warning: _warning(ends),

@@ -475,7 +475,7 @@ describe('Licences controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Summary')
+          expect(response.payload).to.contain('Licence summary')
         })
       })
     })

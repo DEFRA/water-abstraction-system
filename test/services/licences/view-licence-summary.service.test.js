@@ -80,7 +80,7 @@ describe('Licences - View Licence Summary service', () => {
             }
           ],
           notification: null,
-          pageTitle: 'Licence number 01/123',
+          pageTitle: 'Licence summary 01/123',
           pageTitleCaption: 'Between two ferns',
           primaryUser: {
             id: 10036,

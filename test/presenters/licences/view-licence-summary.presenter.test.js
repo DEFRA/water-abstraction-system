@@ -35,7 +35,7 @@ describe('Licences - View Licence Summary Presenter', () => {
         licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
         licenceRef: '01/123',
         notification: null,
-        pageTitle: 'Licence number 01/123',
+        pageTitle: 'Licence summary 01/123',
         pageTitleCaption: 'Between two ferns',
         primaryUser: {
           id: 10036,
