@@ -9,13 +9,22 @@
  * Formats data for the `/licences/{id}/contact-details` view licence contact details page
  *
  * @param {object[]} contacts - The results from `FetchLicenceContactsService` to be formatted for the view
+ * @param {object} licence - The id and licence ref of the licence
  *
  * @returns {object} The data formatted for the view template
  */
-function go(contacts) {
+function go(contacts, licence) {
+  const { licenceRef } = licence
+
   return {
+    backLink: {
+      text: 'Go back to search',
+      href: '/licences'
+    },
     customerId: _findCustomerId(contacts),
-    licenceContacts: _licenceContacts(contacts)
+    licenceContacts: _licenceContacts(contacts),
+    pageTitle: 'Contact details',
+    pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 
