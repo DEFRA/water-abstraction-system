@@ -2,15 +2,15 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup preview page
- * @module PreviewService
+ * @module ViewPreviewService
  */
 
-const AbstractionAlertNotificationsPresenter = require('../../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
-const FetchRecipientsService = require('../fetch-recipients.service.js')
-const NotificationsPresenter = require('../../../../presenters/notices/setup/notifications.presenter.js')
-const PreviewPresenter = require('../../../../presenters/notices/setup/preview/preview.presenter.js')
-const SessionModel = require('../../../../models/session.model.js')
-const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
+const AbstractionAlertNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
+const FetchRecipientsService = require('./fetch-recipients.service.js')
+const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
+const PreviewPresenter = require('../../../presenters/notices/setup/preview.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup preview page

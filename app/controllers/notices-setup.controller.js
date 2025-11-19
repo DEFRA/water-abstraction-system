@@ -17,7 +17,6 @@ const LicenceService = require('../services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
 const PaperReturnService = require('../services/notices/setup/paper-return.service.js')
 const PreviewPaperReturnService = require('../services/notices/setup/preview-paper-return.service.js')
-const PreviewService = require('../services/notices/setup/preview/preview.service.js')
 const RecipientNameService = require('../services/notices/setup/recipient-name.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
@@ -43,6 +42,7 @@ const ViewAlertThresholdsService = require('../services/notices/setup/view-alert
 const ViewAlertTypeService = require('../services/notices/setup/view-alert-type.service.js')
 const ViewCancelAlertsService = require('../services/notices/setup/view-cancel-alerts.service.js')
 const ViewCheckLicenceMatchesService = require('../services/notices/setup/view-check-licence-matches.service.js')
+const ViewPreviewService = require('../services/notices/setup/view-preview.service.js')
 const ViewPreviewCheckAlertService = require('../services/notices/setup/view-preview-check-alert.service.js')
 const ViewPreviewCheckPaperReturnService = require('../services/notices/setup/view-preview-check-paper-return.service.js')
 const ViewReturnsPeriodService = require('../services/notices/setup/view-returns-period.service.js')
@@ -453,9 +453,9 @@ async function viewPaperReturn(request, h) {
 async function viewPreview(request, h) {
   const { contactHashId, licenceMonitoringStationId, sessionId } = request.params
 
-  const pageData = await PreviewService.go(sessionId, contactHashId, licenceMonitoringStationId)
+  const pageData = await ViewPreviewService.go(sessionId, contactHashId, licenceMonitoringStationId)
 
-  return h.view('notices/setup/preview/preview.njk', pageData)
+  return h.view('notices/setup/preview.njk', pageData)
 }
 
 async function viewPreviewCheckAlert(request, h) {

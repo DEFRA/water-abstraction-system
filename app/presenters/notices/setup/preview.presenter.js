@@ -5,10 +5,10 @@
  * @module PreviewPresenter
  */
 
-const GeneratePreviewRequest = require('../../../../requests/notify/generate-preview.request.js')
+const GeneratePreviewRequest = require('../../../requests/notify/generate-preview.request.js')
 
-const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
-const { sentenceCase } = require('../../../base.presenter.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
+const { sentenceCase } = require('../../base.presenter.js')
 
 /**
  * Formats notification data ready for presenting in the preview notification page

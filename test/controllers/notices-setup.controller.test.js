@@ -25,7 +25,6 @@ const LicenceService = require('../../app/services/notices/setup/licence.service
 const NoticeTypeService = require('../../app/services/notices/setup/notice-type.service.js')
 const PaperReturnService = require('../../app/services/notices/setup/paper-return.service.js')
 const PreviewPaperReturnService = require('../../app/services/notices/setup/preview-paper-return.service.js')
-const PreviewService = require('../../app/services/notices/setup/preview/preview.service.js')
 const RecipientNameService = require('../../app/services/notices/setup/recipient-name.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
@@ -51,6 +50,7 @@ const ViewAlertThresholdsService = require('../../app/services/notices/setup/vie
 const ViewAlertTypeService = require('../../app/services/notices/setup/view-alert-type.service.js')
 const ViewCancelAlertsService = require('../../app/services/notices/setup/view-cancel-alerts.service.js')
 const ViewCheckLicenceMatchesService = require('../../app/services/notices/setup/view-check-licence-matches.service.js')
+const ViewPreviewService = require('../../app/services/notices/setup/view-preview.service.js')
 const ViewPreviewCheckAlert = require('../../app/services/notices/setup/view-preview-check-alert.service.js')
 const ViewPreviewCheckPaperReturnService = require('../../app/services/notices/setup/view-preview-check-paper-return.service.js')
 const ViewReturnsPeriodService = require('../../app/services/notices/setup/view-returns-period.service.js')
@@ -808,7 +808,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(PreviewService, 'go').resolves({
+        Sinon.stub(ViewPreviewService, 'go').resolves({
           pageTitle: 'Preview notice'
         })
       })
@@ -839,7 +839,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(PreviewService, 'go').resolves({
+        Sinon.stub(ViewPreviewService, 'go').resolves({
           pageTitle: 'Preview notice'
         })
       })

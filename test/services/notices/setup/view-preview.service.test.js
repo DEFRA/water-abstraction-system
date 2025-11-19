@@ -11,20 +11,20 @@ const { expect } = Code
 // Test helpers
 const { HTTP_STATUS_OK } = require('node:http2').constants
 
-const RecipientsFixture = require('../../../../fixtures/recipients.fixtures.js')
-const SessionHelper = require('../../../../support/helpers/session.helper.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
-const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
+const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Things we need to stub
-const FetchRecipientsService = require('../../../../../app/services/notices/setup/fetch-recipients.service.js')
-const GeneratePreviewRequest = require('../../../../../app/requests/notify/generate-preview.request.js')
+const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const GeneratePreviewRequest = require('../../../../app/requests/notify/generate-preview.request.js')
 
 // Thing under test
-const PreviewService = require('../../../../../app/services/notices/setup/preview/preview.service.js')
+const ViewPreviewService = require('../../../../app/services/notices/setup/view-preview.service.js')
 
-describe('Notices - Setup - Preview - Preview service', () => {
+describe('Notices - Setup - View Preview service', () => {
   let licenceMonitoringStationId
   let recipients
   let session
@@ -106,7 +106,7 @@ describe('Notices - Setup - Preview - Preview service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await PreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
+      const result = await ViewPreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
 
       expect(result).to.equal({
         activeNavBar: 'notices',
@@ -200,7 +200,7 @@ describe('Notices - Setup - Preview - Preview service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await PreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
+      const result = await ViewPreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
 
       expect(result).to.equal({
         activeNavBar: 'notices',
