@@ -17,7 +17,7 @@ const LicenceModel = require('../../models/licence.model.js')
  * @returns {Promise<module:LicenceModel>} the matching `LicenceModel` populated with the id and licence ref
  */
 async function go(licenceId) {
-  return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef', 'includeInPresrocBilling'])
+  return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
 }
 
 module.exports = {

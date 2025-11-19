@@ -142,8 +142,6 @@ describe('Licences - View Licence Set Up presenter', () => {
         chargeVersions = []
         workflows = []
 
-        licence.includeInPresrocBilling = 'no'
-
         auth.credentials.roles = [...auth.credentials.roles, 'manage_agreements', 'delete_agreements']
         auth.credentials.scope = [...auth.credentials.scope, 'manage_agreements', 'delete_agreements']
       })
@@ -271,36 +269,6 @@ describe('Licences - View Licence Set Up presenter', () => {
                 dataTest: 'delete-agreement-0',
                 link: `/licences/${licence.id}/agreements/${agreement.id}/delete`,
                 text: 'Delete'
-              }
-            ])
-          })
-        })
-
-        describe('when user can not Recalculate bills for an agreement because of pre sroc billing', () => {
-          beforeEach(() => {
-            licence.includeInPresrocBilling = 'yes'
-          })
-
-          it('there is no action link to Recalculate bills', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
-
-            expect(result.agreements[0].action).to.equal([
-              {
-                dataTest: 'delete-agreement-0',
-                link: `/licences/${licence.id}/agreements/${agreement.id}/delete`,
-                text: 'Delete'
-              },
-              {
-                dataTest: 'end-agreement-0',
-                link: `/licences/${licence.id}/agreements/${agreement.id}/end`,
-                text: 'End'
               }
             ])
           })

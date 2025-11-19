@@ -29,7 +29,6 @@ describe('Licences - Fetch Licence ref service', () => {
       expect(result).to.be.an.instanceOf(LicenceModel)
       expect(result).to.equal({
         id: licence.id,
-        includeInPresrocBilling: 'no',
         licenceRef: licence.licenceRef
       })
     })
