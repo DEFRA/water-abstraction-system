@@ -17,7 +17,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 // Thing under test
 const FetchLicenceBillService = require('../../../app/services/licences/fetch-licence-bills.service.js')
 
-describe('Fetch Licence Bills service', () => {
+describe('Licences - Fetch Licence Bills service', () => {
   const createdDate = new Date('2022-01-01')
 
   let billLicence
