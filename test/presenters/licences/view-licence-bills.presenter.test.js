@@ -19,7 +19,7 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 // Thing under test
 const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view-licence-bills.presenter.js')
 
-describe('View Licence Bills presenter', () => {
+describe('Licences - View Licence Bills presenter', () => {
   let licence
   let bill
 
