@@ -7,13 +7,23 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test Helpers
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+
 // Thing under test
 const LicenceContactsPresenter = require('../../../app/presenters/licences/licence-contacts.presenter.js')
 
-describe('Licence Contacts presenter', () => {
+describe('Licences - Licence Contacts presenter', () => {
   let licenceContacts
+  let licence
 
   beforeEach(() => {
+    licence = {
+      id: generateUUID(),
+      licenceRef: generateLicenceRef()
+    }
+
     licenceContacts = [
       {
         communicationType: 'Licence Holder',
@@ -36,9 +46,13 @@ describe('Licence Contacts presenter', () => {
 
   describe('when provided with populated licence contacts data', () => {
     it('correctly presents the data', () => {
-      const result = LicenceContactsPresenter.go(licenceContacts)
+      const result = LicenceContactsPresenter.go(licenceContacts, licence)
 
       expect(result).to.equal({
+        backLink: {
+          href: '/licences',
+          text: 'Go back to search'
+        },
         customerId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
         licenceContacts: [
           {
@@ -55,14 +69,16 @@ describe('Licence Contacts presenter', () => {
             communicationType: 'Licence Holder',
             name: 'Acme ltd'
           }
-        ]
+        ],
+        pageTitle: 'Contact details',
+        pageTitleCaption: `Licence ${licence.licenceRef}`
       })
     })
 
     describe('the "customerId" property', () => {
       describe('when one of the licence contacts has the communication type of "Licence Holder"', () => {
         it("returns that licence contact's company Id", () => {
-          const result = LicenceContactsPresenter.go(licenceContacts)
+          const result = LicenceContactsPresenter.go(licenceContacts, licence)
 
           expect(result.customerId).to.equal('ebe95a21-c6f6-4f15-8856-a48ffc737731')
         })
@@ -74,7 +90,7 @@ describe('Licence Contacts presenter', () => {
         })
 
         it('returns null', () => {
-          const result = LicenceContactsPresenter.go(licenceContacts)
+          const result = LicenceContactsPresenter.go(licenceContacts, licence)
 
           expect(result.customerId).to.be.null()
         })
@@ -84,7 +100,7 @@ describe('Licence Contacts presenter', () => {
     describe('the "licenceContacts.name" property', () => {
       describe('when the licence contact does not have a contact', () => {
         it("returns the licence contact's company name", () => {
-          const result = LicenceContactsPresenter.go(licenceContacts)
+          const result = LicenceContactsPresenter.go(licenceContacts, licence)
 
           expect(result.licenceContacts[0].name).to.equal('Acme ltd')
         })
@@ -98,7 +114,7 @@ describe('Licence Contacts presenter', () => {
 
         describe('but no first name', () => {
           it("returns just the licence contact's last name", () => {
-            const result = LicenceContactsPresenter.go(licenceContacts)
+            const result = LicenceContactsPresenter.go(licenceContacts, licence)
 
             expect(result.licenceContacts[0].name).to.equal('Flow')
           })
@@ -110,7 +126,7 @@ describe('Licence Contacts presenter', () => {
           })
 
           it("returns the licence contact's first and last name", () => {
-            const result = LicenceContactsPresenter.go(licenceContacts)
+            const result = LicenceContactsPresenter.go(licenceContacts, licence)
 
             expect(result.licenceContacts[0].name).to.equal('Jackie Flow')
           })
