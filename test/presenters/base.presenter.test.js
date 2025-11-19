@@ -275,10 +275,36 @@ describe('Base presenter', () => {
   })
 
   describe('#formatNumber()', () => {
-    it('formats a number for display', () => {
-      const result = BasePresenter.formatNumber(12345.67894566)
+    describe('when there is a number', () => {
+      it('formats the number for display', () => {
+        const result = BasePresenter.formatNumber(12345.67)
 
-      expect(result).to.equal('12,345.678946')
+        expect(result).to.equal('12,345.67')
+      })
+    })
+
+    describe('when there is a number with more than 6 decimal places', () => {
+      it('formats the number for display to 6 decimal places', () => {
+        const result = BasePresenter.formatNumber(12345.67894566)
+
+        expect(result).to.equal('12,345.678946')
+      })
+    })
+
+    describe('when the number is null', () => {
+      it('returns null', () => {
+        const result = BasePresenter.formatNumber(null)
+
+        expect(result).to.equal(null)
+      })
+    })
+
+    describe('when the number is undefined', () => {
+      it('returns null', () => {
+        const result = BasePresenter.formatNumber(undefined)
+
+        expect(result).to.equal(null)
+      })
     })
   })
 
