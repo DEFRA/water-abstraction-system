@@ -36,7 +36,7 @@ function go(lines, fromDate, toDate, singleVolume) {
 function _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuantity, singleVolume) {
   // Apply the quantity to each line within the abstraction period. Since volume is divided across multiple lines,
   // rounding errors may occur, causing the total to deviate from the original volume. To prevent this, we calculate the
-  // cumulative total using `allocatedLineTotal` and record the index of the last applicable line (`lastIndex`). After
+  // total line quantity (`allocatedLineTotal`) and record the index of the last applicable line (`lastIndex`). After
   // processing all lines, we adjust the last line's quantity if needed to ensure the total matches the original volume.
   linesInsideAbstractionPeriod.forEach((line) => {
     line.quantity = individualLineQuantity
