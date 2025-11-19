@@ -83,8 +83,6 @@ async function go(notification) {
   }
 
   await _recordStatus(notification, notifyStatus, status)
-  await _recordAlert(status, notification)
-  await _recordDueDate(status, notification)
 }
 
 async function _notifyStatus(notifyId) {
@@ -96,12 +94,12 @@ async function _notifyStatus(notifyId) {
     return response.body.status
   }
 
-  global.GlobalNotifier.omfg('Failed to check Notify status', { notifyId, response })
+  global.GlobalNotifier.omfg('Check notification status failed', { notifyId, response })
 
   return null
 }
 
-async function _recordAlert(status, notification) {
+async function _recordAlert(notification, status, trx) {
   const { createdAt, licenceMonitoringStationId, personalisation } = notification
 
   // We only record the notification against the licence monitoring station _if_ the notification is sent and we're
@@ -110,7 +108,7 @@ async function _recordAlert(status, notification) {
     return
   }
 
-  await LicenceMonitoringStationModel.query()
+  await LicenceMonitoringStationModel.query(trx)
     .patch({
       status: personalisation.sending_alert_type,
       statusUpdatedAt: createdAt
@@ -118,23 +116,31 @@ async function _recordAlert(status, notification) {
     .findById(licenceMonitoringStationId)
 }
 
-async function _recordDueDate(status, notification) {
-  const { dueDate, messageRef, returnLogIds } = notification
+async function _recordReturnLogs(notification, status, trx) {
+  const { createdAt, dueDate, messageRef, returnLogIds } = notification
 
-  // We only record the due date against the linked return log IDs if the notification is 'sent' and it's a returns
-  // invitation
+  // We only update the linked return logs if the notification is 'sent' and it's a returns invitation
   if (status !== NOTIFICATIONS_STATUS.sent || !messageRef.startsWith('returns_invitation')) {
     return
   }
 
-  await ReturnLogModel.query()
-    .patch({ dueDate, updatedAt: timestampForPostgres() })
+  await ReturnLogModel.query(trx)
+    .patch({ dueDate, sentDate: createdAt, updatedAt: timestampForPostgres() })
     .whereNull('dueDate')
     .whereIn('returnId', returnLogIds)
 }
 
 async function _recordStatus(notification, notifyStatus, status) {
-  await NotificationModel.query().patch({ notifyStatus, status }).findById(notification.id)
+  try {
+    await NotificationModel.transaction(async (trx) => {
+      await NotificationModel.query(trx).patch({ notifyStatus, status }).findById(notification.id)
+
+      await _recordAlert(notification, status, trx)
+      await _recordReturnLogs(notification, status, trx)
+    })
+  } catch (error) {
+    global.GlobalNotifier.omfg('Check notification status failed', notification, error)
+  }
 }
 
 function _status(notification, notifyStatus) {
