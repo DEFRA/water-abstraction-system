@@ -39,7 +39,7 @@ function go(payload) {
         'number.base': 'Enter a total figure',
         'number.unsafe': 'Enter a smaller total figure',
         'number.positive': 'Enter a total figure greater than zero'
-    })
+      })
   })
 
   return schema.validate(payload, { abortEarly: false })
