@@ -3,11 +3,11 @@
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page
  *
- * @module AlertEmailAddressService
+ * @module ViewAlertEmailAddressService
  */
 
-const AlertEmailAddressPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-email-address.presenter.js')
-const SessionModel = require('../../../../models/session.model.js')
+const AlertEmailAddressPresenter = require('../../../presenters/notices/setup/alert-email-address.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page

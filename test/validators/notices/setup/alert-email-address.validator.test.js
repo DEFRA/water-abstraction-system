@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const AlertEmailAddressValidator = require('../../../../../app/validators/notices/setup/abstraction-alerts/alert-email-address.validator.js')
+const AlertEmailAddressValidator = require('../../../../app/validators/notices/setup/alert-email-address.validator.js')
 
-describe('Alert Email Address Validator', () => {
+describe('Notices - Setup - Alert Email Address validator', () => {
   let payload
 
   beforeEach(() => {

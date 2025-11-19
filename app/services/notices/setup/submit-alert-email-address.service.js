@@ -6,10 +6,10 @@
  * @module SubmitAlertEmailAddressService
  */
 
-const AlertEmailAddressPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-email-address.presenter.js')
-const AlertEmailAddressValidator = require('../../../../validators/notices/setup/abstraction-alerts/alert-email-address.validator.js')
-const SessionModel = require('../../../../models/session.model.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+const AlertEmailAddressPresenter = require('../../../presenters/notices/setup/alert-email-address.presenter.js')
+const AlertEmailAddressValidator = require('../../../validators/notices/setup/alert-email-address.validator.js')
+const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-email-address` page

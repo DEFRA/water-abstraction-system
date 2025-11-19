@@ -6,8 +6,6 @@
  */
 
 const AddRecipientService = require('../services/notices/setup/add-recipient.service.js')
-const AlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/alert-email-address.service.js')
-const AlertThresholdsService = require('../services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelAlertsService = require('../services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
 const CancelService = require('../services/notices/setup/cancel.service.js')
@@ -30,7 +28,7 @@ const RemoveLicencesService = require('../services/notices/setup/remove-licences
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
 const SelectRecipientsService = require('../services/notices/setup/select-recipients.service.js')
-const SubmitAlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
+const SubmitAlertEmailAddressService = require('../services/notices/setup/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
 const SubmitCancelAlertsService = require('../services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
@@ -46,6 +44,8 @@ const SubmitRecipientNameService = require('../services/notices/setup/submit-rec
 const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
 const SubmitReturnsPeriodService = require('../services/notices/setup/returns-period/submit-returns-period.service.js')
 const SubmitSelectRecipientsService = require('../services/notices/setup/submit-select-recipients.service.js')
+const ViewAlertEmailAddressService = require('../services/notices/setup/view-alert-email-address.service.js')
+const ViewAlertThresholdsService = require('../services/notices/setup/view-alert-thresholds.service.js')
 
 async function addRecipient(request, h) {
   const {
@@ -113,7 +113,7 @@ async function submitAlertEmailAddress(request, h) {
   const pageData = await SubmitAlertEmailAddressService.go(sessionId, payload, auth)
 
   if (pageData.error) {
-    return h.view(`notices/setup/abstraction-alerts/alert-email-address.njk`, pageData)
+    return h.view(`notices/setup/alert-email-address.njk`, pageData)
   }
 
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
@@ -334,9 +334,9 @@ async function viewAlertEmailAddress(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await AlertEmailAddressService.go(sessionId, auth)
+  const pageData = await ViewAlertEmailAddressService.go(sessionId, auth)
 
-  return h.view(`notices/setup/abstraction-alerts/alert-email-address.njk`, pageData)
+  return h.view(`notices/setup/alert-email-address.njk`, pageData)
 }
 
 async function viewAlertThresholds(request, h) {
