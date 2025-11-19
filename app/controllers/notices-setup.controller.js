@@ -8,7 +8,6 @@
 const AddRecipientService = require('../services/notices/setup/add-recipient.service.js')
 const CancelService = require('../services/notices/setup/cancel.service.js')
 const CheckAlertService = require('../services/notices/setup/preview/check-alert.service.js')
-const CheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckNoticeTypeService = require('../services/notices/setup/check-notice-type.service.js')
 const CheckPaperReturnService = require('../services/notices/setup/preview/check-paper-return.service.js')
 const CheckService = require('../services/notices/setup/check.service.js')
@@ -31,7 +30,7 @@ const SubmitAlertThresholdsService = require('../services/notices/setup/submit-a
 const SubmitAlertTypeService = require('../services/notices/setup/submit-alert-type.service.js')
 const SubmitCancelAlertsService = require('../services/notices/setup/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
-const SubmitCheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
+const SubmitCheckLicenceMatchesService = require('../services/notices/setup/submit-check-licence-matches.service.js')
 const SubmitCheckNoticeTypeService = require('../services/notices/setup/submit-check-notice-type.service.js')
 const SubmitCheckService = require('../services/notices/setup/submit-check.service.js')
 const SubmitContactTypeService = require('../services/notices/setup/submit-contact-type.service.js')
@@ -46,6 +45,7 @@ const ViewAlertEmailAddressService = require('../services/notices/setup/view-ale
 const ViewAlertThresholdsService = require('../services/notices/setup/view-alert-thresholds.service.js')
 const ViewAlertTypeService = require('../services/notices/setup/view-alert-type.service.js')
 const ViewCancelAlertsService = require('../services/notices/setup/view-cancel-alerts.service.js')
+const ViewCheckLicenceMatchesService = require('../services/notices/setup/view-check-licence-matches.service.js')
 
 async function addRecipient(request, h) {
   const {
@@ -399,9 +399,9 @@ async function viewCheckLicenceMatches(request, h) {
     yar
   } = request
 
-  const pageData = await CheckLicenceMatchesService.go(sessionId, yar)
+  const pageData = await ViewCheckLicenceMatchesService.go(sessionId, yar)
 
-  return h.view(`notices/setup/abstraction-alerts/check-licence-matches.njk`, pageData)
+  return h.view(`notices/setup/check-licence-matches.njk`, pageData)
 }
 
 async function viewCheckNoticeType(request, h) {

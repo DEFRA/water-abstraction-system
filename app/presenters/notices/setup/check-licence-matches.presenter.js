@@ -5,8 +5,8 @@
  * @module CheckLicenceMatchesPresenter
  */
 
-const DetermineRelevantLicenceMonitoringStationsService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js')
-const { determineRestrictionHeading, formatRestrictions } = require('../../../monitoring-stations/base.presenter.js')
+const DetermineRelevantLicenceMonitoringStationsService = require('../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js')
+const { determineRestrictionHeading, formatRestrictions } = require('../../monitoring-stations/base.presenter.js')
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page

@@ -6,8 +6,8 @@
  * @module SubmitCheckLicenceMatchesService
  */
 
-const DetermineRelevantLicenceMonitoringStationsService = require('./determine-relevant-licence-monitoring-stations.service.js')
-const SessionModel = require('../../../../models/session.model.js')
+const DetermineRelevantLicenceMonitoringStationsService = require('./abstraction-alerts/determine-relevant-licence-monitoring-stations.service.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates saving the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page

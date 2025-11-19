@@ -3,11 +3,11 @@
 /**
  * Orchestrates presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
  *
- * @module CheckLicenceMatchesService
+ * @module ViewCheckLicenceMatchesService
  */
 
-const CheckLicenceMatchesPresenter = require('../../../../presenters/notices/setup/abstraction-alerts/check-licence-matches.presenter.js')
-const SessionModel = require('../../../../models/session.model.js')
+const CheckLicenceMatchesPresenter = require('../../../presenters/notices/setup/check-licence-matches.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page

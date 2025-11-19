@@ -9,13 +9,13 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-alert-session-data.fixture.js')
-const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const CheckLicenceMatchesService = require('../../../../../app/services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
+const ViewCheckLicenceMatchesService = require('../../../../app/services/notices/setup/view-check-licence-matches.service.js')
 
-describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', () => {
+describe('Notices - Setup - Check Licence Matches service', () => {
   let licenceMonitoringStations
   let session
   let sessionData
@@ -46,7 +46,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await CheckLicenceMatchesService.go(session.id, yarStub)
+      const result = await ViewCheckLicenceMatchesService.go(session.id, yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'notices',
@@ -112,7 +112,7 @@ describe('Notices Setup - Abstraction Alerts - Check Licence Matches Service', (
       })
 
       it('should set the notification', async () => {
-        const result = await CheckLicenceMatchesService.go(session.id, yarStub)
+        const result = await ViewCheckLicenceMatchesService.go(session.id, yarStub)
 
         expect(result.notification).to.equal('Test notification')
       })

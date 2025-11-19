@@ -16,7 +16,6 @@ const { postRequestOptions } = require('../support/general.js')
 const AddRecipientService = require('../../app/services/notices/setup/add-recipient.service.js')
 const CancelService = require('../../app/services/notices/setup/cancel.service.js')
 const CheckAlert = require('../../app/services/notices/setup/preview/check-alert.service.js')
-const CheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
 const CheckNoticeTypeService = require('../../app/services/notices/setup/check-notice-type.service.js')
 const CheckPaperReturnService = require('../../app/services/notices/setup/preview/check-paper-return.service.js')
 const CheckService = require('../../app/services/notices/setup/check.service.js')
@@ -39,7 +38,7 @@ const SubmitAlertThresholdsService = require('../../app/services/notices/setup/s
 const SubmitAlertTypeService = require('../../app/services/notices/setup/submit-alert-type.service.js')
 const SubmitCancelAlertsService = require('../../app/services/notices/setup/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
-const SubmitCheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
+const SubmitCheckLicenceMatchesService = require('../../app/services/notices/setup/submit-check-licence-matches.service.js')
 const SubmitCheckNoticeTypeService = require('../../app/services/notices/setup/submit-check-notice-type.service.js')
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
 const SubmitContactTypeService = require('../../app/services/notices/setup/submit-contact-type.service.js')
@@ -54,6 +53,7 @@ const ViewAlertEmailAddressService = require('../../app/services/notices/setup/v
 const ViewAlertThresholdsService = require('../../app/services/notices/setup/view-alert-thresholds.service.js')
 const ViewAlertTypeService = require('../../app/services/notices/setup/view-alert-type.service.js')
 const ViewCancelAlertsService = require('../../app/services/notices/setup/view-cancel-alerts.service.js')
+const ViewCheckLicenceMatchesService = require('../../app/services/notices/setup/view-check-licence-matches.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -652,7 +652,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(CheckLicenceMatchesService, 'go').resolves({
+          Sinon.stub(ViewCheckLicenceMatchesService, 'go').resolves({
             pageTitle: 'Check licence page'
           })
         })
