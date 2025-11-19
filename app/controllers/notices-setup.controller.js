@@ -6,7 +6,6 @@
  */
 
 const AddRecipientService = require('../services/notices/setup/add-recipient.service.js')
-const AlertTypeService = require('../services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelAlertsService = require('../services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
 const CancelService = require('../services/notices/setup/cancel.service.js')
 const CheckAlertService = require('../services/notices/setup/preview/check-alert.service.js')
@@ -30,7 +29,7 @@ const ReturnsPeriodService = require('../services/notices/setup/returns-period/r
 const SelectRecipientsService = require('../services/notices/setup/select-recipients.service.js')
 const SubmitAlertEmailAddressService = require('../services/notices/setup/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../services/notices/setup/submit-alert-thresholds.service.js')
-const SubmitAlertTypeService = require('../services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
+const SubmitAlertTypeService = require('../services/notices/setup/submit-alert-type.service.js')
 const SubmitCancelAlertsService = require('../services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
 const SubmitCheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
@@ -46,6 +45,7 @@ const SubmitReturnsPeriodService = require('../services/notices/setup/returns-pe
 const SubmitSelectRecipientsService = require('../services/notices/setup/submit-select-recipients.service.js')
 const ViewAlertEmailAddressService = require('../services/notices/setup/view-alert-email-address.service.js')
 const ViewAlertThresholdsService = require('../services/notices/setup/view-alert-thresholds.service.js')
+const ViewAlertTypeService = require('../services/notices/setup/view-alert-type.service.js')
 
 async function addRecipient(request, h) {
   const {
@@ -143,7 +143,7 @@ async function submitAlertType(request, h) {
   const pageData = await SubmitAlertTypeService.go(sessionId, payload)
 
   if (pageData.error) {
-    return h.view(`notices/setup/abstraction-alerts/alert-type.njk`, pageData)
+    return h.view(`notices/setup/alert-type.njk`, pageData)
   }
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/alert-thresholds`)
@@ -352,9 +352,9 @@ async function viewAlertType(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await AlertTypeService.go(sessionId)
+  const pageData = await ViewAlertTypeService.go(sessionId)
 
-  return h.view(`notices/setup/abstraction-alerts/alert-type.njk`, pageData)
+  return h.view(`notices/setup/alert-type.njk`, pageData)
 }
 
 async function viewCancel(request, h) {

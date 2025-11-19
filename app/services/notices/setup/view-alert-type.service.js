@@ -3,11 +3,11 @@
 /**
  * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page
  *
- * @module AlertTypeService
+ * @module ViewAlertTypeService
  */
 
-const AlertTypePresenter = require('../../../../presenters/notices/setup/abstraction-alerts/alert-type.presenter.js')
-const SessionModel = require('../../../../models/session.model.js')
+const AlertTypePresenter = require('../../../presenters/notices/setup/alert-type.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates presenting the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-type` page

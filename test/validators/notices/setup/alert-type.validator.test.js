@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-alert-session-data.fixture.js')
+const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
 
 // Thing under test
-const AlertTypeValidator = require('../../../../../app/validators/notices/setup/abstraction-alerts/alert-type.validator.js')
+const AlertTypeValidator = require('../../../../app/validators/notices/setup/alert-type.validator.js')
 
-describe('Notices - Setup - Abstraction Alerts - Alert Type Validator', () => {
+describe('Notices - Setup - Alert Type validator', () => {
   let licenceMonitoringStations
   let licenceMonitoringStationsData
   let payload

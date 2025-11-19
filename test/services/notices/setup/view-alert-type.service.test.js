@@ -9,13 +9,13 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-alert-session-data.fixture.js')
-const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const AlertTypeService = require('../../../../../app/services/notices/setup/abstraction-alerts/alert-type.service.js')
+const ViewAlertTypeService = require('../../../../app/services/notices/setup/view-alert-type.service.js')
 
-describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
+describe('Notices Setup - Setup - View Alert Type service', () => {
   let session
   let sessionData
 
@@ -30,7 +30,7 @@ describe('Notices Setup - Abstraction Alerts - Alert Type Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await AlertTypeService.go(session.id)
+      const result = await ViewAlertTypeService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'notices',

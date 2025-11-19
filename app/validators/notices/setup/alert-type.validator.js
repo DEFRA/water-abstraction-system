@@ -7,7 +7,7 @@
  */
 
 const Joi = require('joi')
-const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
+const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
 
 const errorMessage = 'Select the type of alert you need to send'
 
