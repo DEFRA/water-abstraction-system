@@ -23,7 +23,6 @@ const PreviewService = require('../services/notices/setup/preview/preview.servic
 const RecipientNameService = require('../services/notices/setup/recipient-name.service.js')
 const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
-const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
 const SelectRecipientsService = require('../services/notices/setup/select-recipients.service.js')
 const SubmitAlertEmailAddressService = require('../services/notices/setup/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../services/notices/setup/submit-alert-thresholds.service.js')
@@ -39,13 +38,14 @@ const SubmitNoticeTypeService = require('../services/notices/setup/submit-notice
 const SubmitPaperReturnService = require('../services/notices/setup/submit-paper-return.service.js')
 const SubmitRecipientNameService = require('../services/notices/setup/submit-recipient-name.service.js')
 const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
-const SubmitReturnsPeriodService = require('../services/notices/setup/returns-period/submit-returns-period.service.js')
+const SubmitReturnsPeriodService = require('../services/notices/setup/submit-returns-period.service.js')
 const SubmitSelectRecipientsService = require('../services/notices/setup/submit-select-recipients.service.js')
 const ViewAlertEmailAddressService = require('../services/notices/setup/view-alert-email-address.service.js')
 const ViewAlertThresholdsService = require('../services/notices/setup/view-alert-thresholds.service.js')
 const ViewAlertTypeService = require('../services/notices/setup/view-alert-type.service.js')
 const ViewCancelAlertsService = require('../services/notices/setup/view-cancel-alerts.service.js')
 const ViewCheckLicenceMatchesService = require('../services/notices/setup/view-check-licence-matches.service.js')
+const ViewReturnsPeriodService = require('../services/notices/setup/view-returns-period.service.js')
 
 async function addRecipient(request, h) {
   const {
@@ -497,7 +497,7 @@ async function viewReturnsPeriod(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await ReturnsPeriodService.go(sessionId)
+  const pageData = await ViewReturnsPeriodService.go(sessionId)
 
   return h.view(`notices/setup/returns-period.njk`, pageData)
 }

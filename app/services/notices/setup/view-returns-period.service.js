@@ -2,11 +2,11 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup returns period page
- * @module ReturnsPeriodService
+ * @module ViewReturnsPeriodService
  */
 
-const ReturnsPeriodPresenter = require('../../../../presenters/notices/setup/returns-period/returns-period.presenter.js')
-const SessionModel = require('../../../../models/session.model.js')
+const ReturnsPeriodPresenter = require('../../../presenters/notices/setup/returns-period.presenter.js')
+const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup returns period page

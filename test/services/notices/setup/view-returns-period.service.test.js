@@ -9,13 +9,13 @@ const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../../support/helpers/session.helper.js')
-const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
-const ReturnsPeriodService = require('../../../../../app/services/notices/setup/returns-period/returns-period.service.js')
+const ReturnsPeriodService = require('../../../../app/services/notices/setup/view-returns-period.service.js')
 
-describe('Notices - Setup - Returns Period service', () => {
+describe('Notices - Setup - View Returns Period service', () => {
   let clock
   let referenceCode
   let session

@@ -5,10 +5,10 @@
  * @module ReturnsPeriodPresenter
  */
 
-const { determineUpcomingReturnPeriods } = require('../../../../lib/return-periods.lib.js')
-const { formatLongDate } = require('../../../base.presenter.js')
-const { returnsPeriodText } = require('../../base.presenter.js')
-const { today } = require('../../../../lib/general.lib.js')
+const { determineUpcomingReturnPeriods } = require('../../../lib/return-periods.lib.js')
+const { formatLongDate } = require('../../base.presenter.js')
+const { returnsPeriodText } = require('../base.presenter.js')
+const { today } = require('../../../lib/general.lib.js')
 
 /**
  * Formats data for the `/notices/setup/returns-period` page

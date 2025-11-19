@@ -5,12 +5,12 @@
  * @module SubmitReturnsPeriodService
  */
 
-const DetermineReturnsPeriodService = require('../determine-returns-period.service.js')
-const GeneralLib = require('../../../../lib/general.lib.js')
-const ReturnsPeriodPresenter = require('../../../../presenters/notices/setup/returns-period/returns-period.presenter.js')
-const ReturnsPeriodValidator = require('../../../../validators/notices/setup/returns-periods.validator.js')
-const SessionModel = require('../../../../models/session.model.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
+const ReturnsPeriodPresenter = require('../../../presenters/notices/setup/returns-period.presenter.js')
+const ReturnsPeriodValidator = require('../../../validators/notices/setup/returns-periods.validator.js')
+const SessionModel = require('../../../models/session.model.js')
+const { flashNotification } = require('../../../lib/general.lib.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Formats data for the `/notices/setup/returns-period` page
@@ -29,7 +29,7 @@ async function go(sessionId, payload, yar) {
 
   if (!validationResult) {
     if (session.checkPageVisited) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Returns period updated')
+      flashNotification(yar, 'Updated', 'Returns period updated')
 
       session.checkPageVisited = false
     }

@@ -31,7 +31,6 @@ const PreviewService = require('../../app/services/notices/setup/preview/preview
 const RecipientNameService = require('../../app/services/notices/setup/recipient-name.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
-const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
 const SelectRecipientsService = require('../../app/services/notices/setup/select-recipients.service.js')
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/submit-alert-thresholds.service.js')
@@ -47,13 +46,14 @@ const SubmitNoticeTypeService = require('../../app/services/notices/setup/submit
 const SubmitPaperReturnService = require('../../app/services/notices/setup/submit-paper-return.service.js')
 const SubmitRecipientNameService = require('../../app/services/notices/setup/submit-recipient-name.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
-const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
+const SubmitReturnsPeriodService = require('../../app/services/notices/setup/submit-returns-period.service.js')
 const SubmitSelectRecipientsService = require('../../app/services/notices/setup/submit-select-recipients.service.js')
 const ViewAlertEmailAddressService = require('../../app/services/notices/setup/view-alert-email-address.service.js')
 const ViewAlertThresholdsService = require('../../app/services/notices/setup/view-alert-thresholds.service.js')
 const ViewAlertTypeService = require('../../app/services/notices/setup/view-alert-type.service.js')
 const ViewCancelAlertsService = require('../../app/services/notices/setup/view-cancel-alerts.service.js')
 const ViewCheckLicenceMatchesService = require('../../app/services/notices/setup/view-check-licence-matches.service.js')
+const ViewReturnsPeriodService = require('../../app/services/notices/setup/view-returns-period.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -1162,7 +1162,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ReturnsPeriodService, 'go').returns(_viewReturnsPeriod())
+          Sinon.stub(ViewReturnsPeriodService, 'go').returns(_viewReturnsPeriod())
         })
 
         it('returns the page successfully', async () => {
