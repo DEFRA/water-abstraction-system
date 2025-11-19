@@ -5,7 +5,7 @@
  * @module ViewReturnSubmissionPresenter
  */
 
-const { formatLongDate, formatNumber, formatQuantity, sentenceCase } = require('../base.presenter.js')
+const { formatLongDate, formatNumber, formatQuantityToUnit, sentenceCase } = require('../base.presenter.js')
 
 const { returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
 
@@ -88,7 +88,7 @@ function _generateTableRows(lines) {
       cubicMetresQuantity: formatNumber(quantity),
       date: formatLongDate(endDate),
       reading,
-      unitQuantity: formatQuantity(userUnit, quantity)
+      unitQuantity: formatQuantityToUnit(quantity, userUnit)
     }
 
     return rowData
@@ -126,7 +126,7 @@ function _total(lines, units) {
 
   return {
     cubicMetresTotal: formatNumber(totalQuantity),
-    unitTotal: formatQuantity(units, totalQuantity)
+    unitTotal: formatQuantityToUnit(totalQuantity, units)
   }
 }
 

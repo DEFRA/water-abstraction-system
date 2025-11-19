@@ -276,9 +276,9 @@ describe('Base presenter', () => {
 
   describe('#formatNumber()', () => {
     it('formats a number for display', () => {
-      const result = BasePresenter.formatNumber(12345.6789)
+      const result = BasePresenter.formatNumber(12345.67894566)
 
-      expect(result).to.equal('12,345.679')
+      expect(result).to.equal('12,345.678946')
     })
   })
 
@@ -360,19 +360,19 @@ describe('Base presenter', () => {
     })
   })
 
-  describe('#formatQuantity()', () => {
+  describe('#formatQuantityToUnit()', () => {
     describe('when quantity and units are provided', () => {
       describe('and the value is not 0', () => {
-        it('returns converted and formatted quantity', () => {
-          const result = BasePresenter.formatQuantity('gal', 100)
+        it('returns the formatted value of 100 cubic metres converted to gallons to 6 decimal places', () => {
+          const result = BasePresenter.formatQuantityToUnit(100, 'gal')
 
-          expect(result).to.equal('21,996.925')
+          expect(result).to.equal('21,996.92483')
         })
       })
 
       describe('and the value is 0', () => {
         it('returns 0 as a string', () => {
-          const result = BasePresenter.formatQuantity('gal', 0)
+          const result = BasePresenter.formatQuantityToUnit(0, 'gal')
 
           expect(result).to.equal('0')
         })
@@ -381,7 +381,7 @@ describe('Base presenter', () => {
 
     describe('when quantity is null', () => {
       it('returns null', () => {
-        const result = BasePresenter.formatQuantity('someUnit', null)
+        const result = BasePresenter.formatQuantityToUnit(null, 'someUnit')
 
         expect(result).to.equal(null)
       })

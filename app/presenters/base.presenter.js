@@ -1,5 +1,7 @@
 'use strict'
 
+const Big = require('big.js')
+
 const { today } = require('../lib/general.lib.js')
 const { noticeMappings, returnUnits } = require('../lib/static-lookups.lib.js')
 
@@ -211,10 +213,10 @@ function formatNoticeType(subtype, alertType = null) {
  *
  * @returns {string|null} The formatted number or null if the number is null or undefined
  */
-function formatNumber(number, minimumFractionDigits = 0, maximumFractionDigits = 3) {
+function formatNumber(number, minimumFractionDigits = 0, maximumFractionDigits = 6) {
   // NOTE: We don't use !number because that would match 0, which for this helper is a valid number and something we
   // want to format
-  if (number === null) {
+  if (number === null || number === undefined) {
     return null
   }
 
@@ -279,12 +281,15 @@ function formatPurposes(purposes) {
  *
  * @returns {string|null} The formatted quantity or null if the quantity is null or undefined
  */
-function formatQuantity(units, quantity) {
+function formatQuantityToUnit(quantity, units) {
   if (quantity === null || quantity === undefined) {
     return null
   }
 
-  const convertedQuantity = quantity * returnUnits[units].multiplier
+  Big.DP = 6 // Set decimal places to 6
+  Big.RM = Big.roundHalfUp // Set rounding mode to round half up
+
+  const convertedQuantity = Big(quantity).times(returnUnits[units].multiplier).toNumber()
 
   return formatNumber(convertedQuantity)
 }
@@ -589,7 +594,7 @@ module.exports = {
   formatNumber,
   formatPounds,
   formatPurposes,
-  formatQuantity,
+  formatQuantityToUnit,
   formatRestrictionType,
   formatReturnLogStatus,
   formatValidationResult,
