@@ -11,40 +11,38 @@ const { expect } = Code
 const BillHelper = require('../../support/helpers/bill.helper.js')
 const BillLicenceHelper = require('../../support/helpers/bill-licence.helper.js')
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchLicenceBillService = require('../../../app/services/licences/fetch-licence-bills.service.js')
 
-describe('Fetch Licence Bills service', () => {
+describe('Licences - Fetch Licence Bills service', () => {
   const createdDate = new Date('2022-01-01')
 
-  let billId
-  let billingAccountId
+  let billLicence
   let billRunId
-  let licenceId
+  let billingAccountId
+  let licence
 
   beforeEach(async () => {
-    billId = generateUUID()
     billingAccountId = generateUUID()
     billRunId = generateUUID()
-    licenceId = generateUUID()
+
+    licence = await LicenceHelper.add()
+
+    billLicence = await BillLicenceHelper.add({
+      licenceId: licence.id
+    })
   })
 
   describe('when the licence has bills', () => {
-    beforeEach(async () => {
-      await BillLicenceHelper.add({
-        licenceId,
-        billId
-      })
-    })
-
     describe("and they are linked to a 'sent' bill run", () => {
       beforeEach(async () => {
         await BillRunHelper.add({ id: billRunId, status: 'sent' })
 
         await BillHelper.add({
-          id: billId,
+          id: billLicence.billId,
           billRunId,
           invoiceNumber: '123',
           accountNumber: 'T21404193A',
@@ -58,32 +56,37 @@ describe('Fetch Licence Bills service', () => {
       })
 
       it('returns results', async () => {
-        const result = await FetchLicenceBillService.go(licenceId, 1)
+        const result = await FetchLicenceBillService.go(licence.id, 1)
 
-        expect(result.pagination).to.equal({
-          total: 1
-        })
-
-        expect(result.bills).to.equal([
-          {
-            accountNumber: 'T21404193A',
-            billRun: {
-              id: billRunId,
-              batchType: 'supplementary',
-              scheme: 'sroc',
-              summer: false
-            },
-            billingAccountId,
-            createdAt: createdDate,
-            credit: null,
-            deminimis: false,
-            financialYearEnding: 2023,
-            id: billId,
-            invoiceNumber: '123',
-            legacyId: null,
-            netAmount: 12345
+        expect(result).to.equal({
+          bills: [
+            {
+              accountNumber: 'T21404193A',
+              billRun: {
+                id: billRunId,
+                batchType: 'supplementary',
+                scheme: 'sroc',
+                summer: false
+              },
+              billingAccountId,
+              createdAt: createdDate,
+              credit: null,
+              deminimis: false,
+              financialYearEnding: 2023,
+              id: billLicence.billId,
+              invoiceNumber: '123',
+              legacyId: null,
+              netAmount: 12345
+            }
+          ],
+          licence: {
+            id: licence.id,
+            licenceRef: licence.licenceRef
+          },
+          pagination: {
+            total: 1
           }
-        ])
+        })
       })
     })
 
@@ -92,7 +95,7 @@ describe('Fetch Licence Bills service', () => {
         await BillRunHelper.add({ id: billRunId })
 
         await BillHelper.add({
-          id: billId,
+          id: billLicence.billId,
           billRunId,
           invoiceNumber: '123',
           accountNumber: 'T21404193A',
@@ -106,13 +109,18 @@ describe('Fetch Licence Bills service', () => {
       })
 
       it('returns no results', async () => {
-        const result = await FetchLicenceBillService.go(licenceId, 1)
+        const result = await FetchLicenceBillService.go(licence.id, 1)
 
-        expect(result.pagination).to.equal({
-          total: 0
+        expect(result).to.equal({
+          bills: [],
+          licence: {
+            id: licence.id,
+            licenceRef: licence.licenceRef
+          },
+          pagination: {
+            total: 0
+          }
         })
-
-        expect(result.bills).to.be.empty()
       })
     })
   })
@@ -120,18 +128,22 @@ describe('Fetch Licence Bills service', () => {
   describe('when the licence has no bills', () => {
     beforeEach(async () => {
       await BillRunHelper.add({ id: billRunId, status: 'sent' })
-      await BillHelper.add({ id: billId, billRunId })
-      await BillLicenceHelper.add({ billId })
+      await BillHelper.add({ id: billLicence.id, billRunId })
     })
 
     it('returns no results', async () => {
-      const result = await FetchLicenceBillService.go(licenceId, 1)
+      const result = await FetchLicenceBillService.go(licence.id, 1)
 
-      expect(result.pagination).to.equal({
-        total: 0
+      expect(result).to.equal({
+        bills: [],
+        licence: {
+          id: licence.id,
+          licenceRef: licence.licenceRef
+        },
+        pagination: {
+          total: 0
+        }
       })
-
-      expect(result.bills).to.be.empty()
     })
   })
 })
