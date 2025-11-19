@@ -6,7 +6,6 @@
  */
 
 const AddRecipientService = require('../services/notices/setup/add-recipient.service.js')
-const CheckNoticeTypeService = require('../services/notices/setup/check-notice-type.service.js')
 const CheckService = require('../services/notices/setup/check.service.js')
 const ConfirmationService = require('../services/notices/setup/confirmation.service.js')
 const ContactTypeService = require('../services/notices/setup/contact-type.service.js')
@@ -42,6 +41,7 @@ const ViewAlertTypeService = require('../services/notices/setup/view-alert-type.
 const ViewCancelService = require('../services/notices/setup/view-cancel.service.js')
 const ViewCancelAlertsService = require('../services/notices/setup/view-cancel-alerts.service.js')
 const ViewCheckLicenceMatchesService = require('../services/notices/setup/view-check-licence-matches.service.js')
+const ViewCheckNoticeTypeService = require('../services/notices/setup/view-check-notice-type.service.js')
 const ViewPreviewService = require('../services/notices/setup/view-preview.service.js')
 const ViewPreviewCheckAlertService = require('../services/notices/setup/view-preview-check-alert.service.js')
 const ViewPreviewCheckPaperReturnService = require('../services/notices/setup/view-preview-check-paper-return.service.js')
@@ -402,7 +402,7 @@ async function viewCheckNoticeType(request, h) {
     yar
   } = request
 
-  const pageData = await CheckNoticeTypeService.go(sessionId, yar)
+  const pageData = await ViewCheckNoticeTypeService.go(sessionId, yar)
 
   return h.view(`notices/setup/check-notice-type.njk`, pageData)
 }

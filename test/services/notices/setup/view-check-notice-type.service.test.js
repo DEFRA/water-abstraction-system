@@ -13,7 +13,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
-const CheckNoticeTypeService = require('../../../../app/services/notices/setup/check-notice-type.service.js')
+const ViewCheckNoticeTypeService = require('../../../../app/services/notices/setup/view-check-notice-type.service.js')
 
 describe('Notices - Setup - Check Notice Type Service', () => {
   let licenceRef
@@ -36,7 +36,7 @@ describe('Notices - Setup - Check Notice Type Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await CheckNoticeTypeService.go(session.id, yarStub)
+      const result = await ViewCheckNoticeTypeService.go(session.id, yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'notices',
@@ -55,7 +55,7 @@ describe('Notices - Setup - Check Notice Type Service', () => {
     })
 
     it('should set the "checkPageVisited" flag', async () => {
-      await CheckNoticeTypeService.go(session.id, yarStub)
+      await ViewCheckNoticeTypeService.go(session.id, yarStub)
 
       const refreshedSession = await session.$query()
 
@@ -68,7 +68,7 @@ describe('Notices - Setup - Check Notice Type Service', () => {
       })
 
       it('should set the notification', async () => {
-        const result = await CheckNoticeTypeService.go(session.id, yarStub)
+        const result = await ViewCheckNoticeTypeService.go(session.id, yarStub)
 
         expect(result.notification).to.equal('Test notification')
       })

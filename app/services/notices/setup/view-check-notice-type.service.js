@@ -3,7 +3,7 @@
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/check-notice-type` page
  *
- * @module CheckNoticeTypeService
+ * @module ViewCheckNoticeTypeService
  */
 
 const CheckNoticeTypePresenter = require('../../../presenters/notices/setup/check-notice-type.presenter.js')
