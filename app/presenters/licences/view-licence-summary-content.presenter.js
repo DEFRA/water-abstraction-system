@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for the `/licences/{id}/summary` page's summary tab
+ * Formats data for the `/licences/{id}/summary` page
  * @module ViewLicenceSummaryContentPresenter
  */
 
@@ -11,7 +11,7 @@ const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 /**
- * Formats data for the `/licences/{id}/summary` page's summary tab
+ * Formats data for the `/licences/{id}/summary` page
  *
  * @param {module:LicenceModel} licence - The licence the summary data will be extracted from
  *

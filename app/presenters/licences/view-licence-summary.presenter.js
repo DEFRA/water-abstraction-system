@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for common licence data `/licences/{id}` pages
+ * Formats data for the `/licences/{id}/summary` page
  * @module ViewLicenceSummaryPresenter
  */
 
@@ -9,7 +9,7 @@ const { formatLongDate } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
 /**
- * Formats data for common licence data `/licences/{id}` page's
+ * Formats data for the `/licences/{id}/summary` page
  *
  * @param {module:LicenceModel} licence - The licence where the data will be extracted for from
  *
