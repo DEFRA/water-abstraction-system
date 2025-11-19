@@ -11,13 +11,21 @@ const { formatLongDate, formatNoticeType, sentenceCase } = require('../base.pres
  * Formats data for the `/licences/{id}/communications` view licence communications page
  *
  * @param {module:NotificationModel[]} notifications - All notifications linked to the licence
- * @param {string} licenceId - The UUID of the licence
+ * @param {object} licence - The id and licence ref of the licence
  *
  * @returns {object} The data formatted for the view template
  */
-function go(notifications, licenceId) {
+function go(notifications, licence) {
+  const { id: licenceId, licenceRef } = licence
+
   return {
-    notifications: _notifications(notifications, licenceId)
+    backLink: {
+      text: 'Go back to search',
+      href: '/licences'
+    },
+    notifications: _notifications(notifications, licenceId),
+    pageTitle: 'Communications',
+    pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 

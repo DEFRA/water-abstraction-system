@@ -6,8 +6,6 @@
 {% from "macros/notification-status-tag.njk" import statusTag %}
 
 {% block subPageContent %}
-<h2 class="govuk-heading-l">Communications</h2>
-
 {% if notifications.length === 0 %}
   <p data-test='no-notifications-msg'>No communications for this licence.</p>
 {% else %}
