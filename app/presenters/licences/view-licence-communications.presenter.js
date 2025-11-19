@@ -11,7 +11,7 @@ const { formatLongDate, formatNoticeType, sentenceCase } = require('../base.pres
  * Formats data for the `/licences/{id}/communications` view licence communications page
  *
  * @param {module:NotificationModel[]} notifications - All notifications linked to the licence
- * @param {module:LicenceModel} licence - an instance of LicenceModel
+ * @param {object} licence - The id and licence ref of the licence
  *
  * @returns {object} The data formatted for the view template
  */
