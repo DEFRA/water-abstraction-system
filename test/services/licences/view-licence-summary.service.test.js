@@ -19,7 +19,7 @@ const ViewLicenceService = require('../../../app/services/licences/view-licence.
 // Thing under test
 const ViewLicenceSummaryService = require('../../../app/services/licences/view-licence-summary.service.js')
 
-describe('View Licence Summary service', () => {
+describe('licences - View Licence Summary service', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
   let fetchLicenceResult

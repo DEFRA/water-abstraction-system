@@ -6,7 +6,7 @@
  */
 
 const FetchLicenceSummaryService = require('./fetch-licence-summary.service.js')
-const ViewLicenceService = require('./view-licence.service.js')
+const ViewLicencePresenter = require('../../presenters/licences/view-licence.presenter.js')
 const ViewLicenceSummaryPresenter = require('../../presenters/licences/view-licence-summary.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
@@ -19,15 +19,14 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
 async function go(licenceId, auth) {
-  const commonData = await ViewLicenceService.go(licenceId)
+  const licenceData = await FetchLicenceSummaryService.go(licenceId)
 
-  const summaryLicenceData = await FetchLicenceSummaryService.go(licenceId)
-
-  const pageData = ViewLicenceSummaryPresenter.go(summaryLicenceData)
+  const licenceSummaryData = ViewLicenceSummaryPresenter.go(licenceData)
+  const pageData = ViewLicencePresenter.go(licenceData)
 
   return {
     ...pageData,
-    ...commonData,
+    ...licenceSummaryData,
     roles: userRoles(auth)
   }
 }
