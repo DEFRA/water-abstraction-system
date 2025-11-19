@@ -67,6 +67,9 @@ function convertToCubicMetres(quantity, units) {
     return null
   }
 
+  Big.DP = 6 // Set decimal places to 6
+  Big.RM = Big.roundHalfUp // Set rounding mode to round half up
+
   return Big(quantity).div(returnUnits[units].multiplier).toNumber()
 }
 

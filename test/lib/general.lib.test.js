@@ -133,10 +133,10 @@ describe('GeneralLib', () => {
         units = 'gal'
       })
 
-      it('returns the quantity converted to cubic metres (4.546090000001814)', () => {
+      it('returns the quantity converted to cubic metres (4.546090000001814) rounded to 6 decimal places', () => {
         const result = GeneralLib.convertToCubicMetres(quantity, units)
 
-        expect(result).to.equal(4.546090000001814)
+        expect(result).to.equal(4.54609)
       })
     })
 
