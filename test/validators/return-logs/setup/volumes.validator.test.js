@@ -41,6 +41,19 @@ describe('Return Logs Setup - Volumes validator', () => {
       })
     })
 
+    describe('because the user entered a number with more than 6 decimal places', () => {
+      beforeEach(() => {
+        payload = { '2023-05-31T00:00:00.000Z': '10.1234567' }
+      })
+
+      it('fails validation with the message "Enter a number with no more than 6 decimal places"', () => {
+        const result = VolumesValidator.go(payload)
+
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Enter a number with no more than 6 decimal places')
+      })
+    })
+
     describe('because the user entered a negative number', () => {
       beforeEach(() => {
         payload = { '2023-05-31T00:00:00.000Z': '-200' }
