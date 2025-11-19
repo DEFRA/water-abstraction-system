@@ -14,17 +14,15 @@ const LicenceModel = require('../../../app/models/licence.model.js')
 const ViewLicencePresenter = require('../../../app/presenters/licences/view-licence.presenter.js')
 
 describe('Licences - View Licence presenter', () => {
-  let auth
   let licence
 
   beforeEach(() => {
-    auth = _auth()
     licence = _licence()
   })
 
   describe('when provided with a populated licence', () => {
     it('correctly presents the data', () => {
-      const result = ViewLicencePresenter.go(licence, auth)
+      const result = ViewLicencePresenter.go(licence)
 
       expect(result).to.equal({
         backLink: {
@@ -43,7 +41,6 @@ describe('Licences - View Licence presenter', () => {
           id: 10036,
           username: 'grace.hopper@example.co.uk'
         },
-        roles: ['billing', 'view_charge_versions'],
         warning: null,
         workflowWarning: true
       })
@@ -54,7 +51,7 @@ describe('Licences - View Licence presenter', () => {
     describe('when the licence has a primary user (registered user)', () => {
       describe('and they have added a custom name for the licence', () => {
         it('returns the licence name', () => {
-          const result = ViewLicencePresenter.go(licence, auth)
+          const result = ViewLicencePresenter.go(licence)
 
           expect(result.pageTitleCaption).to.equal('Between two ferns')
         })
@@ -66,7 +63,7 @@ describe('Licences - View Licence presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewLicencePresenter.go(licence, auth)
+          const result = ViewLicencePresenter.go(licence)
 
           expect(result.pageTitleCaption).to.be.null()
         })
@@ -79,7 +76,7 @@ describe('Licences - View Licence presenter', () => {
       })
 
       it('returns "Unregistered licence"', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
+        const result = ViewLicencePresenter.go(licence)
 
         expect(result.pageTitleCaption).to.equal('Unregistered licence')
       })
@@ -89,7 +86,7 @@ describe('Licences - View Licence presenter', () => {
   describe('the "notification" property', () => {
     describe('when the licence has NOT been flagged for any supplementary bill runs', () => {
       it('returns "null"', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
+        const result = ViewLicencePresenter.go(licence)
 
         expect(result.notification).to.be.null()
       })
@@ -101,7 +98,7 @@ describe('Licences - View Licence presenter', () => {
       })
 
       it('returns a notification just for the "old charge scheme"', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
+        const result = ViewLicencePresenter.go(licence)
 
         expect(result.notification).to.equal(
           'This licence has been marked for the next supplementary bill run for the old charge scheme.'
@@ -115,7 +112,7 @@ describe('Licences - View Licence presenter', () => {
       })
 
       it('returns a notification just for the current charge scheme', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
+        const result = ViewLicencePresenter.go(licence)
 
         expect(result.notification).to.equal('This licence has been marked for the next supplementary bill run.')
       })
@@ -128,7 +125,7 @@ describe('Licences - View Licence presenter', () => {
       })
 
       it('returns a notification just for both charge schemes', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
+        const result = ViewLicencePresenter.go(licence)
 
         expect(result.notification).to.equal(
           'This licence has been marked for the next supplementary bill runs for the current and old charge schemes.'
@@ -142,7 +139,7 @@ describe('Licences - View Licence presenter', () => {
       })
 
       it('returns a notification just for TPT supplementary', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
+        const result = ViewLicencePresenter.go(licence)
 
         expect(result.notification).to.equal(
           'This licence has been marked for the next two-part tariff supplementary bill run.'
@@ -157,7 +154,7 @@ describe('Licences - View Licence presenter', () => {
       })
 
       it('returns a notification for TPT & PRESROC supplementary', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
+        const result = ViewLicencePresenter.go(licence)
 
         expect(result.notification).to.equal(
           'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.'
@@ -172,7 +169,7 @@ describe('Licences - View Licence presenter', () => {
       })
 
       it('returns a notification for TPT & SROC supplementary', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
+        const result = ViewLicencePresenter.go(licence)
 
         expect(result.notification).to.equal(
           'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run.'
@@ -188,7 +185,7 @@ describe('Licences - View Licence presenter', () => {
       })
 
       it('returns a notification for TPT, PRESROC & SROC supplementary', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
+        const result = ViewLicencePresenter.go(licence)
 
         expect(result.notification).to.equal(
           'This licence has been marked for the next two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.'
@@ -197,32 +194,10 @@ describe('Licences - View Licence presenter', () => {
     })
   })
 
-  describe('the "roles" property', () => {
-    describe('when the authenticated user has roles', () => {
-      it('returns the roles names as an array', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
-
-        expect(result.roles).to.equal(['billing', 'view_charge_versions'])
-      })
-    })
-
-    describe('when the authenticated user has no roles', () => {
-      beforeEach(() => {
-        auth.credentials.roles = []
-      })
-
-      it('returns an empty array', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
-
-        expect(result.roles).to.be.empty()
-      })
-    })
-  })
-
   describe('the "warning" property', () => {
     describe('when the licence does not have an "end" date', () => {
       it('returns null', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
+        const result = ViewLicencePresenter.go(licence)
 
         expect(result.warning).to.be.null()
       })
@@ -235,7 +210,7 @@ describe('Licences - View Licence presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewLicencePresenter.go(licence, auth)
+          const result = ViewLicencePresenter.go(licence)
 
           expect(result.warning).to.be.null()
         })
@@ -247,7 +222,7 @@ describe('Licences - View Licence presenter', () => {
         })
 
         it('returns "This licence expired on 1 April 2019"', () => {
-          const result = ViewLicencePresenter.go(licence, auth)
+          const result = ViewLicencePresenter.go(licence)
 
           expect(result.warning).to.equal({
             iconFallbackText: 'Warning',
@@ -262,7 +237,7 @@ describe('Licences - View Licence presenter', () => {
         })
 
         it('returns "This licence lapsed on 1 April 2019"', () => {
-          const result = ViewLicencePresenter.go(licence, auth)
+          const result = ViewLicencePresenter.go(licence)
 
           expect(result.warning).to.equal({
             iconFallbackText: 'Warning',
@@ -277,7 +252,7 @@ describe('Licences - View Licence presenter', () => {
         })
 
         it('returns "This licence was revoked on 1 April 2019"', () => {
-          const result = ViewLicencePresenter.go(licence, auth)
+          const result = ViewLicencePresenter.go(licence)
 
           expect(result.warning).to.equal({
             iconFallbackText: 'Warning',
@@ -295,7 +270,7 @@ describe('Licences - View Licence presenter', () => {
       })
 
       it('returns false', () => {
-        const result = ViewLicencePresenter.go(licence, auth)
+        const result = ViewLicencePresenter.go(licence)
 
         expect(result.workflowWarning).to.be.false()
       })
@@ -308,7 +283,7 @@ describe('Licences - View Licence presenter', () => {
         })
 
         it('returns false', () => {
-          const result = ViewLicencePresenter.go(licence, auth)
+          const result = ViewLicencePresenter.go(licence)
 
           expect(result.workflowWarning).to.be.false()
         })
@@ -316,7 +291,7 @@ describe('Licences - View Licence presenter', () => {
 
       describe('and the status is "to_setup"', () => {
         it('returns true', () => {
-          const result = ViewLicencePresenter.go(licence, auth)
+          const result = ViewLicencePresenter.go(licence)
 
           expect(result.workflowWarning).to.be.true()
         })
@@ -324,29 +299,6 @@ describe('Licences - View Licence presenter', () => {
     })
   })
 })
-
-function _auth() {
-  return {
-    credentials: {
-      roles: [
-        {
-          id: 'b62afe79-d599-4101-b374-729011711462',
-          role: 'billing',
-          description: 'Administer billing',
-          createdAt: new Date('2023-12-14'),
-          updatedAt: new Date('2024-08-19')
-        },
-        {
-          id: '02b09477-8c1e-4f9a-956c-ad18f9d4f222',
-          role: 'view_charge_versions',
-          description: 'View charge information',
-          createdAt: new Date('2023-12-14'),
-          updatedAt: new Date('2024-08-19')
-        }
-      ]
-    }
-  }
-}
 
 function _licence() {
   const licence = LicenceModel.fromJson({

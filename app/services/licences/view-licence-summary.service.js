@@ -25,6 +25,8 @@ async function go(licenceId, auth) {
   const pageData = ViewLicencePresenter.go(licenceData)
 
   return {
+    activeNavBar: 'search',
+    activeTab: 'summary',
     ...pageData,
     ...licenceSummaryData,
     roles: userRoles(auth)
