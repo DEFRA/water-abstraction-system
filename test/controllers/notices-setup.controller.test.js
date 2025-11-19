@@ -14,7 +14,6 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const AddRecipientService = require('../../app/services/notices/setup/add-recipient.service.js')
-const AlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
 const AlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/alert-type.service.js')
 const CancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
 const CancelService = require('../../app/services/notices/setup/cancel.service.js')
@@ -38,7 +37,7 @@ const RemoveThresholdService = require('../../app/services/notices/setup/abstrac
 const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
 const SelectRecipientsService = require('../../app/services/notices/setup/select-recipients.service.js')
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/submit-alert-email-address.service.js')
-const SubmitAlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
+const SubmitAlertThresholdsService = require('../../app/services/notices/setup/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
 const SubmitCancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
@@ -54,6 +53,7 @@ const SubmitRemoveLicencesService = require('../../app/services/notices/setup/su
 const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
 const SubmitSelectRecipientsService = require('../../app/services/notices/setup/submit-select-recipients.service.js')
 const ViewAlertEmailAddressService = require('../../app/services/notices/setup/view-alert-email-address.service.js')
+const ViewAlertThresholdsService = require('../../app/services/notices/setup/view-alert-thresholds.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -463,7 +463,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(AlertThresholdsService, 'go').resolves({
+          Sinon.stub(ViewAlertThresholdsService, 'go').resolves({
             pageTitle: 'Threshold page'
           })
         })

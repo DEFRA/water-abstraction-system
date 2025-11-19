@@ -5,9 +5,9 @@
  * @module AlertThresholdsPresenter
  */
 
-const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
-const { formatValueUnit, titleCase } = require('../../../base.presenter.js')
-const { unitConversion } = require('../../../../lib/static-lookups.lib.js')
+const DetermineRelevantLicenceMonitoringStationsByAlertTypeService = require('../../../services/notices/setup/abstraction-alerts/determine-relevant-licence-monitoring-stations-by-alert-type.service.js')
+const { formatValueUnit, titleCase } = require('../../base.presenter.js')
+const { unitConversion } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page

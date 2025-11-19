@@ -29,7 +29,7 @@ const RemoveThresholdService = require('../services/notices/setup/abstraction-al
 const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
 const SelectRecipientsService = require('../services/notices/setup/select-recipients.service.js')
 const SubmitAlertEmailAddressService = require('../services/notices/setup/submit-alert-email-address.service.js')
-const SubmitAlertThresholdsService = require('../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
+const SubmitAlertThresholdsService = require('../services/notices/setup/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
 const SubmitCancelAlertsService = require('../services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
@@ -128,7 +128,7 @@ async function submitAlertThresholds(request, h) {
   const pageData = await SubmitAlertThresholdsService.go(sessionId, payload)
 
   if (pageData.error) {
-    return h.view(`notices/setup/abstraction-alerts/alert-thresholds.njk`, pageData)
+    return h.view(`notices/setup/alert-thresholds.njk`, pageData)
   }
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
@@ -342,9 +342,9 @@ async function viewAlertEmailAddress(request, h) {
 async function viewAlertThresholds(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await AlertThresholdsService.go(sessionId)
+  const pageData = await ViewAlertThresholdsService.go(sessionId)
 
-  return h.view(`notices/setup/abstraction-alerts/alert-thresholds.njk`, pageData)
+  return h.view(`notices/setup/alert-thresholds.njk`, pageData)
 }
 
 async function viewAlertType(request, h) {

@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const AlertThresholdsValidator = require('../../../../../app/validators/notices/setup/abstraction-alerts/alert-thresholds.validator.js')
+const AlertThresholdsValidator = require('../../../../app/validators/notices/setup/alert-thresholds.validator.js')
 
-describe('Notices Setup - Abstraction Alerts - Alert Thresholds Validator', () => {
+describe('Notices Setup - Setup - Alert Thresholds validator', () => {
   let payload
 
   beforeEach(() => {
