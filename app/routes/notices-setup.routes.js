@@ -209,18 +209,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-alert',
-    options: {
-      handler: NoticesSetupController.viewCheckAlert,
-      auth: {
-        access: {
-          scope: ['hof_notifications']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches',
     options: {
       handler: NoticesSetupController.viewCheckLicenceMatches,
@@ -407,6 +395,18 @@ const routes = [
       auth: {
         access: {
           scope: ['hof_notifications', 'returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-alert',
+    options: {
+      handler: NoticesSetupController.viewPreviewCheckAlert,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
         }
       }
     }

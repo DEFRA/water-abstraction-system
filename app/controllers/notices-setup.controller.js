@@ -7,7 +7,6 @@
 
 const AddRecipientService = require('../services/notices/setup/add-recipient.service.js')
 const CancelService = require('../services/notices/setup/cancel.service.js')
-const CheckAlertService = require('../services/notices/setup/preview/check-alert.service.js')
 const CheckNoticeTypeService = require('../services/notices/setup/check-notice-type.service.js')
 const CheckPaperReturnService = require('../services/notices/setup/preview/check-paper-return.service.js')
 const CheckService = require('../services/notices/setup/check.service.js')
@@ -45,6 +44,7 @@ const ViewAlertThresholdsService = require('../services/notices/setup/view-alert
 const ViewAlertTypeService = require('../services/notices/setup/view-alert-type.service.js')
 const ViewCancelAlertsService = require('../services/notices/setup/view-cancel-alerts.service.js')
 const ViewCheckLicenceMatchesService = require('../services/notices/setup/view-check-licence-matches.service.js')
+const ViewPreviewCheckAlertService = require('../services/notices/setup/view-preview-check-alert.service.js')
 const ViewReturnsPeriodService = require('../services/notices/setup/view-returns-period.service.js')
 
 async function addRecipient(request, h) {
@@ -385,14 +385,6 @@ async function viewCheck(request, h) {
   return h.view(`notices/setup/check.njk`, pageData)
 }
 
-async function viewCheckAlert(request, h) {
-  const { contactHashId, sessionId } = request.params
-
-  const pageData = await CheckAlertService.go(contactHashId, sessionId)
-
-  return h.view('notices/setup/preview/check-alert.njk', pageData)
-}
-
 async function viewCheckLicenceMatches(request, h) {
   const {
     params: { sessionId },
@@ -474,6 +466,14 @@ async function viewPreview(request, h) {
   return h.view('notices/setup/preview/preview.njk', pageData)
 }
 
+async function viewPreviewCheckAlert(request, h) {
+  const { contactHashId, sessionId } = request.params
+
+  const pageData = await ViewPreviewCheckAlertService.go(contactHashId, sessionId)
+
+  return h.view('notices/setup/preview-check-alert.njk', pageData)
+}
+
 async function viewRecipientName(request, h) {
   const { sessionId } = request.params
 
@@ -538,7 +538,6 @@ module.exports = {
   viewCancel,
   viewCancelAlerts,
   viewCheck,
-  viewCheckAlert,
   viewCheckLicenceMatches,
   viewCheckNoticeType,
   viewCheckPaperReturn,
@@ -548,6 +547,7 @@ module.exports = {
   viewNoticeType,
   viewPaperReturn,
   viewPreview,
+  viewPreviewCheckAlert,
   viewRecipientName,
   viewRemoveLicences,
   viewReturnsPeriod,

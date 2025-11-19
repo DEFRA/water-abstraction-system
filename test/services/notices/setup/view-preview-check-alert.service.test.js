@@ -9,17 +9,17 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionDataFixture = require('../../../../fixtures/abstraction-alert-session-data.fixture.js')
-const RecipientsFixture = require('../../../../fixtures/recipients.fixtures.js')
-const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const AbstractionAlertSessionDataFixture = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
+const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const DetermineRecipientsService = require('../../../../../app/services/notices/setup/determine-recipients.service.js')
-const FetchAbstractionAlertRecipientsService = require('../../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
-const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
+const DetermineRecipientsService = require('../../../../app/services/notices/setup/determine-recipients.service.js')
+const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
+const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
-const CheckAlertService = require('../../../../../app/services/notices/setup/preview/check-alert.service.js')
+const ViewPreviewCheckAlertService = require('../../../../app/services/notices/setup/view-preview-check-alert.service.js')
 
 describe('Notices Setup - Preview - Check Alert service', () => {
   let licenceMonitoringStations
@@ -62,7 +62,7 @@ describe('Notices Setup - Preview - Check Alert service', () => {
 
   describe('when called', () => {
     it('returns the page data for the view', async () => {
-      const result = await CheckAlertService.go(testRecipient.contact_hash_id, session.id)
+      const result = await ViewPreviewCheckAlertService.go(testRecipient.contact_hash_id, session.id)
 
       expect(result).to.equal({
         activeNavBar: 'notices',
