@@ -71,6 +71,7 @@ describe('Licences - Fetch licence returns service', () => {
 
       expect(result).to.equal({
         licence: {
+          id: licence.id,
           licenceRef: licence.licenceRef
         },
         pagination: {
