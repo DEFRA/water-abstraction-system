@@ -19,11 +19,7 @@ const NotificationModel = require('../../../models/notification.model.js')
  * @returns {Promise<object>} - an object with an array of failed return log ids and an array of failed licence refs
  */
 async function go(eventId) {
-  const results = await _query(eventId)
-
-  if (results.length === 0) {
-    return []
-  }
+  const results = await _fetch(eventId)
 
   const licences = []
   const returnIds = []
@@ -47,7 +43,7 @@ async function go(eventId) {
  *
  * @private
  */
-async function _query(eventId) {
+async function _fetch(eventId) {
   return NotificationModel.query()
     .select(['licences', 'returnLogIds'])
     .where('status', 'error')

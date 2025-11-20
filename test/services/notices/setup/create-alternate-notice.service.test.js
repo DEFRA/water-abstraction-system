@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Joi = require('joi')
 const Sinon = require('sinon')
 
 const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
@@ -11,26 +12,59 @@ const { expect } = Code
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
 const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
 
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 
 // Things to stub
-const CreateNotificationsService = require('../../../../app/services/notices/setup/create-notifications.service.js')
-const EventModel = require('../../../../app/models/event.model.js')
+const FetchAlternateRecipientsService = require('../../../../app/services/notices/setup/fetch-alternate-recipients.service.js')
 const FetchFailedReturnsInvitationsService = require('../../../../app/services/notices/setup/fetch-failed-returns-invitations.service.js')
-const FetchReturnsAddressesService = require('../../../../app/services/notices/setup/fetch-returns-addresses.service.js')
 
 // Thing under test
 const CreateAlternateNoticeService = require('../../../../app/services/notices/setup/create-alternate-notice.service.js')
 
-describe('Notices - Create Alternate notice service', () => {
+describe('Notices - Setup - Create Alternate Notice service', () => {
   let fetchFailedReturnsInvitationsResults
   let fetchReturnsAddressesServiceResults
-  let insertStub
   let noticeWithErrors
   let notifications
+
+  const noticeSchema = Joi.object({
+    createdAt: Joi.date().required(),
+    id: Joi.string().guid().required(),
+    issuer: 'admin-internal@wrls.gov.uk',
+    licences: Joi.array().ordered('11/111', '01/124', '01/125').required(),
+    metadata: {
+      error: 0,
+      name: 'Returns: invitation',
+      options: {
+        excludedLicences: Joi.array().empty()
+      },
+      recipients: 3,
+      returnCycle: {
+        dueDate: '2026-04-28',
+        endDate: '2026-03-31',
+        quarterly: false,
+        startDate: '2025-04-01',
+        summer: false
+      }
+    },
+    overallStatus: 'pending',
+    referenceCode: Joi.string()
+      .pattern(/^RINV-/)
+      .required(),
+    status: 'completed',
+    statusCounts: {
+      cancelled: 0,
+      error: 0,
+      pending: 3,
+      sent: 0
+    },
+    subtype: 'returnInvitation',
+    triggerNoticeId: Joi.string().guid().optional(),
+    type: 'notification',
+    updatedAt: Joi.date().required()
+  })
 
   beforeEach(() => {
     fetchFailedReturnsInvitationsResults = {
@@ -71,25 +105,6 @@ describe('Notices - Create Alternate notice service', () => {
       subtype: 'returnInvitation',
       type: 'notification'
     }
-
-    insertStub = {
-      ...noticeWithErrors,
-      id: generateUUID(),
-      licences: ['01/123', '01/124', '01/125'],
-      metadata: {
-        ...noticeWithErrors.metadata,
-        error: 0,
-        recipients: 3
-      },
-      overallStatus: 'pending',
-      referenceCode: NotificationHelper.generateReferenceCode('RINV')
-    }
-
-    notifications = [
-      _notification(insertStub.id, fetchReturnsAddressesServiceResults[0]),
-      _notification(insertStub.id, fetchReturnsAddressesServiceResults[1]),
-      _notification(insertStub.id, fetchReturnsAddressesServiceResults[2])
-    ]
   })
 
   afterEach(() => {
@@ -99,20 +114,22 @@ describe('Notices - Create Alternate notice service', () => {
   describe('when called with a notice with errors', () => {
     beforeEach(() => {
       Sinon.stub(FetchFailedReturnsInvitationsService, 'go').resolves(fetchFailedReturnsInvitationsResults)
-      Sinon.stub(FetchReturnsAddressesService, 'go').resolves(fetchReturnsAddressesServiceResults)
-      Sinon.stub(EventModel, 'query').returns({
-        insert: Sinon.stub().resolves(insertStub)
-      })
-      Sinon.stub(CreateNotificationsService, 'go').resolves(notifications)
+      Sinon.stub(FetchAlternateRecipientsService, 'go').resolves(fetchReturnsAddressesServiceResults)
     })
 
     it('returns a list of notifications to be sent and the reference code for the new notice', async () => {
       const result = await CreateAlternateNoticeService.go(noticeWithErrors)
 
-      expect(result).to.equal({
-        notifications,
-        referenceCode: insertStub.referenceCode
-      })
+      notifications = [
+        _notification(result.notice.id, fetchReturnsAddressesServiceResults[0]),
+        _notification(result.notice.id, fetchReturnsAddressesServiceResults[1]),
+        _notification(result.notice.id, fetchReturnsAddressesServiceResults[2])
+      ]
+
+      Joi.assert(result.notice, noticeSchema)
+      expect(result.notifications[0]).to.equal(notifications[0], { skip: ['createdAt', 'id'] })
+      expect(result.notifications[1]).to.equal(notifications[1], { skip: ['createdAt', 'id'] })
+      expect(result.notifications[2]).to.equal(notifications[2], { skip: ['createdAt', 'id'] })
     })
   })
 
@@ -126,7 +143,7 @@ describe('Notices - Create Alternate notice service', () => {
 
       expect(result).to.equal({
         notifications: [],
-        referenceCode: null
+        notice: null
       })
     })
   })
@@ -158,6 +175,7 @@ function _licenceHolderAddress(name = 'Bob', licenceRef, returnLogIds) {
 
 function _notification(noticeId, licenceHolderDetails) {
   return {
+    dueDate: '2026-04-28',
     eventId: noticeId,
     licenceMonitoringStationId: null,
     licences: licenceHolderDetails.licence_refs,
@@ -165,16 +183,16 @@ function _notification(noticeId, licenceHolderDetails) {
     messageType: 'letter',
     pdf: null,
     personalisation: {
-      address_line_1: 'Mr H J Potter',
-      address_line_2: '1',
+      address_line_1: `${licenceHolderDetails.contact.initials} ${licenceHolderDetails.contact.name}`,
+      address_line_2: '4',
       address_line_3: 'Privet Drive',
       address_line_4: 'Little Whinging',
       address_line_5: 'Surrey',
       address_line_6: 'WD25 7LR',
-      name: licenceHolderDetails.contact.name,
-      periodEndDate: null,
-      periodStartDate: null,
-      returnDueDate: formatLongDate(futureDueDate('letter'))
+      name: `${licenceHolderDetails.contact.initials} ${licenceHolderDetails.contact.name}`,
+      periodEndDate: formatLongDate('2026-03-31'),
+      periodStartDate: formatLongDate('2025-04-01'),
+      returnDueDate: formatLongDate('2026-04-28')
     },
     recipient: null,
     returnLogIds: licenceHolderDetails.return_log_ids,

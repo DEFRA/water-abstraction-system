@@ -3,14 +3,14 @@
 /**
  * Orchestrates creating a new notice and notifications for returns invitation emails that failed
  *
- * @module SendAlternateLetterService
+ * @module CreateAlternateNoticeService
  */
 
 const CreateNotificationsService = require('./create-notifications.service.js')
 const DetermineNoticeTypeService = require('./determine-notice-type.service.js')
 const EventModel = require('../../../models/event.model.js')
+const FetchAlternateRecipientsService = require('./fetch-alternate-recipients.service.js')
 const FetchFailedReturnsInvitationsService = require('./fetch-failed-returns-invitations.service.js')
-const FetchReturnsAddressesService = require('./fetch-returns-addresses.service.js')
 
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
 const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
@@ -26,15 +26,15 @@ async function go(notice) {
   const { failedLicenceRefs, failedReturnIds } = await FetchFailedReturnsInvitationsService.go(notice.id)
 
   if (failedReturnIds.length === 0) {
-    return { notifications: [], referenceCode: null }
+    return { notice: null, notifications: [] }
   }
 
   const noticeType = DetermineNoticeTypeService.go(NoticeType.INVITATIONS)
-  const recipients = await FetchReturnsAddressesService.go(failedReturnIds)
+  const recipients = await FetchAlternateRecipientsService.go(failedReturnIds)
   const letterNotice = await _notice(notice, noticeType, recipients, failedLicenceRefs)
   const notifications = await _notifications(letterNotice, recipients)
 
-  return { notifications, referenceCode: letterNotice.referenceCode }
+  return { notice: letterNotice, notifications }
 }
 
 async function _notice(notice, noticeType, recipients, licenceRefs) {

@@ -281,8 +281,8 @@ describe('Notices - Setup - Send Notice service', () => {
         })
 
         createAlternateNoticeStub = Sinon.stub(CreateAlternateNoticeService, 'go').resolves({
-          notifications: [notifications[1]],
-          referenceCode: 'RINV-WT6J2U'
+          notice,
+          notifications: [notifications[1]]
         })
 
         Sinon.stub(SendLetterService, 'go').resolves({

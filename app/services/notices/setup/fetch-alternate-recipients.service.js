@@ -94,7 +94,7 @@ function _query() {
       best_contact_type b
       USING (contact_hash_id)
     ORDER BY
-      b.contact NULLS LAST
+      b.contact NULLS LAST;
 `
 }
 

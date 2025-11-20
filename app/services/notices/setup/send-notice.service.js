@@ -27,7 +27,7 @@ async function go(notice, notifications) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    const { id: noticeId, referenceCode, subtype } = notice
+    const { id: noticeId, referenceCode } = notice
 
     const sentNotifications = await _sendNotifications(notifications, referenceCode)
 
@@ -39,15 +39,7 @@ async function go(notice, notifications) {
 
     await UpdateEventService.go([noticeId])
 
-    if (subtype === 'returnInvitation') {
-      const { notifications: lettersToBeSent, referenceCode: lettersReferenceCode } =
-        await CreateAlternateNoticeService.go(notice)
-
-      if (lettersToBeSent.length > 0) {
-        await _sendNotifications(lettersToBeSent, lettersReferenceCode)
-        await _updateFailedEmailInvitations(noticeId)
-      }
-    }
+    await _sendAlternateNotice(notice)
 
     calculateAndLogTimeTaken(startTime, 'Send notice complete', { count: notifications.length, noticeId })
   } catch (error) {
@@ -69,6 +61,19 @@ async function _recordResult(sendResult) {
   const { id, pdf, plaintext, notifyError, notifyId, notifyStatus, status } = sendResult
 
   await NotificationModel.query().patch({ pdf, plaintext, notifyError, notifyId, notifyStatus, status }).findById(id)
+}
+
+async function _sendAlternateNotice(notice) {
+  const { id: noticeId, subtype } = notice
+
+  if (subtype === 'returnInvitation') {
+    const { notice: alternateNotice, notifications } = await CreateAlternateNoticeService.go(notice)
+
+    if (notifications.length > 0) {
+      await _sendNotifications(notifications, alternateNotice.referenceCode)
+      await _updateFailedEmailInvitations(noticeId)
+    }
+  }
 }
 
 async function _sendNotification(notification, referenceCode) {
@@ -105,7 +110,7 @@ async function _sendNotifications(notifications, referenceCode) {
 }
 
 async function _updateFailedEmailInvitations(noticeId) {
-  return NotificationModel.query()
+  await NotificationModel.query()
     .patch({ alternateNoticeId: noticeId })
     .where('status', 'error')
     .where('messageRef', 'returns_invitation_primary_user_email')
