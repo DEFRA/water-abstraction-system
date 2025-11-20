@@ -16,7 +16,7 @@ const { today } = require('../../lib/general.lib.js')
  * @returns {object} The data formatted for the view template
  */
 function go(licence) {
-  const { id, includeInPresrocBilling, licenceDocumentHeader, licenceRef, workflows } = licence
+  const { id: licenceId, includeInPresrocBilling, licenceDocumentHeader, licenceRef, workflows } = licence
 
   const primaryUser = licence.$primaryUser()
   const ends = licence.$ends()
@@ -29,7 +29,8 @@ function go(licence) {
     documentId: licenceDocumentHeader.id,
     ends,
     includeInPresrocBilling,
-    licenceId: id,
+    licenceBaseLink: `/system/licences/${licenceId}`,
+    licenceId,
     licenceRef,
     notification: _notification(licence),
     pageTitle: `Licence summary ${licenceRef}`,

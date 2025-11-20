@@ -735,7 +735,10 @@ function _viewLicenceContactDetails() {
 }
 
 function _viewLicencePoints() {
+  const commonLicenceData = _viewLicence()
+
   return {
+    ...commonLicenceData,
     id: 'f500992f-b178-480b-9325-51fe7fdbc9fd',
     licencePoints: [
       {

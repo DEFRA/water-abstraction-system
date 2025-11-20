@@ -18,19 +18,32 @@ const FetchLicenceConditionsService = require('../../../app/services/licences/fe
 const ViewConditionsService = require('../../../app/services/licences/view-conditions.service.js')
 
 describe('Licences - View Conditions service', () => {
+  let auth
   let licenceFixture
 
   beforeEach(() => {
+    auth = {
+      credentials: {
+        roles: [
+          {
+            role: 'billing'
+          }
+        ]
+      }
+    }
+
     licenceFixture = LicencesFixture.licence()
 
     Sinon.stub(FetchLicenceConditionsService, 'go').returns(licenceFixture)
   })
 
   it('correctly presents the data', async () => {
-    const result = await ViewConditionsService.go(licenceFixture.licence.id)
+    const result = await ViewConditionsService.go(licenceFixture.licence.id, auth)
 
     expect(result).to.equal({
       activeNavBar: 'search',
+      activeSummarySubNav: 'conditions',
+      activeTab: 'summary',
       backLink: {
         href: `/system/licences/${licenceFixture.licence.id}/summary`,
         text: 'Go back to summary'
@@ -62,8 +75,10 @@ describe('Licences - View Conditions service', () => {
           displayTitle: 'Political cessation condition'
         }
       ],
+      licenceBaseLink: `/system/licences/${licenceFixture.licence.id}`,
       pageTitle: 'Conditions',
       pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
+      roles: ['billing'],
       showingConditions: 'Showing 1 types of further conditions',
       warning: {
         iconFallbackText: 'Warning',

@@ -18,9 +18,20 @@ const FetchLicencePointsService = require('../../../app/services/licences/fetch-
 const ViewPointsService = require('../../../app/services/licences/view-points.service.js')
 
 describe('Licences - View Points service', () => {
+  let auth
   let licenceFixture
 
   beforeEach(() => {
+    auth = {
+      credentials: {
+        roles: [
+          {
+            role: 'billing'
+          }
+        ]
+      }
+    }
+
     licenceFixture = LicencesFixture.licence()
 
     Sinon.stub(FetchLicencePointsService, 'go').returns(licenceFixture)
@@ -28,14 +39,17 @@ describe('Licences - View Points service', () => {
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewPointsService.go(licenceFixture.licence.id)
+      const result = await ViewPointsService.go(licenceFixture.licence.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        activeSummarySubNav: 'points',
+        activeTab: 'summary',
         backLink: {
           href: `/system/licences/${licenceFixture.licence.id}/summary`,
           text: 'Go back to summary'
         },
+        licenceBaseLink: `/system/licences/${licenceFixture.licence.id}`,
         licencePoints: [
           {
             bgsReference: 'TL 14/123',
@@ -58,6 +72,7 @@ describe('Licences - View Points service', () => {
         ],
         pageTitle: 'Points',
         pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
+        roles: ['billing'],
         showingPoints: 'Showing 1 abstraction points'
       })
     })
