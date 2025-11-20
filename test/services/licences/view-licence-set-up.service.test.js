@@ -18,7 +18,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
 const FetchChargeVersionsService = require('../../../app/services/licences/fetch-charge-versions.service.js')
-const FetchLicenceRefService = require('../../../app/services/licences/fetch-licence-ref.service.js')
+const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 const FetchReturnVersionsService = require('../../../app/services/licences/fetch-return-versions.service.js')
 const FetchWorkflowsService = require('../../../app/services/licences/fetch-workflows.service.js')
 
@@ -106,7 +106,7 @@ describe('Licences - View Licence Set Up service', () => {
 
     Sinon.stub(FetchWorkflowsService, 'go').returns([workflow])
 
-    Sinon.stub(FetchLicenceRefService, 'go').resolves(licence)
+    Sinon.stub(FetchLicenceService, 'go').resolves(licence)
   })
 
   afterEach(() => {

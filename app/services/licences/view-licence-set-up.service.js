@@ -7,7 +7,7 @@
 
 const FetchAgreementsService = require('./fetch-agreements.service.js')
 const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
-const FetchLicenceRefService = require('./fetch-licence-ref.service.js')
+const FetchLicenceService = require('./fetch-licence.service.js')
 const FetchReturnVersionsService = require('./fetch-return-versions.service.js')
 const FetchWorkflowsService = require('./fetch-workflows.service.js')
 const ViewLicenceSetUpPresenter = require('../../presenters/licences/view-licence-set-up.presenter.js')
@@ -22,7 +22,7 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence set up template.
  */
 async function go(licenceId, auth) {
-  const licence = await FetchLicenceRefService.go(licenceId)
+  const licence = await FetchLicenceService.go(licenceId)
 
   const agreements = await FetchAgreementsService.go(licence.licenceRef)
   const chargeVersions = await FetchChargeVersionsService.go(licenceId)
