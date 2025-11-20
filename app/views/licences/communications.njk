@@ -1,10 +1,11 @@
-{% extends 'licences/layout.njk' %}
+{% extends 'layout-licences.njk' %}
+
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% from "macros/notification-status-tag.njk" import statusTag %}
 
 {% block subPageContent %}
-<h2 class="govuk-heading-l">Communications</h2>
-
 {% if notifications.length === 0 %}
   <p data-test='no-notifications-msg'>No communications for this licence.</p>
 {% else %}

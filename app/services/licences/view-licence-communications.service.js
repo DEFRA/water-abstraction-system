@@ -7,8 +7,8 @@
 
 const FetchCommunicationsService = require('./fetch-communications.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const ViewLicenceService = require('./view-licence.service.js')
 const ViewLicenceCommunicationsPresenter = require('../../presenters/licences/view-licence-communications.presenter.js')
+const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence communications page
@@ -22,10 +22,9 @@ const ViewLicenceCommunicationsPresenter = require('../../presenters/licences/vi
 async function go(licenceId, auth, page = 1) {
   const selectedPageNumber = Number(page)
 
-  const commonData = await ViewLicenceService.go(licenceId, auth)
+  const { notifications, licence, totalNumber } = await FetchCommunicationsService.go(licenceId, selectedPageNumber)
 
-  const { notifications, totalNumber } = await FetchCommunicationsService.go(commonData.licenceRef, selectedPageNumber)
-  const pageData = ViewLicenceCommunicationsPresenter.go(notifications, licenceId)
+  const pageData = ViewLicenceCommunicationsPresenter.go(notifications, licence)
 
   const pagination = PaginatorPresenter.go(
     totalNumber,
@@ -34,10 +33,11 @@ async function go(licenceId, auth, page = 1) {
   )
 
   return {
-    activeTab: 'communications',
-    ...commonData,
     ...pageData,
-    pagination
+    activeNavBar: 'search',
+    activeTab: 'communications',
+    pagination,
+    roles: userRoles(auth)
   }
 }
 

@@ -1,4 +1,6 @@
-{% extends 'licences/layout.njk' %}
+{% extends 'layout-licences.njk' %}
+
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% macro displayAddress(address) %}
   {% if address.address1 %}
@@ -28,8 +30,6 @@
 {% endmacro %}
 
 {% block subPageContent %}
-  <h2 class="govuk-heading-l">Contact details</h2>
-
   {% set tableHeaders = [
     { text: 'Name' },
     { text: 'Communication type' },

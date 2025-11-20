@@ -1,10 +1,11 @@
-{% extends 'licences/layout.njk' %}
+{% extends 'layout-licences.njk' %}
 
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% block subPageContent %}
-<h2 class="govuk-heading-l">Summary</h2>
+  {% if primaryUser %}
+    <p>Registered to <a href="/user/{{ primaryUser.id }}/status">{{ primaryUser.username }}</a></p>
+  {% endif %}
 
 <dl class="govuk-summary-list">
   <div class="govuk-summary-list__row">

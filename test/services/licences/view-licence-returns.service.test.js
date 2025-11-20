@@ -8,41 +8,48 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+
 // Things we need to stub
 const DetermineLicenceHasReturnVersionsService = require('../../../app/services/licences/determine-licence-has-return-versions.service.js')
 const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service.js')
-const ViewLicenceService = require('../../../app/services/licences/view-licence.service.js')
 
 // Thing under test
 const ViewLicenceReturnsService = require('../../../app/services/licences/view-licence-returns.service.js')
 
 describe('View Licence Returns service', () => {
-  const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
   const page = 1
 
   let auth
+  let licence
 
   beforeEach(async () => {
     auth = {
       isValid: true,
       credentials: {
         user: { id: 123 },
-        roles: ['returns'],
+        roles: [
+          {
+            role: 'returns'
+          }
+        ],
         groups: [],
         scope: ['returns'],
         permissions: { abstractionReform: false, billRuns: true, manage: true }
       }
     }
 
+    licence = {
+      licenceRef: generateLicenceRef()
+    }
+
     Sinon.stub(DetermineLicenceHasReturnVersionsService, 'go').returns(true)
 
     Sinon.stub(FetchLicenceReturnsService, 'go').resolves({
       pagination: { total: 1 },
+      licence,
       returns: []
-    })
-
-    Sinon.stub(ViewLicenceService, 'go').resolves({
-      licenceName: 'fake licence'
     })
   })
 
@@ -53,14 +60,21 @@ describe('View Licence Returns service', () => {
   describe('when a return', () => {
     describe('and it has no optional fields', () => {
       it('will return all the mandatory data and default values for use in the licence returns page', async () => {
-        const result = await ViewLicenceReturnsService.go(testId, auth, page)
+        const result = await ViewLicenceReturnsService.go(licence.id, auth, page)
 
         expect(result).to.equal({
+          activeNavBar: 'search',
           activeTab: 'returns',
-          returns: [],
+          backLink: {
+            text: 'Go back to search',
+            href: '/licences'
+          },
           noReturnsMessage: 'No returns for this licence.',
-          licenceName: 'fake licence',
-          pagination: { numberOfPages: 1 }
+          pageTitle: 'Returns',
+          pageTitleCaption: `Licence ${licence.licenceRef}`,
+          pagination: { numberOfPages: 1 },
+          returns: [],
+          roles: ['returns']
         })
       })
     })

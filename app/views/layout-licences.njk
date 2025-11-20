@@ -1,0 +1,117 @@
+{% extends 'layout.njk' %}
+{% set mainClasses = 'licence-layout-main' %}
+
+{% if activeTab !== 'summary' %}
+  {% set notification = null %}
+  {% set warning = null %}
+{% else %}
+  {% if notification %}
+    {% set notification = {
+      text: notification,
+      titleText: 'Important'
+    } %}
+  {% endif %}
+{% endif %}
+
+{% block beforeContent %}
+{{ super() }}
+
+<div class="govuk-grid-row govuk-!-margin-top-6">
+  <div class="govuk-grid-column-one-quarter">
+    <nav class="x-govuk-sub-navigation" aria-labelledby="sub-navigation-heading">
+      <h2 class="govuk-visually-hidden" id="sub-navigation-heading">Pages in this section</h2>
+      <ul class="x-govuk-sub-navigation__section">
+        <li
+          class="x-govuk-sub-navigation__section-item {% if activeTab === 'summary' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="summary"
+              {% if activeTab === 'summary' %}aria-current="page"{% endif %}>
+            Licence summary
+          </a>
+          {% if activeTab === 'summary' %}
+          <ul class="x-govuk-sub-navigation__section x-govuk-sub-navigation__section--nested">
+            <li class="x-govuk-sub-navigation__section-item">
+              <a class="x-govuk-sub-navigation__link" href="purposes" {% if activeSummarySubNav === 'purposes' %}aria-current="true"{% endif %}>
+                Purposes, periods and amounts
+              </a>
+            </li>
+            <li class="x-govuk-sub-navigation__section-item">
+              <a class="x-govuk-sub-navigation__link" href="points" {% if activeSummarySubNav === 'points' %}aria-current="true"{% endif %}>
+              Points
+              </a>
+            </li>
+            <li class="x-govuk-sub-navigation__section-item">
+              <a class="x-govuk-sub-navigation__link" href="conditions" {% if activeSummarySubNav === 'conditions' %}aria-current="true"{% endif %}>
+              Conditions
+              </a>
+            </li>
+          </ul>
+          {% endif %}
+        </li>
+
+        <li
+          class="x-govuk-sub-navigation__section-item {% if activeTab === 'contact-details' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="contact-details"
+              {% if activeTab === 'contact-details' %}aria-current="page"{% endif %}>
+            Contact details
+          </a>
+        </li>
+
+        <li
+          class="x-govuk-sub-navigation__section-item {% if activeTab === 'returns' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="returns"
+              {% if activeTab === 'returns' %}aria-current="page"{% endif %}>
+            Returns
+          </a>
+        </li>
+
+        <li
+          class="x-govuk-sub-navigation__section-item {% if activeTab === 'communications' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="communications"
+              {% if activeTab === 'communications' %}aria-current="page"{% endif %}>
+            Communications
+          </a>
+        </li>
+
+        {% if 'billing' in roles %}
+          <li
+            class="x-govuk-sub-navigation__section-item {% if activeTab === 'bills' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="bills"
+              {% if activeTab === 'bills' %}aria-current="page"{% endif %}>
+              Bills
+            </a>
+          </li>
+        {% endif %}
+
+        {% if 'view_charge_versions' in roles %}
+          <li
+            class="x-govuk-sub-navigation__section-item {% if activeTab === 'set-up' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="set-up"
+              {% if activeTab === 'set-up' %}aria-current="page"{% endif %}>
+              Licence set up
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-column-three-quarters">
+
+    {% if activeTab === 'summary' %}
+      {% if (workflowWarning === true) and (('billing' in roles) or ('view_charge_versions' in roles)) %}
+        {{ govukWarningText({
+          text: "This licence has changed and needs the set up reviewed before it can be billed.",
+          iconFallbackText: "Warning"
+        }) }}
+      {% endif %}
+    {% endif %}
+
+    {{ super() }}
+
+    {% block subPageContent %}
+    {% endblock %}
+  </div>
+</div>
+{% endblock %}

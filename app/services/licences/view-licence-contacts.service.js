@@ -9,7 +9,7 @@ const CustomerContactsPresenter = require('../../presenters/licences/customer-co
 const FetchCustomerContactsService = require('./fetch-customer-contacts.service.js')
 const FetchLicenceContactsService = require('./fetch-licence-contacts.service.js')
 const LicenceContactsPresenter = require('../../presenters/licences/licence-contacts.presenter.js')
-const ViewLicenceService = require('./view-licence.service.js')
+const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence contact details page
@@ -20,19 +20,18 @@ const ViewLicenceService = require('./view-licence.service.js')
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence contact details template.
  */
 async function go(licenceId, auth) {
-  const commonData = await ViewLicenceService.go(licenceId, auth)
-
-  const licenceContacts = await FetchLicenceContactsService.go(licenceId)
-  const licenceContactsData = LicenceContactsPresenter.go(licenceContacts)
+  const { licenceContacts, licence } = await FetchLicenceContactsService.go(licenceId)
+  const licenceContactsData = LicenceContactsPresenter.go(licenceContacts, licence)
 
   const customerContacts = await FetchCustomerContactsService.go(licenceId)
   const customerContactsData = CustomerContactsPresenter.go(customerContacts)
 
   return {
+    activeNavBar: 'search',
     activeTab: 'contact-details',
-    ...commonData,
     ...customerContactsData,
-    ...licenceContactsData
+    ...licenceContactsData,
+    roles: userRoles(auth)
   }
 }
 

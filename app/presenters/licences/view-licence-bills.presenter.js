@@ -13,14 +13,22 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 /**
  * Formats data for the `/licences/{id}/bills` view licence bill page
  *
- * @param {string} licenceId - The UUID of the licence
+ * @param {object} licence - The id and licence ref of the licence
  * @param {object[]} bills - The licence's bills
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licenceId, bills) {
+function go(licence, bills) {
+  const { id: licenceId, licenceRef } = licence
+
   return {
-    bills: _bills(licenceId, bills)
+    backLink: {
+      text: 'Go back to search',
+      href: '/licences'
+    },
+    bills: _bills(licenceId, bills),
+    pageTitle: 'Bills',
+    pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 
@@ -79,7 +87,6 @@ function _formatBillNumber(bill) {
 
   return ''
 }
-
 module.exports = {
   go
 }
