@@ -51,11 +51,9 @@ describe('Licences - View Licence Summary service', () => {
           abstractionAmounts: [],
           abstractionConditions: [],
           abstractionPeriods: [],
-          abstractionPeriodsAndPurposesLinkText: null,
           abstractionPeriodsCaption: 'Period of abstraction',
           abstractionPoints: [],
           abstractionPointsCaption: 'Point of abstraction',
-          abstractionPointsLinkText: 'View details of the abstraction point',
           activeNavBar: 'search',
           activeTab: 'summary',
           backLink: {
@@ -63,9 +61,6 @@ describe('Licences - View Licence Summary service', () => {
             text: 'Go back to search'
           },
           documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
-          enableLicenceConditionsView: true,
-          enableLicencePointsView: true,
-          enableLicencePurposesView: true,
           enableMonitoringStationsView: true,
           endDate: null,
           ends: null,
