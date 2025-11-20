@@ -1,18 +1,6 @@
 {% extends 'layout.njk' %}
 {% set mainClasses = 'licence-layout-main' %}
 
-{% if activeTab !== 'summary' %}
-  {% set notification = null %}
-  {% set warning = null %}
-{% else %}
-  {% if notification %}
-    {% set notification = {
-      text: notification,
-      titleText: 'Important'
-    } %}
-  {% endif %}
-{% endif %}
-
 {% block beforeContent %}
 {{ super() }}
 
