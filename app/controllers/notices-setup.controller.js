@@ -6,9 +6,9 @@
  */
 
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
-const PreviewPaperReturnService = require('../services/notices/setup/preview-paper-return.service.js')
 const ProcessAddRecipientService = require('../services/notices/setup/process-add-recipient.service.js')
 const ProcessDownloadRecipientsService = require('../services/notices/setup/process-download-recipients.service.js')
+const ProcessPreviewPaperReturnService = require('../services/notices/setup/process-preview-paper-return.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const SubmitAlertEmailAddressService = require('../services/notices/setup/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../services/notices/setup/submit-alert-thresholds.service.js')
@@ -47,14 +47,6 @@ const ViewRemoveLicencesService = require('../services/notices/setup/view-remove
 const ViewReturnsPeriodService = require('../services/notices/setup/view-returns-period.service.js')
 const ViewSelectRecipientsService = require('../services/notices/setup/view-select-recipients.service.js')
 
-async function previewPaperReturn(request, h) {
-  const { contactHashId, sessionId, returnId } = request.params
-
-  const fileBuffer = await PreviewPaperReturnService.go(sessionId, contactHashId, returnId)
-
-  return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
-}
-
 async function processAddRecipient(request, h) {
   const {
     params: { sessionId },
@@ -79,6 +71,14 @@ async function processDownloadRecipients(request, h) {
     .encoding('binary')
     .header('Content-Type', type)
     .header('Content-Disposition', `attachment; filename="${filename}"`)
+}
+
+async function processPreviewPaperReturn(request, h) {
+  const { contactHashId, sessionId, returnId } = request.params
+
+  const fileBuffer = await ProcessPreviewPaperReturnService.go(sessionId, contactHashId, returnId)
+
+  return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
 }
 
 async function removeThreshold(request, h) {
@@ -511,9 +511,9 @@ async function viewSelectRecipients(request, h) {
 }
 
 module.exports = {
-  previewPaperReturn,
   processAddRecipient,
   processDownloadRecipients,
+  processPreviewPaperReturn,
   removeThreshold,
   setup,
   submitAlertEmailAddress,

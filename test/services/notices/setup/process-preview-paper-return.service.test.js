@@ -19,9 +19,9 @@ const FetchRecipientsService = require('../../../../app/services/notices/setup/f
 const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/generate-paper-return.request.js')
 
 // Thing under test
-const PreviewPaperReturnService = require('../../../../app/services/notices/setup/preview-paper-return.service.js')
+const ProcessPreviewPaperReturnService = require('../../../../app/services/notices/setup/process-preview-paper-return.service.js')
 
-describe('Notices - Setup - Preview Paper Return Service', () => {
+describe('Notices - Setup - Process Preview Paper Return service', () => {
   let contactHashId
   let dueReturnLog
   let licenceRef
@@ -76,7 +76,7 @@ describe('Notices - Setup - Preview Paper Return Service', () => {
 
   describe('when called', () => {
     it('returns generated pdf as an array buffer', async () => {
-      const result = await PreviewPaperReturnService.go(session.id, contactHashId, returnId)
+      const result = await ProcessPreviewPaperReturnService.go(session.id, contactHashId, returnId)
 
       expect(result).to.be.instanceOf(ArrayBuffer)
       // The encoded string is 9 chars
@@ -84,7 +84,7 @@ describe('Notices - Setup - Preview Paper Return Service', () => {
     })
 
     it('should call "GeneratePaperReturnRequest"', async () => {
-      await PreviewPaperReturnService.go(session.id, contactHashId, returnId)
+      await ProcessPreviewPaperReturnService.go(session.id, contactHashId, returnId)
 
       expect(GeneratePaperReturnRequest.send.calledOnce).to.be.true()
 

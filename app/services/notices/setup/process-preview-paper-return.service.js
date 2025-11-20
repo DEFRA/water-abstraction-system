@@ -3,7 +3,7 @@
 /**
  * Orchestrates fetching and presenting the data for previewing a paper return
  *
- * @module PreviewPaperReturnService
+ * @module ProcessPreviewPaperReturnService
  */
 
 const FetchRecipientsService = require('./fetch-recipients.service.js')

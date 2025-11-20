@@ -14,9 +14,9 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
-const PreviewPaperReturnService = require('../../app/services/notices/setup/preview-paper-return.service.js')
 const ProcessAddRecipientService = require('../../app/services/notices/setup/process-add-recipient.service.js')
 const ProcessDownloadRecipientsService = require('../../app/services/notices/setup/process-download-recipients.service.js')
+const ProcessPreviewPaperReturnService = require('../../app/services/notices/setup/process-preview-paper-return.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/submit-alert-thresholds.service.js')
@@ -937,7 +937,7 @@ describe('Notices Setup controller', () => {
 
         buffer = Buffer.from('mock file')
 
-        Sinon.stub(PreviewPaperReturnService, 'go').resolves(buffer)
+        Sinon.stub(ProcessPreviewPaperReturnService, 'go').resolves(buffer)
       })
 
       describe('when a request is valid', () => {
