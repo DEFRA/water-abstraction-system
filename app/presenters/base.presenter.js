@@ -1,8 +1,6 @@
 'use strict'
 
-const Big = require('big.js')
-
-const { today } = require('../lib/general.lib.js')
+const { convertFromCubicMetres, today } = require('../lib/general.lib.js')
 const { noticeMappings, returnUnits } = require('../lib/static-lookups.lib.js')
 
 const DUE_PERIOD_DAYS = 27
@@ -286,10 +284,7 @@ function formatQuantityToUnit(quantity, units) {
     return null
   }
 
-  Big.DP = 6 // Set decimal places to 6
-  Big.RM = Big.roundHalfUp // Set rounding mode to round half up
-
-  const convertedQuantity = Big(quantity).times(returnUnits[units].multiplier).toNumber()
+  const convertedQuantity = convertFromCubicMetres(quantity, units)
 
   return formatNumber(convertedQuantity)
 }
