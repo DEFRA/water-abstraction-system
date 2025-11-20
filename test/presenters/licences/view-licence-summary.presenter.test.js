@@ -100,9 +100,10 @@ describe('Licences - View Licence Summary Presenter', () => {
       it('returns a notification just for the "old charge scheme"', () => {
         const result = ViewLicenceSummaryPresenter.go(licence)
 
-        expect(result.notification).to.equal(
-          'This licence has been marked for the next supplementary bill run for the old charge scheme.'
-        )
+        expect(result.notification).to.equal({
+          text: 'This licence has been marked for the next supplementary bill run for the old charge scheme.',
+          titleText: 'Important'
+        })
       })
     })
 
@@ -114,7 +115,10 @@ describe('Licences - View Licence Summary Presenter', () => {
       it('returns a notification just for the current charge scheme', () => {
         const result = ViewLicenceSummaryPresenter.go(licence)
 
-        expect(result.notification).to.equal('This licence has been marked for the next supplementary bill run.')
+        expect(result.notification).to.equal({
+          text: 'This licence has been marked for the next supplementary bill run.',
+          titleText: 'Important'
+        })
       })
     })
 
@@ -127,9 +131,10 @@ describe('Licences - View Licence Summary Presenter', () => {
       it('returns a notification just for both charge schemes', () => {
         const result = ViewLicenceSummaryPresenter.go(licence)
 
-        expect(result.notification).to.equal(
-          'This licence has been marked for the next supplementary bill runs for the current and old charge schemes.'
-        )
+        expect(result.notification).to.equal({
+          text: 'This licence has been marked for the next supplementary bill runs for the current and old charge schemes.',
+          titleText: 'Important'
+        })
       })
     })
 
@@ -141,9 +146,10 @@ describe('Licences - View Licence Summary Presenter', () => {
       it('returns a notification just for TPT supplementary', () => {
         const result = ViewLicenceSummaryPresenter.go(licence)
 
-        expect(result.notification).to.equal(
-          'This licence has been marked for the next two-part tariff supplementary bill run.'
-        )
+        expect(result.notification).to.equal({
+          text: 'This licence has been marked for the next two-part tariff supplementary bill run.',
+          titleText: 'Important'
+        })
       })
     })
 
@@ -156,9 +162,10 @@ describe('Licences - View Licence Summary Presenter', () => {
       it('returns a notification for TPT & PRESROC supplementary', () => {
         const result = ViewLicenceSummaryPresenter.go(licence)
 
-        expect(result.notification).to.equal(
-          'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.'
-        )
+        expect(result.notification).to.equal({
+          text: 'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.',
+          titleText: 'Important'
+        })
       })
     })
 
@@ -171,9 +178,10 @@ describe('Licences - View Licence Summary Presenter', () => {
       it('returns a notification for TPT & SROC supplementary', () => {
         const result = ViewLicenceSummaryPresenter.go(licence)
 
-        expect(result.notification).to.equal(
-          'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run.'
-        )
+        expect(result.notification).to.equal({
+          text: 'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run.',
+          titleText: 'Important'
+        })
       })
     })
 
@@ -187,9 +195,10 @@ describe('Licences - View Licence Summary Presenter', () => {
       it('returns a notification for TPT, PRESROC & SROC supplementary', () => {
         const result = ViewLicenceSummaryPresenter.go(licence)
 
-        expect(result.notification).to.equal(
-          'This licence has been marked for the next two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.'
-        )
+        expect(result.notification).to.equal({
+          text: 'This licence has been marked for the next two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.',
+          titleText: 'Important'
+        })
       })
     })
   })
