@@ -75,7 +75,6 @@ describe('Licences - View Conditions service', () => {
           displayTitle: 'Political cessation condition'
         }
       ],
-      licenceBaseLink: `/system/licences/${licenceFixture.licence.id}`,
       pageTitle: 'Conditions',
       pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
       roles: ['billing'],

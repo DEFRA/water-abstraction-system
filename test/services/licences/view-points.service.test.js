@@ -49,7 +49,6 @@ describe('Licences - View Points service', () => {
           href: `/system/licences/${licenceFixture.licence.id}/summary`,
           text: 'Go back to summary'
         },
-        licenceBaseLink: `/system/licences/${licenceFixture.licence.id}`,
         licencePoints: [
           {
             bgsReference: 'TL 14/123',

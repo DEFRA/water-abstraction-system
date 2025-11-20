@@ -28,7 +28,6 @@ function go(data) {
       text: 'Go back to summary'
     },
     licencePoints,
-    licenceBaseLink: `/system/licences/${licenceId}`,
     pageTitle: 'Points',
     pageTitleCaption: `Licence ${licenceRef}`,
     showingPoints: `Showing ${licencePoints.length} abstraction points`

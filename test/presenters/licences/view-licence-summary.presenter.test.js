@@ -32,7 +32,6 @@ describe('Licences - View Licence Summary Presenter', () => {
         documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
         ends: null,
         includeInPresrocBilling: 'no',
-        licenceBaseLink: `/system/licences/${licence.id}`,
         licenceId: licence.id,
         licenceRef: '01/123',
         notification: null,

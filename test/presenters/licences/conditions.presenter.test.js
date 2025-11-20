@@ -57,7 +57,6 @@ describe('Licences - Conditions presenter', () => {
             displayTitle: 'Political cessation condition'
           }
         ],
-        licenceBaseLink: `/system/licences/${licenceFixture.licence.id}`,
         pageTitle: 'Conditions',
         pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
         showingConditions: 'Showing 1 types of further conditions',

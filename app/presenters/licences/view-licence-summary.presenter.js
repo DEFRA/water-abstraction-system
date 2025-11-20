@@ -29,7 +29,6 @@ function go(licence) {
     documentId: licenceDocumentHeader.id,
     ends,
     includeInPresrocBilling,
-    licenceBaseLink: `/system/licences/${licenceId}`,
     licenceId,
     licenceRef,
     notification: _notification(licence),

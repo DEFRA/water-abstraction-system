@@ -22,7 +22,6 @@ function go(licenceVersionPurposeConditionTypes) {
       text: 'Go back to summary'
     },
     conditionTypes,
-    licenceBaseLink: `/system/licences/${licenceId}`,
     pageTitle: 'Conditions',
     pageTitleCaption: `Licence ${licenceRef}`,
     showingConditions: `Showing ${conditionTypes.length} types of further conditions`,

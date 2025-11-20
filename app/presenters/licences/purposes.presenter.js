@@ -27,7 +27,6 @@ function go(licence) {
       text: 'Go back to summary'
     },
     licencePurposes,
-    licenceBaseLink: `/system/licences/${licenceId}`,
     pageTitle: 'Purposes, periods and amounts',
     pageTitleCaption: `Licence ${licenceRef}`,
     showingPurposes: `Showing ${licencePurposes.length} purposes`
