@@ -7,6 +7,7 @@
 
 const Joi = require('joi')
 
+const MAX_DECIMAL = 6
 const VALID_VALUES = ['yes', 'no']
 
 /**
@@ -67,7 +68,7 @@ function _maxDecimals(value, helpers) {
 
   const parts = value.toString().split('.')
 
-  if (parts.length === 1 || parts[1].length <= 6) {
+  if (parts.length === 1 || parts[1].length <= MAX_DECIMAL) {
     return value
   }
 

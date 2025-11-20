@@ -8,6 +8,7 @@
 const Joi = require('joi')
 
 const MAX_ALLOWED_VOLUME = 9999999999
+const MAX_DECIMAL = 6
 
 /**
  * Validates data submitted for the `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
@@ -58,7 +59,7 @@ function _maxDecimals(value, helpers) {
 
   const parts = value.toString().split('.')
 
-  if (parts.length === 1 || parts[1].length <= 6) {
+  if (parts.length === 1 || parts[1].length <= MAX_DECIMAL) {
     return value
   }
 
