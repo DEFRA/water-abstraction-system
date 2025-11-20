@@ -11,7 +11,7 @@ const { expect } = Code
 // Thing under test
 const DetermineReturnsPeriodService = require('../../../../app/services/notices/setup/determine-returns-period.service.js')
 
-describe('Notices - Setup - Determine returns period service', () => {
+describe('Notices - Setup - Determine Returns Period service', () => {
   const year = 2025
 
   let clock

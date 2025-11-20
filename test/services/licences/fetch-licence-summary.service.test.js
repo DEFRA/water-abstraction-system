@@ -8,22 +8,24 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
 const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
 const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
-const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
+const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
+const LicenceSupplementaryYearModel = require('../../support/helpers/licence-supplementary-year.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-version-purpose-point.helper.js')
+const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
 const PointHelper = require('../../support/helpers/point.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 const SourceHelper = require('../../support/helpers/source.helper.js')
+const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 
 // Thing under test
 const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service.js')
@@ -31,19 +33,23 @@ const FetchLicenceSummaryService = require('../../../app/services/licences/fetch
 const REGION_SOUTHERN_INDEX = 5
 
 describe('Fetch Licence Summary service', () => {
-  let monitoringStation
   let licence
   let licenceDocumentHeader
-  let licenceMonitoringStation
+  let licenceEntity
+  let licenceEntityRole
   let licenceHolderSeed
+  let licenceMonitoringStation
+  let licenceSupplementaryYearId
   let licenceVersion
   let licenceVersionPurpose
   let licenceVersionPurposeCondition
   let licenceVersionPurposeConditionType
+  let monitoringStation
   let point
   let purpose
   let region
   let source
+  let workflow
 
   beforeEach(async () => {
     licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.data.find((conditionType) => {
@@ -64,6 +70,7 @@ describe('Fetch Licence Summary service', () => {
       startDate: new Date('2021-10-11'),
       status: 'superseded'
     })
+
     licenceVersion = await LicenceVersionHelper.add({
       licenceId: licence.id,
       startDate: new Date('2022-05-01')
@@ -92,9 +99,13 @@ describe('Fetch Licence Summary service', () => {
       licenceName: 'Licence Holder Ltd',
       licenceRef: licence.licenceRef
     })
-    const { id: licenceEntityId } = await LicenceEntityHelper.add()
 
-    await LicenceEntityRoleHelper.add({ companyEntityId: licenceHolderSeed.companyId, licenceEntityId })
+    licenceEntity = await LicenceEntityHelper.add()
+
+    licenceEntityRole = await LicenceEntityRoleHelper.add({
+      companyEntityId: licenceHolderSeed.companyId,
+      licenceEntity: licenceEntity.id
+    })
 
     monitoringStation = await MonitoringStationHelper.add()
 
@@ -102,6 +113,19 @@ describe('Fetch Licence Summary service', () => {
       monitoringStationId: monitoringStation.id,
       licenceId: licence.id
     })
+
+    const licenceSupplementaryYear = await LicenceSupplementaryYearModel.add({
+      licenceId: licence.id,
+      twoPartTariff: true
+    })
+
+    licenceSupplementaryYearId = licenceSupplementaryYear.id
+
+    // We add two workflow records: one reflects that the licence is in workflow, so of that it previously was but
+    // has been dealt with. We want to ensure these soft-deleted records are ignored so licences are not flagged
+    // as changed incorrectly
+    workflow = await WorkflowHelper.add({ licenceId: licence.id })
+    await WorkflowHelper.add({ deletedAt: new Date('2023-06-01'), licenceId: licence.id })
   })
 
   describe('when called', () => {
@@ -112,10 +136,20 @@ describe('Fetch Licence Summary service', () => {
         id: licence.id,
         expiredDate: null,
         startDate: new Date('2022-01-01'),
+        includeInPresrocBilling: 'no',
+        includeInSrocBilling: false,
+        revokedDate: null,
+        lapsedDate: null,
         region: {
           id: region.id,
           displayName: region.displayName
         },
+        licenceRef: licence.licenceRef,
+        licenceSupplementaryYears: [
+          {
+            id: licenceSupplementaryYearId
+          }
+        ],
         licenceVersions: [
           {
             id: licenceVersion.id,
@@ -184,8 +218,21 @@ describe('Fetch Licence Summary service', () => {
           ]
         },
         licenceDocumentHeader: {
-          id: licenceDocumentHeader.id
-        }
+          id: licenceDocumentHeader.id,
+          licenceName: 'Licence Holder Ltd',
+          licenceEntityRoles: [
+            {
+              id: licenceEntityRole.id,
+              licenceEntity: null
+            }
+          ]
+        },
+        workflows: [
+          {
+            id: workflow.id,
+            status: workflow.status
+          }
+        ]
       })
     })
   })

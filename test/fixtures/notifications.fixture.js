@@ -27,6 +27,7 @@ function abstractionAlertEmail(notice) {
 
   const notification = {
     createdAt: new Date('2025-10-09'),
+    dueDate: null,
     eventId: notice.id,
     licenceMonitoringStationId,
     licences: notice.licences,
@@ -77,6 +78,7 @@ function abstractionAlertLetter(notice) {
 
   const notification = {
     createdAt: new Date('2025-10-09'),
+    dueDate: null,
     eventId: notice.id,
     licenceMonitoringStationId,
     licences: notice.licences,
@@ -127,6 +129,7 @@ function abstractionAlertLetter(notice) {
 function legacyHandsOfFlow(notice) {
   const notification = {
     createdAt: new Date('2022-10-09'),
+    dueDate: null,
     eventId: notice.id,
     licenceMonitoringStationId: null,
     licences: notice.licences,
@@ -174,6 +177,7 @@ function legacyHandsOfFlow(notice) {
 function legacyRenewal(notice) {
   const notification = {
     createdAt: new Date('2022-10-09'),
+    dueDate: null,
     eventId: notice.id,
     licenceMonitoringStationId: null,
     licences: notice.licences,
@@ -279,6 +283,7 @@ function paperReturn(notice) {
 
   const notification = {
     createdAt: new Date('2025-10-09'),
+    dueDate: new Date('2025-04-28'),
     eventId: notice.id,
     licenceMonitoringStationId: null,
     licences: notice.licences,
@@ -322,6 +327,7 @@ function paperReturn(notice) {
 function returnsInvitationEmail(notice) {
   const notification = {
     createdAt: new Date('2025-04-02'),
+    dueDate: new Date('2025-04-28'),
     eventId: notice.id,
     licenceMonitoringStationId: null,
     licences: notice.licences,
@@ -343,7 +349,7 @@ function returnsInvitationEmail(notice) {
       '^ You’ll need to submit your returns by 1 April 2025.\n',
     recipient: 'grace.hopper@acme.co.uk',
     returnedAt: null,
-    returnLogIds: null,
+    returnLogIds: [generateUUID(), generateUUID()],
     status: 'sent'
   }
 
@@ -360,6 +366,7 @@ function returnsInvitationEmail(notice) {
 function returnsInvitationLetter(notice) {
   const notification = {
     createdAt: new Date('2025-04-02'),
+    dueDate: new Date('2025-04-28'),
     eventId: notice.id,
     licenceMonitoringStationId: null,
     licences: notice.licences,
@@ -383,7 +390,7 @@ function returnsInvitationLetter(notice) {
       '^ You’ll need to submit your returns by 1 April 2025.\n',
     recipient: null,
     returnedAt: null,
-    returnLogIds: null,
+    returnLogIds: [generateUUID(), generateUUID()],
     status: 'sent'
   }
 
@@ -400,6 +407,7 @@ function returnsInvitationLetter(notice) {
 function returnsReminderEmail(notice) {
   const notification = {
     createdAt: new Date('2025-04-18'),
+    dueDate: new Date('2025-04-28'),
     eventId: notice.id,
     licenceMonitoringStationId: null,
     licences: notice.licences,
@@ -421,7 +429,7 @@ function returnsReminderEmail(notice) {
       '^ You’ll need to submit your returns by 1 April 2025.\n',
     recipient: 'grace.hopper@acme.co.uk',
     returnedAt: null,
-    returnLogIds: null,
+    returnLogIds: [generateUUID(), generateUUID()],
     status: 'sent'
   }
 
@@ -438,6 +446,7 @@ function returnsReminderEmail(notice) {
 function returnsReminderLetter(notice) {
   const notification = {
     createdAt: new Date('2025-04-18'),
+    dueDate: new Date('2025-04-28'),
     eventId: notice.id,
     licenceMonitoringStationId: null,
     licences: notice.licences,
@@ -463,7 +472,7 @@ function returnsReminderLetter(notice) {
       'We asked you to submit your returns by 1 April 2025.\n',
     recipient: null,
     returnedAt: null,
-    returnLogIds: null,
+    returnLogIds: [generateUUID(), generateUUID()],
     status: 'sent'
   }
 

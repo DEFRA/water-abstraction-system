@@ -16,7 +16,7 @@ const { formatLongDate } = require('../../../../app/presenters/base.presenter.js
 // Thing under test
 const NotificationsPresenter = require('../../../../app/presenters/notices/setup/notifications.presenter.js')
 
-describe('Notices - Setup - Notifications Presenter', () => {
+describe('Notices - Setup - Notifications presenter', () => {
   const noticeId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
   let determinedReturnsPeriod

@@ -17,7 +17,7 @@ const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 // Thing under test
 const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 
-describe('Notices - Setup - Fetch returns recipients service', () => {
+describe('Notices - Setup - Fetch Returns Recipients service', () => {
   let seedData
   let session
 

@@ -19,16 +19,14 @@ const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js'
 // Thing under test
 const FetchLicenceContactsService = require('../../../app/services/licences/fetch-licence-contacts.service.js')
 
-describe('Fetch Licence Contacts service', () => {
-  let licenceId
+describe('Licences - Fetch Licence Contacts service', () => {
   let companyId
   let contactId
+  let licence
 
   describe('when the licence has contact details', () => {
     beforeEach(async () => {
-      const licence = await LicenceHelper.add()
-
-      licenceId = licence.id
+      licence = await LicenceHelper.add()
 
       const company = await CompanyHelper.add()
 
@@ -53,23 +51,31 @@ describe('Fetch Licence Contacts service', () => {
     })
 
     it('returns the matching licence contacts', async () => {
-      const results = await FetchLicenceContactsService.go(licenceId)
+      const results = await FetchLicenceContactsService.go(licence.id)
 
-      expect(results[0]).to.equal({
-        communicationType: 'Licence Holder',
-        companyId,
-        companyName: 'Example Trading Ltd',
-        contactId,
-        firstName: 'Amara',
-        lastName: 'Gupta',
-        address1: 'ENVIRONMENT AGENCY',
-        address2: 'HORIZON HOUSE',
-        address3: 'DEANERY ROAD',
-        address4: 'BRISTOL',
-        address5: null,
-        address6: null,
-        postcode: 'BS1 5AH',
-        country: 'United Kingdom'
+      expect(results).to.equal({
+        licence: {
+          id: licence.id,
+          licenceRef: licence.licenceRef
+        },
+        licenceContacts: [
+          {
+            communicationType: 'Licence Holder',
+            companyId,
+            companyName: 'Example Trading Ltd',
+            contactId,
+            firstName: 'Amara',
+            lastName: 'Gupta',
+            address1: 'ENVIRONMENT AGENCY',
+            address2: 'HORIZON HOUSE',
+            address3: 'DEANERY ROAD',
+            address4: 'BRISTOL',
+            address5: null,
+            address6: null,
+            postcode: 'BS1 5AH',
+            country: 'United Kingdom'
+          }
+        ]
       })
     })
   })

@@ -77,4 +77,45 @@ describe('Licences - Base Licences presenter', () => {
       })
     })
   })
+
+  describe('#userRoles()', () => {
+    let auth
+
+    beforeEach(() => {
+      auth = {
+        credentials: {
+          roles: [
+            {
+              id: '123',
+              role: 'role1'
+            },
+            {
+              id: '456',
+              role: 'role2'
+            }
+          ]
+        }
+      }
+    })
+
+    describe('when the user has roles', () => {
+      it('should return the roles', () => {
+        const result = BaseLicencesPresenter.userRoles(auth)
+
+        expect(result).to.equal(['role1', 'role2'])
+      })
+    })
+
+    describe('when the user has no roles', () => {
+      beforeEach(() => {
+        auth.credentials.roles = []
+      })
+
+      it('should return an empty array', () => {
+        const result = BaseLicencesPresenter.userRoles(auth)
+
+        expect(result).to.be.empty()
+      })
+    })
+  })
 })

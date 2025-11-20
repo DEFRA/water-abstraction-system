@@ -1,6 +1,7 @@
-{% extends 'licences/layout.njk' %}
+{% extends 'layout-licences.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% from "macros/charge-version-status-tag.njk" import statusTag as chargeVersionStatusTag %}
 {% from "macros/return-version-status-tag.njk" import statusTag as returnVersionStatusTag %}
@@ -15,7 +16,6 @@
 {% endmacro %}
 
 {% block subPageContent %}
-<h2 class="govuk-heading-l">Licence set up</h2>
   <h3 class="govuk-heading-m"> Requirements for returns </h3>
 
   {% if returnVersions.length === 0 %}

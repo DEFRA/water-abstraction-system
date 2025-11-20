@@ -475,7 +475,7 @@ describe('Licences controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Summary')
+          expect(response.payload).to.contain('Licence summary')
         })
       })
     })
@@ -735,7 +735,10 @@ function _viewLicenceContactDetails() {
 }
 
 function _viewLicencePoints() {
+  const commonLicenceData = _viewLicence()
+
   return {
+    ...commonLicenceData,
     id: 'f500992f-b178-480b-9325-51fe7fdbc9fd',
     licencePoints: [
       {
@@ -761,7 +764,10 @@ function _viewLicencePoints() {
 }
 
 function _viewLicencePurposes() {
+  const commonLicenceData = _viewLicence()
+
   return {
+    ...commonLicenceData,
     id: '5ca7bf18-d433-491c-ac83-483f67ee7d93',
     licenceRef: '01/140/R01',
     licencePurposes: [

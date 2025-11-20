@@ -5,37 +5,17 @@
  * @module NoticesSetupController
  */
 
-const AddRecipientService = require('../services/notices/setup/add-recipient.service.js')
-const AlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/alert-email-address.service.js')
-const AlertThresholdsService = require('../services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
-const AlertTypeService = require('../services/notices/setup/abstraction-alerts/alert-type.service.js')
-const CancelAlertsService = require('../services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
-const CancelService = require('../services/notices/setup/cancel.service.js')
-const CheckAlertService = require('../services/notices/setup/preview/check-alert.service.js')
-const CheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
-const CheckNoticeTypeService = require('../services/notices/setup/check-notice-type.service.js')
-const CheckPaperReturnService = require('../services/notices/setup/preview/check-paper-return.service.js')
-const CheckService = require('../services/notices/setup/check.service.js')
-const ConfirmationService = require('../services/notices/setup/confirmation.service.js')
-const ContactTypeService = require('../services/notices/setup/contact-type.service.js')
-const DownloadRecipientsService = require('../services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
-const LicenceService = require('../services/notices/setup/licence.service.js')
-const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
-const PaperReturnService = require('../services/notices/setup/paper-return.service.js')
-const PreviewPaperReturnService = require('../services/notices/setup/preview-paper-return.service.js')
-const PreviewService = require('../services/notices/setup/preview/preview.service.js')
-const RecipientNameService = require('../services/notices/setup/recipient-name.service.js')
-const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
-const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
-const ReturnsPeriodService = require('../services/notices/setup/returns-period/returns-period.service.js')
-const SelectRecipientsService = require('../services/notices/setup/select-recipients.service.js')
-const SubmitAlertEmailAddressService = require('../services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
-const SubmitAlertThresholdsService = require('../services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
-const SubmitAlertTypeService = require('../services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
-const SubmitCancelAlertsService = require('../services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
+const ProcessAddRecipientService = require('../services/notices/setup/process-add-recipient.service.js')
+const ProcessDownloadRecipientsService = require('../services/notices/setup/process-download-recipients.service.js')
+const ProcessPreviewPaperReturnService = require('../services/notices/setup/process-preview-paper-return.service.js')
+const ProcessRemoveThresholdService = require('../services/notices/setup/process-remove-threshold.service.js')
+const SubmitAlertEmailAddressService = require('../services/notices/setup/submit-alert-email-address.service.js')
+const SubmitAlertThresholdsService = require('../services/notices/setup/submit-alert-thresholds.service.js')
+const SubmitAlertTypeService = require('../services/notices/setup/submit-alert-type.service.js')
+const SubmitCancelAlertsService = require('../services/notices/setup/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../services/notices/setup/submit-cancel.service.js')
-const SubmitCheckLicenceMatchesService = require('../services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
+const SubmitCheckLicenceMatchesService = require('../services/notices/setup/submit-check-licence-matches.service.js')
 const SubmitCheckNoticeTypeService = require('../services/notices/setup/submit-check-notice-type.service.js')
 const SubmitCheckService = require('../services/notices/setup/submit-check.service.js')
 const SubmitContactTypeService = require('../services/notices/setup/submit-contact-type.service.js')
@@ -44,42 +24,46 @@ const SubmitNoticeTypeService = require('../services/notices/setup/submit-notice
 const SubmitPaperReturnService = require('../services/notices/setup/submit-paper-return.service.js')
 const SubmitRecipientNameService = require('../services/notices/setup/submit-recipient-name.service.js')
 const SubmitRemoveLicencesService = require('../services/notices/setup/submit-remove-licences.service.js')
-const SubmitReturnsPeriodService = require('../services/notices/setup/returns-period/submit-returns-period.service.js')
+const SubmitReturnsPeriodService = require('../services/notices/setup/submit-returns-period.service.js')
 const SubmitSelectRecipientsService = require('../services/notices/setup/submit-select-recipients.service.js')
+const ViewAlertEmailAddressService = require('../services/notices/setup/view-alert-email-address.service.js')
+const ViewAlertThresholdsService = require('../services/notices/setup/view-alert-thresholds.service.js')
+const ViewAlertTypeService = require('../services/notices/setup/view-alert-type.service.js')
+const ViewCancelService = require('../services/notices/setup/view-cancel.service.js')
+const ViewCancelAlertsService = require('../services/notices/setup/view-cancel-alerts.service.js')
+const ViewCheckService = require('../services/notices/setup/view-check.service.js')
+const ViewCheckLicenceMatchesService = require('../services/notices/setup/view-check-licence-matches.service.js')
+const ViewCheckNoticeTypeService = require('../services/notices/setup/view-check-notice-type.service.js')
+const ViewConfirmationService = require('../services/notices/setup/view-confirmation.service.js')
+const ViewContactTypeService = require('../services/notices/setup/view-contact-type.service.js')
+const ViewLicenceService = require('../services/notices/setup/view-licence.service.js')
+const ViewNoticeTypeService = require('../services/notices/setup/view-notice-type.service.js')
+const ViewPaperReturnService = require('../services/notices/setup/view-paper-return.service.js')
+const ViewPreviewService = require('../services/notices/setup/view-preview.service.js')
+const ViewPreviewCheckAlertService = require('../services/notices/setup/view-preview-check-alert.service.js')
+const ViewPreviewCheckPaperReturnService = require('../services/notices/setup/view-preview-check-paper-return.service.js')
+const ViewRecipientNameService = require('../services/notices/setup/view-recipient-name.service.js')
+const ViewRemoveLicencesService = require('../services/notices/setup/view-remove-licences.service.js')
+const ViewReturnsPeriodService = require('../services/notices/setup/view-returns-period.service.js')
+const ViewSelectRecipientsService = require('../services/notices/setup/view-select-recipients.service.js')
 
-async function addRecipient(request, h) {
+async function processAddRecipient(request, h) {
   const {
     params: { sessionId },
     yar
   } = request
 
-  await AddRecipientService.go(sessionId, yar)
+  await ProcessAddRecipientService.go(sessionId, yar)
 
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
 
-async function checkAlert(request, h) {
-  const { contactHashId, sessionId } = request.params
-
-  const pageData = await CheckAlertService.go(contactHashId, sessionId)
-
-  return h.view('notices/setup/preview/check-alert.njk', pageData)
-}
-
-async function viewCheckPaperReturn(request, h) {
-  const { contactHashId, sessionId } = request.params
-
-  const pageData = await CheckPaperReturnService.go(sessionId, contactHashId)
-
-  return h.view(`notices/setup/preview/check-paper-return.njk`, pageData)
-}
-
-async function downloadRecipients(request, h) {
+async function processDownloadRecipients(request, h) {
   const {
     params: { sessionId }
   } = request
 
-  const { data, type, filename } = await DownloadRecipientsService.go(sessionId)
+  const { data, type, filename } = await ProcessDownloadRecipientsService.go(sessionId)
 
   return h
     .response(data)
@@ -89,181 +73,23 @@ async function downloadRecipients(request, h) {
     .header('Content-Disposition', `attachment; filename="${filename}"`)
 }
 
-async function preview(request, h) {
-  const { contactHashId, licenceMonitoringStationId, sessionId } = request.params
-
-  const pageData = await PreviewService.go(sessionId, contactHashId, licenceMonitoringStationId)
-
-  return h.view('notices/setup/preview/preview.njk', pageData)
-}
-
-async function viewAlertEmailAddress(request, h) {
-  const {
-    auth,
-    params: { sessionId }
-  } = request
-
-  const pageData = await AlertEmailAddressService.go(sessionId, auth)
-
-  return h.view(`notices/setup/abstraction-alerts/alert-email-address.njk`, pageData)
-}
-
-async function viewAlertThresholds(request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await AlertThresholdsService.go(sessionId)
-
-  return h.view(`notices/setup/abstraction-alerts/alert-thresholds.njk`, pageData)
-}
-
-async function viewAlertType(request, h) {
-  const {
-    params: { sessionId }
-  } = request
-
-  const pageData = await AlertTypeService.go(sessionId)
-
-  return h.view(`notices/setup/abstraction-alerts/alert-type.njk`, pageData)
-}
-
-async function viewCancel(request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await CancelService.go(sessionId)
-
-  return h.view(`notices/setup/cancel.njk`, pageData)
-}
-
-async function viewCancelAlerts(request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await CancelAlertsService.go(sessionId)
-
-  return h.view(`notices/setup/abstraction-alerts/cancel-alerts.njk`, pageData)
-}
-
-async function viewCheckLicenceMatches(request, h) {
-  const {
-    params: { sessionId },
-    yar
-  } = request
-
-  const pageData = await CheckLicenceMatchesService.go(sessionId, yar)
-
-  return h.view(`notices/setup/abstraction-alerts/check-licence-matches.njk`, pageData)
-}
-
-async function viewCheckNoticeType(request, h) {
-  const {
-    params: { sessionId },
-    yar
-  } = request
-
-  const pageData = await CheckNoticeTypeService.go(sessionId, yar)
-
-  return h.view(`notices/setup/check-notice-type.njk`, pageData)
-}
-
-async function viewConfirmation(request, h) {
-  const { eventId } = request.params
-
-  const pageData = await ConfirmationService.go(eventId)
-
-  return h.view(`notices/setup/confirmation.njk`, pageData)
-}
-
-async function viewContactType(request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await ContactTypeService.go(sessionId)
-
-  return h.view(`notices/setup/contact-type.njk`, pageData)
-}
-
-async function viewLicence(request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await LicenceService.go(sessionId)
-
-  return h.view(`notices/setup/licence.njk`, pageData)
-}
-
-async function viewRemoveLicences(request, h) {
-  const {
-    params: { sessionId }
-  } = request
-
-  const pageData = await RemoveLicencesService.go(sessionId)
-
-  return h.view(`notices/setup/remove-licences.njk`, pageData)
-}
-
-async function viewReturnsPeriod(request, h) {
-  const {
-    params: { sessionId }
-  } = request
-
-  const pageData = await ReturnsPeriodService.go(sessionId)
-
-  return h.view(`notices/setup/returns-period.njk`, pageData)
-}
-
-async function viewCheck(request, h) {
-  const {
-    params: { sessionId },
-    query: { page },
-    yar
-  } = request
-
-  const pageData = await CheckService.go(sessionId, yar, page)
-
-  return h.view(`notices/setup/check.njk`, pageData)
-}
-
-async function viewNoticeType(request, h) {
-  const {
-    auth,
-    params: { sessionId }
-  } = request
-
-  const pageData = await NoticeTypeService.go(sessionId, auth)
-
-  return h.view(`notices/setup/notice-type.njk`, pageData)
-}
-
-async function viewPreviewPaperReturn(request, h) {
+async function processPreviewPaperReturn(request, h) {
   const { contactHashId, sessionId, returnId } = request.params
 
-  const fileBuffer = await PreviewPaperReturnService.go(sessionId, contactHashId, returnId)
+  const fileBuffer = await ProcessPreviewPaperReturnService.go(sessionId, contactHashId, returnId)
 
   return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
 }
 
-async function viewRecipientName(request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await RecipientNameService.go(sessionId)
-
-  return h.view(`notices/setup/recipient-name.njk`, pageData)
-}
-
-async function viewRemoveThreshold(request, h) {
+async function processRemoveThreshold(request, h) {
   const {
     params: { sessionId, licenceMonitoringStationId },
     yar
   } = request
 
-  await RemoveThresholdService.go(sessionId, licenceMonitoringStationId, yar)
+  await ProcessRemoveThresholdService.go(sessionId, licenceMonitoringStationId, yar)
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
-}
-
-async function viewPaperReturn(request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await PaperReturnService.go(sessionId)
-
-  return h.view(`notices/setup/paper-return.njk`, pageData)
 }
 
 async function setup(request, h) {
@@ -277,14 +103,6 @@ async function setup(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/${path}`)
 }
 
-async function viewSelectRecipients(request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await SelectRecipientsService.go(sessionId)
-
-  return h.view(`notices/setup/select-recipients.njk`, pageData)
-}
-
 async function submitAlertEmailAddress(request, h) {
   const {
     auth,
@@ -295,7 +113,7 @@ async function submitAlertEmailAddress(request, h) {
   const pageData = await SubmitAlertEmailAddressService.go(sessionId, payload, auth)
 
   if (pageData.error) {
-    return h.view(`notices/setup/abstraction-alerts/alert-email-address.njk`, pageData)
+    return h.view(`notices/setup/alert-email-address.njk`, pageData)
   }
 
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
@@ -310,7 +128,7 @@ async function submitAlertThresholds(request, h) {
   const pageData = await SubmitAlertThresholdsService.go(sessionId, payload)
 
   if (pageData.error) {
-    return h.view(`notices/setup/abstraction-alerts/alert-thresholds.njk`, pageData)
+    return h.view(`notices/setup/alert-thresholds.njk`, pageData)
   }
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
@@ -325,7 +143,7 @@ async function submitAlertType(request, h) {
   const pageData = await SubmitAlertTypeService.go(sessionId, payload)
 
   if (pageData.error) {
-    return h.view(`notices/setup/abstraction-alerts/alert-type.njk`, pageData)
+    return h.view(`notices/setup/alert-type.njk`, pageData)
   }
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/alert-thresholds`)
@@ -510,31 +328,193 @@ async function submitSelectRecipients(request, h) {
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
 }
 
+async function viewAlertEmailAddress(request, h) {
+  const {
+    auth,
+    params: { sessionId }
+  } = request
+
+  const pageData = await ViewAlertEmailAddressService.go(sessionId, auth)
+
+  return h.view(`notices/setup/alert-email-address.njk`, pageData)
+}
+
+async function viewAlertThresholds(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewAlertThresholdsService.go(sessionId)
+
+  return h.view(`notices/setup/alert-thresholds.njk`, pageData)
+}
+
+async function viewAlertType(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await ViewAlertTypeService.go(sessionId)
+
+  return h.view(`notices/setup/alert-type.njk`, pageData)
+}
+
+async function viewCancel(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewCancelService.go(sessionId)
+
+  return h.view(`notices/setup/cancel.njk`, pageData)
+}
+
+async function viewCancelAlerts(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewCancelAlertsService.go(sessionId)
+
+  return h.view(`notices/setup/cancel-alerts.njk`, pageData)
+}
+
+async function viewCheck(request, h) {
+  const {
+    params: { sessionId },
+    query: { page },
+    yar
+  } = request
+
+  const pageData = await ViewCheckService.go(sessionId, yar, page)
+
+  return h.view(`notices/setup/check.njk`, pageData)
+}
+
+async function viewCheckLicenceMatches(request, h) {
+  const {
+    params: { sessionId },
+    yar
+  } = request
+
+  const pageData = await ViewCheckLicenceMatchesService.go(sessionId, yar)
+
+  return h.view(`notices/setup/check-licence-matches.njk`, pageData)
+}
+
+async function viewCheckNoticeType(request, h) {
+  const {
+    params: { sessionId },
+    yar
+  } = request
+
+  const pageData = await ViewCheckNoticeTypeService.go(sessionId, yar)
+
+  return h.view(`notices/setup/check-notice-type.njk`, pageData)
+}
+
+async function viewConfirmation(request, h) {
+  const { eventId } = request.params
+
+  const pageData = await ViewConfirmationService.go(eventId)
+
+  return h.view(`notices/setup/confirmation.njk`, pageData)
+}
+
+async function viewContactType(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewContactTypeService.go(sessionId)
+
+  return h.view(`notices/setup/contact-type.njk`, pageData)
+}
+
+async function viewLicence(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewLicenceService.go(sessionId)
+
+  return h.view(`notices/setup/licence.njk`, pageData)
+}
+
+async function viewNoticeType(request, h) {
+  const {
+    auth,
+    params: { sessionId }
+  } = request
+
+  const pageData = await ViewNoticeTypeService.go(sessionId, auth)
+
+  return h.view(`notices/setup/notice-type.njk`, pageData)
+}
+
+async function viewPaperReturn(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewPaperReturnService.go(sessionId)
+
+  return h.view(`notices/setup/paper-return.njk`, pageData)
+}
+
+async function viewPreview(request, h) {
+  const { contactHashId, licenceMonitoringStationId, sessionId } = request.params
+
+  const pageData = await ViewPreviewService.go(sessionId, contactHashId, licenceMonitoringStationId)
+
+  return h.view('notices/setup/preview.njk', pageData)
+}
+
+async function viewPreviewCheckAlert(request, h) {
+  const { contactHashId, sessionId } = request.params
+
+  const pageData = await ViewPreviewCheckAlertService.go(contactHashId, sessionId)
+
+  return h.view('notices/setup/preview-check-alert.njk', pageData)
+}
+
+async function viewPreviewCheckPaperReturn(request, h) {
+  const { contactHashId, sessionId } = request.params
+
+  const pageData = await ViewPreviewCheckPaperReturnService.go(sessionId, contactHashId)
+
+  return h.view(`notices/setup/preview-check-paper-return.njk`, pageData)
+}
+
+async function viewRecipientName(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewRecipientNameService.go(sessionId)
+
+  return h.view(`notices/setup/recipient-name.njk`, pageData)
+}
+
+async function viewRemoveLicences(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await ViewRemoveLicencesService.go(sessionId)
+
+  return h.view(`notices/setup/remove-licences.njk`, pageData)
+}
+
+async function viewReturnsPeriod(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const pageData = await ViewReturnsPeriodService.go(sessionId)
+
+  return h.view(`notices/setup/returns-period.njk`, pageData)
+}
+
+async function viewSelectRecipients(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewSelectRecipientsService.go(sessionId)
+
+  return h.view(`notices/setup/select-recipients.njk`, pageData)
+}
+
 module.exports = {
-  addRecipient,
-  checkAlert,
-  downloadRecipients,
-  preview,
-  viewAlertEmailAddress,
-  viewAlertThresholds,
-  viewAlertType,
-  viewCancel,
-  viewCancelAlerts,
-  viewCheck,
-  viewCheckLicenceMatches,
-  viewCheckNoticeType,
-  viewCheckPaperReturn,
-  viewConfirmation,
-  viewContactType,
-  viewLicence,
-  viewNoticeType,
-  viewPaperReturn,
-  viewPreviewPaperReturn,
-  viewRecipientName,
-  viewRemoveLicences,
-  viewRemoveThreshold,
-  viewReturnsPeriod,
-  viewSelectRecipients,
+  processAddRecipient,
+  processDownloadRecipients,
+  processPreviewPaperReturn,
+  processRemoveThreshold,
   setup,
   submitAlertEmailAddress,
   submitAlertThresholds,
@@ -551,5 +531,25 @@ module.exports = {
   submitRecipientName,
   submitRemoveLicences,
   submitReturnsPeriod,
-  submitSelectRecipients
+  submitSelectRecipients,
+  viewAlertEmailAddress,
+  viewAlertThresholds,
+  viewAlertType,
+  viewCancel,
+  viewCancelAlerts,
+  viewCheck,
+  viewCheckLicenceMatches,
+  viewCheckNoticeType,
+  viewConfirmation,
+  viewContactType,
+  viewLicence,
+  viewNoticeType,
+  viewPaperReturn,
+  viewPreview,
+  viewPreviewCheckAlert,
+  viewPreviewCheckPaperReturn,
+  viewRecipientName,
+  viewRemoveLicences,
+  viewReturnsPeriod,
+  viewSelectRecipients
 }

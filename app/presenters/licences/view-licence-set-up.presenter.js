@@ -33,44 +33,55 @@ const AGREEMENTS = {
  * @param {module:LicenceAgreementModel[]} agreements - All agreements records for the licence
  * @param {module:ReturnVersionModel[]} returnVersions - All returns version records for the licence
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {object} commonData - Licence data already formatted for the view's shared elements
+ * @param {object} licence - The id and licence ref of the licence
  *
  * @returns {object} The data formatted for the view template
  */
-function go(chargeVersions, workflows, agreements, returnVersions, auth, commonData) {
+function go(chargeVersions, workflows, agreements, returnVersions, auth, licence) {
   const enableRequirementsForReturns = FeatureFlagsConfig.enableRequirementsForReturns
 
+  const licenceData = {
+    licenceId: licence.id,
+    ends: licence.$ends()
+  }
+
   return {
-    links: {
-      chargeInformation: _chargeInformationLinks(auth, commonData),
-      agreements: _agreementLinks(auth, commonData),
-      returnVersions: _returnVersionsLinks(commonData, enableRequirementsForReturns, auth),
-      recalculateBills: _recalculateBills(agreements, auth, commonData)
+    agreements: _agreements(licenceData, agreements, auth),
+    backLink: {
+      text: 'Go back to search',
+      href: '/licences'
     },
-    agreements: _agreements(commonData, agreements, auth),
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
+    links: {
+      chargeInformation: _chargeInformationLinks(auth, licenceData),
+      agreements: _agreementLinks(auth, licenceData),
+      returnVersions: _returnVersionsLinks(licenceData, enableRequirementsForReturns, auth),
+      recalculateBills: _recalculateBills(agreements, auth, licenceData)
+    },
+    pageTitle: 'Licence set up',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
     returnVersions: _returnVersions(returnVersions)
   }
 }
 
-function _agreements(commonData, agreements, auth) {
+function _agreements(licenceData, agreements, auth) {
   return agreements.map((agreement, index) => {
     return {
       startDate: formatLongDate(agreement.startDate),
       endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '',
       description: AGREEMENTS[_financialAgreementCode(agreement)],
       signedOn: agreement.signedOn ? formatLongDate(agreement.signedOn) : '',
-      action: _agreementActionLinks(commonData, agreement, auth, index)
+      action: _agreementActionLinks(licenceData, agreement, auth, index)
     }
   })
 }
 
-function _agreementActionLinks(commonData, agreement, auth, index) {
+function _agreementActionLinks(licenceData, agreement, auth, index) {
   if (!auth.credentials.scope.includes(ROLES.manageAgreements)) {
     return []
   }
 
-  if (_endsSixYearsAgo(commonData.ends)) {
+  if (_endsSixYearsAgo(licenceData.ends)) {
     return []
   }
 
@@ -81,7 +92,7 @@ function _agreementActionLinks(commonData, agreement, auth, index) {
     actionLinks.push({
       dataTest: `delete-agreement-${index}`,
       text: 'Delete',
-      link: `/licences/${commonData.licenceId}/agreements/${agreement.id}/delete`
+      link: `/licences/${licenceData.licenceId}/agreements/${agreement.id}/delete`
     })
   }
 
@@ -89,28 +100,28 @@ function _agreementActionLinks(commonData, agreement, auth, index) {
     actionLinks.push({
       dataTest: `end-agreement-${index}`,
       text: 'End',
-      link: `/licences/${commonData.licenceId}/agreements/${agreement.id}/end`
+      link: `/licences/${licenceData.licenceId}/agreements/${agreement.id}/end`
     })
   }
 
   return actionLinks
 }
 
-function _agreementLinks(auth, commonData) {
-  if (auth.credentials.scope.includes(ROLES.manageAgreements) && !_endsSixYearsAgo(commonData.ends)) {
+function _agreementLinks(auth, licenceData) {
+  if (auth.credentials.scope.includes(ROLES.manageAgreements) && !_endsSixYearsAgo(licenceData.ends)) {
     return {
-      setUpAgreement: `/licences/${commonData.licenceId}/agreements/select-type`
+      setUpAgreement: `/licences/${licenceData.licenceId}/agreements/select-type`
     }
   }
 
   return {}
 }
 
-function _chargeInformationLinks(auth, commonData) {
-  if (auth.credentials.scope.includes(ROLES.workflowEditor) && !_endsSixYearsAgo(commonData.ends)) {
+function _chargeInformationLinks(auth, licenceData) {
+  if (auth.credentials.scope.includes(ROLES.workflowEditor) && !_endsSixYearsAgo(licenceData.ends)) {
     return {
-      setupNewCharge: `/licences/${commonData.licenceId}/charge-information/create`,
-      makeLicenceNonChargeable: `/licences/${commonData.licenceId}/charge-information/non-chargeable-reason?start=1`
+      setupNewCharge: `/licences/${licenceData.licenceId}/charge-information/create`,
+      makeLicenceNonChargeable: `/licences/${licenceData.licenceId}/charge-information/non-chargeable-reason?start=1`
     }
   }
 
@@ -189,9 +200,9 @@ function _reason(returnVersion) {
   return reason ?? ''
 }
 
-function _recalculateBills(agreements, auth, commonData) {
+function _recalculateBills(agreements, auth, licenceData) {
   if (auth.credentials.scope.includes(ROLES.billing) && _hasTwoPartTariffAgreement(agreements)) {
-    return { markForSupplementaryBilling: `/system/licences/${commonData.licenceId}/mark-for-supplementary-billing` }
+    return { markForSupplementaryBilling: `/system/licences/${licenceData.licenceId}/mark-for-supplementary-billing` }
   }
 
   return {}
@@ -215,11 +226,11 @@ function _returnVersions(returnVersions = [{}]) {
   })
 }
 
-function _returnVersionsLinks(commonData, enableRequirementsForReturns, auth) {
+function _returnVersionsLinks(licenceData, enableRequirementsForReturns, auth) {
   if (auth.credentials.scope.includes(ROLES.billing) && enableRequirementsForReturns) {
     return {
-      returnsRequired: `/system/licences/${commonData.licenceId}/returns-required`,
-      noReturnsRequired: `/system/licences/${commonData.licenceId}/no-returns-required`
+      returnsRequired: `/system/licences/${licenceData.licenceId}/returns-required`,
+      noReturnsRequired: `/system/licences/${licenceData.licenceId}/no-returns-required`
     }
   }
 

@@ -5,6 +5,7 @@
  * @module FetchLicenceContactService
  */
 
+const LicenceModel = require('../../models/licence.model.js')
 const { db } = require('../../../db/db.js')
 
 /**
@@ -15,7 +16,15 @@ const { db } = require('../../../db/db.js')
  * @returns {Promise<object>} the data needed to populate the view licence page's contact details tab
  */
 async function go(licenceId) {
-  return _fetch(licenceId)
+  const licenceContacts = await _fetch(licenceId)
+
+  const licence = await _fetchLicence(licenceId)
+
+  return { licenceContacts, licence }
+}
+
+async function _fetchLicence(licenceId) {
+  return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
 }
 
 async function _fetch(licenceId) {
