@@ -42,7 +42,10 @@ function _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuant
     line.quantity = individualLineQuantity
   })
 
-  const allocatedLineTotal = Big(individualLineQuantity).times(linesInsideAbstractionPeriod.length).toNumber()
+  const allocatedLineTotal = Big(individualLineQuantity)
+    .times(linesInsideAbstractionPeriod.length)
+    .round(6, Big.roundHalfUp)
+    .toNumber()
 
   if (allocatedLineTotal !== Number(singleVolume)) {
     const roundingError = singleVolume - allocatedLineTotal
@@ -52,10 +55,7 @@ function _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuant
 }
 
 function _individualLineQuantity(linesInsideAbstractionPeriod, singleVolume) {
-  Big.DP = 6 // Set decimal places to 6
-  Big.RM = Big.roundHalfUp // Set rounding mode to round half up
-
-  return Big(singleVolume).div(linesInsideAbstractionPeriod.length).toNumber()
+  return Big(singleVolume).div(linesInsideAbstractionPeriod.length).round(6, Big.roundHalfUp).toNumber()
 }
 
 function _linesInsideAbstractionPeriod(lines, fromDate, toDate) {
