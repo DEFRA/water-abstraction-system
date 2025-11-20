@@ -62,6 +62,6 @@ function userRoles(auth) {
 
 module.exports = {
   formatAbstractionAmounts,
-  userRoles,
-  pluralise
+  pluralise,
+  userRoles
 }
