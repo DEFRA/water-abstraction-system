@@ -3,7 +3,7 @@
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/paper-return` page
  *
- * @module PaperReturnService
+ * @module ViewPaperReturnService
  */
 
 const PaperReturnPresenter = require('../../../presenters/notices/setup/paper-return.presenter.js')

@@ -13,9 +13,9 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const PaperReturnService = require('../../../../app/services/notices/setup/paper-return.service.js')
+const ViewPaperReturnService = require('../../../../app/services/notices/setup/view-paper-return.service.js')
 
-describe('Notices - Setup - Paper Return service', () => {
+describe('Notices - Setup - View Paper Return service', () => {
   let dueReturn
   let licenceRef
   let session
@@ -39,7 +39,7 @@ describe('Notices - Setup - Paper Return service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await PaperReturnService.go(session.id)
+      const result = await ViewPaperReturnService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'notices',
