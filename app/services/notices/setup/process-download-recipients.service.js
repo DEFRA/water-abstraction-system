@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates fetching and formatting the data needed for the notices setup download link
- * @module DownloadRecipientsService
+ * @module ProcessDownloadRecipientsService
  */
 
 const AbstractionAlertDownloadRecipientsPresenter = require('../../../presenters/notices/setup/abstraction-alert-download-recipients.presenter.js')

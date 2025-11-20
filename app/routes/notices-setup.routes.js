@@ -19,7 +19,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/download',
     options: {
-      handler: NoticesSetupController.downloadRecipients,
+      handler: NoticesSetupController.processDownloadRecipients,
       auth: {
         access: {
           scope: ['hof_notifications', 'returns']

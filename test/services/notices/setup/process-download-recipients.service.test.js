@@ -22,9 +22,9 @@ const FetchDownloadRecipientsService = require('../../../../app/services/notices
 const FetchPaperReturnRecipientsService = require('../../../../app/services/notices/setup/fetch-paper-return-recipients.service.js')
 
 // Thing under test
-const DownloadRecipientsService = require('../../../../app/services/notices/setup/download-recipients.service.js')
+const ProcessDownloadRecipientsService = require('../../../../app/services/notices/setup/process-download-recipients.service.js')
 
-describe('Notices - Setup - Download Recipients service', () => {
+describe('Notices - Setup - Process Download Recipients service', () => {
   let referenceCode
   let session
   let testRecipients
@@ -49,7 +49,7 @@ describe('Notices - Setup - Download Recipients service', () => {
     })
 
     it('correctly returns the csv string, filename and type', async () => {
-      const result = await DownloadRecipientsService.go(session.id)
+      const result = await ProcessDownloadRecipientsService.go(session.id)
 
       expect(result).to.equal({
         data:
@@ -85,7 +85,7 @@ describe('Notices - Setup - Download Recipients service', () => {
     })
 
     it('correctly returns the csv string, filename and type', async () => {
-      const result = await DownloadRecipientsService.go(session.id)
+      const result = await ProcessDownloadRecipientsService.go(session.id)
 
       expect(result).to.equal({
         data:
@@ -134,7 +134,7 @@ describe('Notices - Setup - Download Recipients service', () => {
       })
 
       it('correctly returns the csv string, filename and type', async () => {
-        const result = await DownloadRecipientsService.go(session.id)
+        const result = await ProcessDownloadRecipientsService.go(session.id)
 
         expect(result).to.equal({
           data:
@@ -177,7 +177,7 @@ describe('Notices - Setup - Download Recipients service', () => {
       })
 
       it('correctly returns the csv string, filename and type', async () => {
-        const result = await DownloadRecipientsService.go(session.id)
+        const result = await ProcessDownloadRecipientsService.go(session.id)
 
         expect(result).to.equal({
           data:
@@ -240,7 +240,7 @@ describe('Notices - Setup - Download Recipients service', () => {
       })
 
       it('correctly returns the csv string, filename and type', async () => {
-        const result = await DownloadRecipientsService.go(session.id)
+        const result = await ProcessDownloadRecipientsService.go(session.id)
 
         expect(result).to.equal({
           data:

@@ -5,10 +5,10 @@
  * @module NoticesSetupController
  */
 
-const DownloadRecipientsService = require('../services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
 const PreviewPaperReturnService = require('../services/notices/setup/preview-paper-return.service.js')
 const ProcessAddRecipientService = require('../services/notices/setup/process-add-recipient.service.js')
+const ProcessDownloadRecipientsService = require('../services/notices/setup/process-download-recipients.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const SubmitAlertEmailAddressService = require('../services/notices/setup/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../services/notices/setup/submit-alert-thresholds.service.js')
@@ -47,21 +47,6 @@ const ViewRemoveLicencesService = require('../services/notices/setup/view-remove
 const ViewReturnsPeriodService = require('../services/notices/setup/view-returns-period.service.js')
 const ViewSelectRecipientsService = require('../services/notices/setup/view-select-recipients.service.js')
 
-async function downloadRecipients(request, h) {
-  const {
-    params: { sessionId }
-  } = request
-
-  const { data, type, filename } = await DownloadRecipientsService.go(sessionId)
-
-  return h
-    .response(data)
-    .type(type)
-    .encoding('binary')
-    .header('Content-Type', type)
-    .header('Content-Disposition', `attachment; filename="${filename}"`)
-}
-
 async function previewPaperReturn(request, h) {
   const { contactHashId, sessionId, returnId } = request.params
 
@@ -79,6 +64,21 @@ async function processAddRecipient(request, h) {
   await ProcessAddRecipientService.go(sessionId, yar)
 
   return h.redirect(`/system/notices/setup/${sessionId}/check`)
+}
+
+async function processDownloadRecipients(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const { data, type, filename } = await ProcessDownloadRecipientsService.go(sessionId)
+
+  return h
+    .response(data)
+    .type(type)
+    .encoding('binary')
+    .header('Content-Type', type)
+    .header('Content-Disposition', `attachment; filename="${filename}"`)
 }
 
 async function removeThreshold(request, h) {
@@ -511,9 +511,9 @@ async function viewSelectRecipients(request, h) {
 }
 
 module.exports = {
-  downloadRecipients,
   previewPaperReturn,
   processAddRecipient,
+  processDownloadRecipients,
   removeThreshold,
   setup,
   submitAlertEmailAddress,

@@ -13,10 +13,10 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const DownloadRecipientsService = require('../../app/services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const PreviewPaperReturnService = require('../../app/services/notices/setup/preview-paper-return.service.js')
 const ProcessAddRecipientService = require('../../app/services/notices/setup/process-add-recipient.service.js')
+const ProcessDownloadRecipientsService = require('../../app/services/notices/setup/process-download-recipients.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/submit-alert-thresholds.service.js')
@@ -367,7 +367,11 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(DownloadRecipientsService, 'go').returns({ data: 'test', type: 'type/csv', filename: 'test.csv' })
+          Sinon.stub(ProcessDownloadRecipientsService, 'go').returns({
+            data: 'test',
+            type: 'type/csv',
+            filename: 'test.csv'
+          })
         })
 
         it('returns the file successfully', async () => {
