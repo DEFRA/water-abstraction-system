@@ -71,6 +71,89 @@ describe('GeneralLib', () => {
     })
   })
 
+  describe('#convertFromCubicMetres()', () => {
+    let quantity
+    let units
+
+    describe('when the quantity is null', () => {
+      beforeEach(() => {
+        quantity = null
+        units = 'm³'
+      })
+
+      it('returns null', () => {
+        const result = GeneralLib.convertFromCubicMetres(quantity, units)
+
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the quantity in cubic metres (1000) is converted to cubic metres', () => {
+      beforeEach(() => {
+        quantity = 1000
+        units = 'm³'
+      })
+
+      it('returns the same quantity (1000)', () => {
+        const result = GeneralLib.convertFromCubicMetres(quantity, units)
+
+        expect(result).to.equal(1000)
+      })
+    })
+
+    describe('when the quantity in cubic metres (1000) is converted to litres', () => {
+      beforeEach(() => {
+        quantity = 1000
+        units = 'l'
+      })
+
+      it('returns the quantity converted to litres (1000000)', () => {
+        const result = GeneralLib.convertFromCubicMetres(quantity, units)
+
+        expect(result).to.equal(1000000)
+      })
+    })
+
+    describe('when the quantity in cubic metres (1000) is converted to megalitres', () => {
+      beforeEach(() => {
+        quantity = 1000
+        units = 'Ml'
+      })
+
+      it('returns the quantity converted to megalitres (1)', () => {
+        const result = GeneralLib.convertFromCubicMetres(quantity, units)
+
+        expect(result).to.equal(1)
+      })
+    })
+
+    describe('when the quantity in cubic metres (100) is converted to in gallons', () => {
+      beforeEach(() => {
+        quantity = 100
+        units = 'gal'
+      })
+
+      it('returns the quantity converted to gallons (21996.9248299) rounded to 6 decimal places', () => {
+        const result = GeneralLib.convertFromCubicMetres(quantity, units)
+
+        expect(result).to.equal(21996.92483)
+      })
+    })
+
+    describe('when the quantity will result in a "known" floating point precision error (1.235 * 0.001 = 0.0012350000000000002)', () => {
+      beforeEach(() => {
+        quantity = 1.235
+        units = 'Ml'
+      })
+
+      it('returns the quantity converted to megalitres (0.001235)', () => {
+        const result = GeneralLib.convertFromCubicMetres(quantity, units)
+
+        expect(result).to.equal(0.001235)
+      })
+    })
+  })
+
   describe('#convertToCubicMetres()', () => {
     let quantity
     let units
