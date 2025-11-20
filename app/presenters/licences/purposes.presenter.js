@@ -17,13 +17,13 @@ const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
  * @returns {object} licence and licenceVersionPurposes data needed by the view template
  */
 function go(licence) {
-  const { id: licenceId, licenceRef, licenceVersions } = licence
+  const { id, licenceRef, licenceVersions } = licence
 
   const licencePurposes = _formatLicencePurposes(licenceVersions[0].licenceVersionPurposes)
 
   return {
     backLink: {
-      href: `/system/licences/${licenceId}/summary`,
+      href: `/system/licences/${id}/summary`,
       text: 'Go back to summary'
     },
     licencePurposes,

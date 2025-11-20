@@ -764,7 +764,10 @@ function _viewLicencePoints() {
 }
 
 function _viewLicencePurposes() {
+  const commonLicenceData = _viewLicence()
+
   return {
+    ...commonLicenceData,
     id: '5ca7bf18-d433-491c-ac83-483f67ee7d93',
     licenceRef: '01/140/R01',
     licencePurposes: [
