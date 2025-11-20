@@ -13,10 +13,10 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const AddRecipientService = require('../../app/services/notices/setup/add-recipient.service.js')
 const DownloadRecipientsService = require('../../app/services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const PreviewPaperReturnService = require('../../app/services/notices/setup/preview-paper-return.service.js')
+const ProcessAddRecipientService = require('../../app/services/notices/setup/process-add-recipient.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/submit-alert-thresholds.service.js')
@@ -1442,7 +1442,7 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(AddRecipientService, 'go')
+          Sinon.stub(ProcessAddRecipientService, 'go')
         })
 
         it('redirects to the check recipient page', async () => {

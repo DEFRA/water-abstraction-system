@@ -15,9 +15,9 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const AddRecipientService = require('../../../../app/services/notices/setup/add-recipient.service.js')
+const ProcessAddRecipientService = require('../../../../app/services/notices/setup/process-add-recipient.service.js')
 
-describe('Notices - Setup - Add Recipient service', () => {
+describe('Notices - Setup - Process Add Recipient service', () => {
   let contactHashId
   let licenceRef
   let session
@@ -67,7 +67,7 @@ describe('Notices - Setup - Add Recipient service', () => {
         })
 
         it('adds an `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
-          await AddRecipientService.go(sessionId, yarStub)
+          await ProcessAddRecipientService.go(sessionId, yarStub)
 
           const refreshedSession = await session.$query()
 
@@ -121,7 +121,7 @@ describe('Notices - Setup - Add Recipient service', () => {
         })
 
         it('adds the recipient to `additionalRecipients` and pushes its hash ID into `selectedRecipients`', async () => {
-          await AddRecipientService.go(sessionId, yarStub)
+          await ProcessAddRecipientService.go(sessionId, yarStub)
 
           const refreshedSession = await session.$query()
 
@@ -191,7 +191,7 @@ describe('Notices - Setup - Add Recipient service', () => {
         })
 
         it('adds a `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
-          await AddRecipientService.go(sessionId, yarStub)
+          await ProcessAddRecipientService.go(sessionId, yarStub)
 
           const refreshedSession = await session.$query()
 

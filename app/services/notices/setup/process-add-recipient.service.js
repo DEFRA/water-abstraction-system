@@ -2,7 +2,7 @@
 
 /**
  * Add an 'additional recipient' to the notice setup session from address data captured by our shared address journey
- * @module AddRecipientService
+ * @module ProcessAddRecipientService
  */
 
 const crypto = require('crypto')

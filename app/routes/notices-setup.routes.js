@@ -7,7 +7,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/add-recipient',
     options: {
-      handler: NoticesSetupController.addRecipient,
+      handler: NoticesSetupController.processAddRecipient,
       auth: {
         access: {
           scope: ['hof_notifications', 'returns']
