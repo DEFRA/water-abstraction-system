@@ -3,7 +3,7 @@
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/contact-type` page
  *
- * @module ContactTypeService
+ * @module ViewContactTypeService
  */
 
 const ContactTypePresenter = require('../../../presenters/notices/setup/contact-type.presenter.js')

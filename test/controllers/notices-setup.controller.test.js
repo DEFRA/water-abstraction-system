@@ -14,7 +14,6 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const AddRecipientService = require('../../app/services/notices/setup/add-recipient.service.js')
-const ContactTypeService = require('../../app/services/notices/setup/contact-type.service.js')
 const DownloadRecipientsService = require('../../app/services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const LicenceService = require('../../app/services/notices/setup/licence.service.js')
@@ -50,6 +49,7 @@ const ViewCheckService = require('../../app/services/notices/setup/view-check.se
 const ViewCheckLicenceMatchesService = require('../../app/services/notices/setup/view-check-licence-matches.service.js')
 const ViewCheckNoticeTypeService = require('../../app/services/notices/setup/view-check-notice-type.service.js')
 const ViewConfirmationService = require('../../app/services/notices/setup/view-confirmation.service.js')
+const ViewContactTypeService = require('../../app/services/notices/setup/view-contact-type.service.js')
 const ViewPreviewService = require('../../app/services/notices/setup/view-preview.service.js')
 const ViewPreviewCheckAlert = require('../../app/services/notices/setup/view-preview-check-alert.service.js')
 const ViewPreviewCheckPaperReturnService = require('../../app/services/notices/setup/view-preview-check-paper-return.service.js')
@@ -1359,7 +1359,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ContactTypeService, 'go').returns({ pageTitle: 'Select how to contact the recipient' })
+          Sinon.stub(ViewContactTypeService, 'go').returns({ pageTitle: 'Select how to contact the recipient' })
         })
 
         it('returns the page successfully', async () => {

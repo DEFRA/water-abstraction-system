@@ -11,9 +11,9 @@ const { expect } = Code
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ContactTypeService = require('../../../../app/services/notices/setup/contact-type.service.js')
+const ViewContactTypeService = require('../../../../app/services/notices/setup/view-contact-type.service.js')
 
-describe('Notices - Setup - Contact Type Service', () => {
+describe('Notices - Setup - View Contact Type service', () => {
   let session
   let sessionData
 
@@ -25,7 +25,7 @@ describe('Notices - Setup - Contact Type Service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ContactTypeService.go(session.id)
+      const result = await ViewContactTypeService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'notices',
@@ -54,7 +54,7 @@ describe('Notices - Setup - Contact Type Service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ContactTypeService.go(session.id)
+      const result = await ViewContactTypeService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'notices',
@@ -83,7 +83,7 @@ describe('Notices - Setup - Contact Type Service', () => {
     })
 
     it('returns page data for the view', async () => {
-      const result = await ContactTypeService.go(session.id)
+      const result = await ViewContactTypeService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'notices',
