@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ContactTypePresenter = require('../../../../app/presenters/notices/setup/contact-type.presenter.js')
 
-describe('Contact Type Presenter', () => {
+describe('Notices - Setup - Contact Type presenter', () => {
   let session
 
   describe('when called with no session data', () => {

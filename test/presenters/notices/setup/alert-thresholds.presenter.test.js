@@ -13,7 +13,7 @@ const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert
 // Thing under test
 const AlertThresholdsPresenter = require('../../../../app/presenters/notices/setup/alert-thresholds.presenter.js')
 
-describe('Notices Setup - Abstraction Alerts - Alert Thresholds Presenter', () => {
+describe('Notices - Setup - Alert Thresholds presenter', () => {
   let licenceMonitoringStations
   let session
 

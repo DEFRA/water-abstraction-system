@@ -13,7 +13,7 @@ const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert
 // Thing under test
 const CancelAlertsPresenter = require('../../../../app/presenters/notices/setup/cancel-alerts.presenter.js')
 
-describe('Cancel Alerts Presenter', () => {
+describe('Notices - Setup - Cancel Alerts presenter', () => {
   let session
 
   beforeEach(() => {
