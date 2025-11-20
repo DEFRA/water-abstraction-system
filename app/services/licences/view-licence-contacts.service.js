@@ -27,6 +27,7 @@ async function go(licenceId, auth) {
   const customerContactsData = CustomerContactsPresenter.go(customerContacts)
 
   return {
+    activeNavBar: 'search',
     activeTab: 'contact-details',
     ...customerContactsData,
     ...licenceContactsData,
