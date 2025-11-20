@@ -34,6 +34,7 @@ async function go(licenceId, auth, page = 1) {
 
   return {
     ...pageData,
+    activeNavBar: 'search',
     activeTab: 'communications',
     pagination,
     roles: userRoles(auth)
