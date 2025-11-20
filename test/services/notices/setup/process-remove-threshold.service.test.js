@@ -15,7 +15,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const ProcessRemoveThresholdService = require('../../../../app/services/notices/setup/process-remove-threshold.service.js')
 
-describe('Notices - Setup - Process Remove Threshold Service', () => {
+describe('Notices - Setup - Process Remove Threshold service', () => {
   let licenceMonitoringStations
   let session
   let sessionData

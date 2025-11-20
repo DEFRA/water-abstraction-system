@@ -14,7 +14,7 @@ const SessionHelper = require('../../../../test/support/helpers/session.helper.j
 // Thing under test
 const SubmitAlertTypeService = require('../../../../app/services/notices/setup/submit-alert-type.service.js')
 
-describe('Notices - Setup - Alert Type service', () => {
+describe('Notices - Setup - Submit Alert Type service', () => {
   let payload
   let session
   let sessionData

@@ -13,7 +13,7 @@ const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-do
 // Thing under test
 const FetchReturnsDueService = require('../../../../app/services/notices/setup/fetch-returns-due.service.js')
 
-describe('Notices - Setup - Fetch returns due service', () => {
+describe('Notices - Setup - Fetch Returns Due service', () => {
   let licenceDocumentHeader
   let licenceRefs
   let noticeType

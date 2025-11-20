@@ -15,7 +15,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 // Thing under test
 const ViewCheckNoticeTypeService = require('../../../../app/services/notices/setup/view-check-notice-type.service.js')
 
-describe('Notices - Setup - Check Notice Type Service', () => {
+describe('Notices - Setup - View Check Notice Type service', () => {
   let licenceRef
   let session
   let sessionData

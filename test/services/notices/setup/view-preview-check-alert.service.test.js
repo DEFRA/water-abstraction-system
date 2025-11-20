@@ -21,7 +21,7 @@ const { generateReferenceCode } = require('../../../support/helpers/notification
 // Thing under test
 const ViewPreviewCheckAlertService = require('../../../../app/services/notices/setup/view-preview-check-alert.service.js')
 
-describe('Notices Setup - Preview - Check Alert service', () => {
+describe('Notices - Setup - View Preview Check Alert service', () => {
   let licenceMonitoringStations
   let recipients
   let session

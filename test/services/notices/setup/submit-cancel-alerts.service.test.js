@@ -15,7 +15,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 // Thing under test
 const SubmitCancelAlertsService = require('../../../../app/services/notices/setup/submit-cancel-alerts.service.js')
 
-describe('Cancel Alerts Service', () => {
+describe('Notices - Setup - Submit Cancel Alerts service', () => {
   const monitoringStationId = generateUUID()
 
   let session

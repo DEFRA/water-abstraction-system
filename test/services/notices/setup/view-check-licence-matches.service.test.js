@@ -15,7 +15,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const ViewCheckLicenceMatchesService = require('../../../../app/services/notices/setup/view-check-licence-matches.service.js')
 
-describe('Notices - Setup - Check Licence Matches service', () => {
+describe('Notices - Setup - View Check Licence Matches service', () => {
   let licenceMonitoringStations
   let session
   let sessionData

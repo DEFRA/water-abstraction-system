@@ -13,7 +13,7 @@ const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-do
 // Thing under test
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 
-describe('Notices - Setup - Fetch abstraction alert recipients service', () => {
+describe('Notices - Setup - Fetch Abstraction Alert Recipients service', () => {
   let seedData
   let session
 

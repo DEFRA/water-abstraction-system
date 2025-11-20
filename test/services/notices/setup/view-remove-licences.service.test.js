@@ -14,7 +14,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 // Thing under test
 const ViewRemoveLicencesService = require('../../../../app/services/notices/setup/view-remove-licences.service.js')
 
-describe('Notices - Setup - View Remove licences service', () => {
+describe('Notices - Setup - View Remove Licences service', () => {
   const licences = []
 
   let referenceCode

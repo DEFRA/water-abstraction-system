@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitAlertThresholdsService = require('../../../../app/services/notices/setup/submit-alert-thresholds.service.js')
 
-describe('Notices Setup - Abstraction Alerts - Submit Alert Thresholds service', () => {
+describe('Notices - Setup - Submit Alert Thresholds service', () => {
   let licenceMonitoringStations
   let payload
   let session
