@@ -1,7 +1,7 @@
 'use strict'
 
 const { convertFromCubicMetres, today } = require('../lib/general.lib.js')
-const { noticeMappings, returnUnits } = require('../lib/static-lookups.lib.js')
+const { noticeMappings } = require('../lib/static-lookups.lib.js')
 
 const DUE_PERIOD_DAYS = 27
 
