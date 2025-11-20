@@ -11,9 +11,9 @@ const { expect } = Code
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const NoticeTypeService = require('../../../../app/services/notices/setup/notice-type.service.js')
+const ViewNoticeTypeService = require('../../../../app/services/notices/setup/view-notice-type.service.js')
 
-describe('Notices - Setup - Notice Type Service', () => {
+describe('Notices - Setup - View Notice Type service', () => {
   let auth
   let session
   let sessionData
@@ -32,7 +32,7 @@ describe('Notices - Setup - Notice Type Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await NoticeTypeService.go(session.id, auth)
+      const result = await ViewNoticeTypeService.go(session.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'notices',

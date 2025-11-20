@@ -8,7 +8,6 @@
 const AddRecipientService = require('../services/notices/setup/add-recipient.service.js')
 const DownloadRecipientsService = require('../services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
-const NoticeTypeService = require('../services/notices/setup/notice-type.service.js')
 const PaperReturnService = require('../services/notices/setup/paper-return.service.js')
 const PreviewPaperReturnService = require('../services/notices/setup/preview-paper-return.service.js')
 const RecipientNameService = require('../services/notices/setup/recipient-name.service.js')
@@ -42,6 +41,7 @@ const ViewCheckNoticeTypeService = require('../services/notices/setup/view-check
 const ViewConfirmationService = require('../services/notices/setup/view-confirmation.service.js')
 const ViewContactTypeService = require('../services/notices/setup/view-contact-type.service.js')
 const ViewLicenceService = require('../services/notices/setup/view-licence.service.js')
+const ViewNoticeTypeService = require('../services/notices/setup/view-notice-type.service.js')
 const ViewPreviewService = require('../services/notices/setup/view-preview.service.js')
 const ViewPreviewCheckAlertService = require('../services/notices/setup/view-preview-check-alert.service.js')
 const ViewPreviewCheckPaperReturnService = require('../services/notices/setup/view-preview-check-paper-return.service.js')
@@ -437,7 +437,7 @@ async function viewNoticeType(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await NoticeTypeService.go(sessionId, auth)
+  const pageData = await ViewNoticeTypeService.go(sessionId, auth)
 
   return h.view(`notices/setup/notice-type.njk`, pageData)
 }
