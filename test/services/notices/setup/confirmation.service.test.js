@@ -12,7 +12,7 @@ const EventHelper = require('../../../support/helpers/event.helper.js')
 const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
-const ConfirmationService = require('../../../../app/services/notices/setup/confirmation.service.js')
+const ViewConfirmationService = require('../../../../app/services/notices/setup/view-confirmation.service.js')
 
 describe('Notices - Setup - Confirmation service', () => {
   const referenceCode = generateReferenceCode()
@@ -29,7 +29,7 @@ describe('Notices - Setup - Confirmation service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ConfirmationService.go(event.id)
+      const result = await ViewConfirmationService.go(event.id)
 
       expect(result).to.equal({
         activeNavBar: 'notices',

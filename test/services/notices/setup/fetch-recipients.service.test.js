@@ -20,7 +20,7 @@ const FetchReturnsRecipientsService = require('../../../../app/services/notices/
 // Thing under test
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 
-describe('Notices - Setup - Fetch recipients service', () => {
+describe('Notices - Setup - Fetch Recipients service', () => {
   let recipients
   let session
 

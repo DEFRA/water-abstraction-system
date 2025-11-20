@@ -16,7 +16,7 @@ const { generateReferenceCode } = require('../../../support/helpers/notification
 // Thing under test
 const SubmitRemoveLicencesService = require('../../../../app/services/notices/setup/submit-remove-licences.service.js')
 
-describe('Notices - Setup - Submit Remove licences service', () => {
+describe('Notices - Setup - Submit Remove Licences service', () => {
   let fetchReturnsDueServiceStub
   let payload
   let referenceCode

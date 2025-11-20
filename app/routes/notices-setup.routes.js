@@ -5,9 +5,9 @@ const NoticesSetupController = require('../controllers/notices-setup.controller.
 const routes = [
   {
     method: 'GET',
-    path: '/notices/setup/{journey}',
+    path: '/notices/setup/{sessionId}/add-recipient',
     options: {
-      handler: NoticesSetupController.setup,
+      handler: NoticesSetupController.processAddRecipient,
       auth: {
         access: {
           scope: ['hof_notifications', 'returns']
@@ -19,7 +19,43 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/download',
     options: {
-      handler: NoticesSetupController.downloadRecipients,
+      handler: NoticesSetupController.processDownloadRecipients,
+      auth: {
+        access: {
+          scope: ['hof_notifications', 'returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnId}',
+    options: {
+      handler: NoticesSetupController.processPreviewPaperReturn,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}',
+    options: {
+      handler: NoticesSetupController.processRemoveThreshold,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{journey}',
+    options: {
+      handler: NoticesSetupController.setup,
       auth: {
         access: {
           scope: ['hof_notifications', 'returns']
@@ -53,57 +89,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-type',
-    options: {
-      handler: NoticesSetupController.viewAlertType,
-      auth: {
-        access: {
-          scope: ['hof_notifications']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-type',
-    options: {
-      handler: NoticesSetupController.submitAlertType,
-      auth: {
-        access: {
-          scope: ['hof_notifications']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: '/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds',
     options: {
       handler: NoticesSetupController.viewAlertThresholds,
-      auth: {
-        access: {
-          scope: ['hof_notifications']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/cancel',
-    options: {
-      handler: NoticesSetupController.viewCancelAlerts,
-      auth: {
-        access: {
-          scope: ['hof_notifications']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/cancel',
-    options: {
-      handler: NoticesSetupController.submitCancelAlerts,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -125,9 +113,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-type',
     options: {
-      handler: NoticesSetupController.viewCheckLicenceMatches,
+      handler: NoticesSetupController.viewAlertType,
       auth: {
         access: {
           scope: ['hof_notifications']
@@ -137,48 +125,12 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/alert-type',
     options: {
-      handler: NoticesSetupController.submitCheckLicenceMatches,
+      handler: NoticesSetupController.submitAlertType,
       auth: {
         access: {
           scope: ['hof_notifications']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}',
-    options: {
-      handler: NoticesSetupController.viewRemoveThreshold,
-      auth: {
-        access: {
-          scope: ['hof_notifications']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/notices/setup/{sessionId}/licence',
-    options: {
-      handler: NoticesSetupController.viewLicence,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/notices/setup/{sessionId}/licence',
-    options: {
-      handler: NoticesSetupController.submitLicence,
-      auth: {
-        access: {
-          scope: ['returns']
         }
       }
     }
@@ -209,6 +161,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/cancel',
+    options: {
+      handler: NoticesSetupController.viewCancelAlerts,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/cancel',
+    options: {
+      handler: NoticesSetupController.submitCancelAlerts,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/notices/setup/{sessionId}/check',
     options: {
       handler: NoticesSetupController.viewCheck,
@@ -227,6 +203,30 @@ const routes = [
       auth: {
         access: {
           scope: ['hof_notifications', 'returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches',
+    options: {
+      handler: NoticesSetupController.viewCheckLicenceMatches,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches',
+    options: {
+      handler: NoticesSetupController.submitCheckLicenceMatches,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
         }
       }
     }
@@ -269,6 +269,54 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/notices/setup/{sessionId}/contact-type',
+    options: {
+      handler: NoticesSetupController.viewContactType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/contact-type',
+    options: {
+      handler: NoticesSetupController.submitContactType,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/licence',
+    options: {
+      handler: NoticesSetupController.viewLicence,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/licence',
+    options: {
+      handler: NoticesSetupController.submitLicence,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/notices/setup/{sessionId}/notice-type',
     options: {
       handler: NoticesSetupController.viewNoticeType,
@@ -293,9 +341,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return',
+    path: '/notices/setup/{sessionId}/paper-return',
     options: {
-      handler: NoticesSetupController.viewCheckPaperReturn,
+      handler: NoticesSetupController.viewPaperReturn,
       auth: {
         access: {
           scope: ['returns']
@@ -304,10 +352,10 @@ const routes = [
     }
   },
   {
-    method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnId}',
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/paper-return',
     options: {
-      handler: NoticesSetupController.viewPreviewPaperReturn,
+      handler: NoticesSetupController.submitPaperReturn,
       auth: {
         access: {
           scope: ['returns']
@@ -319,7 +367,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}',
     options: {
-      handler: NoticesSetupController.preview,
+      handler: NoticesSetupController.viewPreview,
       auth: {
         access: {
           scope: ['returns']
@@ -331,7 +379,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}/alert/{licenceMonitoringStationId}',
     options: {
-      handler: NoticesSetupController.preview,
+      handler: NoticesSetupController.viewPreview,
       auth: {
         access: {
           scope: ['hof_notifications', 'returns']
@@ -343,10 +391,22 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-alert',
     options: {
-      handler: NoticesSetupController.checkAlert,
+      handler: NoticesSetupController.viewPreviewCheckAlert,
       auth: {
         access: {
           scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return',
+    options: {
+      handler: NoticesSetupController.viewPreviewCheckPaperReturn,
+      auth: {
+        access: {
+          scope: ['returns']
         }
       }
     }
@@ -425,54 +485,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/paper-return',
-    options: {
-      handler: NoticesSetupController.viewPaperReturn,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/notices/setup/{sessionId}/paper-return',
-    options: {
-      handler: NoticesSetupController.submitPaperReturn,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/notices/setup/{sessionId}/contact-type',
-    options: {
-      handler: NoticesSetupController.viewContactType,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/notices/setup/{sessionId}/contact-type',
-    options: {
-      handler: NoticesSetupController.submitContactType,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
     path: '/notices/setup/{sessionId}/select-recipients',
     options: {
       handler: NoticesSetupController.viewSelectRecipients,
@@ -488,18 +500,6 @@ const routes = [
     path: '/notices/setup/{sessionId}/select-recipients',
     options: {
       handler: NoticesSetupController.submitSelectRecipients,
-      auth: {
-        access: {
-          scope: ['hof_notifications', 'returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/notices/setup/{sessionId}/add-recipient',
-    options: {
-      handler: NoticesSetupController.addRecipient,
       auth: {
         access: {
           scope: ['hof_notifications', 'returns']

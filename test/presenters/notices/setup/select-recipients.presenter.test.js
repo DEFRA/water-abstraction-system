@@ -14,7 +14,7 @@ const { generateReferenceCode } = require('../../../support/helpers/notification
 // Thing under test
 const SelectRecipientsPresenter = require('../../../../app/presenters/notices/setup/select-recipients.presenter.js')
 
-describe('Notices - Setup - Select Recipients Presenter', () => {
+describe('Notices - Setup - Select Recipients presenter', () => {
   let recipients
   let referenceCode
   let selectedRecipients

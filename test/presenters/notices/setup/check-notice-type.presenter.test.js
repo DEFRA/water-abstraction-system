@@ -14,7 +14,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 // Thing under test
 const CheckNoticeTypePresenter = require('../../../../app/presenters/notices/setup/check-notice-type.presenter.js')
 
-describe('Notices - Setup - Check Notice Type Presenter', () => {
+describe('Notices - Setup - Check Notice Type presenter', () => {
   let licenceRef
   let noticeType
   let session

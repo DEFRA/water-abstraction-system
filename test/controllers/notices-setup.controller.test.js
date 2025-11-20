@@ -13,37 +13,17 @@ const { expect } = Code
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const AddRecipientService = require('../../app/services/notices/setup/add-recipient.service.js')
-const AlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/alert-email-address.service.js')
-const AlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/alert-thresholds.service.js')
-const AlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/alert-type.service.js')
-const CancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/cancel-alerts.service.js')
-const CancelService = require('../../app/services/notices/setup/cancel.service.js')
-const CheckAlert = require('../../app/services/notices/setup/preview/check-alert.service.js')
-const CheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/check-licence-matches.service.js')
-const CheckNoticeTypeService = require('../../app/services/notices/setup/check-notice-type.service.js')
-const CheckPaperReturnService = require('../../app/services/notices/setup/preview/check-paper-return.service.js')
-const CheckService = require('../../app/services/notices/setup/check.service.js')
-const ConfirmationService = require('../../app/services/notices/setup/confirmation.service.js')
-const ContactTypeService = require('../../app/services/notices/setup/contact-type.service.js')
-const DownloadRecipientsService = require('../../app/services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
-const LicenceService = require('../../app/services/notices/setup/licence.service.js')
-const NoticeTypeService = require('../../app/services/notices/setup/notice-type.service.js')
-const PaperReturnService = require('../../app/services/notices/setup/paper-return.service.js')
-const PreviewPaperReturnService = require('../../app/services/notices/setup/preview-paper-return.service.js')
-const PreviewService = require('../../app/services/notices/setup/preview/preview.service.js')
-const RecipientNameService = require('../../app/services/notices/setup/recipient-name.service.js')
-const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
-const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
-const ReturnsPeriodService = require('../../app/services/notices/setup/returns-period/returns-period.service.js')
-const SelectRecipientsService = require('../../app/services/notices/setup/select-recipients.service.js')
-const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-email-address.service.js')
-const SubmitAlertThresholdsService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-thresholds.service.js')
-const SubmitAlertTypeService = require('../../app/services/notices/setup/abstraction-alerts/submit-alert-type.service.js')
-const SubmitCancelAlertsService = require('../../app/services/notices/setup/abstraction-alerts/submit-cancel-alerts.service.js')
+const ProcessAddRecipientService = require('../../app/services/notices/setup/process-add-recipient.service.js')
+const ProcessDownloadRecipientsService = require('../../app/services/notices/setup/process-download-recipients.service.js')
+const ProcessPreviewPaperReturnService = require('../../app/services/notices/setup/process-preview-paper-return.service.js')
+const ProcessRemoveThresholdService = require('../../app/services/notices/setup/process-remove-threshold.service.js')
+const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/submit-alert-email-address.service.js')
+const SubmitAlertThresholdsService = require('../../app/services/notices/setup/submit-alert-thresholds.service.js')
+const SubmitAlertTypeService = require('../../app/services/notices/setup/submit-alert-type.service.js')
+const SubmitCancelAlertsService = require('../../app/services/notices/setup/submit-cancel-alerts.service.js')
 const SubmitCancelService = require('../../app/services/notices/setup/submit-cancel.service.js')
-const SubmitCheckLicenceMatchesService = require('../../app/services/notices/setup/abstraction-alerts/submit-check-licence-matches.service.js')
+const SubmitCheckLicenceMatchesService = require('../../app/services/notices/setup/submit-check-licence-matches.service.js')
 const SubmitCheckNoticeTypeService = require('../../app/services/notices/setup/submit-check-notice-type.service.js')
 const SubmitCheckService = require('../../app/services/notices/setup/submit-check.service.js')
 const SubmitContactTypeService = require('../../app/services/notices/setup/submit-contact-type.service.js')
@@ -52,8 +32,28 @@ const SubmitNoticeTypeService = require('../../app/services/notices/setup/submit
 const SubmitPaperReturnService = require('../../app/services/notices/setup/submit-paper-return.service.js')
 const SubmitRecipientNameService = require('../../app/services/notices/setup/submit-recipient-name.service.js')
 const SubmitRemoveLicencesService = require('../../app/services/notices/setup/submit-remove-licences.service.js')
-const SubmitReturnsPeriodService = require('../../app/services/notices/setup/returns-period/submit-returns-period.service.js')
+const SubmitReturnsPeriodService = require('../../app/services/notices/setup/submit-returns-period.service.js')
 const SubmitSelectRecipientsService = require('../../app/services/notices/setup/submit-select-recipients.service.js')
+const ViewAlertEmailAddressService = require('../../app/services/notices/setup/view-alert-email-address.service.js')
+const ViewAlertThresholdsService = require('../../app/services/notices/setup/view-alert-thresholds.service.js')
+const ViewAlertTypeService = require('../../app/services/notices/setup/view-alert-type.service.js')
+const ViewCancelService = require('../../app/services/notices/setup/view-cancel.service.js')
+const ViewCancelAlertsService = require('../../app/services/notices/setup/view-cancel-alerts.service.js')
+const ViewCheckService = require('../../app/services/notices/setup/view-check.service.js')
+const ViewCheckLicenceMatchesService = require('../../app/services/notices/setup/view-check-licence-matches.service.js')
+const ViewCheckNoticeTypeService = require('../../app/services/notices/setup/view-check-notice-type.service.js')
+const ViewConfirmationService = require('../../app/services/notices/setup/view-confirmation.service.js')
+const ViewContactTypeService = require('../../app/services/notices/setup/view-contact-type.service.js')
+const ViewLicenceService = require('../../app/services/notices/setup/view-licence.service.js')
+const ViewNoticeTypeService = require('../../app/services/notices/setup/view-notice-type.service.js')
+const ViewPaperReturnService = require('../../app/services/notices/setup/view-paper-return.service.js')
+const ViewPreviewService = require('../../app/services/notices/setup/view-preview.service.js')
+const ViewPreviewCheckAlert = require('../../app/services/notices/setup/view-preview-check-alert.service.js')
+const ViewPreviewCheckPaperReturnService = require('../../app/services/notices/setup/view-preview-check-paper-return.service.js')
+const ViewRecipientNameService = require('../../app/services/notices/setup/view-recipient-name.service.js')
+const ViewRemoveLicencesService = require('../../app/services/notices/setup/view-remove-licences.service.js')
+const ViewReturnsPeriodService = require('../../app/services/notices/setup/view-returns-period.service.js')
+const ViewSelectRecipientsService = require('../../app/services/notices/setup/view-select-recipients.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -192,7 +192,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(CancelService, 'go').returns(_viewCancel())
+          Sinon.stub(ViewCancelService, 'go').returns(_viewCancel())
         })
 
         it('returns the page successfully', async () => {
@@ -238,7 +238,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(CheckService, 'go').returns(_viewCheck())
+          Sinon.stub(ViewCheckService, 'go').returns(_viewCheck())
         })
 
         it('returns the page successfully', async () => {
@@ -288,7 +288,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(CheckNoticeTypeService, 'go').returns({
+          Sinon.stub(ViewCheckNoticeTypeService, 'go').returns({
             pageTitle: 'Check the notice type'
           })
         })
@@ -337,7 +337,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ConfirmationService, 'go').returns(_viewConfirmation())
+          Sinon.stub(ViewConfirmationService, 'go').returns(_viewConfirmation())
         })
 
         it('returns the page successfully', async () => {
@@ -367,7 +367,11 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(DownloadRecipientsService, 'go').returns({ data: 'test', type: 'type/csv', filename: 'test.csv' })
+          Sinon.stub(ProcessDownloadRecipientsService, 'go').returns({
+            data: 'test',
+            type: 'type/csv',
+            filename: 'test.csv'
+          })
         })
 
         it('returns the file successfully', async () => {
@@ -395,7 +399,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(AlertEmailAddressService, 'go').resolves({
+          Sinon.stub(ViewAlertEmailAddressService, 'go').resolves({
             pageTitle: 'Email Address page'
           })
         })
@@ -463,7 +467,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(AlertThresholdsService, 'go').resolves({
+          Sinon.stub(ViewAlertThresholdsService, 'go').resolves({
             pageTitle: 'Threshold page'
           })
         })
@@ -533,7 +537,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(AlertTypeService, 'go').resolves({
+          Sinon.stub(ViewAlertTypeService, 'go').resolves({
             pageTitle: 'Alert page'
           })
         })
@@ -603,7 +607,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(CancelAlertsService, 'go').resolves({
+          Sinon.stub(ViewCancelAlertsService, 'go').resolves({
             pageTitle: 'Cancel page'
           })
         })
@@ -652,7 +656,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(CheckLicenceMatchesService, 'go').resolves({
+          Sinon.stub(ViewCheckLicenceMatchesService, 'go').resolves({
             pageTitle: 'Check licence page'
           })
         })
@@ -703,7 +707,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(RemoveThresholdService, 'go').resolves({})
+          Sinon.stub(ProcessRemoveThresholdService, 'go').resolves({})
         })
 
         describe('when a request is valid', () => {
@@ -732,7 +736,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(LicenceService, 'go').resolves({
+        Sinon.stub(ViewLicenceService, 'go').resolves({
           pageTitle: 'Enter a licence number'
         })
       })
@@ -808,7 +812,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(PreviewService, 'go').resolves({
+        Sinon.stub(ViewPreviewService, 'go').resolves({
           pageTitle: 'Preview notice'
         })
       })
@@ -839,7 +843,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(PreviewService, 'go').resolves({
+        Sinon.stub(ViewPreviewService, 'go').resolves({
           pageTitle: 'Preview notice'
         })
       })
@@ -869,7 +873,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(CheckAlert, 'go').resolves({
+        Sinon.stub(ViewPreviewCheckAlert, 'go').resolves({
           pageTitle: 'Check the recipient previews'
         })
       })
@@ -899,7 +903,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(CheckPaperReturnService, 'go').resolves({
+        Sinon.stub(ViewPreviewCheckPaperReturnService, 'go').resolves({
           pageTitle: 'Preview notice'
         })
       })
@@ -933,7 +937,7 @@ describe('Notices Setup controller', () => {
 
         buffer = Buffer.from('mock file')
 
-        Sinon.stub(PreviewPaperReturnService, 'go').resolves(buffer)
+        Sinon.stub(ProcessPreviewPaperReturnService, 'go').resolves(buffer)
       })
 
       describe('when a request is valid', () => {
@@ -963,7 +967,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(NoticeTypeService, 'go').resolves({
+        Sinon.stub(ViewNoticeTypeService, 'go').resolves({
           pageTitle: 'Select the notice type'
         })
       })
@@ -1030,7 +1034,7 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(RecipientNameService, 'go').returns({ pageTitle: 'Recipients name' })
+          Sinon.stub(ViewRecipientNameService, 'go').returns({ pageTitle: 'Recipients name' })
         })
 
         it('returns the page successfully', async () => {
@@ -1096,7 +1100,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(RemoveLicencesService, 'go').returns(_viewRemoveLicence())
+          Sinon.stub(ViewRemoveLicencesService, 'go').returns(_viewRemoveLicence())
         })
 
         it('returns the page successfully', async () => {
@@ -1162,7 +1166,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ReturnsPeriodService, 'go').returns(_viewReturnsPeriod())
+          Sinon.stub(ViewReturnsPeriodService, 'go').returns(_viewReturnsPeriod())
         })
 
         it('returns the page successfully', async () => {
@@ -1229,7 +1233,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(PaperReturnService, 'go').returns({ pageTitle: 'Select the returns for the paper forms' })
+          Sinon.stub(ViewPaperReturnService, 'go').returns({ pageTitle: 'Select the returns for the paper forms' })
         })
 
         it('returns the page successfully', async () => {
@@ -1294,7 +1298,7 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(SelectRecipientsService, 'go').returns({ pageTitle: 'Select recipients' })
+          Sinon.stub(ViewSelectRecipientsService, 'go').returns({ pageTitle: 'Select recipients' })
         })
 
         it('returns the page successfully', async () => {
@@ -1359,7 +1363,7 @@ describe('Notices Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(async () => {
           Sinon.stub(InitiateSessionService, 'go').resolves(session)
-          Sinon.stub(ContactTypeService, 'go').returns({ pageTitle: 'Select how to contact the recipient' })
+          Sinon.stub(ViewContactTypeService, 'go').returns({ pageTitle: 'Select how to contact the recipient' })
         })
 
         it('returns the page successfully', async () => {
@@ -1442,7 +1446,7 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(AddRecipientService, 'go')
+          Sinon.stub(ProcessAddRecipientService, 'go')
         })
 
         it('redirects to the check recipient page', async () => {

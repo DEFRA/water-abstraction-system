@@ -19,7 +19,7 @@ const FetchRecipientsService = require('../../../../app/services/notices/setup/f
 // Thing under test
 const SubmitSelectRecipientsService = require('../../../../app/services/notices/setup/submit-select-recipients.service.js')
 
-describe('Notices - Setup - Submit Select Recipients Service', () => {
+describe('Notices - Setup - Submit Select Recipients service', () => {
   let payload
   let recipients
   let referenceCode

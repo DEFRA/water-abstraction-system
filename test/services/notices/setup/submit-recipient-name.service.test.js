@@ -14,7 +14,7 @@ const { generateReferenceCode } = require('../../../support/helpers/notification
 // Thing under test
 const SubmitRecipientNameService = require('../../../../app/services/notices/setup/submit-recipient-name.service.js')
 
-describe('Notices - Setup - Recipient Name Service', () => {
+describe('Notices - Setup - Submit Recipient Name service', () => {
   let payload
   let referenceCode
   let session
