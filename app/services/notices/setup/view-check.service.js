@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup check page
- * @module CheckService
+ * @module ViewCheckService
  */
 
 const CheckPresenter = require('../../../presenters/notices/setup/check.presenter.js')

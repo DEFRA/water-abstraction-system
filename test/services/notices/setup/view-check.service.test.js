@@ -17,9 +17,9 @@ const FetchAbstractionAlertRecipientsService = require('../../../../app/services
 const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
 
 // Thing under test
-const CheckService = require('../../../../app/services/notices/setup/check.service.js')
+const ViewCheckService = require('../../../../app/services/notices/setup/view-check.service.js')
 
-describe('Notices - Setup - Check service', () => {
+describe('Notices - Setup - View Check service', () => {
   let removeLicences
   let session
   let testRecipients
@@ -50,7 +50,7 @@ describe('Notices - Setup - Check service', () => {
   })
 
   it('correctly presents the data', async () => {
-    const result = await CheckService.go(session.id, yarStub)
+    const result = await ViewCheckService.go(session.id, yarStub)
 
     expect(result).to.equal({
       activeNavBar: 'notices',
@@ -87,7 +87,7 @@ describe('Notices - Setup - Check service', () => {
   describe('the "selectedRecipients" property', () => {
     describe('when there are no "selectedRecipients"', () => {
       it('adds the "selectedRecipients" array to the session', async () => {
-        await CheckService.go(session.id, yarStub)
+        await ViewCheckService.go(session.id, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -117,7 +117,7 @@ describe('Notices - Setup - Check service', () => {
       })
 
       it('does not affect the "selectedRecipients"', async () => {
-        await CheckService.go(session.id, yarStub)
+        await ViewCheckService.go(session.id, yarStub)
 
         const refreshedSession = await session.$query()
         expect(refreshedSession).to.equal(session)
@@ -142,7 +142,7 @@ describe('Notices - Setup - Check service', () => {
     })
 
     it('correctly presents the data', async () => {
-      const result = await CheckService.go(session.id, yarStub)
+      const result = await ViewCheckService.go(session.id, yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'notices',
