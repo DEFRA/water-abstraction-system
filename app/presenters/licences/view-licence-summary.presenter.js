@@ -55,18 +55,30 @@ function _notification(licence) {
   const baseMessage = 'This licence has been marked for the next '
 
   if (licenceSupplementaryYears.length > 0) {
-    return _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling)
+    return {
+      text: _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling),
+      titleText: 'Important'
+    }
   }
 
   if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
-    return baseMessage + 'supplementary bill runs for the current and old charge schemes.'
+    return {
+      text: baseMessage + 'supplementary bill runs for the current and old charge schemes.',
+      titleText: 'Important'
+    }
   }
   if (includeInPresrocBilling === 'yes') {
-    return baseMessage + 'supplementary bill run for the old charge scheme.'
+    return {
+      text: baseMessage + 'supplementary bill run for the old charge scheme.',
+      titleText: 'Important'
+    }
   }
 
   if (includeInSrocBilling === true) {
-    return baseMessage + 'supplementary bill run.'
+    return {
+      text: baseMessage + 'supplementary bill run.',
+      titleText: 'Important'
+    }
   }
 
   return null
