@@ -6,7 +6,6 @@
  */
 
 const AddRecipientService = require('../services/notices/setup/add-recipient.service.js')
-const ConfirmationService = require('../services/notices/setup/confirmation.service.js')
 const ContactTypeService = require('../services/notices/setup/contact-type.service.js')
 const DownloadRecipientsService = require('../services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
@@ -42,6 +41,7 @@ const ViewCancelAlertsService = require('../services/notices/setup/view-cancel-a
 const ViewCheckService = require('../services/notices/setup/view-check.service.js')
 const ViewCheckLicenceMatchesService = require('../services/notices/setup/view-check-licence-matches.service.js')
 const ViewCheckNoticeTypeService = require('../services/notices/setup/view-check-notice-type.service.js')
+const ViewConfirmationService = require('../services/notices/setup/view-confirmation.service.js')
 const ViewPreviewService = require('../services/notices/setup/view-preview.service.js')
 const ViewPreviewCheckAlertService = require('../services/notices/setup/view-preview-check-alert.service.js')
 const ViewPreviewCheckPaperReturnService = require('../services/notices/setup/view-preview-check-paper-return.service.js')
@@ -410,7 +410,7 @@ async function viewCheckNoticeType(request, h) {
 async function viewConfirmation(request, h) {
   const { eventId } = request.params
 
-  const pageData = await ConfirmationService.go(eventId)
+  const pageData = await ViewConfirmationService.go(eventId)
 
   return h.view(`notices/setup/confirmation.njk`, pageData)
 }

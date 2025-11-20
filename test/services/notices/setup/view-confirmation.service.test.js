@@ -14,7 +14,7 @@ const { generateReferenceCode } = require('../../../support/helpers/notification
 // Thing under test
 const ViewConfirmationService = require('../../../../app/services/notices/setup/view-confirmation.service.js')
 
-describe('Notices - Setup - Confirmation service', () => {
+describe('Notices - Setup - View Confirmation service', () => {
   const referenceCode = generateReferenceCode()
 
   let event

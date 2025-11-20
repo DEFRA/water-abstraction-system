@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates presenting the data for `/notices/setup/{eventId}/confirmation` page
- * @module ConfirmationService
+ * @module ViewConfirmationService
  */
 
 const ConfirmationPresenter = require('../../../presenters/notices/setup/confirmation.presenter.js')
