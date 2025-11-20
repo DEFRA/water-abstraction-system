@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates fetching and presenting the data for `/notices/setup/{sessionId}/licence` page
- * @module LicenceService
+ * @module ViewLicenceService
  */
 
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')

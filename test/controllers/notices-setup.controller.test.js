@@ -16,7 +16,6 @@ const { postRequestOptions } = require('../support/general.js')
 const AddRecipientService = require('../../app/services/notices/setup/add-recipient.service.js')
 const DownloadRecipientsService = require('../../app/services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
-const LicenceService = require('../../app/services/notices/setup/licence.service.js')
 const NoticeTypeService = require('../../app/services/notices/setup/notice-type.service.js')
 const PaperReturnService = require('../../app/services/notices/setup/paper-return.service.js')
 const PreviewPaperReturnService = require('../../app/services/notices/setup/preview-paper-return.service.js')
@@ -50,6 +49,7 @@ const ViewCheckLicenceMatchesService = require('../../app/services/notices/setup
 const ViewCheckNoticeTypeService = require('../../app/services/notices/setup/view-check-notice-type.service.js')
 const ViewConfirmationService = require('../../app/services/notices/setup/view-confirmation.service.js')
 const ViewContactTypeService = require('../../app/services/notices/setup/view-contact-type.service.js')
+const ViewLicenceService = require('../../app/services/notices/setup/view-licence.service.js')
 const ViewPreviewService = require('../../app/services/notices/setup/view-preview.service.js')
 const ViewPreviewCheckAlert = require('../../app/services/notices/setup/view-preview-check-alert.service.js')
 const ViewPreviewCheckPaperReturnService = require('../../app/services/notices/setup/view-preview-check-paper-return.service.js')
@@ -732,7 +732,7 @@ describe('Notices Setup controller', () => {
           }
         }
 
-        Sinon.stub(LicenceService, 'go').resolves({
+        Sinon.stub(ViewLicenceService, 'go').resolves({
           pageTitle: 'Enter a licence number'
         })
       })

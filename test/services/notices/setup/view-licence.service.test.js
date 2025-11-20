@@ -13,9 +13,9 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
-const LicenceService = require('../../../../app/services/notices/setup/licence.service.js')
+const ViewLicenceService = require('../../../../app/services/notices/setup/view-licence.service.js')
 
-describe('Notices - Setup - Licence service', () => {
+describe('Notices - Setup - View Licence service', () => {
   let licenceRef
   let session
 
@@ -31,7 +31,7 @@ describe('Notices - Setup - Licence service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await LicenceService.go(session.id)
+      const result = await ViewLicenceService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'notices',
