@@ -51,7 +51,7 @@ describe('Licences - Points presenter', () => {
         ],
         pageTitle: 'Points',
         pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
-        showingPoints: 'Showing 1 abstraction points'
+        showingPoints: 'Showing 1 abstraction point'
       })
     })
   })

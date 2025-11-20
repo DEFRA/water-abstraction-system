@@ -72,7 +72,7 @@ describe('Licences - View Points service', () => {
         pageTitle: 'Points',
         pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
         roles: ['billing'],
-        showingPoints: 'Showing 1 abstraction points'
+        showingPoints: 'Showing 1 abstraction point'
       })
     })
   })

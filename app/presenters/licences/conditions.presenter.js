@@ -5,6 +5,8 @@
  * @module ConditionsPresenter
  */
 
+const { pluralise } = require('./base-licences.presenter.js')
+
 /**
  * Formats the licence and related conditions data for the licence conditions page
  *
@@ -24,7 +26,7 @@ function go(licenceVersionPurposeConditionTypes) {
     conditionTypes,
     pageTitle: 'Conditions',
     pageTitleCaption: `Licence ${licenceRef}`,
-    showingConditions: `Showing ${conditionTypes.length} types of further conditions`,
+    showingConditions: `Showing ${conditionTypes.length} types of further ${pluralise('condition', conditionTypes.length)}`,
     warning: {
       text: 'We may not be able to show a full list of the conditions, because we do not hold all of the licence information on our system yet. You should refer to the paper copy of the licence to view all conditions.',
       iconFallbackText: 'Warning'

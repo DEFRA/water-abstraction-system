@@ -78,6 +78,24 @@ describe('Licences - Base Licences presenter', () => {
     })
   })
 
+  describe('#pluralise()', () => {
+    describe('when count is 1', () => {
+      it('should return the word ', () => {
+        const result = BaseLicencesPresenter.pluralise('point', 1)
+
+        expect(result).to.equal('point')
+      })
+    })
+
+    describe('when count is not 1', () => {
+      it('should return the word pluralised', () => {
+        const result = BaseLicencesPresenter.pluralise('point', 2)
+
+        expect(result).to.equal('points')
+      })
+    })
+  })
+
   describe('#userRoles()', () => {
     let auth
 
