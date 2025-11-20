@@ -175,7 +175,7 @@ function _licenceHolderAddress(name = 'Bob', licenceRef, returnLogIds) {
 
 function _notification(noticeId, licenceHolderDetails) {
   return {
-    dueDate: '2026-04-28',
+    dueDate: new Date('2026-04-28'),
     eventId: noticeId,
     licenceMonitoringStationId: null,
     licences: licenceHolderDetails.licence_refs,
