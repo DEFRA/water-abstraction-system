@@ -17,9 +17,9 @@ const { generateReferenceCode } = require('../../../support/helpers/notification
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 
 // Thing under test
-const SelectRecipientsService = require('../../../../app/services/notices/setup/select-recipients.service.js')
+const ViewSelectRecipientsService = require('../../../../app/services/notices/setup/view-select-recipients.service.js')
 
-describe('Notices - Setup - Select Recipients Service', () => {
+describe('Notices - Setup - View Select Recipients service', () => {
   let session
   let sessionData
   let recipients
@@ -46,7 +46,7 @@ describe('Notices - Setup - Select Recipients Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await SelectRecipientsService.go(session.id)
+      const result = await ViewSelectRecipientsService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'notices',

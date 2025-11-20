@@ -3,7 +3,7 @@
 /**
  * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/select-recipients' page
  *
- * @module SelectRecipientsService
+ * @module ViewSelectRecipientsService
  */
 
 const FetchRecipientsService = require('./fetch-recipients.service.js')
