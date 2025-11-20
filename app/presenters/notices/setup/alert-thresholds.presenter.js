@@ -77,8 +77,8 @@ function _sortedThresholds(relevantThresholds) {
     const multiplierA = unitConversion[unitA] ?? 1
     const multiplierB = unitConversion[unitB] ?? 1
 
-    const normalisedA = parseFloat(valueA) * multiplierA
-    const normalisedB = parseFloat(valueB) * multiplierB
+    const normalisedA = Number.parseFloat(valueA) * multiplierA
+    const normalisedB = Number.parseFloat(valueB) * multiplierB
 
     return normalisedB - normalisedA
   })

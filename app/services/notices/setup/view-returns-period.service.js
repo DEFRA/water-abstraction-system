@@ -13,7 +13,7 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} sessionId - The UUID for setup returns notification session record
  *
- * @returns {object} The view data for the returns period page
+ * @returns {Promise<object>} The view data for the returns period page
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)

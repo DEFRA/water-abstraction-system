@@ -5,7 +5,7 @@
  * @module ProcessAddRecipientService
  */
 
-const crypto = require('crypto')
+const crypto = require('node:crypto')
 
 const SessionModel = require('../../../models/session.model.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
