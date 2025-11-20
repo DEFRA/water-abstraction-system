@@ -19,7 +19,7 @@ const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/g
 // Thing under test
 const PreparePaperReturnService = require('../../../../app/services/notices/setup/prepare-paper-return.service.js')
 
-describe('Notices - Setup - Prepare Paper return Service', () => {
+describe('Notices - Setup - Prepare Paper Return service', () => {
   const buffer = new TextEncoder().encode('mock file').buffer
 
   let dueReturnLog
