@@ -34,11 +34,9 @@ function go(licence) {
     abstractionAmounts: _abstractionAmounts(licenceVersionPurposes),
     abstractionConditions: _abstractionConditions(licenceVersionPurposes),
     abstractionPeriods,
-    abstractionPeriodsAndPurposesLinkText: _abstractionPeriodsAndPurposesLinkText(abstractionPeriods, purposes),
     abstractionPeriodsCaption: _abstractionPeriodsCaption(abstractionPeriods),
     abstractionPoints,
     abstractionPointsCaption: _abstractionPointsCaption(abstractionPoints),
-    abstractionPointsLinkText: _abstractionPointsLinkText(abstractionPoints),
     activeTab: 'summary',
     documentId: licenceDocumentHeader.id,
     enableLicenceConditionsView,
@@ -105,19 +103,6 @@ function _abstractionPeriods(licenceVersionPurposes) {
   return uniqueAbstractionPeriods
 }
 
-function _abstractionPeriodsAndPurposesLinkText(abstractionPeriods, purposes) {
-  let abstractionPeriodsAndPurposesLinkText = null
-
-  if (abstractionPeriods.length > 0) {
-    const abstractionPeriodsLabel = abstractionPeriods.length > 1 ? 'periods' : 'period'
-    const purposesLabel = purposes.data.length > 1 ? 'purposes' : 'purpose'
-
-    abstractionPeriodsAndPurposesLinkText = `View details of your ${purposesLabel}, ${abstractionPeriodsLabel} and amounts`
-  }
-
-  return abstractionPeriodsAndPurposesLinkText
-}
-
 function _abstractionPeriodsCaption(abstractionPeriods) {
   return abstractionPeriods.length > 1 ? 'Periods of abstraction' : 'Period of abstraction'
 }
@@ -144,12 +129,6 @@ function _abstractionPoints(licenceVersionPurposes) {
 
 function _abstractionPointsCaption(abstractionPoints) {
   return abstractionPoints.length > 1 ? 'Points of abstraction' : 'Point of abstraction'
-}
-
-function _abstractionPointsLinkText(abstractionPoints) {
-  return abstractionPoints.length > 1
-    ? 'View details of the abstraction points'
-    : 'View details of the abstraction point'
 }
 
 function _endDate(expiredDate) {
