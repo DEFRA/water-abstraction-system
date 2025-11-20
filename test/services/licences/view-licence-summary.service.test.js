@@ -71,7 +71,7 @@ describe('Licences - View Licence Summary service', () => {
           ends: null,
           includeInPresrocBilling: 'no',
           licenceHolder: 'Unregistered licence',
-          licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+          licenceId: fetchLicenceResult.id,
           licenceRef: '01/123',
           monitoringStations: [
             {

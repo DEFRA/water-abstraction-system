@@ -18,9 +18,20 @@ const FetchLicencePurposesService = require('../../../app/services/licences/fetc
 const ViewPurposesService = require('../../../app/services/licences/view-purposes.service.js')
 
 describe('Licences - View Purposes service', () => {
+  let auth
   let licenceFixture
 
   beforeEach(() => {
+    auth = {
+      credentials: {
+        roles: [
+          {
+            role: 'billing'
+          }
+        ]
+      }
+    }
+
     licenceFixture = LicencesFixture.licence()
 
     Sinon.stub(FetchLicencePurposesService, 'go').returns(licenceFixture.licence)
@@ -28,10 +39,12 @@ describe('Licences - View Purposes service', () => {
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewPurposesService.go(licenceFixture.licence.id)
+      const result = await ViewPurposesService.go(licenceFixture.licence.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        activeSummarySubNav: 'purposes',
+        activeTab: 'summary',
         backLink: {
           href: `/system/licences/${licenceFixture.licence.id}/summary`,
           text: 'Go back to summary'
@@ -55,6 +68,7 @@ describe('Licences - View Purposes service', () => {
         ],
         pageTitle: 'Purposes, periods and amounts',
         pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
+        roles: ['billing'],
         showingPurposes: 'Showing 1 purposes'
       })
     })

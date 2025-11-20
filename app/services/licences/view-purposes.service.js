@@ -7,22 +7,27 @@
 
 const FetchLicencePurposesService = require('../licences/fetch-licence-purposes.service.js')
 const PurposesPresenter = require('../../presenters/licences/purposes.presenter.js')
+const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence purposes page
  *
  * @param {string} licenceId - The UUID of the licence
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence purposes template
  */
-async function go(licenceId) {
+async function go(licenceId, auth) {
   const licencePurposes = await FetchLicencePurposesService.go(licenceId)
 
   const pageData = PurposesPresenter.go(licencePurposes)
 
   return {
+    ...pageData,
     activeNavBar: 'search',
-    ...pageData
+    activeSummarySubNav: 'purposes',
+    activeTab: 'summary',
+    roles: userRoles(auth)
   }
 }
 

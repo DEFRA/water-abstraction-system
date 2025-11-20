@@ -30,13 +30,19 @@
           {% if activeTab === 'summary' %}
           <ul class="x-govuk-sub-navigation__section x-govuk-sub-navigation__section--nested">
             <li class="x-govuk-sub-navigation__section-item">
-              <a class="x-govuk-sub-navigation__link" href="/system/licences/{{ licenceId }}/purposes">Purposes, periods and amounts</a>
+              <a class="x-govuk-sub-navigation__link" href="purposes" {% if activeSummarySubNav === 'purposes' %}aria-current="true"{% endif %}>
+                Purposes, periods and amounts
+              </a>
             </li>
             <li class="x-govuk-sub-navigation__section-item">
-              <a class="x-govuk-sub-navigation__link" href="/system/licences/{{ licenceId }}/points">Points</a>
+              <a class="x-govuk-sub-navigation__link" href="points" {% if activeSummarySubNav === 'points' %}aria-current="true"{% endif %}>
+              Points
+              </a>
             </li>
             <li class="x-govuk-sub-navigation__section-item">
-              <a class="x-govuk-sub-navigation__link" href="/system/licences/{{ licenceId }}/conditions">Conditions</a>
+              <a class="x-govuk-sub-navigation__link" href="conditions" {% if activeSummarySubNav === 'conditions' %}aria-current="true"{% endif %}>
+              Conditions
+              </a>
             </li>
           </ul>
           {% endif %}
