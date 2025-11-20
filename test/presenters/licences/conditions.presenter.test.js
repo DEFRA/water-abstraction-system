@@ -59,7 +59,7 @@ describe('Licences - Conditions presenter', () => {
         ],
         pageTitle: 'Conditions',
         pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
-        showingConditions: 'Showing 1 types of further condition',
+        showingConditions: 'Showing 1 type of further conditions',
         warning: {
           iconFallbackText: 'Warning',
           text: 'We may not be able to show a full list of the conditions, because we do not hold all of the licence information on our system yet. You should refer to the paper copy of the licence to view all conditions.'
