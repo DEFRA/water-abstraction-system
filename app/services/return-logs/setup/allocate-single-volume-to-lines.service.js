@@ -7,6 +7,8 @@
 
 const Big = require('big.js')
 
+const MAX_DECIMAL = 6
+
 /**
  * Orchestrates allocating a single volume to return submission lines using the abstraction period dates given.
  *
@@ -44,7 +46,7 @@ function _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuant
 
   const allocatedLineTotal = Big(individualLineQuantity)
     .times(linesInsideAbstractionPeriod.length)
-    .round(6, Big.roundHalfUp)
+    .round(MAX_DECIMAL, Big.roundHalfUp)
     .toNumber()
 
   if (allocatedLineTotal !== Number(singleVolume)) {
@@ -55,7 +57,7 @@ function _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuant
 }
 
 function _individualLineQuantity(linesInsideAbstractionPeriod, singleVolume) {
-  return Big(singleVolume).div(linesInsideAbstractionPeriod.length).round(6, Big.roundHalfUp).toNumber()
+  return Big(singleVolume).div(linesInsideAbstractionPeriod.length).round(MAX_DECIMAL, Big.roundHalfUp).toNumber()
 }
 
 function _linesInsideAbstractionPeriod(lines, fromDate, toDate) {
