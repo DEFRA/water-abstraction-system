@@ -12,9 +12,9 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
-const RecipientNameService = require('../../../../app/services/notices/setup/recipient-name.service.js')
+const ViewRecipientNameService = require('../../../../app/services/notices/setup/view-recipient-name.service.js')
 
-describe('Notices - Setup - Recipient Name Service', () => {
+describe('Notices - Setup - View Recipient Name service', () => {
   let referenceCode
   let session
   let sessionData
@@ -28,7 +28,7 @@ describe('Notices - Setup - Recipient Name Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await RecipientNameService.go(session.id)
+      const result = await ViewRecipientNameService.go(session.id)
 
       expect(result).to.equal({
         activeNavBar: 'notices',

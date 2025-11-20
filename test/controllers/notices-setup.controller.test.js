@@ -17,7 +17,6 @@ const AddRecipientService = require('../../app/services/notices/setup/add-recipi
 const DownloadRecipientsService = require('../../app/services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../../app/services/notices/setup/initiate-session.service.js')
 const PreviewPaperReturnService = require('../../app/services/notices/setup/preview-paper-return.service.js')
-const RecipientNameService = require('../../app/services/notices/setup/recipient-name.service.js')
 const RemoveLicencesService = require('../../app/services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const SelectRecipientsService = require('../../app/services/notices/setup/select-recipients.service.js')
@@ -53,6 +52,7 @@ const ViewPaperReturnService = require('../../app/services/notices/setup/view-pa
 const ViewPreviewService = require('../../app/services/notices/setup/view-preview.service.js')
 const ViewPreviewCheckAlert = require('../../app/services/notices/setup/view-preview-check-alert.service.js')
 const ViewPreviewCheckPaperReturnService = require('../../app/services/notices/setup/view-preview-check-paper-return.service.js')
+const ViewRecipientNameService = require('../../app/services/notices/setup/view-recipient-name.service.js')
 const ViewReturnsPeriodService = require('../../app/services/notices/setup/view-returns-period.service.js')
 
 // For running our service
@@ -1030,7 +1030,7 @@ describe('Notices Setup controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(RecipientNameService, 'go').returns({ pageTitle: 'Recipients name' })
+          Sinon.stub(ViewRecipientNameService, 'go').returns({ pageTitle: 'Recipients name' })
         })
 
         it('returns the page successfully', async () => {

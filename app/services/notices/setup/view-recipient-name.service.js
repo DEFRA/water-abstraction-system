@@ -3,7 +3,7 @@
 /**
  * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/recipient-name' page
  *
- * @module RecipientNameService
+ * @module ViewRecipientNameService
  */
 
 const RecipientNamePresenter = require('../../../presenters/notices/setup/recipient-name.presenter.js')
