@@ -3,12 +3,12 @@
 /**
  * Orchestrates removing the licence monitoring station from the thresholds list for - `/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}` page
  *
- * @module RemoveThresholdService
+ * @module ProcessRemoveThresholdService
  */
 
-const GeneralLib = require('../../../../lib/general.lib.js')
-const SessionModel = require('../../../../models/session.model.js')
-const { formatRestrictionType, formatValueUnit } = require('../../../../presenters/base.presenter.js')
+const GeneralLib = require('../../../lib/general.lib.js')
+const SessionModel = require('../../../models/session.model.js')
+const { formatRestrictionType, formatValueUnit } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates removing the licence monitoring station from the thresholds list for - `/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}` page

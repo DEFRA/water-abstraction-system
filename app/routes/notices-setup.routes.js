@@ -43,7 +43,7 @@ const routes = [
     method: 'GET',
     path: '/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}',
     options: {
-      handler: NoticesSetupController.removeThreshold,
+      handler: NoticesSetupController.processRemoveThreshold,
       auth: {
         access: {
           scope: ['hof_notifications']

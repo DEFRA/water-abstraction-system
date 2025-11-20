@@ -17,7 +17,7 @@ const InitiateSessionService = require('../../app/services/notices/setup/initiat
 const ProcessAddRecipientService = require('../../app/services/notices/setup/process-add-recipient.service.js')
 const ProcessDownloadRecipientsService = require('../../app/services/notices/setup/process-download-recipients.service.js')
 const ProcessPreviewPaperReturnService = require('../../app/services/notices/setup/process-preview-paper-return.service.js')
-const RemoveThresholdService = require('../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
+const ProcessRemoveThresholdService = require('../../app/services/notices/setup/process-remove-threshold.service.js')
 const SubmitAlertEmailAddressService = require('../../app/services/notices/setup/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../../app/services/notices/setup/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../../app/services/notices/setup/submit-alert-type.service.js')
@@ -707,7 +707,7 @@ describe('Notices Setup controller', () => {
             }
           }
 
-          Sinon.stub(RemoveThresholdService, 'go').resolves({})
+          Sinon.stub(ProcessRemoveThresholdService, 'go').resolves({})
         })
 
         describe('when a request is valid', () => {

@@ -9,7 +9,7 @@ const InitiateSessionService = require('../services/notices/setup/initiate-sessi
 const ProcessAddRecipientService = require('../services/notices/setup/process-add-recipient.service.js')
 const ProcessDownloadRecipientsService = require('../services/notices/setup/process-download-recipients.service.js')
 const ProcessPreviewPaperReturnService = require('../services/notices/setup/process-preview-paper-return.service.js')
-const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
+const ProcessRemoveThresholdService = require('../services/notices/setup/process-remove-threshold.service.js')
 const SubmitAlertEmailAddressService = require('../services/notices/setup/submit-alert-email-address.service.js')
 const SubmitAlertThresholdsService = require('../services/notices/setup/submit-alert-thresholds.service.js')
 const SubmitAlertTypeService = require('../services/notices/setup/submit-alert-type.service.js')
@@ -81,13 +81,13 @@ async function processPreviewPaperReturn(request, h) {
   return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
 }
 
-async function removeThreshold(request, h) {
+async function processRemoveThreshold(request, h) {
   const {
     params: { sessionId, licenceMonitoringStationId },
     yar
   } = request
 
-  await RemoveThresholdService.go(sessionId, licenceMonitoringStationId, yar)
+  await ProcessRemoveThresholdService.go(sessionId, licenceMonitoringStationId, yar)
 
   return h.redirect(`/system/notices/setup/${sessionId}/abstraction-alerts/check-licence-matches`)
 }
@@ -514,7 +514,7 @@ module.exports = {
   processAddRecipient,
   processDownloadRecipients,
   processPreviewPaperReturn,
-  removeThreshold,
+  processRemoveThreshold,
   setup,
   submitAlertEmailAddress,
   submitAlertThresholds,

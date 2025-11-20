@@ -9,13 +9,13 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../../fixtures/abstraction-alert-session-data.fixture.js')
-const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const RemoveThresholdService = require('../../../../../app/services/notices/setup/abstraction-alerts/remove-threshold.service.js')
+const ProcessRemoveThresholdService = require('../../../../app/services/notices/setup/process-remove-threshold.service.js')
 
-describe('Notices Setup - Abstraction Alerts - Remove Threshold Service', () => {
+describe('Notices - Setup - Process Remove Threshold Service', () => {
   let licenceMonitoringStations
   let session
   let sessionData
@@ -42,7 +42,7 @@ describe('Notices Setup - Abstraction Alerts - Remove Threshold Service', () => 
       })
 
       it('saves the "licenceMonitoringStationId" to the session to be excluded from the list', async () => {
-        await RemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
+        await ProcessRemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -61,7 +61,7 @@ describe('Notices Setup - Abstraction Alerts - Remove Threshold Service', () => 
       })
 
       it('saves the "licenceMonitoringStationId" to the session with the existing "removedThresholds"', async () => {
-        await RemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
+        await ProcessRemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
 
         const refreshedSession = await session.$query()
 
@@ -82,7 +82,7 @@ describe('Notices Setup - Abstraction Alerts - Remove Threshold Service', () => 
         })
       })
       it('sets a flash message', async () => {
-        await RemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
+        await ProcessRemoveThresholdService.go(session.id, licenceMonitoringStations.one.id, yarStub)
 
         // Check we add the flash message
         const [flashType, bannerMessage] = yarStub.flash.args[0]
