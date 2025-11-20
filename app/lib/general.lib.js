@@ -11,6 +11,8 @@ const { setTimeout } = require('node:timers/promises')
 
 const { returnUnits } = require('./static-lookups.lib.js')
 
+const MAX_DECIMAL = 6
+
 /**
  * Calculates and logs the time taken in milliseconds between the provided `startTime` and the current time
  *
@@ -67,7 +69,7 @@ function convertFromCubicMetres(quantity, units) {
     return null
   }
 
-  return Big(quantity).times(returnUnits[units].multiplier).round(6, Big.roundHalfUp).toNumber()
+  return Big(quantity).times(returnUnits[units].multiplier).round(MAX_DECIMAL, Big.roundHalfUp).toNumber()
 }
 
 /**
@@ -89,7 +91,7 @@ function convertToCubicMetres(quantity, units) {
     return null
   }
 
-  return Big(quantity).div(returnUnits[units].multiplier).round(6, Big.roundHalfUp).toNumber()
+  return Big(quantity).div(returnUnits[units].multiplier).round(MAX_DECIMAL, Big.roundHalfUp).toNumber()
 }
 
 /**
