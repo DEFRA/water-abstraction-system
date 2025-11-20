@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates fetching and presenting the licences to remove for the notices setup remove licences page
- * @module RemoveLicencesService
+ * @module ViewRemoveLicencesService
  */
 
 const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remove-licences.presenter.js')

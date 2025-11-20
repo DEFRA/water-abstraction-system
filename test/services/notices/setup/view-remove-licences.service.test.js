@@ -12,9 +12,9 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const RemoveLicencesService = require('../../../../app/services/notices/setup/remove-licences.service.js')
+const ViewRemoveLicencesService = require('../../../../app/services/notices/setup/view-remove-licences.service.js')
 
-describe('Notices - Setup - Remove licences service', () => {
+describe('Notices - Setup - View Remove licences service', () => {
   const licences = []
 
   let referenceCode
@@ -27,7 +27,7 @@ describe('Notices - Setup - Remove licences service', () => {
   })
 
   it('correctly presents the data', async () => {
-    const result = await RemoveLicencesService.go(session.id)
+    const result = await ViewRemoveLicencesService.go(session.id)
 
     expect(result).to.equal({
       activeNavBar: 'notices',

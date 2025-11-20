@@ -9,7 +9,6 @@ const AddRecipientService = require('../services/notices/setup/add-recipient.ser
 const DownloadRecipientsService = require('../services/notices/setup/download-recipients.service.js')
 const InitiateSessionService = require('../services/notices/setup/initiate-session.service.js')
 const PreviewPaperReturnService = require('../services/notices/setup/preview-paper-return.service.js')
-const RemoveLicencesService = require('../services/notices/setup/remove-licences.service.js')
 const RemoveThresholdService = require('../services/notices/setup/abstraction-alerts/remove-threshold.service.js')
 const SelectRecipientsService = require('../services/notices/setup/select-recipients.service.js')
 const SubmitAlertEmailAddressService = require('../services/notices/setup/submit-alert-email-address.service.js')
@@ -45,6 +44,7 @@ const ViewPreviewService = require('../services/notices/setup/view-preview.servi
 const ViewPreviewCheckAlertService = require('../services/notices/setup/view-preview-check-alert.service.js')
 const ViewPreviewCheckPaperReturnService = require('../services/notices/setup/view-preview-check-paper-return.service.js')
 const ViewRecipientNameService = require('../services/notices/setup/view-recipient-name.service.js')
+const ViewRemoveLicencesService = require('../services/notices/setup/view-remove-licences.service.js')
 const ViewReturnsPeriodService = require('../services/notices/setup/view-returns-period.service.js')
 
 async function addRecipient(request, h) {
@@ -487,7 +487,7 @@ async function viewRemoveLicences(request, h) {
     params: { sessionId }
   } = request
 
-  const pageData = await RemoveLicencesService.go(sessionId)
+  const pageData = await ViewRemoveLicencesService.go(sessionId)
 
   return h.view(`notices/setup/remove-licences.njk`, pageData)
 }
