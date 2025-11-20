@@ -99,9 +99,12 @@ async function viewCommunications(request, h) {
 }
 
 async function viewLicenceConditions(request, h) {
-  const { id } = request.params
+  const {
+    params: { id },
+    auth
+  } = request
 
-  const pageData = await ViewConditionsService.go(id)
+  const pageData = await ViewConditionsService.go(id, auth)
 
   return h.view('licences/conditions.njk', pageData)
 }
@@ -126,17 +129,22 @@ async function viewLicenceContacts(request, h) {
 }
 
 async function viewLicencePoints(request, h) {
-  const { id: licenceId } = request.params
+  const {
+    params: { id },
+    auth
+  } = request
 
-  const pageData = await ViewPointsService.go(licenceId)
+  const pageData = await ViewPointsService.go(id, auth)
 
   return h.view('licences/points.njk', pageData)
 }
 
 async function viewLicencePurposes(request, h) {
-  const { id: licenceId } = request.params
-
-  const pageData = await ViewPurposesService.go(licenceId)
+  const {
+    params: { id },
+    auth
+  } = request
+  const pageData = await ViewPurposesService.go(id, auth)
 
   return h.view('licences/purposes.njk', pageData)
 }
