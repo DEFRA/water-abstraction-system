@@ -6,6 +6,7 @@
  */
 
 const FetchBillingAccountSearchResultsService = require('./fetch-billing-account-search-results.service.js')
+const FetchLicenceHolderSearchResultsService = require('./fetch-licence-holder-search-results.service.js')
 const FetchLicenceSearchResultsService = require('./fetch-licence-search-results.service.js')
 const FetchMonitoringStationSearchResultsService = require('./fetch-monitoring-station-search-results.service.js')
 const FetchReturnLogSearchResultsService = require('./fetch-return-log-search-results.service.js')
@@ -45,11 +46,13 @@ async function go(query, resultType, page, userScopes) {
 async function _allSearchResults(query, resultType, page, userScopes) {
   return Promise.all([
     _fullBillingAccountSearchResults(query, resultType, page, userScopes),
+    _fullLicenceHolderSearchResults(query, resultType, page),
     _fullLicenceSearchResults(query, resultType, page),
     _fullMonitoringStationSearchResults(query, resultType, page),
     _fullReturnLogSearchResults(query, resultType, page),
     _fullUserSearchResults(query, resultType, page),
     _partialBillingAccountSearchResults(query, resultType, page, userScopes),
+    _partialLicenceHolderSearchResults(query, resultType, page),
     _partialLicenceSearchResults(query, resultType, page),
     _partialMonitoringStationSearchResults(query, resultType, page),
     _partialReturnLogSearchResults(query, resultType, page),
@@ -71,6 +74,18 @@ async function _fullBillingAccountSearchResults(query, resultType, page, userSco
   }
 
   return FetchBillingAccountSearchResultsService.go(query, page, true)
+}
+
+async function _fullLicenceHolderSearchResults(query, resultType, page) {
+  if (resultType && resultType !== 'licenceHolder') {
+    return NO_RESULTS
+  }
+
+  if (!_matchesFullLicenceHolderName(query)) {
+    return NO_RESULTS
+  }
+
+  return FetchLicenceHolderSearchResultsService.go(query, page, true)
 }
 
 async function _fullLicenceSearchResults(query, resultType, page) {
@@ -118,14 +133,26 @@ async function _fullUserSearchResults(query, resultType, page) {
 }
 
 function _largestResultCount(searchResults) {
-  const [billingAccounts, licences, monitoringStations, returnLogs, users] = searchResults
+  const [billingAccounts, licenceHolders, licences, monitoringStations, returnLogs, users] = searchResults
 
-  return Math.max(billingAccounts.total, licences.total, monitoringStations.total, returnLogs.total, users.total)
+  return Math.max(
+    billingAccounts.total,
+    licenceHolders.total,
+    licences.total,
+    monitoringStations.total,
+    returnLogs.total,
+    users.total
+  )
 }
 
 function _matchesFullBillingAccountReference(query) {
   // Billing account references are of the format "A12345678A" where the first letter is a charge region
   return query.match(/^[ABENSTWY][0-9]{8}A$/i)
+}
+
+function _matchesFullLicenceHolderName(query) {
+  // Licence holder names are all at least 2 characters long
+  return query.length > 1
 }
 
 function _matchesFullLicenceRef(query) {
@@ -193,6 +220,14 @@ async function _partialBillingAccountSearchResults(query, resultType, page, user
   return FetchBillingAccountSearchResultsService.go(query, page, false)
 }
 
+async function _partialLicenceHolderSearchResults(query, resultType, page) {
+  if (resultType && resultType !== 'licenceHolder') {
+    return NO_RESULTS
+  }
+
+  return FetchLicenceHolderSearchResultsService.go(query, page, false)
+}
+
 async function _partialLicenceSearchResults(query, resultType, page) {
   if (resultType && resultType !== 'licence') {
     return NO_RESULTS
@@ -234,16 +269,18 @@ async function _partialUserSearchResults(query, resultType, page) {
 }
 
 function _searchResults(searchResults) {
-  const [billingAccounts, licences, monitoringStations, returnLogs, users] = searchResults
+  const [billingAccounts, licenceHolders, licences, monitoringStations, returnLogs, users] = searchResults
 
   return {
     amountFound:
       billingAccounts.results.length +
+      licenceHolders.results.length +
       licences.results.length +
       monitoringStations.results.length +
       returnLogs.results.length +
       users.results.length,
     billingAccounts,
+    licenceHolders,
     licences,
     monitoringStations,
     returnLogs,
