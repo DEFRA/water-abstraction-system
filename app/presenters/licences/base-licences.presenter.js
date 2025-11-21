@@ -39,7 +39,7 @@ function formatAbstractionAmounts(licenceVersionPurpose) {
  * When the count is 1, the word is returned unchanged. Otherwise, the word is appended with an 's'.
  *
  * @param {string} word - the singular version of the word
- * @param {number} count
+ * @param {number} count - The count of items that the word refers
  *
  * @returns {string} The pluralised word
  */
