@@ -31,10 +31,10 @@ async function go(notice) {
 
   const noticeType = DetermineNoticeTypeService.go(NoticeType.INVITATIONS)
   const recipients = await FetchAlternateRecipientsService.go(failedReturnIds)
-  const letterNotice = await _notice(notice, noticeType, recipients, failedLicenceRefs)
-  const notifications = await _notifications(letterNotice, recipients)
+  const alternateNotice = await _notice(notice, noticeType, recipients, failedLicenceRefs)
+  const notifications = await _notifications(alternateNotice, recipients)
 
-  return { notice: letterNotice, notifications }
+  return { notice: alternateNotice, notifications }
 }
 
 async function _notice(notice, noticeType, recipients, licenceRefs) {

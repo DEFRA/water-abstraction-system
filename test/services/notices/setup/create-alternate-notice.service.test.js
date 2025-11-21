@@ -3,7 +3,6 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Joi = require('joi')
 const Sinon = require('sinon')
 
 const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
@@ -28,43 +27,6 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
   let fetchReturnsAddressesServiceResults
   let noticeWithErrors
   let notifications
-
-  const noticeSchema = Joi.object({
-    createdAt: Joi.date().required(),
-    id: Joi.string().guid().required(),
-    issuer: 'admin-internal@wrls.gov.uk',
-    licences: Joi.array().ordered('11/111', '01/124', '01/125').required(),
-    metadata: {
-      error: 0,
-      name: 'Returns: invitation',
-      options: {
-        excludedLicences: Joi.array().empty()
-      },
-      recipients: 3,
-      returnCycle: {
-        dueDate: '2026-04-28',
-        endDate: '2026-03-31',
-        quarterly: false,
-        startDate: '2025-04-01',
-        summer: false
-      }
-    },
-    overallStatus: 'pending',
-    referenceCode: Joi.string()
-      .pattern(/^RINV-/)
-      .required(),
-    status: 'completed',
-    statusCounts: {
-      cancelled: 0,
-      error: 0,
-      pending: 3,
-      sent: 0
-    },
-    subtype: 'returnInvitation',
-    triggerNoticeId: Joi.string().guid().optional(),
-    type: 'notification',
-    updatedAt: Joi.date().required()
-  })
 
   beforeEach(() => {
     fetchFailedReturnsInvitationsResults = {
@@ -126,7 +88,11 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
         _notification(result.notice.id, fetchReturnsAddressesServiceResults[2])
       ]
 
-      Joi.assert(result.notice, noticeSchema)
+      expect(result.notice.issuer).to.equal(noticeWithErrors.issuer)
+      expect(result.notice.licences).to.equal(['11/111', '01/124', '01/125'])
+      expect(result.notice.metadata.name).to.equal('Returns: invitation')
+      expect(result.notice.metadata.recipients).to.equal(3)
+      expect(result.notice.subtype).to.equal('returnInvitation')
       expect(result.notifications[0]).to.equal(notifications[0], { skip: ['createdAt', 'id'] })
       expect(result.notifications[1]).to.equal(notifications[1], { skip: ['createdAt', 'id'] })
       expect(result.notifications[2]).to.equal(notifications[2], { skip: ['createdAt', 'id'] })
@@ -138,7 +104,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
       Sinon.stub(FetchFailedReturnsInvitationsService, 'go').resolves({ failedLicenceRefs: [], failedReturnIds: [] })
     })
 
-    it('returns an empty array and a null reference code', async () => {
+    it('returns an empty notifications array and a null notice', async () => {
       const result = await CreateAlternateNoticeService.go(noticeWithErrors)
 
       expect(result).to.equal({

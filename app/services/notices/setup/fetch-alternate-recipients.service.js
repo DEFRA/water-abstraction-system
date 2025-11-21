@@ -1,18 +1,18 @@
 'use strict'
 
 /**
- * Fetches the addresses to send a paper return invitations to.
- * @module FetchReturnsAddressesService
+ * Fetches licence holders as alternate recipients for failed returns invitations to primary users
+ * @module FetchAlternateRecipientsService
  */
 
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches the addresses to send a paper return invitations to.
+ * Fetches licence holders as alternate recipients for failed returns invitations to primary users
  *
- * @param {string[]} returnIds - The return log ids which failed to receive an email.
+ * @param {string[]} returnIds - The return Ids from failed returns invitations to primary users
  *
- * @returns {Promise<object[]>} - an array of licence holder deteails.
+ * @returns {Promise<object[]>} - The alternate recipients for the failed notifications
  */
 async function go(returnIds) {
   const { rows } = await _fetch(returnIds)

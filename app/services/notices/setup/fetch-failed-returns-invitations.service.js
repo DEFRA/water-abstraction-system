@@ -1,25 +1,25 @@
 'use strict'
 
 /**
- * Fetches the notifications which notify failed to send.
+ * Fetches the licence refs and return logs IDs from failed returns invitation notifications to primary users
  * @module FetchFailedReturnsInvitationsService
  */
 
 const NotificationModel = require('../../../models/notification.model.js')
 
 /**
- * Fetches the notifications which notify failed to send.
+ * Fetches the licence refs and return logs IDs from failed returns invitation notifications to primary users
  *
- * The function checks an event for failed return invitation emails.
+ * The function checks a notice for failed return invitation emails to primary users.
  *
  * This could have been because of a temporary issue or an invalid email address.
  *
- * @param {string} eventId - The event id to check.
+ * @param {string} noticeId - The event id to check.
  *
  * @returns {Promise<object>} - an object with an array of failed return log ids and an array of failed licence refs
  */
-async function go(eventId) {
-  const results = await _fetch(eventId)
+async function go(noticeId) {
+  const results = await _fetch(noticeId)
 
   const licences = []
   const returnIds = []

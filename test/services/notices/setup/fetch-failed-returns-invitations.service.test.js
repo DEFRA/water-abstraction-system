@@ -44,7 +44,7 @@ describe('Notices - Setup - Fetch Failed Returns Invitations service', () => {
       failedInvitationFirstRecipient = await NotificationHelper.add({
         ...NotificationsFixture.returnsInvitationEmail(returnsInvitationNotice),
         createdAt: today(),
-        licences: `["${licences[0]}", "${licences[1]}"]`,
+        licences: [licences[0], licences[1]],
         recipient: 'error@example.com',
         returnLogIds: ['18998ffd-feaf-4e24-b998-7e7af026ba14', 'c06708f5-195a-43b1-9f2e-d4f72ee7bd76'],
         status: 'error'
@@ -53,7 +53,7 @@ describe('Notices - Setup - Fetch Failed Returns Invitations service', () => {
       failedInvitationSecondRecipient = await NotificationHelper.add({
         ...NotificationsFixture.returnsInvitationEmail(returnsInvitationNotice),
         createdAt: today(),
-        licences: `["${licences[1]}", "${licences[2]}"]`,
+        licences: [licences[1], licences[2]],
         recipient: 'error-duplicate-licence-ref@example.com',
         returnLogIds: [
           '0f760d21-0f05-49e7-b226-21ad02dd22b4',
@@ -67,7 +67,7 @@ describe('Notices - Setup - Fetch Failed Returns Invitations service', () => {
         ...NotificationsFixture.returnsInvitationEmail(returnsInvitationNotice),
         alternateNoticeId: 'db649e8c-d38d-4d7a-92ce-bc681c645124',
         createdAt: today(),
-        licences: `["${licences[4]}"]`,
+        licences: [licences[4]],
         recipient: 'already-processed@example.com',
         returnLogIds: ['38ed8bf6-2979-4e7a-83b8-77a46f1b64e6'],
         status: 'error'
@@ -76,7 +76,7 @@ describe('Notices - Setup - Fetch Failed Returns Invitations service', () => {
       returnsInvitationNotificationSent = await NotificationHelper.add({
         ...NotificationsFixture.returnsInvitationEmail(returnsInvitationNotice),
         createdAt: today(),
-        licences: `["${licences[4]}"]`,
+        licences: [licences[4]],
         recipient: 'already-processed@example.com',
         returnLogIds: ['38ed8bf6-2979-4e7a-83b8-77a46f1b64e6'],
         status: 'sent'

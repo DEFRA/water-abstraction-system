@@ -66,13 +66,15 @@ async function _recordResult(sendResult) {
 async function _sendAlternateNotice(notice) {
   const { id: noticeId, subtype } = notice
 
-  if (subtype === 'returnInvitation') {
-    const { notice: alternateNotice, notifications } = await CreateAlternateNoticeService.go(notice)
+  if (subtype !== 'returnInvitation') {
+    return
+  }
 
-    if (notifications.length > 0) {
-      await _sendNotifications(notifications, alternateNotice.referenceCode)
-      await _updateFailedEmailInvitations(noticeId)
-    }
+  const { notice: alternateNotice, notifications } = await CreateAlternateNoticeService.go(notice)
+
+  if (notifications.length > 0) {
+    await _sendNotifications(notifications, alternateNotice.referenceCode)
+    await _updateFailedEmailInvitations(noticeId)
   }
 }
 
