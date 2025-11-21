@@ -6,7 +6,7 @@
  */
 
 const { formatAbstractionPeriod } = require('../base.presenter.js')
-const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
+const { formatAbstractionAmounts, pluralise } = require('./base-licences.presenter.js')
 
 /**
  * Formats the licence and related licenceVersionPurposes data for the view licence purposes page
@@ -29,7 +29,7 @@ function go(licence) {
     licencePurposes,
     pageTitle: 'Purposes, periods and amounts',
     pageTitleCaption: `Licence ${licenceRef}`,
-    showingPurposes: `Showing ${licencePurposes.length} purposes`
+    showingPurposes: `Showing ${licencePurposes.length} ${pluralise('purpose', licencePurposes.length)}`
   }
 }
 

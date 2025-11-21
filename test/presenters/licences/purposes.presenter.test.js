@@ -50,7 +50,7 @@ describe('Licences - Purposes presenter', () => {
         ],
         pageTitle: 'Purposes, periods and amounts',
         pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
-        showingPurposes: 'Showing 1 purposes'
+        showingPurposes: 'Showing 1 purpose'
       })
     })
   })

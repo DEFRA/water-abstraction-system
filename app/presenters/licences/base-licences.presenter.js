@@ -34,6 +34,20 @@ function formatAbstractionAmounts(licenceVersionPurpose) {
 }
 
 /**
+ * Pluralise a word based on a count
+ *
+ * When the count is 1, the word is returned unchanged. Otherwise, the word is appended with an 's'.
+ *
+ * @param {string} word - the singular version of the word
+ * @param {number} count - The count of items that the word refers
+ *
+ * @returns {string} The pluralised version of the word if count is greater than 1, else word.
+ */
+function pluralise(word, count) {
+  return count > 1 ? `${word}s` : word
+}
+
+/**
  * Flatten the 'auth.credentials.roles' to and array of roles e.g. ['returns', 'billing']
  *
  * @param {object} auth - The auth object taken from `request.auth` containing user details
@@ -48,5 +62,6 @@ function userRoles(auth) {
 
 module.exports = {
   formatAbstractionAmounts,
+  pluralise,
   userRoles
 }

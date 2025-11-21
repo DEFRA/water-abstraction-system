@@ -639,7 +639,7 @@ function _viewLicenceBills() {
 
   return {
     ...commonLicenceData,
-    activeTab: 'bills',
+    activeSecondaryNav: 'bills',
     bills: [{ id: 'bills-id' }]
   }
 }
@@ -649,7 +649,7 @@ function _viewLicenceConditions() {
 
   return {
     ...commonLicenceData,
-    activeTab: 'search',
+    activeSecondaryNav: 'search',
     conditionTypes: [
       {
         conditions: [
@@ -688,7 +688,7 @@ function _viewLicenceCommunications() {
 
   return {
     ...commonLicenceData,
-    activeTab: 'communications',
+    activeSecondaryNav: 'communications',
     communications: [{ type: 'paper return', sent: 'date', sender: 'admin@email.com', method: 'letter' }]
   }
 }
@@ -698,7 +698,7 @@ function _viewLicenceContacts() {
 
   return {
     ...commonLicenceData,
-    activeTab: 'contact-details',
+    activeSecondaryNav: 'contact-details',
     licenceContacts: [{ name: 'jobo', communicationType: 'Licence Holder' }],
     customerContacts: [{ name: 'jimbo', communicationType: 'customer' }]
   }
@@ -720,7 +720,7 @@ function _viewLicenceContactDetails() {
 
   return {
     ...commonLicenceData,
-    activeTab: 'search',
+    activeSecondaryNav: 'search',
     licenceContacts: [
       {
         address: {
@@ -791,7 +791,7 @@ function _viewLicenceReturns() {
 
   return {
     ...commonLicenceData,
-    activeTab: 'returns',
+    activeSecondaryNav: 'returns',
     returns: [{ id: 'returns-id' }],
     noReturnsMessage: null
   }
@@ -802,7 +802,7 @@ function _viewLicenceSetUp() {
 
   return {
     ...commonLicenceData,
-    activeTab: 'set-up',
+    activeSecondaryNav: 'set-up',
     agreements: [{}],
     chargeInformation: [{}],
     enableRequirementsForReturns: true,
@@ -832,7 +832,7 @@ function _viewLicenceSummary() {
     region: 'Southern',
     startDate: '1 November 2022',
     endDate: '1 November 2032',
-    activeTab: 'summary'
+    activeSecondaryNav: 'summary'
   }
 }
 

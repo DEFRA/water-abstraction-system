@@ -43,8 +43,8 @@ describe('Licences - View Purposes service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        activeSecondaryNav: 'summary',
         activeSummarySubNav: 'purposes',
-        activeTab: 'summary',
         backLink: {
           href: `/system/licences/${licenceFixture.licence.id}/summary`,
           text: 'Go back to summary'
@@ -69,7 +69,7 @@ describe('Licences - View Purposes service', () => {
         pageTitle: 'Purposes, periods and amounts',
         pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
         roles: ['billing'],
-        showingPurposes: 'Showing 1 purposes'
+        showingPurposes: 'Showing 1 purpose'
       })
     })
   })

@@ -6,6 +6,7 @@
  */
 
 const PointModel = require('../../models/point.model.js')
+const { pluralise } = require('./base-licences.presenter.js')
 
 /**
  * Formats the licence and related points data for the view licence points page
@@ -30,7 +31,7 @@ function go(data) {
     licencePoints,
     pageTitle: 'Points',
     pageTitleCaption: `Licence ${licenceRef}`,
-    showingPoints: `Showing ${licencePoints.length} abstraction points`
+    showingPoints: `Showing ${licencePoints.length} abstraction ${pluralise('point', licencePoints.length)}`
   }
 }
 

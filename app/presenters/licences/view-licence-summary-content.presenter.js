@@ -34,7 +34,7 @@ function go(licence) {
     abstractionPeriodsCaption: _abstractionPeriodsCaption(abstractionPeriods),
     abstractionPoints,
     abstractionPointsCaption: _abstractionPointsCaption(abstractionPoints),
-    activeTab: 'summary',
+    activeSecondaryNav: 'summary',
     documentId: licenceDocumentHeader.id,
     enableMonitoringStationsView,
     endDate: _endDate(expiredDate),
