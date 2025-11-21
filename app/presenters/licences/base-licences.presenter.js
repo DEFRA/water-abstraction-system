@@ -41,10 +41,10 @@ function formatAbstractionAmounts(licenceVersionPurpose) {
  * @param {string} word - the singular version of the word
  * @param {number} count - The count of items that the word refers
  *
- * @returns {string} The pluralised word
+ * @returns {string} The pluralised version of the word if count is greater than 1, else word.
  */
 function pluralise(word, count) {
-  return count === 1 ? word : `${word}s`
+  return count > 1 ? `${word}s` : word
 }
 
 /**

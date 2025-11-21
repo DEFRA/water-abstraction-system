@@ -79,7 +79,7 @@ describe('Licences - Base Licences presenter', () => {
   })
 
   describe('#pluralise()', () => {
-    describe('when count is 1', () => {
+    describe('when the count is 1', () => {
       it('returns the word unchanged', () => {
         const result = BaseLicencesPresenter.pluralise('point', 1)
 
@@ -87,7 +87,7 @@ describe('Licences - Base Licences presenter', () => {
       })
     })
 
-    describe('when count is not 1', () => {
+    describe('when the count is greater than 1', () => {
       it('returns the word pluralised', () => {
         const result = BaseLicencesPresenter.pluralise('point', 2)
 
