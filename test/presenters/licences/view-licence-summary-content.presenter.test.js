@@ -35,7 +35,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       abstractionPeriodsCaption: 'Periods of abstraction',
       abstractionPoints: ['At National Grid Reference TL 23198 88603'],
       abstractionPointsCaption: 'Point of abstraction',
-      activeTab: 'summary',
+      activeSecondaryNav: 'summary',
       documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
       enableMonitoringStationsView: true,
       endDate: null,
