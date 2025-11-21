@@ -8,6 +8,7 @@
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
+const { convertFromCubicMetres } = require('../../../lib/general.lib.js')
 const { returnUnits, unitNames } = require('../../../lib/static-lookups.lib.js')
 
 const UNITS = {
@@ -210,7 +211,7 @@ function _submissionLines(returnSubmissionLines) {
     let convertedQuantity = quantity
 
     if (quantity) {
-      convertedQuantity = quantity * returnUnits[userUnit].multiplier
+      convertedQuantity = convertFromCubicMetres(quantity, userUnit)
     }
 
     return {
