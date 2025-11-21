@@ -55,7 +55,7 @@ describe('Licences - View Licence Summary service', () => {
           abstractionPoints: [],
           abstractionPointsCaption: 'Point of abstraction',
           activeNavBar: 'search',
-          activeTab: 'summary',
+          activeSecondaryNav: 'summary',
           backLink: {
             href: '/licences',
             text: 'Go back to search'

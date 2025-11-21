@@ -28,7 +28,7 @@ async function go(licenceId, auth) {
 
   return {
     activeNavBar: 'search',
-    activeTab: 'contact-details',
+    activeSecondaryNav: 'contact-details',
     ...customerContactsData,
     ...licenceContactsData,
     roles: userRoles(auth)

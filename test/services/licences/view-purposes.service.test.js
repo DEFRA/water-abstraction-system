@@ -43,8 +43,8 @@ describe('Licences - View Purposes service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        activeSecondaryNav: 'summary',
         activeSummarySubNav: 'purposes',
-        activeTab: 'summary',
         backLink: {
           href: `/system/licences/${licenceFixture.licence.id}/summary`,
           text: 'Go back to summary'

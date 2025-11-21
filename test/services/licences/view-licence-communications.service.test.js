@@ -78,7 +78,7 @@ describe('Licences - View Licence Communications service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        activeTab: 'communications',
+        activeSecondaryNav: 'communications',
         backLink: {
           href: '/licences',
           text: 'Go back to search'
