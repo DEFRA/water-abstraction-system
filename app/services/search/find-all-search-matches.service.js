@@ -152,11 +152,7 @@ function _matchesFullBillingAccountReference(query) {
 
 function _matchesFullLicenceHolderName(query) {
   // Licence holder names are all at least 2 characters long
-  if (query.length < 2) {
-    return false
-  }
-
-  return true
+  return query.length > 1
 }
 
 function _matchesFullLicenceRef(query) {

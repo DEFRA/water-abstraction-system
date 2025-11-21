@@ -9,6 +9,15 @@ const ContactModel = require('../../models/contact.model.js')
 const { formatLongDate, formatReturnLogStatus } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
+const filterItems = [
+  ['billingAccount', 'Billing accounts'],
+  ['licenceHolder', 'Licence holders'],
+  ['licence', 'Licences'],
+  ['monitoringStation', 'Monitoring stations'],
+  ['returnLog', 'Return logs'],
+  ['user', 'Users']
+]
+
 const resultTypes = {
   billingAccount: 'billing accounts',
   licence: 'licences',
@@ -84,18 +93,19 @@ function _blankSearchPage(userScopes, query, resultType) {
 }
 
 function _filterItems(userScopes, resultType) {
-  const items = []
-
-  if (userScopes.includes('billing')) {
-    items.push({ checked: resultType === 'billingAccount', value: 'billingAccount', text: 'Billing accounts' })
-  }
-  items.push({ checked: resultType === 'licenceHolder', value: 'licenceHolder', text: 'Licence holders' })
-  items.push({ checked: resultType === 'licence', value: 'licence', text: 'Licences' })
-  items.push({ checked: resultType === 'monitoringStation', value: 'monitoringStation', text: 'Monitoring stations' })
-  items.push({ checked: resultType === 'returnLog', value: 'returnLog', text: 'Return logs' })
-  items.push({ checked: resultType === 'user', value: 'user', text: 'Users' })
-
-  return items
+  return filterItems
+    .filter(([value]) => {
+      // Only show the billing account filter option if the user has billing scope
+      // All other items are always shown
+      return value !== 'billingAccount' || userScopes.includes('billing')
+    })
+    .map(([value, text]) => {
+      return {
+        checked: value === resultType,
+        value,
+        text
+      }
+    })
 }
 
 function _holderContact(licence) {

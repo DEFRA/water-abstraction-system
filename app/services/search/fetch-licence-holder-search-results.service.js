@@ -12,6 +12,12 @@ const { db } = require('../../../db/db.js')
 // The value of the "role" attribute used to identify the licence holder
 const LICENCE_HOLDER_ROLE = 'Licence holder'
 
+// The JSONB path query to extract licence holder contacts has to be passed in as a parameter to a raw query to
+// prevent the question mark being used as a placeholder for a query parameter as Knex doesn't fully support/understand
+// PostgreSQL JSONB path query syntax.
+// So we define it here as a constant to be passed into the queries below.
+const jsonbPathQuery = `$[*] ? (@.role == "${LICENCE_HOLDER_ROLE}")`
+
 /**
  * Handles fetching search results for licence holders on the /search page
  *
@@ -31,57 +37,17 @@ async function go(query, page, matchFullHolderName = false) {
   const fullHolderName = _fullHolderName(query)
   const partialHolderName = `%${fullHolderName}%`
 
-  // The JSONB path query to extract licence holder contacts has to be passed in as a parameter to a raw query to
-  // prevent the question mark being used as a placeholder for a query parameter as Knex doesn't support fully
-  // support/understand PostgreSQL JSONB path query syntax
-  const jsonbPathQuery = `$[*] ? (@.role == "${LICENCE_HOLDER_ROLE}")`
+  const searchSql = _searchSql(matchFullHolderName)
+  const searchParams = _searchParams(matchFullHolderName, fullHolderName, partialHolderName, page)
+  const countSql = _countSql(matchFullHolderName)
+  const countParams = _countParams(matchFullHolderName, fullHolderName, partialHolderName)
 
-  const matchParams = [jsonbPathQuery]
-  const pageParams = [DatabaseConfig.defaultPageSize, (page - 1) * DatabaseConfig.defaultPageSize]
+  const [searchQueryResults, countQueryResults] = await Promise.all([
+    db.raw(searchSql, searchParams),
+    db.raw(countSql, countParams)
+  ])
 
-  let searchSql = `
-    SELECT  licences.id,
-            concat(dh.holder->>'salutation' || ' ', COALESCE(dh.holder->>'forename', dh.holder->>'initials') || ' ', dh.holder->>'name') AS "holderName",
-            dh.holder->>'type' AS "holderType",
-            dh.licence_ref AS "licenceRef"
-    FROM (SELECT licence_ref, jsonb_path_query(metadata->'contacts', ?) AS holder FROM licence_document_headers) dh
-    JOIN licences ON dh.licence_ref = licences.licence_ref
-    WHERE dh.holder->>'name' ILIKE ?
-    `
-
-  let countSql = `
-    SELECT COUNT(*) AS total
-    FROM (SELECT licence_ref, jsonb_path_query(metadata->'contacts', ?) AS holder FROM licence_document_headers) dh
-    JOIN licences ON dh.licence_ref = licences.licence_ref
-    WHERE dh.holder->>'name' ILIKE ?
-  `
-
-  if (matchFullHolderName) {
-    matchParams.push(fullHolderName)
-  } else {
-    searchSql += `AND NOT dh.holder->>'name' ILIKE ?`
-    countSql += `AND NOT dh.holder->>'name' ILIKE ?`
-    matchParams.push(partialHolderName)
-    matchParams.push(fullHolderName)
-  }
-
-  searchSql += `
-      ORDER BY
-            LOWER(dh.holder->>'name') ASC,
-            LOWER(COALESCE(dh.holder->>'forename', dh.holder->>'initials')) ASC,
-            LOWER(dh.holder->>'salutation') ASC,
-            dh.licence_ref ASC
-    `
-  if (!matchFullHolderName) {
-    searchSql += `LIMIT ? OFFSET ?`
-  }
-
-  const searchParams = matchFullHolderName ? matchParams : [...matchParams, ...pageParams]
-
-  const searchQueryResults = await db.raw(searchSql, searchParams)
-
-  const countQueryResults = await db.raw(countSql, matchParams)
-  const total = parseInt(countQueryResults.rows[0].total, 10)
+  const total = Number.parseInt(countQueryResults.rows[0].total, 10)
 
   return {
     results: searchQueryResults.rows,
@@ -89,11 +55,76 @@ async function go(query, page, matchFullHolderName = false) {
   }
 }
 
+function _countParams(matchFullHolderName, fullHolderName, partialHolderName) {
+  if (matchFullHolderName) {
+    return [jsonbPathQuery, fullHolderName]
+  }
+
+  return [jsonbPathQuery, partialHolderName, fullHolderName]
+}
+
+function _countSql(matchFullHolderName) {
+  const countSql = `
+    SELECT COUNT(*) AS total
+    FROM (SELECT licence_ref, jsonb_path_query(metadata->'contacts', ?) AS holder FROM licence_document_headers) dh
+    JOIN licences ON dh.licence_ref = licences.licence_ref
+    WHERE dh.holder->>'name' ILIKE ?
+  `
+
+  return matchFullHolderName ? countSql : countSql + `AND NOT dh.holder->>'name' ILIKE ?`
+}
+
 function _fullHolderName(query) {
   return query
     .replaceAll('\\', '\\\\')
     .replaceAll('%', String.raw`\%`)
     .replaceAll('_', String.raw`\_`)
+}
+
+function _searchParams(matchFullHolderName, fullHolderName, partialHolderName, page) {
+  if (matchFullHolderName) {
+    return [jsonbPathQuery, fullHolderName]
+  }
+
+  return [
+    jsonbPathQuery,
+    partialHolderName,
+    fullHolderName,
+    DatabaseConfig.defaultPageSize,
+    (page - 1) * DatabaseConfig.defaultPageSize
+  ]
+}
+
+function _searchSql(matchFullHolderName) {
+  return _searchSqlSelect(matchFullHolderName) + _searchSqlOrderedPage(matchFullHolderName)
+}
+
+function _searchSqlOrderedPage(matchFullHolderName) {
+  const searchSqlOrderedPage = `
+    ORDER BY
+          LOWER(dh.holder->>'name') ASC,
+          LOWER(COALESCE(dh.holder->>'forename', dh.holder->>'initials')) ASC,
+          LOWER(dh.holder->>'salutation') ASC,
+          dh.licence_ref ASC
+  `
+
+  return matchFullHolderName ? searchSqlOrderedPage : searchSqlOrderedPage + `LIMIT ? OFFSET ?`
+}
+function _searchSqlSelect(matchFullHolderName) {
+  const searchSqlSelect = `
+    SELECT  licences.id,
+            concat(dh.holder->>'salutation' || ' ',
+                   COALESCE(dh.holder->>'forename', dh.holder->>'initials') || ' ',
+                   dh.holder->>'name'
+                   ) AS "holderName",
+            dh.holder->>'type' AS "holderType",
+            dh.licence_ref AS "licenceRef"
+    FROM (SELECT licence_ref, jsonb_path_query(metadata->'contacts', ?) AS holder FROM licence_document_headers) dh
+    JOIN licences ON dh.licence_ref = licences.licence_ref
+    WHERE dh.holder->>'name' ILIKE ?
+  `
+
+  return matchFullHolderName ? searchSqlSelect : searchSqlSelect + `AND NOT dh.holder->>'name' ILIKE ?`
 }
 
 module.exports = {
