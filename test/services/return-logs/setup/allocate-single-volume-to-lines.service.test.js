@@ -10,24 +10,25 @@ const { expect } = Code
 // Thing under test
 const AllocateSingleVolumeToLinesService = require('../../../../app/services/return-logs/setup/allocate-single-volume-to-lines.service.js')
 
-describe('Return Logs - Allocate Single Volume To Lines Service', () => {
+describe.only('Return Logs - Allocate Single Volume To Lines Service', () => {
   describe('when passed an abstraction periods to and from date', () => {
-    let fromDate
-    let toDate
-    let singleVolume
     let lines
+    let session
 
     describe('and a single volume that can be divided equally', () => {
       describe('and the lines have had a quantity allocated to it before', () => {
         beforeEach(() => {
-          singleVolume = 2100
-          fromDate = new Date('2023-10-01').toISOString()
-          toDate = new Date('2024-03-31').toISOString()
           lines = _linesWithQuantity()
+          session = {
+            singleVolumeQuantity: 2100,
+            fromFullDate: new Date('2023-10-01').toISOString(),
+            toFullDate: new Date('2024-03-31').toISOString(),
+            lines
+          }
         })
 
         it('removes the old allocated quantity', () => {
-          AllocateSingleVolumeToLinesService.go(lines, fromDate, toDate, singleVolume)
+          AllocateSingleVolumeToLinesService.go(session)
 
           expect(lines[0].quantity).to.not.exist()
           expect(lines[1].quantity).to.not.exist()
@@ -38,7 +39,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
         })
 
         it('allocates the new quantity to the applicable lines', () => {
-          AllocateSingleVolumeToLinesService.go(lines, fromDate, toDate, singleVolume)
+          AllocateSingleVolumeToLinesService.go(session)
 
           expect(lines[6].quantity).to.equal(350)
           expect(lines[7].quantity).to.equal(350)
@@ -51,14 +52,17 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
 
       describe('and the lines have not been allocated to before', () => {
         beforeEach(() => {
-          singleVolume = 1200
-          fromDate = new Date('2023-04-01').toISOString()
-          toDate = new Date('2023-09-30').toISOString()
           lines = _lines()
+          session = {
+            singleVolumeQuantity: 1200,
+            fromFullDate: new Date('2023-04-01').toISOString(),
+            toFullDate: new Date('2023-09-30').toISOString(),
+            lines
+          }
         })
 
         it('allocates the volume evenly across lines covered by the abstraction period', () => {
-          AllocateSingleVolumeToLinesService.go(lines, fromDate, toDate, singleVolume)
+          AllocateSingleVolumeToLinesService.go(session)
 
           expect(lines[0].quantity).to.equal(200)
           expect(lines[1].quantity).to.equal(200)
@@ -69,7 +73,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
         })
 
         it('ignores lines outside the abstraction period', () => {
-          AllocateSingleVolumeToLinesService.go(lines, fromDate, toDate, singleVolume)
+          AllocateSingleVolumeToLinesService.go(session)
 
           expect(lines[6].quantity).to.not.exist()
           expect(lines[7].quantity).to.not.exist()
@@ -83,14 +87,17 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
 
     describe('and a single volume that cannot be divided equally', () => {
       beforeEach(() => {
-        singleVolume = 1001.111123
-        fromDate = new Date('2023-04-01').toISOString()
-        toDate = new Date('2023-09-30').toISOString()
         lines = _lines()
+        session = {
+          singleVolumeQuantity: 1001.111123,
+          fromFullDate: new Date('2023-04-01').toISOString(),
+          toFullDate: new Date('2023-09-30').toISOString(),
+          lines
+        }
       })
 
       it('handles rounding errors by adjusting the last line', () => {
-        AllocateSingleVolumeToLinesService.go(lines, fromDate, toDate, singleVolume)
+        AllocateSingleVolumeToLinesService.go(session)
 
         expect(lines[0].quantity).to.equal(166.851854)
         expect(lines[1].quantity).to.equal(166.851854)
@@ -101,7 +108,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
       })
 
       it('allocates the single volume across lines so their total matches the single volume', () => {
-        AllocateSingleVolumeToLinesService.go(lines, fromDate, toDate, singleVolume)
+        AllocateSingleVolumeToLinesService.go(session)
 
         const linesTotal = lines.reduce((sum, line) => {
           const quantity = line.quantity ?? 0
@@ -113,7 +120,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
       })
 
       it('ignores lines outside the abstraction period', () => {
-        AllocateSingleVolumeToLinesService.go(lines, fromDate, toDate, singleVolume)
+        AllocateSingleVolumeToLinesService.go(session)
 
         expect(lines[6].quantity).to.not.exist()
         expect(lines[7].quantity).to.not.exist()
