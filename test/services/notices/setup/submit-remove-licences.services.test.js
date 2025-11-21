@@ -9,19 +9,22 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const FetchReturnsDueService = require('../../../../app/services/notices/setup/fetch-returns-due.service.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+
+// Things we need to stub
+const FetchLicenceRefsWithDueReturnsService = require('../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js')
 
 // Thing under test
 const SubmitRemoveLicencesService = require('../../../../app/services/notices/setup/submit-remove-licences.service.js')
 
 describe('Notices - Setup - Submit Remove Licences service', () => {
-  let fetchReturnsDueServiceStub
+  let fetchLicenceRefsWithDueReturnsStub
   let payload
   let referenceCode
   let session
-  let validLicences
+  let licenceRefWithDueReturns
 
   beforeEach(async () => {
     referenceCode = generateReferenceCode()
@@ -40,21 +43,21 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
       }
     })
 
-    validLicences = [{ licenceRef: '1234' }]
+    licenceRefWithDueReturns = generateLicenceRef()
 
-    fetchReturnsDueServiceStub = Sinon.stub(FetchReturnsDueService, 'go')
+    fetchLicenceRefsWithDueReturnsStub = Sinon.stub(FetchLicenceRefsWithDueReturnsService, 'go')
   })
 
   afterEach(() => {
-    fetchReturnsDueServiceStub.restore()
+    fetchLicenceRefsWithDueReturnsStub.restore()
   })
 
   describe('when submitting licences to remove ', () => {
     describe('is successful', () => {
       beforeEach(async () => {
-        payload = { removeLicences: '1234' }
+        payload = { removeLicences: licenceRefWithDueReturns }
 
-        fetchReturnsDueServiceStub.resolves(validLicences)
+        fetchLicenceRefsWithDueReturnsStub.resolves([licenceRefWithDueReturns])
       })
 
       it('saves the submitted value', async () => {
@@ -62,7 +65,7 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.removeLicences).to.equal('1234')
+        expect(refreshedSession.removeLicences).to.equal(licenceRefWithDueReturns)
       })
 
       it('returns the redirect route', async () => {
@@ -78,9 +81,9 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
       beforeEach(async () => {
         payload = { removeLicences: '789' }
 
-        validLicences = []
+        licenceRefWithDueReturns = []
 
-        fetchReturnsDueServiceStub.resolves([validLicences])
+        fetchLicenceRefsWithDueReturnsStub.resolves([licenceRefWithDueReturns])
       })
 
       it('correctly presents the data with the error', async () => {
