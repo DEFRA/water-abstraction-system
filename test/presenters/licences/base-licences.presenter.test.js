@@ -88,7 +88,7 @@ describe('Licences - Base Licences presenter', () => {
     })
 
     describe('when count is not 1', () => {
-      it('should return the word pluralised', () => {
+      it('returns the word pluralised', () => {
         const result = BaseLicencesPresenter.pluralise('point', 2)
 
         expect(result).to.equal('points')
