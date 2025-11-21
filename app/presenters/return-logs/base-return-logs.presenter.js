@@ -1,6 +1,6 @@
 'use strict'
 
-const { formatNumber, formatQuantity, sentenceCase } = require('../base.presenter.js')
+const { formatNumber, formatQuantityToUnit, sentenceCase } = require('../base.presenter.js')
 const { convertToCubicMetres } = require('../../lib/general.lib.js')
 const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
 
@@ -124,7 +124,7 @@ function generateSummaryTableRows(method, frequency, lines, id = null, rootPath 
     }
 
     if (userUnit !== unitNames.CUBIC_METRES) {
-      rowData.unitTotal = formatQuantity(userUnit, quantity)
+      rowData.unitTotal = formatQuantityToUnit(quantity, userUnit)
     }
 
     return rowData

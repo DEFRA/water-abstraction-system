@@ -7,6 +7,7 @@
 
 const Joi = require('joi')
 
+const MAX_DECIMAL = 6
 const VALID_VALUES = ['yes', 'no']
 
 /**
@@ -19,7 +20,6 @@ const VALID_VALUES = ['yes', 'no']
  */
 function go(payload) {
   const singleVolumeError = "Select if it's a single volume"
-  const singleVolumeQuantityError = 'Enter a total figure'
 
   const schema = Joi.object({
     singleVolume: Joi.string()
@@ -30,16 +30,49 @@ function go(payload) {
         'any.only': singleVolumeError,
         'string.empty': singleVolumeError
       }),
-    singleVolumeQuantity: Joi.number().positive().when('singleVolume', { is: 'yes', then: Joi.required() }).messages({
-      'any.required': singleVolumeQuantityError,
-      'number.base': singleVolumeQuantityError,
-      'number.max': singleVolumeQuantityError,
-      'number.unsafe': singleVolumeQuantityError,
-      'number.positive': singleVolumeQuantityError
-    })
+    singleVolumeQuantity: Joi.number()
+      .positive()
+      .when('singleVolume', { is: 'yes', then: Joi.required() })
+      .custom(_maxDecimals, 'Max decimals')
+      .messages({
+        'any.invalid': 'Enter a number with no more than 6 decimal places',
+        'any.required': 'Enter a total figure',
+        'number.base': 'Enter a total figure',
+        'number.unsafe': 'Enter a smaller total figure',
+        'number.positive': 'Enter a total figure greater than zero'
+      })
   })
 
   return schema.validate(payload, { abortEarly: false })
+}
+
+/**
+ * Custom JOI validator to check a value does not have more than 6 decimal places
+ *
+ * Due to limitations in Joi validation for decimals, achieving validation for numbers with more than 6 decimal places
+ * requires a custom approach.
+ *
+ * See {@link https://github.com/hapijs/joi/blob/master/API.md#anycustommethod-description | Joi custom validation}.
+ *
+ * @param {number} value - the value to be validated
+ * @param {object} helpers - a Joi object containing a numbers of helpers
+ *
+ * @returns {number|object} if valid the original value else a Joi 'any.invalid' error. Knowing we return this means
+ * you can assign what error message to use when a number has too many decimals.
+ */
+function _maxDecimals(value, helpers) {
+  // Guard clause to ensure we don't try and interact with a null or undefined value
+  if (!value) {
+    return value
+  }
+
+  const parts = value.toString().split('.')
+
+  if (parts.length === 1 || parts[1].length <= MAX_DECIMAL) {
+    return value
+  }
+
+  return helpers.error('any.invalid')
 }
 
 module.exports = {

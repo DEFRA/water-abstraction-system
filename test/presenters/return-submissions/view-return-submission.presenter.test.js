@@ -213,7 +213,7 @@ describe('View Return Submissions presenter', () => {
           expect(result.tableData.rows[0]).to.include({
             cubicMetresQuantity: '1,000',
             date: '1 February 2025',
-            unitQuantity: '219,969.248'
+            unitQuantity: '219,969.248299'
           })
         })
 
@@ -221,7 +221,7 @@ describe('View Return Submissions presenter', () => {
           const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
           expect(result.tableData.cubicMetresTotal).to.equal('28,000')
-          expect(result.tableData.unitTotal).to.equal('6,159,138.952')
+          expect(result.tableData.unitTotal).to.equal('6,159,138.952372')
         })
       })
     })

@@ -29,6 +29,7 @@ describe('Return Logs Setup - Submit Period Used service', () => {
         periodEndDay: '31',
         periodEndMonth: '03',
         singleVolumeQuantity: '1200',
+        units: 'cubicMetres',
         lines: [
           { startDate: new Date('2023-04-01'), endDate: new Date('2023-04-30') },
           { startDate: new Date('2023-05-01'), endDate: new Date('2023-05-31') },

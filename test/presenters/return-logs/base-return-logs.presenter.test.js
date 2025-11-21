@@ -121,7 +121,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
       it('returns the quantity converted to cubic metres formatted as a string to 3 decimal places', () => {
         const result = BaseReturnLogsPresenter.formatToCubicMetres(quantity, units)
 
-        expect(result).to.equal('4.546')
+        expect(result).to.equal('4.54609')
       })
     })
 
@@ -345,8 +345,8 @@ describe('Return Logs - Base Return Logs presenter', () => {
           it('converts non-cubic metre totals to cubic metres as a formatted string', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-            expect(result[0].unitTotal).to.equal('87,987.699')
-            expect(result[1].unitTotal).to.equal('109,984.624')
+            expect(result[0].unitTotal).to.equal('87,987.69932')
+            expect(result[1].unitTotal).to.equal('109,984.62415')
           })
         })
 
@@ -503,7 +503,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
           it('converts non-cubic metre totals to cubic metres as a formatted string', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-            expect(result[0].unitTotal).to.equal('329,953.872')
+            expect(result[0].unitTotal).to.equal('329,953.872449')
           })
         })
 
