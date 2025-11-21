@@ -80,7 +80,7 @@ describe('Licences - Base Licences presenter', () => {
 
   describe('#pluralise()', () => {
     describe('when count is 1', () => {
-      it('should return the word ', () => {
+      it('returns the word unchanged', () => {
         const result = BaseLicencesPresenter.pluralise('point', 1)
 
         expect(result).to.equal('point')
