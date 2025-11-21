@@ -13,9 +13,9 @@ const LicenceModel = require('../../../app/models/licence.model.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const FetchLicenceRefService = require('../../../app/services/licences/fetch-licence-ref.service.js')
+const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
-describe('Licences - Fetch Licence ref service', () => {
+describe('Licences - Fetch Licence service', () => {
   let licence
 
   describe('when there is a matching licence', () => {
@@ -24,19 +24,22 @@ describe('Licences - Fetch Licence ref service', () => {
     })
 
     it('returns the matching licence', async () => {
-      const result = await FetchLicenceRefService.go(licence.id)
+      const result = await FetchLicenceService.go(licence.id)
 
       expect(result).to.be.an.instanceOf(LicenceModel)
       expect(result).to.equal({
+        expiredDate: null,
         id: licence.id,
-        licenceRef: licence.licenceRef
+        lapsedDate: null,
+        licenceRef: licence.licenceRef,
+        revokedDate: null
       })
     })
   })
 
   describe('when there is not a matching licence', () => {
     it('returns undefined', async () => {
-      const result = await FetchLicenceRefService.go(generateUUID())
+      const result = await FetchLicenceService.go(generateUUID())
 
       expect(result).to.be.undefined()
     })
