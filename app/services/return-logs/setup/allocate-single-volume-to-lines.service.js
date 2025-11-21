@@ -66,9 +66,11 @@ function _applyQuantityToLines(
     .toNumber()
 
   if (allocatedLineTotal !== Number(singleVolumeCubicMetres)) {
-    const roundingError = singleVolumeCubicMetres - allocatedLineTotal
+    const roundingError = Big(singleVolumeCubicMetres).minus(allocatedLineTotal).toNumber()
     const lastIndex = linesInsideAbstractionPeriod.length - 1
-    linesInsideAbstractionPeriod[lastIndex].quantityCubicMetres += roundingError
+    linesInsideAbstractionPeriod[lastIndex].quantityCubicMetres = Big(individualLineQuantity.cubicMetres)
+      .plus(roundingError)
+      .toNumber()
 
     linesInsideAbstractionPeriod[lastIndex].quantity = convertFromCubicMetres(
       linesInsideAbstractionPeriod[lastIndex].quantityCubicMetres,
@@ -101,7 +103,9 @@ function _linesInsideAbstractionPeriod(fromFullDate, lines, toFullDate) {
   const abstractionPeriodLines = []
 
   lines.forEach((line) => {
-    delete line.quantity // Delete any existing quantity
+    // Delete any existing quantities
+    delete line.quantity
+    delete line.quantityCubicMetres
 
     if (_lineWithinAbstractionPeriod(line.startDate, line.endDate, fromFullDate, toFullDate)) {
       abstractionPeriodLines.push(line)
