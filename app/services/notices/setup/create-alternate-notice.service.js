@@ -20,7 +20,7 @@ const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.j
  *
  * @param {module:EventModel} notice - The email notice to check for failed notifications
  *
- * @returns {Promise<object>} - the created notifications and reference code
+ * @returns {Promise<object>} The created alternate notice and notifications
  */
 async function go(notice) {
   const { failedLicenceRefs, failedReturnIds } = await FetchFailedReturnsInvitationsService.go(notice.id)

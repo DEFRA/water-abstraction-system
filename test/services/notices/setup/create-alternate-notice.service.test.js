@@ -9,11 +9,11 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
-
+const EventModel = require('../../../../app/models/event.model.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
+const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
 
 // Things to stub
 const FetchAlternateRecipientsService = require('../../../../app/services/notices/setup/fetch-alternate-recipients.service.js')
@@ -46,12 +46,13 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
     ]
 
     noticeWithErrors = {
+      id: generateUUID(),
       issuer: 'admin-internal@wrls.gov.uk',
       licences: ['01/123', '01/124', '01/125', '01/126'],
       metadata: {
         name: 'Returns: invitation',
         error: 3,
-        options: { excludeLicences: [] },
+        options: { excludedLicences: [] },
         recipients: 4,
         returnCycle: {
           dueDate: '2026-04-28',
@@ -88,11 +89,22 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
         _notification(result.notice.id, fetchReturnsAddressesServiceResults[2])
       ]
 
-      expect(result.notice.issuer).to.equal(noticeWithErrors.issuer)
-      expect(result.notice.licences).to.equal(['11/111', '01/124', '01/125'])
-      expect(result.notice.metadata.name).to.equal('Returns: invitation')
-      expect(result.notice.metadata.recipients).to.equal(3)
-      expect(result.notice.subtype).to.equal('returnInvitation')
+      expect(result.notice).to.be.an.instanceOf(EventModel)
+      expect(result.notice).to.equal(
+        {
+          ...noticeWithErrors,
+          licences: ['11/111', '01/124', '01/125'],
+          metadata: {
+            ...noticeWithErrors.metadata,
+            error: 0,
+            recipients: 3
+          },
+          overallStatus: 'pending',
+          statusCounts: { cancelled: 0, error: 0, pending: 3, sent: 0 },
+          triggerNoticeId: noticeWithErrors.id
+        },
+        { skip: ['createdAt', 'id', 'referenceCode', 'updatedAt'] }
+      )
       expect(result.notifications[0]).to.equal(notifications[0], { skip: ['createdAt', 'id'] })
       expect(result.notifications[1]).to.equal(notifications[1], { skip: ['createdAt', 'id'] })
       expect(result.notifications[2]).to.equal(notifications[2], { skip: ['createdAt', 'id'] })

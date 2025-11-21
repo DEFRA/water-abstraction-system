@@ -12,7 +12,7 @@ const { db } = require('../../../../db/db.js')
  *
  * @param {string[]} returnIds - The return Ids from failed returns invitations to primary users
  *
- * @returns {Promise<object[]>} - The alternate recipients for the failed notifications
+ * @returns {Promise<object[]>} The alternate recipients for the failed notifications
  */
 async function go(returnIds) {
   const { rows } = await _fetch(returnIds)

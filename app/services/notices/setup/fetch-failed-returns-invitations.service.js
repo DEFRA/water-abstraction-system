@@ -14,9 +14,9 @@ const NotificationModel = require('../../../models/notification.model.js')
  *
  * This could have been because of a temporary issue or an invalid email address.
  *
- * @param {string} noticeId - The event id to check.
+ * @param {string} noticeId - The notice UUID to check
  *
- * @returns {Promise<object>} - an object with an array of failed return log ids and an array of failed licence refs
+ * @returns {Promise<object>} An object with an array of failed return log ids and an array of failed licence refs
  */
 async function go(noticeId) {
   const results = await _fetch(noticeId)
