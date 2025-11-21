@@ -113,10 +113,9 @@ function _searchSqlOrderedPage(matchFullHolderName) {
 function _searchSqlSelect(matchFullHolderName) {
   const searchSqlSelect = `
     SELECT  licences.id,
-            concat(dh.holder->>'salutation' || ' ',
-                   COALESCE(dh.holder->>'forename', dh.holder->>'initials') || ' ',
-                   dh.holder->>'name'
-                   ) AS "holderName",
+            concat( dh.holder->>'salutation' || ' ',
+                    COALESCE(dh.holder->>'forename', dh.holder->>'initials') || ' ',
+                    dh.holder->>'name') AS "holderName",
             dh.holder->>'type' AS "holderType",
             dh.licence_ref AS "licenceRef"
     FROM (SELECT licence_ref, jsonb_path_query(metadata->'contacts', ?) AS holder FROM licence_document_headers) dh
