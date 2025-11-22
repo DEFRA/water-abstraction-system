@@ -26,7 +26,7 @@ const additionalContactTwo = {
   email: 'Brick.Tamland@news.com'
 }
 
-const primaryUser = {
+const primaryUserContact = {
   name: 'Primary User test',
   email: `primary.user@important.com`,
   role: 'primary_user'
@@ -69,18 +69,18 @@ async function seed(date) {
 
   return {
     additionalContact: await _additionalContact(),
-    licenceHolder: await _licenceHolder(dates.one),
-    licenceHolderTransferredReturnLog: await _licenceHolder(dates.eleven, false),
+    licenceHolder: await licenceHolder(dates.one),
+    licenceHolderTransferredReturnLog: await licenceHolder(dates.eleven, false),
     licenceHolderAndReturnTo: await _licenceHolderAndReturnTo(dates.two),
     licenceHolderAndReturnToTransferredReturnLog: await _licenceHolderAndReturnTo(dates.twelve, false),
     licenceHolderAndReturnToWithTheSameAddress: await _licenceHolderAndReturnToWithTheSameAddress(dates.three),
-    licenceHolderReturnLogGreaterThanToday: await _licenceHolder(dates.seven, '4000-01-01'),
+    licenceHolderReturnLogGreaterThanToday: await licenceHolder(dates.seven, '4000-01-01'),
     licenceHolderWithAdditionalContact: await _licenceHolderWithAdditionalContact(),
     multipleAdditionalContact: await _multipleAdditionalContact(),
     multipleAdditionalContactDifferentLicenceRefs: await _multipleAdditionalContactDifferentLicenceRefs(),
     multipleAdditionalContactWithAndWithoutAlerts: await _multipleAdditionalContactWithAndWithoutAlerts(),
     multipleLicenceRefs: await _multipleLicenceRefs(dates.ten),
-    primaryUser: await _primaryUser(dates.four),
+    primaryUser: await primaryUser(dates.four),
     primaryUserAndReturnsAgent: await _primaryUserAndReturnsAgent(dates.five),
     primaryUserAndReturnsAgentWithTheSameEmail: await _primaryUserAndReturnsAgentWithTheSameEmail(dates.six),
     primaryUserDueDate: await _primaryUserDueDate(dates.eight),
@@ -194,10 +194,10 @@ async function _addLicenceHolderAndReturnToSameAddress() {
 async function _addPrimaryUser() {
   const licenceDocumentHeader = await _addLicenceHolder()
 
-  await _addLicenceEntity(licenceDocumentHeader, primaryUser)
+  await _addLicenceEntity(licenceDocumentHeader, primaryUserContact)
 
   // Add a duplicate primary user with the same email
-  await _addLicenceEntity(licenceDocumentHeader, primaryUser)
+  await _addLicenceEntity(licenceDocumentHeader, primaryUserContact)
 
   return licenceDocumentHeader
 }
@@ -250,7 +250,16 @@ function _contact(name, role) {
   }
 }
 
-async function _licenceHolder(date, endDate = null, isCurrent = true) {
+/**
+ * Adds a licence holder with a return log.
+ *
+ * @param {Date} date - The start date of the return log.
+ * @param {Date} endDate - The end date of the return log.
+ * @param {boolean} isCurrent - Whether the return log is current.
+ *
+ * @returns {Promise<object>} - The licence holder and return log
+ */
+async function licenceHolder(date, endDate = null, isCurrent = true) {
   const licenceDocumentHeader = await _addLicenceHolder()
 
   const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef, endDate, isCurrent)
@@ -325,10 +334,17 @@ async function _multipleAdditionalContactWithAndWithoutAlerts() {
   return licenceDocument
 }
 
-async function _primaryUser(date) {
+/**
+ * A primary user is a contact associated with a licence document.
+ *
+ * @param {string} date - a date in the format 'YYYY-MM-DD'
+ *
+ * @returns {Promise<object>} a licence document header with a primary user and a return log
+ */
+async function primaryUser(date) {
   const licenceDocumentHeader = await _addPrimaryUser()
 
-  await _addLicenceEntity(licenceDocumentHeader, primaryUser)
+  await _addLicenceEntity(licenceDocumentHeader, primaryUserContact)
 
   const returnLog = await _addReturnLog(date, licenceDocumentHeader.licenceRef)
 
@@ -341,7 +357,7 @@ async function _primaryUser(date) {
 async function _primaryUserAndReturnsAgent(date) {
   const licenceDocumentHeader = await _addLicenceHolder()
 
-  await _addLicenceEntity(licenceDocumentHeader, primaryUser)
+  await _addLicenceEntity(licenceDocumentHeader, primaryUserContact)
 
   await _addLicenceEntity(licenceDocumentHeader, returnsAgent)
 
@@ -354,10 +370,10 @@ async function _primaryUserAndReturnsAgent(date) {
 }
 
 async function _primaryUserAndReturnsAgentWithTheSameEmail(date) {
-  const licenceDocumentHeader = await _addPrimaryUser(primaryUser)
+  const licenceDocumentHeader = await _addPrimaryUser(primaryUserContact)
 
   const licenceEntity = await LicenceEntityHelper.add({
-    name: primaryUser.email
+    name: primaryUserContact.email
   })
 
   await LicenceEntityRoleHelper.add({
@@ -410,11 +426,11 @@ async function _primaryUserMultipleReturnLogs(date) {
 }
 
 async function _primaryUserWithAdditionalContact() {
-  const primaryUser = await _addPrimaryUser()
+  const _primaryUser = await _addPrimaryUser()
 
-  await _additionalContact(primaryUser.licenceRef)
+  await _additionalContact(_primaryUser.licenceRef)
 
-  return primaryUser
+  return _primaryUser
 }
 
 /**
@@ -440,5 +456,7 @@ async function _multipleLicenceRefs(date) {
 }
 
 module.exports = {
+  licenceHolder,
+  primaryUser,
   seed
 }
