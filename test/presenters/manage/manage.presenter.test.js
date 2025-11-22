@@ -42,7 +42,7 @@ describe('Manage - Manage presenter', () => {
         manageUsers: { links: { createAccount: true }, show: true },
         returnNotices: { links: { adHoc: true, invitations: true, paperForms: false, reminders: true }, show: true },
         viewReports: {
-          links: { digitise: true, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
+          links: { digitise: true, invalidAddresses: true, kpis: true, returnsCycles: true },
           show: true
         },
         viewWorkflow: { links: { checkLicences: true }, show: true }
@@ -66,7 +66,7 @@ describe('Manage - Manage presenter', () => {
           show: false
         },
         viewReports: {
-          links: { digitise: false, invalidAddresses: false, kpis: false, notices: false, returnsCycles: false },
+          links: { digitise: false, invalidAddresses: false, kpis: false, returnsCycles: false },
           show: false
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }
@@ -87,7 +87,7 @@ describe('Manage - Manage presenter', () => {
         manageUsers: { links: { createAccount: true }, show: true },
         returnNotices: { links: { adHoc: true, invitations: true, paperForms: false, reminders: true }, show: true },
         viewReports: {
-          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
+          links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: true },
           show: true
         },
         viewWorkflow: { links: { checkLicences: true }, show: true }
@@ -111,7 +111,7 @@ describe('Manage - Manage presenter', () => {
           show: false
         },
         viewReports: {
-          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }
@@ -135,7 +135,7 @@ describe('Manage - Manage presenter', () => {
           show: false
         },
         viewReports: {
-          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }
@@ -159,7 +159,7 @@ describe('Manage - Manage presenter', () => {
           show: false
         },
         viewReports: {
-          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }
@@ -183,7 +183,7 @@ describe('Manage - Manage presenter', () => {
           show: false
         },
         viewReports: {
-          links: { digitise: true, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          links: { digitise: true, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }
@@ -207,7 +207,7 @@ describe('Manage - Manage presenter', () => {
           show: false
         },
         viewReports: {
-          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }
@@ -231,7 +231,7 @@ describe('Manage - Manage presenter', () => {
           show: true
         },
         viewReports: {
-          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
+          links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: true },
           show: true
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }

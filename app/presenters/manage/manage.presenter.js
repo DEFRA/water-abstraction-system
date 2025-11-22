@@ -77,12 +77,6 @@ function _viewReports(userScopes) {
     digitise: _hasPermission(userScopes, ['ar_approver']),
     invalidAddresses: _basicReports(userScopes),
     kpis: _basicReports(userScopes),
-    notices: _hasPermission(userScopes, [
-      'bulk_return_notifications',
-      'hof_notifications',
-      'renewal_notifications',
-      'returns'
-    ]),
     returnsCycles: _hasPermission(userScopes, ['returns'])
   }
 

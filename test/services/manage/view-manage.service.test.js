@@ -40,7 +40,6 @@ describe('Manage - View Manage service', () => {
             digitise: false,
             invalidAddresses: true,
             kpis: true,
-            notices: false,
             returnsCycles: false
           }
         },
