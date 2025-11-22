@@ -5,8 +5,6 @@
  * @module ManagePresenter
  */
 
-const featureFlagsConfig = require('../../../config/feature-flags.config.js')
-
 /**
  * Formats data for the `/manage` page
  *
@@ -21,7 +19,6 @@ function go(userScopes) {
   return {
     manageUsers: _manageUsers(userScopes),
     pageTitle: 'Manage',
-    returnNotices: _returnNotices(userScopes),
     viewReports: _viewReports(userScopes),
     viewWorkflow: _viewWorkflow(userScopes)
   }
@@ -59,17 +56,6 @@ function _manageUsers(userScopes) {
   }
 
   return { show: links.createAccount, links }
-}
-
-function _returnNotices(userScopes) {
-  const links = {
-    invitations: _hasPermission(userScopes, ['bulk_return_notifications']),
-    paperForms: _hasPermission(userScopes, ['returns']) && !featureFlagsConfig.enableAdHocNotifications,
-    reminders: _hasPermission(userScopes, ['bulk_return_notifications']),
-    adHoc: _hasPermission(userScopes, ['returns']) && featureFlagsConfig.enableAdHocNotifications
-  }
-
-  return { show: Object.values(links).includes(true), links }
 }
 
 function _viewReports(userScopes) {

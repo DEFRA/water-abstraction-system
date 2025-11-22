@@ -25,15 +25,6 @@ describe('Manage - View Manage service', () => {
         activeNavBar: 'manage',
         manageUsers: { show: false, links: { createAccount: false } },
         pageTitle: 'Manage',
-        returnNotices: {
-          show: false,
-          links: {
-            invitations: false,
-            paperForms: false,
-            reminders: false,
-            adHoc: false
-          }
-        },
         viewReports: {
           show: true,
           links: {
