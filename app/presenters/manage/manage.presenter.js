@@ -20,7 +20,7 @@ const featureFlagsConfig = require('../../../config/feature-flags.config.js')
 function go(userScopes) {
   return {
     manageUsers: _manageUsers(userScopes),
-    pageTitle: 'Manage reports and notices',
+    pageTitle: 'Manage',
     returnNotices: _returnNotices(userScopes),
     viewReports: _viewReports(userScopes),
     viewWorkflow: _viewWorkflow(userScopes)

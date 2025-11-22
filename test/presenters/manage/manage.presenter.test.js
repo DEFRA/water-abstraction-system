@@ -38,7 +38,7 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: true }, show: true },
         returnNotices: { links: { adHoc: true, invitations: true, paperForms: false, reminders: true }, show: true },
         viewReports: {
@@ -59,7 +59,7 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
@@ -83,7 +83,7 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: true }, show: true },
         returnNotices: { links: { adHoc: true, invitations: true, paperForms: false, reminders: true }, show: true },
         viewReports: {
@@ -104,7 +104,7 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
@@ -128,7 +128,7 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
@@ -152,7 +152,7 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
@@ -176,7 +176,7 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
@@ -200,7 +200,7 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
@@ -224,7 +224,7 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
         returnNotices: {
           links: { adHoc: true, invitations: false, paperForms: false, reminders: false },
