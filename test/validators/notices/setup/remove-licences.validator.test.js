@@ -10,12 +10,12 @@ const { expect } = Code
 // Thing under test
 const RemoveLicencesValidator = require('../../../../app/validators/notices/setup/remove-licences.validator.js')
 
-describe('Notices - Setup - Remove licences validator', () => {
-  let validLicences
+describe('Notices - Setup - Remove Licences validator', () => {
+  let licenceRefsWithDueReturns
   let payload
 
   beforeEach(() => {
-    validLicences = [{ licenceRef: '123/67' }]
+    licenceRefsWithDueReturns = ['123/67']
   })
 
   describe('when licences are valid to be removed', () => {
@@ -24,7 +24,7 @@ describe('Notices - Setup - Remove licences validator', () => {
     })
 
     it('confirms the data is valid', () => {
-      const result = RemoveLicencesValidator.go(payload, validLicences)
+      const result = RemoveLicencesValidator.go(payload, licenceRefsWithDueReturns)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -38,7 +38,7 @@ describe('Notices - Setup - Remove licences validator', () => {
       })
 
       it('fails validation', () => {
-        const result = RemoveLicencesValidator.go(payload, validLicences)
+        const result = RemoveLicencesValidator.go(payload, licenceRefsWithDueReturns)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -52,7 +52,7 @@ describe('Notices - Setup - Remove licences validator', () => {
       })
 
       it('fails validation', () => {
-        const result = RemoveLicencesValidator.go(payload, validLicences)
+        const result = RemoveLicencesValidator.go(payload, licenceRefsWithDueReturns)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()

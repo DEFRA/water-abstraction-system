@@ -13,19 +13,16 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * Validates data submitted for the `/notices/setup/remove-licences` page
  *
  * @param {object} payload - The payload from the request to be validated
- * @param {object[]} validLicences - The licences that that have due returns for the selected notification period
+ * @param {object[]} licenceRefsWithDueReturns - The references of licences with due returns for the period and notice
+ * type selected
  *
- * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
+ * @returns {object} The result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, validLicences) {
-  const validLicenceRefs = validLicences.map((licence) => {
-    return licence.licenceRef
-  })
-
+function go(payload, licenceRefsWithDueReturns) {
   const schema = Joi.object({
     removeLicences: Joi.custom((value, helpers) => {
-      return _removedLicencesInValidLicencesValidator(value, helpers, validLicenceRefs)
+      return _removedLicencesWithDueReturnsValidator(value, helpers, licenceRefsWithDueReturns)
     }, 'Custom Licence Validation')
   }).messages({
     missingLicence: 'There are no returns due for licence {{#missingLicences}}',
@@ -35,11 +32,11 @@ function go(payload, validLicences) {
   return schema.validate(payload, { abortEarly: false })
 }
 
-function _findRemovedLicencesNotInValidLicences(licenceRefsToRemove, validLicenceRefs) {
+function _findRemovedLicencesWithoutDueReturns(licenceRefsToRemove, licenceRefsWithDueReturns) {
   const missingLicences = []
 
   for (const licenceRefToRemove of licenceRefsToRemove) {
-    if (!validLicenceRefs.includes(licenceRefToRemove)) {
+    if (!licenceRefsWithDueReturns.includes(licenceRefToRemove)) {
       missingLicences.push(licenceRefToRemove)
     }
   }
@@ -47,10 +44,10 @@ function _findRemovedLicencesNotInValidLicences(licenceRefsToRemove, validLicenc
   return missingLicences
 }
 
-function _removedLicencesInValidLicencesValidator(value, helpers, validLicenceRefs) {
+function _removedLicencesWithDueReturnsValidator(value, helpers, licenceRefsWithDueReturns) {
   const result = transformStringOfLicencesToArray(value)
 
-  const missingLicences = _findRemovedLicencesNotInValidLicences(result, validLicenceRefs)
+  const missingLicences = _findRemovedLicencesWithoutDueReturns(result, licenceRefsWithDueReturns)
 
   if (missingLicences.length > 0) {
     const messageKey = missingLicences.length === 1 ? 'missingLicence' : 'missingLicences'
