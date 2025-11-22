@@ -3,31 +3,19 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const AuthService = require('../../../app/services/plugins/auth.service.js')
 const { data: users } = require('../../../db/seeds/data/users.js')
 
-// Things we want to stub
-const featureFlags = require('../../../config/feature-flags.config.js')
-
 // Thing under test
 const ManagePresenter = require('../../../app/presenters/manage/manage.presenter.js')
 
 describe('Manage - Manage presenter', () => {
   let auth
-
-  beforeEach(() => {
-    Sinon.stub(featureFlags, 'enableAdHocNotifications').value(true)
-  })
-
-  afterEach(() => {
-    Sinon.restore()
-  })
 
   describe('when the user is assigned "Super user" permissions', () => {
     beforeEach(async () => {
@@ -38,11 +26,10 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: true }, show: true },
-        returnNotices: { links: { adHoc: true, invitations: true, paperForms: false, reminders: true }, show: true },
         viewReports: {
-          links: { digitise: true, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
+          links: { digitise: true, invalidAddresses: true, kpis: true, returnsCycles: true },
           show: true
         },
         viewWorkflow: { links: { checkLicences: true }, show: true }
@@ -59,14 +46,10 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
-        returnNotices: {
-          links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
-          show: false
-        },
         viewReports: {
-          links: { digitise: false, invalidAddresses: false, kpis: false, notices: false, returnsCycles: false },
+          links: { digitise: false, invalidAddresses: false, kpis: false, returnsCycles: false },
           show: false
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }
@@ -83,11 +66,10 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: true }, show: true },
-        returnNotices: { links: { adHoc: true, invitations: true, paperForms: false, reminders: true }, show: true },
         viewReports: {
-          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
+          links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: true },
           show: true
         },
         viewWorkflow: { links: { checkLicences: true }, show: true }
@@ -104,14 +86,10 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
-        returnNotices: {
-          links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
-          show: false
-        },
         viewReports: {
-          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }
@@ -128,14 +106,10 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
-        returnNotices: {
-          links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
-          show: false
-        },
         viewReports: {
-          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }
@@ -152,14 +126,10 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
-        returnNotices: {
-          links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
-          show: false
-        },
         viewReports: {
-          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }
@@ -176,14 +146,10 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
-        returnNotices: {
-          links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
-          show: false
-        },
         viewReports: {
-          links: { digitise: true, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          links: { digitise: true, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }
@@ -200,14 +166,10 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
-        returnNotices: {
-          links: { adHoc: false, invitations: false, paperForms: false, reminders: false },
-          show: false
-        },
         viewReports: {
-          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: false },
+          links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: false },
           show: true
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }
@@ -224,14 +186,10 @@ describe('Manage - Manage presenter', () => {
       const result = await ManagePresenter.go(auth.credentials.scope)
 
       expect(result).to.equal({
-        pageTitle: 'Manage reports and notices',
+        pageTitle: 'Manage',
         manageUsers: { links: { createAccount: false }, show: false },
-        returnNotices: {
-          links: { adHoc: true, invitations: false, paperForms: false, reminders: false },
-          show: true
-        },
         viewReports: {
-          links: { digitise: false, invalidAddresses: true, kpis: true, notices: true, returnsCycles: true },
+          links: { digitise: false, invalidAddresses: true, kpis: true, returnsCycles: true },
           show: true
         },
         viewWorkflow: { links: { checkLicences: false }, show: false }

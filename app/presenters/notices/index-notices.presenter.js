@@ -7,8 +7,6 @@
 
 const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
 
-const featureFlagsConfig = require('../../../config/feature-flags.config.js')
-
 /**
  * Formats data for the `/notices` page
  *
@@ -35,10 +33,7 @@ function go(notices, totalNumber, auth) {
 function _links(scope) {
   const links = {}
 
-  if (
-    featureFlagsConfig.enableAdHocNotifications &&
-    (scope.includes('returns') || scope.includes('bulk_return_notifications'))
-  ) {
+  if (scope.includes('returns') || scope.includes('bulk_return_notifications')) {
     links.adhoc = {
       text: 'Create an ad-hoc notice',
       href: '/system/notices/setup/adhoc'
