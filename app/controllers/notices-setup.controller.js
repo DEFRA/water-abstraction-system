@@ -95,10 +95,10 @@ async function processRemoveThreshold(request, h) {
 async function setup(request, h) {
   const {
     params: { journey },
-    query: { monitoringStationId, noticeType }
+    query: { monitoringStationId }
   } = request
 
-  const { sessionId, path } = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
+  const { sessionId, path } = await InitiateSessionService.go(journey, monitoringStationId)
 
   return h.redirect(`/system/notices/setup/${sessionId}/${path}`)
 }
