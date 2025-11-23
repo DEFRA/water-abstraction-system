@@ -18,7 +18,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
 const FetchDownloadRecipientsService = require('../../../../app/services/notices/setup/fetch-download-recipients.service.js')
-const FetchPaperReturnRecipientsService = require('../../../../app/services/notices/setup/fetch-paper-return-recipients.service.js')
+const FetchPaperReturnRecipientsService = require('../../../../app/services/notices/setup/paper-returns/fetch-paper-return-recipients.service.js')
 
 // Thing under test
 const ProcessDownloadRecipientsService = require('../../../../app/services/notices/setup/process-download-recipients.service.js')

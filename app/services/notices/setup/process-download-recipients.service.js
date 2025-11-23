@@ -11,7 +11,7 @@ const DownloadPaperReturnRecipientsPresenter = require('../../../presenters/noti
 const DownloadRecipientsPresenter = require('../../../presenters/notices/setup/download-recipients.presenter.js')
 const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
 const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
-const FetchPaperReturnRecipientsService = require('./fetch-paper-return-recipients.service.js')
+const FetchPaperReturnRecipientsService = require('./paper-returns/fetch-paper-return-recipients.service.js')
 const RecipientsService = require('./recipients.service.js')
 const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 

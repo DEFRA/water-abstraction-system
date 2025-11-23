@@ -8,12 +8,12 @@ const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
+const LicenceDocumentHeaderSeeder = require('../../../../support/seeders/licence-document-header.seeder.js')
 
 // Thing under test
-const FetchPaperReturnRecipientsService = require('../../../../app/services/notices/setup/fetch-paper-return-recipients.service.js')
+const FetchPaperReturnRecipientsService = require('../../../../../app/services/notices/setup/paper-returns/fetch-paper-return-recipients.service.js')
 
-describe('Notices - Setup - Fetch Paper Return Recipients service', () => {
+describe('Notices - Setup - Paper Returns - Fetch Paper Return Recipients service', () => {
   let seedData
   let session
 

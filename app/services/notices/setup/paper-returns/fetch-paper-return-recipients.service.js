@@ -5,7 +5,7 @@
  * @module FetchPaperReturnRecipientsService
  */
 
-const { db } = require('../../../../db/db.js')
+const { db } = require('../../../../../db/db.js')
 
 /**
  * Fetches the paper return recipients data for the `/notices/setup/check` page
