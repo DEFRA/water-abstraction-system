@@ -15,7 +15,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
 const DetermineRecipientsService = require('../../../../app/services/notices/setup/determine-recipients.service.js')
-const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
+const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test

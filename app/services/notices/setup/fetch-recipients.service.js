@@ -6,7 +6,7 @@
  */
 
 const DetermineRecipientsService = require('./determine-recipients.service.js')
-const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
+const FetchAbstractionAlertRecipientsService = require('./abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
 const FetchPaperReturnRecipientsService = require('./paper-returns/fetch-paper-return-recipients.service.js')
 const FetchReturnsRecipientsService = require('./fetch-returns-recipients.service.js')
 const RecipientsService = require('./recipients.service.js')

@@ -8,12 +8,12 @@ const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceDocumentHeaderSeeder = require('../../../support/seeders/licence-document-header.seeder.js')
+const LicenceDocumentHeaderSeeder = require('../../../../support/seeders/licence-document-header.seeder.js')
 
 // Thing under test
-const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
+const FetchAbstractionAlertRecipientsService = require('../../../../../app/services/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
 
-describe('Notices - Setup - Fetch Abstraction Alert Recipients service', () => {
+describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipients service', () => {
   let seedData
   let session
 
