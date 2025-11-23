@@ -5,7 +5,7 @@
  * @module DetermineNoticeTypeService
  */
 
-const { generateRandomInteger } = require('../../../lib/general.lib.js')
+const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
 const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -67,28 +67,9 @@ function go(noticeType) {
     noticeType,
     name,
     notificationType,
-    referenceCode: _generateReferenceCode(prefix),
+    referenceCode: generateNoticeReferenceCode(prefix),
     subType
   }
-}
-
-/**
- * A function to generate a pseudo-unique reference code for recipients notices
- *
- * @param {string} prefix
- *
- * @returns {string} A reference code with a prefix and random string (RINV-A14GB8)
- */
-function _generateReferenceCode(prefix) {
-  const possible = 'ABCDEFGHJKLMNPQRTUVWXYZ0123456789'
-  const length = 6
-
-  let text = ''
-
-  for (let i = 0; i < length; i++) {
-    text += possible.charAt(generateRandomInteger(0, possible.length))
-  }
-  return prefix + text
 }
 
 module.exports = {

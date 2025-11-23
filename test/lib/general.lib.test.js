@@ -229,6 +229,15 @@ describe('GeneralLib', () => {
     })
   })
 
+  describe('#generateNoticeReferenceCode', () => {
+    it('generates a 6 character reference code with the given prefix', () => {
+      const result = GeneralLib.generateNoticeReferenceCode('TEST-')
+
+      expect(result.startsWith('TEST-')).to.be.true()
+      expect(result.length).to.equal(11)
+    })
+  })
+
   describe('#generateUUID', () => {
     // NOTE: generateUUID() only calls crypto.randomUUID(); it does nothing else. So, there is nothing really to test
     // and certainly, testing the UUID is really unique is beyond the scope of this project! But this test at least
