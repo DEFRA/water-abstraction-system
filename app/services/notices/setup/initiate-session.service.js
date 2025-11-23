@@ -6,9 +6,9 @@
  */
 
 const DetermineLicenceMonitoringStationsService = require('./abstraction-alerts/determine-licence-monitoring-stations.service.js')
-const DetermineNoticeTypeService = require('./determine-notice-type.service.js')
 const SessionModel = require('../../../models/session.model.js')
-const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
+const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
+const { NoticeJourney, NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Initiates the session record used for setting up a new notice
@@ -31,7 +31,7 @@ const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.j
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(journey, monitoringStationId = null) {
-  const notice = _notice(journey)
+  const noticeProperties = _noticeProperties(journey)
 
   let additionalData = {}
 
@@ -43,7 +43,7 @@ async function go(journey, monitoringStationId = null) {
     .insert({
       data: {
         ...additionalData,
-        ...notice,
+        ...noticeProperties,
         journey
       }
     })
@@ -56,16 +56,24 @@ async function go(journey, monitoringStationId = null) {
 }
 
 /**
- * The 'standard' and 'adhoc' journeys do not have a noticeType set as itn is selected later in the journey.
+ * The 'standard' and 'adhoc' journeys do not have a noticeType set as it is selected later in the journey.
  *
  * @private
  */
-function _notice(journey) {
-  if (journey === NoticeJourney.ALERTS) {
-    return DetermineNoticeTypeService.go(NoticeType.ABSTRACTION_ALERTS)
+function _noticeProperties(journey) {
+  if (journey !== NoticeJourney.ALERTS) {
+    return null
   }
 
-  return null
+  const { name, prefix, subType, notificationType } = NoticeTypes[NoticeType.ABSTRACTION_ALERTS]
+
+  return {
+    name,
+    noticeType: NoticeType.ABSTRACTION_ALERTS,
+    notificationType,
+    referenceCode: generateNoticeReferenceCode(prefix),
+    subType
+  }
 }
 
 function _redirect(journey) {

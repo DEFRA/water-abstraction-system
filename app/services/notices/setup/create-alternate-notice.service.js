@@ -7,13 +7,11 @@
  */
 
 const CreateNotificationsService = require('./create-notifications.service.js')
-const DetermineNoticeTypeService = require('./determine-notice-type.service.js')
 const EventModel = require('../../../models/event.model.js')
 const FetchAlternateRecipientsService = require('./fetch-alternate-recipients.service.js')
 const FetchFailedReturnsInvitationsService = require('./fetch-failed-returns-invitations.service.js')
-
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
-const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
+const { generateNoticeReferenceCode, timestampForPostgres } = require('../../../lib/general.lib.js')
+const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates creating a new notice and notifications for returns invitation emails that failed
@@ -29,15 +27,14 @@ async function go(notice) {
     return { notice: null, notifications: [] }
   }
 
-  const noticeType = DetermineNoticeTypeService.go(NoticeType.INVITATIONS)
   const recipients = await FetchAlternateRecipientsService.go(failedReturnIds)
-  const alternateNotice = await _notice(notice, noticeType, recipients, failedLicenceRefs)
+  const alternateNotice = await _notice(notice, recipients, failedLicenceRefs)
   const notifications = await _notifications(alternateNotice, recipients)
 
   return { notice: alternateNotice, notifications }
 }
 
-async function _notice(notice, noticeType, recipients, licenceRefs) {
+async function _notice(notice, recipients, licenceRefs) {
   const timestamp = timestampForPostgres()
   const noticeDetails = {
     issuer: notice.issuer,
@@ -51,10 +48,10 @@ async function _notice(notice, noticeType, recipients, licenceRefs) {
       recipients: recipients.length
     },
     overallStatus: 'pending',
-    referenceCode: noticeType.referenceCode,
+    referenceCode: generateNoticeReferenceCode('RINV-'),
     status: 'completed',
     statusCounts: { cancelled: 0, error: 0, pending: recipients.length, sent: 0 },
-    subtype: noticeType.subType,
+    subtype: notice.subtype,
     triggerNoticeId: notice.id,
     type: 'notification'
   }
