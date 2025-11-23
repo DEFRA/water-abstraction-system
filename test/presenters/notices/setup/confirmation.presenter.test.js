@@ -8,13 +8,13 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ConfirmationPresenter = require('../../../../app/presenters/notices/setup/confirmation.presenter.js')
 
 describe('Notices - Setup - Confirmation presenter', () => {
-  const referenceCode = generateReferenceCode()
+  const referenceCode = generateNoticeReferenceCode('RINV-')
 
   let event
 

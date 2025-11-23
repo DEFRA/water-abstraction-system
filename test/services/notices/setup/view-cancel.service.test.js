@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ViewCancelService = require('../../../../app/services/notices/setup/view-cancel.service.js')
@@ -18,7 +18,9 @@ describe('Notices - Setup - View Cancel service', () => {
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({ data: { licenceRef: '01/111', referenceCode: generateReferenceCode() } })
+    session = await SessionHelper.add({
+      data: { licenceRef: '01/111', referenceCode: generateNoticeReferenceCode('RINV-') }
+    })
   })
 
   describe('when called', () => {

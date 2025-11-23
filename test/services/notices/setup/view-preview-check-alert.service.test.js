@@ -16,7 +16,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Things we need to stub
 const DetermineRecipientsService = require('../../../../app/services/notices/setup/determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ViewPreviewCheckAlertService = require('../../../../app/services/notices/setup/view-preview-check-alert.service.js')
@@ -40,7 +40,7 @@ describe('Notices - Setup - View Preview Check Alert service', () => {
         licenceMonitoringStations.two.thresholdGroup,
         licenceMonitoringStations.three.thresholdGroup
       ],
-      referenceCode: generateReferenceCode('WAA')
+      referenceCode: generateNoticeReferenceCode('WAA-')
     }
 
     session = await SessionHelper.add({ data: sessionData })

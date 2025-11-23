@@ -11,9 +11,8 @@ const { expect } = Code
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things to stub
 const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
@@ -38,7 +37,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
 
     before(async () => {
       removeLicences = ''
-      referenceCode = generateReferenceCode('RREM')
+      referenceCode = generateNoticeReferenceCode('RREM-')
 
       session = await SessionHelper.add({
         data: { returnsPeriod: 'quarterFour', referenceCode, notificationType: 'Returns reminder', removeLicences }
@@ -68,7 +67,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
 
     before(async () => {
       removeLicences = ''
-      referenceCode = generateReferenceCode('RREM')
+      referenceCode = generateNoticeReferenceCode('RREM-')
 
       session = await SessionHelper.add({
         data: {
@@ -106,7 +105,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
 
       before(async () => {
         licenceRef = generateLicenceRef()
-        referenceCode = generateReferenceCode('PRTF')
+        referenceCode = generateNoticeReferenceCode('PRTF-')
 
         dueReturn = {
           description: 'Potable Water Supply - Direct',
@@ -162,7 +161,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
           recipients.licenceHolder.licence_refs
         ])
 
-        referenceCode = generateReferenceCode('WAA')
+        referenceCode = generateNoticeReferenceCode('WAA-')
 
         session = await SessionHelper.add({
           data: {
@@ -225,7 +224,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
           }
         ]
 
-        referenceCode = generateReferenceCode('WAA')
+        referenceCode = generateNoticeReferenceCode('WAA-')
 
         session = await SessionHelper.add({
           data: {

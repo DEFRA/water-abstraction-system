@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateReferenceCode } = require('../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const ViewNoticePresenter = require('../../../app/presenters/notices/view-notice.presenter.js')
@@ -30,7 +30,7 @@ describe('Notices - View Notice presenter', () => {
       id: 'a40dcb94-cb01-4fce-9a46-94b49eca2057',
       issuer: 'test@wrls.gov.uk',
       overallStatus: 'error',
-      referenceCode: generateReferenceCode('WAA'),
+      referenceCode: generateNoticeReferenceCode('WAA-'),
       status: 'completed',
       subtype: 'waterAbstractionAlerts',
       alertType: 'warning'

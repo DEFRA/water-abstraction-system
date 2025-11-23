@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ReturnsPeriodService = require('../../../../app/services/notices/setup/view-returns-period.service.js')
@@ -21,7 +21,7 @@ describe('Notices - Setup - View Returns Period service', () => {
   let session
 
   before(async () => {
-    referenceCode = generateReferenceCode()
+    referenceCode = generateNoticeReferenceCode('RINV-')
 
     session = await SessionHelper.add({ data: { referenceCode, noticeType: 'invitations' } })
 

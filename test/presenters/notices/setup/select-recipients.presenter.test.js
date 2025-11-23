@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const SelectRecipientsPresenter = require('../../../../app/presenters/notices/setup/select-recipients.presenter.js')
@@ -24,7 +24,7 @@ describe('Notices - Setup - Select Recipients presenter', () => {
   beforeEach(() => {
     recipients = RecipientsFixture.recipients()
 
-    referenceCode = generateReferenceCode()
+    referenceCode = generateNoticeReferenceCode('RINV-')
 
     selectedRecipients = [
       recipients.primaryUser.contact_hash_id,

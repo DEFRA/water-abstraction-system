@@ -12,6 +12,7 @@ const { generateUUID, today } = require('../../../app/lib/general.lib.js')
 
 // Test helpers
 const NotificationHelper = require('../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const UpdateEventService = require('../../../app/services/jobs/notification-status/update-event.service.js')
@@ -55,7 +56,7 @@ describe('Notifications - Process Returned Letter service', () => {
     beforeEach(async () => {
       payload = {
         notification_id: notification.notifyId,
-        reference: NotificationHelper.generateReferenceCode('RREM')
+        reference: generateNoticeReferenceCode('RREM-')
       }
 
       updateEventStub = Sinon.stub(UpdateEventService, 'go').resolves()
@@ -96,7 +97,7 @@ describe('Notifications - Process Returned Letter service', () => {
     beforeEach(async () => {
       payload = {
         notification_id: generateUUID(),
-        reference: NotificationHelper.generateReferenceCode('RREM')
+        reference: generateNoticeReferenceCode('RREM-')
       }
     })
 
@@ -117,7 +118,7 @@ describe('Notifications - Process Returned Letter service', () => {
     beforeEach(async () => {
       payload = {
         notification_id: notification.notifyId,
-        reference: NotificationHelper.generateReferenceCode('RREM')
+        reference: generateNoticeReferenceCode('RREM-')
       }
 
       Sinon.stub(UpdateEventService, 'go').rejects()

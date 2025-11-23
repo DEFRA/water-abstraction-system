@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ViewRecipientNameService = require('../../../../app/services/notices/setup/view-recipient-name.service.js')
@@ -20,7 +20,7 @@ describe('Notices - Setup - View Recipient Name service', () => {
   let sessionData
 
   beforeEach(async () => {
-    referenceCode = generateReferenceCode()
+    referenceCode = generateNoticeReferenceCode('RINV-')
     sessionData = { referenceCode }
 
     session = await SessionHelper.add({ data: sessionData })

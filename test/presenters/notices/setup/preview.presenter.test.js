@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const GeneratePreviewRequest = require('../../../../app/requests/notify/generate-preview.request.js')
@@ -29,7 +29,7 @@ describe('Notices - Setup - Preview presenter', () => {
   let referenceCode
 
   beforeEach(() => {
-    referenceCode = generateReferenceCode()
+    referenceCode = generateNoticeReferenceCode('RINV-')
   })
 
   afterEach(() => {
@@ -174,7 +174,7 @@ describe('Notices - Setup - Preview presenter', () => {
       beforeEach(() => {
         noticeType = 'abstractionAlerts'
 
-        referenceCode = generateReferenceCode('WAA')
+        referenceCode = generateNoticeReferenceCode('WAA-')
       })
 
       describe('and the notification is a letter', () => {

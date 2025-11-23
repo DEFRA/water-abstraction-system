@@ -8,11 +8,10 @@ const Sinon = require('sinon')
 const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const { postRequestOptions } = require('../support/general.js')
-
 // Test helpers
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { generateReferenceCode } = require('../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../app/lib/general.lib.js')
+const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const IndexNoticesService = require('../../app/services/notices/index-notices.service.js')
@@ -282,7 +281,7 @@ describe('Notices controller', () => {
 })
 
 function _noticePageData(error = false) {
-  const reference = generateReferenceCode()
+  const reference = generateNoticeReferenceCode('RINV-')
 
   const pageData = {
     activeNavBar: 'notices',

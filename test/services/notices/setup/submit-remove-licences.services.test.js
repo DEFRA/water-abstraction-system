@@ -10,8 +10,8 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Things we need to stub
 const FetchLicenceRefsWithDueReturnsService = require('../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js')
@@ -27,7 +27,7 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
   let licenceRefWithDueReturns
 
   beforeEach(async () => {
-    referenceCode = generateReferenceCode()
+    referenceCode = generateNoticeReferenceCode('RINV-')
 
     session = await SessionHelper.add({
       data: {

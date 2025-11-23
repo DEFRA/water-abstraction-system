@@ -13,9 +13,8 @@ const NoticesFixture = require('../../../fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../../fixtures/notifications.fixture.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Things we need to stub
 const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
@@ -73,7 +72,7 @@ describe('Notices - Setup - Submit Check service', () => {
     ]
     Sinon.stub(FetchRecipientsService, 'go').resolves(recipients)
 
-    referenceCode = generateReferenceCode('RINV-')
+    referenceCode = generateNoticeReferenceCode('RINV-')
     session = await SessionHelper.add({
       id: sessionId,
       data: {
