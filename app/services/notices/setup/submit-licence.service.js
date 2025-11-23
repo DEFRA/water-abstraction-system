@@ -5,7 +5,7 @@
  * @module SubmitLicenceService
  */
 
-const FetchReturnsDueByLicenceRefService = require('./fetch-returns-due-by-licence-ref.service.js')
+const FetchDueReturnsForLicenceService = require('./paper-returns/fetch-due-returns-for-licence.service.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
@@ -66,7 +66,7 @@ async function _dueReturns(payload) {
     return []
   }
 
-  return FetchReturnsDueByLicenceRefService.go(payload.licenceRef)
+  return FetchDueReturnsForLicenceService.go(payload.licenceRef)
 }
 
 async function _licenceExists(licenceRef) {

@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Fetches the returns due for the `/notices/setup/{sessionId}/paper-return` page
- * @module FetchReturnsDueByLicenceRefService
+ * Fetches the 'due' returns for a licence for the `/notices/setup/{sessionId}/paper-return` page
+ * @module FetchDueReturnsForLicenceService
  */
 
-const { db } = require('../../../../db/db.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+const { db } = require('../../../../../db/db.js')
+const { timestampForPostgres } = require('../../../../lib/general.lib.js')
 
 /**
- * Fetches the returns due for the `/notices/setup/{sessionId}/paper-return` page
+ * Fetches the 'due' returns for a licence for the `/notices/setup/{sessionId}/paper-return` page
  *
  * @param {string} licenceRef - The licence reference to fetch 'due' return logs for
  *
