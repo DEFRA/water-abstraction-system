@@ -220,8 +220,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
             return Big(sum).plus(quantityCubicMetres).toNumber()
           }, 0)
 
-          expect(linesQuantityTotal).to.equal(220213.661192)
-          expect(linesQuantityTotal).to.not.equal(session.singleVolumeQuantity)
+          expect(linesQuantityTotal).to.equal(220213.661192) // Slightly different to original volume of 220213.66119
           expect(linesQuantityCubicMetresTotal).to.equal(1001.111123)
         })
       })
