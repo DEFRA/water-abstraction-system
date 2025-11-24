@@ -6,6 +6,7 @@
  */
 
 const FetchCommunicationsService = require('./fetch-communications.service.js')
+const FetchLicenceService = require('./fetch-licence.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const ViewLicenceCommunicationsPresenter = require('../../presenters/licences/view-licence-communications.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
@@ -22,7 +23,9 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
 async function go(licenceId, auth, page = 1) {
   const selectedPageNumber = Number(page)
 
-  const { notifications, licence, totalNumber } = await FetchCommunicationsService.go(licenceId, selectedPageNumber)
+  const licence = await FetchLicenceService.go(licenceId)
+
+  const { notifications, totalNumber } = await FetchCommunicationsService.go(licence.licenceRef, selectedPageNumber)
 
   const pageData = ViewLicenceCommunicationsPresenter.go(notifications, licence)
 

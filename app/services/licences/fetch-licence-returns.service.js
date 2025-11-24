@@ -5,7 +5,6 @@
  * @module FetchLicenceReturnsService
  */
 
-const LicenceModel = require('../../models/licence.model.js')
 const ReturnLogModel = require('../../models/return-log.model.js')
 
 const DatabaseConfig = require('../../../config/database.config.js')
@@ -21,13 +20,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
 async function go(licenceId, page) {
   const { results, total } = await _fetch(licenceId, page)
 
-  const licence = await _fetchLicence(licenceId)
-
-  return { returns: results, licence, pagination: { total } }
-}
-
-async function _fetchLicence(licenceId) {
-  return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
+  return { returns: results, pagination: { total } }
 }
 
 async function _fetch(licenceId, page) {

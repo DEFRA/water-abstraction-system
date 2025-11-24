@@ -35,13 +35,9 @@ describe('Licences - Fetch Communications service', () => {
 
   describe('when the licence has notifications', () => {
     it('returns the matching notifications', async () => {
-      const result = await FetchCommunicationsService.go(licence.id, 1)
+      const result = await FetchCommunicationsService.go(licence.licenceRef, 1)
 
       expect(result).to.equal({
-        licence: {
-          id: licence.id,
-          licenceRef: licence.licenceRef
-        },
         notifications: [
           {
             createdAt: notification.createdAt,
@@ -67,13 +63,9 @@ describe('Licences - Fetch Communications service', () => {
     })
 
     it('returns no notifications', async () => {
-      const result = await FetchCommunicationsService.go(licence.id, 1)
+      const result = await FetchCommunicationsService.go(licence.licenceRef, 1)
 
       expect(result).to.equal({
-        licence: {
-          id: licence.id,
-          licenceRef: licence.licenceRef
-        },
         notifications: [],
         totalNumber: 0
       })
