@@ -19,7 +19,7 @@ async function go(licenceId) {
   const licence = await _fetch(licenceId)
 
   return {
-    licenceVersionPurposes: licence.licenceVersions[0].licenceVersionPurposes,
+    purposes: licence.licenceVersions[0].licenceVersionPurposes,
     licence: { id: licence.id, licenceRef: licence.licenceRef }
   }
 }

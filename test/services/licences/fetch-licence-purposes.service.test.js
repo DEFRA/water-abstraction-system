@@ -55,7 +55,7 @@ describe('Fetch Licence Purposes service', () => {
 
       expect(result).to.equal({
         licence: { id: licence.id, licenceRef: licence.licenceRef },
-        licenceVersionPurposes: [
+        purposes: [
           {
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3,

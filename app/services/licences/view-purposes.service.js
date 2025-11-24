@@ -18,9 +18,9 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence purposes template
  */
 async function go(licenceId, auth) {
-  const { licence, licenceVersionPurposes } = await FetchLicencePurposesService.go(licenceId)
+  const { licence, purposes } = await FetchLicencePurposesService.go(licenceId)
 
-  const pageData = PurposesPresenter.go(licenceVersionPurposes, licence)
+  const pageData = PurposesPresenter.go(purposes, licence)
 
   return {
     ...pageData,
