@@ -79,10 +79,6 @@ describe('Licences - Fetch Licence Bills service', () => {
               netAmount: 12345
             }
           ],
-          licence: {
-            id: licence.id,
-            licenceRef: licence.licenceRef
-          },
           pagination: {
             total: 1
           }
@@ -113,10 +109,6 @@ describe('Licences - Fetch Licence Bills service', () => {
 
         expect(result).to.equal({
           bills: [],
-          licence: {
-            id: licence.id,
-            licenceRef: licence.licenceRef
-          },
           pagination: {
             total: 0
           }
@@ -136,10 +128,6 @@ describe('Licences - Fetch Licence Bills service', () => {
 
       expect(result).to.equal({
         bills: [],
-        licence: {
-          id: licence.id,
-          licenceRef: licence.licenceRef
-        },
         pagination: {
           total: 0
         }

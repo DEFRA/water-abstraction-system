@@ -14,6 +14,7 @@ const { generateLicenceRef } = require('../../support/helpers/licence.helper.js'
 
 // Things we need to stub
 const FetchLicenceBillsService = require('../../../app/services/licences/fetch-licence-bills.service.js')
+const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
 const ViewLicenceBillsService = require('../../../app/services/licences/view-licence-bills.service.js')
@@ -37,12 +38,13 @@ describe('Licences - View Licence Bills service', () => {
     licenceId = generateUUID()
     licenceRef = generateLicenceRef()
 
+    Sinon.stub(FetchLicenceService, 'go').returns({
+      id: licenceId,
+      licenceRef
+    })
+
     Sinon.stub(FetchLicenceBillsService, 'go').returns({
       bills: [],
-      licence: {
-        id: licenceId,
-        licenceRef
-      },
       pagination: { total: 1 }
     })
   })

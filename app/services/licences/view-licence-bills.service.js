@@ -6,6 +6,7 @@
  */
 
 const FetchLicenceBillsService = require('./fetch-licence-bills.service.js')
+const FetchLicenceService = require('./fetch-licence.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const ViewLicenceBillsPresenter = require('../../presenters/licences/view-licence-bills.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
@@ -20,7 +21,9 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence bills template.
  */
 async function go(licenceId, auth, page) {
-  const { bills, licence, pagination } = await FetchLicenceBillsService.go(licenceId, page)
+  const licence = await FetchLicenceService.go(licenceId)
+
+  const { bills, pagination } = await FetchLicenceBillsService.go(licenceId, page)
 
   const pageData = ViewLicenceBillsPresenter.go(bills, licence)
 
