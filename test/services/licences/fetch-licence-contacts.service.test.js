@@ -53,30 +53,24 @@ describe('Licences - Fetch Licence Contacts service', () => {
     it('returns the matching licence contacts', async () => {
       const results = await FetchLicenceContactsService.go(licence.id)
 
-      expect(results).to.equal({
-        licence: {
-          id: licence.id,
-          licenceRef: licence.licenceRef
-        },
-        licenceContacts: [
-          {
-            communicationType: 'Licence Holder',
-            companyId,
-            companyName: 'Example Trading Ltd',
-            contactId,
-            firstName: 'Amara',
-            lastName: 'Gupta',
-            address1: 'ENVIRONMENT AGENCY',
-            address2: 'HORIZON HOUSE',
-            address3: 'DEANERY ROAD',
-            address4: 'BRISTOL',
-            address5: null,
-            address6: null,
-            postcode: 'BS1 5AH',
-            country: 'United Kingdom'
-          }
-        ]
-      })
+      expect(results).to.equal([
+        {
+          communicationType: 'Licence Holder',
+          companyId,
+          companyName: 'Example Trading Ltd',
+          contactId,
+          firstName: 'Amara',
+          lastName: 'Gupta',
+          address1: 'ENVIRONMENT AGENCY',
+          address2: 'HORIZON HOUSE',
+          address3: 'DEANERY ROAD',
+          address4: 'BRISTOL',
+          address5: null,
+          address6: null,
+          postcode: 'BS1 5AH',
+          country: 'United Kingdom'
+        }
+      ])
     })
   })
 })
