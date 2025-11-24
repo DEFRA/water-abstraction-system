@@ -6,6 +6,7 @@
  */
 
 const FetchLicencePointsService = require('../licences/fetch-licence-points.service.js')
+const FetchLicenceService = require('./fetch-licence.service.js')
 const PointsPresenter = require('../../presenters/licences/points.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
@@ -18,7 +19,8 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence points template
  */
 async function go(licenceId, auth) {
-  const { licence, points } = await FetchLicencePointsService.go(licenceId)
+  const licence = await FetchLicenceService.go(licenceId)
+  const points = await FetchLicencePointsService.go(licenceId)
 
   const pageData = PointsPresenter.go(points, licence)
 
