@@ -20,7 +20,7 @@ const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 // Thing under test
 const FetchLicenceConditionsService = require('../../../app/services/licences/fetch-licence-conditions.service.js')
 
-describe('Fetch Licence Conditions service', () => {
+describe('Licences - Fetch Licence Conditions service', () => {
   let licence
   let licenceVersion
   let licenceVersionPurpose
@@ -75,53 +75,47 @@ describe('Fetch Licence Conditions service', () => {
       })
     })
 
-    it('return the matching licence and its related conditions', async () => {
+    it('return the matching conditions', async () => {
       const result = await FetchLicenceConditionsService.go(licence.id)
 
-      expect(result).to.equal({
-        conditions: [
-          {
-            id: licenceVersionPurposeConditionType.id,
-            displayTitle: licenceVersionPurposeConditionType.displayTitle,
-            description: licenceVersionPurposeConditionType.description,
-            subcodeDescription: licenceVersionPurposeConditionType.subcodeDescription,
-            param1Label: licenceVersionPurposeConditionType.param1Label,
-            param2Label: licenceVersionPurposeConditionType.param2Label,
-            licenceVersionPurposeConditions: [
-              {
-                id: licenceVersionPurposeCondition.id,
-                param1: licenceVersionPurposeCondition.param1,
-                param2: licenceVersionPurposeCondition.param2,
-                notes: licenceVersionPurposeCondition.notes,
-                licenceVersionPurpose: {
-                  id: licenceVersionPurpose.id,
-                  purpose: {
-                    id: purpose.id,
-                    description: purpose.description
-                  },
-                  licenceVersionPurposePoints: [
-                    {
-                      id: licenceVersionPurposePoint.id,
-                      point: {
-                        id: point.id,
-                        description: point.description,
-                        ngr1: point.ngr1,
-                        ngr2: point.ngr2,
-                        ngr3: point.ngr3,
-                        ngr4: point.ngr4
-                      }
+      expect(result).to.equal([
+        {
+          id: licenceVersionPurposeConditionType.id,
+          displayTitle: licenceVersionPurposeConditionType.displayTitle,
+          description: licenceVersionPurposeConditionType.description,
+          subcodeDescription: licenceVersionPurposeConditionType.subcodeDescription,
+          param1Label: licenceVersionPurposeConditionType.param1Label,
+          param2Label: licenceVersionPurposeConditionType.param2Label,
+          licenceVersionPurposeConditions: [
+            {
+              id: licenceVersionPurposeCondition.id,
+              param1: licenceVersionPurposeCondition.param1,
+              param2: licenceVersionPurposeCondition.param2,
+              notes: licenceVersionPurposeCondition.notes,
+              licenceVersionPurpose: {
+                id: licenceVersionPurpose.id,
+                purpose: {
+                  id: purpose.id,
+                  description: purpose.description
+                },
+                licenceVersionPurposePoints: [
+                  {
+                    id: licenceVersionPurposePoint.id,
+                    point: {
+                      id: point.id,
+                      description: point.description,
+                      ngr1: point.ngr1,
+                      ngr2: point.ngr2,
+                      ngr3: point.ngr3,
+                      ngr4: point.ngr4
                     }
-                  ]
-                }
+                  }
+                ]
               }
-            ]
-          }
-        ],
-        licence: {
-          id: licence.id,
-          licenceRef: licence.licenceRef
+            }
+          ]
         }
-      })
+      ])
     })
   })
 })
