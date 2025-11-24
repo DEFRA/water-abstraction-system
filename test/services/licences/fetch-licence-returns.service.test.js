@@ -70,10 +70,6 @@ describe('Licences - Fetch licence returns service', () => {
       const result = await FetchLicenceReturnsService.go(licence.id, 1)
 
       expect(result).to.equal({
-        licence: {
-          id: licence.id,
-          licenceRef: licence.licenceRef
-        },
         pagination: {
           total: 3
         },
