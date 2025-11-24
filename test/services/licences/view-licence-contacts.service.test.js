@@ -15,6 +15,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 // Things we need to stub
 const FetchLicenceContactsService = require('../../../app/services/licences/fetch-licence-contacts.service.js')
 const FetchCustomerContactsService = require('../../../app/services/licences/fetch-customer-contacts.service.js')
+const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
 const ViewLicenceContactsService = require('../../../app/services/licences/view-licence-contacts.service.js')
@@ -38,29 +39,27 @@ describe('Licences - View Licence Contacts service', () => {
       }
     }
 
-    Sinon.stub(FetchLicenceContactsService, 'go').returns({
-      licence: {
-        licenceRef
-      },
-      licenceContacts: [
-        {
-          communicationType: 'Licence Holder',
-          companyId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
-          companyName: 'Acme ltd',
-          contactId: null,
-          firstName: null,
-          lastName: null,
-          address1: '34 Eastgate',
-          address2: null,
-          address3: null,
-          address4: null,
-          address5: null,
-          address6: null,
-          postcode: 'CF71 7DG',
-          country: 'United Kingdom'
-        }
-      ]
+    Sinon.stub(FetchLicenceService, 'go').returns({
+      licenceRef
     })
+    Sinon.stub(FetchLicenceContactsService, 'go').returns([
+      {
+        communicationType: 'Licence Holder',
+        companyId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
+        companyName: 'Acme ltd',
+        contactId: null,
+        firstName: null,
+        lastName: null,
+        address1: '34 Eastgate',
+        address2: null,
+        address3: null,
+        address4: null,
+        address5: null,
+        address6: null,
+        postcode: 'CF71 7DG',
+        country: 'United Kingdom'
+      }
+    ])
 
     Sinon.stub(FetchCustomerContactsService, 'go').returns([
       {

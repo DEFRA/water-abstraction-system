@@ -5,7 +5,6 @@
  * @module FetchLicenceContactService
  */
 
-const LicenceModel = require('../../models/licence.model.js')
 const { db } = require('../../../db/db.js')
 
 /**
@@ -13,18 +12,10 @@ const { db } = require('../../../db/db.js')
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<object>} the data needed to populate the view licence page's contact details tab
+ * @returns {Promise<object[]>} the data needed to populate the view licence page's contact details tab
  */
 async function go(licenceId) {
-  const licenceContacts = await _fetch(licenceId)
-
-  const licence = await _fetchLicence(licenceId)
-
-  return { licenceContacts, licence }
-}
-
-async function _fetchLicence(licenceId) {
-  return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
+  return await _fetch(licenceId)
 }
 
 async function _fetch(licenceId) {

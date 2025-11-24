@@ -8,6 +8,7 @@
 const CustomerContactsPresenter = require('../../presenters/licences/customer-contacts.presenter.js')
 const FetchCustomerContactsService = require('./fetch-customer-contacts.service.js')
 const FetchLicenceContactsService = require('./fetch-licence-contacts.service.js')
+const FetchLicenceService = require('./fetch-licence.service.js')
 const LicenceContactsPresenter = require('../../presenters/licences/licence-contacts.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
@@ -20,7 +21,9 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence contact details template.
  */
 async function go(licenceId, auth) {
-  const { licenceContacts, licence } = await FetchLicenceContactsService.go(licenceId)
+  const licence = await FetchLicenceService.go(licenceId)
+
+  const licenceContacts = await FetchLicenceContactsService.go(licenceId)
   const licenceContactsData = LicenceContactsPresenter.go(licenceContacts, licence)
 
   const customerContacts = await FetchCustomerContactsService.go(licenceId)
