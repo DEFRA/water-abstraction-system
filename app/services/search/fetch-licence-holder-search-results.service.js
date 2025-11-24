@@ -9,14 +9,12 @@ const DatabaseConfig = require('../../../config/database.config.js')
 
 const { db } = require('../../../db/db.js')
 
-// The value of the "role" attribute used to identify the licence holder
-const LICENCE_HOLDER_ROLE = 'Licence holder'
-
-// The JSONB path query to extract licence holder contacts has to be passed in as a parameter to a raw query to
-// prevent the question mark being used as a placeholder for a query parameter as Knex doesn't fully support/understand
-// PostgreSQL JSONB path query syntax.
-// So we define it here as a constant to be passed into the queries below.
-const LICENCE_HOLDER_ROLE_JSONB_PATH_QUERY = `$[*] ? (@.role == "${LICENCE_HOLDER_ROLE}")`
+// Knex doesn't fully support/understand PostgreSQL JSONB path query syntax, so any question marks in the query get
+// interpreted by Knex as placeholders for query parameters, which it then replaces with whatever actual parameter value
+// we have provided to the query.
+// To prevent this, we define a placeholder parameter for the JSONB path query in our main query and then pass the JSONB
+// path query in as the parameter value.
+const LICENCE_HOLDER_ROLE_JSONB_PATH_QUERY = '$[*] ? (@.role == "Licence holder")'
 
 /**
  * Handles fetching search results for licence holders on the /search page
