@@ -12,7 +12,7 @@ const LicenceModel = require('../../models/licence.model.js')
  *
  * @param {string} licenceId - The UUID of the licence
  *
- * @returns {Promise<{object}>} The licence instance and related licenceVersionPurposes data needed for the
+ * @returns {Promise<object>} The licence instance and related licenceVersionPurposes data needed for the
  * licence purposes page
  */
 async function go(licenceId) {
