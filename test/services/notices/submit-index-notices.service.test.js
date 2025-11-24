@@ -12,7 +12,6 @@ const { expect } = Code
 const NoticesFixture = require('../../fixtures/notices.fixture.js')
 
 // Things to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
 
 // Thing under test
@@ -35,8 +34,6 @@ describe('Notices - Submit Index Notices service', () => {
       get: Sinon.stub(),
       set: Sinon.stub().returns()
     }
-
-    Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
   })
 
   afterEach(() => {

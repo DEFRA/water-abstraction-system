@@ -43,8 +43,8 @@ describe('Licences - View Points service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        activeSecondaryNav: 'summary',
         activeSummarySubNav: 'points',
-        activeTab: 'summary',
         backLink: {
           href: `/system/licences/${licenceFixture.licence.id}/summary`,
           text: 'Go back to summary'
@@ -72,7 +72,7 @@ describe('Licences - View Points service', () => {
         pageTitle: 'Points',
         pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
         roles: ['billing'],
-        showingPoints: 'Showing 1 abstraction points'
+        showingPoints: 'Showing 1 abstraction point'
       })
     })
   })

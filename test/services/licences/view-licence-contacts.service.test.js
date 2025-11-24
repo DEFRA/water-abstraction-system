@@ -86,7 +86,7 @@ describe('Licences - View Licence Contacts service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        activeTab: 'contact-details',
+        activeSecondaryNav: 'contact-details',
         backLink: {
           href: '/licences',
           text: 'Go back to search'

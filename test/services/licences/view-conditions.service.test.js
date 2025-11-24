@@ -42,8 +42,8 @@ describe('Licences - View Conditions service', () => {
 
     expect(result).to.equal({
       activeNavBar: 'search',
+      activeSecondaryNav: 'summary',
       activeSummarySubNav: 'conditions',
-      activeTab: 'summary',
       backLink: {
         href: `/system/licences/${licenceFixture.licence.id}/summary`,
         text: 'Go back to summary'
@@ -78,7 +78,7 @@ describe('Licences - View Conditions service', () => {
       pageTitle: 'Conditions',
       pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
       roles: ['billing'],
-      showingConditions: 'Showing 1 types of further conditions',
+      showingConditions: 'Showing 1 type of further conditions',
       warning: {
         iconFallbackText: 'Warning',
         text: 'We may not be able to show a full list of the conditions, because we do not hold all of the licence information on our system yet. You should refer to the paper copy of the licence to view all conditions.'
