@@ -20,7 +20,7 @@ const ViewPurposesService = require('../../../app/services/licences/view-purpose
 describe('Licences - View Purposes service', () => {
   let auth
   let licence
-  let licenceVersionPurposes
+  let purposes
 
   beforeEach(() => {
     auth = {
@@ -35,11 +35,11 @@ describe('Licences - View Purposes service', () => {
 
     licence = ViewLicencesFixture.licence()
 
-    licenceVersionPurposes = [ViewLicencesFixture.licenceVersionPurpose()]
+    purposes = [ViewLicencesFixture.licenceVersionPurpose()]
 
     Sinon.stub(FetchLicencePurposesService, 'go').returns({
       licence,
-      licenceVersionPurposes
+      purposes
     })
   })
 
