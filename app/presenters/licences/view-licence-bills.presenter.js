@@ -13,12 +13,12 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 /**
  * Formats data for the `/licences/{id}/bills` view licence bill page
  *
- * @param {object} licence - The id and licence ref of the licence
  * @param {object[]} bills - The licence's bills
+ * @param {object} licence - The id and licence ref of the licence
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licence, bills) {
+function go(bills, licence) {
   const { id: licenceId, licenceRef } = licence
 
   return {

@@ -10,13 +10,14 @@ const { pluralise } = require('./base-licences.presenter.js')
 /**
  * Formats the licence and related conditions data for the licence conditions page
  *
- * @param {object} licenceVersionPurposeConditionTypes - The licence and related conditions data returned by `FetchLicenceConditionsService`
+ * @param {object[]} conditions - The condition data returned by `FetchLicenceConditionsService`
+ * @param {object} licence - The id and licence ref of the licence
  *
  * @returns {object} licence and conditions data needed by the view template
  */
-function go(licenceVersionPurposeConditionTypes) {
-  const { id: licenceId, licenceRef } = licenceVersionPurposeConditionTypes.licence
-  const conditionTypes = _conditionTypes(licenceVersionPurposeConditionTypes.conditions)
+function go(conditions, licence) {
+  const { id: licenceId, licenceRef } = licence
+  const conditionTypes = _conditionTypes(conditions)
 
   return {
     backLink: {
