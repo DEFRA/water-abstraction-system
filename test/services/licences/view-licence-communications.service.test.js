@@ -16,6 +16,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchCommunicationsService = require('../../../app/services/licences/fetch-communications.service.js')
+const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
 const ViewLicenceCommunicationsService = require('../../../app/services/licences/view-licence-communications.service.js')
@@ -58,12 +59,13 @@ describe('Licences - View Licence Communications service', () => {
       }
     }
 
+    Sinon.stub(FetchLicenceService, 'go').resolves({
+      id: licenceId,
+      licenceRef
+    })
+
     Sinon.stub(FetchCommunicationsService, 'go').resolves({
       notifications: [notification],
-      licence: {
-        id: licenceId,
-        licenceRef
-      },
       totalNumber: 1
     })
   })
