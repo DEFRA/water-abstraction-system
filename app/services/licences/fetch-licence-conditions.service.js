@@ -6,9 +6,8 @@
  * @module FetchLicenceConditionsService
  */
 
-const LicenceModel = require('../../models/licence.model.js')
-const LicenceVersionPurposeConditionTypeModel = require('../../models/licence-version-purpose-condition-type.model.js')
 const LicenceVersionPurposeConditionModel = require('../../models/licence-version-purpose-condition.model.js')
+const LicenceVersionPurposeConditionTypeModel = require('../../models/licence-version-purpose-condition-type.model.js')
 const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 
 /**
@@ -17,21 +16,11 @@ const LicenceVersionPurposeModel = require('../../models/licence-version-purpose
  *
  * @param {string} licenceId - The UUID of the licence
  *
- * @returns {Promise<object>} An object containing the licence and condition types, along with their related purposes
+ * @returns {Promise<object[]>} An array oof objects containing the condition types, along with their related purposes
  * and points data, required for the licence conditions page
  */
 async function go(licenceId) {
-  const conditions = await _fetchConditions(licenceId)
-  const licence = await _fetchLicence(licenceId)
-
-  return {
-    conditions,
-    licence
-  }
-}
-
-async function _fetchLicence(licenceId) {
-  return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
+  return _fetchConditions(licenceId)
 }
 
 async function _fetchConditions(licenceId) {
