@@ -7,31 +7,22 @@
 
 const { ref } = require('objection')
 
-const LicenceModel = require('../../models/licence.model.js')
 const NotificationModel = require('../../models/notification.model.js')
 
 const databaseConfig = require('../../../config/database.config.js')
 
 /**
- * Fetch the matching licence and return data needed for the view licence communications page
+ * Fetches data needed for the view '/licences/{id}/communications` page
  *
- * Was built to provide the data needed for the '/licences/{id}/communications' page
- *
- * @param {string} licenceId - The UUID for the licence to fetch
+ * @param {string} licenceRef - The licence ref for the licence
  * @param {number} page - The current page for the pagination service
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's communications tab
  */
-async function go(licenceId, page) {
-  const licence = await _fetchLicence(licenceId)
+async function go(licenceRef, page) {
+  const { results: notifications, total: totalNumber } = await _fetch(licenceRef, page)
 
-  const { results: notifications, total: totalNumber } = await _fetch(licence.licenceRef, page)
-
-  return { notifications, licence, totalNumber }
-}
-
-async function _fetchLicence(licenceId) {
-  return LicenceModel.query().findById(licenceId).select(['id', 'licenceRef'])
+  return { notifications, totalNumber }
 }
 
 async function _fetch(licenceRef, page) {
