@@ -16,7 +16,7 @@ const LICENCE_HOLDER_ROLE = 'Licence holder'
 // prevent the question mark being used as a placeholder for a query parameter as Knex doesn't fully support/understand
 // PostgreSQL JSONB path query syntax.
 // So we define it here as a constant to be passed into the queries below.
-const jsonbPathQuery = `$[*] ? (@.role == "${LICENCE_HOLDER_ROLE}")`
+const LICENCE_HOLDER_ROLE_JSONB_PATH_QUERY = `$[*] ? (@.role == "${LICENCE_HOLDER_ROLE}")`
 
 /**
  * Handles fetching search results for licence holders on the /search page
@@ -57,10 +57,10 @@ async function go(query, page, matchFullHolderName = false) {
 
 function _countParams(matchFullHolderName, fullHolderName, partialHolderName) {
   if (matchFullHolderName) {
-    return [jsonbPathQuery, fullHolderName]
+    return [LICENCE_HOLDER_ROLE_JSONB_PATH_QUERY, fullHolderName]
   }
 
-  return [jsonbPathQuery, partialHolderName, fullHolderName]
+  return [LICENCE_HOLDER_ROLE_JSONB_PATH_QUERY, partialHolderName, fullHolderName]
 }
 
 function _countSql(matchFullHolderName) {
@@ -83,11 +83,11 @@ function _fullHolderName(query) {
 
 function _searchParams(matchFullHolderName, fullHolderName, partialHolderName, page) {
   if (matchFullHolderName) {
-    return [jsonbPathQuery, fullHolderName]
+    return [LICENCE_HOLDER_ROLE_JSONB_PATH_QUERY, fullHolderName]
   }
 
   return [
-    jsonbPathQuery,
+    LICENCE_HOLDER_ROLE_JSONB_PATH_QUERY,
     partialHolderName,
     fullHolderName,
     DatabaseConfig.defaultPageSize,
