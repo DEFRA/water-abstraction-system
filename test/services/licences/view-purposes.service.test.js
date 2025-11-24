@@ -13,6 +13,7 @@ const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 
 // Things we need to stub
 const FetchLicencePurposesService = require('../../../app/services/licences/fetch-licence-purposes.service.js')
+const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
 const ViewPurposesService = require('../../../app/services/licences/view-purposes.service.js')
@@ -37,10 +38,9 @@ describe('Licences - View Purposes service', () => {
 
     purposes = [ViewLicencesFixture.licenceVersionPurpose()]
 
-    Sinon.stub(FetchLicencePurposesService, 'go').returns({
-      licence,
-      purposes
-    })
+    Sinon.stub(FetchLicenceService, 'go').returns(licence)
+
+    Sinon.stub(FetchLicencePurposesService, 'go').returns(purposes)
   })
 
   describe('when a licence with a matching ID exists', () => {

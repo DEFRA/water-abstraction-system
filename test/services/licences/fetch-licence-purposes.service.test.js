@@ -19,7 +19,7 @@ const SourceHelper = require('../../support/helpers/source.helper.js')
 // Thing under test
 const FetchLicencePurposesService = require('../../../app/services/licences/fetch-licence-purposes.service.js')
 
-describe('Fetch Licence Purposes service', () => {
+describe('Licences - Fetch Licence Purposes service', () => {
   let licence
   let licenceVersion
   let licenceVersionPurpose
@@ -50,47 +50,44 @@ describe('Fetch Licence Purposes service', () => {
       })
     })
 
-    it('returns the matching licence versions, licence version purposes, points, purposes, and sources', async () => {
+    it('returns the matching licence version purposes, points, purposes, and sources', async () => {
       const result = await FetchLicencePurposesService.go(licence.id)
 
-      expect(result).to.equal({
-        licence: { id: licence.id, licenceRef: licence.licenceRef },
-        purposes: [
-          {
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 3,
-            abstractionPeriodStartDay: 1,
-            abstractionPeriodStartMonth: 1,
-            annualQuantity: null,
-            dailyQuantity: null,
-            hourlyQuantity: null,
-            instantQuantity: null,
-            licenceVersionPurposePoints: [
-              {
-                abstractionMethod: 'Unspecified Pump'
-              }
-            ],
-            points: [
-              {
-                description: point.description,
-                id: point.id,
-                ngr1: point.ngr1,
-                ngr2: null,
-                ngr3: null,
-                ngr4: null,
-                source: {
-                  description: source.description,
-                  id: source.id
-                }
-              }
-            ],
-            purpose: {
-              description: purpose.description,
-              id: purpose.id
+      expect(result).to.equal([
+        {
+          abstractionPeriodEndDay: 31,
+          abstractionPeriodEndMonth: 3,
+          abstractionPeriodStartDay: 1,
+          abstractionPeriodStartMonth: 1,
+          annualQuantity: null,
+          dailyQuantity: null,
+          hourlyQuantity: null,
+          instantQuantity: null,
+          licenceVersionPurposePoints: [
+            {
+              abstractionMethod: 'Unspecified Pump'
             }
+          ],
+          points: [
+            {
+              description: point.description,
+              id: point.id,
+              ngr1: point.ngr1,
+              ngr2: null,
+              ngr3: null,
+              ngr4: null,
+              source: {
+                description: source.description,
+                id: source.id
+              }
+            }
+          ],
+          purpose: {
+            description: purpose.description,
+            id: purpose.id
           }
-        ]
-      })
+        }
+      ])
     })
   })
 })

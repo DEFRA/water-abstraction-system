@@ -1,27 +1,23 @@
 'use strict'
 
 /**
- * Fetches the licence instance and its related licenceVersionPurposes data needed for the licence purposes page
+ * Fetches the licenceVersionPurposes data needed for the licence purposes page
  * @module FetchLicencePurposesService
  */
 
 const LicenceModel = require('../../models/licence.model.js')
 
 /**
- * Fetches the licence instance and its related licenceVersionPurposes data needed for the licence purposes page
+ * Fetches the licenceVersionPurposes data needed for the licence purposes page
  *
  * @param {string} licenceId - The UUID of the licence
  *
- * @returns {Promise<object>} The licence instance and related licenceVersionPurposes data needed for the
- * licence purposes page
+ * @returns {Promise<object>} The licenceVersionPurposes data needed for the licence purposes page
  */
 async function go(licenceId) {
   const licence = await _fetch(licenceId)
 
-  return {
-    purposes: licence.licenceVersions[0].licenceVersionPurposes,
-    licence: { id: licence.id, licenceRef: licence.licenceRef }
-  }
+  return licence.licenceVersions[0].licenceVersionPurposes
 }
 
 async function _fetch(licenceId) {
