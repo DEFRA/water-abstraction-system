@@ -941,7 +941,7 @@ describe('Return Logs Setup - Check presenter', () => {
         session.units = 'cubicMetres'
       })
 
-      it('returns the "totalQuantity" to 3 decimal places formatted as a string', () => {
+      it('returns the "totalQuantity" to 6 decimal places formatted as a string', () => {
         const result = CheckPresenter.go(session)
 
         expect(result.totalCubicMetres).to.equal('1,000.123456')
@@ -953,7 +953,7 @@ describe('Return Logs Setup - Check presenter', () => {
         session.units = 'megalitres'
       })
 
-      it('returns the "totalQuantity" converted to cubic metres to 3 decimal places formatted as a string', () => {
+      it('returns the "totalQuantity" converted to cubic metres to 6 decimal places formatted as a string', () => {
         const result = CheckPresenter.go(session)
 
         expect(result.totalCubicMetres).to.equal('1,000,123.456')
@@ -983,7 +983,7 @@ describe('Return Logs Setup - Check presenter', () => {
         ]
       })
 
-      it('returns the "totalQuantity" to 3 decimal places formatted as a string', () => {
+      it('returns the "totalQuantity" to 6 decimal places formatted as a string', () => {
         const result = CheckPresenter.go(session)
 
         expect(result.totalQuantity).to.equal('1,010.123567')

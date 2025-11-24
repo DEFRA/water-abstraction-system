@@ -118,7 +118,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
         units = 'gal'
       })
 
-      it('returns the quantity converted to cubic metres formatted as a string to 3 decimal places', () => {
+      it('returns the quantity converted to cubic metres formatted as a string to 6 decimal places', () => {
         const result = BaseReturnLogsPresenter.formatToCubicMetres(quantity, units)
 
         expect(result).to.equal('4.54609')
