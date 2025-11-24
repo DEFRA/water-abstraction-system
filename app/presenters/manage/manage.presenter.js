@@ -5,8 +5,6 @@
  * @module ManagePresenter
  */
 
-const featureFlagsConfig = require('../../../config/feature-flags.config.js')
-
 /**
  * Formats data for the `/manage` page
  *
@@ -20,8 +18,7 @@ const featureFlagsConfig = require('../../../config/feature-flags.config.js')
 function go(userScopes) {
   return {
     manageUsers: _manageUsers(userScopes),
-    pageTitle: 'Manage reports and notices',
-    returnNotices: _returnNotices(userScopes),
+    pageTitle: 'Manage',
     viewReports: _viewReports(userScopes),
     viewWorkflow: _viewWorkflow(userScopes)
   }
@@ -61,28 +58,11 @@ function _manageUsers(userScopes) {
   return { show: links.createAccount, links }
 }
 
-function _returnNotices(userScopes) {
-  const links = {
-    invitations: _hasPermission(userScopes, ['bulk_return_notifications']),
-    paperForms: _hasPermission(userScopes, ['returns']) && !featureFlagsConfig.enableAdHocNotifications,
-    reminders: _hasPermission(userScopes, ['bulk_return_notifications']),
-    adHoc: _hasPermission(userScopes, ['returns']) && featureFlagsConfig.enableAdHocNotifications
-  }
-
-  return { show: Object.values(links).includes(true), links }
-}
-
 function _viewReports(userScopes) {
   const links = {
     digitise: _hasPermission(userScopes, ['ar_approver']),
     invalidAddresses: _basicReports(userScopes),
     kpis: _basicReports(userScopes),
-    notices: _hasPermission(userScopes, [
-      'bulk_return_notifications',
-      'hof_notifications',
-      'renewal_notifications',
-      'returns'
-    ]),
     returnsCycles: _hasPermission(userScopes, ['returns'])
   }
 

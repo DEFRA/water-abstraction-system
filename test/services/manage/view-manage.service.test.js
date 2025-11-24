@@ -24,23 +24,13 @@ describe('Manage - View Manage service', () => {
       expect(result).to.equal({
         activeNavBar: 'manage',
         manageUsers: { show: false, links: { createAccount: false } },
-        pageTitle: 'Manage reports and notices',
-        returnNotices: {
-          show: false,
-          links: {
-            invitations: false,
-            paperForms: false,
-            reminders: false,
-            adHoc: false
-          }
-        },
+        pageTitle: 'Manage',
         viewReports: {
           show: true,
           links: {
             digitise: false,
             invalidAddresses: true,
             kpis: true,
-            notices: false,
             returnsCycles: false
           }
         },
