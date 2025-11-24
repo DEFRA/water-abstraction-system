@@ -87,8 +87,8 @@ function _returnLines(returnSubmissionId, session, timestamp) {
 
     previousReading = currentReading
 
-    // We use destructuring to remove the reading property as this is not a valid column in the db
-    const { reading, ...restOfLine } = line
+    // We use destructuring to remove the quantityCubicMetres and reading properties as these are not a valid db columns
+    const { quantityCubicMetres, reading, ...restOfLine } = line
 
     const userUnit = _getUserUnit(session.units)
 
