@@ -39,7 +39,7 @@ async function go(notice) {
 
 async function _notice(notice, noticeType, recipients, licenceRefs) {
   const timestamp = timestampForPostgres()
-  const _noticeDetails = {
+  const noticeDetails = {
     issuer: notice.issuer,
     licences: licenceRefs,
     metadata: {
@@ -59,7 +59,7 @@ async function _notice(notice, noticeType, recipients, licenceRefs) {
     type: 'notification'
   }
 
-  return EventModel.query().insert({ ..._noticeDetails, createdAt: timestamp, updatedAt: timestamp })
+  return EventModel.query().insert({ ...noticeDetails, createdAt: timestamp, updatedAt: timestamp })
 }
 
 async function _notifications(notice, recipients) {
