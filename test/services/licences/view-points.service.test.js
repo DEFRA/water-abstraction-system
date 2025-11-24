@@ -13,6 +13,7 @@ const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 
 // Things we need to stub
 const FetchLicencePointsService = require('../../../app/services/licences/fetch-licence-points.service.js')
+const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
 const ViewPointsService = require('../../../app/services/licences/view-points.service.js')
@@ -34,10 +35,9 @@ describe('Licences - View Points service', () => {
 
     licence = ViewLicencesFixture.licence()
 
-    Sinon.stub(FetchLicencePointsService, 'go').returns({
-      licence,
-      points: [ViewLicencesFixture.point()]
-    })
+    Sinon.stub(FetchLicenceService, 'go').returns(licence)
+
+    Sinon.stub(FetchLicencePointsService, 'go').returns([ViewLicencesFixture.point()])
   })
 
   describe('when a licence with a matching ID exists', () => {
