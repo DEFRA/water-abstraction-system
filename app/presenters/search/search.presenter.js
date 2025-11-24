@@ -12,8 +12,10 @@ const { today } = require('../../lib/general.lib.js')
 const resultTypes = {
   billingAccount: 'billing accounts',
   licence: 'licences',
+  licenceHolder: 'licence holders',
   monitoringStation: 'monitoring stations',
-  returnLog: 'return logs'
+  returnLog: 'return logs',
+  user: 'users'
 }
 
 /**
@@ -87,9 +89,14 @@ function _filterItems(userScopes, resultType) {
   if (userScopes.includes('billing')) {
     items.push({ checked: resultType === 'billingAccount', value: 'billingAccount', text: 'Billing accounts' })
   }
-  items.push({ checked: resultType === 'licence', value: 'licence', text: 'Licences' })
-  items.push({ checked: resultType === 'monitoringStation', value: 'monitoringStation', text: 'Monitoring stations' })
-  items.push({ checked: resultType === 'returnLog', value: 'returnLog', text: 'Return logs' })
+
+  items.push(
+    { checked: resultType === 'licenceHolder', value: 'licenceHolder', text: 'Licence holders' },
+    { checked: resultType === 'licence', value: 'licence', text: 'Licences' },
+    { checked: resultType === 'monitoringStation', value: 'monitoringStation', text: 'Monitoring stations' },
+    { checked: resultType === 'returnLog', value: 'returnLog', text: 'Return logs' },
+    { checked: resultType === 'user', value: 'user', text: 'Users' }
+  )
 
   return items
 }
@@ -117,6 +124,14 @@ function _licenceEndDetails(licenceEnd) {
   }
 
   return { licenceEndDate, licenceEndedText }
+}
+
+function _licenceHolders(licenceHolders) {
+  if (licenceHolders.length === 0) {
+    return null
+  }
+
+  return licenceHolders
 }
 
 function _licences(licences) {
@@ -147,6 +162,7 @@ function _licences(licences) {
 function _matches(searchResults) {
   return {
     billingAccounts: _billingAccounts(searchResults.billingAccounts.results),
+    licenceHolders: _licenceHolders(searchResults.licenceHolders.results),
     licences: _licences(searchResults.licences.results),
     monitoringStations: _monitoringStations(searchResults.monitoringStations.results),
     returnLogs: _returnLogs(searchResults.returnLogs.results),
