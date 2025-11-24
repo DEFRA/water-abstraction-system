@@ -18,7 +18,7 @@ const SourceHelper = require('../../support/helpers/source.helper.js')
 // Thing under test
 const FetchLicencePointsService = require('../../../app/services/licences/fetch-licence-points.service.js')
 
-describe('Fetch Licence Points service', () => {
+describe('Licences - Fetch Licence Points service', () => {
   let licence
   let licenceVersion
   let licenceVersionPurpose
@@ -62,38 +62,32 @@ describe('Fetch Licence Points service', () => {
       })
     })
 
-    it('returns the matching licence and its related points and source', async () => {
+    it('returns the points and source', async () => {
       const result = await FetchLicencePointsService.go(licence.id)
 
-      expect(result).to.equal({
-        licence: {
-          id: licence.id,
-          licenceRef: licence.licenceRef
-        },
-        points: [
-          {
-            bgsReference: 'TL 14/123',
-            category: 'Single Point',
-            depth: 123,
-            description: 'RIVER OUSE AT BLETSOE',
-            hydroInterceptDistance: 8.01,
-            hydroReference: 'TL 14/133',
-            hydroOffsetDistance: 5.56,
-            pointId: point.id,
-            locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
-            ngr1: 'SD 963 193',
-            ngr2: 'SD 963 193',
-            ngr3: 'SD 963 193',
-            ngr4: 'SD 963 193',
-            note: 'WELL IS SPRING-FED',
-            primaryType: 'Groundwater',
-            secondaryType: 'Borehole',
-            wellReference: '81312',
-            sourceDescription: source.description,
-            sourceType: source.sourceType
-          }
-        ]
-      })
+      expect(result).to.equal([
+        {
+          bgsReference: 'TL 14/123',
+          category: 'Single Point',
+          depth: 123,
+          description: 'RIVER OUSE AT BLETSOE',
+          hydroInterceptDistance: 8.01,
+          hydroReference: 'TL 14/133',
+          hydroOffsetDistance: 5.56,
+          pointId: point.id,
+          locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
+          ngr1: 'SD 963 193',
+          ngr2: 'SD 963 193',
+          ngr3: 'SD 963 193',
+          ngr4: 'SD 963 193',
+          note: 'WELL IS SPRING-FED',
+          primaryType: 'Groundwater',
+          secondaryType: 'Borehole',
+          wellReference: '81312',
+          sourceDescription: source.description,
+          sourceType: source.sourceType
+        }
+      ])
     })
   })
 })
