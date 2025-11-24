@@ -2,6 +2,9 @@
 
 const notifyTemplates = {
   standard: {
+    failedInvitations: {
+      licenceHolderLetter: '791ba6a9-e821-4df6-b49f-4ab3bb15248f'
+    },
     invitations: {
       primaryUserEmail: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f',
       returnsAgentEmail: '41c45bd4-8225-4d7e-a175-b48b613b5510',
@@ -16,6 +19,9 @@ const notifyTemplates = {
     }
   },
   adhoc: {
+    failedInvitations: {
+      licenceHolderLetter: '791ba6a9-e821-4df6-b49f-4ab3bb15248f'
+    },
     invitations: {
       primaryUserEmail: '7bb89469-1dbc-458a-9526-fad8ab71285f',
       returnsAgentEmail: 'cbc4efe2-f3b5-4642-8f6d-3532df73ee94',
