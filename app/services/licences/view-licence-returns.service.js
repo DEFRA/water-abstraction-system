@@ -7,6 +7,7 @@
 
 const DetermineLicenceHasReturnVersionsService = require('./determine-licence-has-return-versions.service.js')
 const FetchLicenceReturnsService = require('./fetch-licence-returns.service.js')
+const FetchLicenceService = require('../../services/licences/fetch-licence.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const ViewLicenceReturnsPresenter = require('../../presenters/licences/view-licence-returns.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
@@ -21,9 +22,11 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
 async function go(licenceId, auth, page) {
+  const licence = await FetchLicenceService.go(licenceId)
+
   const hasRequirements = await DetermineLicenceHasReturnVersionsService.go(licenceId)
 
-  const { returns, licence, pagination } = await FetchLicenceReturnsService.go(licenceId, page)
+  const { returns, pagination } = await FetchLicenceReturnsService.go(licenceId, page)
 
   const pageData = ViewLicenceReturnsPresenter.go(returns, hasRequirements, licence)
 
