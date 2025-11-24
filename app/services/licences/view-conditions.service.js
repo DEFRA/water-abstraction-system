@@ -5,8 +5,9 @@
  * @module ViewConditionsService
  */
 
-const FetchLicenceConditionsService = require('./fetch-licence-conditions.service.js')
 const ConditionsPresenter = require('../../presenters/licences/conditions.presenter.js')
+const FetchLicenceConditionsService = require('./fetch-licence-conditions.service.js')
+const FetchLicenceService = require('./fetch-licence.service.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
@@ -18,7 +19,8 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence conditions template
  */
 async function go(licenceId, auth) {
-  const { conditions, licence } = await FetchLicenceConditionsService.go(licenceId)
+  const licence = await FetchLicenceService.go(licenceId)
+  const conditions = await FetchLicenceConditionsService.go(licenceId)
 
   const pageData = ConditionsPresenter.go(conditions, licence)
 
