@@ -31,7 +31,7 @@ async function _fetchLicence(licenceId) {
 }
 
 async function _fetchPoints(licenceId) {
-  const points = await db
+  return db
     .distinct()
     .select(
       'p.bgsReference',
@@ -66,8 +66,6 @@ async function _fetchPoints(licenceId) {
         .andWhere('lv.status', 'current')
     })
     .orderBy('p.description')
-
-  return points
 }
 
 module.exports = {

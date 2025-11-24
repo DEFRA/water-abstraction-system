@@ -54,48 +54,40 @@ describe('Fetch Licence Purposes service', () => {
       const result = await FetchLicencePurposesService.go(licence.id)
 
       expect(result).to.equal({
-        id: licence.id,
-        licenceRef: licence.licenceRef,
-        licenceVersions: [
+        licence: { id: licence.id, licenceRef: licence.licenceRef },
+        licenceVersionPurposes: [
           {
-            id: licenceVersion.id,
-            startDate: licenceVersion.startDate,
-            status: 'current',
-            licenceVersionPurposes: [
+            abstractionPeriodEndDay: 31,
+            abstractionPeriodEndMonth: 3,
+            abstractionPeriodStartDay: 1,
+            abstractionPeriodStartMonth: 1,
+            annualQuantity: null,
+            dailyQuantity: null,
+            hourlyQuantity: null,
+            instantQuantity: null,
+            licenceVersionPurposePoints: [
               {
-                abstractionPeriodEndDay: 31,
-                abstractionPeriodEndMonth: 3,
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 1,
-                annualQuantity: null,
-                dailyQuantity: null,
-                hourlyQuantity: null,
-                instantQuantity: null,
-                licenceVersionPurposePoints: [
-                  {
-                    abstractionMethod: 'Unspecified Pump'
-                  }
-                ],
-                points: [
-                  {
-                    description: point.description,
-                    id: point.id,
-                    ngr1: point.ngr1,
-                    ngr2: null,
-                    ngr3: null,
-                    ngr4: null,
-                    source: {
-                      description: source.description,
-                      id: source.id
-                    }
-                  }
-                ],
-                purpose: {
-                  description: purpose.description,
-                  id: purpose.id
+                abstractionMethod: 'Unspecified Pump'
+              }
+            ],
+            points: [
+              {
+                description: point.description,
+                id: point.id,
+                ngr1: point.ngr1,
+                ngr2: null,
+                ngr3: null,
+                ngr4: null,
+                source: {
+                  description: source.description,
+                  id: source.id
                 }
               }
-            ]
+            ],
+            purpose: {
+              description: purpose.description,
+              id: purpose.id
+            }
           }
         ]
       })

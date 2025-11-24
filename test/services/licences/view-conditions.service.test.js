@@ -9,7 +9,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicencesFixture = require('../../fixtures/licences.fixture.js')
+const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 
 // Things we need to stub
 const FetchLicenceConditionsService = require('../../../app/services/licences/fetch-licence-conditions.service.js')
@@ -19,7 +19,8 @@ const ViewConditionsService = require('../../../app/services/licences/view-condi
 
 describe('Licences - View Conditions service', () => {
   let auth
-  let licenceFixture
+  let conditions
+  let licence
 
   beforeEach(() => {
     auth = {
@@ -32,20 +33,24 @@ describe('Licences - View Conditions service', () => {
       }
     }
 
-    licenceFixture = LicencesFixture.licence()
+    licence = ViewLicencesFixture.licence()
+    conditions = [ViewLicencesFixture.condition()]
 
-    Sinon.stub(FetchLicenceConditionsService, 'go').returns(licenceFixture)
+    Sinon.stub(FetchLicenceConditionsService, 'go').returns({
+      licence,
+      conditions
+    })
   })
 
   it('correctly presents the data', async () => {
-    const result = await ViewConditionsService.go(licenceFixture.licence.id, auth)
+    const result = await ViewConditionsService.go(licence.id, auth)
 
     expect(result).to.equal({
       activeNavBar: 'search',
       activeSecondaryNav: 'summary',
       activeSummarySubNav: 'conditions',
       backLink: {
-        href: `/system/licences/${licenceFixture.licence.id}/summary`,
+        href: `/system/licences/${licence.id}/summary`,
         text: 'Go back to summary'
       },
       conditionTypes: [
@@ -76,7 +81,7 @@ describe('Licences - View Conditions service', () => {
         }
       ],
       pageTitle: 'Conditions',
-      pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
+      pageTitleCaption: `Licence ${licence.licenceRef}`,
       roles: ['billing'],
       showingConditions: 'Showing 1 type of further conditions',
       warning: {

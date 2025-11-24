@@ -9,7 +9,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicencesFixture = require('../../fixtures/licences.fixture.js')
+const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 
 // Things we need to stub
 const FetchLicencePurposesService = require('../../../app/services/licences/fetch-licence-purposes.service.js')
@@ -19,7 +19,8 @@ const ViewPurposesService = require('../../../app/services/licences/view-purpose
 
 describe('Licences - View Purposes service', () => {
   let auth
-  let licenceFixture
+  let licence
+  let licenceVersionPurposes
 
   beforeEach(() => {
     auth = {
@@ -32,21 +33,26 @@ describe('Licences - View Purposes service', () => {
       }
     }
 
-    licenceFixture = LicencesFixture.licence()
+    licence = ViewLicencesFixture.licence()
 
-    Sinon.stub(FetchLicencePurposesService, 'go').returns(licenceFixture.licence)
+    licenceVersionPurposes = [ViewLicencesFixture.licenceVersionPurpose()]
+
+    Sinon.stub(FetchLicencePurposesService, 'go').returns({
+      licence,
+      licenceVersionPurposes
+    })
   })
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewPurposesService.go(licenceFixture.licence.id, auth)
+      const result = await ViewPurposesService.go(licence.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',
         activeSecondaryNav: 'summary',
         activeSummarySubNav: 'purposes',
         backLink: {
-          href: `/system/licences/${licenceFixture.licence.id}/summary`,
+          href: `/system/licences/${licence.id}/summary`,
           text: 'Go back to summary'
         },
         licencePurposes: [
@@ -67,7 +73,7 @@ describe('Licences - View Purposes service', () => {
           }
         ],
         pageTitle: 'Purposes, periods and amounts',
-        pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
+        pageTitleCaption: `Licence ${licence.licenceRef}`,
         roles: ['billing'],
         showingPurposes: 'Showing 1 purpose'
       })
