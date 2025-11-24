@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AllocateSingleVolumeToLinesService = require('../../../../app/services/return-logs/setup/allocate-single-volume-to-lines.service.js')
 
-describe.only('Return Logs - Allocate Single Volume To Lines Service', () => {
+describe('Return Logs - Allocate Single Volume To Lines Service', () => {
   describe('when passed an abstraction periods to and from date', () => {
     let lines
     let session
@@ -20,10 +20,11 @@ describe.only('Return Logs - Allocate Single Volume To Lines Service', () => {
         beforeEach(() => {
           lines = _linesWithQuantity()
           session = {
-            singleVolumeQuantity: 2100,
             fromFullDate: new Date('2023-10-01').toISOString(),
+            lines,
+            singleVolumeQuantity: 2100,
             toFullDate: new Date('2024-03-31').toISOString(),
-            lines
+            units: 'cubicMetres'
           }
         })
 
@@ -54,10 +55,11 @@ describe.only('Return Logs - Allocate Single Volume To Lines Service', () => {
         beforeEach(() => {
           lines = _lines()
           session = {
-            singleVolumeQuantity: 1200,
             fromFullDate: new Date('2023-04-01').toISOString(),
+            lines,
+            singleVolumeQuantity: 1200,
             toFullDate: new Date('2023-09-30').toISOString(),
-            lines
+            units: 'cubicMetres'
           }
         })
 
@@ -89,10 +91,11 @@ describe.only('Return Logs - Allocate Single Volume To Lines Service', () => {
       beforeEach(() => {
         lines = _lines()
         session = {
-          singleVolumeQuantity: 1001.111123,
           fromFullDate: new Date('2023-04-01').toISOString(),
+          lines,
+          singleVolumeQuantity: 1001.111123,
           toFullDate: new Date('2023-09-30').toISOString(),
-          lines
+          units: 'cubicMetres'
         }
       })
 
