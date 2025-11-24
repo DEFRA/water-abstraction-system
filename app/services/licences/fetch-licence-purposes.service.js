@@ -23,7 +23,6 @@ async function go(licenceId) {
 async function _fetch(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
-    .select(['id', 'licenceRef'])
     .modify('currentVersion')
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
     .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {
