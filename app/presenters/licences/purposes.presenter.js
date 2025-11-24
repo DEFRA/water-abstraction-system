@@ -11,16 +11,13 @@ const { formatAbstractionAmounts, pluralise } = require('./base-licences.present
 /**
  * Formats the licence and related licenceVersionPurposes data for the view licence purposes page
  *
- * @param {object} licence - The licence and related licenceVersionPurposes data returned by
- * `FetchLicencePurposesService`
+ * @param {object} licenceVersionPurposes - The licenceVersionPurposes data returned by `FetchLicencePurposesService`
+ * @param {object} licence - The id and licence ref of the licence
  *
  * @returns {object} licence and licenceVersionPurposes data needed by the view template
  */
-function go(licence) {
-  const {
-    licence: { id, licenceRef },
-    licenceVersionPurposes
-  } = licence
+function go(licenceVersionPurposes, licence) {
+  const { id, licenceRef } = licence
 
   const licencePurposes = _formatLicencePurposes(licenceVersionPurposes)
 
