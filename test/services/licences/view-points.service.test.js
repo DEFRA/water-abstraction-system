@@ -9,7 +9,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicencesFixture = require('../../fixtures/licences.fixture.js')
+const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 
 // Things we need to stub
 const FetchLicencePointsService = require('../../../app/services/licences/fetch-licence-points.service.js')
@@ -19,7 +19,7 @@ const ViewPointsService = require('../../../app/services/licences/view-points.se
 
 describe('Licences - View Points service', () => {
   let auth
-  let licenceFixture
+  let licence
 
   beforeEach(() => {
     auth = {
@@ -32,21 +32,24 @@ describe('Licences - View Points service', () => {
       }
     }
 
-    licenceFixture = LicencesFixture.licence()
+    licence = ViewLicencesFixture.licence()
 
-    Sinon.stub(FetchLicencePointsService, 'go').returns(licenceFixture)
+    Sinon.stub(FetchLicencePointsService, 'go').returns({
+      licence,
+      points: [ViewLicencesFixture.point()]
+    })
   })
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewPointsService.go(licenceFixture.licence.id, auth)
+      const result = await ViewPointsService.go(licence.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',
         activeSecondaryNav: 'summary',
         activeSummarySubNav: 'points',
         backLink: {
-          href: `/system/licences/${licenceFixture.licence.id}/summary`,
+          href: `/system/licences/${licence.id}/summary`,
           text: 'Go back to summary'
         },
         licencePoints: [
@@ -70,7 +73,7 @@ describe('Licences - View Points service', () => {
           }
         ],
         pageTitle: 'Points',
-        pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
+        pageTitleCaption: `Licence ${licence.licenceRef}`,
         roles: ['billing'],
         showingPoints: 'Showing 1 abstraction point'
       })
