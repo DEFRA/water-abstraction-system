@@ -9,6 +9,8 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 const VolumesPresenter = require('../../../presenters/return-logs/setup/volumes.presenter.js')
 const VolumesValidator = require('../../../validators/return-logs/setup/volumes.validator.js')
+const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
+const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -67,6 +69,12 @@ function _determineRequestedYearAndMonth(yearMonth) {
   return yearMonth.split('-').map(Number)
 }
 
+function _getUnitSymbolByName(units) {
+  return Object.keys(returnUnits).find((key) => {
+    return returnUnits[key].name === units
+  })
+}
+
 function _lineError(line, error) {
   const lineError = error.errorList.find((validationError) => {
     return validationError.href === `#${line.endDate}`
@@ -88,12 +96,17 @@ function _lineError(line, error) {
  * @private
  */
 async function _save(payload, session, requestedYear, requestedMonth) {
+  const unitSymbol = _getUnitSymbolByName(session.units)
+
   session.lines.forEach((line) => {
     const endDate = new Date(line.endDate)
 
     if (endDate.getFullYear() === requestedYear && endDate.getMonth() === requestedMonth) {
       // The volumes are always in text format in the payload so we convert to a number before updating the session
-      line.quantity = payload[line.endDate] ? Number(payload[line.endDate]) : null
+      const lineEntry = payload[line.endDate] ? Number(payload[line.endDate]) : null
+
+      line.quantityCubicMetres = lineEntry !== null ? convertToCubicMetres(lineEntry, unitSymbol) : null
+      line.quantity = lineEntry !== null ? convertFromCubicMetres(line.quantityCubicMetres, unitSymbol) : null
     }
   })
 

@@ -28,6 +28,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
           {
             endDate: '2023-04-30T00:00:00.000Z',
             quantity: 100,
+            quantityCubicMetres: 100000,
             startDate: '2023-04-01T00:00:00.000Z'
           },
           {
@@ -37,12 +38,13 @@ describe('Return Logs Setup - Submit Volumes service', () => {
           {
             endDate: '2023-06-30T00:00:00.000Z',
             quantity: 300,
+            quantityCubicMetres: 300000,
             startDate: '2023-06-01T00:00:00.000Z'
           }
         ],
         returnsFrequency: 'month',
         returnReference: '1234',
-        units: 'cubicMetres'
+        units: 'megalitres'
       }
     }
 
@@ -68,16 +70,19 @@ describe('Return Logs Setup - Submit Volumes service', () => {
             {
               endDate: '2023-04-30T00:00:00.000Z',
               quantity: 100,
+              quantityCubicMetres: 100000,
               startDate: '2023-04-01T00:00:00.000Z'
             },
             {
               endDate: '2023-05-31T00:00:00.000Z',
               quantity: null,
+              quantityCubicMetres: null,
               startDate: '2023-05-01T00:00:00.000Z'
             },
             {
               endDate: '2023-06-30T00:00:00.000Z',
               quantity: 300,
+              quantityCubicMetres: 300000,
               startDate: '2023-06-01T00:00:00.000Z'
             }
           ])
@@ -108,6 +113,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
             {
               endDate: '2023-04-30T00:00:00.000Z',
               quantity: 100,
+              quantityCubicMetres: 100000,
               startDate: '2023-04-01T00:00:00.000Z'
             },
             {
@@ -117,6 +123,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
             {
               endDate: '2023-06-30T00:00:00.000Z',
               quantity: 200,
+              quantityCubicMetres: 200000,
               startDate: '2023-06-01T00:00:00.000Z'
             }
           ])
@@ -165,7 +172,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
           ],
           pageTitle: 'Water abstracted April 2023',
           pageTitleCaption: 'Return reference 1234',
-          units: 'Cubic metres'
+          units: 'Megalitres'
         })
       })
 
