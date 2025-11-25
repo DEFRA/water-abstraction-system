@@ -16,7 +16,7 @@ const { today } = require('../../lib/general.lib.js')
  * @returns {object} The data formatted for the view template
  */
 function go(licence) {
-  const { id, includeInPresrocBilling, licenceDocumentHeader, licenceRef, workflows } = licence
+  const { id, includeInPresrocBilling, licenceDocumentHeader, licenceRef, workflows, startDate } = licence
 
   const primaryUser = licence.$primaryUser()
   const ends = licence.$ends()
@@ -26,6 +26,7 @@ function go(licence) {
       text: 'Go back to search',
       href: '/licences'
     },
+    currentVersion: _currentVersion(licence, startDate),
     documentId: licenceDocumentHeader.id,
     ends,
     includeInPresrocBilling,
@@ -38,6 +39,16 @@ function go(licence) {
     warning: _warning(ends),
     workflowWarning: _workflowWarning(workflows)
   }
+}
+
+function _currentVersion(licence, startDate) {
+  const currentVersion = licence.$currentVersion()
+
+  if (currentVersion?.startDate) {
+    return `The current version of the licence starting ${formatLongDate(currentVersion.startDate)}`
+  }
+
+  return `The current version of the licence starting ${formatLongDate(startDate)}`
 }
 
 function _licenceName(primaryUser, licence) {

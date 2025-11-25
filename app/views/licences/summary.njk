@@ -3,6 +3,9 @@
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% block subPageContent %}
+
+  <h2 class="govuk-body-l"> {{ currentVersion }} </h2>
+
   {% if primaryUser %}
     <p>Registered to <a href="/user/{{ primaryUser.id }}/status">{{ primaryUser.username }}</a></p>
   {% endif %}
@@ -17,7 +20,7 @@
   </div>
 
   <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">Effective from</dt>
+    <dt class="govuk-summary-list__key">Licence version start date</dt>
     <dd class="govuk-summary-list__value">{{ startDate }}</dd>
   </div>
 
