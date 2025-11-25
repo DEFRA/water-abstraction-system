@@ -17,9 +17,9 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
-const ViewLicenceBillsPresenter = require('../../../app/presenters/licences/view-licence-bills.presenter.js')
+const ViewBillsPresenter = require('../../../app/presenters/licences/view-bills.presenter.js')
 
-describe('Licences - View Licence Bills presenter', () => {
+describe('Licences - View Bills presenter', () => {
   let licence
   let bill
 
@@ -40,7 +40,7 @@ describe('Licences - View Licence Bills presenter', () => {
 
   describe('when provided with a bills data', () => {
     it('correctly presents the data', () => {
-      const result = ViewLicenceBillsPresenter.go([bill], licence)
+      const result = ViewBillsPresenter.go([bill], licence)
 
       expect(result).to.equal({
         backLink: {
@@ -70,7 +70,7 @@ describe('Licences - View Licence Bills presenter', () => {
       describe('for each bill returned', () => {
         describe('when the invoice number exists', () => {
           it('correctly formats the "billNumber" to the invoice number', () => {
-            const result = ViewLicenceBillsPresenter.go([bill], licence)
+            const result = ViewBillsPresenter.go([bill], licence)
 
             expect(result.bills[0].billNumber).to.equal('WAC0003872T')
           })
@@ -79,7 +79,7 @@ describe('Licences - View Licence Bills presenter', () => {
         describe('the "billingAccountLink" property', () => {
           describe('when the "enableBillingAccountView" flag is true', () => {
             it('returns the system link', () => {
-              const result = ViewLicenceBillsPresenter.go([bill], licence)
+              const result = ViewBillsPresenter.go([bill], licence)
 
               expect(result.bills[0].billingAccountLink).to.equal(
                 `/system/billing-accounts/${bill.billingAccountId}?licence-id=${licence.id}`
@@ -93,7 +93,7 @@ describe('Licences - View Licence Bills presenter', () => {
             })
 
             it('returns the legacy link', () => {
-              const result = ViewLicenceBillsPresenter.go([bill], licence)
+              const result = ViewBillsPresenter.go([bill], licence)
 
               expect(result.bills[0].billingAccountLink).to.equal(`/billing-accounts/${bill.billingAccountId}`)
             })
@@ -107,7 +107,7 @@ describe('Licences - View Licence Bills presenter', () => {
           })
 
           it('correctly formats the "billNumber" to "De minimis bill"', () => {
-            const result = ViewLicenceBillsPresenter.go([bill], licence)
+            const result = ViewBillsPresenter.go([bill], licence)
 
             expect(result.bills[0].billNumber).to.equal('De minimis bill')
           })
@@ -120,7 +120,7 @@ describe('Licences - View Licence Bills presenter', () => {
           })
 
           it('correctly formats the "billNumber" to "NALD revised bill"', () => {
-            const result = ViewLicenceBillsPresenter.go([bill], licence)
+            const result = ViewBillsPresenter.go([bill], licence)
 
             expect(result.bills[0].billNumber).to.equal('NALD revised bill')
           })
@@ -133,7 +133,7 @@ describe('Licences - View Licence Bills presenter', () => {
           })
 
           it('correctly formats the "billNumber" to "Zero value bill"', () => {
-            const result = ViewLicenceBillsPresenter.go([bill], licence)
+            const result = ViewBillsPresenter.go([bill], licence)
 
             expect(result.bills[0].billNumber).to.equal('Zero value bill')
           })
@@ -145,7 +145,7 @@ describe('Licences - View Licence Bills presenter', () => {
           })
 
           it('returns an empty string', () => {
-            const result = ViewLicenceBillsPresenter.go([bill], licence)
+            const result = ViewBillsPresenter.go([bill], licence)
 
             expect(result.bills[0].billNumber).to.equal('')
           })

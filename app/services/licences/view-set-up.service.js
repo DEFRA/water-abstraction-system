@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the view licence set up tab
- * @module ViewLicenceSetUpService
+ * @module ViewSetUpService
  */
 
 const FetchAgreementsService = require('./fetch-agreements.service.js')
@@ -10,7 +10,7 @@ const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
 const FetchReturnVersionsService = require('./fetch-return-versions.service.js')
 const FetchWorkflowsService = require('./fetch-workflows.service.js')
-const ViewLicenceSetUpPresenter = require('../../presenters/licences/view-licence-set-up.presenter.js')
+const ViewSetUpPresenter = require('../../presenters/licences/view-set-up.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
@@ -29,7 +29,7 @@ async function go(licenceId, auth) {
   const workflows = await FetchWorkflowsService.go(licenceId)
   const returnVersions = await FetchReturnVersionsService.go(licenceId)
 
-  const pageData = ViewLicenceSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
+  const pageData = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
   return {
     ...pageData,

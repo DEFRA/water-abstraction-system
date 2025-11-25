@@ -17,9 +17,9 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
-const ViewLicenceSetUpPresenter = require('../../../app/presenters/licences/view-licence-set-up.presenter.js')
+const ViewSetUpPresenter = require('../../../app/presenters/licences/view-set-up.presenter.js')
 
-describe('Licences - View Licence Set Up presenter', () => {
+describe('Licences - View Set Up presenter', () => {
   let agreement
   let agreements
   let auth
@@ -108,7 +108,7 @@ describe('Licences - View Licence Set Up presenter', () => {
   })
 
   it('should return the page data', () => {
-    const result = ViewLicenceSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
+    const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
     expect(result).to.equal({
       agreements: [],
@@ -147,14 +147,7 @@ describe('Licences - View Licence Set Up presenter', () => {
       })
 
       it('correctly presents the agreements data', () => {
-        const result = ViewLicenceSetUpPresenter.go(
-          chargeVersions,
-          workflows,
-          agreements,
-          returnVersions,
-          auth,
-          licence
-        )
+        const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
         expect(result.agreements).to.equal([
           {
@@ -180,14 +173,7 @@ describe('Licences - View Licence Set Up presenter', () => {
 
       describe('when all the actions are available for an agreement', () => {
         it('shows delete, end and recalculate bills actions', () => {
-          const result = ViewLicenceSetUpPresenter.go(
-            chargeVersions,
-            workflows,
-            agreements,
-            returnVersions,
-            auth,
-            licence
-          )
+          const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
           expect(result.agreements[0].action).to.equal([
             {
@@ -211,14 +197,7 @@ describe('Licences - View Licence Set Up presenter', () => {
           })
 
           it('there are no actions', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.agreements[0].action).to.equal([])
           })
@@ -230,14 +209,7 @@ describe('Licences - View Licence Set Up presenter', () => {
           })
 
           it('there is no action link to delete', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.agreements[0].action).to.equal([
               {
@@ -255,14 +227,7 @@ describe('Licences - View Licence Set Up presenter', () => {
           })
 
           it('there is no action link to end the agreement', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.agreements[0].action).to.equal([
               {
@@ -278,14 +243,7 @@ describe('Licences - View Licence Set Up presenter', () => {
       describe('when the financial agreement code ', () => {
         describe('is for Two-part tariff ', () => {
           it('correctly maps the code to the description', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.agreements[0].description).to.equal('Two-part tariff')
           })
@@ -297,14 +255,7 @@ describe('Licences - View Licence Set Up presenter', () => {
           })
 
           it('correctly maps the code to the description', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.agreements[0].description).to.equal('Canal and Rivers Trust, supported source (S130S)')
           })
@@ -316,14 +267,7 @@ describe('Licences - View Licence Set Up presenter', () => {
           })
 
           it('correctly maps the code to the description', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.agreements[0].description).to.equal('Canal and Rivers Trust, unsupported source (S130U)')
           })
@@ -334,14 +278,7 @@ describe('Licences - View Licence Set Up presenter', () => {
             agreement.financialAgreement.code = 'S126'
           })
           it('correctly maps the code to the description', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.agreements[0].description).to.equal('Abatement')
           })
@@ -354,14 +291,7 @@ describe('Licences - View Licence Set Up presenter', () => {
         })
 
         it('shows delete, end and recalculate bills actions', () => {
-          const result = ViewLicenceSetUpPresenter.go(
-            chargeVersions,
-            workflows,
-            agreements,
-            returnVersions,
-            auth,
-            licence
-          )
+          const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
           expect(result.agreements[0].action).to.equal([
             {
@@ -394,14 +324,7 @@ describe('Licences - View Licence Set Up presenter', () => {
         })
 
         it('shows delete, end and recalculate bills actions', () => {
-          const result = ViewLicenceSetUpPresenter.go(
-            chargeVersions,
-            workflows,
-            agreements,
-            returnVersions,
-            auth,
-            licence
-          )
+          const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
           expect(result.agreements[0].action).to.equal([])
         })
@@ -416,14 +339,7 @@ describe('Licences - View Licence Set Up presenter', () => {
       })
 
       it('groups both types of data into the "chargeInformation" property', () => {
-        const result = ViewLicenceSetUpPresenter.go(
-          chargeVersions,
-          workflows,
-          agreements,
-          returnVersions,
-          auth,
-          licence
-        )
+        const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
         expect(result.chargeInformation).to.equal([
           {
@@ -465,14 +381,7 @@ describe('Licences - View Licence Set Up presenter', () => {
         })
 
         it('correctly presents the data with a dash for the end date', () => {
-          const result = ViewLicenceSetUpPresenter.go(
-            chargeVersions,
-            workflows,
-            agreements,
-            returnVersions,
-            auth,
-            licence
-          )
+          const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
           expect(result.chargeInformation).to.equal([
             {
@@ -500,14 +409,7 @@ describe('Licences - View Licence Set Up presenter', () => {
         })
 
         it('correctly presents the data with the end date', () => {
-          const result = ViewLicenceSetUpPresenter.go(
-            chargeVersions,
-            workflows,
-            agreements,
-            returnVersions,
-            auth,
-            licence
-          )
+          const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
           expect(result.chargeInformation).to.equal([
             {
@@ -545,14 +447,7 @@ describe('Licences - View Licence Set Up presenter', () => {
           })
 
           it('correctly presents the data and workflow actions', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.chargeInformation).to.equal([
               {
@@ -575,14 +470,7 @@ describe('Licences - View Licence Set Up presenter', () => {
 
         describe('and the user is not permitted to review workflow records', () => {
           it('correctly presents the data and workflow actions', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.chargeInformation).to.equal([
               {
@@ -610,14 +498,7 @@ describe('Licences - View Licence Set Up presenter', () => {
           })
 
           it('correctly presents the data and workflow actions', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.chargeInformation).to.equal([
               {
@@ -640,14 +521,7 @@ describe('Licences - View Licence Set Up presenter', () => {
 
         describe('and the user is not permitted to review workflow records', () => {
           it('correctly presents the data and workflow actions', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.chargeInformation).to.equal([
               {
@@ -675,14 +549,7 @@ describe('Licences - View Licence Set Up presenter', () => {
           })
 
           it('correctly presents the data and workflow actions', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.chargeInformation).to.equal([
               {
@@ -709,14 +576,7 @@ describe('Licences - View Licence Set Up presenter', () => {
           })
 
           it('correctly presents the data and workflow actions', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.chargeInformation).to.equal([
               {
@@ -739,14 +599,7 @@ describe('Licences - View Licence Set Up presenter', () => {
       })
 
       it('correctly presents the returns versions data', () => {
-        const result = ViewLicenceSetUpPresenter.go(
-          chargeVersions,
-          workflows,
-          agreements,
-          returnVersions,
-          auth,
-          licence
-        )
+        const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
         expect(result.returnVersions).to.equal([
           {
@@ -773,14 +626,7 @@ describe('Licences - View Licence Set Up presenter', () => {
         })
 
         it('correctly presents the returns versions data with the missing data defaults', () => {
-          const result = ViewLicenceSetUpPresenter.go(
-            chargeVersions,
-            workflows,
-            agreements,
-            returnVersions,
-            auth,
-            licence
-          )
+          const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
           expect(result.returnVersions).to.equal([
             {
@@ -818,14 +664,7 @@ describe('Licences - View Licence Set Up presenter', () => {
             })
 
             it('correctly presents the set up agreement link ', () => {
-              const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions,
-                workflows,
-                agreements,
-                returnVersions,
-                auth,
-                licence
-              )
+              const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
               expect(result.links.agreements.setUpAgreement).to.equal(`/licences/${licence.id}/agreements/select-type`)
             })
@@ -841,14 +680,7 @@ describe('Licences - View Licence Set Up presenter', () => {
             })
 
             it('the agreement link is not present', () => {
-              const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions,
-                workflows,
-                agreements,
-                returnVersions,
-                auth,
-                licence
-              )
+              const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
               expect(result.links.agreements.setUpAgreement).to.be.undefined()
             })
@@ -869,14 +701,7 @@ describe('Licences - View Licence Set Up presenter', () => {
             })
 
             it('the agreement link is not present', () => {
-              const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions,
-                workflows,
-                agreements,
-                returnVersions,
-                auth,
-                licence
-              )
+              const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
               expect(result.setUpAgreement).to.be.undefined()
             })
@@ -888,14 +713,7 @@ describe('Licences - View Licence Set Up presenter', () => {
         describe('and the user can edit a workflow  ', () => {
           describe('and the licence does not end more than 6 years ago', () => {
             it('return the associated links', () => {
-              const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions,
-                workflows,
-                agreements,
-                returnVersions,
-                auth,
-                licence
-              )
+              const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
               expect(result.links.chargeInformation.makeLicenceNonChargeable).to.equal(
                 `/licences/${licence.id}/charge-information/non-chargeable-reason?start=1`
@@ -925,14 +743,7 @@ describe('Licences - View Licence Set Up presenter', () => {
             })
 
             it('returns no links for editing', () => {
-              const result = ViewLicenceSetUpPresenter.go(
-                chargeVersions,
-                workflows,
-                agreements,
-                returnVersions,
-                auth,
-                licence
-              )
+              const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
               expect(result.links.chargeInformation.makeLicenceNonChargeable).to.be.undefined()
               expect(result.links.chargeInformation.setupNewCharge).to.be.undefined()
@@ -944,14 +755,7 @@ describe('Licences - View Licence Set Up presenter', () => {
       describe('when the billing user wants to manage return versions', () => {
         describe('and the "enableRequirementsForReturns" feature toggle is true', () => {
           it('return the associated links', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.links.returnVersions.returnsRequired).to.equal(
               `/system/licences/${licence.id}/returns-required`
@@ -968,14 +772,7 @@ describe('Licences - View Licence Set Up presenter', () => {
           })
 
           it('return no returnVersions links', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.links.returnVersions).to.equal({})
           })
@@ -995,7 +792,7 @@ describe('Licences - View Licence Set Up presenter', () => {
         }
         describe('and the "enableRequirementsForReturns" feature toggle is true', () => {
           it('returns no return version setup links', () => {
-            const result = ViewLicenceSetUpPresenter.go(
+            const result = ViewSetUpPresenter.go(
               chargeVersions,
               workflows,
               agreements,
@@ -1014,7 +811,7 @@ describe('Licences - View Licence Set Up presenter', () => {
           })
 
           it('returns no return version setup links', () => {
-            const result = ViewLicenceSetUpPresenter.go(
+            const result = ViewSetUpPresenter.go(
               chargeVersions,
               workflows,
               agreements,
@@ -1039,14 +836,7 @@ describe('Licences - View Licence Set Up presenter', () => {
           })
 
           it('correctly presents the recalculate bills link', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.links.recalculateBills.markForSupplementaryBilling).to.equal(
               `/system/licences/${licence.id}/mark-for-supplementary-billing`
@@ -1063,14 +853,7 @@ describe('Licences - View Licence Set Up presenter', () => {
           })
 
           it('the recalculate bills link is not present', () => {
-            const result = ViewLicenceSetUpPresenter.go(
-              chargeVersions,
-              workflows,
-              agreements,
-              returnVersions,
-              auth,
-              licence
-            )
+            const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
             expect(result.recalculateBills).to.be.undefined()
           })
@@ -1085,14 +868,7 @@ describe('Licences - View Licence Set Up presenter', () => {
         })
 
         it('the recalculate bills link is not present', () => {
-          const result = ViewLicenceSetUpPresenter.go(
-            chargeVersions,
-            workflows,
-            agreements,
-            returnVersions,
-            auth,
-            licence
-          )
+          const result = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
           expect(result.recalculateBills).to.be.undefined()
         })

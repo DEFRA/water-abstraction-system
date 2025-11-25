@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the `/licences/{id}/bills` view licence bill page
- * @module ViewLicenceBillsPresenter
+ * @module ViewBillsPresenter
  */
 
 const { formatLongDate, formatMoney } = require('../base.presenter.js')

@@ -16,9 +16,9 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service.js')
 
 // Thing under test
-const ViewLicenceSummaryService = require('../../../app/services/licences/view-licence-summary.service.js')
+const ViewSummaryService = require('../../../app/services/licences/view-summary.service.js')
 
-describe('Licences - View Licence Summary service', () => {
+describe('Licences - View Summary service', () => {
   const testId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
 
   let auth
@@ -45,7 +45,7 @@ describe('Licences - View Licence Summary service', () => {
       })
 
       it('will return all the mandatory data and default values for use in the licence summary page', async () => {
-        const result = await ViewLicenceSummaryService.go(testId, auth)
+        const result = await ViewSummaryService.go(testId, auth)
 
         expect(result).to.equal({
           abstractionAmounts: [],

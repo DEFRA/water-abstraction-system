@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the `/licences/{id}/summary` page
- * @module ViewLicenceSummaryPresenter
+ * @module ViewSummaryPresenter
  */
 
 const { formatLongDate } = require('../base.presenter.js')

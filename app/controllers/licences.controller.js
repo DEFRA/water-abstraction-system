@@ -10,19 +10,19 @@ const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
 const InitiateSessionService = require('../services/return-versions/setup/initiate-session.service.js')
 const LicenceSupplementaryProcessBillingFlagService = require('../services/licences/supplementary/process-billing-flag.service.js')
 const SubmitMarkForSupplementaryBillingService = require('../services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
+const ViewBillsService = require('../services/licences/view-bills.service.js')
+const ViewCommunicationsService = require('../services/licences/view-communications.service.js')
 const ViewConditionsService = require('../services/licences/view-conditions.service.js')
 const ViewContactDetailsService = require('../services/licences/view-contact-details.service.js')
-const ViewLicenceBillsService = require('../services/licences/view-licence-bills.service.js')
-const ViewLicenceCommunicationsService = require('../services/licences/view-licence-communications.service.js')
-const ViewLicenceContactsService = require('../services/licences/view-licence-contacts.service.js')
+const ViewContactsService = require('../services/licences/view-contacts.service.js')
 const ViewLicenceHistoryService = require('../services/licences/view-licence-history.service.js')
-const ViewLicenceReturnsService = require('../services/licences/view-licence-returns.service.js')
-const ViewLicenceSetUpService = require('../services/licences/view-licence-set-up.service.js')
-const ViewLicenceSummaryService = require('../services/licences/view-licence-summary.service.js')
 const ViewMarkForSupplementaryBillingService = require('../services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
 const ViewMarkedForSupplementaryBillingService = require('../services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
 const ViewPointsService = require('../services/licences/view-points.service.js')
 const ViewPurposesService = require('../services/licences/view-purposes.service.js')
+const ViewReturnsService = require('../services/licences/view-returns.service.js')
+const ViewSetUpService = require('../services/licences/view-set-up.service.js')
+const ViewSummaryService = require('../services/licences/view-summary.service.js')
 
 async function markedForSupplementaryBilling(request, h) {
   const { id: licenceId } = request.params
@@ -81,7 +81,7 @@ async function viewBills(request, h) {
     query: { page = 1 }
   } = request
 
-  const pageData = await ViewLicenceBillsService.go(id, auth, page)
+  const pageData = await ViewBillsService.go(id, auth, page)
 
   return h.view('licences/bills.njk', pageData)
 }
@@ -93,7 +93,7 @@ async function viewCommunications(request, h) {
     query: { page = 1 }
   } = request
 
-  const pageData = await ViewLicenceCommunicationsService.go(id, auth, page)
+  const pageData = await ViewCommunicationsService.go(id, auth, page)
 
   return h.view('licences/communications.njk', pageData)
 }
@@ -123,7 +123,7 @@ async function viewLicenceContacts(request, h) {
     auth
   } = request
 
-  const pageData = await ViewLicenceContactsService.go(id, auth)
+  const pageData = await ViewContactsService.go(id, auth)
 
   return h.view('licences/contact-details.njk', pageData)
 }
@@ -167,7 +167,7 @@ async function viewReturns(request, h) {
     query: { page = 1 }
   } = request
 
-  const pageData = await ViewLicenceReturnsService.go(id, auth, page)
+  const pageData = await ViewReturnsService.go(id, auth, page)
 
   return h.view('licences/returns.njk', pageData)
 }
@@ -178,7 +178,7 @@ async function viewSetUp(request, h) {
     auth
   } = request
 
-  const pageData = await ViewLicenceSetUpService.go(id, auth)
+  const pageData = await ViewSetUpService.go(id, auth)
 
   return h.view('licences/set-up.njk', pageData)
 }
@@ -189,7 +189,7 @@ async function viewSummary(request, h) {
     auth
   } = request
 
-  const pageData = await ViewLicenceSummaryService.go(id, auth)
+  const pageData = await ViewSummaryService.go(id, auth)
 
   return h.view('licences/summary.njk', pageData)
 }

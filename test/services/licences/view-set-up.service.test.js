@@ -23,9 +23,9 @@ const FetchReturnVersionsService = require('../../../app/services/licences/fetch
 const FetchWorkflowsService = require('../../../app/services/licences/fetch-workflows.service.js')
 
 // Thing under test
-const ViewLicenceSetUpService = require('../../../app/services/licences/view-licence-set-up.service.js')
+const ViewSetUpService = require('../../../app/services/licences/view-set-up.service.js')
 
-describe('Licences - View Licence Set Up service', () => {
+describe('Licences - View Set Up service', () => {
   let agreement
   let auth
   let chargeVersion
@@ -115,7 +115,7 @@ describe('Licences - View Licence Set Up service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicenceSetUpService.go(licence.id, auth)
+      const result = await ViewSetUpService.go(licence.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',

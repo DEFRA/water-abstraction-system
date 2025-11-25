@@ -17,9 +17,9 @@ const FetchLicenceBillsService = require('../../../app/services/licences/fetch-l
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
-const ViewLicenceBillsService = require('../../../app/services/licences/view-licence-bills.service.js')
+const ViewBillsService = require('../../../app/services/licences/view-bills.service.js')
 
-describe('Licences - View Licence Bills service', () => {
+describe('Licences - View Bills service', () => {
   let auth
   let licenceId
   let licenceRef
@@ -56,7 +56,7 @@ describe('Licences - View Licence Bills service', () => {
   describe('when a bill', () => {
     describe('and it has no optional fields', () => {
       it('will return all the mandatory data and default values for use in the licence bills page', async () => {
-        const result = await ViewLicenceBillsService.go(licenceId, auth)
+        const result = await ViewBillsService.go(licenceId, auth)
 
         expect(result).to.equal({
           activeNavBar: 'search',
