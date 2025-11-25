@@ -27,159 +27,155 @@ describe('Search - Search presenter', () => {
     page = 1
 
     allSearchMatches = {
-      exactSearchResults: {
-        amountFound: 6,
-        billingAccounts: {
-          results: [
-            {
-              accountNumber: 'A12345678A',
-              createdAt: new Date('2000-01-01T00:00:00.000Z'),
-              id: 'billing-account-1',
-              name: 'Company 1'
-            }
-          ],
-          total: 1
+      results: [
+        {
+          exact: true,
+          model: {
+            accountNumber: 'A12345678A',
+            company: { name: 'Company 1' },
+            createdAt: new Date('2000-01-01T00:00:00.000Z'),
+            id: 'billing-account-1'
+          },
+          type: 'billingAccount'
         },
-        licenceHolders: {
-          results: [
-            {
-              holderName: 'Mr F Surname',
-              holderType: 'Person',
-              id: 'licence-1',
-              licenceRef: '01/123'
-            }
-          ],
-          total: 1
+        {
+          exact: true,
+          model: {
+            metadata: {
+              contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr', type: 'Person' }]
+            },
+            licence: { id: 'licence-1', licenceRef: '01/123' }
+          },
+          type: 'licenceHolder'
         },
-        licences: {
-          results: [
-            {
-              $ends: () => {
-                return null
-              },
-              id: 'licence-1',
-              licenceRef: '01/123',
-              metadata: { contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr' }] }
+        {
+          exact: true,
+          model: {
+            $ends: () => {
+              return null
+            },
+            id: 'licence-1',
+            licenceRef: '01/123',
+            licenceDocumentHeader: {
+              metadata: {
+                contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr', type: 'Person' }]
+              }
             }
-          ],
-          total: 1
+          },
+          type: 'licence'
         },
-        monitoringStations: {
-          results: [
-            {
-              catchmentName: 'Catchment 1',
-              id: 'monitoring-station-1',
-              gridReference: 'SX1234512345',
-              label: 'Monitoring Station 1',
-              riverName: 'River 1'
-            }
-          ],
-          total: 1
+        {
+          exact: true,
+          model: {
+            catchmentName: 'Catchment 1',
+            id: 'monitoring-station-1',
+            gridReference: 'SX1234512345',
+            label: 'Monitoring Station 1',
+            riverName: 'River 1'
+          },
+          type: 'monitoringStation'
         },
-        returnLogs: {
-          results: [
-            {
-              dueDates: [new Date('2001-01-01')],
-              endDates: [new Date('2000-12-31')],
-              id: 'licence-1',
-              ids: ['v1:1:1/2/3:1:2000-01-01:2000-12-31'],
-              licenceRef: '01/123',
-              returnReference: '123',
-              returnRequirementId: 'return-requirement-1',
-              statuses: ['completed']
-            }
-          ],
-          total: 1
+        {
+          exact: true,
+          model: {
+            dueDates: [new Date('2001-01-01')],
+            endDates: [new Date('2000-12-31')],
+            id: 'licence-1',
+            ids: ['v1:1:1/2/3:1:2000-01-01:2000-12-31'],
+            licenceRef: '01/123',
+            returnReference: '123',
+            returnRequirementId: 'return-requirement-1',
+            statuses: ['completed']
+          },
+          type: 'returnLog'
         },
-        users: {
-          results: [
-            {
-              application: 'water_admin',
-              id: 'user-1',
-              lastLogin: new Date('2001-01-01T00:00:00Z'),
-              username: 'TESTSEARCH01@wrls.gov.uk'
+        {
+          exact: true,
+          model: {
+            application: 'water_admin',
+            id: 'user-1',
+            lastLogin: new Date('2001-01-01T00:00:00Z'),
+            username: 'TESTSEARCH01@wrls.gov.uk'
+          },
+          type: 'user'
+        },
+        {
+          exact: false,
+          model: {
+            accountNumber: 'A12345678A',
+            company: { name: 'Company 1' },
+            createdAt: new Date('2000-01-01T00:00:00.000Z'),
+            id: 'billing-account-1'
+          },
+          type: 'billingAccount'
+        },
+        {
+          exact: false,
+          model: {
+            metadata: {
+              contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr', type: 'Person' }]
+            },
+            licence: { id: 'licence-1', licenceRef: '01/123' }
+          },
+          type: 'licenceHolder'
+        },
+        {
+          exact: false,
+          model: {
+            $ends: () => {
+              return null
+            },
+            id: 'licence-1',
+            licenceRef: '01/123',
+            licenceDocumentHeader: {
+              metadata: {
+                contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr', type: 'Person' }]
+              }
             }
-          ],
-          total: 1
+          },
+          type: 'licence'
+        },
+        {
+          exact: false,
+          model: {
+            catchmentName: 'Catchment 1',
+            id: 'monitoring-station-1',
+            gridReference: 'SX1234512345',
+            label: 'Monitoring Station 1',
+            riverName: 'River 1'
+          },
+          type: 'monitoringStation'
+        },
+        {
+          exact: false,
+          model: {
+            dueDates: [new Date('2001-01-01')],
+            endDates: [new Date('2000-12-31')],
+            id: 'licence-1',
+            ids: ['v1:1:1/2/3:1:2000-01-01:2000-12-31'],
+            licenceRef: '01/123',
+            returnReference: '123',
+            returnRequirementId: 'return-requirement-1',
+            statuses: ['completed']
+          },
+          type: 'returnLog'
+        },
+        {
+          exact: false,
+          model: {
+            application: 'water_admin',
+            id: 'user-1',
+            lastLogin: new Date('2001-01-01T00:00:00Z'),
+            username: 'TESTSEARCH01@wrls.gov.uk'
+          },
+          type: 'user'
+        },
+        {
+          exact: false,
+          type: 'UNKNOWN_TYPE'
         }
-      },
-      largestResultCount: 1,
-      similarSearchResults: {
-        amountFound: 6,
-        billingAccounts: {
-          results: [
-            {
-              accountNumber: 'A12345678A',
-              createdAt: new Date('2000-01-01T00:00:00.000Z'),
-              id: 'billing-account-1',
-              name: 'Company 1'
-            }
-          ],
-          total: 1
-        },
-        licenceHolders: {
-          results: [
-            {
-              holderName: 'Mr F Surname',
-              holderType: 'Person',
-              id: 'licence-1',
-              licenceRef: '01/123'
-            }
-          ],
-          total: 1
-        },
-        licences: {
-          results: [
-            {
-              $ends: () => {
-                return null
-              },
-              id: 'licence-1',
-              licenceRef: '01/123',
-              metadata: { contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr' }] }
-            }
-          ],
-          total: 1
-        },
-        monitoringStations: {
-          results: [
-            {
-              catchmentName: 'Catchment 1',
-              id: 'monitoring-station-1',
-              gridReference: 'SX1234512345',
-              label: 'Monitoring Station 1',
-              riverName: 'River 1'
-            }
-          ],
-          total: 1
-        },
-        returnLogs: {
-          results: [
-            {
-              dueDates: [new Date('2001-01-01')],
-              endDates: [new Date('2000-12-31')],
-              id: 'licence-1',
-              ids: ['v1:1:1/2/3:1:2000-01-01:2000-12-31'],
-              licenceRef: '01/123',
-              returnReference: '123',
-              returnRequirementId: 'return-requirement-1',
-              statuses: ['completed']
-            }
-          ],
-          total: 1
-        },
-        users: {
-          results: [
-            {
-              application: 'water_admin',
-              id: 'user-1',
-              lastLogin: new Date('2001-01-01T00:00:00Z'),
-              username: 'TESTSEARCH01@wrls.gov.uk'
-            }
-          ],
-          total: 1
-        }
-      }
+      ],
+      total: 13
     }
   })
 
@@ -187,60 +183,6 @@ describe('Search - Search presenter', () => {
     const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
     expect(result).to.equal({
-      exactMatches: {
-        billingAccounts: [
-          {
-            accountNumber: 'A12345678A',
-            createdAt: '1 January 2000',
-            id: 'billing-account-1',
-            name: 'Company 1'
-          }
-        ],
-        licenceHolders: [
-          {
-            holderName: 'Mr F Surname',
-            holderType: 'Person',
-            id: 'licence-1',
-            licenceRef: '01/123'
-          }
-        ],
-        licences: [
-          {
-            id: 'licence-1',
-            licenceEndDate: null,
-            licenceEndedText: null,
-            licenceHolderName: 'Mr F Surname',
-            licenceRef: '01/123'
-          }
-        ],
-        monitoringStations: [
-          {
-            catchmentName: 'Catchment 1',
-            gridReference: 'SX1234512345',
-            id: 'monitoring-station-1',
-            label: 'Monitoring Station 1',
-            riverName: 'River 1'
-          }
-        ],
-        returnLogs: [
-          {
-            endDate: '31 December 2000',
-            id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
-            licenceId: 'licence-1',
-            licenceRef: '01/123',
-            returnReference: '123',
-            statusText: 'complete'
-          }
-        ],
-        users: [
-          {
-            id: 'user-1',
-            lastLogin: '1 January 2001',
-            type: 'Internal',
-            username: 'TESTSEARCH01@wrls.gov.uk'
-          }
-        ]
-      },
       filterItems: [
         {
           checked: false,
@@ -273,216 +215,148 @@ describe('Search - Search presenter', () => {
           value: 'user'
         }
       ],
-      noPartialResults: false,
       noResults: false,
       page: 1,
       pageTitle: 'Search results for "searchthis"',
       pageTitleCaption: null,
-      partialMatches: {
-        billingAccounts: [
-          {
-            accountNumber: 'A12345678A',
-            id: 'billing-account-1',
-            createdAt: '1 January 2000',
-            name: 'Company 1'
-          }
-        ],
-        licenceHolders: [
-          {
-            holderName: 'Mr F Surname',
-            holderType: 'Person',
-            id: 'licence-1',
-            licenceRef: '01/123'
-          }
-        ],
-        licences: [
-          {
-            id: 'licence-1',
-            licenceEndDate: null,
-            licenceEndedText: null,
-            licenceHolderName: 'Mr F Surname',
-            licenceRef: '01/123'
-          }
-        ],
-        monitoringStations: [
-          {
-            catchmentName: 'Catchment 1',
-            gridReference: 'SX1234512345',
-            id: 'monitoring-station-1',
-            label: 'Monitoring Station 1',
-            riverName: 'River 1'
-          }
-        ],
-        returnLogs: [
-          {
-            endDate: '31 December 2000',
-            id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
-            licenceId: 'licence-1',
-            licenceRef: '01/123',
-            returnReference: '123',
-            statusText: 'complete'
-          }
-        ],
-        users: [
-          {
-            id: 'user-1',
-            lastLogin: '1 January 2001',
-            type: 'Internal',
-            username: 'TESTSEARCH01@wrls.gov.uk'
-          }
-        ]
-      },
       query: 'searchthis',
+      results: [
+        {
+          col2Title: 'Holder',
+          col2Value: 'Company 1',
+          col3Title: 'Created date',
+          col3Value: '1 January 2000',
+          exact: true,
+          link: '/system/billing-accounts/billing-account-1',
+          reference: 'A12345678A',
+          statusTag: null,
+          type: 'Billing account'
+        },
+        {
+          col2Title: 'Licence',
+          col2Value: '01/123',
+          col3Title: 'Type',
+          col3Value: 'Person',
+          exact: true,
+          link: '/system/licences/licence-1/summary',
+          reference: 'Mr F Surname',
+          statusTag: null,
+          type: 'Holder'
+        },
+        {
+          col2Title: 'Licence holder',
+          col2Value: 'Mr F Surname',
+          col3Title: 'End date',
+          col3Value: null,
+          exact: true,
+          link: '/system/licences/licence-1/summary',
+          reference: '01/123',
+          statusTag: null,
+          type: 'Licence'
+        },
+        {
+          col2Title: 'River',
+          col2Value: undefined,
+          col3Title: 'Grid reference',
+          col3Value: 'SX1234512345',
+          exact: true,
+          link: '/system/monitoring-stations/monitoring-station-1',
+          reference: 'Monitoring Station 1',
+          statusTag: null,
+          type: 'Monitoring station'
+        },
+        {
+          col2Title: 'Licence',
+          col2Value: '01/123',
+          col3Title: 'End date',
+          col3Value: null,
+          exact: true,
+          link: '/system/return-logs/undefined',
+          reference: '123',
+          statusTag: undefined,
+          type: 'Return reference'
+        },
+        {
+          col2Title: 'Type',
+          col2Value: 'Internal',
+          col3Title: 'Last signed in',
+          col3Value: '1 January 2001',
+          exact: true,
+          link: '/user/user-1/status',
+          reference: 'TESTSEARCH01@wrls.gov.uk',
+          statusTag: undefined,
+          type: 'User'
+        },
+        {
+          col2Title: 'Holder',
+          col2Value: 'Company 1',
+          col3Title: 'Created date',
+          col3Value: '1 January 2000',
+          exact: false,
+          link: '/system/billing-accounts/billing-account-1',
+          reference: 'A12345678A',
+          statusTag: null,
+          type: 'Billing account'
+        },
+        {
+          col2Title: 'Licence',
+          col2Value: '01/123',
+          col3Title: 'Type',
+          col3Value: 'Person',
+          exact: false,
+          link: '/system/licences/licence-1/summary',
+          reference: 'Mr F Surname',
+          statusTag: null,
+          type: 'Holder'
+        },
+        {
+          col2Title: 'Licence holder',
+          col2Value: 'Mr F Surname',
+          col3Title: 'End date',
+          col3Value: null,
+          exact: false,
+          link: '/system/licences/licence-1/summary',
+          reference: '01/123',
+          statusTag: null,
+          type: 'Licence'
+        },
+        {
+          col2Title: 'River',
+          col2Value: undefined,
+          col3Title: 'Grid reference',
+          col3Value: 'SX1234512345',
+          exact: false,
+          link: '/system/monitoring-stations/monitoring-station-1',
+          reference: 'Monitoring Station 1',
+          statusTag: null,
+          type: 'Monitoring station'
+        },
+        {
+          col2Title: 'Licence',
+          col2Value: '01/123',
+          col3Title: 'End date',
+          col3Value: null,
+          exact: false,
+          link: '/system/return-logs/undefined',
+          reference: '123',
+          statusTag: undefined,
+          type: 'Return reference'
+        },
+        {
+          col2Title: 'Type',
+          col2Value: 'Internal',
+          col3Title: 'Last signed in',
+          col3Value: '1 January 2001',
+          exact: false,
+          link: '/user/user-1/status',
+          reference: 'TESTSEARCH01@wrls.gov.uk',
+          statusTag: undefined,
+          type: 'User'
+        }
+      ],
       resultType: null,
       resultTypeText: 'all matches',
-      showExactResults: true,
       showResults: true
-    })
-  })
-
-  describe('the "exactMatches" property', () => {
-    describe('the "exactMatches.billingAccounts" property', () => {
-      describe('when no exactly matching billing accounts have been found', () => {
-        beforeEach(() => {
-          allSearchMatches.exactSearchResults.billingAccounts = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 4
-        })
-
-        it('returns "null"', () => {
-          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-          expect(result.exactMatches.billingAccounts).to.be.null()
-        })
-      })
-
-      describe('when some exactly matching billing accounts have been found', () => {
-        it('returns an array', () => {
-          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-          expect(result.exactMatches.billingAccounts[0]).to.exist()
-          expect(result.exactMatches.billingAccounts.length).to.equal(1)
-        })
-      })
-    })
-
-    describe('the "exactMatches.licenceHolders" property', () => {
-      describe('when no exactly matching licence holders have been found', () => {
-        beforeEach(() => {
-          allSearchMatches.exactSearchResults.licenceHolders = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 5
-        })
-
-        it('returns "null"', () => {
-          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-          expect(result.exactMatches.licenceHolders).to.be.null()
-        })
-      })
-
-      describe('when some exactly matching licence holders have been found', () => {
-        it('returns an array', () => {
-          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-          expect(result.exactMatches.licenceHolders[0]).to.exist()
-          expect(result.exactMatches.licenceHolders.length).to.equal(1)
-        })
-      })
-    })
-
-    describe('the "exactMatches.licences" property', () => {
-      describe('when no exactly matching licences have been found', () => {
-        beforeEach(() => {
-          allSearchMatches.exactSearchResults.licences = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 5
-        })
-
-        it('returns "null"', () => {
-          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-          expect(result.exactMatches.licences).to.be.null()
-        })
-      })
-
-      describe('when some exactly matching licences have been found', () => {
-        it('returns an array', () => {
-          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-          expect(result.exactMatches.licences[0]).to.exist()
-          expect(result.exactMatches.licences.length).to.equal(1)
-        })
-      })
-    })
-
-    describe('the "exactMatches.monitoringStations" property', () => {
-      describe('when no exactly matching monitoring stations have been found', () => {
-        beforeEach(() => {
-          allSearchMatches.exactSearchResults.monitoringStations = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 5
-        })
-
-        it('returns "null"', () => {
-          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-          expect(result.exactMatches.monitoringStations).to.be.null()
-        })
-      })
-
-      describe('when some exactly matching monitoring stations have been found', () => {
-        it('returns an array', () => {
-          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-          expect(result.exactMatches.monitoringStations[0]).to.exist()
-          expect(result.exactMatches.monitoringStations.length).to.equal(1)
-        })
-      })
-    })
-
-    describe('the "exactMatches.returnLogs" property', () => {
-      describe('when no exactly matching return logs have been found', () => {
-        beforeEach(() => {
-          allSearchMatches.exactSearchResults.returnLogs = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 5
-        })
-
-        it('returns "null"', () => {
-          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-          expect(result.exactMatches.returnLogs).to.be.null()
-        })
-      })
-
-      describe('when some exactly matching return logs have been found', () => {
-        it('returns an array', () => {
-          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-          expect(result.exactMatches.returnLogs[0]).to.exist()
-          expect(result.exactMatches.returnLogs.length).to.equal(1)
-        })
-      })
-    })
-
-    describe('the "exactMatches.users" property', () => {
-      describe('when no exactly matching users have been found', () => {
-        beforeEach(() => {
-          allSearchMatches.exactSearchResults.users = { results: [], total: 0 }
-          allSearchMatches.exactSearchResults.amountFound = 4
-        })
-
-        it('returns "null"', () => {
-          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-          expect(result.exactMatches.users).to.be.null()
-        })
-      })
-
-      describe('when some exactly matching users have been found', () => {
-        it('returns an array', () => {
-          const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-          expect(result.exactMatches.users[0]).to.exist()
-          expect(result.exactMatches.users.length).to.equal(1)
-        })
-      })
     })
   })
 
@@ -655,59 +529,12 @@ describe('Search - Search presenter', () => {
     })
   })
 
-  describe('the "noPartialResults" property', () => {
-    describe('when no partial matches have been found', () => {
-      beforeEach(() => {
-        allSearchMatches.similarSearchResults = {
-          amountFound: 0,
-          billingAccounts: { results: [], total: 0 },
-          licenceHolders: { results: [], total: 0 },
-          licences: { results: [], total: 0 },
-          monitoringStations: { results: [], total: 0 },
-          returnLogs: { results: [], total: 0 },
-          users: { results: [], total: 0 }
-        }
-      })
-
-      it('returns "true"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.noPartialResults).to.be.true()
-      })
-    })
-
-    describe('when some partial matches have been found', () => {
-      it('returns "false"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.noPartialResults).to.be.false()
-      })
-    })
-  })
-
   describe('the "noResults" property', () => {
-    describe('when there are neither exact nor partial matches', () => {
+    describe('when there are no results', () => {
       beforeEach(() => {
         allSearchMatches = {
-          exactSearchResults: {
-            amountFound: 0,
-            billingAccounts: { results: [], total: 0 },
-            licenceHolders: { results: [], total: 0 },
-            licences: { results: [], total: 0 },
-            monitoringStations: { results: [], total: 0 },
-            returnLogs: { results: [], total: 0 },
-            users: { results: [], total: 0 }
-          },
-          largestResultCount: 0,
-          similarSearchResults: {
-            amountFound: 0,
-            billingAccounts: { results: [], total: 0 },
-            licenceHolders: { results: [], total: 0 },
-            licences: { results: [], total: 0 },
-            monitoringStations: { results: [], total: 0 },
-            returnLogs: { results: [], total: 0 },
-            users: { results: [], total: 0 }
-          }
+          results: [],
+          total: 0
         }
       })
 
@@ -715,54 +542,6 @@ describe('Search - Search presenter', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.noResults).to.be.true()
-      })
-    })
-
-    describe('when there are only exact matches', () => {
-      beforeEach(() => {
-        allSearchMatches.similarSearchResults = {
-          amountFound: 0,
-          billingAccounts: { results: [], total: 0 },
-          licenceHolders: { results: [], total: 0 },
-          licences: { results: [], total: 0 },
-          monitoringStations: { results: [], total: 0 },
-          returnLogs: { results: [], total: 0 },
-          users: { results: [], total: 0 }
-        }
-      })
-
-      it('returns "false"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.noResults).to.be.false()
-      })
-    })
-
-    describe('when there are only partial matches', () => {
-      beforeEach(() => {
-        allSearchMatches.exactSearchResults = {
-          amountFound: 0,
-          billingAccounts: { results: [], total: 0 },
-          licenceHolders: { results: [], total: 0 },
-          licences: { results: [], total: 0 },
-          monitoringStations: { results: [], total: 0 },
-          returnLogs: { results: [], total: 0 },
-          users: { results: [], total: 0 }
-        }
-      })
-
-      it('returns "false"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.noResults).to.be.false()
-      })
-    })
-
-    describe('when all searches have results', () => {
-      it('returns "false"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.noResults).to.be.false()
       })
     })
   })
@@ -928,36 +707,6 @@ describe('Search - Search presenter', () => {
     })
   })
 
-  describe('the "showExactResults" property', () => {
-    describe('when there are no exact matches', () => {
-      beforeEach(() => {
-        allSearchMatches.exactSearchResults = {
-          amountFound: 0,
-          billingAccounts: { results: [], total: 0 },
-          licenceHolders: { results: [], total: 0 },
-          licences: { results: [], total: 0 },
-          monitoringStations: { results: [], total: 0 },
-          returnLogs: { results: [], total: 0 },
-          users: { results: [], total: 0 }
-        }
-      })
-
-      it('returns "false"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.showExactResults).to.be.false()
-      })
-    })
-
-    describe('when there are exact matches', () => {
-      it('returns "true"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.showExactResults).to.be.true()
-      })
-    })
-  })
-
   describe('the "showResults" property', () => {
     describe('when no search result page is requested', () => {
       beforeEach(() => {
@@ -980,10 +729,38 @@ describe('Search - Search presenter', () => {
     })
   })
 
-  describe('the "licenceEndedText" property of licences', () => {
+  describe('the licence holder property "col2Value" for licences', () => {
+    describe('when a licence has no contacts', () => {
+      beforeEach(() => {
+        allSearchMatches.results[2].model.licenceDocumentHeader.metadata = {}
+      })
+
+      it('returns a blank name', () => {
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.results[2].col2Value).to.equal('')
+      })
+    })
+
+    describe('when a licence has no licence holder contact', () => {
+      beforeEach(() => {
+        allSearchMatches.results[2].model.licenceDocumentHeader.metadata = {
+          contacts: [{ initials: 'F', name: 'Surname', role: 'Not a licence holder', salutation: 'Mr' }]
+        }
+      })
+
+      it('returns a blank name', () => {
+        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+
+        expect(result.results[2].col2Value).to.equal('')
+      })
+    })
+  })
+
+  describe('the "statusTag" property for licences', () => {
     describe('when a licence has an end date in the past', () => {
       beforeEach(() => {
-        allSearchMatches.exactSearchResults.licences.results[0].$ends = () => {
+        allSearchMatches.results[2].model.$ends = () => {
           return {
             date: new Date('2020-12-31'),
             reason: 'revoked'
@@ -994,7 +771,7 @@ describe('Search - Search presenter', () => {
       it('returns the `reason` value', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
-        expect(result.exactMatches.licences[0].licenceEndedText).to.equal('revoked')
+        expect(result.results[2].statusTag).to.equal('revoked')
       })
     })
 
@@ -1003,7 +780,7 @@ describe('Search - Search presenter', () => {
         const tomorrow = new Date()
         tomorrow.setDate(tomorrow.getDate() + 1)
 
-        allSearchMatches.exactSearchResults.licences.results[0].$ends = () => {
+        allSearchMatches.results[2].model.$ends = () => {
           return {
             date: tomorrow,
             reason: 'expired'
@@ -1014,76 +791,21 @@ describe('Search - Search presenter', () => {
       it('returns an empty value', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
-        expect(result.exactMatches.licences[0].licenceEndedText).to.not.exist()
+        expect(result.results[2].statusTag).to.not.exist()
       })
     })
   })
 
-  describe('the "licenceHolderName" property of licences', () => {
-    describe('when a licence has no contacts', () => {
-      beforeEach(() => {
-        allSearchMatches.exactSearchResults.licences.results[0].metadata = {}
-      })
-
-      it('returns a blank name', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.exactMatches.licences[0].licenceHolderName).to.equal('')
-      })
-    })
-
-    describe('when a licence has no licence holder contact', () => {
-      beforeEach(() => {
-        allSearchMatches.exactSearchResults.licences.results[0].metadata = {
-          contacts: [{ initials: 'F', name: 'Surname', role: 'Not a licence holder', salutation: 'Mr' }]
-        }
-      })
-
-      it('returns a blank name', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.exactMatches.licences[0].licenceHolderName).to.equal('')
-      })
-    })
-  })
-
-  describe('the "id" and "statusText" properties of return logs', () => {
-    describe('when multiple return logs have been found for a single return reference', () => {
-      beforeEach(() => {
-        allSearchMatches.exactSearchResults.returnLogs.results = [
-          {
-            dueDates: [new Date('2001-01-01'), new Date('2002-01-01')],
-            endDates: [new Date('2000-12-31'), new Date('2001-12-31')],
-            id: 'licence-1',
-            ids: ['v1:1:1/2/3:1:2000-01-01:2000-12-31', 'v1:1:1/2/3:1:2001-01-01:2001-12-31'],
-            licenceRef: '01/123',
-            returnReference: '123',
-            returnRequirementId: 'return-requirement-1',
-            statuses: ['completed', 'due']
-          }
-        ]
-      })
-
-      it('returns the latest id, end date and status', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.exactMatches.returnLogs[0].endDate).to.equal('31 December 2001')
-        expect(result.exactMatches.returnLogs[0].id).to.equal('v1:1:1/2/3:1:2001-01-01:2001-12-31')
-        expect(result.exactMatches.returnLogs[0].statusText).to.equal('overdue')
-      })
-    })
-  })
-
-  describe('the "type" property of users', () => {
+  describe('the user type property "col2Value" for users', () => {
     describe('when a user is external', () => {
       beforeEach(() => {
-        allSearchMatches.exactSearchResults.users.results[0].application = 'water_vml'
+        allSearchMatches.results[5].model.application = 'water_vml'
       })
 
       it('returns "External"', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
-        expect(result.exactMatches.users[0].type).to.equal('External')
+        expect(result.results[5].col2Value).to.equal('External')
       })
     })
 
@@ -1091,7 +813,7 @@ describe('Search - Search presenter', () => {
       it('returns "Internal"', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
-        expect(result.exactMatches.users[0].type).to.equal('Internal')
+        expect(result.results[5].col2Value).to.equal('Internal')
       })
     })
   })

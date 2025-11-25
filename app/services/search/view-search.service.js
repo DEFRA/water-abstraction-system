@@ -49,7 +49,7 @@ async function _blankPage(userScopes) {
 async function _pageOfResults(userScopes, searchQuery, resultType, pageNumber) {
   const allSearchMatches = await FindAllSearchMatchesService.go(searchQuery, resultType, pageNumber, userScopes)
 
-  const pagination = PaginatorPresenter.go(allSearchMatches.largestResultCount, pageNumber, `/system/search`)
+  const pagination = PaginatorPresenter.go(allSearchMatches.total, pageNumber, `/system/search`)
 
   const formattedData = SearchPresenter.go(
     userScopes,

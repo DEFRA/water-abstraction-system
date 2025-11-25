@@ -39,175 +39,29 @@ describe('Search - View search service', () => {
     page = 1
 
     Sinon.stub(FindAllSearchMatchesService, 'go').resolves({
-      exactSearchResults: {
-        amountFound: 7,
-        billingAccounts: {
-          results: [
-            {
-              accountNumber: 'A12345678A',
-              createdAt: new Date('2000-01-01T00:00:00.000Z'),
-              id: 'billing-account-1',
-              name: 'Company 1'
-            }
-          ],
-          total: 1
+      results: [
+        {
+          exact: false,
+          model: {
+            accountNumber: 'A12345678A',
+            company: { name: 'Company 1' },
+            createdAt: new Date('2000-01-01T00:00:00.000Z'),
+            id: 'billing-account-1'
+          },
+          type: 'billingAccount'
         },
-        licenceHolders: {
-          results: [
-            {
-              holderName: 'Mr F Surname',
-              holderType: 'Person',
-              id: 'licence-1',
-              licenceRef: '01/123'
-            }
-          ],
-          total: 1
-        },
-        licences: {
-          results: [
-            {
-              $ends: () => {
-                return null
-              },
-              id: 'licence-1',
-              licenceRef: '01/123',
-              metadata: { contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr' }] }
-            },
-            {
-              $ends: () => {
-                return null
-              },
-              id: 'licence-2',
-              licenceRef: '123/45/678',
-              metadata: { contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr' }] }
-            }
-          ],
-          total: 2
-        },
-        monitoringStations: {
-          results: [
-            {
-              catchmentName: 'Catchment 1',
-              id: 'monitoring-station-1',
-              gridReference: 'SX1234512345',
-              label: 'Monitoring Station 1',
-              riverName: 'River 1'
-            }
-          ],
-          total: 1
-        },
-        returnLogs: {
-          results: [
-            {
-              dueDates: [new Date('2001-01-01')],
-              endDates: [new Date('2000-12-31')],
-              id: 'licence-1',
-              ids: ['v1:1:1/2/3:1:2000-01-01:2000-12-31'],
-              licenceRef: '01/123',
-              returnReference: '123',
-              returnRequirementId: 'return-requirement-1',
-              statuses: ['completed']
-            }
-          ],
-          total: 1
-        },
-        users: {
-          results: [
-            {
-              application: 'water_admin',
-              id: 'user-1',
-              lastLogin: new Date('2001-01-01T00:00:00Z'),
-              username: 'TESTSEARCH01@wrls.gov.uk'
-            }
-          ],
-          total: 1
+        {
+          exact: false,
+          model: {
+            accountNumber: 'B12345678A',
+            company: { name: 'Company 2' },
+            createdAt: new Date('2001-01-01T00:00:00.000Z'),
+            id: 'billing-account-2'
+          },
+          type: 'billingAccount'
         }
-      },
-      largestResultCount: 2,
-      similarSearchResults: {
-        amountFound: 7,
-        billingAccounts: {
-          results: [
-            {
-              accountNumber: 'A12345678A',
-              createdAt: new Date('2000-01-01T00:00:00.000Z'),
-              id: 'billing-account-1',
-              name: 'Company 1'
-            }
-          ],
-          total: 1
-        },
-        licenceHolders: {
-          results: [
-            {
-              holderName: 'Mr F Surname',
-              holderType: 'Person',
-              id: 'licence-1',
-              licenceRef: '01/123'
-            }
-          ],
-          total: 1
-        },
-        licences: {
-          results: [
-            {
-              $ends: () => {
-                return null
-              },
-              id: 'licence-1',
-              licenceRef: '01/123',
-              metadata: { contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr' }] }
-            },
-            {
-              $ends: () => {
-                return null
-              },
-              id: 'licence-2',
-              licenceRef: '123/45/678',
-              metadata: { contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr' }] }
-            }
-          ],
-          total: 2
-        },
-        monitoringStations: {
-          results: [
-            {
-              catchmentName: 'Catchment 1',
-              id: 'monitoring-station-1',
-              gridReference: 'SX1234512345',
-              label: 'Monitoring Station 1',
-              riverName: 'River 1'
-            }
-          ],
-          total: 1
-        },
-        returnLogs: {
-          results: [
-            {
-              dueDates: [new Date('2001-01-01')],
-              endDates: [new Date('2000-12-31')],
-              id: 'licence-1',
-              ids: ['v1:1:1/2/3:1:2000-01-01:2000-12-31'],
-              licenceRef: '01/123',
-              returnReference: '123',
-              returnRequirementId: 'return-requirement-1',
-              statuses: ['completed']
-            }
-          ],
-          total: 1
-        },
-        users: {
-          results: [
-            {
-              application: 'water_admin',
-              id: 'user-1',
-              lastLogin: new Date('2001-01-01T00:00:00Z'),
-              username: 'TESTSEARCH01@wrls.gov.uk'
-            }
-          ],
-          total: 1
-        }
-      }
+      ],
+      total: 2
     })
   })
 
@@ -218,7 +72,7 @@ describe('Search - View search service', () => {
   describe('when called', () => {
     beforeEach(() => {
       searchResultType = 'all'
-      searchQuery = '1231231231'
+      searchQuery = '12345678'
     })
 
     it('returns page data for the view', async () => {
@@ -226,67 +80,6 @@ describe('Search - View search service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        exactMatches: {
-          billingAccounts: [
-            {
-              accountNumber: 'A12345678A',
-              createdAt: '1 January 2000',
-              id: 'billing-account-1',
-              name: 'Company 1'
-            }
-          ],
-          licenceHolders: [
-            {
-              holderName: 'Mr F Surname',
-              holderType: 'Person',
-              id: 'licence-1',
-              licenceRef: '01/123'
-            }
-          ],
-          licences: [
-            {
-              id: 'licence-1',
-              licenceEndDate: null,
-              licenceEndedText: null,
-              licenceHolderName: 'Mr F Surname',
-              licenceRef: '01/123'
-            },
-            {
-              id: 'licence-2',
-              licenceEndDate: null,
-              licenceEndedText: null,
-              licenceHolderName: 'Mr F Surname',
-              licenceRef: '123/45/678'
-            }
-          ],
-          monitoringStations: [
-            {
-              catchmentName: 'Catchment 1',
-              gridReference: 'SX1234512345',
-              id: 'monitoring-station-1',
-              label: 'Monitoring Station 1',
-              riverName: 'River 1'
-            }
-          ],
-          returnLogs: [
-            {
-              endDate: '31 December 2000',
-              id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
-              licenceId: 'licence-1',
-              licenceRef: '01/123',
-              returnReference: '123',
-              statusText: 'complete'
-            }
-          ],
-          users: [
-            {
-              id: 'user-1',
-              lastLogin: '1 January 2001',
-              type: 'Internal',
-              username: 'TESTSEARCH01@wrls.gov.uk'
-            }
-          ]
-        },
         filterItems: [
           {
             checked: false,
@@ -319,80 +112,41 @@ describe('Search - View search service', () => {
             value: 'user'
           }
         ],
-        noPartialResults: false,
         noResults: false,
         page: 1,
-        pageTitle: 'Search results for "1231231231"',
+        pageTitle: 'Search results for "12345678"',
         pageTitleCaption: null,
         pagination: {
           numberOfPages: 1,
           showingMessage: 'Showing all 2 undefined'
         },
-        partialMatches: {
-          billingAccounts: [
-            {
-              accountNumber: 'A12345678A',
-              createdAt: '1 January 2000',
-              id: 'billing-account-1',
-              name: 'Company 1'
-            }
-          ],
-          licenceHolders: [
-            {
-              holderName: 'Mr F Surname',
-              holderType: 'Person',
-              id: 'licence-1',
-              licenceRef: '01/123'
-            }
-          ],
-          licences: [
-            {
-              id: 'licence-1',
-              licenceEndDate: null,
-              licenceEndedText: null,
-              licenceHolderName: 'Mr F Surname',
-              licenceRef: '01/123'
-            },
-            {
-              id: 'licence-2',
-              licenceEndDate: null,
-              licenceEndedText: null,
-              licenceHolderName: 'Mr F Surname',
-              licenceRef: '123/45/678'
-            }
-          ],
-          monitoringStations: [
-            {
-              catchmentName: 'Catchment 1',
-              gridReference: 'SX1234512345',
-              id: 'monitoring-station-1',
-              label: 'Monitoring Station 1',
-              riverName: 'River 1'
-            }
-          ],
-          returnLogs: [
-            {
-              endDate: '31 December 2000',
-              id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
-              licenceId: 'licence-1',
-              licenceRef: '01/123',
-              returnReference: '123',
-              statusText: 'complete'
-            }
-          ],
-          users: [
-            {
-              id: 'user-1',
-              lastLogin: '1 January 2001',
-              type: 'Internal',
-              username: 'TESTSEARCH01@wrls.gov.uk'
-            }
-          ]
-        },
-        query: '1231231231',
+        query: '12345678',
+        results: [
+          {
+            col2Title: 'Holder',
+            col2Value: 'Company 1',
+            col3Title: 'Created date',
+            col3Value: '1 January 2000',
+            exact: false,
+            link: '/system/billing-accounts/billing-account-1',
+            reference: 'A12345678A',
+            statusTag: null,
+            type: 'Billing account'
+          },
+          {
+            col2Title: 'Holder',
+            col2Value: 'Company 2',
+            col3Title: 'Created date',
+            col3Value: '1 January 2001',
+            exact: false,
+            link: '/system/billing-accounts/billing-account-2',
+            reference: 'B12345678A',
+            statusTag: null,
+            type: 'Billing account'
+          }
+        ],
         resultType: null,
         resultTypeText: 'all matches',
-        showExactResults: true,
         showResults: true
       })
     })
@@ -451,7 +205,7 @@ describe('Search - View search service', () => {
   describe('when called with no result type specified', () => {
     beforeEach(() => {
       searchResultType = null
-      searchQuery = '1231231231'
+      searchQuery = '12345678'
     })
 
     it('still returns page data for the view', async () => {
@@ -459,67 +213,6 @@ describe('Search - View search service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        exactMatches: {
-          billingAccounts: [
-            {
-              accountNumber: 'A12345678A',
-              createdAt: '1 January 2000',
-              id: 'billing-account-1',
-              name: 'Company 1'
-            }
-          ],
-          licenceHolders: [
-            {
-              holderName: 'Mr F Surname',
-              holderType: 'Person',
-              id: 'licence-1',
-              licenceRef: '01/123'
-            }
-          ],
-          licences: [
-            {
-              id: 'licence-1',
-              licenceEndDate: null,
-              licenceEndedText: null,
-              licenceHolderName: 'Mr F Surname',
-              licenceRef: '01/123'
-            },
-            {
-              id: 'licence-2',
-              licenceEndDate: null,
-              licenceEndedText: null,
-              licenceHolderName: 'Mr F Surname',
-              licenceRef: '123/45/678'
-            }
-          ],
-          monitoringStations: [
-            {
-              catchmentName: 'Catchment 1',
-              gridReference: 'SX1234512345',
-              id: 'monitoring-station-1',
-              label: 'Monitoring Station 1',
-              riverName: 'River 1'
-            }
-          ],
-          returnLogs: [
-            {
-              endDate: '31 December 2000',
-              id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
-              licenceId: 'licence-1',
-              licenceRef: '01/123',
-              returnReference: '123',
-              statusText: 'complete'
-            }
-          ],
-          users: [
-            {
-              id: 'user-1',
-              lastLogin: '1 January 2001',
-              type: 'Internal',
-              username: 'TESTSEARCH01@wrls.gov.uk'
-            }
-          ]
-        },
         filterItems: [
           {
             checked: false,
@@ -552,80 +245,41 @@ describe('Search - View search service', () => {
             value: 'user'
           }
         ],
-        noPartialResults: false,
         noResults: false,
         page: 1,
-        pageTitle: 'Search results for "1231231231"',
+        pageTitle: 'Search results for "12345678"',
         pageTitleCaption: null,
         pagination: {
           numberOfPages: 1,
           showingMessage: 'Showing all 2 undefined'
         },
-        partialMatches: {
-          billingAccounts: [
-            {
-              accountNumber: 'A12345678A',
-              createdAt: '1 January 2000',
-              id: 'billing-account-1',
-              name: 'Company 1'
-            }
-          ],
-          licenceHolders: [
-            {
-              holderName: 'Mr F Surname',
-              holderType: 'Person',
-              id: 'licence-1',
-              licenceRef: '01/123'
-            }
-          ],
-          licences: [
-            {
-              id: 'licence-1',
-              licenceEndDate: null,
-              licenceEndedText: null,
-              licenceHolderName: 'Mr F Surname',
-              licenceRef: '01/123'
-            },
-            {
-              id: 'licence-2',
-              licenceEndDate: null,
-              licenceEndedText: null,
-              licenceHolderName: 'Mr F Surname',
-              licenceRef: '123/45/678'
-            }
-          ],
-          monitoringStations: [
-            {
-              catchmentName: 'Catchment 1',
-              gridReference: 'SX1234512345',
-              id: 'monitoring-station-1',
-              label: 'Monitoring Station 1',
-              riverName: 'River 1'
-            }
-          ],
-          returnLogs: [
-            {
-              endDate: '31 December 2000',
-              id: 'v1:1:1/2/3:1:2000-01-01:2000-12-31',
-              licenceId: 'licence-1',
-              licenceRef: '01/123',
-              returnReference: '123',
-              statusText: 'complete'
-            }
-          ],
-          users: [
-            {
-              id: 'user-1',
-              lastLogin: '1 January 2001',
-              type: 'Internal',
-              username: 'TESTSEARCH01@wrls.gov.uk'
-            }
-          ]
-        },
-        query: '1231231231',
+        query: '12345678',
+        results: [
+          {
+            col2Title: 'Holder',
+            col2Value: 'Company 1',
+            col3Title: 'Created date',
+            col3Value: '1 January 2000',
+            exact: false,
+            link: '/system/billing-accounts/billing-account-1',
+            reference: 'A12345678A',
+            statusTag: null,
+            type: 'Billing account'
+          },
+          {
+            col2Title: 'Holder',
+            col2Value: 'Company 2',
+            col3Title: 'Created date',
+            col3Value: '1 January 2001',
+            exact: false,
+            link: '/system/billing-accounts/billing-account-2',
+            reference: 'B12345678A',
+            statusTag: null,
+            type: 'Billing account'
+          }
+        ],
         resultType: null,
         resultTypeText: 'all matches',
-        showExactResults: true,
         showResults: true
       })
     })
