@@ -584,24 +584,61 @@ describe('Licence model', () => {
     })
 
     describe('when instance has licence versions', () => {
-      beforeEach(async () => {
-        testRecord = await LicenceHelper.add()
+      describe('and the latest licence version start date is >= today', () => {
+        beforeEach(async () => {
+          testRecord = await LicenceHelper.add()
 
-        currentLicenceVersion = await LicenceVersionHelper.add({ licenceId: testRecord.id, status: 'current' })
+          currentLicenceVersion = await LicenceVersionHelper.add({
+            licenceId: testRecord.id,
+            status: 'superseded'
+          })
 
-        // Add a second that isn't current
-        await LicenceVersionHelper.add({ licenceId: testRecord.id, status: 'superseded' })
+          // future licence version - marked current
+          await LicenceVersionHelper.add({
+            licenceId: testRecord.id,
+            startDate: new Date('3000-01-01'),
+            status: 'current'
+          })
 
-        testRecord = await LicenceModel.query().findById(testRecord.id).modify('currentVersion')
+          testRecord = await LicenceModel.query().findById(testRecord.id).modify('currentVersion')
+        })
+
+        it('returns the "current" licence version', () => {
+          const result = testRecord.$currentVersion()
+
+          expect(result).to.equal({
+            id: currentLicenceVersion.id,
+            startDate: currentLicenceVersion.startDate,
+            status: 'superseded'
+          })
+        })
       })
+      describe('and the latest licence version start date is <= today', () => {
+        beforeEach(async () => {
+          testRecord = await LicenceHelper.add()
 
-      it('returns the "current" licence version', () => {
-        const result = testRecord.$currentVersion()
+          currentLicenceVersion = await LicenceVersionHelper.add({
+            licenceId: testRecord.id,
+            status: 'superseded'
+          })
 
-        expect(result).to.equal({
-          id: currentLicenceVersion.id,
-          startDate: currentLicenceVersion.startDate,
-          status: currentLicenceVersion.status
+          await LicenceVersionHelper.add({
+            licenceId: testRecord.id,
+            startDate: new Date('2001-01-01'),
+            status: 'current'
+          })
+
+          testRecord = await LicenceModel.query().findById(testRecord.id).modify('currentVersion')
+        })
+
+        it('returns the "current" licence version', () => {
+          const result = testRecord.$currentVersion()
+
+          expect(result).to.equal({
+            id: currentLicenceVersion.id,
+            startDate: currentLicenceVersion.startDate,
+            status: 'superseded'
+          })
         })
       })
     })
