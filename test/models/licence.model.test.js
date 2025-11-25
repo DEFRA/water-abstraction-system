@@ -638,7 +638,7 @@ describe('Licence model', () => {
           expect(result).to.equal({
             id: currentLicenceVersion.id,
             startDate: currentLicenceVersion.startDate,
-            status: 'superseded'
+            status: 'current'
           })
         })
       })
