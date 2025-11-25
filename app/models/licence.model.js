@@ -9,6 +9,7 @@ const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
 const { compareDates } = require('../lib/dates.lib.js')
+const { timestampForPostgres } = require('../lib/general.lib.js')
 
 class LicenceModel extends BaseModel {
   static get tableName() {
@@ -166,7 +167,11 @@ class LicenceModel extends BaseModel {
       // currentVersion modifier fetches only the current licence version record for this licence
       currentVersion(query) {
         query.withGraphFetched('licenceVersions').modifyGraph('licenceVersions', (builder) => {
-          builder.select(['id', 'startDate', 'status']).where('status', 'current').orderBy('startDate', 'desc').limit(1)
+          builder
+            .select(['id', 'startDate', 'status'])
+            .where('startDate', '<=', timestampForPostgres())
+            .orderBy('startDate', 'desc')
+            .limit(1)
         })
       },
       // licenceHolder modifier fetches all the joined records needed to identify the licence holder
@@ -265,6 +270,10 @@ class LicenceModel extends BaseModel {
    * status of 'current'. However, at times we have encountered licences without a licence version hence we cater for
    * that in the function.
    *
+   * We have also seen licence versions with a start date in the future and the status marked as 'current'. These are not
+   * regarded as 'current', so the query orders the licence versions by start date (desc) and then picks the first
+   * licence version where the start date is less than or equal to the current day.
+   *
    * @returns {module:LicenceVersion|null} `null` if this instance's `licenceVersions` has not been populated or there
    * are none (we've found a couple of examples!). Else a `LicenceVersionModel` that is the 'current' version for this
    * licence
@@ -274,9 +283,7 @@ class LicenceModel extends BaseModel {
       return null
     }
 
-    return this.licenceVersions.find((licenceVersion) => {
-      return licenceVersion.status === 'current'
-    })
+    return this.licenceVersions[0]
   }
 
   /**
