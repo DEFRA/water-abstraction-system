@@ -49,7 +49,7 @@ describe('Licences - Summary Presenter', () => {
   })
 
   describe('the "currentVersion" property', () => {
-    describe('when the there is no current versions', () => {
+    describe('when the current version is null', () => {
       it('returns the text with the "startDate"', () => {
         const result = SummaryPresenter.go(licence)
 
