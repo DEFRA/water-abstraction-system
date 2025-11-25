@@ -9,14 +9,7 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
 const SessionModel = require('../../../models/session.model.js')
 const { daysFromPeriod, weeksFromPeriod, monthsFromPeriod } = require('../../../lib/dates.lib.js')
 const { convertFromCubicMetres } = require('../../../lib/general.lib.js')
-const { unitNames } = require('../../../lib/static-lookups.lib.js')
-
-const UNITS = {
-  [unitNames.CUBIC_METRES]: 'cubicMetres',
-  [unitNames.LITRES]: 'litres',
-  [unitNames.MEGALITRES]: 'megalitres',
-  [unitNames.GALLONS]: 'gallons'
-}
+const { returnUnits, unitNames } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Initiates the session record used for setting up a new return log edit journey
@@ -200,7 +193,7 @@ function _submissionData(lines, returnLog) {
     receivedDateYear: returnLog.receivedDate && `${returnLog.receivedDate.getFullYear()}`,
     reported: method === 'oneMeter' ? 'meterReadings' : 'abstractionVolumes',
     startReading: meter.startReading,
-    units: UNITS[metadata.units || unitNames.CUBIC_METRES],
+    units: returnUnits[metadata.units || unitNames.CUBIC_METRES].name,
     unitSymbol: metadata.units || unitNames.CUBIC_METRES
   }
 }
