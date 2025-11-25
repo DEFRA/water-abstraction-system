@@ -18,6 +18,10 @@
 {% endmacro %}
 
 {% block pageContent %}
+  {% if licencePurposes.length === 0 %}
+  <p>No purposes for this licence.</p>
+  {% else %}
+
   <p> {{ showingPurposes }} </p>
 
   {% for licencePurpose in licencePurposes %}
@@ -94,4 +98,5 @@
       rows: tableRows
     }) }}
   {% endfor %}
+  {% endif %}
 {% endblock %}
