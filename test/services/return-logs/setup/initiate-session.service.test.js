@@ -114,7 +114,8 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         submissionType: 'edit',
         twoPartTariff: returnLog.metadata.isTwoPartTariff,
         underQuery: returnLog.underQuery,
-        units: 'cubicMetres'
+        units: 'cubicMetres',
+        unitSymbol: 'm³'
       })
     })
 

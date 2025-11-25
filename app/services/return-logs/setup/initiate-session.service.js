@@ -200,7 +200,8 @@ function _submissionData(lines, returnLog) {
     receivedDateYear: returnLog.receivedDate && `${returnLog.receivedDate.getFullYear()}`,
     reported: method === 'oneMeter' ? 'meterReadings' : 'abstractionVolumes',
     startReading: meter.startReading,
-    units: UNITS[metadata.units || unitNames.CUBIC_METRES]
+    units: UNITS[metadata.units || unitNames.CUBIC_METRES],
+    unitSymbol: metadata.units || unitNames.CUBIC_METRES
   }
 }
 
