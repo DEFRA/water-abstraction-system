@@ -5,287 +5,52 @@
  * @module FindAllSearchMatchesService
  */
 
-const FetchBillingAccountSearchResultsService = require('./fetch-billing-account-search-results.service.js')
-const FetchLicenceHolderSearchResultsService = require('./fetch-licence-holder-search-results.service.js')
-const FetchLicenceSearchResultsService = require('./fetch-licence-search-results.service.js')
-const FetchMonitoringStationSearchResultsService = require('./fetch-monitoring-station-search-results.service.js')
-const FetchReturnLogSearchResultsService = require('./fetch-return-log-search-results.service.js')
-const FetchUserSearchResultsService = require('./fetch-user-search-results.service.js')
-
-const NO_RESULTS = { results: [], total: 0 }
+const DetermineSearchItemsService = require('./determine-search-items.service.js')
+const FetchSearchResultsDetailsService = require('./fetch-search-results-details.service.js')
+const FetchSearchResultsService = require('./fetch-search-results.service.js')
 
 /**
  * Coordinates finding all matching search results for a search query from the /search page
- *
- * Searches match any part of the field being searched, so the most relevant results won't necessarily be displayed
- * first. To avoid this happening, we first select the results that exactly match (case insensitive) the query.
- *
- * To prevent pointless searches, we also perform some checks on the search query to see if there are some things that
- * it is not worth searching for. For example, return references are always numeric, so we can skip searching for them
- * if the search query contains any letters.
  *
  * @param {string} query - The value to search for, taken from the session
  * @param {string} resultType - The type of search result to display
  * @param {number} page - The requested page
  * @param {string[]} userScopes - The user's scopes
  *
- * @returns {Promise<string>} The full set of results
+ * @returns {Promise<object>} The full set of results for the requested page
  */
 async function go(query, resultType, page, userScopes) {
-  const allSearchResults = await _allSearchResults(query, resultType, page, userScopes)
-  const fullMatches = allSearchResults.slice(0, allSearchResults.length / 2)
-  const partialMatches = allSearchResults.slice(allSearchResults.length / 2)
+  const resultTypes = DetermineSearchItemsService.go(query, resultType, userScopes)
 
-  return {
-    exactSearchResults: _searchResults(fullMatches),
-    largestResultCount: _largestResultCount(partialMatches),
-    similarSearchResults: _searchResults(partialMatches)
-  }
+  const { results: orderedSearchResults, total } = await FetchSearchResultsService.go(query, resultTypes, page)
+
+  const idsByType = _idsByType(orderedSearchResults)
+
+  const modelsByType = await FetchSearchResultsDetailsService.go(idsByType)
+
+  const results = _results(orderedSearchResults, modelsByType)
+
+  return { results, total }
 }
 
-async function _allSearchResults(query, resultType, page, userScopes) {
-  return Promise.all([
-    _fullBillingAccountSearchResults(query, resultType, page, userScopes),
-    _fullLicenceHolderSearchResults(query, resultType, page),
-    _fullLicenceSearchResults(query, resultType, page),
-    _fullMonitoringStationSearchResults(query, resultType, page),
-    _fullReturnLogSearchResults(query, resultType, page),
-    _fullUserSearchResults(query, resultType, page),
-    _partialBillingAccountSearchResults(query, resultType, page, userScopes),
-    _partialLicenceHolderSearchResults(query, resultType, page),
-    _partialLicenceSearchResults(query, resultType, page),
-    _partialMonitoringStationSearchResults(query, resultType, page),
-    _partialReturnLogSearchResults(query, resultType, page),
-    _partialUserSearchResults(query, resultType, page)
-  ])
+function _idsByType(searchResults) {
+  return searchResults.reduce((groupedIds, searchResult) => {
+    if (!groupedIds[searchResult.type]) {
+      groupedIds[searchResult.type] = []
+    }
+    groupedIds[searchResult.type].push(searchResult.id)
+    return groupedIds
+  }, {})
 }
 
-async function _fullBillingAccountSearchResults(query, resultType, page, userScopes) {
-  if (!userScopes.includes('billing')) {
-    return NO_RESULTS
-  }
+function _results(orderedSearchResults, modelsByType) {
+  return orderedSearchResults.map(({ exact, id, type }) => {
+    const model = modelsByType[type].find((model) => {
+      return model.id === id
+    })
 
-  if (resultType && resultType !== 'billingAccount') {
-    return NO_RESULTS
-  }
-
-  if (!_matchesFullBillingAccountReference(query)) {
-    return NO_RESULTS
-  }
-
-  return FetchBillingAccountSearchResultsService.go(query, page, true)
-}
-
-async function _fullLicenceHolderSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'licenceHolder') {
-    return NO_RESULTS
-  }
-
-  if (!_matchesFullLicenceHolderName(query)) {
-    return NO_RESULTS
-  }
-
-  return FetchLicenceHolderSearchResultsService.go(query, page, true)
-}
-
-async function _fullLicenceSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'licence') {
-    return NO_RESULTS
-  }
-
-  if (!_matchesFullLicenceRef(query)) {
-    return NO_RESULTS
-  }
-
-  return FetchLicenceSearchResultsService.go(query, page, true)
-}
-
-async function _fullMonitoringStationSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'monitoringStation') {
-    return NO_RESULTS
-  }
-
-  return FetchMonitoringStationSearchResultsService.go(query, page, true)
-}
-
-async function _fullReturnLogSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'returnLog') {
-    return NO_RESULTS
-  }
-
-  if (!_matchesFullReturnLogReference(query)) {
-    return NO_RESULTS
-  }
-
-  return FetchReturnLogSearchResultsService.go(query, page, true)
-}
-
-async function _fullUserSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'user') {
-    return NO_RESULTS
-  }
-
-  if (!_matchesFullUsername(query)) {
-    return NO_RESULTS
-  }
-
-  return FetchUserSearchResultsService.go(query, page, true)
-}
-
-function _largestResultCount(searchResults) {
-  const [billingAccounts, licenceHolders, licences, monitoringStations, returnLogs, users] = searchResults
-
-  return Math.max(
-    billingAccounts.total,
-    licenceHolders.total,
-    licences.total,
-    monitoringStations.total,
-    returnLogs.total,
-    users.total
-  )
-}
-
-function _matchesFullBillingAccountReference(query) {
-  // Billing account references are of the format "A12345678A" where the first letter is a charge region
-  return query.match(/^[ABENSTWY][0-9]{8}A$/i)
-}
-
-function _matchesFullLicenceHolderName(query) {
-  // Licence holder names are all at least 2 characters long
-  return query.length > 1
-}
-
-function _matchesFullLicenceRef(query) {
-  if (!_matchesPartialLicenceRef(query)) {
-    return false
-  }
-
-  // Licence references are all at least 6 characters long
-  if (query.length < 6) {
-    return false
-  }
-
-  // If it contains a slash followed by at least two digits, it could be a full licence reference
-  if (query.match(/^.+\/\d{2}.+$/)) {
-    return true
-  }
-
-  // If it starts with at least 10 consecutive digits, it could be a full licence reference
-  if (query.match(/^\d{10}/)) {
-    return true
-  }
-
-  return false
-}
-
-function _matchesFullReturnLogReference(query) {
-  // Return log references are just numeric, without leading zeros
-  return query.match(/^[1-9]\d*$/)
-}
-
-function _matchesFullUsername(query) {
-  // Usernames will have at least one character before the @ sign and we expect at least five characters after
-  return query.match(/^.+@.{5,}$/)
-}
-
-function _matchesPartialBillingAccountReference(query) {
-  // If it's longer than 10 characters or contains any characters that aren't allowed in a billing account reference
-  // then it can't be part of a billing account reference
-  return query.match(/^[ABENSTWY0-9]{1,10}$/i)
-}
-
-function _matchesPartialLicenceRef(query) {
-  // If there are three consecutive letters, it's not a licence reference
-  return !query.match(/[a-z]{3}/i)
-}
-
-function _matchesPartialReturnLogReference(query) {
-  // Return log references contain only numerical digits
-  return query.match(/^\d+$/)
-}
-
-async function _partialBillingAccountSearchResults(query, resultType, page, userScopes) {
-  if (!userScopes.includes('billing')) {
-    return NO_RESULTS
-  }
-
-  if (resultType && resultType !== 'billingAccount') {
-    return NO_RESULTS
-  }
-
-  if (!_matchesPartialBillingAccountReference(query)) {
-    return NO_RESULTS
-  }
-
-  return FetchBillingAccountSearchResultsService.go(query, page, false)
-}
-
-async function _partialLicenceHolderSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'licenceHolder') {
-    return NO_RESULTS
-  }
-
-  return FetchLicenceHolderSearchResultsService.go(query, page, false)
-}
-
-async function _partialLicenceSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'licence') {
-    return NO_RESULTS
-  }
-
-  if (!_matchesPartialLicenceRef(query)) {
-    return NO_RESULTS
-  }
-
-  return FetchLicenceSearchResultsService.go(query, page, false)
-}
-
-async function _partialMonitoringStationSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'monitoringStation') {
-    return NO_RESULTS
-  }
-
-  return FetchMonitoringStationSearchResultsService.go(query, page, false)
-}
-
-async function _partialReturnLogSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'returnLog') {
-    return NO_RESULTS
-  }
-
-  if (!_matchesPartialReturnLogReference(query)) {
-    return NO_RESULTS
-  }
-
-  return FetchReturnLogSearchResultsService.go(query, page, false)
-}
-
-async function _partialUserSearchResults(query, resultType, page) {
-  if (resultType && resultType !== 'user') {
-    return NO_RESULTS
-  }
-
-  return FetchUserSearchResultsService.go(query, page, false)
-}
-
-function _searchResults(searchResults) {
-  const [billingAccounts, licenceHolders, licences, monitoringStations, returnLogs, users] = searchResults
-
-  return {
-    amountFound:
-      billingAccounts.results.length +
-      licenceHolders.results.length +
-      licences.results.length +
-      monitoringStations.results.length +
-      returnLogs.results.length +
-      users.results.length,
-    billingAccounts,
-    licenceHolders,
-    licences,
-    monitoringStations,
-    returnLogs,
-    users
-  }
+    return { exact, model, type }
+  })
 }
 
 module.exports = {

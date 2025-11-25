@@ -11,6 +11,11 @@
 
 {% macro licenceStatusTag(text) %}{{ govukTag({ text: text, classes: 'govuk-tag--grey' }) }}{% endmacro %}
 
+{% macro statusTag(type, text) %}
+  {{ licenceStatusTag(text) if type == 'Licence' }}
+  {{ returnStatusTag(text, true) if type == 'Return reference' }}
+{% endmacro %}
+
 {% set filterContent %}
   <h2 class="govuk-heading-m govuk-!-margin-bottom-5">Filter matches by</h2>
 
@@ -92,251 +97,23 @@
     {% else %}
       <hr class="searchresult-separator">
 
-      {% if showExactResults %}
-        {% if exactMatches.licences %}
-          {% for licence in exactMatches.licences %}
-            <hr class="searchresult-separator">
-            <div class="searchresult-row">
-              <dl class="searchresult-list">
-                <div class="searchresult-column">
-                  <dt class="searchresult-term-l">Licence:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a></dd><p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Licence holder:</dt><dd class="searchresult-detail">{{ licence.licenceHolderName }}</dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">End date:</dt><dd class="searchresult-detail">{{ licence.licenceEndDate }} {{ licenceStatusTag(licence.licenceEndedText) if licence.licenceEndedText }}</dd>
-                </div>
-              </dl>
+      {% for result in results %}
+        <hr class="searchresult-separator">
+        <div class="searchresult-row">
+          <dl class="searchresult-list">
+            <div class="searchresult-column">
+              <dt class="searchresult-term-l">{{ result.type }}:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="{{ result.link }}">{{ result.reference }}</a></dd>{% if result.exact %}<p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>{% endif %}
             </div>
-            <hr class="searchresult-separator">
-          {% endfor %}
-        {% endif %}
-
-        {% if exactMatches.licenceHolders %}
-          {% for licenceHolder in exactMatches.licenceHolders %}
-            <hr class="searchresult-separator">
-            <div class="searchresult-row">
-              <dl class="searchresult-list">
-                <div class="searchresult-column">
-                  <dt class="searchresult-term-l">Holder:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/licences/{{ licenceHolder.id }}/summary">{{ licenceHolder.holderName }}</a></dd><p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Licence:</dt><dd class="searchresult-detail">{{ licenceHolder.licenceRef }}</dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Type:</dt><dd class="searchresult-detail">{{ licenceHolder.holderType }}</dd>
-                </div>
-              </dl>
+            <div class="searchresult-column">
+              <dt class="searchresult-term">{{ result.col2Title }}:</dt><dd class="searchresult-detail">{{ result.col2Value }}</dd>
             </div>
-            <hr class="searchresult-separator">
-          {% endfor %}
-        {% endif %}
-
-        {% if exactMatches.monitoringStations %}
-          {% for monitoringStation in exactMatches.monitoringStations %}
-            <hr class="searchresult-separator">
-            <div class="searchresult-row">
-              <dl class="searchresult-list">
-                <div class="searchresult-column">
-                  <dt class="searchresult-term-l">Monitoring station:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/monitoring-stations/{{ monitoringStation.id }}">{{ monitoringStation.label }}</a></dd><p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">River:</dt><dd class="searchresult-detail">{{ monitoringStation.riverName }}</dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Grid reference:</dt><dd class="searchresult-detail">{{ monitoringStation.gridReference }}</dd>
-                </div>
-              </dl>
+            <div class="searchresult-column">
+              <dt class="searchresult-term">{{ result.col3Title }}:</dt><dd class="searchresult-detail">{{ result.col3Value }} {{ statusTag(result.type, result.statusTag) if result.statusTag }}</dd>
             </div>
-            <hr class="searchresult-separator">
-          {% endfor %}
-        {% endif %}
-
-        {% if exactMatches.returnLogs %}
-          {% for returnLog in exactMatches.returnLogs %}
-            <hr class="searchresult-separator">
-            <div class="searchresult-row">
-              <dl class="searchresult-list">
-                <div class="searchresult-column">
-                  <dt class="searchresult-term-l">Return reference:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/return-logs?id={{ returnLog.id }}">{{ returnLog.returnReference }}</a></dd><p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Licence returns:</dt><dd class="searchresult-detail"><a class="searchresult-link" href="/system/licences/{{ returnLog.licenceId }}/returns">{{ returnLog.licenceRef }}</a></dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">End date:</dt><dd class="searchresult-detail">{{ returnLog.endDate }} {{ returnStatusTag(returnLog.statusText, true) if returnLog.statusText }}</dd>
-                </div>
-              </dl>
-            </div>
-            <hr class="searchresult-separator">
-          {% endfor %}
-        {% endif %}
-
-        {% if exactMatches.billingAccounts %}
-          {% for billingAccount in exactMatches.billingAccounts %}
-            <hr class="searchresult-separator">
-            <div class="searchresult-row">
-              <dl class="searchresult-list">
-                <div class="searchresult-column">
-                  <dt class="searchresult-term-l">Billing account:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/billing-accounts/{{ billingAccount.id }}">{{ billingAccount.accountNumber }}</a></dd><p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Holder:</dt><dd class="searchresult-detail">{{ billingAccount.name }}</dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Created date:</dt><dd class="searchresult-detail">{{ billingAccount.createdAt }}</dd>
-                </div>
-              </dl>
-            </div>
-            <hr class="searchresult-separator">
-          {% endfor %}
-        {% endif %}
-
-
-        {% if exactMatches.users %}
-          {% for user in exactMatches.users %}
-            <hr class="searchresult-separator">
-            <div class="searchresult-row">
-              <dl class="searchresult-list">
-                <div class="searchresult-column">
-                  <dt class="searchresult-term-l">User:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/user/{{ user.id }}/status">{{ user.username }}</a></dd><p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Type:</dt><dd class="searchresult-detail">{{ user.type }}</dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Last signed in:</dt><dd class="searchresult-detail">{{ user.lastLogin }}</dd>
-                </div>
-              </dl>
-            </div>
-            <hr class="searchresult-separator">
-          {% endfor %}
-        {% endif %}
-
-      {% endif %}
-
-      {% if not noPartialResults %}
-        {% if partialMatches.licences %}
-          {% for licence in partialMatches.licences %}
-            <hr class="searchresult-separator">
-            <div class="searchresult-row">
-              <dl class="searchresult-list">
-                <div class="searchresult-column">
-                  <dt class="searchresult-term-l">Licence:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/licences/{{ licence.id }}/summary">{{ licence.licenceRef }}</a></dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Licence holder:</dt><dd class="searchresult-detail">{{ licence.licenceHolderName }}</dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">End date:</dt><dd class="searchresult-detail">{{ licence.licenceEndDate }} {{ licenceStatusTag(licence.licenceEndedText) if licence.licenceEndedText }}</dd>
-                </div>
-              </dl>
-            </div>
-            <hr class="searchresult-separator">
-          {% endfor %}
-        {% endif %}
-
-        {% if partialMatches.licenceHolders %}
-          {% for licenceHolder in partialMatches.licenceHolders %}
-            <hr class="searchresult-separator">
-            <div class="searchresult-row">
-              <dl class="searchresult-list">
-                <div class="searchresult-column">
-                  <dt class="searchresult-term-l">Holder:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/licences/{{ licenceHolder.id }}/summary">{{ licenceHolder.holderName }}</a></dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Licence:</dt><dd class="searchresult-detail">{{ licenceHolder.licenceRef }}</dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Type:</dt><dd class="searchresult-detail">{{ licenceHolder.holderType }}</dd>
-                </div>
-              </dl>
-            </div>
-            <hr class="searchresult-separator">
-          {% endfor %}
-        {% endif %}
-
-        {% if partialMatches.monitoringStations %}
-          {% for monitoringStation in partialMatches.monitoringStations %}
-            <hr class="searchresult-separator">
-            <div class="searchresult-row">
-              <dl class="searchresult-list">
-                <div class="searchresult-column">
-                  <dt class="searchresult-term-l">Monitoring station:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/monitoring-stations/{{ monitoringStation.id }}">{{ monitoringStation.label }}</a></dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">River:</dt><dd class="searchresult-detail">{{ monitoringStation.riverName }}</dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Grid reference:</dt><dd class="searchresult-detail">{{ monitoringStation.gridReference }}</dd>
-                </div>
-              </dl>
-            </div>
-            <hr class="searchresult-separator">
-          {% endfor %}
-        {% endif %}
-
-        {% if partialMatches.returnLogs %}
-          {% for returnLog in partialMatches.returnLogs %}
-            <hr class="searchresult-separator">
-            <div class="searchresult-row">
-              <dl class="searchresult-list">
-                <div class="searchresult-column">
-                  <dt class="searchresult-term-l">Return reference:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/return-logs?id={{ returnLog.id }}">{{ returnLog.returnReference }}</a></dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Licence returns:</dt><dd class="searchresult-detail"><a class="searchresult-link" href="/system/licences/{{ returnLog.licenceId }}/returns">{{ returnLog.licenceRef }}</a></dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">End date:</dt><dd class="searchresult-detail">{{ returnLog.endDate }} {{ returnStatusTag(returnLog.statusText, true) if returnLog.statusText }}</dd>
-                </div>
-              </dl>
-            </div>
-            <hr class="searchresult-separator">
-          {% endfor %}
-        {% endif %}
-
-        {% if partialMatches.billingAccounts %}
-          {% for billingAccount in partialMatches.billingAccounts %}
-            <hr class="searchresult-separator">
-            <div class="searchresult-row">
-              <dl class="searchresult-list">
-                <div class="searchresult-column">
-                  <dt class="searchresult-term-l">Billing account:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/billing-accounts/{{ billingAccount.id }}">{{ billingAccount.accountNumber }}</a></dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Holder:</dt><dd class="searchresult-detail">{{ billingAccount.name }}</dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Created date:</dt><dd class="searchresult-detail">{{ billingAccount.createdAt }}</dd>
-                </div>
-              </dl>
-            </div>
-            <hr class="searchresult-separator">
-          {% endfor %}
-        {% endif %}
-
-        {% if partialMatches.users %}
-          {% for user in partialMatches.users %}
-            <hr class="searchresult-separator">
-            <div class="searchresult-row">
-              <dl class="searchresult-list">
-                <div class="searchresult-column">
-                  <dt class="searchresult-term-l">User:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/user/{{ user.id }}/status">{{ user.username }}</a></dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Type:</dt><dd class="searchresult-detail">{{ user.type }}</dd>
-                </div>
-                <div class="searchresult-column">
-                  <dt class="searchresult-term">Last signed in:</dt><dd class="searchresult-detail">{{ user.lastLogin }}</dd>
-                </div>
-              </dl>
-            </div>
-            <hr class="searchresult-separator">
-          {% endfor %}
-        {% endif %}
-      {% endif %}
+          </dl>
+        </div>
+        <hr class="searchresult-separator">
+      {% endfor %}
 
       <hr class="searchresult-separator">
 

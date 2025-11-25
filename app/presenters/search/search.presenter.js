@@ -23,10 +23,12 @@ const resultTypes = {
  *
  * @param {string[]} userScopes - The user's scopes
  * @param {string} query - The user-entered search query, if any
- * @param {string} page - The requested page, when displaying search results
  * @param {string} resultType - The type of search results being displayed
+ * @param {string} page - The requested page, when displaying search results
  * @param {string} numberOfPages - The total number of pages available for the search results
- * @param {object} allSearchMatches - All the search matches found
+ * @param {object} allSearchMatches - All the search matches found, in the same form returned by Objection pagination,
+ * i.e. an object with an array of `results` for the current page and a `total` of the full number of matching results
+ * in the database
  *
  * @returns {object} - The data formatted for the view template
  */
@@ -37,40 +39,61 @@ function go(userScopes, query, resultType, page, numberOfPages, allSearchMatches
     return _blankSearchPage(userScopes, query, resultType)
   }
 
-  const { exactSearchResults, similarSearchResults } = allSearchMatches
+  const { results, total } = allSearchMatches
 
   return {
-    exactMatches: _matches(exactSearchResults),
     filterItems: _filterItems(userScopes, resultType),
-    noPartialResults: similarSearchResults.amountFound === 0,
-    noResults: exactSearchResults.amountFound === 0 && similarSearchResults.amountFound === 0,
+    noResults: total === 0,
     page,
     pageTitle: `Search results for "${query}"`,
     pageTitleCaption: _pageTitleCaption(numberOfPages, page),
-    partialMatches: _matches(similarSearchResults),
     query,
+    results: _results(results),
     resultType,
     resultTypeText: resultTypes[resultType] || 'all matches',
-    showExactResults: exactSearchResults.amountFound !== 0,
     showResults: true
   }
 }
 
-function _billingAccounts(billingAccounts) {
-  if (billingAccounts.length === 0) {
-    return null
+function _results(results) {
+  return results
+    .map((result) => {
+      switch (result.type) {
+        case 'billingAccount':
+          return _billingAccount(result)
+        case 'licence':
+          return _licence(result)
+        case 'licenceHolder':
+          return _licenceHolder(result)
+        case 'monitoringStation':
+          return _monitoringStation(result)
+        case 'returnLog':
+          return _returnLog(result)
+        case 'user':
+          return _user(result)
+        default:
+          return null // Any unknown types are returned as null so they can be filtered out
+      }
+    })
+    .filter(Boolean)
+}
+
+function _billingAccount(billingAccount) {
+  const { exact, model } = billingAccount
+  const { accountNumber, company, createdAt, id } = model
+  const { name } = company
+
+  return {
+    col2Title: 'Holder',
+    col2Value: name,
+    col3Title: 'Created date',
+    col3Value: formatLongDate(createdAt),
+    exact,
+    link: `/system/billing-accounts/${id}`,
+    reference: accountNumber,
+    statusTag: null,
+    type: 'Billing account'
   }
-
-  return billingAccounts.map((billingAccount) => {
-    const { accountNumber, createdAt, id, name } = billingAccount
-
-    return {
-      accountNumber,
-      createdAt: formatLongDate(createdAt),
-      id,
-      name
-    }
-  })
 }
 
 function _blankSearchPage(userScopes, query, resultType) {
@@ -101,15 +124,28 @@ function _filterItems(userScopes, resultType) {
   return items
 }
 
-function _holderContact(licence) {
-  return (
-    licence.metadata.contacts?.find((contact) => {
+function _licenceHolderDetail(licenceDocumentHeader) {
+  const licenceHolder =
+    licenceDocumentHeader.metadata.contacts?.find((contact) => {
       return contact.role === 'Licence holder'
     }) ?? {}
-  )
+
+  // Holder name is either a company name given by Name or made up of any parts of Salutation, Initials, Forename and
+  // Name that are populated, where Name provides the surname for a person.
+  // Licences that have ended don't seem to have this information populated, which makes their display a bit
+  // unhelpful.
+  const { forename: firstName, initials, name: lastName, salutation, type } = licenceHolder
+  const holderContactModel = ContactModel.fromJson({ firstName, initials, lastName, salutation })
+
+  return {
+    holderName: holderContactModel.$name(),
+    holderType: type
+  }
 }
 
-function _licenceEndDetails(licenceEnd) {
+function _licenceEndDetails(licence) {
+  const licenceEnd = licence.$ends()
+
   let licenceEndDate = null
   let licenceEndedText = null
 
@@ -126,56 +162,63 @@ function _licenceEndDetails(licenceEnd) {
   return { licenceEndDate, licenceEndedText }
 }
 
-function _licenceHolders(licenceHolders) {
-  if (licenceHolders.length === 0) {
-    return null
-  }
+function _licence(licence) {
+  const { exact, model } = licence
+  const { id, licenceDocumentHeader, licenceRef } = model
 
-  return licenceHolders
-}
+  const { holderName } = _licenceHolderDetail(licenceDocumentHeader)
 
-function _licences(licences) {
-  if (licences.length === 0) {
-    return null
-  }
+  const { licenceEndDate, licenceEndedText } = _licenceEndDetails(model)
 
-  return licences.map((licence) => {
-    const licenceEnd = licence.$ends()
-    const { id, licenceRef } = licence
-
-    const { forename: firstName, initials, name: lastName, salutation } = _holderContact(licence)
-
-    // Holder name is either a company name given by Name or made up of any parts of Salutation, Initials, Forename and
-    // Name that are populated, where Name provides the surname for a person.
-    // Licences that have ended don't seem to have this information populated, which makes their display a bit
-    // unhelpful.
-    const holderContactModel = ContactModel.fromJson({ firstName, initials, lastName, salutation })
-    const licenceHolderName = holderContactModel.$name()
-
-    // Licences that have ended are displayed with a tag showing the reason
-    const { licenceEndDate, licenceEndedText } = _licenceEndDetails(licenceEnd)
-
-    return { id, licenceEndDate, licenceEndedText, licenceHolderName, licenceRef }
-  })
-}
-
-function _matches(searchResults) {
   return {
-    billingAccounts: _billingAccounts(searchResults.billingAccounts.results),
-    licenceHolders: _licenceHolders(searchResults.licenceHolders.results),
-    licences: _licences(searchResults.licences.results),
-    monitoringStations: _monitoringStations(searchResults.monitoringStations.results),
-    returnLogs: _returnLogs(searchResults.returnLogs.results),
-    users: _users(searchResults.users.results)
+    col2Title: 'Licence holder',
+    col2Value: holderName,
+    col3Title: 'End date',
+    col3Value: licenceEndDate,
+    exact,
+    link: `/system/licences/${id}/summary`,
+    reference: licenceRef,
+    statusTag: licenceEndedText,
+    type: 'Licence'
   }
 }
 
-function _monitoringStations(monitoringStations) {
-  if (monitoringStations.length === 0) {
-    return null
-  }
+function _licenceHolder(licenceHolder) {
+  const { exact, model } = licenceHolder
+  const {
+    licence: { id, licenceRef }
+  } = model
 
-  return monitoringStations
+  const { holderName, holderType } = _licenceHolderDetail(model)
+
+  return {
+    col2Title: 'Licence',
+    col2Value: licenceRef,
+    col3Title: 'Type',
+    col3Value: holderType,
+    exact,
+    link: `/system/licences/${id}/summary`,
+    reference: holderName,
+    statusTag: null,
+    type: 'Holder'
+  }
+}
+
+function _monitoringStation(monitoringStation) {
+  const { exact, model } = monitoringStation
+  const { gridReference, id, label, river } = model
+
+  return {
+    col2Title: 'River',
+    col2Value: river,
+    col3Title: 'Grid reference',
+    col3Value: gridReference,
+    exact,
+    link: `/system/monitoring-stations/${id}`,
+    reference: label,
+    statusTag: null,
+    type: 'Monitoring station'
+  }
 }
 
 function _pageTitleCaption(numberOfPages, selectedPageNumber) {
@@ -186,59 +229,42 @@ function _pageTitleCaption(numberOfPages, selectedPageNumber) {
   return `Page ${selectedPageNumber} of ${numberOfPages}`
 }
 
-function _returnLogDetail(ids, dueDates, endDates, statuses) {
-  return ids
-    .map((id, index) => {
-      const dueDate = dueDates[index]
-      const endDate = endDates[index]
-      const status = statuses[index]
+function _returnLog(returnLog) {
+  const { exact, model } = returnLog
+  const { endDate, returnId, licenceRef, returnReference } = model
 
-      return { dueDate, endDate, id, status }
-    })
-    .sort((a, b) => {
-      return b.endDate - a.endDate
-    })[0]
+  const statusTag = formatReturnLogStatus(model)
+
+  return {
+    col2Title: 'Licence',
+    col2Value: licenceRef,
+    col3Title: 'End date',
+    col3Value: formatLongDate(endDate),
+    exact,
+    link: `/system/return-logs/${returnId}`,
+    reference: returnReference,
+    statusTag,
+    type: 'Return reference'
+  }
 }
 
-function _returnLogs(returnLogs) {
-  if (returnLogs.length === 0) {
-    return null
+function _user(user) {
+  const { exact, model } = user
+  const { application, id, lastLogin, username } = model
+
+  const statusTag = formatReturnLogStatus(model)
+
+  return {
+    col2Title: 'Type',
+    col2Value: application === 'water_vml' ? 'External' : 'Internal',
+    col3Title: 'Last signed in',
+    col3Value: formatLongDate(lastLogin),
+    exact,
+    link: `/user/${id}/status`,
+    reference: username,
+    statusTag,
+    type: 'User'
   }
-
-  return returnLogs.map((returnLog) => {
-    const { dueDates, endDates, id: licenceId, ids, licenceRef, returnReference, statuses } = returnLog
-
-    const returnLogDetail = _returnLogDetail(ids, dueDates, endDates, statuses)
-
-    const statusText = formatReturnLogStatus(returnLogDetail)
-    const { id } = returnLogDetail
-
-    return {
-      endDate: formatLongDate(returnLogDetail.endDate),
-      id,
-      licenceId,
-      licenceRef,
-      returnReference,
-      statusText
-    }
-  })
-}
-
-function _users(users) {
-  if (users.length === 0) {
-    return null
-  }
-
-  return users.map((user) => {
-    const { application, id, lastLogin, username } = user
-
-    return {
-      id,
-      lastLogin: formatLongDate(lastLogin),
-      type: application === 'water_vml' ? 'External' : 'Internal',
-      username
-    }
-  })
 }
 
 module.exports = {
