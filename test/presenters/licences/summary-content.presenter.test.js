@@ -842,7 +842,7 @@ describe('Licences - Summary Content Presenter', () => {
       })
     })
 
-    describe('when the current version has a start date', () => {
+    describe('when the current version is not null', () => {
       beforeEach(() => {
         licence.$currentVersion = () => {
           return { startDate: '2021-01-01', licenceVersionPurposes: [] }
