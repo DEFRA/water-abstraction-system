@@ -7,7 +7,6 @@
 
 const { formatLongDate } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
-const { licence } = require('../../../test/fixtures/view-licences.fixture.js')
 
 /**
  * Formats data for the `/licences/{id}/summary` page
