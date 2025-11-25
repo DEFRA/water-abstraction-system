@@ -270,7 +270,7 @@ class LicenceModel extends BaseModel {
    * status of 'current'. However, at times we have encountered licences without a licence version hence we cater for
    * that in the function.
    *
-   * We have also seed licence with the start date in the future and the status marked as 'current'. These are not
+   * We have also seen licence versions with a start date in the future and the status marked as 'current'. These are not
    * regarded as 'current', so the query orders the licence versions by start date (desc) and then picks the first
    * licence version where the start date is less than or equal to the current day.
    *
