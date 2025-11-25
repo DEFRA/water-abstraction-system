@@ -619,7 +619,7 @@ describe('Licence model', () => {
 
           currentLicenceVersion = await LicenceVersionHelper.add({
             licenceId: testRecord.id,
-            status: 'superseded'
+            status: 'current'
           })
 
           await LicenceVersionHelper.add({
