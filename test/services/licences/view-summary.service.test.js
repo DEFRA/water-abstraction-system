@@ -60,6 +60,7 @@ describe('Licences - View Summary service', () => {
             href: '/licences',
             text: 'Go back to search'
           },
+          currentVersion: 'The current version of the licence starting 1 April 2019',
           documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
           enableMonitoringStationsView: true,
           endDate: null,
@@ -111,7 +112,7 @@ function _auth() {
 }
 
 function _testLicence() {
-  return LicenceModel.fromJson({
+  const licence = LicenceModel.fromJson({
     id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
     expiredDate: null,
     startDate: new Date('2019-04-01'),
@@ -154,4 +155,6 @@ function _testLicence() {
     licenceSupplementaryYears: [],
     workflows: [{ id: 'b6f44c94-25e4-4ca8-a7db-364534157ba7', status: 'to_setup' }]
   })
+
+  return licence
 }

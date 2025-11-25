@@ -29,6 +29,7 @@ describe('Licences - Summary Presenter', () => {
           href: '/licences',
           text: 'Go back to search'
         },
+        currentVersion: 'The current version of the licence starting 1 April 2019',
         documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
         ends: null,
         includeInPresrocBilling: 'no',
@@ -43,6 +44,32 @@ describe('Licences - Summary Presenter', () => {
         },
         warning: null,
         workflowWarning: true
+      })
+    })
+  })
+
+  describe('the "currentVersion" property', () => {
+    describe('when the there is no current versions', () => {
+      it('returns the text with the "startDate"', () => {
+        const result = SummaryPresenter.go(licence)
+
+        expect(result.currentVersion).to.equal('The current version of the licence starting 1 April 2019')
+      })
+    })
+
+    describe('when the there is a current versions', () => {
+      beforeEach(() => {
+        licence.$currentVersion = () => {
+          return {
+            startDate: '2021-01-01'
+          }
+        }
+      })
+
+      it('returns the text with the licence versions "startDate"', () => {
+        const result = SummaryPresenter.go(licence)
+
+        expect(result.currentVersion).to.equal('The current version of the licence starting 1 January 2021')
       })
     })
   })
@@ -310,7 +337,7 @@ describe('Licences - Summary Presenter', () => {
 })
 
 function _licence() {
-  const licence = LicenceModel.fromJson({
+  return LicenceModel.fromJson({
     id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
     expiredDate: null,
     lapsedDate: null,
@@ -335,8 +362,7 @@ function _licence() {
       ]
     },
     licenceSupplementaryYears: [],
+    startDate: new Date('2019-04-01'),
     workflows: [{ id: 'b6f44c94-25e4-4ca8-a7db-364534157ba7', status: 'to_setup' }]
   })
-
-  return licence
 }

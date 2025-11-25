@@ -45,7 +45,7 @@ function go(licence) {
     purposesCount: licenceVersionPurposes ? licenceVersionPurposes.length : 0,
     region: region.displayName,
     sourceOfSupply: _sourceOfSupply(licenceVersionPurposes),
-    startDate: _startDay(licence)
+    startDate: _startDate(licence, startDate)
   }
 }
 
@@ -196,10 +196,14 @@ function _sourceOfSupply(licenceVersionPurposes) {
   return licenceVersionPurposes[0].points[0].source.description
 }
 
-function _startDay(licence) {
+function _startDate(licence, startDate) {
   const currentVersion = licence.$currentVersion()
 
-  return formatLongDate(currentVersion.startDate)
+  if (currentVersion?.startDate) {
+    return formatLongDate(currentVersion.startDate)
+  }
+
+  return formatLongDate(startDate)
 }
 
 module.exports = {

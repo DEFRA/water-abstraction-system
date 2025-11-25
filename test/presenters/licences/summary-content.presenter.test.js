@@ -54,7 +54,7 @@ describe('Licences - Summary Content Presenter', () => {
       purposesCount: 3,
       region: 'Avalon',
       sourceOfSupply: 'SURFACE WATER SOURCE OF SUPPLY',
-      startDate: '1 April 2019'
+      startDate: '1 April 2022'
     })
   })
 
@@ -823,6 +823,36 @@ describe('Licences - Summary Content Presenter', () => {
             expect(result.sourceOfSupply).to.equal('SURFACE WATER SOURCE OF SUPPLY')
           })
         })
+      })
+    })
+  })
+
+  describe('the "startDate" property', () => {
+    describe('when the current version is null', () => {
+      beforeEach(() => {
+        licence.$currentVersion = () => {
+          return null
+        }
+      })
+
+      it('returns the current version start date', () => {
+        const result = SummaryContentPresenter.go(licence)
+
+        expect(result.startDate).to.equal('1 April 2019')
+      })
+    })
+
+    describe('when the current version has a start date', () => {
+      beforeEach(() => {
+        licence.$currentVersion = () => {
+          return { startDate: '2021-01-01', licenceVersionPurposes: [] }
+        }
+      })
+
+      it('returns the current version start date', () => {
+        const result = SummaryContentPresenter.go(licence)
+
+        expect(result.startDate).to.equal('1 January 2021')
       })
     })
   })
