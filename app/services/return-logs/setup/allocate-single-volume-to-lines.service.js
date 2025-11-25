@@ -8,7 +8,6 @@
 const Big = require('big.js')
 
 const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
-const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
 const MAX_DECIMAL = 6
 
@@ -28,11 +27,9 @@ const MAX_DECIMAL = 6
  * @param {object} session - Session object containing the return submission data
  */
 function go(session) {
-  const { fromFullDate, lines, singleVolumeQuantity, toFullDate, units } = session
+  const { fromFullDate, lines, singleVolumeQuantity, toFullDate, unitSymbol } = session
 
   const linesInsideAbstractionPeriod = _linesInsideAbstractionPeriod(fromFullDate, lines, toFullDate)
-
-  const unitSymbol = _getUnitSymbolByName(units)
 
   const singleVolumeCubicMetres = convertToCubicMetres(singleVolumeQuantity, unitSymbol)
 
@@ -77,12 +74,6 @@ function _applyQuantityToLines(
       unitSymbol
     )
   }
-}
-
-function _getUnitSymbolByName(units) {
-  return Object.keys(returnUnits).find((key) => {
-    return returnUnits[key].name === units
-  })
 }
 
 function _individualLineQuantity(linesInsideAbstractionPeriod, singleVolumeCubicMetres, unitSymbol) {

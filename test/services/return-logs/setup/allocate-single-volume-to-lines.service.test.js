@@ -27,7 +27,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
             lines,
             singleVolumeQuantity: 2100,
             toFullDate: new Date('2024-03-31').toISOString(),
-            units: 'cubicMetres'
+            unitSymbol: 'm³'
           }
         })
 
@@ -74,7 +74,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
             lines,
             singleVolumeQuantity: 1200,
             toFullDate: new Date('2023-09-30').toISOString(),
-            units: 'cubicMetres'
+            unitSymbol: 'm³'
           }
         })
 
@@ -122,7 +122,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
           lines,
           singleVolumeQuantity: 1001.111123,
           toFullDate: new Date('2023-09-30').toISOString(),
-          units: 'cubicMetres'
+          unitSymbol: 'm³'
         }
       })
 
@@ -180,7 +180,7 @@ describe('Return Logs - Allocate Single Volume To Lines Service', () => {
             lines,
             singleVolumeQuantity: 220213.66119, // 1001.111123 cubic metres converted to gallons to 6 decimal places
             toFullDate: new Date('2023-09-30').toISOString(),
-            units: 'gallons'
+            unitSymbol: 'gal'
           }
         })
 
