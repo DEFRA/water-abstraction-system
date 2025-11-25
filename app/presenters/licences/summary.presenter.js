@@ -7,6 +7,7 @@
 
 const { formatLongDate } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
+const { licence } = require('../../../test/fixtures/view-licences.fixture.js')
 
 /**
  * Formats data for the `/licences/{id}/summary` page
@@ -21,16 +22,20 @@ function go(licence) {
   const primaryUser = licence.$primaryUser()
   const ends = licence.$ends()
 
+  const currentVersion = licence.$currentVersion()
+
   return {
     backLink: {
       text: 'Go back to search',
       href: '/licences'
     },
+    currentVersion: _currentVersion(licence),
     documentId: licenceDocumentHeader.id,
     ends,
     includeInPresrocBilling,
     licenceId: id,
     licenceRef,
+    licenceVersionStartDate: formatLongDate(currentVersion.startDate),
     notification: _notification(licence),
     pageTitle: `Licence summary ${licenceRef}`,
     pageTitleCaption: _licenceName(primaryUser, licence),
@@ -38,6 +43,10 @@ function go(licence) {
     warning: _warning(ends),
     workflowWarning: _workflowWarning(workflows)
   }
+}
+
+function _currentVersion(currentVersion) {
+  return `The current version of the licence starting ${formatLongDate(currentVersion.startDate)}`
 }
 
 function _licenceName(primaryUser, licence) {
