@@ -57,7 +57,7 @@ describe('Licences - Summary Presenter', () => {
       })
     })
 
-    describe('when the there is a current versions', () => {
+    describe('when the current version is not null', () => {
       beforeEach(() => {
         licence.$currentVersion = () => {
           return {
