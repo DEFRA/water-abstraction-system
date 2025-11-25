@@ -7,6 +7,10 @@
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% block pageContent %}
+  {% if conditionType.conditions.length === 0 %}
+  <p>No conditions for this licence.</p>
+  {% else %}
+
   <p> {{ showingConditions }} </p>
 
   <div class="govuk-grid-row ">
@@ -103,4 +107,5 @@
       {% endfor %}
     </div>
   </div>
+  {% endif %}
 {% endblock %}

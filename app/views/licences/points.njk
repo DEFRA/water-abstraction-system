@@ -3,6 +3,9 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block pageContent %}
+  {% if licencePoints.length === 0 %}
+  <p>No points for this licence.</p>
+  {% else %}
   <p> {{ showingPoints }} </p>
 
   {% for licencePoint in licencePoints %}
@@ -161,4 +164,5 @@
       ]
     }) }}
   {% endfor %}
+  {% endif %}
 {% endblock %}
