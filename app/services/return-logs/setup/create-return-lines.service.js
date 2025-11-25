@@ -7,7 +7,6 @@
 
 const ReturnSubmissionLineModel = require('../../../models/return-submission-line.model.js')
 const { convertToCubicMetres, generateUUID } = require('../../../lib/general.lib.js')
-const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Creates return lines by formatting the provided lines and inserting them into the database
@@ -59,23 +58,6 @@ function _calculateLineQuantity(line, meter10TimesDisplay, previousReading, volu
   }
 }
 
-/**
- * Convert a unit name to the form we persist as `user_unit` ie. from `cubicMetres` to `m³`
- *
- * @param {string} unit - The unit name to convert
- *
- * @returns {string|undefined} The symbol for the unit or undefined if not found
- */
-function _getUserUnit(unit) {
-  const entries = Object.entries(returnUnits)
-
-  const foundEntry = entries.find(([_, value]) => {
-    return value.name === unit
-  })
-
-  return foundEntry ? foundEntry[0] : undefined
-}
-
 function _returnLines(returnSubmissionId, session, timestamp) {
   const meter10TimesDisplay = session.meter10TimesDisplay === 'yes'
   const volumes = session.reported === 'abstractionVolumes'
@@ -90,7 +72,7 @@ function _returnLines(returnSubmissionId, session, timestamp) {
     // We use destructuring to remove the quantityCubicMetres and reading properties as these are not a valid db columns
     const { quantityCubicMetres, reading, ...restOfLine } = line
 
-    const userUnit = _getUserUnit(session.units)
+    const userUnit = session.unitSymbol
 
     return {
       ...restOfLine,

@@ -45,10 +45,10 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
         ],
         meter10TimesDisplay: 'no',
         meterProvided: 'no',
+        reported: 'abstractionVolumes',
         returnsFrequency: 'week',
         startReading: null,
-        units: 'cubicMetres',
-        reported: 'abstractionVolumes'
+        unitSymbol: 'm³'
       }
     })
 
@@ -71,7 +71,7 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
 
     describe('when the unit of measurement is megalitres', () => {
       beforeEach(() => {
-        session.units = 'megalitres'
+        session.unitSymbol = 'Ml'
       })
 
       it('correctly converts quantity', async () => {
