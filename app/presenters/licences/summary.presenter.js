@@ -22,8 +22,6 @@ function go(licence) {
   const primaryUser = licence.$primaryUser()
   const ends = licence.$ends()
 
-  const currentVersion = licence.$currentVersion()
-
   return {
     backLink: {
       text: 'Go back to search',
@@ -35,7 +33,6 @@ function go(licence) {
     includeInPresrocBilling,
     licenceId: id,
     licenceRef,
-    licenceVersionStartDate: formatLongDate(currentVersion.startDate),
     notification: _notification(licence),
     pageTitle: `Licence summary ${licenceRef}`,
     pageTitleCaption: _licenceName(primaryUser, licence),
@@ -45,7 +42,9 @@ function go(licence) {
   }
 }
 
-function _currentVersion(currentVersion) {
+function _currentVersion(licence) {
+  const currentVersion = licence.$currentVersion()
+
   return `The current version of the licence starting ${formatLongDate(currentVersion.startDate)}`
 }
 

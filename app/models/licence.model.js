@@ -274,10 +274,6 @@ class LicenceModel extends BaseModel {
       return null
     }
 
-    // if the start date is in the future - use the previous one
-    // status can be ignored
-    // give me first where - start date <= today and end date null | >= today
-
     return this.licenceVersions.find((licenceVersion) => {
       return licenceVersion.status === 'current'
     })
