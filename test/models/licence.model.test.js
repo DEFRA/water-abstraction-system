@@ -613,6 +613,7 @@ describe('Licence model', () => {
           })
         })
       })
+
       describe('and the latest licence version start date is <= today', () => {
         beforeEach(async () => {
           testRecord = await LicenceHelper.add()
