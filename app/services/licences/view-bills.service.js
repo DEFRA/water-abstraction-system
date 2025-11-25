@@ -2,13 +2,13 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the view licence bills tab
- * @module ViewLicenceBillsService
+ * @module ViewBillsService
  */
 
+const BillsPresenter = require('../../presenters/licences/bills.presenter.js')
 const FetchLicenceBillsService = require('./fetch-licence-bills.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const ViewLicenceBillsPresenter = require('../../presenters/licences/view-licence-bills.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
@@ -25,7 +25,7 @@ async function go(licenceId, auth, page) {
 
   const { bills, pagination } = await FetchLicenceBillsService.go(licenceId, page)
 
-  const pageData = ViewLicenceBillsPresenter.go(bills, licence)
+  const pageData = BillsPresenter.go(bills, licence)
 
   const paginationData = PaginatorPresenter.go(pagination.total, Number(page), `/system/licences/${licenceId}/bills`)
 

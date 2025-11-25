@@ -2,12 +2,12 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence summary page
- * @module ViewLicenceSummaryService
+ * @module ViewSummaryService
  */
 
 const FetchLicenceSummaryService = require('./fetch-licence-summary.service.js')
-const ViewLicenceSummaryContentPresenter = require('../../presenters/licences/view-licence-summary-content.presenter.js')
-const ViewLicenceSummaryPresenter = require('../../presenters/licences/view-licence-summary.presenter.js')
+const SummaryContentPresenter = require('../../presenters/licences/summary-content.presenter.js')
+const SummaryPresenter = require('../../presenters/licences/summary.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
@@ -21,8 +21,8 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
 async function go(licenceId, auth) {
   const licenceData = await FetchLicenceSummaryService.go(licenceId)
 
-  const licenceSummaryContentData = ViewLicenceSummaryContentPresenter.go(licenceData)
-  const pageData = ViewLicenceSummaryPresenter.go(licenceData)
+  const licenceSummaryContentData = SummaryContentPresenter.go(licenceData)
+  const pageData = SummaryPresenter.go(licenceData)
 
   return {
     ...licenceSummaryContentData,

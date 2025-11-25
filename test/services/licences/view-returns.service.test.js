@@ -17,9 +17,9 @@ const FetchLicenceReturnsService = require('../../../app/services/licences/fetch
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
-const ViewLicenceReturnsService = require('../../../app/services/licences/view-licence-returns.service.js')
+const ViewReturnsService = require('../../../app/services/licences/view-returns.service.js')
 
-describe('Licences - View Licence Returns service', () => {
+describe('Licences - View Returns service', () => {
   const page = 1
 
   let auth
@@ -62,7 +62,7 @@ describe('Licences - View Licence Returns service', () => {
   describe('when a return', () => {
     describe('and it has no optional fields', () => {
       it('will return all the mandatory data and default values for use in the licence returns page', async () => {
-        const result = await ViewLicenceReturnsService.go(licence.id, auth, page)
+        const result = await ViewReturnsService.go(licence.id, auth, page)
 
         expect(result).to.equal({
           activeNavBar: 'search',

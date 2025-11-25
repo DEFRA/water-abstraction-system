@@ -19,9 +19,9 @@ const FetchCommunicationsService = require('../../../app/services/licences/fetch
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
-const ViewLicenceCommunicationsService = require('../../../app/services/licences/view-licence-communications.service.js')
+const ViewCommunicationsService = require('../../../app/services/licences/view-communications.service.js')
 
-describe('Licences - View Licence Communications service', () => {
+describe('Licences - View Communications service', () => {
   const page = 1
 
   let auth
@@ -76,7 +76,7 @@ describe('Licences - View Licence Communications service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicenceCommunicationsService.go(licenceId, auth, page)
+      const result = await ViewCommunicationsService.go(licenceId, auth, page)
 
       expect(result).to.equal({
         activeNavBar: 'search',

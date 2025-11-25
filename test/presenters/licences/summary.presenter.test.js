@@ -11,9 +11,9 @@ const { expect } = Code
 const LicenceModel = require('../../../app/models/licence.model.js')
 
 // Thing under test
-const ViewLicenceSummaryPresenter = require('../../../app/presenters/licences/view-licence-summary.presenter.js')
+const SummaryPresenter = require('../../../app/presenters/licences/summary.presenter.js')
 
-describe('Licences - View Licence Summary Presenter', () => {
+describe('Licences - Summary Presenter', () => {
   let licence
 
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe('Licences - View Licence Summary Presenter', () => {
 
   describe('when provided with a populated licence', () => {
     it('correctly presents the data', () => {
-      const result = ViewLicenceSummaryPresenter.go(licence)
+      const result = SummaryPresenter.go(licence)
 
       expect(result).to.equal({
         backLink: {
@@ -51,7 +51,7 @@ describe('Licences - View Licence Summary Presenter', () => {
     describe('when the licence has a primary user (registered user)', () => {
       describe('and they have added a custom name for the licence', () => {
         it('returns the licence name', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence)
 
           expect(result.pageTitleCaption).to.equal('Between two ferns')
         })
@@ -63,7 +63,7 @@ describe('Licences - View Licence Summary Presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence)
 
           expect(result.pageTitleCaption).to.be.null()
         })
@@ -76,7 +76,7 @@ describe('Licences - View Licence Summary Presenter', () => {
       })
 
       it('returns "Unregistered licence"', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence)
 
         expect(result.pageTitleCaption).to.equal('Unregistered licence')
       })
@@ -86,7 +86,7 @@ describe('Licences - View Licence Summary Presenter', () => {
   describe('the "notification" property', () => {
     describe('when the licence has NOT been flagged for any supplementary bill runs', () => {
       it('returns "null"', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence)
 
         expect(result.notification).to.be.null()
       })
@@ -98,7 +98,7 @@ describe('Licences - View Licence Summary Presenter', () => {
       })
 
       it('returns a notification just for the "old charge scheme"', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence)
 
         expect(result.notification).to.equal({
           text: 'This licence has been marked for the next supplementary bill run for the old charge scheme.',
@@ -113,7 +113,7 @@ describe('Licences - View Licence Summary Presenter', () => {
       })
 
       it('returns a notification just for the current charge scheme', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence)
 
         expect(result.notification).to.equal({
           text: 'This licence has been marked for the next supplementary bill run.',
@@ -129,7 +129,7 @@ describe('Licences - View Licence Summary Presenter', () => {
       })
 
       it('returns a notification just for both charge schemes', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence)
 
         expect(result.notification).to.equal({
           text: 'This licence has been marked for the next supplementary bill runs for the current and old charge schemes.',
@@ -144,7 +144,7 @@ describe('Licences - View Licence Summary Presenter', () => {
       })
 
       it('returns a notification just for TPT supplementary', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence)
 
         expect(result.notification).to.equal({
           text: 'This licence has been marked for the next two-part tariff supplementary bill run.',
@@ -160,7 +160,7 @@ describe('Licences - View Licence Summary Presenter', () => {
       })
 
       it('returns a notification for TPT & PRESROC supplementary', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence)
 
         expect(result.notification).to.equal({
           text: 'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.',
@@ -176,7 +176,7 @@ describe('Licences - View Licence Summary Presenter', () => {
       })
 
       it('returns a notification for TPT & SROC supplementary', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence)
 
         expect(result.notification).to.equal({
           text: 'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run.',
@@ -193,7 +193,7 @@ describe('Licences - View Licence Summary Presenter', () => {
       })
 
       it('returns a notification for TPT, PRESROC & SROC supplementary', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence)
 
         expect(result.notification).to.equal({
           text: 'This licence has been marked for the next two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.',
@@ -206,7 +206,7 @@ describe('Licences - View Licence Summary Presenter', () => {
   describe('the "warning" property', () => {
     describe('when the licence does not have an "end" date', () => {
       it('returns null', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence)
 
         expect(result.warning).to.be.null()
       })
@@ -219,7 +219,7 @@ describe('Licences - View Licence Summary Presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence)
 
           expect(result.warning).to.be.null()
         })
@@ -231,7 +231,7 @@ describe('Licences - View Licence Summary Presenter', () => {
         })
 
         it('returns "This licence expired on 1 April 2019"', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence)
 
           expect(result.warning).to.equal({
             iconFallbackText: 'Warning',
@@ -246,7 +246,7 @@ describe('Licences - View Licence Summary Presenter', () => {
         })
 
         it('returns "This licence lapsed on 1 April 2019"', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence)
 
           expect(result.warning).to.equal({
             iconFallbackText: 'Warning',
@@ -261,7 +261,7 @@ describe('Licences - View Licence Summary Presenter', () => {
         })
 
         it('returns "This licence was revoked on 1 April 2019"', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence)
 
           expect(result.warning).to.equal({
             iconFallbackText: 'Warning',
@@ -279,7 +279,7 @@ describe('Licences - View Licence Summary Presenter', () => {
       })
 
       it('returns false', () => {
-        const result = ViewLicenceSummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence)
 
         expect(result.workflowWarning).to.be.false()
       })
@@ -292,7 +292,7 @@ describe('Licences - View Licence Summary Presenter', () => {
         })
 
         it('returns false', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence)
 
           expect(result.workflowWarning).to.be.false()
         })
@@ -300,7 +300,7 @@ describe('Licences - View Licence Summary Presenter', () => {
 
       describe('and the status is "to_setup"', () => {
         it('returns true', () => {
-          const result = ViewLicenceSummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence)
 
           expect(result.workflowWarning).to.be.true()
         })

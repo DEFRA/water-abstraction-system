@@ -15,9 +15,9 @@ const PointModel = require('../../../app/models/point.model.js')
 const { today } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const ViewLicenceSummaryContentPresenter = require('../../../app/presenters/licences/view-licence-summary-content.presenter.js')
+const SummaryContentPresenter = require('../../../app/presenters/licences/summary-content.presenter.js')
 
-describe('Licences - View Licence Summary Content Presenter', () => {
+describe('Licences - Summary Content Presenter', () => {
   let licence
 
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ViewLicenceSummaryContentPresenter.go(licence)
+    const result = SummaryContentPresenter.go(licence)
 
     expect(result).to.equal({
       abstractionAmounts: [],
@@ -65,7 +65,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       })
 
       it('returns an empty array', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.abstractionAmounts).to.be.empty()
       })
@@ -110,7 +110,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       })
 
       it('returns abstractions amounts formatted for display', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.abstractionAmounts).to.equal([
           '180,000.00 cubic metres per year',
@@ -123,7 +123,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
 
     describe('when there are multiple licence version purposes', () => {
       it('returns an empty array', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.abstractionAmounts).to.be.empty()
       })
@@ -187,7 +187,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
         })
 
         it('returns an array containing all the titles in alphabetical order', () => {
-          const result = ViewLicenceSummaryContentPresenter.go(licence)
+          const result = SummaryContentPresenter.go(licence)
 
           expect(result.abstractionConditions).to.equal(['Derogation clause', 'General conditions'])
         })
@@ -213,7 +213,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
         })
 
         it('returns an array containing only the distinct title', () => {
-          const result = ViewLicenceSummaryContentPresenter.go(licence)
+          const result = SummaryContentPresenter.go(licence)
 
           expect(result.abstractionConditions).to.equal(['General conditions'])
         })
@@ -267,7 +267,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
         })
 
         it('returns an array containing all the titles in alphabetical order', () => {
-          const result = ViewLicenceSummaryContentPresenter.go(licence)
+          const result = SummaryContentPresenter.go(licence)
 
           expect(result.abstractionConditions).to.equal(['Derogation clause', 'General conditions'])
         })
@@ -294,7 +294,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
         })
 
         it('returns an array containing only the distinct title', () => {
-          const result = ViewLicenceSummaryContentPresenter.go(licence)
+          const result = SummaryContentPresenter.go(licence)
 
           expect(result.abstractionConditions).to.equal(['General conditions'])
         })
@@ -309,7 +309,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       })
 
       it('returns an empty array', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.abstractionPeriods).to.be.empty()
       })
@@ -322,7 +322,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
         })
 
         it('returns an empty array', () => {
-          const result = ViewLicenceSummaryContentPresenter.go(licence)
+          const result = SummaryContentPresenter.go(licence)
 
           expect(result.abstractionPeriods).to.be.empty()
         })
@@ -335,7 +335,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
         })
 
         it('returns the abstraction period formatted for display', () => {
-          const result = ViewLicenceSummaryContentPresenter.go(licence)
+          const result = SummaryContentPresenter.go(licence)
 
           expect(result.abstractionPeriods).to.equal(['1 April to 31 October'])
         })
@@ -348,7 +348,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
           })
 
           it('returns the abstraction periods formatted for display', () => {
-            const result = ViewLicenceSummaryContentPresenter.go(licence)
+            const result = SummaryContentPresenter.go(licence)
 
             expect(result.abstractionPeriods).to.equal(['1 April to 31 October', '1 November to 31 March'])
           })
@@ -360,7 +360,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
           })
 
           it('returns the abstraction period formatted for display', () => {
-            const result = ViewLicenceSummaryContentPresenter.go(licence)
+            const result = SummaryContentPresenter.go(licence)
 
             expect(result.abstractionPeriods).to.equal(['1 April to 31 October'])
           })
@@ -376,7 +376,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       })
 
       it('returns the singular caption', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.abstractionPeriodsCaption).to.equal('Period of abstraction')
       })
@@ -388,7 +388,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       })
 
       it('returns the singular caption', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.abstractionPeriodsCaption).to.equal('Period of abstraction')
       })
@@ -396,7 +396,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
 
     describe('when multiple abstraction periods have been extracted from the licence data', () => {
       it('returns the plural caption', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.abstractionPeriodsCaption).to.equal('Periods of abstraction')
       })
@@ -410,7 +410,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       })
 
       it('returns an empty array', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.abstractionPoints).to.be.empty()
       })
@@ -423,7 +423,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
         })
 
         it('returns an empty array', () => {
-          const result = ViewLicenceSummaryContentPresenter.go(licence)
+          const result = SummaryContentPresenter.go(licence)
 
           expect(result.abstractionPoints).to.be.empty()
         })
@@ -437,7 +437,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
 
         describe('that has a single point', () => {
           it('returns the abstraction point formatted for display', () => {
-            const result = ViewLicenceSummaryContentPresenter.go(licence)
+            const result = SummaryContentPresenter.go(licence)
 
             expect(result.abstractionPoints).to.equal(['At National Grid Reference TL 23198 88603'])
           })
@@ -459,7 +459,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
           })
 
           it('returns the abstraction points formatted for display', () => {
-            const result = ViewLicenceSummaryContentPresenter.go(licence)
+            const result = SummaryContentPresenter.go(licence)
 
             expect(result.abstractionPoints).to.equal([
               'At National Grid Reference TL 23198 88603',
@@ -472,7 +472,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       describe('and multiple licence version purposes linked to it', () => {
         describe('that have the same point', () => {
           it('returns the abstraction point formatted for display', () => {
-            const result = ViewLicenceSummaryContentPresenter.go(licence)
+            const result = SummaryContentPresenter.go(licence)
 
             expect(result.abstractionPoints).to.equal(['At National Grid Reference TL 23198 88603'])
           })
@@ -492,7 +492,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
           })
 
           it('returns the abstraction points formatted for display', () => {
-            const result = ViewLicenceSummaryContentPresenter.go(licence)
+            const result = SummaryContentPresenter.go(licence)
 
             expect(result.abstractionPoints).to.equal([
               'At National Grid Reference TL 23198 88603',
@@ -511,7 +511,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       })
 
       it('returns the singular caption', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
       })
@@ -524,7 +524,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
         })
 
         it('returns the singular caption', () => {
-          const result = ViewLicenceSummaryContentPresenter.go(licence)
+          const result = SummaryContentPresenter.go(licence)
 
           expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
         })
@@ -533,7 +533,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       describe('and at least one licence version purpose linked to it', () => {
         describe('but the points are all the same', () => {
           it('returns the singular caption', () => {
-            const result = ViewLicenceSummaryContentPresenter.go(licence)
+            const result = SummaryContentPresenter.go(licence)
 
             expect(result.abstractionPointsCaption).to.equal('Point of abstraction')
           })
@@ -553,7 +553,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
           })
 
           it('returns the plural caption', () => {
-            const result = ViewLicenceSummaryContentPresenter.go(licence)
+            const result = SummaryContentPresenter.go(licence)
 
             expect(result.abstractionPointsCaption).to.equal('Points of abstraction')
           })
@@ -565,7 +565,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
   describe('the "endDate" property', () => {
     describe('when the licence expired date is null', () => {
       it('returns null', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.endDate).to.be.null()
       })
@@ -580,7 +580,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.endDate).to.be.null()
       })
@@ -592,7 +592,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       })
 
       it('returns "1 April 2099"', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.endDate).to.equal('1 April 2099')
       })
@@ -602,7 +602,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
   describe('the "licenceHolder" property', () => {
     describe('when the licence holder is not set', () => {
       it('returns "Unregistered licence"', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.licenceHolder).to.equal('Unregistered licence')
       })
@@ -625,7 +625,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       })
 
       it('returns "Barbara Liskov"', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.licenceHolder).to.equal('Barbara Liskov')
       })
@@ -639,7 +639,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       })
 
       it('will return an empty array', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.monitoringStations).to.equal([])
       })
@@ -647,7 +647,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
 
     describe('when the licence is linked to a single monitoring station', () => {
       it("will return an array with the monitoring station's details", () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.monitoringStations).to.equal([
           {
@@ -671,7 +671,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
         })
 
         it('will return an array with each monitoring stations details', () => {
-          const result = ViewLicenceSummaryContentPresenter.go(licence)
+          const result = SummaryContentPresenter.go(licence)
 
           expect(result.monitoringStations).to.equal([
             { id: 'ac075651-4781-4e24-a684-b943b98607ca', label: 'MEVAGISSEY FIRE STATION' },
@@ -692,7 +692,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
         })
 
         it("will return an array with just the one monitoring station's details", () => {
-          const result = ViewLicenceSummaryContentPresenter.go(licence)
+          const result = SummaryContentPresenter.go(licence)
 
           expect(result.monitoringStations).to.equal([
             {
@@ -712,7 +712,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.purposes).to.equal(null)
       })
@@ -725,7 +725,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewLicenceSummaryContentPresenter.go(licence)
+          const result = SummaryContentPresenter.go(licence)
 
           expect(result.purposes).to.equal(null)
         })
@@ -738,7 +738,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
         })
 
         it('returns the singular version of the caption and the purpose descriptions', () => {
-          const result = ViewLicenceSummaryContentPresenter.go(licence)
+          const result = SummaryContentPresenter.go(licence)
 
           expect(result.purposes).to.equal({
             caption: 'Purpose',
@@ -754,7 +754,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
           })
 
           it('returns the plural version of the caption and all purpose descriptions', () => {
-            const result = ViewLicenceSummaryContentPresenter.go(licence)
+            const result = SummaryContentPresenter.go(licence)
 
             expect(result.purposes).to.equal({
               caption: 'Purposes',
@@ -765,7 +765,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
 
         describe('that have some abstraction purposes that are the same', () => {
           it('returns the plural version of the captions and the unique purpose descriptions', () => {
-            const result = ViewLicenceSummaryContentPresenter.go(licence)
+            const result = SummaryContentPresenter.go(licence)
 
             expect(result.purposes).to.equal({
               caption: 'Purposes',
@@ -784,7 +784,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewLicenceSummaryContentPresenter.go(licence)
+        const result = SummaryContentPresenter.go(licence)
 
         expect(result.sourceOfSupply).to.equal(null)
       })
@@ -797,7 +797,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewLicenceSummaryContentPresenter.go(licence)
+          const result = SummaryContentPresenter.go(licence)
 
           expect(result.sourceOfSupply).to.equal(null)
         })
@@ -810,7 +810,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
           })
 
           it('returns null', () => {
-            const result = ViewLicenceSummaryContentPresenter.go(licence)
+            const result = SummaryContentPresenter.go(licence)
 
             expect(result.sourceOfSupply).to.equal(null)
           })
@@ -818,7 +818,7 @@ describe('Licences - View Licence Summary Content Presenter', () => {
 
         describe('and it has at least one point', () => {
           it('returns the source description of the first point', () => {
-            const result = ViewLicenceSummaryContentPresenter.go(licence)
+            const result = SummaryContentPresenter.go(licence)
 
             expect(result.sourceOfSupply).to.equal('SURFACE WATER SOURCE OF SUPPLY')
           })

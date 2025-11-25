@@ -18,9 +18,9 @@ const FetchCustomerContactsService = require('../../../app/services/licences/fet
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
-const ViewLicenceContactsService = require('../../../app/services/licences/view-licence-contacts.service.js')
+const ViewContactsService = require('../../../app/services/licences/view-contacts.service.js')
 
-describe('Licences - View Licence Contacts service', () => {
+describe('Licences - View Contacts service', () => {
   let auth
   let licenceId
   let licenceRef
@@ -81,7 +81,7 @@ describe('Licences - View Licence Contacts service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicenceContactsService.go(licenceId, auth)
+      const result = await ViewContactsService.go(licenceId, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',

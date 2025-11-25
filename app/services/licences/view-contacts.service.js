@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the view licence contact details tab
- * @module ViewLicenceContactsService
+ * @module ViewContactsService
  */
 
 const CustomerContactsPresenter = require('../../presenters/licences/customer-contacts.presenter.js')

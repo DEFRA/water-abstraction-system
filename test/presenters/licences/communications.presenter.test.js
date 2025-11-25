@@ -14,8 +14,9 @@ const { generateLicenceRef } = require('../../support/helpers/licence.helper.js'
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const ViewLicenceCommunicationsPresenter = require('../../../app/presenters/licences/view-licence-communications.presenter.js')
-describe('Licences - View Licence Communications presenter', () => {
+const CommunicationsPresenter = require('../../../app/presenters/licences/communications.presenter.js')
+
+describe('Licences - Communications presenter', () => {
   let licence
   let notification
 
@@ -43,7 +44,7 @@ describe('Licences - View Licence Communications presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ViewLicenceCommunicationsPresenter.go([notification], licence)
+    const result = CommunicationsPresenter.go([notification], licence)
 
     expect(result).to.equal({
       backLink: {
