@@ -9,7 +9,7 @@ const DetermineLicenceHasReturnVersionsService = require('./determine-licence-ha
 const FetchLicenceReturnsService = require('./fetch-licence-returns.service.js')
 const FetchLicenceService = require('../../services/licences/fetch-licence.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const ViewReturnsPresenter = require('../../presenters/licences/view-returns.presenter.js')
+const ReturnsPresenter = require('../../presenters/licences/returns.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
@@ -28,7 +28,7 @@ async function go(licenceId, auth, page) {
 
   const { returns, pagination } = await FetchLicenceReturnsService.go(licenceId, page)
 
-  const pageData = ViewReturnsPresenter.go(returns, hasRequirements, licence)
+  const pageData = ReturnsPresenter.go(returns, hasRequirements, licence)
 
   const paginationData = PaginatorPresenter.go(pagination.total, Number(page), `/system/licences/${licenceId}/returns`)
 

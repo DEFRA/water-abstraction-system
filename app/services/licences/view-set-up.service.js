@@ -10,7 +10,7 @@ const FetchChargeVersionsService = require('./fetch-charge-versions.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
 const FetchReturnVersionsService = require('./fetch-return-versions.service.js')
 const FetchWorkflowsService = require('./fetch-workflows.service.js')
-const ViewSetUpPresenter = require('../../presenters/licences/view-set-up.presenter.js')
+const SetUpPresenter = require('../../presenters/licences/set-up.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
@@ -29,7 +29,7 @@ async function go(licenceId, auth) {
   const workflows = await FetchWorkflowsService.go(licenceId)
   const returnVersions = await FetchReturnVersionsService.go(licenceId)
 
-  const pageData = ViewSetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
+  const pageData = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
   return {
     ...pageData,

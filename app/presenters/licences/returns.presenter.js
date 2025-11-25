@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the `/licences/{id}/returns` view licence returns page
- * @module ViewReturnsPresenter
+ * @module ReturnsPresenter
  */
 
 const { formatLongDate, formatPurposes, formatReturnLogStatus } = require('../base.presenter.js')

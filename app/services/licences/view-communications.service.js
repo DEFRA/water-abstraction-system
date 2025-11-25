@@ -5,10 +5,10 @@
  * @module ViewCommunicationsService
  */
 
+const CommunicationsPresenter = require('../../presenters/licences/communications.presenter.js')
 const FetchCommunicationsService = require('./fetch-communications.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const ViewCommunicationsPresenter = require('../../presenters/licences/view-communications.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
@@ -27,7 +27,7 @@ async function go(licenceId, auth, page = 1) {
 
   const { notifications, totalNumber } = await FetchCommunicationsService.go(licence.licenceRef, selectedPageNumber)
 
-  const pageData = ViewCommunicationsPresenter.go(notifications, licence)
+  const pageData = CommunicationsPresenter.go(notifications, licence)
 
   const pagination = PaginatorPresenter.go(
     totalNumber,
