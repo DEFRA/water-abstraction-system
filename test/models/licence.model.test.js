@@ -625,7 +625,7 @@ describe('Licence model', () => {
           await LicenceVersionHelper.add({
             licenceId: testRecord.id,
             startDate: new Date('2001-01-01'),
-            status: 'current'
+            status: 'superseded'
           })
 
           testRecord = await LicenceModel.query().findById(testRecord.id).modify('currentVersion')
