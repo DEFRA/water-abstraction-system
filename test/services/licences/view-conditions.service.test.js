@@ -12,7 +12,7 @@ const { expect } = Code
 const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 
 // Things we need to stub
-const FetchLicenceConditionsService = require('../../../app/services/licences/fetch-licence-conditions.service.js')
+const FetchConditionsService = require('../../../app/services/licences/fetch-conditions.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
@@ -39,7 +39,7 @@ describe('Licences - View Conditions service', () => {
 
     Sinon.stub(FetchLicenceService, 'go').returns(licence)
 
-    Sinon.stub(FetchLicenceConditionsService, 'go').returns(conditions)
+    Sinon.stub(FetchConditionsService, 'go').returns(conditions)
   })
 
   it('correctly presents the data', async () => {
