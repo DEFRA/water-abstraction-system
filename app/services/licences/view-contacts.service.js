@@ -7,9 +7,9 @@
 
 const CustomerContactsPresenter = require('../../presenters/licences/customer-contacts.presenter.js')
 const FetchCustomerContactsService = require('./fetch-customer-contacts.service.js')
-const FetchLicenceContactsService = require('./fetch-licence-contacts.service.js')
+const FetchContactsService = require('./fetch-contacts.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
-const LicenceContactsPresenter = require('../../presenters/licences/licence-contacts.presenter.js')
+const ContactsPresenter = require('../../presenters/licences/contacts.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
@@ -23,8 +23,8 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
 async function go(licenceId, auth) {
   const licence = await FetchLicenceService.go(licenceId)
 
-  const licenceContacts = await FetchLicenceContactsService.go(licenceId)
-  const licenceContactsData = LicenceContactsPresenter.go(licenceContacts, licence)
+  const licenceContacts = await FetchContactsService.go(licenceId)
+  const licenceContactsData = ContactsPresenter.go(licenceContacts, licence)
 
   const customerContacts = await FetchCustomerContactsService.go(licenceId)
   const customerContactsData = CustomerContactsPresenter.go(customerContacts)

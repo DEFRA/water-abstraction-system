@@ -12,9 +12,9 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
-const ContactDetailsPresenter = require('../../../app/presenters/licences/contact-details.presenter.js')
+const LicenceContactsPresenter = require('../../../app/presenters/licences/licence-contacts.presenter.js')
 
-describe('Licences - Contact Details presenter', () => {
+describe('Licences - Contact presenter', () => {
   let licenceContactDetailsData
   let licenceId
   let licenceRef
@@ -28,7 +28,7 @@ describe('Licences - Contact Details presenter', () => {
 
   describe('when provided with populated licence contact details data', () => {
     it('correctly presents the data', () => {
-      const result = ContactDetailsPresenter.go(licenceContactDetailsData)
+      const result = LicenceContactsPresenter.go(licenceContactDetailsData)
 
       expect(result).to.equal({
         backLink: {
@@ -69,7 +69,7 @@ describe('Licences - Contact Details presenter', () => {
       describe('when the licence contact is a "contact"', () => {
         describe('the "licenceContactDetails.address" property', () => {
           it('returns the address of the property', () => {
-            const result = ContactDetailsPresenter.go(licenceContactDetailsData)
+            const result = LicenceContactsPresenter.go(licenceContactDetailsData)
 
             expect(result.licenceContactDetails[0].address).to.equal([
               'ENVIRONMENT AGENCY',
@@ -85,7 +85,7 @@ describe('Licences - Contact Details presenter', () => {
         describe('the "licenceContactDetails.role" property', () => {
           describe('when one of the licence contact details has the role type of "Enforcement officer"', () => {
             it('returns licenceContactDetails without the contact with the role type of "Enforcement officer"', () => {
-              const result = ContactDetailsPresenter.go(licenceContactDetailsData)
+              const result = LicenceContactsPresenter.go(licenceContactDetailsData)
 
               const hasEnforcementOfficer = result.licenceContactDetails.some((contact) => {
                 return contact.role === 'Enforcement officer'
@@ -103,7 +103,7 @@ describe('Licences - Contact Details presenter', () => {
             })
 
             it("returns the licence contact's forename and name", () => {
-              const result = ContactDetailsPresenter.go(licenceContactDetailsData)
+              const result = LicenceContactsPresenter.go(licenceContactDetailsData)
 
               expect(result.licenceContactDetails[2].name).to.equal('Mr Noel Edmonds')
             })
@@ -111,7 +111,7 @@ describe('Licences - Contact Details presenter', () => {
 
           describe('when the initials are not null', () => {
             it("returns the licence contact's forename and name", () => {
-              const result = ContactDetailsPresenter.go(licenceContactDetailsData)
+              const result = LicenceContactsPresenter.go(licenceContactDetailsData)
 
               expect(result.licenceContactDetails[2].name).to.equal('Mr N Edmonds')
             })
@@ -123,7 +123,7 @@ describe('Licences - Contact Details presenter', () => {
         describe('the "licenceContactDetails" property', () => {
           describe('and the role is "primary_user"', () => {
             it('returns the email and formatted role', () => {
-              const result = ContactDetailsPresenter.go(licenceContactDetailsData)
+              const result = LicenceContactsPresenter.go(licenceContactDetailsData)
 
               expect(result.licenceContactDetails[3]).to.equal({
                 email: 'primary.user@important.com',
@@ -134,7 +134,7 @@ describe('Licences - Contact Details presenter', () => {
 
           describe('and the role is "user_returns"', () => {
             it('returns the email and formatted role', () => {
-              const result = ContactDetailsPresenter.go(licenceContactDetailsData)
+              const result = LicenceContactsPresenter.go(licenceContactDetailsData)
 
               expect(result.licenceContactDetails[4]).to.equal({
                 email: 'returns.agent@important.com',

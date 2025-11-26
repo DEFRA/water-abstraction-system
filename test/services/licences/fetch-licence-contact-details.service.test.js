@@ -12,9 +12,9 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceDocumentHeaderSeeder = require('../../support/seeders/licence-document-header.seeder.js')
 
 // Thing under test
-const FetchLicenceContactDetailsService = require('../../../app/services/licences/fetch-licence-contact-details.service.js')
+const FetchLicenceContactsService = require('../../../app/services/licences/fetch-licence-contacts.service.js')
 
-describe('Fetch Licence Contact Details service', () => {
+describe('Fetch Licence Contact service', () => {
   let licence
   let licenceId
   let licenceRef
@@ -34,7 +34,7 @@ describe('Fetch Licence Contact Details service', () => {
     })
 
     it('returns the matching licence and licence document header', async () => {
-      const result = await FetchLicenceContactDetailsService.go(licenceId)
+      const result = await FetchLicenceContactsService.go(licenceId)
 
       expect(result).to.equal({
         id: licenceId,

@@ -13,8 +13,8 @@ const SubmitMarkForSupplementaryBillingService = require('../services/licences/s
 const ViewBillsService = require('../services/licences/view-bills.service.js')
 const ViewCommunicationsService = require('../services/licences/view-communications.service.js')
 const ViewConditionsService = require('../services/licences/view-conditions.service.js')
-const ViewContactDetailsService = require('../services/licences/view-contact-details.service.js')
 const ViewContactsService = require('../services/licences/view-contacts.service.js')
+const ViewLicenceContactService = require('../services/licences/view-licence-contacts.service.js')
 const ViewLicenceHistoryService = require('../services/licences/view-licence-history.service.js')
 const ViewMarkForSupplementaryBillingService = require('../services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
 const ViewMarkedForSupplementaryBillingService = require('../services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
@@ -112,7 +112,7 @@ async function viewLicenceConditions(request, h) {
 async function viewLicenceContactDetails(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewContactDetailsService.go(id)
+  const pageData = await ViewLicenceContactService.go(id)
 
   return h.view('licences/licence-contact-details.njk', pageData)
 }

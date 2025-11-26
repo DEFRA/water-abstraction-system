@@ -2,11 +2,11 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the contact details link page
- * @module ViewContactDetailsService
+ * @module ViewLicenceContactService
  */
 
-const FetchLicenceContactDetailsService = require('./fetch-licence-contact-details.service.js')
-const ContactDetailsPresenter = require('../../presenters/licences/contact-details.presenter.js')
+const FetchLicenceContactsService = require('./fetch-licence-contacts.service.js')
+const LicenceContactsPresenter = require('../../presenters/licences/licence-contacts.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the contact details link page
@@ -16,9 +16,9 @@ const ContactDetailsPresenter = require('../../presenters/licences/contact-detai
  * @returns {Promise<object>} The view data for the licence contacts page
  */
 async function go(licenceId) {
-  const licence = await FetchLicenceContactDetailsService.go(licenceId)
+  const licence = await FetchLicenceContactsService.go(licenceId)
 
-  const pageData = ContactDetailsPresenter.go(licence)
+  const pageData = LicenceContactsPresenter.go(licence)
 
   return {
     activeNavBar: 'search',

@@ -13,7 +13,7 @@ const { generateLicenceRef } = require('../../support/helpers/licence.helper.js'
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchLicenceContactsService = require('../../../app/services/licences/fetch-licence-contacts.service.js')
+const FetchContactsService = require('../../../app/services/licences/fetch-contacts.service.js')
 const FetchCustomerContactsService = require('../../../app/services/licences/fetch-customer-contacts.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
@@ -42,7 +42,7 @@ describe('Licences - View Contacts service', () => {
     Sinon.stub(FetchLicenceService, 'go').returns({
       licenceRef
     })
-    Sinon.stub(FetchLicenceContactsService, 'go').returns([
+    Sinon.stub(FetchContactsService, 'go').returns([
       {
         communicationType: 'Licence Holder',
         companyId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',

@@ -13,12 +13,12 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
-const FetchLicenceContactDetailsService = require('../../../app/services/licences/fetch-licence-contact-details.service.js')
+const FetchLicenceContactsService = require('../../../app/services/licences/fetch-licence-contacts.service.js')
 
 // Thing under test
-const ViewContactDetailsService = require('../../../app/services/licences/view-contact-details.service.js')
+const ViewLicenceContactService = require('../../../app/services/licences/view-licence-contacts.service.js')
 
-describe('Licences - View Contact Details service', () => {
+describe('Licences - View Licence Contacts service', () => {
   let licenceId
   let licenceRef
 
@@ -26,14 +26,12 @@ describe('Licences - View Contact Details service', () => {
     licenceId = generateUUID()
     licenceRef = generateLicenceRef()
 
-    Sinon.stub(FetchLicenceContactDetailsService, 'go').returns(
-      _testFetchLicenceContactDetailsData(licenceId, licenceRef)
-    )
+    Sinon.stub(FetchLicenceContactsService, 'go').returns(_testFetchLicenceContactDetailsData(licenceId, licenceRef))
   })
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewContactDetailsService.go(licenceId)
+      const result = await ViewLicenceContactService.go(licenceId)
 
       expect(result).to.equal({
         activeNavBar: 'search',
