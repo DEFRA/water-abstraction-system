@@ -7,7 +7,7 @@
 
 const FetchLicenceService = require('./fetch-licence.service.js')
 const FetchSummaryService = require('./fetch-summary.service.js')
-const SummaryContentPresenter = require('../../presenters/licences/summary-content.presenter.js')
+const SummaryHeadingPresenter = require('../../presenters/licences/summary-heading.presenter.js')
 const SummaryPresenter = require('../../presenters/licences/summary.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
@@ -23,11 +23,11 @@ async function go(licenceId, auth) {
   const licence = await FetchLicenceService.go(licenceId)
   const summary = await FetchSummaryService.go(licenceId)
 
-  const summaryContentData = SummaryContentPresenter.go(summary)
-  const pageData = SummaryPresenter.go(licence, summary)
+  const summaryHeadingData = SummaryHeadingPresenter.go(licence, summary)
+  const pageData = SummaryPresenter.go(summary)
 
   return {
-    ...summaryContentData,
+    ...summaryHeadingData,
     ...pageData,
     activeNavBar: 'search',
     activeSecondaryNav: 'summary',

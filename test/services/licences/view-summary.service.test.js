@@ -23,7 +23,6 @@ const ViewSummaryService = require('../../../app/services/licences/view-summary.
 
 describe('Licences - View Summary service', () => {
   let auth
-  let licenceId
   let licence
   let summary
 
@@ -39,7 +38,7 @@ describe('Licences - View Summary service', () => {
       startDate: new Date('2019-04-01')
     })
 
-    summary = _testSummary(licenceId)
+    summary = _testSummary(licence.id)
 
     auth = _auth()
 
@@ -61,7 +60,7 @@ describe('Licences - View Summary service', () => {
       })
 
       it('will return all the mandatory data and default values for use in the licence summary page', async () => {
-        const result = await ViewSummaryService.go(licenceId, auth)
+        const result = await ViewSummaryService.go(licence.id, auth)
 
         expect(result).to.equal({
           abstractionAmounts: [],
