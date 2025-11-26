@@ -22,8 +22,8 @@ const ViewBillsService = require('../../app/services/licences/view-bills.service
 const ViewCommunicationsService = require('../../app/services/licences/view-communications.service.js')
 const ViewConditionsService = require('../../app/services/licences/view-conditions.service.js')
 const ViewContactDetailsService = require('../../app/services/licences/view-contact-details.service.js')
+const ViewHistoryService = require('../../app/services/licences/view-history.service.js')
 const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
-const ViewLicenceHistoryService = require('../../app/services/licences/view-licence-history.service.js')
 const ViewMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
 const ViewMarkedForSupplementaryBillingService = require('../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
 const ViewPointsService = require('../../app/services/licences/view-points.service.js')
@@ -184,7 +184,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceHistoryService, 'go').resolves(_viewLicenceHistory())
+          Sinon.stub(ViewHistoryService, 'go').resolves(_viewLicenceHistory())
         })
 
         it('returns the page successfully', async () => {

@@ -14,8 +14,8 @@ const ViewBillsService = require('../services/licences/view-bills.service.js')
 const ViewCommunicationsService = require('../services/licences/view-communications.service.js')
 const ViewConditionsService = require('../services/licences/view-conditions.service.js')
 const ViewContactDetailsService = require('../services/licences/view-contact-details.service.js')
+const ViewHistoryService = require('../services/licences/view-history.service.js')
 const ViewLicenceContactsService = require('../services/licences/view-licence-contacts.service.js')
-const ViewLicenceHistoryService = require('../services/licences/view-licence-history.service.js')
 const ViewMarkForSupplementaryBillingService = require('../services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
 const ViewMarkedForSupplementaryBillingService = require('../services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
 const ViewPointsService = require('../services/licences/view-points.service.js')
@@ -155,7 +155,7 @@ async function viewHistory(request, h) {
     auth
   } = request
 
-  const pageData = await ViewLicenceHistoryService.go(id, auth)
+  const pageData = await ViewHistoryService.go(id, auth)
 
   return h.view('licences/history.njk', pageData)
 }

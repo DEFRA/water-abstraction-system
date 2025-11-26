@@ -18,21 +18,21 @@ const ModLogModel = require('../../../app/models/mod-log.model.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
 
 // Things we need to stub
-const FetchLicenceHistoryService = require('../../../app/services/licences/fetch-licence-history.service.js')
+const FetchHistoryService = require('../../../app/services/licences/fetch-history.service.js')
 
 // Thing under test
-const ViewLicenceHistoryService = require('../../../app/services/licences/view-licence-history.service.js')
+const ViewHistoryService = require('../../../app/services/licences/view-history.service.js')
 
-describe('Licences - View Licence History service', () => {
+describe('Licences - View History service', () => {
   const licenceId = '91aff99a-3204-4727-86bd-7bdf3ef24533'
 
   beforeEach(() => {
-    Sinon.stub(FetchLicenceHistoryService, 'go').returns(_testFetchLicenceHistory())
+    Sinon.stub(FetchHistoryService, 'go').returns(_testFetchLicenceHistory())
   })
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewLicenceHistoryService.go(licenceId)
+      const result = await ViewHistoryService.go(licenceId)
 
       expect(result).to.equal({
         activeNavBar: 'search',

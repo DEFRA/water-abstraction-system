@@ -16,9 +16,9 @@ const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 
 // Thing under test
-const FetchLicenceHistoryService = require('../../../app/services/licences/fetch-licence-history.service.js')
+const FetchHistoryService = require('../../../app/services/licences/fetch-history.service.js')
 
-describe('Licences - Fetch Licence History service', () => {
+describe('Licences - Fetch History service', () => {
   let chargeVersion
   let chargeVersionModLog
   let chargeVersionNote
@@ -48,7 +48,7 @@ describe('Licences - Fetch Licence History service', () => {
     })
 
     it('returns the matching licence versions, charge versions and return versions', async () => {
-      const result = await FetchLicenceHistoryService.go(licenceId)
+      const result = await FetchHistoryService.go(licenceId)
 
       expect(result).to.equal({
         id: licence.id,
