@@ -27,11 +27,11 @@ const SourceHelper = require('../../support/helpers/source.helper.js')
 const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 
 // Thing under test
-const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service.js')
+const FetchSummaryService = require('../../../app/services/licences/fetch-summary.service.js')
 
 const REGION_SOUTHERN_INDEX = 5
 
-describe('Fetch Licence Summary service', () => {
+describe('Licences - Fetch Summary service', () => {
   let licence
   let licenceDocumentHeader
   let licenceEntity
@@ -121,7 +121,7 @@ describe('Fetch Licence Summary service', () => {
 
   describe('when called', () => {
     it('returns results', async () => {
-      const result = await FetchLicenceSummaryService.go(licence.id)
+      const result = await FetchSummaryService.go(licence.id)
 
       expect(result).to.equal({
         id: licence.id,

@@ -16,7 +16,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 // Things we need to stub
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
-const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service.js')
+const FetchSummaryService = require('../../../app/services/licences/fetch-summary.service.js')
 
 // Thing under test
 const ViewSummaryService = require('../../../app/services/licences/view-summary.service.js')
@@ -25,7 +25,7 @@ describe('Licences - View Summary service', () => {
   let auth
   let licenceId
   let licence
-  let licenceSummary
+  let summary
 
   beforeEach(() => {
     licence = LicenceModel.fromJson({
@@ -39,7 +39,7 @@ describe('Licences - View Summary service', () => {
       startDate: new Date('2019-04-01')
     })
 
-    licenceSummary = _testLicenceSummary(licenceId)
+    summary = _testSummary(licenceId)
 
     auth = _auth()
 
@@ -56,9 +56,8 @@ describe('Licences - View Summary service', () => {
   describe('when a licence with a matching ID exists', () => {
     describe('and it has no optional fields', () => {
       beforeEach(() => {
-        Sinon.stub(FetchLicenceSummaryService, 'go').resolves(licenceSummary)
-
         Sinon.stub(FetchLicenceService, 'go').resolves(licence)
+        Sinon.stub(FetchSummaryService, 'go').resolves(summary)
       })
 
       it('will return all the mandatory data and default values for use in the licence summary page', async () => {
@@ -85,7 +84,7 @@ describe('Licences - View Summary service', () => {
           licenceRef: licence.licenceRef,
           monitoringStations: [
             {
-              id: licenceSummary.licenceMonitoringStations[0].monitoringStation.id,
+              id: summary.licenceMonitoringStations[0].monitoringStation.id,
               label: 'MEVAGISSEY FIRE STATION'
             }
           ],
@@ -125,7 +124,7 @@ function _auth() {
   }
 }
 
-function _testLicenceSummary(licenceId) {
+function _testSummary(licenceId) {
   return LicenceModel.fromJson({
     id: licenceId,
     expiredDate: null,
