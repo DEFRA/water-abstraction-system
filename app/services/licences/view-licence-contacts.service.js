@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the contact details link page
+ * Orchestrates fetching and presenting the data needed for the view licence contacts page
  * @module ViewLicenceContactService
  */
 

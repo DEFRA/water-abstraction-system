@@ -5,20 +5,23 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchLicenceContactsService = require('../../../app/services/licences/fetch-licence-contacts.service.js')
+const FetchContactsService = require('../../../app/services/licences/fetch-contacts.service.js')
+const FetchCustomerContactsService = require('../../../app/services/licences/fetch-customer-contacts.service.js')
+const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
-const ViewLicenceContactService = require('../../../app/services/licences/view-licence-contacts.service.js')
+const ViewContactDetailsService = require('../../../app/services/licences/view-contact-details.service.js')
 
-describe('Licences - View Licence Contacts service', () => {
+describe('Licences - View Contact Details service', () => {
+  let auth
   let licenceId
   let licenceRef
 
@@ -26,75 +29,95 @@ describe('Licences - View Licence Contacts service', () => {
     licenceId = generateUUID()
     licenceRef = generateLicenceRef()
 
-    Sinon.stub(FetchLicenceContactsService, 'go').returns(_testFetchLicenceContactDetailsData(licenceId, licenceRef))
+    auth = {
+      credentials: {
+        roles: [
+          {
+            role: 'billing'
+          }
+        ]
+      }
+    }
+
+    Sinon.stub(FetchLicenceService, 'go').returns({
+      licenceRef
+    })
+    Sinon.stub(FetchContactsService, 'go').returns([
+      {
+        communicationType: 'Licence Holder',
+        companyId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
+        companyName: 'Acme ltd',
+        contactId: null,
+        firstName: null,
+        lastName: null,
+        address1: '34 Eastgate',
+        address2: null,
+        address3: null,
+        address4: null,
+        address5: null,
+        address6: null,
+        postcode: 'CF71 7DG',
+        country: 'United Kingdom'
+      }
+    ])
+
+    Sinon.stub(FetchCustomerContactsService, 'go').returns([
+      {
+        communicationType: 'Additional Contact',
+        email: 'dfd@email.com',
+        firstName: 'Donald',
+        initials: null,
+        lastName: 'Duck',
+        middleInitials: null,
+        salutation: null,
+        suffix: null
+      }
+    ])
   })
 
-  describe('when a licence with a matching ID exists', () => {
-    it('correctly presents the data', async () => {
-      const result = await ViewLicenceContactService.go(licenceId)
+  afterEach(() => {
+    Sinon.restore()
+  })
+
+  describe('when called', () => {
+    it('returns page data for the view', async () => {
+      const result = await ViewContactDetailsService.go(licenceId, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        activeSecondaryNav: 'contact-details',
         backLink: {
-          href: `/system/licences/${licenceId}/summary`,
-          text: 'Go back to summary'
+          href: '/licences',
+          text: 'Go back to search'
         },
-        licenceContactDetails: [
+        customerContacts: [
           {
-            address: ['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'DEANERY ROAD', 'BRISTOL', 'AVON', 'BS1 5AH'],
-            name: 'A GUPTA',
-            role: 'Licence holder'
+            communicationType: 'Additional Contact',
+            email: 'dfd@email.com',
+            name: 'Donald Duck'
           }
         ],
-        pageTitle: 'Licence contact details',
-        pageTitleCaption: `Licence ${licenceRef}`
+        customerId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
+        licenceContacts: [
+          {
+            address: {
+              address1: '34 Eastgate',
+              address2: null,
+              address3: null,
+              address4: null,
+              address5: null,
+              address6: null,
+              country: 'United Kingdom',
+              postcode: 'CF71 7DG'
+            },
+            communicationType: 'Licence Holder',
+            name: 'Acme ltd'
+          }
+        ],
+        pageTitle: 'Contact details',
+        pageTitleCaption: `Licence ${licenceRef}`,
+        roles: ['billing']
       })
     })
   })
 })
-
-function _testFetchLicenceContactDetailsData(licenceId, licenceRef) {
-  return {
-    id: licenceId,
-    licenceRef,
-    licenceDocumentHeader: {
-      id: generateUUID(),
-      metadata: {
-        Name: 'GUPTA',
-        Town: 'BRISTOL',
-        County: 'AVON',
-        Country: '',
-        Expires: null,
-        Forename: 'AMARA',
-        Initials: 'A',
-        Modified: '20080327',
-        Postcode: 'BS1 5AH',
-        contacts: [
-          {
-            name: 'GUPTA',
-            role: 'Licence holder',
-            town: 'BRISTOL',
-            type: 'Person',
-            county: 'AVON',
-            country: null,
-            forename: 'AMARA',
-            initials: 'A',
-            postcode: 'BS1 5AH',
-            salutation: null,
-            addressLine1: 'ENVIRONMENT AGENCY',
-            addressLine2: 'HORIZON HOUSE',
-            addressLine3: 'DEANERY ROAD',
-            addressLine4: null
-          }
-        ],
-        IsCurrent: true,
-        Salutation: '',
-        AddressLine1: 'ENVIRONMENT AGENCY',
-        AddressLine2: 'HORIZON HOUSE',
-        AddressLine3: 'DEANERY ROAD',
-        AddressLine4: ''
-      },
-      licenceEntityRoles: []
-    }
-  }
-}

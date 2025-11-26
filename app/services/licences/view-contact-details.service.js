@@ -1,11 +1,11 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the view licence contact details tab
- * @module ViewContactsService
+ * Orchestrates fetching and presenting the data needed for the view contact details page
+ * @module ViewContactDetailsService
  */
 
-const ContactsPresenter = require('../../presenters/licences/contacts.presenter.js')
+const ContactDetailsPresenter = require('../../presenters/licences/contact-details.presenter.js')
 const CustomerContactsPresenter = require('../../presenters/licences/customer-contacts.presenter.js')
 const FetchContactsService = require('./fetch-contacts.service.js')
 const FetchCustomerContactsService = require('./fetch-customer-contacts.service.js')
@@ -24,7 +24,7 @@ async function go(licenceId, auth) {
   const licence = await FetchLicenceService.go(licenceId)
 
   const licenceContacts = await FetchContactsService.go(licenceId)
-  const licenceContactsData = ContactsPresenter.go(licenceContacts, licence)
+  const licenceContactsData = ContactDetailsPresenter.go(licenceContacts, licence)
 
   const customerContacts = await FetchCustomerContactsService.go(licenceId)
   const customerContactsData = CustomerContactsPresenter.go(customerContacts)

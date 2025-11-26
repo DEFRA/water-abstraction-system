@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for the `/licences/{id}/licence-contact` licence contact details link page
+ * Formats data for the `/licences/{id}/licence-contacts` licence contacts page
  * @module LicenceContactsPresenter
  */
 
@@ -13,7 +13,7 @@ const ENTITY_ROLES = {
 }
 
 /**
- * Formats data for the `/licences/{id}/licence-contact` licence contact details link page
+ * Formats data for the `/licences/{id}/licence-contacts` licence contacts page
  *
  * @param {module:LicenceModel} licence - The licence and related licenceDocumentHeader
  *
@@ -27,13 +27,13 @@ function go(licence) {
       href: `/system/licences/${licenceId}/summary`,
       text: 'Go back to summary'
     },
-    licenceContactDetails: _licenceContactDetails(licenceDocumentHeader),
-    pageTitle: 'Licence contact details',
+    licenceContacts: _licenceContacts(licenceDocumentHeader),
+    pageTitle: 'Licence contacts',
     pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 
-function _licenceContactDetails(licenceDocumentHeader) {
+function _licenceContacts(licenceDocumentHeader) {
   return [
     ...filteredContactDetailsByRole(licenceDocumentHeader.metadata.contacts),
     ..._licenceEntityRoles(licenceDocumentHeader.licenceEntityRoles)

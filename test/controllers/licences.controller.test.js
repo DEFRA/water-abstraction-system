@@ -21,8 +21,8 @@ const SubmitMarkForSupplementaryBillingService = require('../../app/services/lic
 const ViewBillsService = require('../../app/services/licences/view-bills.service.js')
 const ViewCommunicationsService = require('../../app/services/licences/view-communications.service.js')
 const ViewConditionsService = require('../../app/services/licences/view-conditions.service.js')
-const ViewContactsService = require('../../app/services/licences/view-contacts.service.js')
-const ViewLicenceContactService = require('../../app/services/licences/view-licence-contacts.service.js')
+const ViewContactDetailsService = require('../../app/services/licences/view-contact-details.service.js')
+const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
 const ViewLicenceHistoryService = require('../../app/services/licences/view-licence-history.service.js')
 const ViewMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
 const ViewMarkedForSupplementaryBillingService = require('../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
@@ -156,7 +156,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has contacts', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewContactsService, 'go').resolves(_viewLicenceContacts())
+          Sinon.stub(ViewContactDetailsService, 'go').resolves(_viewContactDetails())
         })
 
         it('returns the page successfully', async () => {
@@ -197,12 +197,12 @@ describe('Licences controller', () => {
     })
   })
 
-  describe('/licences/{id}/licence-contact', () => {
+  describe('/licences/{id}/licence-contacts', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
           method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/licence-contact',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/licence-contacts',
           auth: {
             strategy: 'session',
             credentials: { scope: [] }
@@ -212,14 +212,14 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has contacts', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceContactService, 'go').resolves(_viewLicenceContactDetails())
+          Sinon.stub(ViewLicenceContactsService, 'go').resolves(_viewLicenceContacts())
         })
 
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Licence contact details')
+          expect(response.payload).to.contain('Licence contacts')
         })
       })
     })
@@ -693,7 +693,7 @@ function _viewLicenceCommunications() {
   }
 }
 
-function _viewLicenceContacts() {
+function _viewContactDetails() {
   const commonLicenceData = _viewLicence()
 
   return {
@@ -713,7 +713,7 @@ function _viewLicenceHistory() {
   }
 }
 
-function _viewLicenceContactDetails() {
+function _viewLicenceContacts() {
   const commonLicenceData = _viewLicence()
 
   commonLicenceData.pageTitle = null
@@ -730,7 +730,7 @@ function _viewLicenceContactDetails() {
         role: 'Licence holder'
       }
     ],
-    pageTitle: 'Licence contact details'
+    pageTitle: 'Licence contacts'
   }
 }
 

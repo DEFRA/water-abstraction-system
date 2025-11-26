@@ -7,236 +7,131 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
+// Test Helpers
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
-const LicenceContactsPresenter = require('../../../app/presenters/licences/licence-contacts.presenter.js')
+const ContactDetailsPresenter = require('../../../app/presenters/licences/contact-details.presenter.js')
 
-describe('Licences - Contact presenter', () => {
-  let licenceContactDetailsData
-  let licenceId
-  let licenceRef
+describe('Licences - Contact Details presenter', () => {
+  let contacts
+  let licence
 
   beforeEach(() => {
-    licenceId = generateUUID()
-    licenceRef = generateLicenceRef()
+    licence = {
+      id: generateUUID(),
+      licenceRef: generateLicenceRef()
+    }
 
-    licenceContactDetailsData = _testFetchLicenceContactDetailsData(licenceId, licenceRef)
+    contacts = [
+      {
+        communicationType: 'Licence Holder',
+        companyId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
+        companyName: 'Acme ltd',
+        contactId: null,
+        firstName: null,
+        lastName: null,
+        address1: '34 Eastgate',
+        address2: null,
+        address3: null,
+        address4: null,
+        address5: null,
+        address6: null,
+        postcode: 'CF71 7DG',
+        country: 'United Kingdom'
+      }
+    ]
   })
 
-  describe('when provided with populated licence contact details data', () => {
+  describe('when provided with populated contacts data', () => {
     it('correctly presents the data', () => {
-      const result = LicenceContactsPresenter.go(licenceContactDetailsData)
+      const result = ContactDetailsPresenter.go(contacts, licence)
 
       expect(result).to.equal({
         backLink: {
-          href: `/system/licences/${licenceId}/summary`,
-          text: 'Go back to summary'
+          href: '/licences',
+          text: 'Go back to search'
         },
-        licenceContactDetails: [
+        customerId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
+        licenceContacts: [
           {
-            address: ['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'DEANERY ROAD', 'BRISTOL', 'BS1 5AH', 'United Kingdom'],
-            role: 'Licence holder',
+            address: {
+              address1: '34 Eastgate',
+              address2: null,
+              address3: null,
+              address4: null,
+              address5: null,
+              address6: null,
+              country: 'United Kingdom',
+              postcode: 'CF71 7DG'
+            },
+            communicationType: 'Licence Holder',
             name: 'Acme ltd'
-          },
-          {
-            address: ['Furland', 'Crewkerne', 'Somerset', 'TA18 7TT', 'United Kingdom'],
-            role: 'Licence contact',
-            name: 'Furland Farm'
-          },
-          {
-            address: ['Crinkley Bottom', 'Cricket St Thomas', 'Somerset', 'TA20 1KL', 'United Kingdom'],
-            role: 'Returns to',
-            name: 'Mr N Edmonds'
-          },
-          {
-            email: 'primary.user@important.com',
-            role: 'Primary user'
-          },
-          {
-            email: 'returns.agent@important.com',
-            role: 'Returns agent'
           }
         ],
-        pageTitle: 'Licence contact details',
-        pageTitleCaption: `Licence ${licenceRef}`
+        pageTitle: 'Contact details',
+        pageTitleCaption: `Licence ${licence.licenceRef}`
       })
     })
 
-    describe('the "licenceContactDetails" property', () => {
-      describe('when the licence contact is a "contact"', () => {
-        describe('the "licenceContactDetails.address" property', () => {
-          it('returns the address of the property', () => {
-            const result = LicenceContactsPresenter.go(licenceContactDetailsData)
+    describe('the "customerId" property', () => {
+      describe('when one of the contacts has the communication type of "Licence Holder"', () => {
+        it("returns that contact's company Id", () => {
+          const result = ContactDetailsPresenter.go(contacts, licence)
 
-            expect(result.licenceContactDetails[0].address).to.equal([
-              'ENVIRONMENT AGENCY',
-              'HORIZON HOUSE',
-              'DEANERY ROAD',
-              'BRISTOL',
-              'BS1 5AH',
-              'United Kingdom'
-            ])
-          })
-        })
-
-        describe('the "licenceContactDetails.role" property', () => {
-          describe('when one of the licence contact details has the role type of "Enforcement officer"', () => {
-            it('returns licenceContactDetails without the contact with the role type of "Enforcement officer"', () => {
-              const result = LicenceContactsPresenter.go(licenceContactDetailsData)
-
-              const hasEnforcementOfficer = result.licenceContactDetails.some((contact) => {
-                return contact.role === 'Enforcement officer'
-              })
-
-              expect(hasEnforcementOfficer).to.be.false()
-            })
-          })
-        })
-
-        describe('the "licenceContacts.name" property', () => {
-          describe('when the initials are null', () => {
-            beforeEach(() => {
-              licenceContactDetailsData.licenceDocumentHeader.metadata.contacts[3].initials = null
-            })
-
-            it("returns the licence contact's forename and name", () => {
-              const result = LicenceContactsPresenter.go(licenceContactDetailsData)
-
-              expect(result.licenceContactDetails[2].name).to.equal('Mr Noel Edmonds')
-            })
-          })
-
-          describe('when the initials are not null', () => {
-            it("returns the licence contact's forename and name", () => {
-              const result = LicenceContactsPresenter.go(licenceContactDetailsData)
-
-              expect(result.licenceContactDetails[2].name).to.equal('Mr N Edmonds')
-            })
-          })
+          expect(result.customerId).to.equal('ebe95a21-c6f6-4f15-8856-a48ffc737731')
         })
       })
 
-      describe('when the licence contact is a "licenceEntityRole"', () => {
-        describe('the "licenceContactDetails" property', () => {
-          describe('and the role is "primary_user"', () => {
-            it('returns the email and formatted role', () => {
-              const result = LicenceContactsPresenter.go(licenceContactDetailsData)
+      describe('when none of the contacts has the communication type of "Licence Holder"', () => {
+        beforeEach(() => {
+          contacts[0].communicationType = 'Returns'
+        })
 
-              expect(result.licenceContactDetails[3]).to.equal({
-                email: 'primary.user@important.com',
-                role: 'Primary user'
-              })
-            })
+        it('returns null', () => {
+          const result = ContactDetailsPresenter.go(contacts, licence)
+
+          expect(result.customerId).to.be.null()
+        })
+      })
+    })
+
+    describe('the "licenceContacts.name" property', () => {
+      describe('when the contact does not have a contact', () => {
+        it("returns the contact's company name", () => {
+          const result = ContactDetailsPresenter.go(contacts, licence)
+
+          expect(result.licenceContacts[0].name).to.equal('Acme ltd')
+        })
+      })
+
+      describe('when the contact has a contact with a last name', () => {
+        beforeEach(() => {
+          contacts[0].contactId = '0a4ebb93-2e90-4e35-acd5-a5aa73466508'
+          contacts[0].lastName = 'Flow'
+        })
+
+        describe('but no first name', () => {
+          it("returns just the contact's last name", () => {
+            const result = ContactDetailsPresenter.go(contacts, licence)
+
+            expect(result.licenceContacts[0].name).to.equal('Flow')
+          })
+        })
+
+        describe('and a first name', () => {
+          beforeEach(() => {
+            contacts[0].firstName = 'Jackie'
           })
 
-          describe('and the role is "user_returns"', () => {
-            it('returns the email and formatted role', () => {
-              const result = LicenceContactsPresenter.go(licenceContactDetailsData)
+          it("returns the contact's first and last name", () => {
+            const result = ContactDetailsPresenter.go(contacts, licence)
 
-              expect(result.licenceContactDetails[4]).to.equal({
-                email: 'returns.agent@important.com',
-                role: 'Returns agent'
-              })
-            })
+            expect(result.licenceContacts[0].name).to.equal('Jackie Flow')
           })
         })
       })
     })
   })
 })
-
-function _testFetchLicenceContactDetailsData(licenceId, licenceRef) {
-  return {
-    id: licenceId,
-    licenceRef,
-    licenceDocumentHeader: {
-      id: generateUUID(),
-      metadata: {
-        contacts: [
-          {
-            name: 'Acme ltd',
-            role: 'Licence holder',
-            town: 'BRISTOL',
-            type: 'Organisation',
-            county: null,
-            country: 'United Kingdom',
-            forename: null,
-            initials: null,
-            postcode: 'BS1 5AH',
-            salutation: null,
-            addressLine1: 'ENVIRONMENT AGENCY',
-            addressLine2: 'HORIZON HOUSE',
-            addressLine3: 'DEANERY ROAD',
-            addressLine4: null
-          },
-          {
-            name: 'Acme ltd',
-            role: 'Enforcement officer',
-            town: 'BRISTOL',
-            type: 'Organisation',
-            county: null,
-            country: 'United Kingdom',
-            forename: null,
-            initials: null,
-            postcode: 'BS1 5AH',
-            salutation: null,
-            addressLine1: 'ENVIRONMENT AGENCY',
-            addressLine2: 'HORIZON HOUSE',
-            addressLine3: 'DEANERY ROAD',
-            addressLine4: null
-          },
-          {
-            name: 'Furland Farm',
-            role: 'Licence contact',
-            town: 'Somerset',
-            type: 'Organisation',
-            county: null,
-            country: 'United Kingdom',
-            forename: null,
-            initials: null,
-            postcode: 'TA18 7TT',
-            salutation: null,
-            addressLine1: 'Furland',
-            addressLine2: 'Crewkerne',
-            addressLine3: null,
-            addressLine4: null
-          },
-          {
-            name: 'Edmonds',
-            role: 'Returns to',
-            town: 'Somerset',
-            type: 'Person',
-            county: null,
-            country: 'United Kingdom',
-            forename: 'Noel',
-            initials: 'N',
-            postcode: 'TA20 1KL',
-            salutation: 'Mr',
-            addressLine1: 'Crinkley Bottom',
-            addressLine2: 'Cricket St Thomas',
-            addressLine3: null,
-            addressLine4: null
-          }
-        ],
-        IsCurrent: false
-      },
-      licenceEntityRoles: [
-        {
-          role: 'primary_user',
-          licenceEntity: {
-            name: 'primary.user@important.com'
-          }
-        },
-        {
-          role: 'user_returns',
-          licenceEntity: {
-            name: 'returns.agent@important.com'
-          }
-        }
-      ]
-    }
-  }
-}

@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the `/licences/{id}/contact-details` view licence contact details page
- * @module ContactsPresenter
+ * Formats data for the `/licences/{id}/contact-details` view contact details page
+ * @module ContactDetailsPresenter
  */
 
 /**
- * Formats data for the `/licences/{id}/contact-details` view licence contact details page
+ * Formats data for the `/licences/{id}/contact-details` view contact details page
  *
  * @param {object[]} contacts - The results from `FetchContactsService` to be formatted for the view
  * @param {object} licence - The id and licence ref of the licence
