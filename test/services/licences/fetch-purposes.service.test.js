@@ -17,9 +17,9 @@ const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const SourceHelper = require('../../support/helpers/source.helper.js')
 
 // Thing under test
-const FetchLicencePurposesService = require('../../../app/services/licences/fetch-licence-purposes.service.js')
+const FetchPurposesService = require('../../../app/services/licences/fetch-purposes.service.js')
 
-describe('Licences - Fetch Licence Purposes service', () => {
+describe('Licences - Fetch Purposes service', () => {
   let licence
   let licenceVersion
   let licenceVersionPurpose
@@ -51,7 +51,7 @@ describe('Licences - Fetch Licence Purposes service', () => {
     })
 
     it('returns the matching licence version purposes, points, purposes, and sources', async () => {
-      const result = await FetchLicencePurposesService.go(licence.id)
+      const result = await FetchPurposesService.go(licence.id)
 
       expect(result).to.equal([
         {

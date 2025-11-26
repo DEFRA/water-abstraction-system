@@ -12,7 +12,7 @@ const { expect } = Code
 const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 
 // Things we need to stub
-const FetchLicencePurposesService = require('../../../app/services/licences/fetch-licence-purposes.service.js')
+const FetchPurposesService = require('../../../app/services/licences/fetch-purposes.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
@@ -40,7 +40,7 @@ describe('Licences - View Purposes service', () => {
 
     Sinon.stub(FetchLicenceService, 'go').returns(licence)
 
-    Sinon.stub(FetchLicencePurposesService, 'go').returns(purposes)
+    Sinon.stub(FetchPurposesService, 'go').returns(purposes)
   })
 
   afterEach(() => {

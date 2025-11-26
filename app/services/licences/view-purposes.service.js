@@ -5,7 +5,7 @@
  * @module ViewPurposesService
  */
 
-const FetchLicencePurposesService = require('../licences/fetch-licence-purposes.service.js')
+const FetchPurposesService = require('../licences/fetch-purposes.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
 const PurposesPresenter = require('../../presenters/licences/purposes.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
@@ -20,7 +20,7 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  */
 async function go(licenceId, auth) {
   const licence = await FetchLicenceService.go(licenceId)
-  const purposes = await FetchLicencePurposesService.go(licenceId)
+  const purposes = await FetchPurposesService.go(licenceId)
 
   const pageData = PurposesPresenter.go(purposes, licence)
 
