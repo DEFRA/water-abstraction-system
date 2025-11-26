@@ -36,7 +36,7 @@ function formatAbstractionAmounts(licenceVersionPurpose) {
 /**
  * The licence summary and set-up pages show a notification when a licence is marked for supplementary bill runs. This
  *
- * @param {object} licence - The licence where the data will be extracted for from
+ * @param {object} licence - The licence to determine if a notification is needed
  *
  * @returns {object | null} an object containing the notification text and title text if the licence is marked for a
  * supplementary bill run, else null
