@@ -21,6 +21,8 @@ const METER_READINGS_METHOD = 'meterReadings'
  * quantity will be multiplied by 10.
  *
  * @param {object} session - Session object containing the return submission data
+ *
+ * @returns {Promise<module:SessionModel>} - The updated Session object
  */
 async function go(session) {
   if (session.reported === METER_READINGS_METHOD) {
