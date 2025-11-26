@@ -15,7 +15,7 @@ const { db } = require('../../../db/db.js')
  * @returns {Promise<object[]>} the data needed to populate the view licence page's contact details tab
  */
 async function go(licenceId) {
-  return await _fetch(licenceId)
+  return _fetch(licenceId)
 }
 
 async function _fetch(licenceId) {
