@@ -42,10 +42,10 @@ function formatAbstractionAmounts(licenceVersionPurpose) {
  * supplementary bill run, else null
  */
 function supplementaryBillRunNotification(licence) {
-  const { includeInPresrocBilling, includeInSrocBilling, licenceSupplementaryYears } = licence
+  const { includeInPresrocBilling, includeInSrocBilling, includeTwoPartTariffBilling } = licence
   const baseMessage = 'This licence has been marked for the next '
 
-  if (licenceSupplementaryYears.length > 0) {
+  if (includeTwoPartTariffBilling) {
     return {
       text: _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling),
       titleText: 'Important'

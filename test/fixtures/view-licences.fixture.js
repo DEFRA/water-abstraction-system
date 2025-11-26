@@ -57,7 +57,7 @@ function licence() {
     licenceRef: generateLicenceRef(),
     includeInPresrocBilling: 'no',
     includeInSrocBilling: false,
-    licenceSupplementaryYears: [{ financialYearEnd: 2024 }, { financialYearEnd: 2022 }]
+    includeTwoPartTariffBilling: true
   })
 }
 

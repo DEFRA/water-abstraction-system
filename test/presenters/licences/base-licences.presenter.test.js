@@ -83,7 +83,7 @@ describe('Licences - Base Licences presenter', () => {
 
     beforeEach(() => {
       licence = {
-        licenceSupplementaryYears: []
+        includeTwoPartTariffBilling: false
       }
     })
 
@@ -143,7 +143,7 @@ describe('Licences - Base Licences presenter', () => {
 
     describe('when the licence has been flagged just for the next TPT supplementary bill run', () => {
       beforeEach(() => {
-        licence.licenceSupplementaryYears.push({ id: '1636ab31-3b79-4fec-9e51-be89835e9981' })
+        licence.includeTwoPartTariffBilling = true
       })
 
       it('returns a notification just for TPT supplementary', () => {
@@ -158,7 +158,7 @@ describe('Licences - Base Licences presenter', () => {
 
     describe('when the licence has been flagged for the next TPT & PRESROC supplementary bill runs', () => {
       beforeEach(() => {
-        licence.licenceSupplementaryYears.push({ id: '1636ab31-3b79-4fec-9e51-be89835e9981' })
+        licence.includeTwoPartTariffBilling = true
         licence.includeInPresrocBilling = 'yes'
       })
 
@@ -174,7 +174,7 @@ describe('Licences - Base Licences presenter', () => {
 
     describe('when the licence has been flagged for the next TPT & SROC supplementary bill runs', () => {
       beforeEach(() => {
-        licence.licenceSupplementaryYears.push({ id: '1636ab31-3b79-4fec-9e51-be89835e9981' })
+        licence.includeTwoPartTariffBilling = true
         licence.includeInSrocBilling = true
       })
 
@@ -190,7 +190,7 @@ describe('Licences - Base Licences presenter', () => {
 
     describe('when the licence has been flagged for the next TPT, PRESROC & SROC supplementary bill runs', () => {
       beforeEach(() => {
-        licence.licenceSupplementaryYears.push({ id: '1636ab31-3b79-4fec-9e51-be89835e9981' })
+        licence.includeTwoPartTariffBilling = true
         licence.includeInPresrocBilling = 'yes'
         licence.includeInSrocBilling = true
       })

@@ -18,13 +18,12 @@ const FetchLicenceService = require('../../../app/services/licences/fetch-licenc
 
 describe('Licences - Fetch Licence service', () => {
   let licence
-  let licenceSupplementaryYear
 
   describe('when there is a matching licence', () => {
     beforeEach(async () => {
       licence = await LicenceHelper.add()
 
-      licenceSupplementaryYear = await LicenceSupplementaryYearModel.add({
+      await LicenceSupplementaryYearModel.add({
         licenceId: licence.id,
         twoPartTariff: true
       })
@@ -39,13 +38,9 @@ describe('Licences - Fetch Licence service', () => {
         id: licence.id,
         includeInPresrocBilling: 'no',
         includeInSrocBilling: false,
+        includeTwoPartTariffBilling: true,
         lapsedDate: null,
         licenceRef: licence.licenceRef,
-        licenceSupplementaryYears: [
-          {
-            id: licenceSupplementaryYear.id
-          }
-        ],
         revokedDate: null
       })
     })

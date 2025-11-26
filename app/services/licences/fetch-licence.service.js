@@ -6,6 +6,7 @@
  */
 
 const LicenceModel = require('../../models/licence.model.js')
+const { db } = require('../../../db/db.js')
 
 /**
  * Fetches the matching licence for the view '/licences/{id}/*' pages
@@ -18,18 +19,27 @@ async function go(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
     .select([
-      'id',
-      'licenceRef',
-      'revokedDate',
-      'lapsedDate',
       'expiredDate',
+      'id',
+      'lapsedDate',
+      'licenceRef',
       'includeInPresrocBilling',
-      'includeInSrocBilling'
+      'includeInSrocBilling',
+      'revokedDate',
+      db.raw(`
+      (
+        CASE
+          WHEN EXISTS (
+            SELECT 1
+            FROM public.licence_supplementary_years lsy
+            WHERE lsy.licence_id = licences.id
+          )
+          THEN TRUE
+          ELSE FALSE
+        END
+      ) AS "includeTwoPartTariffBilling"
+    `)
     ])
-    .withGraphFetched('licenceSupplementaryYears')
-    .modifyGraph('licenceSupplementaryYears', (builder) => {
-      builder.select(['id']).where('twoPartTariff', true)
-    })
 }
 
 module.exports = {
