@@ -34,6 +34,48 @@ function formatAbstractionAmounts(licenceVersionPurpose) {
 }
 
 /**
+ * The licence summary and set-up pages show a notification when a licence is marked for supplementary bill runs. This
+ *
+ * @param {object} licence - The licence where the data will be extracted for from
+ *
+ * @returns {object | null} an object containing the notification text and title text if the licence is marked for a
+ * supplementary bill run, else null
+ */
+function supplementaryBillRunNotification(licence) {
+  const { includeInPresrocBilling, includeInSrocBilling, licenceSupplementaryYears } = licence
+  const baseMessage = 'This licence has been marked for the next '
+
+  if (licenceSupplementaryYears.length > 0) {
+    return {
+      text: _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling),
+      titleText: 'Important'
+    }
+  }
+
+  if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
+    return {
+      text: baseMessage + 'supplementary bill runs for the current and old charge schemes.',
+      titleText: 'Important'
+    }
+  }
+  if (includeInPresrocBilling === 'yes') {
+    return {
+      text: baseMessage + 'supplementary bill run for the old charge scheme.',
+      titleText: 'Important'
+    }
+  }
+
+  if (includeInSrocBilling === true) {
+    return {
+      text: baseMessage + 'supplementary bill run.',
+      titleText: 'Important'
+    }
+  }
+
+  return null
+}
+
+/**
  * Pluralise a word based on a count
  *
  * When the count is 1, the word is returned unchanged. Otherwise, the word is appended with an 's'.
@@ -60,8 +102,28 @@ function userRoles(auth) {
   })
 }
 
+function _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling) {
+  if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
+    return (
+      baseMessage +
+      'two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.'
+    )
+  }
+  if (includeInPresrocBilling === 'yes') {
+    return (
+      baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.'
+    )
+  }
+
+  if (includeInSrocBilling === true) {
+    return baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run.'
+  }
+
+  return baseMessage + 'two-part tariff supplementary bill run.'
+}
 module.exports = {
   formatAbstractionAmounts,
+  supplementaryBillRunNotification,
   pluralise,
   userRoles
 }

@@ -17,7 +17,16 @@ const LicenceModel = require('../../models/licence.model.js')
 async function go(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
-    .select(['id', 'licenceRef', 'revokedDate', 'lapsedDate', 'expiredDate'])
+    .select([
+      'id',
+      'licenceRef',
+      'revokedDate',
+      'lapsedDate',
+      'expiredDate',
+      'includeInPresrocBilling',
+      'includeInSrocBilling'
+    ])
+    .withGraphFetched('licenceSupplementaryYears')
 }
 
 module.exports = {

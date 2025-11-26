@@ -54,7 +54,13 @@ function condition() {
 function licence() {
   return LicenceModel.fromJson({
     id: generateUUID(),
-    licenceRef: generateLicenceRef()
+    licenceRef: generateLicenceRef(),
+    $ends: () => {
+      return { date: new Date() }
+    },
+    includeInPresrocBilling: 'no',
+    includeInSrocBilling: false,
+    licenceSupplementaryYears: [{ financialYearEnd: 2024 }, { financialYearEnd: 2022 }]
   })
 }
 

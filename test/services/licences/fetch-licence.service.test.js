@@ -30,8 +30,11 @@ describe('Licences - Fetch Licence service', () => {
       expect(result).to.equal({
         expiredDate: null,
         id: licence.id,
+        includeInPresrocBilling: 'no',
+        includeInSrocBilling: false,
         lapsedDate: null,
         licenceRef: licence.licenceRef,
+        licenceSupplementaryYears: [],
         revokedDate: null
       })
     })

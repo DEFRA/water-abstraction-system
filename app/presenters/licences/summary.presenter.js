@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate } = require('../base.presenter.js')
+const { supplementaryBillRunNotification } = require('./base-licences.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
 /**
@@ -32,7 +33,7 @@ function go(licence) {
     includeInPresrocBilling,
     licenceId: id,
     licenceRef,
-    notification: _notification(licence),
+    notification: supplementaryBillRunNotification(licence),
     pageTitle: `Licence summary ${licenceRef}`,
     pageTitleCaption: _licenceName(primaryUser, licence),
     primaryUser,
@@ -59,60 +60,6 @@ function _licenceName(primaryUser, licence) {
   const licenceName = licence.$licenceName()
 
   return licenceName ?? null
-}
-
-function _notification(licence) {
-  const { includeInPresrocBilling, includeInSrocBilling, licenceSupplementaryYears } = licence
-  const baseMessage = 'This licence has been marked for the next '
-
-  if (licenceSupplementaryYears.length > 0) {
-    return {
-      text: _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling),
-      titleText: 'Important'
-    }
-  }
-
-  if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
-    return {
-      text: baseMessage + 'supplementary bill runs for the current and old charge schemes.',
-      titleText: 'Important'
-    }
-  }
-  if (includeInPresrocBilling === 'yes') {
-    return {
-      text: baseMessage + 'supplementary bill run for the old charge scheme.',
-      titleText: 'Important'
-    }
-  }
-
-  if (includeInSrocBilling === true) {
-    return {
-      text: baseMessage + 'supplementary bill run.',
-      titleText: 'Important'
-    }
-  }
-
-  return null
-}
-
-function _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling) {
-  if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
-    return (
-      baseMessage +
-      'two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.'
-    )
-  }
-  if (includeInPresrocBilling === 'yes') {
-    return (
-      baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.'
-    )
-  }
-
-  if (includeInSrocBilling === true) {
-    return baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run.'
-  }
-
-  return baseMessage + 'two-part tariff supplementary bill run.'
 }
 
 function _warning(ends) {
