@@ -34,7 +34,7 @@ function formatAbstractionAmounts(licenceVersionPurpose) {
 }
 
 /**
- * The licence summary and set-up pages show a notification when a licence is marked for supplementary bill runs. This
+ * The licence summary and set-up pages show a notification when a licence is marked for supplementary bill runs.
  *
  * @param {object} licence - The licence to determine if a notification is needed
  *
