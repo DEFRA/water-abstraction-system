@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Fetches all return logs for a licence which is needed for the view '/licences/{id}/contact-details` page
- * @module FetchContactsService
+ * Fetches all contact details for a licence which is needed for the view '/licences/{id}/contact-details` page
+ * @module FetchContactDetailsService
  */
 
 const { db } = require('../../../db/db.js')
@@ -12,7 +12,7 @@ const { db } = require('../../../db/db.js')
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<object[]>} the data needed to populate the view licence page's contact details tab
+ * @returns {Promise<object[]>} the data needed to populate the view contact details page
  */
 async function go(licenceId) {
   return _fetch(licenceId)
