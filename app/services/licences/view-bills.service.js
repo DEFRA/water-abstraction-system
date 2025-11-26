@@ -6,7 +6,7 @@
  */
 
 const BillsPresenter = require('../../presenters/licences/bills.presenter.js')
-const FetchLicenceBillsService = require('./fetch-licence-bills.service.js')
+const FetchBillsService = require('./fetch-bills.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
@@ -23,7 +23,7 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
 async function go(licenceId, auth, page) {
   const licence = await FetchLicenceService.go(licenceId)
 
-  const { bills, pagination } = await FetchLicenceBillsService.go(licenceId, page)
+  const { bills, pagination } = await FetchBillsService.go(licenceId, page)
 
   const pageData = BillsPresenter.go(bills, licence)
 
