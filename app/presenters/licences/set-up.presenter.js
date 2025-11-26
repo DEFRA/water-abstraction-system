@@ -7,7 +7,7 @@
 
 const { formatLongDate } = require('../base.presenter.js')
 const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
-const { supplementaryBillRunNotification } = require('./base-licences.presenter.js')
+const { supplementaryBillingNotification } = require('./base-licences.presenter.js')
 
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
@@ -59,7 +59,7 @@ function go(chargeVersions, workflows, agreements, returnVersions, auth, licence
       returnVersions: _returnVersionsLinks(licenceData, enableRequirementsForReturns, auth),
       recalculateBills: _recalculateBills(agreements, auth, licenceData)
     },
-    notification: supplementaryBillRunNotification(licence),
+    notification: supplementaryBillingNotification(licence),
     pageTitle: 'Licence set up',
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     returnVersions: _returnVersions(returnVersions)

@@ -37,7 +37,7 @@ async function go(licenceId) {
           THEN TRUE
           ELSE FALSE
         END
-      ) AS "includeTwoPartTariffBilling"
+      ) AS "includeInTwoPartTariffBilling"
     `)
     ])
 }

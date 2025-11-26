@@ -41,11 +41,11 @@ function formatAbstractionAmounts(licenceVersionPurpose) {
  * @returns {object | null} an object containing the notification text and title text if the licence is marked for a
  * supplementary bill run, else null
  */
-function supplementaryBillRunNotification(licence) {
-  const { includeInPresrocBilling, includeInSrocBilling, includeTwoPartTariffBilling } = licence
+function supplementaryBillingNotification(licence) {
+  const { includeInPresrocBilling, includeInSrocBilling, includeInTwoPartTariffBilling } = licence
   const baseMessage = 'This licence has been marked for the next '
 
-  if (includeTwoPartTariffBilling) {
+  if (includeInTwoPartTariffBilling) {
     return {
       text: _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling),
       titleText: 'Important'
@@ -124,7 +124,7 @@ function _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBil
 
 module.exports = {
   formatAbstractionAmounts,
-  supplementaryBillRunNotification,
+  supplementaryBillingNotification,
   pluralise,
   userRoles
 }

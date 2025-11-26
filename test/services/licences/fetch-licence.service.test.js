@@ -38,7 +38,7 @@ describe('Licences - Fetch Licence service', () => {
         id: licence.id,
         includeInPresrocBilling: 'no',
         includeInSrocBilling: false,
-        includeTwoPartTariffBilling: true,
+        includeInTwoPartTariffBilling: true,
         lapsedDate: null,
         licenceRef: licence.licenceRef,
         revokedDate: null

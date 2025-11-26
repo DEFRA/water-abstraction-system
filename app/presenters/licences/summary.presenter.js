@@ -6,7 +6,7 @@
  */
 
 const { formatLongDate } = require('../base.presenter.js')
-const { supplementaryBillRunNotification } = require('./base-licences.presenter.js')
+const { supplementaryBillingNotification } = require('./base-licences.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
 /**
@@ -33,7 +33,7 @@ function go(licence, licenceSummary) {
     currentVersion: _currentVersion(licenceSummary, startDate),
     licenceId: id,
     licenceRef,
-    notification: supplementaryBillRunNotification(licence),
+    notification: supplementaryBillingNotification(licence),
     pageTitle: `Licence summary ${licenceRef}`,
     pageTitleCaption: _licenceName(primaryUser, licenceSummary),
     primaryUser,

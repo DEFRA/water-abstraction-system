@@ -57,7 +57,7 @@ function licence() {
     licenceRef: generateLicenceRef(),
     includeInPresrocBilling: 'no',
     includeInSrocBilling: false,
-    includeTwoPartTariffBilling: true
+    includeInTwoPartTariffBilling: true
   })
 }
 
