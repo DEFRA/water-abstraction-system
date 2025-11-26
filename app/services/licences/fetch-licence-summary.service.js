@@ -23,16 +23,7 @@ async function go(licenceId) {
 async function _fetch(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
-    .select([
-      'id',
-      'expiredDate',
-      'startDate',
-      'lapsedDate',
-      'includeInPresrocBilling',
-      'includeInSrocBilling',
-      'licenceRef',
-      'revokedDate'
-    ])
+    .select(['expiredDate', 'id', 'startDate'])
     .modify('licenceName')
     .modify('primaryUser')
     .modify('currentVersion')
@@ -44,10 +35,6 @@ async function _fetch(licenceId) {
     .withGraphFetched('licenceDocumentHeader')
     .modifyGraph('licenceDocumentHeader', (builder) => {
       builder.select(['id'])
-    })
-    .withGraphFetched('licenceSupplementaryYears')
-    .modifyGraph('licenceSupplementaryYears', (builder) => {
-      builder.select(['id']).where('twoPartTariff', true)
     })
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
     .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {

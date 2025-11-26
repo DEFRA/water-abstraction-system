@@ -9,20 +9,23 @@ const { expect } = Code
 
 // Test helpers
 const LicenceModel = require('../../../app/models/licence.model.js')
+const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 
 // Thing under test
 const SummaryPresenter = require('../../../app/presenters/licences/summary.presenter.js')
 
 describe('Licences - Summary Presenter', () => {
   let licence
+  let licenceSummary
 
   beforeEach(() => {
-    licence = _licence()
+    licence = ViewLicencesFixture.licence()
+    licenceSummary = _licenceSummary()
   })
 
   describe('when provided with a populated licence', () => {
     it('correctly presents the data', () => {
-      const result = SummaryPresenter.go(licence)
+      const result = SummaryPresenter.go(licence, licenceSummary)
 
       expect(result).to.equal({
         backLink: {
@@ -30,13 +33,13 @@ describe('Licences - Summary Presenter', () => {
           text: 'Go back to search'
         },
         currentVersion: 'The current version of the licence starting 1 April 2019',
-        documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
-        ends: null,
-        includeInPresrocBilling: 'no',
-        licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-        licenceRef: '01/123',
-        notification: null,
-        pageTitle: 'Licence summary 01/123',
+        licenceId: licence.id,
+        licenceRef: licence.licenceRef,
+        notification: {
+          text: 'This licence has been marked for the next two-part tariff supplementary bill run.',
+          titleText: 'Important'
+        },
+        pageTitle: `Licence summary ${licence.licenceRef}`,
         pageTitleCaption: 'Between two ferns',
         primaryUser: {
           id: 10036,
@@ -51,7 +54,7 @@ describe('Licences - Summary Presenter', () => {
   describe('the "currentVersion" property', () => {
     describe('when the current version is null', () => {
       it('returns the text with the "startDate"', () => {
-        const result = SummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence, licenceSummary)
 
         expect(result.currentVersion).to.equal('The current version of the licence starting 1 April 2019')
       })
@@ -59,15 +62,15 @@ describe('Licences - Summary Presenter', () => {
 
     describe('when the current version is not null', () => {
       beforeEach(() => {
-        licence.$currentVersion = () => {
-          return {
-            startDate: '2021-01-01'
+        licenceSummary.licenceVersions = [
+          {
+            startDate: new Date('2021-01-01')
           }
-        }
+        ]
       })
 
       it('returns the text with the licence versions "startDate"', () => {
-        const result = SummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence, licenceSummary)
 
         expect(result.currentVersion).to.equal('The current version of the licence starting 1 January 2021')
       })
@@ -78,7 +81,7 @@ describe('Licences - Summary Presenter', () => {
     describe('when the licence has a primary user (registered user)', () => {
       describe('and they have added a custom name for the licence', () => {
         it('returns the licence name', () => {
-          const result = SummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence, licenceSummary)
 
           expect(result.pageTitleCaption).to.equal('Between two ferns')
         })
@@ -86,11 +89,11 @@ describe('Licences - Summary Presenter', () => {
 
       describe('but they have not added a custom name for the licence', () => {
         beforeEach(() => {
-          licence.licenceDocumentHeader.licenceName = null
+          licenceSummary.licenceDocumentHeader.licenceName = null
         })
 
         it('returns null', () => {
-          const result = SummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence, licenceSummary)
 
           expect(result.pageTitleCaption).to.be.null()
         })
@@ -99,11 +102,11 @@ describe('Licences - Summary Presenter', () => {
 
     describe('when the licence does not have a primary user (registered user)', () => {
       beforeEach(() => {
-        licence.licenceDocumentHeader.licenceEntityRoles = []
+        licenceSummary.licenceDocumentHeader.licenceEntityRoles = []
       })
 
       it('returns "Unregistered licence"', () => {
-        const result = SummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence, licenceSummary)
 
         expect(result.pageTitleCaption).to.equal('Unregistered licence')
       })
@@ -113,7 +116,7 @@ describe('Licences - Summary Presenter', () => {
   describe('the "warning" property', () => {
     describe('when the licence does not have an "end" date', () => {
       it('returns null', () => {
-        const result = SummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence, licenceSummary)
 
         expect(result.warning).to.be.null()
       })
@@ -126,7 +129,7 @@ describe('Licences - Summary Presenter', () => {
         })
 
         it('returns null', () => {
-          const result = SummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence, licenceSummary)
 
           expect(result.warning).to.be.null()
         })
@@ -138,7 +141,7 @@ describe('Licences - Summary Presenter', () => {
         })
 
         it('returns "This licence expired on 1 April 2019"', () => {
-          const result = SummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence, licenceSummary)
 
           expect(result.warning).to.equal({
             iconFallbackText: 'Warning',
@@ -153,7 +156,7 @@ describe('Licences - Summary Presenter', () => {
         })
 
         it('returns "This licence lapsed on 1 April 2019"', () => {
-          const result = SummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence, licenceSummary)
 
           expect(result.warning).to.equal({
             iconFallbackText: 'Warning',
@@ -168,7 +171,7 @@ describe('Licences - Summary Presenter', () => {
         })
 
         it('returns "This licence was revoked on 1 April 2019"', () => {
-          const result = SummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence, licenceSummary)
 
           expect(result.warning).to.equal({
             iconFallbackText: 'Warning',
@@ -182,11 +185,11 @@ describe('Licences - Summary Presenter', () => {
   describe('the "workflowWarning" property', () => {
     describe('when the licence is not in workflow', () => {
       beforeEach(() => {
-        licence.workflows = []
+        licenceSummary.workflows = []
       })
 
       it('returns false', () => {
-        const result = SummaryPresenter.go(licence)
+        const result = SummaryPresenter.go(licence, licenceSummary)
 
         expect(result.workflowWarning).to.be.false()
       })
@@ -195,11 +198,11 @@ describe('Licences - Summary Presenter', () => {
     describe('when the licence is in workflow', () => {
       describe('but the status is not "to_setup"', () => {
         beforeEach(() => {
-          licence.workflows[0].status = 'changes_requested'
+          licenceSummary.workflows[0].status = 'changes_requested'
         })
 
         it('returns false', () => {
-          const result = SummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence, licenceSummary)
 
           expect(result.workflowWarning).to.be.false()
         })
@@ -207,7 +210,7 @@ describe('Licences - Summary Presenter', () => {
 
       describe('and the status is "to_setup"', () => {
         it('returns true', () => {
-          const result = SummaryPresenter.go(licence)
+          const result = SummaryPresenter.go(licence, licenceSummary)
 
           expect(result.workflowWarning).to.be.true()
         })
@@ -216,15 +219,10 @@ describe('Licences - Summary Presenter', () => {
   })
 })
 
-function _licence() {
+function _licenceSummary() {
   return LicenceModel.fromJson({
     id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
     expiredDate: null,
-    lapsedDate: null,
-    includeInPresrocBilling: 'no',
-    includeInSrocBilling: false,
-    licenceRef: '01/123',
-    revokedDate: null,
     licenceDocumentHeader: {
       id: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
       licenceName: 'Between two ferns',

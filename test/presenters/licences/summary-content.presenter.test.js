@@ -12,7 +12,7 @@ const { expect } = Code
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const PointModel = require('../../../app/models/point.model.js')
-const { today } = require('../../../app/lib/general.lib.js')
+const { today, generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const SummaryContentPresenter = require('../../../app/presenters/licences/summary-content.presenter.js')
@@ -36,14 +36,13 @@ describe('Licences - Summary Content Presenter', () => {
       abstractionPoints: ['At National Grid Reference TL 23198 88603'],
       abstractionPointsCaption: 'Point of abstraction',
       activeSecondaryNav: 'summary',
-      documentId: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb',
       enableMonitoringStationsView: true,
       endDate: null,
       licenceHolder: 'Unregistered licence',
-      licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+      licenceId: licence.id,
       monitoringStations: [
         {
-          id: 'ac075651-4781-4e24-a684-b943b98607ca',
+          id: licence.licenceMonitoringStations[0].monitoringStation.id,
           label: 'MEVAGISSEY FIRE STATION'
         }
       ],
@@ -75,7 +74,7 @@ describe('Licences - Summary Content Presenter', () => {
       beforeEach(() => {
         licence.licenceVersions[0].licenceVersionPurposes = [
           {
-            id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+            id: generateUUID(),
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
@@ -84,23 +83,23 @@ describe('Licences - Summary Content Presenter', () => {
             dailyQuantity: 720,
             hourlyQuantity: 144,
             instantQuantity: 40,
-            purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+            purpose: { id: generateUUID(), description: 'Spray Irrigation - Storage' },
             points: [
               PointModel.fromJson({
-                id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+                id: generateUUID(),
                 description: null,
                 ngr1: 'TL 23198 88603',
                 ngr2: null,
                 ngr3: null,
                 ngr4: null,
-                source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+                source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
               })
             ],
             licenceVersionPurposeConditions: [
               {
-                id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+                id: generateUUID(),
                 licenceVersionPurposeConditionType: {
-                  id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                  id: generateUUID(),
                   displayTitle: 'General conditions'
                 }
               }
@@ -134,34 +133,34 @@ describe('Licences - Summary Content Presenter', () => {
     describe('when there are multiple licence version purposes', () => {
       beforeEach(() => {
         const point = PointModel.fromJson({
-          id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+          id: generateUUID(),
           description: null,
           ngr1: 'TL 23198 88603',
           ngr2: null,
           ngr3: null,
           ngr4: null,
-          source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+          source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
         })
 
         licence.licenceVersions[0].licenceVersionPurposes = [
           {
-            id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+            id: generateUUID(),
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 10,
             points: [point],
-            purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+            purpose: { id: generateUUID(), description: 'Spray Irrigation - Storage' },
             licenceVersionPurposeConditions: []
           },
           {
-            id: 'da6cbb9b-edcb-4b5b-8d3a-fab22ce6ee8b',
+            id: generateUUID(),
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 11,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 3,
             points: [point],
-            purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+            purpose: { id: generateUUID(), description: 'Spray Irrigation - Storage' },
             licenceVersionPurposeConditions: []
           }
         ]
@@ -170,17 +169,17 @@ describe('Licences - Summary Content Presenter', () => {
       describe('and each contains a condition with a different display title', () => {
         beforeEach(() => {
           licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push({
-            id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+            id: generateUUID(),
             licenceVersionPurposeConditionType: {
-              id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+              id: generateUUID(),
               displayTitle: 'General conditions'
             }
           })
 
           licence.licenceVersions[0].licenceVersionPurposes[1].licenceVersionPurposeConditions.push({
-            id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
+            id: generateUUID(),
             licenceVersionPurposeConditionType: {
-              id: '7ee108f1-268d-4ded-81c7-d397c075e7db',
+              id: generateUUID(),
               displayTitle: 'Derogation clause'
             }
           })
@@ -196,17 +195,17 @@ describe('Licences - Summary Content Presenter', () => {
       describe('and each contains conditions with the same display titles', () => {
         beforeEach(() => {
           licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push({
-            id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+            id: generateUUID(),
             licenceVersionPurposeConditionType: {
-              id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+              id: generateUUID(),
               displayTitle: 'General conditions'
             }
           })
 
           licence.licenceVersions[0].licenceVersionPurposes[1].licenceVersionPurposeConditions.push({
-            id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
+            id: generateUUID(),
             licenceVersionPurposeConditionType: {
-              id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+              id: generateUUID(),
               displayTitle: 'General conditions'
             }
           })
@@ -224,23 +223,23 @@ describe('Licences - Summary Content Presenter', () => {
       beforeEach(() => {
         licence.licenceVersions[0].licenceVersionPurposes = [
           {
-            id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+            id: generateUUID(),
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
             abstractionPeriodEndMonth: 10,
             points: [
               PointModel.fromJson({
-                id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+                id: generateUUID(),
                 description: null,
                 ngr1: 'TL 23198 88603',
                 ngr2: null,
                 ngr3: null,
                 ngr4: null,
-                source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+                source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
               })
             ],
-            purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+            purpose: { id: generateUUID(), description: 'Spray Irrigation - Storage' },
             licenceVersionPurposeConditions: []
           }
         ]
@@ -250,16 +249,16 @@ describe('Licences - Summary Content Presenter', () => {
         beforeEach(() => {
           licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push(
             {
-              id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+              id: generateUUID(),
               licenceVersionPurposeConditionType: {
-                id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                id: generateUUID(),
                 displayTitle: 'General conditions'
               }
             },
             {
-              id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
+              id: generateUUID(),
               licenceVersionPurposeConditionType: {
-                id: '7ee108f1-268d-4ded-81c7-d397c075e7db',
+                id: generateUUID(),
                 displayTitle: 'Derogation clause'
               }
             }
@@ -277,16 +276,16 @@ describe('Licences - Summary Content Presenter', () => {
         beforeEach(() => {
           licence.licenceVersions[0].licenceVersionPurposes[0].licenceVersionPurposeConditions.push(
             {
-              id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+              id: generateUUID(),
               licenceVersionPurposeConditionType: {
-                id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                id: generateUUID(),
                 displayTitle: 'General conditions'
               }
             },
             {
-              id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
+              id: generateUUID(),
               licenceVersionPurposeConditionType: {
-                id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                id: generateUUID(),
                 displayTitle: 'General conditions'
               }
             }
@@ -448,12 +447,12 @@ describe('Licences - Summary Content Presenter', () => {
             licence.licenceVersions[0].licenceVersionPurposes[0].points.push(
               PointModel.fromJson({
                 description: 'RIVER MEDWAY AT YALDING INTAKE',
-                id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+                id: generateUUID(),
                 ngr1: 'TQ 69212 50394',
                 ngr2: null,
                 ngr3: null,
                 ngr4: null,
-                source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+                source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
               })
             )
           })
@@ -482,12 +481,12 @@ describe('Licences - Summary Content Presenter', () => {
           beforeEach(() => {
             licence.licenceVersions[0].licenceVersionPurposes[1].points[0] = PointModel.fromJson({
               description: 'RIVER MEDWAY AT YALDING INTAKE',
-              id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+              id: generateUUID(),
               ngr1: 'TQ 69212 50394',
               ngr2: null,
               ngr3: null,
               ngr4: null,
-              source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+              source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
             })
           })
 
@@ -543,12 +542,12 @@ describe('Licences - Summary Content Presenter', () => {
           beforeEach(() => {
             licence.licenceVersions[0].licenceVersionPurposes[1].points[0] = PointModel.fromJson({
               description: 'RIVER MEDWAY AT YALDING INTAKE',
-              id: 'd03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6',
+              id: generateUUID(),
               ngr1: 'TQ 69212 50394',
               ngr2: null,
               ngr3: null,
               ngr4: null,
-              source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+              source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
             })
           })
 
@@ -651,7 +650,7 @@ describe('Licences - Summary Content Presenter', () => {
 
         expect(result.monitoringStations).to.equal([
           {
-            id: 'ac075651-4781-4e24-a684-b943b98607ca',
+            id: licence.licenceMonitoringStations[0].monitoringStation.id,
             label: 'MEVAGISSEY FIRE STATION'
           }
         ])
@@ -662,9 +661,9 @@ describe('Licences - Summary Content Presenter', () => {
       describe('that are all different', () => {
         beforeEach(() => {
           licence.licenceMonitoringStations.push({
-            id: '13f7504d-2750-4dd9-94dd-929e99e900a0',
+            id: generateUUID(),
             monitoringStation: {
-              id: '4a6493b0-1d8d-429f-a7a0-3a6541d5ff1f',
+              id: generateUUID(),
               label: 'AVALON FIRE STATION'
             }
           })
@@ -674,8 +673,8 @@ describe('Licences - Summary Content Presenter', () => {
           const result = SummaryContentPresenter.go(licence)
 
           expect(result.monitoringStations).to.equal([
-            { id: 'ac075651-4781-4e24-a684-b943b98607ca', label: 'MEVAGISSEY FIRE STATION' },
-            { id: '4a6493b0-1d8d-429f-a7a0-3a6541d5ff1f', label: 'AVALON FIRE STATION' }
+            { id: licence.licenceMonitoringStations[0].monitoringStation.id, label: 'MEVAGISSEY FIRE STATION' },
+            { id: licence.licenceMonitoringStations[1].monitoringStation.id, label: 'AVALON FIRE STATION' }
           ])
         })
       })
@@ -683,9 +682,9 @@ describe('Licences - Summary Content Presenter', () => {
       describe('that are all the same station', () => {
         beforeEach(() => {
           licence.licenceMonitoringStations.push({
-            id: 'e813542c-50a0-4497-be1a-00af3a810cac',
+            id: licence.licenceMonitoringStations[0].id,
             monitoringStation: {
-              id: 'ac075651-4781-4e24-a684-b943b98607ca',
+              id: licence.licenceMonitoringStations[0].monitoringStation.id,
               label: 'MEVAGISSEY FIRE STATION'
             }
           })
@@ -696,7 +695,7 @@ describe('Licences - Summary Content Presenter', () => {
 
           expect(result.monitoringStations).to.equal([
             {
-              id: 'ac075651-4781-4e24-a684-b943b98607ca',
+              id: licence.licenceMonitoringStations[0].monitoringStation.id,
               label: 'MEVAGISSEY FIRE STATION'
             }
           ])
@@ -860,31 +859,31 @@ describe('Licences - Summary Content Presenter', () => {
 
 function _licence() {
   const point = PointModel.fromJson({
-    id: 'ab80acd6-7c2a-4f51-87f5-2c397829a0bb',
+    id: generateUUID(),
     description: null,
     ngr1: 'TL 23198 88603',
     ngr2: null,
     ngr3: null,
     ngr4: null,
-    source: { id: 'b0b12db5-e95c-44a7-8008-2389fdbba9db', description: 'SURFACE WATER SOURCE OF SUPPLY' }
+    source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
   })
 
   return LicenceModel.fromJson({
-    id: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+    id: generateUUID(),
     expiredDate: null,
     startDate: new Date('2019-04-01'),
     region: {
-      id: '740375f0-5add-4335-8ed5-b21b55b4a228',
+      id: generateUUID(),
       displayName: 'Avalon'
     },
     licenceVersions: [
       {
-        id: 'ac9a8a56-c9ae-43d0-a003-296b4aa7481d',
+        id: generateUUID(),
         startDate: new Date('2022-04-01'),
         status: 'current',
         licenceVersionPurposes: [
           {
-            id: '7f5e0838-d87a-4c2e-8e9b-09d6814b9ec4',
+            id: generateUUID(),
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
@@ -893,27 +892,27 @@ function _licence() {
             dailyQuantity: 720,
             hourlyQuantity: 144,
             instantQuantity: 40,
-            purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+            purpose: { id: generateUUID(), description: 'Spray Irrigation - Storage' },
             points: [point],
             licenceVersionPurposeConditions: [
               {
-                id: '3844bf76-107d-49f1-b3fb-54619ac8d300',
+                id: generateUUID(),
                 licenceVersionPurposeConditionType: {
-                  id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                  id: generateUUID(),
                   displayTitle: 'General conditions'
                 }
               },
               {
-                id: '0c466bc8-c79c-44e0-b6ca-b95e0bfffddf',
+                id: generateUUID(),
                 licenceVersionPurposeConditionType: {
-                  id: '7ee108f1-268d-4ded-81c7-d397c075e7db',
+                  id: generateUUID(),
                   displayTitle: 'Derogation clause'
                 }
               }
             ]
           },
           {
-            id: 'da6cbb9b-edcb-4b5b-8d3a-fab22ce6ee8b',
+            id: generateUUID(),
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 11,
             abstractionPeriodEndDay: 31,
@@ -922,20 +921,20 @@ function _licence() {
             dailyQuantity: null,
             hourlyQuantity: null,
             instantQuantity: null,
-            purpose: { id: '0316229a-e76d-4785-bc2c-65075a1a8f50', description: 'Spray Irrigation - Storage' },
+            purpose: { id: generateUUID(), description: 'Spray Irrigation - Storage' },
             points: [point],
             licenceVersionPurposeConditions: [
               {
-                id: '999d98b0-ba6a-4a82-8cb6-03253a6722aa',
+                id: generateUUID(),
                 licenceVersionPurposeConditionType: {
-                  id: '2bfb0c37-5bcb-4f15-b017-27bc0afff1a0',
+                  id: generateUUID(),
                   displayTitle: 'General conditions'
                 }
               }
             ]
           },
           {
-            id: 'f68ed9a0-4a2b-42da-8f5b-c5c897113121',
+            id: generateUUID(),
             abstractionPeriodStartDay: 1,
             abstractionPeriodStartMonth: 4,
             abstractionPeriodEndDay: 31,
@@ -944,13 +943,13 @@ function _licence() {
             dailyQuantity: null,
             hourlyQuantity: null,
             instantQuantity: null,
-            purpose: { id: 'd1fc1c6f-bff0-4da2-a41a-033f151fddc7', description: 'Spray Irrigation - Direct' },
+            purpose: { id: generateUUID(), description: 'Spray Irrigation - Direct' },
             points: [point],
             licenceVersionPurposeConditions: [
               {
-                id: 'd5f30ba6-8170-4596-9276-362efb2175fa',
+                id: generateUUID(),
                 licenceVersionPurposeConditionType: {
-                  id: '923846ea-da9a-4687-bb66-6dd11411afb9',
+                  id: generateUUID(),
                   displayTitle: 'Non standard quantities'
                 }
               }
@@ -961,14 +960,14 @@ function _licence() {
     ],
     licenceMonitoringStations: [
       {
-        id: 'f775f2cf-9b7c-4f1e-bb6f-6e81b34b1a8d',
+        id: generateUUID(),
         monitoringStation: {
-          id: 'ac075651-4781-4e24-a684-b943b98607ca',
+          id: generateUUID(),
           label: 'MEVAGISSEY FIRE STATION'
         }
       }
     ],
     licenceDocument: null,
-    licenceDocumentHeader: { id: '28665d16-eba3-4c9a-aa55-7ab671b0c4fb' }
+    licenceDocumentHeader: { id: generateUUID() }
   })
 }

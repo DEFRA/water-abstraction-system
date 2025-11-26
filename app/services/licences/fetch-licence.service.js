@@ -27,6 +27,9 @@ async function go(licenceId) {
       'includeInSrocBilling'
     ])
     .withGraphFetched('licenceSupplementaryYears')
+    .modifyGraph('licenceSupplementaryYears', (builder) => {
+      builder.select(['id']).where('twoPartTariff', true)
+    })
 }
 
 module.exports = {

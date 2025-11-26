@@ -12,14 +12,17 @@ const { today } = require('../../lib/general.lib.js')
 /**
  * Formats data for the `/licences/{id}/summary` page
  *
- * @param {module:LicenceModel} licence - The licence where the data will be extracted for from
+ * @param {object} licence - the licence summary data returned by `FetchLicenceService`
+ * @param {object} licenceSummary - the licence summary data returned by `FetchLicenceSummaryService`
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licence) {
-  const { id, includeInPresrocBilling, licenceDocumentHeader, licenceRef, workflows, startDate } = licence
+function go(licence, licenceSummary) {
+  const { id, licenceRef } = licence
 
-  const primaryUser = licence.$primaryUser()
+  const { workflows, startDate } = licenceSummary
+
+  const primaryUser = licenceSummary.$primaryUser()
   const ends = licence.$ends()
 
   return {
@@ -27,15 +30,12 @@ function go(licence) {
       text: 'Go back to search',
       href: '/licences'
     },
-    currentVersion: _currentVersion(licence, startDate),
-    documentId: licenceDocumentHeader.id,
-    ends,
-    includeInPresrocBilling,
+    currentVersion: _currentVersion(licenceSummary, startDate),
     licenceId: id,
     licenceRef,
     notification: supplementaryBillRunNotification(licence),
     pageTitle: `Licence summary ${licenceRef}`,
-    pageTitleCaption: _licenceName(primaryUser, licence),
+    pageTitleCaption: _licenceName(primaryUser, licenceSummary),
     primaryUser,
     warning: _warning(ends),
     workflowWarning: _workflowWarning(workflows)
