@@ -5,11 +5,11 @@
  * @module ViewContactsService
  */
 
-const CustomerContactsPresenter = require('../../presenters/licences/customer-contacts.presenter.js')
-const FetchCustomerContactsService = require('./fetch-customer-contacts.service.js')
-const FetchContactsService = require('./fetch-contacts.service.js')
-const FetchLicenceService = require('./fetch-licence.service.js')
 const ContactsPresenter = require('../../presenters/licences/contacts.presenter.js')
+const CustomerContactsPresenter = require('../../presenters/licences/customer-contacts.presenter.js')
+const FetchContactsService = require('./fetch-contacts.service.js')
+const FetchCustomerContactsService = require('./fetch-customer-contacts.service.js')
+const FetchLicenceService = require('./fetch-licence.service.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
