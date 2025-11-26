@@ -14,7 +14,7 @@ const LicenceDocumentHeaderSeeder = require('../../support/seeders/licence-docum
 // Thing under test
 const FetchLicenceContactsService = require('../../../app/services/licences/fetch-licence-contacts.service.js')
 
-describe('Fetch Licence Contact service', () => {
+describe('Licences - Fetch Licence Contacts service', () => {
   let licence
   let licenceId
   let licenceRef
