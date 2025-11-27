@@ -967,7 +967,6 @@ function _summary() {
         }
       }
     ],
-    licenceDocument: null,
-    licenceDocumentHeader: { id: generateUUID() }
+    licenceDocument: null
   })
 }
