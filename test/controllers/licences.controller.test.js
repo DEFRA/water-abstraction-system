@@ -72,7 +72,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewBillsService, 'go').resolves(_viewLicenceBills())
+          Sinon.stub(ViewBillsService, 'go').resolves(_viewBills())
         })
 
         it('returns the page successfully', async () => {
@@ -100,7 +100,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has conditions', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewConditionsService, 'go').resolves(_viewLicenceConditions())
+          Sinon.stub(ViewConditionsService, 'go').resolves(_viewConditions())
         })
 
         it('returns the page successfully', async () => {
@@ -128,7 +128,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewCommunicationsService, 'go').resolves(_viewLicenceCommunications())
+          Sinon.stub(ViewCommunicationsService, 'go').resolves(_viewCommunications())
         })
 
         it('returns the page successfully', async () => {
@@ -184,7 +184,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewHistoryService, 'go').resolves(_viewLicenceHistory())
+          Sinon.stub(ViewHistoryService, 'go').resolves(_viewHistory())
         })
 
         it('returns the page successfully', async () => {
@@ -298,7 +298,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewPointsService, 'go').resolves(_viewLicencePoints())
+          Sinon.stub(ViewPointsService, 'go').resolves(_viewPoints())
         })
 
         it('returns the page successfully', async () => {
@@ -326,7 +326,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewPurposesService, 'go').resolves(_viewLicencePurposes())
+          Sinon.stub(ViewPurposesService, 'go').resolves(_viewPurposes())
         })
 
         it('returns the page successfully', async () => {
@@ -412,7 +412,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewReturnsService, 'go').resolves(_viewLicenceReturns())
+          Sinon.stub(ViewReturnsService, 'go').resolves(_viewReturns())
         })
 
         it('returns the page successfully', async () => {
@@ -440,7 +440,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewSetUpService, 'go').resolves(_viewLicenceSetUp())
+          Sinon.stub(ViewSetUpService, 'go').resolves(_viewSetUp())
         })
 
         it('returns the page successfully', async () => {
@@ -468,7 +468,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewSummaryService, 'go').resolves(_viewLicenceSummary())
+          Sinon.stub(ViewSummaryService, 'go').resolves(_viewSummary())
         })
 
         it('returns the page successfully', async () => {
@@ -619,6 +619,24 @@ describe('Licences controller', () => {
   })
 })
 
+function _commonData() {
+  return {
+    documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
+    licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+    licenceName: 'Between two ferns',
+    licenceRef: '01/123',
+    notification: null,
+    pageTitle: 'Licence 01/123',
+    primaryUser: {
+      id: 10036,
+      username: 'grace.hopper@example.co.uk'
+    },
+    roles: ['billing', 'view_charge_versions'],
+    warning: null,
+    workflowWarning: true
+  }
+}
+
 function _markForSupplementaryBilling() {
   return {
     activeNavBar: 'search',
@@ -634,8 +652,8 @@ function _markForSupplementaryBilling() {
   }
 }
 
-function _viewLicenceBills() {
-  const commonLicenceData = _viewLicence()
+function _viewBills() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
@@ -644,8 +662,8 @@ function _viewLicenceBills() {
   }
 }
 
-function _viewLicenceConditions() {
-  const commonLicenceData = _viewLicence()
+function _viewConditions() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
@@ -683,8 +701,8 @@ function _viewLicenceConditions() {
   }
 }
 
-function _viewLicenceCommunications() {
-  const commonLicenceData = _viewLicence()
+function _viewCommunications() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
@@ -694,7 +712,7 @@ function _viewLicenceCommunications() {
 }
 
 function _viewContactDetails() {
-  const commonLicenceData = _viewLicence()
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
@@ -704,7 +722,7 @@ function _viewContactDetails() {
   }
 }
 
-function _viewLicenceHistory() {
+function _viewHistory() {
   return {
     entries: [{}],
     licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
@@ -714,7 +732,7 @@ function _viewLicenceHistory() {
 }
 
 function _viewLicenceContacts() {
-  const commonLicenceData = _viewLicence()
+  const commonLicenceData = _commonData()
 
   commonLicenceData.pageTitle = null
 
@@ -734,8 +752,8 @@ function _viewLicenceContacts() {
   }
 }
 
-function _viewLicencePoints() {
-  const commonLicenceData = _viewLicence()
+function _viewPoints() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
@@ -763,8 +781,8 @@ function _viewLicencePoints() {
   }
 }
 
-function _viewLicencePurposes() {
-  const commonLicenceData = _viewLicence()
+function _viewPurposes() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
@@ -786,8 +804,8 @@ function _viewLicencePurposes() {
   }
 }
 
-function _viewLicenceReturns() {
-  const commonLicenceData = _viewLicence()
+function _viewReturns() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
@@ -797,8 +815,8 @@ function _viewLicenceReturns() {
   }
 }
 
-function _viewLicenceSetUp() {
-  const commonLicenceData = _viewLicence()
+function _viewSetUp() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
@@ -823,8 +841,8 @@ function _viewLicenceSetUp() {
   }
 }
 
-function _viewLicenceSummary() {
-  const commonLicenceData = _viewLicence()
+function _viewSummary() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
@@ -833,23 +851,5 @@ function _viewLicenceSummary() {
     startDate: '1 November 2022',
     endDate: '1 November 2032',
     activeSecondaryNav: 'summary'
-  }
-}
-
-function _viewLicence() {
-  return {
-    documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
-    licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-    licenceName: 'Between two ferns',
-    licenceRef: '01/123',
-    notification: null,
-    pageTitle: 'Licence 01/123',
-    primaryUser: {
-      id: 10036,
-      username: 'grace.hopper@example.co.uk'
-    },
-    roles: ['billing', 'view_charge_versions'],
-    warning: null,
-    workflowWarning: true
   }
 }
