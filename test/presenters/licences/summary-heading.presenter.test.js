@@ -238,7 +238,6 @@ function _summary() {
         }
       ]
     },
-    licenceSupplementaryYears: [],
     startDate: new Date('2019-04-01'),
     workflows: [{ id: 'b6f44c94-25e4-4ca8-a7db-364534157ba7', status: 'to_setup' }]
   })
