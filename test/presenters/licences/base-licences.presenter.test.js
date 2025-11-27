@@ -78,6 +78,134 @@ describe('Licences - Base Licences presenter', () => {
     })
   })
 
+  describe('#supplementaryBillingNotification()', () => {
+    let licence
+
+    beforeEach(() => {
+      licence = {
+        includeInTwoPartTariffBilling: false
+      }
+    })
+
+    describe('when the licence has NOT been flagged for any supplementary bill runs', () => {
+      it('returns "null"', () => {
+        const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
+
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the licence has been flagged just for the next PRESROC supplementary bill run', () => {
+      beforeEach(() => {
+        licence.includeInPresrocBilling = 'yes'
+      })
+
+      it('returns a notification just for the "old charge scheme"', () => {
+        const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
+
+        expect(result).to.equal({
+          text: 'This licence has been marked for the next supplementary bill run for the old charge scheme.',
+          titleText: 'Important'
+        })
+      })
+    })
+
+    describe('when the licence has been flagged just for the next SROC supplementary bill run', () => {
+      beforeEach(() => {
+        licence.includeInSrocBilling = true
+      })
+
+      it('returns a notification just for the current charge scheme', () => {
+        const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
+
+        expect(result).to.equal({
+          text: 'This licence has been marked for the next supplementary bill run.',
+          titleText: 'Important'
+        })
+      })
+    })
+
+    describe('when the licence has been flagged for the next PRESROC & SROC supplementary bill runs', () => {
+      beforeEach(() => {
+        licence.includeInPresrocBilling = 'yes'
+        licence.includeInSrocBilling = true
+      })
+
+      it('returns a notification just for both charge schemes', () => {
+        const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
+
+        expect(result).to.equal({
+          text: 'This licence has been marked for the next supplementary bill runs for the current and old charge schemes.',
+          titleText: 'Important'
+        })
+      })
+    })
+
+    describe('when the licence has been flagged just for the next TPT supplementary bill run', () => {
+      beforeEach(() => {
+        licence.includeInTwoPartTariffBilling = true
+      })
+
+      it('returns a notification just for TPT supplementary', () => {
+        const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
+
+        expect(result).to.equal({
+          text: 'This licence has been marked for the next two-part tariff supplementary bill run.',
+          titleText: 'Important'
+        })
+      })
+    })
+
+    describe('when the licence has been flagged for the next TPT & PRESROC supplementary bill runs', () => {
+      beforeEach(() => {
+        licence.includeInTwoPartTariffBilling = true
+        licence.includeInPresrocBilling = 'yes'
+      })
+
+      it('returns a notification for TPT & PRESROC supplementary', () => {
+        const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
+
+        expect(result).to.equal({
+          text: 'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.',
+          titleText: 'Important'
+        })
+      })
+    })
+
+    describe('when the licence has been flagged for the next TPT & SROC supplementary bill runs', () => {
+      beforeEach(() => {
+        licence.includeInTwoPartTariffBilling = true
+        licence.includeInSrocBilling = true
+      })
+
+      it('returns a notification for TPT & SROC supplementary', () => {
+        const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
+
+        expect(result).to.equal({
+          text: 'This licence has been marked for the next two-part tariff supplementary bill run and the supplementary bill run.',
+          titleText: 'Important'
+        })
+      })
+    })
+
+    describe('when the licence has been flagged for the next TPT, PRESROC & SROC supplementary bill runs', () => {
+      beforeEach(() => {
+        licence.includeInTwoPartTariffBilling = true
+        licence.includeInPresrocBilling = 'yes'
+        licence.includeInSrocBilling = true
+      })
+
+      it('returns a notification for TPT, PRESROC & SROC supplementary', () => {
+        const result = BaseLicencesPresenter.supplementaryBillingNotification(licence)
+
+        expect(result).to.equal({
+          text: 'This licence has been marked for the next two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.',
+          titleText: 'Important'
+        })
+      })
+    })
+  })
+
   describe('#pluralise()', () => {
     describe('when the count is 1', () => {
       it('returns the word unchanged', () => {

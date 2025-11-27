@@ -6,19 +6,23 @@
  */
 
 const { formatLongDate } = require('../base.presenter.js')
+const { supplementaryBillingNotification } = require('./base-licences.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
 /**
  * Formats data for the `/licences/{id}/summary` page
  *
- * @param {module:LicenceModel} licence - The licence where the data will be extracted for from
+ * @param {object} licence - the licence summary data returned by `FetchLicenceService`
+ * @param {object} licenceSummary - the licence summary data returned by `FetchLicenceSummaryService`
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licence) {
-  const { id, includeInPresrocBilling, licenceDocumentHeader, licenceRef, workflows, startDate } = licence
+function go(licence, licenceSummary) {
+  const { id, licenceRef } = licence
 
-  const primaryUser = licence.$primaryUser()
+  const { workflows, startDate } = licenceSummary
+
+  const primaryUser = licenceSummary.$primaryUser()
   const ends = licence.$ends()
 
   return {
@@ -26,15 +30,12 @@ function go(licence) {
       text: 'Go back to search',
       href: '/licences'
     },
-    currentVersion: _currentVersion(licence, startDate),
-    documentId: licenceDocumentHeader.id,
-    ends,
-    includeInPresrocBilling,
+    currentVersion: _currentVersion(licenceSummary, startDate),
     licenceId: id,
     licenceRef,
-    notification: _notification(licence),
+    notification: supplementaryBillingNotification(licence),
     pageTitle: `Licence summary ${licenceRef}`,
-    pageTitleCaption: _licenceName(primaryUser, licence),
+    pageTitleCaption: _licenceName(primaryUser, licenceSummary),
     primaryUser,
     warning: _warning(ends),
     workflowWarning: _workflowWarning(workflows)
@@ -59,60 +60,6 @@ function _licenceName(primaryUser, licence) {
   const licenceName = licence.$licenceName()
 
   return licenceName ?? null
-}
-
-function _notification(licence) {
-  const { includeInPresrocBilling, includeInSrocBilling, licenceSupplementaryYears } = licence
-  const baseMessage = 'This licence has been marked for the next '
-
-  if (licenceSupplementaryYears.length > 0) {
-    return {
-      text: _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling),
-      titleText: 'Important'
-    }
-  }
-
-  if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
-    return {
-      text: baseMessage + 'supplementary bill runs for the current and old charge schemes.',
-      titleText: 'Important'
-    }
-  }
-  if (includeInPresrocBilling === 'yes') {
-    return {
-      text: baseMessage + 'supplementary bill run for the old charge scheme.',
-      titleText: 'Important'
-    }
-  }
-
-  if (includeInSrocBilling === true) {
-    return {
-      text: baseMessage + 'supplementary bill run.',
-      titleText: 'Important'
-    }
-  }
-
-  return null
-}
-
-function _tptNotification(baseMessage, includeInPresrocBilling, includeInSrocBilling) {
-  if (includeInPresrocBilling === 'yes' && includeInSrocBilling === true) {
-    return (
-      baseMessage +
-      'two-part tariff supplementary bill run and supplementary bill runs for the current and old charge schemes.'
-    )
-  }
-  if (includeInPresrocBilling === 'yes') {
-    return (
-      baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run for the old charge scheme.'
-    )
-  }
-
-  if (includeInSrocBilling === true) {
-    return baseMessage + 'two-part tariff supplementary bill run and the supplementary bill run.'
-  }
-
-  return baseMessage + 'two-part tariff supplementary bill run.'
 }
 
 function _warning(ends) {

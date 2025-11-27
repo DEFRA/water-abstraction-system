@@ -18,7 +18,7 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
  * @returns {object} The data formatted for the view template
  */
 function go(licence) {
-  const { expiredDate, id, licenceDocumentHeader, licenceMonitoringStations, region, startDate } = licence
+  const { expiredDate, id, licenceMonitoringStations, region, startDate } = licence
 
   const licenceVersionPurposes = _licenceVersionPurposes(licence)
   const purposes = _purposes(licenceVersionPurposes)
@@ -35,7 +35,6 @@ function go(licence) {
     abstractionPoints,
     abstractionPointsCaption: _abstractionPointsCaption(abstractionPoints),
     activeSecondaryNav: 'summary',
-    documentId: licenceDocumentHeader.id,
     enableMonitoringStationsView,
     endDate: _endDate(expiredDate),
     licenceHolder: _licenceHolder(licence),

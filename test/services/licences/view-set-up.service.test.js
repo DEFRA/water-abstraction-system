@@ -9,9 +9,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceModel = require('../../../app/models/licence.model.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -34,10 +33,7 @@ describe('Licences - View Set Up service', () => {
   let workflow
 
   beforeEach(() => {
-    licence = LicenceModel.fromJson({
-      id: generateUUID(),
-      licenceRef: generateLicenceRef()
-    })
+    licence = ViewLicencesFixture.licence()
 
     auth = {
       isValid: true,
@@ -167,6 +163,10 @@ describe('Licences - View Set Up service', () => {
             markForSupplementaryBilling: `/system/licences/${licence.id}/mark-for-supplementary-billing`
           },
           returnVersions: {}
+        },
+        notification: {
+          text: 'This licence has been marked for the next two-part tariff supplementary bill run.',
+          titleText: 'Important'
         },
         pageTitle: 'Licence set up',
         pageTitleCaption: `Licence ${licence.licenceRef}`,

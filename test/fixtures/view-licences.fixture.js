@@ -54,7 +54,10 @@ function condition() {
 function licence() {
   return LicenceModel.fromJson({
     id: generateUUID(),
-    licenceRef: generateLicenceRef()
+    licenceRef: generateLicenceRef(),
+    includeInPresrocBilling: 'no',
+    includeInSrocBilling: false,
+    includeInTwoPartTariffBilling: true
   })
 }
 
