@@ -14,11 +14,11 @@ const ChargeVersionNoteModel = require('../../../app/models/charge-version-note.
 const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
 const ModLogModel = require('../../../app/models/mod-log.model.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const HistoryPresenter = require('../../../app/presenters/licences/history.presenter.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 describe('Licences - History presenter', () => {
   let licence
