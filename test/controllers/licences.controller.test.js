@@ -727,7 +727,8 @@ function _viewHistory() {
 
   return {
     ...commonLicenceData,
-    entries: [{}]
+    entries: [{}],
+    pageTitle: 'History'
   }
 }
 
