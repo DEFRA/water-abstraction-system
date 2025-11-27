@@ -18,9 +18,9 @@ const PointHelper = require('../../support/helpers/point.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 
 // Thing under test
-const FetchLicenceConditionsService = require('../../../app/services/licences/fetch-licence-conditions.service.js')
+const FetchConditionsService = require('../../../app/services/licences/fetch-conditions.service.js')
 
-describe('Licences - Fetch Licence Conditions service', () => {
+describe('Licences - Fetch Conditions service', () => {
   let licence
   let licenceVersion
   let licenceVersionPurpose
@@ -76,7 +76,7 @@ describe('Licences - Fetch Licence Conditions service', () => {
     })
 
     it('return the matching conditions', async () => {
-      const result = await FetchLicenceConditionsService.go(licence.id)
+      const result = await FetchConditionsService.go(licence.id)
 
       expect(result).to.equal([
         {

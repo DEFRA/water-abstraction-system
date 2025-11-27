@@ -9,11 +9,11 @@
     {% endfor %}
   {% endmacro %}
 
-  {% for licenceContactDetail in licenceContactDetails %}
+  {% for licenceContact in licenceContacts %}
     {{ govukSummaryList({
       card: {
         title: {
-          text: licenceContactDetail.role
+          text: licenceContact.role
         }
       },
       rows: [
@@ -23,27 +23,27 @@
           classes:"govuk-!-font-weight-regular"
         },
           value: {
-          text:  licenceContactDetail.name
+          text:  licenceContact.name
         }
-        } if licenceContactDetail.name,
+        } if licenceContact.name,
         {
           key: {
           text: "Address",
           classes:"govuk-!-font-weight-regular"
         },
           value: {
-          html: displayAddress(licenceContactDetail.address)
+          html: displayAddress(licenceContact.address)
         }
-        } if licenceContactDetail.address,
+        } if licenceContact.address,
         {
           key: {
           text: "Email",
           classes:"govuk-!-font-weight-regular"
         },
           value: {
-          text: licenceContactDetail.email
+          text: licenceContact.email
         }
-        } if licenceContactDetail.email
+        } if licenceContact.email
       ]
     })
     }}

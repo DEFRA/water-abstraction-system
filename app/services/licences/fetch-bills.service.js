@@ -2,7 +2,7 @@
 
 /**
  * Fetches all return logs for a licence which is needed for the view '/licences/{id}/bills` page
- * @module FetchLicenceBillsService
+ * @module FetchBillsService
  */
 
 const BillModel = require('../../models/bill.model.js')

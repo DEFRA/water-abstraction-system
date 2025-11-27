@@ -16,9 +16,9 @@ const PointHelper = require('../../support/helpers/point.helper.js')
 const SourceHelper = require('../../support/helpers/source.helper.js')
 
 // Thing under test
-const FetchLicencePointsService = require('../../../app/services/licences/fetch-licence-points.service.js')
+const FetchPointsService = require('../../../app/services/licences/fetch-points.service.js')
 
-describe('Licences - Fetch Licence Points service', () => {
+describe('Licences - Fetch Points service', () => {
   let licence
   let licenceVersion
   let licenceVersionPurpose
@@ -63,7 +63,7 @@ describe('Licences - Fetch Licence Points service', () => {
     })
 
     it('returns the points and source', async () => {
-      const result = await FetchLicencePointsService.go(licence.id)
+      const result = await FetchPointsService.go(licence.id)
 
       expect(result).to.equal([
         {

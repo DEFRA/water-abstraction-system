@@ -2,7 +2,7 @@
 
 /**
  * Fetches data needed for the view '/licences/{id}/summary` page
- * @module FetchLicenceSummaryService
+ * @module FetchSummaryService
  */
 
 const LicenceModel = require('../../models/licence.model.js')

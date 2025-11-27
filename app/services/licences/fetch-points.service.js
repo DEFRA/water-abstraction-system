@@ -1,18 +1,18 @@
 'use strict'
 
 /**
- * Fetches the points data needed for the licence points page
- * @module FetchLicencePointsService
+ * Fetches the points data needed for the points page
+ * @module FetchPointsService
  */
 
 const { db } = require('../../../db/db.js')
 
 /**
- * Fetches the points data needed for the licence points page
+ * Fetches the points data needed for the points page
  *
  * @param {string} licenceId - The UUID of the licence
  *
- * @returns {Promise<object[]>} An object containing the points data needed for the licence points page
+ * @returns {Promise<object[]>} An object containing the points data needed for the points page
  */
 async function go(licenceId) {
   return _fetchPoints(licenceId)

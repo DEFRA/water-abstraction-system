@@ -12,9 +12,9 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 
 // Thing under test
-const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service.js')
+const FetchReturnsService = require('../../../app/services/licences/fetch-returns.service.js')
 
-describe('Licences - Fetch licence returns service', () => {
+describe('Licences - Fetch Returns service', () => {
   let licence
   let returnLogs
 
@@ -67,7 +67,7 @@ describe('Licences - Fetch licence returns service', () => {
 
   describe('when the licence has return logs', () => {
     it('returns results', async () => {
-      const result = await FetchLicenceReturnsService.go(licence.id, 1)
+      const result = await FetchReturnsService.go(licence.id, 1)
 
       expect(result).to.equal({
         pagination: {

@@ -14,8 +14,8 @@ const ViewBillsService = require('../services/licences/view-bills.service.js')
 const ViewCommunicationsService = require('../services/licences/view-communications.service.js')
 const ViewConditionsService = require('../services/licences/view-conditions.service.js')
 const ViewContactDetailsService = require('../services/licences/view-contact-details.service.js')
-const ViewContactsService = require('../services/licences/view-contacts.service.js')
-const ViewLicenceHistoryService = require('../services/licences/view-licence-history.service.js')
+const ViewHistoryService = require('../services/licences/view-history.service.js')
+const ViewLicenceContactsService = require('../services/licences/view-licence-contacts.service.js')
 const ViewMarkForSupplementaryBillingService = require('../services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
 const ViewMarkedForSupplementaryBillingService = require('../services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
 const ViewPointsService = require('../services/licences/view-points.service.js')
@@ -109,21 +109,21 @@ async function viewLicenceConditions(request, h) {
   return h.view('licences/conditions.njk', pageData)
 }
 
-async function viewLicenceContactDetails(request, h) {
+async function viewLicenceContacts(request, h) {
   const { id } = request.params
 
-  const pageData = await ViewContactDetailsService.go(id)
+  const pageData = await ViewLicenceContactsService.go(id)
 
-  return h.view('licences/licence-contact-details.njk', pageData)
+  return h.view('licences/licence-contacts.njk', pageData)
 }
 
-async function viewLicenceContacts(request, h) {
+async function viewContactDetails(request, h) {
   const {
     params: { id },
     auth
   } = request
 
-  const pageData = await ViewContactsService.go(id, auth)
+  const pageData = await ViewContactDetailsService.go(id, auth)
 
   return h.view('licences/contact-details.njk', pageData)
 }
@@ -155,7 +155,7 @@ async function viewHistory(request, h) {
     auth
   } = request
 
-  const pageData = await ViewLicenceHistoryService.go(id, auth)
+  const pageData = await ViewHistoryService.go(id, auth)
 
   return h.view('licences/history.njk', pageData)
 }
@@ -203,10 +203,10 @@ module.exports = {
   supplementary,
   viewBills,
   viewCommunications,
-  viewLicenceContacts,
+  viewContactDetails,
   viewHistory,
   viewLicenceConditions,
-  viewLicenceContactDetails,
+  viewLicenceContacts,
   viewLicencePoints,
   viewLicencePurposes,
   viewReturns,

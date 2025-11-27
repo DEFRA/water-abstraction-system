@@ -2,7 +2,7 @@
 
 /**
  * Fetches data needed for the view '/licences/{id}/history` page
- * @module FetchLicenceHistoryService
+ * @module FetchHistoryService
  */
 
 const LicenceModel = require('../../models/licence.model.js')
