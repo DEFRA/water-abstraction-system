@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -32,13 +32,7 @@ describe('Licences - Set Up presenter', () => {
   let workflows
 
   beforeEach(() => {
-    licence = {
-      id: generateUUID(),
-      licenceRef: generateLicenceRef(),
-      $ends: () => {
-        return { date: new Date() }
-      }
-    }
+    licence = ViewLicencesFixture.licence()
 
     agreement = {
       id: generateUUID(),
@@ -128,6 +122,10 @@ describe('Licences - Set Up presenter', () => {
           noReturnsRequired: `/system/licences/${licence.id}/no-returns-required`,
           returnsRequired: `/system/licences/${licence.id}/returns-required`
         }
+      },
+      notification: {
+        text: 'This licence has been marked for the next two-part tariff supplementary bill run.',
+        titleText: 'Important'
       },
       pageTitle: 'Licence set up',
       pageTitleCaption: `Licence ${licence.licenceRef}`,

@@ -5,8 +5,9 @@
  * @module ViewSummaryService
  */
 
-const FetchLicenceSummaryService = require('./fetch-licence-summary.service.js')
-const SummaryContentPresenter = require('../../presenters/licences/summary-content.presenter.js')
+const FetchLicenceService = require('./fetch-licence.service.js')
+const FetchSummaryService = require('./fetch-summary.service.js')
+const SummaryHeadingPresenter = require('../../presenters/licences/summary-heading.presenter.js')
 const SummaryPresenter = require('../../presenters/licences/summary.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
@@ -19,13 +20,14 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
 async function go(licenceId, auth) {
-  const licenceData = await FetchLicenceSummaryService.go(licenceId)
+  const licence = await FetchLicenceService.go(licenceId)
+  const summary = await FetchSummaryService.go(licenceId)
 
-  const licenceSummaryContentData = SummaryContentPresenter.go(licenceData)
-  const pageData = SummaryPresenter.go(licenceData)
+  const summaryHeadingData = SummaryHeadingPresenter.go(licence, summary)
+  const pageData = SummaryPresenter.go(summary)
 
   return {
-    ...licenceSummaryContentData,
+    ...summaryHeadingData,
     ...pageData,
     activeNavBar: 'search',
     activeSecondaryNav: 'summary',

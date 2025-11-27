@@ -2,7 +2,7 @@
 
 /**
  * Fetches all return logs for a licence which is needed for the view '/licences/{id}/returns` page
- * @module FetchLicenceReturnsService
+ * @module FetchReturnsService
  */
 
 const ReturnLogModel = require('../../models/return-log.model.js')

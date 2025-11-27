@@ -4,73 +4,66 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
-const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
-const LicenceDocumentRolesHelper = require('../../support/helpers/licence-document-role.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
+const LicenceDocumentHeaderSeeder = require('../../support/seeders/licence-document-header.seeder.js')
 
 // Thing under test
 const FetchLicenceContactsService = require('../../../app/services/licences/fetch-licence-contacts.service.js')
 
 describe('Licences - Fetch Licence Contacts service', () => {
-  let companyId
-  let contactId
   let licence
+  let licenceId
+  let licenceRef
+  let licenceDocumentHeaderId
 
-  describe('when the licence has contact details', () => {
-    beforeEach(async () => {
-      licence = await LicenceHelper.add()
+  describe('when the licence has a licence document header', () => {
+    before(async () => {
+      const { licenceHolder: licenceDocumentHeader } = await LicenceDocumentHeaderSeeder.seed()
 
-      const company = await CompanyHelper.add()
-
-      companyId = company.id
-
-      const contact = await ContactHelper.add()
-
-      contactId = contact.id
-
-      const { id: licenceDocumentId } = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
-      const { id: licenceRoleId } = await LicenceRoleHelper.select()
-      const { id: addressId } = await AddressHelper.add()
-
-      await LicenceDocumentRolesHelper.add({
-        endDate: null,
-        licenceDocumentId,
-        addressId,
-        licenceRoleId,
-        contactId,
-        companyId
+      licence = await LicenceHelper.add({
+        licenceRef: licenceDocumentHeader.licenceRef
       })
+
+      licenceId = licence.id
+      licenceRef = licence.licenceRef
+      licenceDocumentHeaderId = licenceDocumentHeader.id
     })
 
-    it('returns the matching licence contacts', async () => {
-      const results = await FetchLicenceContactsService.go(licence.id)
+    it('returns the matching licence and licence document header', async () => {
+      const result = await FetchLicenceContactsService.go(licenceId)
 
-      expect(results).to.equal([
-        {
-          communicationType: 'Licence Holder',
-          companyId,
-          companyName: 'Example Trading Ltd',
-          contactId,
-          firstName: 'Amara',
-          lastName: 'Gupta',
-          address1: 'ENVIRONMENT AGENCY',
-          address2: 'HORIZON HOUSE',
-          address3: 'DEANERY ROAD',
-          address4: 'BRISTOL',
-          address5: null,
-          address6: null,
-          postcode: 'BS1 5AH',
-          country: 'United Kingdom'
+      expect(result).to.equal({
+        id: licenceId,
+        licenceRef,
+        licenceDocumentHeader: {
+          id: licenceDocumentHeaderId,
+          licenceEntityRoles: [],
+          metadata: {
+            contacts: [
+              {
+                addressLine1: '4',
+                addressLine2: 'Privet Drive',
+                addressLine3: null,
+                addressLine4: null,
+                country: null,
+                county: 'Surrey',
+                forename: 'Harry',
+                initials: 'J',
+                name: 'Potter',
+                postcode: 'WD25 7LR',
+                role: 'Licence holder',
+                salutation: null,
+                town: 'Little Whinging',
+                type: 'Person'
+              }
+            ]
+          }
         }
-      ])
+      })
     })
   })
 })

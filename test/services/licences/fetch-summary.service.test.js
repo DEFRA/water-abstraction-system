@@ -14,7 +14,6 @@ const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-ro
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
-const LicenceSupplementaryYearModel = require('../../support/helpers/licence-supplementary-year.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
@@ -28,18 +27,17 @@ const SourceHelper = require('../../support/helpers/source.helper.js')
 const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 
 // Thing under test
-const FetchLicenceSummaryService = require('../../../app/services/licences/fetch-licence-summary.service.js')
+const FetchSummaryService = require('../../../app/services/licences/fetch-summary.service.js')
 
 const REGION_SOUTHERN_INDEX = 5
 
-describe('Fetch Licence Summary service', () => {
+describe('Licences - Fetch Summary service', () => {
   let licence
   let licenceDocumentHeader
   let licenceEntity
   let licenceEntityRole
   let licenceHolderSeed
   let licenceMonitoringStation
-  let licenceSupplementaryYearId
   let licenceVersion
   let licenceVersionPurpose
   let licenceVersionPurposeCondition
@@ -114,13 +112,6 @@ describe('Fetch Licence Summary service', () => {
       licenceId: licence.id
     })
 
-    const licenceSupplementaryYear = await LicenceSupplementaryYearModel.add({
-      licenceId: licence.id,
-      twoPartTariff: true
-    })
-
-    licenceSupplementaryYearId = licenceSupplementaryYear.id
-
     // We add two workflow records: one reflects that the licence is in workflow, so of that it previously was but
     // has been dealt with. We want to ensure these soft-deleted records are ignored so licences are not flagged
     // as changed incorrectly
@@ -130,26 +121,16 @@ describe('Fetch Licence Summary service', () => {
 
   describe('when called', () => {
     it('returns results', async () => {
-      const result = await FetchLicenceSummaryService.go(licence.id)
+      const result = await FetchSummaryService.go(licence.id)
 
       expect(result).to.equal({
         id: licence.id,
         expiredDate: null,
         startDate: new Date('2022-01-01'),
-        includeInPresrocBilling: 'no',
-        includeInSrocBilling: false,
-        revokedDate: null,
-        lapsedDate: null,
         region: {
           id: region.id,
           displayName: region.displayName
         },
-        licenceRef: licence.licenceRef,
-        licenceSupplementaryYears: [
-          {
-            id: licenceSupplementaryYearId
-          }
-        ],
         licenceVersions: [
           {
             id: licenceVersion.id,

@@ -6,7 +6,7 @@
  */
 
 const ConditionsPresenter = require('../../presenters/licences/conditions.presenter.js')
-const FetchLicenceConditionsService = require('./fetch-licence-conditions.service.js')
+const FetchConditionsService = require('./fetch-conditions.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
@@ -20,7 +20,7 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  */
 async function go(licenceId, auth) {
   const licence = await FetchLicenceService.go(licenceId)
-  const conditions = await FetchLicenceConditionsService.go(licenceId)
+  const conditions = await FetchConditionsService.go(licenceId)
 
   const pageData = ConditionsPresenter.go(conditions, licence)
 

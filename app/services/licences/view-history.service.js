@@ -2,11 +2,11 @@
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence history page
- * @module ViewLicenceHistoryService
+ * @module ViewHistoryService
  */
 
-const FetchLicenceHistoryService = require('./fetch-licence-history.service.js')
-const ViewLicenceHistoryPresenter = require('../../presenters/licences/view-licence-history.presenter.js')
+const FetchHistoryService = require('./fetch-history.service.js')
+const HistoryPresenter = require('../../presenters/licences/history.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence history page
@@ -16,9 +16,9 @@ const ViewLicenceHistoryPresenter = require('../../presenters/licences/view-lice
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence history template.
  */
 async function go(licenceId) {
-  const licence = await FetchLicenceHistoryService.go(licenceId)
+  const licence = await FetchHistoryService.go(licenceId)
 
-  const pageData = ViewLicenceHistoryPresenter.go(licence)
+  const pageData = HistoryPresenter.go(licence)
 
   return {
     activeNavBar: 'search',

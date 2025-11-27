@@ -17,9 +17,9 @@ const ModLogModel = require('../../../app/models/mod-log.model.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
 
 // Thing under test
-const ViewLicenceHistoryPresenter = require('../../../app/presenters/licences/view-licence-history.presenter.js')
+const HistoryPresenter = require('../../../app/presenters/licences/history.presenter.js')
 
-describe('Licences - View Licence History presenter', () => {
+describe('Licences - History presenter', () => {
   let licence
 
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe('Licences - View Licence History presenter', () => {
 
   describe('when provided with populated licence history', () => {
     it('correctly presents the data', () => {
-      const result = ViewLicenceHistoryPresenter.go(licence)
+      const result = HistoryPresenter.go(licence)
 
       expect(result).to.equal({
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
@@ -75,7 +75,7 @@ describe('Licences - View Licence History presenter', () => {
     describe('the "createdBy" property', () => {
       describe('when the entry has a "createdBy"', () => {
         it("returns the entry's `createdBy`", () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licence)
 
           expect(result.entries[0].createdBy).to.equal('cristiano.ronaldo@atari.com')
         })
@@ -83,7 +83,7 @@ describe('Licences - View Licence History presenter', () => {
 
       describe('when the entry does not have a "createdBy"', () => {
         it('returns "Migrated from NALD"', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licence)
 
           expect(result.entries[1].createdBy).to.equal('Migrated from NALD')
         })
@@ -93,7 +93,7 @@ describe('Licences - View Licence History presenter', () => {
     describe('the "displayNote" property', () => {
       describe('when the entry has a note', () => {
         it('return true', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licence)
 
           expect(result.entries[0].displayNote).to.be.true()
         })
@@ -106,7 +106,7 @@ describe('Licences - View Licence History presenter', () => {
         })
 
         it('returns false', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licence)
 
           expect(result.entries[0].displayNote).to.be.false()
         })
@@ -116,7 +116,7 @@ describe('Licences - View Licence History presenter', () => {
     describe('the "link" property', () => {
       describe('when the entry is a "charge-version"', () => {
         it('returns the charge version link', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licence)
 
           expect(result.entries[0].link).to.equal(
             '/licences/761bc44f-80d5-49ae-ab46-0a90495417b5/charge-information/dfe3d0d7-5e53-4e51-9748-169d01816642/view'
@@ -126,7 +126,7 @@ describe('Licences - View Licence History presenter', () => {
 
       describe('when the entry is a "licence-version"', () => {
         it('returns null', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licence)
 
           expect(result.entries[1].link).to.be.null()
         })
@@ -134,7 +134,7 @@ describe('Licences - View Licence History presenter', () => {
 
       describe('when the entry is a "return-version"', () => {
         it('returns the return version link', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licence)
 
           expect(result.entries[2].link).to.equal('/system/return-versions/3f09ce0b-288c-4c0b-b519-7329fe70a6cc')
         })
@@ -145,7 +145,7 @@ describe('Licences - View Licence History presenter', () => {
       describe('when the entry is a return version', () => {
         describe('and the reason maps to a WRLS reason', () => {
           it('returns the WRLS reason', () => {
-            const result = ViewLicenceHistoryPresenter.go(licence)
+            const result = HistoryPresenter.go(licence)
 
             expect(result.entries[2].reason).to.equal('New licence')
           })
@@ -162,7 +162,7 @@ describe('Licences - View Licence History presenter', () => {
           })
 
           it("returns the entry's reason", () => {
-            const result = ViewLicenceHistoryPresenter.go(licence)
+            const result = HistoryPresenter.go(licence)
 
             expect(result.entries[2].reason).to.equal('This is a reason')
           })
@@ -173,7 +173,7 @@ describe('Licences - View Licence History presenter', () => {
     describe('the "type" property', () => {
       describe('when the entry is "charge-version"', () => {
         it('returns the index 1 and name "Charge version"', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licence)
 
           expect(result.entries[0].type).to.equal({ index: 1, name: 'Charge version' })
         })
@@ -181,7 +181,7 @@ describe('Licences - View Licence History presenter', () => {
 
       describe('when the entry is "return-version"', () => {
         it('returns the index 2 and name "Return version"', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licence)
 
           expect(result.entries[2].type).to.equal({ index: 2, name: 'Return version' })
         })
@@ -189,7 +189,7 @@ describe('Licences - View Licence History presenter', () => {
 
       describe('when the entry is "licence-version"', () => {
         it('returns the index 0 and name "Licence version"', () => {
-          const result = ViewLicenceHistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licence)
 
           expect(result.entries[1].type).to.equal({ index: 0, name: 'Licence version' })
         })

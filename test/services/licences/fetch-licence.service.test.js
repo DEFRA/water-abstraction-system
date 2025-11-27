@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
+const LicenceSupplementaryYearModel = require('../../support/helpers/licence-supplementary-year.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -21,6 +22,11 @@ describe('Licences - Fetch Licence service', () => {
   describe('when there is a matching licence', () => {
     beforeEach(async () => {
       licence = await LicenceHelper.add()
+
+      await LicenceSupplementaryYearModel.add({
+        licenceId: licence.id,
+        twoPartTariff: true
+      })
     })
 
     it('returns the matching licence', async () => {
@@ -30,6 +36,9 @@ describe('Licences - Fetch Licence service', () => {
       expect(result).to.equal({
         expiredDate: null,
         id: licence.id,
+        includeInPresrocBilling: 'no',
+        includeInSrocBilling: false,
+        includeInTwoPartTariffBilling: true,
         lapsedDate: null,
         licenceRef: licence.licenceRef,
         revokedDate: null

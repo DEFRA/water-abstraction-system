@@ -15,9 +15,9 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const FetchLicenceBillService = require('../../../app/services/licences/fetch-licence-bills.service.js')
+const FetchBillService = require('../../../app/services/licences/fetch-bills.service.js')
 
-describe('Licences - Fetch Licence Bills service', () => {
+describe('Licences - Fetch Bills service', () => {
   const createdDate = new Date('2022-01-01')
 
   let billLicence
@@ -56,7 +56,7 @@ describe('Licences - Fetch Licence Bills service', () => {
       })
 
       it('returns results', async () => {
-        const result = await FetchLicenceBillService.go(licence.id, 1)
+        const result = await FetchBillService.go(licence.id, 1)
 
         expect(result).to.equal({
           bills: [
@@ -105,7 +105,7 @@ describe('Licences - Fetch Licence Bills service', () => {
       })
 
       it('returns no results', async () => {
-        const result = await FetchLicenceBillService.go(licence.id, 1)
+        const result = await FetchBillService.go(licence.id, 1)
 
         expect(result).to.equal({
           bills: [],
@@ -124,7 +124,7 @@ describe('Licences - Fetch Licence Bills service', () => {
     })
 
     it('returns no results', async () => {
-      const result = await FetchLicenceBillService.go(licence.id, 1)
+      const result = await FetchBillService.go(licence.id, 1)
 
       expect(result).to.equal({
         bills: [],

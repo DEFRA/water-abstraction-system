@@ -1,71 +1,69 @@
 'use strict'
 
 /**
- * Formats data for the `/licences/{id}/licence-contact` licence contact details link page
+ * Formats data for the `/licences/{id}/contact-details` view contact details page
  * @module ContactDetailsPresenter
  */
 
-const { filteredContactDetailsByRole } = require('../crm.presenter.js')
-
-const ENTITY_ROLES = {
-  primary_user: 'Primary user',
-  user_returns: 'Returns agent'
-}
-
 /**
- * Formats data for the `/licences/{id}/licence-contact` licence contact details link page
+ * Formats data for the `/licences/{id}/contact-details` view contact details page
  *
- * @param {module:LicenceModel} licence - The licence and related licenceDocumentHeader
+ * @param {object[]} contacts - The results from `FetchContactsService` to be formatted for the view
+ * @param {object} licence - The id and licence ref of the licence
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licence) {
-  const { id: licenceId, licenceDocumentHeader, licenceRef } = licence
+function go(contacts, licence) {
+  const { licenceRef } = licence
 
   return {
     backLink: {
-      href: `/system/licences/${licenceId}/summary`,
-      text: 'Go back to summary'
+      text: 'Go back to search',
+      href: '/licences'
     },
-    licenceContactDetails: _licenceContactDetails(licenceDocumentHeader),
-    pageTitle: 'Licence contact details',
+    customerId: _findCustomerId(contacts),
+    licenceContacts: _licenceContacts(contacts),
+    pageTitle: 'Contact details',
     pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 
-function _licenceContactDetails(licenceDocumentHeader) {
-  return [
-    ...filteredContactDetailsByRole(licenceDocumentHeader.metadata.contacts),
-    ..._licenceEntityRoles(licenceDocumentHeader.licenceEntityRoles)
-  ]
-}
-
-function _formatLicenceEntityRoles(licenceEntityRoles) {
-  return licenceEntityRoles.map((licenceEntityRole) => {
-    return {
-      role: ENTITY_ROLES[licenceEntityRole.role],
-      email: licenceEntityRole.licenceEntity.name
-    }
+function _findCustomerId(contacts) {
+  const customerContact = contacts.find((contact) => {
+    return contact.communicationType === 'Licence Holder'
   })
+
+  if (customerContact) {
+    return customerContact.companyId
+  }
+
+  return null
 }
 
-function _licenceEntityRoles(licenceEntityRoles) {
-  const formattedLicenceEntityRoles = _formatLicenceEntityRoles(licenceEntityRoles)
+function _licenceContactName(contact) {
+  if (contact.contactId) {
+    return `${contact.firstName || ''} ${contact.lastName}`.trim()
+  }
 
-  return _sortLicenceEntityRoles(formattedLicenceEntityRoles)
+  return contact.companyName
 }
 
-function _sortLicenceEntityRoles(licenceEntityRoles) {
-  return licenceEntityRoles.sort((a, b) => {
-    if (a.role < b.role) {
-      return -1
+function _licenceContacts(contacts) {
+  return contacts.map((contact) => {
+    return {
+      address: {
+        address1: contact.address1,
+        address2: contact.address2,
+        address3: contact.address3,
+        address4: contact.address4,
+        address5: contact.address5,
+        address6: contact.address6,
+        country: contact.country,
+        postcode: contact.postcode
+      },
+      communicationType: contact.communicationType,
+      name: _licenceContactName(contact)
     }
-
-    if (a.role > b.role) {
-      return 1
-    }
-
-    return 0
   })
 }
 

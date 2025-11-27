@@ -5,7 +5,7 @@
  * @module ViewPointsService
  */
 
-const FetchLicencePointsService = require('../licences/fetch-licence-points.service.js')
+const FetchPointsService = require('../licences/fetch-points.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
 const PointsPresenter = require('../../presenters/licences/points.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
@@ -20,7 +20,7 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  */
 async function go(licenceId, auth) {
   const licence = await FetchLicenceService.go(licenceId)
-  const points = await FetchLicencePointsService.go(licenceId)
+  const points = await FetchPointsService.go(licenceId)
 
   const pageData = PointsPresenter.go(points, licence)
 

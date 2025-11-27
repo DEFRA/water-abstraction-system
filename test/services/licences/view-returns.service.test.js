@@ -13,7 +13,7 @@ const { generateLicenceRef } = require('../../support/helpers/licence.helper.js'
 
 // Things we need to stub
 const DetermineLicenceHasReturnVersionsService = require('../../../app/services/licences/determine-licence-has-return-versions.service.js')
-const FetchLicenceReturnsService = require('../../../app/services/licences/fetch-licence-returns.service.js')
+const FetchReturnsService = require('../../../app/services/licences/fetch-returns.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
@@ -49,7 +49,7 @@ describe('Licences - View Returns service', () => {
 
     Sinon.stub(FetchLicenceService, 'go').resolves(licence)
 
-    Sinon.stub(FetchLicenceReturnsService, 'go').resolves({
+    Sinon.stub(FetchReturnsService, 'go').resolves({
       pagination: { total: 1 },
       returns: []
     })

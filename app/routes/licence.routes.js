@@ -29,13 +29,13 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/licences/{id}/licence-contact',
-    handler: LicencesController.viewLicenceContactDetails
+    path: '/licences/{id}/licence-contacts',
+    handler: LicencesController.viewLicenceContacts
   },
   {
     method: 'GET',
     path: '/licences/{id}/contact-details',
-    handler: LicencesController.viewLicenceContacts
+    handler: LicencesController.viewContactDetails
   },
   {
     method: 'GET',
