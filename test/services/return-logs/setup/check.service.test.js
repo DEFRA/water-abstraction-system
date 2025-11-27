@@ -5,8 +5,11 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Things we need to stub
+const UpdateQuantitiesService = require('../../../../app/services/return-logs/setup/update-quantities.service.js')
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
@@ -16,35 +19,26 @@ const CheckService = require('../../../../app/services/return-logs/setup/check.s
 
 describe('Return Logs Setup - Check service', () => {
   let session
+  let UpdateQuantitiesServiceStub
   let yarStub
 
-  before(async () => {
-    session = await SessionHelper.add({
-      data: {
-        endDate: '2005-03-31T00:00:00.000Z',
-        lines: [],
-        meterProvided: 'no',
-        periodEndDay: 31,
-        periodEndMonth: 12,
-        periodStartDay: 1,
-        periodStartMonth: 1,
-        purposes: ['Evaporative Cooling'],
-        receivedDate: '2025-01-31T00:00:00.000Z',
-        reported: 'meterReadings',
-        returnReference: '1234',
-        returnsFrequency: 'month',
-        siteDescription: 'POINT A, TEST SITE DESCRIPTION',
-        startDate: '2004-04-01T00:00:00.000Z',
-        startReading: 0,
-        twoPartTariff: false,
-        units: 'megalitres'
-      }
-    })
-
+  beforeEach(() => {
     yarStub = { flash: Sinon.stub().returns([]) }
   })
 
-  describe('when called', () => {
+  afterEach(() => {
+    Sinon.restore()
+  })
+
+  describe('when called for the first time', () => {
+    beforeEach(async () => {
+      const data = _sessionData()
+
+      session = await SessionHelper.add({ data })
+
+      UpdateQuantitiesServiceStub = Sinon.stub(UpdateQuantitiesService, 'go').resolves()
+    })
+
     it('returns page data for the view', async () => {
       const result = await CheckService.go(session.id, yarStub)
 
@@ -119,6 +113,12 @@ describe('Return Logs Setup - Check service', () => {
       })
     })
 
+    it('does not call the Update Quantities service', async () => {
+      await CheckService.go(session.id, yarStub)
+
+      expect(UpdateQuantitiesServiceStub.calledOnce).to.be.false()
+    })
+
     it('updates the session record to indicate user has visited the "check" page', async () => {
       await CheckService.go(session.id, yarStub)
 
@@ -127,4 +127,43 @@ describe('Return Logs Setup - Check service', () => {
       expect(refreshedSession.checkPageVisited).to.be.true()
     })
   })
+
+  describe('when called after the check page has been visited', () => {
+    before(async () => {
+      const data = _sessionData()
+      data.checkPageVisited = true
+
+      session = await SessionHelper.add({ data })
+
+      UpdateQuantitiesServiceStub = Sinon.stub(UpdateQuantitiesService, 'go').resolves()
+    })
+
+    it('calls the Update Quantities service', async () => {
+      await CheckService.go(session.id, yarStub)
+
+      expect(UpdateQuantitiesServiceStub.calledOnce).to.be.true()
+    })
+  })
 })
+
+function _sessionData() {
+  return {
+    endDate: '2005-03-31T00:00:00.000Z',
+    lines: [],
+    meterProvided: 'no',
+    periodEndDay: 31,
+    periodEndMonth: 12,
+    periodStartDay: 1,
+    periodStartMonth: 1,
+    purposes: ['Evaporative Cooling'],
+    receivedDate: '2025-01-31T00:00:00.000Z',
+    reported: 'meterReadings',
+    returnReference: '1234',
+    returnsFrequency: 'month',
+    siteDescription: 'POINT A, TEST SITE DESCRIPTION',
+    startDate: '2004-04-01T00:00:00.000Z',
+    startReading: 0,
+    twoPartTariff: false,
+    units: 'megalitres'
+  }
+}
