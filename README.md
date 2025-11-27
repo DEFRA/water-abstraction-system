@@ -12,8 +12,8 @@ This API provides an interface for calculating charges, queuing transactions and
 
 Make sure you already have:
 
-- [Node.js v20.\*](https://nodejs.org/en/)
-- [PostgreSQL v14](https://www.postgresql.org/)
+- [Node.js v22.\*](https://nodejs.org/en/)
+- [PostgreSQL v15](https://www.postgresql.org/)
 
 ## Running locally
 
