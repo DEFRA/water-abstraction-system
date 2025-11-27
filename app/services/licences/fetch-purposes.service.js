@@ -1,0 +1,64 @@
+'use strict'
+
+/**
+ * Fetches the licenceVersionPurposes data needed for the purposes page
+ * @module FetchPurposesService
+ */
+
+const LicenceModel = require('../../models/licence.model.js')
+
+/**
+ * Fetches the licenceVersionPurposes data needed for the purposes page
+ *
+ * @param {string} licenceId - The UUID of the licence
+ *
+ * @returns {Promise<object>} The licenceVersionPurposes data needed for the purposes page
+ */
+async function go(licenceId) {
+  const licence = await _fetch(licenceId)
+
+  return licence.licenceVersions[0].licenceVersionPurposes
+}
+
+async function _fetch(licenceId) {
+  return LicenceModel.query()
+    .findById(licenceId)
+    .modify('currentVersion')
+    .withGraphFetched('licenceVersions.licenceVersionPurposes')
+    .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {
+      builder
+        .select([
+          'abstractionPeriodStartDay',
+          'abstractionPeriodStartMonth',
+          'abstractionPeriodEndDay',
+          'abstractionPeriodEndMonth',
+          'annualQuantity',
+          'dailyQuantity',
+          'hourlyQuantity',
+          'instantQuantity'
+        ])
+        .orderBy('licenceVersionPurposes.createdAt', 'asc')
+    })
+    .withGraphFetched('licenceVersions.licenceVersionPurposes.licenceVersionPurposePoints')
+    .modifyGraph('licenceVersions.licenceVersionPurposes.licenceVersionPurposePoints', (builder) => {
+      builder.select(['licenceVersionPurposePoints.abstractionMethod'])
+    })
+    .withGraphFetched('licenceVersions.licenceVersionPurposes.points')
+    .modifyGraph('licenceVersions.licenceVersionPurposes.points', (builder) => {
+      builder
+        .select(['points.description', 'points.id', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
+        .orderBy('points.externalId', 'asc')
+    })
+    .withGraphFetched('licenceVersions.licenceVersionPurposes.points.source')
+    .modifyGraph('licenceVersions.licenceVersionPurposes.points.source', (builder) => {
+      builder.select(['sources.description', 'sources.id'])
+    })
+    .withGraphFetched('licenceVersions.licenceVersionPurposes.purpose')
+    .modifyGraph('licenceVersions.licenceVersionPurposes.purpose', (builder) => {
+      builder.select(['id', 'description'])
+    })
+}
+
+module.exports = {
+  go
+}

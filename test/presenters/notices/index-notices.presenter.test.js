@@ -3,16 +3,12 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../fixtures/notices.fixture.js')
-
-// Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const IndexNoticesPresenter = require('../../../app/presenters/notices/index-notices.presenter.js')
@@ -28,12 +24,6 @@ describe('Notices - Index Notices presenter', () => {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }
     }
     notices = NoticesFixture.mapToFetchNoticesResult(NoticesFixture.notices())
-
-    Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(true)
-  })
-
-  afterEach(() => {
-    Sinon.restore()
   })
 
   it('correctly presents the data', () => {
@@ -185,25 +175,6 @@ describe('Notices - Index Notices presenter', () => {
   })
 
   describe('the "links" property', () => {
-    describe('when the "enableAdHocNotifications" is false', () => {
-      beforeEach(() => {
-        Sinon.stub(FeatureFlagsConfig, 'enableAdHocNotifications').value(false)
-
-        auth.credentials.scope = ['bulk_return_notifications', 'returns']
-      })
-
-      it('returns all of the links (except adhoc)', () => {
-        const result = IndexNoticesPresenter.go(notices, 0, auth)
-
-        expect(result.links).to.equal({
-          notice: {
-            href: '/system/notices/setup/standard',
-            text: 'Create a standard notice'
-          }
-        })
-      })
-    })
-
     describe('when the user has both permissions', () => {
       beforeEach(() => {
         auth.credentials.scope = ['bulk_return_notifications', 'returns']

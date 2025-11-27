@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things to stub
 const FetchBillingAccountSearchResultsService = require('../../../app/services/search/fetch-billing-account-search-results.service.js')
+const FetchLicenceHolderSearchResultsService = require('../../../app/services/search/fetch-licence-holder-search-results.service.js')
 const FetchLicenceSearchResultsService = require('../../../app/services/search/fetch-licence-search-results.service.js')
 const FetchMonitoringStationSearchResultsService = require('../../../app/services/search/fetch-monitoring-station-search-results.service.js')
 const FetchReturnLogSearchResultsService = require('../../../app/services/search/fetch-return-log-search-results.service.js')
@@ -26,6 +27,18 @@ describe('Search - Find all search matches service', () => {
         createdAt: new Date('2000-01-01T00:00:00.000Z'),
         id: 'billing-account-1',
         name: 'Company 1'
+      }
+    ],
+    total: 1
+  }
+
+  const licenceHolderResults = {
+    results: [
+      {
+        holderName: 'Mr F Surname',
+        holderType: 'Person',
+        id: 'licence-1',
+        licenceRef: '01/123'
       }
     ],
     total: 1
@@ -96,6 +109,7 @@ describe('Search - Find all search matches service', () => {
 
   beforeEach(() => {
     Sinon.stub(FetchBillingAccountSearchResultsService, 'go').resolves(billingAccountResults)
+    Sinon.stub(FetchLicenceHolderSearchResultsService, 'go').resolves(licenceHolderResults)
     Sinon.stub(FetchLicenceSearchResultsService, 'go').resolves(licenceResults)
     Sinon.stub(FetchMonitoringStationSearchResultsService, 'go').resolves(monitoringStationResults)
     Sinon.stub(FetchReturnLogSearchResultsService, 'go').resolves(returnLogResults)
@@ -119,8 +133,9 @@ describe('Search - Find all search matches service', () => {
 
       expect(result).to.equal({
         exactSearchResults: {
-          amountFound: 3,
+          amountFound: 4,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: licenceHolderResults,
           licences: licenceResults,
           monitoringStations: monitoringStationResults,
           returnLogs: returnLogResults,
@@ -128,8 +143,9 @@ describe('Search - Find all search matches service', () => {
         },
         largestResultCount: 1,
         similarSearchResults: {
-          amountFound: 4,
+          amountFound: 5,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: licenceHolderResults,
           licences: licenceResults,
           monitoringStations: monitoringStationResults,
           returnLogs: returnLogResults,
@@ -153,6 +169,7 @@ describe('Search - Find all search matches service', () => {
         exactSearchResults: {
           amountFound: 1,
           billingAccounts: billingAccountResults,
+          licenceHolders: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },
@@ -162,6 +179,41 @@ describe('Search - Find all search matches service', () => {
         similarSearchResults: {
           amountFound: 1,
           billingAccounts: billingAccountResults,
+          licenceHolders: { results: [], total: 0 },
+          licences: { results: [], total: 0 },
+          monitoringStations: { results: [], total: 0 },
+          returnLogs: { results: [], total: 0 },
+          users: { results: [], total: 0 }
+        }
+      })
+    })
+  })
+
+  describe('when only licences holders are requested', () => {
+    beforeEach(() => {
+      page = 1
+      resultType = 'licenceHolder'
+      searchQuery = 'Walker'
+      userScopes = []
+    })
+
+    it('returns only licence holder data', async () => {
+      const result = await FindAllSearchMatchesService.go(searchQuery, resultType, page, userScopes)
+      expect(result).to.equal({
+        exactSearchResults: {
+          amountFound: 1,
+          billingAccounts: { results: [], total: 0 },
+          licenceHolders: licenceHolderResults,
+          licences: { results: [], total: 0 },
+          monitoringStations: { results: [], total: 0 },
+          returnLogs: { results: [], total: 0 },
+          users: { results: [], total: 0 }
+        },
+        largestResultCount: 1,
+        similarSearchResults: {
+          amountFound: 1,
+          billingAccounts: { results: [], total: 0 },
+          licenceHolders: licenceHolderResults,
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },
@@ -185,6 +237,7 @@ describe('Search - Find all search matches service', () => {
         exactSearchResults: {
           amountFound: 1,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: { results: [], total: 0 },
           licences: licenceResults,
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },
@@ -194,6 +247,7 @@ describe('Search - Find all search matches service', () => {
         similarSearchResults: {
           amountFound: 1,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: { results: [], total: 0 },
           licences: licenceResults,
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },
@@ -217,6 +271,7 @@ describe('Search - Find all search matches service', () => {
         exactSearchResults: {
           amountFound: 1,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: monitoringStationResults,
           returnLogs: { results: [], total: 0 },
@@ -226,6 +281,7 @@ describe('Search - Find all search matches service', () => {
         similarSearchResults: {
           amountFound: 1,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: monitoringStationResults,
           returnLogs: { results: [], total: 0 },
@@ -250,6 +306,7 @@ describe('Search - Find all search matches service', () => {
         exactSearchResults: {
           amountFound: 1,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: returnLogResults,
@@ -259,6 +316,7 @@ describe('Search - Find all search matches service', () => {
         similarSearchResults: {
           amountFound: 1,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: returnLogResults,
@@ -282,6 +340,7 @@ describe('Search - Find all search matches service', () => {
         exactSearchResults: {
           amountFound: 1,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },
@@ -291,6 +350,7 @@ describe('Search - Find all search matches service', () => {
         similarSearchResults: {
           amountFound: 1,
           billingAccounts: { results: [], total: 0 },
+          licenceHolders: { results: [], total: 0 },
           licences: { results: [], total: 0 },
           monitoringStations: { results: [], total: 0 },
           returnLogs: { results: [], total: 0 },
@@ -405,6 +465,26 @@ describe('Search - Find all search matches service', () => {
         const result = await FindAllSearchMatchesService.go(searchQuery, resultType, page, userScopes)
 
         expect(result.similarSearchResults.amountFound).to.equal(0)
+      })
+    })
+  })
+
+  describe('when the search is not a full licence holder name', () => {
+    beforeEach(() => {
+      page = 1
+      resultType = 'licenceHolder'
+      userScopes = []
+    })
+
+    describe('because it is too short', () => {
+      beforeEach(() => {
+        searchQuery = 'A'
+      })
+
+      it('returns no exact matches', async () => {
+        const result = await FindAllSearchMatchesService.go(searchQuery, resultType, page, userScopes)
+
+        expect(result.exactSearchResults.amountFound).to.equal(0)
       })
     })
   })

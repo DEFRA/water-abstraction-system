@@ -18,19 +18,19 @@ const { postRequestOptions } = require('../support/general.js')
 const InitiateSessionService = require('../../app/services/return-versions/setup/initiate-session.service.js')
 const LicenceSupplementaryProcessBillingFlagService = require('../../app/services/licences/supplementary/process-billing-flag.service.js')
 const SubmitMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/submit-mark-for-supplementary-billing.service.js')
-const ViewLicenceBillsService = require('../../app/services/licences/view-licence-bills.service.js')
-const ViewLicenceCommunicationsService = require('../../app/services/licences/view-licence-communications.service.js')
-const ViewContactDetailsService = require('../../app/services/licences/view-contact-details.service.js')
+const ViewBillsService = require('../../app/services/licences/view-bills.service.js')
+const ViewCommunicationsService = require('../../app/services/licences/view-communications.service.js')
 const ViewConditionsService = require('../../app/services/licences/view-conditions.service.js')
+const ViewContactDetailsService = require('../../app/services/licences/view-contact-details.service.js')
+const ViewHistoryService = require('../../app/services/licences/view-history.service.js')
 const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
-const ViewLicenceHistoryService = require('../../app/services/licences/view-licence-history.service.js')
-const ViewLicenceReturnsService = require('../../app/services/licences/view-licence-returns.service.js')
-const ViewLicenceSetUpService = require('../../app/services/licences/view-licence-set-up.service.js')
-const ViewLicenceSummaryService = require('../../app/services/licences/view-licence-summary.service.js')
-const ViewMarkedForSupplementaryBillingService = require('../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
 const ViewMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
-const ViewPurposesService = require('../../app/services/licences/view-purposes.service.js')
+const ViewMarkedForSupplementaryBillingService = require('../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
 const ViewPointsService = require('../../app/services/licences/view-points.service.js')
+const ViewPurposesService = require('../../app/services/licences/view-purposes.service.js')
+const ViewReturnsService = require('../../app/services/licences/view-returns.service.js')
+const ViewSetUpService = require('../../app/services/licences/view-set-up.service.js')
+const ViewSummaryService = require('../../app/services/licences/view-summary.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -72,7 +72,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceBillsService, 'go').resolves(_viewLicenceBills())
+          Sinon.stub(ViewBillsService, 'go').resolves(_viewBills())
         })
 
         it('returns the page successfully', async () => {
@@ -100,7 +100,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has conditions', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewConditionsService, 'go').resolves(_viewLicenceConditions())
+          Sinon.stub(ViewConditionsService, 'go').resolves(_viewConditions())
         })
 
         it('returns the page successfully', async () => {
@@ -128,7 +128,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceCommunicationsService, 'go').resolves(_viewLicenceCommunications())
+          Sinon.stub(ViewCommunicationsService, 'go').resolves(_viewCommunications())
         })
 
         it('returns the page successfully', async () => {
@@ -156,7 +156,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has contacts', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceContactsService, 'go').resolves(_viewLicenceContacts())
+          Sinon.stub(ViewContactDetailsService, 'go').resolves(_viewContactDetails())
         })
 
         it('returns the page successfully', async () => {
@@ -184,7 +184,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceHistoryService, 'go').resolves(_viewLicenceHistory())
+          Sinon.stub(ViewHistoryService, 'go').resolves(_viewHistory())
         })
 
         it('returns the page successfully', async () => {
@@ -197,12 +197,12 @@ describe('Licences controller', () => {
     })
   })
 
-  describe('/licences/{id}/licence-contact', () => {
+  describe('/licences/{id}/licence-contacts', () => {
     describe('GET', () => {
       beforeEach(async () => {
         options = {
           method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/licence-contact',
+          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/licence-contacts',
           auth: {
             strategy: 'session',
             credentials: { scope: [] }
@@ -212,14 +212,14 @@ describe('Licences controller', () => {
 
       describe('when a request is valid and has contacts', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewContactDetailsService, 'go').resolves(_viewLicenceContactDetails())
+          Sinon.stub(ViewLicenceContactsService, 'go').resolves(_viewLicenceContacts())
         })
 
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Licence contact details')
+          expect(response.payload).to.contain('Licence contacts')
         })
       })
     })
@@ -298,7 +298,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewPointsService, 'go').resolves(_viewLicencePoints())
+          Sinon.stub(ViewPointsService, 'go').resolves(_viewPoints())
         })
 
         it('returns the page successfully', async () => {
@@ -326,7 +326,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewPurposesService, 'go').resolves(_viewLicencePurposes())
+          Sinon.stub(ViewPurposesService, 'go').resolves(_viewPurposes())
         })
 
         it('returns the page successfully', async () => {
@@ -412,7 +412,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceReturnsService, 'go').resolves(_viewLicenceReturns())
+          Sinon.stub(ViewReturnsService, 'go').resolves(_viewReturns())
         })
 
         it('returns the page successfully', async () => {
@@ -440,7 +440,7 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceSetUpService, 'go').resolves(_viewLicenceSetUp())
+          Sinon.stub(ViewSetUpService, 'go').resolves(_viewSetUp())
         })
 
         it('returns the page successfully', async () => {
@@ -468,14 +468,14 @@ describe('Licences controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(ViewLicenceSummaryService, 'go').resolves(_viewLicenceSummary())
+          Sinon.stub(ViewSummaryService, 'go').resolves(_viewSummary())
         })
 
         it('returns the page successfully', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Summary')
+          expect(response.payload).to.contain('Licence summary')
         })
       })
     })
@@ -619,6 +619,24 @@ describe('Licences controller', () => {
   })
 })
 
+function _commonData() {
+  return {
+    documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
+    licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
+    licenceName: 'Between two ferns',
+    licenceRef: '01/123',
+    notification: null,
+    pageTitle: 'Licence 01/123',
+    primaryUser: {
+      id: 10036,
+      username: 'grace.hopper@example.co.uk'
+    },
+    roles: ['billing', 'view_charge_versions'],
+    warning: null,
+    workflowWarning: true
+  }
+}
+
 function _markForSupplementaryBilling() {
   return {
     activeNavBar: 'search',
@@ -634,22 +652,22 @@ function _markForSupplementaryBilling() {
   }
 }
 
-function _viewLicenceBills() {
-  const commonLicenceData = _viewLicence()
+function _viewBills() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
-    activeTab: 'bills',
+    activeSecondaryNav: 'bills',
     bills: [{ id: 'bills-id' }]
   }
 }
 
-function _viewLicenceConditions() {
-  const commonLicenceData = _viewLicence()
+function _viewConditions() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
-    activeTab: 'search',
+    activeSecondaryNav: 'search',
     conditionTypes: [
       {
         conditions: [
@@ -683,28 +701,28 @@ function _viewLicenceConditions() {
   }
 }
 
-function _viewLicenceCommunications() {
-  const commonLicenceData = _viewLicence()
+function _viewCommunications() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
-    activeTab: 'communications',
+    activeSecondaryNav: 'communications',
     communications: [{ type: 'paper return', sent: 'date', sender: 'admin@email.com', method: 'letter' }]
   }
 }
 
-function _viewLicenceContacts() {
-  const commonLicenceData = _viewLicence()
+function _viewContactDetails() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
-    activeTab: 'contact-details',
+    activeSecondaryNav: 'contact-details',
     licenceContacts: [{ name: 'jobo', communicationType: 'Licence Holder' }],
     customerContacts: [{ name: 'jimbo', communicationType: 'customer' }]
   }
 }
 
-function _viewLicenceHistory() {
+function _viewHistory() {
   return {
     entries: [{}],
     licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
@@ -713,14 +731,14 @@ function _viewLicenceHistory() {
   }
 }
 
-function _viewLicenceContactDetails() {
-  const commonLicenceData = _viewLicence()
+function _viewLicenceContacts() {
+  const commonLicenceData = _commonData()
 
   commonLicenceData.pageTitle = null
 
   return {
     ...commonLicenceData,
-    activeTab: 'search',
+    activeSecondaryNav: 'search',
     licenceContacts: [
       {
         address: {
@@ -730,12 +748,15 @@ function _viewLicenceContactDetails() {
         role: 'Licence holder'
       }
     ],
-    pageTitle: 'Licence contact details'
+    pageTitle: 'Licence contacts'
   }
 }
 
-function _viewLicencePoints() {
+function _viewPoints() {
+  const commonLicenceData = _commonData()
+
   return {
+    ...commonLicenceData,
     id: 'f500992f-b178-480b-9325-51fe7fdbc9fd',
     licencePoints: [
       {
@@ -760,8 +781,11 @@ function _viewLicencePoints() {
   }
 }
 
-function _viewLicencePurposes() {
+function _viewPurposes() {
+  const commonLicenceData = _commonData()
+
   return {
+    ...commonLicenceData,
     id: '5ca7bf18-d433-491c-ac83-483f67ee7d93',
     licenceRef: '01/140/R01',
     licencePurposes: [
@@ -780,23 +804,23 @@ function _viewLicencePurposes() {
   }
 }
 
-function _viewLicenceReturns() {
-  const commonLicenceData = _viewLicence()
+function _viewReturns() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
-    activeTab: 'returns',
+    activeSecondaryNav: 'returns',
     returns: [{ id: 'returns-id' }],
     noReturnsMessage: null
   }
 }
 
-function _viewLicenceSetUp() {
-  const commonLicenceData = _viewLicence()
+function _viewSetUp() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
-    activeTab: 'set-up',
+    activeSecondaryNav: 'set-up',
     agreements: [{}],
     chargeInformation: [{}],
     enableRequirementsForReturns: true,
@@ -817,8 +841,8 @@ function _viewLicenceSetUp() {
   }
 }
 
-function _viewLicenceSummary() {
-  const commonLicenceData = _viewLicence()
+function _viewSummary() {
+  const commonLicenceData = _commonData()
 
   return {
     ...commonLicenceData,
@@ -826,24 +850,6 @@ function _viewLicenceSummary() {
     region: 'Southern',
     startDate: '1 November 2022',
     endDate: '1 November 2032',
-    activeTab: 'summary'
-  }
-}
-
-function _viewLicence() {
-  return {
-    documentId: 'e8f491f0-0c60-4083-9d41-d2be69f17a1e',
-    licenceId: 'f1288f6c-8503-4dc1-b114-75c408a14bd0',
-    licenceName: 'Between two ferns',
-    licenceRef: '01/123',
-    notification: null,
-    pageTitle: 'Licence 01/123',
-    primaryUser: {
-      id: 10036,
-      username: 'grace.hopper@example.co.uk'
-    },
-    roles: ['billing', 'view_charge_versions'],
-    warning: null,
-    workflowWarning: true
+    activeSecondaryNav: 'summary'
   }
 }

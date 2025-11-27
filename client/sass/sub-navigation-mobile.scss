@@ -1,0 +1,17 @@
+// Custom mobile and desktop behaviour for the sub-navigation.
+// These overrides replicate the design changes used in the WRLS prototype:
+// https://github.com/defra-design/wrls-prototype/blob/b03cf7b4f6a801ac94549d3280f95871b631f5f8/app/assets/sass/sub-nav.scss
+// This is required because the default GOV.UK Prototype Components sub-navigation
+// does not match the service’s intended spacing and layout on mobile/desktop.
+// Do not remove these overrides once the upstream components or design system are updated.
+
+@media (max-width: 40.0625em) {
+  .x-govuk-sub-navigation__section-item {
+    margin: 10px 15px 0px 0px;
+    display: inline-block;
+  }
+
+  ul.x-govuk-sub-navigation__section--nested .x-govuk-sub-navigation__section-item {
+    margin: 10px 30px 0px 0px;
+  }
+}

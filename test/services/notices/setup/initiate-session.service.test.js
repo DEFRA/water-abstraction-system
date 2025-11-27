@@ -20,7 +20,6 @@ const InitiateSessionService = require('../../../../app/services/notices/setup/i
 
 describe('Notices - Setup - Initiate Session service', () => {
   let journey
-  let noticeType
   let monitoringStationId
 
   afterEach(() => {
@@ -31,12 +30,11 @@ describe('Notices - Setup - Initiate Session service', () => {
     describe('and the journey is "standard"', () => {
       beforeEach(() => {
         journey = 'standard'
-        noticeType = null
         monitoringStationId = undefined
       })
 
       it('returns the session Id and redirect path', async () => {
-        const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
+        const result = await InitiateSessionService.go(journey, monitoringStationId)
 
         expect(result).to.equal({
           sessionId: result.sessionId,
@@ -45,7 +43,7 @@ describe('Notices - Setup - Initiate Session service', () => {
       })
 
       it('initiates the session for the standard journey ', async () => {
-        const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
+        const result = await InitiateSessionService.go(journey, monitoringStationId)
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
 
@@ -53,49 +51,16 @@ describe('Notices - Setup - Initiate Session service', () => {
           journey: 'standard'
         })
       })
-
-      describe('and there is a "noticeType"', () => {
-        beforeEach(() => {
-          noticeType = 'invitations'
-        })
-
-        it('returns the session Id and redirect path', async () => {
-          const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
-
-          expect(result).to.equal({
-            sessionId: result.sessionId,
-            path: 'returns-period'
-          })
-        })
-
-        it('initiates the session for the standard journey for the "noticeType"', async () => {
-          const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
-
-          const matchingSession = await SessionModel.query().findById(result.sessionId)
-
-          expect(matchingSession.data).to.equal(
-            {
-              journey: 'standard',
-              name: 'Returns: invitation',
-              noticeType: 'invitations',
-              notificationType: 'Returns invitation',
-              subType: 'returnInvitation'
-            },
-            { skip: ['referenceCode'] }
-          )
-        })
-      })
     })
 
     describe('and the journey is "adhoc"', () => {
       beforeEach(() => {
         journey = 'adhoc'
-        noticeType = null
         monitoringStationId = undefined
       })
 
       it('initiates the session for the ad-hoc notice setup journey and returns the session ID and redirect path', async () => {
-        const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
+        const result = await InitiateSessionService.go(journey, monitoringStationId)
 
         expect(result).to.equal({
           sessionId: result.sessionId,
@@ -117,14 +82,13 @@ describe('Notices - Setup - Initiate Session service', () => {
         monitoringStationData = AbstractionAlertSessionData.get()
 
         journey = 'alerts'
-        noticeType = null
         monitoringStationId = monitoringStationData.monitoringStationId
 
         Sinon.stub(DetermineLicenceMonitoringStationsService, 'go').resolves(monitoringStationData)
       })
 
       it('initiates the session for the abstraction alerts setup journey and returns the session ID and redirect path', async () => {
-        const result = await InitiateSessionService.go(journey, noticeType, monitoringStationId)
+        const result = await InitiateSessionService.go(journey, monitoringStationId)
 
         expect(result).to.equal({
           sessionId: result.sessionId,

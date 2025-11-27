@@ -16,7 +16,7 @@ const { generateUUID, timestampForPostgres } = require('../../../../app/lib/gene
 // Thing under test
 const RecordNotifySendResultsService = require('../../../../app/services/notices/setup/record-notify-send-results.service.js')
 
-describe('Notices - Setup - Record notify send results service', () => {
+describe('Notices - Setup - Record Notify Send Results service', () => {
   let eventId
   let notUpdatedNotification
   let notification

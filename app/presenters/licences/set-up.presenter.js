@@ -1,0 +1,305 @@
+'use strict'
+
+/**
+ * Formats data for the `/licences/{id}/set-up` view licence set up page
+ * @module SetUpPresenter
+ */
+
+const { formatLongDate } = require('../base.presenter.js')
+const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
+const { supplementaryBillingNotification } = require('./base-licences.presenter.js')
+
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+
+const ROLES = {
+  billing: 'billing',
+  deleteAgreements: 'delete_agreements',
+  manageAgreements: 'manage_agreements',
+  workflowEditor: 'charge_version_workflow_editor',
+  workflowReviewer: 'charge_version_workflow_reviewer'
+}
+
+const AGREEMENTS = {
+  S127: 'Two-part tariff',
+  S130S: 'Canal and Rivers Trust, supported source (S130S)',
+  S130U: 'Canal and Rivers Trust, unsupported source (S130U)',
+  S126: 'Abatement'
+}
+
+/**
+ * Formats data for the `/licences/{id}/set-up` view licence set up page
+ *
+ * @param {module:ChargeVersionModel[]} chargeVersions - All charge versions records for the licence
+ * @param {module:WorkflowModel[]} workflows - All in-progress workflow records for the licence
+ * @param {module:LicenceAgreementModel[]} agreements - All agreements records for the licence
+ * @param {module:ReturnVersionModel[]} returnVersions - All returns version records for the licence
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {object} licence - The id and licence ref of the licence
+ *
+ * @returns {object} The data formatted for the view template
+ */
+function go(chargeVersions, workflows, agreements, returnVersions, auth, licence) {
+  const enableRequirementsForReturns = FeatureFlagsConfig.enableRequirementsForReturns
+
+  const licenceData = {
+    licenceId: licence.id,
+    ends: licence.$ends()
+  }
+
+  return {
+    agreements: _agreements(licenceData, agreements, auth),
+    backLink: {
+      text: 'Go back to search',
+      href: '/licences'
+    },
+    chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
+    links: {
+      chargeInformation: _chargeInformationLinks(auth, licenceData),
+      agreements: _agreementLinks(auth, licenceData),
+      returnVersions: _returnVersionsLinks(licenceData, enableRequirementsForReturns, auth),
+      recalculateBills: _recalculateBills(agreements, auth, licenceData)
+    },
+    notification: supplementaryBillingNotification(licence),
+    pageTitle: 'Licence set up',
+    pageTitleCaption: `Licence ${licence.licenceRef}`,
+    returnVersions: _returnVersions(returnVersions)
+  }
+}
+
+function _agreements(licenceData, agreements, auth) {
+  return agreements.map((agreement, index) => {
+    return {
+      startDate: formatLongDate(agreement.startDate),
+      endDate: agreement.endDate ? formatLongDate(agreement.endDate) : '',
+      description: AGREEMENTS[_financialAgreementCode(agreement)],
+      signedOn: agreement.signedOn ? formatLongDate(agreement.signedOn) : '',
+      action: _agreementActionLinks(licenceData, agreement, auth, index)
+    }
+  })
+}
+
+function _agreementActionLinks(licenceData, agreement, auth, index) {
+  if (!auth.credentials.scope.includes(ROLES.manageAgreements)) {
+    return []
+  }
+
+  if (_endsSixYearsAgo(licenceData.ends)) {
+    return []
+  }
+
+  const actionLinks = []
+  const hasNotEnded = agreement.endDate === null
+
+  if (auth.credentials.scope.includes(ROLES.deleteAgreements)) {
+    actionLinks.push({
+      dataTest: `delete-agreement-${index}`,
+      text: 'Delete',
+      link: `/licences/${licenceData.licenceId}/agreements/${agreement.id}/delete`
+    })
+  }
+
+  if (hasNotEnded) {
+    actionLinks.push({
+      dataTest: `end-agreement-${index}`,
+      text: 'End',
+      link: `/licences/${licenceData.licenceId}/agreements/${agreement.id}/end`
+    })
+  }
+
+  return actionLinks
+}
+
+function _agreementLinks(auth, licenceData) {
+  if (auth.credentials.scope.includes(ROLES.manageAgreements) && !_endsSixYearsAgo(licenceData.ends)) {
+    return {
+      setUpAgreement: `/licences/${licenceData.licenceId}/agreements/select-type`
+    }
+  }
+
+  return {}
+}
+
+function _chargeInformationLinks(auth, licenceData) {
+  if (auth.credentials.scope.includes(ROLES.workflowEditor) && !_endsSixYearsAgo(licenceData.ends)) {
+    return {
+      setupNewCharge: `/licences/${licenceData.licenceId}/charge-information/create`,
+      makeLicenceNonChargeable: `/licences/${licenceData.licenceId}/charge-information/non-chargeable-reason?start=1`
+    }
+  }
+
+  return {}
+}
+
+function _chargeInformation(chargeVersions, workflows, auth) {
+  return [..._workflows(workflows, auth), ..._chargeVersions(chargeVersions)]
+}
+
+function _chargeVersions(chargeVersions) {
+  return chargeVersions.map((chargeVersion, index) => {
+    return {
+      id: chargeVersion.id,
+      startDate: formatLongDate(chargeVersion.startDate),
+      endDate: chargeVersion.endDate ? formatLongDate(chargeVersion.endDate) : '',
+      status: chargeVersion.status,
+      reason: chargeVersion.changeReason?.description,
+      action: [
+        {
+          dataTest: `charge-version-${index}`,
+          text: 'View',
+          link: `/licences/${chargeVersion.licenceId}/charge-information/${chargeVersion.id}/view`
+        }
+      ]
+    }
+  })
+}
+
+function _endsSixYearsAgo(endDate) {
+  if (!endDate) {
+    return null
+  }
+
+  const sixYears = 6
+  const timeStamp = { hour: 23, minutes: 59, seconds: 59, ms: 999 }
+
+  const yesterday = new Date()
+
+  yesterday.setDate(yesterday.getDate() - 1)
+  yesterday.setHours(timeStamp.hour, timeStamp.minutes, timeStamp.seconds, timeStamp.ms)
+
+  const sixYearsFromYesterday = new Date(yesterday.getTime())
+
+  sixYearsFromYesterday.setFullYear(yesterday.getFullYear() - sixYears)
+
+  return endDate.date < sixYearsFromYesterday
+}
+
+function _financialAgreementCode(agreement) {
+  return agreement.financialAgreement.code
+}
+
+function _hasTwoPartTariffAgreement(agreements) {
+  return agreements.some((agreement) => {
+    return agreement.financialAgreement.code === 'S127'
+  })
+}
+
+/**
+ * The history helper $reason() will return either the reason saved against the return version record, the reason
+ * captured in the first mod log entry, or null.
+ *
+ * If its the reason saved against the return version we have to map it to its display version first.
+ *
+ * @private
+ */
+function _reason(returnVersion) {
+  const reason = returnVersion.$reason()
+  const mappedReason = returnRequirementReasons[reason]
+
+  if (mappedReason) {
+    return mappedReason
+  }
+
+  return reason ?? ''
+}
+
+function _recalculateBills(agreements, auth, licenceData) {
+  if (auth.credentials.scope.includes(ROLES.billing) && _hasTwoPartTariffAgreement(agreements)) {
+    return { markForSupplementaryBilling: `/system/licences/${licenceData.licenceId}/mark-for-supplementary-billing` }
+  }
+
+  return {}
+}
+
+function _returnVersions(returnVersions = [{}]) {
+  return returnVersions.map((returnVersion, index) => {
+    return {
+      action: [
+        {
+          dataTest: `return-version-${index}`,
+          text: 'View',
+          link: `/system/return-versions/${returnVersion.id}`
+        }
+      ],
+      endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
+      reason: _reason(returnVersion),
+      startDate: formatLongDate(returnVersion.startDate),
+      status: returnVersion.status
+    }
+  })
+}
+
+function _returnVersionsLinks(licenceData, enableRequirementsForReturns, auth) {
+  if (auth.credentials.scope.includes(ROLES.billing) && enableRequirementsForReturns) {
+    return {
+      returnsRequired: `/system/licences/${licenceData.licenceId}/returns-required`,
+      noReturnsRequired: `/system/licences/${licenceData.licenceId}/no-returns-required`
+    }
+  }
+
+  return {}
+}
+
+function _workflows(workflows, auth) {
+  return workflows.map((workflow, index) => {
+    return {
+      action: _workflowAction(workflow, auth, index),
+      endDate: '',
+      id: workflow.id,
+      reason: workflow.data.chargeVersion?.changeReason?.description,
+      startDate: _workflowStartDate(workflow),
+      status: workflow.status
+    }
+  })
+}
+
+function _workflowAction(workflow, auth, index) {
+  if (workflow.status === 'to_setup' && auth.credentials.scope.includes(ROLES.workflowEditor)) {
+    return _workflowActionEditor(workflow, index)
+  }
+
+  if (auth.credentials.scope.includes(ROLES.workflowReviewer)) {
+    return _workflowActionReviewer(workflow, index)
+  }
+
+  return []
+}
+
+function _workflowActionEditor(workflow, index) {
+  return [
+    {
+      dataTest: `set-up-charge-version-${index}`,
+      text: 'Set up',
+      link: `/licences/${workflow.licenceId}/charge-information/create?chargeVersionWorkflowId=${workflow.id}`
+    },
+    {
+      dataTest: `remove-charge-version-${index}`,
+      text: 'Remove',
+      link: `/charge-information-workflow/${workflow.id}/remove`
+    }
+  ]
+}
+
+function _workflowActionReviewer(workflow, index) {
+  return [
+    {
+      dataTest: `review-charge-version-${index}`,
+      text: 'Review',
+      link: `/licences/${workflow.licenceId}/charge-information/${workflow.id}/review`
+    }
+  ]
+}
+
+function _workflowStartDate(workflow) {
+  if (workflow.status === 'to_setup') {
+    return ''
+  }
+
+  // Stored as JSON the date is returned as a string. So, we need to convert it to a date type first
+  const startDate = new Date(workflow.data.chargeVersion.dateRange.startDate)
+
+  return formatLongDate(startDate)
+}
+
+module.exports = {
+  go
+}

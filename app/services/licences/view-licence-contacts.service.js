@@ -1,38 +1,28 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the view licence contact details tab
- * @module ViewLicenceContactsService
+ * Orchestrates fetching and presenting the data needed for the view licence contacts page
+ * @module ViewLicenceContactService
  */
 
-const CustomerContactsPresenter = require('../../presenters/licences/customer-contacts.presenter.js')
-const FetchCustomerContactsService = require('./fetch-customer-contacts.service.js')
 const FetchLicenceContactsService = require('./fetch-licence-contacts.service.js')
 const LicenceContactsPresenter = require('../../presenters/licences/licence-contacts.presenter.js')
-const ViewLicenceService = require('./view-licence.service.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the licence contact details page
+ * Orchestrates fetching and presenting the data needed for the contact details link page
  *
  * @param {string} licenceId - The UUID of the licence
- * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
- * @returns {Promise<object>} an object representing the `pageData` needed by the licence contact details template.
+ * @returns {Promise<object>} The view data for the licence contacts page
  */
-async function go(licenceId, auth) {
-  const commonData = await ViewLicenceService.go(licenceId, auth)
+async function go(licenceId) {
+  const licence = await FetchLicenceContactsService.go(licenceId)
 
-  const licenceContacts = await FetchLicenceContactsService.go(licenceId)
-  const licenceContactsData = LicenceContactsPresenter.go(licenceContacts)
-
-  const customerContacts = await FetchCustomerContactsService.go(licenceId)
-  const customerContactsData = CustomerContactsPresenter.go(customerContacts)
+  const pageData = LicenceContactsPresenter.go(licence)
 
   return {
-    activeTab: 'contact-details',
-    ...commonData,
-    ...customerContactsData,
-    ...licenceContactsData
+    activeNavBar: 'search',
+    ...pageData
   }
 }
 

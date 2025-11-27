@@ -16,7 +16,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 // Thing under test
 const PaperReturnNotificationsPresenter = require('../../../../app/presenters/notices/setup/paper-return-notifications.presenter.js')
 
-describe('Notices - Setup - Paper Return Notifications Presenter', () => {
+describe('Notices - Setup - Paper Return Notifications presenter', () => {
   const noticeId = '32f4cab2-ce0c-4711-aac8-fb4941f3b59a'
 
   let dueReturns

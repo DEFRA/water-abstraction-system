@@ -13,7 +13,7 @@ const { generateReferenceCode } = require('../../../support/helpers/notification
 // Thing under test
 const RecipientNamePresenter = require('../../../../app/presenters/notices/setup/recipient-name.presenter.js')
 
-describe('Notices - Setup - Recipient Name Presenter', () => {
+describe('Notices - Setup - Recipient Name presenter', () => {
   let referenceCode
   let session
 

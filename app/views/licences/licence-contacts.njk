@@ -1,0 +1,51 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block pageContent %}
+  {% macro displayAddress(address) %}
+    {% for item in address %}
+      <p class="govuk-body govuk-!-margin-bottom-0"> {{ item }} </p>
+    {% endfor %}
+  {% endmacro %}
+
+  {% for licenceContact in licenceContacts %}
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: licenceContact.role
+        }
+      },
+      rows: [
+        {
+          key: {
+          text: "Name",
+          classes:"govuk-!-font-weight-regular"
+        },
+          value: {
+          text:  licenceContact.name
+        }
+        } if licenceContact.name,
+        {
+          key: {
+          text: "Address",
+          classes:"govuk-!-font-weight-regular"
+        },
+          value: {
+          html: displayAddress(licenceContact.address)
+        }
+        } if licenceContact.address,
+        {
+          key: {
+          text: "Email",
+          classes:"govuk-!-font-weight-regular"
+        },
+          value: {
+          text: licenceContact.email
+        }
+        } if licenceContact.email
+      ]
+    })
+    }}
+  {% endfor %}
+{% endblock %}

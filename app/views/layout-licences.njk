@@ -1,0 +1,105 @@
+{% extends 'layout.njk' %}
+{% set mainClasses = 'licence-layout-main' %}
+
+{% block beforeContent %}
+{{ super() }}
+
+<div class="govuk-grid-row govuk-!-margin-top-6">
+  <div class="govuk-grid-column-one-quarter">
+    <nav class="x-govuk-sub-navigation" aria-labelledby="sub-navigation-heading">
+      <h2 class="govuk-visually-hidden" id="sub-navigation-heading">Pages in this section</h2>
+      <ul class="x-govuk-sub-navigation__section">
+        <li
+          class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'summary' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="summary"
+              {% if activeSecondaryNav === 'summary' %}aria-current="page"{% endif %}>
+            Licence summary
+          </a>
+          {% if activeSecondaryNav === 'summary' %}
+          <ul class="x-govuk-sub-navigation__section x-govuk-sub-navigation__section--nested">
+            <li class="x-govuk-sub-navigation__section-item">
+              <a class="x-govuk-sub-navigation__link" href="purposes" {% if activeSummarySubNav === 'purposes' %}aria-current="true"{% endif %}>
+                Purposes, periods and amounts
+              </a>
+            </li>
+            <li class="x-govuk-sub-navigation__section-item">
+              <a class="x-govuk-sub-navigation__link" href="points" {% if activeSummarySubNav === 'points' %}aria-current="true"{% endif %}>
+              Points
+              </a>
+            </li>
+            <li class="x-govuk-sub-navigation__section-item">
+              <a class="x-govuk-sub-navigation__link" href="conditions" {% if activeSummarySubNav === 'conditions' %}aria-current="true"{% endif %}>
+              Conditions
+              </a>
+            </li>
+          </ul>
+          {% endif %}
+        </li>
+
+        <li
+          class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'contact-details' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="contact-details"
+              {% if activeSecondaryNav === 'contact-details' %}aria-current="page"{% endif %}>
+            Contact details
+          </a>
+        </li>
+
+        <li
+          class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'returns' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="returns"
+              {% if activeSecondaryNav === 'returns' %}aria-current="page"{% endif %}>
+            Returns
+          </a>
+        </li>
+
+        <li
+          class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'communications' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="communications"
+              {% if activeSecondaryNav === 'communications' %}aria-current="page"{% endif %}>
+            Communications
+          </a>
+        </li>
+
+        {% if 'billing' in roles %}
+          <li
+            class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'bills' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="bills"
+              {% if activeSecondaryNav === 'bills' %}aria-current="page"{% endif %}>
+              Bills
+            </a>
+          </li>
+        {% endif %}
+
+        {% if 'view_charge_versions' in roles %}
+          <li
+            class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'set-up' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="set-up"
+              {% if activeSecondaryNav === 'set-up' %}aria-current="page"{% endif %}>
+              Licence set up
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-column-three-quarters">
+
+    {% if activeSecondaryNav === 'summary' %}
+      {% if (workflowWarning === true) and (('billing' in roles) or ('view_charge_versions' in roles)) %}
+        {{ govukWarningText({
+          text: "This licence has changed and needs the set up reviewed before it can be billed.",
+          iconFallbackText: "Warning"
+        }) }}
+      {% endif %}
+    {% endif %}
+
+    {{ super() }}
+
+    {% block subPageContent %}
+    {% endblock %}
+  </div>
+</div>
+{% endblock %}

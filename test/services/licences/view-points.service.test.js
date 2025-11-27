@@ -9,31 +9,47 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicencesFixture = require('../../fixtures/licences.fixture.js')
+const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 
 // Things we need to stub
-const FetchLicencePointsService = require('../../../app/services/licences/fetch-licence-points.service.js')
+const FetchPointsService = require('../../../app/services/licences/fetch-points.service.js')
+const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
 const ViewPointsService = require('../../../app/services/licences/view-points.service.js')
 
 describe('Licences - View Points service', () => {
-  let licenceFixture
+  let auth
+  let licence
 
   beforeEach(() => {
-    licenceFixture = LicencesFixture.licence()
+    auth = {
+      credentials: {
+        roles: [
+          {
+            role: 'billing'
+          }
+        ]
+      }
+    }
 
-    Sinon.stub(FetchLicencePointsService, 'go').returns(licenceFixture)
+    licence = ViewLicencesFixture.licence()
+
+    Sinon.stub(FetchLicenceService, 'go').returns(licence)
+
+    Sinon.stub(FetchPointsService, 'go').returns([ViewLicencesFixture.point()])
   })
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewPointsService.go(licenceFixture.licence.id)
+      const result = await ViewPointsService.go(licence.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        activeSecondaryNav: 'summary',
+        activeSummarySubNav: 'points',
         backLink: {
-          href: `/system/licences/${licenceFixture.licence.id}/summary`,
+          href: `/system/licences/${licence.id}/summary`,
           text: 'Go back to summary'
         },
         licencePoints: [
@@ -57,8 +73,9 @@ describe('Licences - View Points service', () => {
           }
         ],
         pageTitle: 'Points',
-        pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
-        showingPoints: 'Showing 1 abstraction points'
+        pageTitleCaption: `Licence ${licence.licenceRef}`,
+        roles: ['billing'],
+        showingPoints: 'Showing 1 abstraction point'
       })
     })
   })

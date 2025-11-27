@@ -5,24 +5,31 @@
  * @module ViewPointsService
  */
 
-const FetchLicencePointsService = require('../licences/fetch-licence-points.service.js')
+const FetchPointsService = require('../licences/fetch-points.service.js')
+const FetchLicenceService = require('./fetch-licence.service.js')
 const PointsPresenter = require('../../presenters/licences/points.presenter.js')
+const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence points page
  *
  * @param {string} licenceId - The UUID of the licence
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence points template
  */
-async function go(licenceId) {
-  const licencePoints = await FetchLicencePointsService.go(licenceId)
+async function go(licenceId, auth) {
+  const licence = await FetchLicenceService.go(licenceId)
+  const points = await FetchPointsService.go(licenceId)
 
-  const pageData = PointsPresenter.go(licencePoints)
+  const pageData = PointsPresenter.go(points, licence)
 
   return {
+    ...pageData,
     activeNavBar: 'search',
-    ...pageData
+    activeSecondaryNav: 'summary',
+    activeSummarySubNav: 'points',
+    roles: userRoles(auth)
   }
 }
 

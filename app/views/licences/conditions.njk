@@ -1,4 +1,4 @@
-{% extends 'layout.njk' %}
+{% extends 'layout-licences.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/panel/macro.njk" import govukPanel %}
@@ -7,6 +7,10 @@
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 
 {% block pageContent %}
+  {% if conditionType.conditions.length === 0 %}
+  <p>No conditions for this licence.</p>
+  {% else %}
+
   <p> {{ showingConditions }} </p>
 
   <div class="govuk-grid-row ">
@@ -103,4 +107,5 @@
       {% endfor %}
     </div>
   </div>
+  {% endif %}
 {% endblock %}

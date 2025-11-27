@@ -6,19 +6,18 @@
  */
 
 const PointModel = require('../../models/point.model.js')
+const { pluralise } = require('./base-licences.presenter.js')
 
 /**
  * Formats the licence and related points data for the view licence points page
  *
- * @param {object} data - The licence and related points data returned by `FetchLicencePointsService`
+ * @param {object[]} points - The points data returned by `FetchLicencePointsService`
+ * @param {object} licence - The id and licence ref of the licence
  *
  * @returns {object} licence and points data needed by the view template
  */
-function go(data) {
-  const {
-    licence: { id: licenceId, licenceRef },
-    points
-  } = data
+function go(points, licence) {
+  const { id: licenceId, licenceRef } = licence
 
   const licencePoints = _formatLicencePoints(points)
 
@@ -30,7 +29,7 @@ function go(data) {
     licencePoints,
     pageTitle: 'Points',
     pageTitleCaption: `Licence ${licenceRef}`,
-    showingPoints: `Showing ${licencePoints.length} abstraction points`
+    showingPoints: `Showing ${licencePoints.length} abstraction ${pluralise('point', licencePoints.length)}`
   }
 }
 

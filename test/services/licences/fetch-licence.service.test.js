@@ -10,33 +10,23 @@ const { expect } = Code
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
-const licenceSupplementaryYearHelper = require('../../support/helpers/licence-supplementary-year.helper.js')
-const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
+const LicenceSupplementaryYearModel = require('../../support/helpers/licence-supplementary-year.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
-describe('Fetch Licence service', () => {
+describe('Licences - Fetch Licence service', () => {
   let licence
-  let licenceSupplementaryYearId
-  let workflow
 
   describe('when there is a matching licence', () => {
     beforeEach(async () => {
       licence = await LicenceHelper.add()
 
-      const licenceSupplementaryYear = await licenceSupplementaryYearHelper.add({
+      await LicenceSupplementaryYearModel.add({
         licenceId: licence.id,
         twoPartTariff: true
       })
-
-      licenceSupplementaryYearId = licenceSupplementaryYear.id
-
-      // We add two workflow records: one reflects that the licence is in workflow, so of that it previously was but
-      // has been dealt with. We want to ensure these soft-deleted records are ignored so licences are not flagged
-      // as changed incorrectly
-      workflow = await WorkflowHelper.add({ licenceId: licence.id })
-      await WorkflowHelper.add({ deletedAt: new Date('2023-06-01'), licenceId: licence.id })
     })
 
     it('returns the matching licence', async () => {
@@ -44,32 +34,21 @@ describe('Fetch Licence service', () => {
 
       expect(result).to.be.an.instanceOf(LicenceModel)
       expect(result).to.equal({
+        expiredDate: null,
         id: licence.id,
         includeInPresrocBilling: 'no',
         includeInSrocBilling: false,
-        licenceRef: licence.licenceRef,
-        expiredDate: null,
-        revokedDate: null,
+        includeInTwoPartTariffBilling: true,
         lapsedDate: null,
-        licenceDocumentHeader: null,
-        licenceSupplementaryYears: [
-          {
-            id: licenceSupplementaryYearId
-          }
-        ],
-        workflows: [
-          {
-            id: workflow.id,
-            status: workflow.status
-          }
-        ]
+        licenceRef: licence.licenceRef,
+        revokedDate: null
       })
     })
   })
 
   describe('when there is not a matching licence', () => {
     it('returns undefined', async () => {
-      const result = await FetchLicenceService.go('4ba2066b-4623-4102-801a-c771e39af2f3')
+      const result = await FetchLicenceService.go(generateUUID())
 
       expect(result).to.be.undefined()
     })

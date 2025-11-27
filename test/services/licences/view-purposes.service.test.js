@@ -5,35 +5,58 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicencesFixture = require('../../fixtures/licences.fixture.js')
+const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 
 // Things we need to stub
-const FetchLicencePurposesService = require('../../../app/services/licences/fetch-licence-purposes.service.js')
+const FetchPurposesService = require('../../../app/services/licences/fetch-purposes.service.js')
+const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
 const ViewPurposesService = require('../../../app/services/licences/view-purposes.service.js')
 
 describe('Licences - View Purposes service', () => {
-  let licenceFixture
+  let auth
+  let licence
+  let purposes
 
   beforeEach(() => {
-    licenceFixture = LicencesFixture.licence()
+    auth = {
+      credentials: {
+        roles: [
+          {
+            role: 'billing'
+          }
+        ]
+      }
+    }
 
-    Sinon.stub(FetchLicencePurposesService, 'go').returns(licenceFixture.licence)
+    licence = ViewLicencesFixture.licence()
+
+    purposes = [ViewLicencesFixture.licenceVersionPurpose()]
+
+    Sinon.stub(FetchLicenceService, 'go').returns(licence)
+
+    Sinon.stub(FetchPurposesService, 'go').returns(purposes)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when a licence with a matching ID exists', () => {
     it('correctly presents the data', async () => {
-      const result = await ViewPurposesService.go(licenceFixture.licence.id)
+      const result = await ViewPurposesService.go(licence.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        activeSecondaryNav: 'summary',
+        activeSummarySubNav: 'purposes',
         backLink: {
-          href: `/system/licences/${licenceFixture.licence.id}/summary`,
+          href: `/system/licences/${licence.id}/summary`,
           text: 'Go back to summary'
         },
         licencePurposes: [
@@ -54,8 +77,9 @@ describe('Licences - View Purposes service', () => {
           }
         ],
         pageTitle: 'Purposes, periods and amounts',
-        pageTitleCaption: `Licence ${licenceFixture.licence.licenceRef}`,
-        showingPurposes: 'Showing 1 purposes'
+        pageTitleCaption: `Licence ${licence.licenceRef}`,
+        roles: ['billing'],
+        showingPurposes: 'Showing 1 purpose'
       })
     })
   })

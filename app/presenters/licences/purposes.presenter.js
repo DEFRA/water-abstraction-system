@@ -6,20 +6,20 @@
  */
 
 const { formatAbstractionPeriod } = require('../base.presenter.js')
-const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
+const { formatAbstractionAmounts, pluralise } = require('./base-licences.presenter.js')
 
 /**
  * Formats the licence and related licenceVersionPurposes data for the view licence purposes page
  *
- * @param {module:LicenceModel} licence - The licence and related licenceVersionPurposes data returned by
- * `FetchLicencePurposesService`
+ * @param {object} purposes - The licenceVersionPurposes data returned by `FetchLicencePurposesService`
+ * @param {object} licence - The id and licence ref of the licence
  *
  * @returns {object} licence and licenceVersionPurposes data needed by the view template
  */
-function go(licence) {
-  const { id, licenceRef, licenceVersions } = licence
+function go(purposes, licence) {
+  const { id, licenceRef } = licence
 
-  const licencePurposes = _formatLicencePurposes(licenceVersions[0].licenceVersionPurposes)
+  const licencePurposes = formatPurposes(purposes)
 
   return {
     backLink: {
@@ -29,7 +29,7 @@ function go(licence) {
     licencePurposes,
     pageTitle: 'Purposes, periods and amounts',
     pageTitleCaption: `Licence ${licenceRef}`,
-    showingPurposes: `Showing ${licencePurposes.length} purposes`
+    showingPurposes: `Showing ${licencePurposes.length} ${pluralise('purpose', licencePurposes.length)}`
   }
 }
 
@@ -80,24 +80,22 @@ function _formatAbstractionPoints(points) {
   })
 }
 
-function _formatLicencePurposes(licenceVersionPurposes) {
-  return licenceVersionPurposes.map((licenceVersionPurpose) => {
-    const abstractionAmounts = _formatAbstractionAmounts(licenceVersionPurpose)
-    const abstractionMethods = _formatAbstractionMethod(licenceVersionPurpose.licenceVersionPurposePoints)
-    const abstractionPoints = _formatAbstractionPoints(licenceVersionPurpose.points)
+function formatPurposes(purposes) {
+  return purposes.map((purpose) => {
+    const abstractionAmounts = _formatAbstractionAmounts(purpose)
+    const abstractionMethods = _formatAbstractionMethod(purpose.licenceVersionPurposePoints)
+    const abstractionPoints = _formatAbstractionPoints(purpose.points)
 
     return {
       abstractionAmounts,
       abstractionAmountsTitle: abstractionAmounts.length > 1 ? 'Abstraction amounts' : 'Abstraction amount',
       abstractionMethods,
       abstractionMethodsTitle:
-        licenceVersionPurpose.licenceVersionPurposePoints.length > 1
-          ? 'Methods of abstraction'
-          : 'Method of abstraction',
-      abstractionPeriod: _abstractionPeriod(licenceVersionPurpose),
+        purpose.licenceVersionPurposePoints.length > 1 ? 'Methods of abstraction' : 'Method of abstraction',
+      abstractionPeriod: _abstractionPeriod(purpose),
       abstractionPoints,
       abstractionPointsTitle: abstractionPoints.length > 1 ? 'Abstraction points' : 'Abstraction point',
-      purposeDescription: licenceVersionPurpose.purpose.description
+      purposeDescription: purpose.purpose.description
     }
   })
 }

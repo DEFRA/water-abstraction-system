@@ -1,48 +1,45 @@
 'use strict'
 
 /**
- * Fetches the matching licence and its data needed for the view '/licences/{id}/*` pages
+ * Fetches the matching licence for the view '/licences/{id}/*' pages
  * @module FetchLicenceService
  */
 
 const LicenceModel = require('../../models/licence.model.js')
+const { db } = require('../../../db/db.js')
 
 /**
- * Fetches the matching licence and its data needed for the view '/licences/{id}/*` pages
- *
- * Was built to provide the data needed for the '/licences/{id}' page
+ * Fetches the matching licence for the view '/licences/{id}/*' pages
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<module:LicenceModel>} the matching `LicenceModel` populated with the data needed for the view
- * licence page top section (shared by all tab pages) and some elements needed for the summary tab
+ * @returns {Promise<module:LicenceModel>} the matching `LicenceModel`
  */
 async function go(licenceId) {
-  return _fetch(licenceId)
-}
-
-async function _fetch(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
     .select([
-      'id',
       'expiredDate',
+      'id',
       'lapsedDate',
+      'licenceRef',
       'includeInPresrocBilling',
       'includeInSrocBilling',
-      'licenceRef',
-      'revokedDate'
+      'revokedDate',
+      db.raw(`
+      (
+        CASE
+          WHEN EXISTS (
+            SELECT 1
+            FROM public.licence_supplementary_years lsy
+            WHERE lsy.licence_id = licences.id
+          )
+          THEN TRUE
+          ELSE FALSE
+        END
+      ) AS "includeInTwoPartTariffBilling"
+    `)
     ])
-    .modify('licenceName')
-    .modify('primaryUser')
-    .withGraphFetched('licenceSupplementaryYears')
-    .modifyGraph('licenceSupplementaryYears', (builder) => {
-      builder.select(['id']).where('twoPartTariff', true)
-    })
-    .withGraphFetched('workflows')
-    .modifyGraph('workflows', (builder) => {
-      builder.select(['id', 'status']).whereNull('deletedAt')
-    })
 }
 
 module.exports = {

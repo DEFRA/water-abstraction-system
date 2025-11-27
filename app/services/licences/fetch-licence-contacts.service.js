@@ -1,54 +1,42 @@
 'use strict'
 
 /**
- * Fetches all return logs for a licence which is needed for the view '/licences/{id}/contact-details` page
- * @module FetchLicenceContactService
+ * Fetches data needed for the view '/licences/{id}/licence-contact` page
+ * @module FetchLicenceContactsService
  */
 
-const { db } = require('../../../db/db.js')
+const LicenceModel = require('../../models/licence.model.js')
 
 /**
- * Fetches all contact details for a licence which is needed for the view '/licences/{id}/contact-details` page
+ * Fetch the matching licence and return data needed for the licence contact details link page
+ *
+ * Was built to provide the data needed for the '/licences/{id}/licence-contact' page
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<object>} the data needed to populate the view licence page's contact details tab
+ * @returns {Promise<module:LicenceModel>} the matching `licenceModel` populated with the data needed for the view
+ * licence contact details page
  */
 async function go(licenceId) {
   return _fetch(licenceId)
 }
 
 async function _fetch(licenceId) {
-  return db
-    .withSchema('public')
-    .select([
-      'lr.label AS communicationType',
-      'cmp.id AS companyId',
-      'cmp.name AS companyName',
-      'con.id AS contactId',
-      'con.firstName',
-      'con.lastName',
-      'a.address1',
-      'a.address2',
-      'a.address3',
-      'a.address4',
-      'a.address5',
-      'a.address6',
-      'a.postcode',
-      'a.country'
-    ])
-    .from('licenceDocuments AS ld')
-    .innerJoin('licences AS l', 'l.licenceRef', '=', 'ld.licenceRef')
-    .innerJoin('licenceDocumentRoles AS ldr', 'ldr.licenceDocumentId', '=', 'ld.id')
-    .innerJoin('licenceRoles AS lr', 'lr.id', '=', 'ldr.licenceRoleId')
-    .innerJoin('companies AS cmp', 'cmp.id', '=', 'ldr.companyId')
-    .leftJoin('contacts AS con', 'con.id', '=', 'ldr.contactId')
-    .innerJoin('addresses AS a', 'a.id', '=', 'ldr.addressId')
-    .where('l.id', '=', licenceId)
-    .andWhere((builder) => {
-      builder.whereNull('ldr.end_date').orWhere('ldr.end_date', '>', db.raw('NOW()'))
+  return LicenceModel.query()
+    .findById(licenceId)
+    .select(['id', 'licenceRef'])
+    .withGraphFetched('licenceDocumentHeader')
+    .modifyGraph('licenceDocumentHeader', (builder) => {
+      builder.select(['id', 'metadata'])
     })
-    .orderBy('lr.label', 'desc')
+    .withGraphFetched('licenceDocumentHeader.licenceEntityRoles')
+    .modifyGraph('licenceDocumentHeader.licenceEntityRoles', (builder) => {
+      builder.select(['role']).whereIn('role', ['primary_user', 'user_returns'])
+    })
+    .withGraphFetched('licenceDocumentHeader.licenceEntityRoles.licenceEntity')
+    .modifyGraph('licenceDocumentHeader.licenceEntityRoles.licenceEntity', (builder) => {
+      builder.select(['name'])
+    })
 }
 
 module.exports = {

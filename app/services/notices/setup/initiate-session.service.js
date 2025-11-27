@@ -20,18 +20,18 @@ const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.j
  * At the end when the journey is complete the data from the session will be used to create the notice and related
  * notifications and the session record itself deleted.
  *
- * This session will be used for all types of notices (invitations, reminders). We set the prefix and type for the
- * upstream services to use e.g. the prefix and code are used in the filename of a csv file.
+ * This session will be used for all types of notices (invitations, reminders, abstraction alerts and paper returns). We
+ * set the prefix and type for the upstream services to use e.g. the prefix and code are used in the filename of a csv
+ * file.
  *
  * @param {string} journey - The notice journey to use; 'adhoc', 'standard' or 'alerts'
- * @param {string} [noticeType=null] - A string relating to one of the keys for `NOTIFICATION_TYPES`
  * @param {string} [monitoringStationId=null] - For abstraction alerts, the UUID of the monitoring station we are
  * creating an alert for
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(journey, noticeType = null, monitoringStationId = null) {
-  const notice = _notice(journey, noticeType)
+async function go(journey, monitoringStationId = null) {
+  const notice = _notice(journey)
 
   let additionalData = {}
 
@@ -51,34 +51,25 @@ async function go(journey, noticeType = null, monitoringStationId = null) {
 
   return {
     sessionId: session.id,
-    path: _redirect(journey, noticeType)
+    path: _redirect(journey)
   }
 }
 
 /**
- * The 'adhoc' journey does not have a noticeType set. This is set later in the journey.
+ * The 'standard' and 'adhoc' journeys do not have a noticeType set as itn is selected later in the journey.
  *
  * @private
  */
-function _notice(journey, noticeType) {
+function _notice(journey) {
   if (journey === NoticeJourney.ALERTS) {
-    noticeType = NoticeType.ABSTRACTION_ALERTS
-  }
-
-  if (noticeType) {
-    return DetermineNoticeTypeService.go(noticeType)
+    return DetermineNoticeTypeService.go(NoticeType.ABSTRACTION_ALERTS)
   }
 
   return null
 }
 
-function _redirect(journey, noticeType) {
+function _redirect(journey) {
   if (journey === NoticeJourney.STANDARD) {
-    // The legacy 'manage' page provides a notice type, this is due to be removed.
-    if (noticeType) {
-      return 'returns-period'
-    }
-
     return 'notice-type'
   }
 
@@ -86,6 +77,7 @@ function _redirect(journey, noticeType) {
     return 'abstraction-alerts/alert-type'
   }
 
+  // Ad-hoc
   return 'licence'
 }
 

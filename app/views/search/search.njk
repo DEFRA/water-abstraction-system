@@ -47,11 +47,6 @@
 
   <div class="govuk-grid-row govuk-!-margin-top-9">
     <div class="govuk-grid-column-full">
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">
-        {{ pageTitle }}
-        <span class="govuk-caption-l">{{ pageTitleCaption }}</span>
-      </h1>
-
       <form method="post">
         <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}"/>
 
@@ -111,6 +106,26 @@
                 </div>
                 <div class="searchresult-column">
                   <dt class="searchresult-term">End date:</dt><dd class="searchresult-detail">{{ licence.licenceEndDate }} {{ licenceStatusTag(licence.licenceEndedText) if licence.licenceEndedText }}</dd>
+                </div>
+              </dl>
+            </div>
+            <hr class="searchresult-separator">
+          {% endfor %}
+        {% endif %}
+
+        {% if exactMatches.licenceHolders %}
+          {% for licenceHolder in exactMatches.licenceHolders %}
+            <hr class="searchresult-separator">
+            <div class="searchresult-row">
+              <dl class="searchresult-list">
+                <div class="searchresult-column">
+                  <dt class="searchresult-term-l">Holder:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/licences/{{ licenceHolder.id }}/summary">{{ licenceHolder.holderName }}</a></dd><p class="govuk-body-s govuk-!-margin-bottom-0">Exact match</p>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Licence:</dt><dd class="searchresult-detail">{{ licenceHolder.licenceRef }}</dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Type:</dt><dd class="searchresult-detail">{{ licenceHolder.holderType }}</dd>
                 </div>
               </dl>
             </div>
@@ -215,6 +230,26 @@
                 </div>
                 <div class="searchresult-column">
                   <dt class="searchresult-term">End date:</dt><dd class="searchresult-detail">{{ licence.licenceEndDate }} {{ licenceStatusTag(licence.licenceEndedText) if licence.licenceEndedText }}</dd>
+                </div>
+              </dl>
+            </div>
+            <hr class="searchresult-separator">
+          {% endfor %}
+        {% endif %}
+
+        {% if partialMatches.licenceHolders %}
+          {% for licenceHolder in partialMatches.licenceHolders %}
+            <hr class="searchresult-separator">
+            <div class="searchresult-row">
+              <dl class="searchresult-list">
+                <div class="searchresult-column">
+                  <dt class="searchresult-term-l">Holder:</dt><dd class="searchresult-detail-l"><a class="searchresult-link" href="/system/licences/{{ licenceHolder.id }}/summary">{{ licenceHolder.holderName }}</a></dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Licence:</dt><dd class="searchresult-detail">{{ licenceHolder.licenceRef }}</dd>
+                </div>
+                <div class="searchresult-column">
+                  <dt class="searchresult-term">Type:</dt><dd class="searchresult-detail">{{ licenceHolder.holderType }}</dd>
                 </div>
               </dl>
             </div>
