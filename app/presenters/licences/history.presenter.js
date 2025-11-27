@@ -11,17 +11,18 @@ const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 /**
  * Formats data for the `/licences/{id}/history` view history page
  *
- * @param licenceHistory - The licence and related charge, licence and return versions
+ * @param {object} licenceHistory - The licence and related charge, licence and return versions
  * @param {object} licence - The id and licence ref of the licence
  *
  * @returns The data formatted and sorted for the view template
  */
 function go(licenceHistory, licence) {
   const { id: licenceId, licenceRef } = licence
+  const { chargeVersions, licenceVersions, returnVersions } = licenceHistory
 
-  const chargeVersionEntries = _chargeVersionEntries(licenceHistory, licenceId)
-  const licenceVersionEntries = _licenceVersionEntries(licenceHistory)
-  const returnVersionEntries = _returnVersionEntries(licenceHistory)
+  const chargeVersionEntries = _chargeVersionEntries(chargeVersions, licenceId)
+  const licenceVersionEntries = _licenceVersionEntries(licenceVersions)
+  const returnVersionEntries = _returnVersionEntries(returnVersions)
 
   const sortedEntries = _sortEntries(chargeVersionEntries, licenceVersionEntries, returnVersionEntries)
 
@@ -36,9 +37,7 @@ function go(licenceHistory, licence) {
   }
 }
 
-function _chargeVersionEntries(licence, licenceId) {
-  const { chargeVersions } = licence
-
+function _chargeVersionEntries(chargeVersions, licenceId) {
   return chargeVersions.map((chargeVersion) => {
     const createdAt = chargeVersion.$createdAt()
     const notes = chargeVersion.$notes()
@@ -67,9 +66,7 @@ function _createdBy(entry) {
   return 'Migrated from NALD'
 }
 
-function _licenceVersionEntries(licence) {
-  const { licenceVersions } = licence
-
+function _licenceVersionEntries(licenceVersions) {
   return licenceVersions.map((licenceVersion) => {
     const createdAt = licenceVersion.$createdAt()
     const notes = licenceVersion.$notes()
@@ -88,9 +85,7 @@ function _licenceVersionEntries(licence) {
   })
 }
 
-function _returnVersionEntries(licence) {
-  const { returnVersions } = licence
-
+function _returnVersionEntries(returnVersions) {
   return returnVersions.map((returnVersion) => {
     const createdAt = returnVersion.$createdAt()
     const notes = returnVersion.$notes()
