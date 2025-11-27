@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+
 jobs:
   shai-hulud-detect:
     runs-on: ubuntu-latest
