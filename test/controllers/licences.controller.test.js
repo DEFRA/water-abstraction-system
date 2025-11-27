@@ -723,11 +723,11 @@ function _viewContactDetails() {
 }
 
 function _viewHistory() {
+  const commonLicenceData = _commonData()
+
   return {
-    entries: [{}],
-    licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
-    licenceRef: 'AT/Test',
-    pageTitle: 'History for AT/Test'
+    ...commonLicenceData,
+    entries: [{}]
   }
 }
 

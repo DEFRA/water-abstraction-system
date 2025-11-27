@@ -1,5 +1,5 @@
-{% extends 'layout.njk' %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% extends 'layout-licences.njk' %}
+
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
@@ -18,20 +18,7 @@
   {% endfor %}
 {% endmacro %}
 
-{% block breadcrumbs %}
-  {{ govukBackLink({
-    text: 'Go back to licence ' + licenceRef,
-    href: "/system/licences/" + licenceId + "/summary"
-  }) }}
-{% endblock %}
-
-{% block content %}
-    {# Main heading #}
-  <div>
-    <span class="govuk-caption-l"> Licence {{ licenceRef }} </span>
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">History</h1>
-  </div>
-
+{% block subPageContent %}
   {% if entries.length === 0 %}
     <p>No history for this licence.</p>
   {% else %}

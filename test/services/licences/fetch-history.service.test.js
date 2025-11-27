@@ -52,7 +52,6 @@ describe('Licences - Fetch History service', () => {
 
       expect(result).to.equal({
         id: licence.id,
-        licenceRef: licence.licenceRef,
         chargeVersions: [
           {
             id: chargeVersion.id,

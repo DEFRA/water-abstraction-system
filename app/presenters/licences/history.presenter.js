@@ -11,29 +11,33 @@ const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 /**
  * Formats data for the `/licences/{id}/history` view history page
  *
- * @param {module:LicenceModel} licence - The licence and related charge, licence and return versions
+ * @param licenceHistory - The licence and related charge, licence and return versions
+ * @param {object} licence - The id and licence ref of the licence
  *
  * @returns The data formatted and sorted for the view template
  */
-function go(licence) {
+function go(licenceHistory, licence) {
   const { id: licenceId, licenceRef } = licence
 
-  const chargeVersionEntries = _chargeVersionEntries(licence)
-  const licenceVersionEntries = _licenceVersionEntries(licence)
-  const returnVersionEntries = _returnVersionEntries(licence)
+  const chargeVersionEntries = _chargeVersionEntries(licenceHistory, licenceId)
+  const licenceVersionEntries = _licenceVersionEntries(licenceHistory)
+  const returnVersionEntries = _returnVersionEntries(licenceHistory)
 
   const sortedEntries = _sortEntries(chargeVersionEntries, licenceVersionEntries, returnVersionEntries)
 
   return {
+    backLink: {
+      href: `/system/licences/${licenceId}/summary`,
+      text: 'Go back to search'
+    },
     entries: sortedEntries,
-    licenceId,
-    licenceRef,
-    pageTitle: `History for ${licenceRef}`
+    pageTitle: 'History',
+    pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 
-function _chargeVersionEntries(licence) {
-  const { chargeVersions, id } = licence
+function _chargeVersionEntries(licence, licenceId) {
+  const { chargeVersions } = licence
 
   return chargeVersions.map((chargeVersion) => {
     const createdAt = chargeVersion.$createdAt()
@@ -45,7 +49,7 @@ function _chargeVersionEntries(licence) {
       dateCreated: formatLongDate(createdAt),
       displayNote: notes.length > 0,
       notes,
-      link: `/licences/${id}/charge-information/${chargeVersion.id}/view`,
+      link: `/licences/${licenceId}/charge-information/${chargeVersion.id}/view`,
       reason: chargeVersion.$reason(),
       startDate: formatLongDate(chargeVersion.startDate),
       type: { index: 1, name: 'Charge version' }
