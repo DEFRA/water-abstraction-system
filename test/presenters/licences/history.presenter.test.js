@@ -9,39 +9,47 @@ const { expect } = Code
 
 // Test helpers
 const ChangeReasonModel = require('../../../app/models/change-reason.model.js')
-const LicenceModel = require('../../../app/models/licence.model.js')
 const ChargeVersionModel = require('../../../app/models/charge-version.model.js')
 const ChargeVersionNoteModel = require('../../../app/models/charge-version-note.model.js')
 const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
 const ModLogModel = require('../../../app/models/mod-log.model.js')
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const HistoryPresenter = require('../../../app/presenters/licences/history.presenter.js')
 
 describe('Licences - History presenter', () => {
   let licence
+  let licenceHistory
 
   beforeEach(() => {
-    licence = _testLicence()
+    licence = {
+      id: generateUUID(),
+      licenceRef: generateLicenceRef()
+    }
+
+    licenceHistory = _testLicenceHistory()
   })
 
   describe('when provided with populated licence history', () => {
     it('correctly presents the data', () => {
-      const result = HistoryPresenter.go(licence)
+      const result = HistoryPresenter.go(licenceHistory, licence)
 
       expect(result).to.equal({
-        licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',
-        licenceRef: '01/123',
-        pageTitle: 'History for 01/123',
+        backLink: {
+          href: `/system/licences/${licence.id}/summary`,
+          text: 'Go back to search'
+        },
         entries: [
           {
-            createdAt: new Date('2023-07-05T00:00:00.000Z'),
+            createdAt: new Date('2023-04-03T00:00:00.000Z'),
             createdBy: 'cristiano.ronaldo@atari.com',
-            dateCreated: '5 July 2023',
+            dateCreated: '3 April 2023',
             displayNote: true,
             notes: ['Charge version test note'],
-            link: '/licences/761bc44f-80d5-49ae-ab46-0a90495417b5/charge-information/dfe3d0d7-5e53-4e51-9748-169d01816642/view',
+            link: `/licences/${licence.id}/charge-information/${licenceHistory.chargeVersions[0].id}/view`,
             reason: 'Major change',
             startDate: '1 April 2020',
             type: { index: 1, name: 'Charge version' }
@@ -63,19 +71,21 @@ describe('Licences - History presenter', () => {
             dateCreated: '5 April 2021',
             displayNote: true,
             notes: ['Test note'],
-            link: '/system/return-versions/3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
+            link: `/system/return-versions/${licenceHistory.returnVersions[0].id}`,
             reason: 'New licence',
             startDate: '1 April 2021',
             type: { index: 2, name: 'Return version' }
           }
-        ]
+        ],
+        pageTitle: 'History',
+        pageTitleCaption: `Licence ${licence.licenceRef}`
       })
     })
 
     describe('the "createdBy" property', () => {
       describe('when the entry has a "createdBy"', () => {
         it("returns the entry's `createdBy`", () => {
-          const result = HistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licenceHistory, licence)
 
           expect(result.entries[0].createdBy).to.equal('cristiano.ronaldo@atari.com')
         })
@@ -83,7 +93,7 @@ describe('Licences - History presenter', () => {
 
       describe('when the entry does not have a "createdBy"', () => {
         it('returns "Migrated from NALD"', () => {
-          const result = HistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licenceHistory, licence)
 
           expect(result.entries[1].createdBy).to.equal('Migrated from NALD')
         })
@@ -93,7 +103,7 @@ describe('Licences - History presenter', () => {
     describe('the "displayNote" property', () => {
       describe('when the entry has a note', () => {
         it('return true', () => {
-          const result = HistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licenceHistory, licence)
 
           expect(result.entries[0].displayNote).to.be.true()
         })
@@ -101,12 +111,13 @@ describe('Licences - History presenter', () => {
 
       describe('when the entry does not have a note', () => {
         beforeEach(() => {
-          licence.chargeVersions[0].noteId = null
-          licence.chargeVersions[0].chargeVersionNote = null
+          licenceHistory.chargeVersions[0].modLogs = []
+          licenceHistory.chargeVersions[0].noteId = null
+          licenceHistory.chargeVersions[0].chargeVersionNote = null
         })
 
         it('returns false', () => {
-          const result = HistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licenceHistory, licence)
 
           expect(result.entries[0].displayNote).to.be.false()
         })
@@ -116,17 +127,17 @@ describe('Licences - History presenter', () => {
     describe('the "link" property', () => {
       describe('when the entry is a "charge-version"', () => {
         it('returns the charge version link', () => {
-          const result = HistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licenceHistory, licence)
 
           expect(result.entries[0].link).to.equal(
-            '/licences/761bc44f-80d5-49ae-ab46-0a90495417b5/charge-information/dfe3d0d7-5e53-4e51-9748-169d01816642/view'
+            `/licences/${licence.id}/charge-information/${licenceHistory.chargeVersions[0].id}/view`
           )
         })
       })
 
       describe('when the entry is a "licence-version"', () => {
         it('returns null', () => {
-          const result = HistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licenceHistory, licence)
 
           expect(result.entries[1].link).to.be.null()
         })
@@ -134,9 +145,9 @@ describe('Licences - History presenter', () => {
 
       describe('when the entry is a "return-version"', () => {
         it('returns the return version link', () => {
-          const result = HistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licenceHistory, licence)
 
-          expect(result.entries[2].link).to.equal('/system/return-versions/3f09ce0b-288c-4c0b-b519-7329fe70a6cc')
+          expect(result.entries[2].link).to.equal(`/system/return-versions/${licenceHistory.returnVersions[0].id}`)
         })
       })
     })
@@ -145,7 +156,7 @@ describe('Licences - History presenter', () => {
       describe('when the entry is a return version', () => {
         describe('and the reason maps to a WRLS reason', () => {
           it('returns the WRLS reason', () => {
-            const result = HistoryPresenter.go(licence)
+            const result = HistoryPresenter.go(licenceHistory, licence)
 
             expect(result.entries[2].reason).to.equal('New licence')
           })
@@ -153,8 +164,8 @@ describe('Licences - History presenter', () => {
 
         describe('and the reason does not map to a WRLS reason', () => {
           beforeEach(() => {
-            licence.returnVersions[0].reason = null
-            licence.returnVersions[0].modLogs = [
+            licenceHistory.returnVersions[0].reason = null
+            licenceHistory.returnVersions[0].modLogs = [
               ModLogModel.fromJson({
                 reasonDescription: 'This is a reason'
               })
@@ -162,7 +173,7 @@ describe('Licences - History presenter', () => {
           })
 
           it("returns the entry's reason", () => {
-            const result = HistoryPresenter.go(licence)
+            const result = HistoryPresenter.go(licenceHistory, licence)
 
             expect(result.entries[2].reason).to.equal('This is a reason')
           })
@@ -173,7 +184,7 @@ describe('Licences - History presenter', () => {
     describe('the "type" property', () => {
       describe('when the entry is "charge-version"', () => {
         it('returns the index 1 and name "Charge version"', () => {
-          const result = HistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licenceHistory, licence)
 
           expect(result.entries[0].type).to.equal({ index: 1, name: 'Charge version' })
         })
@@ -181,7 +192,7 @@ describe('Licences - History presenter', () => {
 
       describe('when the entry is "return-version"', () => {
         it('returns the index 2 and name "Return version"', () => {
-          const result = HistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licenceHistory, licence)
 
           expect(result.entries[2].type).to.equal({ index: 2, name: 'Return version' })
         })
@@ -189,7 +200,7 @@ describe('Licences - History presenter', () => {
 
       describe('when the entry is "licence-version"', () => {
         it('returns the index 0 and name "Licence version"', () => {
-          const result = HistoryPresenter.go(licence)
+          const result = HistoryPresenter.go(licenceHistory, licence)
 
           expect(result.entries[1].type).to.equal({ index: 0, name: 'Licence version' })
         })
@@ -198,45 +209,41 @@ describe('Licences - History presenter', () => {
   })
 })
 
-function _testLicence() {
+function _testLicenceHistory() {
   const changeReason = ChangeReasonModel.fromJson({
-    id: '0dee4596-0867-4997-8a00-e0998cfcefc0',
+    id: generateUUID(),
     description: 'Major change'
   })
 
   const chargeVersionNote = ChargeVersionNoteModel.fromJson({
-    id: '27ac6412-5f73-4e35-8885-236bfea92a1c',
+    id: generateUUID(),
     note: 'Charge version test note'
   })
 
-  const testLicence = LicenceModel.fromJson({
-    id: '761bc44f-80d5-49ae-ab46-0a90495417b5',
-    licenceRef: '01/123',
-    licenceDocument: {
-      licenceDocumentRoles: [
-        {
-          id: '3b903973-2143-47fe-b7a2-b205aa8eb933'
-        }
-      ]
-    }
+  const modLog = ModLogModel.fromJson({
+    id: generateUUID(),
+    naldDate: new Date('2023-04-03'),
+    note: 'modLog test note!',
+    reasonDescription: 'This is a test!',
+    userId: 'TEST_NALD_OWNER'
   })
 
   const chargeVersions = ChargeVersionModel.fromJson({
     createdAt: new Date('2023-07-05'),
     createdBy: { id: 3, email: 'cristiano.ronaldo@atari.com' },
-    id: 'dfe3d0d7-5e53-4e51-9748-169d01816642',
+    id: generateUUID(),
     reason: 'new-licence',
     status: 'current',
     startDate: new Date('2020-04-01'),
-    modLogs: [],
+    modLogs: [modLog],
     chargeVersionNote,
     changeReason,
-    noteId: '27ac6412-5f73-4e35-8885-236bfea92a1c'
+    noteId: generateUUID()
   })
 
   const licenceVersions = LicenceVersionModel.fromJson({
     createdAt: new Date('2022-06-05'),
-    id: '4c42fd78-6e68-4eaa-9c88-781c323a5a38',
+    id: generateUUID(),
     reason: 'new-licence',
     status: 'current',
     startDate: new Date('2022-04-01'),
@@ -245,7 +252,7 @@ function _testLicence() {
 
   const returnVersions = ReturnVersionModel.fromJson({
     createdAt: new Date('2021-04-05'),
-    id: '3f09ce0b-288c-4c0b-b519-7329fe70a6cc',
+    id: generateUUID(),
     multipleUpload: false,
     notes: 'Test note',
     reason: 'new-licence',
@@ -255,8 +262,6 @@ function _testLicence() {
   })
 
   return {
-    id: testLicence.id,
-    licenceRef: testLicence.licenceRef,
     licenceVersions: [licenceVersions],
     chargeVersions: [chargeVersions],
     returnVersions: [returnVersions]
