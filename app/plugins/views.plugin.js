@@ -36,7 +36,7 @@ import('marked').then((mod) => {
   global.GlobalMarked = mod.marked
 })
 
-const { enableSystemProfiles, enableLicenceHistoryView } = require('../../config/feature-flags.config.js')
+const { enableLicenceHistoryView, enableSystemProfiles } = require('../../config/feature-flags.config.js')
 
 const ViewsPlugin = {
   plugin: Vision,
@@ -122,10 +122,10 @@ function context(request) {
       scope: request.auth.credentials?.scope,
       permission: request.auth.credentials?.permission
     },
-    navigationLinks: _navigationLinks(request.auth),
     featureToggles: {
       enableLicenceHistoryView
-    }
+    },
+    navigationLinks: _navigationLinks(request.auth)
   }
 }
 
