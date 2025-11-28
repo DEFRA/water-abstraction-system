@@ -774,7 +774,7 @@ describe('Return Logs Setup - Check presenter', () => {
                 quantity: 0,
                 quantityCubicMetres: 0,
                 reading: 0,
-                startDate: '2023-04-01T00:00:00.000Z',
+                startDate: '2023-04-01T00:00:00.000Z'
               }
             ]
             session.startReading = 0
