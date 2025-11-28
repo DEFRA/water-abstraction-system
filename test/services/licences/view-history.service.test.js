@@ -41,7 +41,13 @@ describe('Licences - View History service', () => {
       licenceRef: generateLicenceRef()
     }
 
-    licenceHistory = _testLicenceHistory()
+    licenceHistory = [
+      LicenceVersionModel.fromJson({
+        endDate: new Date('2022-06-05'),
+        id: generateUUID(),
+        startDate: new Date('2022-04-01')
+      })
+    ]
 
     Sinon.stub(FetchLicenceService, 'go').returns(licence)
     Sinon.stub(FetchHistoryService, 'go').returns(licenceHistory)
@@ -61,7 +67,7 @@ describe('Licences - View History service', () => {
         licenceVersions: [
           {
             action: {
-              link: `/system/licence-versions/${licenceHistory.licenceVersions[0].id}`,
+              link: `/system/licence-versions/${licenceHistory[0].id}`,
               text: 'View'
             },
             changeType: null,
@@ -77,15 +83,3 @@ describe('Licences - View History service', () => {
     })
   })
 })
-
-function _testLicenceHistory() {
-  const licenceVersions = LicenceVersionModel.fromJson({
-    endDate: new Date('2022-06-05'),
-    id: generateUUID(),
-    startDate: new Date('2022-04-01')
-  })
-
-  return {
-    licenceVersions: [licenceVersions]
-  }
-}

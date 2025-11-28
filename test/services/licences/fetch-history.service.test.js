@@ -31,16 +31,13 @@ describe('Licences - Fetch History service', () => {
     it('returns the matching licence versions, charge versions and return versions', async () => {
       const result = await FetchHistoryService.go(licenceId)
 
-      expect(result).to.equal({
-        id: licence.id,
-        licenceVersions: [
-          {
-            endDate: licenceVersion.endDate,
-            id: licenceVersion.id,
-            startDate: licenceVersion.startDate
-          }
-        ]
-      })
+      expect(result).to.equal([
+        {
+          endDate: licenceVersion.endDate,
+          id: licenceVersion.id,
+          startDate: licenceVersion.startDate
+        }
+      ])
     })
   })
 })
