@@ -164,6 +164,7 @@ function _sessionData() {
     startDate: '2004-04-01T00:00:00.000Z',
     startReading: 0,
     twoPartTariff: false,
-    units: 'megalitres'
+    units: 'megalitres',
+    unitSymbol: 'Ml'
   }
 }

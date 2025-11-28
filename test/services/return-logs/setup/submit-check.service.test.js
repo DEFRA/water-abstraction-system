@@ -85,6 +85,7 @@ describe('Return Logs Setup - Submit Check service', () => {
         ],
         returnsFrequency: 'month',
         units: 'cubicMetres',
+        unitSymbol: 'm³',
         meterProvided: false
       }
     }
