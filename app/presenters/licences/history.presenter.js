@@ -6,7 +6,6 @@
  */
 
 const { formatLongDate } = require('../base.presenter.js')
-const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the `/licences/{id}/history` view history page
