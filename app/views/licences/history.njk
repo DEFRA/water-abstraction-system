@@ -1,96 +1,57 @@
 {% extends 'layout-licences.njk' %}
 
-{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
-
-{% macro dateAndTypeColumn(entry) %}
-  {% if entry.link %}
-    <a href="{{ entry.link }}" class="govuk-link">{{ entry.dateCreated }}</a>
-  {% else %}
-    <div>{{ entry.dateCreated }}</div>
-  {% endif %}
-  <p class="govuk-body-s govuk-!-margin-bottom-0">{{ entry.type.name }}</p>
-{% endmacro %}
-
-{% macro formatNote(notes) %}
-  {% for note in notes %}
-    <p class="govuk-!-margin-bottom-0"> {{ note }}</p>
-  {% endfor %}
-{% endmacro %}
 
 {% block subPageContent %}
   {% if entries.length === 0 %}
     <p>No history for this licence.</p>
   {% else %}
     {% set tableRows = [] %}
-    {% for entry in entries %}
-      {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+    {% for licenceVersion in licenceVersions %}
       {% set rowIndex = loop.index0 %}
 
-      {% if entry.displayNote %}
-        {% set classes = 'table__cell--include govuk-!-margin-bottom-0 govuk-!-padding-bottom-0' %}
-      {% else %}
-        {% set classes = '' %}
-      {% endif %}
-
-      {# Set data row #}
       {% set dataRow = [
         {
-          html: dateAndTypeColumn(entry),
-          attributes: { 'data-test': 'entry-date-type-' + rowIndex },
+          text: licenceVersion.startDate,
+          attributes: { 'data-test': 'licenceVersion-start-date-' + rowIndex },
           classes: classes
         },
         {
-          text: entry.startDate,
-          attributes: { 'data-test': 'entry-start-date-' + rowIndex },
+          text: licenceVersion.endDate,
+          attributes: { 'data-test': 'licenceVersion-end-date-' + rowIndex },
           classes: classes
         },
         {
-          text: entry.reason,
-          attributes: { 'data-test': 'entry-reason-' + rowIndex },
+          text: licenceVersion.reason,
+          attributes: { 'data-test': 'licenceVersion-reason-' + rowIndex },
           classes: classes
         },
         {
-          text: entry.createdBy,
-          attributes: { 'data-test': 'entry-created-by-' + rowIndex },
+          text: licenceVersion.changeType,
+          attributes: { 'data-test': 'licenceVersion-chnage-type-' + rowIndex },
           classes: classes
+        },
+        {
+          html: '<a href="'+ licenceVersion.action.link +'" class="govuk-link">' + licenceVersion.action.text + '</a>',
+          attributes: { 'data-test': 'action-' + rowIndex }
         }
       ] %}
 
+
       {% set tableRows = (tableRows.push(dataRow), tableRows) %}
-
-      {# Set note row #}
-      {% if entry.displayNote %}
-        {% set noteCell %}
-          {{
-            govukDetails({
-              classes: 'govuk-!-margin-bottom-0',
-              summaryText: 'Note',
-              html: formatNote(entry.notes)
-            })
-          }}
-        {% endset %}
-
-        {% set noteRow = [
-          {
-            html: noteCell,
-            attributes: { 'data-test': 'entry-note-' + rowIndex },
-            colspan: 4
-          }
-        ] %}
-
-        {% set tableRows = (tableRows.push(noteRow), tableRows) %}
-      {% endif %}
     {% endfor %}
 
     {{ govukTable({
       attributes: { 'data-test': 'bills-table' },
+      caption: "Showing all licence versions imported into the service.",
+      captionClasses: "govuk-table__caption--m govuk-!-font-weight-regular",
       firstCellIsHeader: false,
       head: [
-        { text: 'Date and type' },
         { text: 'Start date' },
-        { text: 'Reason', classes: 'govuk-!-width-one-quarter' },
-        { text: 'Created by', classes: 'govuk-!-width-one-quarter' }
+        { text: 'End date' },
+        { text: 'Reason' },
+        { text: 'Change type' },
+        { text: 'Action' }
       ],
       rows: tableRows
     }) }}
