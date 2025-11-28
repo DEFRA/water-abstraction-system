@@ -6,7 +6,7 @@
  */
 
 const ReturnSubmissionLineModel = require('../../../models/return-submission-line.model.js')
-const { convertToCubicMetres, generateUUID } = require('../../../lib/general.lib.js')
+const { generateUUID } = require('../../../lib/general.lib.js')
 
 /**
  * Creates return lines by formatting the provided lines and inserting them into the database
@@ -28,61 +28,20 @@ async function go(returnSubmissionId, session, timestamp, trx = null) {
   return ReturnSubmissionLineModel.query(trx).insert(returnLines)
 }
 
-/**
- * Calculates the quantity for a line based on the provided parameters. If the line contains volumes, it uses the
- * quantity directly. If it contains meter readings, it calculates the difference between the current and previous
- * readings. If the meter has a 10x display, it multiplies the difference by 10.
- *
- * @param {object} line - The line to process
- * @param {number} previousReading - The last meter reading we encountered
- * @param {boolean} volumes - Indicates if the line contains volumes (vs meter readings)
- * @param {boolean} meter10TimesDisplay - Indicates if the meter is a 10x display
- * @returns {object} - An object containing the calculated quantity and the new previous reading
- */
-function _calculateLineQuantity(line, meter10TimesDisplay, previousReading, volumes) {
-  const currentReading = line.reading ?? previousReading
-
-  if (volumes) {
-    return { rawQuantity: line.quantity, currentReading }
-  }
-
-  if (line.reading == null) {
-    return { rawQuantity: null, currentReading }
-  }
-
-  const multiplier = meter10TimesDisplay ? 10 : 1
-
-  return {
-    rawQuantity: (line.reading - previousReading) * multiplier,
-    currentReading
-  }
-}
-
 function _returnLines(returnSubmissionId, session, timestamp) {
-  const meter10TimesDisplay = session.meter10TimesDisplay === 'yes'
-  const volumes = session.reported === 'abstractionVolumes'
-
-  let previousReading = session.startReading ?? 0
-
   return session.lines.map((line) => {
-    const { rawQuantity, currentReading } = _calculateLineQuantity(line, meter10TimesDisplay, previousReading, volumes)
-
-    previousReading = currentReading
-
     // We use destructuring to remove the quantityCubicMetres and reading properties as these are not a valid db columns
     const { quantityCubicMetres, reading, ...restOfLine } = line
-
-    const userUnit = session.unitSymbol
 
     return {
       ...restOfLine,
       id: generateUUID(),
       createdAt: timestamp,
-      quantity: rawQuantity ? convertToCubicMetres(rawQuantity, userUnit) : rawQuantity,
+      quantity: line.quantityCubicMetres,
       readingType: session.meterProvided === 'yes' ? 'measured' : 'estimated',
       returnSubmissionId,
       timePeriod: session.returnsFrequency,
-      userUnit
+      userUnit: session.unitSymbol
     }
   })
 }
