@@ -25,7 +25,13 @@ describe('Licences - History presenter', () => {
       licenceRef: generateLicenceRef()
     }
 
-    licenceHistory = _testLicenceHistory()
+    licenceHistory = [
+      LicenceVersionModel.fromJson({
+        endDate: new Date('2022-06-05'),
+        id: generateUUID(),
+        startDate: new Date('2022-04-01')
+      })
+    ]
   })
 
   describe('when provided with populated licence history', () => {
@@ -40,7 +46,7 @@ describe('Licences - History presenter', () => {
         licenceVersions: [
           {
             action: {
-              link: `/system/licence-versions/${licenceHistory.licenceVersions[0].id}`,
+              link: `/system/licence-versions/${licenceHistory[0].id}`,
               text: 'View'
             },
             changeType: null,
@@ -55,15 +61,3 @@ describe('Licences - History presenter', () => {
     })
   })
 })
-
-function _testLicenceHistory() {
-  const licenceVersions = LicenceVersionModel.fromJson({
-    endDate: new Date('2022-06-05'),
-    id: generateUUID(),
-    startDate: new Date('2022-04-01')
-  })
-
-  return {
-    licenceVersions: [licenceVersions]
-  }
-}

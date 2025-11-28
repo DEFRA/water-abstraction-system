@@ -17,14 +17,13 @@ const { formatLongDate } = require('../base.presenter.js')
  */
 function go(licenceHistory, licence) {
   const { id: licenceId, licenceRef } = licence
-  const { licenceVersions } = licenceHistory
 
   return {
     backLink: {
       href: `/system/licences/${licenceId}/summary`,
       text: 'Go back to search'
     },
-    licenceVersions: _licenceVersionEntries(licenceVersions),
+    licenceVersions: _licenceVersionEntries(licenceHistory),
     pageTitle: 'History',
     pageTitleCaption: `Licence ${licenceRef}`
   }
