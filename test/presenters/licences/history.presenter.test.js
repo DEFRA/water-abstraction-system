@@ -29,6 +29,7 @@ describe('Licences - History presenter', () => {
       LicenceVersionModel.fromJson({
         endDate: new Date('2022-06-05'),
         id: generateUUID(),
+        modLogs: [{ id: generateUUID(), reasonDescription: 'Licence Holder Name/Address Change' }],
         startDate: new Date('2022-04-01')
       })
     ]
@@ -51,7 +52,7 @@ describe('Licences - History presenter', () => {
             },
             changeType: null,
             endDate: '5 June 2022',
-            reason: null,
+            reason: 'Licence Holder Name/Address Change',
             startDate: '1 April 2022'
           }
         ],

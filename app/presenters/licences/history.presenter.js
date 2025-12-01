@@ -38,7 +38,7 @@ function _licenceVersionEntries(licenceVersions) {
       },
       changeType: null,
       endDate: formatLongDate(licenceVersion.endDate),
-      reason: null,
+      reason: licenceVersion.$reason(),
       startDate: formatLongDate(licenceVersion.startDate)
     }
   })

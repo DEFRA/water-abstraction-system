@@ -45,6 +45,7 @@ describe('Licences - View History service', () => {
       LicenceVersionModel.fromJson({
         endDate: new Date('2022-06-05'),
         id: generateUUID(),
+        modLogs: [],
         startDate: new Date('2022-04-01')
       })
     ]
