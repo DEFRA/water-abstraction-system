@@ -5,7 +5,7 @@ const tableName = 'document_header'
 exports.up = function (knex) {
   return knex.schema.withSchema('crm').createTable(tableName, (table) => {
     // Primary Key
-    table.uuid('document_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
+    table.string('document_id').primary().defaultTo(knex.raw('gen_random_uuid()'))
 
     // Data
     table.string('regime_entity_id').notNullable()
