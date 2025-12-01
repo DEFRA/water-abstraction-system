@@ -78,7 +78,7 @@ describe('Licences - History presenter', () => {
           licenceHistory[0].administrative = true
         })
 
-        it('should return the change type', () => {
+        it('returns "no licence issued"', () => {
           const result = HistoryPresenter.go(licenceHistory, licence)
 
           expect(result.licenceVersions[0].changeType).to.equal('no licence issued')
