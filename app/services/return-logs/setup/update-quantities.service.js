@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Updates the quantities saved in the session following a change of UOM or the submission of readings
+ * Updates the quantities saved in the session when revisiting the check page (session.checkPageVisited is true)
  * @module UpdateQuantitiesService
  */
 
@@ -10,7 +10,12 @@ const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/g
 const METER_READINGS_METHOD = 'meterReadings'
 
 /**
- * Updates the quantities saved in the session following a change of UOM or the submission of readings
+ * Updates the quantities saved in the session when revisiting the check page (session.checkPageVisited is true)
+ *
+ * There are several changes that can be made to the return submission that will require re-calculation of the
+ * quantities saved in the session (change to UOM, change to/from meter readings etc). Therefore, whenever the user
+ * revisits the check page we recalculate the quantities and update the session to ensure they are correct before
+ * presenting the data.
  *
  * When "volumes" are used the line.quantity is calculated from line.quantityCubicMetres in the sessions data as this
  * will always be populated with the correct volume in cubic metres. Whereas the line.quantity may require updating if
