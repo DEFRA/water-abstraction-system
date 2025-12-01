@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const ModLogHelper = require('../../support/helpers/mod-log.helper.js')
 
 // Thing under test
 const FetchHistoryService = require('../../../app/services/licences/fetch-history.service.js')
@@ -18,6 +19,7 @@ describe('Licences - Fetch History service', () => {
   let licence
   let licenceId
   let licenceVersion
+  let modLog
 
   describe('when the licence has licence versions, charge versions and return versions', () => {
     before(async () => {
@@ -26,15 +28,30 @@ describe('Licences - Fetch History service', () => {
       licenceId = licence.id
 
       licenceVersion = await LicenceVersionHelper.add({ licenceId })
+
+      modLog = await ModLogHelper.add({
+        licenceVersionId: licenceVersion.id,
+        reasonDescription: 'Licence Holder Name/Address Change'
+      })
     })
 
-    it('returns the matching licence versions, charge versions and return versions', async () => {
+    it('returns the matching licence versions', async () => {
       const result = await FetchHistoryService.go(licenceId)
 
       expect(result).to.equal([
         {
+          createdAt: licenceVersion.createdAt,
           endDate: licenceVersion.endDate,
           id: licenceVersion.id,
+          modLogs: [
+            {
+              id: modLog.id,
+              naldDate: new Date('2012-06-01'),
+              note: null,
+              reasonDescription: 'Licence Holder Name/Address Change',
+              userId: 'TTESTER'
+            }
+          ],
           startDate: licenceVersion.startDate
         }
       ])

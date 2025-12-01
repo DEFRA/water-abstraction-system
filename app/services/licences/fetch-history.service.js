@@ -19,7 +19,10 @@ async function go(licenceId) {
 }
 
 async function _fetch(licenceId) {
-  return LicenceVersionModel.query().where('licenceId', licenceId).select(['endDate', 'id', 'startDate'])
+  return LicenceVersionModel.query()
+    .where('licenceId', licenceId)
+    .select(['endDate', 'id', 'startDate'])
+    .modify('history')
 }
 
 module.exports = {
