@@ -23,6 +23,7 @@ describe('Return Logs Setup - Check presenter', () => {
 
       expect(result).to.equal({
         abstractionPeriod: '1 January to 31 December',
+        conversionInsetText: 'All submissions are converted to cubic metres and rounded to six decimal places.',
         displayReadings: false,
         displayUnits: true,
         enterMultipleLinkText: 'Enter multiple monthly volumes',

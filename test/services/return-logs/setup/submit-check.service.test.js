@@ -225,6 +225,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       expect(result).to.equal({
         abstractionPeriod: null,
         activeNavBar: 'search',
+        conversionInsetText: 'All submissions are converted to cubic metres and rounded to six decimal places.',
         displayReadings: false,
         displayUnits: false,
         enterMultipleLinkText: 'Enter multiple monthly volumes',

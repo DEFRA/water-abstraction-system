@@ -39,6 +39,7 @@ describe('Return Logs Setup - Single Volume service', () => {
         {
           activeNavBar: 'search',
           backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
+          conversionInsetText: 'All submissions are converted to cubic metres and rounded to six decimal places.',
           pageTitle: 'Is it a single volume?',
           pageTitleCaption: 'Return reference 012345',
           singleVolume: null,

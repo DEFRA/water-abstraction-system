@@ -45,6 +45,7 @@ describe('Return Logs Setup - Check service', () => {
       expect(result).to.equal({
         abstractionPeriod: '1 January to 31 December',
         activeNavBar: 'search',
+        conversionInsetText: 'All submissions are converted to cubic metres and rounded to six decimal places.',
         displayReadings: true,
         displayUnits: true,
         enterMultipleLinkText: 'Enter multiple monthly readings',

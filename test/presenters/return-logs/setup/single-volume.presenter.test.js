@@ -30,6 +30,7 @@ describe('Return Logs Setup - Single Volume presenter', () => {
           href: '/system/return-logs/setup/61e07498-f309-4829-96a9-72084a54996d/meter-provided',
           text: 'Back'
         },
+        conversionInsetText: 'All submissions are converted to cubic metres and rounded to six decimal places.',
         pageTitle: 'Is it a single volume?',
         pageTitleCaption: 'Return reference 012345',
         sessionId: '61e07498-f309-4829-96a9-72084a54996d',

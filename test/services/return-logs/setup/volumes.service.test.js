@@ -46,6 +46,7 @@ describe('Return Logs Setup - Volumes service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         backLink: { href: `/system/return-logs/setup/${session.id}/check`, text: 'Back' },
+        conversionInsetText: 'All submissions are converted to cubic metres and rounded to six decimal places.',
         inputLines: [
           {
             endDate: '2023-04-30T00:00:00.000Z',
