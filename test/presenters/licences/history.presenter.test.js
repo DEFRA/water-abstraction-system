@@ -66,7 +66,7 @@ describe('Licences - History presenter', () => {
   describe('the "licenceVersions" property', () => {
     describe('the "changeType" property', () => {
       describe('when the licence version is not administrative', () => {
-        it('should return the change type', () => {
+        it('returns "licence issued"', () => {
           const result = HistoryPresenter.go(licenceHistory, licence)
 
           expect(result.licenceVersions[0].changeType).to.equal('licence issued')
