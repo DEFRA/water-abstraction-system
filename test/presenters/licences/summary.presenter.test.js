@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -23,6 +23,10 @@ describe('Licences - Summary Presenter', () => {
   beforeEach(() => {
     summary = _summary()
     Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsView').value(true)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   it('correctly presents the data', () => {
