@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -17,7 +17,7 @@ describe('Notices - Setup - Determine Returns Period service', () => {
   let clock
   let returnsPeriod
 
-  before(async () => {
+  beforeEach(async () => {
     clock = Sinon.useFakeTimers(new Date(`${year}-01-01`))
 
     returnsPeriod = 'quarterFour'
