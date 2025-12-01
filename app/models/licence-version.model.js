@@ -73,9 +73,12 @@ class LicenceVersionModel extends BaseModel {
       // history modifier fetches all the related records needed to determine history properties, for example, created
       // at, created by, and notes from the record and its NALD mod logs (where they exist)
       history(query) {
-        query.withGraphFetched('modLogs').modifyGraph('modLogs', (builder) => {
-          builder.select(['id', 'naldDate', 'note', 'reasonDescription', 'userId']).orderBy('externalId', 'asc')
-        })
+        query
+          .select(['createdAt'])
+          .withGraphFetched('modLogs')
+          .modifyGraph('modLogs', (builder) => {
+            builder.select(['id', 'naldDate', 'note', 'reasonDescription', 'userId']).orderBy('externalId', 'asc')
+          })
       }
     }
   }

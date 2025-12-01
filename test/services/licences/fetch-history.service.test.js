@@ -35,11 +35,12 @@ describe('Licences - Fetch History service', () => {
       })
     })
 
-    it('returns the matching licence versions, charge versions and return versions', async () => {
+    it('returns the matching licence versions', async () => {
       const result = await FetchHistoryService.go(licenceId)
 
       expect(result).to.equal([
         {
+          createdAt: licenceVersion.createdAt,
           endDate: licenceVersion.endDate,
           id: licenceVersion.id,
           modLogs: [
