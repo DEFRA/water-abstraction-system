@@ -22,7 +22,7 @@ describe('Licences - Fetch History service', () => {
   let licenceVersionTwo
   let modLog
 
-  describe('when the licence has licence versions, charge versions and return versions', () => {
+  describe('when the licence has licence versions', () => {
     before(async () => {
       licence = await LicenceHelper.add()
 
