@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -21,11 +21,15 @@ const DownloadReturnLogService = require('../../../app/services/return-logs/down
 describe('Return Logs - Download Return Log Service', () => {
   let returnLog
 
-  before(() => {
+  beforeEach(() => {
     returnLog = ReturnLogsFixture.returnLog('month')
     returnLog.returnSubmissions = [ReturnLogsFixture.returnSubmission(returnLog, 'estimated')]
 
     Sinon.stub(FetchDownloadReturnLogService, 'go').resolves(returnLog)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   it('correctly returns the csv string, filename and type', async () => {

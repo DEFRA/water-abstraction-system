@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -20,6 +20,10 @@ const ViewBillingAccountService = require('../../../app/services/billing-account
 describe('Billing Accounts - View Billing Account service', () => {
   beforeEach(() => {
     Sinon.stub(FetchViewBillingAccountService, 'go').returns(BillingAccountsFixture.billingAccount())
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when a billing account with a matching ID exists', () => {
