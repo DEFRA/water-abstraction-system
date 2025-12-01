@@ -16,11 +16,11 @@ const { formatLongDate } = require('../base.presenter.js')
  * @returns The data formatted and sorted for the view template
  */
 function go(licenceHistory, licence) {
-  const { id: licenceId, licenceRef } = licence
+  const { licenceRef } = licence
 
   return {
     backLink: {
-      href: `/system/licences/${licenceId}/summary`,
+      href: `/licences`,
       text: 'Go back to search'
     },
     licenceVersions: _licenceVersionEntries(licenceHistory),
@@ -36,7 +36,7 @@ function _licenceVersionEntries(licenceVersions) {
         text: 'View',
         link: `/system/licence-versions/${licenceVersion.id}`
       },
-      changeType: null,
+      changeType: licenceVersion.administrative ? 'no licence issued' : 'licence issued',
       endDate: formatLongDate(licenceVersion.endDate),
       reason: licenceVersion.$reason(),
       startDate: formatLongDate(licenceVersion.startDate)
