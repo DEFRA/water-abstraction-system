@@ -3,6 +3,7 @@
 ![Build Status](https://github.com/DEFRA/water-abstraction-system/actions/workflows/ci.yml/badge.svg?branch=main)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_water-abstraction-system&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=DEFRA_water-abstraction-system)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_water-abstraction-system&metric=coverage)](https://sonarcloud.io/dashboard?id=DEFRA_water-abstraction-system)
+[![shai-hulud-detect](https://github.com/DEFRA/water-abstraction-system/actions/workflows/shai-hulud-detect.yml/badge.svg)](https://github.com/DEFRA/water-abstraction-system/actions/workflows/shai-hulud-detect.yml)
 [![Licence](https://img.shields.io/badge/Licence-OGLv3-blue.svg)](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3)
 
 This API provides an interface for calculating charges, queuing transactions and generating transaction files used to produce invoices.
@@ -11,8 +12,8 @@ This API provides an interface for calculating charges, queuing transactions and
 
 Make sure you already have:
 
-- [Node.js v20.\*](https://nodejs.org/en/)
-- [PostgreSQL v14](https://www.postgresql.org/)
+- [Node.js v22.\*](https://nodejs.org/en/)
+- [PostgreSQL v15](https://www.postgresql.org/)
 
 ## Running locally
 
