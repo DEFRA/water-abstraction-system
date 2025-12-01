@@ -127,7 +127,8 @@ function _formatLines(lines, reported) {
 }
 
 /**
- * Groups an array of formatted lines by month.
+ * Groups an array of formatted lines by month. If none of the lines for a month contain a value for quantity or
+ * quantityCubicMetres, the total for that month will be null.
  *
  * @returns {Array} An array of objects grouped by month, each containing:
  *   @param {Date} endDate - The end date of the month.
@@ -145,16 +146,22 @@ function _groupLinesByMonth(formattedLines) {
     if (!monthlyLine[key]) {
       monthlyLine[key] = {
         endDate,
-        quantity: 0,
-        quantityCubicMetres: 0
+        quantity: null,
+        quantityCubicMetres: null
       }
     }
-    monthlyLine[key].quantity = Big(monthlyLine[key].quantity)
-      .plus(quantity ?? 0)
-      .toNumber()
-    monthlyLine[key].quantityCubicMetres = Big(monthlyLine[key].quantityCubicMetres)
-      .plus(quantityCubicMetres ?? 0)
-      .toNumber()
+
+    if (quantity != null) {
+      monthlyLine[key].quantity =
+        monthlyLine[key].quantity === null ? quantity : Big(monthlyLine[key].quantity).plus(quantity).toNumber()
+    }
+
+    if (quantityCubicMetres != null) {
+      monthlyLine[key].quantityCubicMetres =
+        monthlyLine[key].quantityCubicMetres === null
+          ? quantityCubicMetres
+          : Big(monthlyLine[key].quantityCubicMetres).plus(quantityCubicMetres).toNumber()
+    }
 
     if (typeof reading === 'number') {
       monthlyLine[key].reading = reading
