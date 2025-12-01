@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
@@ -67,6 +67,10 @@ describe('Notices - Fetch Notices service', () => {
     await legacyNotice.$query().delete()
     await returnsInvitationNotice.$query().delete()
     await returnedInvitationNotice.$query().delete()
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when no filter is applied', () => {

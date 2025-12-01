@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we want to stub
@@ -17,6 +17,10 @@ const ViewInvalidAddressesService = require('../../../app/services/reports/view-
 describe('Reports - View Invalid Addresses service', () => {
   beforeEach(() => {
     Sinon.stub(FetchInvalidAddressesService, 'go').returns(_invalidAddresses())
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -40,6 +40,10 @@ describe('Licences - View Conditions service', () => {
     Sinon.stub(FetchLicenceService, 'go').returns(licence)
 
     Sinon.stub(FetchConditionsService, 'go').returns(conditions)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   it('correctly presents the data', async () => {
