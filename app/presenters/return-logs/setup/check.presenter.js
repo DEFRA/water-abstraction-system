@@ -8,7 +8,7 @@
 const Big = require('big.js')
 
 const { formatAbstractionPeriod, formatLongDate, formatNumber, sentenceCase } = require('../../base.presenter.js')
-const { generateSummaryTableHeaders } = require('../base-return-logs.presenter.js')
+const { conversionInsetText, generateSummaryTableHeaders } = require('../base-return-logs.presenter.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 const ABSTRACTION_VOLUMES_METHOD = 'abstractionVolumes'
@@ -43,6 +43,7 @@ function go(session) {
 
   return {
     ...alwaysRequiredPageData,
+    conversionInsetText: conversionInsetText(),
     displayReadings: reported !== ABSTRACTION_VOLUMES_METHOD,
     displayUnits: units !== 'cubicMetres',
     enterMultipleLinkText: _enterMultipleLinkText(reported, returnsFrequency),

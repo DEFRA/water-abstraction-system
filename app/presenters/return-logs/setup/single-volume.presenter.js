@@ -5,6 +5,8 @@
  * @module SingleVolumePresenter
  */
 
+const { conversionInsetText } = require('../base-return-logs.presenter.js')
+
 /**
  * Format data for the `/return-log/setup/{sessionId}/single-volume` page
  *
@@ -17,6 +19,7 @@ function go(session) {
 
   return {
     backLink: { href: _backLinkHref(session), text: 'Back' },
+    conversionInsetText: conversionInsetText(),
     pageTitle: 'Is it a single volume?',
     pageTitleCaption: `Return reference ${returnReference}`,
     sessionId,

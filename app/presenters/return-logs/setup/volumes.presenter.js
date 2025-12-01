@@ -6,6 +6,7 @@
  */
 
 const { formatDateMonthYear, formatLongDate, sentenceCase } = require('../../base.presenter.js')
+const { conversionInsetText } = require('../base-return-logs.presenter.js')
 
 /**
  * Format data for the `/return-logs/setup/{sessionId}/volumes/{yearMonth}` page
@@ -28,6 +29,7 @@ function go(session, yearMonth) {
 
   return {
     backLink: { href: `/system/return-logs/setup/${sessionId}/check`, text: 'Back' },
+    conversionInsetText: conversionInsetText(),
     inputLines: _inputLines(requestedMonthLines, returnsFrequency),
     pageTitle: _pageTitle(new Date(requestedMonthLines[0].endDate)),
     pageTitleCaption: `Return reference ${returnReference}`,
