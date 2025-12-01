@@ -14,6 +14,14 @@ const { unitNames } = require('../../../app/lib/static-lookups.lib.js')
 const BaseReturnLogsPresenter = require('../../../app/presenters/return-logs/base-return-logs.presenter.js')
 
 describe('Return Logs - Base Return Logs presenter', () => {
+  describe('#conversionInsetText()', () => {
+    it('returns the expected details', () => {
+      const result = BaseReturnLogsPresenter.conversionInsetText()
+
+      expect(result).to.equal('All submissions are converted to cubic metres and rounded to six decimal places.')
+    })
+  })
+
   describe('#formatMeterDetails()', () => {
     const testMeter = {
       manufacturer: 'METER_MAKE',

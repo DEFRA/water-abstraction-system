@@ -4,6 +4,17 @@ const { formatNumber, formatQuantityToUnit, sentenceCase } = require('../base.pr
 const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
 
 /**
+ * The inset text to display on return log pages when volumes are entered
+ *
+ * @returns {string} The inset text to be used on the page
+ */
+function conversionInsetText() {
+  const text = 'All submissions are converted to cubic metres and rounded to six decimal places.'
+
+  return text
+}
+
+/**
  * Formats the details of a return submission meter
  *
  * @param {object} meter - the meter to be formatted
@@ -181,6 +192,7 @@ function _linkDetails(id, method, frequency, endDate, rootPath) {
 }
 
 module.exports = {
+  conversionInsetText,
   formatMeterDetails,
   generateSummaryTableHeaders,
   generateSummaryTableRows
