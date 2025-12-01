@@ -19,6 +19,7 @@ describe('Licences - Fetch History service', () => {
   let licence
   let licenceId
   let licenceVersion
+  let licenceVersionTwo
   let modLog
 
   describe('when the licence has licence versions, charge versions and return versions', () => {
@@ -28,6 +29,8 @@ describe('Licences - Fetch History service', () => {
       licenceId = licence.id
 
       licenceVersion = await LicenceVersionHelper.add({ licenceId })
+
+      licenceVersionTwo = await LicenceVersionHelper.add({ licenceId, issue: 1, increment: 1 })
 
       modLog = await ModLogHelper.add({
         licenceVersionId: licenceVersion.id,
@@ -40,6 +43,7 @@ describe('Licences - Fetch History service', () => {
 
       expect(result).to.equal([
         {
+          administrative: null,
           createdAt: licenceVersion.createdAt,
           endDate: licenceVersion.endDate,
           id: licenceVersion.id,
@@ -53,6 +57,14 @@ describe('Licences - Fetch History service', () => {
             }
           ],
           startDate: licenceVersion.startDate
+        },
+        {
+          administrative: true,
+          createdAt: licenceVersionTwo.createdAt,
+          endDate: licenceVersionTwo.endDate,
+          id: licenceVersionTwo.id,
+          modLogs: [],
+          startDate: licenceVersionTwo.startDate
         }
       ])
     })
