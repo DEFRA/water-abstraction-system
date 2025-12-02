@@ -23,11 +23,17 @@ function go(licenceVersion) {
       text: 'Go back to history'
     },
     changeType: licenceVersion.administrative ? 'no licence issued' : 'licence issued',
+    notes: _notes(licenceVersion),
     pageTitle: `Licence version starting ${formatLongDate(licenceVersion.startDate)}`,
     pageTitleCaption: `Licence ${licence.licenceRef}`,
-    reason: _reason(licenceVersion),
-    notes: _notes(licenceVersion)
+    reason: _reason(licenceVersion)
   }
+}
+
+function _notes(licenceVersion) {
+  const notes = licenceVersion.$notes()
+
+  return notes.length > 0 ? notes : null
 }
 
 function _reason(licenceVersion) {
@@ -43,12 +49,6 @@ function _reason(licenceVersion) {
   }
 
   return `${reason} created on ${formatLongDate(licenceVersion.createdAt)} by ${createdBy}`
-}
-
-function _notes(licenceVersion) {
-  const notes = licenceVersion.$notes()
-
-  return notes.length > 0 ? notes : null
 }
 
 module.exports = {
