@@ -1,5 +1,17 @@
 {% extends 'layout.njk' %}
 
+{% from "macros/licence-version-change-type-tag.njk" import changeTypeTag as licenceVersionChangeTypeTag %}
+
+
 {% block pageContent %}
 
+  {{ licenceVersionChangeTypeTag(changeType, false) }}
+
+  {% if reason %}
+    <p class="govuk-body-l"> {{ reason }} </p>
+  {% endif %}
+
+  {% if notes %}
+    <p><strong>Notes:</strong> {{ notes }} </p>
+  {% endif %}
 {% endblock %}

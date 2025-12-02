@@ -11,13 +11,13 @@
   {% endif %}
 
   {% if inline %}
-    {% set fontSize = "" %}
+    {% set additionalClasses = "" %}
   {% else %}
-    {% set fontSize = "govuk-!-font-size-27" %}
+    {% set additionalClasses = "govuk-!-font-size-27 govuk-!-margin-bottom-4" %}
   {% endif %}
 
   {{ govukTag({
     text: text,
-    classes: color + ' ' + fontSize
+    classes: color + ' ' + additionalClasses
   }) }}
 {% endmacro %}
