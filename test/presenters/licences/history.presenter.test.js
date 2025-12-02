@@ -30,7 +30,8 @@ describe('Licences - History presenter', () => {
         endDate: new Date('2022-06-05'),
         id: generateUUID(),
         modLogs: [{ id: generateUUID(), reasonDescription: 'Licence Holder Name/Address Change' }],
-        startDate: new Date('2022-04-01')
+        startDate: new Date('2022-04-01'),
+        administrative: null
       })
     ]
   })
@@ -41,7 +42,7 @@ describe('Licences - History presenter', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: `/system/licences/${licence.id}/summary`,
+          href: `/licences`,
           text: 'Go back to search'
         },
         licenceVersions: [
@@ -50,7 +51,7 @@ describe('Licences - History presenter', () => {
               link: `/system/licence-versions/${licenceHistory[0].id}`,
               text: 'View'
             },
-            changeType: null,
+            changeType: 'licence issued',
             endDate: '5 June 2022',
             reason: 'Licence Holder Name/Address Change',
             startDate: '1 April 2022'
@@ -58,6 +59,30 @@ describe('Licences - History presenter', () => {
         ],
         pageTitle: 'History',
         pageTitleCaption: `Licence ${licence.licenceRef}`
+      })
+    })
+  })
+
+  describe('the "licenceVersions" property', () => {
+    describe('the "changeType" property', () => {
+      describe('when the licence version is not administrative', () => {
+        it('returns "licence issued"', () => {
+          const result = HistoryPresenter.go(licenceHistory, licence)
+
+          expect(result.licenceVersions[0].changeType).to.equal('licence issued')
+        })
+      })
+
+      describe('when the licence version is administrative', () => {
+        beforeEach(() => {
+          licenceHistory[0].administrative = true
+        })
+
+        it('returns "no licence issued"', () => {
+          const result = HistoryPresenter.go(licenceHistory, licence)
+
+          expect(result.licenceVersions[0].changeType).to.equal('no licence issued')
+        })
       })
     })
   })
