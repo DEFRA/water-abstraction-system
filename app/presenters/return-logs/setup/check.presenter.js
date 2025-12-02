@@ -164,6 +164,7 @@ function _groupLinesByMonth(formattedLines) {
           : Big(monthlyLine[key].quantityCubicMetres).plus(quantityCubicMetres).toNumber()
     }
 
+    // Always use the last reading for the month
     if (typeof reading === 'number') {
       monthlyLine[key].reading = reading
     }
