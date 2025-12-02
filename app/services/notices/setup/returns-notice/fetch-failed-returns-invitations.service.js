@@ -5,7 +5,7 @@
  * @module FetchFailedReturnsInvitationsService
  */
 
-const NotificationModel = require('../../../models/notification.model.js')
+const NotificationModel = require('../../../../models/notification.model.js')
 
 /**
  * Fetches the licence refs and return logs IDs from failed returns invitation notifications to primary users

@@ -8,8 +8,8 @@
 
 const CreateNotificationsService = require('./create-notifications.service.js')
 const EventModel = require('../../../models/event.model.js')
-const FetchAlternateRecipientsService = require('./fetch-alternate-recipients.service.js')
-const FetchFailedReturnsInvitationsService = require('./fetch-failed-returns-invitations.service.js')
+const FetchAlternateReturnsRecipientsService = require('./returns-notice/fetch-alternate-returns-recipients.service.js')
+const FetchFailedReturnsInvitationsService = require('./returns-notice/fetch-failed-returns-invitations.service.js')
 const { generateNoticeReferenceCode, timestampForPostgres } = require('../../../lib/general.lib.js')
 const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 
@@ -27,7 +27,7 @@ async function go(notice) {
     return { notice: null, notifications: [] }
   }
 
-  const recipients = await FetchAlternateRecipientsService.go(failedReturnIds)
+  const recipients = await FetchAlternateReturnsRecipientsService.go(failedReturnIds)
   const alternateNotice = await _notice(notice, recipients, failedLicenceRefs)
   const notifications = await _notifications(alternateNotice, recipients)
 
