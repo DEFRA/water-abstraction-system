@@ -13,9 +13,9 @@ const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.j
 const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 
 // Thing under test
-const FetchDueReturnsForLicence = require('../../../../../app/services/notices/setup/paper-returns/fetch-due-returns-for-licence.service.js')
+const FetchDueReturnsForLicence = require('../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js')
 
-describe('Notices - Setup - Paper Returns - Fetch Due Returns For Licence service', () => {
+describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence service', () => {
   let licenceRef
   let returnLogs
   let region
