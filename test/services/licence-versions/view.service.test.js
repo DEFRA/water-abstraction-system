@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ViewService = require('../../../app/services/licence-versions/view.service.js')
 
-describe('Licence versions - View Service', () => {
+describe('Licence Versions - View service', () => {
   describe('when called', () => {
     it('returns page data for the view', async () => {
       const result = await ViewService.go()
