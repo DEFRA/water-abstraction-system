@@ -11,7 +11,7 @@ const ViewPresenter = require('../../presenters/licence-versions/view.presenter.
 /**
  * Orchestrates fetching and presenting the data for the `/licence-versions/{id}` page
  *
- * @returns {Promise<object>} - The data formatted for the view template
+ * @returns {Promise<object>} The data formatted for the view template
  */
 async function go() {
   const pageData = ViewPresenter.go()
