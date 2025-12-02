@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the `/notices/setup/download` link when the journey is for 'alerts'
- * @module AbstractionAlertDownloadRecipientsPresenter
+ * @module DownloadAbstractionAlertPresenter
  */
 
 const { addressToCSV } = require('../base.presenter.js')
