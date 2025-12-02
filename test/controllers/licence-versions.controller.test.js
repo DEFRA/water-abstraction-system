@@ -15,7 +15,7 @@ const { HTTP_STATUS_OK } = require('node:http2').constants
 const { init } = require('../../app/server.js')
 const ViewService = require('../../app/services/licence-versions/view.service.js')
 
-describe('Licences controller', () => {
+describe('Licence Versions controller', () => {
   let options
   let server
 
