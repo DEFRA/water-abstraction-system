@@ -20,7 +20,7 @@ function go(licenceVersion) {
   return {
     backLink: {
       href: `/system/licences/${licence.id}/history`,
-      text: 'Back to history'
+      text: 'Go back to history'
     },
     pageTitle: `Licence version starting ${formatLongDate(licenceVersion.startDate)}`,
     pageTitleCaption: `Licence ${licence.licenceRef}`,

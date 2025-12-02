@@ -50,7 +50,7 @@ describe('Licence Versions - View service', () => {
         activeNavBar: 'search',
         backLink: {
           href: `/system/licences/${licence.id}/history`,
-          text: 'Back to history'
+          text: 'Go back to history'
         },
         changeType: 'licence issued',
         pageTitle: 'Licence version starting 1 January 2022',
