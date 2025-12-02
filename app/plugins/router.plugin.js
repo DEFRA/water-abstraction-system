@@ -27,18 +27,19 @@ const NoticesRoutes = require('../routes/notices.routes.js')
 const NoticesSetupRoutes = require('../routes/notices-setup.routes.js')
 const NotificationRoutes = require('../routes/notifications.routes.js')
 const JobRoutes = require('../routes/jobs.routes.js')
-const LicenceRoutes = require('../routes/licence.routes.js')
 const LicenceEndDatesRoutes = require('../routes/licences-end-dates.routes.js')
 const LicenceMonitoringStationRoutes = require('../routes/licence-monitoring-station.routes.js')
 const LicenceMonitoringStationSetupRoutes = require('../routes/licence-monitoring-station-setup.routes.js')
+const LicenceRoutes = require('../routes/licence.routes.js')
+const LicenceVersionsRoutes = require('../routes/licence-versions.routes.js')
 const ManageRoutes = require('../routes/manage.routes.js')
 const MonitoringStationRoutes = require('../routes/monitoring-station.routes.js')
-const ReturnLogSetupRoutes = require('../routes/return-logs-setup.routes.js')
 const ReportRoutes = require('../routes/reports.routes.js')
 const ReturnLogRoutes = require('../routes/return-logs.routes.js')
+const ReturnLogSetupRoutes = require('../routes/return-logs-setup.routes.js')
 const ReturnSubmissionsRoutes = require('../routes/return-submissions.routes.js')
-const ReturnVersionsSetupRoutes = require('../routes/return-versions-setup.routes.js')
 const ReturnVersionsRoutes = require('../routes/return-versions.routes.js')
+const ReturnVersionsSetupRoutes = require('../routes/return-versions-setup.routes.js')
 const RootRoutes = require('../routes/root.routes.js')
 const SearchRoutes = require('../routes/search.routes.js')
 const UsersRoutes = require('../routes/users.routes.js')
@@ -62,6 +63,7 @@ const routes = [
   ...LicenceEndDatesRoutes,
   ...LicenceMonitoringStationRoutes,
   ...LicenceMonitoringStationSetupRoutes,
+  ...LicenceVersionsRoutes,
   ...JobRoutes,
   ...ManageRoutes,
   ...MonitoringStationRoutes,
