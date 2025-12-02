@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const DownloadRecipientsPresenter = require('../../../../app/presenters/notices/setup/download-recipients.presenter.js')
+const DownloadReturnsNoticePresenter = require('../../../../app/presenters/notices/setup/download-returns-notice.presenter.js')
 
-describe('Notices - Setup - Download Recipients presenter', () => {
+describe('Notices - Setup - Download Returns Notice presenter', () => {
   const notificationType = 'Returns invitation'
 
   let recipients
@@ -26,7 +26,7 @@ describe('Notices - Setup - Download Recipients presenter', () => {
 
   describe('when provided with "recipients"', () => {
     it('correctly formats the data to a csv string', () => {
-      const result = DownloadRecipientsPresenter.go(
+      const result = DownloadReturnsNoticePresenter.go(
         [recipients.primaryUser, recipients.licenceHolder, recipients.returnsTo, recipients.organisation],
         session
       )
@@ -46,7 +46,7 @@ describe('Notices - Setup - Download Recipients presenter', () => {
     })
 
     it('correctly formats the headers', () => {
-      const result = DownloadRecipientsPresenter.go([recipients.primaryUser], session)
+      const result = DownloadReturnsNoticePresenter.go([recipients.primaryUser], session)
 
       let [headers] = result.split('\n')
       // We want to test the header includes the new line
@@ -75,7 +75,7 @@ describe('Notices - Setup - Download Recipients presenter', () => {
 
     describe('when the recipient is a "primary_user"', () => {
       it('correctly formats the row', () => {
-        const result = DownloadRecipientsPresenter.go([recipients.primaryUser], session)
+        const result = DownloadReturnsNoticePresenter.go([recipients.primaryUser], session)
 
         let [, row] = result.split('\n')
         // We want to test the row includes the new line
@@ -106,7 +106,7 @@ describe('Notices - Setup - Download Recipients presenter', () => {
       describe('and the "contact" is a "person"', () => {
         describe('and the "person" is a "Licence holder"', () => {
           it('correctly formats the row', () => {
-            const result = DownloadRecipientsPresenter.go([recipients.licenceHolder], session)
+            const result = DownloadReturnsNoticePresenter.go([recipients.licenceHolder], session)
 
             let [, row] = result.split('\n')
             // We want to test the row includes the new line
@@ -136,7 +136,7 @@ describe('Notices - Setup - Download Recipients presenter', () => {
 
         describe('and the "person" is a "Returns to"', () => {
           it('correctly formats the row', () => {
-            const result = DownloadRecipientsPresenter.go([recipients.returnsTo], session)
+            const result = DownloadReturnsNoticePresenter.go([recipients.returnsTo], session)
 
             let [, row] = result.split('\n')
             // We want to test the row includes the new line
@@ -167,7 +167,7 @@ describe('Notices - Setup - Download Recipients presenter', () => {
 
       describe('and the "contact" is a "organisation"', () => {
         it('correctly formats the row', () => {
-          const result = DownloadRecipientsPresenter.go([recipients.organisation], session)
+          const result = DownloadReturnsNoticePresenter.go([recipients.organisation], session)
 
           let [, row] = result.split('\n')
           // We want to test the row includes the new line

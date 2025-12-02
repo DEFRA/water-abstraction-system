@@ -2,7 +2,7 @@
 
 /**
  * Formats data for the `/notices/setup/download` link
- * @module DownloadRecipientsPresenter
+ * @module DownloadReturnsNoticePresenter
  */
 
 const { addressToCSV } = require('../base.presenter.js')
