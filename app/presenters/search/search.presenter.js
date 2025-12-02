@@ -55,27 +55,31 @@ function go(userScopes, query, resultType, page, numberOfPages, allSearchMatches
   }
 }
 
+function _result(result) {
+  switch (result.type) {
+    case 'billingAccount':
+      return _billingAccount(result)
+    case 'licence':
+      return _licence(result)
+    case 'licenceHolder':
+      return _licenceHolder(result)
+    case 'monitoringStation':
+      return _monitoringStation(result)
+    case 'returnLog':
+      return _returnLog(result)
+    case 'user':
+      return _user(result)
+    default:
+      return null // Any unknown types are returned as null so they can be filtered out
+  }
+}
+
 function _results(results) {
   return results
     .map((result) => {
-      switch (result.type) {
-        case 'billingAccount':
-          return _billingAccount(result)
-        case 'licence':
-          return _licence(result)
-        case 'licenceHolder':
-          return _licenceHolder(result)
-        case 'monitoringStation':
-          return _monitoringStation(result)
-        case 'returnLog':
-          return _returnLog(result)
-        case 'user':
-          return _user(result)
-        default:
-          return null // Any unknown types are returned as null so they can be filtered out
-      }
+      return _result(result)
     })
-    .filter(Boolean)
+    .filter(Boolean) // Any unknown types filtered out
 }
 
 function _billingAccount(billingAccount) {

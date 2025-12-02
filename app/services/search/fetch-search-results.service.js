@@ -9,9 +9,23 @@ const DatabaseConfig = require('../../../config/database.config.js')
 
 const { db } = require('../../../db/db.js')
 
+const BILLING_ACCOUNT_SQL = `
+  SELECT
+    'billingAccount' AS row_type,
+    id AS row_uu_id,
+    NULL AS row_text_id,
+    CAST (NULL AS INT) AS row_int_id,
+    account_number ILIKE ? AS exact,
+    5 AS table_order,
+    account_number AS row_order,
+    CAST (NULL AS DATE) AS date_order
+  FROM billing_accounts
+  WHERE account_number ILIKE ?
+`
+
 // The database tables don't use consistent field types as identifiers, so we need to know which field to use for each
 // type of record
-const ID_FIELDS = {
+const ID_FIELD_FOR_TABLE = {
   billingAccount: 'row_uu_id',
   licenceHolder: 'row_text_id',
   licence: 'row_uu_id',
@@ -27,6 +41,83 @@ const ID_FIELDS = {
 // To prevent this, we define a placeholder parameter for the JSONB path query in our main query and then pass this
 // JSONB path query in as the parameter value.
 const LICENCE_HOLDER_ROLE_JSONB_PATH_QUERY = '$[*] ? (@.role == "Licence holder")'
+
+const LICENCE_HOLDER_SQL = `
+  SELECT
+    'licenceHolder' AS row_type,
+    CAST (NULL AS UUID) AS row_uu_id,
+    id AS row_text_id,
+    CAST (NULL AS INT) AS row_int_id,
+    dh.holder->>'name' ILIKE ? AS exact,
+    2 AS table_order,
+    CONCAT(
+      LOWER(dh.holder->>'name'), ' ',
+      LOWER(COALESCE(dh.holder->>'forename', dh.holder->>'initials')), ' ',
+      LOWER(dh.holder->>'salutation'
+    ), dh.licence_ref) AS row_order,
+    CAST (NULL AS DATE) AS date_order
+  FROM (
+    SELECT id, licence_ref, jsonb_path_query_first(metadata->'contacts', ?) AS holder
+    FROM licence_document_headers
+  ) dh
+  WHERE dh.holder->>'name' ILIKE ?
+`
+
+const LICENCE_SQL = `
+  SELECT
+    'licence' AS row_type,
+    id AS row_uu_id,
+    NULL AS row_text_id,
+    CAST (NULL AS INT) AS row_int_id,
+    licence_ref ILIKE ? AS exact,
+    1 AS table_order,
+    licence_ref AS row_order,
+    CAST (NULL AS DATE) AS date_order
+  FROM licences
+  WHERE licence_ref ILIKE ?
+`
+
+const MONITORING_STATION_SQL = `
+  SELECT
+    'monitoringStation' AS row_type,
+    id AS row_uu_id,
+    NULL AS row_text_id,
+    CAST (NULL AS INT) AS row_int_id,
+    label ILIKE ? AS exact,
+    3 AS table_order,
+    label AS row_order,
+    CAST (NULL AS DATE) AS date_order
+  FROM monitoring_stations
+  WHERE label ILIKE ?
+`
+
+const RETURN_LOG_SQL = `
+  SELECT
+    'returnLog' AS row_type,
+    return_id AS row_uu_id,
+    id AS row_text_id,
+    CAST (NULL AS INT) AS row_int_id,
+    return_reference ILIKE ? AS exact,
+    4 AS table_order,
+    CONCAT(return_reference, ' ', licence_ref, ' ') AS row_order,
+    end_date AS date_order
+  FROM return_logs
+  WHERE return_reference ILIKE ?
+`
+
+const USER_SQL = `
+  SELECT
+    'user' AS row_type,
+    CAST (NULL AS UUID) AS row_id,
+    NULL AS record_id,
+    id AS row_int_id,
+    username ILIKE ? AS exact,
+    6 AS table_order,
+    username AS row_order,
+    CAST (NULL AS DATE) AS date_order
+  FROM users
+  WHERE username ILIKE ?
+`
 
 /**
  * Handles fetching a list of matching search results for the /search page
@@ -86,26 +177,14 @@ function _allSql(exactQuery, partialQuery, resultTypes, page) {
 
   searchSqls.params.push(DatabaseConfig.defaultPageSize, (page - 1) * DatabaseConfig.defaultPageSize)
 
-  const countSql = 'SELECT' + countSqls.statements.join('+') + 'AS total'
+  const countSql = `SELECT ${countSqls.statements.join('+')} AS total`
 
   return { countParams: countSqls.params, countSql, searchParams: searchSqls.params, searchSql }
 }
 
 function _billingAccountSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) {
   if (resultTypes.includes('billingAccount')) {
-    searchSqls.statements.push(`
-      SELECT
-        'billingAccount' AS row_type,
-        id AS row_uu_id,
-        NULL AS row_text_id,
-        CAST (NULL AS INT) AS row_int_id,
-        account_number ILIKE ? AS exact,
-        5 AS table_order,
-        account_number AS row_order,
-        CAST (NULL AS DATE) AS date_order
-      FROM billing_accounts
-      WHERE account_number ILIKE ?
-    `)
+    searchSqls.statements.push(BILLING_ACCOUNT_SQL)
     searchSqls.params.push(exactQuery, partialQuery)
 
     countSqls.statements.push(`
@@ -124,26 +203,7 @@ function _exactQuery(query) {
 
 function _licenceHolderSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) {
   if (resultTypes.includes('licenceHolder')) {
-    searchSqls.statements.push(`
-      SELECT
-        'licenceHolder' AS row_type,
-        CAST (NULL AS UUID) AS row_uu_id,
-        id AS row_text_id,
-        CAST (NULL AS INT) AS row_int_id,
-        dh.holder->>'name' ILIKE ? AS exact,
-        2 AS table_order,
-        CONCAT(
-          LOWER(dh.holder->>'name'), ' ',
-          LOWER(COALESCE(dh.holder->>'forename', dh.holder->>'initials')), ' ',
-          LOWER(dh.holder->>'salutation'
-        ), dh.licence_ref) AS row_order,
-        CAST (NULL AS DATE) AS date_order
-      FROM (
-        SELECT id, licence_ref, jsonb_path_query_first(metadata->'contacts', ?) AS holder
-        FROM licence_document_headers
-      ) dh
-      WHERE dh.holder->>'name' ILIKE ?
-    `)
+    searchSqls.statements.push(LICENCE_HOLDER_SQL)
     searchSqls.params.push(exactQuery, LICENCE_HOLDER_ROLE_JSONB_PATH_QUERY, partialQuery)
 
     countSqls.statements.push(`
@@ -155,19 +215,7 @@ function _licenceHolderSql(resultTypes, searchSqls, countSqls, exactQuery, parti
 
 function _licenceSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) {
   if (resultTypes.includes('licence')) {
-    searchSqls.statements.push(`
-      SELECT
-        'licence' AS row_type,
-        id AS row_uu_id,
-        NULL AS row_text_id,
-        CAST (NULL AS INT) AS row_int_id,
-        licence_ref ILIKE ? AS exact,
-        1 AS table_order,
-        licence_ref AS row_order,
-        CAST (NULL AS DATE) AS date_order
-      FROM licences
-      WHERE licence_ref ILIKE ?
-    `)
+    searchSqls.statements.push(LICENCE_SQL)
     searchSqls.params.push(exactQuery, partialQuery)
 
     countSqls.statements.push(`
@@ -179,19 +227,7 @@ function _licenceSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuer
 
 function _monitoringStationSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) {
   if (resultTypes.includes('monitoringStation')) {
-    searchSqls.statements.push(`
-      SELECT
-        'monitoringStation' AS row_type,
-        id AS row_uu_id,
-        NULL AS row_text_id,
-        CAST (NULL AS INT) AS row_int_id,
-        label ILIKE ? AS exact,
-        3 AS table_order,
-        label AS row_order,
-        CAST (NULL AS DATE) AS date_order
-      FROM monitoring_stations
-      WHERE label ILIKE ?
-    `)
+    searchSqls.statements.push(MONITORING_STATION_SQL)
     searchSqls.params.push(exactQuery, partialQuery)
 
     countSqls.statements.push(`
@@ -204,7 +240,7 @@ function _monitoringStationSql(resultTypes, searchSqls, countSqls, exactQuery, p
 function _results(rows) {
   return rows.map((row) => {
     const { exact, row_type: type } = row
-    const id = row[ID_FIELDS[type]]
+    const id = row[ID_FIELD_FOR_TABLE[type]]
 
     return {
       exact,
@@ -216,19 +252,7 @@ function _results(rows) {
 
 function _returnLogSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) {
   if (resultTypes.includes('returnLog')) {
-    searchSqls.statements.push(`
-      SELECT
-        'returnLog' AS row_type,
-        return_id AS row_uu_id,
-        id AS row_text_id,
-        CAST (NULL AS INT) AS row_int_id,
-        return_reference ILIKE ? AS exact,
-        4 AS table_order,
-        CONCAT(return_reference, ' ', licence_ref, ' ') AS row_order,
-        end_date AS date_order
-      FROM return_logs
-      WHERE return_reference ILIKE ?
-    `)
+    searchSqls.statements.push(RETURN_LOG_SQL)
     searchSqls.params.push(exactQuery, partialQuery)
 
     countSqls.statements.push(`
@@ -240,19 +264,7 @@ function _returnLogSql(resultTypes, searchSqls, countSqls, exactQuery, partialQu
 
 function _userSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) {
   if (resultTypes.includes('user')) {
-    searchSqls.statements.push(`
-      SELECT
-        'user' AS row_type,
-        CAST (NULL AS UUID) AS row_id,
-        NULL AS record_id,
-        id AS row_int_id,
-        username ILIKE ? AS exact,
-        6 AS table_order,
-        username AS row_order,
-        CAST (NULL AS DATE) AS date_order
-      FROM users
-      WHERE username ILIKE ?
-    `)
+    searchSqls.statements.push(USER_SQL)
     searchSqls.params.push(exactQuery, partialQuery)
 
     countSqls.statements.push(`
