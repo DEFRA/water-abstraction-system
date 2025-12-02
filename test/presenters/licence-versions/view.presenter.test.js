@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ViewPresenter = require('../../../app/presenters/licence-versions/view.presenter.js')
 
-describe('Licence versions - View Presenter', () => {
+describe('Licence Versions - View presenter', () => {
   describe('when called', () => {
     it('returns page data for the view', () => {
       const result = ViewPresenter.go()
