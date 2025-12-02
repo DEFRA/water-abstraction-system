@@ -7,6 +7,8 @@
 
 const RESULT_TYPES = ['billingAccount', 'licenceHolder', 'licence', 'monitoringStation', 'returnLog', 'user']
 
+const MAX_LICENCE_LENGTH = 20
+
 /**
  * Determines which items to search for a given query on the /search page
  *
@@ -56,14 +58,14 @@ function _billingAccounts(resultTypes, query, selectedResultType, userScopes) {
   }
 
   // Billing account references are of the format "A12345678A" where the first letter is a charge region
-  if (query.length === 10 && !query.match(/^[ABENSTWY][0-9]{8}A$/i)) {
+  if (query.length === 10 && !query.match(/^[ABENSTWY]\d{8}A$/i)) {
     return
   }
 
   resultTypes.push('billingAccount')
 }
 
-function _licenceHolders(resultTypes, query, selectedResultType) {
+function _licenceHolders(resultTypes, _query, selectedResultType) {
   if (selectedResultType && selectedResultType !== 'licenceHolder') {
     return
   }
@@ -79,7 +81,7 @@ function _licences(resultTypes, query, selectedResultType) {
   }
 
   // Licence references are no longer than 20 characters
-  if (query.length > 20) {
+  if (query.length > MAX_LICENCE_LENGTH) {
     return
   }
 
@@ -97,7 +99,7 @@ function _licences(resultTypes, query, selectedResultType) {
   resultTypes.push('licence')
 }
 
-function _monitoringStations(resultTypes, query, selectedResultType) {
+function _monitoringStations(resultTypes, _query, selectedResultType) {
   if (selectedResultType && selectedResultType !== 'monitoringStation') {
     return
   }
@@ -125,7 +127,7 @@ function _returnLogs(resultTypes, query, selectedResultType) {
   resultTypes.push('returnLog')
 }
 
-function _users(resultTypes, query, selectedResultType) {
+function _users(resultTypes, _query, selectedResultType) {
   if (selectedResultType && selectedResultType !== 'user') {
     return
   }

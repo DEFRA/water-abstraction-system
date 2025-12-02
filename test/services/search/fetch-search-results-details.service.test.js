@@ -92,6 +92,20 @@ describe('Search - Fetch search results detail service', () => {
     })
   })
 
+  describe('when an unknown type is requested', () => {
+    beforeEach(() => {
+      idsByType = { UNKNOWN_TYPE: [13, 14] }
+    })
+
+    it('returns no matches', async () => {
+      const result = await FetchSearchResultsDetailsService.go(idsByType)
+
+      expect(result).to.equal({
+        UNKNOWN_TYPE: []
+      })
+    })
+  })
+
   describe('when billing accounts are requested', () => {
     beforeEach(() => {
       idsByType = { billingAccount: [1, 2] }

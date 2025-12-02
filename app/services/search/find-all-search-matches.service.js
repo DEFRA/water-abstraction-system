@@ -45,8 +45,8 @@ function _idsByType(searchResults) {
 
 function _results(orderedSearchResults, modelsByType) {
   return orderedSearchResults.map(({ exact, id, type }) => {
-    const model = modelsByType[type].find((model) => {
-      return model.id === id
+    const model = modelsByType[type].find((modelFound) => {
+      return modelFound.id === id
     })
 
     return { exact, model, type }

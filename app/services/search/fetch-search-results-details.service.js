@@ -50,6 +50,8 @@ async function _findByType(type, ids) {
       return ReturnLogModel.query().findByIds(ids)
     case 'user':
       return UserModel.query().findByIds(ids)
+    default:
+      return []
   }
 }
 
