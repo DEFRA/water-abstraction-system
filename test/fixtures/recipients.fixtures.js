@@ -1,7 +1,205 @@
 'use strict'
 
-const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
+const crypto = require('node:crypto')
+
 const { generateUUID } = require('../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
+const { generateReference } = require('../support/helpers/return-requirement.helper.js')
+
+/**
+ * Creates a fixture for an abstraction alert notice additional contact recipient
+ *
+ * This fixture generates a recipient object representing an additional contact for abstraction alerts with a predefined
+ * email and associated licence references.
+ *
+ * @returns {object} The abstraction alert additional contact recipient fixture
+ */
+function alertNoticeAdditionalContact() {
+  const email = 'additional.contact@abs-alerts.com'
+
+  return {
+    contact: null,
+    contact_hash_id: _emailContactHashId(email),
+    contact_type: 'Additional contact',
+    email,
+    licence_refs: [generateLicenceRef()],
+    message_type: 'Email'
+  }
+}
+
+/**
+ * Creates a fixture for an abstraction alert notice licence holder recipient
+ *
+ * This fixture generates a recipient object representing a licence holder contact for abstraction alerts with
+ * predefined address and associated licence references.
+ *
+ * @returns {object} The abstraction alert licence holder recipient fixture
+ */
+function alertNoticeLicenceHolder() {
+  const contact = _licenceDocumentHeaderContact('Alertholder', 'Licence holder')
+
+  return {
+    contact,
+    contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
+    contact_type: 'Licence holder',
+    email: null,
+    licence_refs: [generateLicenceRef()],
+    message_type: 'Letter'
+  }
+}
+
+/**
+ * Creates a fixture for an abstraction alert notice primary user recipient
+ *
+ * This fixture generates a recipient object representing a primary user for abstraction alerts with a predefined
+ * email and associated licence references.
+ *
+ * @returns {object} The abstraction alert primary user recipient fixture
+ */
+function alertNoticePrimaryUser() {
+  const email = 'primary.user@abs-alerts.com'
+
+  return {
+    contact: null,
+    contact_hash_id: _emailContactHashId(email),
+    contact_type: 'Primary user',
+    email,
+    licence_refs: [generateLicenceRef()],
+    message_type: 'Email'
+  }
+}
+
+/**
+ * Creates a fixture for a returns notice licence holder recipient
+ *
+ * This fixture generates a recipient object representing a licence holder contact for a returns notice with
+ * predefined address and associated licence references.
+ *
+ * @param {boolean} [download=false] - Flag indicating if the fixture should represent the download format
+ *
+ * @returns {object} The returns notice licence holder recipient fixture
+ */
+function returnsNoticeLicenceHolder(download = false) {
+  const contact = _licenceDocumentHeaderContact('Returnsholder', 'Licence holder')
+
+  const recipient = {
+    contact,
+    contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
+    contact_type: 'Licence holder',
+    due_date: new Date('2025-04-28'),
+    end_date: new Date('2025-03-31'),
+    email: null,
+    licence_ref: generateLicenceRef(),
+    message_type: 'Letter',
+    return_reference: generateReference(),
+    start_date: new Date('2024-04-01')
+  }
+
+  if (download) {
+    return recipient
+  }
+
+  return _nonDownloadRecipient(recipient)
+}
+
+/**
+ * Creates a fixture for a returns notice primary user recipient
+ *
+ * This fixture generates a recipient object representing a primary user for a returns notice with predefined
+ * email and associated licence references.
+ *
+ * @param {boolean} [download=false] - Flag indicating if the fixture should represent the download format
+ *
+ * @returns {object} The returns notice primary user recipient fixture
+ */
+function returnsNoticePrimaryUser(download = false) {
+  const email = 'primary.user@returns-notice.com'
+
+  const recipient = {
+    contact: null,
+    contact_hash_id: _emailContactHashId(email),
+    contact_type: 'Primary user',
+    due_date: new Date('2025-04-28'),
+    end_date: new Date('2025-03-31'),
+    email,
+    licence_ref: generateLicenceRef(),
+    message_type: 'Email',
+    return_reference: generateReference(),
+    start_date: new Date('2024-04-01')
+  }
+
+  if (download) {
+    return recipient
+  }
+
+  return _nonDownloadRecipient(recipient)
+}
+
+/**
+ * Creates a fixture for a returns notice returns agent recipient
+ *
+ * This fixture generates a recipient object representing a returns agent for a returns notice with predefined
+ * email and associated licence references.
+ *
+ * @param {boolean} [download=false] - Flag indicating if the fixture should represent the download format
+ *
+ * @returns {object} The returns notice returns agent recipient fixture
+ */
+function returnsNoticeReturnsAgent(download = false) {
+  const email = 'returns.agent@returns-notice.com'
+
+  const recipient = {
+    contact: null,
+    contact_hash_id: _emailContactHashId(email),
+    contact_type: 'Returns agent',
+    due_date: new Date('2025-04-28'),
+    end_date: new Date('2025-03-31'),
+    email,
+    licence_ref: generateLicenceRef(),
+    message_type: 'Email',
+    return_reference: generateReference(),
+    start_date: new Date('2024-04-01')
+  }
+
+  if (download) {
+    return recipient
+  }
+
+  return _nonDownloadRecipient(recipient)
+}
+
+/**
+ * Creates a fixture for a returns notice returns to recipient
+ *
+ * This fixture generates a recipient object representing a returns to contact for a returns notice with predefined
+ * address and associated licence references.
+ *
+ * @param {boolean} [download=false] - Flag indicating if the fixture should represent the download format
+ *
+ * @returns {object} The returns notice returns to recipient fixture
+ */
+function returnsNoticeReturnsTo(download = false) {
+  const contact = _licenceDocumentHeaderContact('Returnsto', 'Returns to')
+
+  const recipient = {
+    contact,
+    contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
+    contact_type: 'Returns to',
+    due_date: new Date('2025-04-28'),
+    end_date: new Date('2025-03-31'),
+    email: null,
+    licence_ref: generateLicenceRef(),
+    message_type: 'Letter',
+    return_reference: generateReference(),
+    start_date: new Date('2024-04-01')
+  }
+
+  if (download) {
+    return recipient
+  }
+
+  return _nonDownloadRecipient(recipient)
+}
 
 /**
  * Create abstraction alerts recipients test data
@@ -139,7 +337,68 @@ function _contact(line1, name, role) {
   }
 }
 
+function _emailContactHashId(email) {
+  return crypto.createHash('md5').update(email).digest('hex')
+}
+
+function _licenceDocumentHeaderContact(name, role) {
+  return {
+    addressLine1: '4',
+    addressLine2: 'Privet Drive',
+    addressLine3: null,
+    addressLine4: null,
+    country: null,
+    county: 'Surrey',
+    forename: 'Harry',
+    initials: 'J',
+    name,
+    postcode: 'WD25 7LR',
+    role,
+    salutation: null,
+    town: 'Little Whinging',
+    type: 'Person'
+  }
+}
+
+function _licenceDocumentHeaderContactHashId(contact) {
+  const salutation = contact.salutation ?? ''
+  const forename = contact.forename ?? ''
+  const initials = contact.initials ?? ''
+  const name = contact.name
+  const addressLine1 = contact.addressLine1
+  const addressLine2 = contact.addressLine2 ?? ''
+  const addressLine3 = contact.addressLine3 ?? ''
+  const addressLine4 = contact.addressLine4 ?? ''
+  const town = contact.town ?? ''
+  const county = contact.county ?? ''
+  const postcode = contact.postcode ?? ''
+  const country = contact.country ?? ''
+
+  const _combinedString = `${salutation}${forename}${initials}${name}${addressLine1}${addressLine2}${addressLine3}${addressLine4}${town}${county}${postcode}${country}`
+
+  return crypto.createHash('md5').update(_combinedString.toLowerCase()).digest('hex')
+}
+
+function _nonDownloadRecipient(recipient) {
+  return {
+    contact: recipient.contact,
+    contact_hash_id: recipient.contact_hash_id,
+    contact_type: recipient.contact_type,
+    email: recipient.email,
+    licence_refs: [recipient.licence_ref],
+    message_type: recipient.message_type,
+    return_log_ids: [generateUUID()]
+  }
+}
+
 module.exports = {
+  alertNoticeAdditionalContact,
+  alertNoticeLicenceHolder,
+  alertNoticePrimaryUser,
   alertsRecipients,
-  recipients
+  recipients,
+  returnsNoticeLicenceHolder,
+  returnsNoticePrimaryUser,
+  returnsNoticeReturnsAgent,
+  returnsNoticeReturnsTo
 }
