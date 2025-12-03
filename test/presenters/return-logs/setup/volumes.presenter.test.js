@@ -25,7 +25,6 @@ describe('Return Logs Setup - Volumes presenter', () => {
 
       expect(result).to.equal({
         backLink: { href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/check', text: 'Back' },
-        conversionInsetText: 'All submissions are converted to cubic metres and rounded to six decimal places.',
         inputLines: [
           {
             endDate: '2023-05-31T00:00:00.000Z',
