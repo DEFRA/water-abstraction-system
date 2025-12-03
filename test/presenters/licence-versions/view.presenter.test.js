@@ -151,7 +151,7 @@ describe('Licence Versions - View presenter', () => {
         auth.credentials.scope = ['billing']
       })
 
-      describe('when there is no "reason" or "userId"', () => {
+      describe('and there is no "reason" or "userId"', () => {
         beforeEach(() => {
           licenceVersion.modLogs[0].reasonDescription = null
         })
