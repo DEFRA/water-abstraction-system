@@ -126,23 +126,25 @@ describe('Licence Versions - View presenter', () => {
   })
 
   describe('the "reason" property', () => {
-    describe('when there is a "reason"', () => {
-      it('returns the created on', () => {
-        const result = ViewPresenter.go(licenceVersion, auth)
+    describe('when the user does not have the "billing" role', ()=> {
+      describe('and there is a "reason"', () => {
+        it('returns the created on', () => {
+          const result = ViewPresenter.go(licenceVersion, auth)
 
-        expect(result.reason).to.equal('Licence Holder Name/Address Change')
-      })
-    })
-
-    describe('when there is no "reason"', () => {
-      beforeEach(() => {
-        licenceVersion.modLogs[0].reasonDescription = null
+          expect(result.reason).to.equal('Licence Holder Name/Address Change')
+        })
       })
 
-      it('returns the created on', () => {
-        const result = ViewPresenter.go(licenceVersion, auth)
+      describe('and there is no "reason"', () => {
+        beforeEach(() => {
+          licenceVersion.modLogs[0].reasonDescription = null
+        })
 
-        expect(result.reason).to.be.null()
+        it('returns the created on', () => {
+          const result = ViewPresenter.go(licenceVersion, auth)
+
+          expect(result.reason).to.be.null()
+        })
       })
     })
 
