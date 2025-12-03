@@ -98,6 +98,18 @@ describe('Licence Versions - View presenter', () => {
   })
 
   describe('the "reason" property', () => {
+    describe('when there is no "reasonDescription" or "userId"', () => {
+      beforeEach(() => {
+        licenceVersion.modLogs[0].reasonDescription = null
+      })
+
+      it('returns the created on', () => {
+        const result = ViewPresenter.go(licenceVersion)
+
+        expect(result.reason).to.equal('Created on 1 January 2022')
+      })
+    })
+
     describe('when there is a reason', () => {
       describe('and we know who created it', () => {
         it('returns the reason with who created it', () => {
@@ -117,18 +129,6 @@ describe('Licence Versions - View presenter', () => {
 
           expect(result.reason).to.equal('Licence Holder Name/Address Change created on 1 January 2022')
         })
-      })
-    })
-
-    describe('when there is no reason', () => {
-      beforeEach(() => {
-        licenceVersion.modLogs[0].reasonDescription = null
-      })
-
-      it('returns null', () => {
-        const result = ViewPresenter.go(licenceVersion)
-
-        expect(result.reason).to.be.null()
       })
     })
   })

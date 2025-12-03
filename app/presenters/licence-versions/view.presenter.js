@@ -39,16 +39,17 @@ function _notes(licenceVersion) {
 function _reason(licenceVersion) {
   const reason = licenceVersion.$reason()
   const createdBy = licenceVersion.$createdBy()
+  const createdAt = formatLongDate(licenceVersion.createdAt)
 
   if (!reason) {
-    return null
+    return `Created on ${createdAt}`
   }
 
   if (!createdBy) {
-    return `${reason} created on ${formatLongDate(licenceVersion.createdAt)}`
+    return `${reason} created on ${createdAt}`
   }
 
-  return `${reason} created on ${formatLongDate(licenceVersion.createdAt)} by ${createdBy}`
+  return `${reason} created on ${createdAt} by ${createdBy}`
 }
 
 module.exports = {
