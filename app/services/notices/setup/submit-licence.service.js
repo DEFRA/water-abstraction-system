@@ -5,13 +5,13 @@
  * @module SubmitLicenceService
  */
 
-const FetchReturnsDueByLicenceRefService = require('./fetch-returns-due-by-licence-ref.service.js')
-const GeneralLib = require('../../../lib/general.lib.js')
+const FetchDueReturnsForLicenceService = require('./returns-notice/fetch-due-returns-for-licence.service.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
 const LicenceValidator = require('../../../validators/notices/setup/licence.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { flashNotification } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/licence` page
@@ -38,7 +38,7 @@ async function go(sessionId, payload, yar) {
 
   if (!validationResult) {
     if (session.checkPageVisited && payload.licenceRef !== session.licenceRef) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Licence number updated')
+      flashNotification(yar, 'Updated', 'Licence number updated')
 
       session.checkPageVisited = false
     }
@@ -66,7 +66,7 @@ async function _dueReturns(payload) {
     return []
   }
 
-  return FetchReturnsDueByLicenceRefService.go(payload.licenceRef)
+  return FetchDueReturnsForLicenceService.go(payload.licenceRef)
 }
 
 async function _licenceExists(licenceRef) {

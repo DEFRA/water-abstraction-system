@@ -229,6 +229,15 @@ describe('GeneralLib', () => {
     })
   })
 
+  describe('#generateNoticeReferenceCode', () => {
+    it('generates a 6 character reference code with the given prefix', () => {
+      const result = GeneralLib.generateNoticeReferenceCode('TEST-')
+
+      expect(result.startsWith('TEST-')).to.be.true()
+      expect(result.length).to.equal(11)
+    })
+  })
+
   describe('#generateUUID', () => {
     // NOTE: generateUUID() only calls crypto.randomUUID(); it does nothing else. So, there is nothing really to test
     // and certainly, testing the UUID is really unique is beyond the scope of this project! But this test at least
@@ -409,35 +418,6 @@ describe('GeneralLib', () => {
     })
   })
 
-  describe('#timestampForPostgres', () => {
-    beforeEach(() => {
-      testDate = new Date(2015, 9, 21, 20, 31, 57)
-
-      clock = Sinon.useFakeTimers(testDate)
-    })
-
-    it('returns the current date and time as an ISO string', () => {
-      const result = GeneralLib.timestampForPostgres()
-
-      expect(result).to.equal('2015-10-21T20:31:57.000Z')
-    })
-  })
-
-  describe('#today', () => {
-    beforeEach(() => {
-      testDate = new Date(2025, 9, 19, 20, 31, 57, 234)
-
-      clock = Sinon.useFakeTimers(testDate)
-    })
-
-    it('returns the current date and time as date-only (time set to midnight)', () => {
-      const result = GeneralLib.today()
-
-      // We compare ISO strings as its a clearer way of ensuring the result is as expected
-      expect(result.toISOString()).to.equal('2025-10-19T00:00:00.000Z')
-    })
-  })
-
   describe('#splitArrayIntoGroups', () => {
     let testArray
     let testGroupSize
@@ -532,6 +512,35 @@ describe('GeneralLib', () => {
 
         expect(result).to.equal([[1, 2]])
       })
+    })
+  })
+
+  describe('#timestampForPostgres', () => {
+    beforeEach(() => {
+      testDate = new Date(2015, 9, 21, 20, 31, 57)
+
+      clock = Sinon.useFakeTimers(testDate)
+    })
+
+    it('returns the current date and time as an ISO string', () => {
+      const result = GeneralLib.timestampForPostgres()
+
+      expect(result).to.equal('2015-10-21T20:31:57.000Z')
+    })
+  })
+
+  describe('#today', () => {
+    beforeEach(() => {
+      testDate = new Date(2025, 9, 19, 20, 31, 57, 234)
+
+      clock = Sinon.useFakeTimers(testDate)
+    })
+
+    it('returns the current date and time as date-only (time set to midnight)', () => {
+      const result = GeneralLib.today()
+
+      // We compare ISO strings as its a clearer way of ensuring the result is as expected
+      expect(result.toISOString()).to.equal('2025-10-19T00:00:00.000Z')
     })
   })
 

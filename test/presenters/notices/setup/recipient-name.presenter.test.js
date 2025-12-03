@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const RecipientNamePresenter = require('../../../../app/presenters/notices/setup/recipient-name.presenter.js')
@@ -18,7 +18,7 @@ describe('Notices - Setup - Recipient Name presenter', () => {
   let session
 
   beforeEach(() => {
-    referenceCode = generateReferenceCode()
+    referenceCode = generateNoticeReferenceCode('RINV-')
 
     session = { id: '123', referenceCode }
   })

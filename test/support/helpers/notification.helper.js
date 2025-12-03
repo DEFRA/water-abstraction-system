@@ -5,7 +5,6 @@
  */
 
 const NotificationModel = require('../../../app/models/notification.model.js')
-const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
 
 /**
  * Add a new notification
@@ -43,19 +42,7 @@ function defaults(data = {}) {
   }
 }
 
-/**
- * Returns a randomly generate reference code.
- *
- * @param {string} [prefix='RINV']
- *
- * @returns {string} - A randomly generated reference code
- */
-function generateReferenceCode(prefix = 'RINV') {
-  return `${prefix}-${generateRandomInteger(100000, 999999)}`
-}
-
 module.exports = {
   add,
-  defaults,
-  generateReferenceCode
+  defaults
 }

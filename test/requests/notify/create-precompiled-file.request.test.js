@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED } = require('node:http2').constants
-const { generateReferenceCode } = require('../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const NotifyRequest = require('../../../app/requests/notify.request.js')
@@ -29,7 +29,7 @@ describe('Notify - Create precompiled file request', () => {
 
   describe('when the request succeeds', () => {
     beforeEach(() => {
-      referenceCode = generateReferenceCode()
+      referenceCode = generateNoticeReferenceCode('RINV-')
       content = new TextEncoder().encode('Test data').buffer
 
       response = {

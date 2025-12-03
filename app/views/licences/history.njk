@@ -1,6 +1,7 @@
 {% extends 'layout-licences.njk' %}
 
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "macros/licence-version-change-type-tag.njk" import changeTypeTag as licenceVersionChangeTypeTag %}
 
 {% block subPageContent %}
   {% if entries.length === 0 %}
@@ -27,9 +28,7 @@
           classes: classes
         },
         {
-          text: licenceVersion.changeType,
-          attributes: { 'data-test': 'licenceVersion-chnage-type-' + rowIndex },
-          classes: classes
+          html: licenceVersionChangeTypeTag(licenceVersion.changeType, true)
         },
         {
           html: '<a href="'+ licenceVersion.action.link +'" class="govuk-link">' + licenceVersion.action.text + '</a>',

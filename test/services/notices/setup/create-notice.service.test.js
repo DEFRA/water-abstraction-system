@@ -10,7 +10,7 @@ const { expect } = Code
 // Test helpers
 const EventModel = require('../../../../app/models/event.model.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
@@ -30,7 +30,7 @@ describe('Notices - Setup - Create Notice service', () => {
       returnsPeriod: 'quarterFour',
       removeLicences: [],
       journey: 'invitations',
-      referenceCode: generateReferenceCode(),
+      referenceCode: generateNoticeReferenceCode('RINV-'),
       determinedReturnsPeriod: {
         dueDate: new Date(`2025-07-28`),
         endDate: new Date(`2025-06-30`),

@@ -66,7 +66,7 @@ describe('Licences - View History service', () => {
         activeNavBar: 'search',
         activeSecondaryNav: 'history',
         backLink: {
-          href: `/system/licences/${licence.id}/summary`,
+          href: `/licences`,
           text: 'Go back to search'
         },
         licenceVersions: [
@@ -75,7 +75,7 @@ describe('Licences - View History service', () => {
               link: `/system/licence-versions/${licenceHistory[0].id}`,
               text: 'View'
             },
-            changeType: null,
+            changeType: 'licence issued',
             endDate: '5 June 2022',
             reason: null,
             startDate: '1 April 2022'

@@ -13,8 +13,8 @@ const NoticesFixture = require('../../../fixtures/notices.fixture.js')
 const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
 
 // Things to stub
-const FetchAlternateRecipientsService = require('../../../../app/services/notices/setup/fetch-alternate-recipients.service.js')
-const FetchFailedReturnsInvitationsService = require('../../../../app/services/notices/setup/fetch-failed-returns-invitations.service.js')
+const FetchAlternateReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js')
+const FetchFailedReturnsInvitationsService = require('../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js')
 
 // Thing under test
 const CreateAlternateNoticeService = require('../../../../app/services/notices/setup/create-alternate-notice.service.js')
@@ -54,7 +54,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
       ]
 
       Sinon.stub(FetchFailedReturnsInvitationsService, 'go').resolves(fetchFailedReturnsInvitationsResults)
-      Sinon.stub(FetchAlternateRecipientsService, 'go').resolves(fetchReturnsAddressesServiceResults)
+      Sinon.stub(FetchAlternateReturnsRecipientsService, 'go').resolves(fetchReturnsAddressesServiceResults)
     })
 
     it('returns a list of notifications to be sent and the reference code for the new notice', async () => {
