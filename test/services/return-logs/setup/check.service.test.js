@@ -19,7 +19,6 @@ const CheckService = require('../../../../app/services/return-logs/setup/check.s
 
 describe('Return Logs Setup - Check service', () => {
   let session
-  let UpdateQuantitiesServiceStub
   let yarStub
 
   beforeEach(() => {
@@ -35,8 +34,6 @@ describe('Return Logs Setup - Check service', () => {
       const data = _sessionData()
 
       session = await SessionHelper.add({ data })
-
-      UpdateQuantitiesServiceStub = Sinon.stub(UpdateQuantitiesService, 'go').resolves()
     })
 
     it('returns page data for the view', async () => {
@@ -114,35 +111,12 @@ describe('Return Logs Setup - Check service', () => {
       })
     })
 
-    it('does not call the Update Quantities service', async () => {
-      await CheckService.go(session.id, yarStub)
-
-      expect(UpdateQuantitiesServiceStub.calledOnce).to.be.false()
-    })
-
     it('updates the session record to indicate user has visited the "check" page', async () => {
       await CheckService.go(session.id, yarStub)
 
       const refreshedSession = await session.$query()
 
       expect(refreshedSession.checkPageVisited).to.be.true()
-    })
-  })
-
-  describe('when called after the check page has been visited', () => {
-    before(async () => {
-      const data = _sessionData()
-      data.checkPageVisited = true
-
-      session = await SessionHelper.add({ data })
-
-      UpdateQuantitiesServiceStub = Sinon.stub(UpdateQuantitiesService, 'go').resolves()
-    })
-
-    it('calls the Update Quantities service', async () => {
-      await CheckService.go(session.id, yarStub)
-
-      expect(UpdateQuantitiesServiceStub.calledOnce).to.be.true()
     })
   })
 })

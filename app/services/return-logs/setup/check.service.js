@@ -20,11 +20,9 @@ const UpdateQuantitiesService = require('../../../services/return-logs/setup/upd
 async function go(sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  if (session.checkPageVisited) {
-    await UpdateQuantitiesService.go(session)
-  } else {
-    await _markCheckPageVisited(session)
-  }
+  await UpdateQuantitiesService.go(session)
+
+  await _updateSession(session)
 
   const formattedData = CheckPresenter.go(session)
 
@@ -37,7 +35,7 @@ async function go(sessionId, yar) {
   }
 }
 
-async function _markCheckPageVisited(session) {
+async function _updateSession(session) {
   session.checkPageVisited = true
 
   return session.$update()
