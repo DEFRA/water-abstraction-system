@@ -43,6 +43,14 @@ describe('Licences - Fetch History service', () => {
 
       expect(result).to.equal([
         {
+          administrative: true,
+          createdAt: licenceVersionTwo.createdAt,
+          endDate: licenceVersionTwo.endDate,
+          id: licenceVersionTwo.id,
+          modLogs: [],
+          startDate: licenceVersionTwo.startDate
+        },
+        {
           administrative: null,
           createdAt: licenceVersion.createdAt,
           endDate: licenceVersion.endDate,
@@ -57,14 +65,6 @@ describe('Licences - Fetch History service', () => {
             }
           ],
           startDate: licenceVersion.startDate
-        },
-        {
-          administrative: true,
-          createdAt: licenceVersionTwo.createdAt,
-          endDate: licenceVersionTwo.endDate,
-          id: licenceVersionTwo.id,
-          modLogs: [],
-          startDate: licenceVersionTwo.startDate
         }
       ])
     })
