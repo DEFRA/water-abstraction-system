@@ -69,10 +69,12 @@ describe('Licence Versions - View presenter', () => {
   })
 
   describe('the "errorInDataEmail" property', () => {
-    it('returns the email address', () => {
-      const result = ViewPresenter.go(licenceVersion, auth)
+    describe('when the user does NOT have the "billing" role', () => {
+      it('returns the email address', () => {
+        const result = ViewPresenter.go(licenceVersion, auth)
 
-      expect(result.errorInDataEmail).to.equal('water_abstractiondigital@environment-agency.gov.uk')
+        expect(result.errorInDataEmail).to.equal('water_abstractiondigital@environment-agency.gov.uk')
+      })
     })
 
     describe('when the user has the "billing" role', () => {
