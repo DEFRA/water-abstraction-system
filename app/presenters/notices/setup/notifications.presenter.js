@@ -10,6 +10,8 @@ const { formatLongDate } = require('../../base.presenter.js')
 const { futureDueDate } = require('../base.presenter.js')
 const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
 
+const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
+
 // NOTE: We know the notice type, for example, 'returns invitation' and this is stored against the notice. But against
 // the notification the legacy code also captures the user and method type in a field called `message_ref`.
 //
@@ -70,15 +72,13 @@ const MESSAGE_REFS = {
 function go(session, recipients, noticeId) {
   const notifications = []
 
-  const { determinedReturnsPeriod, journey, noticeType } = session
-
   for (const recipient of recipients) {
     let notification
 
     if (recipient.email) {
-      notification = _email(recipient, determinedReturnsPeriod, journey, noticeId, noticeType)
+      notification = _email(recipient, noticeId, session)
     } else {
-      notification = _letter(recipient, determinedReturnsPeriod, journey, noticeId, noticeType)
+      notification = _letter(recipient, noticeId, session)
     }
 
     notifications.push(notification)
@@ -87,10 +87,12 @@ function go(session, recipients, noticeId) {
   return notifications
 }
 
-function _email(recipient, determinedReturnsPeriod, journey, noticeId, noticeType) {
+function _email(recipient, noticeId, session) {
+  const { determinedReturnsPeriod, journey, noticeType } = session
+
   const messageType = 'email'
   const templateId = _emailTemplate(recipient.contact_type, journey, noticeType)
-  const dueDate = determinedReturnsPeriod?.dueDate ?? futureDueDate(messageType)
+  const dueDate = _dueDate(session, messageType)
 
   return {
     dueDate,
@@ -110,6 +112,14 @@ function _email(recipient, determinedReturnsPeriod, journey, noticeId, noticeTyp
   }
 }
 
+function _dueDate(session, messageType) {
+  if (featureFlagsConfig.enableNullDueDate) {
+    return session?.latestDueDate ?? futureDueDate(messageType)
+  }
+
+  return session?.determinedReturnsPeriod?.dueDate ?? futureDueDate(messageType)
+}
+
 function _emailTemplate(contactType, journey, noticeType) {
   if (contactType === 'Returns agent') {
     return notifyTemplates[journey][noticeType].returnsAgentEmail
@@ -118,11 +128,13 @@ function _emailTemplate(contactType, journey, noticeType) {
   return notifyTemplates[journey][noticeType].primaryUserEmail
 }
 
-function _letter(recipient, determinedReturnsPeriod, journey, noticeId, noticeType) {
+function _letter(recipient, noticeId, session) {
+  const { determinedReturnsPeriod, journey, noticeType } = session
+
   const messageType = 'letter'
   const templateId = _letterTemplate(recipient.contact_type, journey, noticeType)
   const address = NotifyAddressPresenter.go(recipient.contact)
-  const dueDate = determinedReturnsPeriod?.dueDate ?? futureDueDate(messageType)
+  const dueDate = _dueDate(session, messageType)
 
   return {
     dueDate,
