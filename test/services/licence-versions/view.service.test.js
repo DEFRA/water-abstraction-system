@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
@@ -19,21 +20,30 @@ const FetchLicenceVersionService = require('../../../app/services/licence-versio
 const ViewService = require('../../../app/services/licence-versions/view.service.js')
 
 describe('Licence Versions - View service', () => {
+  let auth
   let licence
   let licenceVersion
 
   beforeEach(() => {
+    auth = {
+      credentials: {
+        scope: []
+      }
+    }
+
     licence = {
       id: generateUUID(),
       licenceRef: generateLicenceRef()
     }
 
-    licenceVersion = {
+    licenceVersion = LicenceVersionModel.fromJson({
       administrative: null,
+      createdAt: new Date('2022-01-01'),
       id: generateUUID(),
       licence,
+      modLogs: [{ id: generateUUID(), reasonDescription: 'Licence Holder Name/Address Change', userId: 'JOBSWORTH01' }],
       startDate: new Date('2022-01-01')
-    }
+    })
 
     Sinon.stub(FetchLicenceVersionService, 'go').returns(licenceVersion)
   })
@@ -44,7 +54,7 @@ describe('Licence Versions - View service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewService.go(licenceVersion.id)
+      const result = await ViewService.go(licenceVersion.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -53,8 +63,10 @@ describe('Licence Versions - View service', () => {
           text: 'Go back to history'
         },
         changeType: 'licence issued',
+        notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
-        pageTitleCaption: `Licence ${licence.licenceRef}`
+        pageTitleCaption: `Licence ${licence.licenceRef}`,
+        reason: 'Licence Holder Name/Address Change'
       })
     })
   })

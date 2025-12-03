@@ -30,11 +30,13 @@ describe('Licence Versions - Fetch licence version service', () => {
 
       expect(result).to.equal({
         administrative: null,
+        createdAt: licenceVersion.createdAt,
         id: licenceVersion.id,
         licence: {
           id: licence.id,
           licenceRef: licence.licenceRef
         },
+        modLogs: [],
         startDate: licenceVersion.startDate
       })
     })

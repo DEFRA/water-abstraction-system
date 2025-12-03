@@ -5,6 +5,15 @@
 
 {% block pageContent %}
 
-{{ licenceVersionChangeTypeTag(changeType, true) }}
+  {{ licenceVersionChangeTypeTag(changeType, false) }}
 
+  <hr class="govuk-section-break govuk-!-margin-bottom-5 govuk-section-break">
+
+  {% if reason %}
+    <p class="govuk-body-l"> {{ reason }} </p>
+  {% endif %}
+
+  {% if notes %}
+    <p><strong>Notes:</strong> {{ notes }} </p>
+  {% endif %}
 {% endblock %}

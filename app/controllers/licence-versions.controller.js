@@ -8,9 +8,12 @@
 const ViewService = require('../services/licence-versions/view.service.js')
 
 async function view(request, h) {
-  const { id } = request.params
+  const {
+    auth,
+    params: { id }
+  } = request
 
-  const pageData = await ViewService.go(id)
+  const pageData = await ViewService.go(id, auth)
 
   return h.view(`licence-versions/view.njk`, pageData)
 }

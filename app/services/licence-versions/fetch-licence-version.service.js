@@ -29,6 +29,7 @@ async function go(licenceVersionId) {
     .modifyGraph('licence', (builder) => {
       builder.select(['id', 'licenceRef'])
     })
+    .modify('history')
 }
 
 module.exports = {
