@@ -90,7 +90,7 @@ describe('Licence Versions - View presenter', () => {
   })
 
   describe('the "notes" property', () => {
-    describe('when the user does not have the "billing" role', ()=> {
+    describe('when the user does not have the "billing" role', () => {
       it('returns null', () => {
         const result = ViewPresenter.go(licenceVersion, auth)
 
@@ -126,7 +126,7 @@ describe('Licence Versions - View presenter', () => {
   })
 
   describe('the "reason" property', () => {
-    describe('when the user does not have the "billing" role', ()=> {
+    describe('when the user does not have the "billing" role', () => {
       describe('and there is a "reason"', () => {
         it('returns the created on', () => {
           const result = ViewPresenter.go(licenceVersion, auth)
