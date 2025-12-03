@@ -55,17 +55,15 @@ async function _readingsUpdate(session) {
     }
   })
 
-  return session.$update()
+  return session
 }
 
 async function _volumesUpdate(session) {
   session.lines.forEach((line) => {
-    line.quantity = line.quantityCubicMetres
-      ? convertFromCubicMetres(line.quantityCubicMetres, session.unitSymbol)
-      : line.quantityCubicMetres
+    line.quantity = convertFromCubicMetres(line.quantityCubicMetres, session.unitSymbol)
   })
 
-  return session.$update()
+  return session
 }
 
 module.exports = {
