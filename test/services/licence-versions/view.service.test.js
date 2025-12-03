@@ -20,10 +20,17 @@ const FetchLicenceVersionService = require('../../../app/services/licence-versio
 const ViewService = require('../../../app/services/licence-versions/view.service.js')
 
 describe('Licence Versions - View service', () => {
+  let auth
   let licence
   let licenceVersion
 
   beforeEach(() => {
+    auth = {
+      credentials: {
+        scope: []
+      }
+    }
+
     licence = {
       id: generateUUID(),
       licenceRef: generateLicenceRef()
@@ -47,7 +54,7 @@ describe('Licence Versions - View service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewService.go(licenceVersion.id)
+      const result = await ViewService.go(licenceVersion.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -59,7 +66,7 @@ describe('Licence Versions - View service', () => {
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
         pageTitleCaption: `Licence ${licence.licenceRef}`,
-        reason: 'Licence Holder Name/Address Change created on 1 January 2022 by JOBSWORTH01'
+        reason: 'Licence Holder Name/Address Change'
       })
     })
   })
