@@ -31,7 +31,7 @@ describe('Return Logs - Void Licence Return Logs service', () => {
   let reissuedReturnLog1
   let reissuedReturnLog2
 
-  describe('when we are reissuing return logs because a licence end date has changed', () => {
+  describe('when we are reissuing return logs because a licence end date has been added', () => {
     before(async () => {
       changeDate = new Date('2022-12-31')
 
@@ -82,6 +82,79 @@ describe('Return Logs - Void Licence Return Logs service', () => {
             })
 
             it('voids only the return log [C] that matches the cycle and ends after the "change date"', async () => {
+              await VoidLicenceReturnLogsService.go(reissuedReturnLogIds, licenceRef, returnCycleId, changeDate)
+
+              let returnLogBeingChecked
+
+              returnLogBeingChecked = await differentReturnCycleReturnLog.$query()
+              expect(returnLogBeingChecked.status).to.equal('due')
+
+              returnLogBeingChecked = await endsBeforeTheChangeDateReturnLog.$query()
+              expect(returnLogBeingChecked.status).to.equal('due')
+
+              returnLogBeingChecked = await endsAfterTheChangeDateReturnLog.$query()
+              expect(returnLogBeingChecked.status).to.equal('void')
+
+              returnLogBeingChecked = await reissuedReturnLog1.$query()
+              expect(reissuedReturnLog1.status).to.equal('due')
+            })
+          })
+        })
+      })
+    })
+  })
+
+  describe('when we are reissuing return logs because a licence end date has been changed to a future date', () => {
+    before(async () => {
+      changeDate = new Date('2022-12-31')
+
+      licenceRef = LicenceHelper.generateLicenceRef()
+      returnCycleId = generateUUID()
+    })
+
+    describe('and the licence has one return log on a different return cycle [A]', () => {
+      before(async () => {
+        differentReturnCycleReturnLog = await ReturnLogHelper.add({
+          endDate: new Date('2023-10-31'),
+          licenceRef,
+          returnCycleId: generateUUID(),
+          startDate: new Date('2022-11-01')
+        })
+      })
+
+      describe('and one return log for the matching return cycle that ends before the "change date" [B]', () => {
+        before(async () => {
+          endsBeforeTheChangeDateReturnLog = await ReturnLogHelper.add({
+            endDate: new Date('2022-09-30'),
+            licenceRef,
+            returnCycleId
+          })
+        })
+
+        describe('and one return log for the matching return cycle that matched the "change date" [C]', () => {
+          before(async () => {
+            returnReference = ReturnRequirementHelper.generateReference()
+            endsAfterTheChangeDateReturnLog = await ReturnLogHelper.add({
+              endDate: changeDate,
+              licenceRef,
+              returnCycleId,
+              returnReference
+            })
+          })
+
+          describe('and now the reissued return log [D]', () => {
+            before(async () => {
+              reissuedReturnLog1 = await ReturnLogHelper.add({
+                endDate: new Date('2023-03-31'),
+                licenceRef,
+                returnCycleId,
+                returnReference
+              })
+
+              reissuedReturnLogIds = [reissuedReturnLog1.id]
+            })
+
+            it('voids only the return log [C] that matches the cycle', async () => {
               await VoidLicenceReturnLogsService.go(reissuedReturnLogIds, licenceRef, returnCycleId, changeDate)
 
               let returnLogBeingChecked
