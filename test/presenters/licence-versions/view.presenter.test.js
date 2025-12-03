@@ -128,7 +128,7 @@ describe('Licence Versions - View presenter', () => {
   describe('the "reason" property', () => {
     describe('when the user does not have the "billing" role', () => {
       describe('and there is a "reason"', () => {
-        it('returns the created on', () => {
+        it('returns the "reason"', () => {
           const result = ViewPresenter.go(licenceVersion, auth)
 
           expect(result.reason).to.equal('Licence Holder Name/Address Change')
