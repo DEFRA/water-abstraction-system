@@ -103,7 +103,7 @@ describe('Licence Versions - View presenter', () => {
         auth.credentials.scope = ['billing']
       })
 
-      describe('when there are notes', () => {
+      describe('and there are notes', () => {
         it('returns the notes', () => {
           const result = ViewPresenter.go(licenceVersion, auth)
 
@@ -111,7 +111,7 @@ describe('Licence Versions - View presenter', () => {
         })
       })
 
-      describe('when there are no notes', () => {
+      describe('but there are no notes', () => {
         beforeEach(() => {
           licenceVersion.modLogs[0].note = null
         })
@@ -158,14 +158,14 @@ describe('Licence Versions - View presenter', () => {
           licenceVersion.modLogs[0].reasonDescription = null
         })
 
-        it('returns the created on', () => {
+        it('returns just the created on', () => {
           const result = ViewPresenter.go(licenceVersion, auth)
 
           expect(result.reason).to.equal('Created on 1 January 2022')
         })
       })
 
-      describe('when there is a reason', () => {
+      describe('and there is a reason', () => {
         describe('and we know who created it', () => {
           it('returns the reason with who created it', () => {
             const result = ViewPresenter.go(licenceVersion, auth)
