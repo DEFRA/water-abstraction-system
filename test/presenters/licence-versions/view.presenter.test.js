@@ -140,7 +140,7 @@ describe('Licence Versions - View presenter', () => {
           licenceVersion.modLogs[0].reasonDescription = null
         })
 
-        it('returns the created on', () => {
+        it('returns null', () => {
           const result = ViewPresenter.go(licenceVersion, auth)
 
           expect(result.reason).to.be.null()
