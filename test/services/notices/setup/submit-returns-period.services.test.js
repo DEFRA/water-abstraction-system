@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const SubmitReturnsPeriodService = require('../../../../app/services/notices/setup/submit-returns-period.service.js')
@@ -23,7 +23,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
   let yarStub
 
   before(async () => {
-    referenceCode = generateReferenceCode()
+    referenceCode = generateNoticeReferenceCode('RINV-')
 
     const testDate = new Date('2024-12-01')
 

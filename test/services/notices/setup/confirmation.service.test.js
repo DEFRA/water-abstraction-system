@@ -9,13 +9,13 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ViewConfirmationService = require('../../../../app/services/notices/setup/view-confirmation.service.js')
 
 describe('Notices - Setup - Confirmation service', () => {
-  const referenceCode = generateReferenceCode()
+  const referenceCode = generateNoticeReferenceCode('RINV-')
 
   let event
 

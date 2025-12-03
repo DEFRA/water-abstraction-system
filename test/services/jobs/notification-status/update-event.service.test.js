@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const EventHelper = require('../../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const UpdateEventService = require('../../../../app/services/jobs/notification-status/update-event.service.js')
@@ -47,7 +48,7 @@ describe('Job - Notification Status - Update Event service', () => {
 
     notIncludedEvent = await EventHelper.add({
       ...eventData,
-      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+      referenceCode: generateNoticeReferenceCode('RINV-')
     })
     notifications.push(await NotificationHelper.add({ eventId: notIncludedEvent.id, status: 'pending' }))
 
@@ -55,13 +56,13 @@ describe('Job - Notification Status - Update Event service', () => {
 
     cancelledEvent = await EventHelper.add({
       ...eventData,
-      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+      referenceCode: generateNoticeReferenceCode('RINV-')
     })
     notifications.push(await NotificationHelper.add({ eventId: cancelledEvent.id, status: 'cancelled' }))
 
     sentEvent = await EventHelper.add({
       ...eventData,
-      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+      referenceCode: generateNoticeReferenceCode('RINV-')
     })
     notifications.push(await NotificationHelper.add({ eventId: sentEvent.id, status: 'sent' }))
 
@@ -69,35 +70,35 @@ describe('Job - Notification Status - Update Event service', () => {
     sentAndPendingEvent = await EventHelper.add({
       ...eventData,
       metadata: {},
-      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+      referenceCode: generateNoticeReferenceCode('RINV-')
     })
     notifications.push(await NotificationHelper.add({ eventId: sentAndPendingEvent.id, status: 'sent' }))
     notifications.push(await NotificationHelper.add({ eventId: sentAndPendingEvent.id, status: 'pending' }))
 
     sentAndErroredEvent = await EventHelper.add({
       ...eventData,
-      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+      referenceCode: generateNoticeReferenceCode('RINV-')
     })
     notifications.push(await NotificationHelper.add({ eventId: sentAndErroredEvent.id, status: 'sent' }))
     notifications.push(await NotificationHelper.add({ eventId: sentAndErroredEvent.id, status: 'error' }))
 
     sentAndReturnedEvent = await EventHelper.add({
       ...eventData,
-      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+      referenceCode: generateNoticeReferenceCode('RINV-')
     })
     notifications.push(await NotificationHelper.add({ eventId: sentAndReturnedEvent.id, status: 'sent' }))
     notifications.push(await NotificationHelper.add({ eventId: sentAndReturnedEvent.id, status: 'returned' }))
 
     sentAndCancelledEvent = await EventHelper.add({
       ...eventData,
-      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+      referenceCode: generateNoticeReferenceCode('RINV-')
     })
     notifications.push(await NotificationHelper.add({ eventId: sentAndCancelledEvent.id, status: 'sent' }))
     notifications.push(await NotificationHelper.add({ eventId: sentAndCancelledEvent.id, status: 'cancelled' }))
 
     oneOfEachEvent = await EventHelper.add({
       ...eventData,
-      referenceCode: NotificationHelper.generateReferenceCode('RINV')
+      referenceCode: generateNoticeReferenceCode('RINV-')
     })
     notifications.push(await NotificationHelper.add({ eventId: oneOfEachEvent.id, status: 'sent' }))
     notifications.push(await NotificationHelper.add({ eventId: oneOfEachEvent.id, status: 'error' }))

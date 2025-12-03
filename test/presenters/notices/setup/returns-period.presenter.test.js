@@ -9,8 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ReturnsPeriodPresenter = require('../../../../app/presenters/notices/setup/returns-period.presenter.js')
@@ -26,7 +25,7 @@ describe('Notices - Setup - Returns Period presenter', () => {
   let testDate
 
   beforeEach(() => {
-    referenceCode = generateReferenceCode()
+    referenceCode = generateNoticeReferenceCode('RINV-')
     session = { referenceCode, noticeType: 'invitations', id: generateUUID() }
   })
 

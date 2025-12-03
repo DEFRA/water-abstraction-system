@@ -8,17 +8,17 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const EventHelper = require('../../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../../fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../../fixtures/notifications.fixture.js')
-const NotificationHelper = require('../../../support/helpers/notification.helper.js')
-const { today } = require('../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const EventHelper = require('../../../../support/helpers/event.helper.js')
+const NoticesFixture = require('../../../../fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../../../fixtures/notifications.fixture.js')
+const NotificationHelper = require('../../../../support/helpers/notification.helper.js')
+const { today } = require('../../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 
 // Thing under test
-const FetchFailedReturnsInvitationsService = require('../../../../app/services/notices/setup/fetch-failed-returns-invitations.service.js')
+const FetchFailedReturnsInvitationsService = require('../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js')
 
-describe('Notices - Setup - Fetch Failed Returns Invitations service', () => {
+describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations service', () => {
   let failedInvitationAlternateSet
   let failedInvitationFirstRecipient
   let failedInvitationSecondRecipient

@@ -22,18 +22,18 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, yar, page = 1) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const recipients = await FetchRecipientsService.go(session)
+  const recipients = await FetchRecipientsService.go(session, false)
 
   await _initialiseSelectedRecipients(recipients, session)
 
   const pagination = PaginatorPresenter.go(recipients.length, Number(page), `/system/notices/setup/${sessionId}/check`)
 
-  const formattedData = CheckPresenter.go(recipients, page, pagination, session)
+  const pageData = CheckPresenter.go(recipients, page, pagination, session)
 
   const notification = yar.flash('notification')[0]
 
   return {
-    ...formattedData,
+    ...pageData,
     activeNavBar: 'notices',
     notification,
     page,
@@ -44,9 +44,9 @@ async function go(sessionId, yar, page = 1) {
 /**
  * Initialises the 'selectedRecipients' array in the session if it doesn't already exist
  *
- * If the session doesn't have a 'selectedRecipients' array set, this function will populate it with
- * all the contact_hash_id values from the provided recipients array. This ensures that
- * all recipients are initially selected by default.
+ * If the session doesn't have a 'selectedRecipients' array set, this function will populate it with all the
+ * contact_hash_id values from the provided recipients array. This ensures that all recipients are initially selected by
+ * default.
  *
  * This has to be done after the initial 'FetchRecipientsService' call so 'contact_hash_id' is available.
  *
@@ -57,9 +57,9 @@ async function _initialiseSelectedRecipients(recipients, session) {
     session.selectedRecipients = recipients.map((recipient) => {
       return recipient.contact_hash_id
     })
-  }
 
-  return session.$update()
+    await session.$update()
+  }
 }
 
 module.exports = {

@@ -1,8 +1,7 @@
 'use strict'
 
-const { generateRandomInteger, generateUUID } = require('../../app/lib/general.lib.js')
+const { generateNoticeReferenceCode, generateRandomInteger, generateUUID } = require('../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
-const { generateReferenceCode } = require('../support/helpers/notification.helper.js')
 
 /**
  * Represents a notice of type 'alert reduce'
@@ -21,7 +20,7 @@ function alertReduce() {
     },
     recipients: 1
   }
-  data.referenceCode = generateReferenceCode('WAA')
+  data.referenceCode = generateNoticeReferenceCode('WAA-')
   data.subtype = 'waterAbstractionAlerts'
 
   return data
@@ -44,7 +43,7 @@ function alertResume() {
     },
     recipients: 1
   }
-  data.referenceCode = generateReferenceCode('WAA')
+  data.referenceCode = generateNoticeReferenceCode('WAA-')
   data.subtype = 'waterAbstractionAlerts'
 
   return data
@@ -67,7 +66,7 @@ function alertStop() {
     },
     recipients: 1
   }
-  data.referenceCode = generateReferenceCode('WAA')
+  data.referenceCode = generateNoticeReferenceCode('WAA-')
   data.subtype = 'waterAbstractionAlerts'
 
   return data
@@ -90,7 +89,7 @@ function alertWarning() {
     },
     recipients: 1
   }
-  data.referenceCode = generateReferenceCode('WAA')
+  data.referenceCode = generateNoticeReferenceCode('WAA-')
   data.subtype = 'waterAbstractionAlerts'
 
   return data
@@ -114,7 +113,7 @@ function legacyHandsOffFlow() {
     recipients: 1,
     taskConfigId: 1
   }
-  data.referenceCode = generateReferenceCode('HOF')
+  data.referenceCode = generateNoticeReferenceCode('HOF-')
   data.subtype = 'hof-warning'
 
   return data
@@ -138,7 +137,7 @@ function legacyRenewal() {
     recipients: 1,
     taskConfigId: 2
   }
-  data.referenceCode = generateReferenceCode('RENEW')
+  data.referenceCode = generateNoticeReferenceCode('RENEW-')
   data.subtype = 'renewal'
 
   return data
@@ -203,7 +202,7 @@ function returnsInvitation() {
     recipients: generateRandomInteger(1, 5000),
     returnCycle: { dueDate: '2025-04-28', endDate: '2025-03-31', isSummer: false, startDate: '2024-04-01' }
   }
-  data.referenceCode = generateReferenceCode('RINV')
+  data.referenceCode = generateNoticeReferenceCode('RINV-')
   data.subtype = 'returnInvitation'
 
   return data
@@ -224,7 +223,7 @@ function returnsPaperForm() {
     recipients: 1,
     returnCycle: { dueDate: '2025-11-03', endDate: null, startDate: null }
   }
-  data.referenceCode = generateReferenceCode('PRTF')
+  data.referenceCode = generateNoticeReferenceCode('PRTF-')
   data.subtype = 'paperReturnForms'
 
   return data
@@ -253,7 +252,7 @@ function returnsReminder() {
       startDate: '2024-04-01'
     }
   }
-  data.referenceCode = generateReferenceCode('RREM')
+  data.referenceCode = generateNoticeReferenceCode('RREM-')
   data.subtype = 'returnReminder'
 
   return data

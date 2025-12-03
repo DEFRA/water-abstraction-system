@@ -12,9 +12,9 @@ const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 
 // Thing under test
-const AbstractionAlertDownloadRecipientsPresenter = require('../../../../app/presenters/notices/setup/abstraction-alert-download-recipients.presenter.js')
+const DownloadAbstractionAlertPresenter = require('../../../../app/presenters/notices/setup/download-abstraction-alert.presenter.js')
 
-describe('Notices - Setup - Abstraction Alert Download Recipients presenter', () => {
+describe('Notices - Setup - Download Abstraction Alert presenter', () => {
   let session
   let recipients
   let testRecipients
@@ -37,7 +37,7 @@ describe('Notices - Setup - Abstraction Alert Download Recipients presenter', ()
   })
 
   it('correctly formats the data to a csv string', () => {
-    const result = AbstractionAlertDownloadRecipientsPresenter.go(testRecipients, session)
+    const result = DownloadAbstractionAlertPresenter.go(testRecipients, session)
 
     expect(result).to.equal(
       // Headers
@@ -52,7 +52,7 @@ describe('Notices - Setup - Abstraction Alert Download Recipients presenter', ()
   })
 
   it('correctly formats the headers', () => {
-    const result = AbstractionAlertDownloadRecipientsPresenter.go(testRecipients, session)
+    const result = DownloadAbstractionAlertPresenter.go(testRecipients, session)
 
     let [headers] = result.split('\n')
     // We want to test the header includes the new line
@@ -80,7 +80,7 @@ describe('Notices - Setup - Abstraction Alert Download Recipients presenter', ()
 
   describe('when the recipient is an "additional contact"', () => {
     it('correctly formats the row', () => {
-      const result = AbstractionAlertDownloadRecipientsPresenter.go([recipients.additionalContact], session)
+      const result = DownloadAbstractionAlertPresenter.go([recipients.additionalContact], session)
 
       let [, row] = result.split('\n')
       // We want to test the row includes the new line
@@ -108,7 +108,7 @@ describe('Notices - Setup - Abstraction Alert Download Recipients presenter', ()
 
   describe('when the recipient is a "primary_user"', () => {
     it('correctly formats the row', () => {
-      const result = AbstractionAlertDownloadRecipientsPresenter.go([recipients.primaryUser], session)
+      const result = DownloadAbstractionAlertPresenter.go([recipients.primaryUser], session)
 
       let [, row] = result.split('\n')
       // We want to test the row includes the new line
@@ -137,7 +137,7 @@ describe('Notices - Setup - Abstraction Alert Download Recipients presenter', ()
   describe('when the recipient is a "licence holder"', () => {
     describe('and the "contact" is a "person"', () => {
       it('correctly formats the row', () => {
-        const result = AbstractionAlertDownloadRecipientsPresenter.go([recipients.licenceHolder], session)
+        const result = DownloadAbstractionAlertPresenter.go([recipients.licenceHolder], session)
 
         let [, row] = result.split('\n')
         // We want to test the row includes the new line
@@ -165,7 +165,7 @@ describe('Notices - Setup - Abstraction Alert Download Recipients presenter', ()
 
     describe('and the "contact" is a "organisation"', () => {
       it('correctly formats the row', () => {
-        const result = AbstractionAlertDownloadRecipientsPresenter.go(
+        const result = DownloadAbstractionAlertPresenter.go(
           [
             {
               ...recipients.licenceHolder,
@@ -245,7 +245,7 @@ describe('Notices - Setup - Abstraction Alert Download Recipients presenter', ()
     })
 
     it('correctly returns the csv string, filename and type', () => {
-      const result = AbstractionAlertDownloadRecipientsPresenter.go(testRecipients, session)
+      const result = DownloadAbstractionAlertPresenter.go(testRecipients, session)
 
       expect(result).to.equal(
         // Headers

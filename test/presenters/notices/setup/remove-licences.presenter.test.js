@@ -8,8 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const RemoveLicencesPresenter = require('../../../../app/presenters/notices/setup/remove-licences.presenter.js')
@@ -20,7 +19,7 @@ describe('Notices - Setup - Remove Licences presenter', () => {
   let session
 
   beforeEach(() => {
-    referenceCode = generateReferenceCode()
+    referenceCode = generateNoticeReferenceCode('RINV-')
 
     session = {
       id: generateUUID(),

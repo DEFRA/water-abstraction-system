@@ -10,17 +10,23 @@ const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { NoticeJourney, NoticeType } = require('../../../../app/lib/static-lookups.lib.js')
 
 // Things we need to stub
-const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
-const FetchPaperReturnRecipientsService = require('../../../../app/services/notices/setup/fetch-paper-return-recipients.service.js')
-const FetchReturnsRecipientsService = require('../../../../app/services/notices/setup/fetch-returns-recipients.service.js')
+const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
+const FetchAdHocReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-ad-hoc-returns-recipients.service.js')
+const FetchPaperReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js')
+const FetchStandardReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-standard-returns-recipients.service.js')
 
 // Thing under test
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 
 describe('Notices - Setup - Fetch Recipients service', () => {
+  let download
+  let fetchAbstractionAlertRecipientsStub
+  let fetchAdHocReturnsRecipientsStub
+  let fetchPaperReturnsRecipientsStub
+  let fetchStandardReturnsRecipientsStub
   let recipients
   let session
 
@@ -28,269 +34,233 @@ describe('Notices - Setup - Fetch Recipients service', () => {
     Sinon.restore()
   })
 
-  describe('when getting the recipients', () => {
-    describe('and all recipients are required', () => {
-      beforeEach(async () => {
-        recipients = RecipientsFixture.recipients()
+  describe('when setting up an abstraction alert', () => {
+    beforeEach(() => {
+      session = {
+        journey: NoticeJourney.ALERTS,
+        noticeType: NoticeType.ABSTRACTION_ALERTS
+      }
 
-        session = await SessionHelper.add({
-          data: {
-            journey: 'standard'
-          }
-        })
+      download = false
 
-        Sinon.stub(FetchReturnsRecipientsService, 'go').resolves([recipients.primaryUser, recipients.returnsAgent])
-      })
-
-      it('returns all the recipients formatted for display', async () => {
-        const result = await FetchRecipientsService.go(session)
-
-        expect(result).to.equal([
-          {
-            contact: null,
-            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-            contact_type: 'Primary user',
-            email: 'primary.user@important.com',
-            licence_refs: recipients.primaryUser.licence_refs,
-            message_type: 'Email',
-            return_log_ids: recipients.primaryUser.return_log_ids
-          },
-          {
-            contact: null,
-            contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
-            contact_type: 'Returns agent',
-            email: 'returns.agent@important.com',
-            licence_refs: recipients.returnsAgent.licence_refs,
-            message_type: 'Email',
-            return_log_ids: recipients.returnsAgent.return_log_ids
-          }
-        ])
-      })
+      fetchAdHocReturnsRecipientsStub = Sinon.stub(FetchAdHocReturnsRecipientsService, 'go').resolves()
+      fetchPaperReturnsRecipientsStub = Sinon.stub(FetchPaperReturnsRecipientsService, 'go').resolves()
+      fetchStandardReturnsRecipientsStub = Sinon.stub(FetchStandardReturnsRecipientsService, 'go').resolves()
     })
 
-    describe('and all recipients are not required', () => {
-      describe('when there are selected recipients', () => {
-        beforeEach(async () => {
-          recipients = RecipientsFixture.recipients()
+    describe('and fetching recipients for checking or sending', () => {
+      beforeEach(() => {
+        recipients = [RecipientsFixture.alertNoticePrimaryUser(), RecipientsFixture.alertNoticeAdditionalContact()]
 
-          session = await SessionHelper.add({
-            data: {
-              journey: 'standard',
-              selectedRecipients: [recipients.licenceHolder.contact_hash_id]
-            }
-          })
-
-          Sinon.stub(FetchReturnsRecipientsService, 'go').resolves([recipients.primaryUser, recipients.licenceHolder])
-        })
-
-        it('returns only the selected recipients formatted for display', async () => {
-          const result = await FetchRecipientsService.go(session)
-
-          expect(result).to.equal([
-            {
-              contact: {
-                addressLine1: '1',
-                addressLine2: 'Privet Drive',
-                addressLine3: null,
-                addressLine4: null,
-                country: null,
-                county: 'Surrey',
-                forename: 'Harry',
-                initials: 'H J',
-                name: 'Potter',
-                postcode: 'WD25 7LR',
-                role: 'Licence holder',
-                salutation: 'Mr',
-                town: 'Little Whinging',
-                type: 'Person'
-              },
-              contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
-              contact_type: 'Licence holder',
-              email: null,
-              licence_refs: recipients.licenceHolder.licence_refs,
-              message_type: 'Letter',
-              return_log_ids: recipients.licenceHolder.return_log_ids
-            }
-          ])
-        })
+        fetchAbstractionAlertRecipientsStub = Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves(
+          recipients
+        )
       })
 
-      describe('when there are no selected recipients', () => {
-        beforeEach(async () => {
-          recipients = RecipientsFixture.recipients()
+      it('determines the appropriate fetch service to call and returns the recipient data', async () => {
+        const results = await FetchRecipientsService.go(session, download)
 
-          session = await SessionHelper.add({
-            data: {
-              journey: 'standard'
-            }
-          })
+        expect(fetchAbstractionAlertRecipientsStub.calledOnceWith(session)).to.be.true()
 
-          Sinon.stub(FetchReturnsRecipientsService, 'go').resolves([recipients.primaryUser, recipients.returnsAgent])
-        })
+        expect(fetchAdHocReturnsRecipientsStub.called).to.be.false()
+        expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
+        expect(fetchStandardReturnsRecipientsStub.called).to.be.false()
 
-        it('returns all the recipients formatted for display', async () => {
-          const result = await FetchRecipientsService.go(session)
-
-          expect(result).to.equal([
-            {
-              contact: null,
-              contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-              contact_type: 'Primary user',
-              email: 'primary.user@important.com',
-              licence_refs: recipients.primaryUser.licence_refs,
-              message_type: 'Email',
-              return_log_ids: recipients.primaryUser.return_log_ids
-            },
-            {
-              contact: null,
-              contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
-              contact_type: 'Returns agent',
-              email: 'returns.agent@important.com',
-              licence_refs: recipients.returnsAgent.licence_refs,
-              message_type: 'Email',
-              return_log_ids: recipients.returnsAgent.return_log_ids
-            }
-          ])
-        })
-      })
-    })
-
-    describe('and there are "additionalRecipients"', () => {
-      beforeEach(async () => {
-        recipients = RecipientsFixture.recipients()
-
-        session = await SessionHelper.add({
-          data: {
-            journey: 'standard',
-            additionalRecipients: [recipients.licenceHolder]
-          }
-        })
-
-        Sinon.stub(FetchReturnsRecipientsService, 'go').resolves([recipients.primaryUser, recipients.returnsAgent])
-      })
-
-      it('returns all the recipients (including "additionalRecipients") formatted for display', async () => {
-        const result = await FetchRecipientsService.go(session)
-
-        expect(result).to.equal([
-          {
-            contact: null,
-            contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-            contact_type: 'Primary user',
-            email: 'primary.user@important.com',
-            licence_refs: recipients.primaryUser.licence_refs,
-            message_type: 'Email',
-            return_log_ids: recipients.primaryUser.return_log_ids
-          },
-          {
-            contact: null,
-            contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
-            contact_type: 'Returns agent',
-            email: 'returns.agent@important.com',
-            licence_refs: recipients.returnsAgent.licence_refs,
-            message_type: 'Email',
-            return_log_ids: recipients.returnsAgent.return_log_ids
-          },
-          {
-            contact: {
-              addressLine1: '1',
-              addressLine2: 'Privet Drive',
-              addressLine3: null,
-              addressLine4: null,
-              country: null,
-              county: 'Surrey',
-              forename: 'Harry',
-              initials: 'H J',
-              name: 'Potter',
-              postcode: 'WD25 7LR',
-              role: 'Licence holder',
-              salutation: 'Mr',
-              town: 'Little Whinging',
-              type: 'Person'
-            },
-            contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
-            contact_type: 'Licence holder',
-            email: null,
-            licence_refs: recipients.licenceHolder.licence_refs,
-            message_type: 'Letter',
-            return_log_ids: recipients.licenceHolder.return_log_ids
-          }
-        ])
+        expect(results).to.equal(recipients)
       })
     })
   })
 
-  describe('when the notice types is "abstractionAlerts"', () => {
-    beforeEach(async () => {
-      session = await SessionHelper.add({
-        data: {
-          noticeType: 'abstractionAlerts'
-        }
-      })
+  describe('when setting up a paper return', () => {
+    beforeEach(() => {
+      session = {
+        journey: NoticeJourney.ADHOC,
+        noticeType: NoticeType.PAPER_RETURN
+      }
 
-      recipients = RecipientsFixture.alertsRecipients()
-
-      Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves([recipients.additionalContact])
+      fetchAbstractionAlertRecipientsStub = Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves()
+      fetchAdHocReturnsRecipientsStub = Sinon.stub(FetchAdHocReturnsRecipientsService, 'go').resolves()
+      fetchStandardReturnsRecipientsStub = Sinon.stub(FetchStandardReturnsRecipientsService, 'go').resolves()
     })
 
-    it('correctly presents the data', async () => {
-      const result = await FetchRecipientsService.go(session)
+    describe('and fetching recipients for checking or sending', () => {
+      beforeEach(() => {
+        download = false
 
-      expect(result).to.equal([
-        {
-          contact: null,
-          contact_hash_id: '90129f6aa5b98734aa3fefd3f8cf86a',
-          contact_type: 'Additional contact',
-          email: recipients.additionalContact.email,
-          licence_refs: recipients.additionalContact.licence_refs,
-          message_type: 'Email'
-        }
-      ])
+        recipients = [
+          RecipientsFixture.returnsNoticePrimaryUser(download),
+          RecipientsFixture.returnsNoticeReturnsAgent(download)
+        ]
+
+        fetchPaperReturnsRecipientsStub = Sinon.stub(FetchPaperReturnsRecipientsService, 'go').resolves(recipients)
+      })
+
+      it('determines the appropriate fetch service to call and returns the recipient data', async () => {
+        const results = await FetchRecipientsService.go(session, download)
+
+        expect(fetchPaperReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
+
+        expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
+        expect(fetchAdHocReturnsRecipientsStub.called).to.be.false()
+        expect(fetchStandardReturnsRecipientsStub.called).to.be.false()
+
+        expect(results).to.equal(recipients)
+      })
+    })
+
+    describe('and fetching recipients for downloading', () => {
+      beforeEach(() => {
+        download = true
+
+        recipients = [
+          RecipientsFixture.returnsNoticePrimaryUser(download),
+          RecipientsFixture.returnsNoticeReturnsAgent(download)
+        ]
+
+        fetchPaperReturnsRecipientsStub = Sinon.stub(FetchPaperReturnsRecipientsService, 'go').resolves(recipients)
+      })
+
+      it('determines the appropriate fetch service to call and returns the recipient data', async () => {
+        const results = await FetchRecipientsService.go(session, download)
+
+        expect(fetchPaperReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
+
+        expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
+        expect(fetchAdHocReturnsRecipientsStub.called).to.be.false()
+        expect(fetchStandardReturnsRecipientsStub.called).to.be.false()
+
+        expect(results).to.equal(recipients)
+      })
     })
   })
 
-  describe('and the "noticeType" is "paperReturn"', () => {
-    beforeEach(async () => {
-      recipients = RecipientsFixture.recipients()
+  describe('when setting up an ad-hoc returns invitation or reminder', () => {
+    beforeEach(() => {
+      session = {
+        journey: NoticeJourney.ADHOC,
+        noticeType: NoticeType.INVITATIONS
+      }
 
-      session = await SessionHelper.add({
-        data: {
-          noticeType: 'paperReturn'
-        }
-      })
-
-      Sinon.stub(FetchPaperReturnRecipientsService, 'go').resolves([recipients.licenceHolder])
+      fetchAbstractionAlertRecipientsStub = Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves()
+      fetchPaperReturnsRecipientsStub = Sinon.stub(FetchPaperReturnsRecipientsService, 'go').resolves()
+      fetchStandardReturnsRecipientsStub = Sinon.stub(FetchStandardReturnsRecipientsService, 'go').resolves()
     })
 
-    it('returns only letter recipients', async () => {
-      const result = await FetchRecipientsService.go(session)
+    describe('and fetching recipients for checking or sending', () => {
+      beforeEach(() => {
+        download = false
 
-      expect(result).to.equal([
-        {
-          contact: {
-            addressLine1: '1',
-            addressLine2: 'Privet Drive',
-            addressLine3: null,
-            addressLine4: null,
-            country: null,
-            county: 'Surrey',
-            forename: 'Harry',
-            initials: 'H J',
-            name: 'Potter',
-            postcode: 'WD25 7LR',
-            role: 'Licence holder',
-            salutation: 'Mr',
-            town: 'Little Whinging',
-            type: 'Person'
-          },
-          contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
-          contact_type: 'Licence holder',
-          email: null,
-          licence_refs: recipients.licenceHolder.licence_refs,
-          message_type: 'Letter',
-          return_log_ids: recipients.licenceHolder.return_log_ids
-        }
-      ])
+        recipients = [
+          RecipientsFixture.returnsNoticePrimaryUser(download),
+          RecipientsFixture.returnsNoticeReturnsAgent(download)
+        ]
+
+        fetchAdHocReturnsRecipientsStub = Sinon.stub(FetchAdHocReturnsRecipientsService, 'go').resolves(recipients)
+      })
+
+      it('determines the appropriate fetch service to call and returns the recipient data', async () => {
+        const results = await FetchRecipientsService.go(session, download)
+
+        expect(fetchAdHocReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
+
+        expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
+        expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
+        expect(fetchStandardReturnsRecipientsStub.called).to.be.false()
+
+        expect(results).to.equal(recipients)
+      })
+    })
+
+    describe('and fetching recipients for downloading', () => {
+      beforeEach(() => {
+        download = true
+
+        recipients = [
+          RecipientsFixture.returnsNoticePrimaryUser(download),
+          RecipientsFixture.returnsNoticeReturnsAgent(download)
+        ]
+
+        fetchAdHocReturnsRecipientsStub = Sinon.stub(FetchAdHocReturnsRecipientsService, 'go').resolves(recipients)
+      })
+
+      it('determines the appropriate fetch service to call and returns the recipient data', async () => {
+        const results = await FetchRecipientsService.go(session, download)
+
+        expect(fetchAdHocReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
+
+        expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
+        expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
+        expect(fetchStandardReturnsRecipientsStub.called).to.be.false()
+
+        expect(results).to.equal(recipients)
+      })
+    })
+  })
+
+  describe('when setting up a standard returns invitation or reminder', () => {
+    beforeEach(() => {
+      session = {
+        journey: NoticeJourney.STANDARD,
+        noticeType: NoticeType.REMINDERS
+      }
+
+      fetchAbstractionAlertRecipientsStub = Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves()
+      fetchAdHocReturnsRecipientsStub = Sinon.stub(FetchAdHocReturnsRecipientsService, 'go').resolves()
+      fetchPaperReturnsRecipientsStub = Sinon.stub(FetchPaperReturnsRecipientsService, 'go').resolves()
+    })
+
+    describe('and fetching recipients for checking or sending', () => {
+      beforeEach(() => {
+        download = false
+
+        recipients = [
+          RecipientsFixture.returnsNoticePrimaryUser(download),
+          RecipientsFixture.returnsNoticeReturnsAgent(download)
+        ]
+
+        fetchStandardReturnsRecipientsStub = Sinon.stub(FetchStandardReturnsRecipientsService, 'go').resolves(
+          recipients
+        )
+      })
+
+      it('determines the appropriate fetch service to call and returns the recipient data', async () => {
+        const results = await FetchRecipientsService.go(session, download)
+
+        expect(fetchStandardReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
+
+        expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
+        expect(fetchAdHocReturnsRecipientsStub.called).to.be.false()
+        expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
+
+        expect(results).to.equal(recipients)
+      })
+    })
+
+    describe('and fetching recipients for downloading', () => {
+      beforeEach(() => {
+        download = true
+
+        recipients = [
+          RecipientsFixture.returnsNoticePrimaryUser(download),
+          RecipientsFixture.returnsNoticeReturnsAgent(download)
+        ]
+
+        fetchStandardReturnsRecipientsStub = Sinon.stub(FetchStandardReturnsRecipientsService, 'go').resolves(
+          recipients
+        )
+      })
+
+      it('determines the appropriate fetch service to call and returns the recipient data', async () => {
+        const results = await FetchRecipientsService.go(session, download)
+
+        expect(fetchStandardReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
+
+        expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
+        expect(fetchAdHocReturnsRecipientsStub.called).to.be.false()
+        expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
+
+        expect(results).to.equal(recipients)
+      })
     })
   })
 })

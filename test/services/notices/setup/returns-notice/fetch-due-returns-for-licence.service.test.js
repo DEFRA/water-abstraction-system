@@ -8,14 +8,14 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const RegionHelper = require('../../../support/helpers/region.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const RegionHelper = require('../../../../support/helpers/region.helper.js')
+const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
+const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 
 // Thing under test
-const FetchReturnsDueByLicenceRefService = require('../../../../app/services/notices/setup/fetch-returns-due-by-licence-ref.service.js')
+const FetchDueReturnsForLicence = require('../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js')
 
-describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
+describe('Notices - Setup - Returns Notice - Fetch Due Returns For Licence service', () => {
   let licenceRef
   let returnLogs
   let region
@@ -86,7 +86,7 @@ describe('Notices - Setup - Fetch Returns Due By Licence Ref service', () => {
 
   describe('when called', () => {
     it('returns the "due" returns for the licence', async () => {
-      const result = await FetchReturnsDueByLicenceRefService.go(licenceRef)
+      const result = await FetchDueReturnsForLicence.go(licenceRef)
 
       expect(result).to.equal([
         {

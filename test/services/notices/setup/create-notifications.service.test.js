@@ -11,9 +11,8 @@ const { expect } = Code
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Thing under test
 const CreateNotificationsService = require('../../../../app/services/notices/setup/create-notifications.service.js')
@@ -86,7 +85,7 @@ describe('Notices - Setup - Create Notifications service', () => {
         name: 'Water abstraction alert',
         noticeType: 'abstractionAlerts',
         notificationType: 'Abstraction alert',
-        referenceCode: generateReferenceCode('WAA-'),
+        referenceCode: generateNoticeReferenceCode('WAA-'),
         relevantLicenceMonitoringStations: [...licenceMonitoringStations],
         removedThresholds: [],
         selectedRecipients: [recipients[0].contact_hash_id, recipients[1].contact_hash_id],
@@ -176,7 +175,7 @@ describe('Notices - Setup - Create Notifications service', () => {
         { ...fixtureData.returnsTo, licence_refs: [licenceRef] }
       ]
 
-      const referenceCode = generateReferenceCode('PRTF-')
+      const referenceCode = generateNoticeReferenceCode('PRTF-')
       const selectedReturnId = generateUUID()
       const sessionId = generateUUID()
 
@@ -371,7 +370,7 @@ describe('Notices - Setup - Create Notifications service', () => {
         }
       ]
 
-      const referenceCode = generateReferenceCode('RINV-')
+      const referenceCode = generateNoticeReferenceCode('RINV-')
       const sessionId = generateUUID()
 
       session = {

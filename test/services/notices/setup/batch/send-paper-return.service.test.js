@@ -11,7 +11,7 @@ const { expect } = Code
 // Test helpers
 const NotificationsFixture = require('../../../../fixtures/notifications.fixture.js')
 const NotifyResponseFixture = require('../../../../fixtures/notify-response.fixture.js')
-const { generateReferenceCode } = require('../../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const CreatePrecompiledFileRequest = require('../../../../../app/requests/notify/create-precompiled-file.request.js')
@@ -27,7 +27,7 @@ describe('Notices - Setup - Batch - Send Return form service', () => {
   let referenceCode
 
   beforeEach(async () => {
-    referenceCode = generateReferenceCode()
+    referenceCode = generateNoticeReferenceCode('RINV-')
     notification = NotificationsFixture.notification().notification
 
     notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode).pdf
