@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
@@ -34,7 +34,7 @@ describe('Notices - Setup - Check presenter', () => {
       id: generateUUID(),
       journey: 'standard',
       noticeType: 'invitations',
-      referenceCode: generateReferenceCode('RINV')
+      referenceCode: generateNoticeReferenceCode('RINV-')
     }
 
     testRecipients = RecipientsFixture.recipients()
@@ -160,7 +160,7 @@ describe('Notices - Setup - Check presenter', () => {
       beforeEach(() => {
         session.journey = 'alerts'
         session.noticeType = 'abstractionAlerts'
-        session.referenceCode = generateReferenceCode('WAA')
+        session.referenceCode = generateNoticeReferenceCode('WAA-')
         session.monitoringStationId = '345'
       })
 
@@ -338,7 +338,7 @@ describe('Notices - Setup - Check presenter', () => {
         describe('and the "noticeType" is "paperReturn"', () => {
           beforeEach(() => {
             session.noticeType = 'paperReturn'
-            session.referenceCode = generateReferenceCode('PRTF')
+            session.referenceCode = generateNoticeReferenceCode('PRTF-')
           })
 
           it('should return null', () => {
@@ -355,7 +355,7 @@ describe('Notices - Setup - Check presenter', () => {
         beforeEach(() => {
           session.journey = 'alerts'
           session.noticeType = 'abstractionAlerts'
-          session.referenceCode = generateReferenceCode('WAA')
+          session.referenceCode = generateNoticeReferenceCode('WAA-')
           session.monitoringStationId = '345'
         })
 
@@ -406,7 +406,7 @@ describe('Notices - Setup - Check presenter', () => {
         describe('and the "noticeType" is "reminders"', () => {
           beforeEach(() => {
             session.noticeType = 'reminders'
-            session.referenceCode = generateReferenceCode('RREM')
+            session.referenceCode = generateNoticeReferenceCode('RREM-')
           })
 
           describe('and the method is "letter"', () => {

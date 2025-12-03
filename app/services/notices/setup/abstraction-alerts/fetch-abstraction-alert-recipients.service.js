@@ -5,7 +5,7 @@
  * @module FetchAbstractionAlertRecipientsService
  */
 
-const { db } = require('../../../../db/db.js')
+const { db } = require('../../../../../db/db.js')
 
 /**
  * Fetches the abstraction alert recipients data for the `/notices/setup/check` page

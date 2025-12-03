@@ -5,12 +5,11 @@
  * @module SubmitRemoveLicencesService
  */
 
-const FetchReturnsDueService = require('./fetch-returns-due.service.js')
+const FetchLicenceRefsWithDueReturnsService = require('./fetch-licence-refs-with-due-returns.service.js')
 const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remove-licences.presenter.js')
 const RemoveLicencesValidator = require('../../../validators/notices/setup/remove-licences.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for the notice setup remove licences page
@@ -18,15 +17,15 @@ const { transformStringOfLicencesToArray } = require('../../../lib/general.lib.j
  * @param {string} sessionId - The UUID for setup notice session record
  * @param {object} payload - The submitted form data
  *
- * @returns {object} An object containing where to redirect to if there are no errors else the page data for the view
+ * @returns {Promise<object>} An object containing where to redirect to if there are no errors else the page data for the view
  * including the validation error details
  */
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const validLicences = await _fetchValidLicences(session, payload)
+  const licenceRefsWithDueReturns = await _fetchLicenceRefsWithDueReturns(session)
 
-  const validationResult = _validate(payload, validLicences)
+  const validationResult = _validate(payload, licenceRefsWithDueReturns)
 
   if (validationResult) {
     const formattedData = RemoveLicencesPresenter.go(payload.removeLicences, session)
@@ -45,12 +44,10 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _fetchValidLicences(session, payload) {
+async function _fetchLicenceRefsWithDueReturns(session) {
   const { determinedReturnsPeriod, noticeType } = session
 
-  const removeLicences = transformStringOfLicencesToArray(payload.removeLicences)
-
-  return FetchReturnsDueService.go(removeLicences, determinedReturnsPeriod, noticeType)
+  return FetchLicenceRefsWithDueReturnsService.go(determinedReturnsPeriod, noticeType)
 }
 
 async function _save(session, payload) {

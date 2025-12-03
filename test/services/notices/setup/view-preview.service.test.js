@@ -13,9 +13,8 @@ const { HTTP_STATUS_OK } = require('node:http2').constants
 
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
 
 // Things we need to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
@@ -75,7 +74,7 @@ describe('Notices - Setup - View Preview service', () => {
           name: 'Water abstraction alert',
           noticeType: 'abstractionAlerts',
           notificationType: 'Abstraction alert',
-          referenceCode: generateReferenceCode('WAA-'),
+          referenceCode: generateNoticeReferenceCode('WAA-'),
           relevantLicenceMonitoringStations: [...licenceMonitoringStations],
           removedThresholds: [],
           selectedRecipients: [recipients[0].contact_hash_id],
@@ -131,7 +130,7 @@ describe('Notices - Setup - View Preview service', () => {
       recipients = [fixtureData.primaryUser]
 
       const licenceRef = generateLicenceRef()
-      const referenceCode = generateReferenceCode('RINV-')
+      const referenceCode = generateNoticeReferenceCode('RINV-')
       const sessionId = generateUUID()
       const dueReturns = [
         {

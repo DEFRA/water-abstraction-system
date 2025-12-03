@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
 const NotificationHelper = require('../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchNoticeService = require('../../../app/services/notices/fetch-notice.service.js')
@@ -36,7 +37,7 @@ describe('Notices - Fetch Notice service', () => {
         recipients: 2
       },
       overallStatus: 'error',
-      referenceCode: NotificationHelper.generateReferenceCode('WAA'),
+      referenceCode: generateNoticeReferenceCode('WAA-'),
       status: 'completed',
       subtype: 'waterAbstractionAlerts',
       type: 'notification'

@@ -294,6 +294,37 @@ const NoticeType = Object.freeze({
   REMINDERS: 'reminders'
 })
 
+/**
+ * The notice journey depends on some of these properties being in the session for each notice. Also, some legacy and
+ * reporting functionality requires them to be set in the records. We collate them here for easy reference.
+ */
+const NoticeTypes = Object.freeze({
+  [NoticeType.ABSTRACTION_ALERTS]: {
+    name: 'Water abstraction alert',
+    prefix: 'WAA-',
+    subType: 'waterAbstractionAlerts',
+    notificationType: 'Abstraction alert'
+  },
+  [NoticeType.INVITATIONS]: {
+    name: 'Returns: invitation',
+    prefix: 'RINV-',
+    subType: 'returnInvitation',
+    notificationType: 'Returns invitation'
+  },
+  [NoticeType.PAPER_RETURN]: {
+    name: 'Paper returns',
+    prefix: 'PRTF-',
+    subType: 'paperReturnForms',
+    notificationType: 'Paper returns'
+  },
+  [NoticeType.REMINDERS]: {
+    name: 'Returns: reminder',
+    prefix: 'RREM-',
+    subType: 'returnReminder',
+    notificationType: 'Returns reminder'
+  }
+})
+
 const organisationTypes = ['individual', 'limitedCompany', 'limitedLiabilityPartnership', 'publicLimitedCompany']
 
 /**
@@ -482,6 +513,7 @@ module.exports = {
   NoticeJourney,
   noticeMappings,
   NoticeType,
+  NoticeTypes,
   organisationTypes,
   returnCycleDates,
   returnPeriodDates,

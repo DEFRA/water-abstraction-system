@@ -1,42 +1,51 @@
 'use strict'
 
 /**
- * Orchestrates fetching and determining recipients
+ * Orchestrates fetching and determining recipients when checking, downloading or sending notices
  * @module FetchRecipientsService
  */
 
 const DetermineRecipientsService = require('./determine-recipients.service.js')
-const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
-const FetchPaperReturnRecipientsService = require('./fetch-paper-return-recipients.service.js')
-const FetchReturnsRecipientsService = require('./fetch-returns-recipients.service.js')
+const FetchAbstractionAlertRecipientsService = require('./abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
+const FetchAdHocReturnsRecipientsService = require('./returns-notice/fetch-ad-hoc-returns-recipients.service.js')
+const FetchPaperReturnsRecipientsService = require('./returns-notice/fetch-paper-returns-recipients.service.js')
+const FetchStandardReturnsRecipientsService = require('./returns-notice/fetch-standard-returns-recipients.service.js')
 const RecipientsService = require('./recipients.service.js')
-const { NoticeType } = require('../../../lib/static-lookups.lib.js')
+const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
- * Orchestrates fetching and determining recipients
+ * Orchestrates fetching and determining recipients when checking, downloading or sending notices
  *
  * Fetches the recipients based on the journey type and determines recipients (remove duplicates).
  *
  * @param {module:SessionModel} session - The session instance
+ * @param {boolean} download - Flag indicating if this is for download purposes (affects aggregation and result
+ * formatting)
  *
- * @returns {Promise<object[]>} - recipients
+ * @returns {Promise<object[]>} The recipient data for the notice or download
  */
-async function go(session) {
-  const recipientsData = await _recipientsData(session)
+async function go(session, download) {
+  const recipientsData = await _recipientsData(session, download)
 
   const recipients = RecipientsService.go(session, recipientsData)
 
   return DetermineRecipientsService.go(recipients)
 }
 
-async function _recipientsData(session) {
+async function _recipientsData(session, download) {
   if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
     return FetchAbstractionAlertRecipientsService.go(session)
-  } else if (session.noticeType === NoticeType.PAPER_RETURN) {
-    return FetchPaperReturnRecipientsService.go(session)
-  } else {
-    return FetchReturnsRecipientsService.go(session)
   }
+
+  if (session.noticeType === NoticeType.PAPER_RETURN) {
+    return FetchPaperReturnsRecipientsService.go(session, download)
+  }
+
+  if (session.journey === NoticeJourney.ADHOC) {
+    return FetchAdHocReturnsRecipientsService.go(session, download)
+  }
+
+  return FetchStandardReturnsRecipientsService.go(session, download)
 }
 
 module.exports = {
