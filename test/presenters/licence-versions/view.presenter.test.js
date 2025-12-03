@@ -98,7 +98,7 @@ describe('Licence Versions - View presenter', () => {
       })
     })
 
-    describe('when the user is "billing and data"', () => {
+    describe('when the user has the "billing" role', () => {
       beforeEach(() => {
         auth.credentials.scope = ['billing']
       })
