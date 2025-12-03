@@ -11,6 +11,7 @@ const LicencePresenter = require('../../../presenters/notices/setup/licence.pres
 const LicenceValidator = require('../../../validators/notices/setup/licence.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { compareDates } = require('../../../lib/dates.lib.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
 
 /**
@@ -69,6 +70,27 @@ async function _dueReturns(payload) {
   return FetchDueReturnsForLicenceService.go(payload.licenceRef)
 }
 
+function _latestDueDate(dueReturnLogs) {
+  let latestDueDate
+
+  for (const dueReturnLog of dueReturnLogs) {
+    // If we encounter a return log with no due date, then will calculate the due date from the current date when we
+    // send the notice
+    if (!dueReturnLog.dueDate) {
+      latestDueDate = null
+      break
+    }
+
+    // If latestDueDate has not yet been set, or it has been and the current return log's due date is later than it,
+    // then set latestDueDate to the current return log's due date
+    if (!latestDueDate || compareDates(dueReturnLog.dueDate, latestDueDate) === 1) {
+      latestDueDate = dueReturnLog.dueDate
+    }
+  }
+
+  return latestDueDate
+}
+
 async function _licenceExists(licenceRef) {
   const licence = await LicenceModel.query().where('licenceRef', licenceRef).select('licenceRef').first()
 
@@ -79,6 +101,7 @@ async function _save(session, payload, dueReturns) {
   session.licenceRef = payload.licenceRef
 
   session.dueReturns = dueReturns
+  session.latestDueDate = _latestDueDate(dueReturns)
 
   return session.$update()
 }
