@@ -90,10 +90,12 @@ describe('Licence Versions - View presenter', () => {
   })
 
   describe('the "notes" property', () => {
-    it('returns null', () => {
-      const result = ViewPresenter.go(licenceVersion, auth)
+    describe('when the user does not have the "billing" role', ()=> {
+      it('returns null', () => {
+        const result = ViewPresenter.go(licenceVersion, auth)
 
-      expect(result.notes).to.be.null()
+        expect(result.notes).to.be.null()
+      })
     })
 
     describe('when the user is "billing and data"', () => {
