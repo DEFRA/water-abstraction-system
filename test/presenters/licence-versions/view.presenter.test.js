@@ -59,10 +59,31 @@ describe('Licence Versions - View presenter', () => {
           text: 'Go back to history'
         },
         changeType: 'licence issued',
+        errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
         pageTitleCaption: `Licence ${licence.licenceRef}`,
         reason: 'Licence Holder Name/Address Change'
+      })
+    })
+  })
+
+  describe('the "errorInDataEmail" property', () => {
+    it('returns the email address', () => {
+      const result = ViewPresenter.go(licenceVersion, auth)
+
+      expect(result.errorInDataEmail).to.equal('water_abstractiondigital@environment-agency.gov.uk')
+    })
+
+    describe('when the user has the "billing" role', () => {
+      beforeEach(() => {
+        auth.credentials.scope = ['billing']
+      })
+
+      it('returns null', () => {
+        const result = ViewPresenter.go(licenceVersion, auth)
+
+        expect(result.errorInDataEmail).to.be.null()
       })
     })
   })

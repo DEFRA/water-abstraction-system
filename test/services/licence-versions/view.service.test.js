@@ -63,6 +63,7 @@ describe('Licence Versions - View service', () => {
           text: 'Go back to history'
         },
         changeType: 'licence issued',
+        errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
         pageTitleCaption: `Licence ${licence.licenceRef}`,

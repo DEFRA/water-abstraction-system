@@ -26,11 +26,19 @@ function go(licenceVersion, auth) {
       text: 'Go back to history'
     },
     changeType: licenceVersion.administrative ? 'no licence issued' : 'licence issued',
+    errorInDataEmail: _errorInDataEmail(billingAndDataRole),
     notes: _notes(licenceVersion, billingAndDataRole),
     pageTitle: `Licence version starting ${formatLongDate(licenceVersion.startDate)}`,
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     reason: _reason(licenceVersion, billingAndDataRole)
   }
+}
+function _errorInDataEmail(billingAndDataRole) {
+  if (billingAndDataRole) {
+    return null
+  }
+
+  return 'water_abstractiondigital@environment-agency.gov.uk'
 }
 
 function _notes(licenceVersion, billingAndDataRole) {
