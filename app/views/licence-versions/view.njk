@@ -16,4 +16,10 @@
   {% if notes %}
     <p><strong>Notes:</strong> {{ notes }} </p>
   {% endif %}
+
+  {% if errorInDataEmail %}
+    <p class="govuk-body">If you find errors in this data, email:
+      <a class="gov-link" href="mailto:{{ errorInDataEmail }}">{{ errorInDataEmail }}</a>
+    </p>
+  {% endif %}
 {% endblock %}
