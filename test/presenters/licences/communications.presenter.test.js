@@ -48,7 +48,7 @@ describe('Licences - Communications presenter', () => {
 
     expect(result).to.equal({
       backLink: {
-        href: '/licences',
+        href: '/',
         text: 'Go back to search'
       },
       notifications: [

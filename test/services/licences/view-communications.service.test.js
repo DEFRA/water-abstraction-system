@@ -82,7 +82,7 @@ describe('Licences - View Communications service', () => {
         activeNavBar: 'search',
         activeSecondaryNav: 'communications',
         backLink: {
-          href: '/licences',
+          href: '/',
           text: 'Go back to search'
         },
         notifications: [
