@@ -1,46 +1,55 @@
 'use strict'
 
 /**
- * Transforms an array of object into the previous and next pagination objects
- *
- * https://design-system.service.gov.uk/components/pagination/#options-pagination-example--next:~:text=For%20navigating%20between%20content%20pages
+ * Returns the previous and next neighbours in an already-sorted array of objects,
+ * based on the `id` of the provided anchor object.
  *
  * @module PaginatorPreviousAndNextPresenter
  */
 
 /**
- * Returns the next and previous element base on the id in the arrays order
+ * Returns the previous and next neighbours in an already-sorted array of objects,
+ * based on the `id` of the provided anchor object.
  *
- * @param {Array} arrayOfElements - a sorted array of objects, with an id as minimum
- * @param {string} elementAnchorId - a UUID to use as the position in the array
+ * Finds the elements immediately before and after an anchor object (by matching `id`)
+ * and returns them as a `{ previous, next }` pair for use in presentation layers.
  *
- * @returns {object} an object containing the 'next' and 'previous' items
+ * This module implements lookup logic only — it does not generate URLs, HTML, or
+ * Design System pagination markup.
+ *
+ * Intended to support previous/next style pagination controls such as those used in
+ * the GOV.UK Design System "Options: Previous and Next" pagination example.
+ *
+ * @param {Array<object>} arrayOfElements - A pre-sorted array of objects in the
+ * order users should navigate. Each object must contain an `id` property at minimum.
+ *
+ * @param {object} anchorElement - The object used as the anchor position. Must
+ * contain an `id` property matching the same shape as array elements.
+ *
+ * @returns {object} An object containing:
+ * - `previous` {Object|null}: The element immediately before the anchor in the array,
+ * or `null` if the anchor is the first item or the `id` is not found.
+ * - `next` {Object|null}: The element immediately after the anchor in the array,
+ * or `null` if the anchor is the last item or the `id` is not found.
+ *
  */
-function go(arrayOfElements, elementAnchorId) {
-  const index = _indexOfAnchorId(arrayOfElements, elementAnchorId)
+function go(arrayOfElements, anchorElement) {
+  const index = _indexOfAnchorId(arrayOfElements, anchorElement)
 
-  const previous = index >= 0 ? (arrayOfElements[index - 1] ?? null) : null
-  const next = index >= 0 ? (arrayOfElements[index + 1] ?? null) : null
+  if (index === -1) {
+    return { previous: null, next: null }
+  }
 
   return {
-    previous,
-    next
+    previous: arrayOfElements[index - 1] ?? null,
+    next: arrayOfElements[index + 1] ?? null
   }
 }
 
-/**
- * We need to find the index for the anchor id. This allows us to find the previous and next element in the array.
- *
- * We need to map the array to a flat array of 'ids' and then we can return the index.
- *
- * @private
- */
-function _indexOfAnchorId(arrayOfElements, elementAnchorId) {
-  return arrayOfElements
-    .map((element) => {
-      return element.id
-    })
-    .indexOf(elementAnchorId)
+function _indexOfAnchorId(arrayOfElements, anchorElement) {
+  return arrayOfElements.findIndex((element) => {
+    return element.id === anchorElement.id
+  })
 }
 
 module.exports = {

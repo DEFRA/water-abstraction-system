@@ -13,14 +13,14 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 // Thing under test
 const PaginatorPreviousAndNextPresenter = require('../../app/presenters/paginator-previous-and-next.presenter.js')
 
-describe.only('Paginator previous and next presenter', () => {
+describe('Paginator previous and next presenter', () => {
+  let anchorElement
   let arrayOfElements
-  let elementAnchorId
   let nextElement
   let previousElement
 
   beforeEach(() => {
-    elementAnchorId = generateUUID()
+    anchorElement = { id: generateUUID() }
 
     previousElement = {
       id: generateUUID()
@@ -30,13 +30,21 @@ describe.only('Paginator previous and next presenter', () => {
       id: generateUUID()
     }
 
-    arrayOfElements = [previousElement, { id: elementAnchorId }, nextElement]
+    arrayOfElements = [
+      { id: generateUUID() },
+      { id: generateUUID() },
+      previousElement,
+      anchorElement,
+      nextElement,
+      { id: generateUUID() },
+      { id: generateUUID() }
+    ]
   })
 
   describe('when the anchor element is in the array', () => {
-    describe('and there is a "previous" and "next" ', () => {
-      it('returns the "previous" and "next" elements', () => {
-        const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, elementAnchorId)
+    describe('and there is a "previous" and "next" element', () => {
+      it('returns the populated "previous" and "next" elements', () => {
+        const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, anchorElement)
 
         expect(result).to.equal({
           previous: previousElement,
@@ -47,11 +55,11 @@ describe.only('Paginator previous and next presenter', () => {
 
     describe('and there is only a "previous" element', () => {
       beforeEach(() => {
-        arrayOfElements = [previousElement, { id: elementAnchorId }]
+        arrayOfElements = [previousElement, anchorElement]
       })
 
-      it('returns the "next" elements', () => {
-        const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, elementAnchorId)
+      it('returns the populated "previous" element', () => {
+        const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, anchorElement)
 
         expect(result).to.equal({
           previous: previousElement,
@@ -62,11 +70,11 @@ describe.only('Paginator previous and next presenter', () => {
 
     describe('and there is only a "next" element', () => {
       beforeEach(() => {
-        arrayOfElements = [{ id: elementAnchorId }, nextElement]
+        arrayOfElements = [anchorElement, nextElement]
       })
 
-      it('returns the "next" elements', () => {
-        const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, elementAnchorId)
+      it('returns the populated "next" element', () => {
+        const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, anchorElement)
 
         expect(result).to.equal({
           previous: null,
@@ -77,11 +85,11 @@ describe.only('Paginator previous and next presenter', () => {
 
     describe('and there is only the anchor element', () => {
       beforeEach(() => {
-        arrayOfElements = [{ id: elementAnchorId }]
+        arrayOfElements = [anchorElement]
       })
 
-      it('returns the "next" elements', () => {
-        const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, elementAnchorId)
+      it('returns the "previous" and "next" elements as null', () => {
+        const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, anchorElement)
 
         expect(result).to.equal({
           previous: null,
@@ -104,7 +112,7 @@ describe.only('Paginator previous and next presenter', () => {
     })
 
     it('returns the "previous" and "next" as null', () => {
-      const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, elementAnchorId)
+      const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, anchorElement)
 
       expect(result).to.equal({
         previous: null,
