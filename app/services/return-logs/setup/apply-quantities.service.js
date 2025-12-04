@@ -27,7 +27,7 @@ const METER_READINGS_METHOD = 'meterReadings'
  *
  * @param {object} session - Session object containing the return submission data
  *
- * @returns {<module:SessionModel>} - The updated Session object
+ * @returns {module:SessionModel} - The updated Session object
  */
 function go(session) {
   if (session.reported === METER_READINGS_METHOD) {
