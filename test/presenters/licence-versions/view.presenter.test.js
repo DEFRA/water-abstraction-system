@@ -155,6 +155,92 @@ describe('Licence Versions - View presenter', () => {
     })
   })
 
+  describe('the "pagination" property', () => {
+    describe('when there is no "pagination" required', () => {
+      it('returns null', () => {
+        const result = ViewPresenter.go(licenceVersionData, auth)
+
+        expect(result.pagination).to.be.null()
+      })
+    })
+
+    describe('when there is "pagination"', () => {
+      let previousLicenceVersion
+      let nextLicenceVersion
+
+      beforeEach(() => {
+        previousLicenceVersion = {
+          id: generateUUID(),
+          startDate: new Date('2019-01-01')
+        }
+
+        nextLicenceVersion = {
+          id: generateUUID(),
+          startDate: new Date('2025-01-01')
+        }
+      })
+
+      describe('and there are both "previous" and "next" licence versions', () => {
+        beforeEach(() => {
+          licenceVersionData.licenceVersionsForPagination = [previousLicenceVersion, licenceVersion, nextLicenceVersion]
+        })
+
+        it('returns the "previous" and "next" links', () => {
+          const result = ViewPresenter.go(licenceVersionData, auth)
+
+          expect(result.pagination).to.equal({
+            next: {
+              href: `/system/licence-versions/${nextLicenceVersion.id}`,
+              labelText: 'Starting 1 January 2025',
+              text: 'Next version'
+            },
+            previous: {
+              href: `/system/licence-versions/${previousLicenceVersion.id}`,
+              labelText: 'Starting 1 January 2019',
+              text: 'Previous version'
+            }
+          })
+        })
+      })
+
+      describe('and there is only a "next" licence version', () => {
+        beforeEach(() => {
+          licenceVersionData.licenceVersionsForPagination = [licenceVersion, nextLicenceVersion]
+        })
+
+        it('returns the "next" link', () => {
+          const result = ViewPresenter.go(licenceVersionData, auth)
+
+          expect(result.pagination).to.equal({
+            next: {
+              href: `/system/licence-versions/${nextLicenceVersion.id}`,
+              labelText: 'Starting 1 January 2025',
+              text: 'Next version'
+            }
+          })
+        })
+      })
+
+      describe('and there is only a "previous" licence version', () => {
+        beforeEach(() => {
+          licenceVersionData.licenceVersionsForPagination = [previousLicenceVersion, licenceVersion]
+        })
+
+        it('returns the "previous" link', () => {
+          const result = ViewPresenter.go(licenceVersionData, auth)
+
+          expect(result.pagination).to.equal({
+            previous: {
+              href: `/system/licence-versions/${previousLicenceVersion.id}`,
+              labelText: 'Starting 1 January 2019',
+              text: 'Previous version'
+            }
+          })
+        })
+      })
+    })
+  })
+
   describe('the "reason" property', () => {
     describe('when the user does not have the "billing" role', () => {
       describe('and there is a "reason"', () => {
