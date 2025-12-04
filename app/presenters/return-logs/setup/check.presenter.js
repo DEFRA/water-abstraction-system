@@ -151,12 +151,12 @@ function _groupLinesByMonth(formattedLines) {
       }
     }
 
-    if (quantity != null) {
+    if (typeof quantity === 'number') {
       monthlyLine[key].quantity =
         monthlyLine[key].quantity === null ? quantity : Big(monthlyLine[key].quantity).plus(quantity).toNumber()
     }
 
-    if (quantityCubicMetres != null) {
+    if (typeof quantityCubicMetres === 'number') {
       monthlyLine[key].quantityCubicMetres =
         monthlyLine[key].quantityCubicMetres === null
           ? quantityCubicMetres
