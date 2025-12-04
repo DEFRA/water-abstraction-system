@@ -11,7 +11,7 @@ const { formatLongDate } = require('../base.presenter.js')
 /**
  * Formats data for the `/licence-versions/{id}` page
  *
- * @param {object} licenceVersionData - the licence version with the licence
+ * @param {object} licenceVersionData - the licence version with the licence, and the 'licenceVersionsForPagination'
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {object} The data formatted for the view template
@@ -56,6 +56,12 @@ function _notes(licenceVersion, billingAndDataRole) {
   return notes.length > 0 ? notes : null
 }
 
+/**
+ * Calculate the previous and next licence versions to create the pagination object. This feeds directly into the GDS
+ * component.
+ *
+ * @private
+ */
 function _pagination(licenceVersionsForPagination, licenceVersion) {
   const { previous, next } = PreviousAndNextPresenter.go(licenceVersionsForPagination, licenceVersion)
 
