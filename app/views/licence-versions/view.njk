@@ -1,5 +1,7 @@
 {% extends 'layout.njk' %}
 
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+
 {% from "macros/licence-version-change-type-tag.njk" import changeTypeTag as licenceVersionChangeTypeTag %}
 
 
@@ -22,4 +24,9 @@
       <a class="gov-link" href="mailto:{{ errorInDataEmail }}">{{ errorInDataEmail }}</a>
     </p>
   {% endif %}
+
+  {% if pagination %}
+    {{ govukPagination(pagination) }}
+  {% endif %}
+
 {% endblock %}
