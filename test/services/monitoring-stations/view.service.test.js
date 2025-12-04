@@ -73,7 +73,7 @@ describe('Monitoring Stations - View service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         notification: 'Tag removed for 99/999/9999',
-        backLink: { href: '/licences', text: 'Go back to search' },
+        backLink: { href: '/', text: 'Go back to search' },
         buttons: {
           createAlert: {
             href: '/system/notices/setup/alerts?monitoringStationId=f122d4bb-42bd-4af9-a081-1656f5a30b63'

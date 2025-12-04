@@ -117,7 +117,7 @@ describe('Licences - View Set Up service', () => {
         activeNavBar: 'search',
         activeSecondaryNav: 'set-up',
         backLink: {
-          href: '/licences',
+          href: '/',
           text: 'Go back to search'
         },
         agreements: [

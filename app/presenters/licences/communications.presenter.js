@@ -21,7 +21,7 @@ function go(notifications, licence) {
   return {
     backLink: {
       text: 'Go back to search',
-      href: '/licences'
+      href: '/'
     },
     notifications: _notifications(notifications, licenceId),
     pageTitle: 'Communications',

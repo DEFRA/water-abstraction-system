@@ -24,7 +24,7 @@ function go(bills, licence) {
   return {
     backLink: {
       text: 'Go back to search',
-      href: '/licences'
+      href: '/'
     },
     bills: _bills(licenceId, bills),
     pageTitle: 'Bills',

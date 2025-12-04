@@ -107,7 +107,7 @@ describe('Licences - Set Up presenter', () => {
     expect(result).to.equal({
       agreements: [],
       backLink: {
-        href: '/licences',
+        href: '/',
         text: 'Go back to search'
       },
       chargeInformation: [],
