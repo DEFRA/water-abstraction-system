@@ -11,9 +11,9 @@ const { expect } = Code
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Thing under test
-const PaginatorPreviousAndNextPresenter = require('../../app/presenters/paginator-previous-and-next.presenter.js')
+const PreviousAndNextPresenterTest = require('../../app/presenters/previous-and-next.presenter.js')
 
-describe('Paginator previous and next presenter', () => {
+describe('Previous and next presenter', () => {
   let anchorElement
   let arrayOfElements
   let nextElement
@@ -44,7 +44,7 @@ describe('Paginator previous and next presenter', () => {
   describe('when the anchor element is in the array', () => {
     describe('and there is a "previous" and "next" element', () => {
       it('returns the populated "previous" and "next" elements', () => {
-        const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, anchorElement)
+        const result = PreviousAndNextPresenterTest.go(arrayOfElements, anchorElement)
 
         expect(result).to.equal({
           previous: previousElement,
@@ -59,7 +59,7 @@ describe('Paginator previous and next presenter', () => {
       })
 
       it('returns the populated "previous" element', () => {
-        const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, anchorElement)
+        const result = PreviousAndNextPresenterTest.go(arrayOfElements, anchorElement)
 
         expect(result).to.equal({
           previous: previousElement,
@@ -74,7 +74,7 @@ describe('Paginator previous and next presenter', () => {
       })
 
       it('returns the populated "next" element', () => {
-        const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, anchorElement)
+        const result = PreviousAndNextPresenterTest.go(arrayOfElements, anchorElement)
 
         expect(result).to.equal({
           previous: null,
@@ -89,7 +89,7 @@ describe('Paginator previous and next presenter', () => {
       })
 
       it('returns the "previous" and "next" elements as null', () => {
-        const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, anchorElement)
+        const result = PreviousAndNextPresenterTest.go(arrayOfElements, anchorElement)
 
         expect(result).to.equal({
           previous: null,
@@ -112,7 +112,7 @@ describe('Paginator previous and next presenter', () => {
     })
 
     it('returns the "previous" and "next" as null', () => {
-      const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, anchorElement)
+      const result = PreviousAndNextPresenterTest.go(arrayOfElements, anchorElement)
 
       expect(result).to.equal({
         previous: null,
