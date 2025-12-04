@@ -46,7 +46,7 @@ function go(chargeVersions, workflows, agreements, returnVersions, auth, licence
     agreements: _agreements(licenceData, agreements, auth),
     backLink: {
       text: 'Go back to search',
-      href: '/licences'
+      href: '/'
     },
     chargeInformation: _chargeInformation(chargeVersions, workflows, auth),
     links: {

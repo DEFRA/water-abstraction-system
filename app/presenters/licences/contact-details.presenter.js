@@ -19,7 +19,7 @@ function go(contacts, licence) {
   return {
     backLink: {
       text: 'Go back to search',
-      href: '/licences'
+      href: '/'
     },
     customerId: _findCustomerId(contacts),
     licenceContacts: _licenceContacts(contacts),

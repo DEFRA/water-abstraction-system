@@ -44,7 +44,7 @@ function go(monitoringStation, licenceMonitoringStations, auth) {
   const restrictions = _restrictions(licenceMonitoringStations, monitoringStationId)
 
   return {
-    backLink: { href: '/licences', text: 'Go back to search' },
+    backLink: { href: '/', text: 'Go back to search' },
     buttons: {
       createAlert: _createAlertButton(restrictions, auth, monitoringStationId),
       tagLicence: _tagLicenceButton(auth, monitoringStationId)

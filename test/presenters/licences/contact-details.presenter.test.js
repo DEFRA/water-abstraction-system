@@ -50,7 +50,7 @@ describe('Licences - Contact Details presenter', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: '/licences',
+          href: '/',
           text: 'Go back to search'
         },
         customerId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
