@@ -11,7 +11,7 @@ const { formatLongDate } = require('../base.presenter.js')
 /**
  * Formats data for the `/licence-versions/{id}` page
  *
- * @param {object} licenceVersionData - the licence version with the licence, and the 'licenceVersionsForPagination'
+ * @param {object} licenceVersionData - the licence version with the licence, and the licence versions for pagination
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {object} The data formatted for the view template
@@ -33,8 +33,8 @@ function go(licenceVersionData, auth) {
     notes: _notes(licenceVersion, billingAndDataRole),
     pageTitle: `Licence version starting ${formatLongDate(licenceVersion.startDate)}`,
     pageTitleCaption: `Licence ${licence.licenceRef}`,
-    reason: _reason(licenceVersion, billingAndDataRole),
-    pagination: _pagination(licenceVersionsForPagination, licenceVersion)
+    pagination: _pagination(licenceVersionsForPagination, licenceVersion),
+    reason: _reason(licenceVersion, billingAndDataRole)
   }
 }
 
