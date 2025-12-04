@@ -1,0 +1,25 @@
+{% extends 'layout.njk' %}
+
+{% from "macros/licence-version-change-type-tag.njk" import changeTypeTag as licenceVersionChangeTypeTag %}
+
+
+{% block pageContent %}
+
+  {{ licenceVersionChangeTypeTag(changeType, false) }}
+
+  <hr class="govuk-section-break govuk-!-margin-bottom-5 govuk-section-break">
+
+  {% if reason %}
+    <p class="govuk-body-l"> {{ reason }} </p>
+  {% endif %}
+
+  {% if notes %}
+    <p><strong>Notes:</strong> {{ notes }} </p>
+  {% endif %}
+
+  {% if errorInDataEmail %}
+    <p class="govuk-body">If you find errors in this data, email:
+      <a class="gov-link" href="mailto:{{ errorInDataEmail }}">{{ errorInDataEmail }}</a>
+    </p>
+  {% endif %}
+{% endblock %}

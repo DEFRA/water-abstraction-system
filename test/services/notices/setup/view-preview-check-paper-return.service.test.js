@@ -9,8 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ViewPreviewCheckPaperReturnService = require('../../../../app/services/notices/setup/view-preview-check-paper-return.service.js')
@@ -33,7 +32,7 @@ describe('Notices - Setup - View Preview Check Paper Return service', () => {
 
     sessionData = {
       dueReturns: [dueReturn],
-      referenceCode: generateReferenceCode('PRTF'),
+      referenceCode: generateNoticeReferenceCode('PRTF-'),
       selectedReturns: [dueReturn.returnId]
     }
 

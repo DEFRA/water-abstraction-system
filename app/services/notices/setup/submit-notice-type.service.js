@@ -6,12 +6,11 @@
  * @module SubmitNoticeTypeService
  */
 
-const DetermineNoticeTypeService = require('./determine-notice-type.service.js')
-const GeneralLib = require('../../../lib/general.lib.js')
 const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
 const NoticeTypeValidator = require('../../../validators/notices/setup/notice-type.validator.js')
 const SessionModel = require('../../../models/session.model.js')
-const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
+const { flashNotification, generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
+const { NoticeJourney, NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -33,7 +32,7 @@ async function go(sessionId, payload, yar, auth) {
     const hasBeenVisited = session.checkPageVisited
 
     if (session.checkPageVisited && payload.noticeType !== session.noticeType) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Notice type updated')
+      flashNotification(yar, 'Updated', 'Notice type updated')
 
       session.checkPageVisited = false
     }
@@ -70,17 +69,14 @@ function _redirect(noticeType, checkPageVisited, journey, hasBeenVisited) {
   }
 }
 
-/**
- * We use the object assign as we need to maintain the session as a class with the '$update' method
- * @private
- */
 async function _save(session, payload) {
-  const noticeTypeData = DetermineNoticeTypeService.go(payload.noticeType)
+  const { name, prefix, subType, notificationType } = NoticeTypes[payload.noticeType]
 
-  Object.assign(session, {
-    ...noticeTypeData,
-    noticeType: payload.noticeType
-  })
+  session.name = name
+  session.noticeType = payload.noticeType
+  session.notificationType = notificationType
+  session.referenceCode = generateNoticeReferenceCode(prefix)
+  session.subType = subType
 
   return session.$update()
 }

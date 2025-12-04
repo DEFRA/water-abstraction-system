@@ -5,15 +5,10 @@
  * @module ProcessDownloadRecipientsService
  */
 
-const AbstractionAlertDownloadRecipientsPresenter = require('../../../presenters/notices/setup/abstraction-alert-download-recipients.presenter.js')
-const DownloadAdHocRecipientsPresenter = require('../../../presenters/notices/setup/download-adhoc-recipients.presenter.js')
-const DownloadPaperReturnRecipientsPresenter = require('../../../presenters/notices/setup/download-paper-return-recipients.presenter.js')
-const DownloadRecipientsPresenter = require('../../../presenters/notices/setup/download-recipients.presenter.js')
-const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
-const FetchDownloadRecipientsService = require('./fetch-download-recipients.service.js')
-const FetchPaperReturnRecipientsService = require('./fetch-paper-return-recipients.service.js')
-const RecipientsService = require('./recipients.service.js')
-const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
+const DownloadAbstractionAlertPresenter = require('../../../presenters/notices/setup/download-abstraction-alert.presenter.js')
+const DownloadReturnsNoticePresenter = require('../../../presenters/notices/setup/download-returns-notice.presenter.js')
+const FetchRecipientsService = require('./fetch-recipients.service.js')
+const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 
 const SessionModel = require('../../../models/session.model.js')
 
@@ -32,7 +27,9 @@ async function go(sessionId) {
 
   const { notificationType, referenceCode } = session
 
-  const formattedData = await _formattedData(session)
+  const recipients = await FetchRecipientsService.go(session, true)
+
+  const formattedData = await _formattedData(recipients, session)
 
   return {
     data: formattedData,
@@ -41,44 +38,12 @@ async function go(sessionId) {
   }
 }
 
-async function _alerts(session) {
-  const abstractionAlertRecipients = await FetchAbstractionAlertRecipientsService.go(session)
-
-  return AbstractionAlertDownloadRecipientsPresenter.go(abstractionAlertRecipients, session)
-}
-
-async function _formattedData(session) {
-  if (session.noticeType === NoticeType.ABSTRACTION_ALERTS) {
-    return _alerts(session)
+async function _formattedData(recipients, session) {
+  if (session.journey === NoticeJourney.ALERTS) {
+    return DownloadAbstractionAlertPresenter.go(recipients, session)
   }
 
-  if (session.noticeType === NoticeType.PAPER_RETURN) {
-    return _paperReturn(session)
-  }
-
-  // Both standard return invitations and reminders, and ad-hoc return invitations fetch recipients in the same way
-  const recipients = await _recipients(session)
-
-  // They just present the same data differently!
-  if (session.journey === NoticeJourney.ADHOC) {
-    return DownloadAdHocRecipientsPresenter.go(recipients, session)
-  }
-
-  return DownloadRecipientsPresenter.go(recipients, session)
-}
-
-async function _recipients(session) {
-  const downloadRecipients = await FetchDownloadRecipientsService.go(session)
-
-  return RecipientsService.go(session, downloadRecipients)
-}
-
-async function _paperReturn(session) {
-  const letterRecipientsData = await FetchPaperReturnRecipientsService.go(session)
-
-  const letterRecipients = RecipientsService.go(session, letterRecipientsData)
-
-  return DownloadPaperReturnRecipientsPresenter.go(letterRecipients, session)
+  return DownloadReturnsNoticePresenter.go(recipients, session)
 }
 
 module.exports = {

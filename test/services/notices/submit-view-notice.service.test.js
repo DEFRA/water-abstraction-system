@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateReferenceCode } = require('../../support/helpers/notification.helper.js')
+const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
 
 // Things to stub
 const FetchNoticeService = require('../../../app/services/notices/fetch-notice.service.js')
@@ -31,7 +31,7 @@ describe('Notices - Submit View Notice service', () => {
       id: 'a40dcb94-cb01-4fce-9a46-94b49eca2057',
       issuer: 'test@wrls.gov.uk',
       overallStatus: 'error',
-      referenceCode: generateReferenceCode('WAA'),
+      referenceCode: generateNoticeReferenceCode('WAA-'),
       status: 'completed',
       subtype: 'waterAbstractionAlerts',
       alertType: 'warning'

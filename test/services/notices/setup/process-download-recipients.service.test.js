@@ -9,285 +9,180 @@ const { describe, it, afterEach, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const NoticeSessionFixture = require('../../../fixtures/notice-session.fixture.js')
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-const { generateReferenceCode } = require('../../../support/helpers/notification.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { formatAbstractionPeriod, formatValueUnit } = require('../../../../app/presenters/base.presenter.js')
+const { addressToCSV } = require('../../../../app/presenters/notices/base.presenter.js')
+const { transformArrayToCSVRow } = require('../../../../app/lib/transform-to-csv.lib.js')
 
 // Things to stub
-const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
-const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/fetch-abstraction-alert-recipients.service.js')
-const FetchDownloadRecipientsService = require('../../../../app/services/notices/setup/fetch-download-recipients.service.js')
-const FetchPaperReturnRecipientsService = require('../../../../app/services/notices/setup/fetch-paper-return-recipients.service.js')
+const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const SessionModel = require('../../../../app/models/session.model.js')
 
 // Thing under test
 const ProcessDownloadRecipientsService = require('../../../../app/services/notices/setup/process-download-recipients.service.js')
 
 describe('Notices - Setup - Process Download Recipients service', () => {
-  let referenceCode
   let session
-  let testRecipients
+  let recipient
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when the journey is for "standard"', () => {
-    let removeLicences
+  describe('when the notice type is an "abstraction alert"', () => {
+    before(() => {
+      recipient = RecipientsFixture.alertNoticePrimaryUser()
+      session = NoticeSessionFixture.abstractionAlertStop(recipient.licence_refs[0])
 
-    before(async () => {
-      removeLicences = ''
-      referenceCode = generateReferenceCode('RREM')
-
-      session = await SessionHelper.add({
-        data: { returnsPeriod: 'quarterFour', referenceCode, notificationType: 'Returns reminder', removeLicences }
+      Sinon.stub(SessionModel, 'query').returns({
+        findById: Sinon.stub().resolves(session)
       })
 
-      testRecipients = _recipients()
-      Sinon.stub(FetchDownloadRecipientsService, 'go').resolves(testRecipients)
+      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
     })
 
-    it('correctly returns the csv string, filename and type', async () => {
+    it('returns the correct csv string, filename and type', async () => {
       const result = await ProcessDownloadRecipientsService.go(session.id)
+
+      const recipientRow = _transformAbstractionAlertRecipientToRow(recipient, session)
 
       expect(result).to.equal({
         data:
           // Headers
-          'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
-          // Row - licence holder
-          '"1/343/3","376439279",2018-01-01,2019-01-01,2021-01-01,"Returns reminder","letter","Licence holder",,"Mr J Potter","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n',
-        filename: `Returns reminder - ${referenceCode}.csv`,
-        type: 'text/csv'
+          'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          recipientRow,
+        type: 'text/csv',
+        filename: `${session.notificationType} - ${session.referenceCode}.csv`
       })
     })
   })
 
-  describe('when the journey is for "adhoc"', () => {
-    let removeLicences
+  describe('when the notice type is "paper returns"', () => {
+    before(() => {
+      recipient = RecipientsFixture.returnsNoticeLicenceHolder()
+      session = NoticeSessionFixture.paperReturn(recipient.licence_refs[0])
 
-    before(async () => {
-      removeLicences = ''
-      referenceCode = generateReferenceCode('RREM')
-
-      session = await SessionHelper.add({
-        data: {
-          journey: 'adhoc',
-          notificationType: 'Returns reminder',
-          referenceCode,
-          removeLicences,
-          returnsPeriod: 'quarterFour'
-        }
+      Sinon.stub(SessionModel, 'query').returns({
+        findById: Sinon.stub().resolves(session)
       })
 
-      testRecipients = _recipients()
-      Sinon.stub(FetchDownloadRecipientsService, 'go').resolves(testRecipients)
+      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
     })
 
-    it('correctly returns the csv string, filename and type', async () => {
+    it('returns the correct csv string, filename and type', async () => {
       const result = await ProcessDownloadRecipientsService.go(session.id)
+
+      const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
       expect(result).to.equal({
         data:
           // Headers
-          'Licence,Return reference,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
-          // Row - licence holder
-          '"1/343/3","376439279","Returns reminder","letter","Licence holder",,"Mr J Potter","4","Privet Drive","Line 3","Line 4, Little Whinging","Surrey","WD25 7LR"\n',
-        filename: `Returns reminder - ${referenceCode}.csv`,
-        type: 'text/csv'
-      })
-    })
-
-    describe('and the notice type is "paperReturn"', () => {
-      const returnReference = '376439279'
-
-      let dueReturn
-      let licenceRef
-
-      before(async () => {
-        licenceRef = generateLicenceRef()
-        referenceCode = generateReferenceCode('PRTF')
-
-        dueReturn = {
-          description: 'Potable Water Supply - Direct',
-          dueDate: '2021-01-01',
-          endDate: '2019-01-01',
-          returnId: generateUUID(),
-          returnReference,
-          startDate: '2018-01-01'
-        }
-
-        session = await SessionHelper.add({
-          data: {
-            dueReturns: [dueReturn],
-            journey: 'adhoc',
-            licenceRef,
-            noticeType: 'paperReturn',
-            notificationType: 'Paper returns',
-            referenceCode,
-            selectedReturns: [dueReturn.returnId]
-          }
-        })
-
-        testRecipients = RecipientsFixture.recipients()
-        Sinon.stub(FetchPaperReturnRecipientsService, 'go').resolves([testRecipients.licenceHolder])
-      })
-
-      it('correctly returns the csv string, filename and type', async () => {
-        const result = await ProcessDownloadRecipientsService.go(session.id)
-
-        expect(result).to.equal({
-          data:
-            // Headers
-            'Licence,Return reference,Return period start date,Return period end date,Return due date,Notification type,Message type,Contact type,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
-            // Row - licence holder
-            `"${licenceRef}","${returnReference}",2018-01-01,2019-01-01,2021-01-01,"Return forms","letter","Licence holder","Mr H J Potter","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n`,
-          filename: `Paper returns - ${referenceCode}.csv`,
-          type: 'text/csv'
-        })
+          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          recipientRow,
+        type: 'text/csv',
+        filename: `${session.notificationType} - ${session.referenceCode}.csv`
       })
     })
   })
 
-  describe('when the notice type is "abstractionAlerts"', () => {
-    let recipients
+  describe('when the notice type is a "returns reminder"', () => {
+    before(() => {
+      recipient = RecipientsFixture.returnsNoticeLicenceHolder()
+      session = NoticeSessionFixture.standardReminder(recipient.licence_refs[0])
 
-    describe('and there are recipients', () => {
-      before(async () => {
-        recipients = RecipientsFixture.alertsRecipients()
-
-        testRecipients = [...Object.values(recipients)]
-
-        const relevantLicenceMonitoringStations = AbstractionAlertSessionData.relevantLicenceMonitoringStations([
-          recipients.licenceHolder.licence_refs
-        ])
-
-        referenceCode = generateReferenceCode('WAA')
-
-        session = await SessionHelper.add({
-          data: {
-            notificationType: 'Abstraction alert',
-            noticeType: 'abstractionAlerts',
-            referenceCode,
-            relevantLicenceMonitoringStations
-          }
-        })
-
-        Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves(testRecipients)
+      Sinon.stub(SessionModel, 'query').returns({
+        findById: Sinon.stub().resolves(session)
       })
 
-      it('correctly returns the csv string, filename and type', async () => {
-        const result = await ProcessDownloadRecipientsService.go(session.id)
-
-        expect(result).to.equal({
-          data:
-            // Headers
-            'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
-            // Row - licence holder
-            `"${recipients.licenceHolder.licence_refs}","1 February to 1 January","level","1000m","Abstraction alert","letter","Licence holder",,"Mr H J Potter","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n`,
-          filename: `Abstraction alert - ${referenceCode}.csv`,
-          type: 'text/csv'
-        })
-      })
+      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
     })
 
-    describe('and there is a recipient used for multiple licences', () => {
-      let recipients
+    it('returns the correct csv string, filename and type', async () => {
+      const result = await ProcessDownloadRecipientsService.go(session.id)
 
-      before(async () => {
-        recipients = RecipientsFixture.alertsRecipients()
+      const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
 
-        testRecipients = [
-          recipients.licenceHolder,
-          recipients.primaryUser,
-          {
-            ...recipients.additionalContact,
-            licence_refs: `${recipients.primaryUser.licence_refs},${recipients.licenceHolder.licence_refs}`
-          }
-        ]
+      expect(result).to.equal({
+        data:
+          // Headers
+          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          recipientRow,
+        type: 'text/csv',
+        filename: `${session.notificationType} - ${session.referenceCode}.csv`
+      })
+    })
+  })
 
-        const abstractionAlertSessionData = AbstractionAlertSessionData.get()
+  describe('when the notice type is a "returns invitation"', () => {
+    before(() => {
+      recipient = RecipientsFixture.returnsNoticeLicenceHolder()
+      session = NoticeSessionFixture.standardInvitation(recipient.licence_refs[0])
 
-        const licenceMonitoringStationTwo = abstractionAlertSessionData.licenceMonitoringStations[1]
-
-        const relevantLicenceMonitoringStations = [
-          {
-            ...licenceMonitoringStationTwo,
-            licence: {
-              licenceRef: recipients.licenceHolder.licence_refs[0]
-            }
-          },
-          {
-            ...licenceMonitoringStationTwo,
-            licence: {
-              licenceRef: recipients.primaryUser.licence_refs[0]
-            }
-          }
-        ]
-
-        referenceCode = generateReferenceCode('WAA')
-
-        session = await SessionHelper.add({
-          data: {
-            notificationType: 'Abstraction alert',
-            noticeType: 'abstractionAlerts',
-            referenceCode,
-            relevantLicenceMonitoringStations
-          }
-        })
-
-        Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves(testRecipients)
+      Sinon.stub(SessionModel, 'query').returns({
+        findById: Sinon.stub().resolves(session)
       })
 
-      it('correctly returns the csv string, filename and type', async () => {
-        const result = await ProcessDownloadRecipientsService.go(session.id)
+      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+    })
 
-        expect(result).to.equal({
-          data:
-            // Headers
-            'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
-            // Row - licence holder
-            `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","letter","Licence holder",,"Mr H J Potter","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n` +
-            // Row - additional contact for same recipient - with unique licence ref
-            `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,\n` +
-            // Row - Primary user
-            `"${recipients.primaryUser.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","Primary user","primary.user@important.com",,,,,,,\n` +
-            // Row - additional contact for same recipient - with unique licence ref
-            `"${recipients.primaryUser.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,\n`,
-          filename: `Abstraction alert - ${referenceCode}.csv`,
-          type: 'text/csv'
-        })
+    it('returns the correct csv string, filename and type', async () => {
+      const result = await ProcessDownloadRecipientsService.go(session.id)
+
+      const recipientRow = _transformRecipientToRow(recipient, session.notificationType)
+
+      expect(result).to.equal({
+        data:
+          // Headers
+          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          recipientRow,
+        type: 'text/csv',
+        filename: `${session.notificationType} - ${session.referenceCode}.csv`
       })
     })
   })
 })
 
-function _recipients() {
-  return [
-    {
-      contact: {
-        addressLine1: '4',
-        addressLine2: 'Privet Drive',
-        addressLine3: 'Line 3',
-        addressLine4: 'Line 4',
-        country: 'United Kingdom',
-        county: 'Surrey',
-        forename: 'Harry',
-        initials: 'J',
-        name: 'Potter',
-        postcode: 'WD25 7LR',
-        role: 'Licence holder',
-        salutation: 'Mr',
-        town: 'Little Whinging',
-        type: 'Person'
-      },
-      contact_type: 'Licence holder',
-      due_date: new Date('2021-01-01'),
-      email: null,
-      end_date: new Date('2019-01-01'),
-      licence_ref: '1/343/3',
-      return_reference: '376439279',
-      start_date: new Date('2018-01-01')
-    }
+function _transformAbstractionAlertRecipientToRow(recipient, session) {
+  const { notificationType, relevantLicenceMonitoringStations } = session
+
+  const licenceMonitoringStation = relevantLicenceMonitoringStations[0]
+
+  const abstractionPeriod = formatAbstractionPeriod(
+    licenceMonitoringStation.abstractionPeriodStartDay,
+    licenceMonitoringStation.abstractionPeriodStartMonth,
+    licenceMonitoringStation.abstractionPeriodEndDay,
+    licenceMonitoringStation.abstractionPeriodEndMonth
+  )
+
+  const row = [
+    recipient.licence_refs[0],
+    abstractionPeriod,
+    licenceMonitoringStation.measureType,
+    formatValueUnit(licenceMonitoringStation.thresholdValue, licenceMonitoringStation.thresholdUnit),
+    notificationType,
+    recipient.contact ? 'letter' : 'email',
+    recipient.contact_type,
+    recipient.email || '',
+    ...addressToCSV(recipient.contact)
   ]
+
+  return transformArrayToCSVRow(row)
+}
+
+function _transformRecipientToRow(recipient, notificationType) {
+  const row = [
+    recipient.licence_ref,
+    recipient.return_reference,
+    recipient.start_date,
+    recipient.end_date,
+    recipient.due_date,
+    notificationType,
+    recipient.message_type,
+    recipient.contact_type,
+    recipient.email || '',
+    ...addressToCSV(recipient.contact)
+  ]
+
+  return transformArrayToCSVRow(row)
 }

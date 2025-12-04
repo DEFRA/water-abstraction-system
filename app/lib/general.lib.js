@@ -178,6 +178,37 @@ function flashNotification(yar, titleText = 'Updated', text = 'Changes made') {
 }
 
 /**
+ * Generate the pseudo-unique reference code for a notice
+ *
+ * We generate a reference for all notices created in the service and sent via Notify. This reference is passed to
+ * Notify and used to link the notice in the Notify system.
+ *
+ * As far as the function is concerned, the prefix can be anything. However, each notice type as a distinct prefix it
+ * uses.
+ *
+ * - Paper returns `PRTF-`
+ * - Returns reminder `RREM-`
+ * - Returns invitation `RINV-`
+ * - Water abstraction alert `WAA-`
+ *
+ * @param {string} prefix - The prefix to use for the notice code
+ *
+ * @returns {string} A reference code with a prefix and random string, for example, `RINV-A14GB8`
+ */
+function generateNoticeReferenceCode(prefix) {
+  const possible = 'ABCDEFGHJKLMNPQRTUVWXYZ0123456789'
+  const length = 6
+
+  let text = ''
+
+  for (let i = 0; i < length; i++) {
+    text += possible.charAt(generateRandomInteger(0, possible.length))
+  }
+
+  return prefix + text
+}
+
+/**
  * Generate a random integer within a range (inclusive)
  *
  * @param {number} min - lowest number (integer) in the range (inclusive)
@@ -450,6 +481,7 @@ module.exports = {
   currentTimeInNanoseconds,
   determineCurrentFinancialYear,
   flashNotification,
+  generateNoticeReferenceCode,
   generateRandomInteger,
   generateUUID,
   pause,

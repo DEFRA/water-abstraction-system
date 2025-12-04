@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -12,6 +13,9 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
 const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
+
+// Things we need to stub
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 // Thing under test
 const NotificationsPresenter = require('../../../../app/presenters/notices/setup/notifications.presenter.js')
@@ -66,6 +70,12 @@ describe('Notices - Setup - Notifications presenter', () => {
       journey: 'standard',
       noticeType: 'invitations'
     }
+
+    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   it('correctly presents the data', () => {
@@ -327,7 +337,7 @@ describe('Notices - Setup - Notifications presenter', () => {
 
   describe('the "personalisation" property', () => {
     describe('when the notification is an email', () => {
-      describe('and the session does not have a due date for the return period', () => {
+      describe('and the session does not have a latest due date', () => {
         it('returns the expected "personalisation"', () => {
           const result = NotificationsPresenter.go(session, recipients, noticeId)
 
@@ -339,9 +349,9 @@ describe('Notices - Setup - Notifications presenter', () => {
         })
       })
 
-      describe('and the session has a due date for the return period', () => {
+      describe('and the session has a latest due date', () => {
         beforeEach(() => {
-          session.determinedReturnsPeriod.dueDate = new Date('2025-04-28')
+          session.latestDueDate = new Date('2025-04-28')
         })
 
         it('returns the expected "personalisation"', () => {
@@ -357,7 +367,7 @@ describe('Notices - Setup - Notifications presenter', () => {
     })
 
     describe('when the notification is a letter', () => {
-      describe('and the session does not have a due date for the return period', () => {
+      describe('and the session does not have a latest due date', () => {
         it('returns the expected "personalisation"', () => {
           const result = NotificationsPresenter.go(session, recipients, noticeId)
 
@@ -376,9 +386,9 @@ describe('Notices - Setup - Notifications presenter', () => {
         })
       })
 
-      describe('and the session has a due date for the return period', () => {
+      describe('and the session has a latest due date', () => {
         beforeEach(() => {
-          session.determinedReturnsPeriod.dueDate = new Date('2025-04-28')
+          session.latestDueDate = new Date('2025-04-28')
         })
 
         it('returns the expected "personalisation"', () => {

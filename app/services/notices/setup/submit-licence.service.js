@@ -5,13 +5,14 @@
  * @module SubmitLicenceService
  */
 
-const FetchReturnsDueByLicenceRefService = require('./fetch-returns-due-by-licence-ref.service.js')
-const GeneralLib = require('../../../lib/general.lib.js')
+const FetchDueReturnsForLicenceService = require('./returns-notice/fetch-due-returns-for-licence.service.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
 const LicenceValidator = require('../../../validators/notices/setup/licence.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { compareDates } = require('../../../lib/dates.lib.js')
+const { flashNotification } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/licence` page
@@ -38,7 +39,7 @@ async function go(sessionId, payload, yar) {
 
   if (!validationResult) {
     if (session.checkPageVisited && payload.licenceRef !== session.licenceRef) {
-      GeneralLib.flashNotification(yar, 'Updated', 'Licence number updated')
+      flashNotification(yar, 'Updated', 'Licence number updated')
 
       session.checkPageVisited = false
     }
@@ -66,7 +67,28 @@ async function _dueReturns(payload) {
     return []
   }
 
-  return FetchReturnsDueByLicenceRefService.go(payload.licenceRef)
+  return FetchDueReturnsForLicenceService.go(payload.licenceRef)
+}
+
+function _latestDueDate(dueReturnLogs) {
+  let latestDueDate
+
+  for (const dueReturnLog of dueReturnLogs) {
+    // If we encounter a return log with no due date, then will calculate the due date from the current date when we
+    // send the notice
+    if (!dueReturnLog.dueDate) {
+      latestDueDate = null
+      break
+    }
+
+    // If latestDueDate has not yet been set, or it has been and the current return log's due date is later than it,
+    // then set latestDueDate to the current return log's due date
+    if (!latestDueDate || compareDates(dueReturnLog.dueDate, latestDueDate) === 1) {
+      latestDueDate = dueReturnLog.dueDate
+    }
+  }
+
+  return latestDueDate
 }
 
 async function _licenceExists(licenceRef) {
@@ -79,6 +101,7 @@ async function _save(session, payload, dueReturns) {
   session.licenceRef = payload.licenceRef
 
   session.dueReturns = dueReturns
+  session.latestDueDate = _latestDueDate(dueReturns)
 
   return session.$update()
 }

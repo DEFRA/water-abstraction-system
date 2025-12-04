@@ -8,7 +8,7 @@
 
 const CheckAlertPresenter = require('../../../presenters/notices/setup/preview-check-alert.presenter.js')
 const DetermineRecipientsService = require('./determine-recipients.service.js')
-const FetchAbstractionAlertRecipientsService = require('./fetch-abstraction-alert-recipients.service.js')
+const FetchAbstractionAlertRecipientsService = require('./abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
