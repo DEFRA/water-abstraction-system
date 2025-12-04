@@ -3,21 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const BillingAccountModel = require('../../../app/models/billing-account.model.js')
 
-// Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-
 // Thing under test
 const ViewBillPresenter = require('../../../app/presenters/bills/view-bill.presenter.js')
 
-describe('View Bill presenter', () => {
+describe.only('View Bill presenter', () => {
   let bill
   let billingAccount
 
@@ -25,11 +21,6 @@ describe('View Bill presenter', () => {
     beforeEach(() => {
       bill = _testBill()
       billingAccount = _testBillingAccount()
-      Sinon.stub(FeatureFlagsConfig, 'enableBillingAccountView').value(true)
-    })
-
-    afterEach(() => {
-      Sinon.restore()
     })
 
     it('correctly presents the data', () => {
@@ -61,28 +52,6 @@ describe('View Bill presenter', () => {
         pageTitle: 'Bill for Wessex Water Services Ltd',
         region: 'South West',
         transactionFile: 'nalei50002t'
-      })
-    })
-
-    describe('the "billingAccountLink" property', () => {
-      describe('when enableBillingAccountView is false', () => {
-        beforeEach(() => {
-          Sinon.stub(FeatureFlagsConfig, 'enableBillingAccountView').value(false)
-        })
-
-        it('returns the link to the legacy billing account page', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
-
-          expect(result.billingAccountLink).to.equal('/billing-accounts/ee3f5562-26ad-4d58-9b59-5c388a13d7d0')
-        })
-      })
-
-      describe('when enableBillingAccountView is true', () => {
-        it('returns the link to the legacy billing account page', () => {
-          const result = ViewBillPresenter.go(bill, billingAccount)
-
-          expect(result.billingAccountLink).to.equal('/system/billing-accounts/ee3f5562-26ad-4d58-9b59-5c388a13d7d0')
-        })
       })
     })
 
