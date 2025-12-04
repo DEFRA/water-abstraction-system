@@ -15,7 +15,7 @@ const { generateLicenceRef } = require('../../support/helpers/licence.helper.js'
 // Thing under test
 const ViewPresenter = require('../../../app/presenters/licence-versions/view.presenter.js')
 
-describe('Licence Versions - View presenter', () => {
+describe.only('Licence Versions - View presenter', () => {
   let auth
   let licence
   let licenceVersion
@@ -60,6 +60,10 @@ describe('Licence Versions - View presenter', () => {
         },
         changeType: 'licence issued',
         errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
+        licenceDetails: {
+          endDate: null,
+          startDate: '1 January 2022'
+        },
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
         pageTitleCaption: `Licence ${licence.licenceRef}`,
@@ -109,6 +113,14 @@ describe('Licence Versions - View presenter', () => {
 
         expect(result.changeType).to.equal('no licence issued')
       })
+    })
+  })
+
+  describe('the "licenceDetails" property', () => {
+    it('returns the licence details', () => {
+      const result = ViewPresenter.go(licenceVersion, auth)
+
+      expect(result.licenceDetails).to.equal({ endDate: null, startDate: '1 January 2022' })
     })
   })
 

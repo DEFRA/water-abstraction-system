@@ -31,6 +31,7 @@ describe('Licence Versions - Fetch licence version service', () => {
       expect(result).to.equal({
         administrative: null,
         createdAt: licenceVersion.createdAt,
+        endDate: null,
         id: licenceVersion.id,
         licence: {
           id: licence.id,
