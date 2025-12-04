@@ -8,7 +8,7 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const UpdateQuantitiesService = require('../../../../app/services/return-logs/setup/update-quantities.service.js')
+const ApplyQuantitiesService = require('../../../../app/services/return-logs/setup/apply-quantities.service.js')
 
 describe('Return Logs Setup - Update Quantities service', () => {
   let session
@@ -42,7 +42,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       })
 
       it('updates the session data with the correct quantities', async () => {
-        const result = await UpdateQuantitiesService.go(session)
+        const result = await ApplyQuantitiesService.go(session)
 
         expect(result).to.equal({
           lines: [
@@ -103,7 +103,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
         })
 
         it('updates the session data with the correct quantities', async () => {
-          const result = await UpdateQuantitiesService.go(session)
+          const result = await ApplyQuantitiesService.go(session)
 
           expect(result).to.equal({
             lines: [
@@ -166,7 +166,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       })
 
       it('updates the session data with the correct quantities', async () => {
-        const result = await UpdateQuantitiesService.go(session)
+        const result = await ApplyQuantitiesService.go(session)
 
         expect(result).to.equal({
           lines: [
@@ -227,7 +227,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
         })
 
         it('updates the session data with the correct quantities', async () => {
-          const result = await UpdateQuantitiesService.go(session)
+          const result = await ApplyQuantitiesService.go(session)
 
           expect(result).to.equal({
             lines: [
@@ -293,7 +293,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       })
 
       it('updates the session data with the correct quantities', async () => {
-        const result = await UpdateQuantitiesService.go(session)
+        const result = await ApplyQuantitiesService.go(session)
 
         expect(result).to.equal({
           lines: [

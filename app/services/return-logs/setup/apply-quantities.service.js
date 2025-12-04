@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Updates the quantities saved in the session when revisiting the check page (session.checkPageVisited is true)
- * @module UpdateQuantitiesService
+ * Recalculates the quantities and applies them to the session object
+ * @module ApplyQuantitiesService
  */
 
 const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
@@ -10,7 +10,7 @@ const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/g
 const METER_READINGS_METHOD = 'meterReadings'
 
 /**
- * Updates the quantities saved in the session when revisiting the check page (session.checkPageVisited is true)
+ * Recalculates the quantities and applies them to the session object
  *
  * There are several changes that can be made to the return submission that will require re-calculation of the
  * quantities saved in the session (change to UOM, change to/from meter readings etc). Therefore, whenever the user

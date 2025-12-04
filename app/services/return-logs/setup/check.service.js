@@ -7,7 +7,7 @@
 
 const CheckPresenter = require('../../../presenters/return-logs/setup/check.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
-const UpdateQuantitiesService = require('../../../services/return-logs/setup/update-quantities.service.js')
+const ApplyQuantitiesService = require('../../../services/return-logs/setup/apply-quantities.service.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/check` page
@@ -34,7 +34,7 @@ async function go(sessionId, yar) {
 }
 
 async function _updateSession(session) {
-  await UpdateQuantitiesService.go(session)
+  await ApplyQuantitiesService.go(session)
 
   session.checkPageVisited = true
 
