@@ -17,11 +17,7 @@
  * @returns {object} an object containing the 'next' and 'previous' items
  */
 function go(arrayOfElements, elementAnchorId) {
-  const index = arrayOfElements
-    .map((element) => {
-      return element.id
-    })
-    .indexOf(elementAnchorId)
+  const index = _indexOfAnchorId(arrayOfElements, elementAnchorId)
 
   const previous = index >= 0 ? (arrayOfElements[index - 1] ?? null) : null
   const next = index >= 0 ? (arrayOfElements[index + 1] ?? null) : null
@@ -30,6 +26,21 @@ function go(arrayOfElements, elementAnchorId) {
     previous,
     next
   }
+}
+
+/**
+ * We need to find the index for the anchor id. This allows us to find the previous and next element in the array.
+ *
+ * We need to map the array to a flat array of 'ids' and then we can return the index.
+ *
+ * @private
+ */
+function _indexOfAnchorId(arrayOfElements, elementAnchorId) {
+  return arrayOfElements
+    .map((element) => {
+      return element.id
+    })
+    .indexOf(elementAnchorId)
 }
 
 module.exports = {

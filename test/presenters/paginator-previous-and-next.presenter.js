@@ -74,6 +74,21 @@ describe.only('Paginator previous and next presenter', () => {
         })
       })
     })
+
+    describe('and there is only the anchor element', () => {
+      beforeEach(() => {
+        arrayOfElements = [{ id: elementAnchorId }]
+      })
+
+      it('returns the "next" elements', () => {
+        const result = PaginatorPreviousAndNextPresenter.go(arrayOfElements, elementAnchorId)
+
+        expect(result).to.equal({
+          previous: null,
+          next: null
+        })
+      })
+    })
   })
 
   describe('when the anchor element is not in the array', () => {
