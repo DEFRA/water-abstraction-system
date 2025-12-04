@@ -13,7 +13,7 @@ const BillingAccountModel = require('../../../app/models/billing-account.model.j
 // Thing under test
 const ViewBillPresenter = require('../../../app/presenters/bills/view-bill.presenter.js')
 
-describe.only('View Bill presenter', () => {
+describe('View Bill presenter', () => {
   let bill
   let billingAccount
 
