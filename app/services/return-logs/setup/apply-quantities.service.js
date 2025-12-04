@@ -27,9 +27,9 @@ const METER_READINGS_METHOD = 'meterReadings'
  *
  * @param {object} session - Session object containing the return submission data
  *
- * @returns {Promise<module:SessionModel>} - The updated Session object
+ * @returns {<module:SessionModel>} - The updated Session object
  */
-async function go(session) {
+function go(session) {
   if (session.reported === METER_READINGS_METHOD) {
     return _readingsUpdate(session)
   }
@@ -37,7 +37,7 @@ async function go(session) {
   return _volumesUpdate(session)
 }
 
-async function _readingsUpdate(session) {
+function _readingsUpdate(session) {
   const multiplier = session.meter10TimesDisplay === 'yes' ? 10 : 1
   let previousReading = session.startReading ?? 0
 
@@ -58,7 +58,7 @@ async function _readingsUpdate(session) {
   return session
 }
 
-async function _volumesUpdate(session) {
+function _volumesUpdate(session) {
   session.lines.forEach((line) => {
     line.quantity = convertFromCubicMetres(line.quantityCubicMetres, session.unitSymbol)
   })

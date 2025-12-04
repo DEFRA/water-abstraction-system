@@ -34,7 +34,7 @@ async function go(sessionId, yar) {
 }
 
 async function _updateSession(session) {
-  await ApplyQuantitiesService.go(session)
+  ApplyQuantitiesService.go(session)
 
   session.checkPageVisited = true
 
