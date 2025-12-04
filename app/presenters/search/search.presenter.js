@@ -9,15 +9,6 @@ const ContactModel = require('../../models/contact.model.js')
 const { formatLongDate, formatReturnLogStatus } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
-const resultTypes = {
-  billingAccount: 'billing accounts',
-  licence: 'licences',
-  licenceHolder: 'licence holders',
-  monitoringStation: 'monitoring stations',
-  returnLog: 'return logs',
-  user: 'users'
-}
-
 /**
  * Formats data for the `/search` page
  *
@@ -49,37 +40,10 @@ function go(userScopes, query, resultType, page, numberOfPages, allSearchMatches
     pageTitleCaption: _pageTitleCaption(numberOfPages, page),
     query,
     results: _results(results),
+    resultsCaption: _resultsCaption(results.length, total),
     resultType,
-    resultTypeText: resultTypes[resultType] || 'all matches',
     showResults: true
   }
-}
-
-function _result(result) {
-  switch (result.type) {
-    case 'billingAccount':
-      return _billingAccount(result)
-    case 'licence':
-      return _licence(result)
-    case 'licenceHolder':
-      return _licenceHolder(result)
-    case 'monitoringStation':
-      return _monitoringStation(result)
-    case 'returnLog':
-      return _returnLog(result)
-    case 'user':
-      return _user(result)
-    default:
-      return null // Any unknown types are returned as null so they can be filtered out
-  }
-}
-
-function _results(results) {
-  return results
-    .map((result) => {
-      return _result(result)
-    })
-    .filter(Boolean) // Any unknown types filtered out
 }
 
 function _billingAccount(billingAccount) {
@@ -231,6 +195,45 @@ function _pageTitleCaption(numberOfPages, selectedPageNumber) {
   }
 
   return `Page ${selectedPageNumber} of ${numberOfPages}`
+}
+
+function _result(result) {
+  switch (result.type) {
+    case 'billingAccount':
+      return _billingAccount(result)
+    case 'licence':
+      return _licence(result)
+    case 'licenceHolder':
+      return _licenceHolder(result)
+    case 'monitoringStation':
+      return _monitoringStation(result)
+    case 'returnLog':
+      return _returnLog(result)
+    case 'user':
+      return _user(result)
+    default:
+      return null // Any unknown types are returned as null so they can be filtered out
+  }
+}
+
+function _results(results) {
+  return results
+    .map((result) => {
+      return _result(result)
+    })
+    .filter(Boolean) // Any unknown types filtered out
+}
+
+function _resultsCaption(numberDisplayed, totalNumber) {
+  if (totalNumber > numberDisplayed) {
+    return `Showing ${numberDisplayed} of ${totalNumber} matches`
+  }
+
+  if (totalNumber === 1) {
+    return `Showing only match`
+  }
+
+  return `Showing all ${totalNumber} matches`
 }
 
 function _returnLog(returnLog) {

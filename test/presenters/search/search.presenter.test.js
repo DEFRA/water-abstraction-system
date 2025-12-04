@@ -354,8 +354,8 @@ describe('Search - Search presenter', () => {
           type: 'User'
         }
       ],
+      resultsCaption: 'Showing all 13 matches',
       resultType: null,
-      resultTypeText: 'all matches',
       showResults: true
     })
   })
@@ -609,100 +609,37 @@ describe('Search - Search presenter', () => {
     })
   })
 
-  describe('the "resultTypeText" property', () => {
-    describe('when the result type is "all"', () => {
+  describe('the "resultsCaption" property', () => {
+    describe('when there are more results than displayed', () => {
       beforeEach(() => {
-        resultType = 'all'
+        allSearchMatches.total = 1000
       })
 
-      it('returns "all matches"', () => {
+      it('returns the number displayed and total number', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
-        expect(result.resultTypeText).to.equal('all matches')
+        expect(result.resultsCaption).to.equal('Showing 13 of 1000 matches')
       })
     })
 
-    describe('when the result type is "billingAccount"', () => {
+    describe('when there is only one result', () => {
       beforeEach(() => {
-        resultType = 'billingAccount'
+        allSearchMatches.total = 1
+        allSearchMatches.results = allSearchMatches.results.slice(0, 1)
       })
 
-      it('returns "billing accounts"', () => {
+      it('returns "Showing only match"', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
-        expect(result.resultTypeText).to.equal('billing accounts')
+        expect(result.resultsCaption).to.equal('Showing only match')
       })
     })
 
-    describe('when the result type is "licenceHolder"', () => {
-      beforeEach(() => {
-        resultType = 'licenceHolder'
-      })
-
-      it('returns "licence holders"', () => {
+    describe('when all available results are displayed', () => {
+      it('returns the number displayed', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
-        expect(result.resultTypeText).to.equal('licence holders')
-      })
-    })
-
-    describe('when the result type is "licence"', () => {
-      beforeEach(() => {
-        resultType = 'licence'
-      })
-
-      it('returns "licences"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.resultTypeText).to.equal('licences')
-      })
-    })
-
-    describe('when the result type is "monitoringStation"', () => {
-      beforeEach(() => {
-        resultType = 'monitoringStation'
-      })
-
-      it('returns "monitoring stations"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.resultTypeText).to.equal('monitoring stations')
-      })
-    })
-
-    describe('when the result type is "returnLog"', () => {
-      beforeEach(() => {
-        resultType = 'returnLog'
-      })
-
-      it('returns "return logs"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.resultTypeText).to.equal('return logs')
-      })
-    })
-
-    describe('when the result type is "user"', () => {
-      beforeEach(() => {
-        resultType = 'user'
-      })
-
-      it('returns "users"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.resultTypeText).to.equal('users')
-      })
-    })
-
-    describe('when the result type is not provided', () => {
-      beforeEach(() => {
-        resultType = undefined
-      })
-
-      it('returns "all matches"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.resultTypeText).to.equal('all matches')
+        expect(result.resultsCaption).to.equal('Showing all 13 matches')
       })
     })
   })

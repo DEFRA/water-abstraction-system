@@ -78,10 +78,6 @@
             open: resultType,
             summaryText: "Filter matches"
           }) }}
-
-          {% if showResults %}
-            <p class="govuk-body">Showing {{ resultTypeText }}</p>
-          {% endif %}
         </div>
       </form>
     </div>
@@ -95,6 +91,8 @@
         </div>
       </div>
     {% else %}
+      <p class="govuk-body">{{ resultsCaption }}</p>
+
       <hr class="searchresult-separator">
 
       {% for result in results %}

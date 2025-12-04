@@ -145,8 +145,8 @@ describe('Search - View search service', () => {
             type: 'Billing account'
           }
         ],
+        resultsCaption: 'Showing all 2 matches',
         resultType: null,
-        resultTypeText: 'all matches',
         showResults: true
       })
     })
@@ -278,8 +278,8 @@ describe('Search - View search service', () => {
             type: 'Billing account'
           }
         ],
+        resultsCaption: 'Showing all 2 matches',
         resultType: null,
-        resultTypeText: 'all matches',
         showResults: true
       })
     })
