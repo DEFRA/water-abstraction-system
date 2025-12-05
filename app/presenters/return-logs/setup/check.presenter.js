@@ -152,15 +152,15 @@ function _groupLinesByMonth(formattedLines) {
     }
 
     if (typeof quantity === 'number') {
-      monthlyLine[key].quantity =
-        monthlyLine[key].quantity === null ? quantity : Big(monthlyLine[key].quantity).plus(quantity).toNumber()
+      monthlyLine[key].quantity = Big(monthlyLine[key].quantity || 0)
+        .plus(quantity)
+        .toNumber()
     }
 
     if (typeof quantityCubicMetres === 'number') {
-      monthlyLine[key].quantityCubicMetres =
-        monthlyLine[key].quantityCubicMetres === null
-          ? quantityCubicMetres
-          : Big(monthlyLine[key].quantityCubicMetres).plus(quantityCubicMetres).toNumber()
+      monthlyLine[key].quantityCubicMetres = Big(monthlyLine[key].quantityCubicMetres || 0)
+        .plus(quantityCubicMetres)
+        .toNumber()
     }
 
     // Always use the last reading for the month
