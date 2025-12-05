@@ -8,8 +8,6 @@
 const { formatLongDate, formatMoney } = require('../base.presenter.js')
 const { formatBillRunType } = require('../billing.presenter.js')
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-
 /**
  * Formats data for the `/licences/{id}/bills` view licence bill page
  *
@@ -48,7 +46,7 @@ function _bills(licenceId, bills) {
     return {
       accountNumber,
       billingAccountId,
-      billingAccountLink: _billingAccountLink(billingAccountId, licenceId),
+      billingAccountLink: `/system/billing-accounts/${billingAccountId}?licence-id=${licenceId}`,
       billId,
       billNumber: _formatBillNumber(bill),
       billRunType: formatBillRunType(billRun.batchType, billRun.scheme, billRun.summer),
@@ -58,14 +56,6 @@ function _bills(licenceId, bills) {
       total: formatMoney(netAmount)
     }
   })
-}
-
-function _billingAccountLink(billingAccountId, licenceId) {
-  if (FeatureFlagsConfig.enableBillingAccountView) {
-    return `/system/billing-accounts/${billingAccountId}?licence-id=${licenceId}`
-  }
-
-  return `/billing-accounts/${billingAccountId}`
 }
 
 function _formatBillNumber(bill) {
