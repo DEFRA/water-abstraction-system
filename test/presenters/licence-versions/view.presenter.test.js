@@ -66,6 +66,10 @@ describe('Licence Versions - View presenter', () => {
         },
         changeType: 'licence issued',
         errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
+        licenceDetails: {
+          endDate: null,
+          startDate: '1 January 2022'
+        },
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
         pageTitleCaption: `Licence ${licence.licenceRef}`,
@@ -116,6 +120,14 @@ describe('Licence Versions - View presenter', () => {
 
         expect(result.changeType).to.equal('no licence issued')
       })
+    })
+  })
+
+  describe('the "licenceDetails" property', () => {
+    it('returns the licence details', () => {
+      const result = ViewPresenter.go(licenceVersionData, auth)
+
+      expect(result.licenceDetails).to.equal({ endDate: null, startDate: '1 January 2022' })
     })
   })
 
