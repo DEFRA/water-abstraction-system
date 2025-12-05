@@ -9,6 +9,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
 const VolumesPresenter = require('../../../presenters/return-logs/setup/volumes.presenter.js')
 const VolumesValidator = require('../../../validators/return-logs/setup/volumes.validator.js')
+const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -93,7 +94,10 @@ async function _save(payload, session, requestedYear, requestedMonth) {
 
     if (endDate.getFullYear() === requestedYear && endDate.getMonth() === requestedMonth) {
       // The volumes are always in text format in the payload so we convert to a number before updating the session
-      line.quantity = payload[line.endDate] ? Number(payload[line.endDate]) : null
+      const lineEntry = payload[line.endDate] ? Number(payload[line.endDate]) : null
+
+      line.quantityCubicMetres = lineEntry !== null ? convertToCubicMetres(lineEntry, session.unitSymbol) : null
+      line.quantity = lineEntry !== null ? convertFromCubicMetres(line.quantityCubicMetres, session.unitSymbol) : null
     }
   })
 

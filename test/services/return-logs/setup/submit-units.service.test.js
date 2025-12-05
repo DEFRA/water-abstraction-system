@@ -44,6 +44,7 @@ describe('Return Logs Setup - Submit Units service', () => {
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.units).to.equal('litres')
+        expect(refreshedSession.unitSymbol).to.equal('l')
       })
 
       describe('and the page has been not been visited', () => {

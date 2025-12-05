@@ -3,8 +3,13 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 
 {% block pageContent %}
+  {{ govukInsetText({
+    text: 'All submissions are converted to cubic metres and rounded to six decimal places.'
+  }) }}
+
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
