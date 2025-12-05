@@ -5,7 +5,10 @@
  * @module ViewReturnSubmissionPresenter
  */
 
+const Big = require('big.js')
+
 const { formatLongDate, formatNumber, formatQuantityToUnit, sentenceCase } = require('../base.presenter.js')
+const { convertFromCubicMetres } = require('../../lib/general.lib.js')
 
 const { returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
 
@@ -118,15 +121,21 @@ function _generateTableHeaders(units, method, frequency) {
 }
 
 function _total(lines, units) {
-  const totalQuantity = lines.reduce((acc, line) => {
-    const quantity = line.quantity ?? 0
+  const totalQuantityCubicMetres = lines.reduce((acc, line) => {
+    const quantityCubicMetres = line.quantity ?? 0
 
-    return acc + quantity
+    return Big(acc).plus(quantityCubicMetres).toNumber()
+  }, 0)
+
+  const totalQuantityUnits = lines.reduce((acc, line) => {
+    const quantityUnits = convertFromCubicMetres(line.quantity || 0, units)
+
+    return Big(acc).plus(quantityUnits).toNumber()
   }, 0)
 
   return {
-    cubicMetresTotal: formatNumber(totalQuantity),
-    unitTotal: formatQuantityToUnit(totalQuantity, units)
+    cubicMetresTotal: formatNumber(totalQuantityCubicMetres),
+    unitTotal: formatNumber(totalQuantityUnits)
   }
 }
 
