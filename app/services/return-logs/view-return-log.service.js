@@ -5,6 +5,7 @@
  * @module ViewReturnLogService
  */
 
+const FetchReturnLogCommunicationsService = require('./fetch-return-log-communications.service.js')
 const FetchReturnLogService = require('./fetch-return-log.service.js')
 const ViewReturnLogPresenter = require('../../presenters/return-logs/view-return-log.presenter.js')
 
@@ -19,8 +20,9 @@ const ViewReturnLogPresenter = require('../../presenters/return-logs/view-return
  */
 async function go(auth, returnId, version) {
   const returnLog = await FetchReturnLogService.go(returnId, version)
+  const notifications = await FetchReturnLogCommunicationsService.go(returnId)
 
-  const pageData = ViewReturnLogPresenter.go(auth, returnLog)
+  const pageData = ViewReturnLogPresenter.go(auth, returnLog, notifications)
 
   return {
     activeNavBar: 'search',

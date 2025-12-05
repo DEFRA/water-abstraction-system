@@ -5,6 +5,8 @@
  * @module ViewReturnLogPresenter
  */
 
+const NotificationsTablePresenter = require('../notifications/notifications-table.presenter.js')
+
 const {
   formatAbstractionPeriod,
   formatLongDate,
@@ -24,10 +26,11 @@ const { returnRequirementFrequencies, unitNames } = require('../../lib/static-lo
  *
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {module:ReturnLogModel} returnLog - The return log and associated submission and licence data
+ * @param {module:NotificationModel[]} notifications - All notifications linked to the licence
  *
  * @returns {object} page data needed by the view template
  */
-function go(auth, returnLog) {
+function go(auth, returnLog, notifications) {
   const {
     current,
     endDate,
@@ -52,6 +55,7 @@ function go(auth, returnLog) {
   const method = selectedReturnSubmission?.$method()
   const units = selectedReturnSubmission?.$units()
   const formattedStatus = formatReturnLogStatus(returnLog)
+  const notificationsTableData = NotificationsTablePresenter.go(notifications)
   const summaryTableData = _summaryTableData(selectedReturnSubmission, returnsFrequency)
 
   return {
@@ -67,6 +71,7 @@ function go(auth, returnLog) {
     method,
     nilReturn: selectedReturnSubmission ? selectedReturnSubmission.nilReturn : false,
     notification: underQuery ? { text: 'This return has been marked under query' } : null,
+    notifications: notificationsTableData,
     pageTitle: 'Abstraction return',
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     purpose: formatPurposes(purposes),
