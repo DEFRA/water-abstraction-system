@@ -12,7 +12,6 @@ require('dotenv').config()
 const config = {
   // Credit to https://stackoverflow.com/a/323546/6117745 for how to handle
   // converting the env var to a boolean
-  enableBillingAccountView: String(process.env.ENABLE_BILLING_ACCOUNT_VIEW) === 'true' || false,
   enableLicenceConditionsView: String(process.env.ENABLE_LICENCE_CONDITIONS_VIEW) === 'true' || false,
   enableLicenceHistoryView: String(process.env.ENABLE_LICENCE_HISTORY_VIEW) === 'true' || false,
   enableLicencePointsView: String(process.env.ENABLE_LICENCE_POINTS_VIEW) === 'true' || false,

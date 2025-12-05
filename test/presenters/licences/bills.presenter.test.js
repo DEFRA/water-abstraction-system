@@ -3,18 +3,14 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const { generateAccountNumber } = require('../../support/helpers/billing-account.helper.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-
-// Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const BillsPresenter = require('../../../app/presenters/licences/bills.presenter.js')
@@ -30,12 +26,6 @@ describe('Licences - Bills presenter', () => {
       id: generateUUID(),
       licenceRef: generateLicenceRef()
     }
-
-    Sinon.stub(FeatureFlagsConfig, 'enableBillingAccountView').value(true)
-  })
-
-  afterEach(() => {
-    Sinon.restore()
   })
 
   describe('when provided with a bills data', () => {
@@ -73,30 +63,6 @@ describe('Licences - Bills presenter', () => {
             const result = BillsPresenter.go([bill], licence)
 
             expect(result.bills[0].billNumber).to.equal('WAC0003872T')
-          })
-        })
-
-        describe('the "billingAccountLink" property', () => {
-          describe('when the "enableBillingAccountView" flag is true', () => {
-            it('returns the system link', () => {
-              const result = BillsPresenter.go([bill], licence)
-
-              expect(result.bills[0].billingAccountLink).to.equal(
-                `/system/billing-accounts/${bill.billingAccountId}?licence-id=${licence.id}`
-              )
-            })
-          })
-
-          describe('when the "enableBillingAccountView" flag is false', () => {
-            beforeEach(() => {
-              Sinon.stub(FeatureFlagsConfig, 'enableBillingAccountView').value(false)
-            })
-
-            it('returns the legacy link', () => {
-              const result = BillsPresenter.go([bill], licence)
-
-              expect(result.bills[0].billingAccountLink).to.equal(`/billing-accounts/${bill.billingAccountId}`)
-            })
           })
         })
 
