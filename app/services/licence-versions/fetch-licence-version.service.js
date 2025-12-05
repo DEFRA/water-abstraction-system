@@ -43,6 +43,7 @@ async function _fetch(licenceVersionId) {
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
       builder.select(['id', 'licenceRef'])
+      builder.modify('licenceName')
     })
     .modify('history')
 }

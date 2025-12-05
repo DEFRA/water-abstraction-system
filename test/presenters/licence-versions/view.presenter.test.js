@@ -125,7 +125,7 @@ describe.only('Licence Versions - View presenter', () => {
 
   describe('the "licenceDetails" property', () => {
     it('returns the licence details', () => {
-      const result = ViewPresenter.go(licenceVersion, auth)
+      const result = ViewPresenter.go(licenceVersionData, auth)
 
       expect(result.licenceDetails).to.equal({ endDate: null, startDate: '1 January 2022' })
     })
