@@ -247,7 +247,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           eventId: noticeId,
           licenceMonitoringStationId: null,
           licences: recipients[0].licence_refs,
-          messageRef: 'pdf.return_form',
+          messageRef: 'paper return',
           messageType: 'letter',
           pdf: null,
           personalisation: {
@@ -285,7 +285,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           eventId: noticeId,
           licenceMonitoringStationId: null,
           licences: recipients[1].licence_refs,
-          messageRef: 'pdf.return_form',
+          messageRef: 'paper return',
           messageType: 'letter',
           pdf: null,
           personalisation: {

@@ -287,7 +287,7 @@ function paperReturn(notice) {
     eventId: notice.id,
     licenceMonitoringStationId: null,
     licences: notice.licences,
-    messageRef: 'pdf.return_form',
+    messageRef: 'paper return',
     messageType: 'letter',
     notifyId: generateUUID(),
     notifyStatus: 'received',

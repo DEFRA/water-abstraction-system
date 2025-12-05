@@ -57,7 +57,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
         dueDate: dueReturns[0].dueDate,
         eventId: noticeId,
         licences: [licenceRef],
-        messageRef: 'pdf.return_form',
+        messageRef: 'paper return',
         messageType: 'letter',
         personalisation: {
           address_line_1: 'Mr H J Potter',
@@ -87,7 +87,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
         dueDate: dueReturns[0].dueDate,
         eventId: noticeId,
         licences: [licenceRef],
-        messageRef: 'pdf.return_form',
+        messageRef: 'paper return',
         messageType: 'letter',
         personalisation: {
           address_line_1: 'Mr H J Weasley',

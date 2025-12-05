@@ -83,7 +83,7 @@ async function _sendNotification(notification, referenceCode) {
     return SendEmailService.go(notification, referenceCode)
   }
 
-  if (notification.messageRef === 'pdf.return_form') {
+  if (notification.messageRef === 'paper return') {
     return SendPaperReturnService.go(notification, referenceCode)
   }
 
