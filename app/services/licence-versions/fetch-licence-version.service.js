@@ -13,9 +13,23 @@ const { raw } = require('objection')
  *
  * @param {string} licenceVersionId - The UUID for the licence version to fetch
  *
- * @returns {Promise<module:LicenceVersionModel>} the licence version
+ * @returns {Promise<object>} an object with the licence version and the licence versions for pagination
  */
 async function go(licenceVersionId) {
+  return {
+    licenceVersion: await _fetch(licenceVersionId),
+    licenceVersionsForPagination: await _fetchPagination(licenceVersionId)
+  }
+}
+
+async function _fetchPagination(licenceVersionId) {
+  return LicenceVersionModel.query()
+    .where('licenceId', LicenceVersionModel.query().select('licenceId').findById(licenceVersionId))
+    .select(['id', 'startDate'])
+    .orderBy('startDate', 'asc')
+}
+
+async function _fetch(licenceVersionId) {
   return LicenceVersionModel.query()
     .findById(licenceVersionId)
     .select([
