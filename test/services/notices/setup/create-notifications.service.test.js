@@ -409,7 +409,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           eventId: noticeId,
           licenceMonitoringStationId: null,
           licences: recipients[0].licence_refs,
-          messageRef: 'returns_invitation_licence_holder_letter',
+          messageRef: 'returns invitation',
           messageType: 'letter',
           pdf: null,
           personalisation: {
@@ -438,7 +438,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           eventId: noticeId,
           licenceMonitoringStationId: null,
           licences: recipients[1].licence_refs,
-          messageRef: 'returns_invitation_returns_to_letter',
+          messageRef: 'returns invitation',
           messageType: 'letter',
           pdf: null,
           personalisation: {

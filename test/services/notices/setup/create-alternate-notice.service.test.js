@@ -92,7 +92,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
           eventId: result.notice.id,
           licences: '01/111',
           messageType: 'letter',
-          messageRef: 'returns_invitation_licence_holder_letter',
+          messageRef: 'returns invitation',
           personalisation: {
             name: 'J Anne',
             periodEndDate: '31 March 2025',
@@ -120,7 +120,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
           eventId: result.notice.id,
           licences: '01/125',
           messageType: 'letter',
-          messageRef: 'returns_invitation_licence_holder_letter',
+          messageRef: 'returns invitation',
           personalisation: {
             name: 'J Charles',
             periodEndDate: '31 March 2025',

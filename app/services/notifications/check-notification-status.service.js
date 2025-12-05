@@ -120,7 +120,7 @@ async function _recordReturnLogs(notification, status, trx) {
   const { createdAt, dueDate, messageRef, returnLogIds } = notification
 
   // We only update the linked return logs if the notification is 'sent' and it's a returns invitation
-  if (status !== NOTIFICATIONS_STATUS.sent || !messageRef.startsWith('returns_invitation')) {
+  if (status !== NOTIFICATIONS_STATUS.sent || !messageRef.startsWith('returns invitation')) {
     return
   }
 

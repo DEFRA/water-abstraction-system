@@ -86,7 +86,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         dueDate: dynamicEmailDueDate,
         eventId: noticeId,
         licences: recipients[0].licence_refs,
-        messageRef: 'returns_invitation_primary_user_email',
+        messageRef: 'returns invitation',
         messageType: 'email',
         personalisation: {
           periodEndDate: '31 March 2025',
@@ -102,7 +102,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         dueDate: dynamicEmailDueDate,
         eventId: noticeId,
         licences: recipients[1].licence_refs,
-        messageRef: 'returns_invitation_returns_agent_email',
+        messageRef: 'returns invitation',
         messageType: 'email',
         personalisation: {
           periodEndDate: '31 March 2025',
@@ -118,7 +118,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         dueDate: dynamicLetterDueDate,
         eventId: noticeId,
         licences: recipients[2].licence_refs,
-        messageRef: 'returns_invitation_licence_holder_letter',
+        messageRef: 'returns invitation',
         messageType: 'letter',
         personalisation: {
           address_line_1: 'Mr H J Potter',
@@ -140,7 +140,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         dueDate: dynamicLetterDueDate,
         eventId: noticeId,
         licences: recipients[3].licence_refs,
-        messageRef: 'returns_invitation_returns_to_letter',
+        messageRef: 'returns invitation',
         messageType: 'letter',
         personalisation: {
           address_line_1: 'Mr H J Weasley',
@@ -162,7 +162,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         dueDate: dynamicLetterDueDate,
         eventId: noticeId,
         licences: recipients[4].licence_refs,
-        messageRef: 'returns_invitation_licence_holder_letter',
+        messageRef: 'returns invitation',
         messageType: 'letter',
         personalisation: {
           address_line_1: 'Mr H J Potter',
@@ -184,7 +184,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         dueDate: dynamicEmailDueDate,
         eventId: noticeId,
         licences: recipients[5].licence_refs,
-        messageRef: 'returns_invitation_primary_user_email',
+        messageRef: 'returns invitation',
         messageType: 'email',
         personalisation: {
           periodEndDate: '31 March 2025',
@@ -200,7 +200,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         dueDate: dynamicLetterDueDate,
         eventId: noticeId,
         licences: recipients[6].licence_refs,
-        messageRef: 'returns_invitation_licence_holder_letter',
+        messageRef: 'returns invitation',
         messageType: 'letter',
         personalisation: {
           address_line_1: 'Mr H J Hermione',
@@ -228,7 +228,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[0].messageRef).to.equal('returns_invitation_primary_user_email')
+            expect(result[0].messageRef).to.equal('returns invitation')
           })
         })
 
@@ -236,7 +236,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[1].messageRef).to.equal('returns_invitation_returns_agent_email')
+            expect(result[1].messageRef).to.equal('returns invitation')
           })
         })
 
@@ -244,7 +244,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[5].messageRef).to.equal('returns_invitation_primary_user_email')
+            expect(result[5].messageRef).to.equal('returns invitation')
           })
         })
       })
@@ -254,7 +254,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[2].messageRef).to.equal('returns_invitation_licence_holder_letter')
+            expect(result[2].messageRef).to.equal('returns invitation')
           })
         })
 
@@ -262,7 +262,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[3].messageRef).to.equal('returns_invitation_returns_to_letter')
+            expect(result[3].messageRef).to.equal('returns invitation')
           })
         })
 
@@ -270,7 +270,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[6].messageRef).to.equal('returns_invitation_licence_holder_letter')
+            expect(result[6].messageRef).to.equal('returns invitation')
           })
         })
       })
@@ -286,7 +286,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[0].messageRef).to.equal('returns_reminder_primary_user_email')
+            expect(result[0].messageRef).to.equal('returns reminder')
           })
         })
 
@@ -294,7 +294,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[1].messageRef).to.equal('returns_reminder_returns_agent_email')
+            expect(result[1].messageRef).to.equal('returns reminder')
           })
         })
 
@@ -302,7 +302,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[5].messageRef).to.equal('returns_reminder_primary_user_email')
+            expect(result[5].messageRef).to.equal('returns reminder')
           })
         })
       })
@@ -312,7 +312,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[2].messageRef).to.equal('returns_reminder_licence_holder_letter')
+            expect(result[2].messageRef).to.equal('returns reminder')
           })
         })
 
@@ -320,7 +320,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[3].messageRef).to.equal('returns_reminder_returns_to_letter')
+            expect(result[3].messageRef).to.equal('returns reminder')
           })
         })
 
@@ -328,7 +328,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[6].messageRef).to.equal('returns_reminder_licence_holder_letter')
+            expect(result[6].messageRef).to.equal('returns reminder')
           })
         })
       })

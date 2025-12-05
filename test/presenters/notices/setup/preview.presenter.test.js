@@ -46,7 +46,7 @@ describe('Notices - Setup - Preview presenter', () => {
         beforeEach(() => {
           notification = {
             licences: '["11/1111"]',
-            messageRef: 'returns_invitation_licence_holder_letter',
+            messageRef: 'returns invitation',
             messageType: 'letter',
             personalisation: {
               address_line_1: 'Clean Water Limited',
@@ -106,7 +106,7 @@ describe('Notices - Setup - Preview presenter', () => {
             backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
             contents: 'Dear Clean Water Limited,\r\n',
             messageType: 'letter',
-            pageTitle: 'Returns invitation licence holder letter',
+            pageTitle: 'Returns invitation',
             pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
           })
@@ -117,7 +117,7 @@ describe('Notices - Setup - Preview presenter', () => {
         beforeEach(() => {
           notification = {
             licences: '["11/1111"]',
-            messageRef: 'returns_invitation_primary_user_email',
+            messageRef: 'returns invitation',
             messageType: 'email',
             personalisation: {
               periodEndDate: '28th January 2025',
@@ -162,7 +162,7 @@ describe('Notices - Setup - Preview presenter', () => {
             backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
             contents: 'Dear licence holder,\r\n',
             messageType: 'email',
-            pageTitle: 'Returns invitation primary user email',
+            pageTitle: 'Returns invitation',
             pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
           })
@@ -324,7 +324,7 @@ describe('Notices - Setup - Preview presenter', () => {
 
       notification = {
         licences: '["11/1111"]',
-        messageRef: 'returns_invitation_primary_user_email',
+        messageRef: 'returns invitation',
         messageType: 'email',
         personalisation: {
           periodEndDate: '28th January 2025',
@@ -369,7 +369,7 @@ describe('Notices - Setup - Preview presenter', () => {
         backLink: { href: `/system/notices/setup/${sessionId}/check`, text: 'Back' },
         contents: 'error',
         messageType: 'email',
-        pageTitle: 'Returns invitation primary user email',
+        pageTitle: 'Returns invitation',
         pageTitleCaption: `Notice ${referenceCode}`,
         refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}`
       })
