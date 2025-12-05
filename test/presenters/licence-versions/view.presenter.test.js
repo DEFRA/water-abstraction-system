@@ -19,6 +19,7 @@ describe('Licence Versions - View presenter', () => {
   let auth
   let licence
   let licenceVersion
+  let licenceVersionData
 
   beforeEach(() => {
     auth = {
@@ -47,11 +48,16 @@ describe('Licence Versions - View presenter', () => {
       ],
       startDate: new Date('2022-01-01')
     })
+
+    licenceVersionData = {
+      licenceVersion,
+      licenceVersionsForPagination: [licenceVersion]
+    }
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ViewPresenter.go(licenceVersion, auth)
+      const result = ViewPresenter.go(licenceVersionData, auth)
 
       expect(result).to.equal({
         backLink: {
@@ -63,6 +69,7 @@ describe('Licence Versions - View presenter', () => {
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
         pageTitleCaption: `Licence ${licence.licenceRef}`,
+        pagination: null,
         reason: 'Licence Holder Name/Address Change'
       })
     })
@@ -71,7 +78,7 @@ describe('Licence Versions - View presenter', () => {
   describe('the "errorInDataEmail" property', () => {
     describe('when the user does NOT have the "billing" role', () => {
       it('returns the email address', () => {
-        const result = ViewPresenter.go(licenceVersion, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth)
 
         expect(result.errorInDataEmail).to.equal('water_abstractiondigital@environment-agency.gov.uk')
       })
@@ -83,7 +90,7 @@ describe('Licence Versions - View presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewPresenter.go(licenceVersion, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth)
 
         expect(result.errorInDataEmail).to.be.null()
       })
@@ -93,7 +100,7 @@ describe('Licence Versions - View presenter', () => {
   describe('the "changeType" property', () => {
     describe('when the licence version is not administrative', () => {
       it('returns "licence issued"', () => {
-        const result = ViewPresenter.go(licenceVersion, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth)
 
         expect(result.changeType).to.equal('licence issued')
       })
@@ -105,7 +112,7 @@ describe('Licence Versions - View presenter', () => {
       })
 
       it('returns "no licence issued"', () => {
-        const result = ViewPresenter.go(licenceVersion, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth)
 
         expect(result.changeType).to.equal('no licence issued')
       })
@@ -115,7 +122,7 @@ describe('Licence Versions - View presenter', () => {
   describe('the "notes" property', () => {
     describe('when the user does not have the "billing" role', () => {
       it('returns null', () => {
-        const result = ViewPresenter.go(licenceVersion, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth)
 
         expect(result.notes).to.be.null()
       })
@@ -128,7 +135,7 @@ describe('Licence Versions - View presenter', () => {
 
       describe('and there are notes', () => {
         it('returns the notes', () => {
-          const result = ViewPresenter.go(licenceVersion, auth)
+          const result = ViewPresenter.go(licenceVersionData, auth)
 
           expect(result.notes).to.equal(['Whole licence trade'])
         })
@@ -140,9 +147,95 @@ describe('Licence Versions - View presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewPresenter.go(licenceVersion, auth)
+          const result = ViewPresenter.go(licenceVersionData, auth)
 
           expect(result.notes).to.be.null()
+        })
+      })
+    })
+  })
+
+  describe('the "pagination" property', () => {
+    describe('when there is no "pagination" required', () => {
+      it('returns null', () => {
+        const result = ViewPresenter.go(licenceVersionData, auth)
+
+        expect(result.pagination).to.be.null()
+      })
+    })
+
+    describe('when there is "pagination"', () => {
+      let previousLicenceVersion
+      let nextLicenceVersion
+
+      beforeEach(() => {
+        previousLicenceVersion = {
+          id: generateUUID(),
+          startDate: new Date('2019-01-01')
+        }
+
+        nextLicenceVersion = {
+          id: generateUUID(),
+          startDate: new Date('2025-01-01')
+        }
+      })
+
+      describe('and there are both "previous" and "next" licence versions', () => {
+        beforeEach(() => {
+          licenceVersionData.licenceVersionsForPagination = [previousLicenceVersion, licenceVersion, nextLicenceVersion]
+        })
+
+        it('returns the "previous" and "next" links', () => {
+          const result = ViewPresenter.go(licenceVersionData, auth)
+
+          expect(result.pagination).to.equal({
+            next: {
+              href: `/system/licence-versions/${nextLicenceVersion.id}`,
+              labelText: 'Starting 1 January 2025',
+              text: 'Next version'
+            },
+            previous: {
+              href: `/system/licence-versions/${previousLicenceVersion.id}`,
+              labelText: 'Starting 1 January 2019',
+              text: 'Previous version'
+            }
+          })
+        })
+      })
+
+      describe('and there is only a "next" licence version', () => {
+        beforeEach(() => {
+          licenceVersionData.licenceVersionsForPagination = [licenceVersion, nextLicenceVersion]
+        })
+
+        it('returns the "next" link', () => {
+          const result = ViewPresenter.go(licenceVersionData, auth)
+
+          expect(result.pagination).to.equal({
+            next: {
+              href: `/system/licence-versions/${nextLicenceVersion.id}`,
+              labelText: 'Starting 1 January 2025',
+              text: 'Next version'
+            }
+          })
+        })
+      })
+
+      describe('and there is only a "previous" licence version', () => {
+        beforeEach(() => {
+          licenceVersionData.licenceVersionsForPagination = [previousLicenceVersion, licenceVersion]
+        })
+
+        it('returns the "previous" link', () => {
+          const result = ViewPresenter.go(licenceVersionData, auth)
+
+          expect(result.pagination).to.equal({
+            previous: {
+              href: `/system/licence-versions/${previousLicenceVersion.id}`,
+              labelText: 'Starting 1 January 2019',
+              text: 'Previous version'
+            }
+          })
         })
       })
     })
@@ -152,7 +245,7 @@ describe('Licence Versions - View presenter', () => {
     describe('when the user does not have the "billing" role', () => {
       describe('and there is a "reason"', () => {
         it('returns the "reason"', () => {
-          const result = ViewPresenter.go(licenceVersion, auth)
+          const result = ViewPresenter.go(licenceVersionData, auth)
 
           expect(result.reason).to.equal('Licence Holder Name/Address Change')
         })
@@ -164,7 +257,7 @@ describe('Licence Versions - View presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewPresenter.go(licenceVersion, auth)
+          const result = ViewPresenter.go(licenceVersionData, auth)
 
           expect(result.reason).to.be.null()
         })
@@ -182,7 +275,7 @@ describe('Licence Versions - View presenter', () => {
         })
 
         it('returns just the created on', () => {
-          const result = ViewPresenter.go(licenceVersion, auth)
+          const result = ViewPresenter.go(licenceVersionData, auth)
 
           expect(result.reason).to.equal('Created on 1 January 2022')
         })
@@ -191,7 +284,7 @@ describe('Licence Versions - View presenter', () => {
       describe('and there is a reason', () => {
         describe('and we know who created it', () => {
           it('returns the reason with who created it', () => {
-            const result = ViewPresenter.go(licenceVersion, auth)
+            const result = ViewPresenter.go(licenceVersionData, auth)
 
             expect(result.reason).to.equal(
               'Licence Holder Name/Address Change created on 1 January 2022 by JOBSWORTH01'
@@ -205,7 +298,7 @@ describe('Licence Versions - View presenter', () => {
           })
 
           it('returns the reason without who created it', () => {
-            const result = ViewPresenter.go(licenceVersion, auth)
+            const result = ViewPresenter.go(licenceVersionData, auth)
 
             expect(result.reason).to.equal('Licence Holder Name/Address Change created on 1 January 2022')
           })

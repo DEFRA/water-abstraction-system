@@ -18,9 +18,9 @@ const ViewPresenter = require('../../presenters/licence-versions/view.presenter.
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(licenceVersionId, auth) {
-  const licenceVersion = await FetchLicenceVersionService.go(licenceVersionId)
+  const licenceVersionData = await FetchLicenceVersionService.go(licenceVersionId)
 
-  const pageData = ViewPresenter.go(licenceVersion, auth)
+  const pageData = ViewPresenter.go(licenceVersionData, auth)
 
   return {
     activeNavBar: 'search',
