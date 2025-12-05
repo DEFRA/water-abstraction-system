@@ -61,7 +61,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licenceMonitoringStationId: licenceMonitoringStations.one.id,
         licences: [primaryUserLicenceRef],
-        messageRef: 'water_abstraction_alert_reduce_warning_email',
+        messageRef: 'abstraction alert reduce warning',
         messageType: 'email',
         personalisation: {
           alertType: 'reduce',
@@ -86,7 +86,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licenceMonitoringStationId: licenceMonitoringStations.two.id,
         licences: [licenceHolderLicenceRef],
-        messageRef: 'water_abstraction_alert_stop_warning',
+        messageRef: 'abstraction alert stop warning',
         messageType: 'letter',
         personalisation: {
           address_line_1: 'Mr H J Potter',
@@ -117,7 +117,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licenceMonitoringStationId: licenceMonitoringStations.three.id,
         licences: [additionalContactLicenceRef],
-        messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
+        messageRef: 'abstraction alert reduce or stop warning',
         messageType: 'email',
         personalisation: {
           alertType: 'stop_or_reduce',
@@ -159,7 +159,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
           licences: [licenceRef],
-          messageRef: 'water_abstraction_alert_reduce_warning_email',
+          messageRef: 'abstraction alert reduce warning',
           messageType: 'email',
           personalisation: {
             alertType: 'reduce',
@@ -184,7 +184,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.two.id,
           licences: [licenceRef],
-          messageRef: 'water_abstraction_alert_stop_warning_email',
+          messageRef: 'abstraction alert stop warning',
           messageType: 'email',
           personalisation: {
             alertType: 'stop',
@@ -226,7 +226,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.three.id,
           licences: [licenceRef],
-          messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
+          messageRef: 'abstraction alert reduce or stop warning',
           messageType: 'email',
           personalisation: {
             alertType: 'stop_or_reduce',
@@ -271,7 +271,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
           licences: [licenceRef],
-          messageRef: 'water_abstraction_alert_reduce_warning_email',
+          messageRef: 'abstraction alert reduce warning',
           messageType: 'email',
           personalisation: {
             alertType: 'reduce',
@@ -316,7 +316,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
           licences: [licenceRef],
-          messageRef: 'water_abstraction_alert_reduce_warning_email',
+          messageRef: 'abstraction alert reduce warning',
           messageType: 'email',
           personalisation: {
             alertType: 'reduce',
@@ -359,7 +359,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
           licences: [licenceRef],
-          messageRef: 'water_abstraction_alert_reduce_warning',
+          messageRef: 'abstraction alert reduce warning',
           messageType: 'letter',
           personalisation: {
             address_line_1: 'Mr H J Potter',
@@ -483,7 +483,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           it('correctly sets the default message ref', () => {
             const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-            expect(result.messageRef).to.equal('water_abstraction_alert')
+            expect(result.messageRef).to.equal('abstraction alert')
           })
         })
       })
@@ -501,7 +501,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             it('correctly sets the message ref', () => {
               const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-              expect(result.messageRef).to.equal('water_abstraction_alert_resume_email')
+              expect(result.messageRef).to.equal('abstraction alert resume')
             })
 
             describe('is a letter', () => {
@@ -512,7 +512,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
               it('correctly sets the message ref', () => {
                 const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-                expect(result.messageRef).to.equal('water_abstraction_alert_resume')
+                expect(result.messageRef).to.equal('abstraction alert resume')
               })
             })
           })
@@ -534,7 +534,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
               it('correctly sets the message ref', () => {
                 const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-                expect(result.messageRef).to.equal('water_abstraction_alert_reduce_or_stop_email')
+                expect(result.messageRef).to.equal('abstraction alert reduce or stop')
               })
 
               describe('is a letter', () => {
@@ -545,7 +545,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
                 it('correctly sets the message ref', () => {
                   const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-                  expect(result.messageRef).to.equal('water_abstraction_alert_reduce_or_stop')
+                  expect(result.messageRef).to.equal('abstraction alert reduce or stop')
                 })
               })
             })
@@ -562,7 +562,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
               it('correctly sets the message ref', () => {
                 const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-                expect(result.messageRef).to.equal('water_abstraction_alert_reduce_email')
+                expect(result.messageRef).to.equal('abstraction alert reduce')
               })
 
               describe('is a letter', () => {
@@ -573,7 +573,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
                 it('correctly sets the message ref', () => {
                   const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-                  expect(result.messageRef).to.equal('water_abstraction_alert_reduce')
+                  expect(result.messageRef).to.equal('abstraction alert reduce')
                 })
               })
             })
@@ -595,7 +595,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
             it('correctly sets the message ref', () => {
               const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-              expect(result.messageRef).to.equal('water_abstraction_alert_stop_email')
+              expect(result.messageRef).to.equal('abstraction alert stop')
             })
 
             describe('is a letter', () => {
@@ -606,7 +606,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
               it('correctly sets the message ref', () => {
                 const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-                expect(result.messageRef).to.equal('water_abstraction_alert_stop')
+                expect(result.messageRef).to.equal('abstraction alert stop')
               })
             })
           })
@@ -628,7 +628,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
               it('correctly sets the message ref', () => {
                 const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-                expect(result.messageRef).to.equal('water_abstraction_alert_reduce_warning_email')
+                expect(result.messageRef).to.equal('abstraction alert reduce warning')
               })
 
               describe('is a letter', () => {
@@ -639,7 +639,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
                 it('correctly sets the message ref', () => {
                   const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-                  expect(result.messageRef).to.equal('water_abstraction_alert_reduce_warning')
+                  expect(result.messageRef).to.equal('abstraction alert reduce warning')
                 })
               })
             })
@@ -656,7 +656,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
               it('correctly sets the message ref', () => {
                 const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-                expect(result.messageRef).to.equal('water_abstraction_alert_reduce_or_stop_warning_email')
+                expect(result.messageRef).to.equal('abstraction alert reduce or stop warning')
               })
 
               describe('is a letter', () => {
@@ -667,7 +667,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
                 it('correctly sets the message ref', () => {
                   const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-                  expect(result.messageRef).to.equal('water_abstraction_alert_reduce_or_stop_warning')
+                  expect(result.messageRef).to.equal('abstraction alert reduce or stop warning')
                 })
               })
             })
@@ -684,7 +684,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
               it('correctly sets the message ref', () => {
                 const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-                expect(result.messageRef).to.equal('water_abstraction_alert_stop_warning_email')
+                expect(result.messageRef).to.equal('abstraction alert stop warning')
               })
 
               describe('is a letter', () => {
@@ -695,7 +695,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
                 it('correctly sets the message ref', () => {
                   const [result] = AbstractionAlertNotificationsPresenter.go(session, testRecipients, noticeId)
 
-                  expect(result.messageRef).to.equal('water_abstraction_alert_stop_warning')
+                  expect(result.messageRef).to.equal('abstraction alert stop warning')
                 })
               })
             })

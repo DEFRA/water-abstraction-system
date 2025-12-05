@@ -181,7 +181,7 @@ describe('Notices - Setup - Preview presenter', () => {
         beforeEach(() => {
           notification = {
             licences: '["11/1111"]',
-            messageRef: 'water_abstraction_alert_stop_warning',
+            messageRef: 'abstraction alert stop warning',
             messageType: 'letter',
             personalisation: {
               address_line_1: 'Clean Water Limited',
@@ -246,7 +246,7 @@ describe('Notices - Setup - Preview presenter', () => {
             backLink: { href: `/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`, text: 'Back' },
             contents: 'Dear licence contact,\r\n',
             messageType: 'letter',
-            pageTitle: 'Water abstraction alert stop warning',
+            pageTitle: 'Abstraction alert stop warning',
             pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`
           })
@@ -257,7 +257,7 @@ describe('Notices - Setup - Preview presenter', () => {
         beforeEach(() => {
           notification = {
             licences: '["11/1111"]',
-            messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
+            messageRef: 'abstraction alert reduce or stop warning',
             messageType: 'email',
             personalisation: {
               alertType: 'warning',
@@ -309,7 +309,7 @@ describe('Notices - Setup - Preview presenter', () => {
             backLink: { href: `/system/notices/setup/${sessionId}/preview/${contactHashId}/check-alert`, text: 'Back' },
             contents: 'Dear licence contact,\r\n',
             messageType: 'email',
-            pageTitle: 'Water abstraction alert reduce or stop warning email',
+            pageTitle: 'Abstraction alert reduce or stop warning',
             pageTitleCaption: `Notice ${referenceCode}`,
             refreshPageLink: `/system/notices/setup/${sessionId}/preview/${contactHashId}/alert/${licenceMonitoringStationId}`
           })

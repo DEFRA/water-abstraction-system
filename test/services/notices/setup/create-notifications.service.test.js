@@ -104,7 +104,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           eventId: noticeId,
           licenceMonitoringStationId: session.licenceMonitoringStations[0].id,
           licences: recipients[0].licence_refs,
-          messageRef: 'water_abstraction_alert_stop_email',
+          messageRef: 'abstraction alert stop',
           messageType: 'email',
           pdf: null,
           personalisation: {
@@ -136,7 +136,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           eventId: noticeId,
           licenceMonitoringStationId: session.licenceMonitoringStations[1].id,
           licences: recipients[1].licence_refs,
-          messageRef: 'water_abstraction_alert_stop_email',
+          messageRef: 'abstraction alert stop',
           messageType: 'email',
           pdf: null,
           personalisation: {

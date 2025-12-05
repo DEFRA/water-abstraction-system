@@ -163,17 +163,13 @@ function _email(recipient, eventId, commonPersonalisation, alertType, restrictio
     eventId,
     licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
     licences: [commonPersonalisation.licenceRef],
-    messageRef: _emailMessageRef(alertType, restrictionType),
+    messageRef: _messageRef(alertType, restrictionType),
     messageType,
     personalisation: commonPersonalisation,
     recipient: recipient.email,
     status: 'pending',
     templateId: _templateId(alertType, restrictionType, 'email')
   }
-}
-
-function _emailMessageRef(alertType, restrictionType) {
-  return `${_messageRef(alertType, restrictionType)}_email`
 }
 
 /**
@@ -240,34 +236,32 @@ function _matchingRecipients(recipients, station) {
 
 function _messageRef(alertType, restrictionType) {
   if (alertType === 'resume') {
-    return 'water_abstraction_alert_resume'
+    return 'abstraction alert resume'
   }
 
   if (alertType === 'reduce') {
-    return restrictionType === 'stop_or_reduce'
-      ? 'water_abstraction_alert_reduce_or_stop'
-      : 'water_abstraction_alert_reduce'
+    return restrictionType === 'stop_or_reduce' ? 'abstraction alert reduce or stop' : 'abstraction alert reduce'
   }
 
   if (alertType === 'stop') {
-    return 'water_abstraction_alert_stop'
+    return 'abstraction alert stop'
   }
 
   if (alertType === 'warning') {
     if (restrictionType === 'reduce') {
-      return 'water_abstraction_alert_reduce_warning'
+      return 'abstraction alert reduce warning'
     }
 
     if (restrictionType === 'stop_or_reduce') {
-      return 'water_abstraction_alert_reduce_or_stop_warning'
+      return 'abstraction alert reduce or stop warning'
     }
 
     if (restrictionType === 'stop') {
-      return 'water_abstraction_alert_stop_warning'
+      return 'abstraction alert stop warning'
     }
   }
 
-  return 'water_abstraction_alert'
+  return 'abstraction alert'
 }
 
 function _templateId(alertType, restrictionType, type) {
