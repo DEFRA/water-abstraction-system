@@ -6,7 +6,6 @@
  */
 
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
-const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 
 const REPORTED = {
   VOLUMES: 'abstractionVolumes',
@@ -29,7 +28,7 @@ function go(session) {
   return {
     meters: _determineMeters(session),
     method: session.reported === REPORTED.VOLUMES ? 'abstractionVolumes' : 'oneMeter',
-    units: getUnitSymbolByName(session.units),
+    units: session.unitSymbol,
     // Legacy code sets reported to `estimated` ONLY if we have volumes with no meter; otherwise it's `measured`
     type: session.reported === REPORTED.VOLUMES && session.meterProvided === 'no' ? 'estimated' : 'measured',
     ..._totalProperties(session)
@@ -66,7 +65,7 @@ function _determineMeters(session) {
       }),
       // Units, readings and start reading are only set if this is a meter reading return
       ...(session.reported === REPORTED.READINGS && {
-        units: getUnitSymbolByName(session.units),
+        units: session.unitSymbol,
         readings: _formatReadings(session.lines),
         startReading: session.startReading
       })
@@ -95,12 +94,6 @@ function _totalProperties(session) {
       totalCustomDateEnd: session.toFullDate
     })
   }
-}
-
-function getUnitSymbolByName(name) {
-  return Object.keys(returnUnits).find((key) => {
-    return returnUnits[key].name === name
-  })
 }
 
 module.exports = {

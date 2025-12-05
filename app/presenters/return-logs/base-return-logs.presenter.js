@@ -1,7 +1,9 @@
 'use strict'
 
-const { formatNumber, formatQuantity, sentenceCase } = require('../base.presenter.js')
-const { convertToCubicMetres } = require('../../lib/general.lib.js')
+const Big = require('big.js')
+
+const { formatNumber, sentenceCase } = require('../base.presenter.js')
+const { convertFromCubicMetres } = require('../../lib/general.lib.js')
 const { returnRequirementFrequencies, returnUnits, unitNames } = require('../../lib/static-lookups.lib.js')
 
 /**
@@ -23,20 +25,6 @@ function formatMeterDetails(meter) {
     serialNumber,
     xDisplay: multiplier === 1 ? 'No' : 'Yes'
   }
-}
-
-/**
- * Converts a quantity from a given unit to cubic metres and formats it
- *
- * @param {number} quantity - the quantity to be converted to cubic metres and formatted
- * @param {string} units - the unit of the quantity
- *
- * @returns {string|null} The converted and formatted quantity or null
- */
-function formatToCubicMetres(quantity, units) {
-  const convertedQuantity = convertToCubicMetres(quantity, units)
-
-  return formatNumber(convertedQuantity)
 }
 
 /**
@@ -108,11 +96,11 @@ function generateSummaryTableRows(method, frequency, lines, id = null, rootPath 
   const groups = _groupLinesByMonth(lines)
 
   return groups.map((group) => {
-    const { endDate, quantity, reading, userUnit } = group
+    const { endDate, quantityCubicMetres, quantityUserUnit, reading, userUnit } = group
 
     const rowData = {
       month: endDate.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' }),
-      monthlyTotal: formatNumber(quantity)
+      monthlyTotal: formatNumber(quantityCubicMetres)
     }
 
     if (method !== 'abstractionVolumes') {
@@ -124,7 +112,7 @@ function generateSummaryTableRows(method, frequency, lines, id = null, rootPath 
     }
 
     if (userUnit !== unitNames.CUBIC_METRES) {
-      rowData.unitTotal = formatQuantity(userUnit, quantity)
+      rowData.unitTotal = formatNumber(quantityUserUnit)
     }
 
     return rowData
@@ -165,13 +153,19 @@ function _groupLinesByMonth(lines) {
     if (!acc[key]) {
       acc[key] = {
         endDate,
-        quantity: null,
+        quantityCubicMetres: null,
+        quantityUserUnit: null,
         userUnit
       }
     }
 
-    if (quantity || quantity === 0) {
-      acc[key].quantity += quantity
+    if (typeof quantity === 'number') {
+      acc[key].quantityCubicMetres = Big(acc[key].quantityCubicMetres || 0)
+        .plus(quantity)
+        .toNumber()
+      acc[key].quantityUserUnit = Big(acc[key].quantityUserUnit || 0)
+        .plus(convertFromCubicMetres(quantity, userUnit))
+        .toNumber()
     }
 
     if (typeof reading === 'number') {
@@ -197,7 +191,6 @@ function _linkDetails(id, method, frequency, endDate, rootPath) {
 
 module.exports = {
   formatMeterDetails,
-  formatToCubicMetres,
   generateSummaryTableHeaders,
   generateSummaryTableRows
 }

@@ -5,17 +5,20 @@
  * @module ViewPresenter
  */
 
+const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
 
 /**
  * Formats data for the `/licence-versions/{id}` page
  *
- * @param {object} licenceVersion - the licence version with the licence
+ * @param {object} licenceVersionData - the licence version with the licence, and the licence versions for pagination
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licenceVersion, auth) {
+function go(licenceVersionData, auth) {
+  const { licenceVersion, licenceVersionsForPagination } = licenceVersionData
+
   const { licence } = licenceVersion
 
   const billingAndDataRole = auth.credentials.scope.includes('billing')
@@ -31,9 +34,11 @@ function go(licenceVersion, auth) {
     notes: _notes(licenceVersion, billingAndDataRole),
     pageTitle: `Licence version starting ${formatLongDate(licenceVersion.startDate)}`,
     pageTitleCaption: `Licence ${licence.licenceRef}`,
+    pagination: _pagination(licenceVersionsForPagination, licenceVersion),
     reason: _reason(licenceVersion, billingAndDataRole)
   }
 }
+
 function _errorInDataEmail(billingAndDataRole) {
   if (billingAndDataRole) {
     return null
@@ -57,6 +62,40 @@ function _notes(licenceVersion, billingAndDataRole) {
   const notes = licenceVersion.$notes()
 
   return notes.length > 0 ? notes : null
+}
+
+/**
+ * Calculate the previous and next licence versions to create the pagination object. This feeds directly into the GDS
+ * component.
+ *
+ * @private
+ */
+function _pagination(licenceVersionsForPagination, licenceVersion) {
+  const { previous, next } = PreviousAndNextPresenter.go(licenceVersionsForPagination, licenceVersion)
+
+  if (!next && !previous) {
+    return null
+  }
+
+  const pagination = {}
+
+  if (previous) {
+    pagination.previous = {
+      text: 'Previous version',
+      labelText: `Starting ${formatLongDate(previous.startDate)}`,
+      href: `/system/licence-versions/${previous.id}`
+    }
+  }
+
+  if (next) {
+    pagination.next = {
+      text: 'Next version',
+      labelText: `Starting ${formatLongDate(next.startDate)}`,
+      href: `/system/licence-versions/${next.id}`
+    }
+  }
+
+  return pagination
 }
 
 function _reason(licenceVersion, billingAndDataRole) {

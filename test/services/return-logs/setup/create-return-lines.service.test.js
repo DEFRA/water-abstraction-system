@@ -28,27 +28,28 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
           {
             startDate: '2024-10-26T00:00:00.000Z',
             endDate: '2024-11-01T00:00:00.000Z',
-            reading: 1234,
-            quantity: 16
+            quantity: 16,
+            quantityCubicMetres: 16,
+            reading: 1234
           },
           {
             startDate: '2024-11-02T00:00:00.000Z',
             endDate: '2024-11-08T00:00:00.000Z',
-            reading: 2345,
-            quantity: 0
+            quantity: 0,
+            quantityCubicMetres: 0,
+            reading: 2345
           },
           {
             startDate: '2024-11-09T00:00:00.000Z',
-            endDate: '2024-11-15T00:00:00.000Z',
-            reading: 3456
+            endDate: '2024-11-15T00:00:00.000Z'
           }
         ],
         meter10TimesDisplay: 'no',
         meterProvided: 'no',
+        reported: 'abstractionVolumes',
         returnsFrequency: 'week',
         startReading: null,
-        units: 'cubicMetres',
-        reported: 'abstractionVolumes'
+        unitSymbol: 'm³'
       }
     })
 
@@ -67,100 +68,6 @@ describe('Return Logs - Setup - Create New Return Lines service', () => {
       expect(result[0].startDate).to.equal(new Date('2024-10-26T00:00:00.000Z'))
       expect(result[0].timePeriod).to.equal('week')
       expect(result[0].userUnit).to.equal('m³')
-    })
-
-    describe('when the unit of measurement is megalitres', () => {
-      beforeEach(() => {
-        session.units = 'megalitres'
-      })
-
-      it('correctly converts quantity', async () => {
-        const [result] = await CreateReturnLinesService.go(returnSubmissionId, session, timestamp)
-
-        expect(result.quantity).to.equal(16000)
-        expect(result.userUnit).to.equal('Ml')
-      })
-    })
-
-    describe('when meterProvided is "yes"', () => {
-      beforeEach(() => {
-        session.meterProvided = 'yes'
-      })
-
-      it('sets readingType to "measured"', async () => {
-        const [result] = await CreateReturnLinesService.go(returnSubmissionId, session, timestamp)
-
-        expect(result.readingType).to.equal('measured')
-      })
-    })
-
-    describe('when measured using meter readings', () => {
-      beforeEach(() => {
-        session.reported = 'meterReadings'
-        session.startReading = 1000
-      })
-
-      it('recalculates quantities from meter readings', async () => {
-        const result = await CreateReturnLinesService.go(returnSubmissionId, session, timestamp)
-
-        const quantities = result.map((line) => {
-          return line.quantity
-        })
-
-        // First quantity is 1234 - 1000
-        // Second quantity is 2345 - 1234
-        // Third quantity is 3456 - 2345
-        expect(quantities).to.equal([234, 1111, 1111])
-      })
-
-      describe('and the meter has a 10x display', () => {
-        beforeEach(() => {
-          session.meter10TimesDisplay = 'yes'
-        })
-
-        it('correctly handles 10x display by multiplying calculated quantities by 10', async () => {
-          const result = await CreateReturnLinesService.go(returnSubmissionId, session, timestamp)
-
-          const quantities = result.map((line) => {
-            return line.quantity
-          })
-
-          expect(quantities).to.equal([2340, 11110, 11110])
-        })
-      })
-
-      describe('and there are meter readings of 0 and null', () => {
-        beforeEach(() => {
-          session.lines = [
-            {
-              startDate: '2024-10-26T00:00:00.000Z',
-              endDate: '2024-11-01T00:00:00.000Z',
-              reading: 0
-            },
-            {
-              startDate: '2024-11-02T00:00:00.000Z',
-              endDate: '2024-11-08T00:00:00.000Z',
-              reading: null
-            },
-            {
-              startDate: '2024-11-09T00:00:00.000Z',
-              endDate: '2024-11-15T00:00:00.000Z',
-              reading: 3456
-            }
-          ]
-          session.startReading = 0
-        })
-
-        it('recalculates quantities from meter readings', async () => {
-          const result = await CreateReturnLinesService.go(returnSubmissionId, session, timestamp)
-
-          const quantities = result.map((line) => {
-            return line.quantity
-          })
-
-          expect(quantities).to.equal([0, null, 3456])
-        })
-      })
     })
 
     describe('when called for a nil return', () => {

@@ -5,6 +5,12 @@
  * @module AllocateSingleVolumeToLinesService
  */
 
+const Big = require('big.js')
+
+const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
+
+const MAX_DECIMAL = 6
+
 /**
  * Orchestrates allocating a single volume to return submission lines using the abstraction period dates given.
  *
@@ -18,45 +24,81 @@
  * sum using a variable called `roundingCounter` and record the index of the last applicable line (`lastIndex`). After
  * processing all lines, we adjust the last line's quantity if needed to ensure the total matches the original volume.
  *
- * @param {object[]} lines - An array of lines with startDate and endDate properties
- * @param {string} fromDate - The start date of the abstraction period
- * @param {string} toDate - The end date of the abstraction period
- * @param {number} singleVolume - The volume to allocate
+ * @param {object} session - Session object containing the return submission data
  */
-function go(lines, fromDate, toDate, singleVolume) {
-  const linesInsideAbstractionPeriod = _linesInsideAbstractionPeriod(lines, fromDate, toDate)
+function go(session) {
+  const { fromFullDate, lines, singleVolumeQuantity, toFullDate, unitSymbol } = session
 
-  const individualLineQuantity = singleVolume / linesInsideAbstractionPeriod.length
+  const linesInsideAbstractionPeriod = _linesInsideAbstractionPeriod(fromFullDate, lines, toFullDate)
 
-  _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuantity, singleVolume)
+  const singleVolumeCubicMetres = convertToCubicMetres(singleVolumeQuantity, unitSymbol)
+
+  const individualLineQuantity = _individualLineQuantity(
+    linesInsideAbstractionPeriod,
+    singleVolumeCubicMetres,
+    unitSymbol
+  )
+
+  _applyQuantityToLines(individualLineQuantity, linesInsideAbstractionPeriod, singleVolumeCubicMetres, unitSymbol)
 }
 
-function _applyQuantityToLines(linesInsideAbstractionPeriod, individualLineQuantity, singleVolume) {
-  let allocatedLineTotal = 0
-
+function _applyQuantityToLines(
+  individualLineQuantity,
+  linesInsideAbstractionPeriod,
+  singleVolumeCubicMetres,
+  unitSymbol
+) {
   // Apply the quantity to each line within the abstraction period. Since volume is divided across multiple lines,
-  // rounding errors may occur, causing the total to deviate from the original volume. To prevent this, we track the
-  // cumulative sum using `allocatedLineTotal` and record the index of the last applicable line (`lastIndex`). After
+  // rounding errors may occur, causing the total to deviate from the original volume. To prevent this, we calculate the
+  // total line quantity (`allocatedLineTotal`) and record the index of the last applicable line (`lastIndex`). After
   // processing all lines, we adjust the last line's quantity if needed to ensure the total matches the original volume.
   linesInsideAbstractionPeriod.forEach((line) => {
-    line.quantity = individualLineQuantity
-    allocatedLineTotal += individualLineQuantity
+    line.quantity = individualLineQuantity.userUnit
+    line.quantityCubicMetres = individualLineQuantity.cubicMetres
   })
 
-  if (allocatedLineTotal !== Number(singleVolume)) {
-    const roundingError = singleVolume - allocatedLineTotal
+  const allocatedLineTotal = Big(individualLineQuantity.cubicMetres)
+    .times(linesInsideAbstractionPeriod.length)
+    .round(MAX_DECIMAL, Big.roundHalfUp)
+    .toNumber()
+
+  if (allocatedLineTotal !== Number(singleVolumeCubicMetres)) {
+    const roundingError = Big(singleVolumeCubicMetres).minus(allocatedLineTotal).toNumber()
     const lastIndex = linesInsideAbstractionPeriod.length - 1
-    linesInsideAbstractionPeriod[lastIndex].quantity += roundingError
+    linesInsideAbstractionPeriod[lastIndex].quantityCubicMetres = Big(individualLineQuantity.cubicMetres)
+      .plus(roundingError)
+      .toNumber()
+
+    linesInsideAbstractionPeriod[lastIndex].quantity = convertFromCubicMetres(
+      linesInsideAbstractionPeriod[lastIndex].quantityCubicMetres,
+      unitSymbol
+    )
   }
 }
 
-function _linesInsideAbstractionPeriod(lines, fromDate, toDate) {
+function _individualLineQuantity(linesInsideAbstractionPeriod, singleVolumeCubicMetres, unitSymbol) {
+  const cubicMetres = Big(singleVolumeCubicMetres)
+    .div(linesInsideAbstractionPeriod.length)
+    .round(MAX_DECIMAL, Big.roundHalfUp)
+    .toNumber()
+
+  const individualLineQuantity = {
+    cubicMetres,
+    userUnit: convertFromCubicMetres(cubicMetres, unitSymbol)
+  }
+
+  return individualLineQuantity
+}
+
+function _linesInsideAbstractionPeriod(fromFullDate, lines, toFullDate) {
   const abstractionPeriodLines = []
 
   lines.forEach((line) => {
-    delete line.quantity // Delete any existing quantity
+    // Delete any existing quantities
+    delete line.quantity
+    delete line.quantityCubicMetres
 
-    if (_lineWithinAbstractionPeriod(line.startDate, line.endDate, fromDate, toDate)) {
+    if (_lineWithinAbstractionPeriod(line.startDate, line.endDate, fromFullDate, toFullDate)) {
       abstractionPeriodLines.push(line)
     }
   })
@@ -64,8 +106,8 @@ function _linesInsideAbstractionPeriod(lines, fromDate, toDate) {
   return abstractionPeriodLines
 }
 
-function _lineWithinAbstractionPeriod(lineStartDate, lineEndDate, fromDate, toDate) {
-  return lineStartDate >= fromDate && lineEndDate <= toDate
+function _lineWithinAbstractionPeriod(lineStartDate, lineEndDate, fromFullDate, toFullDate) {
+  return lineStartDate >= fromFullDate && lineEndDate <= toFullDate
 }
 
 module.exports = {
