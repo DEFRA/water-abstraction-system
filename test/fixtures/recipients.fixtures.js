@@ -236,7 +236,7 @@ function _addAdditionalContact() {
     licence_refs: [generateLicenceRef()],
     contact: null,
     contact_hash_id: '90129f6aa5b98734aa3fefd3f8cf86a',
-    contact_type: 'Additional contact',
+    contact_type: 'additional contact',
     email: 'additional.contact@important.com',
     message_type: 'Email'
   }
@@ -246,7 +246,7 @@ function _addLicenceHolder() {
   return {
     contact: _contact('1', 'Potter', 'Licence holder'),
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
-    contact_type: 'Licence holder',
+    contact_type: 'licence holder',
     email: null,
     licence_refs: [generateLicenceRef()],
     message_type: 'Letter',
@@ -259,7 +259,7 @@ function _addPrimaryUser() {
     licence_refs: [generateLicenceRef()],
     contact: null,
     contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-    contact_type: 'Primary user',
+    contact_type: 'primary user',
     email: 'primary.user@important.com',
     return_log_ids: [generateUUID()],
     message_type: 'Email'

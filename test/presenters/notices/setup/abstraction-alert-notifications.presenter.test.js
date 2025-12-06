@@ -58,6 +58,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
 
     expect(result).to.equal([
       {
+        contactType: 'primary user',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licenceMonitoringStationId: licenceMonitoringStations.one.id,
         licences: [primaryUserLicenceRef],
@@ -83,6 +84,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f'
       },
       {
+        contactType: 'licence holder',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licenceMonitoringStationId: licenceMonitoringStations.two.id,
         licences: [licenceHolderLicenceRef],
@@ -114,6 +116,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
         templateId: '7ab10c86-2c23-4376-8c72-9419e7f982bb'
       },
       {
+        contactType: 'additional contact',
         eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
         licenceMonitoringStationId: licenceMonitoringStations.three.id,
         licences: [additionalContactLicenceRef],
@@ -156,6 +159,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
 
       expect(result).to.equal([
         {
+          contactType: 'primary user',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
           licences: [licenceRef],
@@ -181,6 +185,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
           templateId: '6ec7265d-8ebb-4217-a62b-9bf0216f8c9f'
         },
         {
+          contactType: 'primary user',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.two.id,
           licences: [licenceRef],
@@ -223,6 +228,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
 
       expect(result).to.equal([
         {
+          contactType: 'additional contact',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.three.id,
           licences: [licenceRef],
@@ -268,6 +274,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
 
       expect(result).to.equal([
         {
+          contactType: 'additional contact',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
           licences: [licenceRef],
@@ -313,6 +320,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
 
       expect(result).to.equal([
         {
+          contactType: 'primary user',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
           licences: [licenceRef],
@@ -356,6 +364,7 @@ describe('Notices - Setup - Abstraction Alert Notifications presenter', () => {
 
       expect(result).to.equal([
         {
+          contactType: 'licence holder',
           eventId: 'c1cae668-3dad-4806-94e2-eb3f27222ed9',
           licenceMonitoringStationId: licenceMonitoringStations.one.id,
           licences: [licenceRef],

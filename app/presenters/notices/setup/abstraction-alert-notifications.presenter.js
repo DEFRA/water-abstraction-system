@@ -160,6 +160,7 @@ function _email(recipient, eventId, commonPersonalisation, alertType, restrictio
   const messageType = 'email'
 
   return {
+    contactType: recipient.contact_type,
     eventId,
     licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
     licences: [commonPersonalisation.licenceRef],
@@ -200,6 +201,7 @@ function _letter(recipient, eventId, commonPersonalisation, alertType, restricti
   const address = NotifyAddressPresenter.go(recipient.contact)
 
   return {
+    contactType: recipient.contact_type,
     eventId,
     licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
     licences: [commonPersonalisation.licenceRef],
