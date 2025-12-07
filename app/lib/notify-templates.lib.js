@@ -1,38 +1,68 @@
 'use strict'
 
-const notifyTemplates = {
-  standard: {
-    failedInvitations: {
-      licenceHolderLetter: '791ba6a9-e821-4df6-b49f-4ab3bb15248f'
+const NOTIFY_TEMPLATES = Object.freeze({
+  failedInvitations: {
+    adhoc: {
+      letter: {
+        'licence holder': '791ba6a9-e821-4df6-b49f-4ab3bb15248f'
+      }
     },
-    invitations: {
-      primaryUserEmail: '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f',
-      returnsAgentEmail: '41c45bd4-8225-4d7e-a175-b48b613b5510',
-      licenceHolderLetter: '4fe80aed-c5dd-44c3-9044-d0289d635019',
-      returnsToLetter: '0e535549-99a2-44a9-84a7-589b12d00879'
-    },
-    reminders: {
-      primaryUserEmail: 'f1144bc7-8bdc-4e82-87cb-1a6c69445836',
-      returnsAgentEmail: '038e1807-d1b5-4f09-a5a6-d7eee9030a7a',
-      licenceHolderLetter: 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba',
-      returnsToLetter: 'e9f132c7-a550-4e18-a5c1-78375f07aa2d'
+    standard: {
+      letter: {
+        'licence holder': '791ba6a9-e821-4df6-b49f-4ab3bb15248f'
+      }
     }
   },
-  adhoc: {
-    failedInvitations: {
-      licenceHolderLetter: '791ba6a9-e821-4df6-b49f-4ab3bb15248f'
+  invitations: {
+    adhoc: {
+      email: {
+        'primary user': '7bb89469-1dbc-458a-9526-fad8ab71285f',
+        'returns agent': 'cbc4efe2-f3b5-4642-8f6d-3532df73ee94',
+        'single use': '7bb89469-1dbc-458a-9526-fad8ab71285f'
+      },
+      letter: {
+        'licence holder': '4b47cf1c-043c-4a0c-8659-5be06cb2b860',
+        'returns to': '73b4c395-4423-4976-8ab4-c82e2cb6beee',
+        'single use': '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
+      }
     },
-    invitations: {
-      primaryUserEmail: '7bb89469-1dbc-458a-9526-fad8ab71285f',
-      returnsAgentEmail: 'cbc4efe2-f3b5-4642-8f6d-3532df73ee94',
-      licenceHolderLetter: '4b47cf1c-043c-4a0c-8659-5be06cb2b860',
-      returnsToLetter: '73b4c395-4423-4976-8ab4-c82e2cb6beee'
+    standard: {
+      email: {
+        'primary user': '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f',
+        'returns agent': '41c45bd4-8225-4d7e-a175-b48b613b5510',
+        'single use': '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
+      },
+      letter: {
+        'licence holder': '4fe80aed-c5dd-44c3-9044-d0289d635019',
+        'returns to': '0e535549-99a2-44a9-84a7-589b12d00879',
+        'single use': '4fe80aed-c5dd-44c3-9044-d0289d635019'
+      }
+    }
+  },
+  reminders: {
+    adhoc: {
+      email: {
+        'primary user': '87dceeb3-aa2b-4ff5-aff9-97755a71532b',
+        'returns agent': 'c8076bbd-7d93-4743-81b3-755a5c5f1d50',
+        'single use': '87dceeb3-aa2b-4ff5-aff9-97755a71532b'
+      },
+      letter: {
+        'licence holder': '62224316-35c4-4b02-98c2-81332817f3dc',
+        'returns to': 'eca3e1d0-a8a6-4eb1-b166-23891fe3a9e5',
+        'single use': '62224316-35c4-4b02-98c2-81332817f3dc'
+      }
     },
-    reminders: {
-      primaryUserEmail: '87dceeb3-aa2b-4ff5-aff9-97755a71532b',
-      returnsAgentEmail: 'c8076bbd-7d93-4743-81b3-755a5c5f1d50',
-      licenceHolderLetter: '62224316-35c4-4b02-98c2-81332817f3dc',
-      returnsToLetter: 'eca3e1d0-a8a6-4eb1-b166-23891fe3a9e5'
+    standard: {
+      email: {
+        'primary user': 'f1144bc7-8bdc-4e82-87cb-1a6c69445836',
+        'returns agent': '038e1807-d1b5-4f09-a5a6-d7eee9030a7a',
+        'single use': 'f1144bc7-8bdc-4e82-87cb-1a6c69445836'
+      },
+      letter: {
+        'licence holder': 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba',
+        'returns to': 'e9f132c7-a550-4e18-a5c1-78375f07aa2d',
+        'single use': 'c01c808b-094b-4a3a-ab9f-a6e86bad36ba'
+      }
     }
   },
   alerts: {
@@ -55,8 +85,8 @@ const notifyTemplates = {
       stopWarning: '7ab10c86-2c23-4376-8c72-9419e7f982bb'
     }
   }
-}
+})
 
 module.exports = {
-  notifyTemplates
+  NOTIFY_TEMPLATES
 }
