@@ -61,7 +61,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: _createMD5Hash(payload.contactEmail),
-            contact_type: 'Single use',
+            contact_type: 'single use',
             email: payload.contactEmail,
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],
@@ -114,7 +114,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: _createMD5Hash(payload.contactEmail),
-            contact_type: 'Single use',
+            contact_type: 'single use',
             email: payload.contactEmail,
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],
@@ -159,7 +159,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: testEmailHash,
-            contact_type: 'Single use',
+            contact_type: 'single use',
             email: 'test@test.gov.uk',
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],
@@ -192,7 +192,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         sessionData.additionalRecipients = [
           {
             contact_hash_id: testEmailHash,
-            contact_type: 'Single use',
+            contact_type: 'single use',
             email: 'test@test.gov.uk',
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],
@@ -215,7 +215,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         expect(refreshedSession.additionalRecipients).to.equal([
           {
             contact_hash_id: testEmailHash,
-            contact_type: 'Single use',
+            contact_type: 'single use',
             email: 'test@test.gov.uk',
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],
@@ -223,7 +223,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
           },
           {
             contact_hash_id: _createMD5Hash(payload.contactEmail),
-            contact_type: 'Single use',
+            contact_type: 'single use',
             email: payload.contactEmail,
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],

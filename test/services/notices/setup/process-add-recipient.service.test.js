@@ -86,7 +86,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
                 postcode: sessionData.addressJourney.address.postcode
               },
               contact_hash_id: contactHashId,
-              contact_type: 'Single use',
+              contact_type: 'single use',
               licence_ref: sessionData.licenceRef,
               licence_refs: [sessionData.licenceRef],
               message_type: 'Letter'
@@ -153,7 +153,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
                 postcode: session.addressJourney.address.postcode
               },
               contact_hash_id: contactHashId,
-              contact_type: 'Single use',
+              contact_type: 'single use',
               licence_ref: session.licenceRef,
               licence_refs: [session.licenceRef],
               message_type: 'Letter'
@@ -208,7 +208,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
                 country: sessionData.addressJourney.address.country
               },
               contact_hash_id: contactHashId,
-              contact_type: 'Single use',
+              contact_type: 'single use',
               licence_ref: sessionData.licenceRef,
               licence_refs: [sessionData.licenceRef],
               message_type: 'Letter'
