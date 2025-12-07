@@ -53,8 +53,7 @@ async function clean(recipient) {
  */
 async function licenceHolder(name, licenceRef = null) {
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
-  const contactType = 'Licence holder'
-  const contact = _licenceDocumentHeaderContact(name, contactType)
+  const contact = _licenceDocumentHeaderContact(name, 'Licence holder')
 
   if (!licenceRef) {
     licenceRef = generateLicenceRef()
@@ -71,7 +70,7 @@ async function licenceHolder(name, licenceRef = null) {
   return {
     contact,
     contactHashId: _contactHashId(contact),
-    contactType,
+    contactType: 'licence holder',
     email: null,
     licenceDocumentHeader,
     licenceEntityRole: null,
@@ -93,8 +92,6 @@ async function licenceHolder(name, licenceRef = null) {
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
 async function primaryUser(licenceDocumentHeader, email) {
-  const contactType = 'Primary user'
-
   const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
   const licenceEntityRole = await LicenceEntityRoleHelper.add({
     companyEntityId: licenceDocumentHeader.companyEntityId,
@@ -105,7 +102,7 @@ async function primaryUser(licenceDocumentHeader, email) {
   return {
     contact: null,
     contactHashId: _emailHashId(email),
-    contactType,
+    contactType: 'primary user',
     email,
     licenceDocumentHeader,
     licenceEntityRole,
@@ -133,8 +130,6 @@ async function primaryUser(licenceDocumentHeader, email) {
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
 async function returnsAgent(licenceDocumentHeader, email) {
-  const contactType = 'Returns agent'
-
   const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
   const licenceEntityRole = await LicenceEntityRoleHelper.add({
     companyEntityId: licenceDocumentHeader.companyEntityId,
@@ -145,7 +140,7 @@ async function returnsAgent(licenceDocumentHeader, email) {
   return {
     contact: null,
     contactHashId: _emailHashId(email),
-    contactType,
+    contactType: 'returns agent',
     email,
     licenceDocumentHeader,
     licenceEntityRole,
@@ -167,8 +162,7 @@ async function returnsAgent(licenceDocumentHeader, email) {
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
 async function returnsTo(licenceDocumentHeader, name) {
-  const contactType = 'Returns to'
-  const contact = _licenceDocumentHeaderContact(name, contactType)
+  const contact = _licenceDocumentHeaderContact(name, 'Returns to')
   const { metadata } = licenceDocumentHeader
 
   metadata.contacts.push(contact)
@@ -178,7 +172,7 @@ async function returnsTo(licenceDocumentHeader, name) {
   return {
     contact,
     contactHashId: _contactHashId(contact),
-    contactType,
+    contactType: 'returns to',
     email: null,
     licenceDocumentHeader,
     licenceEntityRole: null,

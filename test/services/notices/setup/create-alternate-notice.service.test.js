@@ -179,7 +179,7 @@ function _licenceHolderAddress(name, licenceRef, returnLogIds) {
       town: 'Little Whinging',
       type: 'Person'
     },
-    contact_type: 'Licence holder',
+    contact_type: 'licence holder',
     licence_refs: licenceRef,
     return_log_ids: returnLogIds
   }

@@ -175,7 +175,7 @@ function _licenceHolderQuery() {
           )
         )
       )) AS contact_hash_id,
-      ('Licence holder') AS contact_type,
+      ('licence holder') AS contact_type,
       drl.due_date AS due_date,
       drl.end_date AS end_date,
       (NULL) AS email,
@@ -204,7 +204,7 @@ function _primaryUserQuery(noticeType) {
     SELECT
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
-      ('Primary user') AS contact_type,
+      ('primary user') AS contact_type,
       drl.due_date AS due_date,
       drl.end_date AS end_date,
       le."name" AS email,
@@ -299,7 +299,7 @@ function _noRecipientsQuery() {
     SELECT
       NULL::jsonb AS contact,
       NULL AS contact_hash_id,
-      ('No recipient') AS contact_type,
+      ('no recipient') AS contact_type,
       NULL::date AS due_date,
       NULL::date AS end_date,
       NULL::text AS email,
@@ -318,7 +318,7 @@ function _returnsAgentQuery(noticeType) {
     SELECT
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
-      ('Returns agent') AS contact_type,
+      ('returns agent') AS contact_type,
       drl.due_date AS due_date,
       drl.end_date AS end_date,
       le."name" AS email,
@@ -364,7 +364,7 @@ function _returnsToQuery(noticeType) {
           )
         )
       )) AS contact_hash_id,
-      ('Returns to') AS contact_type,
+      ('returns to') AS contact_type,
       drl.due_date AS due_date,
       drl.end_date AS end_date,
       (NULL) AS email,

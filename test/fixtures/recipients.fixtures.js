@@ -41,7 +41,7 @@ function alertNoticeLicenceHolder() {
   return {
     contact,
     contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
-    contact_type: 'Licence holder',
+    contact_type: 'licence holder',
     email: null,
     licence_refs: [generateLicenceRef()],
     message_type: 'Letter'
@@ -62,7 +62,7 @@ function alertNoticePrimaryUser() {
   return {
     contact: null,
     contact_hash_id: _emailContactHashId(email),
-    contact_type: 'Primary user',
+    contact_type: 'primary user',
     email,
     licence_refs: [generateLicenceRef()],
     message_type: 'Email'
@@ -85,7 +85,7 @@ function returnsNoticeLicenceHolder(download = false) {
   const recipient = {
     contact,
     contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
-    contact_type: 'Licence holder',
+    contact_type: 'licence holder',
     due_date: new Date('2025-04-28'),
     end_date: new Date('2025-03-31'),
     email: null,
@@ -118,7 +118,7 @@ function returnsNoticePrimaryUser(download = false) {
   const recipient = {
     contact: null,
     contact_hash_id: _emailContactHashId(email),
-    contact_type: 'Primary user',
+    contact_type: 'primary user',
     due_date: new Date('2025-04-28'),
     end_date: new Date('2025-03-31'),
     email,
@@ -151,7 +151,7 @@ function returnsNoticeReturnsAgent(download = false) {
   const recipient = {
     contact: null,
     contact_hash_id: _emailContactHashId(email),
-    contact_type: 'Returns agent',
+    contact_type: 'returns agent',
     due_date: new Date('2025-04-28'),
     end_date: new Date('2025-03-31'),
     email,
@@ -184,7 +184,7 @@ function returnsNoticeReturnsTo(download = false) {
   const recipient = {
     contact,
     contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
-    contact_type: 'Returns to',
+    contact_type: 'returns to',
     due_date: new Date('2025-04-28'),
     end_date: new Date('2025-03-31'),
     email: null,
@@ -271,7 +271,7 @@ function _addReturnsAgent() {
     licence_refs: [generateLicenceRef()],
     contact: null,
     contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
-    contact_type: 'Returns agent',
+    contact_type: 'returns agent',
     email: 'returns.agent@important.com',
     return_log_ids: [generateUUID()],
     message_type: 'Email'
@@ -288,7 +288,7 @@ function _addReturnTo() {
   return {
     contact,
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed679893',
-    contact_type: 'Returns to',
+    contact_type: 'returns to',
     email: null,
     licence_refs: [generateLicenceRef()],
     message_type: 'Letter',
@@ -300,7 +300,7 @@ function _addLicenceHolderWithMultipleLicences() {
   return {
     contact: _contact('3', 'Potter', 'Licence holder'),
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed09878075',
-    contact_type: 'Licence holder',
+    contact_type: 'licence holder',
     email: null,
     licence_refs: [generateLicenceRef(), generateLicenceRef()],
     message_type: 'Letter',
