@@ -87,8 +87,6 @@ function _alertDetails(notification) {
 }
 
 function _backLink(notification, licence, returnId) {
-  console.log(licence)
-  console.log(returnId)
   if (licence) {
     return { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' }
   }
