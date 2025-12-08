@@ -4,6 +4,7 @@ const EventModel = require('../../app/models/event.model.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const NotificationModel = require('../../app/models/notification.model.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
+const { NOTIFY_TEMPLATES } = require('../../app/lib/notify-templates.lib.js')
 
 const ADDRESS = {
   address_line_1: 'ACME Services Ltd',
@@ -60,7 +61,8 @@ function abstractionAlertEmail(notice) {
     recipient: 'grace.hopper@acme.co.uk',
     returnedAt: null,
     returnLogIds: null,
-    status: 'sent'
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.alerts.email.stop
   }
 
   return notification
@@ -113,7 +115,8 @@ function abstractionAlertLetter(notice) {
     recipient: null,
     returnedAt: null,
     returnLogIds: null,
-    status: 'sent'
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.alerts.letter.stop
   }
 
   return notification
@@ -161,7 +164,8 @@ function legacyHandsOfFlow(notice) {
     recipient: 'n/a',
     returnedAt: null,
     returnLogIds: null,
-    status: 'sent'
+    status: 'sent',
+    templateId: null
   }
 
   return notification
@@ -209,7 +213,8 @@ function legacyRenewal(notice) {
     recipient: 'n/a',
     returnedAt: null,
     returnLogIds: null,
-    status: 'sent'
+    status: 'sent',
+    templateId: null
   }
 
   return notification
@@ -311,7 +316,8 @@ function paperReturn(notice) {
     plaintext: null,
     returnedAt: null,
     returnLogIds: [returnId],
-    status: 'sent'
+    status: 'sent',
+    templateId: null
   }
 
   return notification
@@ -350,7 +356,8 @@ function returnsInvitationEmail(notice) {
     recipient: 'grace.hopper@acme.co.uk',
     returnedAt: null,
     returnLogIds: [generateUUID(), generateUUID()],
-    status: 'sent'
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.invitations.standard.email['primary user']
   }
 
   return notification
@@ -391,7 +398,8 @@ function returnsInvitationLetter(notice) {
     recipient: null,
     returnedAt: null,
     returnLogIds: [generateUUID(), generateUUID()],
-    status: 'sent'
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
   }
 
   return notification
@@ -430,7 +438,8 @@ function returnsReminderEmail(notice) {
     recipient: 'grace.hopper@acme.co.uk',
     returnedAt: null,
     returnLogIds: [generateUUID(), generateUUID()],
-    status: 'sent'
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.reminders.standard.email['primary user']
   }
 
   return notification
@@ -473,7 +482,8 @@ function returnsReminderLetter(notice) {
     recipient: null,
     returnedAt: null,
     returnLogIds: [generateUUID(), generateUUID()],
-    status: 'sent'
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.reminders.standard.letter['licence holder']
   }
 
   return notification

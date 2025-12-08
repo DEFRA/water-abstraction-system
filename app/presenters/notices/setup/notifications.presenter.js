@@ -8,7 +8,7 @@
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { futureDueDate } = require('../base.presenter.js')
-const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
+const { NOTIFY_TEMPLATES } = require('../../../lib/notify-templates.lib.js')
 
 const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
@@ -62,7 +62,6 @@ function _email(recipient, noticeId, session) {
   const { determinedReturnsPeriod, journey, noticeType } = session
 
   const messageType = 'email'
-  const templateId = _emailTemplate(recipient.contact_type, journey, noticeType)
   const dueDate = _dueDate(session, messageType)
 
   return {
@@ -79,7 +78,7 @@ function _email(recipient, noticeId, session) {
     recipient: recipient.email,
     returnLogIds: recipient.return_log_ids,
     status: 'pending',
-    templateId
+    templateId: NOTIFY_TEMPLATES[noticeType][journey][messageType][recipient.contact_type]
   }
 }
 
@@ -91,19 +90,10 @@ function _dueDate(session, messageType) {
   return session?.determinedReturnsPeriod?.dueDate ?? futureDueDate(messageType)
 }
 
-function _emailTemplate(contactType, journey, noticeType) {
-  if (contactType === 'Returns agent') {
-    return notifyTemplates[journey][noticeType].returnsAgentEmail
-  }
-
-  return notifyTemplates[journey][noticeType].primaryUserEmail
-}
-
 function _letter(recipient, noticeId, session) {
   const { determinedReturnsPeriod, journey, noticeType } = session
 
   const messageType = 'letter'
-  const templateId = _letterTemplate(recipient.contact_type, journey, noticeType)
   const address = NotifyAddressPresenter.go(recipient.contact)
   const dueDate = _dueDate(session, messageType)
 
@@ -123,16 +113,8 @@ function _letter(recipient, noticeId, session) {
     },
     returnLogIds: recipient.return_log_ids,
     status: 'pending',
-    templateId
+    templateId: NOTIFY_TEMPLATES[noticeType][journey][messageType][recipient.contact_type]
   }
-}
-
-function _letterTemplate(contactType, journey, noticeType) {
-  if (contactType === 'Returns to') {
-    return notifyTemplates[journey][noticeType].returnsToLetter
-  }
-
-  return notifyTemplates[journey][noticeType].licenceHolderLetter
 }
 
 module.exports = {

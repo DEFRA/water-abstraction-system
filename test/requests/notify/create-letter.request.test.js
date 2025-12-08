@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
-const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
+const { NOTIFY_TEMPLATES } = require('../../../app/lib/notify-templates.lib.js')
 
 // Things we need to stub
 const NotifyRequest = require('../../../app/requests/notify.request.js')
@@ -39,7 +39,7 @@ describe('Notify - Create Letter request', () => {
       reference: 'RINV-G2UYT8'
     }
 
-    templateId = notifyTemplates.standard.invitations.licenceHolderLetter
+    templateId = NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
   })
 
   afterEach(() => {

@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_OK } = require('node:http2').constants
-const { notifyTemplates } = require('../../../app/lib/notify-templates.lib.js')
+const { NOTIFY_TEMPLATES } = require('../../../app/lib/notify-templates.lib.js')
 
 // Things we need to stub
 const NotifyRequest = require('../../../app/requests/notify.request.js')
@@ -36,7 +36,7 @@ describe('Notify - Create Email request', () => {
       reference: 'RINV-H1EZR5'
     }
 
-    templateId = notifyTemplates.standard.invitations.primaryUserEmail
+    templateId = NOTIFY_TEMPLATES.invitations.standard.email['primary user']
   })
 
   afterEach(() => {

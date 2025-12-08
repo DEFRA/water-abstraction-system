@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../../fixtures/notices.fixture.js')
-const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
+const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
 
 // Things to stub
 const FetchAlternateReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js')
@@ -107,7 +107,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
           },
           returnLogIds: ['18998ffd-feaf-4e24-b998-7e7af026ba14', 'c06708f5-195a-43b1-9f2e-d4f72ee7bd76'],
           status: 'pending',
-          templateId: notifyTemplates.standard.failedInvitations.licenceHolderLetter,
+          templateId: NOTIFY_TEMPLATES.failedInvitations.standard.letter['licence holder'],
           licenceMonitoringStationId: null,
           pdf: null,
           recipient: null
@@ -135,7 +135,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
           },
           returnLogIds: ['e6bc04bc-1899-4b3c-b733-6f4be6aa8e07'],
           status: 'pending',
-          templateId: notifyTemplates.standard.failedInvitations.licenceHolderLetter,
+          templateId: NOTIFY_TEMPLATES.failedInvitations.standard.letter['licence holder'],
           licenceMonitoringStationId: null,
           pdf: null,
           recipient: null

@@ -6,7 +6,7 @@
  */
 
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
-const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
+const { NOTIFY_TEMPLATES } = require('../../../lib/notify-templates.lib.js')
 
 /**
  * Formats recipients into notifications for an abstraction alert
@@ -268,30 +268,30 @@ function _messageRef(alertType, restrictionType) {
 
 function _templateId(alertType, restrictionType, type) {
   if (alertType === 'resume') {
-    return notifyTemplates.alerts[type].resume
+    return NOTIFY_TEMPLATES.alerts[type].resume
   }
 
   if (alertType === 'reduce') {
     return restrictionType === 'stop_or_reduce'
-      ? notifyTemplates.alerts[type].reduceOrStop
-      : notifyTemplates.alerts[type].reduce
+      ? NOTIFY_TEMPLATES.alerts[type].reduceOrStop
+      : NOTIFY_TEMPLATES.alerts[type].reduce
   }
 
   if (alertType === 'stop') {
-    return notifyTemplates.alerts[type].stop
+    return NOTIFY_TEMPLATES.alerts[type].stop
   }
 
   if (alertType === 'warning') {
     if (restrictionType === 'reduce') {
-      return notifyTemplates.alerts[type].reduceWarning
+      return NOTIFY_TEMPLATES.alerts[type].reduceWarning
     }
 
     if (restrictionType === 'stop_or_reduce') {
-      return notifyTemplates.alerts[type].reduceOrStopWarning
+      return NOTIFY_TEMPLATES.alerts[type].reduceOrStopWarning
     }
 
     if (restrictionType === 'stop') {
-      return notifyTemplates.alerts[type].stopWarning
+      return NOTIFY_TEMPLATES.alerts[type].stopWarning
     }
   }
 

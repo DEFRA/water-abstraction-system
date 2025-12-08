@@ -11,7 +11,7 @@ const { expect } = Code
 // Test helpers
 const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
-const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
+const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 
 // Things we need to stub
@@ -96,7 +96,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         recipient: 'primary.user@important.com',
         returnLogIds: recipients[0].return_log_ids,
         status: 'pending',
-        templateId: notifyTemplates.standard.invitations.primaryUserEmail
+        templateId: NOTIFY_TEMPLATES.invitations.standard.email['primary user']
       },
       {
         dueDate: dynamicEmailDueDate,
@@ -112,7 +112,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         recipient: 'returns.agent@important.com',
         returnLogIds: recipients[1].return_log_ids,
         status: 'pending',
-        templateId: notifyTemplates.standard.invitations.returnsAgentEmail
+        templateId: NOTIFY_TEMPLATES.invitations.standard.email['returns agent']
       },
       {
         dueDate: dynamicLetterDueDate,
@@ -134,7 +134,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         },
         returnLogIds: recipients[2].return_log_ids,
         status: 'pending',
-        templateId: notifyTemplates.standard.invitations.licenceHolderLetter
+        templateId: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
       },
       {
         dueDate: dynamicLetterDueDate,
@@ -156,7 +156,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         },
         returnLogIds: recipients[3].return_log_ids,
         status: 'pending',
-        templateId: notifyTemplates.standard.invitations.returnsToLetter
+        templateId: NOTIFY_TEMPLATES.invitations.standard.letter['returns to']
       },
       {
         dueDate: dynamicLetterDueDate,
@@ -178,7 +178,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         },
         returnLogIds: recipients[4].return_log_ids,
         status: 'pending',
-        templateId: notifyTemplates.standard.invitations.licenceHolderLetter
+        templateId: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
       },
       {
         dueDate: dynamicEmailDueDate,
@@ -194,7 +194,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         recipient: 'single.use@important.com',
         returnLogIds: recipients[5].return_log_ids,
         status: 'pending',
-        templateId: notifyTemplates.standard.invitations.primaryUserEmail
+        templateId: NOTIFY_TEMPLATES.invitations.standard.email['single use']
       },
       {
         dueDate: dynamicLetterDueDate,
@@ -216,7 +216,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         },
         returnLogIds: recipients[6].return_log_ids,
         status: 'pending',
-        templateId: notifyTemplates.standard.invitations.licenceHolderLetter
+        templateId: NOTIFY_TEMPLATES.invitations.standard.letter['single use']
       }
     ])
   })
@@ -405,240 +405,6 @@ describe('Notices - Setup - Notifications presenter', () => {
             periodStartDate: '1 January 2025',
             returnDueDate: '28 April 2025',
             name: 'Mr H J Potter'
-          })
-        })
-      })
-    })
-  })
-
-  describe('the "templateId" property', () => {
-    describe('when the setup journey is "standard"', () => {
-      describe('and the notice is a "returns invitation"', () => {
-        describe('and the notification is an email', () => {
-          describe('and the recipient is the "Primary user"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[0].templateId).to.equal(notifyTemplates.standard.invitations.primaryUserEmail)
-            })
-          })
-
-          describe('and the recipient is a "Returns agent"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[1].templateId).to.equal(notifyTemplates.standard.invitations.returnsAgentEmail)
-            })
-          })
-
-          describe('and the recipient is a "Single use"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[5].templateId).to.equal(notifyTemplates.standard.invitations.primaryUserEmail)
-            })
-          })
-        })
-
-        describe('when the notifications is a letter', () => {
-          describe('and the recipient is the "Licence holder"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[2].templateId).to.equal(notifyTemplates.standard.invitations.licenceHolderLetter)
-            })
-          })
-
-          describe('and the recipient is a "Returns to"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[3].templateId).to.equal(notifyTemplates.standard.invitations.returnsToLetter)
-            })
-          })
-
-          describe('and the recipient is a "Single use"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[6].templateId).to.equal(notifyTemplates.standard.invitations.licenceHolderLetter)
-            })
-          })
-        })
-      })
-
-      describe('and the notice is a "returns reminder"', () => {
-        beforeEach(() => {
-          session.noticeType = 'reminders'
-        })
-
-        describe('and the notification is an email', () => {
-          describe('and the recipient is the "Primary user"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[0].templateId).to.equal(notifyTemplates.standard.reminders.primaryUserEmail)
-            })
-          })
-
-          describe('and the recipient is a "Returns agent"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[1].templateId).to.equal(notifyTemplates.standard.reminders.returnsAgentEmail)
-            })
-          })
-
-          describe('and the recipient is a "Single use"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[5].templateId).to.equal(notifyTemplates.standard.reminders.primaryUserEmail)
-            })
-          })
-        })
-
-        describe('when the notifications is a letter', () => {
-          describe('and the recipient is the "Licence holder"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[2].templateId).to.equal(notifyTemplates.standard.reminders.licenceHolderLetter)
-            })
-          })
-
-          describe('and the recipient is a "Returns to"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[3].templateId).to.equal(notifyTemplates.standard.reminders.returnsToLetter)
-            })
-          })
-
-          describe('and the recipient is a "Single use"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[6].templateId).to.equal(notifyTemplates.standard.reminders.licenceHolderLetter)
-            })
-          })
-        })
-      })
-    })
-
-    describe('when the setup journey is "ad-hoc"', () => {
-      beforeEach(() => {
-        session.journey = 'adhoc'
-      })
-
-      describe('and the notice is a "returns invitation"', () => {
-        describe('and the notification is an email', () => {
-          describe('and the recipient is the "Primary user"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[0].templateId).to.equal(notifyTemplates.adhoc.invitations.primaryUserEmail)
-            })
-          })
-
-          describe('and the recipient is a "Returns agent"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[1].templateId).to.equal(notifyTemplates.adhoc.invitations.returnsAgentEmail)
-            })
-          })
-
-          describe('and the recipient is a "Single use"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[5].templateId).to.equal(notifyTemplates.adhoc.invitations.primaryUserEmail)
-            })
-          })
-        })
-
-        describe('when the notifications is a letter', () => {
-          describe('and the recipient is the "Licence holder"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[2].templateId).to.equal(notifyTemplates.adhoc.invitations.licenceHolderLetter)
-            })
-          })
-
-          describe('and the recipient is a "Returns to"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[3].templateId).to.equal(notifyTemplates.adhoc.invitations.returnsToLetter)
-            })
-          })
-
-          describe('and the recipient is a "Single use"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[6].templateId).to.equal(notifyTemplates.adhoc.invitations.licenceHolderLetter)
-            })
-          })
-        })
-      })
-
-      describe('and the notice is a "returns reminder"', () => {
-        beforeEach(() => {
-          session.noticeType = 'reminders'
-        })
-
-        describe('and the notification is an email', () => {
-          describe('and the recipient is the "Primary user"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[0].templateId).to.equal(notifyTemplates.adhoc.reminders.primaryUserEmail)
-            })
-          })
-
-          describe('and the recipient is a "Returns agent"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[1].templateId).to.equal(notifyTemplates.adhoc.reminders.returnsAgentEmail)
-            })
-          })
-
-          describe('and the recipient is a "Single use"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[5].templateId).to.equal(notifyTemplates.adhoc.reminders.primaryUserEmail)
-            })
-          })
-        })
-
-        describe('when the notifications is a letter', () => {
-          describe('and the recipient is the "Licence holder"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[2].templateId).to.equal(notifyTemplates.adhoc.reminders.licenceHolderLetter)
-            })
-          })
-
-          describe('and the recipient is a "Returns to"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[3].templateId).to.equal(notifyTemplates.adhoc.reminders.returnsToLetter)
-            })
-          })
-
-          describe('and the recipient is a "Single use"', () => {
-            it('returns the correct "templateId"', () => {
-              const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-              expect(result[6].templateId).to.equal(notifyTemplates.adhoc.reminders.licenceHolderLetter)
-            })
           })
         })
       })
