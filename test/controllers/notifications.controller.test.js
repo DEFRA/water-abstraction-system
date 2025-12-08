@@ -48,6 +48,61 @@ describe('Notifications controller', () => {
   })
 
   describe('Notifications controller', () => {
+    describe('/notifications/{notificationId}', () => {
+      describe('GET', () => {
+        beforeEach(async () => {
+          options = {
+            method: 'GET',
+            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3',
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['returns'] }
+            }
+          }
+        })
+
+        describe('when a request is valid', () => {
+          beforeEach(async () => {
+            licence = {
+              id: generateUUID(),
+              licenceRef: generateLicenceRef()
+            }
+
+            const notice = NoticesFixture.returnsInvitation()
+            const notification = NotificationsFixture.returnsInvitationEmail(notice)
+            notification.event = notice
+
+            Sinon.stub(ViewNotificationService, 'go').resolves({
+              activeNavBar: 'search',
+              address: [],
+              alertDetails: null,
+              backLink: { href: `/system/notices/${notice.id}`, text: `Go back to notice ${notice.referenceCode}` },
+              contents: notification.plaintext,
+              licenceRef: licence.licenceRef,
+              messageType: 'email',
+              pageTitle: 'Returns invitation',
+              pageTitleCaption: `Licence ${licence.licenceRef}`,
+              paperForm: null,
+              reference: notice.referenceCode,
+              sentDate: '2 April 2025',
+              sentBy: notice.issuer,
+              sentTo: notification.recipient,
+              status: notification.status
+            })
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain(`Licence ${licence.licenceRef}`)
+            expect(response.payload).to.contain('Returns invitation')
+            expect(response.payload).to.contain('Go back to notice')
+          })
+        })
+      })
+    })
+
     describe('/notifications/{notificationId}?id={LICENCE_ID}', () => {
       describe('GET', () => {
         beforeEach(async () => {
@@ -97,6 +152,7 @@ describe('Notifications controller', () => {
             expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain(`Licence ${licence.licenceRef}`)
             expect(response.payload).to.contain('Returns invitation')
+            expect(response.payload).to.contain('Go back to communications')
           })
         })
       })
@@ -152,6 +208,7 @@ describe('Notifications controller', () => {
             expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain(`Licence ${licence.licenceRef}`)
             expect(response.payload).to.contain('Returns invitation')
+            expect(response.payload).to.contain('Go back to return log')
           })
         })
       })
