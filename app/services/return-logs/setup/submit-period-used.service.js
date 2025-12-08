@@ -96,12 +96,7 @@ async function _save(session, payload) {
 
   _determineAbstractionPeriodDates(session, payload)
 
-  AllocateSingleVolumeToLinesService.go(
-    session.lines,
-    session.fromFullDate,
-    session.toFullDate,
-    session.singleVolumeQuantity
-  )
+  AllocateSingleVolumeToLinesService.go(session)
 
   return session.$update()
 }

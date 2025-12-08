@@ -348,29 +348,32 @@ describe('Return Logs Setup - Check presenter', () => {
 
       describe('and the frequency is monthly', () => {
         beforeEach(() => {
-          session.lines = [
-            {
-              endDate: '2023-04-30T00:00:00.000Z',
-              startDate: '2023-04-01T00:00:00.000Z',
-              quantity: 10.123567
-            },
-            {
-              endDate: '2023-05-31T00:00:00.000Z',
-              startDate: '2023-05-01T00:00:00.000Z',
-              quantity: null
-            },
-            {
-              endDate: '2023-06-30T00:00:00.000Z',
-              startDate: '2023-06-01T00:00:00.000Z',
-              quantity: 1000
-            }
-          ]
           session.returnsFrequency = 'month'
         })
 
         describe('and the unit of measurement is cubic metres', () => {
           beforeEach(() => {
-            session.units = 'cubicMetres'
+            session.lines = [
+              {
+                endDate: '2023-04-30T00:00:00.000Z',
+                quantity: 10.123456,
+                quantityCubicMetres: 10.123456,
+                startDate: '2023-04-01T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-05-31T00:00:00.000Z',
+                quantity: null,
+                quantityCubicMetres: null,
+                startDate: '2023-05-01T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-06-30T00:00:00.000Z',
+                quantity: 1000,
+                quantityCubicMetres: 1000,
+                startDate: '2023-06-01T00:00:00.000Z'
+              }
+            ]
+            session.unitSymbol = 'm³'
           })
 
           it('returns the "summaryTableData" headers', () => {
@@ -393,8 +396,8 @@ describe('Return Logs Setup - Check presenter', () => {
                   text: 'Enter monthly volumes'
                 },
                 month: 'April 2023',
-                monthlyTotal: '10.124',
-                unitTotal: '10.124'
+                monthlyTotal: '10.123456',
+                unitTotal: '10.123456'
               },
               {
                 link: {
@@ -420,7 +423,27 @@ describe('Return Logs Setup - Check presenter', () => {
 
         describe('and the unit of measurement is not cubic metres', () => {
           beforeEach(() => {
-            session.units = 'megalitres'
+            session.lines = [
+              {
+                endDate: '2023-04-30T00:00:00.000Z',
+                quantity: 10.123456,
+                quantityCubicMetres: 10123.456,
+                startDate: '2023-04-01T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-05-31T00:00:00.000Z',
+                quantity: null,
+                quantityCubicMetres: null,
+                startDate: '2023-05-01T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-06-30T00:00:00.000Z',
+                quantity: 1000,
+                quantityCubicMetres: 1000000,
+                startDate: '2023-06-01T00:00:00.000Z'
+              }
+            ]
+            session.unitSymbol = 'Ml'
           })
 
           it('returns the "summaryTableData" headers with an additional column for the UOM used', () => {
@@ -444,8 +467,8 @@ describe('Return Logs Setup - Check presenter', () => {
                   text: 'Enter monthly volumes'
                 },
                 month: 'April 2023',
-                monthlyTotal: '10,123.567',
-                unitTotal: '10.124'
+                monthlyTotal: '10,123.456',
+                unitTotal: '10.123456'
               },
               {
                 link: {
@@ -472,29 +495,32 @@ describe('Return Logs Setup - Check presenter', () => {
 
       describe('and the frequency is daily', () => {
         beforeEach(() => {
-          session.lines = [
-            {
-              endDate: '2023-04-01T00:00:00.000Z',
-              startDate: '2023-04-01T00:00:00.000Z',
-              quantity: 10.123567
-            },
-            {
-              endDate: '2023-04-02T00:00:00.000Z',
-              startDate: '2023-04-02T00:00:00.000Z',
-              quantity: null
-            },
-            {
-              endDate: '2023-04-03T00:00:00.000Z',
-              startDate: '2023-04-03T00:00:00.000Z',
-              quantity: 1000
-            }
-          ]
           session.returnsFrequency = 'day'
         })
 
         describe('and the unit of measurement is cubic metres', () => {
           beforeEach(() => {
-            session.units = 'cubicMetres'
+            session.lines = [
+              {
+                endDate: '2023-04-01T00:00:00.000Z',
+                quantity: 10.123456,
+                quantityCubicMetres: 10.123456,
+                startDate: '2023-04-01T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-04-02T00:00:00.000Z',
+                quantity: null,
+                quantityCubicMetres: null,
+                startDate: '2023-04-02T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-04-03T00:00:00.000Z',
+                quantity: 1000,
+                quantityCubicMetres: 1000,
+                startDate: '2023-04-03T00:00:00.000Z'
+              }
+            ]
+            session.unitSymbol = 'm³'
           })
 
           it('returns the "summaryTableData" headers', () => {
@@ -517,8 +543,8 @@ describe('Return Logs Setup - Check presenter', () => {
                   text: 'Enter daily volumes'
                 },
                 month: 'April 2023',
-                monthlyTotal: '1,010.124',
-                unitTotal: '1,010.124'
+                monthlyTotal: '1,010.123456',
+                unitTotal: '1,010.123456'
               }
             ])
           })
@@ -526,7 +552,27 @@ describe('Return Logs Setup - Check presenter', () => {
 
         describe('and the unit of measurement is not cubic metres', () => {
           beforeEach(() => {
-            session.units = 'gallons'
+            session.lines = [
+              {
+                endDate: '2023-04-01T00:00:00.000Z',
+                quantity: 10.123456,
+                quantityCubicMetres: 0.046022,
+                startDate: '2023-04-01T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-04-02T00:00:00.000Z',
+                quantity: null,
+                quantityCubicMetres: null,
+                startDate: '2023-04-02T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-04-03T00:00:00.000Z',
+                quantity: 1000,
+                quantityCubicMetres: 4.54609,
+                startDate: '2023-04-03T00:00:00.000Z'
+              }
+            ]
+            session.unitSymbol = 'gal'
           })
 
           it('returns the "summaryTableData" headers with an additional column for the UOM used', () => {
@@ -550,8 +596,8 @@ describe('Return Logs Setup - Check presenter', () => {
                   text: 'Enter daily volumes'
                 },
                 month: 'April 2023',
-                monthlyTotal: '4.592',
-                unitTotal: '1,010.124'
+                monthlyTotal: '4.592112',
+                unitTotal: '1,010.123456'
               }
             ])
           })
@@ -568,28 +614,32 @@ describe('Return Logs Setup - Check presenter', () => {
 
       describe('and the frequency is monthly', () => {
         beforeEach(() => {
-          session.lines = [
-            {
-              endDate: '2023-04-30T00:00:00.000Z',
-              startDate: '2023-04-01T00:00:00.000Z'
-            },
-            {
-              endDate: '2023-05-31T00:00:00.000Z',
-              startDate: '2023-05-01T00:00:00.000Z',
-              reading: 102
-            },
-            {
-              endDate: '2023-06-30T00:00:00.000Z',
-              startDate: '2023-06-01T00:00:00.000Z',
-              reading: 200
-            }
-          ]
           session.returnsFrequency = 'month'
         })
 
         describe('and the unit of measurement is cubic metres', () => {
           beforeEach(() => {
-            session.units = 'cubicMetres'
+            session.lines = [
+              {
+                endDate: '2023-04-30T00:00:00.000Z',
+                startDate: '2023-04-01T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-05-31T00:00:00.000Z',
+                quantity: 2,
+                quantityCubicMetres: 2,
+                reading: 102,
+                startDate: '2023-05-01T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-06-30T00:00:00.000Z',
+                quantity: 98,
+                quantityCubicMetres: 98,
+                reading: 200,
+                startDate: '2023-06-01T00:00:00.000Z'
+              }
+            ]
+            session.unitSymbol = 'm³'
           })
 
           it('returns the "summaryTableData" headers', () => {
@@ -615,7 +665,7 @@ describe('Return Logs Setup - Check presenter', () => {
                 month: 'April 2023',
                 monthlyTotal: null,
                 unitTotal: null,
-                reading: null
+                reading: undefined
               },
               {
                 link: {
@@ -639,54 +689,31 @@ describe('Return Logs Setup - Check presenter', () => {
               }
             ])
           })
-
-          describe('and the meter has a x10 display', () => {
-            beforeEach(() => {
-              session.meter10TimesDisplay = 'yes'
-            })
-
-            it('returns the "summaryTableData" rows with the volumes x10', () => {
-              const result = CheckPresenter.go(session)
-
-              expect(result.summaryTableData.rows).to.equal([
-                {
-                  link: {
-                    href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
-                    text: 'Enter monthly readings'
-                  },
-                  month: 'April 2023',
-                  monthlyTotal: null,
-                  unitTotal: null,
-                  reading: null
-                },
-                {
-                  link: {
-                    href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-4',
-                    text: 'Enter monthly readings'
-                  },
-                  month: 'May 2023',
-                  monthlyTotal: '20',
-                  unitTotal: '20',
-                  reading: 102
-                },
-                {
-                  link: {
-                    href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-5',
-                    text: 'Enter monthly readings'
-                  },
-                  month: 'June 2023',
-                  monthlyTotal: '980',
-                  unitTotal: '980',
-                  reading: 200
-                }
-              ])
-            })
-          })
         })
 
         describe('and the unit of measurement is not cubic metres', () => {
           beforeEach(() => {
-            session.units = 'megalitres'
+            session.lines = [
+              {
+                endDate: '2023-04-30T00:00:00.000Z',
+                startDate: '2023-04-01T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-05-31T00:00:00.000Z',
+                quantity: 2,
+                quantityCubicMetres: 2000,
+                reading: 102,
+                startDate: '2023-05-01T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-06-30T00:00:00.000Z',
+                quantity: 98,
+                quantityCubicMetres: 98000,
+                reading: 200,
+                startDate: '2023-06-01T00:00:00.000Z'
+              }
+            ]
+            session.unitSymbol = 'Ml'
           })
 
           it('returns the "summaryTableData" headers with an additional column for the UOM used', () => {
@@ -713,7 +740,7 @@ describe('Return Logs Setup - Check presenter', () => {
                 month: 'April 2023',
                 monthlyTotal: null,
                 unitTotal: null,
-                reading: null
+                reading: undefined
               },
               {
                 link: {
@@ -744,8 +771,10 @@ describe('Return Logs Setup - Check presenter', () => {
             session.lines = [
               {
                 endDate: '2023-04-30T00:00:00.000Z',
-                startDate: '2023-04-01T00:00:00.000Z',
-                reading: 0
+                quantity: 0,
+                quantityCubicMetres: 0,
+                reading: 0,
+                startDate: '2023-04-01T00:00:00.000Z'
               }
             ]
             session.startReading = 0
@@ -772,28 +801,32 @@ describe('Return Logs Setup - Check presenter', () => {
 
       describe('and the frequency is daily', () => {
         beforeEach(() => {
-          session.lines = [
-            {
-              endDate: '2023-04-01T00:00:00.000Z',
-              startDate: '2023-04-01T00:00:00.000Z',
-              reading: 102
-            },
-            {
-              endDate: '2023-04-02T00:00:00.000Z',
-              startDate: '2023-04-02T00:00:00.000Z'
-            },
-            {
-              endDate: '2023-04-03T00:00:00.000Z',
-              startDate: '2023-04-03T00:00:00.000Z',
-              reading: 200
-            }
-          ]
           session.returnsFrequency = 'day'
         })
 
         describe('and the unit of measurement is cubic metres', () => {
           beforeEach(() => {
-            session.units = 'cubicMetres'
+            session.lines = [
+              {
+                endDate: '2023-04-01T00:00:00.000Z',
+                quantity: 2,
+                quantityCubicMetres: 2,
+                reading: 102,
+                startDate: '2023-04-01T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-04-02T00:00:00.000Z',
+                startDate: '2023-04-02T00:00:00.000Z'
+              },
+              {
+                endDate: '2023-04-03T00:00:00.000Z',
+                quantity: 98,
+                quantityCubicMetres: 98,
+                reading: 200,
+                startDate: '2023-04-03T00:00:00.000Z'
+              }
+            ]
+            session.unitSymbol = 'm³'
           })
 
           it('returns the "summaryTableData" headers', () => {
@@ -818,41 +851,6 @@ describe('Return Logs Setup - Check presenter', () => {
                 },
                 month: 'April 2023',
                 monthlyTotal: '100',
-                unitTotal: '100',
-                reading: 200
-              }
-            ])
-          })
-        })
-
-        describe('and the unit of measurement is not cubic metres', () => {
-          beforeEach(() => {
-            session.units = 'gallons'
-          })
-
-          it('returns the "summaryTableData" headers with an additional column for the UOM used', () => {
-            const result = CheckPresenter.go(session)
-
-            expect(result.summaryTableData.headers).to.equal([
-              { text: 'Month' },
-              { text: 'End reading', format: 'numeric' },
-              { text: 'Total gallons', format: 'numeric' },
-              { text: 'Total cubic metres', format: 'numeric' },
-              { text: 'Details', format: 'numeric' }
-            ])
-          })
-
-          it('returns the "summaryTableData" rows with the monthlyTotal converted to cubic metres', () => {
-            const result = CheckPresenter.go(session)
-
-            expect(result.summaryTableData.rows).to.equal([
-              {
-                link: {
-                  href: '/system/return-logs/setup/e840675e-9fb9-4ce1-bf0a-d140f5c57f47/readings/2023-3',
-                  text: 'Enter daily readings'
-                },
-                month: 'April 2023',
-                monthlyTotal: '0.455',
                 unitTotal: '100',
                 reading: 200
               }
@@ -930,34 +928,29 @@ describe('Return Logs Setup - Check presenter', () => {
       session.lines = [
         {
           endDate: '2023-04-30T00:00:00.000Z',
-          startDate: '2023-04-01T00:00:00.000Z',
-          quantity: 1000.123456
+          quantity: 10.123567,
+          quantityCubicMetres: 10.123567,
+          startDate: '2023-04-01T00:00:00.000Z'
+        },
+        {
+          endDate: '2023-05-31T00:00:00.000Z',
+          quantity: null,
+          quantityCubicMetres: null,
+          startDate: '2023-05-01T00:00:00.000Z'
+        },
+        {
+          endDate: '2023-06-30T00:00:00.000Z',
+          quantity: 1000,
+          quantityCubicMetres: 1000,
+          startDate: '2023-06-01T00:00:00.000Z'
         }
       ]
     })
 
-    describe('when the unit of measurement is cubic metres', () => {
-      beforeEach(() => {
-        session.units = 'cubicMetres'
-      })
+    it('returns the "totalQuantity" to 6 decimal places formatted as a string', () => {
+      const result = CheckPresenter.go(session)
 
-      it('returns the "totalQuantity" to 3 decimal places formatted as a string', () => {
-        const result = CheckPresenter.go(session)
-
-        expect(result.totalCubicMetres).to.equal('1,000.123')
-      })
-    })
-
-    describe('when the unit of measurement is not cubic metres', () => {
-      beforeEach(() => {
-        session.units = 'megalitres'
-      })
-
-      it('returns the "totalQuantity" converted to cubic metres to 3 decimal places formatted as a string', () => {
-        const result = CheckPresenter.go(session)
-
-        expect(result.totalCubicMetres).to.equal('1,000,123.456')
-      })
+      expect(result.totalCubicMetres).to.equal('1,010.123567')
     })
   })
 
@@ -967,26 +960,29 @@ describe('Return Logs Setup - Check presenter', () => {
         session.lines = [
           {
             endDate: '2023-04-30T00:00:00.000Z',
-            startDate: '2023-04-01T00:00:00.000Z',
-            quantity: 10.123567
+            quantity: 10.123567,
+            quantityCubicMetres: 10.123567,
+            startDate: '2023-04-01T00:00:00.000Z'
           },
           {
             endDate: '2023-05-31T00:00:00.000Z',
-            startDate: '2023-05-01T00:00:00.000Z',
-            quantity: null
+            quantity: null,
+            quantityCubicMetres: null,
+            startDate: '2023-05-01T00:00:00.000Z'
           },
           {
             endDate: '2023-06-30T00:00:00.000Z',
-            startDate: '2023-06-01T00:00:00.000Z',
-            quantity: 1000
+            quantity: 1000,
+            quantityCubicMetres: 1000,
+            startDate: '2023-06-01T00:00:00.000Z'
           }
         ]
       })
 
-      it('returns the "totalQuantity" to 3 decimal places formatted as a string', () => {
+      it('returns the "totalQuantity" to 6 decimal places formatted as a string', () => {
         const result = CheckPresenter.go(session)
 
-        expect(result.totalQuantity).to.equal('1,010.124')
+        expect(result.totalQuantity).to.equal('1,010.123567')
       })
     })
 
@@ -995,18 +991,21 @@ describe('Return Logs Setup - Check presenter', () => {
         session.lines = [
           {
             endDate: '2023-04-30T00:00:00.000Z',
-            startDate: '2023-04-01T00:00:00.000Z',
-            quantity: null
+            quantity: null,
+            quantityCubicMetres: null,
+            startDate: '2023-04-01T00:00:00.000Z'
           },
           {
             endDate: '2023-05-31T00:00:00.000Z',
-            startDate: '2023-05-01T00:00:00.000Z',
-            quantity: null
+            quantity: null,
+            quantityCubicMetres: null,
+            startDate: '2023-05-01T00:00:00.000Z'
           },
           {
             endDate: '2023-06-30T00:00:00.000Z',
-            startDate: '2023-06-01T00:00:00.000Z',
-            quantity: null
+            quantity: null,
+            quantityCubicMetres: null,
+            startDate: '2023-06-01T00:00:00.000Z'
           }
         ]
       })
@@ -1105,6 +1104,7 @@ function _sessionData() {
     siteDescription: 'POINT A, TEST SITE DESCRIPTION',
     startDate: '2023-04-01T00:00:00.000Z',
     twoPartTariff: false,
-    units: 'megalitres'
+    units: 'megalitres',
+    unitSymbol: 'Ml'
   }
 }

@@ -7,6 +7,7 @@
 
 const CheckPresenter = require('../../../presenters/return-logs/setup/check.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
+const ApplyQuantitiesService = require('../../../services/return-logs/setup/apply-quantities.service.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/check` page
@@ -19,7 +20,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  await _markCheckPageVisited(session)
+  await _updateSession(session)
 
   const formattedData = CheckPresenter.go(session)
 
@@ -32,7 +33,9 @@ async function go(sessionId, yar) {
   }
 }
 
-async function _markCheckPageVisited(session) {
+async function _updateSession(session) {
+  ApplyQuantitiesService.go(session)
+
   session.checkPageVisited = true
 
   return session.$update()

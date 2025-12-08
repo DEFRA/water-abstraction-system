@@ -84,6 +84,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
             startDate: '2021-12-26T00:00:00.000Z',
             endDate: '2022-01-01T00:00:00.000Z',
             quantity: 4380,
+            quantityCubicMetres: 4380,
             reading: null
           }
         ],
@@ -113,7 +114,8 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         submissionType: 'edit',
         twoPartTariff: returnLog.metadata.isTwoPartTariff,
         underQuery: returnLog.underQuery,
-        units: 'cubicMetres'
+        units: 'cubicMetres',
+        unitSymbol: 'm³'
       })
     })
 
