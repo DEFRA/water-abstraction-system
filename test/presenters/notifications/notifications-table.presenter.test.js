@@ -130,6 +130,28 @@ describe('Notifications - Notification Table presenter', () => {
     })
   })
 
+  describe('when someone has removed the query params from the url', () => {
+    describe('and neither licenceId nor returnId are present', () => {
+      it('correctly presents the data', () => {
+        const result = NotificationsTablePresenter.go([notification], null, null)
+
+        expect(result).to.equal([
+          {
+            link: {
+              hiddenText: 'sent 9 October 2025 via email',
+              href: `/system/notifications/${notification.id}`
+            },
+            method: 'Email',
+            sentBy: notification.event.issuer,
+            sentDate: '9 October 2025',
+            status: notification.status,
+            type: 'alert'
+          }
+        ])
+      })
+    })
+  })
+
   describe('when there are no notifications', () => {
     beforeEach(() => {
       licenceId = generateUUID()

@@ -952,14 +952,6 @@ describe('Return Logs - View Return Log presenter', () => {
   })
 
   describe('the "notifications" property', () => {
-    describe('when no notifications are passed in', () => {
-      it('returns an empty array', () => {
-        const result = ViewReturnLogPresenter.go(auth, returnLog)
-
-        expect(result.notifications).to.equal([])
-      })
-    })
-
     describe('when the notifications are an empty array', () => {
       it('returns an empty array', () => {
         const result = ViewReturnLogPresenter.go(auth, returnLog, [])
