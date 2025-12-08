@@ -87,6 +87,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
               },
               contact_hash_id: contactHashId,
               contact_type: 'single use',
+              email: null,
               licence_ref: sessionData.licenceRef,
               licence_refs: [sessionData.licenceRef],
               message_type: 'Letter'
@@ -110,6 +111,8 @@ describe('Notices - Setup - Process Add Recipient service', () => {
                 postcode: 'SW2A 2AA'
               },
               contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
+              contact_type: 'single use',
+              email: null,
               licence_refs: [licenceRef],
               message_type: 'Letter'
             }
@@ -140,6 +143,8 @@ describe('Notices - Setup - Process Add Recipient service', () => {
                 postcode: 'SW2A 2AA'
               },
               contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
+              contact_type: 'single use',
+              email: null,
               licence_refs: [licenceRef],
               message_type: 'Letter'
             },
@@ -154,6 +159,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
               },
               contact_hash_id: contactHashId,
               contact_type: 'single use',
+              email: null,
               licence_ref: session.licenceRef,
               licence_refs: [session.licenceRef],
               message_type: 'Letter'
@@ -209,6 +215,7 @@ describe('Notices - Setup - Process Add Recipient service', () => {
               },
               contact_hash_id: contactHashId,
               contact_type: 'single use',
+              email: null,
               licence_ref: sessionData.licenceRef,
               licence_refs: [sessionData.licenceRef],
               message_type: 'Letter'

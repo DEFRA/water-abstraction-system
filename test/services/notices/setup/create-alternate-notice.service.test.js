@@ -10,6 +10,8 @@ const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../../fixtures/notices.fixture.js')
+const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
+const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
 const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
 
 // Things to stub
@@ -88,15 +90,16 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
 
       expect(result.notifications[0]).to.equal(
         {
-          dueDate: new Date('2025-04-28'),
+          contactType: 'licence holder',
+          dueDate: futureDueDate('letter'),
           eventId: result.notice.id,
           licences: '01/111',
           messageType: 'letter',
-          messageRef: 'returns invitation',
+          messageRef: 'returns invitation failed',
           personalisation: {
             name: 'J Anne',
             periodEndDate: '31 March 2025',
-            returnDueDate: '28 April 2025',
+            returnDueDate: formatLongDate(futureDueDate('letter')),
             address_line_1: 'J Anne',
             address_line_2: '4',
             address_line_3: 'Privet Drive',
@@ -116,15 +119,16 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
       )
       expect(result.notifications[1]).to.equal(
         {
-          dueDate: new Date('2025-04-28'),
+          contactType: 'licence holder',
+          dueDate: futureDueDate('letter'),
           eventId: result.notice.id,
           licences: '01/125',
           messageType: 'letter',
-          messageRef: 'returns invitation',
+          messageRef: 'returns invitation failed',
           personalisation: {
             name: 'J Charles',
             periodEndDate: '31 March 2025',
-            returnDueDate: '28 April 2025',
+            returnDueDate: formatLongDate(futureDueDate('letter')),
             address_line_1: 'J Charles',
             address_line_2: '4',
             address_line_3: 'Privet Drive',

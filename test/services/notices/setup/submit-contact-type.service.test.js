@@ -60,6 +60,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         expect(refreshedSession.contactType).to.equal(undefined)
         expect(refreshedSession.additionalRecipients).to.equal([
           {
+            contact: null,
             contact_hash_id: _createMD5Hash(payload.contactEmail),
             contact_type: 'single use',
             email: payload.contactEmail,
@@ -113,6 +114,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         expect(refreshedSession.contactType).to.equal(undefined)
         expect(refreshedSession.additionalRecipients).to.equal([
           {
+            contact: null,
             contact_hash_id: _createMD5Hash(payload.contactEmail),
             contact_type: 'single use',
             email: payload.contactEmail,
@@ -158,6 +160,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         expect(refreshedSession.contactType).to.equal(undefined)
         expect(refreshedSession.additionalRecipients).to.equal([
           {
+            contact: null,
             contact_hash_id: testEmailHash,
             contact_type: 'single use',
             email: 'test@test.gov.uk',
@@ -191,6 +194,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
 
         sessionData.additionalRecipients = [
           {
+            contact: null,
             contact_hash_id: testEmailHash,
             contact_type: 'single use',
             email: 'test@test.gov.uk',
@@ -214,6 +218,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         expect(refreshedSession.contactType).to.equal(undefined)
         expect(refreshedSession.additionalRecipients).to.equal([
           {
+            contact: null,
             contact_hash_id: testEmailHash,
             contact_type: 'single use',
             email: 'test@test.gov.uk',
@@ -222,6 +227,7 @@ describe('Notices - Setup - Submit Contact Type service', () => {
             message_type: 'Email'
           },
           {
+            contact: null,
             contact_hash_id: _createMD5Hash(payload.contactEmail),
             contact_type: 'single use',
             email: payload.contactEmail,

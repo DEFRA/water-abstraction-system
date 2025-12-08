@@ -41,6 +41,7 @@ function _address(recipient) {
 
 function _notification(recipient, selectedReturnLog, noticeId, licenceRef) {
   return {
+    contactType: recipient.contact_type,
     dueDate: selectedReturnLog.dueDate,
     eventId: noticeId,
     licences: [licenceRef],

@@ -54,6 +54,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
 
     expect(result).to.equal([
       {
+        contactType: 'licence holder',
         dueDate: dueReturns[0].dueDate,
         eventId: noticeId,
         licences: [licenceRef],
@@ -84,6 +85,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
         status: 'pending'
       },
       {
+        contactType: 'returns to',
         dueDate: dueReturns[0].dueDate,
         eventId: noticeId,
         licences: [licenceRef],

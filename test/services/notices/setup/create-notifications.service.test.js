@@ -95,6 +95,7 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       expect(results[0]).to.equal(
         {
+          contactType: recipients[0].contact_type,
           dueDate: null,
           eventId: noticeId,
           licenceMonitoringStationId: session.licenceMonitoringStations[0].id,
@@ -127,6 +128,7 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       expect(results[1]).to.equal(
         {
+          contactType: recipients[1].contact_type,
           dueDate: null,
           eventId: noticeId,
           licenceMonitoringStationId: session.licenceMonitoringStations[1].id,
@@ -236,6 +238,7 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       expect(results[0]).to.equal(
         {
+          contactType: recipients[0].contact_type,
           dueDate: new Date(session.dueReturns[0].dueDate),
           eventId: noticeId,
           licenceMonitoringStationId: null,
@@ -274,6 +277,7 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       expect(results[1]).to.equal(
         {
+          contactType: recipients[1].contact_type,
           dueDate: new Date(session.dueReturns[0].dueDate),
           eventId: noticeId,
           licenceMonitoringStationId: null,
@@ -349,6 +353,7 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       expect(results[0]).to.equal(
         {
+          contactType: recipients[0].contact_type,
           dueDate: futureDueDate('letter'),
           eventId: noticeId,
           licenceMonitoringStationId: null,
@@ -378,6 +383,7 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       expect(results[1]).to.equal(
         {
+          contactType: recipients[1].contact_type,
           dueDate: futureDueDate('letter'),
           eventId: noticeId,
           licenceMonitoringStationId: null,

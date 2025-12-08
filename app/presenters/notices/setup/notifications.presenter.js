@@ -65,6 +65,7 @@ function _email(recipient, noticeId, session) {
   const dueDate = _dueDate(session, messageType)
 
   return {
+    contactType: recipient.contact_type,
     dueDate,
     eventId: noticeId,
     licences: recipient.licence_refs,
@@ -98,6 +99,7 @@ function _letter(recipient, noticeId, session) {
   const dueDate = _dueDate(session, messageType)
 
   return {
+    contactType: recipient.contact_type,
     dueDate,
     eventId: noticeId,
     licences: recipient.licence_refs,

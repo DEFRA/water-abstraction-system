@@ -45,14 +45,14 @@ describe('Notices - Setup - Notifications presenter', () => {
     const singleUseEmail = {
       ...fixtureData.primaryUser,
       contact_hash_id: 'ba3cbb0311b78e79a9aed711cf20a9e8',
-      contact_type: 'Single use',
+      contact_type: 'single use',
       email: 'single.use@important.com'
     }
     const singleUseLetter = {
       ...fixtureData.licenceHolder,
       contact: { ...fixtureData.licenceHolder.contact, addressLine1: '4', name: 'Hermione' },
       contact_hash_id: '2cfae110bb4c6611261169ddc1f26c34',
-      contact_type: 'Single use'
+      contact_type: 'single use'
     }
 
     recipients = [
@@ -83,6 +83,7 @@ describe('Notices - Setup - Notifications presenter', () => {
 
     expect(result).to.equal([
       {
+        contactType: recipients[0].contact_type,
         dueDate: dynamicEmailDueDate,
         eventId: noticeId,
         licences: recipients[0].licence_refs,
@@ -99,6 +100,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         templateId: NOTIFY_TEMPLATES.invitations.standard.email['primary user']
       },
       {
+        contactType: recipients[1].contact_type,
         dueDate: dynamicEmailDueDate,
         eventId: noticeId,
         licences: recipients[1].licence_refs,
@@ -115,6 +117,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         templateId: NOTIFY_TEMPLATES.invitations.standard.email['returns agent']
       },
       {
+        contactType: recipients[2].contact_type,
         dueDate: dynamicLetterDueDate,
         eventId: noticeId,
         licences: recipients[2].licence_refs,
@@ -137,6 +140,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         templateId: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
       },
       {
+        contactType: recipients[3].contact_type,
         dueDate: dynamicLetterDueDate,
         eventId: noticeId,
         licences: recipients[3].licence_refs,
@@ -159,6 +163,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         templateId: NOTIFY_TEMPLATES.invitations.standard.letter['returns to']
       },
       {
+        contactType: recipients[4].contact_type,
         dueDate: dynamicLetterDueDate,
         eventId: noticeId,
         licences: recipients[4].licence_refs,
@@ -181,6 +186,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         templateId: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
       },
       {
+        contactType: 'single use',
         dueDate: dynamicEmailDueDate,
         eventId: noticeId,
         licences: recipients[5].licence_refs,
@@ -197,6 +203,7 @@ describe('Notices - Setup - Notifications presenter', () => {
         templateId: NOTIFY_TEMPLATES.invitations.standard.email['single use']
       },
       {
+        contactType: 'single use',
         dueDate: dynamicLetterDueDate,
         eventId: noticeId,
         licences: recipients[6].licence_refs,
@@ -224,7 +231,7 @@ describe('Notices - Setup - Notifications presenter', () => {
   describe('the "messageRef" property', () => {
     describe('when the notice is a "returns invitation"', () => {
       describe('and the notification is an email', () => {
-        describe('and the recipient is the "Primary user"', () => {
+        describe('and the recipient is the "primary user"', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
@@ -232,7 +239,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           })
         })
 
-        describe('and the recipient is a "Returns agent"', () => {
+        describe('and the recipient is a "returns agent"', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
@@ -240,7 +247,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           })
         })
 
-        describe('and the recipient is a "Single use"', () => {
+        describe('and the recipient is a "single use"', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
@@ -250,7 +257,7 @@ describe('Notices - Setup - Notifications presenter', () => {
       })
 
       describe('when the notifications is a letter', () => {
-        describe('and the recipient is the "Licence holder"', () => {
+        describe('and the recipient is the "licence holder"', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
@@ -258,7 +265,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           })
         })
 
-        describe('and the recipient is a "Returns to"', () => {
+        describe('and the recipient is a "returns to"', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
@@ -266,7 +273,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           })
         })
 
-        describe('and the recipient is a "Single use"', () => {
+        describe('and the recipient is a "single use"', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
@@ -282,7 +289,7 @@ describe('Notices - Setup - Notifications presenter', () => {
       })
 
       describe('and the notification is an email', () => {
-        describe('and the recipient is the "Primary user"', () => {
+        describe('and the recipient is the "primary user"', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
@@ -290,7 +297,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           })
         })
 
-        describe('and the recipient is a "Returns agent"', () => {
+        describe('and the recipient is a "returns agent"', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
@@ -298,7 +305,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           })
         })
 
-        describe('and the recipient is a "Single use"', () => {
+        describe('and the recipient is a "single use"', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
@@ -308,7 +315,7 @@ describe('Notices - Setup - Notifications presenter', () => {
       })
 
       describe('when the notifications is a letter', () => {
-        describe('and the recipient is the "Licence holder"', () => {
+        describe('and the recipient is the "licence holder"', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
@@ -316,7 +323,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           })
         })
 
-        describe('and the recipient is a "Returns To"', () => {
+        describe('and the recipient is a "returns To"', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
@@ -324,7 +331,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           })
         })
 
-        describe('and the recipient is a "Single use"', () => {
+        describe('and the recipient is a "single use"', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 

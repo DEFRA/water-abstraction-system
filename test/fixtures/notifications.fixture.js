@@ -27,6 +27,7 @@ function abstractionAlertEmail(notice) {
   const licenceMonitoringStationId = generateUUID()
 
   const notification = {
+    contactType: 'primary user',
     createdAt: new Date('2025-10-09'),
     dueDate: null,
     eventId: notice.id,
@@ -79,6 +80,7 @@ function abstractionAlertLetter(notice) {
   const licenceMonitoringStationId = generateUUID()
 
   const notification = {
+    contactType: 'licence holder',
     createdAt: new Date('2025-10-09'),
     dueDate: null,
     eventId: notice.id,
@@ -131,6 +133,7 @@ function abstractionAlertLetter(notice) {
  */
 function legacyHandsOfFlow(notice) {
   const notification = {
+    contactType: null,
     createdAt: new Date('2022-10-09'),
     dueDate: null,
     eventId: notice.id,
@@ -180,6 +183,7 @@ function legacyHandsOfFlow(notice) {
  */
 function legacyRenewal(notice) {
   const notification = {
+    contactType: null,
     createdAt: new Date('2022-10-09'),
     dueDate: null,
     eventId: notice.id,
@@ -287,6 +291,7 @@ function paperReturn(notice) {
   const returnId = generateUUID()
 
   const notification = {
+    contactType: 'licence holder',
     createdAt: new Date('2025-10-09'),
     dueDate: new Date('2025-04-28'),
     eventId: notice.id,
@@ -332,6 +337,7 @@ function paperReturn(notice) {
  */
 function returnsInvitationEmail(notice) {
   const notification = {
+    contactType: 'primary user',
     createdAt: new Date('2025-04-02'),
     dueDate: new Date('2025-04-28'),
     eventId: notice.id,
@@ -372,6 +378,7 @@ function returnsInvitationEmail(notice) {
  */
 function returnsInvitationLetter(notice) {
   const notification = {
+    contactType: 'licence holder',
     createdAt: new Date('2025-04-02'),
     dueDate: new Date('2025-04-28'),
     eventId: notice.id,
@@ -414,6 +421,7 @@ function returnsInvitationLetter(notice) {
  */
 function returnsReminderEmail(notice) {
   const notification = {
+    contactType: 'primary user',
     createdAt: new Date('2025-04-18'),
     dueDate: new Date('2025-04-28'),
     eventId: notice.id,
@@ -454,6 +462,7 @@ function returnsReminderEmail(notice) {
  */
 function returnsReminderLetter(notice) {
   const notification = {
+    contactType: 'licence holder',
     createdAt: new Date('2025-04-18'),
     dueDate: new Date('2025-04-28'),
     eventId: notice.id,
