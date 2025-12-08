@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
+const FetchReturnLogCommunicationsService = require('../../../app/services/return-logs/fetch-return-log-communications.service.js')
 const FetchReturnLogService = require('../../../app/services/return-logs/fetch-return-log.service.js')
 
 // Test helpers
@@ -32,6 +33,7 @@ describe('Return Logs - View Return Log service', () => {
       licence: LicenceModel.fromJson(LicenceHelper.defaults())
     })
 
+    Sinon.stub(FetchReturnLogCommunicationsService, 'go').resolves([])
     Sinon.stub(FetchReturnLogService, 'go').resolves(mockReturnLog)
   })
 
@@ -39,7 +41,7 @@ describe('Return Logs - View Return Log service', () => {
     Sinon.restore()
   })
 
-  it('correctly fetches return log and transforms it via the presenter', async () => {
+  it('correctly fetches return log, return log notifications and transforms it via the presenter', async () => {
     const result = await ViewReturnLogService.go({ credentials: { scope: ['returns'] } }, 'RETURN_ID', 0)
 
     // We only check a couple of items here -- the key thing is that the mock return log was fetched and successfully
