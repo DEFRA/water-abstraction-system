@@ -78,7 +78,7 @@ async function _fetch(licenceVersionId) {
     })
     .withGraphFetched('licenceVersionPurposes.points.source')
     .modifyGraph('licenceVersionPurposes.points.source', (builder) => {
-      builder.select(['sources.description', 'sources.id'])
+      builder.select(['sources.description', 'sources.id', 'sources.sourceType'])
     })
 }
 

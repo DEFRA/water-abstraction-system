@@ -29,13 +29,13 @@ function go(licenceVersionData, auth) {
       href: `/system/licences/${licence.id}/history`,
       text: 'Go back to history'
     },
-    points: _points(licenceVersion.licenceVersionPurposes),
     changeType: licenceVersion.administrative ? 'no licence issued' : 'licence issued',
     errorInDataEmail: _errorInDataEmail(billingAndDataRole),
     notes: _notes(licenceVersion, billingAndDataRole),
     pageTitle: `Licence version starting ${formatLongDate(licenceVersion.startDate)}`,
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     pagination: _pagination(licenceVersionsForPagination, licenceVersion),
+    points: _points(licenceVersion.licenceVersionPurposes),
     reason: _reason(licenceVersion, billingAndDataRole)
   }
 }
@@ -92,10 +92,30 @@ function _pagination(licenceVersionsForPagination, licenceVersion) {
   return pagination
 }
 
+/**
+ * Format the points for the view
+ *
+ * The view uses the macro 'pointsSummaryCards' and we have a corresponding presenter to map a points for this macro.
+ * The points page uses the macro and presenter, and was the first to use it.
+ *
+ * That is why we need to map the source onto a point in this function.
+ *
+ * We also need to sort here as other logic depends on the 'licenceVersionPurposes'. We can not sort this in the query
+ * as there could be multiple 'licenceVersionPurposes' with multiple 'points'.
+ *
+ * @private
+ */
 function _points(licenceVersionPurposes) {
-  const points = licenceVersionPurposes
+  const formattedPoints = licenceVersionPurposes
     .flatMap((licenceVersionPurpose) => {
       return licenceVersionPurpose.points
+    })
+    .map(({ source, ...point }) => {
+      return {
+        ...point,
+        sourceDescription: source.description,
+        sourceType: source.sourceType
+      }
     })
     .sort((a, b) => {
       return a.description.localeCompare(b.description, 'en', {
@@ -104,7 +124,7 @@ function _points(licenceVersionPurposes) {
       })
     })
 
-  return formatLicencePoints(points)
+  return formatLicencePoints(formattedPoints)
 }
 
 function _reason(licenceVersion, billingAndDataRole) {

@@ -96,7 +96,8 @@ describe('Licence Versions - Fetch licence version service', () => {
                   secondaryType: null,
                   source: {
                     description: source.description,
-                    id: source.id
+                    id: source.id,
+                    sourceType: source.sourceType
                   },
                   wellReference: null
                 }

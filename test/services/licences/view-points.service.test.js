@@ -37,7 +37,13 @@ describe('Licences - View Points service', () => {
 
     Sinon.stub(FetchLicenceService, 'go').returns(licence)
 
-    Sinon.stub(FetchPointsService, 'go').returns([ViewLicencesFixture.point()])
+    Sinon.stub(FetchPointsService, 'go').returns([
+      {
+        ...ViewLicencesFixture.point(),
+        sourceDescription: 'SURFACE WATER SOURCE OF SUPPLY',
+        sourceType: 'Borehole'
+      }
+    ])
   })
 
   afterEach(() => {

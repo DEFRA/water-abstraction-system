@@ -257,7 +257,12 @@ describe('Licence Versions - View presenter', () => {
       beforeEach(() => {
         licenceVersionData.licenceVersion.licenceVersionPurposes = [
           {
-            points: [ViewLicencesFixture.point()]
+            points: [
+              {
+                ...ViewLicencesFixture.point(),
+                source: { description: 'SURFACE WATER SOURCE OF SUPPLY', sourceType: 'Borehole' }
+              }
+            ]
           }
         ]
       })
@@ -292,14 +297,31 @@ describe('Licence Versions - View presenter', () => {
       beforeEach(() => {
         licenceVersionData.licenceVersion.licenceVersionPurposes = [
           {
-            points: [ViewLicencesFixture.point()]
+            points: [
+              {
+                ...ViewLicencesFixture.point(),
+                source: { description: 'SURFACE WATER SOURCE OF SUPPLY', sourceType: 'Borehole' }
+              }
+            ]
           },
           {
-            points: [{ ...ViewLicencesFixture.point(), description: 'ABSTRACTION POINT A' }]
+            points: [
+              {
+                ...ViewLicencesFixture.point(),
+                description: 'ABSTRACTION POINT A',
+                source: { description: 'SURFACE WATER SOURCE OF SUPPLY', sourceType: 'Borehole' }
+              }
+            ]
           },
           {
             // A description with punctuation - this should be ignored
-            points: [{ ...ViewLicencesFixture.point(), description: "ABSTRACTION POINT 'C'" }]
+            points: [
+              {
+                ...ViewLicencesFixture.point(),
+                description: "ABSTRACTION POINT 'C'",
+                source: { description: 'SURFACE WATER SOURCE OF SUPPLY', sourceType: 'Borehole' }
+              }
+            ]
           }
         ]
       })

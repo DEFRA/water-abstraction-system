@@ -20,7 +20,13 @@ describe('Licences - Points presenter', () => {
   beforeEach(() => {
     licence = ViewLicencesFixture.licence()
 
-    points = [ViewLicencesFixture.point()]
+    points = [
+      {
+        ...ViewLicencesFixture.point(),
+        sourceDescription: 'SURFACE WATER SOURCE OF SUPPLY',
+        sourceType: 'Borehole'
+      }
+    ]
   })
 
   describe('when provided with a populated licence and points', () => {
