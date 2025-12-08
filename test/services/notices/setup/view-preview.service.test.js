@@ -116,7 +116,7 @@ describe('Notices - Setup - View Preview service', () => {
         },
         contents: 'Dear licence holder,\r\n',
         messageType: 'email',
-        pageTitle: 'Water abstraction alert stop email',
+        pageTitle: 'Abstraction alert stop',
         pageTitleCaption: `Notice ${session.referenceCode}`,
         refreshPageLink: `/system/notices/setup/${session.id}/preview/${recipients[0].contact_hash_id}/alert/${licenceMonitoringStationId}`
       })
@@ -210,7 +210,7 @@ describe('Notices - Setup - View Preview service', () => {
         },
         contents: 'Dear licence holder,\r\n',
         messageType: 'email',
-        pageTitle: 'Returns invitation primary user email',
+        pageTitle: 'Returns invitation ad-hoc',
         pageTitleCaption: `Notice ${session.referenceCode}`,
         refreshPageLink: `/system/notices/setup/${session.id}/preview/${recipients[0].contact_hash_id}`
       })

@@ -32,7 +32,7 @@ describe('Notifications - Process Returned Letter service', () => {
     notification = await NotificationHelper.add({
       eventId: generateUUID(),
       messageType: 'letter',
-      messageRef: 'returns_reminder_licence_holder_letter',
+      messageRef: 'returns reminder',
       notifyId: generateUUID(),
       notifyStatus: 'sent',
       recipient: null,

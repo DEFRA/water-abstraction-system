@@ -60,19 +60,19 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query Service',
           )
         )
       )) AS contact_hash_id,
-      ('Licence holder') AS contact_type,
+      ('licence holder') AS contact_type,
   `
   const primaryUserExpectedQuery = `
     SELECT
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
-      ('Primary user') AS contact_type,
+      ('primary user') AS contact_type,
   `
   const returnsAgentExpectedQuery = `
     SELECT
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
-      ('Returns agent') AS contact_type,
+      ('returns agent') AS contact_type,
   `
   const returnsToExpectedQuery = `
     SELECT
@@ -95,7 +95,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query Service',
           )
         )
       )) AS contact_hash_id,
-      ('Returns to') AS contact_type,
+      ('returns to') AS contact_type,
   `
 
   let download
@@ -396,7 +396,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query Service',
     })
 
     after(async () => {
-      await RecipientScenariosSeeder.clean(scenarios)
+      // await RecipientScenariosSeeder.clean(scenarios)
     })
 
     describe('and the notice type is "invitations" or "reminders"', () => {

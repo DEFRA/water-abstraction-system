@@ -59,13 +59,13 @@ describe('Notices - Setup - Check presenter', () => {
         {
           contact: ['Mr H J Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
           licences: testRecipients.licenceHolder.licence_refs,
-          method: 'Letter - Licence holder',
+          method: 'Letter - licence holder',
           previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolder.contact_hash_id}`
         },
         {
           contact: ['Mr H J Potter', '3', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
           licences: testRecipients.licenceHolderWithMultipleLicences.licence_refs,
-          method: 'Letter - Licence holder',
+          method: 'Letter - licence holder',
           previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolderWithMultipleLicences.contact_hash_id}`
         },
         {
@@ -78,19 +78,19 @@ describe('Notices - Setup - Check presenter', () => {
             'Surrey'
           ],
           licences: testRecipients.returnsTo.licence_refs,
-          method: 'Letter - Returns to',
+          method: 'Letter - returns to',
           previewLink: null
         },
         {
           contact: ['primary.user@important.com'],
           licences: testRecipients.primaryUser.licence_refs,
-          method: 'Email - Primary user',
+          method: 'Email - primary user',
           previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.primaryUser.contact_hash_id}`
         },
         {
           contact: ['returns.agent@important.com'],
           licences: testRecipients.returnsAgent.licence_refs,
-          method: 'Email - Returns agent',
+          method: 'Email - returns agent',
           previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.returnsAgent.contact_hash_id}`
         }
       ],

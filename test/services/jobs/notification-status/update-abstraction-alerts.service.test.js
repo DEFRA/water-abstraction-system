@@ -32,7 +32,7 @@ describe('Job - Notification Status - Update Abstraction Alerts service', () => 
     notification = {
       createdAt: new Date(),
       licenceMonitoringStationId: licenceMonitoringStation.id,
-      messageRef: 'water_abstraction_alert_resume_email',
+      messageRef: 'abstraction alert resume',
       personalisation: {
         licenceGaugingStationId: licenceMonitoringStation.id,
         sending_alert_type: 'resume'
@@ -65,7 +65,7 @@ describe('Job - Notification Status - Update Abstraction Alerts service', () => 
     beforeEach(() => {
       notification = {
         createdAt: new Date(),
-        messageRef: 'water_abstraction_alert_resume_email',
+        messageRef: 'abstraction alert resume',
         personalisation: {
           licenceGaugingStationId: licenceMonitoringStation.id,
           sending_alert_type: 'resume'

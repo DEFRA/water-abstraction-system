@@ -43,11 +43,11 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
       // Headers
       'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
         // Row - Primary user
-        `"${recipients.primaryUser.licence_refs}","1 February to 1 January","level","1000m","Abstraction alert","email","Primary user","primary.user@important.com",,,,,,,\n` +
+        `"${recipients.primaryUser.licence_refs}","1 February to 1 January","level","1000m","Abstraction alert","email","primary user","primary.user@important.com",,,,,,,\n` +
         // Row - Licence holder
-        `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","letter","Licence holder",,"Mr H J Potter","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n` +
+        `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","letter","licence holder",,"Mr H J Potter","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n` +
         // Row - Additional contact
-        `"${recipients.additionalContact.licence_refs}","1 January to 31 March","level","100m","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,\n`
+        `"${recipients.additionalContact.licence_refs}","1 January to 31 March","level","100m","Abstraction alert","email","additional contact","additional.contact@important.com",,,,,,,\n`
     )
   })
 
@@ -93,7 +93,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
           '"100m",' + // Threshold
           '"Abstraction alert",' + // Notification type
           '"email",' + // Message type
-          '"Additional contact",' + // Contact type
+          '"additional contact",' + // Contact type
           '"additional.contact@important.com",' + // Email
           ',' + // Address line 1
           ',' + // Address line 2
@@ -121,7 +121,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
           '"1000m",' + // Threshold
           '"Abstraction alert",' + // Notification type
           '"email",' + // Message type
-          '"Primary user",' + // Contact type
+          '"primary user",' + // Contact type
           '"primary.user@important.com",' + // Email
           ',' + // Address line 1
           ',' + // Address line 2
@@ -150,7 +150,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
             '"100m3/s",' + // Threshold
             '"Abstraction alert",' + // Notification type
             '"letter",' + // Message type
-            '"Licence holder",' + // Contact type
+            '"licence holder",' + // Contact type
             ',' + // Email
             '"Mr H J Potter",' + // Address line 1
             '"1",' + // Address line 2
@@ -190,7 +190,7 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
             '"100m3/s",' + // Threshold
             '"Abstraction alert",' + // Notification type
             '"letter",' + // Message type
-            '"Licence holder",' + // Contact type
+            '"licence holder",' + // Contact type
             ',' + // Email
             '"Gringotts",' + // Address line 1
             '"1",' + // Address line 2
@@ -251,13 +251,13 @@ describe('Notices - Setup - Download Abstraction Alert presenter', () => {
         // Headers
         'Licence,Abstraction periods,Measure type,Threshold,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           // Row - licence holder
-          `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","letter","Licence holder",,"Mr H J Potter","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n` +
+          `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","letter","licence holder",,"Mr H J Potter","1","Privet Drive","Little Whinging","Surrey","WD25 7LR",\n` +
           // Row - additional contact for same recipient - with unique licence ref
-          `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,\n` +
+          `"${recipients.licenceHolder.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","additional contact","additional.contact@important.com",,,,,,,\n` +
           // Row - Primary user
-          `"${recipients.primaryUser.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","Primary user","primary.user@important.com",,,,,,,\n` +
+          `"${recipients.primaryUser.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","primary user","primary.user@important.com",,,,,,,\n` +
           // Row - additional contact for same recipient - with unique licence ref
-          `"${recipients.primaryUser.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","Additional contact","additional.contact@important.com",,,,,,,\n`
+          `"${recipients.primaryUser.licence_refs}","1 January to 31 March","flow","100m3/s","Abstraction alert","email","additional contact","additional.contact@important.com",,,,,,,\n`
       )
     })
   })

@@ -4,6 +4,7 @@ const EventModel = require('../../app/models/event.model.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const NotificationModel = require('../../app/models/notification.model.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
+const { NOTIFY_TEMPLATES } = require('../../app/lib/notify-templates.lib.js')
 
 const ADDRESS = {
   address_line_1: 'ACME Services Ltd',
@@ -26,12 +27,13 @@ function abstractionAlertEmail(notice) {
   const licenceMonitoringStationId = generateUUID()
 
   const notification = {
+    contactType: 'primary user',
     createdAt: new Date('2025-10-09'),
     dueDate: null,
     eventId: notice.id,
     licenceMonitoringStationId,
     licences: notice.licences,
-    messageRef: 'water_abstraction_alert_stop_email',
+    messageRef: 'abstraction alert stop',
     messageType: 'email',
     notifyId: generateUUID(),
     notifyStatus: 'delivered',
@@ -60,7 +62,8 @@ function abstractionAlertEmail(notice) {
     recipient: 'grace.hopper@acme.co.uk',
     returnedAt: null,
     returnLogIds: null,
-    status: 'sent'
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.alerts.email.stop
   }
 
   return notification
@@ -77,12 +80,13 @@ function abstractionAlertLetter(notice) {
   const licenceMonitoringStationId = generateUUID()
 
   const notification = {
+    contactType: 'licence holder',
     createdAt: new Date('2025-10-09'),
     dueDate: null,
     eventId: notice.id,
     licenceMonitoringStationId,
     licences: notice.licences,
-    messageRef: 'water_abstraction_alert_stop',
+    messageRef: 'abstraction alert stop',
     messageType: 'letter',
     notifyId: generateUUID(),
     notifyStatus: 'received',
@@ -113,7 +117,8 @@ function abstractionAlertLetter(notice) {
     recipient: null,
     returnedAt: null,
     returnLogIds: null,
-    status: 'sent'
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.alerts.letter.stop
   }
 
   return notification
@@ -128,6 +133,7 @@ function abstractionAlertLetter(notice) {
  */
 function legacyHandsOfFlow(notice) {
   const notification = {
+    contactType: null,
     createdAt: new Date('2022-10-09'),
     dueDate: null,
     eventId: notice.id,
@@ -161,7 +167,8 @@ function legacyHandsOfFlow(notice) {
     recipient: 'n/a',
     returnedAt: null,
     returnLogIds: null,
-    status: 'sent'
+    status: 'sent',
+    templateId: null
   }
 
   return notification
@@ -176,6 +183,7 @@ function legacyHandsOfFlow(notice) {
  */
 function legacyRenewal(notice) {
   const notification = {
+    contactType: null,
     createdAt: new Date('2022-10-09'),
     dueDate: null,
     eventId: notice.id,
@@ -209,7 +217,8 @@ function legacyRenewal(notice) {
     recipient: 'n/a',
     returnedAt: null,
     returnLogIds: null,
-    status: 'sent'
+    status: 'sent',
+    templateId: null
   }
 
   return notification
@@ -282,12 +291,13 @@ function paperReturn(notice) {
   const returnId = generateUUID()
 
   const notification = {
+    contactType: 'licence holder',
     createdAt: new Date('2025-10-09'),
     dueDate: new Date('2025-04-28'),
     eventId: notice.id,
     licenceMonitoringStationId: null,
     licences: notice.licences,
-    messageRef: 'pdf.return_form',
+    messageRef: 'paper return',
     messageType: 'letter',
     notifyId: generateUUID(),
     notifyStatus: 'received',
@@ -311,7 +321,8 @@ function paperReturn(notice) {
     plaintext: null,
     returnedAt: null,
     returnLogIds: [returnId],
-    status: 'sent'
+    status: 'sent',
+    templateId: null
   }
 
   return notification
@@ -326,12 +337,13 @@ function paperReturn(notice) {
  */
 function returnsInvitationEmail(notice) {
   const notification = {
+    contactType: 'primary user',
     createdAt: new Date('2025-04-02'),
     dueDate: new Date('2025-04-28'),
     eventId: notice.id,
     licenceMonitoringStationId: null,
     licences: notice.licences,
-    messageRef: 'returns_invitation_primary_user_email',
+    messageRef: 'returns invitation',
     messageType: 'email',
     notifyId: generateUUID(),
     notifyStatus: 'delivered',
@@ -350,7 +362,8 @@ function returnsInvitationEmail(notice) {
     recipient: 'grace.hopper@acme.co.uk',
     returnedAt: null,
     returnLogIds: [generateUUID(), generateUUID()],
-    status: 'sent'
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.invitations.standard.email['primary user']
   }
 
   return notification
@@ -365,12 +378,13 @@ function returnsInvitationEmail(notice) {
  */
 function returnsInvitationLetter(notice) {
   const notification = {
+    contactType: 'licence holder',
     createdAt: new Date('2025-04-02'),
     dueDate: new Date('2025-04-28'),
     eventId: notice.id,
     licenceMonitoringStationId: null,
     licences: notice.licences,
-    messageRef: 'returns_invitation_licence_holder_letter',
+    messageRef: 'returns invitation',
     messageType: 'letter',
     notifyId: generateUUID(),
     notifyStatus: 'received',
@@ -391,7 +405,8 @@ function returnsInvitationLetter(notice) {
     recipient: null,
     returnedAt: null,
     returnLogIds: [generateUUID(), generateUUID()],
-    status: 'sent'
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
   }
 
   return notification
@@ -406,12 +421,13 @@ function returnsInvitationLetter(notice) {
  */
 function returnsReminderEmail(notice) {
   const notification = {
+    contactType: 'primary user',
     createdAt: new Date('2025-04-18'),
     dueDate: new Date('2025-04-28'),
     eventId: notice.id,
     licenceMonitoringStationId: null,
     licences: notice.licences,
-    messageRef: 'returns_reminder_primary_user_email',
+    messageRef: 'returns reminder',
     messageType: 'email',
     notifyId: generateUUID(),
     notifyStatus: 'delivered',
@@ -430,7 +446,8 @@ function returnsReminderEmail(notice) {
     recipient: 'grace.hopper@acme.co.uk',
     returnedAt: null,
     returnLogIds: [generateUUID(), generateUUID()],
-    status: 'sent'
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.reminders.standard.email['primary user']
   }
 
   return notification
@@ -445,12 +462,13 @@ function returnsReminderEmail(notice) {
  */
 function returnsReminderLetter(notice) {
   const notification = {
+    contactType: 'licence holder',
     createdAt: new Date('2025-04-18'),
     dueDate: new Date('2025-04-28'),
     eventId: notice.id,
     licenceMonitoringStationId: null,
     licences: notice.licences,
-    messageRef: 'returns_reminder_licence_holder_letter',
+    messageRef: 'returns reminder',
     messageType: 'letter',
     notifyId: generateUUID(),
     notifyStatus: 'received',
@@ -473,7 +491,8 @@ function returnsReminderLetter(notice) {
     recipient: null,
     returnedAt: null,
     returnLogIds: [generateUUID(), generateUUID()],
-    status: 'sent'
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.reminders.standard.letter['licence holder']
   }
 
   return notification

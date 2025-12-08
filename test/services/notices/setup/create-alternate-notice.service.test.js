@@ -10,9 +10,12 @@ const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../../fixtures/notices.fixture.js')
-const { notifyTemplates } = require('../../../../app/lib/notify-templates.lib.js')
+const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
+const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
+const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
 
 // Things to stub
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const FetchAlternateReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js')
 const FetchFailedReturnsInvitationsService = require('../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js')
 
@@ -23,6 +26,10 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
   let fetchFailedReturnsInvitationsResults
   let fetchReturnsAddressesServiceResults
   let noticeWithErrors
+
+  beforeEach(async () => {
+    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
+  })
 
   afterEach(() => {
     Sinon.restore()
@@ -88,15 +95,16 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
 
       expect(result.notifications[0]).to.equal(
         {
-          dueDate: new Date('2025-04-28'),
+          contactType: 'licence holder',
+          dueDate: futureDueDate('letter'),
           eventId: result.notice.id,
           licences: '01/111',
           messageType: 'letter',
-          messageRef: 'returns_invitation_licence_holder_letter',
+          messageRef: 'returns invitation failed',
           personalisation: {
             name: 'J Anne',
             periodEndDate: '31 March 2025',
-            returnDueDate: '28 April 2025',
+            returnDueDate: formatLongDate(futureDueDate('letter')),
             address_line_1: 'J Anne',
             address_line_2: '4',
             address_line_3: 'Privet Drive',
@@ -107,7 +115,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
           },
           returnLogIds: ['18998ffd-feaf-4e24-b998-7e7af026ba14', 'c06708f5-195a-43b1-9f2e-d4f72ee7bd76'],
           status: 'pending',
-          templateId: notifyTemplates.standard.failedInvitations.licenceHolderLetter,
+          templateId: NOTIFY_TEMPLATES.failedInvitations.standard.letter['licence holder'],
           licenceMonitoringStationId: null,
           pdf: null,
           recipient: null
@@ -116,15 +124,16 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
       )
       expect(result.notifications[1]).to.equal(
         {
-          dueDate: new Date('2025-04-28'),
+          contactType: 'licence holder',
+          dueDate: futureDueDate('letter'),
           eventId: result.notice.id,
           licences: '01/125',
           messageType: 'letter',
-          messageRef: 'returns_invitation_licence_holder_letter',
+          messageRef: 'returns invitation failed',
           personalisation: {
             name: 'J Charles',
             periodEndDate: '31 March 2025',
-            returnDueDate: '28 April 2025',
+            returnDueDate: formatLongDate(futureDueDate('letter')),
             address_line_1: 'J Charles',
             address_line_2: '4',
             address_line_3: 'Privet Drive',
@@ -135,7 +144,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
           },
           returnLogIds: ['e6bc04bc-1899-4b3c-b733-6f4be6aa8e07'],
           status: 'pending',
-          templateId: notifyTemplates.standard.failedInvitations.licenceHolderLetter,
+          templateId: NOTIFY_TEMPLATES.failedInvitations.standard.letter['licence holder'],
           licenceMonitoringStationId: null,
           pdf: null,
           recipient: null
@@ -179,7 +188,7 @@ function _licenceHolderAddress(name, licenceRef, returnLogIds) {
       town: 'Little Whinging',
       type: 'Person'
     },
-    contact_type: 'Licence holder',
+    contact_type: 'licence holder',
     licence_refs: licenceRef,
     return_log_ids: returnLogIds
   }
