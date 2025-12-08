@@ -42,7 +42,6 @@ describe('Licences - View Summary service', () => {
 
     auth = _auth()
 
-    Sinon.stub(FeatureFlagsConfig, 'enableLicencePointsView').value(true)
     Sinon.stub(FeatureFlagsConfig, 'enableLicencePurposesView').value(true)
     Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsView').value(true)
   })
