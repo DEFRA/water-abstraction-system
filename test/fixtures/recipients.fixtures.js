@@ -7,6 +7,80 @@ const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
 const { generateReference } = require('../support/helpers/return-requirement.helper.js')
 
 /**
+ * Creates a fixture for an ad-hoc additional email recipient
+ *
+ * This fixture generates a recipient object representing an additional email contact for an ad-hoc returns notice as
+ * would be added to the `additionalRecipients` property in the session.
+ *
+ * @param {string} [licenceRef=null] - The licence reference for the recipient. If null one will be generated
+ * @param {string} [email=null] - The email address for the recipient. If null a default will be used
+ *
+ * @returns {object} The ad-hoc returns notice additional email recipient fixture
+ */
+function additionalEmailRecipient(licenceRef = null, email = null) {
+  const recipientLicenceRef = licenceRef ?? generateLicenceRef()
+  const recipientEmail = email ?? 'additional@returns-notice.com'
+
+  const recipient = {
+    contact: null,
+    contact_hash_id: _emailContactHashId(recipientEmail),
+    contact_type: 'single use',
+    email,
+    licence_ref: recipientLicenceRef,
+    licence_refs: [recipientLicenceRef],
+    message_type: 'Email'
+  }
+
+  return recipient
+}
+
+/**
+ * Creates a fixture for an ad-hoc additional postal recipient
+ *
+ * This fixture generates a recipient object representing an additional postal contact for an ad-hoc returns notice as
+ * would be added to the `additionalRecipients` property in the session.
+ *
+ * @param {string} [licenceRef=null] - The licence reference for the recipient. If null one will be generated
+ * @param {object} [contact=null] - The contact address for the recipient. If null a default will be used
+ *
+ * @returns {object} The ad-hoc returns notice additional postal recipient fixture
+ */
+function additionalPostalRecipient(licenceRef = null, contact = null) {
+  const recipientLicenceRef = licenceRef ?? generateLicenceRef()
+
+  // NOTE: We take what our helper function would generate for a licence document header contact and modify it to match
+  // what would be set after completing the address lookup journey, when the additional recipient is added to the
+  // session
+  if (!contact) {
+    contact = _licenceDocumentHeaderContact('Additional', 'Not applicable')
+
+    contact.addressLine3 = contact.town
+    contact.addressLine4 = contact.county
+    contact.country = 'United Kingdom'
+
+    delete contact.role
+    delete contact.salutation
+    delete contact.forename
+    delete contact.initials
+    delete contact.type
+    delete contact.town
+    delete contact.county
+  }
+
+  const recipient = {
+    contact: null,
+    contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
+    contact_type: 'single use',
+    email: null,
+    licence_ref: recipientLicenceRef,
+    licence_refs: [recipientLicenceRef],
+    message_type: 'Letter'
+  }
+
+  return recipient
+}
+
+/**
  * Creates a fixture for an abstraction alert notice additional contact recipient
  *
  * This fixture generates a recipient object representing an additional contact for abstraction alerts with a predefined
@@ -392,6 +466,8 @@ function _nonDownloadRecipient(recipient) {
 }
 
 module.exports = {
+  additionalEmailRecipient,
+  additionalPostalRecipient,
   alertNoticeAdditionalContact,
   alertNoticeLicenceHolder,
   alertNoticePrimaryUser,
