@@ -13,6 +13,7 @@ const PointModel = require('../models/point.model.js')
  */
 function formatLicencePoints(points) {
   return points.map((point) => {
+    // NOTE: We create a `PointModel` instance so we can use the `$describe()` instance method
     const pointInstance = PointModel.fromJson(point)
 
     return {
