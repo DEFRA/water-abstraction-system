@@ -44,6 +44,42 @@ async function _fetch(licenceVersionId) {
       builder.select(['id', 'licenceRef'])
     })
     .modify('history')
+    .withGraphFetched('licenceVersionPurposes')
+    .modifyGraph('licenceVersionPurposes', (builder) => {
+      builder.select(['id'])
+    })
+    .withGraphFetched('licenceVersionPurposes.points')
+    .modifyGraph('licenceVersionPurposes.points', (builder) => {
+      builder
+        .distinctOn('points.id')
+        .select([
+          'points.id',
+          'points.bgsReference',
+          'points.category',
+          'points.depth',
+          'points.description',
+          'points.hydroInterceptDistance',
+          'points.hydroReference',
+          'points.hydroOffsetDistance',
+          'points.locationNote',
+          'points.ngr1',
+          'points.ngr2',
+          'points.ngr3',
+          'points.ngr4',
+          'points.note',
+          'points.primaryType',
+          'points.secondaryType',
+          'points.wellReference'
+        ])
+        .orderBy([
+          { column: 'points.id', order: 'asc' },
+          { column: 'points.description', order: 'asc' }
+        ])
+    })
+    .withGraphFetched('licenceVersionPurposes.points.source')
+    .modifyGraph('licenceVersionPurposes.points.source', (builder) => {
+      builder.select(['sources.description', 'sources.id', 'sources.sourceType'])
+    })
 }
 
 module.exports = {
