@@ -46,7 +46,7 @@ describe('Notices - Fetch Notice service', () => {
     notificationEmail = await NotificationHelper.add({
       eventId: event.id,
       licences: ['01/124'],
-      messageRef: 'water_abstraction_alert_reduce_or_stop_warning_email',
+      messageRef: 'abstraction alert reduce or stop warning',
       messageType: 'email',
       notifyId: '0bc87785-e64f-4b99-b15c-ee825235f9bf',
       notifyStatus: 'permanent-failure',
@@ -69,7 +69,7 @@ describe('Notices - Fetch Notice service', () => {
     notificationLetter = await NotificationHelper.add({
       eventId: event.id,
       licences: ['01/123'],
-      messageRef: 'water_abstraction_alert_stop_warning',
+      messageRef: 'abstraction alert stop',
       messageType: 'letter',
       notifyId: '67b2849b-02bc-42fd-a623-86f6c2817e2d',
       notifyStatus: 'received',

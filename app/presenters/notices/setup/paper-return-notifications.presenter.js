@@ -41,10 +41,11 @@ function _address(recipient) {
 
 function _notification(recipient, selectedReturnLog, noticeId, licenceRef) {
   return {
+    contactType: recipient.contact_type,
     dueDate: selectedReturnLog.dueDate,
     eventId: noticeId,
     licences: [licenceRef],
-    messageRef: 'pdf.return_form',
+    messageRef: 'paper return',
     messageType: 'letter',
     personalisation: _personalisation(recipient, selectedReturnLog, licenceRef),
     returnLogIds: [selectedReturnLog.returnId],

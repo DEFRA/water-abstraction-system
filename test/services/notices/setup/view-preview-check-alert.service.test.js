@@ -14,7 +14,6 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const DetermineRecipientsService = require('../../../../app/services/notices/setup/determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
@@ -52,8 +51,7 @@ describe('Notices - Setup - View Preview Check Alert service', () => {
     testRecipients[0].licence_refs = licenceMonitoringStations.two.licence.licenceRef
     testRecipient = testRecipients[0]
 
-    Sinon.stub(DetermineRecipientsService, 'go').returns(testRecipients)
-    Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves()
+    Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves(testRecipients)
   })
 
   afterEach(() => {

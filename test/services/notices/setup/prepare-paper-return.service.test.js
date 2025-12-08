@@ -35,7 +35,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
     notification = {
       eventId: null,
       licences: [licenceRef],
-      messageRef: 'pdf.return_form',
+      messageRef: 'paper return',
       messageType: 'letter',
       personalisation: {
         address_line_1: 'Mr H J Potter',
