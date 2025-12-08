@@ -118,18 +118,38 @@ describe('Notifications - Check Notification Status service', () => {
           expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'received', status: 'sent' })
         })
 
-        it('sets the due date for the linked return log records which do not have one already', async () => {
+        it('does not attempt to update anything in licence monitoring stations', async () => {
           await CheckNotificationStatusService.go(notification)
 
-          expect(returnLogPatchStub.called).to.be.true()
-          expect(returnLogPatchStub.firstCall.args[0]).to.equal(
-            { dueDate: notification.dueDate, sentDate: notification.createdAt },
-            { skip: ['updatedAt'] }
-          )
+          expect(licenceMonitoringStationPatchStub.called).to.be.false()
+        })
 
-          expect(returnLogWhereInStub.called).to.be.true()
-          expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
-          expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
+        describe('and the contact type was "licence holder" or "single use"', () => {
+          it('attempts to set the due date for the linked return log records', async () => {
+            await CheckNotificationStatusService.go(notification)
+
+            expect(returnLogPatchStub.called).to.be.true()
+            expect(returnLogPatchStub.firstCall.args[0]).to.equal(
+              { dueDate: notification.dueDate, sentDate: notification.createdAt },
+              { skip: ['updatedAt'] }
+            )
+
+            expect(returnLogWhereInStub.called).to.be.true()
+            expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+            expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
+          })
+        })
+
+        describe('and the contact type was NOT "licence holder" or "single use"', () => {
+          beforeEach(() => {
+            notification.contactType = 'returns to'
+          })
+
+          it('does not attempt to set the due date for the linked return log records.', async () => {
+            await CheckNotificationStatusService.go(notification)
+
+            expect(returnLogPatchStub.called).to.be.false()
+          })
         })
       })
 
@@ -228,18 +248,38 @@ describe('Notifications - Check Notification Status service', () => {
           expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'delivered', status: 'sent' })
         })
 
-        it('sets the due date for the linked return log records which do not have one already', async () => {
+        it('does not attempt to update anything in licence monitoring stations', async () => {
           await CheckNotificationStatusService.go(notification)
 
-          expect(returnLogPatchStub.called).to.be.true()
-          expect(returnLogPatchStub.firstCall.args[0]).to.equal(
-            { dueDate: notification.dueDate, sentDate: notification.createdAt },
-            { skip: ['updatedAt'] }
-          )
+          expect(licenceMonitoringStationPatchStub.called).to.be.false()
+        })
 
-          expect(returnLogWhereInStub.called).to.be.true()
-          expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
-          expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
+        describe('and the contact type was "primary user" or "single use"', () => {
+          it('attempts to set the due date for the linked return log records', async () => {
+            await CheckNotificationStatusService.go(notification)
+
+            expect(returnLogPatchStub.called).to.be.true()
+            expect(returnLogPatchStub.firstCall.args[0]).to.equal(
+              { dueDate: notification.dueDate, sentDate: notification.createdAt },
+              { skip: ['updatedAt'] }
+            )
+
+            expect(returnLogWhereInStub.called).to.be.true()
+            expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+            expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
+          })
+        })
+
+        describe('and the contact type was NOT "primary user" or "single use"', () => {
+          beforeEach(() => {
+            notification.contactType = 'returns agent'
+          })
+
+          it('does not attempt to set the due date for the linked return log records.', async () => {
+            await CheckNotificationStatusService.go(notification)
+
+            expect(returnLogPatchStub.called).to.be.false()
+          })
         })
       })
 
@@ -728,6 +768,13 @@ describe('Notifications - Check Notification Status service', () => {
       notice = NoticesFixture.returnsPaperForm()
       notification = NotificationsFixture.paperReturn(notice)
       notification.status = 'pending'
+
+      returnLogWhereInStub = Sinon.stub().resolves()
+      Sinon.stub(ReturnLogModel, 'query').returns({
+        patch: returnLogPatchStub,
+        whereNull: Sinon.stub().returnsThis(),
+        whereIn: returnLogWhereInStub
+      })
     })
 
     describe('and Notify returns a "pending" status', () => {
@@ -774,6 +821,40 @@ describe('Notifications - Check Notification Status service', () => {
 
         expect(notificationPatchStub.called).to.be.true()
         expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'received', status: 'sent' })
+      })
+
+      it('does not attempt to update anything in licence monitoring stations', async () => {
+        await CheckNotificationStatusService.go(notification)
+
+        expect(licenceMonitoringStationPatchStub.called).to.be.false()
+      })
+
+      describe('and the contact type was "licence holder" or "single use"', () => {
+        it('attempts to set the due date for the linked return log records', async () => {
+          await CheckNotificationStatusService.go(notification)
+
+          expect(returnLogPatchStub.called).to.be.true()
+          expect(returnLogPatchStub.firstCall.args[0]).to.equal(
+            { dueDate: notification.dueDate, sentDate: notification.createdAt },
+            { skip: ['updatedAt'] }
+          )
+
+          expect(returnLogWhereInStub.called).to.be.true()
+          expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+          expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
+        })
+      })
+
+      describe('and the contact type was NOT "licence holder" or "single use"', () => {
+        beforeEach(() => {
+          notification.contactType = 'returns to'
+        })
+
+        it('does not attempt to set the due date for the linked return log records.', async () => {
+          await CheckNotificationStatusService.go(notification)
+
+          expect(returnLogPatchStub.called).to.be.false()
+        })
       })
     })
 
