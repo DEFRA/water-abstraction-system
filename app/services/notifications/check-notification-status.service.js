@@ -156,7 +156,9 @@ async function _recordReturnLogs(notification, status, trx) {
 async function _recordStatus(notification, notifyStatus, status) {
   try {
     await NotificationModel.transaction(async (trx) => {
-      await NotificationModel.query(trx).patch({ notifyStatus, status }).findById(notification.id)
+      await NotificationModel.query(trx)
+        .patch({ notifyStatus, status, updatedAt: timestampForPostgres() })
+        .findById(notification.id)
 
       await _recordAlert(notification, status, trx)
       await _recordReturnLogs(notification, status, trx)

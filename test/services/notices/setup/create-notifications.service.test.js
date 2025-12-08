@@ -123,7 +123,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           status: 'pending',
           templateId: NOTIFY_TEMPLATES.alerts.email.stop
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
 
       expect(results[1]).to.equal(
@@ -156,7 +156,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           status: 'pending',
           templateId: NOTIFY_TEMPLATES.alerts.email.stop
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
     })
   })
@@ -272,7 +272,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           status: 'pending',
           templateId: null
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
 
       expect(results[1]).to.equal(
@@ -311,7 +311,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           status: 'pending',
           templateId: null
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
     })
   })
@@ -378,7 +378,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           status: 'pending',
           templateId: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
 
       expect(results[1]).to.equal(
@@ -408,7 +408,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           status: 'pending',
           templateId: NOTIFY_TEMPLATES.invitations.standard.letter['returns to']
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
     })
   })

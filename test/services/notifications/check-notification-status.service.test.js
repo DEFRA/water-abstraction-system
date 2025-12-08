@@ -115,7 +115,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'received', status: 'sent' })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'received', status: 'sent' },
+            { skip: ['updatedAt'] }
+          )
         })
 
         it('does not attempt to update anything in licence monitoring stations', async () => {
@@ -170,10 +173,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({
-            notifyStatus: 'temporary-failure',
-            status: 'error'
-          })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'temporary-failure', status: 'error' },
+            { skip: ['updatedAt'] }
+          )
         })
       })
 
@@ -245,7 +248,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'delivered', status: 'sent' })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'delivered', status: 'sent' },
+            { skip: ['updatedAt'] }
+          )
         })
 
         it('does not attempt to update anything in licence monitoring stations', async () => {
@@ -300,10 +306,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({
-            notifyStatus: 'permanent-failure',
-            status: 'error'
-          })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'permanent-failure', status: 'error' },
+            { skip: ['updatedAt'] }
+          )
         })
       })
 
@@ -385,7 +391,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'received', status: 'sent' })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'received', status: 'sent' },
+            { skip: ['updatedAt'] }
+          )
         })
       })
 
@@ -406,10 +415,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({
-            notifyStatus: 'temporary-failure',
-            status: 'error'
-          })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'temporary-failure', status: 'error' },
+            { skip: ['updatedAt'] }
+          )
         })
       })
 
@@ -481,7 +490,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'delivered', status: 'sent' })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'delivered', status: 'sent' },
+            { skip: ['updatedAt'] }
+          )
         })
       })
 
@@ -502,10 +514,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({
-            notifyStatus: 'permanent-failure',
-            status: 'error'
-          })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'permanent-failure', status: 'error' },
+            { skip: ['updatedAt'] }
+          )
         })
       })
 
@@ -583,7 +595,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'received', status: 'sent' })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'received', status: 'sent' },
+            { skip: ['updatedAt'] }
+          )
         })
 
         it('updates the linked licence monitoring station record', async () => {
@@ -614,10 +629,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({
-            notifyStatus: 'validation-failed',
-            status: 'error'
-          })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'validation-failed', status: 'error' },
+            { skip: ['updatedAt'] }
+          )
         })
 
         it('does not update the linked licence monitoring station record', async () => {
@@ -695,7 +710,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'delivered', status: 'sent' })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'delivered', status: 'sent' },
+            { skip: ['updatedAt'] }
+          )
         })
 
         it('updates the linked licence monitoring station record', async () => {
@@ -726,10 +744,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({
-            notifyStatus: 'technical-failure',
-            status: 'error'
-          })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'technical-failure', status: 'error' },
+            { skip: ['updatedAt'] }
+          )
         })
 
         it('does not update the linked licence monitoring station record', async () => {
@@ -820,7 +838,10 @@ describe('Notifications - Check Notification Status service', () => {
         await CheckNotificationStatusService.go(notification)
 
         expect(notificationPatchStub.called).to.be.true()
-        expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'received', status: 'sent' })
+        expect(notificationPatchStub.firstCall.args[0]).to.equal(
+          { notifyStatus: 'received', status: 'sent' },
+          { skip: ['updatedAt'] }
+        )
       })
 
       it('does not attempt to update anything in licence monitoring stations', async () => {
@@ -875,10 +896,10 @@ describe('Notifications - Check Notification Status service', () => {
         await CheckNotificationStatusService.go(notification)
 
         expect(notificationPatchStub.called).to.be.true()
-        expect(notificationPatchStub.firstCall.args[0]).to.equal({
-          notifyStatus: 'temporary-failure',
-          status: 'error'
-        })
+        expect(notificationPatchStub.firstCall.args[0]).to.equal(
+          { notifyStatus: 'temporary-failure', status: 'error' },
+          { skip: ['updatedAt'] }
+        )
       })
     })
 
@@ -899,10 +920,10 @@ describe('Notifications - Check Notification Status service', () => {
         await CheckNotificationStatusService.go(notification)
 
         expect(notificationPatchStub.called).to.be.true()
-        expect(notificationPatchStub.firstCall.args[0]).to.equal({
-          notifyStatus: 'cancelled',
-          status: 'cancelled'
-        })
+        expect(notificationPatchStub.firstCall.args[0]).to.equal(
+          { notifyStatus: 'cancelled', status: 'cancelled' },
+          { skip: ['updatedAt'] }
+        )
       })
     })
 
