@@ -1,0 +1,160 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% macro pointsSummaryCards(points) -%}
+  {% for point in points %}
+    {# Set an easier to use index. #}
+    {% set rowIndex = loop.index0 %}
+
+    {# Summary card #}
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: point.description,
+          classes: "govuk-table__caption--m govuk-!-margin-bottom-0"
+        }
+      },
+      rows: [
+        {
+          key: {
+          text: "BGS reference",
+          attributes: { 'data-test': 'bgs-reference-title-' + rowIndex }
+        },
+          value: {
+          text: point.bgsReference,
+          attributes: { 'data-test': 'bgs-reference-' + rowIndex }
+        }
+        },
+        {
+          key: {
+          text: "Category",
+          attributes: { 'data-test': 'category-title-' + rowIndex }
+        },
+          value: {
+          text: point.category,
+          attributes: { 'data-test': 'category-' + rowIndex }
+        }
+        },
+        {
+          key: {
+          text: "Depth",
+          attributes: { 'data-test': 'depth-title-' + rowIndex }
+        },
+          value: {
+          text: point.depth,
+          attributes: { 'data-test': 'depth-' + rowIndex }
+        }
+        },
+        {
+          key: {
+          text: "Grid reference",
+          attributes: { 'data-test': 'grid-reference-title-' + rowIndex }
+        },
+          value: {
+          text: point.gridReference,
+          attributes: { 'data-test': 'grid-reference-' + rowIndex }
+        }
+        },
+        {
+          key: {
+          text: "Hydro intercept distance",
+          attributes: { 'data-test': 'hydro-intercept-distance-title-' + rowIndex }
+        },
+          value: {
+          text: point.hydroInterceptDistance,
+          attributes: { 'data-test': 'hydro-intercept-distance-' + rowIndex }
+        }
+        },
+        {
+          key: {
+          text: "Hydro offset distance",
+          attributes: { 'data-test': 'hydro-offset-distance-title-' + rowIndex }
+        },
+          value: {
+          text: point.hydroOffsetDistance,
+          attributes: { 'data-test': 'hydro-offset-distance-' + rowIndex }
+        }
+        },
+        {
+          key: {
+          text: "Hydro reference",
+          attributes: { 'data-test': 'hydro-reference-title-' + rowIndex }
+        },
+          value: {
+          text: point.hydroReference,
+          attributes: { 'data-test': 'hydro-reference-' + rowIndex }
+        }
+        },
+        {
+          key: {
+          text: "Location note",
+          attributes: { 'data-test': 'location-note-title-' + rowIndex }
+        },
+          value: {
+          text: point.locationNote,
+          attributes: { 'data-test': 'location-note-' + rowIndex }
+        }
+        },
+        {
+          key: {
+          text: "Note",
+          attributes: { 'data-test': 'note-title-' + rowIndex }
+        },
+          value: {
+          text: point.note,
+          attributes: { 'data-test': 'note-' + rowIndex }
+        }
+        },
+        {
+          key: {
+          text: "Primary type",
+          attributes: { 'data-test': 'primary-type-title-' + rowIndex }
+        },
+          value: {
+          text: point.primaryType,
+          attributes: { 'data-test': 'primary-type-' + rowIndex }
+        }
+        },
+        {
+          key: {
+          text: "Secondary type",
+          attributes: { 'data-test': 'secondary-type-title-' + rowIndex }
+        },
+          value: {
+          text: point.secondaryType,
+          attributes: { 'data-test': 'secondary-type-' + rowIndex }
+        }
+        },
+        {
+          key: {
+          text: "Source",
+          attributes: { 'data-test': 'source-title-' + rowIndex }
+        },
+          value: {
+          text: point.sourceDescription,
+          attributes: { 'data-test': 'source-description-' + rowIndex }
+        }
+        },
+        {
+          key: {
+          text: "Source type",
+          attributes: { 'data-test': 'source-type-title-' + rowIndex }
+        },
+          value: {
+          text: point.sourceType,
+          attributes: { 'data-test': 'source-type-' + rowIndex }
+        }
+        },
+        {
+          key: {
+          text: "Well reference",
+          attributes: { 'data-test': 'well-reference-title-' + rowIndex }
+        },
+          value: {
+          text: point.wellReference,
+          attributes: { 'data-test': 'well-reference-' + rowIndex }
+        }
+        }
+      ]
+    }) }}
+  {% endfor %}
+{%- endmacro %}

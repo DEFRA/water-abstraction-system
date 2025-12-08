@@ -7,6 +7,7 @@
 
 const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
+const { formatLicencePoints } = require('../licence.presenter.js')
 
 /**
  * Formats data for the `/licence-versions/{id}` page
@@ -23,11 +24,16 @@ function go(licenceVersionData, auth) {
 
   const billingAndDataRole = auth.credentials.scope.includes('billing')
 
+  const points = licenceVersion.licenceVersionPurposes.flatMap((lp) => {
+    return lp.points
+  })
+
   return {
     backLink: {
       href: `/system/licences/${licence.id}/history`,
       text: 'Go back to history'
     },
+    points: formatLicencePoints(points),
     changeType: licenceVersion.administrative ? 'no licence issued' : 'licence issued',
     errorInDataEmail: _errorInDataEmail(billingAndDataRole),
     notes: _notes(licenceVersion, billingAndDataRole),

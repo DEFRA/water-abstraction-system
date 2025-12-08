@@ -1,9 +1,10 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% from "macros/licence-version-change-type-tag.njk" import changeTypeTag as licenceVersionChangeTypeTag %}
-
+{% from "macros/points-summary-card.njk" import pointsSummaryCards %}
 
 {% block pageContent %}
 
@@ -28,5 +29,18 @@
   {% if pagination %}
     {{ govukPagination(pagination) }}
   {% endif %}
+
+  <ul class="govuk-list govuk-!-margin-bottom-6">
+    <li>
+      <a class="govuk-link" href="#points">Points</a>
+    </li>
+  </ul>
+
+  <section id="points">
+    <h2 class="govuk-heading-m govuk-!-margin-top-3">
+      Points
+    </h2>
+    {{ pointsSummaryCards(points) }}
+  </section>
 
 {% endblock %}

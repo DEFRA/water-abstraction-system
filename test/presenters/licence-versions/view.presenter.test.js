@@ -9,8 +9,9 @@ const { expect } = Code
 
 // Test helpers
 const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const ViewPresenter = require('../../../app/presenters/licence-versions/view.presenter.js')
@@ -38,6 +39,7 @@ describe('Licence Versions - View presenter', () => {
       createdAt: new Date('2022-01-01'),
       id: generateUUID(),
       licence,
+      licenceVersionPurposes: [],
       modLogs: [
         {
           id: generateUUID(),
@@ -70,6 +72,7 @@ describe('Licence Versions - View presenter', () => {
         pageTitle: 'Licence version starting 1 January 2022',
         pageTitleCaption: `Licence ${licence.licenceRef}`,
         pagination: null,
+        points: [],
         reason: 'Licence Holder Name/Address Change'
       })
     })
@@ -237,6 +240,51 @@ describe('Licence Versions - View presenter', () => {
             }
           })
         })
+      })
+    })
+  })
+
+  describe('the "points" property', () => {
+    describe('when there are no points', () => {
+      it('returns an empty array', () => {
+        const result = ViewPresenter.go(licenceVersionData, auth)
+
+        expect(result.points).to.equal([])
+      })
+    })
+
+    describe('when there are points', () => {
+      beforeEach(() => {
+        licenceVersionData.licenceVersion.licenceVersionPurposes = [
+          {
+            points: [ViewLicencesFixture.point()]
+          }
+        ]
+      })
+
+      it('returns the points', () => {
+        const result = ViewPresenter.go(licenceVersionData, auth)
+
+        expect(result.points).to.equal([
+          {
+            bgsReference: 'TL 14/123',
+            category: 'Single Point',
+            depth: '123',
+            description: 'RIVER OUSE AT BLETSOE',
+            gridReference:
+              'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (RIVER OUSE AT BLETSOE)',
+            hydroInterceptDistance: '8.01',
+            hydroOffsetDistance: '5.56',
+            hydroReference: 'TL 14/133',
+            locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
+            note: 'WELL IS SPRING-FED',
+            primaryType: 'Groundwater',
+            secondaryType: 'Borehole',
+            sourceDescription: 'SURFACE WATER SOURCE OF SUPPLY',
+            sourceType: 'Borehole',
+            wellReference: '81312'
+          }
+        ])
       })
     })
   })
