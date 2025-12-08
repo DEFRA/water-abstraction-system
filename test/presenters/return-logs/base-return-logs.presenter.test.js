@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -52,89 +52,6 @@ describe('Return Logs - Base Return Logs presenter', () => {
         const result = BaseReturnLogsPresenter.formatMeterDetails({ ...testMeter, manufacturer: null })
 
         expect(result).to.equal(null)
-      })
-    })
-  })
-
-  describe('#formatToCubicMetres()', () => {
-    let quantity
-    let units
-
-    describe('when the quantity is null or undefined', () => {
-      before(() => {
-        quantity = null
-        units = 'm³'
-      })
-
-      it('returns null', () => {
-        const result = BaseReturnLogsPresenter.formatToCubicMetres(quantity, units)
-
-        expect(result).to.be.null()
-      })
-    })
-
-    describe('when the quantity is in cubic metres', () => {
-      before(() => {
-        quantity = 1000
-        units = 'm³'
-      })
-
-      it('returns the same quantity formatted as a string', () => {
-        const result = BaseReturnLogsPresenter.formatToCubicMetres(quantity, units)
-
-        expect(result).to.equal('1,000')
-      })
-    })
-
-    describe('when the quantity is in litres', () => {
-      before(() => {
-        quantity = 1000
-        units = 'l'
-      })
-
-      it('returns the quantity converted to cubic metres formatted as a string', () => {
-        const result = BaseReturnLogsPresenter.formatToCubicMetres(quantity, units)
-
-        expect(result).to.equal('1')
-      })
-    })
-
-    describe('when the quantity is in megalitres', () => {
-      before(() => {
-        quantity = 1000
-        units = 'Ml'
-      })
-
-      it('returns the quantity converted to cubic metres formatted as a string', () => {
-        const result = BaseReturnLogsPresenter.formatToCubicMetres(quantity, units)
-
-        expect(result).to.equal('1,000,000')
-      })
-    })
-
-    describe('when the quantity is in gallons', () => {
-      before(() => {
-        quantity = 1000
-        units = 'gal'
-      })
-
-      it('returns the quantity converted to cubic metres formatted as a string to 3 decimal places', () => {
-        const result = BaseReturnLogsPresenter.formatToCubicMetres(quantity, units)
-
-        expect(result).to.equal('4.546')
-      })
-    })
-
-    describe('when the quantity will result in a "known" floating point precision error', () => {
-      before(() => {
-        quantity = 2.018
-        units = 'Ml'
-      })
-
-      it('returns the "correct" quantity converted to cubic metres formatted as a string', () => {
-        const result = BaseReturnLogsPresenter.formatToCubicMetres(quantity, units)
-
-        expect(result).to.equal('2,018')
       })
     })
   })
@@ -345,8 +262,8 @@ describe('Return Logs - Base Return Logs presenter', () => {
           it('converts non-cubic metre totals to cubic metres as a formatted string', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-            expect(result[0].unitTotal).to.equal('87,987.699')
-            expect(result[1].unitTotal).to.equal('109,984.624')
+            expect(result[0].unitTotal).to.equal('87,987.69932')
+            expect(result[1].unitTotal).to.equal('109,984.62415')
           })
         })
 
@@ -503,7 +420,7 @@ describe('Return Logs - Base Return Logs presenter', () => {
           it('converts non-cubic metre totals to cubic metres as a formatted string', () => {
             const result = BaseReturnLogsPresenter.generateSummaryTableRows(method, frequency, sampleLines)
 
-            expect(result[0].unitTotal).to.equal('329,953.872')
+            expect(result[0].unitTotal).to.equal('329,953.872449')
           })
         })
 

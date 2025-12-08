@@ -69,7 +69,7 @@ describe('Return Logs Setup - Single Volume validator', () => {
 
       describe('but entered text', () => {
         beforeEach(() => {
-          payload.singeVolumeQuantity = 'Test'
+          payload.singleVolumeQuantity = 'Test'
         })
 
         it('fails validation with the message "Enter a total figure"', () => {
@@ -82,40 +82,53 @@ describe('Return Logs Setup - Single Volume validator', () => {
 
       describe('but entered a negative volume', () => {
         beforeEach(() => {
-          payload.singeVolumeQuantity = '-0.1'
+          payload.singleVolumeQuantity = '-0.1'
         })
 
-        it('fails validation with the message "Enter a total figure"', () => {
+        it('fails validation with the message "Enter a total figure greater than zero"', () => {
           const result = SingleVolumeValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a total figure')
+          expect(result.error.details[0].message).to.equal('Enter a total figure greater than zero')
         })
       })
 
       describe('but entered a volume too small', () => {
         beforeEach(() => {
-          payload.singeVolumeQuantity = '0'
+          payload.singleVolumeQuantity = '0'
         })
 
-        it('fails validation with the message "Enter a total figure"', () => {
+        it('fails validation with the message "Enter a total figure greater than zero"', () => {
           const result = SingleVolumeValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a total figure')
+          expect(result.error.details[0].message).to.equal('Enter a total figure greater than zero')
         })
       })
 
       describe('but entered a volume too big', () => {
         beforeEach(() => {
-          payload.singeVolumeQuantity = '9007199254740992'
+          payload.singleVolumeQuantity = '9007199254740992'
         })
 
-        it('fails validation with the message "Enter a total figure"', () => {
+        it('fails validation with the message "Enter a smaller total figure"', () => {
           const result = SingleVolumeValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a total figure')
+          expect(result.error.details[0].message).to.equal('Enter a smaller total figure')
+        })
+      })
+
+      describe('but entered a volume with more than 6 decimal places', () => {
+        beforeEach(() => {
+          payload.singleVolumeQuantity = '1.1234567'
+        })
+
+        it('fails validation with the message "Enter a number with no more than 6 decimal places"', () => {
+          const result = SingleVolumeValidator.go(payload)
+
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal('Enter a number with no more than 6 decimal places')
         })
       })
     })

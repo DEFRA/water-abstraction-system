@@ -5,11 +5,12 @@
  * @module SubmitUnitsService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
+const { returnUnits } = require('../../../lib/static-lookups.lib.js')
 const UnitsPresenter = require('../../../presenters/return-logs/setup/units.presenter.js')
 const UnitsValidator = require('../../../validators/return-logs/setup/units.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/units` page
@@ -52,8 +53,15 @@ async function go(sessionId, payload, yar) {
   }
 }
 
+function _getUnitSymbolByName(units) {
+  return Object.keys(returnUnits).find((key) => {
+    return returnUnits[key].name === units
+  })
+}
+
 async function _save(session, payload) {
   session.units = payload.units
+  session.unitSymbol = _getUnitSymbolByName(payload.units)
 
   return session.$update()
 }

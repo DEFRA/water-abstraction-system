@@ -262,6 +262,11 @@
     <div class="govuk-grid-row govuk-!-margin-bottom-0">
       <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-l">{{tableTitle}}</h2>
+
+        {{ govukInsetText({
+          text: 'All submissions are converted to cubic metres and rounded to six decimal places.'
+        }) }}
+
         <p class="govuk-!-margin-bottom-3">
           <strong><a class="govuk-link" href="{{links.multipleEntries}}">{{enterMultipleLinkText}}</a></strong> – paste in values for an entire return period
         </p>

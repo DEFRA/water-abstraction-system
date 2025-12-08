@@ -15,11 +15,12 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
 
   beforeEach(() => {
     sessionData = {
-      reported: 'abstractionVolumes',
-      units: 'cubicMetres',
-      singleVolume: false,
+      lines: [],
       meterProvided: 'no',
-      lines: []
+      reported: 'abstractionVolumes',
+      singleVolume: false,
+      units: 'cubicMetres',
+      unitSymbol: 'm³'
     }
   })
 
@@ -66,10 +67,10 @@ describe('Return Logs Setup - Generate Return Submission Metadata', () => {
 
     it('correctly sets units', () => {
       const sessionDataToTest = [
-        { ...sessionData, units: 'cubicMetres' },
-        { ...sessionData, units: 'litres' },
-        { ...sessionData, units: 'megalitres' },
-        { ...sessionData, units: 'gallons' }
+        { ...sessionData, units: 'cubicMetres', unitSymbol: 'm³' },
+        { ...sessionData, units: 'litres', unitSymbol: 'l' },
+        { ...sessionData, units: 'megalitres', unitSymbol: 'Ml' },
+        { ...sessionData, units: 'gallons', unitSymbol: 'gal' }
       ]
 
       const results = sessionDataToTest.map((session) => {

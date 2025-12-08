@@ -11,6 +11,8 @@ const { setTimeout } = require('node:timers/promises')
 
 const { returnUnits } = require('./static-lookups.lib.js')
 
+const MAX_DECIMAL = 6
+
 /**
  * Calculates and logs the time taken in milliseconds between the provided `startTime` and the current time
  *
@@ -49,6 +51,28 @@ function calculateAndLogTimeTaken(startTime, message, data = {}) {
 }
 
 /**
+ * Converts a quantity from cubic metres to a given unit
+ *
+ * We use **Big.js** to mitigate issues with
+ * {@link https://en.wikipedia.org/wiki/Floating-point_error_mitigation | floating-point errors}.
+ *
+ * The classic example of this in JavaScript is `0.1 + 0.2`. You expect `0.3` but in fact the result is
+ * `0.30000000000000004`.
+ *
+ * @param {number} quantity - the quantity in cubic metres to be formatted and converted to the given unit
+ * @param {string} units - the unit to convert the quantity to
+ *
+ * @returns {number|null} The converted quantity or null if the quantity is null or undefined
+ */
+function convertFromCubicMetres(quantity, units) {
+  if (quantity === null || quantity === undefined) {
+    return null
+  }
+
+  return Big(quantity).times(returnUnits[units].multiplier).round(MAX_DECIMAL, Big.roundHalfUp).toNumber()
+}
+
+/**
  * Converts a quantity from a given unit to cubic metres
  *
  * We use **Big.js** to mitigate issues with
@@ -67,7 +91,7 @@ function convertToCubicMetres(quantity, units) {
     return null
   }
 
-  return Big(quantity).div(returnUnits[units].multiplier).toNumber()
+  return Big(quantity).div(returnUnits[units].multiplier).round(MAX_DECIMAL, Big.roundHalfUp).toNumber()
 }
 
 /**
@@ -452,6 +476,7 @@ function transformStringOfLicencesToArray(licences) {
 
 module.exports = {
   calculateAndLogTimeTaken,
+  convertFromCubicMetres,
   convertToCubicMetres,
   currentTimeInNanoseconds,
   determineCurrentFinancialYear,

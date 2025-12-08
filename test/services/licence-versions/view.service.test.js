@@ -45,7 +45,10 @@ describe('Licence Versions - View service', () => {
       startDate: new Date('2022-01-01')
     })
 
-    Sinon.stub(FetchLicenceVersionService, 'go').returns(licenceVersion)
+    Sinon.stub(FetchLicenceVersionService, 'go').returns({
+      licenceVersion,
+      licenceVersionsForPagination: [licenceVersion]
+    })
   })
 
   afterEach(() => {
@@ -67,6 +70,7 @@ describe('Licence Versions - View service', () => {
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
         pageTitleCaption: `Licence ${licence.licenceRef}`,
+        pagination: null,
         reason: 'Licence Holder Name/Address Change'
       })
     })
