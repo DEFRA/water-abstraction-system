@@ -117,10 +117,20 @@ async function _recordAlert(notification, status, trx) {
 }
 
 async function _recordReturnLogs(notification, status, trx) {
-  const { createdAt, dueDate, messageRef, returnLogIds } = notification
+  const { contactType, createdAt, dueDate, messageRef, returnLogIds } = notification
 
-  // We only update the linked return logs if the notification is 'sent' and it's a returns invitation
-  if (status !== NOTIFICATIONS_STATUS.sent || !messageRef.startsWith('returns invitation')) {
+  // If the status was not 'sent' then we make no changes
+  if (status !== NOTIFICATIONS_STATUS.sent) {
+    return
+  }
+
+  // We only apply the due date for certain notice types
+  if (!['paper return', 'returns invitation', 'returns invitation ad-hoc'].includes(messageRef)) {
+    return
+  }
+
+  // We only apply the due date for certain contact types
+  if (!['licence holder', 'primary user', 'single use'].includes(contactType)) {
     return
   }
 
