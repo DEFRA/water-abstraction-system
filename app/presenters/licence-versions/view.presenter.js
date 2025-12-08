@@ -24,16 +24,12 @@ function go(licenceVersionData, auth) {
 
   const billingAndDataRole = auth.credentials.scope.includes('billing')
 
-  const points = licenceVersion.licenceVersionPurposes.flatMap((lp) => {
-    return lp.points
-  })
-
   return {
     backLink: {
       href: `/system/licences/${licence.id}/history`,
       text: 'Go back to history'
     },
-    points: formatLicencePoints(points),
+    points: _points(licenceVersion.licenceVersionPurposes),
     changeType: licenceVersion.administrative ? 'no licence issued' : 'licence issued',
     errorInDataEmail: _errorInDataEmail(billingAndDataRole),
     notes: _notes(licenceVersion, billingAndDataRole),
@@ -94,6 +90,21 @@ function _pagination(licenceVersionsForPagination, licenceVersion) {
   }
 
   return pagination
+}
+
+function _points(licenceVersionPurposes) {
+  const points = licenceVersionPurposes
+    .flatMap((licenceVersionPurpose) => {
+      return licenceVersionPurpose.points
+    })
+    .sort((a, b) => {
+      return a.description.localeCompare(b.description, 'en', {
+        sensitivity: 'base',
+        ignorePunctuation: true
+      })
+    })
+
+  return formatLicencePoints(points)
 }
 
 function _reason(licenceVersion, billingAndDataRole) {

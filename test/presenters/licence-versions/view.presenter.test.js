@@ -287,6 +287,84 @@ describe('Licence Versions - View presenter', () => {
         ])
       })
     })
+
+    describe('when there are multiple points', () => {
+      beforeEach(() => {
+        licenceVersionData.licenceVersion.licenceVersionPurposes = [
+          {
+            points: [ViewLicencesFixture.point()]
+          },
+          {
+            points: [{ ...ViewLicencesFixture.point(), description: 'ABSTRACTION POINT A' }]
+          },
+          {
+            // A description with punctuation - this should be ignored
+            points: [{ ...ViewLicencesFixture.point(), description: "ABSTRACTION POINT 'C'" }]
+          }
+        ]
+      })
+
+      it('returns the points ordered by the description', () => {
+        const result = ViewPresenter.go(licenceVersionData, auth)
+
+        expect(result.points).to.equal([
+          {
+            bgsReference: 'TL 14/123',
+            category: 'Single Point',
+            depth: '123',
+            description: 'ABSTRACTION POINT A',
+            gridReference:
+              'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (ABSTRACTION POINT A)',
+            hydroInterceptDistance: '8.01',
+            hydroOffsetDistance: '5.56',
+            hydroReference: 'TL 14/133',
+            locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
+            note: 'WELL IS SPRING-FED',
+            primaryType: 'Groundwater',
+            secondaryType: 'Borehole',
+            sourceDescription: 'SURFACE WATER SOURCE OF SUPPLY',
+            sourceType: 'Borehole',
+            wellReference: '81312'
+          },
+          {
+            bgsReference: 'TL 14/123',
+            category: 'Single Point',
+            depth: '123',
+            description: "ABSTRACTION POINT 'C'",
+            gridReference:
+              "Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (ABSTRACTION POINT 'C')",
+            hydroInterceptDistance: '8.01',
+            hydroOffsetDistance: '5.56',
+            hydroReference: 'TL 14/133',
+            locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
+            note: 'WELL IS SPRING-FED',
+            primaryType: 'Groundwater',
+            secondaryType: 'Borehole',
+            sourceDescription: 'SURFACE WATER SOURCE OF SUPPLY',
+            sourceType: 'Borehole',
+            wellReference: '81312'
+          },
+          {
+            bgsReference: 'TL 14/123',
+            category: 'Single Point',
+            depth: '123',
+            description: 'RIVER OUSE AT BLETSOE',
+            gridReference:
+              'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (RIVER OUSE AT BLETSOE)',
+            hydroInterceptDistance: '8.01',
+            hydroOffsetDistance: '5.56',
+            hydroReference: 'TL 14/133',
+            locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
+            note: 'WELL IS SPRING-FED',
+            primaryType: 'Groundwater',
+            secondaryType: 'Borehole',
+            sourceDescription: 'SURFACE WATER SOURCE OF SUPPLY',
+            sourceType: 'Borehole',
+            wellReference: '81312'
+          }
+        ])
+      })
+    })
   })
 
   describe('the "reason" property', () => {

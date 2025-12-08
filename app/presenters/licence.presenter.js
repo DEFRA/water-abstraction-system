@@ -3,8 +3,11 @@
 const PointModel = require('../models/point.model.js')
 
 /**
+ * Formats Licence points for the view
  *
- * @param {object[]} points
+ * Used by the 'pointsSummaryCards' macro
+ *
+ * @param {object[]} points - points from the licence version purposes
  *
  * @returns {object[]} - the points formatted to be displayed
  */
