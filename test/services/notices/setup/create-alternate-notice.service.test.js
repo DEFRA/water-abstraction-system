@@ -15,6 +15,7 @@ const { futureDueDate } = require('../../../../app/presenters/notices/base.prese
 const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
 
 // Things to stub
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const FetchAlternateReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js')
 const FetchFailedReturnsInvitationsService = require('../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js')
 
@@ -25,6 +26,10 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
   let fetchFailedReturnsInvitationsResults
   let fetchReturnsAddressesServiceResults
   let noticeWithErrors
+
+  beforeEach(async () => {
+    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
+  })
 
   afterEach(() => {
     Sinon.restore()
