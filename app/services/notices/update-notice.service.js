@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Updates the status counts and determines the overall status for the provided events
- * @module UpdateEventService
+ * Updates the status counts and determines the overall status for the provided notices
+ * @module UpdateNoticeService
  */
 
-const { db } = require('../../../../db/db.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+const { db } = require('../../../db/db.js')
+const { timestampForPostgres } = require('../../lib/general.lib.js')
 
 /**
- * Updates the status counts and determines the overall status for the provided events
+ * Updates the status counts and determines the overall status for the provided notices
  *
  * This service sets the `event.overall_status` based on the statuses of the associated notifications. The logic used to
  * determine the overall status is as follows.
@@ -45,13 +45,13 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  * > For more information about error statuses from Notify, refer to the
  * > {@link https://docs.notifications.service.gov.uk/rest-api.html | documentation}
  *
- * @param {string[]} eventIds - the UUIDs of the events to update
+ * @param {string[]} noticeIds - the UUIDs of the notices to update
  */
-async function go(eventIds) {
+async function go(noticeIds) {
   const query = _query()
   const updatedAt = timestampForPostgres()
 
-  await db.raw(query, [updatedAt, eventIds])
+  await db.raw(query, [updatedAt, noticeIds])
 }
 
 function _query() {

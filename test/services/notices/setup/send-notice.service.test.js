@@ -20,7 +20,7 @@ const NotifyConfig = require('../../../../config/notify.config.js')
 const SendEmailService = require('../../../../app/services/notices/setup/batch/send-email.service.js')
 const SendLetterService = require('../../../../app/services/notices/setup/batch/send-letter.service.js')
 const SendPaperReturnService = require('../../../../app/services/notices/setup/batch/send-paper-return.service.js')
-const UpdateEventService = require('../../../../app/services/jobs/notification-status/update-event.service.js')
+const UpdateNoticeService = require('../../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
 const SendNoticeService = require('../../../../app/services/notices/setup/send-notice.service.js')
@@ -60,7 +60,7 @@ describe('Notices - Setup - Send Notice service', () => {
     })
 
     checkNotificationStatusStub = Sinon.stub(CheckNotificationStatusService, 'go').resolves()
-    updateEventServiceStub = Sinon.stub(UpdateEventService, 'go').resolves()
+    updateEventServiceStub = Sinon.stub(UpdateNoticeService, 'go').resolves()
 
     // We have to set wait for status to 25ms to avoid the tests timing out. By default it would be 5 seconds and is
     // used to give Notify a chance to process the email notifications.

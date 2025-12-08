@@ -15,7 +15,7 @@ const NotificationHelper = require('../../support/helpers/notification.helper.js
 const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const UpdateEventService = require('../../../app/services/jobs/notification-status/update-event.service.js')
+const UpdateNoticeService = require('../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
 const ProcessReturnedLetterService = require('../../../app/services/notifications/process-returned-letter.service.js')
@@ -59,7 +59,7 @@ describe('Notifications - Process Returned Letter service', () => {
         reference: generateNoticeReferenceCode('RREM-')
       }
 
-      updateEventStub = Sinon.stub(UpdateEventService, 'go').resolves()
+      updateEventStub = Sinon.stub(UpdateNoticeService, 'go').resolves()
     })
 
     it('updates "status" to returned and "returnedAt" to current date on the matching notification', async () => {
@@ -121,7 +121,7 @@ describe('Notifications - Process Returned Letter service', () => {
         reference: generateNoticeReferenceCode('RREM-')
       }
 
-      Sinon.stub(UpdateEventService, 'go').rejects()
+      Sinon.stub(UpdateNoticeService, 'go').rejects()
     })
 
     it('does not throw an error', async () => {

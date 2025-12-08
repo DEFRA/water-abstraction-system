@@ -11,7 +11,7 @@ const NotificationModel = require('../../../../app/models/notification.model.js'
 const SendEmailService = require('./batch/send-email.service.js')
 const SendLetterService = require('./batch/send-letter.service.js')
 const SendPaperReturnService = require('./batch/send-paper-return.service.js')
-const UpdateEventService = require('../../jobs/notification-status/update-event.service.js')
+const UpdateNoticeService = require('../update-notice.service.js')
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds, pause } = require('../../../lib/general.lib.js')
 
@@ -37,7 +37,7 @@ async function go(notice, notifications) {
 
     await _checkNotifications(sentNotifications)
 
-    await UpdateEventService.go([noticeId])
+    await UpdateNoticeService.go([noticeId])
 
     await _sendAlternateNotice(notice)
 

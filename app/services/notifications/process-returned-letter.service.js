@@ -7,7 +7,7 @@
  */
 
 const NotificationModel = require('../../models/notification.model.js')
-const UpdateEventService = require('../jobs/notification-status/update-event.service.js')
+const UpdateNoticeService = require('../notices/update-notice.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds, timestampForPostgres } = require('../../lib/general.lib.js')
 
 /**
@@ -33,7 +33,7 @@ async function go(payload) {
 
     if (updatedNotifications.length) {
       // Recalculate the overall status and status counts on the linked notice.
-      await UpdateEventService.go([updatedNotifications[0].eventId])
+      await UpdateNoticeService.go([updatedNotifications[0].eventId])
     }
 
     calculateAndLogTimeTaken(startTime, 'Returned letter complete', {

@@ -7,7 +7,7 @@
 
 const CheckNotificationStatusService = require('../../notifications/check-notification-status.service.js')
 const FetchNotificationsService = require('./fetch-notifications.service.js')
-const UpdateEventService = require('./update-event.service.js')
+const UpdateNoticeService = require('../../notices/update-notice.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 
 /**
@@ -65,7 +65,7 @@ async function _updateEventErrorCount(notifications) {
 
   const dedupeEventIds = [...new Set(eventIds)]
 
-  await UpdateEventService.go(dedupeEventIds)
+  await UpdateNoticeService.go(dedupeEventIds)
 }
 
 module.exports = {
