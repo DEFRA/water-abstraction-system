@@ -35,6 +35,7 @@ async function _fetch(licenceVersionId) {
     .select([
       'id',
       'startDate',
+      'endDate',
       raw(
         '(SELECT true FROM public.licence_versions lv2 WHERE lv2.licence_id = licence_versions.licence_id AND lv2.issue = licence_versions.issue AND lv2."increment" = (licence_versions."increment" - 1))'
       ).as('administrative')
@@ -42,6 +43,7 @@ async function _fetch(licenceVersionId) {
     .withGraphFetched('licence')
     .modifyGraph('licence', (builder) => {
       builder.select(['id', 'licenceRef'])
+      builder.modify('licenceHolder')
     })
     .modify('history')
 }

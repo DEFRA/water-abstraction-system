@@ -66,6 +66,11 @@ describe('Licence Versions - View presenter', () => {
         },
         changeType: 'licence issued',
         errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
+        licenceDetails: {
+          endDate: null,
+          licenceHolder: null,
+          startDate: '1 January 2022'
+        },
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
         pageTitleCaption: `Licence ${licence.licenceRef}`,
@@ -115,6 +120,38 @@ describe('Licence Versions - View presenter', () => {
         const result = ViewPresenter.go(licenceVersionData, auth)
 
         expect(result.changeType).to.equal('no licence issued')
+      })
+    })
+  })
+
+  describe('the "licenceDetails" property', () => {
+    it('returns the licence details', () => {
+      const result = ViewPresenter.go(licenceVersionData, auth)
+
+      expect(result.licenceDetails).to.equal({ endDate: null, licenceHolder: null, startDate: '1 January 2022' })
+    })
+
+    describe('the "licenceHolder" property', () => {
+      describe('when there is not a "licenceHolder"', () => {
+        it('returns null', () => {
+          const result = ViewPresenter.go(licenceVersionData, auth)
+
+          expect(result.licenceDetails.licenceHolder).to.be.null()
+        })
+      })
+
+      describe('when there is a "licenceHolder"', () => {
+        beforeEach(() => {
+          licenceVersionData.licenceVersion.licence.licenceDocument = {
+            licenceDocumentRoles: [{ company: { name: 'ACME' } }]
+          }
+        })
+
+        it('returns the licence holder', () => {
+          const result = ViewPresenter.go(licenceVersionData, auth)
+
+          expect(result.licenceDetails.licenceHolder).to.equal('ACME')
+        })
       })
     })
   })
