@@ -20,7 +20,7 @@ const NotifyAddressPresenter = require('./notify-address.presenter.js')
  * @returns {object} - a contact
  */
 function go(recipient) {
-  if (recipient.email) {
+  if (recipient.message_type === 'Email') {
     return [recipient.email]
   }
 

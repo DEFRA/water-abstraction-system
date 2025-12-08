@@ -35,6 +35,7 @@ async function go(session, recipients, noticeId) {
         createdAt: timestampForPostgres()
       })
       .returning([
+        'contactType',
         'createdAt',
         'dueDate',
         'id',

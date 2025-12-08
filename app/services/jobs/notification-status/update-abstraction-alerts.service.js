@@ -10,9 +10,9 @@ const LicenceMonitoringStationModel = require('../../../models/licence-monitorin
 /**
  * Orchestrates the process of updating the licence monitoring stations last abstraction alert.
  *
- * When a notification is for water abstraction alerts it will have the 'messageRef' set as something like:
- * 'water_abstraction_alert_resume_email'. When this is present we need to update the licence monitoring stations
- * 'status' and 'statusUpdatedAt'. This signifies the last abstraction alert sent.
+ * When a notification is for water abstraction alerts it will have the 'messageRef' set as something like: 'abstraction
+ * alert resume'. When this is present we need to update the licence monitoring stations 'status' and 'statusUpdatedAt'.
+ * This signifies the last abstraction alert sent.
  *
  * If a notification has failed to send (Notify has sent an error) then we do not update.
  *
@@ -30,7 +30,7 @@ async function go(notifications) {
  */
 function _stations(notifications) {
   const stationsToUpdate = notifications.filter((notification) => {
-    return notification.messageRef?.includes('water_abstraction_alert') && notification.status !== 'error'
+    return notification.messageRef?.includes('abstraction alert') && notification.status !== 'error'
   })
 
   return stationsToUpdate.map((notification) => {

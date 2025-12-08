@@ -60,8 +60,9 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         expect(refreshedSession.contactType).to.equal(undefined)
         expect(refreshedSession.additionalRecipients).to.equal([
           {
+            contact: null,
             contact_hash_id: _createMD5Hash(payload.contactEmail),
-            contact_type: 'Single use',
+            contact_type: 'single use',
             email: payload.contactEmail,
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],
@@ -113,8 +114,9 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         expect(refreshedSession.contactType).to.equal(undefined)
         expect(refreshedSession.additionalRecipients).to.equal([
           {
+            contact: null,
             contact_hash_id: _createMD5Hash(payload.contactEmail),
-            contact_type: 'Single use',
+            contact_type: 'single use',
             email: payload.contactEmail,
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],
@@ -158,8 +160,9 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         expect(refreshedSession.contactType).to.equal(undefined)
         expect(refreshedSession.additionalRecipients).to.equal([
           {
+            contact: null,
             contact_hash_id: testEmailHash,
-            contact_type: 'Single use',
+            contact_type: 'single use',
             email: 'test@test.gov.uk',
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],
@@ -191,8 +194,9 @@ describe('Notices - Setup - Submit Contact Type service', () => {
 
         sessionData.additionalRecipients = [
           {
+            contact: null,
             contact_hash_id: testEmailHash,
-            contact_type: 'Single use',
+            contact_type: 'single use',
             email: 'test@test.gov.uk',
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],
@@ -214,16 +218,18 @@ describe('Notices - Setup - Submit Contact Type service', () => {
         expect(refreshedSession.contactType).to.equal(undefined)
         expect(refreshedSession.additionalRecipients).to.equal([
           {
+            contact: null,
             contact_hash_id: testEmailHash,
-            contact_type: 'Single use',
+            contact_type: 'single use',
             email: 'test@test.gov.uk',
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],
             message_type: 'Email'
           },
           {
+            contact: null,
             contact_hash_id: _createMD5Hash(payload.contactEmail),
-            contact_type: 'Single use',
+            contact_type: 'single use',
             email: payload.contactEmail,
             licence_ref: session.licenceRef,
             licence_refs: [session.licenceRef],

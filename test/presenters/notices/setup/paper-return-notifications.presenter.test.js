@@ -54,10 +54,11 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
 
     expect(result).to.equal([
       {
+        contactType: 'licence holder',
         dueDate: dueReturns[0].dueDate,
         eventId: noticeId,
         licences: [licenceRef],
-        messageRef: 'pdf.return_form',
+        messageRef: 'paper return',
         messageType: 'letter',
         personalisation: {
           address_line_1: 'Mr H J Potter',
@@ -84,10 +85,11 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
         status: 'pending'
       },
       {
+        contactType: 'returns to',
         dueDate: dueReturns[0].dueDate,
         eventId: noticeId,
         licences: [licenceRef],
-        messageRef: 'pdf.return_form',
+        messageRef: 'paper return',
         messageType: 'letter',
         personalisation: {
           address_line_1: 'Mr H J Weasley',
