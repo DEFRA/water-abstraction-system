@@ -2,7 +2,7 @@
 
 const { HTTP_STATUS_OK } = require('node:http2').constants
 
-const { notifyTemplates } = require('../../app/lib/notify-templates.lib.js')
+const { NOTIFY_TEMPLATES } = require('../../app/lib/notify-templates.lib.js')
 
 /**
  * Represents a successful response from the Notify API
@@ -28,8 +28,8 @@ function successfulResponse(referenceCode) {
           reference: referenceCode,
           scheduled_for: null,
           template: {
-            id: notifyTemplates.standard.invitations.returnsAgentEmail,
-            uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${notifyTemplates.standard.invitations.returnsAgentEmail}`,
+            id: NOTIFY_TEMPLATES.invitations.standard.email['returns agent'],
+            uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${NOTIFY_TEMPLATES.invitations.standard.email['returns agent']}`,
             version: 40
           },
           uri: 'https://api.notifications.service.gov.uk/v2/notifications/9a0a0ba0-9dc7-4322-9a68-cb370220d0c9'
@@ -49,8 +49,8 @@ function successfulResponse(referenceCode) {
           reference: referenceCode,
           scheduled_for: null,
           template: {
-            id: notifyTemplates.standard.invitations.licenceHolderLetter,
-            uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${notifyTemplates.standard.invitations.licenceHolderLetter}`,
+            id: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder'],
+            uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']}`,
             version: 32
           },
           uri: 'https://api.notifications.service.gov.uk/v2/notifications/fff6c2a9-77fc-4553-8265-546109a45044'

@@ -5,12 +5,11 @@
  * @module FetchRecipientsService
  */
 
-const DetermineRecipientsService = require('./determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('./abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
 const FetchAdHocReturnsRecipientsService = require('./returns-notice/fetch-ad-hoc-returns-recipients.service.js')
 const FetchPaperReturnsRecipientsService = require('./returns-notice/fetch-paper-returns-recipients.service.js')
 const FetchStandardReturnsRecipientsService = require('./returns-notice/fetch-standard-returns-recipients.service.js')
-const RecipientsService = require('./recipients.service.js')
+const MergeRecipientsService = require('./merge-recipients.service.js')
 const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -27,9 +26,7 @@ const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.j
 async function go(session, download) {
   const recipientsData = await _recipientsData(session, download)
 
-  const recipients = RecipientsService.go(session, recipientsData)
-
-  return DetermineRecipientsService.go(recipients)
+  return MergeRecipientsService.go(session, recipientsData)
 }
 
 async function _recipientsData(session, download) {

@@ -8,51 +8,22 @@
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { futureDueDate } = require('../base.presenter.js')
-const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
+const { NOTIFY_TEMPLATES } = require('../../../lib/notify-templates.lib.js')
 
 const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
-// NOTE: We know the notice type, for example, 'returns invitation' and this is stored against the notice. But against
-// the notification the legacy code also captures the user and method type in a field called `message_ref`.
-//
-// A registered licence (a customer has created an account and 'registered' the licence as theirs) will have a 'primary
-// user', who can then add additional accounts with the ability to submit returns, known as 'returns agent'. These are
-// always email.
-//
-// An unregistered licence will have a 'licence holder', and the customer can provide details of additional contacts,
-// known as 'returns to'. These are always letters.
-//
-// With the notice type, method, and recipient contact type we can select the correct message_ref to assign to the
-// notification.
 const MESSAGE_REFS = {
-  invitations: {
-    email: {
-      'Primary user': 'returns_invitation_primary_user_email',
-      'Returns agent': 'returns_invitation_returns_agent_email',
-      'Single use': 'returns_invitation_primary_user_email'
-    },
-    letter: {
-      'Licence holder': 'returns_invitation_licence_holder_letter',
-      'Returns to': 'returns_invitation_returns_to_letter',
-      'Single use': 'returns_invitation_licence_holder_letter'
-    }
-  },
   failedInvitations: {
-    letter: {
-      'Licence holder': 'returns_invitation_licence_holder_letter'
-    }
+    adhoc: 'returns invitation failed',
+    standard: 'returns invitation failed'
+  },
+  invitations: {
+    adhoc: 'returns invitation ad-hoc',
+    standard: 'returns invitation'
   },
   reminders: {
-    email: {
-      'Primary user': 'returns_reminder_primary_user_email',
-      'Returns agent': 'returns_reminder_returns_agent_email',
-      'Single use': 'returns_reminder_primary_user_email'
-    },
-    letter: {
-      'Licence holder': 'returns_reminder_licence_holder_letter',
-      'Returns to': 'returns_reminder_returns_to_letter',
-      'Single use': 'returns_reminder_licence_holder_letter'
-    }
+    adhoc: 'returns reminder ad-hoc',
+    standard: 'returns reminder'
   }
 }
 
@@ -91,15 +62,15 @@ function _email(recipient, noticeId, session) {
   const { determinedReturnsPeriod, journey, noticeType } = session
 
   const messageType = 'email'
-  const templateId = _emailTemplate(recipient.contact_type, journey, noticeType)
   const dueDate = _dueDate(session, messageType)
 
   return {
+    contactType: recipient.contact_type,
     dueDate,
     eventId: noticeId,
     licences: recipient.licence_refs,
     messageType,
-    messageRef: MESSAGE_REFS[noticeType][messageType][recipient.contact_type],
+    messageRef: MESSAGE_REFS[noticeType][journey],
     personalisation: {
       periodEndDate: formatLongDate(determinedReturnsPeriod?.endDate),
       periodStartDate: formatLongDate(determinedReturnsPeriod?.startDate),
@@ -108,7 +79,7 @@ function _email(recipient, noticeId, session) {
     recipient: recipient.email,
     returnLogIds: recipient.return_log_ids,
     status: 'pending',
-    templateId
+    templateId: NOTIFY_TEMPLATES[noticeType][journey][messageType][recipient.contact_type]
   }
 }
 
@@ -120,28 +91,20 @@ function _dueDate(session, messageType) {
   return session?.determinedReturnsPeriod?.dueDate ?? futureDueDate(messageType)
 }
 
-function _emailTemplate(contactType, journey, noticeType) {
-  if (contactType === 'Returns agent') {
-    return notifyTemplates[journey][noticeType].returnsAgentEmail
-  }
-
-  return notifyTemplates[journey][noticeType].primaryUserEmail
-}
-
 function _letter(recipient, noticeId, session) {
   const { determinedReturnsPeriod, journey, noticeType } = session
 
   const messageType = 'letter'
-  const templateId = _letterTemplate(recipient.contact_type, journey, noticeType)
   const address = NotifyAddressPresenter.go(recipient.contact)
   const dueDate = _dueDate(session, messageType)
 
   return {
+    contactType: recipient.contact_type,
     dueDate,
     eventId: noticeId,
     licences: recipient.licence_refs,
     messageType,
-    messageRef: MESSAGE_REFS[noticeType][messageType][recipient.contact_type],
+    messageRef: MESSAGE_REFS[noticeType][journey],
     personalisation: {
       ...address,
       periodEndDate: formatLongDate(determinedReturnsPeriod?.endDate),
@@ -152,16 +115,8 @@ function _letter(recipient, noticeId, session) {
     },
     returnLogIds: recipient.return_log_ids,
     status: 'pending',
-    templateId
+    templateId: NOTIFY_TEMPLATES[noticeType][journey][messageType][recipient.contact_type]
   }
-}
-
-function _letterTemplate(contactType, journey, noticeType) {
-  if (contactType === 'Returns to') {
-    return notifyTemplates[journey][noticeType].returnsToLetter
-  }
-
-  return notifyTemplates[journey][noticeType].licenceHolderLetter
 }
 
 module.exports = {

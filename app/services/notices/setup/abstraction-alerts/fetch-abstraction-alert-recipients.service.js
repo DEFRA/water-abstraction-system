@@ -72,7 +72,7 @@ function _query() {
     SELECT
       DISTINCT
       ld.licence_ref,
-      'Additional contact' AS contact_type,
+      'additional contact' AS contact_type,
       con.email,
       NULL::jsonb AS contact,
       md5(LOWER(con.email)) AS contact_hash_id,
@@ -99,7 +99,7 @@ function _query() {
   primary_users AS (
     SELECT
       ldh.licence_ref,
-      'Primary user' AS contact_type,
+      'primary user' AS contact_type,
       le.name AS email,
       NULL::jsonb AS contact,
       md5(LOWER(le.name)) AS contact_hash_id,
@@ -118,7 +118,7 @@ function _query() {
   licence_holders AS (
     SELECT
       ldh.licence_ref,
-      'Licence holder' AS contact_type,
+      'licence holder' AS contact_type,
       NULL AS email,
       contacts AS contact,
       md5(LOWER(concat_ws(
