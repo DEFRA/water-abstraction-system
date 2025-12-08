@@ -302,6 +302,7 @@
     </div>
   {% endif %}
 
+  <h3 class="govuk-heading-m">Communications</h3>
   {% if notifications.length > 0 %}
     {% set tableRows = [] %}
     {% for notification in notifications %}
@@ -355,5 +356,7 @@
       ],
       rows: tableRows
     }) }}
+  {% else %}
+    <p>This return log has no associated communications. While some may exist, they were not recorded at the time.</p>
   {% endif %}
 {% endblock %}

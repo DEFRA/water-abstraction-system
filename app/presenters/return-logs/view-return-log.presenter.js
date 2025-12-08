@@ -26,11 +26,11 @@ const { returnRequirementFrequencies, unitNames } = require('../../lib/static-lo
  *
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {module:ReturnLogModel} returnLog - The return log and associated submission and licence data
- * @param {module:NotificationModel[]} notifications - All notifications linked to the licence
+ * @param {module:NotificationModel[]} notifications - All notifications linked to the return log
  *
  * @returns {object} page data needed by the view template
  */
-function go(auth, returnLog, notifications) {
+function go(auth, returnLog, notifications = []) {
   const {
     current,
     endDate,
@@ -55,7 +55,7 @@ function go(auth, returnLog, notifications) {
   const method = selectedReturnSubmission?.$method()
   const units = selectedReturnSubmission?.$units()
   const formattedStatus = formatReturnLogStatus(returnLog)
-  const notificationsTableData = NotificationsTablePresenter.go(notifications)
+  const notificationsTableData = NotificationsTablePresenter.go(notifications, null, returnId)
   const summaryTableData = _summaryTableData(selectedReturnSubmission, returnsFrequency)
 
   return {

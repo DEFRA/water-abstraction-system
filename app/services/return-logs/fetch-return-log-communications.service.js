@@ -17,7 +17,6 @@ const NotificationModel = require('../../models/notification.model.js')
  * @returns {Promise<object>} the data needed to populate the view return log page's communications tab
  */
 async function go(returnId) {
-  console.log(returnId)
   const results = await _fetch(returnId)
 
   return results
