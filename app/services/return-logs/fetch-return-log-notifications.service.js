@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Fetches data needed for the view '/return-logs/{id}` page
- * @module FetchReturnLogCommunicationsService
+ * Fetch notifications linked to a specified return log
+ * @module FetchReturnLogNotificationsService
  */
 
 const { ref } = require('objection')
@@ -10,11 +10,11 @@ const { ref } = require('objection')
 const NotificationModel = require('../../models/notification.model.js')
 
 /**
- * Fetches data needed for the view '/return-logs/{id}` page
+ * Fetch notifications linked to a specified return log
  *
  * @param {string} returnId - The licence ref for the licence
  *
- * @returns {Promise<object>} the data needed to populate the view return log page's communications tab
+ * @returns {Promise<object[]>} the notifications linked to the return log
  */
 async function go(returnId) {
   const results = await _fetch(returnId)

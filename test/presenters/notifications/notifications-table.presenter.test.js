@@ -77,7 +77,7 @@ describe('Notifications - Notification Table presenter', () => {
     })
   })
 
-  describe('when there is an abstraction alert notification and you have come from a licence', () => {
+  describe('when there is an abstraction alert notification', () => {
     beforeEach(() => {
       licenceId = generateUUID()
       notice = NoticesFixture.alertStop()
@@ -85,52 +85,52 @@ describe('Notifications - Notification Table presenter', () => {
       notification.event = notice
     })
 
-    it('correctly presents the data', () => {
-      const result = NotificationsTablePresenter.go([notification], licenceId)
+    describe('and you have come from a licence', () => {
+      beforeEach(() => {
+        returnLogId = generateUUID()
+      })
 
-      expect(result).to.equal([
-        {
-          link: {
-            hiddenText: 'sent 9 October 2025 via email',
-            href: `/system/notifications/${notification.id}?id=${licenceId}`
-          },
-          method: 'Email',
-          sentBy: notification.event.issuer,
-          sentDate: '9 October 2025',
-          status: notification.status,
-          type: 'alert'
-        }
-      ])
+      it('correctly presents the data', () => {
+        const result = NotificationsTablePresenter.go([notification], licenceId)
+
+        expect(result).to.equal([
+          {
+            link: {
+              hiddenText: 'sent 9 October 2025 via email',
+              href: `/system/notifications/${notification.id}?id=${licenceId}`
+            },
+            method: 'Email',
+            sentBy: notification.event.issuer,
+            sentDate: '9 October 2025',
+            status: notification.status,
+            type: 'alert'
+          }
+        ])
+      })
+    })
+
+    describe('and the query params have been removed', () => {
+      it('correctly presents the data', () => {
+        const result = NotificationsTablePresenter.go([notification], null, null)
+
+        expect(result).to.equal([
+          {
+            link: {
+              hiddenText: 'sent 9 October 2025 via email',
+              href: `/system/notifications/${notification.id}`
+            },
+            method: 'Email',
+            sentBy: notification.event.issuer,
+            sentDate: '9 October 2025',
+            status: notification.status,
+            type: 'alert'
+          }
+        ])
+      })
     })
   })
 
-  describe('when there is an abstraction alert notification no licence id or return id', () => {
-    beforeEach(() => {
-      notice = NoticesFixture.alertStop()
-      notification = NotificationsFixture.abstractionAlertEmail(notice)
-      notification.event = notice
-    })
-
-    it('correctly presents the data', () => {
-      const result = NotificationsTablePresenter.go([notification], null, null)
-
-      expect(result).to.equal([
-        {
-          link: {
-            hiddenText: 'sent 9 October 2025 via email',
-            href: `/system/notifications/${notification.id}`
-          },
-          method: 'Email',
-          sentBy: notification.event.issuer,
-          sentDate: '9 October 2025',
-          status: notification.status,
-          type: 'alert'
-        }
-      ])
-    })
-  })
-
-  describe('when there is no notifications', () => {
+  describe('when there are no notifications', () => {
     beforeEach(() => {
       licenceId = generateUUID()
     })

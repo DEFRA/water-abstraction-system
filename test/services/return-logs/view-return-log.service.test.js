@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const FetchReturnLogCommunicationsService = require('../../../app/services/return-logs/fetch-return-log-communications.service.js')
+const FetchReturnLogNotificationsService = require('../../../app/services/return-logs/fetch-return-log-notifications.service.js')
 const FetchReturnLogService = require('../../../app/services/return-logs/fetch-return-log.service.js')
 
 // Test helpers
@@ -33,7 +33,7 @@ describe('Return Logs - View Return Log service', () => {
       licence: LicenceModel.fromJson(LicenceHelper.defaults())
     })
 
-    Sinon.stub(FetchReturnLogCommunicationsService, 'go').resolves([])
+    Sinon.stub(FetchReturnLogNotificationsService, 'go').resolves([])
     Sinon.stub(FetchReturnLogService, 'go').resolves(mockReturnLog)
   })
 
