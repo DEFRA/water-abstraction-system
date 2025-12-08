@@ -134,9 +134,22 @@ async function _recordReturnLogs(notification, status, trx) {
     return
   }
 
+  // When dealing with an ad-hoc notice, we may have a mix of email and letter 'single use' contacts. If this is the
+  // case, then the later due date from the letter should be applied. When the notice is first sent, any email
+  // notifications will immediately be processed so they will set the due date. It will no longer be null.
+  //
+  // When we process the letter notifications in the nightly job, the due date will already be set. So, we allow the due
+  // date to be updated if it is null, or if it is one day less than the due date we are trying to set. This avoids
+  // having to do additional queries against the DB each time we process a notification just to work out whether we have
+  // a later letter due date.
+  const dueDateMinusOneDay = new Date(dueDate)
+  dueDateMinusOneDay.setDate(dueDateMinusOneDay.getDate() - 1)
+
   await ReturnLogModel.query(trx)
     .patch({ dueDate, sentDate: createdAt, updatedAt: timestampForPostgres() })
-    .whereNull('dueDate')
+    .where((builder) => {
+      builder.whereNull('dueDate').orWhere('dueDate', '>=', dueDateMinusOneDay)
+    })
     .whereIn('returnId', returnLogIds)
 }
 

@@ -61,7 +61,7 @@ describe('Notifications - Check Notification Status service', () => {
       returnLogWhereInStub = Sinon.stub().resolves()
       Sinon.stub(ReturnLogModel, 'query').returns({
         patch: returnLogPatchStub,
-        whereNull: Sinon.stub().returnsThis(),
+        where: Sinon.stub().returnsThis(),
         whereIn: returnLogWhereInStub
       })
     })
@@ -772,7 +772,7 @@ describe('Notifications - Check Notification Status service', () => {
       returnLogWhereInStub = Sinon.stub().resolves()
       Sinon.stub(ReturnLogModel, 'query').returns({
         patch: returnLogPatchStub,
-        whereNull: Sinon.stub().returnsThis(),
+        where: Sinon.stub().returnsThis(),
         whereIn: returnLogWhereInStub
       })
     })
@@ -1002,7 +1002,7 @@ describe('Notifications - Check Notification Status service', () => {
       returnLogWhereInStub = Sinon.stub().rejects(error)
       Sinon.stub(ReturnLogModel, 'query').returns({
         patch: returnLogPatchStub,
-        whereNull: Sinon.stub().returnsThis(),
+        where: Sinon.stub().returnsThis(),
         whereIn: returnLogWhereInStub
       })
     })
