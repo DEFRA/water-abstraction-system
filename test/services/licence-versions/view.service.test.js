@@ -69,6 +69,7 @@ describe('Licence Versions - View service', () => {
         errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
         licenceDetails: {
           endDate: null,
+          licenceHolder: null,
           startDate: '1 January 2022'
         },
         notes: null,

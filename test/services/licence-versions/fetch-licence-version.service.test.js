@@ -50,7 +50,7 @@ describe('Licence Versions - Fetch licence version service', () => {
           licence: {
             id: licence.id,
             licenceRef: licence.licenceRef,
-            licenceDocumentHeader: null
+            licenceDocument: null
           },
           modLogs: [],
           startDate: licenceVersion.startDate
