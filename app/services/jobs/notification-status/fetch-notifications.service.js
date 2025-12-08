@@ -29,6 +29,7 @@ async function go() {
 
   const query = NotificationModel.query()
     .select([
+      'contactType',
       'createdAt',
       'dueDate',
       'eventId',
