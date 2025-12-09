@@ -14,7 +14,6 @@ const { generateLicenceRef } = require('../../support/helpers/licence.helper.js'
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 const FetchSummaryService = require('../../../app/services/licences/fetch-summary.service.js')
 
@@ -41,8 +40,6 @@ describe('Licences - View Summary service', () => {
     summary = _testSummary(licence.id)
 
     auth = _auth()
-
-    Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsView').value(true)
   })
 
   afterEach(() => {
@@ -73,7 +70,6 @@ describe('Licences - View Summary service', () => {
             text: 'Go back to search'
           },
           currentVersion: 'The current version of the licence starting 1 April 2019',
-          enableMonitoringStationsView: true,
           endDate: null,
           licenceHolder: 'Unregistered licence',
           licenceId: licence.id,
