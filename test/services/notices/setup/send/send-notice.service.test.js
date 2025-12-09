@@ -9,22 +9,22 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const NoticesFixture = require('../../../fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../../fixtures/notifications.fixture.js')
+const NoticesFixture = require('../../../../fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../../../fixtures/notifications.fixture.js')
 
 // Things we need to stub
-const CheckNotificationStatusService = require('../../../../app/services/notifications/check-notification-status.service.js')
-const NotificationModel = require('../../../../app/models/notification.model.js')
-const NotifyConfig = require('../../../../config/notify.config.js')
-const SendEmailService = require('../../../../app/services/notices/setup/batch/send-email.service.js')
-const SendLetterService = require('../../../../app/services/notices/setup/batch/send-letter.service.js')
-const SendPaperReturnService = require('../../../../app/services/notices/setup/batch/send-paper-return.service.js')
-const UpdateNoticeService = require('../../../../app/services/notices/update-notice.service.js')
+const CheckNotificationStatusService = require('../../../../../app/services/notifications/check-notification-status.service.js')
+const NotificationModel = require('../../../../../app/models/notification.model.js')
+const NotifyConfig = require('../../../../../config/notify.config.js')
+const SendEmailService = require('../../../../../app/services/notices/setup/send/send-email.service.js')
+const SendLetterService = require('../../../../../app/services/notices/setup/send/send-letter.service.js')
+const SendPaperReturnService = require('../../../../../app/services/notices/setup/send/send-paper-return.service.js')
+const UpdateNoticeService = require('../../../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
-const SendNoticeService = require('../../../../app/services/notices/setup/send-notice.service.js')
+const SendNoticeService = require('../../../../../app/services/notices/setup/send/send-notice.service.js')
 
-describe('Notices - Setup - Send Notice service', () => {
+describe('Notices - Setup - Send - Send Notice service', () => {
   const emailPlaintext =
     'Dear licence holder contact,\r\n' +
     '\r\n' +

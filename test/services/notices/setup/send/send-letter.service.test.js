@@ -17,9 +17,9 @@ const { generateNoticeReferenceCode } = require('../../../../../app/lib/general.
 const CreateLetterRequest = require('../../../../../app/requests/notify/create-letter.request.js')
 
 // Thing under test
-const SendLetterService = require('../../../../../app/services/notices/setup/batch/send-letter.service.js')
+const SendLetterService = require('../../../../../app/services/notices/setup/send/send-letter.service.js')
 
-describe('Notices - Setup - Batch - Send Letter service', () => {
+describe('Notices - Setup - Send - Send Letter service', () => {
   let notification
   let notifyResponse
   let referenceCode

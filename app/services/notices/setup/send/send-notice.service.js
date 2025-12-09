@@ -5,16 +5,16 @@
  * @module SendNoticeService
  */
 
-const CheckNotificationStatusService = require('../../notifications/check-notification-status.service.js')
-const NotificationModel = require('../../../../app/models/notification.model.js')
-const SendEmailService = require('./batch/send-email.service.js')
-const SendLetterService = require('./batch/send-letter.service.js')
-const SendPaperReturnService = require('./batch/send-paper-return.service.js')
-const UpdateNoticeService = require('../update-notice.service.js')
+const CheckNotificationStatusService = require('../../../notifications/check-notification-status.service.js')
+const NotificationModel = require('../../../../../app/models/notification.model.js')
+const SendEmailService = require('./send-email.service.js')
+const SendLetterService = require('./send-letter.service.js')
+const SendPaperReturnService = require('./send-paper-return.service.js')
+const UpdateNoticeService = require('../../update-notice.service.js')
 
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds, pause } = require('../../../lib/general.lib.js')
+const { calculateAndLogTimeTaken, currentTimeInNanoseconds, pause } = require('../../../../lib/general.lib.js')
 
-const notifyConfig = require('../../../../config/notify.config.js')
+const notifyConfig = require('../../../../../config/notify.config.js')
 
 /**
  * Orchestrates sending a notice to Notify, recording the results, and checking the status when finished

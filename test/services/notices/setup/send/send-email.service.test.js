@@ -17,9 +17,9 @@ const { generateNoticeReferenceCode } = require('../../../../../app/lib/general.
 const CreateEmailRequest = require('../../../../../app/requests/notify/create-email.request.js')
 
 // Thing under test
-const SendEmailService = require('../../../../../app/services/notices/setup/batch/send-email.service.js')
+const SendEmailService = require('../../../../../app/services/notices/setup/send/send-email.service.js')
 
-describe('Notices - Setup - Batch - Send Email service', () => {
+describe('Notices - Setup - Send - Send Email service', () => {
   let notification
   let notifyResponse
   let referenceCode
