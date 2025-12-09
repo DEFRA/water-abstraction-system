@@ -3,13 +3,11 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const PointModel = require('../../../app/models/point.model.js')
 const { today, generateUUID } = require('../../../app/lib/general.lib.js')
@@ -22,11 +20,6 @@ describe('Licences - Summary Presenter', () => {
 
   beforeEach(() => {
     summary = _summary()
-    Sinon.stub(FeatureFlagsConfig, 'enableMonitoringStationsView').value(true)
-  })
-
-  afterEach(() => {
-    Sinon.restore()
   })
 
   it('correctly presents the data', () => {
@@ -40,7 +33,6 @@ describe('Licences - Summary Presenter', () => {
       abstractionPoints: ['At National Grid Reference TL 23198 88603'],
       abstractionPointsCaption: 'Point of abstraction',
       activeSecondaryNav: 'summary',
-      enableMonitoringStationsView: true,
       endDate: null,
       licenceHolder: 'Unregistered licence',
       licenceId: summary.id,
