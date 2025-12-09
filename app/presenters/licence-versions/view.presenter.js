@@ -6,8 +6,8 @@
  */
 
 const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
+const { formatLicencePoints, formatLicencePurposes } = require('../licence.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
-const { formatLicencePoints } = require('../licence.presenter.js')
 
 /**
  * Formats data for the `/licence-versions/{id}` page
@@ -36,6 +36,7 @@ function go(licenceVersionData, auth) {
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     pagination: _pagination(licenceVersionsForPagination, licenceVersion),
     points: _points(licenceVersion.licenceVersionPurposes),
+    purposes: _purposes(licenceVersion.licenceVersionPurposes),
     reason: _reason(licenceVersion, billingAndDataRole)
   }
 }
@@ -125,6 +126,14 @@ function _points(licenceVersionPurposes) {
     })
 
   return formatLicencePoints(formattedPoints)
+}
+
+function _purposes(licenceVersionPurposes) {
+  if (licenceVersionPurposes.length > 0) {
+    return formatLicencePurposes(licenceVersionPurposes)
+  }
+
+  return []
 }
 
 function _reason(licenceVersion, billingAndDataRole) {

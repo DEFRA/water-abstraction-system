@@ -75,7 +75,19 @@ describe('Licence Versions - Fetch licence version service', () => {
           },
           licenceVersionPurposes: [
             {
-              id: licenceVersionPurpose.id,
+              abstractionPeriodEndDay: 31,
+              abstractionPeriodEndMonth: 3,
+              abstractionPeriodStartDay: 1,
+              abstractionPeriodStartMonth: 1,
+              annualQuantity: null,
+              dailyQuantity: null,
+              hourlyQuantity: null,
+              instantQuantity: null,
+              licenceVersionPurposePoints: [
+                {
+                  abstractionMethod: null
+                }
+              ],
               points: [
                 {
                   bgsReference: null,
@@ -101,7 +113,11 @@ describe('Licence Versions - Fetch licence version service', () => {
                   },
                   wellReference: null
                 }
-              ]
+              ],
+              purpose: {
+                description: purpose.description,
+                id: purpose.id
+              }
             }
           ],
           modLogs: [],
