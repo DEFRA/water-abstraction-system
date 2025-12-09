@@ -17,9 +17,9 @@ const { generateNoticeReferenceCode } = require('../../../../../app/lib/general.
 const CreateEmailRequest = require('../../../../../app/requests/notify/create-email.request.js')
 
 // Thing under test
-const SendEmailService = require('../../../../../app/services/notices/setup/send/send-email.service.js')
+const SendEmailNotificationService = require('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
 
-describe('Notices - Setup - Send - Send Email service', () => {
+describe('Notices - Setup - Send - Send Email Notification service', () => {
   let notification
   let notifyResponse
   let referenceCode
@@ -38,7 +38,7 @@ describe('Notices - Setup - Send - Send Email service', () => {
   })
 
   it('should return the notification notify response', async () => {
-    const result = await SendEmailService.go(notification, referenceCode)
+    const result = await SendEmailNotificationService.go(notification, referenceCode)
 
     expect(result).to.equal({
       id: notification.id,

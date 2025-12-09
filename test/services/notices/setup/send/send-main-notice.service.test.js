@@ -16,7 +16,7 @@ const NotificationsFixture = require('../../../../fixtures/notifications.fixture
 const CheckNotificationStatusService = require('../../../../../app/services/notifications/check-notification-status.service.js')
 const NotificationModel = require('../../../../../app/models/notification.model.js')
 const NotifyConfig = require('../../../../../config/notify.config.js')
-const SendEmailService = require('../../../../../app/services/notices/setup/send/send-email.service.js')
+const SendEmailNotificationService = require('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
 const SendLetterService = require('../../../../../app/services/notices/setup/send/send-letter.service.js')
 const SendPaperReturnService = require('../../../../../app/services/notices/setup/send/send-paper-return.service.js')
 const UpdateNoticeService = require('../../../../../app/services/notices/update-notice.service.js')
@@ -109,7 +109,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     describe('and all are sent to Notify successfully', () => {
       beforeEach(() => {
-        Sinon.stub(SendEmailService, 'go').resolves({
+        Sinon.stub(SendEmailNotificationService, 'go').resolves({
           id: notifications[1].id,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -169,7 +169,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     describe('and a letter notification fails to send to Notify', () => {
       beforeEach(() => {
-        Sinon.stub(SendEmailService, 'go').resolves({
+        Sinon.stub(SendEmailNotificationService, 'go').resolves({
           id: notifications[1].id,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -231,7 +231,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     describe('and an email notification fails to send to Notify', () => {
       beforeEach(() => {
-        Sinon.stub(SendEmailService, 'go').resolves({
+        Sinon.stub(SendEmailNotificationService, 'go').resolves({
           ...notifications[1],
           id: notifications[1].id,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
