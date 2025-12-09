@@ -13,6 +13,7 @@ const NoticesFixture = require('../../../../fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../../../fixtures/notifications.fixture.js')
 
 // Things we need to stub
+const SendAlternateNoticeService = require('../../../../../app/services/notices/setup/send/send-alternate-notice.service.js')
 const SendMainNoticeService = require('../../../../../app/services/notices/setup/send/send-main-notice.service.js')
 
 // Thing under test
@@ -22,11 +23,11 @@ describe('Notices - Setup - Send - Send Notice service', () => {
   let notice
   let notifications
   let notifierStub
+  let sendAlternateNoticeStub
   let sendMainNoticeStub
 
   beforeEach(() => {
-    notice = NoticesFixture.returnsInvitation()
-    notifications = [NotificationsFixture.returnsInvitationEmail(notice)]
+    sendMainNoticeStub = Sinon.stub(SendMainNoticeService, 'go').resolves()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -41,32 +42,81 @@ describe('Notices - Setup - Send - Send Notice service', () => {
 
   describe('when the service is called', () => {
     beforeEach(() => {
-      sendMainNoticeStub = Sinon.stub(SendMainNoticeService, 'go').resolves()
+      sendAlternateNoticeStub = Sinon.stub(SendAlternateNoticeService, 'go').resolves()
     })
 
-    it('sends the main notice', async () => {
-      await SendNoticeService.go(notice, notifications)
+    describe('and the notice is a returns invitation', () => {
+      beforeEach(() => {
+        notice = NoticesFixture.returnsInvitation()
+        notifications = [NotificationsFixture.returnsInvitationEmail(notice)]
+      })
 
-      expect(sendMainNoticeStub.calledOnce).to.be.true()
-      expect(sendMainNoticeStub.firstCall.args[0]).to.equal(notice)
-      expect(sendMainNoticeStub.firstCall.args[1]).to.equal(notifications)
+      it('sends the main notice', async () => {
+        await SendNoticeService.go(notice, notifications)
+
+        expect(sendMainNoticeStub.calledOnce).to.be.true()
+        expect(sendMainNoticeStub.firstCall.args[0]).to.equal(notice)
+        expect(sendMainNoticeStub.firstCall.args[1]).to.equal(notifications)
+      })
+
+      it('checks the main notice for the need to send an alternate notice', async () => {
+        await SendNoticeService.go(notice, notifications)
+
+        expect(sendAlternateNoticeStub.calledOnce).to.be.true()
+        expect(sendMainNoticeStub.firstCall.args[0]).to.equal(notice)
+      })
+
+      it('logs the time taken', async () => {
+        await SendNoticeService.go(notice, notifications)
+
+        const args = notifierStub.omg.firstCall.args
+
+        expect(args[0]).to.equal('Send notice complete')
+        expect(args[1].timeTakenMs).to.exist()
+        expect(args[1].count).to.equal(1)
+        expect(args[1].noticeId).to.equal(notice.id)
+      })
     })
 
-    it('logs the time taken', async () => {
-      await SendNoticeService.go(notice, notifications)
+    describe('and the notice is NOT a returns invitation', () => {
+      beforeEach(() => {
+        notice = NoticesFixture.returnsReminder()
+        notifications = [NotificationsFixture.returnsReminderEmail(notice)]
+      })
 
-      const args = notifierStub.omg.firstCall.args
+      it('sends the main notice', async () => {
+        await SendNoticeService.go(notice, notifications)
 
-      expect(args[0]).to.equal('Send notice complete')
-      expect(args[1].timeTakenMs).to.exist()
-      expect(args[1].count).to.equal(1)
-      expect(args[1].noticeId).to.equal(notice.id)
+        expect(sendMainNoticeStub.calledOnce).to.be.true()
+        expect(sendMainNoticeStub.firstCall.args[0]).to.equal(notice)
+        expect(sendMainNoticeStub.firstCall.args[1]).to.equal(notifications)
+      })
+
+      it('does not attempt to send an alternate notice', async () => {
+        await SendNoticeService.go(notice, notifications)
+
+        expect(sendAlternateNoticeStub.called).to.be.false()
+      })
+
+      it('logs the time taken', async () => {
+        await SendNoticeService.go(notice, notifications)
+
+        const args = notifierStub.omg.firstCall.args
+
+        expect(args[0]).to.equal('Send notice complete')
+        expect(args[1].timeTakenMs).to.exist()
+        expect(args[1].count).to.equal(1)
+        expect(args[1].noticeId).to.equal(notice.id)
+      })
     })
   })
 
   describe('when the service errors', () => {
     beforeEach(() => {
-      Sinon.stub(SendMainNoticeService, 'go').rejects('Computer says no')
+      notice = NoticesFixture.returnsInvitation()
+      notifications = [NotificationsFixture.returnsInvitationEmail(notice)]
+
+      Sinon.stub(SendAlternateNoticeService, 'go').rejects('Computer says no')
     })
 
     it('logs the error', async () => {
