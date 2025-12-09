@@ -10,8 +10,6 @@ const LicenceEndDateChangeModel = require('../../../models/licence-end-date-chan
 const ProcessBillingFlagService = require('../../licences/supplementary/process-billing-flag.service.js')
 const ProcessLicenceReturnLogsService = require('../../return-logs/process-licence-return-logs.service.js')
 
-const FeatureFlags = require('../../../../config/feature-flags.config.js')
-
 /**
  * Process all licence end date changes previously recorded
  *
@@ -73,9 +71,7 @@ async function _processLicenceEndDateChanges(licenceEndDateChange) {
 async function _returnLogs(licenceEndDateChange) {
   const { licenceId, changeDate } = licenceEndDateChange
 
-  if (FeatureFlags.enableRequirementsForReturns) {
-    await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
-  }
+  await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
 }
 
 module.exports = {
