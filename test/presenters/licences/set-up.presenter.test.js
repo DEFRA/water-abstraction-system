@@ -3,18 +3,14 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
 const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-
-// Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const SetUpPresenter = require('../../../app/presenters/licences/set-up.presenter.js')
@@ -64,8 +60,6 @@ describe('Licences - Set Up presenter', () => {
       licenceId: licence.id
     }
 
-    Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(true)
-
     auth = {
       isValid: true,
       credentials: {
@@ -95,10 +89,6 @@ describe('Licences - Set Up presenter', () => {
     chargeVersions = []
     returnVersions = []
     workflows = []
-  })
-
-  afterEach(() => {
-    Sinon.restore()
   })
 
   it('should return the page data', () => {
@@ -751,29 +741,15 @@ describe('Licences - Set Up presenter', () => {
       })
 
       describe('when the billing user wants to manage return versions', () => {
-        describe('and the "enableRequirementsForReturns" feature toggle is true', () => {
-          it('return the associated links', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
+        it('return the associated links', () => {
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
 
-            expect(result.links.returnVersions.returnsRequired).to.equal(
-              `/system/licences/${licence.id}/returns-required`
-            )
-            expect(result.links.returnVersions.noReturnsRequired).to.equal(
-              `/system/licences/${licence.id}/no-returns-required`
-            )
-          })
-        })
-
-        describe('and the "enableRequirementsForReturns" feature toggle is false', () => {
-          beforeEach(() => {
-            Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
-          })
-
-          it('return no returnVersions links', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, auth, licence)
-
-            expect(result.links.returnVersions).to.equal({})
-          })
+          expect(result.links.returnVersions.returnsRequired).to.equal(
+            `/system/licences/${licence.id}/returns-required`
+          )
+          expect(result.links.returnVersions.noReturnsRequired).to.equal(
+            `/system/licences/${licence.id}/no-returns-required`
+          )
         })
       })
 
@@ -788,24 +764,11 @@ describe('Licences - Set Up presenter', () => {
             permissions: { abstractionReform: false, billRuns: true, manage: true }
           }
         }
-        describe('and the "enableRequirementsForReturns" feature toggle is true', () => {
-          it('returns no return version setup links', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, viewAuth, licence)
 
-            expect(result.links.returnVersions).to.equal({})
-          })
-        })
+        it('returns no return version setup links', () => {
+          const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, viewAuth, licence)
 
-        describe('and the "enableRequirementsForReturns" feature toggle is false', () => {
-          beforeEach(() => {
-            Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
-          })
-
-          it('returns no return version setup links', () => {
-            const result = SetUpPresenter.go(chargeVersions, workflows, agreements, returnVersions, viewAuth, licence)
-
-            expect(result.links.returnVersions).to.equal({})
-          })
+          expect(result.links.returnVersions).to.equal({})
         })
       })
     })

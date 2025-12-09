@@ -12,7 +12,6 @@ const { expect } = Code
 const LicenceEndDateChangeHelper = require('../../../support/helpers/licence-end-date-change.helper.js')
 
 // Things we need to stub
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const LicenceEndDateChangeModel = require('../../../../app/models/licence-end-date-change.model.js')
 const ProcessBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
 const ProcessLicenceReturnLogsService = require('../../../../app/services/return-logs/process-licence-return-logs.service.js')
@@ -53,27 +52,11 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
       expect(processBillingFlagsStub.called).to.be.true()
     })
 
-    describe('and the app is now managing "requirements for returns"', () => {
-      beforeEach(() => {
-        Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(true)
-      })
-
+    describe('and the app is managing "requirements for returns"', () => {
       it('processes the changed licence for reissuing return logs', async () => {
         await ProcessLicenceEndDateChangesService.go()
 
         expect(processReturnLogsStub.called).to.be.true()
-      })
-    })
-
-    describe('and the app is not yet managing "requirements for returns"', () => {
-      beforeEach(() => {
-        Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
-      })
-
-      it('does not process the changed licence for reissuing return logs', async () => {
-        await ProcessLicenceEndDateChangesService.go()
-
-        expect(processReturnLogsStub.called).to.be.false()
       })
     })
 
