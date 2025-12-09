@@ -8,6 +8,7 @@
 
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 {% from "macros/return-status-tag.njk" import statusTag %}
+{% from "macros/notification-status-tag.njk" import statusTag as notificationStatusTag %}
 
 {% block pageContent %}
   <div class="govuk-grid-row govuk-!-margin-bottom-0">
@@ -315,7 +316,7 @@
       {% endset %}
 
       {% set noticeStatusTag %}
-        {{ statusTag(notification.status, true) }}
+        {{ notificationStatusTag(notification.status, true) }}
       {% endset %}
 
       {% set row = [
