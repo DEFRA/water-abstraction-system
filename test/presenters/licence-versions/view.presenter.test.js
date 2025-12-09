@@ -388,6 +388,47 @@ describe('Licence Versions - View presenter', () => {
     })
   })
 
+  describe('the "purposes" property', () => {
+    describe('when there are "purposes"', () => {
+      beforeEach(() => {
+        licenceVersionData.licenceVersion.licenceVersionPurposes = [
+          {
+            licenceVersionPurposePoints: [ViewLicencesFixture.point()],
+            points: [ViewLicencesFixture.pointWithSource()],
+            purpose: ViewLicencesFixture.purpose()
+          }
+        ]
+      })
+
+      it('should return the purposes', () => {
+        const result = ViewPresenter.go(licenceVersionData, auth)
+
+        expect(result.purposes).to.equal([
+          {
+            abstractionAmounts: [],
+            abstractionAmountsTitle: 'Abstraction amount',
+            abstractionMethods: undefined,
+            abstractionMethodsTitle: 'Method of abstraction',
+            abstractionPeriod: null,
+            abstractionPoints: [
+              'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (RIVER OUSE AT BLETSOE)'
+            ],
+            abstractionPointsTitle: 'Abstraction point',
+            purposeDescription: 'Spray Irrigation - Storage'
+          }
+        ])
+      })
+    })
+
+    describe('when there are no "purposes"', () => {
+      it('should return an empty array', () => {
+        const result = ViewPresenter.go(licenceVersionData, auth)
+
+        expect(result.purposes).to.equal([])
+      })
+    })
+  })
+
   describe('the "reason" property', () => {
     describe('when the user does not have the "billing" role', () => {
       describe('and there is a "reason"', () => {
