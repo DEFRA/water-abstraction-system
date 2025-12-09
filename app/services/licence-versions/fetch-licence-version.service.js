@@ -58,42 +58,42 @@ async function _fetch(licenceVersionId) {
           'instantQuantity'
         ])
         .orderBy('licenceVersionPurposes.createdAt', 'asc')
-    })
-    .withGraphFetched('licenceVersionPurposes.licenceVersionPurposePoints')
-    .modifyGraph('licenceVersionPurposes.licenceVersionPurposePoints', (builder) => {
-      builder.select(['licenceVersionPurposePoints.abstractionMethod'])
-    })
-    .withGraphFetched('licenceVersionPurposes.points')
-    .modifyGraph('licenceVersionPurposes.points', (builder) => {
-      builder
-        .select([
-          'points.id',
-          'points.bgsReference',
-          'points.category',
-          'points.depth',
-          'points.description',
-          'points.hydroInterceptDistance',
-          'points.hydroReference',
-          'points.hydroOffsetDistance',
-          'points.locationNote',
-          'points.ngr1',
-          'points.ngr2',
-          'points.ngr3',
-          'points.ngr4',
-          'points.note',
-          'points.primaryType',
-          'points.secondaryType',
-          'points.wellReference'
-        ])
-        .orderBy([{ column: 'points.externalId', order: 'asc' }])
-    })
-    .withGraphFetched('licenceVersionPurposes.points.source')
-    .modifyGraph('licenceVersionPurposes.points.source', (builder) => {
-      builder.select(['sources.description', 'sources.id', 'sources.sourceType'])
-    })
-    .withGraphFetched('licenceVersionPurposes.purpose')
-    .modifyGraph('licenceVersionPurposes.purpose', (builder) => {
-      builder.select(['id', 'description'])
+        .withGraphFetched('licenceVersionPurposePoints')
+        .modifyGraph('licenceVersionPurposePoints', (builder) => {
+          builder.select(['licenceVersionPurposePoints.abstractionMethod'])
+        })
+        .withGraphFetched('points')
+        .modifyGraph('points', (builder) => {
+          builder
+            .select([
+              'points.id',
+              'points.bgsReference',
+              'points.category',
+              'points.depth',
+              'points.description',
+              'points.hydroInterceptDistance',
+              'points.hydroReference',
+              'points.hydroOffsetDistance',
+              'points.locationNote',
+              'points.ngr1',
+              'points.ngr2',
+              'points.ngr3',
+              'points.ngr4',
+              'points.note',
+              'points.primaryType',
+              'points.secondaryType',
+              'points.wellReference'
+            ])
+            .orderBy([{ column: 'points.externalId', order: 'asc' }])
+        })
+        .withGraphFetched('points.source')
+        .modifyGraph('points.source', (builder) => {
+          builder.select(['sources.description', 'sources.id', 'sources.sourceType'])
+        })
+        .withGraphFetched('purpose')
+        .modifyGraph('purpose', (builder) => {
+          builder.select(['id', 'description'])
+        })
     })
 }
 
