@@ -52,7 +52,7 @@ async function _fetch(eventId) {
     .select(['id', 'licences', 'returnLogIds'])
     .where('eventId', eventId)
     .where('status', 'error')
-    .where('messageRef', 'returns invitation')
+    .whereIn('messageRef', ['returns invitation', 'returns invitation ad-hoc'])
     .where('contactType', 'primary user')
     .where('messageType', 'email')
     .whereNull('alternateNoticeId')
