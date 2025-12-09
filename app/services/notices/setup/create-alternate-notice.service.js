@@ -9,7 +9,6 @@
 const CreateNotificationsService = require('./create-notifications.service.js')
 const EventModel = require('../../../models/event.model.js')
 const FetchAlternateReturnsRecipientsService = require('./returns-notice/fetch-alternate-returns-recipients.service.js')
-const FetchFailedReturnsInvitationsService = require('./returns-notice/fetch-failed-returns-invitations.service.js')
 const { generateNoticeReferenceCode, timestampForPostgres } = require('../../../lib/general.lib.js')
 const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 
@@ -17,18 +16,14 @@ const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.j
  * Orchestrates creating a new notice and notifications for returns invitation emails that failed
  *
  * @param {module:EventModel} notice - The email notice to check for failed notifications
+ * @param {string[]} licenceRefs - The combined licence references from the failed notifications
+ * @param {string[]} returnLogIds - The combined return log IDs from the failed notifications
  *
  * @returns {Promise<object>} The created alternate notice and notifications
  */
-async function go(notice) {
-  const { failedLicenceRefs, failedReturnIds } = await FetchFailedReturnsInvitationsService.go(notice.id)
-
-  if (failedReturnIds.length === 0) {
-    return { notice: null, notifications: [] }
-  }
-
-  const recipients = await FetchAlternateReturnsRecipientsService.go(failedReturnIds)
-  const alternateNotice = await _notice(notice, recipients, failedLicenceRefs)
+async function go(notice, licenceRefs, returnLogIds) {
+  const recipients = await FetchAlternateReturnsRecipientsService.go(returnLogIds)
+  const alternateNotice = await _notice(notice, recipients, licenceRefs)
   const notifications = await _notifications(alternateNotice, recipients)
 
   return { notice: alternateNotice, notifications }
