@@ -35,9 +35,11 @@ exports.up = function (knex) {
     table.date('returned_at')
     table.uuid('alternate_notice_id')
     table.date('due_date')
+    table.text('contact_type')
 
     // Legacy timestamps
     table.timestamp('date_created', { useTz: false }).defaultTo(knex.fn.now())
+    table.timestamp('updated_at', { useTz: false }).defaultTo(knex.fn.now())
 
     // Constraints
     table.unique(['job_id'], { useConstraint: true })

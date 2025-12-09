@@ -27,14 +27,17 @@ const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 async function go(session, recipients, noticeId) {
   const notifications = _notifications(session, recipients, noticeId)
   const persistedNotifications = []
+  const timestamp = timestampForPostgres()
 
   for (const notification of notifications) {
     const persistedNotification = await NotificationModel.query()
       .insert({
         ...notification,
-        createdAt: timestampForPostgres()
+        createdAt: timestamp,
+        updatedAt: timestamp
       })
       .returning([
+        'contactType',
         'createdAt',
         'dueDate',
         'id',

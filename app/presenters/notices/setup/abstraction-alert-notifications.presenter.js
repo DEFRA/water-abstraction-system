@@ -6,7 +6,7 @@
  */
 
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
-const { notifyTemplates } = require('../../../lib/notify-templates.lib.js')
+const { NOTIFY_TEMPLATES } = require('../../../lib/notify-templates.lib.js')
 
 /**
  * Formats recipients into notifications for an abstraction alert
@@ -160,20 +160,17 @@ function _email(recipient, eventId, commonPersonalisation, alertType, restrictio
   const messageType = 'email'
 
   return {
+    contactType: recipient.contact_type,
     eventId,
     licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
     licences: [commonPersonalisation.licenceRef],
-    messageRef: _emailMessageRef(alertType, restrictionType),
+    messageRef: _messageRef(alertType, restrictionType),
     messageType,
     personalisation: commonPersonalisation,
     recipient: recipient.email,
     status: 'pending',
     templateId: _templateId(alertType, restrictionType, 'email')
   }
-}
-
-function _emailMessageRef(alertType, restrictionType) {
-  return `${_messageRef(alertType, restrictionType)}_email`
 }
 
 /**
@@ -204,6 +201,7 @@ function _letter(recipient, eventId, commonPersonalisation, alertType, restricti
   const address = NotifyAddressPresenter.go(recipient.contact)
 
   return {
+    contactType: recipient.contact_type,
     eventId,
     licenceMonitoringStationId: commonPersonalisation.licenceGaugingStationId,
     licences: [commonPersonalisation.licenceRef],
@@ -240,62 +238,60 @@ function _matchingRecipients(recipients, station) {
 
 function _messageRef(alertType, restrictionType) {
   if (alertType === 'resume') {
-    return 'water_abstraction_alert_resume'
+    return 'abstraction alert resume'
   }
 
   if (alertType === 'reduce') {
-    return restrictionType === 'stop_or_reduce'
-      ? 'water_abstraction_alert_reduce_or_stop'
-      : 'water_abstraction_alert_reduce'
+    return restrictionType === 'stop_or_reduce' ? 'abstraction alert reduce or stop' : 'abstraction alert reduce'
   }
 
   if (alertType === 'stop') {
-    return 'water_abstraction_alert_stop'
+    return 'abstraction alert stop'
   }
 
   if (alertType === 'warning') {
     if (restrictionType === 'reduce') {
-      return 'water_abstraction_alert_reduce_warning'
+      return 'abstraction alert reduce warning'
     }
 
     if (restrictionType === 'stop_or_reduce') {
-      return 'water_abstraction_alert_reduce_or_stop_warning'
+      return 'abstraction alert reduce or stop warning'
     }
 
     if (restrictionType === 'stop') {
-      return 'water_abstraction_alert_stop_warning'
+      return 'abstraction alert stop warning'
     }
   }
 
-  return 'water_abstraction_alert'
+  return 'abstraction alert'
 }
 
 function _templateId(alertType, restrictionType, type) {
   if (alertType === 'resume') {
-    return notifyTemplates.alerts[type].resume
+    return NOTIFY_TEMPLATES.alerts[type].resume
   }
 
   if (alertType === 'reduce') {
     return restrictionType === 'stop_or_reduce'
-      ? notifyTemplates.alerts[type].reduceOrStop
-      : notifyTemplates.alerts[type].reduce
+      ? NOTIFY_TEMPLATES.alerts[type].reduceOrStop
+      : NOTIFY_TEMPLATES.alerts[type].reduce
   }
 
   if (alertType === 'stop') {
-    return notifyTemplates.alerts[type].stop
+    return NOTIFY_TEMPLATES.alerts[type].stop
   }
 
   if (alertType === 'warning') {
     if (restrictionType === 'reduce') {
-      return notifyTemplates.alerts[type].reduceWarning
+      return NOTIFY_TEMPLATES.alerts[type].reduceWarning
     }
 
     if (restrictionType === 'stop_or_reduce') {
-      return notifyTemplates.alerts[type].reduceOrStopWarning
+      return NOTIFY_TEMPLATES.alerts[type].reduceOrStopWarning
     }
 
     if (restrictionType === 'stop') {
-      return notifyTemplates.alerts[type].stopWarning
+      return NOTIFY_TEMPLATES.alerts[type].stopWarning
     }
   }
 

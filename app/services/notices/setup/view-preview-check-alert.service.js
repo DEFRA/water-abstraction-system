@@ -7,7 +7,6 @@
  */
 
 const CheckAlertPresenter = require('../../../presenters/notices/setup/preview-check-alert.presenter.js')
-const DetermineRecipientsService = require('./determine-recipients.service.js')
 const FetchAbstractionAlertRecipientsService = require('./abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -33,9 +32,7 @@ async function go(contactHashId, sessionId) {
 }
 
 async function _recipientLicenceRefs(contactHashId, session) {
-  const recipientsData = await FetchAbstractionAlertRecipientsService.go(session)
-
-  const recipients = DetermineRecipientsService.go(recipientsData)
+  const recipients = await FetchAbstractionAlertRecipientsService.go(session)
 
   const matchedRecipient = recipients.find((recipient) => {
     return recipient.contact_hash_id === contactHashId

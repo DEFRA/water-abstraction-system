@@ -55,6 +55,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
 
       expect(result).equal({
         alternateNoticeId: null,
+        contactType: null,
         createdAt: new Date(notification.createdAt),
         dueDate: null,
         eventId,
@@ -73,7 +74,8 @@ describe('Job - Notification Status - Update Notifications service', () => {
         returnedAt: null,
         returnLogIds: null,
         status: 'sent',
-        templateId: null
+        templateId: null,
+        updatedAt: new Date(notification.updatedAt)
       })
     })
   })
@@ -108,6 +110,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
 
       expect(result).equal({
         alternateNoticeId: null,
+        contactType: null,
         createdAt: new Date(notification.createdAt),
         dueDate: null,
         eventId,
@@ -126,7 +129,8 @@ describe('Job - Notification Status - Update Notifications service', () => {
         returnedAt: null,
         returnLogIds: null,
         status: 'sent',
-        templateId: null
+        templateId: null,
+        updatedAt: new Date(notification.updatedAt)
       })
     })
 
@@ -137,6 +141,7 @@ describe('Job - Notification Status - Update Notifications service', () => {
 
       expect(result).to.equal({
         alternateNoticeId: null,
+        contactType: null,
         createdAt: new Date(notification2.createdAt),
         dueDate: null,
         eventId,
@@ -155,7 +160,8 @@ describe('Job - Notification Status - Update Notifications service', () => {
         returnedAt: null,
         returnLogIds: null,
         status: 'sent',
-        templateId: null
+        templateId: null,
+        updatedAt: new Date(notification2.updatedAt)
       })
     })
   })

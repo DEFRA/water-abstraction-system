@@ -46,10 +46,11 @@ async function go(noticeId) {
 async function _fetch(eventId) {
   return NotificationModel.query()
     .select(['licences', 'returnLogIds'])
-    .where('status', 'error')
-    .where('messageRef', 'returns_invitation_primary_user_email')
     .where('eventId', eventId)
+    .where('status', 'error')
     .where('messageType', 'email')
+    .where('messageRef', 'returns invitation')
+    .where('contactType', 'primary user')
     .whereNull('alternateNoticeId')
 }
 

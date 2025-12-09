@@ -12,25 +12,20 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
 const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
 
 // Thing under test
 const CreateNotificationsService = require('../../../../app/services/notices/setup/create-notifications.service.js')
 
 describe('Notices - Setup - Create Notifications service', () => {
-  let noticeId
+  const noticeId = generateUUID()
+
   let recipients
   let session
 
-  beforeEach(async () => {
-    noticeId = generateUUID()
-  })
-
   describe('when the notice is an abstraction alert', () => {
     beforeEach(() => {
-      const fixtureData = RecipientsFixture.alertsRecipients()
-
-      recipients = [fixtureData.additionalContact, fixtureData.primaryUser]
+      recipients = [RecipientsFixture.alertNoticePrimaryUser(), RecipientsFixture.alertNoticeAdditionalContact()]
 
       const licenceMonitoringStations = [
         {
@@ -100,11 +95,12 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       expect(results[0]).to.equal(
         {
+          contactType: recipients[0].contact_type,
           dueDate: null,
           eventId: noticeId,
           licenceMonitoringStationId: session.licenceMonitoringStations[0].id,
           licences: recipients[0].licence_refs,
-          messageRef: 'water_abstraction_alert_stop_email',
+          messageRef: 'abstraction alert stop',
           messageType: 'email',
           pdf: null,
           personalisation: {
@@ -122,21 +118,22 @@ describe('Notices - Setup - Create Notifications service', () => {
             thresholdUnit: 'm3/s',
             thresholdValue: 50
           },
-          recipient: 'additional.contact@important.com',
+          recipient: recipients[0].email,
           returnLogIds: null,
           status: 'pending',
-          templateId: 'd7468ba1-ac65-42c4-9785-8998f9c34e01'
+          templateId: NOTIFY_TEMPLATES.alerts.email.stop
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
 
       expect(results[1]).to.equal(
         {
+          contactType: recipients[1].contact_type,
           dueDate: null,
           eventId: noticeId,
           licenceMonitoringStationId: session.licenceMonitoringStations[1].id,
           licences: recipients[1].licence_refs,
-          messageRef: 'water_abstraction_alert_stop_email',
+          messageRef: 'abstraction alert stop',
           messageType: 'email',
           pdf: null,
           personalisation: {
@@ -154,30 +151,28 @@ describe('Notices - Setup - Create Notifications service', () => {
             thresholdUnit: 'Ml/d',
             thresholdValue: 500
           },
-          recipient: 'primary.user@important.com',
+          recipient: recipients[1].email,
           returnLogIds: null,
           status: 'pending',
-          templateId: 'd7468ba1-ac65-42c4-9785-8998f9c34e01'
+          templateId: NOTIFY_TEMPLATES.alerts.email.stop
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
     })
   })
 
   describe('when the notice is a paper return', () => {
     beforeEach(() => {
-      const fixtureData = RecipientsFixture.recipients()
+      const licenceHolder = RecipientsFixture.returnsNoticeLicenceHolder()
+      const returnsTo = RecipientsFixture.returnsNoticeReturnsTo()
 
-      const licenceRef = generateLicenceRef()
-
-      recipients = [
-        { ...fixtureData.licenceHolder, licence_refs: [licenceRef] },
-        { ...fixtureData.returnsTo, licence_refs: [licenceRef] }
-      ]
+      returnsTo.licence_refs = licenceHolder.licence_refs
+      recipients = [licenceHolder, returnsTo]
 
       const referenceCode = generateNoticeReferenceCode('PRTF-')
       const selectedReturnId = generateUUID()
       const sessionId = generateUUID()
+      const licenceRef = licenceHolder.licence_refs[0]
 
       session = {
         addressJourney: {
@@ -243,16 +238,17 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       expect(results[0]).to.equal(
         {
+          contactType: recipients[0].contact_type,
           dueDate: new Date(session.dueReturns[0].dueDate),
           eventId: noticeId,
           licenceMonitoringStationId: null,
           licences: recipients[0].licence_refs,
-          messageRef: 'pdf.return_form',
+          messageRef: 'paper return',
           messageType: 'letter',
           pdf: null,
           personalisation: {
-            address_line_1: 'Mr H J Potter',
-            address_line_2: '1',
+            address_line_1: 'J Returnsholder',
+            address_line_2: '4',
             address_line_3: 'Privet Drive',
             address_line_4: 'Little Whinging',
             address_line_5: 'Surrey',
@@ -276,25 +272,26 @@ describe('Notices - Setup - Create Notifications service', () => {
           status: 'pending',
           templateId: null
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
 
       expect(results[1]).to.equal(
         {
+          contactType: recipients[1].contact_type,
           dueDate: new Date(session.dueReturns[0].dueDate),
           eventId: noticeId,
           licenceMonitoringStationId: null,
           licences: recipients[1].licence_refs,
-          messageRef: 'pdf.return_form',
+          messageRef: 'paper return',
           messageType: 'letter',
           pdf: null,
           personalisation: {
-            address_line_1: 'Mr H J Weasley',
-            address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
-            address_line_3: '2',
-            address_line_4: 'Privet Drive',
-            address_line_5: 'Little Whinging',
-            address_line_6: 'Surrey',
+            address_line_1: 'J Returnsto',
+            address_line_2: '4',
+            address_line_3: 'Privet Drive',
+            address_line_4: 'Little Whinging',
+            address_line_5: 'Surrey',
+            address_line_6: 'WD25 7LR',
             due_date: '28 April 2025',
             end_date: '31 March 2025',
             format_id: '10059610',
@@ -314,61 +311,14 @@ describe('Notices - Setup - Create Notifications service', () => {
           status: 'pending',
           templateId: null
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
     })
   })
 
   describe('when the notice is a returns invitation or reminder', () => {
     beforeEach(() => {
-      const fixtureData = RecipientsFixture.recipients()
-
-      const licenceRef = generateLicenceRef()
-      const dueReturns = [
-        {
-          dueDate: '2025-04-28T00:00:00.000Z',
-          endDate: '2025-03-31T00:00:00.000Z',
-          naldAreaCode: 'RIDIN',
-          purpose: 'Spray Irrigation - Direct',
-          regionCode: 3,
-          regionName: 'North East',
-          returnId: generateUUID(),
-          returnLogId: `v1:3:${licenceRef}:10059610:2024-04-01:2025-03-31`,
-          returnReference: '10059610',
-          returnsFrequency: 'month',
-          siteDescription: 'BOREHOLE AT AVALON',
-          startDate: '2024-04-01T00:00:00.000Z',
-          twoPartTariff: false
-        },
-        {
-          dueDate: '2024-04-28T00:00:00.000Z',
-          endDate: '2024-03-31T00:00:00.000Z',
-          purpose: 'Spray Irrigation - Direct',
-          returnId: generateUUID(),
-          startDate: '2023-04-01T00:00:00.000Z',
-          regionCode: 3,
-          regionName: 'North East',
-          returnLogId: `v1:3:${licenceRef}:10044001:2023-04-01:2024-03-31`,
-          naldAreaCode: 'RIDIN',
-          twoPartTariff: false,
-          returnReference: '10044001',
-          siteDescription: 'PUMP AT TINTAGEL',
-          returnsFrequency: 'month'
-        }
-      ]
-
-      recipients = [
-        {
-          ...fixtureData.licenceHolder,
-          licence_refs: [licenceRef],
-          return_log_ids: [dueReturns[0].returnId, dueReturns[1].returnId]
-        },
-        {
-          ...fixtureData.returnsTo,
-          licence_refs: [licenceRef],
-          return_log_ids: [dueReturns[0].returnId, dueReturns[1].returnId]
-        }
-      ]
+      recipients = [RecipientsFixture.returnsNoticeLicenceHolder(), RecipientsFixture.returnsNoticeReturnsTo()]
 
       const referenceCode = generateNoticeReferenceCode('RINV-')
       const sessionId = generateUUID()
@@ -385,10 +335,8 @@ describe('Notices - Setup - Create Notifications service', () => {
           pageTitleCaption: `Notice ${referenceCode}`
         },
         checkPageVisited: true,
-        dueReturns,
         id: sessionId,
-        licenceRef,
-        journey: 'adhoc',
+        journey: 'standard',
         name: 'Returns: invitation',
         notificationType: 'Returns invitation',
         noticeType: 'invitations',
@@ -405,21 +353,22 @@ describe('Notices - Setup - Create Notifications service', () => {
 
       expect(results[0]).to.equal(
         {
+          contactType: recipients[0].contact_type,
           dueDate: futureDueDate('letter'),
           eventId: noticeId,
           licenceMonitoringStationId: null,
           licences: recipients[0].licence_refs,
-          messageRef: 'returns_invitation_licence_holder_letter',
+          messageRef: 'returns invitation',
           messageType: 'letter',
           pdf: null,
           personalisation: {
-            address_line_1: 'Mr H J Potter',
-            address_line_2: '1',
+            address_line_1: 'J Returnsholder',
+            address_line_2: '4',
             address_line_3: 'Privet Drive',
             address_line_4: 'Little Whinging',
             address_line_5: 'Surrey',
             address_line_6: 'WD25 7LR',
-            name: 'Mr H J Potter',
+            name: 'J Returnsholder',
             periodEndDate: null,
             periodStartDate: null,
             returnDueDate: formatLongDate(futureDueDate('letter'))
@@ -427,28 +376,29 @@ describe('Notices - Setup - Create Notifications service', () => {
           recipient: null,
           returnLogIds: recipients[0].return_log_ids,
           status: 'pending',
-          templateId: '4b47cf1c-043c-4a0c-8659-5be06cb2b860'
+          templateId: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
 
       expect(results[1]).to.equal(
         {
+          contactType: recipients[1].contact_type,
           dueDate: futureDueDate('letter'),
           eventId: noticeId,
           licenceMonitoringStationId: null,
           licences: recipients[1].licence_refs,
-          messageRef: 'returns_invitation_returns_to_letter',
+          messageRef: 'returns invitation',
           messageType: 'letter',
           pdf: null,
           personalisation: {
-            address_line_1: 'Mr H J Weasley',
-            address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
-            address_line_3: '2',
-            address_line_4: 'Privet Drive',
-            address_line_5: 'Little Whinging',
-            address_line_6: 'Surrey',
-            name: 'Mr H J Weasley',
+            address_line_1: 'J Returnsto',
+            address_line_2: '4',
+            address_line_3: 'Privet Drive',
+            address_line_4: 'Little Whinging',
+            address_line_5: 'Surrey',
+            address_line_6: 'WD25 7LR',
+            name: 'J Returnsto',
             periodEndDate: null,
             periodStartDate: null,
             returnDueDate: formatLongDate(futureDueDate('letter'))
@@ -456,9 +406,9 @@ describe('Notices - Setup - Create Notifications service', () => {
           recipient: null,
           returnLogIds: recipients[1].return_log_ids,
           status: 'pending',
-          templateId: '73b4c395-4423-4976-8ab4-c82e2cb6beee'
+          templateId: NOTIFY_TEMPLATES.invitations.standard.letter['returns to']
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
     })
   })

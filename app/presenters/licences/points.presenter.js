@@ -5,8 +5,8 @@
  * @module PointsPresenter
  */
 
-const PointModel = require('../../models/point.model.js')
 const { pluralise } = require('./base-licences.presenter.js')
+const { formatLicencePoints } = require('../licence.presenter.js')
 
 /**
  * Formats the licence and related points data for the view licence points page
@@ -19,7 +19,7 @@ const { pluralise } = require('./base-licences.presenter.js')
 function go(points, licence) {
   const { id: licenceId, licenceRef } = licence
 
-  const licencePoints = _formatLicencePoints(points)
+  const licencePoints = formatLicencePoints(points)
 
   return {
     backLink: {
@@ -31,30 +31,6 @@ function go(points, licence) {
     pageTitleCaption: `Licence ${licenceRef}`,
     showingPoints: `Showing ${licencePoints.length} abstraction ${pluralise('point', licencePoints.length)}`
   }
-}
-
-function _formatLicencePoints(points) {
-  return points.map((point) => {
-    const pointInstance = PointModel.fromJson(point)
-
-    return {
-      bgsReference: pointInstance.bgsReference ?? '',
-      category: pointInstance.category ?? '',
-      depth: pointInstance.depth.toString(),
-      description: pointInstance.description ?? '',
-      gridReference: pointInstance.$describe(),
-      hydroInterceptDistance: pointInstance.hydroInterceptDistance.toString(),
-      hydroOffsetDistance: pointInstance.hydroOffsetDistance.toString(),
-      hydroReference: pointInstance.hydroReference ?? '',
-      locationNote: pointInstance.locationNote ?? '',
-      note: pointInstance.note ?? '',
-      primaryType: pointInstance.primaryType ?? '',
-      secondaryType: pointInstance.secondaryType ?? '',
-      sourceDescription: pointInstance.sourceDescription ?? '',
-      sourceType: pointInstance.sourceType ?? '',
-      wellReference: pointInstance.wellReference ?? ''
-    }
-  })
 }
 
 module.exports = {

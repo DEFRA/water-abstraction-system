@@ -71,7 +71,7 @@ describe('Notices - Setup - View Check service', () => {
         {
           contact: [recipient.email],
           licences: recipient.licence_refs,
-          method: 'Email - Primary user',
+          method: 'Email - primary user',
           previewLink: `/system/notices/setup/${session.id}/preview/${recipient.contact_hash_id}`
         }
       ],

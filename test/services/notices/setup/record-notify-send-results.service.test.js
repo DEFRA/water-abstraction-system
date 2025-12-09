@@ -72,6 +72,7 @@ describe('Notices - Setup - Record Notify Send Results service', () => {
         notUpdatedNotification,
         {
           alternateNoticeId: null,
+          contactType: null,
           createdAt: notification.createdAt,
           dueDate: null,
           eventId,
@@ -90,10 +91,12 @@ describe('Notices - Setup - Record Notify Send Results service', () => {
           returnedAt: null,
           returnLogIds: null,
           status: 'pending',
-          templateId: null
+          templateId: null,
+          updatedAt: notification.updatedAt
         },
         {
           alternateNoticeId: null,
+          contactType: null,
           createdAt: notificationTwo.createdAt,
           dueDate: null,
           eventId,
@@ -112,7 +115,8 @@ describe('Notices - Setup - Record Notify Send Results service', () => {
           returnedAt: null,
           returnLogIds: null,
           status: 'pending',
-          templateId: null
+          templateId: null,
+          updatedAt: notificationTwo.updatedAt
         }
       ])
     })
@@ -143,6 +147,7 @@ describe('Notices - Setup - Record Notify Send Results service', () => {
         notUpdatedNotification,
         {
           alternateNoticeId: null,
+          contactType: null,
           createdAt: notification.createdAt,
           dueDate: null,
           eventId,
@@ -161,10 +166,12 @@ describe('Notices - Setup - Record Notify Send Results service', () => {
           returnedAt: null,
           returnLogIds: null,
           status: 'error',
-          templateId: null
+          templateId: null,
+          updatedAt: notification.updatedAt
         },
         {
           alternateNoticeId: null,
+          contactType: null,
           createdAt: notificationTwo.createdAt,
           dueDate: null,
           eventId,
@@ -183,7 +190,8 @@ describe('Notices - Setup - Record Notify Send Results service', () => {
           returnedAt: null,
           returnLogIds: null,
           status: 'error',
-          templateId: null
+          templateId: null,
+          updatedAt: notificationTwo.updatedAt
         }
       ])
     })
