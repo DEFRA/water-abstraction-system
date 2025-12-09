@@ -293,19 +293,23 @@ describe('Licence Versions - View presenter', () => {
 
     describe('when there are multiple points', () => {
       beforeEach(() => {
+        const pointOne = ViewLicencesFixture.pointWithSource()
         const pointTwo = ViewLicencesFixture.pointWithSource()
-
-        pointTwo.description = 'ABSTRACTION POINT A'
-
-        // A description with punctuation - this should be ignored
         const pointThree = ViewLicencesFixture.pointWithSource()
 
+        pointTwo.description = 'ABSTRACTION POINT A'
+        // A description with punctuation - this should be ignored
         pointThree.description = "ABSTRACTION POINT 'C'"
 
         licenceVersionData.licenceVersion.licenceVersionPurposes = [
           {
             licenceVersionPurposePoints: [ViewLicencesFixture.point()],
-            points: [ViewLicencesFixture.pointWithSource()],
+            points: [pointOne],
+            purpose: ViewLicencesFixture.purpose()
+          },
+          {
+            licenceVersionPurposePoints: [ViewLicencesFixture.point()],
+            points: [pointOne],
             purpose: ViewLicencesFixture.purpose()
           },
           {
@@ -321,7 +325,7 @@ describe('Licence Versions - View presenter', () => {
         ]
       })
 
-      it('returns the points ordered by the description', () => {
+      it('returns the points ordered by the description and no duplicates', () => {
         const result = ViewPresenter.go(licenceVersionData, auth)
 
         expect(result.points).to.equal([

@@ -49,6 +49,27 @@ function _errorInDataEmail(billingAndDataRole) {
   return 'water_abstractiondigital@environment-agency.gov.uk'
 }
 
+/**
+ * Format the points into a flat array of points
+ *
+ * The points are used elsewhere in the presenter, and so we need to add the source manually.
+ *
+ * @private
+ */
+function _formatPoints(licenceVersionPurposes) {
+  return licenceVersionPurposes
+    .flatMap((purpose) => {
+      return purpose.points
+    })
+    .map(({ source, ...point }) => {
+      return {
+        ...point,
+        sourceDescription: source.description,
+        sourceType: source.sourceType
+      }
+    })
+}
+
 function _notes(licenceVersion, billingAndDataRole) {
   if (!billingAndDataRole) {
     return null
@@ -107,25 +128,13 @@ function _pagination(licenceVersionsForPagination, licenceVersion) {
  * @private
  */
 function _points(licenceVersionPurposes) {
-  const formattedPoints = licenceVersionPurposes
-    .flatMap((licenceVersionPurpose) => {
-      return licenceVersionPurpose.points
-    })
-    .map(({ source, ...point }) => {
-      return {
-        ...point,
-        sourceDescription: source.description,
-        sourceType: source.sourceType
-      }
-    })
-    .sort((a, b) => {
-      return a.description.localeCompare(b.description, 'en', {
-        sensitivity: 'base',
-        ignorePunctuation: true
-      })
-    })
+  const formattedPoints = _formatPoints(licenceVersionPurposes)
 
-  return formatLicencePoints(formattedPoints)
+  const dedupePoints = _removeDuplicatePointsById(formattedPoints)
+
+  const sortedPoints = dedupePoints.sort(_sortPointsByDescription)
+
+  return formatLicencePoints(sortedPoints)
 }
 
 function _purposes(licenceVersionPurposes) {
@@ -154,6 +163,33 @@ function _reason(licenceVersion, billingAndDataRole) {
   }
 
   return `${reason} created on ${createdAt} by ${createdBy}`
+}
+
+/**
+ * The licence version purposes points data is shared with the purposes' logic.
+ *
+ * We can not use 'distinctOn' in the fetch because we need all the points for purposes.
+ *
+ * @private
+ */
+function _removeDuplicatePointsById(points) {
+  const seenIds = new Set()
+
+  return points.filter((point) => {
+    if (seenIds.has(point.id)) {
+      return false
+    }
+
+    seenIds.add(point.id)
+    return true
+  })
+}
+
+function _sortPointsByDescription(a, b) {
+  return a.description.localeCompare(b.description, 'en', {
+    sensitivity: 'base',
+    ignorePunctuation: true
+  })
 }
 
 module.exports = {
