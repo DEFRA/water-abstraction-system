@@ -16,22 +16,26 @@ const NotificationModel = require('../../../../models/notification.model.js')
  *
  * @param {string} noticeId - The notice UUID to check
  *
- * @returns {Promise<object>} An object with an array of failed return log ids and an array of failed licence refs
+ * @returns {Promise<object>} An object containing the IDs of the failed notifications, plus the combined return log IDs
+ * and licence references from them
  */
 async function go(noticeId) {
-  const results = await _fetch(noticeId)
+  const notifications = await _fetch(noticeId)
 
   const licences = []
-  const returnIds = []
+  const notificationIds = []
+  const returnLogIds = []
 
-  for (const result of results) {
-    licences.push(...(Array.isArray(result.licences) ? result.licences : [result.licences]))
-    returnIds.push(...(Array.isArray(result.returnLogIds) ? result.returnLogIds : [result.returnLogIds]))
+  for (const notification of notifications) {
+    licences.push(...notification.licences)
+    notificationIds.push(notification.id)
+    returnLogIds.push(...notification.returnLogIds)
   }
 
   return {
-    failedLicenceRefs: [...new Set(licences)],
-    failedReturnIds: [...new Set(returnIds)]
+    licenceRefs: [...new Set(licences)].sort(),
+    notificationIds,
+    returnLogIds: [...new Set(returnLogIds)]
   }
 }
 
@@ -45,12 +49,12 @@ async function go(noticeId) {
  */
 async function _fetch(eventId) {
   return NotificationModel.query()
-    .select(['licences', 'returnLogIds'])
+    .select(['id', 'licences', 'returnLogIds'])
     .where('eventId', eventId)
     .where('status', 'error')
-    .where('messageType', 'email')
     .where('messageRef', 'returns invitation')
     .where('contactType', 'primary user')
+    .where('messageType', 'email')
     .whereNull('alternateNoticeId')
 }
 
