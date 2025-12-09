@@ -14,7 +14,6 @@ const NotificationsFixture = require('../../../fixtures/notifications.fixture.js
 
 // Things we need to stub
 const CheckNotificationStatusService = require('../../../../app/services/notifications/check-notification-status.service.js')
-const CreateAlternateNoticeService = require('../../../../app/services/notices/setup/create-alternate-notice.service.js')
 const NotificationModel = require('../../../../app/models/notification.model.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
 const SendEmailService = require('../../../../app/services/notices/setup/batch/send-email.service.js')
@@ -41,7 +40,6 @@ describe('Notices - Setup - Send Notice service', () => {
     '^ You’ll need to submit your returns by  2 December 2025.\r\n'
 
   let checkNotificationStatusStub
-  let createAlternateNoticeStub
   let notice
   let notifications
   let notificationPatchStub
@@ -133,10 +131,6 @@ describe('Notices - Setup - Send Notice service', () => {
           plaintext: letterPlaintext,
           status: 'pending'
         })
-
-        Sinon.stub(CreateAlternateNoticeService, 'go').resolves({
-          notifications: []
-        })
       })
 
       it('sends the notice, records the Notify responses, and updates the notice when all done', async () => {
@@ -207,10 +201,6 @@ describe('Notices - Setup - Send Notice service', () => {
             '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"Last line of address must be a real UK postcode or another country"}]}',
           status: 'error'
         })
-
-        Sinon.stub(CreateAlternateNoticeService, 'go').resolves({
-          notifications: []
-        })
       })
 
       it('sends the notice, records the Notify responses, including errors, and updates the notice when all done', async () => {
@@ -279,30 +269,12 @@ describe('Notices - Setup - Send Notice service', () => {
           plaintext: emailPlaintext,
           status: 'error'
         })
-
-        createAlternateNoticeStub = Sinon.stub(CreateAlternateNoticeService, 'go').resolves({
-          notice,
-          notifications: [notifications[1]]
-        })
-
-        Sinon.stub(SendLetterService, 'go').resolves({
-          id: notifications[0].id,
-          notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
-          notifyStatus: 'created',
-          plaintext: letterPlaintext,
-          status: 'pending'
-        })
       })
 
-      it('sends the notice, records the Notify responses, including errors then sends a letter and updates the previous notifications', async () => {
+      it('sends the notice, records the Notify responses, including errors', async () => {
         await SendNoticeService.go(notice, [notifications[1]])
 
         expect(checkNotificationStatusStub.called).to.be.false()
-        expect(createAlternateNoticeStub.calledOnce).to.be.true()
-        expect(createAlternateNoticeStub.firstCall.args[0]).to.equal(notice)
-
-        // The previous notifications are updated with the new letter noticeId so we end up calling the patch 3 times
-        expect(notificationPatchStub.calledThrice).to.be.true()
       })
 
       it('still logs the time taken', async () => {

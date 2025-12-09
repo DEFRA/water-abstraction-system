@@ -6,7 +6,6 @@
  */
 
 const CheckNotificationStatusService = require('../../notifications/check-notification-status.service.js')
-const CreateAlternateNoticeService = require('./create-alternate-notice.service.js')
 const NotificationModel = require('../../../../app/models/notification.model.js')
 const SendEmailService = require('./batch/send-email.service.js')
 const SendLetterService = require('./batch/send-letter.service.js')
@@ -39,8 +38,6 @@ async function go(notice, notifications) {
 
     await UpdateNoticeService.go([noticeId])
 
-    await _sendAlternateNotice(notice)
-
     calculateAndLogTimeTaken(startTime, 'Send notice complete', { count: notifications.length, noticeId })
   } catch (error) {
     global.GlobalNotifier.omfg('Send notice failed', { notice }, error)
@@ -61,21 +58,6 @@ async function _recordResult(sendResult) {
   const { id, pdf, plaintext, notifyError, notifyId, notifyStatus, status } = sendResult
 
   await NotificationModel.query().patch({ pdf, plaintext, notifyError, notifyId, notifyStatus, status }).findById(id)
-}
-
-async function _sendAlternateNotice(notice) {
-  const { id: noticeId, subtype } = notice
-
-  if (subtype !== 'returnInvitation') {
-    return
-  }
-
-  const { notice: alternateNotice, notifications } = await CreateAlternateNoticeService.go(notice)
-
-  if (notifications.length > 0) {
-    await _sendNotifications(notifications, alternateNotice.referenceCode)
-    await _updateFailedEmailInvitations(noticeId)
-  }
 }
 
 async function _sendNotification(notification, referenceCode) {
@@ -109,16 +91,6 @@ async function _sendNotifications(notifications, referenceCode) {
   }
 
   return sentNotifications
-}
-
-async function _updateFailedEmailInvitations(noticeId) {
-  await NotificationModel.query()
-    .patch({ alternateNoticeId: noticeId })
-    .where('status', 'error')
-    .where('messageRef', 'returns_invitation_primary_user_email')
-    .where('eventId', noticeId)
-    .where('messageType', 'email')
-    .whereNull('alternateNoticeId')
 }
 
 module.exports = {
