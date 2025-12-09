@@ -60,7 +60,7 @@ async function _fetch(licenceVersionId) {
         .orderBy('licenceVersionPurposes.createdAt', 'asc')
         .withGraphFetched('licenceVersionPurposePoints')
         .modifyGraph('licenceVersionPurposePoints', (licenceVersionPurposePointsBuilder) => {
-          licenceVersionPurposePoints.select(['licenceVersionPurposePoints.abstractionMethod'])
+          licenceVersionPurposePointsBuilder.select(['licenceVersionPurposePoints.abstractionMethod'])
         })
         .withGraphFetched('points')
         .modifyGraph('points', (pointsBuilder) => {
