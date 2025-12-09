@@ -239,6 +239,19 @@ describe('Notifications - View Notification presenter', () => {
       })
     })
 
+    describe('when a return log id is provided', () => {
+      it('returns a back link to the view licence communications page', () => {
+        const returnId = generateUUID()
+
+        const result = ViewNotificationPresenter.go(notification, null, returnId)
+
+        expect(result.backLink).to.be.equal({
+          href: `/system/return-logs/${returnId}`,
+          text: 'Go back to return log'
+        })
+      })
+    })
+
     describe('when no licence is provided', () => {
       it('returns a back link to the view notice page', () => {
         const result = ViewNotificationPresenter.go(notification)
