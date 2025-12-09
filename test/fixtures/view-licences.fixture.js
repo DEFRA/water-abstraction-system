@@ -126,9 +126,7 @@ function point() {
     note: 'WELL IS SPRING-FED',
     primaryType: 'Groundwater',
     secondaryType: 'Borehole',
-    wellReference: '81312',
-    sourceDescription: 'SURFACE WATER SOURCE OF SUPPLY',
-    sourceType: 'Borehole'
+    wellReference: '81312'
   })
 }
 

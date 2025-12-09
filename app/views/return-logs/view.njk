@@ -301,4 +301,62 @@
       </div>
     </div>
   {% endif %}
+
+  <h3 class="govuk-heading-m">Communications</h3>
+  {% if notifications.length > 0 %}
+    {% set tableRows = [] %}
+    {% for notification in notifications %}
+      {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
+      {% set rowIndex = loop.index0 %}
+
+      {# Link to view the notification #}
+      {% set viewLink %}
+        <a class="govuk-link" href="{{ notification.link.href }}">{{ notification.type }} <span class="govuk-visually-hidden">{{ notification.link.hiddenText }}</span></a>
+      {% endset %}
+
+      {% set noticeStatusTag %}
+        {{ statusTag(notification.status, true) }}
+      {% endset %}
+
+      {% set row = [
+        {
+          attributes: { 'data-test': 'notification-type-' + rowIndex },
+          html: viewLink
+        },
+        {
+          attributes: { 'data-test': 'notification-sent-date' + rowIndex },
+          text: notification.sentDate
+        },
+        {
+          attributes: { 'data-test': 'notification-sent-by-' + rowIndex },
+          text: notification.sentBy
+        },
+        {
+          attributes: { 'data-test': 'notification-method-' + rowIndex },
+          text: notification.method
+        },
+        {
+          attributes: { 'data-test': 'notification-status-' + rowIndex },
+          html: noticeStatusTag
+        }
+      ] %}
+
+      {% set tableRows = (tableRows.push(row), tableRows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      attributes: { 'data-test': 'notifications-table' },
+      firstCellIsHeader: false,
+      head: [
+        { text: 'Type' },
+        { text: 'Sent date' },
+        { text: 'Sent by' },
+        { text: 'Method' },
+        { text: 'Status' }
+      ],
+      rows: tableRows
+    }) }}
+  {% else %}
+    <p>This return log has no associated communications. While some may exist, they were not recorded at the time.</p>
+  {% endif %}
 {% endblock %}

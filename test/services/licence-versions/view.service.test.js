@@ -41,6 +41,7 @@ describe('Licence Versions - View service', () => {
       createdAt: new Date('2022-01-01'),
       id: generateUUID(),
       licence,
+      licenceVersionPurposes: [],
       modLogs: [{ id: generateUUID(), reasonDescription: 'Licence Holder Name/Address Change', userId: 'JOBSWORTH01' }],
       startDate: new Date('2022-01-01')
     })
@@ -71,6 +72,7 @@ describe('Licence Versions - View service', () => {
         pageTitle: 'Licence version starting 1 January 2022',
         pageTitleCaption: `Licence ${licence.licenceRef}`,
         pagination: null,
+        points: [],
         reason: 'Licence Holder Name/Address Change'
       })
     })

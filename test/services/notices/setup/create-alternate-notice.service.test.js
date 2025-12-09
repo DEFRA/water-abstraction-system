@@ -120,7 +120,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
           pdf: null,
           recipient: null
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
       expect(result.notifications[1]).to.equal(
         {
@@ -149,7 +149,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
           pdf: null,
           recipient: null
         },
-        { skip: ['createdAt', 'id'] }
+        { skip: ['createdAt', 'id', 'updatedAt'] }
       )
     })
   })

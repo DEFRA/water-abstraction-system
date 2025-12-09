@@ -61,7 +61,7 @@ describe('Notifications - Check Notification Status service', () => {
       returnLogWhereInStub = Sinon.stub().resolves()
       Sinon.stub(ReturnLogModel, 'query').returns({
         patch: returnLogPatchStub,
-        whereNull: Sinon.stub().returnsThis(),
+        where: Sinon.stub().returnsThis(),
         whereIn: returnLogWhereInStub
       })
     })
@@ -115,21 +115,44 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'received', status: 'sent' })
-        })
-
-        it('sets the due date for the linked return log records which do not have one already', async () => {
-          await CheckNotificationStatusService.go(notification)
-
-          expect(returnLogPatchStub.called).to.be.true()
-          expect(returnLogPatchStub.firstCall.args[0]).to.equal(
-            { dueDate: notification.dueDate, sentDate: notification.createdAt },
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'received', status: 'sent' },
             { skip: ['updatedAt'] }
           )
+        })
 
-          expect(returnLogWhereInStub.called).to.be.true()
-          expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
-          expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
+        it('does not attempt to update anything in licence monitoring stations', async () => {
+          await CheckNotificationStatusService.go(notification)
+
+          expect(licenceMonitoringStationPatchStub.called).to.be.false()
+        })
+
+        describe('and the contact type was "licence holder" or "single use"', () => {
+          it('attempts to set the due date for the linked return log records', async () => {
+            await CheckNotificationStatusService.go(notification)
+
+            expect(returnLogPatchStub.called).to.be.true()
+            expect(returnLogPatchStub.firstCall.args[0]).to.equal(
+              { dueDate: notification.dueDate, sentDate: notification.createdAt },
+              { skip: ['updatedAt'] }
+            )
+
+            expect(returnLogWhereInStub.called).to.be.true()
+            expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+            expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
+          })
+        })
+
+        describe('and the contact type was NOT "licence holder" or "single use"', () => {
+          beforeEach(() => {
+            notification.contactType = 'returns to'
+          })
+
+          it('does not attempt to set the due date for the linked return log records.', async () => {
+            await CheckNotificationStatusService.go(notification)
+
+            expect(returnLogPatchStub.called).to.be.false()
+          })
         })
       })
 
@@ -150,10 +173,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({
-            notifyStatus: 'temporary-failure',
-            status: 'error'
-          })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'temporary-failure', status: 'error' },
+            { skip: ['updatedAt'] }
+          )
         })
       })
 
@@ -225,21 +248,44 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'delivered', status: 'sent' })
-        })
-
-        it('sets the due date for the linked return log records which do not have one already', async () => {
-          await CheckNotificationStatusService.go(notification)
-
-          expect(returnLogPatchStub.called).to.be.true()
-          expect(returnLogPatchStub.firstCall.args[0]).to.equal(
-            { dueDate: notification.dueDate, sentDate: notification.createdAt },
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'delivered', status: 'sent' },
             { skip: ['updatedAt'] }
           )
+        })
 
-          expect(returnLogWhereInStub.called).to.be.true()
-          expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
-          expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
+        it('does not attempt to update anything in licence monitoring stations', async () => {
+          await CheckNotificationStatusService.go(notification)
+
+          expect(licenceMonitoringStationPatchStub.called).to.be.false()
+        })
+
+        describe('and the contact type was "primary user" or "single use"', () => {
+          it('attempts to set the due date for the linked return log records', async () => {
+            await CheckNotificationStatusService.go(notification)
+
+            expect(returnLogPatchStub.called).to.be.true()
+            expect(returnLogPatchStub.firstCall.args[0]).to.equal(
+              { dueDate: notification.dueDate, sentDate: notification.createdAt },
+              { skip: ['updatedAt'] }
+            )
+
+            expect(returnLogWhereInStub.called).to.be.true()
+            expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+            expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
+          })
+        })
+
+        describe('and the contact type was NOT "primary user" or "single use"', () => {
+          beforeEach(() => {
+            notification.contactType = 'returns agent'
+          })
+
+          it('does not attempt to set the due date for the linked return log records.', async () => {
+            await CheckNotificationStatusService.go(notification)
+
+            expect(returnLogPatchStub.called).to.be.false()
+          })
         })
       })
 
@@ -260,10 +306,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({
-            notifyStatus: 'permanent-failure',
-            status: 'error'
-          })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'permanent-failure', status: 'error' },
+            { skip: ['updatedAt'] }
+          )
         })
       })
 
@@ -345,7 +391,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'received', status: 'sent' })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'received', status: 'sent' },
+            { skip: ['updatedAt'] }
+          )
         })
       })
 
@@ -366,10 +415,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({
-            notifyStatus: 'temporary-failure',
-            status: 'error'
-          })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'temporary-failure', status: 'error' },
+            { skip: ['updatedAt'] }
+          )
         })
       })
 
@@ -441,7 +490,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'delivered', status: 'sent' })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'delivered', status: 'sent' },
+            { skip: ['updatedAt'] }
+          )
         })
       })
 
@@ -462,10 +514,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({
-            notifyStatus: 'permanent-failure',
-            status: 'error'
-          })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'permanent-failure', status: 'error' },
+            { skip: ['updatedAt'] }
+          )
         })
       })
 
@@ -543,7 +595,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'received', status: 'sent' })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'received', status: 'sent' },
+            { skip: ['updatedAt'] }
+          )
         })
 
         it('updates the linked licence monitoring station record', async () => {
@@ -574,10 +629,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({
-            notifyStatus: 'validation-failed',
-            status: 'error'
-          })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'validation-failed', status: 'error' },
+            { skip: ['updatedAt'] }
+          )
         })
 
         it('does not update the linked licence monitoring station record', async () => {
@@ -655,7 +710,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'delivered', status: 'sent' })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'delivered', status: 'sent' },
+            { skip: ['updatedAt'] }
+          )
         })
 
         it('updates the linked licence monitoring station record', async () => {
@@ -686,10 +744,10 @@ describe('Notifications - Check Notification Status service', () => {
           await CheckNotificationStatusService.go(notification)
 
           expect(notificationPatchStub.called).to.be.true()
-          expect(notificationPatchStub.firstCall.args[0]).to.equal({
-            notifyStatus: 'technical-failure',
-            status: 'error'
-          })
+          expect(notificationPatchStub.firstCall.args[0]).to.equal(
+            { notifyStatus: 'technical-failure', status: 'error' },
+            { skip: ['updatedAt'] }
+          )
         })
 
         it('does not update the linked licence monitoring station record', async () => {
@@ -728,6 +786,13 @@ describe('Notifications - Check Notification Status service', () => {
       notice = NoticesFixture.returnsPaperForm()
       notification = NotificationsFixture.paperReturn(notice)
       notification.status = 'pending'
+
+      returnLogWhereInStub = Sinon.stub().resolves()
+      Sinon.stub(ReturnLogModel, 'query').returns({
+        patch: returnLogPatchStub,
+        where: Sinon.stub().returnsThis(),
+        whereIn: returnLogWhereInStub
+      })
     })
 
     describe('and Notify returns a "pending" status', () => {
@@ -773,7 +838,44 @@ describe('Notifications - Check Notification Status service', () => {
         await CheckNotificationStatusService.go(notification)
 
         expect(notificationPatchStub.called).to.be.true()
-        expect(notificationPatchStub.firstCall.args[0]).to.equal({ notifyStatus: 'received', status: 'sent' })
+        expect(notificationPatchStub.firstCall.args[0]).to.equal(
+          { notifyStatus: 'received', status: 'sent' },
+          { skip: ['updatedAt'] }
+        )
+      })
+
+      it('does not attempt to update anything in licence monitoring stations', async () => {
+        await CheckNotificationStatusService.go(notification)
+
+        expect(licenceMonitoringStationPatchStub.called).to.be.false()
+      })
+
+      describe('and the contact type was "licence holder" or "single use"', () => {
+        it('attempts to set the due date for the linked return log records', async () => {
+          await CheckNotificationStatusService.go(notification)
+
+          expect(returnLogPatchStub.called).to.be.true()
+          expect(returnLogPatchStub.firstCall.args[0]).to.equal(
+            { dueDate: notification.dueDate, sentDate: notification.createdAt },
+            { skip: ['updatedAt'] }
+          )
+
+          expect(returnLogWhereInStub.called).to.be.true()
+          expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+          expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
+        })
+      })
+
+      describe('and the contact type was NOT "licence holder" or "single use"', () => {
+        beforeEach(() => {
+          notification.contactType = 'returns to'
+        })
+
+        it('does not attempt to set the due date for the linked return log records.', async () => {
+          await CheckNotificationStatusService.go(notification)
+
+          expect(returnLogPatchStub.called).to.be.false()
+        })
       })
     })
 
@@ -794,10 +896,10 @@ describe('Notifications - Check Notification Status service', () => {
         await CheckNotificationStatusService.go(notification)
 
         expect(notificationPatchStub.called).to.be.true()
-        expect(notificationPatchStub.firstCall.args[0]).to.equal({
-          notifyStatus: 'temporary-failure',
-          status: 'error'
-        })
+        expect(notificationPatchStub.firstCall.args[0]).to.equal(
+          { notifyStatus: 'temporary-failure', status: 'error' },
+          { skip: ['updatedAt'] }
+        )
       })
     })
 
@@ -818,10 +920,10 @@ describe('Notifications - Check Notification Status service', () => {
         await CheckNotificationStatusService.go(notification)
 
         expect(notificationPatchStub.called).to.be.true()
-        expect(notificationPatchStub.firstCall.args[0]).to.equal({
-          notifyStatus: 'cancelled',
-          status: 'cancelled'
-        })
+        expect(notificationPatchStub.firstCall.args[0]).to.equal(
+          { notifyStatus: 'cancelled', status: 'cancelled' },
+          { skip: ['updatedAt'] }
+        )
       })
     })
 
@@ -921,7 +1023,7 @@ describe('Notifications - Check Notification Status service', () => {
       returnLogWhereInStub = Sinon.stub().rejects(error)
       Sinon.stub(ReturnLogModel, 'query').returns({
         patch: returnLogPatchStub,
-        whereNull: Sinon.stub().returnsThis(),
+        where: Sinon.stub().returnsThis(),
         whereIn: returnLogWhereInStub
       })
     })
