@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Orchestrates sending a notice to Notify, recording the results, and checking the status when finished
- * @module SendNoticeService
+ * Orchestrates sending the first main notice to Notify, recording the results, and checking the status when finished
+ * @module SendMainNoticeService
  */
 
 const CheckNotificationStatusService = require('../../../notifications/check-notification-status.service.js')
@@ -17,7 +17,7 @@ const { calculateAndLogTimeTaken, currentTimeInNanoseconds, pause } = require('.
 const notifyConfig = require('../../../../../config/notify.config.js')
 
 /**
- * Orchestrates sending a notice to Notify, recording the results, and checking the status when finished
+ * Orchestrates sending the first main notice to Notify, recording the results, and checking the status when finished
  *
  * @param {object} notice - The notice to be sent
  * @param {object[]} notifications - The notifications linked to the notice to be sent

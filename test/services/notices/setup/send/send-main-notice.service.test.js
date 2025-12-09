@@ -22,9 +22,9 @@ const SendPaperReturnService = require('../../../../../app/services/notices/setu
 const UpdateNoticeService = require('../../../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
-const SendNoticeService = require('../../../../../app/services/notices/setup/send/send-notice.service.js')
+const SendMainNoticeService = require('../../../../../app/services/notices/setup/send/send-main-notice.service.js')
 
-describe('Notices - Setup - Send - Send Notice service', () => {
+describe('Notices - Setup - Send - Send Main Notice service', () => {
   const emailPlaintext =
     'Dear licence holder contact,\r\n' +
     '\r\n' +
@@ -134,7 +134,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('sends the notice, records the Notify responses, and updates the notice when all done', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledTwice).to.be.true()
@@ -160,7 +160,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('only checks the status of email notifications (letters are typically processed next day by Notify)', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // We only check the notification status for emails
         expect(checkNotificationStatusStub.calledOnce).to.be.true()
@@ -174,7 +174,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('logs the time taken', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         const args = notifierStub.omg.firstCall.args
 
@@ -204,7 +204,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('sends the notice, records the Notify responses, including errors, and updates the notice when all done', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledTwice).to.be.true()
@@ -231,7 +231,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('only checks the status of email notifications (letters are typically processed next day by Notify)', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // NOTE: We still call CheckNotificationStatusService because we know it has logic to only check pending
         // notifications. So, we don't worry about that in SendNoticeService, even though we've rigged our test to fail
@@ -247,7 +247,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('still logs the time taken', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         const args = notifierStub.omg.firstCall.args
 
@@ -272,13 +272,13 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('sends the notice, records the Notify responses, including errors', async () => {
-        await SendNoticeService.go(notice, [notifications[1]])
+        await SendMainNoticeService.go(notice, [notifications[1]])
 
         expect(checkNotificationStatusStub.called).to.be.false()
       })
 
       it('still logs the time taken', async () => {
-        await SendNoticeService.go(notice, [notifications[1]])
+        await SendMainNoticeService.go(notice, [notifications[1]])
 
         const args = notifierStub.omg.firstCall.args
 
@@ -325,7 +325,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('sends the notice, records the Notify response, and updates the notice when all done', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledOnce).to.be.true()
@@ -343,14 +343,14 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('does not try to check the status of the notification', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // We only check the notification status for emails
         expect(checkNotificationStatusStub.called).to.be.false()
       })
 
       it('logs the time taken', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         const args = notifierStub.omg.firstCall.args
 
@@ -372,7 +372,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('sends the notice, records the Notify response, including errors, and updates the notice when all done', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledOnce).to.be.true()
@@ -390,14 +390,14 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
 
       it('does not try to check the status of the notification', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // We only check the notification status for emails
         expect(checkNotificationStatusStub.called).to.be.false()
       })
 
       it('still logs the time taken', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         const args = notifierStub.omg.firstCall.args
 
@@ -435,7 +435,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
     })
 
     it('logs the error', async () => {
-      await SendNoticeService.go(notice, notifications)
+      await SendMainNoticeService.go(notice, notifications)
 
       const args = notifierStub.omfg.firstCall.args
 
