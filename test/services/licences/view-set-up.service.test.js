@@ -14,7 +14,6 @@ const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchAgreementsService = require('../../../app/services/licences/fetch-agreements.service.js')
 const FetchChargeVersionsService = require('../../../app/services/licences/fetch-charge-versions.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
@@ -92,8 +91,6 @@ describe('Licences - View Set Up service', () => {
       licenceId: licence.id
     }
 
-    Sinon.stub(FeatureFlagsConfig, 'enableRequirementsForReturns').value(false)
-
     Sinon.stub(FetchAgreementsService, 'go').returns([agreement])
 
     Sinon.stub(FetchChargeVersionsService, 'go').returns([chargeVersion])
@@ -162,7 +159,10 @@ describe('Licences - View Set Up service', () => {
           recalculateBills: {
             markForSupplementaryBilling: `/system/licences/${licence.id}/mark-for-supplementary-billing`
           },
-          returnVersions: {}
+          returnVersions: {
+            noReturnsRequired: `/system/licences/${licence.id}/no-returns-required`,
+            returnsRequired: `/system/licences/${licence.id}/returns-required`
+          }
         },
         notification: {
           text: 'This licence has been marked for the next two-part tariff supplementary bill run.',

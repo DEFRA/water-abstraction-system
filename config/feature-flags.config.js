@@ -13,8 +13,7 @@ const config = {
   // Credit to https://stackoverflow.com/a/323546/6117745 for how to handle
   // converting the env var to a boolean
   enableLicenceHistoryView: String(process.env.ENABLE_LICENCE_HISTORY_VIEW) === 'true' || false,
-  enableNullDueDate: String(process.env.ENABLE_NULL_DUE_DATE) === 'true' || false,
-  enableRequirementsForReturns: String(process.env.ENABLE_REQUIREMENTS_FOR_RETURNS) === 'true' || false
+  enableNullDueDate: String(process.env.ENABLE_NULL_DUE_DATE) === 'true' || false
 }
 
 module.exports = config

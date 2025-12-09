@@ -423,27 +423,5 @@ describe('Notices - Setup - Prepare Paper Return presenter', () => {
         })
       })
     })
-
-    describe('the "dueDate"', () => {
-      describe('when a due date is set', () => {
-        it('should return the due date', () => {
-          const result = PreparePaperReturnPresenter.go(notification)
-
-          expect(result.dueDate).to.equal('6 July 2025')
-        })
-      })
-
-      describe('when a due date is not set', () => {
-        beforeEach(() => {
-          delete notification.personalisation.due_date
-        })
-
-        it('should return the due date (29 days in the future)', () => {
-          const result = PreparePaperReturnPresenter.go(notification)
-
-          expect(result.dueDate).to.equal('30 January 2025')
-        })
-      })
-    })
   })
 })

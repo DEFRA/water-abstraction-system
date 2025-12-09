@@ -9,8 +9,6 @@ const { formatLongDate } = require('../base.presenter.js')
 const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 const { supplementaryBillingNotification } = require('./base-licences.presenter.js')
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-
 const ROLES = {
   billing: 'billing',
   deleteAgreements: 'delete_agreements',
@@ -39,8 +37,6 @@ const AGREEMENTS = {
  * @returns {object} The data formatted for the view template
  */
 function go(chargeVersions, workflows, agreements, returnVersions, auth, licence) {
-  const enableRequirementsForReturns = FeatureFlagsConfig.enableRequirementsForReturns
-
   const licenceData = {
     licenceId: licence.id,
     ends: licence.$ends()
@@ -56,7 +52,7 @@ function go(chargeVersions, workflows, agreements, returnVersions, auth, licence
     links: {
       chargeInformation: _chargeInformationLinks(auth, licenceData),
       agreements: _agreementLinks(auth, licenceData),
-      returnVersions: _returnVersionsLinks(licenceData, enableRequirementsForReturns, auth),
+      returnVersions: _returnVersionsLinks(licenceData, auth),
       recalculateBills: _recalculateBills(agreements, auth, licenceData)
     },
     notification: supplementaryBillingNotification(licence),
@@ -228,8 +224,8 @@ function _returnVersions(returnVersions = [{}]) {
   })
 }
 
-function _returnVersionsLinks(licenceData, enableRequirementsForReturns, auth) {
-  if (auth.credentials.scope.includes(ROLES.billing) && enableRequirementsForReturns) {
+function _returnVersionsLinks(licenceData, auth) {
+  if (auth.credentials.scope.includes(ROLES.billing)) {
     return {
       returnsRequired: `/system/licences/${licenceData.licenceId}/returns-required`,
       noReturnsRequired: `/system/licences/${licenceData.licenceId}/no-returns-required`
