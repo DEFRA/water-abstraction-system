@@ -21,7 +21,7 @@ describe('Notifications - Notification Table presenter', () => {
   let notification
   let returnLogId
 
-  describe('when there is a return invitation notification', () => {
+  describe('when there is a returns notice notification', () => {
     beforeEach(() => {
       notice = NoticesFixture.returnsInvitation()
       notification = NotificationsFixture.returnsInvitationEmail(notice)
@@ -98,26 +98,6 @@ describe('Notifications - Notification Table presenter', () => {
             link: {
               hiddenText: 'sent 9 October 2025 via email',
               href: `/system/notifications/${notification.id}?id=${licenceId}`
-            },
-            method: 'Email',
-            sentBy: notification.event.issuer,
-            sentDate: '9 October 2025',
-            status: notification.status,
-            type: 'alert'
-          }
-        ])
-      })
-    })
-
-    describe('and the query params have been removed', () => {
-      it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], null, null)
-
-        expect(result).to.equal([
-          {
-            link: {
-              hiddenText: 'sent 9 October 2025 via email',
-              href: `/system/notifications/${notification.id}`
             },
             method: 'Email',
             sentBy: notification.event.issuer,
