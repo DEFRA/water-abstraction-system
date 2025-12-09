@@ -12,7 +12,7 @@ const SendLetterService = require('./send-letter.service.js')
 const SendPaperReturnService = require('./send-paper-return.service.js')
 const UpdateNoticeService = require('../../update-notice.service.js')
 
-const { calculateAndLogTimeTaken, currentTimeInNanoseconds, pause } = require('../../../../lib/general.lib.js')
+const { pause } = require('../../../../lib/general.lib.js')
 
 const notifyConfig = require('../../../../../config/notify.config.js')
 
@@ -23,25 +23,17 @@ const notifyConfig = require('../../../../../config/notify.config.js')
  * @param {object[]} notifications - The notifications linked to the notice to be sent
  */
 async function go(notice, notifications) {
-  try {
-    const startTime = currentTimeInNanoseconds()
+  const { id: noticeId, referenceCode } = notice
 
-    const { id: noticeId, referenceCode } = notice
+  const sentNotifications = await _sendNotifications(notifications, referenceCode)
 
-    const sentNotifications = await _sendNotifications(notifications, referenceCode)
+  // If we rush to check the status too quickly, Notify will respond with a result for emails that is 'still sending'.
+  // The default wait is 5 seconds, which we have found is more than enough time.
+  await pause(notifyConfig.waitForStatus)
 
-    // If we rush to check the status too quickly, Notify will respond with a result for emails that is 'still sending'.
-    // The default wait is 5 seconds, which we have found is more than enough time.
-    await pause(notifyConfig.waitForStatus)
+  await _checkNotifications(sentNotifications)
 
-    await _checkNotifications(sentNotifications)
-
-    await UpdateNoticeService.go([noticeId])
-
-    calculateAndLogTimeTaken(startTime, 'Send notice complete', { count: notifications.length, noticeId })
-  } catch (error) {
-    global.GlobalNotifier.omfg('Send notice failed', { notice }, error)
-  }
+  await UpdateNoticeService.go([noticeId])
 }
 
 async function _checkNotifications(notifications) {
