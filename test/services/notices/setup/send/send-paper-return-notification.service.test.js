@@ -18,9 +18,9 @@ const CreatePrecompiledFileRequest = require('../../../../../app/requests/notify
 const PreparePaperReturnService = require('../../../../../app/services/notices/setup/prepare-paper-return.service.js')
 
 // Thing under test
-const SendPaperReturnService = require('../../../../../app/services/notices/setup/send/send-paper-return.service.js')
+const SendPaperReturnNotificationService = require('../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js')
 
-describe('Notices - Setup - Send - Send Paper Return service', () => {
+describe('Notices - Setup - Send - Send Paper Return Notification service', () => {
   let buffer
   let notification
   let notifyResponse
@@ -50,7 +50,7 @@ describe('Notices - Setup - Send - Send Paper Return service', () => {
     })
 
     it('should return the notification notify response', async () => {
-      const result = await SendPaperReturnService.go(notification, referenceCode)
+      const result = await SendPaperReturnNotificationService.go(notification, referenceCode)
 
       expect(result).to.equal({
         id: notification.id,
@@ -72,7 +72,7 @@ describe('Notices - Setup - Send - Send Paper Return service', () => {
     })
 
     it('should return the notification notify response', async () => {
-      const result = await SendPaperReturnService.go(notification, referenceCode)
+      const result = await SendPaperReturnNotificationService.go(notification, referenceCode)
 
       expect(result).to.equal({
         id: notification.id,

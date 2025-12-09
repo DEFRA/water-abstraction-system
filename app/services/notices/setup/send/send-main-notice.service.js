@@ -9,7 +9,7 @@ const CheckNotificationStatusService = require('../../../notifications/check-not
 const NotificationModel = require('../../../../../app/models/notification.model.js')
 const SendEmailNotificationService = require('./send-email-notification.service.js')
 const SendLetterNotificationService = require('./send-letter-notification.service.js')
-const SendPaperReturnService = require('./send-paper-return.service.js')
+const SendPaperReturnNotificationService = require('./send-paper-return-notification.service.js')
 const UpdateNoticeService = require('../../update-notice.service.js')
 
 const { pause } = require('../../../../lib/general.lib.js')
@@ -58,7 +58,7 @@ async function _sendNotification(notification, referenceCode) {
   }
 
   if (notification.messageRef === 'paper return') {
-    return SendPaperReturnService.go(notification, referenceCode)
+    return SendPaperReturnNotificationService.go(notification, referenceCode)
   }
 
   return SendLetterNotificationService.go(notification, referenceCode)

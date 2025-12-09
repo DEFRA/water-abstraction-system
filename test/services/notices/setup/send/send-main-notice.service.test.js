@@ -18,7 +18,7 @@ const NotificationModel = require('../../../../../app/models/notification.model.
 const NotifyConfig = require('../../../../../config/notify.config.js')
 const SendEmailNotificationService = require('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
 const SendLetterNotificationService = require('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
-const SendPaperReturnService = require('../../../../../app/services/notices/setup/send/send-paper-return.service.js')
+const SendPaperReturnNotificationService = require('../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js')
 const UpdateNoticeService = require('../../../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
@@ -274,7 +274,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     describe('and it is sent to Notify successfully', () => {
       beforeEach(() => {
-        Sinon.stub(SendPaperReturnService, 'go').resolves({
+        Sinon.stub(SendPaperReturnNotificationService, 'go').resolves({
           id: notifications[0].id,
           notifyId: '95296b09-fef6-4723-9716-e962fcd48e8f',
           notifyStatus: 'created',
@@ -312,7 +312,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
 
     describe('and it fails to send to Notify', () => {
       beforeEach(() => {
-        Sinon.stub(SendPaperReturnService, 'go').resolves({
+        Sinon.stub(SendPaperReturnNotificationService, 'go').resolves({
           id: notifications[0].id,
           notifyError: '{"status":404,"message":"Request failed with status code 404"}',
           pdf: Buffer.from('mock file'),
