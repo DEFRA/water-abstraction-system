@@ -15,7 +15,6 @@ const config = {
   enableLicenceHistoryView: String(process.env.ENABLE_LICENCE_HISTORY_VIEW) === 'true' || false,
   enableNullDueDate: String(process.env.ENABLE_NULL_DUE_DATE) === 'true' || false,
   enableRequirementsForReturns: String(process.env.ENABLE_REQUIREMENTS_FOR_RETURNS) === 'true' || false,
-  enableSystemProfiles: String(process.env.ENABLE_SYSTEM_PROFILES) === 'true' || false
 }
 
 module.exports = config
