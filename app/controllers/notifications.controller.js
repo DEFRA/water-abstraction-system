@@ -28,8 +28,9 @@ async function returnedLetter(request, h) {
 async function view(request, h) {
   const { id: notificationId } = request.params
   const { id: licenceId } = request.query
+  const { return: returnId } = request.query
 
-  const pageData = await ViewNotificationService.go(notificationId, licenceId)
+  const pageData = await ViewNotificationService.go(notificationId, licenceId, returnId)
 
   return h.view('notifications/view.njk', pageData)
 }
