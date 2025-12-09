@@ -46,12 +46,26 @@ async function _fetch(licenceVersionId) {
     .modify('history')
     .withGraphFetched('licenceVersionPurposes')
     .modifyGraph('licenceVersionPurposes', (builder) => {
-      builder.select(['id'])
+      builder
+        .select([
+          'abstractionPeriodStartDay',
+          'abstractionPeriodStartMonth',
+          'abstractionPeriodEndDay',
+          'abstractionPeriodEndMonth',
+          'annualQuantity',
+          'dailyQuantity',
+          'hourlyQuantity',
+          'instantQuantity'
+        ])
+        .orderBy('licenceVersionPurposes.createdAt', 'asc')
+    })
+    .withGraphFetched('licenceVersionPurposes.licenceVersionPurposePoints')
+    .modifyGraph('licenceVersionPurposes.licenceVersionPurposePoints', (builder) => {
+      builder.select(['licenceVersionPurposePoints.abstractionMethod'])
     })
     .withGraphFetched('licenceVersionPurposes.points')
     .modifyGraph('licenceVersionPurposes.points', (builder) => {
       builder
-        .distinctOn('points.id')
         .select([
           'points.id',
           'points.bgsReference',
@@ -71,14 +85,15 @@ async function _fetch(licenceVersionId) {
           'points.secondaryType',
           'points.wellReference'
         ])
-        .orderBy([
-          { column: 'points.id', order: 'asc' },
-          { column: 'points.description', order: 'asc' }
-        ])
+        .orderBy([{ column: 'points.externalId', order: 'asc' }])
     })
     .withGraphFetched('licenceVersionPurposes.points.source')
     .modifyGraph('licenceVersionPurposes.points.source', (builder) => {
       builder.select(['sources.description', 'sources.id', 'sources.sourceType'])
+    })
+    .withGraphFetched('licenceVersionPurposes.purpose')
+    .modifyGraph('licenceVersionPurposes.purpose', (builder) => {
+      builder.select(['id', 'description'])
     })
 }
 

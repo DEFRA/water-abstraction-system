@@ -73,6 +73,7 @@ describe('Licence Versions - View presenter', () => {
         pageTitleCaption: `Licence ${licence.licenceRef}`,
         pagination: null,
         points: [],
+        purposes: [],
         reason: 'Licence Holder Name/Address Change'
       })
     })
@@ -257,12 +258,9 @@ describe('Licence Versions - View presenter', () => {
       beforeEach(() => {
         licenceVersionData.licenceVersion.licenceVersionPurposes = [
           {
-            points: [
-              {
-                ...ViewLicencesFixture.point(),
-                source: { description: 'SURFACE WATER SOURCE OF SUPPLY', sourceType: 'Borehole' }
-              }
-            ]
+            licenceVersionPurposePoints: [ViewLicencesFixture.point()],
+            points: [ViewLicencesFixture.pointWithSource()],
+            purpose: ViewLicencesFixture.purpose()
           }
         ]
       })
@@ -295,38 +293,39 @@ describe('Licence Versions - View presenter', () => {
 
     describe('when there are multiple points', () => {
       beforeEach(() => {
+        const pointOne = ViewLicencesFixture.pointWithSource()
+        const pointTwo = ViewLicencesFixture.pointWithSource()
+        const pointThree = ViewLicencesFixture.pointWithSource()
+
+        pointTwo.description = 'ABSTRACTION POINT A'
+        // A description with punctuation - this should be ignored
+        pointThree.description = "ABSTRACTION POINT 'C'"
+
         licenceVersionData.licenceVersion.licenceVersionPurposes = [
           {
-            points: [
-              {
-                ...ViewLicencesFixture.point(),
-                source: { description: 'SURFACE WATER SOURCE OF SUPPLY', sourceType: 'Borehole' }
-              }
-            ]
+            licenceVersionPurposePoints: [ViewLicencesFixture.point()],
+            points: [pointOne],
+            purpose: ViewLicencesFixture.purpose()
           },
           {
-            points: [
-              {
-                ...ViewLicencesFixture.point(),
-                description: 'ABSTRACTION POINT A',
-                source: { description: 'SURFACE WATER SOURCE OF SUPPLY', sourceType: 'Borehole' }
-              }
-            ]
+            licenceVersionPurposePoints: [ViewLicencesFixture.point()],
+            points: [pointOne],
+            purpose: ViewLicencesFixture.purpose()
           },
           {
-            // A description with punctuation - this should be ignored
-            points: [
-              {
-                ...ViewLicencesFixture.point(),
-                description: "ABSTRACTION POINT 'C'",
-                source: { description: 'SURFACE WATER SOURCE OF SUPPLY', sourceType: 'Borehole' }
-              }
-            ]
+            licenceVersionPurposePoints: [ViewLicencesFixture.point()],
+            points: [pointTwo],
+            purpose: ViewLicencesFixture.purpose()
+          },
+          {
+            licenceVersionPurposePoints: [ViewLicencesFixture.point()],
+            points: [pointThree],
+            purpose: ViewLicencesFixture.purpose()
           }
         ]
       })
 
-      it('returns the points ordered by the description', () => {
+      it('returns the points ordered by the description and no duplicates', () => {
         const result = ViewPresenter.go(licenceVersionData, auth)
 
         expect(result.points).to.equal([
@@ -385,6 +384,47 @@ describe('Licence Versions - View presenter', () => {
             wellReference: '81312'
           }
         ])
+      })
+    })
+  })
+
+  describe('the "purposes" property', () => {
+    describe('when there are "purposes"', () => {
+      beforeEach(() => {
+        licenceVersionData.licenceVersion.licenceVersionPurposes = [
+          {
+            licenceVersionPurposePoints: [ViewLicencesFixture.point()],
+            points: [ViewLicencesFixture.pointWithSource()],
+            purpose: ViewLicencesFixture.purpose()
+          }
+        ]
+      })
+
+      it('should return the purposes', () => {
+        const result = ViewPresenter.go(licenceVersionData, auth)
+
+        expect(result.purposes).to.equal([
+          {
+            abstractionAmounts: [],
+            abstractionAmountsTitle: 'Abstraction amount',
+            abstractionMethods: undefined,
+            abstractionMethodsTitle: 'Method of abstraction',
+            abstractionPeriod: null,
+            abstractionPoints: [
+              'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (RIVER OUSE AT BLETSOE)'
+            ],
+            abstractionPointsTitle: 'Abstraction point',
+            purposeDescription: 'Spray Irrigation - Storage'
+          }
+        ])
+      })
+    })
+
+    describe('when there are no "purposes"', () => {
+      it('should return an empty array', () => {
+        const result = ViewPresenter.go(licenceVersionData, auth)
+
+        expect(result.purposes).to.equal([])
       })
     })
   })

@@ -4,6 +4,7 @@
 
 {% from "macros/licence-version-change-type-tag.njk" import changeTypeTag as licenceVersionChangeTypeTag %}
 {% from "macros/points-summary-card.njk" import pointsSummaryCards %}
+{% from "macros/purposes-summary-card.njk" import purposesSummaryCards %}
 
 {% block pageContent %}
 
@@ -33,6 +34,9 @@
     <li>
       <a class="govuk-link" href="#points">Points</a>
     </li>
+    <li>
+      <a class="govuk-link" href="#purposes-periods-and-amounts">Purposes, periods and amounts</a>
+    </li>
   </ul>
 
   <section id="points">
@@ -41,6 +45,14 @@
     </h2>
 
     {{ pointsSummaryCards(points) }}
+  </section>
+
+  <section id="purposes-periods-and-amounts">
+    <h2 class="govuk-heading-m govuk-!-margin-top-3">
+      Purposes, periods and amounts
+    </h2>
+
+    {{ purposesSummaryCards(purposes) }}
   </section>
 
 {% endblock %}

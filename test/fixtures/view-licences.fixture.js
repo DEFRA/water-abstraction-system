@@ -130,9 +130,61 @@ function point() {
   })
 }
 
+/**
+ * Represents a licence point with the source.
+ *
+ * Spreading a model instance (e.g. `{ ...model }`) converts it into a plain
+ * object and **does not preserve the prototype chain**.
+ *
+ * As a result, any methods defined on the model class (such as `$describe()`)
+ * are lost, because object spread only copies enumerable own properties,
+ * not prototype methods.
+ *
+ * To keep model methods available, always construct the model *after*
+ * merging properties (e.g. using `PointModel.fromJson()`), and avoid
+ * spreading class instances directly.
+ *
+ * @returns {PointModel} - licence point
+ **/
+function pointWithSource() {
+  return PointModel.fromJson({
+    bgsReference: 'TL 14/123',
+    category: 'Single Point',
+    depth: 123,
+    description: 'RIVER OUSE AT BLETSOE',
+    hydroInterceptDistance: 8.01,
+    hydroReference: 'TL 14/133',
+    hydroOffsetDistance: 5.56,
+    id: generateUUID(),
+    locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
+    ngr1: 'SD 963 193',
+    ngr2: 'SD 963 193',
+    ngr3: 'SD 963 193',
+    ngr4: 'SD 963 193',
+    note: 'WELL IS SPRING-FED',
+    primaryType: 'Groundwater',
+    secondaryType: 'Borehole',
+    wellReference: '81312',
+    source: { description: 'SURFACE WATER SOURCE OF SUPPLY', sourceType: 'Borehole' }
+  })
+}
+
+/**
+ * Represents a licence purpose
+ *
+ * @returns {object} - licence purpose
+ */
+function purpose() {
+  return {
+    description: 'Spray Irrigation - Storage'
+  }
+}
+
 module.exports = {
   condition,
   licence,
   licenceVersionPurpose,
-  point
+  point,
+  pointWithSource,
+  purpose
 }

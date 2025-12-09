@@ -73,6 +73,7 @@ describe('Licence Versions - View service', () => {
         pageTitleCaption: `Licence ${licence.licenceRef}`,
         pagination: null,
         points: [],
+        purposes: [],
         reason: 'Licence Holder Name/Address Change'
       })
     })
