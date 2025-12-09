@@ -64,6 +64,7 @@ describe('Return Logs - View Return Log presenter', () => {
       method: 'abstractionVolumes',
       nilReturn: false,
       notification: null,
+      notifications: [],
       pageTitle: 'Abstraction return',
       pageTitleCaption: `Licence ${returnLog.licenceRef}`,
       purpose: ['Mineral Washing (Mineral Washing alias)'],
@@ -946,6 +947,16 @@ describe('Return Logs - View Return Log presenter', () => {
           text: 'You are viewing a previous version. This is not the latest submission data.',
           iconFallbackText: 'Warning'
         })
+      })
+    })
+  })
+
+  describe('the "notifications" property', () => {
+    describe('when the notifications are an empty array', () => {
+      it('returns an empty array', () => {
+        const result = ViewReturnLogPresenter.go(auth, returnLog, [])
+
+        expect(result.notifications).to.equal([])
       })
     })
   })

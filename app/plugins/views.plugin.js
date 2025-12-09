@@ -36,7 +36,7 @@ import('marked').then((mod) => {
   global.GlobalMarked = mod.marked
 })
 
-const { enableLicenceHistoryView, enableSystemProfiles } = require('../../config/feature-flags.config.js')
+const { enableLicenceHistoryView } = require('../../config/feature-flags.config.js')
 
 const ViewsPlugin = {
   plugin: Vision,
@@ -191,11 +191,7 @@ function _navigationLinks(auth) {
   const { scope } = auth.credentials
 
   if (scope.includes('hof_notifications') || scope.includes('renewal_notifications')) {
-    if (enableSystemProfiles) {
-      links.unshift({ href: '/system/users/me/profile-details', text: 'Profile details' })
-    } else {
-      links.unshift({ href: '/contact-information', text: 'Contact information' })
-    }
+    links.unshift({ href: '/system/users/me/profile-details', text: 'Profile details' })
   }
 
   return links
