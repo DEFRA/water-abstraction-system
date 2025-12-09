@@ -5,6 +5,28 @@ const { formatAbstractionPeriod } = require('./base.presenter.js')
 const { formatAbstractionAmounts } = require('./licences/base-licences.presenter.js')
 
 /**
+ * Formats Licence condition types for the view
+ *
+ * Used by the 'conditionsSummaryCards' macro
+ *
+ * @param {object[]} conditionTypes -condition types from the licence conditions
+ *
+ * @returns {object[]} - the condition types formatted to be displayed
+ */
+function formatConditionTypes(conditionTypes) {
+  return conditionTypes.map((conditionType) => {
+    const { displayTitle, licenceVersionPurposeConditions } = conditionType
+
+    const conditions = _formatConditions(licenceVersionPurposeConditions, conditionType)
+
+    return {
+      conditions,
+      displayTitle
+    }
+  })
+}
+
+/**
  * Formats Licence points for the view
  *
  * Used by the 'pointsSummaryCards' macro
@@ -78,6 +100,17 @@ function _abstractionPeriod(licenceVersionPurpose) {
   return formatAbstractionPeriod(startDay, startMonth, endDay, endMonth)
 }
 
+function _abstractionPoints(licenceVersionPurposePoints) {
+  const descriptions = licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
+    return licenceVersionPurposePoint.point.$describe()
+  })
+
+  return {
+    label: descriptions.length === 1 ? 'Abstraction point' : 'Abstraction points',
+    descriptions
+  }
+}
+
 function _formatAbstractionAmounts(licenceVersionPurpose) {
   if (!licenceVersionPurpose) {
     return []
@@ -114,7 +147,37 @@ function _formatAbstractionPoints(points) {
   })
 }
 
+function _formatConditions(licenceVersionPurposeConditions, conditionType) {
+  const { description, param1Label, param2Label, subcodeDescription } = conditionType
+
+  return licenceVersionPurposeConditions.map((licenceVersionPurposeCondition) => {
+    const { licenceVersionPurpose, notes, param1, param2 } = licenceVersionPurposeCondition
+
+    return {
+      abstractionPoints: _abstractionPoints(licenceVersionPurpose.licenceVersionPurposePoints),
+      conditionType: description,
+      otherInformation: notes ? notes.trim() : null,
+      param1: _param(param1Label, param1, 1),
+      param2: _param(param2Label, param2, 2),
+      purpose: licenceVersionPurpose.purpose.description,
+      subcodeDescription
+    }
+  })
+}
+
+function _param(paramLabel, param, noteNumber) {
+  // Label nor value set then we don't display the param
+  if (!paramLabel && !param) {
+    return null
+  }
+
+  return {
+    label: paramLabel ?? `Note ${noteNumber}`,
+    value: param
+  }
+}
 module.exports = {
+  formatConditionTypes,
   formatLicencePoints,
   formatLicencePurposes
 }
