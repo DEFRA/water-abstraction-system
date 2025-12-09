@@ -59,12 +59,12 @@ async function _fetch(licenceVersionId) {
         ])
         .orderBy('licenceVersionPurposes.createdAt', 'asc')
         .withGraphFetched('licenceVersionPurposePoints')
-        .modifyGraph('licenceVersionPurposePoints', (builder) => {
-          builder.select(['licenceVersionPurposePoints.abstractionMethod'])
+        .modifyGraph('licenceVersionPurposePoints', (licenceVersionPurposePointsBuilder) => {
+          licenceVersionPurposePoints.select(['licenceVersionPurposePoints.abstractionMethod'])
         })
         .withGraphFetched('points')
-        .modifyGraph('points', (builder) => {
-          builder
+        .modifyGraph('points', (pointsBuilder) => {
+          pointsBuilder
             .select([
               'points.id',
               'points.bgsReference',
@@ -85,14 +85,14 @@ async function _fetch(licenceVersionId) {
               'points.wellReference'
             ])
             .orderBy([{ column: 'points.externalId', order: 'asc' }])
-        })
-        .withGraphFetched('points.source')
-        .modifyGraph('points.source', (builder) => {
-          builder.select(['sources.description', 'sources.id', 'sources.sourceType'])
+            .withGraphFetched('source')
+            .modifyGraph('source', (sourceBuilder) => {
+              sourceBuilder.select(['sources.description', 'sources.id', 'sources.sourceType'])
+            })
         })
         .withGraphFetched('purpose')
-        .modifyGraph('purpose', (builder) => {
-          builder.select(['id', 'description'])
+        .modifyGraph('purpose', (purposeBuilder) => {
+          purposeBuilder.select(['id', 'description'])
         })
     })
 }
