@@ -8,7 +8,7 @@
 const CheckNotificationStatusService = require('../../../notifications/check-notification-status.service.js')
 const NotificationModel = require('../../../../../app/models/notification.model.js')
 const SendEmailNotificationService = require('./send-email-notification.service.js')
-const SendLetterService = require('./send-letter.service.js')
+const SendLetterNotificationService = require('./send-letter-notification.service.js')
 const SendPaperReturnService = require('./send-paper-return.service.js')
 const UpdateNoticeService = require('../../update-notice.service.js')
 
@@ -61,7 +61,7 @@ async function _sendNotification(notification, referenceCode) {
     return SendPaperReturnService.go(notification, referenceCode)
   }
 
-  return SendLetterService.go(notification, referenceCode)
+  return SendLetterNotificationService.go(notification, referenceCode)
 }
 
 async function _sendNotifications(notifications, referenceCode) {

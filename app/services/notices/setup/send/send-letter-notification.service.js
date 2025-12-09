@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates sending a letter notification to Notify
- * @module SendLetterService
+ * @module SendLetterNotificationService
  */
 
 const CreateLetterRequest = require('../../../../requests/notify/create-letter.request.js')
@@ -12,9 +12,9 @@ const NotifyUpdatePresenter = require('../../../../presenters/notices/setup/noti
  * Orchestrates sending a letter notification to Notify
  *
  * @param {object} notification - the notification to send to Notify
- * @param {string} referenceCode - the unique generated reference code
+ * @param {string} referenceCode - the generated notice reference code
  *
- * @returns {Promise<object>} - a notification with the Notify response
+ * @returns {Promise<object>} a notification with the Notify response
  */
 async function go(notification, referenceCode) {
   const notifyResult = await CreateLetterRequest.send(notification.templateId, {

@@ -17,7 +17,7 @@ const CheckNotificationStatusService = require('../../../../../app/services/noti
 const NotificationModel = require('../../../../../app/models/notification.model.js')
 const NotifyConfig = require('../../../../../config/notify.config.js')
 const SendEmailNotificationService = require('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
-const SendLetterService = require('../../../../../app/services/notices/setup/send/send-letter.service.js')
+const SendLetterNotificationService = require('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
 const SendPaperReturnService = require('../../../../../app/services/notices/setup/send/send-paper-return.service.js')
 const UpdateNoticeService = require('../../../../../app/services/notices/update-notice.service.js')
 
@@ -117,7 +117,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           status: 'pending'
         })
 
-        Sinon.stub(SendLetterService, 'go').resolves({
+        Sinon.stub(SendLetterNotificationService, 'go').resolves({
           id: notifications[0].id,
           notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
           notifyStatus: 'created',
@@ -177,7 +177,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           status: 'pending'
         })
 
-        Sinon.stub(SendLetterService, 'go').resolves({
+        Sinon.stub(SendLetterNotificationService, 'go').resolves({
           id: notifications[0].id,
           notifyError:
             '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"Last line of address must be a real UK postcode or another country"}]}',

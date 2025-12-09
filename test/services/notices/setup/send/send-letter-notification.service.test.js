@@ -17,9 +17,9 @@ const { generateNoticeReferenceCode } = require('../../../../../app/lib/general.
 const CreateLetterRequest = require('../../../../../app/requests/notify/create-letter.request.js')
 
 // Thing under test
-const SendLetterService = require('../../../../../app/services/notices/setup/send/send-letter.service.js')
+const SendLetterNotificationService = require('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
 
-describe('Notices - Setup - Send - Send Letter service', () => {
+describe('Notices - Setup - Send - Send Letter Notification service', () => {
   let notification
   let notifyResponse
   let referenceCode
@@ -38,7 +38,7 @@ describe('Notices - Setup - Send - Send Letter service', () => {
   })
 
   it('should return the notification notify response', async () => {
-    const result = await SendLetterService.go(notification, referenceCode)
+    const result = await SendLetterNotificationService.go(notification, referenceCode)
 
     expect(result).to.equal({
       id: notification.id,
