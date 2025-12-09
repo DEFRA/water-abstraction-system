@@ -7,7 +7,6 @@
 
 const { daysFromPeriod, monthsFromPeriod, weeksFromPeriod } = require('../../../lib/dates.lib.js')
 const { formatLongDate } = require('../../base.presenter.js')
-const { futureDueDate } = require('../base.presenter.js')
 const { naldAreaCodes, returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 const { splitArrayIntoGroups } = require('../../../lib/general.lib.js')
 
@@ -94,7 +93,7 @@ function go(notification) {
 
 function _dates(dueDate, endDate, startDate) {
   return {
-    dueDate: formatLongDate(dueDate) || formatLongDate(futureDueDate('letter')),
+    dueDate: formatLongDate(dueDate),
     endDate: formatLongDate(endDate),
     startDate: formatLongDate(startDate)
   }
