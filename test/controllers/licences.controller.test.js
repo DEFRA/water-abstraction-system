@@ -824,7 +824,6 @@ function _viewSetUp() {
     activeSecondaryNav: 'set-up',
     agreements: [{}],
     chargeInformation: [{}],
-    enableRequirementsForReturns: true,
     links: {
       agreements: {
         setUpAgreement: '/'
