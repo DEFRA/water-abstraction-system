@@ -7,6 +7,7 @@
 
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
+const { futureDueDate } = require('../base.presenter.js')
 
 /**
  * Formats recipients and return logs into notifications for a paper return
@@ -25,6 +26,9 @@ function go(session, recipients, noticeId) {
   const selectedReturnLogs = _selectedReturnLogs(session)
 
   for (const selectedReturnLog of selectedReturnLogs) {
+    // If the selected return log does not have a due date, calculate what it should be and apply it
+    selectedReturnLog.dueDate = selectedReturnLog.dueDate || futureDueDate('letter')
+
     for (const recipient of recipients) {
       const notification = _notification(recipient, selectedReturnLog, noticeId, licenceRef)
 
