@@ -101,9 +101,11 @@ function _abstractionPeriod(licenceVersionPurpose) {
 }
 
 function _abstractionPoints(licenceVersionPurposePoints) {
-  const descriptions = licenceVersionPurposePoints.map((licenceVersionPurposePoint) => {
-    return licenceVersionPurposePoint.point.$describe()
+  const points = licenceVersionPurposePoints.flatMap((licenceVersionPurposePoint) => {
+    return licenceVersionPurposePoint.point
   })
+
+  const descriptions = _formatAbstractionPoints(points)
 
   return {
     label: descriptions.length === 1 ? 'Abstraction point' : 'Abstraction points',
