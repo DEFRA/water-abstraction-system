@@ -25,6 +25,7 @@ const FetchAlternateReturnsRecipientsService = require('../../../../app/services
 const CreateAlternateNoticeService = require('../../../../app/services/notices/setup/create-alternate-notice.service.js')
 
 describe('Notices - Setup - Create Alternate Notice service', () => {
+  let dueDate
   let licenceRefs
   let returnLogIds
   let notice
@@ -32,6 +33,8 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
   let recipient
 
   beforeEach(() => {
+    dueDate = futureDueDate('letter')
+
     notice = NoticesFixture.returnsInvitation()
 
     recipient = RecipientsFixture.returnsNoticeLicenceHolder()
@@ -54,7 +57,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
 
   describe('when called', () => {
     it('creates and then returns the alternate notice and associated notifications ready for sending', async () => {
-      const result = await CreateAlternateNoticeService.go(notice, licenceRefs, returnLogIds)
+      const result = await CreateAlternateNoticeService.go(notice, dueDate, licenceRefs, returnLogIds)
 
       expect(result.notice).to.equal(
         {
@@ -81,7 +84,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
       expect(result.notifications[0]).to.equal(
         {
           contactType: 'licence holder',
-          dueDate: futureDueDate('letter'),
+          dueDate,
           eventId: result.notice.id,
           licences: recipient.licence_refs,
           licenceMonitoringStationId: null,
@@ -91,7 +94,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
           personalisation: {
             name: 'J Returnsholder',
             periodEndDate: '31 March 2025',
-            returnDueDate: formatLongDate(futureDueDate('letter')),
+            returnDueDate: formatLongDate(dueDate),
             address_line_1: 'J Returnsholder',
             address_line_2: '4',
             address_line_3: 'Privet Drive',

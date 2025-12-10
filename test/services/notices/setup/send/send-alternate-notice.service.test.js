@@ -89,6 +89,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
   describe('when the main notice has failed primary user email notifications', () => {
     beforeEach(() => {
       Sinon.stub(FetchFailedReturnsInvitationsService, 'go').resolves({
+        dueDate: failedNotification.dueDate,
         licenceRefs: failedNotification.licences,
         notificationIds: [failedNotification.id],
         returnLogIds: failedNotification.returnLogIds
@@ -101,6 +102,7 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
       expect(createAlternateNoticeStub.calledOnce).to.be.true()
       expect(createAlternateNoticeStub.firstCall.args).to.equal([
         mainNotice,
+        failedNotification.dueDate,
         failedNotification.licences,
         failedNotification.returnLogIds
       ])

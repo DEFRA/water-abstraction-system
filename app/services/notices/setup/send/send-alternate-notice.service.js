@@ -21,14 +21,21 @@ const notifyConfig = require('../../../../../config/notify.config.js')
  * @param {object} mainNotice - The main notice to be checked for failed returns invitation emails
  */
 async function go(mainNotice) {
-  const { licenceRefs, notificationIds, returnLogIds } = await FetchFailedReturnsInvitationsService.go(mainNotice.id)
+  const { dueDate, licenceRefs, notificationIds, returnLogIds } = await FetchFailedReturnsInvitationsService.go(
+    mainNotice.id
+  )
 
   // We also don't bother to proceed if no primary user emails failed
   if (notificationIds.length === 0) {
     return
   }
 
-  const { notice, notifications } = await CreateAlternateNoticeService.go(mainNotice, licenceRefs, returnLogIds)
+  const { notice, notifications } = await CreateAlternateNoticeService.go(
+    mainNotice,
+    dueDate,
+    licenceRefs,
+    returnLogIds
+  )
 
   await _sendNotifications(notifications, notice.referenceCode)
   await _updateFailedEmailInvitations(notice.id, notificationIds)
