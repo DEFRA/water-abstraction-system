@@ -40,6 +40,7 @@ async function go(licenceId) {
       ) AS "includeInTwoPartTariffBilling"
     `)
     ])
+    .modify('currentVersion')
 }
 
 module.exports = {

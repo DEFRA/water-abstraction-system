@@ -57,7 +57,14 @@ function licence() {
     licenceRef: generateLicenceRef(),
     includeInPresrocBilling: 'no',
     includeInSrocBilling: false,
-    includeInTwoPartTariffBilling: true
+    includeInTwoPartTariffBilling: true,
+    licenceVersions: [
+      {
+        id: generateUUID(),
+        startDate: new Date('2022-05-01'),
+        status: 'current'
+      }
+    ]
   })
 }
 

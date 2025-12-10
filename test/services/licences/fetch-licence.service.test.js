@@ -11,6 +11,7 @@ const { expect } = Code
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const LicenceSupplementaryYearModel = require('../../support/helpers/licence-supplementary-year.helper.js')
+const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -18,6 +19,7 @@ const FetchLicenceService = require('../../../app/services/licences/fetch-licenc
 
 describe('Licences - Fetch Licence service', () => {
   let licence
+  let licenceVersion
 
   describe('when there is a matching licence', () => {
     beforeEach(async () => {
@@ -26,6 +28,18 @@ describe('Licences - Fetch Licence service', () => {
       await LicenceSupplementaryYearModel.add({
         licenceId: licence.id,
         twoPartTariff: true
+      })
+
+      licenceVersion = await LicenceVersionHelper.add({
+        licenceId: licence.id,
+        startDate: new Date('2022-05-01')
+      })
+
+      // Create 2 licence versions so we can test the service only gets the 'current' version
+      await LicenceVersionHelper.add({
+        licenceId: licence.id,
+        startDate: new Date('2021-10-11'),
+        status: 'superseded'
       })
     })
 
@@ -41,6 +55,13 @@ describe('Licences - Fetch Licence service', () => {
         includeInTwoPartTariffBilling: true,
         lapsedDate: null,
         licenceRef: licence.licenceRef,
+        licenceVersions: [
+          {
+            id: licenceVersion.id,
+            startDate: new Date('2022-05-01'),
+            status: 'current'
+          }
+        ],
         revokedDate: null
       })
     })

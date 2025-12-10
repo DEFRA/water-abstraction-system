@@ -76,7 +76,7 @@ describe('Licences - Fetch Conditions service', () => {
     })
 
     it('return the matching conditions', async () => {
-      const result = await FetchConditionsService.go(licence.id)
+      const result = await FetchConditionsService.go(licenceVersion.id)
 
       expect(result).to.equal([
         {
