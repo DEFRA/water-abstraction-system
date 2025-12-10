@@ -7,6 +7,7 @@
 
 const SendAlternateNoticeService = require('./send-alternate-notice.service.js')
 const SendMainNoticeService = require('./send-main-notice.service.js')
+const UpdateNoticeService = require('../../update-notice.service.js')
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../../lib/general.lib.js')
 
@@ -24,10 +25,18 @@ async function go(notice, notifications) {
 
     await SendMainNoticeService.go(notice, notifications)
 
+    const noticesToUpdate = [noticeId]
+
     // We only check if a failed notice is needed if the original notice was a returns invitation.
     if (subtype === 'returnInvitation') {
-      await SendAlternateNoticeService.go(notice)
+      const alternateNotice = await SendAlternateNoticeService.go(notice)
+
+      if (alternateNotice) {
+        noticesToUpdate.push(alternateNotice.id)
+      }
     }
+
+    await UpdateNoticeService.go(noticesToUpdate)
 
     calculateAndLogTimeTaken(startTime, 'Send notice complete', { count: notifications.length, noticeId })
   } catch (error) {

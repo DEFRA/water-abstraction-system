@@ -19,7 +19,6 @@ const NotifyConfig = require('../../../../../config/notify.config.js')
 const SendEmailNotificationService = require('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
 const SendLetterNotificationService = require('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
 const SendPaperReturnNotificationService = require('../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js')
-const UpdateNoticeService = require('../../../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
 const SendMainNoticeService = require('../../../../../app/services/notices/setup/send/send-main-notice.service.js')
@@ -43,7 +42,6 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
   let notice
   let notifications
   let notificationPatchStub
-  let updateEventServiceStub
 
   beforeEach(() => {
     notifications = []
@@ -57,7 +55,6 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
     })
 
     checkNotificationStatusStub = Sinon.stub(CheckNotificationStatusService, 'go').resolves()
-    updateEventServiceStub = Sinon.stub(UpdateNoticeService, 'go').resolves()
 
     // We have to set wait for status to 25ms to avoid the tests timing out. By default it would be 5 seconds and is
     // used to give Notify a chance to process the email notifications.
@@ -126,7 +123,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         })
       })
 
-      it('sends the notice, records the Notify responses, and updates the notice when all done', async () => {
+      it('sends the notice and records the Notify responses when all done', async () => {
         await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
@@ -147,9 +144,6 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           notifyStatus: 'created',
           status: 'pending'
         })
-
-        // Check the notice is updated after all the sending and status checking steps are complete
-        expect(updateEventServiceStub.calledOnce).to.be.true()
       })
 
       it('only checks the status of email notifications (letters are typically processed next day by Notify)', async () => {
@@ -185,7 +179,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         })
       })
 
-      it('sends the notice, records the Notify responses, including errors, and updates the notice when all done', async () => {
+      it('sends the notice and records the Notify responses, including errors when all done', async () => {
         await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
@@ -207,9 +201,6 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           notifyStatus: 'created',
           status: 'pending'
         })
-
-        // Check the notice is updated after all the sending and status checking steps are complete
-        expect(updateEventServiceStub.calledOnce).to.be.true()
       })
 
       it('only checks the status of email notifications (letters are typically processed next day by Notify)', async () => {
@@ -284,7 +275,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         })
       })
 
-      it('sends the notice, records the Notify response, and updates the notice when all done', async () => {
+      it('sends the notice and records the Notify response when all done', async () => {
         await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
@@ -297,9 +288,6 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           notifyStatus: 'created',
           status: 'pending'
         })
-
-        // Check the notice is updated after all the sending and status checking steps are complete
-        expect(updateEventServiceStub.calledOnce).to.be.true()
       })
 
       it('does not try to check the status of the notification', async () => {
@@ -320,7 +308,7 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
         })
       })
 
-      it('sends the notice, records the Notify response, including errors, and updates the notice when all done', async () => {
+      it('sends the notice and records the Notify response when all done', async () => {
         await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
@@ -333,9 +321,6 @@ describe('Notices - Setup - Send - Send Main Notice service', () => {
           notifyStatus: undefined,
           status: 'error'
         })
-
-        // Check the notice is updated after all the sending and status checking steps are complete
-        expect(updateEventServiceStub.calledOnce).to.be.true()
       })
 
       it('does not try to check the status of the notification', async () => {

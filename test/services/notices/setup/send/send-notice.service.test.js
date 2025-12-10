@@ -15,6 +15,7 @@ const NotificationsFixture = require('../../../../fixtures/notifications.fixture
 // Things we need to stub
 const SendAlternateNoticeService = require('../../../../../app/services/notices/setup/send/send-alternate-notice.service.js')
 const SendMainNoticeService = require('../../../../../app/services/notices/setup/send/send-main-notice.service.js')
+const UpdateNoticeService = require('../../../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
 const SendNoticeService = require('../../../../../app/services/notices/setup/send/send-notice.service.js')
@@ -25,9 +26,11 @@ describe('Notices - Setup - Send - Send Notice service', () => {
   let notifierStub
   let sendAlternateNoticeStub
   let sendMainNoticeStub
+  let updateEventServiceStub
 
   beforeEach(() => {
     sendMainNoticeStub = Sinon.stub(SendMainNoticeService, 'go').resolves()
+    updateEventServiceStub = Sinon.stub(UpdateNoticeService, 'go').resolves()
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -42,7 +45,9 @@ describe('Notices - Setup - Send - Send Notice service', () => {
 
   describe('when the service is called', () => {
     beforeEach(() => {
-      sendAlternateNoticeStub = Sinon.stub(SendAlternateNoticeService, 'go').resolves()
+      sendAlternateNoticeStub = Sinon.stub(SendAlternateNoticeService, 'go').resolves({
+        id: '270d3a69-4cf7-4c90-8459-fbc35d725bd6'
+      })
     })
 
     describe('and the notice is a returns invitation', () => {
@@ -64,6 +69,13 @@ describe('Notices - Setup - Send - Send Notice service', () => {
 
         expect(sendAlternateNoticeStub.calledOnce).to.be.true()
         expect(sendMainNoticeStub.firstCall.args[0]).to.equal(notice)
+      })
+
+      it('updates both the main and alternate notices', async () => {
+        await SendNoticeService.go(notice, notifications)
+
+        expect(updateEventServiceStub.calledOnce).to.be.true()
+        expect(updateEventServiceStub.firstCall.args[0]).to.equal([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
       })
 
       it('logs the time taken', async () => {
@@ -96,6 +108,13 @@ describe('Notices - Setup - Send - Send Notice service', () => {
         await SendNoticeService.go(notice, notifications)
 
         expect(sendAlternateNoticeStub.called).to.be.false()
+      })
+
+      it('only updates the main notice', async () => {
+        await SendNoticeService.go(notice, notifications)
+
+        expect(updateEventServiceStub.calledOnce).to.be.true()
+        expect(updateEventServiceStub.firstCall.args[0]).to.equal([notice.id])
       })
 
       it('logs the time taken', async () => {

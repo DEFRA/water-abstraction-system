@@ -133,11 +133,10 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
       )
     })
 
-    it("updates the alternate notice's overall status when sending is complete", async () => {
-      await SendAlternateNoticeService.go(mainNotice)
+    it('returns the sent alternate notice', async () => {
+      const result = await SendAlternateNoticeService.go(mainNotice)
 
-      expect(updateEventServiceStub.calledOnce).to.be.true()
-      expect(updateEventServiceStub.firstCall.args).to.equal([[alternateNotice.id]])
+      expect(result).to.equal(alternateNotice)
     })
   })
 
@@ -156,6 +155,12 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
       expect(createAlternateNoticeStub.called).to.be.false()
       expect(sendLetterNotificationStub.called).to.be.false()
       expect(updateEventServiceStub.called).to.be.false()
+    })
+
+    it('returns null', async () => {
+      const result = await SendAlternateNoticeService.go(mainNotice)
+
+      expect(result).to.be.null()
     })
   })
 })
