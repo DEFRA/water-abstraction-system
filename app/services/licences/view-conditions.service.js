@@ -21,7 +21,7 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
 async function go(licenceId, auth) {
   const licence = await FetchLicenceService.go(licenceId)
 
-  const currentLicenceVersion = licence.licenceVersions[0]
+  const currentLicenceVersion = licence.$currentVersion()
 
   const conditions = await FetchConditionsService.go(currentLicenceVersion.id)
 
