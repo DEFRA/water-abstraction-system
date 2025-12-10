@@ -10,7 +10,6 @@ const NotificationModel = require('../../../../../app/models/notification.model.
 const SendEmailNotificationService = require('./send-email-notification.service.js')
 const SendLetterNotificationService = require('./send-letter-notification.service.js')
 const SendPaperReturnNotificationService = require('./send-paper-return-notification.service.js')
-const UpdateNoticeService = require('../../update-notice.service.js')
 
 const { pause } = require('../../../../lib/general.lib.js')
 
@@ -23,7 +22,7 @@ const notifyConfig = require('../../../../../config/notify.config.js')
  * @param {object[]} notifications - The notifications linked to the notice to be sent
  */
 async function go(notice, notifications) {
-  const { id: noticeId, referenceCode } = notice
+  const { referenceCode } = notice
 
   const sentNotifications = await _sendNotifications(notifications, referenceCode)
 
@@ -32,8 +31,6 @@ async function go(notice, notifications) {
   await pause(notifyConfig.waitForStatus)
 
   await _checkNotifications(sentNotifications)
-
-  await UpdateNoticeService.go([noticeId])
 }
 
 async function _checkNotifications(notifications) {
