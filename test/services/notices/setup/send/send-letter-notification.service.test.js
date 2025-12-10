@@ -14,12 +14,12 @@ const NotifyResponseFixture = require('../../../../fixtures/notify-response.fixt
 const { generateNoticeReferenceCode } = require('../../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const CreateEmailRequest = require('../../../../../app/requests/notify/create-email.request.js')
+const CreateLetterRequest = require('../../../../../app/requests/notify/create-letter.request.js')
 
 // Thing under test
-const SendEmailService = require('../../../../../app/services/notices/setup/batch/send-email.service.js')
+const SendLetterNotificationService = require('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
 
-describe('Notices - Setup - Batch - Send Email service', () => {
+describe('Notices - Setup - Send - Send Letter Notification service', () => {
   let notification
   let notifyResponse
   let referenceCode
@@ -28,9 +28,9 @@ describe('Notices - Setup - Batch - Send Email service', () => {
     referenceCode = generateNoticeReferenceCode('RINV-')
     notification = NotificationsFixture.notification().notification
 
-    notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode).email
+    notifyResponse = NotifyResponseFixture.successfulResponse(referenceCode).letter
 
-    Sinon.stub(CreateEmailRequest, 'send').onCall(0).resolves(notifyResponse)
+    Sinon.stub(CreateLetterRequest, 'send').onCall(0).resolves(notifyResponse)
   })
 
   afterEach(() => {
@@ -38,13 +38,13 @@ describe('Notices - Setup - Batch - Send Email service', () => {
   })
 
   it('should return the notification notify response', async () => {
-    const result = await SendEmailService.go(notification, referenceCode)
+    const result = await SendLetterNotificationService.go(notification, referenceCode)
 
     expect(result).to.equal({
       id: notification.id,
       notifyId: notifyResponse.response.body.id,
       notifyStatus: 'created',
-      plaintext: 'Dear licence holder,\r\n',
+      plaintext: 'Dear Licence holder,\r\n',
       status: 'pending'
     })
   })

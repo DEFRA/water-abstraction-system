@@ -20,7 +20,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
 const CreateNotificationsService = require('../../../../app/services/notices/setup/create-notifications.service.js')
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const SendNoticeService = require('../../../../app/services/notices/setup/send-notice.service.js')
+const SendNoticeService = require('../../../../app/services/notices/setup/send/send-notice.service.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/notices/setup/submit-check.service.js')

@@ -8,7 +8,7 @@
 const CreateNoticeService = require('./create-notice.service.js')
 const CreateNotificationsService = require('./create-notifications.service.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
-const SendNoticeService = require('./send-notice.service.js')
+const SendNoticeService = require('./send/send-notice.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**

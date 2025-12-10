@@ -9,7 +9,10 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const EventModel = require('../../../../app/models/event.model.js')
 const NoticesFixture = require('../../../fixtures/notices.fixture.js')
+const NotificationModel = require('../../../../app/models/notification.model.js')
+const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
 const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
@@ -17,95 +20,82 @@ const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.j
 // Things to stub
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const FetchAlternateReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js')
-const FetchFailedReturnsInvitationsService = require('../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js')
 
 // Thing under test
 const CreateAlternateNoticeService = require('../../../../app/services/notices/setup/create-alternate-notice.service.js')
 
 describe('Notices - Setup - Create Alternate Notice service', () => {
-  let fetchFailedReturnsInvitationsResults
-  let fetchReturnsAddressesServiceResults
-  let noticeWithErrors
+  let dueDate
+  let licenceRefs
+  let returnLogIds
+  let notice
+  let notificationId
+  let recipient
 
-  beforeEach(async () => {
+  beforeEach(() => {
+    dueDate = futureDueDate('letter')
+
+    notice = NoticesFixture.returnsInvitation()
+
+    recipient = RecipientsFixture.returnsNoticeLicenceHolder()
+    recipient.licence_refs = notice.licences
+
+    licenceRefs = notice.licences
+    returnLogIds = recipient.return_log_ids
+
+    Sinon.stub(FetchAlternateReturnsRecipientsService, 'go').resolves([recipient])
+
     Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
   })
 
-  afterEach(() => {
+  afterEach(async () => {
     Sinon.restore()
+
+    await NotificationModel.query().deleteById(notificationId)
+    await EventModel.query().deleteById(notice.id)
   })
 
-  describe('when called with a notice with errors', () => {
-    beforeEach(() => {
-      noticeWithErrors = NoticesFixture.returnsInvitation()
-      noticeWithErrors.licences = ['11/111', '01/123', '01/124', '01/125', '01/126']
-      noticeWithErrors.metadata.recipients = 5
-      noticeWithErrors.statusCounts.error = 3
-      noticeWithErrors.statusCounts.sent = 2
-
-      fetchFailedReturnsInvitationsResults = {
-        failedLicenceRefs: ['11/111', '01/124', '01/125'],
-        failedReturnIds: [
-          '18998ffd-feaf-4e24-b998-7e7af026ba14',
-          'c06708f5-195a-43b1-9f2e-d4f72ee7bd76',
-          'e6bc04bc-1899-4b3c-b733-6f4be6aa8e07'
-        ]
-      }
-
-      fetchReturnsAddressesServiceResults = [
-        _licenceHolderAddress('Anne', '01/111', [
-          '18998ffd-feaf-4e24-b998-7e7af026ba14',
-          'c06708f5-195a-43b1-9f2e-d4f72ee7bd76'
-        ]),
-        _licenceHolderAddress('Charles', '01/125', ['e6bc04bc-1899-4b3c-b733-6f4be6aa8e07'])
-      ]
-
-      Sinon.stub(FetchFailedReturnsInvitationsService, 'go').resolves(fetchFailedReturnsInvitationsResults)
-      Sinon.stub(FetchAlternateReturnsRecipientsService, 'go').resolves(fetchReturnsAddressesServiceResults)
-    })
-
-    it('returns a list of notifications to be sent and the reference code for the new notice', async () => {
-      const result = await CreateAlternateNoticeService.go(noticeWithErrors)
+  describe('when called', () => {
+    it('creates and then returns the alternate notice and associated notifications ready for sending', async () => {
+      const result = await CreateAlternateNoticeService.go(notice, dueDate, licenceRefs, returnLogIds)
 
       expect(result.notice).to.equal(
         {
-          issuer: 'admin-internal@wrls.gov.uk',
-          licences: ['11/111', '01/124', '01/125'],
+          issuer: notice.issuer,
+          licences: notice.licences,
           metadata: {
             name: 'Returns: invitation',
             error: 0,
             options: { excludedLicences: [] },
-            recipients: 2,
-            returnCycle: {
-              dueDate: '2025-04-28',
-              endDate: '2025-03-31',
-              isSummer: false,
-              startDate: '2024-04-01'
-            }
+            recipients: 1,
+            returnCycle: notice.metadata.returnCycle
           },
           overallStatus: 'pending',
           status: 'completed',
-          statusCounts: { cancelled: 0, error: 0, pending: 2, sent: 0 },
+          statusCounts: { cancelled: 0, error: 0, pending: 1, sent: 0 },
           subtype: 'returnInvitation',
-          triggerNoticeId: noticeWithErrors.id,
+          triggerNoticeId: notice.id,
           type: 'notification'
         },
         { skip: ['createdAt', 'id', 'referenceCode', 'updatedAt'] }
       )
 
+      expect(result.notifications).to.have.length(1)
       expect(result.notifications[0]).to.equal(
         {
           contactType: 'licence holder',
-          dueDate: futureDueDate('letter'),
+          dueDate,
           eventId: result.notice.id,
-          licences: '01/111',
+          licences: recipient.licence_refs,
+          licenceMonitoringStationId: null,
           messageType: 'letter',
-          messageRef: 'returns invitation failed',
+          messageRef: 'returns invitation alternate',
+          pdf: null,
           personalisation: {
-            name: 'J Anne',
+            name: 'J Returnsholder',
             periodEndDate: '31 March 2025',
-            returnDueDate: formatLongDate(futureDueDate('letter')),
-            address_line_1: 'J Anne',
+            returnDueDate: formatLongDate(dueDate),
+            address_line_1: 'J Returnsholder',
             address_line_2: '4',
             address_line_3: 'Privet Drive',
             address_line_4: 'Little Whinging',
@@ -113,83 +103,16 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
             address_line_6: 'WD25 7LR',
             periodStartDate: '1 April 2024'
           },
-          returnLogIds: ['18998ffd-feaf-4e24-b998-7e7af026ba14', 'c06708f5-195a-43b1-9f2e-d4f72ee7bd76'],
+          recipient: null,
+          returnLogIds,
           status: 'pending',
-          templateId: NOTIFY_TEMPLATES.failedInvitations.standard.letter['licence holder'],
-          licenceMonitoringStationId: null,
-          pdf: null,
-          recipient: null
+          templateId: NOTIFY_TEMPLATES.alternateInvitations.standard.letter['licence holder']
         },
         { skip: ['createdAt', 'id', 'updatedAt'] }
       )
-      expect(result.notifications[1]).to.equal(
-        {
-          contactType: 'licence holder',
-          dueDate: futureDueDate('letter'),
-          eventId: result.notice.id,
-          licences: '01/125',
-          messageType: 'letter',
-          messageRef: 'returns invitation failed',
-          personalisation: {
-            name: 'J Charles',
-            periodEndDate: '31 March 2025',
-            returnDueDate: formatLongDate(futureDueDate('letter')),
-            address_line_1: 'J Charles',
-            address_line_2: '4',
-            address_line_3: 'Privet Drive',
-            address_line_4: 'Little Whinging',
-            address_line_5: 'Surrey',
-            address_line_6: 'WD25 7LR',
-            periodStartDate: '1 April 2024'
-          },
-          returnLogIds: ['e6bc04bc-1899-4b3c-b733-6f4be6aa8e07'],
-          status: 'pending',
-          templateId: NOTIFY_TEMPLATES.failedInvitations.standard.letter['licence holder'],
-          licenceMonitoringStationId: null,
-          pdf: null,
-          recipient: null
-        },
-        { skip: ['createdAt', 'id', 'updatedAt'] }
-      )
-    })
-  })
 
-  describe('when called with a notice with no errors', () => {
-    beforeEach(() => {
-      Sinon.stub(FetchFailedReturnsInvitationsService, 'go').resolves({ failedLicenceRefs: [], failedReturnIds: [] })
-    })
-
-    it('returns an empty notifications array and a null notice', async () => {
-      const result = await CreateAlternateNoticeService.go('bc09ccb8-e735-4804-8688-6165450d53b9')
-
-      expect(result).to.equal({
-        notifications: [],
-        notice: null
-      })
+      // We record this here to allow us to clean up in the afterEach()
+      notificationId = result.notifications[0].id
     })
   })
 })
-
-function _licenceHolderAddress(name, licenceRef, returnLogIds) {
-  return {
-    contact: {
-      addressLine1: '4',
-      addressLine2: 'Privet Drive',
-      addressLine3: null,
-      addressLine4: null,
-      country: null,
-      county: 'Surrey',
-      forename: 'Harry',
-      initials: 'J',
-      name,
-      postcode: 'WD25 7LR',
-      role: 'Licence holder',
-      salutation: null,
-      town: 'Little Whinging',
-      type: 'Person'
-    },
-    contact_type: 'licence holder',
-    licence_refs: licenceRef,
-    return_log_ids: returnLogIds
-  }
-}

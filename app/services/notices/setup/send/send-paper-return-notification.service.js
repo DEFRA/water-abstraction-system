@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates sending a paper return notification to Notify
- * @module SendPaperReturnService
+ * @module SendPaperReturnNotificationService
  */
 
 const CreatePrecompiledFileRequest = require('../../../../requests/notify/create-precompiled-file.request.js')
@@ -14,9 +14,9 @@ const PreparePaperReturnService = require('../prepare-paper-return.service.js')
  * Orchestrates sending a paper return notification to Notify
  *
  * @param {object} notification - the notification to send to Notify
- * @param {string} referenceCode - the unique generated reference code
+ * @param {string} referenceCode - the generated notice reference code
  *
- * @returns {Promise<object>} - a notification with the Notify response
+ * @returns {Promise<object>} a notification with the Notify response
  */
 async function go(notification, referenceCode) {
   const returnFormRequest = await PreparePaperReturnService.go(notification)

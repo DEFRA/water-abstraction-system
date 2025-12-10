@@ -342,7 +342,7 @@ function _returnsAgentQuery(noticeType) {
 }
 
 function _returnsToQuery(noticeType) {
-  if (noticeType !== NoticeType.FAILED_INVITATION) {
+  if (noticeType !== NoticeType.ALTERNATE_INVITATION) {
     return `
     SELECT
       contacts AS contact,

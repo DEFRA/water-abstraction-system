@@ -9,23 +9,22 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const NoticesFixture = require('../../../fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../../fixtures/notifications.fixture.js')
+const NoticesFixture = require('../../../../fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../../../fixtures/notifications.fixture.js')
 
 // Things we need to stub
-const CheckNotificationStatusService = require('../../../../app/services/notifications/check-notification-status.service.js')
-const CreateAlternateNoticeService = require('../../../../app/services/notices/setup/create-alternate-notice.service.js')
-const NotificationModel = require('../../../../app/models/notification.model.js')
-const NotifyConfig = require('../../../../config/notify.config.js')
-const SendEmailService = require('../../../../app/services/notices/setup/batch/send-email.service.js')
-const SendLetterService = require('../../../../app/services/notices/setup/batch/send-letter.service.js')
-const SendPaperReturnService = require('../../../../app/services/notices/setup/batch/send-paper-return.service.js')
-const UpdateEventService = require('../../../../app/services/jobs/notification-status/update-event.service.js')
+const CheckNotificationStatusService = require('../../../../../app/services/notifications/check-notification-status.service.js')
+const NotificationModel = require('../../../../../app/models/notification.model.js')
+const NotifyConfig = require('../../../../../config/notify.config.js')
+const SendEmailNotificationService = require('../../../../../app/services/notices/setup/send/send-email-notification.service.js')
+const SendLetterNotificationService = require('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
+const SendPaperReturnNotificationService = require('../../../../../app/services/notices/setup/send/send-paper-return-notification.service.js')
+const UpdateNoticeService = require('../../../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
-const SendNoticeService = require('../../../../app/services/notices/setup/send-notice.service.js')
+const SendMainNoticeService = require('../../../../../app/services/notices/setup/send/send-main-notice.service.js')
 
-describe('Notices - Setup - Send Notice service', () => {
+describe('Notices - Setup - Send - Send Main Notice service', () => {
   const emailPlaintext =
     'Dear licence holder contact,\r\n' +
     '\r\n' +
@@ -41,11 +40,9 @@ describe('Notices - Setup - Send Notice service', () => {
     '^ You’ll need to submit your returns by  2 December 2025.\r\n'
 
   let checkNotificationStatusStub
-  let createAlternateNoticeStub
   let notice
   let notifications
   let notificationPatchStub
-  let notifierStub
   let updateEventServiceStub
 
   beforeEach(() => {
@@ -60,17 +57,11 @@ describe('Notices - Setup - Send Notice service', () => {
     })
 
     checkNotificationStatusStub = Sinon.stub(CheckNotificationStatusService, 'go').resolves()
-    updateEventServiceStub = Sinon.stub(UpdateEventService, 'go').resolves()
+    updateEventServiceStub = Sinon.stub(UpdateNoticeService, 'go').resolves()
 
     // We have to set wait for status to 25ms to avoid the tests timing out. By default it would be 5 seconds and is
     // used to give Notify a chance to process the email notifications.
     Sinon.stub(NotifyConfig, 'waitForStatus').value(25)
-
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
@@ -118,7 +109,7 @@ describe('Notices - Setup - Send Notice service', () => {
 
     describe('and all are sent to Notify successfully', () => {
       beforeEach(() => {
-        Sinon.stub(SendEmailService, 'go').resolves({
+        Sinon.stub(SendEmailNotificationService, 'go').resolves({
           id: notifications[1].id,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -126,21 +117,17 @@ describe('Notices - Setup - Send Notice service', () => {
           status: 'pending'
         })
 
-        Sinon.stub(SendLetterService, 'go').resolves({
+        Sinon.stub(SendLetterNotificationService, 'go').resolves({
           id: notifications[0].id,
           notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
           notifyStatus: 'created',
           plaintext: letterPlaintext,
           status: 'pending'
         })
-
-        Sinon.stub(CreateAlternateNoticeService, 'go').resolves({
-          notifications: []
-        })
       })
 
       it('sends the notice, records the Notify responses, and updates the notice when all done', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledTwice).to.be.true()
@@ -166,7 +153,7 @@ describe('Notices - Setup - Send Notice service', () => {
       })
 
       it('only checks the status of email notifications (letters are typically processed next day by Notify)', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // We only check the notification status for emails
         expect(checkNotificationStatusStub.calledOnce).to.be.true()
@@ -178,22 +165,11 @@ describe('Notices - Setup - Send Notice service', () => {
           status: 'pending'
         })
       })
-
-      it('logs the time taken', async () => {
-        await SendNoticeService.go(notice, notifications)
-
-        const args = notifierStub.omg.firstCall.args
-
-        expect(args[0]).to.equal('Send notice complete')
-        expect(args[1].timeTakenMs).to.exist()
-        expect(args[1].count).to.equal(2)
-        expect(args[1].noticeId).to.equal(notice.id)
-      })
     })
 
     describe('and a letter notification fails to send to Notify', () => {
       beforeEach(() => {
-        Sinon.stub(SendEmailService, 'go').resolves({
+        Sinon.stub(SendEmailNotificationService, 'go').resolves({
           id: notifications[1].id,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
           notifyStatus: 'created',
@@ -201,20 +177,16 @@ describe('Notices - Setup - Send Notice service', () => {
           status: 'pending'
         })
 
-        Sinon.stub(SendLetterService, 'go').resolves({
+        Sinon.stub(SendLetterNotificationService, 'go').resolves({
           id: notifications[0].id,
           notifyError:
             '{"status":400,"message":"Request failed with status code 400","errors":[{"error":"ValidationError","message":"Last line of address must be a real UK postcode or another country"}]}',
           status: 'error'
         })
-
-        Sinon.stub(CreateAlternateNoticeService, 'go').resolves({
-          notifications: []
-        })
       })
 
       it('sends the notice, records the Notify responses, including errors, and updates the notice when all done', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledTwice).to.be.true()
@@ -241,7 +213,7 @@ describe('Notices - Setup - Send Notice service', () => {
       })
 
       it('only checks the status of email notifications (letters are typically processed next day by Notify)', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // NOTE: We still call CheckNotificationStatusService because we know it has logic to only check pending
         // notifications. So, we don't worry about that in SendNoticeService, even though we've rigged our test to fail
@@ -255,22 +227,11 @@ describe('Notices - Setup - Send Notice service', () => {
           status: 'pending'
         })
       })
-
-      it('still logs the time taken', async () => {
-        await SendNoticeService.go(notice, notifications)
-
-        const args = notifierStub.omg.firstCall.args
-
-        expect(args[0]).to.equal('Send notice complete')
-        expect(args[1].timeTakenMs).to.exist()
-        expect(args[1].count).to.equal(2)
-        expect(args[1].noticeId).to.equal(notice.id)
-      })
     })
 
     describe('and an email notification fails to send to Notify', () => {
       beforeEach(() => {
-        Sinon.stub(SendEmailService, 'go').resolves({
+        Sinon.stub(SendEmailNotificationService, 'go').resolves({
           ...notifications[1],
           id: notifications[1].id,
           notifyId: '46dd6e22-dfd3-4b2d-a618-ba88662db03e',
@@ -279,41 +240,12 @@ describe('Notices - Setup - Send Notice service', () => {
           plaintext: emailPlaintext,
           status: 'error'
         })
-
-        createAlternateNoticeStub = Sinon.stub(CreateAlternateNoticeService, 'go').resolves({
-          notice,
-          notifications: [notifications[1]]
-        })
-
-        Sinon.stub(SendLetterService, 'go').resolves({
-          id: notifications[0].id,
-          notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
-          notifyStatus: 'created',
-          plaintext: letterPlaintext,
-          status: 'pending'
-        })
       })
 
-      it('sends the notice, records the Notify responses, including errors then sends a letter and updates the previous notifications', async () => {
-        await SendNoticeService.go(notice, [notifications[1]])
+      it('sends the notice, records the Notify responses, including errors', async () => {
+        await SendMainNoticeService.go(notice, [notifications[1]])
 
         expect(checkNotificationStatusStub.called).to.be.false()
-        expect(createAlternateNoticeStub.calledOnce).to.be.true()
-        expect(createAlternateNoticeStub.firstCall.args[0]).to.equal(notice)
-
-        // The previous notifications are updated with the new letter noticeId so we end up calling the patch 3 times
-        expect(notificationPatchStub.calledThrice).to.be.true()
-      })
-
-      it('still logs the time taken', async () => {
-        await SendNoticeService.go(notice, [notifications[1]])
-
-        const args = notifierStub.omg.firstCall.args
-
-        expect(args[0]).to.equal('Send notice complete')
-        expect(args[1].timeTakenMs).to.exist()
-        expect(args[1].count).to.equal(1)
-        expect(args[1].noticeId).to.equal(notice.id)
       })
     })
   })
@@ -342,7 +274,7 @@ describe('Notices - Setup - Send Notice service', () => {
 
     describe('and it is sent to Notify successfully', () => {
       beforeEach(() => {
-        Sinon.stub(SendPaperReturnService, 'go').resolves({
+        Sinon.stub(SendPaperReturnNotificationService, 'go').resolves({
           id: notifications[0].id,
           notifyId: '95296b09-fef6-4723-9716-e962fcd48e8f',
           notifyStatus: 'created',
@@ -353,7 +285,7 @@ describe('Notices - Setup - Send Notice service', () => {
       })
 
       it('sends the notice, records the Notify response, and updates the notice when all done', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledOnce).to.be.true()
@@ -371,27 +303,16 @@ describe('Notices - Setup - Send Notice service', () => {
       })
 
       it('does not try to check the status of the notification', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // We only check the notification status for emails
         expect(checkNotificationStatusStub.called).to.be.false()
-      })
-
-      it('logs the time taken', async () => {
-        await SendNoticeService.go(notice, notifications)
-
-        const args = notifierStub.omg.firstCall.args
-
-        expect(args[0]).to.equal('Send notice complete')
-        expect(args[1].timeTakenMs).to.exist()
-        expect(args[1].count).to.equal(1)
-        expect(args[1].noticeId).to.equal(notice.id)
       })
     })
 
     describe('and it fails to send to Notify', () => {
       beforeEach(() => {
-        Sinon.stub(SendPaperReturnService, 'go').resolves({
+        Sinon.stub(SendPaperReturnNotificationService, 'go').resolves({
           id: notifications[0].id,
           notifyError: '{"status":404,"message":"Request failed with status code 404"}',
           pdf: Buffer.from('mock file'),
@@ -400,7 +321,7 @@ describe('Notices - Setup - Send Notice service', () => {
       })
 
       it('sends the notice, records the Notify response, including errors, and updates the notice when all done', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // Check we record the Notify responses against the notifications
         expect(notificationPatchStub.calledOnce).to.be.true()
@@ -418,59 +339,11 @@ describe('Notices - Setup - Send Notice service', () => {
       })
 
       it('does not try to check the status of the notification', async () => {
-        await SendNoticeService.go(notice, notifications)
+        await SendMainNoticeService.go(notice, notifications)
 
         // We only check the notification status for emails
         expect(checkNotificationStatusStub.called).to.be.false()
       })
-
-      it('still logs the time taken', async () => {
-        await SendNoticeService.go(notice, notifications)
-
-        const args = notifierStub.omg.firstCall.args
-
-        expect(args[0]).to.equal('Send notice complete')
-        expect(args[1].timeTakenMs).to.exist()
-        expect(args[1].count).to.equal(1)
-        expect(args[1].noticeId).to.equal(notice.id)
-      })
-    })
-  })
-
-  describe('when the service errors', () => {
-    beforeEach(() => {
-      // Setup our notice and its notifications to match what SubmitCheckService will pass in
-      notice = NoticesFixture.returnsInvitation()
-
-      delete notice.metadata.error
-      notice.metadata.recipients = 1
-
-      const notification = NotificationsFixture.returnsInvitationEmail(notice)
-      notifications.push({
-        createdAt: notification.createdAt,
-        id: notification.id,
-        licenceMonitoringStationId: notification.licenceMonitoringStationId,
-        messageRef: notification.messageRef,
-        messageType: notification.messageType,
-        pdf: notification.pdf,
-        personalisation: notification.personalisation,
-        recipient: notification.recipient,
-        returnLogIds: notification.returnLogIds,
-        templateId: notification.templateId
-      })
-
-      Sinon.stub(SendEmailService, 'go').rejects('Notify says no')
-    })
-
-    it('logs the error', async () => {
-      await SendNoticeService.go(notice, notifications)
-
-      const args = notifierStub.omfg.firstCall.args
-
-      expect(args[0]).to.equal('Send notice failed')
-      expect(args[1].notice.id).to.equal(notice.id)
-      expect(args[2]).to.be.an.error()
-      expect(args[2].name).to.equal('Notify says no')
     })
   })
 })
