@@ -116,6 +116,21 @@ WITH
     ${dueReturnLogsQuery}
   ),
 
+  ldh_all AS (
+    SELECT
+      ldh.company_entity_id,
+      ldh.licence_ref,
+      ldh.metadata,
+      drl.return_id,
+      drl.return_reference,
+      drl.start_date,
+      drl.end_date,
+      drl.due_date
+    FROM public.licence_document_headers ldh
+    JOIN due_return_logs drl
+      ON drl.licence_ref = ldh.licence_ref
+  ),
+
   primary_user as (
     ${primaryUserQuery}
   ),
@@ -129,6 +144,14 @@ WITH
     SELECT DISTINCT licence_ref FROM primary_user
   ),
 
+  json_contacts AS (
+    SELECT
+      contacts,
+      a.*
+    FROM ldh_all a
+    CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts
+  ),
+
   licence_holder as (
     ${licenceHolderQuery}
   ),
@@ -138,13 +161,13 @@ WITH
   ),
 
   all_contacts AS (
-    SELECT *, 1 AS priority FROM primary_user
+    SELECT * FROM primary_user
     UNION ALL
-    SELECT *, 2 AS priority FROM returns_agent
+    SELECT * FROM returns_agent
     UNION ALL
-    SELECT *, 3 AS priority FROM licence_holder
+    SELECT * FROM licence_holder
     UNION ALL
-    SELECT *, 4 AS priority FROM returns_to
+    SELECT * FROM returns_to
   ),
 
   ${processQuery}
@@ -176,25 +199,22 @@ function _licenceHolderQuery() {
         )
       )) AS contact_hash_id,
       ('licence holder') AS contact_type,
-      drl.due_date AS due_date,
-      drl.end_date AS end_date,
+      a.due_date AS due_date,
+      a.end_date AS end_date,
       (NULL) AS email,
-      ldh.licence_ref,
+      a.licence_ref,
       ('Letter') as message_type,
-      drl.return_id,
-      drl.return_reference AS return_reference,
-      drl.start_date AS start_date
+      a.return_id,
+      a.return_reference AS return_reference,
+      a.start_date AS start_date,
+      3 AS priority
     FROM
-      public.licence_document_headers ldh
-    INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
-    INNER JOIN due_return_logs drl
-      ON drl.licence_ref = ldh.licence_ref
+      json_contacts a
+    LEFT JOIN registered_licences rl ON
+      rl.licence_ref = a.licence_ref
     WHERE
       contacts->>'role' = 'Licence holder'
-      AND NOT EXISTS (
-        SELECT 1 FROM registered_licences r
-        WHERE r.licence_ref = ldh.licence_ref
-      )
+      AND rl.licence_ref IS NULL
   `
 }
 
@@ -205,22 +225,21 @@ function _primaryUserQuery(noticeType) {
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
       ('primary user') AS contact_type,
-      drl.due_date AS due_date,
-      drl.end_date AS end_date,
+      a.due_date AS due_date,
+      a.end_date AS end_date,
       le."name" AS email,
-      ldh.licence_ref,
+      a.licence_ref,
       ('Email') as message_type,
-      drl.return_id,
-      drl.return_reference AS return_reference,
-      drl.start_date AS start_date
+      a.return_id,
+      a.return_reference AS return_reference,
+      a.start_date AS start_date,
+      1 AS priority
     FROM
-      public.licence_document_headers ldh
+      ldh_all a
     INNER JOIN public.licence_entity_roles ler
-      ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
+      ON ler.company_entity_id = a.company_entity_id AND ler."role" = 'primary_user'
     INNER JOIN public.licence_entities le
       ON le.id = ler.licence_entity_id
-    INNER JOIN due_return_logs drl
-      ON drl.licence_ref = ldh.licence_ref
     `
   }
 
@@ -238,17 +257,15 @@ function _processForDownloading() {
       ac.contact,
       ac.contact_hash_id,
       ac.contact_type,
-      dlr.due_date,
-      dlr.end_date,
+      ac.due_date,
+      ac.end_date,
       ac.email,
-      dlr.licence_ref,
+      ac.licence_ref,
       ac.message_type,
-      dlr.return_reference,
-      dlr.start_date
+      ac.return_reference,
+      ac.start_date
     FROM
       all_contacts ac
-    INNER JOIN due_return_logs dlr
-      ON dlr.return_id = ac.return_id
     ORDER BY
       licence_ref,
       return_reference,
@@ -307,7 +324,8 @@ function _noRecipientsQuery() {
       ('none') as message_type,
       NULL::uuid AS return_id,
       NULL::text AS return_reference,
-      NULL::date AS start_date
+      NULL::date AS start_date,
+      999 AS priority
     WHERE FALSE
   `
 }
@@ -319,22 +337,21 @@ function _returnsAgentQuery(noticeType) {
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
       ('returns agent') AS contact_type,
-      drl.due_date AS due_date,
-      drl.end_date AS end_date,
+      a.due_date AS due_date,
+      a.end_date AS end_date,
       le."name" AS email,
-      ldh.licence_ref,
+      a.licence_ref,
       ('Email') as message_type,
-      drl.return_id,
-      drl.return_reference AS return_reference,
-      drl.start_date AS start_date
+      a.return_id,
+      a.return_reference AS return_reference,
+      a.start_date AS start_date,
+      2 AS priority
     FROM
-      public.licence_document_headers ldh
+      ldh_all a
     INNER JOIN public.licence_entity_roles ler
-      ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'user_returns'
+      ON ler.company_entity_id = a.company_entity_id AND ler."role" = 'user_returns'
     INNER JOIN public.licence_entities le
       ON le.id = ler.licence_entity_id
-    INNER JOIN due_return_logs drl
-      ON drl.licence_ref = ldh.licence_ref
     `
   }
 
@@ -365,25 +382,22 @@ function _returnsToQuery(noticeType) {
         )
       )) AS contact_hash_id,
       ('returns to') AS contact_type,
-      drl.due_date AS due_date,
-      drl.end_date AS end_date,
+      a.due_date AS due_date,
+      a.end_date AS end_date,
       (NULL) AS email,
-      ldh.licence_ref,
+      a.licence_ref,
       ('Letter') as message_type,
-      drl.return_id,
-      drl.return_reference AS return_reference,
-      drl.start_date AS start_date
+      a.return_id,
+      a.return_reference AS return_reference,
+      a.start_date AS start_date,
+      4 AS priority
     FROM
-      public.licence_document_headers ldh
-    INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts ON true
-    INNER JOIN due_return_logs drl
-      ON drl.licence_ref = ldh.licence_ref
+      json_contacts a
+    LEFT JOIN registered_licences rl ON
+      rl.licence_ref = a.licence_ref
     WHERE
       contacts->>'role' = 'Returns to'
-      AND NOT EXISTS (
-        SELECT 1 FROM registered_licences r
-        WHERE r.licence_ref = ldh.licence_ref
-      )
+      AND rl.licence_ref IS NULL
     `
   }
 
