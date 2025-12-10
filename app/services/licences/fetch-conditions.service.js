@@ -12,16 +12,16 @@ const LicenceVersionPurposeModel = require('../../models/licence-version-purpose
 /**
  * Fetches the licence condition types, along with the related purpose and points data required for the conditions page
  *
- * @param {string} licenceId - The UUID of the licence
+ * @param {string} licenceVersionId - The UUID of the licence version
  *
  * @returns {Promise<object[]>} An array oof objects containing the condition types, along with their related purposes
  * and points data, required for the conditions page
  */
-async function go(licenceId) {
-  return _fetchConditions(licenceId)
+async function go(licenceVersionId) {
+  return _fetchConditions(licenceVersionId)
 }
 
-async function _fetchConditions(licenceId) {
+async function _fetchConditions(licenceVersionId) {
   return LicenceVersionPurposeConditionTypeModel.query()
     .select(['id', 'displayTitle', 'description', 'subcodeDescription', 'param1Label', 'param2Label'])
     .whereExists(
@@ -30,8 +30,7 @@ async function _fetchConditions(licenceId) {
         .innerJoinRelated('licenceVersionPurpose')
         .innerJoinRelated('licenceVersionPurpose.licenceVersion')
         .innerJoinRelated('licenceVersionPurpose.licenceVersion.licence')
-        .where('licenceVersionPurpose:licenceVersion:licence.id', licenceId)
-        .andWhere('licenceVersionPurpose:licence_version.status', 'current')
+        .where('licenceVersionPurpose:licenceVersion.id', licenceVersionId)
         .whereColumn(
           'licenceVersionPurposeConditions.licenceVersionPurposeConditionTypeId',
           'licenceVersionPurposeConditionTypes.id'
@@ -59,7 +58,7 @@ async function _fetchConditions(licenceId) {
             .select(1)
             .innerJoinRelated('licenceVersion')
             .innerJoinRelated('licenceVersion.licence')
-            .where('licenceVersion:licence.id', licenceId)
+            .where('licenceVersion.id', licenceVersionId)
             .andWhere('licence_version.status', 'current')
             .whereColumn('licenceVersionPurposeConditions.licenceVersionPurposeId', 'licenceVersionPurposes.id')
         )
