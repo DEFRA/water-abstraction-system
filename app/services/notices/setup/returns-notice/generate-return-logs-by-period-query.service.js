@@ -7,8 +7,6 @@
 
 const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
 
-const featureFlagsConfig = require('../../../../../config/feature-flags.config.js')
-
 /**
  * Generates the query and bindings for selecting the return logs by period that determine which recipients to fetch
  *
@@ -19,12 +17,8 @@ const featureFlagsConfig = require('../../../../../config/feature-flags.config.j
  * @returns {object} The query to use as the 'due_return_logs` CTE in the recipients query, and the associated bindings
  */
 function go(noticeType, licencesToExclude, returnsPeriod) {
-  const { dueDate, endDate, startDate, quarterly, summer } = returnsPeriod
+  const { endDate, startDate, quarterly, summer } = returnsPeriod
   const bindings = [startDate, endDate, summer, quarterly, licencesToExclude]
-
-  if (!featureFlagsConfig.enableNullDueDate) {
-    bindings.push(dueDate)
-  }
 
   const dueDateCondition = _dueDateCondition(noticeType)
 
@@ -35,10 +29,6 @@ function go(noticeType, licencesToExclude, returnsPeriod) {
 }
 
 function _dueDateCondition(noticeType) {
-  if (!featureFlagsConfig.enableNullDueDate) {
-    return '?'
-  }
-
   if (noticeType === NoticeType.REMINDERS) {
     return 'IS NOT NULL'
   }

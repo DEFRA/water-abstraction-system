@@ -8,8 +8,6 @@
 const { determineEarliestDate, determineLatestDate, formatDateObjectToISO } = require('../../lib/dates.lib.js')
 const { determineCycleEndDate } = require('../../lib/return-cycle-dates.lib.js')
 
-const featureFlagsConfig = require('../../../config/feature-flags.config.js')
-
 /**
  * Generate return log data from a return requirement and return cycle
  *
@@ -20,13 +18,13 @@ const featureFlagsConfig = require('../../../config/feature-flags.config.js')
  */
 function go(returnRequirement, returnCycle) {
   const { id: returnRequirementId, reference, reportingFrequency, returnVersion } = returnRequirement
-  const { dueDate, endDate: returnCycleEndDate, id: returnCycleId, startDate: returnCycleStartDate } = returnCycle
+  const { endDate: returnCycleEndDate, id: returnCycleId, startDate: returnCycleStartDate } = returnCycle
 
   const startDate = _startDate(returnVersion, returnCycleStartDate)
   const endDate = _endDate(returnVersion, returnCycleEndDate)
 
   return {
-    dueDate: _dueDate(dueDate),
+    dueDate: null,
     endDate,
     id: _id(returnVersion, reference, startDate, endDate),
     licenceRef: returnVersion.licence.licenceRef,
@@ -59,14 +57,6 @@ function go(returnRequirement, returnCycle) {
 
 function _abstractionPeriodValue(value) {
   return value ? value.toString() : 'null'
-}
-
-function _dueDate(dueDate) {
-  if (featureFlagsConfig.enableNullDueDate) {
-    return null
-  }
-
-  return dueDate
 }
 
 function _endDate(returnVersion, returnCycleEndDate) {

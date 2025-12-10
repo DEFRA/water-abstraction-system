@@ -10,8 +10,6 @@ const { formatLongDate } = require('../../base.presenter.js')
 const { futureDueDate } = require('../base.presenter.js')
 const { NOTIFY_TEMPLATES } = require('../../../lib/notify-templates.lib.js')
 
-const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
-
 const MESSAGE_REFS = {
   alternateInvitations: {
     adhoc: 'returns invitation alternate',
@@ -62,7 +60,7 @@ function _email(recipient, noticeId, session) {
   const { determinedReturnsPeriod, journey, noticeType } = session
 
   const messageType = 'email'
-  const dueDate = _dueDate(session, messageType)
+  const dueDate = session?.latestDueDate ?? futureDueDate(messageType)
 
   return {
     contactType: recipient.contact_type,
@@ -83,20 +81,12 @@ function _email(recipient, noticeId, session) {
   }
 }
 
-function _dueDate(session, messageType) {
-  if (featureFlagsConfig.enableNullDueDate) {
-    return session?.latestDueDate ?? futureDueDate(messageType)
-  }
-
-  return session?.determinedReturnsPeriod?.dueDate ?? futureDueDate(messageType)
-}
-
 function _letter(recipient, noticeId, session) {
   const { determinedReturnsPeriod, journey, noticeType } = session
 
   const messageType = 'letter'
   const address = NotifyAddressPresenter.go(recipient.contact)
-  const dueDate = _dueDate(session, messageType)
+  const dueDate = session?.latestDueDate ?? futureDueDate(messageType)
 
   return {
     contactType: recipient.contact_type,

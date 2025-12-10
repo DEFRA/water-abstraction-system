@@ -3,9 +3,8 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -13,9 +12,6 @@ const NoticeSessionFixture = require('../../../../fixtures/notice-session.fixtur
 const RecipientsSeeder = require('../../../../support/seeders/recipients.seeder.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
-
-// Things we need to stub
-const FeatureFlagsConfig = require('../../../../../config/feature-flags.config.js')
 
 // Thing under test
 const FetchStandardReturnsRecipients = require('../../../../../app/services/notices/setup/returns-notice/fetch-standard-returns-recipients.service.js')
@@ -27,14 +23,6 @@ describe('Notices - Setup - Returns Notice - Fetch Standard Returns Recipients s
   let nullDueDateReturnLog
   let session
   let setDueDateReturnLog
-
-  beforeEach(() => {
-    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
-  })
-
-  afterEach(() => {
-    Sinon.restore()
-  })
 
   before(async () => {
     licenceRef = generateLicenceRef()
