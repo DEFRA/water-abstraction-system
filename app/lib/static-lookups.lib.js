@@ -288,7 +288,7 @@ const noticeMappings = {
 
 const NoticeType = Object.freeze({
   ABSTRACTION_ALERTS: 'abstractionAlerts',
-  FAILED_INVITATION: 'failedInvitations',
+  ALTERNATE_INVITATION: 'alternateInvitations',
   INVITATIONS: 'invitations',
   PAPER_RETURN: 'paperReturn',
   REMINDERS: 'reminders'

@@ -89,7 +89,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
           licences: recipient.licence_refs,
           licenceMonitoringStationId: null,
           messageType: 'letter',
-          messageRef: 'returns invitation failed',
+          messageRef: 'returns invitation alternate',
           pdf: null,
           personalisation: {
             name: 'J Returnsholder',
@@ -106,7 +106,7 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
           recipient: null,
           returnLogIds,
           status: 'pending',
-          templateId: NOTIFY_TEMPLATES.failedInvitations.standard.letter['licence holder']
+          templateId: NOTIFY_TEMPLATES.alternateInvitations.standard.letter['licence holder']
         },
         { skip: ['createdAt', 'id', 'updatedAt'] }
       )

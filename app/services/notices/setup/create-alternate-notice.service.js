@@ -67,7 +67,7 @@ async function _notifications(notice, recipients, dueDate) {
     determinedReturnsPeriod: returnPeriod,
     journey: NoticeJourney.STANDARD,
     latestDueDate: dueDate,
-    noticeType: NoticeType.FAILED_INVITATION
+    noticeType: NoticeType.ALTERNATE_INVITATION
   }
 
   return CreateNotificationsService.go(session, recipients, noticeId)

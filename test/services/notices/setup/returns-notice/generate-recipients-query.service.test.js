@@ -295,7 +295,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query Service',
 
     describe('and the notice type is "failed invitation"', () => {
       before(() => {
-        noticeType = NoticeType.FAILED_INVITATION
+        noticeType = NoticeType.ALTERNATE_INVITATION
         download = false
       })
 
@@ -341,7 +341,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query Service',
       scenarios.push(scenario)
 
       // 2) Licence holder and returns to - all versions of the query will return the licence holder. When the notice
-      // type is FAILED_INVITATION, only the licence holder will be returned
+      // type is ALTERNATE_INVITATION, only the licence holder will be returned
       returnLog = await _addReturnLog(returnLogs)
       scenario = await RecipientScenariosSeeder.licenceHolderWithDifferentReturnsTo([returnLog])
       scenarios.push(scenario)
@@ -931,7 +931,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query Service',
 
     describe('and the notice type is "failed invitation"', () => {
       before(() => {
-        noticeType = NoticeType.FAILED_INVITATION
+        noticeType = NoticeType.ALTERNATE_INVITATION
         download = false
       })
 

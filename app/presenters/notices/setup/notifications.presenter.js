@@ -13,9 +13,9 @@ const { NOTIFY_TEMPLATES } = require('../../../lib/notify-templates.lib.js')
 const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 const MESSAGE_REFS = {
-  failedInvitations: {
-    adhoc: 'returns invitation failed',
-    standard: 'returns invitation failed'
+  alternateInvitations: {
+    adhoc: 'returns invitation alternate',
+    standard: 'returns invitation alternate'
   },
   invitations: {
     adhoc: 'returns invitation ad-hoc',

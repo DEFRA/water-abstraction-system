@@ -1,7 +1,7 @@
 'use strict'
 
 const NOTIFY_TEMPLATES = Object.freeze({
-  failedInvitations: {
+  alternateInvitations: {
     adhoc: {
       letter: {
         'licence holder': '791ba6a9-e821-4df6-b49f-4ab3bb15248f'

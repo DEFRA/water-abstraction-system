@@ -20,7 +20,7 @@ const { db } = require('../../../../../db/db.js')
  */
 async function go(returnLogIds) {
   const { bindings, query: dueReturnLogsQuery } = GenerateReturnLogsByIdQueryService.go(returnLogIds)
-  const query = GenerateRecipientsQueryService.go(NoticeType.FAILED_INVITATION, dueReturnLogsQuery, false)
+  const query = GenerateRecipientsQueryService.go(NoticeType.ALTERNATE_INVITATION, dueReturnLogsQuery, false)
 
   const { rows } = await db.raw(query, bindings)
 
