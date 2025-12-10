@@ -3,18 +3,14 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 const { db } = require('../../../../../db/db.js')
 const { NoticeType } = require('../../../../../app/lib/static-lookups.lib.js')
-
-// Things we need to stub
-const FeatureFlagsConfig = require('../../../../../config/feature-flags.config.js')
 
 // Thing under test
 const GenerateReturnLogsByPeriodQueryService = require('../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-period-query.service.js')
@@ -24,14 +20,6 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
   let noticeType
   let returnLogs
   let returnsPeriod
-
-  beforeEach(() => {
-    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
-  })
-
-  afterEach(() => {
-    Sinon.restore()
-  })
 
   before(async () => {
     returnsPeriod = {

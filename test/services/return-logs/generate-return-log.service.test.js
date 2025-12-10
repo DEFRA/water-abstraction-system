@@ -13,9 +13,6 @@ const ReturnCyclesFixture = require('../../fixtures/return-cycles.fixture.js')
 const ReturnRequirementsFixture = require('../../fixtures/return-requirements.fixture.js')
 const { today } = require('../../../app/lib/general.lib.js')
 
-// Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-
 // Thing under test
 const GenerateReturnLogService = require('../../../app/services/return-logs/generate-return-log.service.js')
 
@@ -30,7 +27,6 @@ describe('Return Logs - Generate Return Log service', () => {
   beforeEach(() => {
     testReturnCycle = ReturnCyclesFixture.returnCycle()
     testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
-    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
   })
 
   afterEach(() => {

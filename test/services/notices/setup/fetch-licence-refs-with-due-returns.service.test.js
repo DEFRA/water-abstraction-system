@@ -3,17 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
-
-// Things to stub
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 // Thing under test
 const FetchLicenceRefsWithDueReturnsService = require('../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js')
@@ -72,14 +68,6 @@ describe('Notices - Setup - Fetch Licence Refs With Due Returns service', () => 
 
     // 9) Another 'due' return log in the returns period with a populated due date, with a different licence ref
     await _addReturnLog(returnLogs, { ...defaultDates, dueDate })
-  })
-
-  beforeEach(async () => {
-    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
-  })
-
-  afterEach(async () => {
-    Sinon.restore()
   })
 
   after(async () => {

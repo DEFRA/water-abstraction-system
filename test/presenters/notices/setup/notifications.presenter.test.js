@@ -3,9 +3,8 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -13,9 +12,6 @@ const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
 const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
 const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-
-// Things we need to stub
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 // Thing under test
 const NotificationsPresenter = require('../../../../app/presenters/notices/setup/notifications.presenter.js')
@@ -70,12 +66,6 @@ describe('Notices - Setup - Notifications presenter', () => {
       journey: 'standard',
       noticeType: 'invitations'
     }
-
-    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
-  })
-
-  afterEach(() => {
-    Sinon.restore()
   })
 
   it('correctly presents the data', () => {

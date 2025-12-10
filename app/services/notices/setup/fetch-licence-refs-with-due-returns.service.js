@@ -8,8 +8,6 @@
 const ReturnLogModel = require('../../../models/return-log.model.js')
 const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
-const featureFlagsConfig = require('../../../../config/feature-flags.config.js')
-
 /**
  * Fetches the licence refs with due returns for the return period selected to validate those licences to be removed
  *
@@ -49,14 +47,10 @@ async function _fetch(returnsPeriod, noticeType) {
     .whereJsonPath('metadata', '$.isSummer', '=', returnsPeriod.summer)
     .distinctOn('licenceRef')
 
-  if (!featureFlagsConfig.enableNullDueDate) {
-    query.andWhere('dueDate', returnsPeriod.dueDate)
+  if (noticeType === NoticeType.REMINDERS) {
+    query.whereNotNull('dueDate')
   } else {
-    if (noticeType === NoticeType.REMINDERS) {
-      query.whereNotNull('dueDate')
-    } else {
-      query.whereNull('dueDate')
-    }
+    query.whereNull('dueDate')
   }
 
   return query

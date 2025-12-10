@@ -18,7 +18,6 @@ const { futureDueDate } = require('../../../../app/presenters/notices/base.prese
 const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
 
 // Things to stub
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const FetchAlternateReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js')
 
 // Thing under test
@@ -44,8 +43,6 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
     returnLogIds = recipient.return_log_ids
 
     Sinon.stub(FetchAlternateReturnsRecipientsService, 'go').resolves([recipient])
-
-    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
   })
 
   afterEach(async () => {

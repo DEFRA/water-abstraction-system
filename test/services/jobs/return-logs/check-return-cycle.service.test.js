@@ -9,7 +9,6 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things to stub
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 const ReturnCycleModel = require('../../../../app/models/return-cycle.model.js')
 
 // Thing under test
@@ -30,7 +29,6 @@ describe('Jobs - Return Logs - Check Return Cycle service', () => {
     firstStub = Sinon.stub()
     insertStub = Sinon.stub().returnsThis()
     returningStub = Sinon.stub()
-    Sinon.stub(FeatureFlagsConfig, 'enableNullDueDate').value(true)
 
     Sinon.stub(ReturnCycleModel, 'query').returns({
       select: Sinon.stub().returnsThis(),
