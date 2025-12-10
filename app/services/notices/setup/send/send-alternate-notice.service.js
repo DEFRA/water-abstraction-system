@@ -11,9 +11,7 @@ const NotificationModel = require('../../../../models/notification.model.js')
 const SendLetterNotificationService = require('./send-letter-notification.service.js')
 const UpdateNoticeService = require('../../update-notice.service.js')
 
-const { pause, timestampForPostgres } = require('../../../../lib/general.lib.js')
-
-const notifyConfig = require('../../../../../config/notify.config.js')
+const { timestampForPostgres } = require('../../../../lib/general.lib.js')
 
 /**
  * Orchestrates sending a 'failed' notice to Notify, recording the results, and checking the status when finished
@@ -39,10 +37,6 @@ async function go(mainNotice) {
 
   await _sendNotifications(notifications, notice.referenceCode)
   await _updateFailedEmailInvitations(notice.id, notificationIds)
-
-  // Give Notify a chance to process the notifications sent. For letters we don't expect them to have been sent, but
-  // hopefully they have got through validation so we'll know if there were any errors.
-  await pause(notifyConfig.waitForStatus)
 
   await UpdateNoticeService.go([notice.id])
 }

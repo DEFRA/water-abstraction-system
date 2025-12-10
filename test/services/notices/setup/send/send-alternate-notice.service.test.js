@@ -16,7 +16,6 @@ const NotificationsFixture = require('../../../../fixtures/notifications.fixture
 const CreateAlternateNoticeService = require('../../../../../app/services/notices/setup/create-alternate-notice.service.js')
 const FetchFailedReturnsInvitationsService = require('../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js')
 const NotificationModel = require('../../../../../app/models/notification.model.js')
-const NotifyConfig = require('../../../../../config/notify.config.js')
 const SendLetterNotificationService = require('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
 const UpdateNoticeService = require('../../../../../app/services/notices/update-notice.service.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
@@ -76,10 +75,6 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     })
 
     updateEventServiceStub = Sinon.stub(UpdateNoticeService, 'go').resolves()
-
-    // We have to set wait for status to 25ms to avoid the tests timing out. By default it would be 5 seconds and is
-    // used to give Notify a chance to process the email notifications.
-    Sinon.stub(NotifyConfig, 'waitForStatus').value(25)
   })
 
   afterEach(() => {
