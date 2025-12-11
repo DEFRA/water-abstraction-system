@@ -127,7 +127,7 @@ WITH
       drl.end_date,
       drl.due_date
     FROM public.licence_document_headers ldh
-    JOIN due_return_logs drl
+    INNER JOIN due_return_logs drl
       ON drl.licence_ref = ldh.licence_ref
   ),
 
