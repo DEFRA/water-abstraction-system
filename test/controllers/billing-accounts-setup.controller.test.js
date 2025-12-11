@@ -1,0 +1,151 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+const Sinon = require('sinon')
+
+const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Test helpers
+const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+const { generateUUID } = require('../../app/lib/general.lib.js')
+const { postRequestOptions } = require('../support/general.js')
+
+// Things we need to stub
+const InitiateSessionService = require('../../app/services/billing-accounts/setup/initiate-session.service.js')
+const SelectAccountService = require('../../app/services/billing-accounts/setup/select-account.service.js')
+const SubmitSelectAccountService = require('../../app/services/billing-accounts/setup/submit-select-account.service.js')
+
+// For running our service
+const { init } = require('../../app/server.js')
+
+describe('Billing Accounts Setup controller', () => {
+  let billingAccountId
+  let options
+  let server
+  let sessionId
+
+  before(async () => {
+    server = await init()
+  })
+
+  beforeEach(async () => {
+    // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
+    // possible
+    Sinon.stub(server.logger, 'error')
+
+    // We silence sending a notification to our Errbit instance using Airbrake
+    Sinon.stub(server.app.airbrake, 'notify').resolvesThis()
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+  })
+
+  describe('/billing-accounts/setup/{billingAccountId}/initiate-session', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        billingAccountId = generateUUID()
+        sessionId = generateUUID()
+        options = _postRequestOptions(`/billing-accounts/setup/${billingAccountId}/initiate-session`)
+      })
+
+      describe('when this url ', () => {
+        beforeEach(() => {
+          Sinon.stub(InitiateSessionService, 'go').resolves(
+            `/system/billing-accounts/setup/${sessionId}/select-account`
+          )
+        })
+
+        it('creates a new session and redirects to the "Who should the bills go to" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/select-account`)
+        })
+      })
+    })
+  })
+
+  describe('/billing-accounts/setup/{sessionId}/select-account', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/select-account`)
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(SelectAccountService, 'go').resolves({
+            pageTitle: 'Who should the bills go to?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Who should the bills go to?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/select-account`)
+      })
+
+      describe('when the user selects existing customer option', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitSelectAccountService, 'go').resolves({
+            accountSelected: 'customer'
+          })
+        })
+
+        it('redirects to the "select company address" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(
+            `/system/billing-accounts/setup/${sessionId}/select-company-address`
+          )
+        })
+      })
+
+      describe('when the user selects another billing account option', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitSelectAccountService, 'go').resolves({
+            accountSelected: 'another'
+          })
+        })
+
+        it('redirects to the "does this account already exist" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(
+            `/system/billing-accounts/setup/${sessionId}/select-existing-account`
+          )
+        })
+      })
+    })
+  })
+})
+
+function _getRequestOptions(path) {
+  return {
+    method: 'GET',
+    url: path,
+    auth: {
+      strategy: 'session',
+      credentials: { scope: ['manage_billing_accounts'] }
+    }
+  }
+}
+
+function _postRequestOptions(path) {
+  return postRequestOptions(path, {}, ['manage_billing_accounts'])
+}

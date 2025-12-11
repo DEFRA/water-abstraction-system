@@ -8,20 +8,20 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
-      name: "billingAccount",
-      errorMessage: error.billingAccount,
+      name: "accountSelected",
+      errorMessage: error.accountSelected,
       items: [
         {
-          id: "existing",
-          value: "existing",
+          id: "customer",
+          value: "customer",
           text: "Existing",
-          checked: "existing" === billingAccount
+          checked: "customer" === accountSelected
         },
         {
           id: "another",
           value: "another",
           text: "Another billing account",
-          checked: "another" === billingAccount
+          checked: "another" === accountSelected
         }
       ]
     }) }}

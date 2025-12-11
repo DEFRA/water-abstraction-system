@@ -4,25 +4,37 @@ const BillingAccountsSetupController = require('../controllers/billing-accounts-
 
 const routes = [
   {
+    method: 'POST',
+    path: '/billing-accounts/setup/{billingAccountId}/initiate-session',
+    options: {
+      handler: BillingAccountsSetupController.submitInitiateSession,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
     method: 'GET',
-    path: '/billing-accounts/setup/{billingAccountId}/select-account',
+    path: '/billing-accounts/setup/{sessionId}/select-account',
     options: {
       handler: BillingAccountsSetupController.viewSelectAccount,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['manage_billing_accounts']
         }
       }
     }
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{billingAccountId}/select-account',
+    path: '/billing-accounts/setup/{sessionId}/select-account',
     options: {
       handler: BillingAccountsSetupController.submitSelectAccount,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['manage_billing_accounts']
         }
       }
     }

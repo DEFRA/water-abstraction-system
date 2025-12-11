@@ -5,6 +5,7 @@
  * @module BillingAccountsSetupController
  */
 
+const InitiateSessionService = require('../services/billing-accounts/setup/initiate-session.service.js')
 const SelectAccountService = require('../services/billing-accounts/setup/select-account.service.js')
 const SubmitSelectAccountService = require('../services/billing-accounts/setup/submit-select-account.service.js')
 
@@ -14,6 +15,14 @@ async function viewSelectAccount(request, h) {
   const pageData = await SelectAccountService.go(sessionId)
 
   return h.view(`billing-accounts/setup/select-account.njk`, pageData)
+}
+
+async function submitInitiateSession(request, h) {
+  const { billingAccountId } = request.params
+
+  const redirectUrl = await InitiateSessionService.go(billingAccountId)
+
+  return h.redirect(redirectUrl)
 }
 
 async function submitSelectAccount(request, h) {
@@ -28,10 +37,15 @@ async function submitSelectAccount(request, h) {
     return h.view(`billing-accounts/setup/select-account.njk`, pageData)
   }
 
-  return h.redirect('')
+  if (pageData.accountSelected === 'customer') {
+    return h.redirect(`/system/billing-accounts/setup/${sessionId}/select-company-address`)
+  }
+
+  return h.redirect(`/system/billing-accounts/setup/${sessionId}/select-existing-account`)
 }
 
 module.exports = {
   viewSelectAccount,
-  submitSelectAccount
+  submitSelectAccount,
+  submitInitiateSession
 }
