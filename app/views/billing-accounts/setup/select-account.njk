@@ -1,0 +1,31 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block pageContent %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukRadios({
+      name: "billingAccount",
+      errorMessage: error.billingAccount,
+      items: [
+        {
+          id: "existing",
+          value: "existing",
+          text: "Existing",
+          checked: "existing" === billingAccount
+        },
+        {
+          id: "another",
+          value: "another",
+          text: "Another billing account",
+          checked: "another" === billingAccount
+        }
+      ]
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}
