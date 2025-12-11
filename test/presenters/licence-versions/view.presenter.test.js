@@ -18,6 +18,7 @@ const ViewPresenter = require('../../../app/presenters/licence-versions/view.pre
 
 describe('Licence Versions - View presenter', () => {
   let auth
+  let conditions
   let licence
   let licenceVersion
   let licenceVersionData
@@ -55,11 +56,13 @@ describe('Licence Versions - View presenter', () => {
       licenceVersion,
       licenceVersionsForPagination: [licenceVersion]
     }
+
+    conditions = []
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ViewPresenter.go(licenceVersionData, auth)
+      const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
       expect(result).to.equal({
         backLink: {
@@ -67,6 +70,7 @@ describe('Licence Versions - View presenter', () => {
           text: 'Go back to history'
         },
         changeType: 'licence issued',
+        conditionTypes: [],
         errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
@@ -82,7 +86,7 @@ describe('Licence Versions - View presenter', () => {
   describe('the "errorInDataEmail" property', () => {
     describe('when the user does NOT have the "billing" role', () => {
       it('returns the email address', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.errorInDataEmail).to.equal('water_abstractiondigital@environment-agency.gov.uk')
       })
@@ -94,7 +98,7 @@ describe('Licence Versions - View presenter', () => {
       })
 
       it('returns null', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.errorInDataEmail).to.be.null()
       })
@@ -104,7 +108,7 @@ describe('Licence Versions - View presenter', () => {
   describe('the "changeType" property', () => {
     describe('when the licence version is not administrative', () => {
       it('returns "licence issued"', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.changeType).to.equal('licence issued')
       })
@@ -116,17 +120,55 @@ describe('Licence Versions - View presenter', () => {
       })
 
       it('returns "no licence issued"', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.changeType).to.equal('no licence issued')
       })
     })
   })
 
+  describe('the "conditionTypes" property', () => {
+    beforeEach(() => {
+      conditions = [ViewLicencesFixture.condition()]
+    })
+
+    it('returns the "conditionTypes"', () => {
+      const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+
+      expect(result.conditionTypes).to.equal([
+        {
+          conditions: [
+            {
+              abstractionPoints: {
+                descriptions: [
+                  'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (RIVER OUSE AT BLETSOE)'
+                ],
+                label: 'Abstraction point'
+              },
+              conditionType: 'Cessation Condition',
+              otherInformation: 'DROUGHT CONDITION',
+              param1: {
+                label: 'Start date',
+                value: '01/05'
+              },
+              param2: {
+                label: 'End date',
+                value: '30/09'
+              },
+              purpose: 'Animal Watering & General Use In Non Farming Situations',
+              subcodeDescription: 'Political - Hosepipe Ban'
+            }
+          ],
+          displayTitle: 'Political cessation condition'
+        }
+      ])
+    })
+  })
+
   describe('the "notes" property', () => {
     describe('when the user does not have the "billing" role', () => {
       it('returns null', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.notes).to.be.null()
       })
@@ -139,7 +181,7 @@ describe('Licence Versions - View presenter', () => {
 
       describe('and there are notes', () => {
         it('returns the notes', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth)
+          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
           expect(result.notes).to.equal(['Whole licence trade'])
         })
@@ -151,7 +193,7 @@ describe('Licence Versions - View presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth)
+          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
           expect(result.notes).to.be.null()
         })
@@ -162,7 +204,7 @@ describe('Licence Versions - View presenter', () => {
   describe('the "pagination" property', () => {
     describe('when there is no "pagination" required', () => {
       it('returns null', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.pagination).to.be.null()
       })
@@ -190,7 +232,7 @@ describe('Licence Versions - View presenter', () => {
         })
 
         it('returns the "previous" and "next" links', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth)
+          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
           expect(result.pagination).to.equal({
             next: {
@@ -213,7 +255,7 @@ describe('Licence Versions - View presenter', () => {
         })
 
         it('returns the "next" link', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth)
+          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
           expect(result.pagination).to.equal({
             next: {
@@ -231,7 +273,7 @@ describe('Licence Versions - View presenter', () => {
         })
 
         it('returns the "previous" link', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth)
+          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
           expect(result.pagination).to.equal({
             previous: {
@@ -248,7 +290,7 @@ describe('Licence Versions - View presenter', () => {
   describe('the "points" property', () => {
     describe('when there are no points', () => {
       it('returns an empty array', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.points).to.equal([])
       })
@@ -266,7 +308,7 @@ describe('Licence Versions - View presenter', () => {
       })
 
       it('returns the points', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.points).to.equal([
           {
@@ -326,7 +368,7 @@ describe('Licence Versions - View presenter', () => {
       })
 
       it('returns the points ordered by the description and no duplicates', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.points).to.equal([
           {
@@ -401,7 +443,7 @@ describe('Licence Versions - View presenter', () => {
       })
 
       it('should return the purposes', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.purposes).to.equal([
           {
@@ -422,7 +464,7 @@ describe('Licence Versions - View presenter', () => {
 
     describe('when there are no "purposes"', () => {
       it('should return an empty array', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth)
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.purposes).to.equal([])
       })
@@ -433,7 +475,7 @@ describe('Licence Versions - View presenter', () => {
     describe('when the user does not have the "billing" role', () => {
       describe('and there is a "reason"', () => {
         it('returns the "reason"', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth)
+          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
           expect(result.reason).to.equal('Licence Holder Name/Address Change')
         })
@@ -445,7 +487,7 @@ describe('Licence Versions - View presenter', () => {
         })
 
         it('returns null', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth)
+          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
           expect(result.reason).to.be.null()
         })
@@ -463,7 +505,7 @@ describe('Licence Versions - View presenter', () => {
         })
 
         it('returns just the created on', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth)
+          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
           expect(result.reason).to.equal('Created on 1 January 2022')
         })
@@ -472,7 +514,7 @@ describe('Licence Versions - View presenter', () => {
       describe('and there is a reason', () => {
         describe('and we know who created it', () => {
           it('returns the reason with who created it', () => {
-            const result = ViewPresenter.go(licenceVersionData, auth)
+            const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
             expect(result.reason).to.equal(
               'Licence Holder Name/Address Change created on 1 January 2022 by JOBSWORTH01'
@@ -486,7 +528,7 @@ describe('Licence Versions - View presenter', () => {
           })
 
           it('returns the reason without who created it', () => {
-            const result = ViewPresenter.go(licenceVersionData, auth)
+            const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
             expect(result.reason).to.equal('Licence Holder Name/Address Change created on 1 January 2022')
           })

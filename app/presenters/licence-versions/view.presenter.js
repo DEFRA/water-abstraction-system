@@ -6,7 +6,7 @@
  */
 
 const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
-const { formatLicencePoints, formatLicencePurposes } = require('../licence.presenter.js')
+const { formatLicencePoints, formatLicencePurposes, formatConditionTypes } = require('../licence.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
 
 /**
@@ -14,10 +14,11 @@ const { formatLongDate } = require('../base.presenter.js')
  *
  * @param {object} licenceVersionData - the licence version with the licence, and the licence versions for pagination
  * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {object[]} conditions - The condition data returned by `FetchLicenceConditionsService`
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licenceVersionData, auth) {
+function go(licenceVersionData, auth, conditions) {
   const { licenceVersion, licenceVersionsForPagination } = licenceVersionData
 
   const { licence } = licenceVersion
@@ -29,6 +30,7 @@ function go(licenceVersionData, auth) {
       href: `/system/licences/${licence.id}/history`,
       text: 'Go back to history'
     },
+    conditionTypes: formatConditionTypes(conditions),
     changeType: licenceVersion.administrative ? 'no licence issued' : 'licence issued',
     errorInDataEmail: _errorInDataEmail(billingAndDataRole),
     notes: _notes(licenceVersion, billingAndDataRole),

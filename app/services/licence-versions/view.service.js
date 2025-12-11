@@ -6,6 +6,7 @@
  * @module ViewService
  */
 
+const FetchConditionsService = require('../licences/fetch-conditions.service.js')
 const FetchLicenceVersionService = require('./fetch-licence-version.service.js')
 const ViewPresenter = require('../../presenters/licence-versions/view.presenter.js')
 
@@ -19,8 +20,9 @@ const ViewPresenter = require('../../presenters/licence-versions/view.presenter.
  */
 async function go(licenceVersionId, auth) {
   const licenceVersionData = await FetchLicenceVersionService.go(licenceVersionId)
+  const conditions = await FetchConditionsService.go(licenceVersionId)
 
-  const pageData = ViewPresenter.go(licenceVersionData, auth)
+  const pageData = ViewPresenter.go(licenceVersionData, auth, conditions)
 
   return {
     activeNavBar: 'search',
