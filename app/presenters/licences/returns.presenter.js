@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate, formatPurposes, formatReturnLogStatus } = require('../base.presenter.js')
+const { defaultPageSize } = require('../../../config/database.config.js')
 
 /**
  * Formats data for the `/licences/{id}/returns` view licence returns page
@@ -13,10 +14,11 @@ const { formatLongDate, formatPurposes, formatReturnLogStatus } = require('../ba
  * @param {module:ReturnLogModel[]} returnLogs - The results from `FetchLicenceReturnsService` to be formatted
  * @param {boolean} hasRequirements - True if the licence has return requirements else false
  * @param {object} licence - The id and licence ref of the licence
+ * @param {number} totalReturns - the total returns from the pagination object
  *
  * @returns {object} The data formatted for the view template
  */
-function go(returnLogs, hasRequirements, licence) {
+function go(returnLogs, hasRequirements, licence, totalReturns) {
   const returns = _returns(returnLogs)
 
   const { licenceRef } = licence
@@ -31,7 +33,8 @@ function go(returnLogs, hasRequirements, licence) {
     returns,
     noReturnsMessage: _noReturnsMessage(hasReturns, hasRequirements),
     pageTitle: 'Returns',
-    pageTitleCaption: `Licence ${licenceRef}`
+    pageTitleCaption: `Licence ${licenceRef}`,
+    tableCaption: _tableCaption(totalReturns, returns.length)
   }
 }
 
@@ -61,6 +64,14 @@ function _returns(returns) {
       status: formatReturnLogStatus(returnLog)
     }
   })
+}
+
+function _tableCaption(totalAmount, currentAmount) {
+  if (totalAmount > defaultPageSize) {
+    return `Showing ${currentAmount} of ${totalAmount} returns`
+  }
+
+  return `Showing all ${totalAmount} returns`
 }
 
 module.exports = {
