@@ -10,10 +10,12 @@ exports.up = function (knex) {
     // Data
     table.uuid('region_id').notNullable()
     table.string('licence_ref').notNullable().unique()
+    table.string('application_number')
     table.boolean('is_water_undertaker').notNullable()
     table.jsonb('regions').notNullable()
     table.date('start_date').notNullable()
     table.date('expired_date')
+    table.date('issue_date')
     table.date('lapsed_date')
     table.date('revoked_date')
     table.boolean('suspend_from_billing').notNullable().defaultTo(false)

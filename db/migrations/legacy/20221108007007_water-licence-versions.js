@@ -9,11 +9,13 @@ exports.up = function (knex) {
 
     // Data
     table.uuid('licence_id').notNullable()
+    table.string('application_number')
     table.integer('issue').notNullable()
     table.integer('increment').notNullable()
     table.string('status').notNullable()
     table.date('start_date').notNullable()
     table.date('end_date')
+    table.date('issue_date')
     table.string('external_id').notNullable().unique()
     table.boolean('is_test').notNullable().defaultTo(false)
 
