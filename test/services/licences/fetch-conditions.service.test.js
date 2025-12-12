@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -19,6 +19,7 @@ const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 
 // Thing under test
 const FetchConditionsService = require('../../../app/services/licences/fetch-conditions.service.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 describe('Licences - Fetch Conditions service', () => {
   let licence
@@ -30,48 +31,50 @@ describe('Licences - Fetch Conditions service', () => {
   let point
   let purpose
 
+  beforeEach(async () => {
+    licence = await LicenceHelper.add()
+
+    licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
+
+    purpose = PurposeHelper.select()
+
+    licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
+      licenceVersionId: licenceVersion.id,
+      purposeId: purpose.id
+    })
+
+    licenceVersionPurposeConditionType = await LicenceVersionPurposeConditionTypeHelper.select()
+
+    point = await PointHelper.add({
+      bgsReference: 'TL 14/123',
+      category: 'Single Point',
+      depth: 123,
+      description: 'RIVER OUSE AT BLETSOE',
+      hydroInterceptDistance: 8.01,
+      hydroReference: 'TL 14/133',
+      hydroOffsetDistance: 5.56,
+      locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
+      ngr1: 'SD 963 193',
+      ngr2: 'SD 963 193',
+      ngr3: 'SD 963 193',
+      ngr4: 'SD 963 193',
+      note: 'WELL IS SPRING-FED',
+      primaryType: 'Groundwater',
+      secondaryType: 'Borehole',
+      wellReference: '81312'
+    })
+
+    licenceVersionPurposePoint = await LicenceVersionPurposePointHelper.add({
+      licenceVersionPurposeId: licenceVersionPurpose.id,
+      pointId: point.id
+    })
+  })
+
   describe('when the licence has licence versions, licence version purposes, conditions and condition types', () => {
-    before(async () => {
-      licence = await LicenceHelper.add()
-
-      licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
-
-      purpose = PurposeHelper.select()
-
-      licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
-        licenceVersionId: licenceVersion.id,
-        purposeId: purpose.id
-      })
-
-      licenceVersionPurposeConditionType = await LicenceVersionPurposeConditionTypeHelper.select()
-
+    beforeEach(async () => {
       licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
         licenceVersionPurposeId: licenceVersionPurpose.id,
         licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id
-      })
-
-      point = await PointHelper.add({
-        bgsReference: 'TL 14/123',
-        category: 'Single Point',
-        depth: 123,
-        description: 'RIVER OUSE AT BLETSOE',
-        hydroInterceptDistance: 8.01,
-        hydroReference: 'TL 14/133',
-        hydroOffsetDistance: 5.56,
-        locationNote: 'Castle Farm, The Loke, Gresham, Norfolk',
-        ngr1: 'SD 963 193',
-        ngr2: 'SD 963 193',
-        ngr3: 'SD 963 193',
-        ngr4: 'SD 963 193',
-        note: 'WELL IS SPRING-FED',
-        primaryType: 'Groundwater',
-        secondaryType: 'Borehole',
-        wellReference: '81312'
-      })
-
-      licenceVersionPurposePoint = await LicenceVersionPurposePointHelper.add({
-        licenceVersionPurposeId: licenceVersionPurpose.id,
-        pointId: point.id
       })
     })
 
@@ -116,6 +119,21 @@ describe('Licences - Fetch Conditions service', () => {
           ]
         }
       ])
+    })
+  })
+
+  describe('when the licence has licence versions, licence version purposes, condition types and no conditions', () => {
+    beforeEach(async () => {
+      licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
+        licenceVersionPurposeId: generateUUID(),
+        licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id
+      })
+    })
+
+    it('return the no matching conditions', async () => {
+      const result = await FetchConditionsService.go(licenceVersion.id)
+
+      expect(result).to.equal([])
     })
   })
 })

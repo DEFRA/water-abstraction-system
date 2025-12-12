@@ -29,7 +29,6 @@ async function _fetchConditions(licenceVersionId) {
         .select(1)
         .innerJoinRelated('licenceVersionPurpose')
         .innerJoinRelated('licenceVersionPurpose.licenceVersion')
-        .innerJoinRelated('licenceVersionPurpose.licenceVersion.licence')
         .where('licenceVersionPurpose:licenceVersion.id', licenceVersionId)
         .whereColumn(
           'licenceVersionPurposeConditions.licenceVersionPurposeConditionTypeId',
@@ -57,9 +56,7 @@ async function _fetchConditions(licenceVersionId) {
           LicenceVersionPurposeModel.query()
             .select(1)
             .innerJoinRelated('licenceVersion')
-            .innerJoinRelated('licenceVersion.licence')
             .where('licenceVersion.id', licenceVersionId)
-            .andWhere('licence_version.status', 'current')
             .whereColumn('licenceVersionPurposeConditions.licenceVersionPurposeId', 'licenceVersionPurposes.id')
         )
         .withGraphFetched('licenceVersionPurpose')
