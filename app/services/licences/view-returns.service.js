@@ -28,7 +28,7 @@ async function go(licenceId, auth, page) {
 
   const { returns, pagination } = await FetchReturnsService.go(licenceId, page)
 
-  const pageData = ReturnsPresenter.go(returns, hasRequirements, licence)
+  const pageData = ReturnsPresenter.go(returns, hasRequirements, licence, pagination.total)
 
   const paginationData = PaginatorPresenter.go(pagination.total, Number(page), `/system/licences/${licenceId}/returns`)
 
