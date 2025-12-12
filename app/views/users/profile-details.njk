@@ -8,29 +8,12 @@
 
 {% from "macros/page-heading.njk" import pageHeading %}
 
-{% block breadcrumbs %}
-  {{
-    govukBackLink({
-      text: 'Go back to search',
-      href: '/'
-    })
-  }}
-{% endblock %}
+{% set backLink = {
+  text: 'Go back to search',
+  href: '/'
+} %}
 
-{% block content %}
-  {% if error %}
-    {{ govukErrorSummary({
-      titleText: "There is a problem",
-      errorList: error.errorList
-    }) }}
-  {%endif%}
-
-  {% if notification %}
-    {{ govukNotificationBanner(notification) }}
-  {% endif %}
-
-  {{ pageHeading(pageTitle) }}
-
+{% block pageContent %}
   <p>This will be visible to your public contacts</p>
 
   <form method="post">
@@ -44,9 +27,7 @@
       id: "name",
       name: "name",
       classes: "govuk-!-width-one-half",
-      errorMessage: {
-        text: error.name
-      } if error.name
+      errorMessage: error.name if error.name
     }) }}
 
     {{ govukInput({
@@ -57,9 +38,7 @@
       id: "jobTitle",
       name: "jobTitle",
       classes: "govuk-!-width-one-half",
-      errorMessage: {
-        text: error.jobTitle
-      } if error.jobTitle
+      errorMessage: error.jobTitle if error.jobTitle
     }) }}
 
     {{ govukInput({
@@ -70,9 +49,7 @@
       id: "email",
       name: "email",
       classes: "govuk-!-width-one-half",
-      errorMessage: {
-        text: error.email
-      } if error.email
+      errorMessage: error.email if error.email
     }) }}
 
     {{ govukInput({
@@ -83,9 +60,7 @@
       id: "tel",
       name: "tel",
       classes: "govuk-!-width-one-half",
-      errorMessage: {
-        text: error.tel
-      } if error.tel
+      errorMessage: error.tel if error.tel
     }) }}
 
     {{ govukTextarea({
@@ -96,9 +71,7 @@
       id: "address",
       name: "address",
       classes: "govuk-!-width-three-quarters",
-      errorMessage: {
-        text: error.address
-      } if error.address
+      errorMessage: error.address if error.address
     }) }}
 
     {{ govukButton({ text: "Update", preventDoubleClick: true }) }}

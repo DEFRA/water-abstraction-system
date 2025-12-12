@@ -7,6 +7,7 @@
 
 const ProfileDetailsValidator = require('../../validators/users/profile-details.validator.js')
 const UserModel = require('../../models/user.model.js')
+const { formatValidationResult } = require('../../presenters/base.presenter.js')
 
 const NAVIGATION_LINKS = [
   { active: true, href: '/system/users/me/profile-details', text: 'Profile details' },
@@ -60,29 +61,9 @@ async function _save(userId, payload) {
 }
 
 function _validate(payload) {
-  const { error } = ProfileDetailsValidator.go(payload)
+  const validationResult = ProfileDetailsValidator.go(payload)
 
-  if (!error) {
-    return null
-  }
-
-  const formattedError = { errorList: [] }
-
-  error.details.forEach((detail) => {
-    // We validate that the email field is both a valid email and it is @environment-agency.gov.uk. If both fail Joi
-    // will return both errors. In this case, there is no value in displaying the 'Email must be @envi...' if it is also
-    // invalid. So, this ensures we get one email error displayed (invalid will always come first in the joi result)
-    if (!formattedError[detail.context.key]) {
-      formattedError.errorList.push({
-        href: `#${detail.context.key}`,
-        text: detail.message
-      })
-
-      formattedError[detail.context.key] = detail.message
-    }
-  })
-
-  return formattedError
+  return formatValidationResult(validationResult)
 }
 
 module.exports = {

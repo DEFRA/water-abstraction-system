@@ -108,13 +108,35 @@ describe('Users - Submit profile details service', () => {
       it('returns the details required to redisplay the page including validation errors', async () => {
         const result = await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
-        expect(result).to.include({
-          pageTitle: 'Profile details',
+        expect(result).to.equal({
+          email: 'invalidtestemail',
           error: {
-            email: 'Enter a valid email address',
-            errorList: [{ href: '#email', text: 'Enter a valid email address' }]
+            email: {
+              text: 'Enter a valid email address'
+            },
+            errorList: [
+              {
+                href: '#email',
+                text: 'Enter a valid email address'
+              }
+            ]
           },
-          ...payload
+          navigationLinks: [
+            {
+              active: true,
+              href: '/system/users/me/profile-details',
+              text: 'Profile details'
+            },
+            {
+              href: '/account/update-password',
+              text: 'Change password'
+            },
+            {
+              href: '/signout',
+              text: 'Sign out'
+            }
+          ],
+          pageTitle: 'Profile details'
         })
       })
 
