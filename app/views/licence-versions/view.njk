@@ -1,6 +1,9 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
 
 {% from "macros/conditions-summary-cards.njk" import conditionsSummaryCards %}
 {% from "macros/licence-version-change-type-tag.njk" import changeTypeTag as licenceVersionChangeTypeTag %}
@@ -33,6 +36,9 @@
 
   <ul class="govuk-list govuk-!-margin-bottom-6">
     <li>
+      <a class="govuk-link" href="#licence-details">Licence details</a>
+    </li>
+    <li>
       <a class="govuk-link" href="#points">Points</a>
     </li>
     <li>
@@ -42,6 +48,54 @@
       <a class="govuk-link" href="#conditions">Conditions</a>
     </li>
   </ul>
+
+  <section id="licence-details">
+    <h2 class="govuk-heading-m govuk-!-margin-top-3">
+      Licence details
+    </h2>
+
+    {{ govukSummaryList({
+      card: {
+        title: {
+          text: ''
+        }
+      },
+      rows: [
+        {
+          key: {
+          text: "Licence version start date"
+        },
+          value: {
+          text: licenceDetails.startDate
+        }
+        },
+        {
+          key: {
+          text: "Licence version issue date"
+        },
+          value: {
+          text: licenceDetails.issueDate
+        }
+        },
+        {
+          key: {
+          text: "Application number"
+        },
+          value: {
+          text: licenceDetails.applicationNumber
+        }
+        },
+        {
+          key: {
+          text: "Licence version end date"
+        },
+          value: {
+          text: licenceDetails.endDate
+        }
+        }
+      ]
+    }) }}
+  </section>
 
   <section id="points">
     <h2 class="govuk-heading-m govuk-!-margin-top-3">
