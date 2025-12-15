@@ -76,7 +76,8 @@ describe('Licences - View Returns service', () => {
           pageTitleCaption: `Licence ${licence.licenceRef}`,
           pagination: { numberOfPages: 1 },
           returns: [],
-          roles: ['returns']
+          roles: ['returns'],
+          tableCaption: 'Showing all 1 returns'
         })
       })
     })
