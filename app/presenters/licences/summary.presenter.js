@@ -16,7 +16,7 @@ const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
  * @returns {object} The data formatted for the view template
  */
 function go(summary) {
-  const { expiredDate, id, licenceMonitoringStations, region, startDate } = summary
+  const { expiredDate, id, licenceMonitoringStations, region, startDate, issueDate } = summary
 
   const licenceVersionPurposes = _licenceVersionPurposes(summary)
   const purposes = _purposes(licenceVersionPurposes)
@@ -32,6 +32,7 @@ function go(summary) {
     abstractionPointsCaption: _abstractionPointsCaption(abstractionPoints),
     activeSecondaryNav: 'summary',
     endDate: _endDate(expiredDate),
+    issueDate: _issueDate(summary, issueDate),
     licenceHolder: _licenceHolder(summary),
     licenceId: id,
     monitoringStations: _monitoringStations(licenceMonitoringStations),
@@ -125,6 +126,16 @@ function _endDate(expiredDate) {
   }
 
   return formatLongDate(expiredDate)
+}
+
+function _issueDate(licence, issueDate) {
+  const currentVersion = licence.$currentVersion()
+
+  if (currentVersion?.issueDate) {
+    return formatLongDate(currentVersion.issueDate)
+  }
+
+  return formatLongDate(issueDate)
 }
 
 function _licenceHolder(licence) {
