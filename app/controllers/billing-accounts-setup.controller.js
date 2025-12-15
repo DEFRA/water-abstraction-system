@@ -47,5 +47,5 @@ async function viewSelectAccount(request, h) {
 module.exports = {
   setup,
   submitSelectAccount,
-  viewSelectAccount,
+  viewSelectAccount
 }
