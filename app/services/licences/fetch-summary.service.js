@@ -23,7 +23,7 @@ async function go(licenceId) {
 async function _fetch(licenceId) {
   return LicenceModel.query()
     .findById(licenceId)
-    .select(['expiredDate', 'id', 'startDate'])
+    .select(['expiredDate', 'id', 'startDate', 'issueDate'])
     .modify('licenceName')
     .modify('primaryUser')
     .modify('currentVersion')

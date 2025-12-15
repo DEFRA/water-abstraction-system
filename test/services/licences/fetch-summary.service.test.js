@@ -126,6 +126,7 @@ describe('Licences - Fetch Summary service', () => {
       expect(result).to.equal({
         id: licence.id,
         expiredDate: null,
+        issueDate: null,
         startDate: new Date('2022-01-01'),
         region: {
           id: region.id,

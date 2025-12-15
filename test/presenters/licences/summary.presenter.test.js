@@ -34,6 +34,7 @@ describe('Licences - Summary Presenter', () => {
       abstractionPointsCaption: 'Point of abstraction',
       activeSecondaryNav: 'summary',
       endDate: null,
+      issueDate: null,
       licenceHolder: 'Unregistered licence',
       licenceId: summary.id,
       monitoringStations: [
@@ -590,6 +591,38 @@ describe('Licences - Summary Presenter', () => {
         const result = SummaryPresenter.go(summary)
 
         expect(result.endDate).to.equal('1 April 2099')
+      })
+    })
+  })
+
+  describe('the "issueDate" property', () => {
+    describe('when the current version is null', () => {
+      beforeEach(() => {
+        summary.$currentVersion = () => {
+          return null
+        }
+
+        summary.issueDate = '2019-04-01'
+      })
+
+      it('returns the current version issue date', () => {
+        const result = SummaryPresenter.go(summary)
+
+        expect(result.issueDate).to.equal('1 April 2019')
+      })
+    })
+
+    describe('when the current version is not null', () => {
+      beforeEach(() => {
+        summary.$currentVersion = () => {
+          return { issueDate: '2021-01-01', licenceVersionPurposes: [] }
+        }
+      })
+
+      it('returns the current version issue date', () => {
+        const result = SummaryPresenter.go(summary)
+
+        expect(result.issueDate).to.equal('1 January 2021')
       })
     })
   })
