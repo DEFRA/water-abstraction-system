@@ -1,7 +1,7 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 
@@ -55,11 +55,7 @@
     </h2>
 
     {{ govukSummaryList({
-      card: {
-        title: {
-          text: ''
-        }
-      },
+      card: {},
       rows: [
         {
           key: {
