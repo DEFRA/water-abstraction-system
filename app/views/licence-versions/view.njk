@@ -2,9 +2,10 @@
 
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 
+{% from "macros/conditions-summary-cards.njk" import conditionsSummaryCards %}
 {% from "macros/licence-version-change-type-tag.njk" import changeTypeTag as licenceVersionChangeTypeTag %}
-{% from "macros/points-summary-card.njk" import pointsSummaryCards %}
-{% from "macros/purposes-summary-card.njk" import purposesSummaryCards %}
+{% from "macros/points-summary-cards.njk" import pointsSummaryCards %}
+{% from "macros/purposes-summary-cards.njk" import purposesSummaryCards %}
 
 {% block pageContent %}
 
@@ -37,6 +38,9 @@
     <li>
       <a class="govuk-link" href="#purposes-periods-and-amounts">Purposes, periods and amounts</a>
     </li>
+    <li>
+      <a class="govuk-link" href="#conditions">Conditions</a>
+    </li>
   </ul>
 
   <section id="points">
@@ -53,6 +57,14 @@
     </h2>
 
     {{ purposesSummaryCards(purposes) }}
+  </section>
+
+  <section id="conditions">
+    <h2 class="govuk-heading-m govuk-!-margin-top-3">
+      Conditions
+    </h2>
+
+    {{ conditionsSummaryCards(conditionTypes, 'No conditions for this licence version.') }}
   </section>
 
 {% endblock %}

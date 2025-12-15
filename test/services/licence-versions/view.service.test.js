@@ -14,6 +14,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
+const FetchConditionsService = require('../../../app/services/licences/fetch-conditions.service.js')
 const FetchLicenceVersionService = require('../../../app/services/licence-versions/fetch-licence-version.service.js')
 
 // Thing under test
@@ -21,6 +22,7 @@ const ViewService = require('../../../app/services/licence-versions/view.service
 
 describe('Licence Versions - View service', () => {
   let auth
+  let conditions
   let licence
   let licenceVersion
 
@@ -46,10 +48,14 @@ describe('Licence Versions - View service', () => {
       startDate: new Date('2022-01-01')
     })
 
+    conditions = []
+
     Sinon.stub(FetchLicenceVersionService, 'go').returns({
       licenceVersion,
       licenceVersionsForPagination: [licenceVersion]
     })
+
+    Sinon.stub(FetchConditionsService, 'go').returns(conditions)
   })
 
   afterEach(() => {
@@ -67,6 +73,7 @@ describe('Licence Versions - View service', () => {
           text: 'Go back to history'
         },
         changeType: 'licence issued',
+        conditionTypes: [],
         errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
