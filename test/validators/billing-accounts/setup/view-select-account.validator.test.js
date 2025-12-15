@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ViewSelectAccountValidator = require('../../../../app/validators/billing-accounts/setup/view-select-account.validator.js')
+const SelectAccountValidator = require('../../../../app/validators/billing-accounts/setup/select-account.validator.js')
 
 describe('Billing Accounts - Setup - View Select Account Validator', () => {
   let payload
@@ -20,7 +20,7 @@ describe('Billing Accounts - Setup - View Select Account Validator', () => {
   describe('when called with a valid option', () => {
     describe('and that option is "customer', () => {
       it('returns with no errors', () => {
-        const result = ViewSelectAccountValidator.go(payload)
+        const result = SelectAccountValidator.go(payload)
 
         expect(result.value).to.exist()
         expect(result.error).not.to.exist()
@@ -29,7 +29,7 @@ describe('Billing Accounts - Setup - View Select Account Validator', () => {
 
     describe('and that option is "another', () => {
       it('returns with no errors', () => {
-        const result = ViewSelectAccountValidator.go(payload)
+        const result = SelectAccountValidator.go(payload)
 
         expect(result.value).to.exist()
         expect(result.error).not.to.exist()
@@ -43,7 +43,7 @@ describe('Billing Accounts - Setup - View Select Account Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ViewSelectAccountValidator.go(payload)
+      const result = SelectAccountValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()

@@ -20,7 +20,7 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} billingAccountId - The UUID of the billing account
  *
- * @returns {Promise<string>} the url to redirect to
+ * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(billingAccountId) {
   const data = { billingAccountId }

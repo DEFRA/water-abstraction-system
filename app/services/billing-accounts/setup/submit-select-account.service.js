@@ -6,9 +6,10 @@
  * @module SubmitSelectAccountService
  */
 
-const ViewSelectAccountPresenter = require('../../../presenters/billing-accounts/setup/view-select-account.presenter.js')
-const ViewSelectAccountValidator = require('../../../validators/billing-accounts/setup/view-select-account.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const SelectAccountPresenter = require('../../../presenters/billing-accounts/setup/select-account.presenter.js')
+const SelectAccountValidator = require('../../../validators/billing-accounts/setup/select-account.validator.js')
+
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -32,7 +33,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = ViewSelectAccountPresenter.go(session)
+  const pageData = SelectAccountPresenter.go(session)
 
   return {
     error: validationResult,
@@ -47,7 +48,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload) {
-  const validationResult = ViewSelectAccountValidator.go(payload)
+  const validationResult = SelectAccountValidator.go(payload)
 
   return formatValidationResult(validationResult)
 }

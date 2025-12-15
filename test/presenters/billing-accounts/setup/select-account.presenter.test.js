@@ -10,7 +10,7 @@ const { expect } = Code
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const ViewSelectAccountPresenter = require('../../../../app/presenters/billing-accounts/setup/view-select-account.presenter.js')
+const SelectAccountPresenter = require('../../../../app/presenters/billing-accounts/setup/select-account.presenter.js')
 
 describe('Billing Accounts - Setup - Select Account Presenter', () => {
   let session
@@ -23,7 +23,7 @@ describe('Billing Accounts - Setup - Select Account Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ViewSelectAccountPresenter.go(session)
+      const result = SelectAccountPresenter.go(session)
 
       expect(result).to.equal({
         backLink: {

@@ -3,7 +3,7 @@
 /**
  * Validates data submitted for the `/billing-accounts/setup/{billingAccountId}/select-account` page
  *
- * @module ViewSelectAccountValidator
+ * @module SelectAccountValidator
  */
 
 const Joi = require('joi')

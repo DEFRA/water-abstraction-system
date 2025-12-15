@@ -6,8 +6,8 @@
  */
 
 const InitiateSessionService = require('../services/billing-accounts/setup/initiate-session.service.js')
-const ViewSelectAccountService = require('../services/billing-accounts/setup/view-select-account.service.js')
 const SubmitSelectAccountService = require('../services/billing-accounts/setup/submit-select-account.service.js')
+const ViewSelectAccountService = require('../services/billing-accounts/setup/view-select-account.service.js')
 
 async function setup(request, h) {
   const { billingAccountId } = request.params

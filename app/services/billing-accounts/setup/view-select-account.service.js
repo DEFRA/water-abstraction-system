@@ -6,7 +6,7 @@
  * @module ViewSelectAccountService
  */
 
-const ViewSelectAccountPresenter = require('../../../presenters/billing-accounts/setup/view-select-account.presenter.js')
+const SelectAccountPresenter = require('../../../presenters/billing-accounts/setup/select-account.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -19,7 +19,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const pageData = ViewSelectAccountPresenter.go(session)
+  const pageData = SelectAccountPresenter.go(session)
 
   return {
     ...pageData
