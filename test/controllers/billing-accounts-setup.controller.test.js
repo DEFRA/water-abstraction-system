@@ -15,7 +15,7 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/billing-accounts/setup/initiate-session.service.js')
-const SelectAccountService = require('../../app/services/billing-accounts/setup/select-account.service.js')
+const SelectAccountService = require('../../app/services/billing-accounts/setup/view-select-account.service.js')
 const SubmitSelectAccountService = require('../../app/services/billing-accounts/setup/submit-select-account.service.js')
 
 // For running our service
@@ -44,19 +44,17 @@ describe('Billing Accounts Setup controller', () => {
     Sinon.restore()
   })
 
-  describe('/billing-accounts/setup/{billingAccountId}/initiate-session', () => {
+  describe('/billing-accounts/setup/{billingAccountId}', () => {
     describe('POST', () => {
       beforeEach(() => {
         billingAccountId = generateUUID()
         sessionId = generateUUID()
-        options = _postRequestOptions(`/billing-accounts/setup/${billingAccountId}/initiate-session`)
+        options = _postRequestOptions(`/billing-accounts/setup/${billingAccountId}`)
       })
 
       describe('when this url ', () => {
         beforeEach(() => {
-          Sinon.stub(InitiateSessionService, 'go').resolves(
-            `/system/billing-accounts/setup/${sessionId}/select-account`
-          )
+          Sinon.stub(InitiateSessionService, 'go').resolves({ id: sessionId })
         })
 
         it('creates a new session and redirects to the "Who should the bills go to" page', async () => {

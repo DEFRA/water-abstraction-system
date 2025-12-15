@@ -6,23 +6,15 @@
  */
 
 const InitiateSessionService = require('../services/billing-accounts/setup/initiate-session.service.js')
-const SelectAccountService = require('../services/billing-accounts/setup/select-account.service.js')
+const ViewSelectAccountService = require('../services/billing-accounts/setup/view-select-account.service.js')
 const SubmitSelectAccountService = require('../services/billing-accounts/setup/submit-select-account.service.js')
 
-async function viewSelectAccount(request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await SelectAccountService.go(sessionId)
-
-  return h.view(`billing-accounts/setup/select-account.njk`, pageData)
-}
-
-async function submitInitiateSession(request, h) {
+async function setup(request, h) {
   const { billingAccountId } = request.params
 
-  const redirectUrl = await InitiateSessionService.go(billingAccountId)
+  const session = await InitiateSessionService.go(billingAccountId)
 
-  return h.redirect(redirectUrl)
+  return h.redirect(`/system/billing-accounts/setup/${session.id}/select-account`)
 }
 
 async function submitSelectAccount(request, h) {
@@ -44,8 +36,16 @@ async function submitSelectAccount(request, h) {
   return h.redirect(`/system/billing-accounts/setup/${sessionId}/select-existing-account`)
 }
 
+async function viewSelectAccount(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewSelectAccountService.go(sessionId)
+
+  return h.view(`billing-accounts/setup/select-account.njk`, pageData)
+}
+
 module.exports = {
-  viewSelectAccount,
+  setup,
   submitSelectAccount,
-  submitInitiateSession
+  viewSelectAccount,
 }

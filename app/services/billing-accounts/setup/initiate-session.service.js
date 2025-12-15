@@ -25,9 +25,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(billingAccountId) {
   const data = { billingAccountId }
 
-  const { id: sessionId } = await SessionModel.query().insert({ data }).returning('id')
-
-  return `/system/billing-accounts/setup/${sessionId}/select-account`
+  return SessionModel.query().insert({ data }).returning('id')
 }
 
 module.exports = {

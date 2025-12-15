@@ -17,7 +17,7 @@ function go(session) {
 
   return {
     backLink: {
-      href: `/billing-accounts/${billingAccountId}`,
+      href: `/system/billing-accounts/${billingAccountId}`,
       text: 'Back'
     },
     pageTitle: 'Who should the bills go to?'

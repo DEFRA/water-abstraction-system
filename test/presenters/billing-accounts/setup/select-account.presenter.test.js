@@ -7,26 +7,30 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Thing under test
-const SelectAccountPresenter = require('../../../../app/presenters/billing-accounts/setup/select-account.presenter.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
-describe('Select Account Presenter', () => {
+// Thing under test
+const ViewSelectAccountPresenter = require('../../../../app/presenters/billing-accounts/setup/view-select-account.presenter.js')
+
+describe('Billing Accounts - Setup - Select Account Presenter', () => {
   let session
 
   beforeEach(() => {
-    session = {}
+    session = {
+      billingAccountId: generateUUID()
+    }
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = SelectAccountPresenter.go(session)
+      const result = ViewSelectAccountPresenter.go(session)
 
       expect(result).to.equal({
         backLink: {
-          href: '',
+          href: `/system/billing-accounts/${session.billingAccountId}`,
           text: 'Back'
         },
-        pageTitle: ''
+        pageTitle: 'Who should the bills go to?'
       })
     })
   })

@@ -5,9 +5,9 @@ const BillingAccountsSetupController = require('../controllers/billing-accounts-
 const routes = [
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{billingAccountId}/initiate-session',
+    path: '/billing-accounts/setup/{billingAccountId}',
     options: {
-      handler: BillingAccountsSetupController.submitInitiateSession,
+      handler: BillingAccountsSetupController.setup,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
