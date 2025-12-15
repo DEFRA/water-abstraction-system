@@ -37,8 +37,11 @@ describe('Licence Versions - View presenter', () => {
 
     licenceVersion = LicenceVersionModel.fromJson({
       administrative: null,
+      applicationNumber: null,
       createdAt: new Date('2022-01-01'),
+      endDate: null,
       id: generateUUID(),
+      issueDate: null,
       licence,
       licenceVersionPurposes: [],
       modLogs: [
@@ -72,6 +75,12 @@ describe('Licence Versions - View presenter', () => {
         changeType: 'licence issued',
         conditionTypes: [],
         errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
+        licenceDetails: {
+          applicationNumber: null,
+          endDate: null,
+          issueDate: null,
+          startDate: '1 January 2022'
+        },
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
         pageTitleCaption: `Licence ${licence.licenceRef}`,
@@ -162,6 +171,40 @@ describe('Licence Versions - View presenter', () => {
           displayTitle: 'Political cessation condition'
         }
       ])
+    })
+  })
+
+  describe('the "licenceDetails" property', () => {
+    describe('when there are licence details', () => {
+      beforeEach(() => {
+        licenceVersionData.licenceVersion.issueDate = '2023-03-03'
+        licenceVersionData.licenceVersion.endDate = '2024-02-01'
+        licenceVersionData.licenceVersion.applicationNumber = 'R.1'
+      })
+
+      it('returns the licence details', () => {
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+
+        expect(result.licenceDetails).to.equal({
+          applicationNumber: 'R.1',
+          endDate: '1 February 2024',
+          issueDate: '3 March 2023',
+          startDate: '1 January 2022'
+        })
+      })
+    })
+
+    describe('when there are licence details missing', () => {
+      it('returns the licence details', () => {
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+
+        expect(result.licenceDetails).to.equal({
+          applicationNumber: null,
+          endDate: null,
+          issueDate: null,
+          startDate: '1 January 2022'
+        })
+      })
     })
   })
 

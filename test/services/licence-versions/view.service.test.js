@@ -40,8 +40,11 @@ describe('Licence Versions - View service', () => {
 
     licenceVersion = LicenceVersionModel.fromJson({
       administrative: null,
+      applicationNumber: null,
       createdAt: new Date('2022-01-01'),
+      endDate: null,
       id: generateUUID(),
+      issueDate: null,
       licence,
       licenceVersionPurposes: [],
       modLogs: [{ id: generateUUID(), reasonDescription: 'Licence Holder Name/Address Change', userId: 'JOBSWORTH01' }],
@@ -75,6 +78,12 @@ describe('Licence Versions - View service', () => {
         changeType: 'licence issued',
         conditionTypes: [],
         errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
+        licenceDetails: {
+          applicationNumber: null,
+          endDate: null,
+          issueDate: null,
+          startDate: '1 January 2022'
+        },
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
         pageTitleCaption: `Licence ${licence.licenceRef}`,
