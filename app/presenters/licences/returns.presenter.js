@@ -5,8 +5,7 @@
  * @module ReturnsPresenter
  */
 
-const { formatLongDate, formatPurposes, formatReturnLogStatus } = require('../base.presenter.js')
-const { defaultPageSize } = require('../../../config/database.config.js')
+const { formatLongDate, formatPurposes, formatReturnLogStatus, paginationShowingXofY } = require('../base.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/returns` view licence returns page
@@ -34,7 +33,7 @@ function go(returnLogs, hasRequirements, licence, totalReturns) {
     noReturnsMessage: _noReturnsMessage(hasReturns, hasRequirements),
     pageTitle: 'Returns',
     pageTitleCaption: `Licence ${licenceRef}`,
-    tableCaption: _tableCaption(totalReturns, returns.length)
+    tableCaption: paginationShowingXofY(totalReturns, returns.length, 'returns')
   }
 }
 
@@ -64,14 +63,6 @@ function _returns(returns) {
       status: formatReturnLogStatus(returnLog)
     }
   })
-}
-
-function _tableCaption(totalAmount, currentAmount) {
-  if (totalAmount > defaultPageSize) {
-    return `Showing ${currentAmount} of ${totalAmount} returns`
-  }
-
-  return `Showing all ${totalAmount} returns`
 }
 
 module.exports = {

@@ -1,6 +1,7 @@
 'use strict'
 
 const { convertFromCubicMetres, today } = require('../lib/general.lib.js')
+const { defaultPageSize } = require('../../config/database.config.js')
 const { noticeMappings } = require('../lib/static-lookups.lib.js')
 
 const DUE_PERIOD_DAYS = 27
@@ -535,6 +536,20 @@ function leftPadZeroes(number, length) {
 }
 
 /**
+ *
+ * @param totalAmount
+ * @param currentAmount
+ * @param message
+ */
+function paginationShowingXofY(totalAmount, currentAmount, message) {
+  if (totalAmount > defaultPageSize) {
+    return `Showing ${currentAmount} of ${totalAmount} ${message}`
+  }
+
+  return `Showing all ${totalAmount} ${message}`
+}
+
+/**
  * Convert a string to sentence case by lowercasing all characters then capitalizing the first letter
  *
  * Will work for strings containing multiple words or only one.
@@ -595,6 +610,7 @@ module.exports = {
   formatValidationResult,
   formatValueUnit,
   leftPadZeroes,
+  paginationShowingXofY,
   sentenceCase,
   titleCase
 }
