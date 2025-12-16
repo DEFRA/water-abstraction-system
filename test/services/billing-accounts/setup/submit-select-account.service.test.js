@@ -7,9 +7,8 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-
 // Test helpers
+const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -22,7 +21,7 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
 
   beforeEach(async () => {
     sessionData = {
-      billingAccountId: generateUUID()
+      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
 
     session = await SessionHelper.add({ data: sessionData })
@@ -44,10 +43,12 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.data).to.equal({
-        accountSelected: 'customer',
-        billingAccountId: sessionData.billingAccountId
-      })
+      expect(refreshedSession.data).to.equal(
+        {
+          accountSelected: 'customer'
+        },
+        { skip: ['billingAccount'] }
+      )
     })
 
     it('returns the correct details the controller needs to redirect the journey', async () => {
@@ -72,9 +73,9 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
       const refreshedSession = await session.$query()
 
       expect(refreshedSession.data).to.equal({
-        accountSelected: 'another',
-        billingAccountId: sessionData.billingAccountId
-      })
+          accountSelected: 'another'
+        },
+        { skip: ['billingAccount'] })
     })
 
     it('returns the correct details the controller needs to redirect the journey', async () => {

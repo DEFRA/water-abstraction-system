@@ -33,7 +33,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = SelectAccountPresenter.go(session)
+  const pageData = _submissionData(session, payload)
 
   return {
     error: validationResult,
@@ -45,6 +45,12 @@ async function _save(session, payload) {
   session.accountSelected = payload.accountSelected
 
   return session.$update()
+}
+
+async function _submissionData(session, payload) {
+  session.accountSelected = payload.accountSelected
+
+  return SelectAccountPresenter.go(session)
 }
 
 function _validate(payload) {

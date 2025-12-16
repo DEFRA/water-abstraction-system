@@ -36,7 +36,7 @@ import('marked').then((mod) => {
   global.GlobalMarked = mod.marked
 })
 
-const { enableLicenceHistoryView } = require('../../config/feature-flags.config.js')
+const { enableBillingAccountChangeAddress, enableLicenceHistoryView } = require('../../config/feature-flags.config.js')
 
 const ViewsPlugin = {
   plugin: Vision,
@@ -123,6 +123,7 @@ function context(request) {
       permission: request.auth.credentials?.permission
     },
     featureToggles: {
+      enableBillingAccountChangeAddress,
       enableLicenceHistoryView
     },
     navigationLinks: _navigationLinks(request.auth)
