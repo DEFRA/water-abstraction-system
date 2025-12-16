@@ -8,25 +8,25 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ContactsPresenter = require('../../../app/presenters/customers/contacts.presenter.js')
+const LicencesPresenter = require('../../../app/presenters/customers/licences.presenter.js')
 
-describe('Customers - Contacts Presenter', () => {
-  let contacts
+describe('Customers - Licences Presenter', () => {
+  let licences
 
   beforeEach(() => {
-    contacts = []
+    licences = []
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactsPresenter.go(contacts)
+      const result = LicencesPresenter.go(licences)
 
       expect(result).to.equal({
         backLink: {
           href: '/',
           text: 'Back to search'
         },
-        pageTitle: 'Contacts'
+        pageTitle: 'Licences'
       })
     })
   })
