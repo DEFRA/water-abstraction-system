@@ -27,7 +27,7 @@ describe('Users - Submit profile details service', () => {
     // NOTE: We stub the UserModel `findById().patch()` query to avoid hitting the DB as part of the test. It is
     // sufficiently simple running it would just be testing Objection.js and not our logic.
     patchStub = Sinon.stub().resolves()
-    findByIdStub = Sinon.stub().returns({ patch: patchStub })
+    findByIdStub = Sinon.stub().returns({ patch: patchStub, whereNull: Sinon.stub().returnsThis() })
     userModelQueryStub = Sinon.stub(UserModel, 'query').returns({ findById: findByIdStub })
     yarStub = { flash: Sinon.stub() }
   })
@@ -51,10 +51,10 @@ describe('Users - Submit profile details service', () => {
       it('saves the user details', async () => {
         const result = await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
-        expect(patchStub.calledOnce).to.be.true()
-        expect(findByIdStub.calledOnceWith(userId)).to.be.true()
+        expect(patchStub.called).to.be.true()
+        expect(findByIdStub.calledWith(userId)).to.be.true()
         expect(
-          patchStub.calledOnceWith({
+          patchStub.calledWith({
             'userData:contactDetails.address': payload.address,
             'userData:contactDetails.email': payload.email,
             'userData:contactDetails.jobTitle': payload.jobTitle,
@@ -80,7 +80,7 @@ describe('Users - Submit profile details service', () => {
           await SubmitProfileDetailsService.go(userId, {}, yarStub)
 
           expect(
-            patchStub.calledOnceWith({
+            patchStub.calledWith({
               'userData:contactDetails.address': '',
               'userData:contactDetails.email': '',
               'userData:contactDetails.jobTitle': '',

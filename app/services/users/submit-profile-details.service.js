@@ -5,6 +5,8 @@
  * @module SubmitProfileDetailsService
  */
 
+const { ref } = require('objection')
+
 const ProfileDetailsValidator = require('../../validators/users/profile-details.validator.js')
 const UserModel = require('../../models/user.model.js')
 const { formatValidationResult } = require('../../presenters/base.presenter.js')
@@ -48,6 +50,13 @@ async function go(userId, payload, yar) {
 
 async function _save(userId, payload) {
   const { address, email, jobTitle, name, tel } = payload
+
+  // Ensure userData and contactDetails objects exist - if they don't, the patch just silently fails
+  await UserModel.query().findById(userId).whereNull('userData').patch({ userData: {} })
+  await UserModel.query()
+    .findById(userId)
+    .whereNull(ref('userData:contactDetails'))
+    .patch({ 'userData:contactDetails': {} })
 
   return UserModel.query()
     .findById(userId)
