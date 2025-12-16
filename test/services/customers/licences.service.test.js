@@ -11,26 +11,26 @@ const { expect } = Code
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const ContactsService = require('../../../app/services/customers/contacts.service.js')
+const LicencesService = require('../../../app/services/customers/licences.service.js')
 
-describe('Customers - Contacts Service', () => {
+describe('Customers - Licences Service', () => {
   let customerId
 
-  beforeEach(async () => {
+  beforeEach(() => {
     customerId = generateUUID()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ContactsService.go(customerId)
+      const result = await LicencesService.go(customerId)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
+        activeTab: 'search',
         backLink: {
           href: '/',
           text: 'Back to search'
         },
-        pageTitle: 'Contacts'
+        pageTitle: 'Licences'
       })
     })
   })

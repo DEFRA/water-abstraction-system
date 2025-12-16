@@ -10,6 +10,14 @@ const routes = [
       handler: CustomersController.viewContact,
       auth: {}
     }
+  },
+  {
+    method: 'GET',
+    path: '/customers/{id}/licences',
+    options: {
+      handler: CustomersController.viewLicences,
+      auth: {}
+    }
   }
 ]
 
