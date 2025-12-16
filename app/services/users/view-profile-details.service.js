@@ -5,15 +5,8 @@
  * @module ViewProfileDetailsService
  */
 
-const { ref } = require('objection')
-
-const UserModel = require('../../models/user.model.js')
-
-const NAVIGATION_LINKS = [
-  { active: true, href: '/system/users/me/profile-details', text: 'Profile details' },
-  { href: '/account/update-password', text: 'Change password' },
-  { href: '/signout', text: 'Sign out' }
-]
+const FetchUserService = require('./fetch-user.service.js')
+const ProfileDetailsPresenter = require('../../presenters/users/profile-details.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/users/me/profile-details` page
@@ -28,23 +21,15 @@ const NAVIGATION_LINKS = [
  * @returns {Promise<object>} The view data for the profile details page
  */
 async function go(userId, yar) {
-  const profileDetails = await UserModel.query()
-    .findById(userId)
-    .select([
-      ref('userData:contactDetails.address').castText().as('address'),
-      ref('userData:contactDetails.email').castText().as('email'),
-      ref('userData:contactDetails.jobTitle').castText().as('jobTitle'),
-      ref('userData:contactDetails.name').castText().as('name'),
-      ref('userData:contactDetails.tel').castText().as('tel')
-    ])
+  const profileDetails = await FetchUserService.go(userId)
 
   const notification = yar.flash('notification')[0]
 
+  const pageData = ProfileDetailsPresenter.go(profileDetails)
+
   return {
-    navigationLinks: NAVIGATION_LINKS,
     notification,
-    pageTitle: 'Profile details',
-    ...profileDetails
+    ...pageData
   }
 }
 
