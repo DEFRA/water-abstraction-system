@@ -72,10 +72,12 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.data).to.equal({
+      expect(refreshedSession.data).to.equal(
+        {
           accountSelected: 'another'
         },
-        { skip: ['billingAccount'] })
+        { skip: ['billingAccount'] }
+      )
     })
 
     it('returns the correct details the controller needs to redirect the journey', async () => {
