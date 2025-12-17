@@ -11,11 +11,11 @@ const LicencesPresenter = require('../../presenters/customers/licences.presenter
 /**
  * Orchestrates fetching and presenting the data for the 'customers/{id}/licences' page
  *
- * @param {string} _licenceId
+ * @param {string} _customerId - the UUID of the customer
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(_licenceId) {
+async function go(_customerId) {
   const pageData = LicencesPresenter.go()
 
   return {

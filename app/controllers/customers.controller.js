@@ -5,8 +5,17 @@
  * @module CustomersController
  */
 
+const BillingAccountsService = require('../services/customers/billing-accounts.service.js')
 const ContactService = require('../services/customers/contacts.service.js')
 const LicencesService = require('../services/customers/licences.service.js')
+
+async function viewBillingAccounts(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await BillingAccountsService.go(sessionId)
+
+  return h.view(`customers/billing-accounts.njk`, pageData)
+}
 
 async function viewContact(request, h) {
   const { id } = request.params
@@ -25,6 +34,7 @@ async function viewLicences(request, h) {
 }
 
 module.exports = {
+  viewBillingAccounts,
   viewContact,
   viewLicences
 }
