@@ -28,7 +28,7 @@ class ReturnSubmissionModel extends BaseModel {
         modelClass: 'return-log.model',
         join: {
           from: 'returnSubmissions.returnLogId',
-          to: 'returnLogs.id'
+          to: 'returnLogs.returnId'
         }
       },
       returnSubmissionLines: {
