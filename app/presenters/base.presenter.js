@@ -537,16 +537,16 @@ function leftPadZeroes(number, length) {
 
 /**
  *
- * @param totalAmount
- * @param currentAmount
- * @param message
+ * @param {number} paginationTotal - the total count from the fetch requests 'total'
+ * @param {number} currentAmount - the current amount of the items (the last page would show 'Showing 7 of 32')
+ * @param {string} message - the message to add to the end of the string (Showing x of y 'returns')
  */
-function paginationShowingXofY(totalAmount, currentAmount, message) {
-  if (totalAmount > defaultPageSize) {
-    return `Showing ${currentAmount} of ${totalAmount} ${message}`
+function paginationShowingXofY(paginationTotal, currentAmount, message) {
+  if (paginationTotal > defaultPageSize) {
+    return `Showing ${currentAmount} of ${paginationTotal} ${message}`
   }
 
-  return `Showing all ${totalAmount} ${message}`
+  return `Showing all ${paginationTotal} ${message}`
 }
 
 /**

@@ -5,7 +5,7 @@
  * @module ViewNoticePresenter
  */
 
-const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
+const { formatLongDate, formatNoticeType, paginationShowingXofY } = require('../base.presenter.js')
 
 /**
  * Formats data for the 'notices/{id}' page
@@ -28,7 +28,7 @@ function go(notice, notifications, totalNumber) {
     reference: notice.referenceCode,
     sentBy: notice.issuer,
     sentDate: formatLongDate(notice.createdAt),
-    showingDeclaration: _showingDeclaration(notifications.length, totalNumber),
+    showingDeclaration: paginationShowingXofY(totalNumber, notifications.length, 'notifications'),
     status: notice.overallStatus
   }
 }
@@ -67,14 +67,6 @@ function _recipient(notification) {
     personalisation['address_line_7'],
     personalisation['postcode']
   ].filter(Boolean)
-}
-
-function _showingDeclaration(numberDisplayed, totalNumber) {
-  if (totalNumber > numberDisplayed) {
-    return `Showing ${numberDisplayed} of ${totalNumber} notifications`
-  }
-
-  return `Showing all ${totalNumber} notifications`
 }
 
 module.exports = {

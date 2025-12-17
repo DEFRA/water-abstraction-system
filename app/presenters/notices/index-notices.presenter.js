@@ -5,7 +5,7 @@
  * @module IndexNoticesPresenter
  */
 
-const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
+const { formatLongDate, formatNoticeType, paginationShowingXofY } = require('../base.presenter.js')
 
 /**
  * Formats data for the `/notices` page
@@ -26,7 +26,7 @@ function go(notices, totalNumber, auth) {
     notices: _noticeRowData(notices),
     pageSubHeading: 'View a notice',
     pageTitle: 'Notices',
-    tableCaption: _tableCaption(notices.length, totalNumber)
+    tableCaption: paginationShowingXofY(totalNumber, notices.length, 'notices')
   }
 }
 
@@ -64,14 +64,6 @@ function _noticeRowData(notices) {
       type: formatNoticeType(subtype, alertType)
     }
   })
-}
-
-function _tableCaption(numberDisplayed, totalNumber) {
-  if (totalNumber > numberDisplayed) {
-    return `Showing ${numberDisplayed} of ${totalNumber} notices`
-  }
-
-  return `Showing all ${totalNumber} notices`
 }
 
 module.exports = {
