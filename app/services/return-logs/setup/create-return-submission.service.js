@@ -23,7 +23,7 @@ const { generateUUID } = require('../../../lib/general.lib.js')
  * @returns {Promise<module:ReturnSubmissionModel>} - The created return submission
  */
 async function go(metadata, session, timestamp, user, trx = null) {
-  const { version, previousVersion } = await _determineVersionNumbers(session.returnLogId, trx)
+  const { version, previousVersion } = await _determineVersionNumbers(session.returnId, trx)
 
   const returnSubmission = {
     id: generateUUID(),
@@ -33,23 +33,24 @@ async function go(metadata, session, timestamp, user, trx = null) {
     nilReturn: session.journey === 'nilReturn',
     metadata,
     notes: session.note?.content,
-    returnLogId: session.returnLogId,
+    returnId: session.returnLogId,
+    returnLogId: session.returnId,
     userId: user.username,
     userType: 'internal',
     version
   }
 
   if (previousVersion) {
-    await _markPreviousVersionAsSuperseded(session.returnLogId, previousVersion, trx)
+    await _markPreviousVersionAsSuperseded(session.returnId, previousVersion, trx)
   }
 
   return ReturnSubmissionModel.query(trx).insert(returnSubmission)
 }
 
-async function _determineVersionNumbers(returnLogId, trx) {
+async function _determineVersionNumbers(returnId, trx) {
   const { previousVersion } = await ReturnSubmissionModel.query(trx)
     .max('version as previousVersion')
-    .where('returnLogId', returnLogId)
+    .where('returnLogId', returnId)
     .first()
 
   return {
@@ -58,10 +59,10 @@ async function _determineVersionNumbers(returnLogId, trx) {
   }
 }
 
-async function _markPreviousVersionAsSuperseded(returnLogId, version, trx) {
+async function _markPreviousVersionAsSuperseded(returnId, version, trx) {
   await ReturnSubmissionModel.query(trx)
     .patch({ current: false })
-    .where('returnLogId', returnLogId)
+    .where('returnLogId', returnId)
     .where('version', version)
 }
 
