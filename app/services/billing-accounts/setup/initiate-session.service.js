@@ -5,6 +5,7 @@
  * @module InitiateSessionService
  */
 
+const FetchViewBillingAccountService = require('../fetch-view-billing-account.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -23,7 +24,11 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(billingAccountId) {
-  const data = { billingAccountId }
+  const { billingAccount } = await FetchViewBillingAccountService.go(billingAccountId)
+
+  const data = {
+    billingAccount
+  }
 
   return SessionModel.query().insert({ data }).returning('id')
 }
