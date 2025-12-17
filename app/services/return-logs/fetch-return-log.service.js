@@ -84,15 +84,14 @@ async function _fetch(returnId, selectedReturnSubmission) {
 async function _fetchAllReturnSubmissions(returnId) {
   return ReturnSubmissionModel.query()
     .select([
-      'returnSubmissions.createdAt',
-      'returnSubmissions.id',
-      'returnSubmissions.notes',
-      'returnSubmissions.version',
-      'returnSubmissions.userId'
+      'createdAt',
+      'id',
+      'notes',
+      'version',
+      'userId'
     ])
-    .joinRelated('returnLog')
-    .where('returnLog.returnId', returnId)
-    .orderBy('returnSubmissions.version', 'desc')
+    .where('returnLogId', returnId)
+    .orderBy('version', 'desc')
 }
 
 function _returnSubmission(allReturnSubmissions, version) {
