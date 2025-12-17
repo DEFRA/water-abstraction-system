@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the 'customers/{id}/contacts' page
- * @module ContactsPresenter
+ * Formats data for the 'customers/{id}/licences' page
+ * @module LicencesPresenter
  */
 
 /**
- * Formats data for the 'customers/{id}/contacts' page
+ * Formats data for the 'customers/{id}/licences' page
  *
  * @returns {object} The data formatted for the view template
  */
@@ -16,7 +16,7 @@ function go() {
       href: '/',
       text: 'Back to search'
     },
-    pageTitle: 'Contacts'
+    pageTitle: 'Licences'
   }
 }
 
