@@ -19,7 +19,8 @@ async function go(_customerId) {
   const pageData = LicencesPresenter.go()
 
   return {
-    activeTab: 'search',
+    activeNavBar: 'search',
+    activeSecondaryNav: 'licences',
     ...pageData
   }
 }

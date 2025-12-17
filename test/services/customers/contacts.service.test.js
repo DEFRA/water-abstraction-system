@@ -26,6 +26,7 @@ describe('Customers - Contacts Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        activeSecondaryNav: 'contacts',
         backLink: {
           href: '/',
           text: 'Back to search'
