@@ -1,0 +1,50 @@
+{% extends 'layout.njk' %}
+
+{% set mainClasses = 'sub-navigation-layout-main' %}
+
+{% block beforeContent %}
+{{ super() }}
+
+<div class="govuk-grid-row govuk-!-margin-top-6">
+  <div class="govuk-grid-column-one-quarter">
+    <nav class="x-govuk-sub-navigation" aria-labelledby="sub-navigation-heading">
+      <h2 class="govuk-visually-hidden" id="sub-navigation-heading">Pages in this section</h2>
+      <ul class="x-govuk-sub-navigation__section">
+        <li
+          class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'licences' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="licences"
+              {% if activeSecondaryNav === 'licences' %}aria-current="page"{% endif %}>
+            Licences
+          </a>
+        </li>
+
+        <li
+          class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'billing-accounts' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="billing-accounts"
+              {% if activeSecondaryNav === 'billing-accounts' %}aria-current="page"{% endif %}>
+              Billing accounts
+          </a>
+        </li>
+
+        <li
+          class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'contacts' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+          <a class="x-govuk-sub-navigation__link" href="contacts"
+             {% if activeSecondaryNav === 'contacts' %}aria-current="page"{% endif %}>
+            Contacts
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-column-three-quarters">
+    {{ super() }}
+
+    {% block subPageContent %}
+    {% endblock %}
+  </div>
+</div>
+{% endblock %}
