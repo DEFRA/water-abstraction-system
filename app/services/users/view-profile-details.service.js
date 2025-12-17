@@ -5,8 +5,10 @@
  * @module ViewProfileDetailsService
  */
 
-const FetchUserService = require('./fetch-user.service.js')
+const { ref } = require('objection')
+
 const ProfileDetailsPresenter = require('../../presenters/users/profile-details.presenter.js')
+const UserModel = require('../../models/user.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/users/me/profile-details` page
@@ -21,7 +23,7 @@ const ProfileDetailsPresenter = require('../../presenters/users/profile-details.
  * @returns {Promise<object>} The view data for the profile details page
  */
 async function go(userId, yar) {
-  const profileDetails = await FetchUserService.go(userId)
+  const profileDetails = await _fetchProfileDetails(userId)
 
   const notification = yar.flash('notification')[0]
 
@@ -31,6 +33,18 @@ async function go(userId, yar) {
     notification,
     ...pageData
   }
+}
+
+async function _fetchProfileDetails(userId) {
+  return UserModel.query()
+    .findById(userId)
+    .select([
+      ref('userData:contactDetails.address').castText().as('address'),
+      ref('userData:contactDetails.email').castText().as('email'),
+      ref('userData:contactDetails.jobTitle').castText().as('jobTitle'),
+      ref('userData:contactDetails.name').castText().as('name'),
+      ref('userData:contactDetails.tel').castText().as('tel')
+    ])
 }
 
 module.exports = {
