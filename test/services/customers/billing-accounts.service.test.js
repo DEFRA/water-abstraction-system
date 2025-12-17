@@ -26,6 +26,7 @@ describe('Customers - Billing Accounts Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'search',
+        activeSecondaryNav: 'billing-accounts',
         backLink: {
           href: '/',
           text: 'Back to search'

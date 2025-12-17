@@ -25,7 +25,8 @@ describe('Customers - Licences Service', () => {
       const result = await LicencesService.go(customerId)
 
       expect(result).to.equal({
-        activeTab: 'search',
+        activeNavBar: 'search',
+        activeSecondaryNav: 'licences',
         backLink: {
           href: '/',
           text: 'Back to search'

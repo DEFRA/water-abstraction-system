@@ -20,6 +20,7 @@ async function go(_customerId) {
 
   return {
     activeNavBar: 'search',
+    activeSecondaryNav: 'contacts',
     ...pageData
   }
 }
