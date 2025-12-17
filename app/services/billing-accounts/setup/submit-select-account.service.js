@@ -33,7 +33,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = _submissionData(session, payload)
+  const pageData = await _submissionData(session, payload)
 
   return {
     error: validationResult,
