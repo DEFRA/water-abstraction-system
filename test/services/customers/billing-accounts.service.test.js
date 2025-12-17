@@ -11,9 +11,9 @@ const { expect } = Code
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const ContactsService = require('../../../app/services/customers/contacts.service.js')
+const BillingAccountsService = require('../../../app/services/customers/billing-accounts.service.js')
 
-describe('Customers - Contacts Service', () => {
+describe('Customers - Billing Accounts Service', () => {
   let customerId
 
   beforeEach(async () => {
@@ -22,7 +22,7 @@ describe('Customers - Contacts Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ContactsService.go(customerId)
+      const result = await BillingAccountsService.go(customerId)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -30,7 +30,7 @@ describe('Customers - Contacts Service', () => {
           href: '/',
           text: 'Back to search'
         },
-        pageTitle: 'Contacts'
+        pageTitle: 'Billing accounts'
       })
     })
   })
