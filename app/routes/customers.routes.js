@@ -5,6 +5,14 @@ const CustomersController = require('../controllers/customers.controller.js')
 const routes = [
   {
     method: 'GET',
+    path: '/customers/{id}/billing-accounts',
+    options: {
+      handler: CustomersController.viewBillingAccounts,
+      auth: {}
+    }
+  },
+  {
+    method: 'GET',
     path: '/customers/{id}/contacts',
     options: {
       handler: CustomersController.viewContact,
