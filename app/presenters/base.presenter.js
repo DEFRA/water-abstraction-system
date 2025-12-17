@@ -536,10 +536,18 @@ function leftPadZeroes(number, length) {
 }
 
 /**
+ * Returns a human-readable pagination summary string.
  *
- * @param {number} paginationTotal - the total count from the fetch requests 'total'
- * @param {number} currentAmount - the current amount of the items (the last page would show 'Showing 7 of 32')
- * @param {string} message - the message to add to the end of the string (Showing x of y 'returns')
+ * If the total number of items exceeds the default page size (set in config),
+ * it returns a string in the form: "Showing X of Y <message>"
+ * Otherwise, it returns: "Showing all Y <message>"
+ *
+ * @param {number} paginationTotal - The total number of items available from the paginated request.
+ * @param {number} currentAmount - The number of items currently being shown (e.g. items on the current page).
+ * @param {string} message - A label appended to the end of the string (e.g. "returns", "results").
+ *
+ * @returns {string} A formatted pagination summary string.
+ *
  */
 function paginationShowingXofY(paginationTotal, currentAmount, message) {
   if (paginationTotal > defaultPageSize) {
