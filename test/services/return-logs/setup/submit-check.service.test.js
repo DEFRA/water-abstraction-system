@@ -52,7 +52,7 @@ describe('Return Logs Setup - Submit Check service', () => {
     })
 
     const initialReturnSubmission = await ReturnSubmissionHelper.add({
-      returnLogId: returnLog.id
+      returnLogId: returnLog.returnId
     })
 
     sessionData = {
