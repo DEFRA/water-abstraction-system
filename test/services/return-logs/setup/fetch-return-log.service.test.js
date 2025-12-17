@@ -66,8 +66,8 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
 
     describe('with multiple return submissions', () => {
       before(async () => {
-        await ReturnSubmissionHelper.add({ returnLogId: returnLog.id })
-        await ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 2 })
+        await ReturnSubmissionHelper.add({ returnLogId: returnLog.returnId })
+        await ReturnSubmissionHelper.add({ returnLogId: returnLog.returnId, version: 2 })
       })
 
       it('returns a count of the associated return submissions', async () => {
