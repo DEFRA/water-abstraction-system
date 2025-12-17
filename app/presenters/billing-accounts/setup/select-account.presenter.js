@@ -13,14 +13,17 @@
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
-  const { billingAccountId } = session
+  const { billingAccount } = session
 
   return {
+    accountSelected: session.accountSelected ?? null,
+    companyName: billingAccount.company.name,
     backLink: {
-      href: `/system/billing-accounts/${billingAccountId}`,
+      href: `/system/billing-accounts/${billingAccount.id}`,
       text: 'Back'
     },
-    pageTitle: 'Who should the bills go to?'
+    pageTitle: 'Who should the bills go to?',
+    pageTitleCaption: `Billing account ${billingAccount.accountNumber}`
   }
 }
 

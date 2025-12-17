@@ -3,34 +3,35 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-
 // Test helpers
+const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtures.js')
+
+// Things we need to stub
+const FetchViewBillingAccountService = require('../../../../app/services/billing-accounts/fetch-view-billing-account.service.js')
 
 // Thing under test
 const InitiateSessionService = require('../../../../app/services/billing-accounts/setup/initiate-session.service.js')
 
 describe('Billing Accounts - Setup - Initiate Session service', () => {
-  let billingAccountId
+  const billingAccountData = BillingAccountsFixture.billingAccount()
+  const billingAccount = billingAccountData.billingAccount
 
   describe('when called', () => {
     before(async () => {
-      billingAccountId = generateUUID()
+      Sinon.stub(FetchViewBillingAccountService, 'go').returns(billingAccountData)
     })
 
     it('creates a new session record containing details of the billing account', async () => {
-      const result = await InitiateSessionService.go(billingAccountId)
+      const result = await InitiateSessionService.go(billingAccount.id)
 
-      expect(result.data).to.equal(
-        {
-          billingAccountId
-        },
-        { skip: ['id'] }
-      )
+      expect(result.data).to.equal({
+        billingAccount
+      })
     })
   })
 })
