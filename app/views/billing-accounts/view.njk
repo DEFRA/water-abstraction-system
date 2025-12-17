@@ -28,6 +28,24 @@
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
   {# Billing account details #}
+  {% if featureToggles.enableBillingAccountChangeAddress  %}
+    {% set changeAddressLink %}
+      <form method="post" action="/system/billing-accounts/setup/{{billingAccountId}}">
+        <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+        {{ govukButton({
+          text: "Change address",
+          classes: "govuk-button--secondary",
+          preventDoubleClick: true
+        }) }}
+      </form>
+    {% endset %}
+  {% else %}
+    {% set changeAddressLink %}
+      <a class="govuk-button govuk-button--secondary" href="/billing-accounts/{{billingAccountId}}/change-address">Change address</a>
+    {% endset %}
+  {% endif %}
+
   <div class="govuk-body">
     {{ govukSummaryList({
       classes: "govuk-summary-list--no-border",
@@ -66,7 +84,7 @@
         },
         {
           value: {
-            html: '<a class="govuk-button govuk-button--secondary" href="/billing-accounts/' + billingAccountId + '/change-address">Change address</a>'
+            html: changeAddressLink
           }
         }
       ]

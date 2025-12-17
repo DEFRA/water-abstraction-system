@@ -7,7 +7,8 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+// Test helpers
+const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtures.js')
 
 // Thing under test
 const SelectAccountPresenter = require('../../../../app/presenters/billing-accounts/setup/select-account.presenter.js')
@@ -17,7 +18,7 @@ describe('Billing Accounts - Setup - Select Account Presenter', () => {
 
   beforeEach(() => {
     session = {
-      billingAccountId: generateUUID()
+      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
   })
 
@@ -26,11 +27,14 @@ describe('Billing Accounts - Setup - Select Account Presenter', () => {
       const result = SelectAccountPresenter.go(session)
 
       expect(result).to.equal({
+        accountSelected: null,
+        companyName: session.billingAccount.company.name,
         backLink: {
-          href: `/system/billing-accounts/${session.billingAccountId}`,
+          href: `/system/billing-accounts/${session.billingAccount.id}`,
           text: 'Back'
         },
-        pageTitle: 'Who should the bills go to?'
+        pageTitle: 'Who should the bills go to?',
+        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })
     })
   })
