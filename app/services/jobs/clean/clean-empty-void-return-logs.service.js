@@ -22,7 +22,7 @@ async function go() {
       .where('status', 'void')
       .whereNull('receivedDate')
       .whereNotExists(
-        ReturnSubmissionModel.query().select(1).whereColumn('returnSubmissions.returnLogId', 'returnLogs.id')
+        ReturnSubmissionModel.query().select(1).whereColumn('returnSubmissions.returnLogId', 'returnLogs.returnId')
       )
   } catch (error) {
     global.GlobalNotifier.omfg('Clean job failed', { job: 'clean-empty-void-return-logs' }, error)

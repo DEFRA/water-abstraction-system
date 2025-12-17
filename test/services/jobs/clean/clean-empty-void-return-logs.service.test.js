@@ -74,7 +74,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
     describe('when there is a void return with a submission', () => {
       beforeEach(async () => {
         returnLog = await ReturnLogHelper.add({ status: 'void' })
-        await ReturnSubmissionHelper.add({ returnLogId: returnLog.id })
+        await ReturnSubmissionHelper.add({ returnLogId: returnLog.returnId })
       })
 
       it('does not remove the return log and returns the count', async () => {
