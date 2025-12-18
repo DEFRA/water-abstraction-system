@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{billingAccountId}/select-account` page
+ * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/select-account` page
  *
  * @module ViewSelectAccountService
  */
@@ -10,7 +10,7 @@ const SelectAccountPresenter = require('../../../presenters/billing-accounts/set
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{billingAccountId}/select-account` page
+ * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/select-account` page
  *
  * @param {string} sessionId
  *

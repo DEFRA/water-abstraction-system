@@ -109,6 +109,11 @@ describe('Users - Submit profile details service', () => {
         const result = await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
         expect(result).to.equal({
+          address: '',
+          backLink: {
+            href: '/',
+            text: 'Go back to search'
+          },
           email: 'invalidtestemail',
           error: {
             email: {
@@ -121,6 +126,8 @@ describe('Users - Submit profile details service', () => {
               }
             ]
           },
+          jobTitle: '',
+          name: '',
           navigationLinks: [
             {
               active: true,
@@ -136,7 +143,8 @@ describe('Users - Submit profile details service', () => {
               text: 'Sign out'
             }
           ],
-          pageTitle: 'Profile details'
+          pageTitle: 'Profile details',
+          tel: ''
         })
       })
 

@@ -7,15 +7,11 @@
 
 const { ref } = require('objection')
 
+const ProfileDetailsPresenter = require('../../presenters/users/profile-details.presenter.js')
 const ProfileDetailsValidator = require('../../validators/users/profile-details.validator.js')
 const UserModel = require('../../models/user.model.js')
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
 
-const NAVIGATION_LINKS = [
-  { active: true, href: '/system/users/me/profile-details', text: 'Profile details' },
-  { href: '/account/update-password', text: 'Change password' },
-  { href: '/signout', text: 'Sign out' }
-]
+const { formatValidationResult } = require('../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating and storing the data for `/users/me/profile-details` page
@@ -40,11 +36,11 @@ async function go(userId, payload, yar) {
     })
   }
 
+  const pageData = ProfileDetailsPresenter.go(payload)
+
   return {
-    navigationLinks: NAVIGATION_LINKS,
-    pageTitle: 'Profile details',
     error: validationResult,
-    ...payload
+    ...pageData
   }
 }
 

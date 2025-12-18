@@ -10,9 +10,9 @@ const ContactService = require('../services/customers/contacts.service.js')
 const LicencesService = require('../services/customers/licences.service.js')
 
 async function viewBillingAccounts(request, h) {
-  const { sessionId } = request.params
+  const { id } = request.params
 
-  const pageData = await BillingAccountsService.go(sessionId)
+  const pageData = await BillingAccountsService.go(id)
 
   return h.view(`customers/billing-accounts.njk`, pageData)
 }

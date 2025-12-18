@@ -7,13 +7,8 @@
 
 const { ref } = require('objection')
 
+const ProfileDetailsPresenter = require('../../presenters/users/profile-details.presenter.js')
 const UserModel = require('../../models/user.model.js')
-
-const NAVIGATION_LINKS = [
-  { active: true, href: '/system/users/me/profile-details', text: 'Profile details' },
-  { href: '/account/update-password', text: 'Change password' },
-  { href: '/signout', text: 'Sign out' }
-]
 
 /**
  * Orchestrates fetching and presenting the data for `/users/me/profile-details` page
@@ -28,7 +23,20 @@ const NAVIGATION_LINKS = [
  * @returns {Promise<object>} The view data for the profile details page
  */
 async function go(userId, yar) {
-  const profileDetails = await UserModel.query()
+  const profileDetails = await _fetchProfileDetails(userId)
+
+  const notification = yar.flash('notification')[0]
+
+  const pageData = ProfileDetailsPresenter.go(profileDetails)
+
+  return {
+    notification,
+    ...pageData
+  }
+}
+
+async function _fetchProfileDetails(userId) {
+  return UserModel.query()
     .findById(userId)
     .select([
       ref('userData:contactDetails.address').castText().as('address'),
@@ -37,15 +45,6 @@ async function go(userId, yar) {
       ref('userData:contactDetails.name').castText().as('name'),
       ref('userData:contactDetails.tel').castText().as('tel')
     ])
-
-  const notification = yar.flash('notification')[0]
-
-  return {
-    navigationLinks: NAVIGATION_LINKS,
-    notification,
-    pageTitle: 'Profile details',
-    ...profileDetails
-  }
 }
 
 module.exports = {

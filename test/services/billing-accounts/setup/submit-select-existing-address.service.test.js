@@ -12,9 +12,9 @@ const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtu
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const SubmitSelectAccountService = require('../../../../app/services/billing-accounts/setup/submit-select-account.service.js')
+const SubmitSelectExistingAddressService = require('../../../../app/services/billing-accounts/setup/submit-select-existing-address.service.js')
 
-describe('Billing Accounts - Setup - Select Account Service', () => {
+describe('Select Existing Address Service', () => {
   let payload
   let session
   let sessionData
@@ -31,82 +31,80 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
     await session.$query().delete()
   })
 
-  describe('when the user picks the customer option', () => {
+  describe('when the user picks an existing address', () => {
     beforeEach(async () => {
       payload = {
-        accountSelected: 'customer'
+        addressSelected: 'existing'
       }
     })
 
     it('saves the submitted value', async () => {
-      await SubmitSelectAccountService.go(session.id, payload)
+      await SubmitSelectExistingAddressService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
       expect(refreshedSession.data).to.equal(
         {
-          accountSelected: 'customer'
+          addressSelected: 'existing'
         },
         { skip: ['billingAccount'] }
       )
     })
 
-    it('returns the correct details the controller needs to redirect the journey', async () => {
-      const result = await SubmitSelectAccountService.go(session.id, payload)
+    it('continues the journey', async () => {
+      const result = await SubmitSelectExistingAddressService.go(session.id, payload)
 
       expect(result).to.equal({
-        accountSelected: 'customer'
+        addressSelected: 'existing'
       })
     })
   })
 
-  describe('when the user picks the "another" option', () => {
+  describe('when the user picks to set up a new address', () => {
     beforeEach(async () => {
       payload = {
-        accountSelected: 'another'
+        addressSelected: 'new'
       }
     })
 
     it('saves the submitted value', async () => {
-      await SubmitSelectAccountService.go(session.id, payload)
+      await SubmitSelectExistingAddressService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
       expect(refreshedSession.data).to.equal(
         {
-          accountSelected: 'another'
+          addressSelected: 'new'
         },
         { skip: ['billingAccount'] }
       )
     })
 
-    it('returns the correct details the controller needs to redirect the journey', async () => {
-      const result = await SubmitSelectAccountService.go(session.id, payload)
+    it('continues the journey', async () => {
+      const result = await SubmitSelectExistingAddressService.go(session.id, payload)
 
       expect(result).to.equal({
-        accountSelected: 'another'
+        addressSelected: 'new'
       })
     })
   })
 
   describe('when validation fails', () => {
     beforeEach(async () => {
-      payload = {
-        accountSelected: 'wrong'
-      }
+      payload = {}
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitSelectAccountService.go(session.id, payload)
+      const result = await SubmitSelectExistingAddressService.go(session.id, payload)
 
       expect(result.error).to.equal({
         errorList: [
           {
-            href: '#accountSelected',
-            text: 'Select who should the bills go to'
+            href: '#addressSelected',
+            text: `Select an existing address for ${session.billingAccount.company.name}`
           }
         ],
-        accountSelected: { text: 'Select who should the bills go to' }
+        addressSelected: { text: `Select an existing address for ${session.billingAccount.company.name}` }
       })
     })
   })
