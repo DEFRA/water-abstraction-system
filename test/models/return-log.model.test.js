@@ -21,7 +21,7 @@ const ReturnSubmissionModel = require('../../app/models/return-submission.model.
 // Thing under test
 const ReturnLogModel = require('../../app/models/return-log.model.js')
 
-describe('Return Log model', () => {
+describe.only('Return Log model', () => {
   let testLicence
   let testRecord
   let testReturnCycle
@@ -42,7 +42,7 @@ describe('Return Log model', () => {
     testReturnSubmissions = []
     for (let i = 0; i < 2; i++) {
       const version = i
-      const returnSubmission = await ReturnSubmissionHelper.add({ returnLogId: testRecord.returnId, version })
+      const returnSubmission = await ReturnSubmissionHelper.add({ returnLogId: testRecord.id, version })
 
       testReturnSubmissions.push(returnSubmission)
     }
