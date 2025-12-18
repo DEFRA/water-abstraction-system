@@ -48,6 +48,10 @@ describe('Users - View profile details service', () => {
       const result = await ViewProfileDetailsService.go(userId, yarStub)
 
       expect(result).to.equal({
+        backLink: {
+          href: '/',
+          text: 'Go back to search'
+        },
         navigationLinks: [
           { active: true, href: '/system/users/me/profile-details', text: 'Profile details' },
           { href: '/account/update-password', text: 'Change password' },
