@@ -12,7 +12,7 @@ const CompanyModel = require('../../models/company.model.js')
  *
  * @param {string} customerId - The customer id for the company
  *
- * @returns {object} the licences for the customer (this will be the licenceDocumentRoles)
+ * @returns {Promise<object[]>} the licences for the customer (this will be the licenceDocumentRoles)
  */
 async function go(customerId) {
   const company = await _fetch(customerId)
