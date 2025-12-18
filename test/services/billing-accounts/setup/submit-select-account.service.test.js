@@ -45,7 +45,8 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
 
       expect(refreshedSession.data).to.equal(
         {
-          accountSelected: 'customer'
+          accountSelected: 'customer',
+          searchInput: null
         },
         { skip: ['billingAccount'] }
       )
@@ -63,7 +64,8 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
   describe('when the user picks the "another" option', () => {
     beforeEach(async () => {
       payload = {
-        accountSelected: 'another'
+        accountSelected: 'another',
+        searchInput: 'Customer Name'
       }
     })
 
@@ -74,7 +76,8 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
 
       expect(refreshedSession.data).to.equal(
         {
-          accountSelected: 'another'
+          accountSelected: 'another',
+          searchInput: 'Customer Name'
         },
         { skip: ['billingAccount'] }
       )
@@ -90,23 +93,70 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
   })
 
   describe('when validation fails', () => {
-    beforeEach(async () => {
-      payload = {
-        accountSelected: 'wrong'
-      }
+    describe('because the user did not select an option', () => {
+      beforeEach(async () => {
+        payload = {
+          accountSelected: 'wrong'
+        }
+      })
+
+      it('returns page data for the view, with errors', async () => {
+        const result = await SubmitSelectAccountService.go(session.id, payload)
+
+        expect(result.error).to.equal({
+          errorList: [
+            {
+              href: '#accountSelected',
+              text: 'Select who should the bills go to'
+            }
+          ],
+          accountSelected: { text: 'Select who should the bills go to' }
+        })
+      })
     })
 
-    it('returns page data for the view, with errors', async () => {
-      const result = await SubmitSelectAccountService.go(session.id, payload)
+    describe('because the user selected "another" but did not enter a search input', () => {
+      beforeEach(async () => {
+        payload = {
+          accountSelected: 'another'
+        }
+      })
 
-      expect(result.error).to.equal({
-        errorList: [
-          {
-            href: '#accountSelected',
-            text: 'Select who should the bills go to'
-          }
-        ],
-        accountSelected: { text: 'Select who should the bills go to' }
+      it('returns page data for the view, with errors', async () => {
+        const result = await SubmitSelectAccountService.go(session.id, payload)
+
+        expect(result.error).to.equal({
+          errorList: [
+            {
+              href: '#searchInput',
+              text: 'Enter the name of an organisation or individual.'
+            }
+          ],
+          searchInput: { text: 'Enter the name of an organisation or individual.' }
+        })
+      })
+    })
+
+    describe('because the user selected "another" but did not enter a search input', () => {
+      beforeEach(async () => {
+        payload = {
+          accountSelected: 'another',
+          searchInput: 'a'.repeat(101)
+        }
+      })
+
+      it('returns page data for the view, with errors', async () => {
+        const result = await SubmitSelectAccountService.go(session.id, payload)
+
+        expect(result.error).to.equal({
+          errorList: [
+            {
+              href: '#searchInput',
+              text: 'Search query must be 100 characters or less'
+            }
+          ],
+          searchInput: { text: 'Search query must be 100 characters or less' }
+        })
       })
     })
   })
