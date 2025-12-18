@@ -21,7 +21,7 @@ const ReturnSubmissionModel = require('../../app/models/return-submission.model.
 // Thing under test
 const ReturnLogModel = require('../../app/models/return-log.model.js')
 
-describe.only('Return Log model', () => {
+describe('Return Log model', () => {
   let testLicence
   let testRecord
   let testReturnCycle
