@@ -58,6 +58,7 @@ describe('Licences - Fetch Licence service', () => {
         licenceVersions: [
           {
             id: licenceVersion.id,
+            issueDate: null,
             startDate: new Date('2022-05-01'),
             status: 'current'
           }
