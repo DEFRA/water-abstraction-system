@@ -168,7 +168,7 @@ class LicenceModel extends BaseModel {
       currentVersion(query) {
         query.withGraphFetched('licenceVersions').modifyGraph('licenceVersions', (builder) => {
           builder
-            .select(['id', 'startDate', 'status'])
+            .select(['id', 'startDate', 'status', 'issueDate'])
             .where('startDate', '<=', timestampForPostgres())
             .orderBy('startDate', 'desc')
             .limit(1)

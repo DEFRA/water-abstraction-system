@@ -608,6 +608,7 @@ describe('Licence model', () => {
 
           expect(result).to.equal({
             id: currentLicenceVersion.id,
+            issueDate: null,
             startDate: currentLicenceVersion.startDate,
             status: 'superseded'
           })
@@ -626,7 +627,8 @@ describe('Licence model', () => {
           await LicenceVersionHelper.add({
             licenceId: testRecord.id,
             startDate: new Date('2001-01-01'),
-            status: 'superseded'
+            status: 'superseded',
+            issueDate: new Date('2001-01-01')
           })
 
           testRecord = await LicenceModel.query().findById(testRecord.id).modify('currentVersion')
@@ -638,6 +640,7 @@ describe('Licence model', () => {
           expect(result).to.equal({
             id: currentLicenceVersion.id,
             startDate: currentLicenceVersion.startDate,
+            issueDate: currentLicenceVersion.issueDate,
             status: 'current'
           })
         })

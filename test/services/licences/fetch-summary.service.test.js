@@ -135,6 +135,7 @@ describe('Licences - Fetch Summary service', () => {
         licenceVersions: [
           {
             id: licenceVersion.id,
+            issueDate: null,
             startDate: new Date('2022-05-01'),
             status: 'current',
             licenceVersionPurposes: [
