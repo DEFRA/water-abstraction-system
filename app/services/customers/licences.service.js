@@ -8,6 +8,7 @@
 
 const LicencesPresenter = require('../../presenters/customers/licences.presenter.js')
 const FetchCustomerService = require('./fetch-customer.service.js')
+const FetchLicencesService = require('./fetch-licences.service.js')
 
 /**
  * Orchestrates fetching and presenting the data for the 'customers/{id}/licences' page
@@ -19,7 +20,9 @@ const FetchCustomerService = require('./fetch-customer.service.js')
 async function go(customerId) {
   const customer = await FetchCustomerService.go(customerId)
 
-  const pageData = LicencesPresenter.go(customer)
+  const licences = await FetchLicencesService.go(customerId)
+
+  const pageData = LicencesPresenter.go(customer, licences)
 
   return {
     activeNavBar: 'search',
