@@ -1,28 +1,29 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/billing-accounts/setup/{sessionId}/select-account` page
+ * Validates data submitted for the `/billing-accounts/setup/{sessionId}/select-existing-address` page
  *
- * @module SelectAccountValidator
+ * @module SelectExistingAddressValidator
  */
 
 const Joi = require('joi')
 
-const VALID_VALUES = ['customer', 'another']
+const VALID_VALUES = ['existing', 'new']
 
 /**
- * Validates data submitted for the `/billing-accounts/setup/{sessionId}/select-account` page
+ * Validates data submitted for the `/billing-accounts/setup/{sessionId}/select-existing-address` page
  *
  * @param {object} payload - The payload from the request to be validated
+ * @param {string} name - The name of the existing customer contact
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
-  const errorMessage = 'Select who should the bills go to'
+function go(payload, name) {
+  const errorMessage = `Select an existing address for ${name}`
 
   const schema = Joi.object({
-    accountSelected: Joi.string()
+    addressSelected: Joi.string()
       .required()
       .valid(...VALID_VALUES)
       .messages({

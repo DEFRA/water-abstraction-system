@@ -38,6 +38,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/billing-accounts/setup/{sessionId}/select-existing-address',
+    options: {
+      handler: BillingAccountsSetupController.viewSelectExistingAddress,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/billing-accounts/setup/{sessionId}/select-existing-address',
+    options: {
+      handler: BillingAccountsSetupController.submitSelectExistingAddress,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
   }
 ]
 
