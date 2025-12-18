@@ -41,7 +41,7 @@ describe('Return Submission model', () => {
 
       beforeEach(async () => {
         testReturnLog = await ReturnLogHelper.add()
-        testRecord = await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.returnId })
+        testRecord = await ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id })
       })
 
       it('can successfully run a related query', async () => {
