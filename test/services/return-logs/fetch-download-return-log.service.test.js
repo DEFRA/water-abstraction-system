@@ -15,7 +15,7 @@ const ReturnSubmissionLineHelper = require('../../support/helpers/return-submiss
 // Thing under test
 const FetchDownloadReturnLogService = require('../../../app/services/return-logs/fetch-download-return-log.service.js')
 
-describe('Fetch Download Return Log service', () => {
+describe.only('Fetch Download Return Log service', () => {
   let returnLog
   let returnSubmissions
 
@@ -24,9 +24,9 @@ describe('Fetch Download Return Log service', () => {
       returnLog = await ReturnLogHelper.add()
 
       returnSubmissions = await Promise.all([
-        ReturnSubmissionHelper.add({ returnLogId: returnLog.returnId, version: 1 }),
-        ReturnSubmissionHelper.add({ returnLogId: returnLog.returnId, version: 2 }),
-        ReturnSubmissionHelper.add({ returnLogId: returnLog.returnId, version: 3 })
+        ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 1 }),
+        ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 2 }),
+        ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 3 })
       ])
 
       await Promise.all([
@@ -46,7 +46,7 @@ describe('Fetch Download Return Log service', () => {
     })
 
     it('returns the return log with its related return submission and return submission lines', async () => {
-      const result = await FetchDownloadReturnLogService.go(returnLog.returnId, 2)
+      const result = await FetchDownloadReturnLogService.go(returnLog.id, 2)
 
       expect(result).to.equal({
         id: returnLog.id,
@@ -65,7 +65,7 @@ describe('Fetch Download Return Log service', () => {
     })
 
     it('orders submission lines by start date', async () => {
-      const result = await FetchDownloadReturnLogService.go(returnLog.returnId, 1)
+      const result = await FetchDownloadReturnLogService.go(returnLog.id, 1)
       const lines = result.returnSubmissions[0].returnSubmissionLines
 
       expect(lines).to.have.length(2)
@@ -99,7 +99,7 @@ describe('Fetch Download Return Log service', () => {
           method: 'oneMeter',
           totalFlag: false
         },
-        returnLogId: returnLog.returnId,
+        returnLogId: returnLog.id,
         version: 1
       })
 
@@ -120,7 +120,7 @@ describe('Fetch Download Return Log service', () => {
     })
 
     it('returns the return log with the submission lines populated with the meter readings', async () => {
-      const result = await FetchDownloadReturnLogService.go(returnLog.returnId, 1)
+      const result = await FetchDownloadReturnLogService.go(returnLog.id, 1)
       const lines = result.returnSubmissions[0].returnSubmissionLines
 
       expect(lines).to.have.length(2)
