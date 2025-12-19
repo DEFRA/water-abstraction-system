@@ -7,7 +7,6 @@
 
 const CompanyAddressModel = require('../../../models/company-address.model.js')
 
-
 /**
  * FFetches the matching existing addresses for the commpany
  *
