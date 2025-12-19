@@ -137,7 +137,7 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
       })
     })
 
-    describe('because the user selected "another" but did not enter a search input', () => {
+    describe('because the user selected "another" but entered an invalid search input', () => {
       beforeEach(async () => {
         payload = {
           accountSelected: 'another',
