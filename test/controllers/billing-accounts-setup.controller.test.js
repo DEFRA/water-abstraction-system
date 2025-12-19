@@ -110,7 +110,7 @@ describe('Billing Accounts Setup controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(
-            `/system/billing-accounts/setup/${sessionId}/select-company-address`
+            `/system/billing-accounts/setup/${sessionId}/select-existing-address`
           )
         })
       })
