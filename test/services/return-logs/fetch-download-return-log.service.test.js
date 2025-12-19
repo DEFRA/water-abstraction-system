@@ -15,7 +15,7 @@ const ReturnSubmissionLineHelper = require('../../support/helpers/return-submiss
 // Thing under test
 const FetchDownloadReturnLogService = require('../../../app/services/return-logs/fetch-download-return-log.service.js')
 
-describe.only('Fetch Download Return Log service', () => {
+describe('Fetch Download Return Log service', () => {
   let returnLog
   let returnSubmissions
 
