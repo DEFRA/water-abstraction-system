@@ -41,9 +41,9 @@ describe('Return Logs - Fetch Return Log service', () => {
   describe('when a return log with submissions exists', () => {
     beforeEach(async () => {
       testSubmissions = await Promise.all([
-        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.returnId, version: 1, notes: 'NOTES_V1' }),
-        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.returnId, version: 2, notes: 'NOTES_V2' }),
-        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.returnId, version: 3, notes: 'NOTES_V3' })
+        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1, notes: 'NOTES_V1' }),
+        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2, notes: 'NOTES_V2' }),
+        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 3, notes: 'NOTES_V3' })
       ])
 
       await Promise.all([
@@ -61,7 +61,7 @@ describe('Return Logs - Fetch Return Log service', () => {
     })
 
     it('fetches the return log with basic metadata fields', async () => {
-      const result = await FetchReturnLogService.go(testReturnLog.returnId)
+      const result = await FetchReturnLogService.go(testReturnLog.id)
 
       expect(result).to.include({
         id: testReturnLog.id,
@@ -75,7 +75,7 @@ describe('Return Logs - Fetch Return Log service', () => {
     })
 
     it('includes the linked licence', async () => {
-      const result = await FetchReturnLogService.go(testReturnLog.returnId)
+      const result = await FetchReturnLogService.go(testReturnLog.id)
       const { licence } = result
 
       expect(licence).to.include({
@@ -86,7 +86,7 @@ describe('Return Logs - Fetch Return Log service', () => {
     })
 
     it('selects the latest version when no version specified', async () => {
-      const result = await FetchReturnLogService.go(testReturnLog.returnId)
+      const result = await FetchReturnLogService.go(testReturnLog.id)
       const selectedSubmission = result.returnSubmissions[0]
 
       expect(selectedSubmission.version).to.equal(3)
@@ -94,14 +94,14 @@ describe('Return Logs - Fetch Return Log service', () => {
     })
 
     it('selects the correct version when specified', async () => {
-      const result = await FetchReturnLogService.go(testReturnLog.returnId, 2)
+      const result = await FetchReturnLogService.go(testReturnLog.id, 2)
       const selectedSubmission = result.returnSubmissions[0]
 
       expect(selectedSubmission.version).to.equal(2)
     })
 
     it('orders submission lines by start date', async () => {
-      const result = await FetchReturnLogService.go(testReturnLog.returnId, 1)
+      const result = await FetchReturnLogService.go(testReturnLog.id, 1)
       const lines = result.returnSubmissions[0].returnSubmissionLines
 
       expect(lines).to.have.length(2)
@@ -110,7 +110,7 @@ describe('Return Logs - Fetch Return Log service', () => {
     })
 
     it('includes all versions ordered descending', async () => {
-      const result = await FetchReturnLogService.go(testReturnLog.returnId)
+      const result = await FetchReturnLogService.go(testReturnLog.id)
 
       expect(result.versions).to.have.length(3)
 
@@ -122,7 +122,7 @@ describe('Return Logs - Fetch Return Log service', () => {
     })
 
     it('includes notes for the versions', async () => {
-      const result = await FetchReturnLogService.go(testReturnLog.returnId)
+      const result = await FetchReturnLogService.go(testReturnLog.id)
 
       const notes = result.versions.map((v) => {
         return v.notes
@@ -132,7 +132,7 @@ describe('Return Logs - Fetch Return Log service', () => {
     })
 
     it('applies readings to selected submission', async () => {
-      const result = await FetchReturnLogService.go(testReturnLog.returnId)
+      const result = await FetchReturnLogService.go(testReturnLog.id)
       const selectedSubmission = result.returnSubmissions[0]
 
       expect(selectedSubmission.$applyReadings.calledOnce).to.be.true()
@@ -141,7 +141,7 @@ describe('Return Logs - Fetch Return Log service', () => {
 
   describe('when a return log has no submissions', () => {
     it('returns the return log without submissions', async () => {
-      const result = await FetchReturnLogService.go(testReturnLog.returnId)
+      const result = await FetchReturnLogService.go(testReturnLog.id)
 
       expect(result.returnSubmissions).to.be.undefined()
       expect(result.versions).to.be.empty()
