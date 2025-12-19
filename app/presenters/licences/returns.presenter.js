@@ -52,13 +52,13 @@ function _noReturnsMessage(hasReturns, hasRequirements) {
 
 function _returns(returns) {
   return returns.map((returnLog) => {
-    const { endDate, dueDate, metadata, returnId, returnReference, startDate } = returnLog
+    const { endDate, dueDate, id: returnLogId, metadata, returnReference, startDate } = returnLog
 
     return {
       dates: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
       description: metadata.description === 'null' ? '' : metadata.description,
       dueDate: dueDate ? formatLongDate(new Date(dueDate)) : '',
-      link: `/system/return-logs/${returnId}`,
+      link: `/system/return-logs/${returnLogId}`,
       purpose: formatPurposes(metadata.purposes),
       reference: returnReference,
       status: formatReturnLogStatus(returnLog)
