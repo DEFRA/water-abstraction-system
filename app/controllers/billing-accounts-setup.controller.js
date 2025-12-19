@@ -51,7 +51,7 @@ async function submitSelectAccount(request, h) {
   }
 
   if (pageData.accountSelected === 'customer') {
-    return h.redirect(`/system/billing-accounts/setup/${sessionId}/select-company-address`)
+    return h.redirect(`/system/billing-accounts/setup/${sessionId}/select-existing-address`)
   }
 
   return h.redirect(`/system/billing-accounts/setup/${sessionId}/select-existing-account`)

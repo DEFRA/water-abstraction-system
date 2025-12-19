@@ -6,6 +6,7 @@
  * @module SubmitSelectExistingAddressService
  */
 
+const FetchExistingAddressesService = require('./fetch-existing-addresses.service.js')
 const SelectExistingAddressPresenter = require('../../../presenters/billing-accounts/setup/select-existing-address.presenter.js')
 const SelectExistingAddressValidator = require('../../../validators/billing-accounts/setup/select-existing-address.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -33,7 +34,8 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = _submissionData(session, payload)
+  const companyAddresses = await FetchExistingAddressesService.go(session.billingAccount.company.id)
+  const pageData = _submissionData(session, payload, companyAddresses)
 
   return {
     error: validationResult,
@@ -47,10 +49,10 @@ async function _save(session, payload) {
   return session.$update()
 }
 
-function _submissionData(session, payload) {
+function _submissionData(session, payload, companyAddresses) {
   session.addressSelected = payload.addressSelected
 
-  return SelectExistingAddressPresenter.go(session)
+  return SelectExistingAddressPresenter.go(session, companyAddresses)
 }
 
 function _validate(payload, name) {
