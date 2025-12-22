@@ -33,17 +33,23 @@ describe('Licence Versions - Fetch licence version service', () => {
     before(async () => {
       licence = await LicenceHelper.add()
 
-      licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
+      licenceVersion = await LicenceVersionHelper.add({
+        licenceId: licence.id,
+        startDate: new Date('2023-01-02'),
+        endDate: null
+      })
 
       // Add additional licence for the pagination array
       additionalLicenceVersionOne = await LicenceVersionHelper.add({
         licenceId: licence.id,
-        startDate: new Date('2023-01-01')
+        startDate: new Date('2023-01-01'),
+        endDate: new Date('2023-01-01')
       })
 
       additionalLicenceVersionTwo = await LicenceVersionHelper.add({
         licenceId: licence.id,
-        startDate: new Date('2019-01-01')
+        startDate: new Date('2019-01-01'),
+        endDate: new Date('2022-12-30')
       })
 
       purpose = PurposeHelper.select()
@@ -132,12 +138,12 @@ describe('Licence Versions - Fetch licence version service', () => {
             startDate: new Date('2019-01-01')
           },
           {
-            id: licenceVersion.id,
-            startDate: new Date('2022-01-01')
-          },
-          {
             id: additionalLicenceVersionOne.id,
             startDate: new Date('2023-01-01')
+          },
+          {
+            id: licenceVersion.id,
+            startDate: new Date('2023-01-02')
           }
         ]
       })
