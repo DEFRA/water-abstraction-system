@@ -8,6 +8,7 @@ exports.up = function (knex) {
     table.string('version_id').primary()
 
     // Data
+    table.uuid('return_log_id').notNullable()
     table.string('return_id').notNullable()
     table.string('user_id').notNullable()
     table.string('user_type').notNullable()

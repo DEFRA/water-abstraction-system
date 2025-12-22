@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { timestampForPostgres } = require('../../../../app/lib/general.lib.js')
+const { generateUUID, timestampForPostgres } = require('../../../../app/lib/general.lib.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
@@ -29,6 +29,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       session = {
         journey: 'enterReturn',
         note: { content: 'TEST_NOTE' },
+        returnId: generateUUID(),
         returnLogId: ReturnLogHelper.generateReturnLogId()
       }
     })
@@ -45,7 +46,8 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
             metadata,
             nilReturn: false,
             notes: 'TEST_NOTE',
-            returnLogId: session.returnLogId,
+            returnId: session.returnLogId,
+            returnLogId: session.returnId,
             userId: user.username,
             userType: 'internal',
             version: 1
@@ -60,7 +62,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       beforeEach(async () => {
         const returnSubmission = await ReturnSubmissionHelper.add()
 
-        session.returnLogId = returnSubmission.returnLogId
+        session.returnId = returnSubmission.returnLogId
       })
 
       it('creates a new return submission and sets the version to 2', async () => {
@@ -74,7 +76,8 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
             metadata,
             nilReturn: false,
             notes: 'TEST_NOTE',
-            returnLogId: session.returnLogId,
+            returnId: session.returnLogId,
+            returnLogId: session.returnId,
             userId: user.username,
             userType: 'internal',
             version: 2
@@ -88,7 +91,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
         await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
 
         const previousVersion = await ReturnSubmissionModel.query()
-          .where('returnLogId', session.returnLogId)
+          .where('returnLogId', session.returnId)
           .where('version', 1)
           .first()
 
@@ -124,7 +127,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       beforeEach(async () => {
         const returnSubmission = await ReturnSubmissionHelper.add()
 
-        session.returnLogId = returnSubmission.returnLogId
+        session.returnId = returnSubmission.returnLogId
       })
 
       it('does not persist anything if an error occurs', async () => {
@@ -138,12 +141,12 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
         }
 
         const currentVersion = await ReturnSubmissionModel.query()
-          .where('returnLogId', session.returnLogId)
+          .where('returnLogId', session.returnId)
           .where('version', 2)
           .first()
 
         const previousVersion = await ReturnSubmissionModel.query()
-          .where('returnLogId', session.returnLogId)
+          .where('returnLogId', session.returnId)
           .where('version', 1)
           .first()
 

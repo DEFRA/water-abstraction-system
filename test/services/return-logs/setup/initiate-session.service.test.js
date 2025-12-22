@@ -59,7 +59,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
       })
 
       returnSubmission = await ReturnSubmissionHelper.add({
-        returnLogId: returnLog.id,
+        returnLogId: returnLog.returnId,
         metadata: { method: 'abstractionVolumes' }
       })
       await ReturnSubmissionLineHelper.add({ returnSubmissionId: returnSubmission.id })
@@ -129,7 +129,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         })
 
         returnSubmission = await ReturnSubmissionHelper.add({
-          returnLogId: returnLog.id,
+          returnLogId: returnLog.returnId,
           metadata: { method: 'abstractionVolumes' }
         })
         await ReturnSubmissionLineHelper.add({ quantity: 0, returnSubmissionId: returnSubmission.id })
@@ -156,7 +156,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         })
 
         await ReturnSubmissionHelper.add({
-          returnLogId: returnLog.id,
+          returnLogId: returnLog.returnId,
           metadata: { units: 'Ml' }
         })
       })
@@ -181,7 +181,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
           endDate: new Date('2022-06-01')
         })
 
-        returnSubmission = await ReturnSubmissionHelper.add({ returnLogId: returnLog.id })
+        returnSubmission = await ReturnSubmissionHelper.add({ returnLogId: returnLog.returnId })
       })
 
       it('defaults the unit to cubicMetres', async () => {
@@ -205,7 +205,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         })
 
         await ReturnSubmissionHelper.add({
-          returnLogId: returnLog.id,
+          returnLogId: returnLog.returnId,
           metadata: {
             type: 'measured',
             total: null,
@@ -247,7 +247,7 @@ describe('Return Logs - Setup - Initiate Session service', () => {
         })
 
         returnSubmission = await ReturnSubmissionHelper.add({
-          returnLogId: returnLog.id,
+          returnLogId: returnLog.returnId,
           nilReturn: true
         })
       })
