@@ -26,7 +26,10 @@ async function _fetchPagination(licenceVersionId) {
   return LicenceVersionModel.query()
     .where('licenceId', LicenceVersionModel.query().select('licenceId').findById(licenceVersionId))
     .select(['id', 'startDate'])
-    .orderBy('startDate', 'asc')
+    .orderBy([
+      { column: 'startDate', order: 'asc' },
+      { column: 'endDate', order: 'asc' }
+    ])
 }
 
 async function _fetch(licenceVersionId) {

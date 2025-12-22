@@ -3,18 +3,25 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Test helpers
 const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
+// Things to stub
+const FetchExistingAddressesService = require('../../../../app/services/billing-accounts/setup/fetch-existing-addresses.service.js')
+
 // Thing under test
 const SubmitSelectExistingAddressService = require('../../../../app/services/billing-accounts/setup/submit-select-existing-address.service.js')
 
-describe('Select Existing Address Service', () => {
+describe('Billing Accounts - Setup - Select Existing Address Service', () => {
+  const addresses = _addresses()
   let payload
   let session
   let sessionData
@@ -34,7 +41,7 @@ describe('Select Existing Address Service', () => {
   describe('when the user picks an existing address', () => {
     beforeEach(async () => {
       payload = {
-        addressSelected: 'existing'
+        addressSelected: generateUUID()
       }
     })
 
@@ -45,7 +52,7 @@ describe('Select Existing Address Service', () => {
 
       expect(refreshedSession.data).to.equal(
         {
-          addressSelected: 'existing'
+          addressSelected: payload.addressSelected
         },
         { skip: ['billingAccount'] }
       )
@@ -55,7 +62,7 @@ describe('Select Existing Address Service', () => {
       const result = await SubmitSelectExistingAddressService.go(session.id, payload)
 
       expect(result).to.equal({
-        addressSelected: 'existing'
+        addressSelected: payload.addressSelected
       })
     })
   })
@@ -92,6 +99,7 @@ describe('Select Existing Address Service', () => {
   describe('when validation fails', () => {
     beforeEach(async () => {
       payload = {}
+      Sinon.stub(FetchExistingAddressesService, 'go').returns(addresses)
     })
 
     it('returns page data for the view, with errors', async () => {
@@ -109,3 +117,20 @@ describe('Select Existing Address Service', () => {
     })
   })
 })
+
+function _addresses() {
+  return [
+    {
+      address: {
+        id: generateUUID(),
+        address1: 'ENVIRONMENT AGENCY',
+        address2: 'HORIZON HOUSE',
+        address3: 'DEANERY ROAD',
+        address4: 'BRISTOL',
+        address5: 'BRISTOLSHIRE',
+        address6: null,
+        postcode: 'BS1 5AH'
+      }
+    }
+  ]
+}

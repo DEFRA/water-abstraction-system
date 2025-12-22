@@ -34,7 +34,53 @@ describe('Billing Accounts - Setup - Select Account Presenter', () => {
           text: 'Back'
         },
         pageTitle: 'Who should the bills go to?',
-        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
+        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+        searchInput: null
+      })
+    })
+  })
+
+  describe('when called with a search input', () => {
+    beforeEach(() => {
+      session.accountSelected = 'another'
+      session.searchInput = 'Company Name'
+    })
+
+    it('returns page data for the view', () => {
+      const result = SelectAccountPresenter.go(session)
+
+      expect(result).to.equal({
+        accountSelected: 'another',
+        companyName: session.billingAccount.company.name,
+        backLink: {
+          href: `/system/billing-accounts/${session.billingAccount.id}`,
+          text: 'Back'
+        },
+        pageTitle: 'Who should the bills go to?',
+        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+        searchInput: 'Company Name'
+      })
+    })
+  })
+
+  describe('when called with existing customer', () => {
+    beforeEach(() => {
+      session.accountSelected = 'customer'
+    })
+
+    it('returns page data for the view', () => {
+      const result = SelectAccountPresenter.go(session)
+
+      expect(result).to.equal({
+        accountSelected: 'customer',
+        companyName: session.billingAccount.company.name,
+        backLink: {
+          href: `/system/billing-accounts/${session.billingAccount.id}`,
+          text: 'Back'
+        },
+        pageTitle: 'Who should the bills go to?',
+        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+        searchInput: null
       })
     })
   })

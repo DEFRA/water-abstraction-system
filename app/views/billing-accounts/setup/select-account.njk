@@ -1,9 +1,23 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block pageContent %}
+  {% set inputHtml %}
+    {{ govukInput({
+      id: "searchInput",
+      name: "searchInput",
+      classes: "govuk-!-width-one-third",
+      errorMessage: error.searchInput,
+      label: {
+        text: "Search for organisation or individual"
+      },
+      value: searchInput
+    }) }}
+  {% endset %}
+
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
@@ -24,7 +38,10 @@
           id: "another",
           value: "another",
           text: "Another billing account",
-          checked: "another" === accountSelected
+          checked: "another" === accountSelected,
+          conditional: {
+            html: inputHtml
+          }
         }
       ]
     }) }}
