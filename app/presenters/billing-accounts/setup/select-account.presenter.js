@@ -23,7 +23,8 @@ function go(session) {
       text: 'Back'
     },
     pageTitle: 'Who should the bills go to?',
-    pageTitleCaption: `Billing account ${billingAccount.accountNumber}`
+    pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
+    searchInput: session.searchInput ?? null
   }
 }
 

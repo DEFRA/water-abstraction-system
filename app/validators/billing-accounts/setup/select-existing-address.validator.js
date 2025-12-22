@@ -8,8 +8,6 @@
 
 const Joi = require('joi')
 
-const VALID_VALUES = ['existing', 'new']
-
 /**
  * Validates data submitted for the `/billing-accounts/setup/{sessionId}/select-existing-address` page
  *
@@ -23,14 +21,11 @@ function go(payload, name) {
   const errorMessage = `Select an existing address for ${name}`
 
   const schema = Joi.object({
-    addressSelected: Joi.string()
-      .required()
-      .valid(...VALID_VALUES)
-      .messages({
-        'any.required': errorMessage,
-        'any.only': errorMessage,
-        'string.empty': errorMessage
-      })
+    addressSelected: Joi.alternatives().try(Joi.string().valid('new'), Joi.string().uuid()).required().messages({
+      'any.required': errorMessage,
+      'any.only': errorMessage,
+      'string.empty': errorMessage
+    })
   })
 
   return schema.validate(payload, { abortEarly: false })

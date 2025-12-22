@@ -43,12 +43,14 @@ async function go(sessionId, payload) {
 
 async function _save(session, payload) {
   session.accountSelected = payload.accountSelected
+  session.searchInput = payload.searchInput ?? null
 
   return session.$update()
 }
 
 function _submissionData(session, payload) {
   session.accountSelected = payload.accountSelected
+  session.searchInput = payload.searchInput ?? null
 
   return SelectAccountPresenter.go(session)
 }
