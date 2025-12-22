@@ -13,17 +13,22 @@ const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 
 // Things we need to stub
 const FetchCustomerService = require('../../../app/services/customers/fetch-customer.service.js')
+const FetchLicencesService = require('../../../app/services/customers/fetch-licences.service.js')
 
 // Thing under test
 const LicencesService = require('../../../app/services/customers/licences.service.js')
 
 describe('Customers - Licences Service', () => {
   let customer
+  let licences
 
   beforeEach(async () => {
     customer = CustomersFixtures.customer()
 
+    licences = CustomersFixtures.licences()
+
     Sinon.stub(FetchCustomerService, 'go').returns(customer)
+    Sinon.stub(FetchLicencesService, 'go').returns(licences)
   })
 
   afterEach(() => {
@@ -41,6 +46,15 @@ describe('Customers - Licences Service', () => {
           href: '/',
           text: 'Back to search'
         },
+        licences: [
+          {
+            endDate: null,
+            id: licences[0].licenceDocument.licence.id,
+            licenceName: 'Between Two Tyrell',
+            licenceRef: licences[0].licenceDocument.licence.licenceRef,
+            startDate: '1 January 2022'
+          }
+        ],
         pageTitle: 'Licences',
         pageTitleCaption: 'Tyrell Corporation'
       })

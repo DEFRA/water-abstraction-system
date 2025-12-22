@@ -1,0 +1,38 @@
+'use strict'
+
+/**
+ * Fetches the customer licences data needed for the view 'customers/{id}/licences'
+ * @module FetchLicencesService
+ */
+
+const LicenceDocumentRoleModel = require('../../models/licence-document-role.model.js')
+
+/**
+ * Fetches the customer licences data needed for the view 'customers/{id}/licences'
+ *
+ * @param {string} customerId - The customer id for the company
+ *
+ * @returns {Promise<object[]>} the licences for the customer (this will be the licenceDocumentRoles)
+ */
+async function go(customerId) {
+  return _fetch(customerId)
+}
+
+async function _fetch(customerId) {
+  return LicenceDocumentRoleModel.query()
+    .select(['id'])
+    .where('companyId', customerId)
+    .withGraphFetched('licenceDocument')
+    .modifyGraph('licenceDocument', (licenceDocumentBuilder) => {
+      licenceDocumentBuilder
+        .select(['id', 'startDate', 'endDate'])
+        .withGraphFetched('licence')
+        .modifyGraph('licence', (licenceBuilder) => {
+          licenceBuilder.select(['id', 'licenceRef']).modify('licenceName')
+        })
+    })
+}
+
+module.exports = {
+  go
+}

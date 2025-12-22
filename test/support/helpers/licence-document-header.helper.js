@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * @module LicenceDocumentHelper
+ * @module LicenceDocumentHeaderHelper
  */
 
 const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
