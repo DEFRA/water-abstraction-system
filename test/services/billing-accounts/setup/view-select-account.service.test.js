@@ -42,7 +42,8 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
           text: 'Back'
         },
         pageTitle: 'Who should the bills go to?',
-        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
+        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+        searchInput: null
       })
     })
   })

@@ -7,22 +7,40 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+
 // Thing under test
 const SelectExistingAddressValidator = require('../../../../app/validators/billing-accounts/setup/select-existing-address.validator.js')
 
 describe('Billing Accounts - Setup - Select Existing Address Validator', () => {
   let payload
 
-  beforeEach(() => {
-    payload = { addressSelected: 'new' }
-  })
-
   describe('when called with valid data', () => {
-    it('returns with no errors', () => {
-      const result = SelectExistingAddressValidator.go(payload, 'Customer Name')
+    describe('and the option is "new"', () => {
+      beforeEach(() => {
+        payload = { addressSelected: 'new' }
+      })
 
-      expect(result.value).to.exist()
-      expect(result.error).not.to.exist()
+      it('returns with no errors', () => {
+        const result = SelectExistingAddressValidator.go(payload, 'Customer Name')
+
+        expect(result.value).to.exist()
+        expect(result.error).not.to.exist()
+      })
+    })
+
+    describe('and the option is a UUID', () => {
+      beforeEach(() => {
+        payload = { addressSelected: generateUUID() }
+      })
+
+      it('returns with no errors', () => {
+        const result = SelectExistingAddressValidator.go(payload, 'Customer Name')
+
+        expect(result.value).to.exist()
+        expect(result.error).not.to.exist()
+      })
     })
   })
 
