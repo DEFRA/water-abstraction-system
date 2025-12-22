@@ -5,7 +5,7 @@
  * @module FetchLicencesService
  */
 
-const CompanyModel = require('../../models/company.model.js')
+const LicenceDocumentRoleModel = require('../../models/licence-document-role.model.js')
 
 /**
  * Fetches the customer licences data needed for the view 'customers/{id}/licences'
@@ -15,27 +15,20 @@ const CompanyModel = require('../../models/company.model.js')
  * @returns {Promise<object[]>} the licences for the customer (this will be the licenceDocumentRoles)
  */
 async function go(customerId) {
-  const company = await _fetch(customerId)
-
-  return company.licenceDocumentRoles
+  return _fetch(customerId)
 }
 
 async function _fetch(customerId) {
-  return CompanyModel.query()
-    .findById(customerId)
+  return LicenceDocumentRoleModel.query()
     .select(['id'])
-    .withGraphFetched('licenceDocumentRoles')
-    .modifyGraph('licenceDocumentRoles', (licenceDocumentRolesBuilder) => {
-      licenceDocumentRolesBuilder
-        .select(['id'])
-        .withGraphFetched('licenceDocument')
-        .modifyGraph('licenceDocument', (licenceDocumentBuilder) => {
-          licenceDocumentBuilder
-            .select(['id', 'startDate', 'endDate'])
-            .withGraphFetched('licence')
-            .modifyGraph('licence', (licenceBuilder) => {
-              licenceBuilder.select(['id', 'licenceRef']).modify('licenceName')
-            })
+    .where('companyId', customerId)
+    .withGraphFetched('licenceDocument')
+    .modifyGraph('licenceDocument', (licenceDocumentBuilder) => {
+      licenceDocumentBuilder
+        .select(['id', 'startDate', 'endDate'])
+        .withGraphFetched('licence')
+        .modifyGraph('licence', (licenceBuilder) => {
+          licenceBuilder.select(['id', 'licenceRef']).modify('licenceName')
         })
     })
 }
