@@ -24,9 +24,9 @@ describe('Fetch Download Return Log service', () => {
       returnLog = await ReturnLogHelper.add()
 
       returnSubmissions = await Promise.all([
-        ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 1 }),
-        ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 2 }),
-        ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 3 })
+        ReturnSubmissionHelper.add({ returnLogId: returnLog.returnId, version: 1 }),
+        ReturnSubmissionHelper.add({ returnLogId: returnLog.returnId, version: 2 }),
+        ReturnSubmissionHelper.add({ returnLogId: returnLog.returnId, version: 3 })
       ])
 
       await Promise.all([
@@ -99,7 +99,7 @@ describe('Fetch Download Return Log service', () => {
           method: 'oneMeter',
           totalFlag: false
         },
-        returnLogId: returnLog.id,
+        returnLogId: returnLog.returnId,
         version: 1
       })
 

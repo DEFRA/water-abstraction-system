@@ -83,7 +83,7 @@ async function _fetch(returnLogId, selectedReturnSubmission) {
 async function _fetchAllReturnSubmissions(returnLogId) {
   return ReturnSubmissionModel.query()
     .select(['createdAt', 'id', 'notes', 'version', 'userId'])
-    .where('returnLogId', returnLogId)
+    .where('returnLogId', returnId)
     .orderBy('version', 'desc')
 }
 

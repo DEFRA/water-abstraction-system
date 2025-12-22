@@ -41,9 +41,9 @@ describe('Return Logs - Fetch Return Log service', () => {
   describe('when a return log with submissions exists', () => {
     beforeEach(async () => {
       testSubmissions = await Promise.all([
-        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 1, notes: 'NOTES_V1' }),
-        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 2, notes: 'NOTES_V2' }),
-        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.id, version: 3, notes: 'NOTES_V3' })
+        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.returnId, version: 1, notes: 'NOTES_V1' }),
+        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.returnId, version: 2, notes: 'NOTES_V2' }),
+        ReturnSubmissionHelper.add({ returnLogId: testReturnLog.returnId, version: 3, notes: 'NOTES_V3' })
       ])
 
       await Promise.all([
