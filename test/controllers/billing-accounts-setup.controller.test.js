@@ -15,8 +15,10 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/billing-accounts/setup/initiate-session.service.js')
-const SelectAccountService = require('../../app/services/billing-accounts/setup/view-select-account.service.js')
+const ViewSelectAccountService = require('../../app/services/billing-accounts/setup/view-select-account.service.js')
+const ViewSelectExistingAddressService = require('../../app/services/billing-accounts/setup/view-select-existing-address.service.js')
 const SubmitSelectAccountService = require('../../app/services/billing-accounts/setup/submit-select-account.service.js')
+const SubmitSelectExistingAddressService = require('../../app/services/billing-accounts/setup/submit-select-existing-address.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -76,7 +78,7 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SelectAccountService, 'go').resolves({
+          Sinon.stub(ViewSelectAccountService, 'go').resolves({
             pageTitle: 'Who should the bills go to?'
           })
         })
@@ -108,7 +110,7 @@ describe('Billing Accounts Setup controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(
-            `/system/billing-accounts/setup/${sessionId}/select-company-address`
+            `/system/billing-accounts/setup/${sessionId}/select-existing-address`
           )
         })
       })
@@ -127,6 +129,67 @@ describe('Billing Accounts Setup controller', () => {
           expect(response.headers.location).to.equal(
             `/system/billing-accounts/setup/${sessionId}/select-existing-account`
           )
+        })
+      })
+    })
+  })
+
+  describe('/billing-accounts/setup/{sessionId}/select-existing-address', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/select-existing-address`)
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ViewSelectExistingAddressService, 'go').resolves({
+            pageTitle: 'Select an existing address for Test User?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Select an existing address for Test User?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/select-existing-address`)
+      })
+
+      describe('when the user selects an existing address option', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitSelectExistingAddressService, 'go').resolves({
+            addressSelected: 'existing'
+          })
+        })
+
+        it('redirects to the "for attention of" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/for-attention-of`)
+        })
+      })
+
+      describe('when the user selects to set up a new address', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitSelectExistingAddressService, 'go').resolves({
+            addressSelected: 'new'
+          })
+        })
+
+        it('redirects to the "postcode" page of the address lookup journey', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/address/${sessionId}/postcode`)
         })
       })
     })

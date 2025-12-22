@@ -18,7 +18,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
  *
- * @returns {object} The data formatted for the view template
+ * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
@@ -43,12 +43,14 @@ async function go(sessionId, payload) {
 
 async function _save(session, payload) {
   session.accountSelected = payload.accountSelected
+  session.searchInput = payload.searchInput ?? null
 
   return session.$update()
 }
 
 function _submissionData(session, payload) {
   session.accountSelected = payload.accountSelected
+  session.searchInput = payload.searchInput ?? null
 
   return SelectAccountPresenter.go(session)
 }
