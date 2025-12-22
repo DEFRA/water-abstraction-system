@@ -5,11 +5,12 @@
  * @module SubmitMultipleEntriesService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
 const MultipleEntriesPresenter = require('../../../presenters/return-logs/setup/multiple-entries.presenter.js')
 const MultipleEntriesValidator = require('../../../validators/return-logs/setup/multiple-entries.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 const SplitMultipleEntriesService = require('../../../services/return-logs/setup/split-multiple-entries.service.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -61,7 +62,8 @@ async function go(sessionId, payload, yar) {
 async function _save(session, payload) {
   session.lines.forEach((line, index) => {
     if (session.reported === 'abstractionVolumes') {
-      line.quantity = payload.multipleEntries[index]
+      line.quantityCubicMetres = convertToCubicMetres(payload.multipleEntries[index], session.unitSymbol)
+      line.quantity = convertFromCubicMetres(line.quantityCubicMetres, session.unitSymbol)
     } else {
       line.reading = payload.multipleEntries[index]
     }
