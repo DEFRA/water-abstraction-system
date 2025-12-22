@@ -45,7 +45,7 @@ describe('Customers - Fetch licence service', () => {
       })
     })
 
-    it('returns the matching company', async () => {
+    it('returns the licences for the company', async () => {
       const result = await FetchLicencesService.go(company.id)
 
       expect(result).to.equal([
