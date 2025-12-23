@@ -49,7 +49,8 @@ function add(data = {}) {
 function defaults(data = {}) {
   const defaults = {
     id: generateUUID(),
-    returnLogId: generateReturnLogId(),
+    returnLogId: generateUUID(),
+    returnId: generateReturnLogId(),
     userId: 'admin-internal@wrls.gov.uk',
     userType: 'internal',
     version: 1,

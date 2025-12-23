@@ -15,20 +15,31 @@ const LicencesPresenter = require('../../../app/presenters/customers/licences.pr
 
 describe('Customers - Licences Presenter', () => {
   let customer
+  let licences
 
   beforeEach(() => {
     customer = CustomersFixtures.customer()
+    licences = CustomersFixtures.licences()
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = LicencesPresenter.go(customer)
+      const result = LicencesPresenter.go(customer, licences)
 
       expect(result).to.equal({
         backLink: {
           href: '/',
           text: 'Back to search'
         },
+        licences: [
+          {
+            endDate: null,
+            id: licences[0].licenceDocument.licence.id,
+            licenceName: 'Between Two Tyrell',
+            licenceRef: licences[0].licenceDocument.licence.licenceRef,
+            startDate: '1 January 2022'
+          }
+        ],
         pageTitle: 'Licences',
         pageTitleCaption: 'Tyrell Corporation'
       })

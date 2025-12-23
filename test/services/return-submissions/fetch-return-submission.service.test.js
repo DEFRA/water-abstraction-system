@@ -29,7 +29,7 @@ describe('Fetch Return Submission service', () => {
         units: 'Ml'
       }
     })
-    testReturnLog = await ReturnLogHelper.add({ id: testReturnSubmission.returnLogId })
+    testReturnLog = await ReturnLogHelper.add({ returnId: testReturnSubmission.returnLogId })
 
     await Promise.all([
       ReturnSubmissionLineHelper.add({

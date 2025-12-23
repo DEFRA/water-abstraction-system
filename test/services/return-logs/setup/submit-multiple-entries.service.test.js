@@ -29,7 +29,8 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
           { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
         ],
         returnsFrequency: 'month',
-        reported: 'abstractionVolumes'
+        reported: 'abstractionVolumes',
+        unitSymbol: 'Ml'
       }
     }
 
@@ -51,7 +52,9 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
           const refreshedSession = await session.$query()
 
           expect(refreshedSession.lines[0].quantity).to.equal(100)
+          expect(refreshedSession.lines[0].quantityCubicMetres).to.equal(100000)
           expect(refreshedSession.lines[1].quantity).to.equal(200)
+          expect(refreshedSession.lines[1].quantityCubicMetres).to.equal(200000)
         })
 
         it('sets the notification message title to "Updated" and the text to "2 monthly volumes have been updated" ', async () => {
