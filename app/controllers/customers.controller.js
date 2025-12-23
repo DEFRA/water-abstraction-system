@@ -26,9 +26,12 @@ async function viewContact(request, h) {
 }
 
 async function viewLicences(request, h) {
-  const { id } = request.params
+  const {
+    params: { id },
+    query: { page = 1 }
+  } = request
 
-  const pageData = await LicencesService.go(id)
+  const pageData = await LicencesService.go(id, page)
 
   return h.view(`customers/licences.njk`, pageData)
 }

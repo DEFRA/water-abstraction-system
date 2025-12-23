@@ -27,7 +27,13 @@ async function go(licenceId, auth, page) {
 
   const pageData = BillsPresenter.go(bills, licence)
 
-  const paginationData = PaginatorPresenter.go(pagination.total, Number(page), `/system/licences/${licenceId}/bills`)
+  const paginationData = PaginatorPresenter.go(
+    pagination.total,
+    Number(page),
+    `/system/licences/${licenceId}/bills`,
+    bills.length,
+    'bills'
+  )
 
   return {
     ...pageData,

@@ -12,11 +12,10 @@ const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
  *
  * @param {module:EventModel} notice - The notice object
  * @param {module:NotificationModel[]} notifications - The notifications linked to the notice
- * @param {number} totalNumber - The total number of notifications linked to the notice
  *
  * @returns {object[]} - The data formatted for the view template
  */
-function go(notice, notifications, totalNumber) {
+function go(notice, notifications) {
   const tableRows = _formatTableData(notifications)
 
   return {
@@ -28,7 +27,6 @@ function go(notice, notifications, totalNumber) {
     reference: notice.referenceCode,
     sentBy: notice.issuer,
     sentDate: formatLongDate(notice.createdAt),
-    showingDeclaration: _showingDeclaration(notifications.length, totalNumber),
     status: notice.overallStatus
   }
 }
@@ -67,14 +65,6 @@ function _recipient(notification) {
     personalisation['address_line_7'],
     personalisation['postcode']
   ].filter(Boolean)
-}
-
-function _showingDeclaration(numberDisplayed, totalNumber) {
-  if (totalNumber > numberDisplayed) {
-    return `Showing ${numberDisplayed} of ${totalNumber} notifications`
-  }
-
-  return `Showing all ${totalNumber} notifications`
 }
 
 module.exports = {

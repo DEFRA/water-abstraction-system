@@ -51,7 +51,7 @@ describe('Licences - View Returns service', () => {
 
     Sinon.stub(FetchReturnsService, 'go').resolves({
       pagination: { total: 1 },
-      returns: []
+      returns: _returnLogs()
     })
   })
 
@@ -71,15 +71,58 @@ describe('Licences - View Returns service', () => {
             text: 'Go back to search',
             href: '/licences'
           },
-          noReturnsMessage: 'No returns for this licence.',
+          noReturnsMessage: null,
           pageTitle: 'Returns',
           pageTitleCaption: `Licence ${licence.licenceRef}`,
-          pagination: { numberOfPages: 1 },
-          returns: [],
-          roles: ['returns'],
-          tableCaption: 'Showing all 1 returns'
+          pagination: { numberOfPages: 1, showingMessage: 'Showing all 1 returns' },
+          returns: [
+            {
+              dates: '2 January 2020 to 1 February 2020',
+              description: 'empty description',
+              dueDate: '28 November 2020',
+              link: '/system/return-logs/c4458436-4766-4271-b978-6af7a0e4fd95',
+              purpose: ['Spray Irrigation - Direct (SPRAY IRRIGATION)'],
+              reference: '10046821',
+              status: 'complete'
+            }
+          ],
+          roles: ['returns']
         })
       })
     })
   })
 })
+
+function _returnLogs() {
+  const returnLog = {
+    id: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
+    dueDate: new Date('2020-11-28'),
+    status: 'completed',
+    startDate: new Date('2020/01/02'),
+    endDate: new Date('2020/02/01'),
+    metadata: {
+      purposes: [
+        {
+          alias: 'SPRAY IRRIGATION',
+          primary: {
+            code: 'A',
+            description: 'Agriculture'
+          },
+          tertiary: {
+            code: '400',
+            description: 'Spray Irrigation - Direct'
+          },
+          secondary: {
+            code: 'AGR',
+            description: 'General Agriculture'
+          }
+        }
+      ],
+      description: 'empty description'
+    },
+    returnId: 'c4458436-4766-4271-b978-6af7a0e4fd95',
+    returnReference: '10046821'
+  }
+
+  return [returnLog]
+}

@@ -27,7 +27,7 @@ describe('Notices - Index Notices presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = IndexNoticesPresenter.go(notices, notices.length, auth)
+    const result = IndexNoticesPresenter.go(notices, auth)
 
     expect(result).to.equal({
       links: {
@@ -124,8 +124,7 @@ describe('Notices - Index Notices presenter', () => {
         }
       ],
       pageSubHeading: 'View a notice',
-      pageTitle: 'Notices',
-      tableCaption: `Showing all ${notices.length} notices`
+      pageTitle: 'Notices'
     })
   })
 
@@ -133,7 +132,7 @@ describe('Notices - Index Notices presenter', () => {
     describe('the "type" property', () => {
       describe('when the notice is for a water abstraction alert', () => {
         it('returns the alert type', () => {
-          const results = IndexNoticesPresenter.go(notices, notices.length, auth)
+          const results = IndexNoticesPresenter.go(notices, auth)
 
           expect(results.notices[0].type).to.equal('Reduce alert')
           expect(results.notices[1].type).to.equal('Resume alert')
@@ -144,7 +143,7 @@ describe('Notices - Index Notices presenter', () => {
 
       describe('when the notice is not for a water abstraction alert', () => {
         it('returns the notice type', () => {
-          const results = IndexNoticesPresenter.go(notices, notices.length, auth)
+          const results = IndexNoticesPresenter.go(notices, auth)
 
           expect(results.notices[4].type).to.equal('HOF warning')
           expect(results.notices[5].type).to.equal('Renewal')
@@ -156,24 +155,6 @@ describe('Notices - Index Notices presenter', () => {
     })
   })
 
-  describe('the "tableCaption" property', () => {
-    describe('when there is only one page of results', () => {
-      it('returns the "tableCaption" with the "Showing all" message', () => {
-        const result = IndexNoticesPresenter.go(notices, notices.length, auth)
-
-        expect(result.tableCaption).to.equal(`Showing all ${notices.length} notices`)
-      })
-    })
-
-    describe('when there are multiple pages of results', () => {
-      it('returns the "tableCaption" with the "Showing x of y" message', () => {
-        const result = IndexNoticesPresenter.go(notices, 50, auth)
-
-        expect(result.tableCaption).to.equal(`Showing ${notices.length} of 50 notices`)
-      })
-    })
-  })
-
   describe('the "links" property', () => {
     describe('when the user has both permissions', () => {
       beforeEach(() => {
@@ -181,7 +162,7 @@ describe('Notices - Index Notices presenter', () => {
       })
 
       it('returns all of the links', () => {
-        const result = IndexNoticesPresenter.go(notices, 0, auth)
+        const result = IndexNoticesPresenter.go(notices, auth)
 
         expect(result.links).to.equal({
           adhoc: {
@@ -202,7 +183,7 @@ describe('Notices - Index Notices presenter', () => {
       })
 
       it('returns none of the links', () => {
-        const result = IndexNoticesPresenter.go(notices, 0, auth)
+        const result = IndexNoticesPresenter.go(notices, auth)
 
         expect(result.links).to.equal({})
       })
@@ -214,7 +195,7 @@ describe('Notices - Index Notices presenter', () => {
       })
 
       it('returns all of the links', () => {
-        const result = IndexNoticesPresenter.go(notices, 0, auth)
+        const result = IndexNoticesPresenter.go(notices, auth)
 
         expect(result.links).to.equal({
           adhoc: {
@@ -235,7 +216,7 @@ describe('Notices - Index Notices presenter', () => {
       })
 
       it('returns only the "adhoc" link', () => {
-        const result = IndexNoticesPresenter.go(notices, 0, auth)
+        const result = IndexNoticesPresenter.go(notices, auth)
 
         expect(result.links).to.equal({
           adhoc: {

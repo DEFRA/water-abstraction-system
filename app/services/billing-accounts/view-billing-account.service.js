@@ -34,6 +34,8 @@ async function go(id, page, licenceId, chargeVersionId, companyId) {
     pageData.pagination.total,
     Number(page),
     `/system/billing-accounts/${id}`,
+    billingAccountData.bills.length,
+    'bills',
     queryArgs
   )
 
