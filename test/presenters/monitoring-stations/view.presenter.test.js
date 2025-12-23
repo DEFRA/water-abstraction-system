@@ -57,7 +57,7 @@ describe('Monitoring Stations - View presenter', () => {
     const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
     expect(result).to.equal({
-      backLink: { href: '/licences', text: 'Go back to search' },
+      backLink: { href: '/', text: 'Go back to search' },
       buttons: {
         createAlert: { href: '/system/notices/setup/alerts?monitoringStationId=f122d4bb-42bd-4af9-a081-1656f5a30b63' },
         tagLicence: { value: 'f122d4bb-42bd-4af9-a081-1656f5a30b63' }

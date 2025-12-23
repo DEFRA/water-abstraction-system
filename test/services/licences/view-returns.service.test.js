@@ -69,7 +69,7 @@ describe('Licences - View Returns service', () => {
           activeSecondaryNav: 'returns',
           backLink: {
             text: 'Go back to search',
-            href: '/licences'
+            href: '/'
           },
           noReturnsMessage: null,
           pageTitle: 'Returns',

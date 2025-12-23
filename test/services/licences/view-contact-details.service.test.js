@@ -87,7 +87,7 @@ describe('Licences - View Contact Details service', () => {
         activeNavBar: 'search',
         activeSecondaryNav: 'contact-details',
         backLink: {
-          href: '/licences',
+          href: '/',
           text: 'Go back to search'
         },
         customerContacts: [

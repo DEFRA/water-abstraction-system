@@ -202,7 +202,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
         expect(result.backLink).to.equal({
           title: 'Go back to search',
-          link: '/licences'
+          link: '/'
         })
       })
     })
