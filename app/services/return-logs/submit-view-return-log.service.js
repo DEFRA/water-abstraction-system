@@ -22,10 +22,10 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  * @param {object} payload - The submitted form data
  * @param {string} returnId - The id of the return log to update
  */
-async function go(payload, returnId) {
+async function go(payload, returnLogId) {
   const underQuery = payload['mark-query'] === 'mark'
 
-  await ReturnLogModel.query().patch({ underQuery, updatedAt: timestampForPostgres() }).where('returnId', returnId)
+  await ReturnLogModel.query().patch({ underQuery, updatedAt: timestampForPostgres() }).findById(returnLogId)
 }
 
 module.exports = {
