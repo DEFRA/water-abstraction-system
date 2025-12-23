@@ -69,7 +69,7 @@ function _dueDate(notifications) {
   const { dueDate: notificationDueDate } = notifications[0]
   const emailFutureDueDate = futureDueDate('email')
 
-  // compareDates returns 0 if the dates are the same, which is how we decide whether to calculate the date of stick
+  // compareDates returns 0 if the dates are the same, which is how we decide whether to calculate the date or stick
   // with what is in the notification
   if (compareDates(notificationDueDate, emailFutureDueDate) === 0) {
     return futureDueDate('letter')
