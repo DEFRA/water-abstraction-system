@@ -396,7 +396,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query Service',
     })
 
     after(async () => {
-      // await RecipientScenariosSeeder.clean(scenarios)
+      await RecipientScenariosSeeder.clean(scenarios)
     })
 
     describe('and the notice type is "invitations" or "reminders"', () => {
