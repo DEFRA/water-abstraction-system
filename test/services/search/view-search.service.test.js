@@ -325,7 +325,8 @@ describe('Search - View search service', () => {
         pageTitle: 'Search results for "1231231231"',
         pageTitleCaption: null,
         pagination: {
-          numberOfPages: 1
+          numberOfPages: 1,
+          showingMessage: 'Showing all 2 undefined'
         },
         partialMatches: {
           billingAccounts: [
@@ -557,7 +558,8 @@ describe('Search - View search service', () => {
         pageTitle: 'Search results for "1231231231"',
         pageTitleCaption: null,
         pagination: {
-          numberOfPages: 1
+          numberOfPages: 1,
+          showingMessage: 'Showing all 2 undefined'
         },
         partialMatches: {
           billingAccounts: [

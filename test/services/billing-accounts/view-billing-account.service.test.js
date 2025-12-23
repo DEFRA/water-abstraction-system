@@ -67,7 +67,7 @@ describe('Billing Accounts - View Billing Account service', () => {
         customerFile: null,
         lastUpdated: null,
         pageTitle: 'Billing account for Ferns Surfacing Limited',
-        pagination: { numberOfPages: 1 }
+        pagination: { numberOfPages: 1, showingMessage: 'Showing all 1 bills' }
       })
     })
   })

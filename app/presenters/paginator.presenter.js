@@ -116,24 +116,14 @@ function go(numberOfRecords, selectedPageNumber, path, currentAmount, message, q
   const numberOfPages = Math.ceil(numberOfRecords / DatabaseConfig.defaultPageSize)
 
   if (numberOfPages < 2) {
-    if (currentAmount && message) {
-      return { numberOfPages, showingMessage: showingXofY(numberOfRecords, currentAmount, message) }
-    }
-    return { numberOfPages }
+    return { numberOfPages, showingMessage: showingXofY(numberOfRecords, currentAmount, message) }
   }
 
   const queryString = _queryString(queryArgs)
 
   const component = _component(selectedPageNumber, numberOfPages, path, queryString)
 
-  if (currentAmount && message) {
-    return { component, numberOfPages, showingMessage: showingXofY(numberOfRecords, currentAmount, message) }
-  }
-
-  return {
-    component,
-    numberOfPages
-  }
+  return { component, numberOfPages, showingMessage: showingXofY(numberOfRecords, currentAmount, message) }
 }
 
 function _component(selectedPageNumber, numberOfPages, path, queryString) {

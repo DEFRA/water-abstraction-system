@@ -32,7 +32,9 @@ async function go(licenceId, auth, page = 1) {
   const pagination = PaginatorPresenter.go(
     totalNumber,
     selectedPageNumber,
-    `/system/licences/${licenceId}/communications`
+    `/system/licences/${licenceId}/communications`,
+    notifications.length,
+    'communications'
   )
 
   return {

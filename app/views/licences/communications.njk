@@ -52,6 +52,7 @@
   {{ govukTable({
     attributes: { 'data-test': 'notifications-table' },
     firstCellIsHeader: false,
+    caption: pagination.showingMessage,
     head: [
       { text: 'Type' },
       { text: 'Sent date' },
