@@ -49,7 +49,7 @@ class ReturnLogModel extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'return-submission.model',
         join: {
-          from: 'returnLogs.returnId',
+          from: 'returnLogs.id',
           to: 'returnSubmissions.returnLogId'
         }
       }

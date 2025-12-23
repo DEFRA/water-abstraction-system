@@ -59,7 +59,7 @@ describe('Return Logs - View Return Log presenter', () => {
       displayTable: true,
       displayTotal: true,
       displayUnits: false,
-      downloadCSVLink: `/system/return-logs/${returnLog.returnId}/download?version=1`,
+      downloadCSVLink: `/system/return-logs/${returnLog.id}/download?version=1`,
       meterDetails: null,
       method: 'abstractionVolumes',
       nilReturn: false,
@@ -100,7 +100,7 @@ describe('Return Logs - View Return Log presenter', () => {
       versions: [
         {
           createdAt: '16 December 2023',
-          link: `/system/return-logs/${returnLog.returnId}?version=1`,
+          link: `/system/return-logs/${returnLog.id}?version=1`,
           notes: null,
           selected: true,
           version: 1,
@@ -290,7 +290,7 @@ describe('Return Logs - View Return Log presenter', () => {
         const result = ViewReturnLogPresenter.go(auth, returnLog)
 
         expect(result.backLink).to.equal({
-          href: `/system/return-logs/${returnLog.returnId}`,
+          href: `/system/return-logs/${returnLog.id}`,
           text: 'Go back to the latest version'
         })
       })
@@ -413,7 +413,7 @@ describe('Return Logs - View Return Log presenter', () => {
         it('returns a link to download the selected version', () => {
           const result = ViewReturnLogPresenter.go(auth, returnLog)
 
-          const expectedLink = `/system/return-logs/${returnLog.returnId}/download?version=${returnLog.returnSubmissions[0].version}`
+          const expectedLink = `/system/return-logs/${returnLog.id}/download?version=${returnLog.returnSubmissions[0].version}`
 
           expect(result.downloadCSVLink).to.equal(expectedLink)
         })
@@ -874,14 +874,14 @@ describe('Return Logs - View Return Log presenter', () => {
       expect(result.versions).to.equal(
         [
           {
-            link: `/system/return-logs/${returnLog.returnId}?version=${returnLog.versions[0].version}`,
+            link: `/system/return-logs/${returnLog.id}?version=${returnLog.versions[0].version}`,
             notes: 'This was a good one',
             selected: false,
             version: returnLog.versions[0].version,
             user: returnLog.versions[0].userId
           },
           {
-            link: `/system/return-logs/${returnLog.returnId}?version=${returnLog.versions[1].version}`,
+            link: `/system/return-logs/${returnLog.id}?version=${returnLog.versions[1].version}`,
             notes: null,
             selected: true,
             version: returnLog.versions[1].version,

@@ -55,8 +55,8 @@ async function check(request, h) {
 }
 
 async function confirmed(request, h) {
-  const { returnId } = request.params
-  const pageData = await ConfirmedService.go(returnId)
+  const { returnLogId } = request.params
+  const pageData = await ConfirmedService.go(returnLogId)
 
   return h.view('return-logs/setup/confirmed.njk', pageData)
 }
@@ -153,9 +153,9 @@ async function submission(request, h) {
 }
 
 async function submitConfirmed(request, h) {
-  const { returnId } = request.params
+  const { returnLogId } = request.params
 
-  const licenceId = await SubmitConfirmedService.go(returnId)
+  const licenceId = await SubmitConfirmedService.go(returnLogId)
 
   return h.redirect(`/system/licences/${licenceId}/returns`)
 }
@@ -179,7 +179,7 @@ async function submitCheck(request, h) {
     return h.view('return-logs/setup/check.njk', pageData)
   }
 
-  return h.redirect(`/system/return-logs/setup/confirmed/${pageData.returnId}`)
+  return h.redirect(`/system/return-logs/setup/confirmed/${pageData.returnLogId}`)
 }
 
 async function submitMeterDetails(request, h) {

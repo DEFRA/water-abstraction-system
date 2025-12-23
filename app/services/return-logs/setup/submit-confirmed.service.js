@@ -11,16 +11,15 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
 /**
  * Manages marking a submitted return for supplementary billing
  *
- * @param {string} returnId - The UUID of the return log
+ * @param {string} returnLogId - The UUID of the return log
  *
  * @returns {Promise<string>} The licenceId to use in the redirect
  */
-async function go(returnId) {
-  const { licenceId, returnLogId } = await ReturnLogModel.query()
-    .select('licence.id AS licenceId', 'returnLogs.id AS returnLogId')
+async function go(returnLogId) {
+  const { licenceId } = await ReturnLogModel.query()
+    .findById(returnLogId)
+    .select('licence.id AS licenceId')
     .innerJoinRelated('licence')
-    .where('returnLogs.returnId', returnId)
-    .first()
 
   await ProcessBillingFlagService.go({ returnLogId })
 
