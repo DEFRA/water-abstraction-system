@@ -925,8 +925,8 @@ describe('Paginator Presenter', () => {
             })
           })
 
-          describe('when "currentAmount" is less than the default page size', () => {
-            it('returns the "Showing X of Y <message>" message', () => {
+          describe('when "numberOfShownItems" is less than the default page size', () => {
+            it('returns the "Showing 3 of 4975 notices"', () => {
               const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
               expect(result.showingMessage).equal(`Showing ${currentAmount} of 4975 notices`)
