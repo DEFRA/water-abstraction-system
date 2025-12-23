@@ -48,24 +48,29 @@ describe('Customers - Fetch licence service', () => {
     it('returns the licences for the company', async () => {
       const result = await FetchLicencesService.go(company.id)
 
-      expect(result).to.equal([
-        {
-          id: licenceDocumentRole.id,
-          licenceDocument: {
-            endDate: null,
-            id: licenceDocument.id,
-            licence: {
-              id: licence.id,
-              licenceDocumentHeader: {
-                id: licenceDocumentHeader.id,
-                licenceName: 'Tyrell Corporation'
+      expect(result).to.equal({
+        licences: [
+          {
+            id: licenceDocumentRole.id,
+            licenceDocument: {
+              endDate: null,
+              id: licenceDocument.id,
+              licence: {
+                id: licence.id,
+                licenceDocumentHeader: {
+                  id: licenceDocumentHeader.id,
+                  licenceName: 'Tyrell Corporation'
+                },
+                licenceRef: licence.licenceRef
               },
-              licenceRef: licence.licenceRef
-            },
-            startDate: new Date('2022-01-01')
+              startDate: new Date('2022-01-01')
+            }
           }
+        ],
+        pagination: {
+          total: 1
         }
-      ])
+      })
     })
   })
 })

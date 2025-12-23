@@ -21,6 +21,7 @@ const LicencesService = require('../../../app/services/customers/licences.servic
 describe('Customers - Licences Service', () => {
   let customer
   let licences
+  let page
 
   beforeEach(async () => {
     customer = CustomersFixtures.customer()
@@ -28,7 +29,12 @@ describe('Customers - Licences Service', () => {
     licences = CustomersFixtures.licences()
 
     Sinon.stub(FetchCustomerService, 'go').returns(customer)
-    Sinon.stub(FetchLicencesService, 'go').returns(licences)
+    Sinon.stub(FetchLicencesService, 'go').returns({
+      licences,
+      pagination: { total: 1 }
+    })
+
+    page = 1
   })
 
   afterEach(() => {
@@ -37,7 +43,7 @@ describe('Customers - Licences Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await LicencesService.go(customer.id)
+      const result = await LicencesService.go(customer.id, page)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -56,7 +62,11 @@ describe('Customers - Licences Service', () => {
           }
         ],
         pageTitle: 'Licences',
-        pageTitleCaption: 'Tyrell Corporation'
+        pageTitleCaption: 'Tyrell Corporation',
+        pagination: {
+          numberOfPages: 1,
+          showingMessage: 'Showing all 1 licences'
+        }
       })
     })
   })

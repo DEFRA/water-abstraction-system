@@ -11,11 +11,11 @@ const { formatLongDate } = require('../base.presenter.js')
  * Formats data for the 'customers/{id}/licences' page
  *
  * @param {module:CompanyModel} customer - The customer from the companies table
- * @param {object} licences - the licences for the customer
+ * @param {object} licenceDocumentRoles - the licences document roles for the customer
  *
  * @returns {object} The data formatted for the view template
  */
-function go(customer, licences) {
+function go(customer, licenceDocumentRoles) {
   return {
     backLink: {
       href: '/',
@@ -23,7 +23,7 @@ function go(customer, licences) {
     },
     pageTitleCaption: customer.name,
     pageTitle: 'Licences',
-    licences: _licences(licences)
+    licences: _licences(licenceDocumentRoles)
   }
 }
 
