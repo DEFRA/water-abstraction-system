@@ -228,55 +228,83 @@ describe('Notices - Submit Index Notices service', () => {
         it('returns the page data for the view, including any errors', async () => {
           const result = await SubmitIndexNoticesService.go(payload, yarStub, auth, '2')
 
-          expect(result).to.equal(
-            {
-              activeNavBar: 'notices',
-              error: {
-                errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
-                fromDate: { text: 'Enter a valid from date' }
-              },
-              filters: {
-                noticeTypes: [],
-                fromDate: '-04-01',
-                openFilter: true,
-                reference: null,
-                sentBy: 'admin-internal@wrls.gov.uk',
-                sentFromDay: payload.sentFromDay,
-                sentFromMonth: payload.sentFromMonth,
-                sentFromYear: null,
-                sentToDay: null,
-                sentToMonth: null,
-                sentToYear: null,
-                statuses: [],
-                toDate: undefined
-              },
-              links: {
-                adhoc: {
-                  href: '/system/notices/setup/adhoc',
-                  text: 'Create an ad-hoc notice'
-                },
-                notice: {
-                  href: '/system/notices/setup/standard',
-                  text: 'Create a standard notice'
-                }
-              },
-              notices: [
-                {
-                  createdDate: '25 March 2025',
-                  link: `/system/notices/${notice.id}`,
-                  recipients: notice.recipientCount,
-                  reference: notice.referenceCode,
-                  sentBy: 'admin-internal@wrls.gov.uk',
-                  status: 'sent',
-                  type: 'Stop alert'
-                }
-              ],
-              pageSubHeading: 'View a notice',
-              pageTitle: 'Notices',
-              tableCaption: 'Showing 1 of 70 notices'
+          expect(result).to.equal({
+            activeNavBar: 'notices',
+            error: {
+              errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
+              fromDate: { text: 'Enter a valid from date' }
             },
-            { skip: ['pagination'] }
-          )
+            filters: {
+              noticeTypes: [],
+              fromDate: '-04-01',
+              openFilter: true,
+              reference: null,
+              sentBy: 'admin-internal@wrls.gov.uk',
+              sentFromDay: payload.sentFromDay,
+              sentFromMonth: payload.sentFromMonth,
+              sentFromYear: null,
+              sentToDay: null,
+              sentToMonth: null,
+              sentToYear: null,
+              statuses: [],
+              toDate: undefined
+            },
+            links: {
+              adhoc: {
+                href: '/system/notices/setup/adhoc',
+                text: 'Create an ad-hoc notice'
+              },
+              notice: {
+                href: '/system/notices/setup/standard',
+                text: 'Create a standard notice'
+              }
+            },
+            notices: [
+              {
+                createdDate: '25 March 2025',
+                link: `/system/notices/${notice.id}`,
+                recipients: notice.recipientCount,
+                reference: notice.referenceCode,
+                sentBy: 'admin-internal@wrls.gov.uk',
+                status: 'sent',
+                type: 'Stop alert'
+              }
+            ],
+            pageSubHeading: 'View a notice',
+            pageTitle: 'Notices',
+            pagination: {
+              component: {
+                items: [
+                  {
+                    current: false,
+                    href: '/system/notices?page=1',
+                    number: 1,
+                    visuallyHiddenText: 'Page 1'
+                  },
+                  {
+                    current: true,
+                    href: '/system/notices?page=2',
+                    number: 2,
+                    visuallyHiddenText: 'Page 2'
+                  },
+                  {
+                    current: false,
+                    href: '/system/notices?page=3',
+                    number: 3,
+                    visuallyHiddenText: 'Page 3'
+                  }
+                ],
+                next: {
+                  href: '/system/notices?page=3'
+                },
+                previous: {
+                  href: '/system/notices?page=1'
+                }
+              },
+              numberOfPages: 3,
+              showingMessage: 'Showing 1 of 70 notices'
+            }
+          })
         })
       })
 
@@ -288,55 +316,55 @@ describe('Notices - Submit Index Notices service', () => {
         it('returns the page data for the view, including any errors', async () => {
           const result = await SubmitIndexNoticesService.go(payload, yarStub, auth)
 
-          expect(result).to.equal(
-            {
-              activeNavBar: 'notices',
-              error: {
-                errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
-                fromDate: { text: 'Enter a valid from date' }
-              },
-              filters: {
-                noticeTypes: [],
-                fromDate: '-04-01',
-                openFilter: true,
-                reference: null,
-                sentBy: 'admin-internal@wrls.gov.uk',
-                sentFromDay: payload.sentFromDay,
-                sentFromMonth: payload.sentFromMonth,
-                sentFromYear: null,
-                sentToDay: null,
-                sentToMonth: null,
-                sentToYear: null,
-                statuses: [],
-                toDate: undefined
-              },
-              links: {
-                adhoc: {
-                  href: '/system/notices/setup/adhoc',
-                  text: 'Create an ad-hoc notice'
-                },
-                notice: {
-                  href: '/system/notices/setup/standard',
-                  text: 'Create a standard notice'
-                }
-              },
-              notices: [
-                {
-                  createdDate: '25 March 2025',
-                  link: `/system/notices/${notice.id}`,
-                  recipients: notice.recipientCount,
-                  reference: notice.referenceCode,
-                  sentBy: 'admin-internal@wrls.gov.uk',
-                  status: 'sent',
-                  type: 'Stop alert'
-                }
-              ],
-              pageSubHeading: 'View a notice',
-              pageTitle: 'Notices',
-              tableCaption: 'Showing all 1 notices'
+          expect(result).to.equal({
+            activeNavBar: 'notices',
+            error: {
+              errorList: [{ href: '#fromDate', text: 'Enter a valid from date' }],
+              fromDate: { text: 'Enter a valid from date' }
             },
-            { skip: ['pagination'] }
-          )
+            filters: {
+              noticeTypes: [],
+              fromDate: '-04-01',
+              openFilter: true,
+              reference: null,
+              sentBy: 'admin-internal@wrls.gov.uk',
+              sentFromDay: payload.sentFromDay,
+              sentFromMonth: payload.sentFromMonth,
+              sentFromYear: null,
+              sentToDay: null,
+              sentToMonth: null,
+              sentToYear: null,
+              statuses: [],
+              toDate: undefined
+            },
+            links: {
+              adhoc: {
+                href: '/system/notices/setup/adhoc',
+                text: 'Create an ad-hoc notice'
+              },
+              notice: {
+                href: '/system/notices/setup/standard',
+                text: 'Create a standard notice'
+              }
+            },
+            notices: [
+              {
+                createdDate: '25 March 2025',
+                link: `/system/notices/${notice.id}`,
+                recipients: notice.recipientCount,
+                reference: notice.referenceCode,
+                sentBy: 'admin-internal@wrls.gov.uk',
+                status: 'sent',
+                type: 'Stop alert'
+              }
+            ],
+            pageSubHeading: 'View a notice',
+            pageTitle: 'Notices',
+            pagination: {
+              numberOfPages: 1,
+              showingMessage: 'Showing all 1 notices'
+            }
+          })
         })
       })
     })

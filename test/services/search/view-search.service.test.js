@@ -14,7 +14,7 @@ const FindAllSearchMatchesService = require('../../../app/services/search/find-a
 // Thing under test
 const ViewSearchService = require('../../../app/services/search/view-search.service.js')
 
-describe.only('Search - View search service', () => {
+describe('Search - View search service', () => {
   let page
   let searchQuery
   let searchResultType

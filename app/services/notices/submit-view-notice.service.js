@@ -64,14 +64,14 @@ function _clearFilters(payload, yar, filterKey) {
 async function _replayView(noticeId, payload, error, selectedPageNumber, savedFilters) {
   const { notice, notifications, totalNumber } = await FetchNoticeService.go(noticeId, selectedPageNumber, savedFilters)
 
-  const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/notices/${notice.id}`)
-  const pageData = ViewNoticePresenter.go(
-    notice,
-    notifications,
+  const pagination = PaginatorPresenter.go(
     totalNumber,
     selectedPageNumber,
-    pagination.numberOfPages
+    `/system/notices/${notice.id}`,
+    notifications.length,
+    'notifications'
   )
+  const pageData = ViewNoticePresenter.go(notice, notifications)
 
   return {
     activeNavBar: 'notices',

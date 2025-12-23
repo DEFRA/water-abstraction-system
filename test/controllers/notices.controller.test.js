@@ -86,7 +86,7 @@ describe('Notices controller', () => {
           const pageData = _noticesPageData()
 
           pageData.pageTitle = 'Notices (page 2 of 3)'
-          pageData.tableCaption = 'Showing 25 of 70 notices'
+          pageData.pagination.showingMessage = 'Showing 25 of 70 notices'
 
           Sinon.stub(IndexNoticesService, 'go').returns(pageData)
         })
@@ -143,7 +143,7 @@ describe('Notices controller', () => {
             const pageData = _noticesPageData(true)
 
             pageData.pageTitle = 'Notices (page 2 of 3)'
-            pageData.tableCaption = 'Showing 25 of 70 notices'
+            pageData.pagination.showingMessage = 'Showing 25 of 70 notices'
 
             Sinon.stub(SubmitIndexNoticesService, 'go').returns(pageData)
           })
@@ -203,7 +203,7 @@ describe('Notices controller', () => {
           const pageData = _noticePageData()
 
           pageData.pageTitle = 'Warning alert (page 2 of 3)'
-          pageData.showingDeclaration = 'Showing 25 of 70 notifications'
+          pageData.pagination.showingMessage = 'Showing 25 of 70 notifications'
 
           Sinon.stub(ViewNoticeService, 'go').returns(pageData)
         })
@@ -260,7 +260,7 @@ describe('Notices controller', () => {
             const pageData = _noticePageData(true)
 
             pageData.pageTitle = 'Warning alert (page 2 of 3)'
-            pageData.showingDeclaration = 'Showing 25 of 70 notifications'
+            pageData.pagination.showingMessage = 'Showing 25 of 70 notifications'
 
             Sinon.stub(SubmitViewNoticeService, 'go').returns(pageData)
           })
@@ -306,10 +306,10 @@ function _noticePageData(error = false) {
     pageTitle: 'Warning alert',
     pageTitleCaption: `Notice ${reference}`,
     reference,
-    showingDeclaration: 'Showing all 1 notifications',
     status: 'error',
     pagination: {
-      numberOfPages: 1
+      numberOfPages: 1,
+      showingMessage: 'Showing all 1 notifications'
     },
     totalNumber: 1
   }
@@ -344,7 +344,9 @@ function _noticesPageData(error = false) {
       }
     ],
     pageTitle: 'Notices',
-    tableCaption: 'Showing all 1 notices'
+    pagination: {
+      showingMessage: 'Showing all 1 notices'
+    }
   }
 
   if (error) {
