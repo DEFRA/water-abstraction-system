@@ -105,26 +105,26 @@ const COMPLEX_END_PAGINATOR = 'end'
  * @param {number} numberOfRecords - the total number of records or results of the thing being paginated
  * @param {number} selectedPageNumber - the page of results selected for viewing
  * @param {string} path - the URL path the paginator should use, for example, `'/system/bill-runs'`
+ * @param {number} numberOfShownItems - The number of items currently being shown (e.g. items on the current page).
+ * @param {string} message - A label appended to the end of the 'Showing x of y' string (e.g. "returns", "results").
  * @param {object} queryArgs - the current query arguments to be added to the pagination links
  *
  * @returns {object} if no pagination is needed just the `numberOfPages` is returned else a `component:` property is
  * also included that can be directly passed to the `govukPagination()` in the view.
  */
-function go(numberOfRecords, selectedPageNumber, path, queryArgs = {}) {
+function go(numberOfRecords, selectedPageNumber, path, numberOfShownItems, message, queryArgs = {}) {
   const numberOfPages = Math.ceil(numberOfRecords / DatabaseConfig.defaultPageSize)
+  const showingMessage = _showingXofY(numberOfRecords, numberOfShownItems, message)
 
   if (numberOfPages < 2) {
-    return { numberOfPages }
+    return { numberOfPages, showingMessage }
   }
 
   const queryString = _queryString(queryArgs)
 
   const component = _component(selectedPageNumber, numberOfPages, path, queryString)
 
-  return {
-    component,
-    numberOfPages
-  }
+  return { component, numberOfPages, showingMessage }
 }
 
 function _component(selectedPageNumber, numberOfPages, path, queryString) {
@@ -247,6 +247,30 @@ function _simplePaginator(selectedPageNumber, numberOfPages, path, queryString) 
   }
 
   return items
+}
+
+/**
+ * Returns a human-readable pagination summary string
+ *
+ * If the total number of items exceeds the default page size (set in config), it returns a string in the form:
+ * "Showing X of Y <message>".
+ *
+ * For all pages except the last, 'X' will equal the default page size. On the last page, 'X' will be the number of
+ * shown items, for example, "Showing 3 of 78 communications".
+ *
+ * If the total number of items does not exceed the default page size, it returns: "Showing all Y <message>".
+ *
+ * In most cases, you'll set this as the caption for the table displaying the records.
+ *
+ * @private
+ *
+ */
+function _showingXofY(paginationTotal, currentAmount, message) {
+  if (paginationTotal > DatabaseConfig.defaultPageSize) {
+    return `Showing ${currentAmount} of ${paginationTotal} ${message}`
+  }
+
+  return `Showing all ${paginationTotal} ${message}`
 }
 
 module.exports = {

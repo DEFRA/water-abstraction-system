@@ -86,8 +86,15 @@ function _handleOneOptionSelected(payload, key) {
 async function _replayView(payload, error, selectedPageNumber, savedFilters, auth) {
   const { results: notices, total: totalNumber } = await FetchNoticesService.go(savedFilters, selectedPageNumber)
 
-  const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/notices`)
-  const pageData = NoticesIndexPresenter.go(notices, totalNumber, auth)
+  const pagination = PaginatorPresenter.go(
+    totalNumber,
+    selectedPageNumber,
+    `/system/notices`,
+    notices.length,
+    'notices'
+  )
+
+  const pageData = NoticesIndexPresenter.go(notices, auth)
 
   return {
     activeNavBar: 'notices',

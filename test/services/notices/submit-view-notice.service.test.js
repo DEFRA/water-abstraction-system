@@ -259,12 +259,12 @@ describe('Notices - Submit View Notice service', () => {
                   href: '/system/notices/a40dcb94-cb01-4fce-9a46-94b49eca2057?page=2'
                 }
               },
-              numberOfPages: 3
+              numberOfPages: 3,
+              showingMessage: 'Showing 2 of 70 notifications'
             },
             reference: notice.referenceCode,
             sentBy: 'test@wrls.gov.uk',
             sentDate: '21 February 2025',
-            showingDeclaration: 'Showing 2 of 70 notifications',
             status: 'error',
             totalNumber: 70
           })
@@ -325,12 +325,12 @@ describe('Notices - Submit View Notice service', () => {
             pageTitle: 'Warning alert',
             pageTitleCaption: `Notice ${notice.referenceCode}`,
             pagination: {
-              numberOfPages: 1
+              numberOfPages: 1,
+              showingMessage: 'Showing all 2 notifications'
             },
             reference: notice.referenceCode,
             sentBy: 'test@wrls.gov.uk',
             sentDate: '21 February 2025',
-            showingDeclaration: 'Showing all 2 notifications',
             status: 'error',
             totalNumber: 2
           })

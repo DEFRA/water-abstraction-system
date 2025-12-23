@@ -27,7 +27,13 @@ async function go(noticeId, yar, page) {
 
   const { notice, notifications, totalNumber } = await FetchNoticeService.go(noticeId, selectedPageNumber, filters)
 
-  const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/notices/${notice.id}`)
+  const pagination = PaginatorPresenter.go(
+    totalNumber,
+    selectedPageNumber,
+    `/system/notices/${notice.id}`,
+    notifications.length,
+    'notifications'
+  )
 
   const pageData = ViewNoticePresenter.go(
     notice,

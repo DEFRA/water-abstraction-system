@@ -16,15 +16,8 @@ const ViewNoticePresenter = require('../../../app/presenters/notices/view-notice
 describe('Notices - View Notice presenter', () => {
   let notice
   let notifications
-  let numberOfPages
-  let totalNumber
-  let selectedPage
 
   beforeEach(() => {
-    numberOfPages = 1
-    selectedPage = 1
-    totalNumber = 2
-
     notice = {
       createdAt: new Date('2025-02-21T14:52:18.000Z'),
       id: 'a40dcb94-cb01-4fce-9a46-94b49eca2057',
@@ -88,7 +81,7 @@ describe('Notices - View Notice presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+    const result = ViewNoticePresenter.go(notice, notifications)
 
     expect(result).to.equal({
       backLink: { href: '/system/notices', text: 'Go back to notices' },
@@ -127,7 +120,6 @@ describe('Notices - View Notice presenter', () => {
       reference: notice.referenceCode,
       sentBy: 'test@wrls.gov.uk',
       sentDate: '21 February 2025',
-      showingDeclaration: 'Showing all 2 notifications',
       status: 'error'
     })
   })
@@ -142,7 +134,7 @@ describe('Notices - View Notice presenter', () => {
           })
 
           it('returns only the populated address lines as an array', () => {
-            const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+            const result = ViewNoticePresenter.go(notice, notifications)
 
             expect(result.notifications[0].recipient).to.equal([
               'Clean Water Limited',
@@ -166,7 +158,7 @@ describe('Notices - View Notice presenter', () => {
           })
 
           it('returns only the populated address lines as an array', () => {
-            const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+            const result = ViewNoticePresenter.go(notice, notifications)
 
             expect(result.notifications[0].recipient).to.equal([
               'Clean Water Limited',
@@ -183,32 +175,10 @@ describe('Notices - View Notice presenter', () => {
 
       describe('when the "messageType" is "letter"', () => {
         it('returns the recipient email in an array', () => {
-          const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
+          const result = ViewNoticePresenter.go(notice, notifications)
 
           expect(result.notifications[1].recipient).to.equal(['shaw.carol@atari.com'])
         })
-      })
-    })
-  })
-
-  describe('the "showingDeclaration" property', () => {
-    describe('when there is only one page of results', () => {
-      it('returns the "showingDeclaration" without page info', () => {
-        const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
-
-        expect(result.showingDeclaration).to.equal('Showing all 2 notifications')
-      })
-    })
-
-    describe('when there are multiple pages of results', () => {
-      beforeEach(() => {
-        totalNumber = 50
-      })
-
-      it('returns the "showingDeclaration" with page info', () => {
-        const result = ViewNoticePresenter.go(notice, notifications, totalNumber, selectedPage, numberOfPages)
-
-        expect(result.showingDeclaration).to.equal('Showing 2 of 50 notifications')
       })
     })
   })

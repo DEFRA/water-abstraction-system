@@ -58,7 +58,7 @@
     {% endfor %}
 
     {{ govukTable({
-      caption: tableCaption,
+      caption: pagination.showingMessage,
       head: [
         {
           text: 'Return reference and dates'
