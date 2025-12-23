@@ -117,7 +117,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitCheckService, 'go').resolves({ returnId: '168026d8-f29b-4165-8726-734c6b14adec' })
+          Sinon.stub(SubmitCheckService, 'go').resolves({ returnLogId: '168026d8-f29b-4165-8726-734c6b14adec' })
         })
 
         it('redirects to the confirmed page on success', async () => {
@@ -159,7 +159,7 @@ describe('Return Logs - Setup - Controller', () => {
     })
   })
 
-  describe('return-logs/setup/confirmed/{returnId}', () => {
+  describe('return-logs/setup/confirmed/{returnLogId}', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
@@ -183,7 +183,6 @@ describe('Return Logs - Setup - Controller', () => {
               label: 'Purpose',
               value: 'Spray Irrigation - Direct'
             },
-            returnId: '227d174d-500b-4e88-ae95-c70b0676bb88',
             siteDescription: 'Addington Sandpits',
             status: 'received'
           })
