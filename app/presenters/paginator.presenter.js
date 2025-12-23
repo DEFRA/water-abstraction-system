@@ -249,20 +249,22 @@ function _simplePaginator(selectedPageNumber, numberOfPages, path, queryString) 
 }
 
 /**
- * Returns a human-readable pagination summary string.
+ * Returns a human-readable pagination summary string
  *
- * If the total number of items exceeds the default page size (set in config),
- * it returns a string in the form: "Showing X of Y <message>"
- * Otherwise, it returns: "Showing all Y <message>"
+ * If the total number of items exceeds the default page size (set in config), it returns a string in the form:
+ * "Showing X of Y <message>".
  *
- * @param {number} paginationTotal - The total number of items available from the paginated request.
- * @param {number} currentAmount - The number of items currently being shown (e.g. items on the current page).
- * @param {string} message - A label appended to the end of the string (e.g. "returns", "results").
+ * For all pages except the last, 'X' will equal the default page size. On the last page, 'X' will be the number of
+ * shown items, for example, "Showing 3 of 78 communications".
  *
- * @returns {string} A formatted pagination summary string.
+ * If the total number of items does not exceed the default page size, it returns: "Showing all Y <message>".
+ * 
+ * In most cases, you'll set this as the caption for the table displaying the records.
+ *
+ * @private
  *
  */
-function showingXofY(paginationTotal, currentAmount, message) {
+function _showingXofY(paginationTotal, currentAmount, message) {
   if (paginationTotal > DatabaseConfig.defaultPageSize) {
     return `Showing ${currentAmount} of ${paginationTotal} ${message}`
   }
