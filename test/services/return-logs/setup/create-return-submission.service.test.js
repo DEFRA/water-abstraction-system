@@ -29,8 +29,8 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       session = {
         journey: 'enterReturn',
         note: { content: 'TEST_NOTE' },
-        returnId: generateUUID(),
-        returnLogId: ReturnLogHelper.generateReturnLogId()
+        returnId: ReturnLogHelper.generateReturnLogId(),
+        returnLogId: generateUUID()
       }
     })
 
@@ -46,8 +46,8 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
             metadata,
             nilReturn: false,
             notes: 'TEST_NOTE',
-            returnId: session.returnLogId,
-            returnLogId: session.returnId,
+            returnId: session.returnId,
+            returnLogId: session.returnLogId,
             userId: user.username,
             userType: 'internal',
             version: 1
@@ -62,7 +62,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       beforeEach(async () => {
         const returnSubmission = await ReturnSubmissionHelper.add()
 
-        session.returnId = returnSubmission.returnLogId
+        session.returnLogId = returnSubmission.returnLogId
       })
 
       it('creates a new return submission and sets the version to 2', async () => {
@@ -76,8 +76,8 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
             metadata,
             nilReturn: false,
             notes: 'TEST_NOTE',
-            returnId: session.returnLogId,
-            returnLogId: session.returnId,
+            returnId: session.returnId,
+            returnLogId: session.returnLogId,
             userId: user.username,
             userType: 'internal',
             version: 2
@@ -91,7 +91,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
         await CreateReturnSubmissionService.go(metadata, session, timestamp, user)
 
         const previousVersion = await ReturnSubmissionModel.query()
-          .where('returnLogId', session.returnId)
+          .where('returnLogId', session.returnLogId)
           .where('version', 1)
           .first()
 
@@ -127,7 +127,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       beforeEach(async () => {
         const returnSubmission = await ReturnSubmissionHelper.add()
 
-        session.returnId = returnSubmission.returnLogId
+        session.returnLogId = returnSubmission.returnLogId
       })
 
       it('does not persist anything if an error occurs', async () => {
@@ -141,12 +141,12 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
         }
 
         const currentVersion = await ReturnSubmissionModel.query()
-          .where('returnLogId', session.returnId)
+          .where('returnLogId', session.returnLogId)
           .where('version', 2)
           .first()
 
         const previousVersion = await ReturnSubmissionModel.query()
-          .where('returnLogId', session.returnId)
+          .where('returnLogId', session.returnLogId)
           .where('version', 1)
           .first()
 
