@@ -5,18 +5,17 @@
  * @module IndexNoticesPresenter
  */
 
-const { formatLongDate, formatNoticeType, paginationShowingXofY } = require('../base.presenter.js')
+const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
 
 /**
  * Formats data for the `/notices` page
  *
  * @param {module:NoticeModel[]} notices - An array of notices to display
- * @param {number} totalNumber - The total number of notices
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(notices, totalNumber, auth) {
+function go(notices, auth) {
   const {
     credentials: { scope }
   } = auth
@@ -25,8 +24,7 @@ function go(notices, totalNumber, auth) {
     links: _links(scope),
     notices: _noticeRowData(notices),
     pageSubHeading: 'View a notice',
-    pageTitle: 'Notices',
-    tableCaption: paginationShowingXofY(totalNumber, notices.length, 'notices')
+    pageTitle: 'Notices'
   }
 }
 

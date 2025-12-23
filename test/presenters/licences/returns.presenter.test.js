@@ -17,10 +17,8 @@ describe('Licences - Returns presenter', () => {
   let returnLogs
   let hasRequirements
   let licence
-  let paginationTotal
 
   beforeEach(() => {
-    paginationTotal = 1
     hasRequirements = true
     returnLogs = _returnLogs()
 
@@ -31,7 +29,7 @@ describe('Licences - Returns presenter', () => {
 
   describe('when provided with returns data', () => {
     it('correctly presents the data', () => {
-      const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence, paginationTotal)
+      const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
       expect(result).to.equal({
         backLink: {
@@ -60,14 +58,13 @@ describe('Licences - Returns presenter', () => {
             reference: '10046820',
             status: 'overdue'
           }
-        ],
-        tableCaption: 'Showing all 1 returns'
+        ]
       })
     })
 
     describe('the "dates" property', () => {
       it('returns the start and end date in long format (2 January 2020 to 1 February 2020)', () => {
-        const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence, paginationTotal)
+        const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
         expect(result.returns[0].dates).to.equal('2 January 2020 to 1 February 2020')
       })
@@ -76,7 +73,7 @@ describe('Licences - Returns presenter', () => {
     describe('the "description" property', () => {
       describe('when description in the metadata is set', () => {
         it('returns an empty string', () => {
-          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence, paginationTotal)
+          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
           expect(result.returns[0].description).to.equal('empty description')
         })
@@ -90,7 +87,7 @@ describe('Licences - Returns presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence, paginationTotal)
+          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
           expect(result.returns[0].description).to.equal('')
         })
@@ -100,7 +97,7 @@ describe('Licences - Returns presenter', () => {
     describe('the "dueDate" property', () => {
       describe('when the due date is set', () => {
         it('returns the formatted due date', () => {
-          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence, paginationTotal)
+          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
           expect(result.returns[0].dueDate).to.equal('28 November 2020')
         })
@@ -112,31 +109,9 @@ describe('Licences - Returns presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence, paginationTotal)
+          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
           expect(result.returns[0].dueDate).to.equal('')
-        })
-      })
-    })
-
-    describe('the "tableCaption" property', () => {
-      describe('when the total returns is not over the "defaultPageSize"', () => {
-        it('returns the table caption', () => {
-          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence, paginationTotal)
-
-          expect(result.tableCaption).to.equal('Showing all 1 returns')
-        })
-      })
-
-      describe('when the total returns is over the "defaultPageSize"', () => {
-        beforeEach(() => {
-          paginationTotal = 30
-        })
-
-        it('returns the table caption', () => {
-          const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence, paginationTotal)
-
-          expect(result.tableCaption).to.equal('Showing 2 of 30 returns')
         })
       })
     })
@@ -145,7 +120,7 @@ describe('Licences - Returns presenter', () => {
   describe('the "noReturnsMessage" property', () => {
     describe('when a licence has returns and requirements', () => {
       it('returns null', () => {
-        const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence, paginationTotal)
+        const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
         expect(result.noReturnsMessage).to.be.null()
       })
@@ -158,7 +133,7 @@ describe('Licences - Returns presenter', () => {
       })
 
       it('returns the message "No requirements for returns have been set up for this licence."', () => {
-        const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence, paginationTotal)
+        const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
         expect(result.noReturnsMessage).to.equal('No requirements for returns have been set up for this licence.')
       })
@@ -170,7 +145,7 @@ describe('Licences - Returns presenter', () => {
       })
 
       it('returns the message "No returns for this licence."', () => {
-        const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence, paginationTotal)
+        const result = ReturnsPresenter.go(returnLogs, hasRequirements, licence)
 
         expect(result.noReturnsMessage).to.equal('No returns for this licence.')
       })

@@ -81,8 +81,7 @@ describe('Notices - Index Notices service', () => {
         ],
         pageSubHeading: 'View a notice',
         pageTitle: 'Notices',
-        tableCaption: 'Showing all 1 notices',
-        pagination: { numberOfPages: 1 }
+        pagination: { numberOfPages: 1, showingMessage: 'Showing all 1 notices' }
       })
     })
   })

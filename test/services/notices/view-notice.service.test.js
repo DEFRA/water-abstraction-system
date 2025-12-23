@@ -149,10 +149,10 @@ describe('Notices - View Notice service', () => {
         reference: fetchResults.notice.referenceCode,
         sentBy: 'test@wrls.gov.uk',
         sentDate: '21 February 2025',
-        showingDeclaration: 'Showing all 2 notifications',
         status: 'error',
         pagination: {
-          numberOfPages: 1
+          numberOfPages: 1,
+          showingMessage: 'Showing all 2 notifications'
         },
         totalNumber: 2
       })

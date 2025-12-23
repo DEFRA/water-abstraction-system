@@ -5,18 +5,17 @@
  * @module ViewNoticePresenter
  */
 
-const { formatLongDate, formatNoticeType, paginationShowingXofY } = require('../base.presenter.js')
+const { formatLongDate, formatNoticeType } = require('../base.presenter.js')
 
 /**
  * Formats data for the 'notices/{id}' page
  *
  * @param {module:EventModel} notice - The notice object
  * @param {module:NotificationModel[]} notifications - The notifications linked to the notice
- * @param {number} totalNumber - The total number of notifications linked to the notice
  *
  * @returns {object[]} - The data formatted for the view template
  */
-function go(notice, notifications, totalNumber) {
+function go(notice, notifications) {
   const tableRows = _formatTableData(notifications)
 
   return {
@@ -28,7 +27,6 @@ function go(notice, notifications, totalNumber) {
     reference: notice.referenceCode,
     sentBy: notice.issuer,
     sentDate: formatLongDate(notice.createdAt),
-    showingDeclaration: paginationShowingXofY(totalNumber, notifications.length, 'notifications'),
     status: notice.overallStatus
   }
 }

@@ -74,10 +74,9 @@ describe('Licences - View Returns service', () => {
           noReturnsMessage: 'No returns for this licence.',
           pageTitle: 'Returns',
           pageTitleCaption: `Licence ${licence.licenceRef}`,
-          pagination: { numberOfPages: 1 },
+          pagination: { numberOfPages: 1, showingMessage: 'Showing all 1 returns' },
           returns: [],
-          roles: ['returns'],
-          tableCaption: 'Showing all 1 returns'
+          roles: ['returns']
         })
       })
     })

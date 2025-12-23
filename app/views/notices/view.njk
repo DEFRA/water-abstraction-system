@@ -146,7 +146,7 @@
   {% if notifications|length === 0 %}
     <p class="govuk-body">No notifications found.</p>
   {% else %}
-    <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">{{showingDeclaration}}</p>
+    <p class="govuk-!-font-weight-bold govuk-!-margin-bottom-0">{{pagination.showingMessage}}</p>
 
     {% set tableRows = [] %}
     {% for notification in notifications %}

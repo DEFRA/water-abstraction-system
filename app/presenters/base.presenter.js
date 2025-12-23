@@ -1,7 +1,6 @@
 'use strict'
 
 const { convertFromCubicMetres, today } = require('../lib/general.lib.js')
-const { defaultPageSize } = require('../../config/database.config.js')
 const { noticeMappings } = require('../lib/static-lookups.lib.js')
 
 const DUE_PERIOD_DAYS = 27
@@ -536,28 +535,6 @@ function leftPadZeroes(number, length) {
 }
 
 /**
- * Returns a human-readable pagination summary string.
- *
- * If the total number of items exceeds the default page size (set in config),
- * it returns a string in the form: "Showing X of Y <message>"
- * Otherwise, it returns: "Showing all Y <message>"
- *
- * @param {number} paginationTotal - The total number of items available from the paginated request.
- * @param {number} currentAmount - The number of items currently being shown (e.g. items on the current page).
- * @param {string} message - A label appended to the end of the string (e.g. "returns", "results").
- *
- * @returns {string} A formatted pagination summary string.
- *
- */
-function paginationShowingXofY(paginationTotal, currentAmount, message) {
-  if (paginationTotal > defaultPageSize) {
-    return `Showing ${currentAmount} of ${paginationTotal} ${message}`
-  }
-
-  return `Showing all ${paginationTotal} ${message}`
-}
-
-/**
  * Convert a string to sentence case by lowercasing all characters then capitalizing the first letter
  *
  * Will work for strings containing multiple words or only one.
@@ -618,7 +595,6 @@ module.exports = {
   formatValidationResult,
   formatValueUnit,
   leftPadZeroes,
-  paginationShowingXofY,
   sentenceCase,
   titleCase
 }

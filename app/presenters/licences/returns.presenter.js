@@ -5,7 +5,7 @@
  * @module ReturnsPresenter
  */
 
-const { formatLongDate, formatPurposes, formatReturnLogStatus, paginationShowingXofY } = require('../base.presenter.js')
+const { formatLongDate, formatPurposes, formatReturnLogStatus } = require('../base.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/returns` view licence returns page
@@ -13,11 +13,10 @@ const { formatLongDate, formatPurposes, formatReturnLogStatus, paginationShowing
  * @param {module:ReturnLogModel[]} returnLogs - The results from `FetchLicenceReturnsService` to be formatted
  * @param {boolean} hasRequirements - True if the licence has return requirements else false
  * @param {object} licence - The id and licence ref of the licence
- * @param {number} totalReturns - the total returns from the pagination object
  *
  * @returns {object} The data formatted for the view template
  */
-function go(returnLogs, hasRequirements, licence, totalReturns) {
+function go(returnLogs, hasRequirements, licence) {
   const returns = _returns(returnLogs)
 
   const { licenceRef } = licence
@@ -32,8 +31,7 @@ function go(returnLogs, hasRequirements, licence, totalReturns) {
     returns,
     noReturnsMessage: _noReturnsMessage(hasReturns, hasRequirements),
     pageTitle: 'Returns',
-    pageTitleCaption: `Licence ${licenceRef}`,
-    tableCaption: paginationShowingXofY(totalReturns, returns.length, 'returns')
+    pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 
