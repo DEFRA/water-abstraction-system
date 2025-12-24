@@ -16,7 +16,7 @@ const { NoticeType } = require('../../../../../app/lib/static-lookups.lib.js')
 // Thing under test
 const GenerateRecipientsQueryService = require('../../../../../app/services/notices/setup/returns-notice/generate-recipients-query.service.js')
 
-describe('Notices - Setup - Returns Notice - Generate Recipients Query Service', () => {
+describe('Notices - Setup - Returns Notice - Generate Recipients Query service', () => {
   const dueReturnLogsQuery = `
   SELECT
     rl.due_date,
