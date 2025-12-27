@@ -41,7 +41,7 @@ function addressToCSV(address) {
 }
 
 /**
- * Determines the due date for a notification
+ * Determines the due date for a notification when no due date information is available
  *
  * This is determined by the business to be 'today' plus 28 days for email, and 29 days for letters. For example, if
  * today is 2025-11-01 then
