@@ -64,7 +64,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
             // The notifications will share some of the same licence references and return log IDs. We can then test
             // what the service returns doesn't contain duplicates
             licenceRefs = [generateLicenceRef(), generateLicenceRef(), generateLicenceRef()].sort()
-            returnLogIds = [generateUUID(), generateUUID(), generateUUID()]
+            returnLogIds = [generateUUID(), generateUUID(), generateUUID()].sort()
           })
 
           describe('and where their "due date" was calculated as today plus 28 days', () => {
