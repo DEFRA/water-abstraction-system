@@ -23,9 +23,9 @@ const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.j
  * @returns {Promise<object>} The created alternate notice and notifications
  */
 async function go(notice, dueDate, licenceRefs, returnLogIds) {
-  const recipients = await FetchAlternateReturnsRecipientsService.go(returnLogIds)
+  const recipients = await FetchAlternateReturnsRecipientsService.go(returnLogIds, dueDate)
   const alternateNotice = await _notice(notice, recipients, licenceRefs)
-  const notifications = await _notifications(alternateNotice, recipients, dueDate)
+  const notifications = await _notifications(alternateNotice, recipients)
 
   return { notice: alternateNotice, notifications }
 }
@@ -55,7 +55,7 @@ async function _notice(notice, recipients, licenceRefs) {
   return EventModel.query().insert({ ...noticeDetails, createdAt: timestamp, updatedAt: timestamp })
 }
 
-async function _notifications(notice, recipients, dueDate) {
+async function _notifications(notice, recipients) {
   const {
     id: noticeId,
     metadata: { returnCycle: returnPeriod }
@@ -66,7 +66,6 @@ async function _notifications(notice, recipients, dueDate) {
   const session = {
     determinedReturnsPeriod: returnPeriod,
     journey: NoticeJourney.STANDARD,
-    latestDueDate: dueDate,
     noticeType: NoticeType.ALTERNATE_INVITATION
   }
 
