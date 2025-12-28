@@ -44,9 +44,9 @@ const HEADERS = [
  * and subsequent rows corresponding to the recipient details.
  */
 function go(recipients, session) {
-  const { noticeType, notificationType } = session
+  const { notificationType } = session
 
-  const rows = _transformToCsv(recipients, noticeType, notificationType)
+  const rows = _transformToCsv(recipients, notificationType)
 
   return [HEADERS + '\n', ...rows].join('')
 }
@@ -58,7 +58,7 @@ function go(recipients, session) {
  *
  * @private
  */
-function _transformToCsv(recipients, noticeType, notificationType) {
+function _transformToCsv(recipients, notificationType) {
   return recipients.map((recipient) => {
     const { contact } = recipient
 
