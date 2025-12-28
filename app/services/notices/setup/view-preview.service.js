@@ -7,8 +7,8 @@
 
 const AbstractionAlertNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
-const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
 const PreviewPresenter = require('../../../presenters/notices/setup/preview.presenter.js')
+const ReturnsNoticeNotificationsPresenter = require('../../../presenters/notices/setup/returns-notice-notifications.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
@@ -53,7 +53,7 @@ function _notification(recipient, session, licenceMonitoringStationId) {
       return unfilteredNotification.personalisation.licenceGaugingStationId === licenceMonitoringStationId
     })
   } else {
-    notification = NotificationsPresenter.go(session, [recipient], null)[0]
+    notification = ReturnsNoticeNotificationsPresenter.go(session, [recipient], null)[0]
   }
 
   return notification

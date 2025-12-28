@@ -6,9 +6,9 @@
  */
 
 const AbstractionAlertNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
-const PaperReturnNotificationsPresenter = require('../../../presenters/notices/setup/paper-return-notifications.presenter.js')
 const NotificationModel = require('../../../../app/models/notification.model.js')
-const NotificationsPresenter = require('../../../presenters/notices/setup/notifications.presenter.js')
+const PaperReturnNotificationsPresenter = require('../../../presenters/notices/setup/paper-return-notifications.presenter.js')
+const ReturnsNoticeNotificationsPresenter = require('../../../presenters/notices/setup/returns-notice-notifications.presenter.js')
 const { timestampForPostgres } = require('../../../lib/general.lib.js')
 const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
@@ -68,7 +68,7 @@ function _notifications(session, recipients, noticeId) {
     return PaperReturnNotificationsPresenter.go(session, recipients, noticeId)
   }
 
-  return NotificationsPresenter.go(session, recipients, noticeId)
+  return ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 }
 
 module.exports = {

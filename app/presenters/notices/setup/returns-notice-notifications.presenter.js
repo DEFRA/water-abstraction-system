@@ -2,7 +2,7 @@
 
 /**
  * Formats recipients into notifications for a standard or ad-hoc returns invitation or reminder
- * @module NotificationsPresenter
+ * @module ReturnsNoticeNotificationsPresenter
  */
 
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
