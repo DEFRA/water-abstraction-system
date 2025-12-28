@@ -37,28 +37,13 @@ describe('Notices - Setup - Notifications presenter', () => {
       summer: 'false'
     }
 
-    const fixtureData = RecipientsFixture.recipients()
-    const singleUseEmail = {
-      ...fixtureData.primaryUser,
-      contact_hash_id: 'ba3cbb0311b78e79a9aed711cf20a9e8',
-      contact_type: 'single use',
-      email: 'single.use@important.com'
-    }
-    const singleUseLetter = {
-      ...fixtureData.licenceHolder,
-      contact: { ...fixtureData.licenceHolder.contact, addressLine1: '4', name: 'Hermione' },
-      contact_hash_id: '2cfae110bb4c6611261169ddc1f26c34',
-      contact_type: 'single use'
-    }
-
     recipients = [
-      fixtureData.primaryUser,
-      fixtureData.returnsAgent,
-      fixtureData.licenceHolder,
-      fixtureData.returnsTo,
-      fixtureData.licenceHolderWithMultipleLicences,
-      singleUseEmail,
-      singleUseLetter
+      RecipientsFixture.returnsNoticePrimaryUser(),
+      RecipientsFixture.returnsNoticeReturnsAgent(),
+      RecipientsFixture.returnsNoticeLicenceHolder(),
+      RecipientsFixture.returnsNoticeReturnsTo(),
+      RecipientsFixture.additionalEmailRecipient(),
+      RecipientsFixture.additionalPostalRecipient()
     ]
 
     session = {
@@ -84,7 +69,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(dynamicEmailDueDate)
         },
-        recipient: 'primary.user@important.com',
+        recipient: recipients[0].email,
         returnLogIds: recipients[0].return_log_ids,
         status: 'pending',
         templateId: NOTIFY_TEMPLATES.invitations.standard.email['primary user']
@@ -101,7 +86,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(dynamicEmailDueDate)
         },
-        recipient: 'returns.agent@important.com',
+        recipient: recipients[1].email,
         returnLogIds: recipients[1].return_log_ids,
         status: 'pending',
         templateId: NOTIFY_TEMPLATES.invitations.standard.email['returns agent']
@@ -114,13 +99,13 @@ describe('Notices - Setup - Notifications presenter', () => {
         messageRef: 'returns invitation',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'Mr H J Potter',
-          address_line_2: '1',
+          address_line_1: 'J Returnsholder',
+          address_line_2: '4',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
-          name: 'Mr H J Potter',
+          name: 'J Returnsholder',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(dynamicLetterDueDate)
@@ -137,13 +122,13 @@ describe('Notices - Setup - Notifications presenter', () => {
         messageRef: 'returns invitation',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'Mr H J Weasley',
-          address_line_2: 'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
-          address_line_3: '2',
-          address_line_4: 'Privet Drive',
-          address_line_5: 'Little Whinging',
-          address_line_6: 'Surrey',
-          name: 'Mr H J Weasley',
+          address_line_1: 'J Returnsto',
+          address_line_2: '4',
+          address_line_3: 'Privet Drive',
+          address_line_4: 'Little Whinging',
+          address_line_5: 'Surrey',
+          address_line_6: 'WD25 7LR',
+          name: 'J Returnsto',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(dynamicLetterDueDate)
@@ -153,33 +138,10 @@ describe('Notices - Setup - Notifications presenter', () => {
         templateId: NOTIFY_TEMPLATES.invitations.standard.letter['returns to']
       },
       {
-        contactType: recipients[4].contact_type,
-        dueDate: dynamicLetterDueDate,
-        eventId: noticeId,
-        licences: recipients[4].licence_refs,
-        messageRef: 'returns invitation',
-        messageType: 'letter',
-        personalisation: {
-          address_line_1: 'Mr H J Potter',
-          address_line_2: '3',
-          address_line_3: 'Privet Drive',
-          address_line_4: 'Little Whinging',
-          address_line_5: 'Surrey',
-          address_line_6: 'WD25 7LR',
-          name: 'Mr H J Potter',
-          periodEndDate: '31 March 2025',
-          periodStartDate: '1 January 2025',
-          returnDueDate: formatLongDate(dynamicLetterDueDate)
-        },
-        returnLogIds: recipients[4].return_log_ids,
-        status: 'pending',
-        templateId: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
-      },
-      {
         contactType: 'single use',
         dueDate: dynamicEmailDueDate,
         eventId: noticeId,
-        licences: recipients[5].licence_refs,
+        licences: recipients[4].licence_refs,
         messageRef: 'returns invitation',
         messageType: 'email',
         personalisation: {
@@ -187,8 +149,8 @@ describe('Notices - Setup - Notifications presenter', () => {
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(dynamicEmailDueDate)
         },
-        recipient: 'single.use@important.com',
-        returnLogIds: recipients[5].return_log_ids,
+        recipient: recipients[4].email,
+        returnLogIds: recipients[4].return_log_ids,
         status: 'pending',
         templateId: NOTIFY_TEMPLATES.invitations.standard.email['single use']
       },
@@ -196,22 +158,22 @@ describe('Notices - Setup - Notifications presenter', () => {
         contactType: 'single use',
         dueDate: dynamicLetterDueDate,
         eventId: noticeId,
-        licences: recipients[6].licence_refs,
+        licences: recipients[5].licence_refs,
         messageRef: 'returns invitation',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'Mr H J Hermione',
+          address_line_1: 'Additional',
           address_line_2: '4',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
-          name: 'Mr H J Hermione',
+          name: 'Additional',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(dynamicLetterDueDate)
         },
-        returnLogIds: recipients[6].return_log_ids,
+        returnLogIds: recipients[5].return_log_ids,
         status: 'pending',
         templateId: NOTIFY_TEMPLATES.invitations.standard.letter['single use']
       }
@@ -241,7 +203,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[5].messageRef).to.equal('returns invitation')
+            expect(result[4].messageRef).to.equal('returns invitation')
           })
         })
       })
@@ -267,7 +229,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[6].messageRef).to.equal('returns invitation')
+            expect(result[5].messageRef).to.equal('returns invitation')
           })
         })
       })
@@ -299,7 +261,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[5].messageRef).to.equal('returns reminder')
+            expect(result[4].messageRef).to.equal('returns reminder')
           })
         })
       })
@@ -325,7 +287,7 @@ describe('Notices - Setup - Notifications presenter', () => {
           it('returns the correct "messageRef"', () => {
             const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-            expect(result[6].messageRef).to.equal('returns reminder')
+            expect(result[5].messageRef).to.equal('returns reminder')
           })
         })
       })
@@ -334,75 +296,32 @@ describe('Notices - Setup - Notifications presenter', () => {
 
   describe('the "personalisation" property', () => {
     describe('when the notification is an email', () => {
-      describe('and the session does not have a latest due date', () => {
-        it('returns the expected "personalisation"', () => {
-          const result = NotificationsPresenter.go(session, recipients, noticeId)
+      it('returns the expected "personalisation"', () => {
+        const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          expect(result[0].personalisation).to.equal({
-            periodEndDate: '31 March 2025',
-            periodStartDate: '1 January 2025',
-            returnDueDate: formatLongDate(dynamicEmailDueDate)
-          })
-        })
-      })
-
-      describe('and the session has a latest due date', () => {
-        beforeEach(() => {
-          session.latestDueDate = new Date('2025-04-28')
-        })
-
-        it('returns the expected "personalisation"', () => {
-          const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-          expect(result[0].personalisation).to.equal({
-            periodEndDate: '31 March 2025',
-            periodStartDate: '1 January 2025',
-            returnDueDate: '28 April 2025'
-          })
+        expect(result[0].personalisation).to.equal({
+          periodEndDate: '31 March 2025',
+          periodStartDate: '1 January 2025',
+          returnDueDate: formatLongDate(recipients[0].notificationDueDate)
         })
       })
     })
 
     describe('when the notification is a letter', () => {
-      describe('and the session does not have a latest due date', () => {
-        it('returns the expected "personalisation"', () => {
-          const result = NotificationsPresenter.go(session, recipients, noticeId)
+      it('returns the expected "personalisation"', () => {
+        const result = NotificationsPresenter.go(session, recipients, noticeId)
 
-          expect(result[2].personalisation).to.equal({
-            address_line_1: 'Mr H J Potter',
-            address_line_2: '1',
-            address_line_3: 'Privet Drive',
-            address_line_4: 'Little Whinging',
-            address_line_5: 'Surrey',
-            address_line_6: 'WD25 7LR',
-            periodEndDate: '31 March 2025',
-            periodStartDate: '1 January 2025',
-            returnDueDate: formatLongDate(dynamicLetterDueDate),
-            name: 'Mr H J Potter'
-          })
-        })
-      })
-
-      describe('and the session has a latest due date', () => {
-        beforeEach(() => {
-          session.latestDueDate = new Date('2025-04-28')
-        })
-
-        it('returns the expected "personalisation"', () => {
-          const result = NotificationsPresenter.go(session, recipients, noticeId)
-
-          expect(result[2].personalisation).to.equal({
-            address_line_1: 'Mr H J Potter',
-            address_line_2: '1',
-            address_line_3: 'Privet Drive',
-            address_line_4: 'Little Whinging',
-            address_line_5: 'Surrey',
-            address_line_6: 'WD25 7LR',
-            periodEndDate: '31 March 2025',
-            periodStartDate: '1 January 2025',
-            returnDueDate: '28 April 2025',
-            name: 'Mr H J Potter'
-          })
+        expect(result[2].personalisation).to.equal({
+          address_line_1: 'J Returnsholder',
+          address_line_2: '4',
+          address_line_3: 'Privet Drive',
+          address_line_4: 'Little Whinging',
+          address_line_5: 'Surrey',
+          address_line_6: 'WD25 7LR',
+          periodEndDate: '31 March 2025',
+          periodStartDate: '1 January 2025',
+          returnDueDate: formatLongDate(recipients[2].notificationDueDate),
+          name: 'J Returnsholder'
         })
       })
     })
