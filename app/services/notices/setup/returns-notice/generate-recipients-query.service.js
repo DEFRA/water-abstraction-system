@@ -150,10 +150,13 @@ WITH
   -- CTE for each contact type.
   json_contacts AS (
     SELECT
-      contacts,
+      contacts.contact AS contact,
       a.*
-    FROM ldh_all a
-    CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts
+    FROM
+      ldh_all a
+    CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts(contact)
+    WHERE
+      contacts.contact->>'role' IN ('Licence holder', 'Returns to')
   ),
 
   licence_holder as (
@@ -213,41 +216,41 @@ SELECT * FROM results;
 function _licenceHolderQuery() {
   return `
     SELECT
-      contacts AS contact,
+      jc.contact,
       (md5(
         LOWER(
           concat(
-            contacts->>'salutation',
-            contacts->>'forename',
-            contacts->>'initials',
-            contacts->>'name',
-            contacts->>'addressLine1',
-            contacts->>'addressLine2',
-            contacts->>'addressLine3',
-            contacts->>'addressLine4',
-            contacts->>'town',
-            contacts->>'county',
-            contacts->>'postcode',
-            contacts->>'country'
+            jc.contact->>'salutation',
+            jc.contact->>'forename',
+            jc.contact->>'initials',
+            jc.contact->>'name',
+            jc.contact->>'addressLine1',
+            jc.contact->>'addressLine2',
+            jc.contact->>'addressLine3',
+            jc.contact->>'addressLine4',
+            jc.contact->>'town',
+            jc.contact->>'county',
+            jc.contact->>'postcode',
+            jc.contact->>'country'
           )
         )
       )) AS contact_hash_id,
       ('licence holder') AS contact_type,
-      a.due_date,
-      a.end_date,
+      jc.due_date,
+      jc.end_date,
       (NULL) AS email,
-      a.licence_ref,
+      jc.licence_ref,
       ('Letter') as message_type,
-      a.return_id,
-      a.return_reference,
-      a.start_date,
+      jc.return_id,
+      jc.return_reference,
+      jc.start_date,
       3 AS priority
     FROM
-      json_contacts a
+      json_contacts jc
     LEFT JOIN registered_licences rl ON
-      rl.licence_ref = a.licence_ref
+      rl.licence_ref = jc.licence_ref
     WHERE
-      contacts->>'role' = 'Licence holder'
+      jc.contact->>'role' = 'Licence holder'
       AND rl.licence_ref IS NULL
   `
 }
@@ -408,41 +411,41 @@ function _returnsToQuery(noticeType) {
   if (noticeType !== NoticeType.ALTERNATE_INVITATION) {
     return `
     SELECT
-      contacts AS contact,
+      jc.contact,
       (md5(
         LOWER(
           concat(
-            contacts->>'salutation',
-            contacts->>'forename',
-            contacts->>'initials',
-            contacts->>'name',
-            contacts->>'addressLine1',
-            contacts->>'addressLine2',
-            contacts->>'addressLine3',
-            contacts->>'addressLine4',
-            contacts->>'town',
-            contacts->>'county',
-            contacts->>'postcode',
-            contacts->>'country'
+            jc.contact->>'salutation',
+            jc.contact->>'forename',
+            jc.contact->>'initials',
+            jc.contact->>'name',
+            jc.contact->>'addressLine1',
+            jc.contact->>'addressLine2',
+            jc.contact->>'addressLine3',
+            jc.contact->>'addressLine4',
+            jc.contact->>'town',
+            jc.contact->>'county',
+            jc.contact->>'postcode',
+            jc.contact->>'country'
           )
         )
       )) AS contact_hash_id,
       ('returns to') AS contact_type,
-      a.due_date,
-      a.end_date,
+      jc.due_date,
+      jc.end_date,
       (NULL) AS email,
-      a.licence_ref,
+      jc.licence_ref,
       ('Letter') as message_type,
-      a.return_id,
-      a.return_reference,
-      a.start_date,
+      jc.return_id,
+      jc.return_reference,
+      jc.start_date,
       4 AS priority
     FROM
-      json_contacts a
+      json_contacts jc
     LEFT JOIN registered_licences rl ON
-      rl.licence_ref = a.licence_ref
+      rl.licence_ref = jc.licence_ref
     WHERE
-      contacts->>'role' = 'Returns to'
+      jc.contact->>'role' = 'Returns to'
       AND rl.licence_ref IS NULL
     `
   }
