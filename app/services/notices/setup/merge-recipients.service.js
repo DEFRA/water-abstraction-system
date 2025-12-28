@@ -48,9 +48,12 @@ function _additionalRecipients(session, fetchedRecipients) {
       }
 
       // NOTE: If we have additional recipients it means we're doing an ad-hoc notice, so we're just looking at a single
-      // licence. This means the due return logs against each fetched recipient is the same, so we can copy them all onto
-      // our additional recipients. We need them, so they can be recorded in the DB and used to link the notification to
-      // the correct return logs.
+      // licence. This means data like the due return logs, or the due date status against each fetched recipient is the
+      // same, so we can copy them all onto our additional recipients. Partly this is for consistency for downstream
+      // services. But it is needed for things like linking the notification to the correct return logs.
+      additionalRecipient.due_date_status = fetchedRecipients[0].due_date_status
+      additionalRecipient.latest_due_date = fetchedRecipients[0].latest_due_date
+      additionalRecipient.notificationDueDate = fetchedRecipients[0].notificationDueDate
       additionalRecipient.return_log_ids = fetchedRecipients[0].return_log_ids
 
       allRecipients.push(additionalRecipient)
