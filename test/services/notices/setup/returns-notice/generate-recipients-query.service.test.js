@@ -41,27 +41,43 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
   `
   const licenceHolderExpectedQuery = `
     SELECT
-      jc.contact,
-      jc.contact_hash_id,
       ('licence holder') AS contact_type,
+      3 AS priority,
+      jc.*
+    FROM
+      json_contacts jc
+    LEFT JOIN registered_licences rl ON
+      rl.licence_ref = jc.licence_ref
+    WHERE
+      jc.contact->>'role' = 'Licence holder'
+      AND rl.licence_ref IS NULL
   `
   const primaryUserExpectedQuery = `
     SELECT
+      ('primary user') AS contact_type,
+      1 AS priority,
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
-      ('primary user') AS contact_type,
   `
   const returnsAgentExpectedQuery = `
     SELECT
+      ('returns agent') AS contact_type,
+      2 AS priority,
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
-      ('returns agent') AS contact_type,
   `
   const returnsToExpectedQuery = `
     SELECT
-      jc.contact,
-      jc.contact_hash_id,
       ('returns to') AS contact_type,
+      4 AS priority,
+      jc.*
+    FROM
+      json_contacts jc
+    LEFT JOIN registered_licences rl ON
+      rl.licence_ref = jc.licence_ref
+    WHERE
+      jc.contact->>'role' = 'Returns to'
+      AND rl.licence_ref IS NULL
   `
 
   let download

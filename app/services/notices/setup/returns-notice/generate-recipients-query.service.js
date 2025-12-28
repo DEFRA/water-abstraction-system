@@ -141,13 +141,14 @@ WITH
     ${returnsAgentQuery}
   ),
 
-  -- set of licences that are registered (have a primary user)
+  -- Which licences are registered (have a primary user). This CTE is used in licence holder and returns to queries to
+  -- filter out those which are registered, as we only want unregistered licences for those contact types.
   registered_licences AS (
     SELECT DISTINCT licence_ref FROM primary_user
   ),
 
   -- Again, for performance, it is better to extract out all the contacts from the JSONB field once, and then use this
-  -- CTE for each contact type.
+  -- CTE for the licence holder and returns to contact types.
   json_contacts AS (
     SELECT
       contacts.contact AS contact,
@@ -169,7 +170,14 @@ WITH
           )
         )
       )) AS contact_hash_id,
-      a.*
+      a.due_date,
+      a.end_date,
+      (NULL) AS email,
+      a.licence_ref,
+      ('Letter') as message_type,
+      a.return_id,
+      a.return_reference,
+      a.start_date
     FROM
       ldh_all a
     CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts(contact)
@@ -234,18 +242,9 @@ SELECT * FROM results;
 function _licenceHolderQuery() {
   return `
     SELECT
-      jc.contact,
-      jc.contact_hash_id,
       ('licence holder') AS contact_type,
-      jc.due_date,
-      jc.end_date,
-      (NULL) AS email,
-      jc.licence_ref,
-      ('Letter') as message_type,
-      jc.return_id,
-      jc.return_reference,
-      jc.start_date,
-      3 AS priority
+      3 AS priority,
+      jc.*
     FROM
       json_contacts jc
     LEFT JOIN registered_licences rl ON
@@ -260,9 +259,10 @@ function _primaryUserQuery(noticeType) {
   if (noticeType === NoticeType.INVITATIONS || noticeType === NoticeType.REMINDERS) {
     return `
     SELECT
+      ('primary user') AS contact_type,
+      1 AS priority,
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
-      ('primary user') AS contact_type,
       a.due_date,
       a.end_date,
       le."name" AS email,
@@ -270,8 +270,7 @@ function _primaryUserQuery(noticeType) {
       ('Email') as message_type,
       a.return_id,
       a.return_reference,
-      a.start_date,
-      1 AS priority
+      a.start_date
     FROM
       ldh_all a
     INNER JOIN public.licence_entity_roles ler
@@ -364,9 +363,10 @@ function _processForSending() {
 function _noRecipientsQuery() {
   return `
     SELECT
+      ('no recipient') AS contact_type,
+      999 AS priority,
       NULL::jsonb AS contact,
       NULL AS contact_hash_id,
-      ('no recipient') AS contact_type,
       NULL::date AS due_date,
       NULL::date AS end_date,
       NULL::text AS email,
@@ -374,8 +374,7 @@ function _noRecipientsQuery() {
       ('none') as message_type,
       NULL::uuid AS return_id,
       NULL::text AS return_reference,
-      NULL::date AS start_date,
-      999 AS priority
+      NULL::date AS start_date
     WHERE FALSE
   `
 }
@@ -384,9 +383,10 @@ function _returnsAgentQuery(noticeType) {
   if (noticeType === NoticeType.INVITATIONS || noticeType === NoticeType.REMINDERS) {
     return `
     SELECT
+      ('returns agent') AS contact_type,
+      2 AS priority,
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
-      ('returns agent') AS contact_type,
       a.due_date,
       a.end_date,
       le."name" AS email,
@@ -394,8 +394,7 @@ function _returnsAgentQuery(noticeType) {
       ('Email') as message_type,
       a.return_id,
       a.return_reference,
-      a.start_date,
-      2 AS priority
+      a.start_date
     FROM
       ldh_all a
     INNER JOIN public.licence_entity_roles ler
@@ -412,18 +411,9 @@ function _returnsToQuery(noticeType) {
   if (noticeType !== NoticeType.ALTERNATE_INVITATION) {
     return `
     SELECT
-      jc.contact,
-      jc.contact_hash_id,
       ('returns to') AS contact_type,
-      jc.due_date,
-      jc.end_date,
-      (NULL) AS email,
-      jc.licence_ref,
-      ('Letter') as message_type,
-      jc.return_id,
-      jc.return_reference,
-      jc.start_date,
-      4 AS priority
+      4 AS priority,
+      jc.*
     FROM
       json_contacts jc
     LEFT JOIN registered_licences rl ON
