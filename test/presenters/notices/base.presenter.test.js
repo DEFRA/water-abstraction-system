@@ -82,7 +82,15 @@ describe('Notices - Base presenter', () => {
           const result = BasePresenter.addressToCSV(address)
 
           expect(result.length).to.equal(7)
-          expect(result).to.equal(['J Returnsholder', 'INVALID ADDRESS - Needs a valid postcode or country outside the UK', '', '', '', '', ''])
+          expect(result).to.equal([
+            'J Returnsholder',
+            'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
+            '',
+            '',
+            '',
+            '',
+            ''
+          ])
         })
       })
     })
