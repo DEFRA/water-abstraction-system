@@ -16,6 +16,8 @@ const { generateLicenceRef } = require('../../../../support/helpers/licence.help
 const FetchAlternateReturnsRecipients = require('../../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js')
 
 describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients service', () => {
+  const notificationDueDate = new Date('2025-12-24')
+
   let licenceHolder
   let licenceRef
   let returnLog
@@ -38,9 +40,10 @@ describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients 
 
   describe('when service is called for sending the "alternate notice"', () => {
     it('fetches the correct recipient data for sending the notice', async () => {
-      const results = await FetchAlternateReturnsRecipients.go([returnLog.returnId])
+      const results = await FetchAlternateReturnsRecipients.go([returnLog.returnId], notificationDueDate)
 
       const sendingResult = RecipientsSeeder.transformToSendingResult(licenceHolder)
+      sendingResult.notificationDueDate = notificationDueDate
 
       expect(results).to.equal([sendingResult])
     })
