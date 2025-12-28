@@ -151,6 +151,24 @@ WITH
   json_contacts AS (
     SELECT
       contacts.contact AS contact,
+      (md5(
+        LOWER(
+          concat(
+            contacts->>'salutation',
+            contacts->>'forename',
+            contacts->>'initials',
+            contacts->>'name',
+            contacts->>'addressLine1',
+            contacts->>'addressLine2',
+            contacts->>'addressLine3',
+            contacts->>'addressLine4',
+            contacts->>'town',
+            contacts->>'county',
+            contacts->>'postcode',
+            contacts->>'country'
+          )
+        )
+      )) AS contact_hash_id,
       a.*
     FROM
       ldh_all a
@@ -217,24 +235,7 @@ function _licenceHolderQuery() {
   return `
     SELECT
       jc.contact,
-      (md5(
-        LOWER(
-          concat(
-            jc.contact->>'salutation',
-            jc.contact->>'forename',
-            jc.contact->>'initials',
-            jc.contact->>'name',
-            jc.contact->>'addressLine1',
-            jc.contact->>'addressLine2',
-            jc.contact->>'addressLine3',
-            jc.contact->>'addressLine4',
-            jc.contact->>'town',
-            jc.contact->>'county',
-            jc.contact->>'postcode',
-            jc.contact->>'country'
-          )
-        )
-      )) AS contact_hash_id,
+      jc.contact_hash_id,
       ('licence holder') AS contact_type,
       jc.due_date,
       jc.end_date,
@@ -412,24 +413,7 @@ function _returnsToQuery(noticeType) {
     return `
     SELECT
       jc.contact,
-      (md5(
-        LOWER(
-          concat(
-            jc.contact->>'salutation',
-            jc.contact->>'forename',
-            jc.contact->>'initials',
-            jc.contact->>'name',
-            jc.contact->>'addressLine1',
-            jc.contact->>'addressLine2',
-            jc.contact->>'addressLine3',
-            jc.contact->>'addressLine4',
-            jc.contact->>'town',
-            jc.contact->>'county',
-            jc.contact->>'postcode',
-            jc.contact->>'country'
-          )
-        )
-      )) AS contact_hash_id,
+      jc.contact_hash_id,
       ('returns to') AS contact_type,
       jc.due_date,
       jc.end_date,

@@ -42,24 +42,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
   const licenceHolderExpectedQuery = `
     SELECT
       jc.contact,
-      (md5(
-        LOWER(
-          concat(
-            jc.contact->>'salutation',
-            jc.contact->>'forename',
-            jc.contact->>'initials',
-            jc.contact->>'name',
-            jc.contact->>'addressLine1',
-            jc.contact->>'addressLine2',
-            jc.contact->>'addressLine3',
-            jc.contact->>'addressLine4',
-            jc.contact->>'town',
-            jc.contact->>'county',
-            jc.contact->>'postcode',
-            jc.contact->>'country'
-          )
-        )
-      )) AS contact_hash_id,
+      jc.contact_hash_id,
       ('licence holder') AS contact_type,
   `
   const primaryUserExpectedQuery = `
@@ -77,24 +60,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
   const returnsToExpectedQuery = `
     SELECT
       jc.contact,
-      (md5(
-        LOWER(
-          concat(
-            jc.contact->>'salutation',
-            jc.contact->>'forename',
-            jc.contact->>'initials',
-            jc.contact->>'name',
-            jc.contact->>'addressLine1',
-            jc.contact->>'addressLine2',
-            jc.contact->>'addressLine3',
-            jc.contact->>'addressLine4',
-            jc.contact->>'town',
-            jc.contact->>'county',
-            jc.contact->>'postcode',
-            jc.contact->>'country'
-          )
-        )
-      )) AS contact_hash_id,
+      jc.contact_hash_id,
       ('returns to') AS contact_type,
   `
 
