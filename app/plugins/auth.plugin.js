@@ -21,6 +21,10 @@ const TWO_HOURS_IN_MS = 2 * 60 * 60 * 1000
  * relying on an authenticated cookie being passed on by the UI. A request that is not authenticated is automatically
  * redirected to the sign-in page.
  *
+ * To ensure that the user's session doesn't time out, we set the `keepAlive` option to true. This causes the cookie's
+ * TTL to be reset on each request. As this writes to the cookie value in the response, we need to also explicitly set
+ * the cookie's path to '/' to prevent the application creating a duplicate cookie scoped to the `/system` path.
+ *
  * If the request is authenticated then we pass the user id along to AuthenticationService. This will give us a
  * UserModel object, along with RoleModel and GroupModel objects representing the roles and groups the user is assigned
  * to. These are all added to the request under request.auth.credentials.
@@ -41,13 +45,15 @@ const AuthPlugin = {
   register: async (server, _options) => {
     server.auth.strategy('session', 'cookie', {
       cookie: {
+        isHttpOnly: true,
+        isSameSite: 'Lax',
+        isSecure: false,
         name: 'sid',
         password: AuthenticationConfig.password,
-        isSecure: false,
-        isSameSite: 'Lax',
-        ttl: TWO_HOURS_IN_MS,
-        isHttpOnly: true
+        path: '/',
+        ttl: TWO_HOURS_IN_MS
       },
+      keepAlive: true,
       redirectTo: '/signin',
       validate: async (_request, session) => {
         return AuthService.go(session.userId)
