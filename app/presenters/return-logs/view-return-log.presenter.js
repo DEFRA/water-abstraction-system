@@ -34,11 +34,10 @@ function go(auth, returnLog, notifications = []) {
   const {
     current,
     endDate,
-    id,
+    id: returnLogId,
     licence,
     purposes,
     receivedDate,
-    returnId,
     returnReference,
     returnsFrequency,
     returnSubmissions,
@@ -55,18 +54,18 @@ function go(auth, returnLog, notifications = []) {
   const method = selectedReturnSubmission?.$method()
   const units = selectedReturnSubmission?.$units()
   const formattedStatus = formatReturnLogStatus(returnLog)
-  const notificationsTableData = NotificationsTablePresenter.go(notifications, null, returnId)
+  const notificationsTableData = NotificationsTablePresenter.go(notifications, null, returnLogId)
   const summaryTableData = _summaryTableData(selectedReturnSubmission, returnsFrequency)
 
   return {
     abstractionPeriod: _abstractionPeriod(returnLog),
-    actionButton: _actionButton(latest, auth, id, formattedStatus),
-    backLink: _backLink(licence.id, latest, returnId),
+    actionButton: _actionButton(latest, auth, returnLogId, formattedStatus),
+    backLink: _backLink(licence.id, latest, returnLogId),
     displayReadings: method !== 'abstractionVolumes',
     displayTable: _displayTable(selectedReturnSubmission),
     displayTotal: !!selectedReturnSubmission,
     displayUnits: units !== unitNames.CUBIC_METRES,
-    downloadCSVLink: _downloadCSVLink(returnId, selectedReturnSubmission),
+    downloadCSVLink: _downloadCSVLink(returnLogId, selectedReturnSubmission),
     meterDetails: formatMeterDetails(selectedReturnSubmission?.$meter()),
     method,
     nilReturn: selectedReturnSubmission ? selectedReturnSubmission.nilReturn : false,
@@ -88,7 +87,7 @@ function go(auth, returnLog, notifications = []) {
     tariff: twoPartTariff ? 'Two-part' : 'Standard',
     total: _total(selectedReturnSubmission),
     underQuery,
-    versions: _versions(returnId, selectedReturnSubmission, versions),
+    versions: _versions(returnLogId, selectedReturnSubmission, versions),
     warning: _warning(formattedStatus, latest)
   }
 }
@@ -151,7 +150,7 @@ function _actionButton(latest, auth, returnLogId, formattedStatus) {
   }
 }
 
-function _backLink(licenceId, latest, returnId) {
+function _backLink(licenceId, latest, returnLogId) {
   if (latest) {
     return {
       href: `/system/licences/${licenceId}/returns`,
@@ -160,7 +159,7 @@ function _backLink(licenceId, latest, returnId) {
   }
 
   return {
-    href: `/system/return-logs/${returnId}`,
+    href: `/system/return-logs/${returnLogId}`,
     text: 'Go back to the latest version'
   }
 }
@@ -174,14 +173,14 @@ function _displayTable(selectedReturnSubmission) {
   return !selectedReturnSubmission.nilReturn
 }
 
-function _downloadCSVLink(returnId, selectedReturnSubmission) {
+function _downloadCSVLink(returnLogId, selectedReturnSubmission) {
   if (!selectedReturnSubmission || selectedReturnSubmission.nilReturn) {
     return null
   }
 
   const { version } = selectedReturnSubmission
 
-  return `/system/return-logs/${returnId}/download?version=${version}`
+  return `/system/return-logs/${returnLogId}/download?version=${version}`
 }
 
 function _latest(versions, selectedReturnSubmission) {
@@ -258,7 +257,7 @@ function _total(selectedReturnSubmission) {
   return formatNumber(total)
 }
 
-function _versions(returnId, selectedReturnSubmission, versions) {
+function _versions(returnLogId, selectedReturnSubmission, versions) {
   // We are dealing with a due or received return log so there are no submissions, which means no versions to display
   if (!selectedReturnSubmission) {
     return null
@@ -269,7 +268,7 @@ function _versions(returnId, selectedReturnSubmission, versions) {
 
     return {
       createdAt: `${formatLongDate(createdAt)}`,
-      link: `/system/return-logs/${returnId}?version=${number}`,
+      link: `/system/return-logs/${returnLogId}?version=${number}`,
       notes,
       selected: id === selectedReturnSubmission.id,
       version: number,

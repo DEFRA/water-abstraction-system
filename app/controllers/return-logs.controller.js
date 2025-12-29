@@ -11,13 +11,13 @@ const ViewReturnLogService = require('../services/return-logs/view-return-log.se
 
 async function download(request, h) {
   const {
-    params: { returnId },
+    params: { returnLogId },
     query
   } = request
 
   const version = Number(query.version)
 
-  const { data, type, filename } = await DownloadReturnLogService.go(returnId, version)
+  const { data, type, filename } = await DownloadReturnLogService.go(returnLogId, version)
 
   return h
     .response(data)
@@ -30,23 +30,23 @@ async function download(request, h) {
 async function view(request, h) {
   const {
     auth,
-    params: { returnId },
+    params: { returnLogId },
     query
   } = request
 
   const version = query.version ? Number(query.version) : 0
 
-  const pageData = await ViewReturnLogService.go(auth, returnId, version)
+  const pageData = await ViewReturnLogService.go(auth, returnLogId, version)
 
   return h.view('return-logs/view.njk', pageData)
 }
 
 async function submitView(request, h) {
-  const { returnId } = request.params
+  const { returnLogId } = request.params
 
-  await SubmitViewReturnLogService.go(request.payload, returnId)
+  await SubmitViewReturnLogService.go(request.payload, returnLogId)
 
-  return h.redirect(`/system/return-logs/${returnId}`)
+  return h.redirect(`/system/return-logs/${returnLogId}`)
 }
 
 module.exports = {

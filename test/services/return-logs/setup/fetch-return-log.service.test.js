@@ -50,12 +50,12 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
     })
 
     it('returns the return log instance', async () => {
-      const result = await FetchReturnLogService.go(returnLog.returnId)
+      const result = await FetchReturnLogService.go(returnLog.id)
 
       expect(result).to.equal({
+        id: returnLog.id,
         licenceId: licence.id,
         licenceRef: licence.licenceRef,
-        returnId: returnLog.returnId,
         returnReference: returnLog.returnReference,
         purposes: returnLog.metadata.purposes,
         siteDescription: returnLog.metadata.description,
@@ -66,12 +66,12 @@ describe('Return Logs - Setup - Fetch Return Log service', () => {
 
     describe('with multiple return submissions', () => {
       before(async () => {
-        await ReturnSubmissionHelper.add({ returnLogId: returnLog.returnId })
-        await ReturnSubmissionHelper.add({ returnLogId: returnLog.returnId, version: 2 })
+        await ReturnSubmissionHelper.add({ returnLogId: returnLog.id })
+        await ReturnSubmissionHelper.add({ returnLogId: returnLog.id, version: 2 })
       })
 
       it('returns a count of the associated return submissions', async () => {
-        const result = await FetchReturnLogService.go(returnLog.returnId)
+        const result = await FetchReturnLogService.go(returnLog.id)
 
         expect(result.submissionCount).to.equal(2)
       })

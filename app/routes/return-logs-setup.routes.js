@@ -17,7 +17,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/return-logs/setup/confirmed/{returnId}',
+    path: '/return-logs/setup/confirmed/{returnLogId}',
     options: {
       handler: ReturnLogsSetupController.confirmed,
       auth: {
@@ -29,7 +29,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/return-logs/setup/confirmed/{returnId}',
+    path: '/return-logs/setup/confirmed/{returnLogId}',
     options: {
       handler: ReturnLogsSetupController.submitConfirmed,
       auth: {

@@ -12,17 +12,17 @@ const { formatLongDate, formatNoticeType, sentenceCase } = require('../base.pres
  *
  * @param {module:NotificationModel[]} notifications - All notifications linked to the licence
  * @param {string} licenceId - The id of the licence to return to if provided
- * @param {string} returnId - The id of the return log to return to if provided
+ * @param {string} returnLogId - The id of the return log to return to if provided
  *
  * @returns {object} The data formatted for the view template
  */
-function go(notifications, licenceId, returnId) {
+function go(notifications, licenceId, returnLogId) {
   return notifications.map((notification) => {
     const { createdAt, event, messageType, status } = notification
     const sentDate = formatLongDate(createdAt)
 
     return {
-      link: _link(notification, licenceId, sentDate, returnId),
+      link: _link(notification, licenceId, sentDate, returnLogId),
       method: sentenceCase(messageType),
       sentBy: event.issuer,
       sentDate,
@@ -32,7 +32,7 @@ function go(notifications, licenceId, returnId) {
   })
 }
 
-function _link(notification, licenceId, sentDate, returnId) {
+function _link(notification, licenceId, sentDate, returnLogId) {
   const { id: notificationId, messageType } = notification
 
   const hiddenText = `sent ${sentDate} via ${messageType}`
@@ -41,8 +41,8 @@ function _link(notification, licenceId, sentDate, returnId) {
 
   if (licenceId) {
     href += `?id=${licenceId}`
-  } else if (returnId) {
-    href += `?return=${returnId}`
+  } else if (returnLogId) {
+    href += `?return=${returnLogId}`
   }
 
   return {
