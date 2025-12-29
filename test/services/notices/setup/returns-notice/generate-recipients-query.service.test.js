@@ -46,11 +46,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       jc.*
     FROM
       json_contacts jc
-    LEFT JOIN registered_licences rl ON
-      rl.licence_ref = jc.licence_ref
     WHERE
       jc.contact->>'role' = 'Licence holder'
-      AND rl.licence_ref IS NULL
   `
   const primaryUserExpectedQuery = `
     SELECT
@@ -73,11 +70,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       jc.*
     FROM
       json_contacts jc
-    LEFT JOIN registered_licences rl ON
-      rl.licence_ref = jc.licence_ref
     WHERE
       jc.contact->>'role' = 'Returns to'
-      AND rl.licence_ref IS NULL
   `
 
   let download

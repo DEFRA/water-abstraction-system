@@ -141,8 +141,9 @@ WITH
     ${returnsAgentQuery}
   ),
 
-  -- Which licences are registered (have a primary user). This CTE is used in licence holder and returns to queries to
-  -- filter out those which are registered, as we only want unregistered licences for those contact types.
+  -- Which licences are registered (have a primary user). This CTE is used in the next CTE json_contacts to filter out
+  -- licence document header records linked to licences that are registered. We only care about extracting the JSON
+  -- contacts for unregistered licences, in order to get the address information.
   registered_licences AS (
     SELECT DISTINCT licence_ref FROM primary_user
   ),
@@ -180,9 +181,12 @@ WITH
       a.start_date
     FROM
       ldh_all a
+    LEFT JOIN registered_licences rl ON
+      rl.licence_ref = a.licence_ref
     CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts(contact)
     WHERE
-      contacts.contact->>'role' IN ('Licence holder', 'Returns to')
+      rl.licence_ref IS NULL
+      AND contacts.contact->>'role' IN ('Licence holder', 'Returns to')
   ),
 
   licence_holder as (
@@ -247,11 +251,8 @@ function _licenceHolderQuery() {
       jc.*
     FROM
       json_contacts jc
-    LEFT JOIN registered_licences rl ON
-      rl.licence_ref = jc.licence_ref
     WHERE
       jc.contact->>'role' = 'Licence holder'
-      AND rl.licence_ref IS NULL
   `
 }
 
@@ -416,11 +417,8 @@ function _returnsToQuery(noticeType) {
       jc.*
     FROM
       json_contacts jc
-    LEFT JOIN registered_licences rl ON
-      rl.licence_ref = jc.licence_ref
     WHERE
       jc.contact->>'role' = 'Returns to'
-      AND rl.licence_ref IS NULL
     `
   }
 
