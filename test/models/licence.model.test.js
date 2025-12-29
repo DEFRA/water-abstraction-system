@@ -645,6 +645,58 @@ describe('Licence model', () => {
           })
         })
       })
+
+      describe('and there are multiple licence versions with the same start date that is <= today', () => {
+        beforeEach(async () => {
+          // earlier licence version - added just for completeness
+          await LicenceVersionHelper.add({
+            endDate: new Date('2022-03-31'),
+            increment: 0,
+            issue: 1,
+            licenceId: testRecord.id,
+            issueDate: new Date('2021-01-01'),
+            startDate: new Date('2021-01-01'),
+            status: 'superseded'
+          })
+
+          // Licence version that contains a mistake so was replaced but has the same start date as the current version.
+          // As it has a lower increment number it should NOT be returned
+          await LicenceVersionHelper.add({
+            endDate: new Date('2022-04-01'),
+            increment: 0,
+            issue: 2,
+            licenceId: testRecord.id,
+            issueDate: new Date('2022-04-01'),
+            startDate: new Date('2022-04-01'),
+            status: 'superseded'
+          })
+
+          // The current licence version that replaced the above. Has the same start date but a higher increment number
+          // so should be returned.
+          currentLicenceVersion = await LicenceVersionHelper.add({
+            endDate: null,
+            increment: 1,
+            issue: 2,
+            licenceId: testRecord.id,
+            issueDate: new Date('2022-04-01'),
+            startDate: new Date('2022-04-01'),
+            status: 'current'
+          })
+
+          testRecord = await LicenceModel.query().findById(testRecord.id).modify('currentVersion')
+        })
+
+        it('returns the "current" licence version', () => {
+          const result = testRecord.$currentVersion()
+
+          expect(result).to.equal({
+            id: currentLicenceVersion.id,
+            startDate: currentLicenceVersion.startDate,
+            issueDate: currentLicenceVersion.issueDate,
+            status: 'current'
+          })
+        })
+      })
     })
   })
 
