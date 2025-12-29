@@ -565,17 +565,17 @@ describe('Licence model', () => {
 
   describe('$currentVersion', () => {
     let currentLicenceVersion
+    let licence
 
     beforeEach(async () => {
-      testRecord = await LicenceHelper.add()
-
-      currentLicenceVersion = await LicenceVersionHelper.add({ licenceId: testRecord.id, status: 'current' })
-
-      // Add a second that isn't current
-      await LicenceVersionHelper.add({ licenceId: testRecord.id, status: 'superseded' })
+      licence = await LicenceHelper.add()
     })
 
     describe('when instance does not have licence versions', () => {
+      beforeEach(async () => {
+        testRecord = await LicenceModel.query().findById(licence.id).modify('currentVersion')
+      })
+
       it('returns null', () => {
         const result = testRecord.$currentVersion()
 
@@ -586,21 +586,19 @@ describe('Licence model', () => {
     describe('when instance has licence versions', () => {
       describe('and the latest licence version start date is >= today', () => {
         beforeEach(async () => {
-          testRecord = await LicenceHelper.add()
-
           currentLicenceVersion = await LicenceVersionHelper.add({
-            licenceId: testRecord.id,
+            licenceId: licence.id,
             status: 'superseded'
           })
 
           // future licence version - marked current
           await LicenceVersionHelper.add({
-            licenceId: testRecord.id,
+            licenceId: licence.id,
             startDate: new Date('3000-01-01'),
             status: 'current'
           })
 
-          testRecord = await LicenceModel.query().findById(testRecord.id).modify('currentVersion')
+          testRecord = await LicenceModel.query().findById(licence.id).modify('currentVersion')
         })
 
         it('returns the "current" licence version', () => {
@@ -617,21 +615,19 @@ describe('Licence model', () => {
 
       describe('and the latest licence version start date is <= today', () => {
         beforeEach(async () => {
-          testRecord = await LicenceHelper.add()
-
           currentLicenceVersion = await LicenceVersionHelper.add({
-            licenceId: testRecord.id,
+            licenceId: licence.id,
             status: 'current'
           })
 
           await LicenceVersionHelper.add({
-            licenceId: testRecord.id,
+            licenceId: licence.id,
             startDate: new Date('2001-01-01'),
             status: 'superseded',
             issueDate: new Date('2001-01-01')
           })
 
-          testRecord = await LicenceModel.query().findById(testRecord.id).modify('currentVersion')
+          testRecord = await LicenceModel.query().findById(licence.id).modify('currentVersion')
         })
 
         it('returns the "current" licence version', () => {
@@ -653,7 +649,7 @@ describe('Licence model', () => {
             endDate: new Date('2022-03-31'),
             increment: 0,
             issue: 1,
-            licenceId: testRecord.id,
+            licenceId: licence.id,
             issueDate: new Date('2021-01-01'),
             startDate: new Date('2021-01-01'),
             status: 'superseded'
@@ -665,7 +661,7 @@ describe('Licence model', () => {
             endDate: new Date('2022-04-01'),
             increment: 0,
             issue: 2,
-            licenceId: testRecord.id,
+            licenceId: licence.id,
             issueDate: new Date('2022-04-01'),
             startDate: new Date('2022-04-01'),
             status: 'superseded'
@@ -677,13 +673,13 @@ describe('Licence model', () => {
             endDate: null,
             increment: 1,
             issue: 2,
-            licenceId: testRecord.id,
+            licenceId: licence.id,
             issueDate: new Date('2022-04-01'),
             startDate: new Date('2022-04-01'),
             status: 'current'
           })
 
-          testRecord = await LicenceModel.query().findById(testRecord.id).modify('currentVersion')
+          testRecord = await LicenceModel.query().findById(licence.id).modify('currentVersion')
         })
 
         it('returns the "current" licence version', () => {
