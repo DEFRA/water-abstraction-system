@@ -14,9 +14,9 @@ const { NoticeJourney, NoticeType } = require('../../../../app/lib/static-lookup
 
 // Things we need to stub
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
-const FetchAdHocReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-ad-hoc-returns-recipients.service.js')
 const FetchPaperReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js')
-const FetchStandardReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-standard-returns-recipients.service.js')
+const FetchReturnsInvitationRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js')
+const FetchReturnsReminderRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-returns-reminder-recipients.service.js')
 
 // Thing under test
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
@@ -24,9 +24,9 @@ const FetchRecipientsService = require('../../../../app/services/notices/setup/f
 describe('Notices - Setup - Fetch Recipients service', () => {
   let download
   let fetchAbstractionAlertRecipientsStub
-  let fetchAdHocReturnsRecipientsStub
   let fetchPaperReturnsRecipientsStub
-  let fetchStandardReturnsRecipientsStub
+  let fetchReturnsInvitationRecipientsStub
+  let fetchReturnsReminderRecipientsStub
   let recipients
   let session
 
@@ -43,9 +43,9 @@ describe('Notices - Setup - Fetch Recipients service', () => {
 
       download = false
 
-      fetchAdHocReturnsRecipientsStub = Sinon.stub(FetchAdHocReturnsRecipientsService, 'go').resolves()
       fetchPaperReturnsRecipientsStub = Sinon.stub(FetchPaperReturnsRecipientsService, 'go').resolves()
-      fetchStandardReturnsRecipientsStub = Sinon.stub(FetchStandardReturnsRecipientsService, 'go').resolves()
+      fetchReturnsInvitationRecipientsStub = Sinon.stub(FetchReturnsInvitationRecipientsService, 'go').resolves()
+      fetchReturnsReminderRecipientsStub = Sinon.stub(FetchReturnsReminderRecipientsService, 'go').resolves()
     })
 
     describe('and fetching recipients for checking or sending', () => {
@@ -62,9 +62,9 @@ describe('Notices - Setup - Fetch Recipients service', () => {
 
         expect(fetchAbstractionAlertRecipientsStub.calledOnceWith(session)).to.be.true()
 
-        expect(fetchAdHocReturnsRecipientsStub.called).to.be.false()
+        expect(fetchReturnsInvitationRecipientsStub.called).to.be.false()
         expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
-        expect(fetchStandardReturnsRecipientsStub.called).to.be.false()
+        expect(fetchReturnsReminderRecipientsStub.called).to.be.false()
 
         expect(results).to.equal(recipients)
       })
@@ -79,8 +79,8 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       }
 
       fetchAbstractionAlertRecipientsStub = Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves()
-      fetchAdHocReturnsRecipientsStub = Sinon.stub(FetchAdHocReturnsRecipientsService, 'go').resolves()
-      fetchStandardReturnsRecipientsStub = Sinon.stub(FetchStandardReturnsRecipientsService, 'go').resolves()
+      fetchReturnsInvitationRecipientsStub = Sinon.stub(FetchReturnsInvitationRecipientsService, 'go').resolves()
+      fetchReturnsReminderRecipientsStub = Sinon.stub(FetchReturnsReminderRecipientsService, 'go').resolves()
     })
 
     describe('and fetching recipients for checking or sending', () => {
@@ -101,8 +101,8 @@ describe('Notices - Setup - Fetch Recipients service', () => {
         expect(fetchPaperReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
 
         expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
-        expect(fetchAdHocReturnsRecipientsStub.called).to.be.false()
-        expect(fetchStandardReturnsRecipientsStub.called).to.be.false()
+        expect(fetchReturnsInvitationRecipientsStub.called).to.be.false()
+        expect(fetchReturnsReminderRecipientsStub.called).to.be.false()
 
         expect(results).to.equal(recipients)
       })
@@ -126,15 +126,15 @@ describe('Notices - Setup - Fetch Recipients service', () => {
         expect(fetchPaperReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
 
         expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
-        expect(fetchAdHocReturnsRecipientsStub.called).to.be.false()
-        expect(fetchStandardReturnsRecipientsStub.called).to.be.false()
+        expect(fetchReturnsInvitationRecipientsStub.called).to.be.false()
+        expect(fetchReturnsReminderRecipientsStub.called).to.be.false()
 
         expect(results).to.equal(recipients)
       })
     })
   })
 
-  describe('when setting up an ad-hoc returns invitation or reminder', () => {
+  describe('when setting up a returns invitation', () => {
     beforeEach(() => {
       session = {
         journey: NoticeJourney.ADHOC,
@@ -143,7 +143,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
 
       fetchAbstractionAlertRecipientsStub = Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves()
       fetchPaperReturnsRecipientsStub = Sinon.stub(FetchPaperReturnsRecipientsService, 'go').resolves()
-      fetchStandardReturnsRecipientsStub = Sinon.stub(FetchStandardReturnsRecipientsService, 'go').resolves()
+      fetchReturnsReminderRecipientsStub = Sinon.stub(FetchReturnsReminderRecipientsService, 'go').resolves()
     })
 
     describe('and fetching recipients for checking or sending', () => {
@@ -155,17 +155,19 @@ describe('Notices - Setup - Fetch Recipients service', () => {
           RecipientsFixture.returnsNoticeReturnsAgent(download)
         ]
 
-        fetchAdHocReturnsRecipientsStub = Sinon.stub(FetchAdHocReturnsRecipientsService, 'go').resolves(recipients)
+        fetchReturnsInvitationRecipientsStub = Sinon.stub(FetchReturnsInvitationRecipientsService, 'go').resolves(
+          recipients
+        )
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService.go(session, download)
 
-        expect(fetchAdHocReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
+        expect(fetchReturnsInvitationRecipientsStub.calledOnceWith(session, download)).to.be.true()
 
         expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
         expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
-        expect(fetchStandardReturnsRecipientsStub.called).to.be.false()
+        expect(fetchReturnsReminderRecipientsStub.called).to.be.false()
 
         expect(results).to.equal(recipients)
       })
@@ -180,24 +182,26 @@ describe('Notices - Setup - Fetch Recipients service', () => {
           RecipientsFixture.returnsNoticeReturnsAgent(download)
         ]
 
-        fetchAdHocReturnsRecipientsStub = Sinon.stub(FetchAdHocReturnsRecipientsService, 'go').resolves(recipients)
+        fetchReturnsInvitationRecipientsStub = Sinon.stub(FetchReturnsInvitationRecipientsService, 'go').resolves(
+          recipients
+        )
       })
 
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService.go(session, download)
 
-        expect(fetchAdHocReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
+        expect(fetchReturnsInvitationRecipientsStub.calledOnceWith(session, download)).to.be.true()
 
         expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
         expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
-        expect(fetchStandardReturnsRecipientsStub.called).to.be.false()
+        expect(fetchReturnsReminderRecipientsStub.called).to.be.false()
 
         expect(results).to.equal(recipients)
       })
     })
   })
 
-  describe('when setting up a standard returns invitation or reminder', () => {
+  describe('when setting up a returns reminder', () => {
     beforeEach(() => {
       session = {
         journey: NoticeJourney.STANDARD,
@@ -205,7 +209,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       }
 
       fetchAbstractionAlertRecipientsStub = Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves()
-      fetchAdHocReturnsRecipientsStub = Sinon.stub(FetchAdHocReturnsRecipientsService, 'go').resolves()
+      fetchReturnsInvitationRecipientsStub = Sinon.stub(FetchReturnsInvitationRecipientsService, 'go').resolves()
       fetchPaperReturnsRecipientsStub = Sinon.stub(FetchPaperReturnsRecipientsService, 'go').resolves()
     })
 
@@ -218,7 +222,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
           RecipientsFixture.returnsNoticeReturnsAgent(download)
         ]
 
-        fetchStandardReturnsRecipientsStub = Sinon.stub(FetchStandardReturnsRecipientsService, 'go').resolves(
+        fetchReturnsReminderRecipientsStub = Sinon.stub(FetchReturnsReminderRecipientsService, 'go').resolves(
           recipients
         )
       })
@@ -226,10 +230,10 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService.go(session, download)
 
-        expect(fetchStandardReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
+        expect(fetchReturnsReminderRecipientsStub.calledOnceWith(session, download)).to.be.true()
 
         expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
-        expect(fetchAdHocReturnsRecipientsStub.called).to.be.false()
+        expect(fetchReturnsInvitationRecipientsStub.called).to.be.false()
         expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
 
         expect(results).to.equal(recipients)
@@ -245,7 +249,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
           RecipientsFixture.returnsNoticeReturnsAgent(download)
         ]
 
-        fetchStandardReturnsRecipientsStub = Sinon.stub(FetchStandardReturnsRecipientsService, 'go').resolves(
+        fetchReturnsReminderRecipientsStub = Sinon.stub(FetchReturnsReminderRecipientsService, 'go').resolves(
           recipients
         )
       })
@@ -253,10 +257,10 @@ describe('Notices - Setup - Fetch Recipients service', () => {
       it('determines the appropriate fetch service to call and returns the recipient data', async () => {
         const results = await FetchRecipientsService.go(session, download)
 
-        expect(fetchStandardReturnsRecipientsStub.calledOnceWith(session, download)).to.be.true()
+        expect(fetchReturnsReminderRecipientsStub.calledOnceWith(session, download)).to.be.true()
 
         expect(fetchAbstractionAlertRecipientsStub.called).to.be.false()
-        expect(fetchAdHocReturnsRecipientsStub.called).to.be.false()
+        expect(fetchReturnsInvitationRecipientsStub.called).to.be.false()
         expect(fetchPaperReturnsRecipientsStub.called).to.be.false()
 
         expect(results).to.equal(recipients)

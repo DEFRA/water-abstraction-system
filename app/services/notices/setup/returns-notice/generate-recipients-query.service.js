@@ -112,22 +112,24 @@ function go(noticeType, dueReturnLogsQuery, download) {
 
   return `
 WITH
-  due_return_logs as (
+  due_return_logs AS (
     ${dueReturnLogsQuery}
   ),
 
+  -- It is more performant to fetch all the licence document headers related to the due return logs once, and then pull
+  -- from this CTE for each contact type, than to join to due_return_logs multiple times via each contact type.
   ldh_all AS (
     SELECT
       ldh.company_entity_id,
+      drl.due_date,
+      drl.end_date,
       ldh.licence_ref,
       ldh.metadata,
       drl.return_id,
       drl.return_reference,
-      drl.start_date,
-      drl.end_date,
-      drl.due_date
+      drl.start_date
     FROM public.licence_document_headers ldh
-    JOIN due_return_logs drl
+    INNER JOIN due_return_logs drl
       ON drl.licence_ref = ldh.licence_ref
   ),
 
@@ -139,17 +141,52 @@ WITH
     ${returnsAgentQuery}
   ),
 
-  -- set of licences that are registered (have a primary user)
+  -- Which licences are registered (have a primary user). This CTE is used in the next CTE json_contacts to filter out
+  -- licence document header records linked to licences that are registered. We only care about extracting the JSON
+  -- contacts for unregistered licences, in order to get the address information.
   registered_licences AS (
     SELECT DISTINCT licence_ref FROM primary_user
   ),
 
+  -- Again, for performance, it is better to extract out all the contacts from the JSONB field once, and then use this
+  -- CTE for the licence holder and returns to contact types.
   json_contacts AS (
     SELECT
-      contacts,
-      a.*
-    FROM ldh_all a
-    CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts
+      contacts.contact AS contact,
+      (md5(
+        LOWER(
+          concat(
+            contacts->>'salutation',
+            contacts->>'forename',
+            contacts->>'initials',
+            contacts->>'name',
+            contacts->>'addressLine1',
+            contacts->>'addressLine2',
+            contacts->>'addressLine3',
+            contacts->>'addressLine4',
+            contacts->>'town',
+            contacts->>'county',
+            contacts->>'postcode',
+            contacts->>'country'
+          )
+        )
+      )) AS contact_hash_id,
+      a.due_date,
+      a.end_date,
+      (NULL) AS email,
+      a.licence_ref,
+      ('Letter') as message_type,
+      a.return_id,
+      a.return_reference,
+      a.start_date
+    FROM
+      ldh_all a
+    LEFT JOIN registered_licences rl ON
+      rl.licence_ref = a.licence_ref
+    CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts(contact)
+    WHERE
+      rl.licence_ref IS NULL
+      AND contacts.contact->>'role' IN ('Licence holder', 'Returns to')
   ),
 
   licence_holder as (
@@ -170,6 +207,36 @@ WITH
     SELECT * FROM returns_to
   ),
 
+  -- For each recipient, determine what the latest due date is across all their due returns
+  latest_due_date AS (
+    SELECT
+      ac.contact_hash_id,
+      MAX(ac.due_date) AS latest_due_date
+    FROM all_contacts ac
+    WHERE
+      ac.due_date IS NOT NULL
+    GROUP BY
+      ac.contact_hash_id
+  ),
+
+  -- For each recipient, determine if all/some/none of their due dates are null
+  due_date_status AS (
+    SELECT
+      ac.contact_hash_id,
+      CASE
+        WHEN COUNT(*) FILTER (WHERE ac.due_date IS NOT NULL) = 0
+          THEN 'all nulls'
+        WHEN COUNT(*) FILTER (WHERE ac.due_date IS NULL) = 0
+          THEN 'all populated'
+        ELSE
+          'some nulls'
+      END AS due_date_status
+    FROM
+      all_contacts ac
+    GROUP BY
+      ac.contact_hash_id
+  ),
+
   ${processQuery}
 
 SELECT * FROM results;
@@ -179,42 +246,13 @@ SELECT * FROM results;
 function _licenceHolderQuery() {
   return `
     SELECT
-      contacts AS contact,
-      (md5(
-        LOWER(
-          concat(
-            contacts->>'salutation',
-            contacts->>'forename',
-            contacts->>'initials',
-            contacts->>'name',
-            contacts->>'addressLine1',
-            contacts->>'addressLine2',
-            contacts->>'addressLine3',
-            contacts->>'addressLine4',
-            contacts->>'town',
-            contacts->>'county',
-            contacts->>'postcode',
-            contacts->>'country'
-          )
-        )
-      )) AS contact_hash_id,
       ('licence holder') AS contact_type,
-      a.due_date AS due_date,
-      a.end_date AS end_date,
-      (NULL) AS email,
-      a.licence_ref,
-      ('Letter') as message_type,
-      a.return_id,
-      a.return_reference AS return_reference,
-      a.start_date AS start_date,
-      3 AS priority
+      3 AS priority,
+      jc.*
     FROM
-      json_contacts a
-    LEFT JOIN registered_licences rl ON
-      rl.licence_ref = a.licence_ref
+      json_contacts jc
     WHERE
-      contacts->>'role' = 'Licence holder'
-      AND rl.licence_ref IS NULL
+      jc.contact->>'role' = 'Licence holder'
   `
 }
 
@@ -222,18 +260,18 @@ function _primaryUserQuery(noticeType) {
   if (noticeType === NoticeType.INVITATIONS || noticeType === NoticeType.REMINDERS) {
     return `
     SELECT
+      ('primary user') AS contact_type,
+      1 AS priority,
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
-      ('primary user') AS contact_type,
-      a.due_date AS due_date,
-      a.end_date AS end_date,
+      a.due_date,
+      a.end_date,
       le."name" AS email,
       a.licence_ref,
       ('Email') as message_type,
       a.return_id,
-      a.return_reference AS return_reference,
-      a.start_date AS start_date,
-      1 AS priority
+      a.return_reference,
+      a.start_date
     FROM
       ldh_all a
     INNER JOIN public.licence_entity_roles ler
@@ -253,23 +291,29 @@ function _processForDownloading() {
   -- Where a contact is duplicated, for example, licence holder and returns to are the same
   -- it selects the one with the highest priority and joins it to the due returns log data
   results AS (
-    SELECT DISTINCT ON (licence_ref, return_reference, contact_hash_id)
+    SELECT DISTINCT ON (contact_hash_id, return_id)
       ac.contact,
       ac.contact_hash_id,
       ac.contact_type,
       ac.due_date,
+      dds.due_date_status,
       ac.end_date,
       ac.email,
+      ldd.latest_due_date,
       ac.licence_ref,
       ac.message_type,
+      ac.return_id,
       ac.return_reference,
       ac.start_date
     FROM
       all_contacts ac
+    LEFT JOIN latest_due_date ldd
+      ON ldd.contact_hash_id = ac.contact_hash_id
+    LEFT JOIN due_date_status dds
+      ON dds.contact_hash_id = ac.contact_hash_id
     ORDER BY
-      licence_ref,
-      return_reference,
       contact_hash_id,
+      return_id,
       priority
   )
   `
@@ -290,18 +334,24 @@ function _processForSending() {
   ),
 
   -- Where a contact is duplicated, for example, licence holder and returns to are the same,
-  -- it selects the one with the highest priority and joins it to the aggreated data
+  -- it selects the one with the highest priority and joins it to the aggregated data
   results AS (
     SELECT DISTINCT ON (contact_hash_id)
       ac.contact,
       ac.contact_hash_id,
       ac.contact_type,
+      dds.due_date_status,
       ac.email,
+      ldd.latest_due_date,
       acd.licence_refs,
       ac.message_type,
       acd.return_ids AS return_log_ids
     FROM
       all_contacts ac
+    LEFT JOIN latest_due_date ldd
+      ON ldd.contact_hash_id = ac.contact_hash_id
+    LEFT JOIN due_date_status dds
+      ON dds.contact_hash_id = ac.contact_hash_id
     INNER JOIN aggregated_contact_data acd
       ON acd.contact_hash_id = ac.contact_hash_id
     ORDER BY
@@ -314,9 +364,10 @@ function _processForSending() {
 function _noRecipientsQuery() {
   return `
     SELECT
+      ('no recipient') AS contact_type,
+      999 AS priority,
       NULL::jsonb AS contact,
       NULL AS contact_hash_id,
-      ('no recipient') AS contact_type,
       NULL::date AS due_date,
       NULL::date AS end_date,
       NULL::text AS email,
@@ -324,8 +375,7 @@ function _noRecipientsQuery() {
       ('none') as message_type,
       NULL::uuid AS return_id,
       NULL::text AS return_reference,
-      NULL::date AS start_date,
-      999 AS priority
+      NULL::date AS start_date
     WHERE FALSE
   `
 }
@@ -334,18 +384,18 @@ function _returnsAgentQuery(noticeType) {
   if (noticeType === NoticeType.INVITATIONS || noticeType === NoticeType.REMINDERS) {
     return `
     SELECT
+      ('returns agent') AS contact_type,
+      2 AS priority,
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
-      ('returns agent') AS contact_type,
-      a.due_date AS due_date,
-      a.end_date AS end_date,
+      a.due_date,
+      a.end_date,
       le."name" AS email,
       a.licence_ref,
       ('Email') as message_type,
       a.return_id,
-      a.return_reference AS return_reference,
-      a.start_date AS start_date,
-      2 AS priority
+      a.return_reference,
+      a.start_date
     FROM
       ldh_all a
     INNER JOIN public.licence_entity_roles ler
@@ -362,42 +412,13 @@ function _returnsToQuery(noticeType) {
   if (noticeType !== NoticeType.ALTERNATE_INVITATION) {
     return `
     SELECT
-      contacts AS contact,
-      (md5(
-        LOWER(
-          concat(
-            contacts->>'salutation',
-            contacts->>'forename',
-            contacts->>'initials',
-            contacts->>'name',
-            contacts->>'addressLine1',
-            contacts->>'addressLine2',
-            contacts->>'addressLine3',
-            contacts->>'addressLine4',
-            contacts->>'town',
-            contacts->>'county',
-            contacts->>'postcode',
-            contacts->>'country'
-          )
-        )
-      )) AS contact_hash_id,
       ('returns to') AS contact_type,
-      a.due_date AS due_date,
-      a.end_date AS end_date,
-      (NULL) AS email,
-      a.licence_ref,
-      ('Letter') as message_type,
-      a.return_id,
-      a.return_reference AS return_reference,
-      a.start_date AS start_date,
-      4 AS priority
+      4 AS priority,
+      jc.*
     FROM
-      json_contacts a
-    LEFT JOIN registered_licences rl ON
-      rl.licence_ref = a.licence_ref
+      json_contacts jc
     WHERE
-      contacts->>'role' = 'Returns to'
-      AND rl.licence_ref IS NULL
+      jc.contact->>'role' = 'Returns to'
     `
   }
 

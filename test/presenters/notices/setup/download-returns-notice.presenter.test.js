@@ -37,7 +37,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         expect(result).to.equal(
           // Headers
-          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
         )
       })
@@ -55,7 +55,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         expect(result).to.equal(
           // Headers
-          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
         )
       })
@@ -73,7 +73,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         expect(result).to.equal(
           // Headers
-          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
         )
       })
@@ -91,7 +91,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         expect(result).to.equal(
           // Headers
-          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
         )
       })
@@ -115,7 +115,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         expect(result).to.equal(
           // Headers
-          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
         )
       })
@@ -133,7 +133,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         expect(result).to.equal(
           // Headers
-          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
         )
       })
@@ -151,7 +151,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         expect(result).to.equal(
           // Headers
-          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
         )
       })
@@ -169,7 +169,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         expect(result).to.equal(
           // Headers
-          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
         )
       })
@@ -193,7 +193,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         expect(result).to.equal(
           // Headers
-          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
         )
       })
@@ -211,7 +211,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         expect(result).to.equal(
           // Headers
-          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
         )
       })
@@ -229,7 +229,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         expect(result).to.equal(
           // Headers
-          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
         )
       })
@@ -247,7 +247,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 
         expect(result).to.equal(
           // Headers
-          'Licence,Return reference,Return start date,Return end date,Return due date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
             recipientRow
         )
       })
@@ -258,11 +258,13 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 function _transformRecipientToRow(recipient, notificationType) {
   const row = [
     recipient.licence_ref,
+    recipient.return_id,
     recipient.return_reference,
     recipient.start_date,
     recipient.end_date,
     recipient.due_date,
     notificationType,
+    recipient.notificationDueDate,
     recipient.message_type,
     recipient.contact_type,
     recipient.email || '',
