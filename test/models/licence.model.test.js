@@ -587,12 +587,18 @@ describe('Licence model', () => {
       describe('and the latest licence version start date is >= today', () => {
         beforeEach(async () => {
           currentLicenceVersion = await LicenceVersionHelper.add({
+            endDate: new Date('2999-12-31'),
+            increment: 0,
+            issue: 1,
             licenceId: licence.id,
             status: 'superseded'
           })
 
           // future licence version - marked current
           await LicenceVersionHelper.add({
+            endDate: null,
+            increment: 0,
+            issue: 2,
             licenceId: licence.id,
             startDate: new Date('3000-01-01'),
             status: 'current'
@@ -615,16 +621,24 @@ describe('Licence model', () => {
 
       describe('and the latest licence version start date is <= today', () => {
         beforeEach(async () => {
-          currentLicenceVersion = await LicenceVersionHelper.add({
-            licenceId: licence.id,
-            status: 'current'
-          })
-
           await LicenceVersionHelper.add({
+            endDate: new Date('2021-12-31'),
+            increment: 0,
+            issue: 1,
+            issueDate: new Date('2001-01-01'),
             licenceId: licence.id,
             startDate: new Date('2001-01-01'),
-            status: 'superseded',
-            issueDate: new Date('2001-01-01')
+            status: 'superseded'
+          })
+
+          currentLicenceVersion = await LicenceVersionHelper.add({
+            endDate: null,
+            increment: 0,
+            issueDate: new Date('2022-01-01'),
+            issue: 2,
+            licenceId: licence.id,
+            startDate: new Date('2022-01-01'),
+            status: 'current'
           })
 
           testRecord = await LicenceModel.query().findById(licence.id).modify('currentVersion')
