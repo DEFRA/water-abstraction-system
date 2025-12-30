@@ -124,7 +124,7 @@ describe('Return Logs - Create Return Logs service', () => {
       clock = Sinon.useFakeTimers(new Date('2025-05-01'))
 
       returnCycle = ReturnCyclesFixture.returnCycles()[1]
-      returnRequirement = ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions()[4]
+      returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
       returnRequirement.returnVersion.endDate = null
       returnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
     })
@@ -132,17 +132,17 @@ describe('Return Logs - Create Return Logs service', () => {
     it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
       const results = await CreateReturnLogsService.go(returnRequirement, returnCycle, new Date('2025-05-01'))
 
-      expect(results[0]).to.equal('v1:4:01/25/90/3242:16999643:2025-04-01:2025-05-01')
+      expect(results[0]).to.equal('v1:4:01/25/90/3242:16999651:2025-04-01:2025-05-01')
     })
   })
 
-  describe('when called with a quarterly return version with a return version end date that ends during the return cycle', () => {
+  describe('when called with a quarterly return version with an end date that ends during the return cycle', () => {
     beforeEach(() => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date('2025-05-01'))
 
       returnCycle = ReturnCyclesFixture.returnCycles()[1]
-      returnRequirement = ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions()[4]
+      returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
       returnRequirement.returnVersion.endDate = new Date('2025-05-01')
 
       // These should always be in sync
@@ -157,22 +157,23 @@ describe('Return Logs - Create Return Logs service', () => {
     })
   })
 
-  describe('when called with a quarterly return version with a licence start date that starts during the return cycle', () => {
+  describe('when called with a quarterly return version with a start date that starts during the return cycle', () => {
     beforeEach(() => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
 
       returnCycle = ReturnCyclesFixture.returnCycles()[1]
-      returnRequirement = ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions()[5]
+      returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
+      returnRequirement.returnVersion.startDate = new Date('2025-07-27')
     })
 
     it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
       const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
       expect(results).to.equal([
-        'v1:4:01/25/90/3242:16999644:2025-07-27:2025-09-30',
-        'v1:4:01/25/90/3242:16999644:2025-10-01:2025-12-31',
-        'v1:4:01/25/90/3242:16999644:2026-01-01:2026-03-31'
+        'v1:4:01/25/90/3242:16999651:2025-07-27:2025-09-30',
+        'v1:4:01/25/90/3242:16999651:2025-10-01:2025-12-31',
+        'v1:4:01/25/90/3242:16999651:2026-01-01:2026-03-31'
       ])
     })
   })
