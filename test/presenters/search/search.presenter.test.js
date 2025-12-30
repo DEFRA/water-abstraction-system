@@ -354,7 +354,6 @@ describe('Search - Search presenter', () => {
           type: 'User'
         }
       ],
-      resultsCaption: 'Showing all 13 matches',
       resultType: null,
       showResults: true
     })
@@ -605,41 +604,6 @@ describe('Search - Search presenter', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.pageTitleCaption).to.be.null()
-      })
-    })
-  })
-
-  describe('the "resultsCaption" property', () => {
-    describe('when there are more results than displayed', () => {
-      beforeEach(() => {
-        allSearchMatches.total = 1000
-      })
-
-      it('returns the number displayed and total number', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.resultsCaption).to.equal('Showing 13 of 1000 matches')
-      })
-    })
-
-    describe('when there is only one result', () => {
-      beforeEach(() => {
-        allSearchMatches.total = 1
-        allSearchMatches.results = allSearchMatches.results.slice(0, 1)
-      })
-
-      it('returns "Showing only match"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.resultsCaption).to.equal('Showing only match')
-      })
-    })
-
-    describe('when all available results are displayed', () => {
-      it('returns the number displayed', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.resultsCaption).to.equal('Showing all 13 matches')
       })
     })
   })

@@ -118,7 +118,7 @@ describe('Search - View search service', () => {
         pageTitleCaption: null,
         pagination: {
           numberOfPages: 1,
-          showingMessage: 'Showing all 2 undefined'
+          showingMessage: 'Showing all 2 matches'
         },
         query: '12345678',
         results: [
@@ -145,7 +145,6 @@ describe('Search - View search service', () => {
             type: 'Billing account'
           }
         ],
-        resultsCaption: 'Showing all 2 matches',
         resultType: null,
         showResults: true
       })
@@ -251,7 +250,7 @@ describe('Search - View search service', () => {
         pageTitleCaption: null,
         pagination: {
           numberOfPages: 1,
-          showingMessage: 'Showing all 2 undefined'
+          showingMessage: 'Showing all 2 matches'
         },
         query: '12345678',
         results: [
@@ -278,7 +277,6 @@ describe('Search - View search service', () => {
             type: 'Billing account'
           }
         ],
-        resultsCaption: 'Showing all 2 matches',
         resultType: null,
         showResults: true
       })

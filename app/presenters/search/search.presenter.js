@@ -40,7 +40,6 @@ function go(userScopes, query, resultType, page, numberOfPages, allSearchMatches
     pageTitleCaption: _pageTitleCaption(numberOfPages, page),
     query,
     results: _results(results),
-    resultsCaption: _resultsCaption(results.length, total),
     resultType,
     showResults: true
   }
@@ -222,18 +221,6 @@ function _results(results) {
       return _result(result)
     })
     .filter(Boolean) // Any unknown types filtered out
-}
-
-function _resultsCaption(numberDisplayed, totalNumber) {
-  if (totalNumber > numberDisplayed) {
-    return `Showing ${numberDisplayed} of ${totalNumber} matches`
-  }
-
-  if (totalNumber === 1) {
-    return `Showing only match`
-  }
-
-  return `Showing all ${totalNumber} matches`
 }
 
 function _returnLog(returnLog) {
