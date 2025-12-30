@@ -26,8 +26,8 @@ describe('Return Logs - Create Return Logs service', () => {
 
   let clock
   let notifierStub
-  let testReturnCycle
-  let testReturnRequirement
+  let returnCycle
+  let returnRequirement
 
   beforeEach(() => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
@@ -48,12 +48,12 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
 
-      testReturnCycle = ReturnCyclesFixture.returnCycle(true)
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirement(true)
+      returnCycle = ReturnCyclesFixture.returnCycle(true)
+      returnRequirement = ReturnRequirementsFixture.summerReturnRequirement()
     })
 
     it('will persist the return logs generated from the return requirement and cycle passed in', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+      const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
       expect(results[0]).to.equal('v1:4:01/25/90/3242:16999652:2025-11-01:2026-10-31')
     })
@@ -66,7 +66,7 @@ describe('Return Logs - Create Return Logs service', () => {
       })
 
       it('handles the error', async () => {
-        await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+        await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
         const args = notifierStub.omfg.firstCall.args
 
@@ -83,12 +83,12 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date('2025-12-01'))
 
-      testReturnCycle = ReturnCyclesFixture.returnCycle()
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
+      returnCycle = ReturnCyclesFixture.returnCycle()
+      returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
     })
 
     it('will persist the return logs generated from the return requirement and cycle passed in', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+      const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
       expect(results).to.equal([
         'v1:4:01/25/90/3242:16999651:2025-04-01:2025-06-30',
@@ -106,7 +106,7 @@ describe('Return Logs - Create Return Logs service', () => {
       })
 
       it('handles the error', async () => {
-        await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+        await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
         const args = notifierStub.omfg.firstCall.args
 
@@ -123,14 +123,14 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date('2025-05-01'))
 
-      testReturnCycle = ReturnCyclesFixture.returnCycles()[1]
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions()[4]
-      testReturnRequirement.returnVersion.endDate = null
-      testReturnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
+      returnCycle = ReturnCyclesFixture.returnCycles()[1]
+      returnRequirement = ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions()[4]
+      returnRequirement.returnVersion.endDate = null
+      returnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
     })
 
     it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle, new Date('2025-05-01'))
+      const results = await CreateReturnLogsService.go(returnRequirement, returnCycle, new Date('2025-05-01'))
 
       expect(results[0]).to.equal('v1:4:01/25/90/3242:16999643:2025-04-01:2025-05-01')
     })
@@ -141,17 +141,17 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date('2025-05-01'))
 
-      testReturnCycle = ReturnCyclesFixture.returnCycles()[1]
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions()[4]
-      testReturnRequirement.returnVersion.endDate = new Date('2025-05-01')
+      returnCycle = ReturnCyclesFixture.returnCycles()[1]
+      returnRequirement = ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions()[4]
+      returnRequirement.returnVersion.endDate = new Date('2025-05-01')
 
       // These should always be in sync
-      testReturnRequirement.legacyId = 16999611
-      testReturnRequirement.reference = 16999611
+      returnRequirement.legacyId = 16999611
+      returnRequirement.reference = 16999611
     })
 
     it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle, new Date('2025-05-01'))
+      const results = await CreateReturnLogsService.go(returnRequirement, returnCycle, new Date('2025-05-01'))
 
       expect(results[0]).to.equal('v1:4:01/25/90/3242:16999611:2025-04-01:2025-05-01')
     })
@@ -162,12 +162,12 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
 
-      testReturnCycle = ReturnCyclesFixture.returnCycles()[1]
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions()[5]
+      returnCycle = ReturnCyclesFixture.returnCycles()[1]
+      returnRequirement = ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions()[5]
     })
 
     it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+      const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
       expect(results).to.equal([
         'v1:4:01/25/90/3242:16999644:2025-07-27:2025-09-30',
@@ -182,12 +182,12 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
 
-      testReturnCycle = ReturnCyclesFixture.returnCycles(6)[5]
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
+      returnCycle = ReturnCyclesFixture.returnCycles(6)[5]
+      returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
     })
 
     it('returns only one return log', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+      const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
       expect(results).to.equal(['v1:4:01/25/90/3242:16999651:2023-04-01:2024-03-31'])
     })
@@ -198,9 +198,9 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
 
-      testReturnCycle = ReturnCyclesFixture.returnCycles(6)[5]
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
-      testReturnRequirement.returnReference = 16999621
+      returnCycle = ReturnCyclesFixture.returnCycles(6)[5]
+      returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
+      returnRequirement.returnReference = 16999621
       await ReturnLogHelper.add({
         id: 'v1:4:01/25/90/3242:16999621:2023-04-01:2024-03-31',
         licenceRef: '01/25/90/3242',
@@ -211,7 +211,7 @@ describe('Return Logs - Create Return Logs service', () => {
     })
 
     it('returns one return log for the year', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+      const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
       expect(results).to.equal(['v1:4:01/25/90/3242:16999651:2023-04-01:2024-03-31'])
     })

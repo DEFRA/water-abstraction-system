@@ -1,21 +1,6 @@
 'use strict'
 
 /**
- * Represents a single result from either `FetchReturnRequirementsService` or
- * `FetchLicenceReturnRequirementsService`
- *
- * @param {boolean} [summer=false] - true to return a summer requirement else false
- * @returns {object}
- */
-function returnRequirement(summer = false) {
-  if (summer) {
-    return summerReturnRequirement()
-  }
-
-  return winterReturnRequirement(true)
-}
-
-/**
  * Represents a single 'fetch' result for a summer return requirement with associated license and purpose data
  *
  * It represents a result from either `FetchReturnRequirementsService` or `FetchLicenceReturnRequirementsService`
@@ -458,7 +443,6 @@ function returnRequirementsAcrossReturnVersions() {
 }
 
 module.exports = {
-  returnRequirement,
   returnRequirements,
   returnRequirementsAcrossReturnVersions,
   summerReturnRequirement,

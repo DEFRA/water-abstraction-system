@@ -21,7 +21,7 @@ const VoidLicenceReturnLogsService = require('../../../app/services/return-logs/
 // Thing under test
 const ProcessLicenceReturnLogsService = require('../../../app/services/return-logs/process-licence-return-logs.service.js')
 
-describe('Process licence return logs service', () => {
+describe('Return Logs - Process Licence Return Logs service', () => {
   const changeDate = new Date('2024-05-26')
   const currentDate = new Date('2024-07-15')
   const licenceId = '3acf7d80-cf74-4e86-8128-13ef687ea091'
@@ -102,9 +102,10 @@ describe('Process licence return logs service', () => {
 
     describe('and the licence has both "summer" and "all-year" return requirements but also a revoked date', () => {
       beforeEach(() => {
-        const _returnRequirement = ReturnRequirementsFixture.returnRequirement()
-        _returnRequirement.returnVersion.licence.revokedDate = new Date('2024-12-31')
-        fetchReturnRequirementsStub.resolves([_returnRequirement])
+        const returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
+
+        returnRequirement.returnVersion.licence.revokedDate = new Date('2024-12-31')
+        fetchReturnRequirementsStub.resolves([returnRequirement])
       })
 
       describe('and the change date means multiple return cycles need processing', () => {
@@ -180,7 +181,7 @@ describe('Process licence return logs service', () => {
 
     describe('and the licence has only a "summer" return requirement', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves([ReturnRequirementsFixture.returnRequirement(true)])
+        fetchReturnRequirementsStub.resolves([ReturnRequirementsFixture.summerReturnRequirement()])
         createReturnLogsStub.resolves()
       })
 
@@ -200,7 +201,7 @@ describe('Process licence return logs service', () => {
 
     describe('and the licence has only an "all-year" return requirement', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves([ReturnRequirementsFixture.returnRequirement(false)])
+        fetchReturnRequirementsStub.resolves([ReturnRequirementsFixture.winterReturnRequirement(true)])
         createReturnLogsStub.resolves()
       })
 
