@@ -56,7 +56,10 @@ describe('Return Logs - Process Licence Return Logs service', () => {
   describe('when called with a known licence ID', () => {
     describe('and the licence has both "summer" and "all-year" return requirements', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves(ReturnRequirementsFixture.returnRequirements())
+        fetchReturnRequirementsStub.resolves([
+          ReturnRequirementsFixture.summerReturnRequirement(),
+          ReturnRequirementsFixture.winterReturnRequirement()
+        ])
       })
 
       describe('and the change date means multiple return cycles need processing', () => {

@@ -162,23 +162,14 @@ function winterReturnRequirement(quarterlyReturns = false) {
 
 /**
  * Represents multiple results from either `FetchReturnRequirementsService` or
- * `FetchLicenceReturnRequirementsService`
- *
- * @returns {object[]}
- */
-function returnRequirements() {
-  return [summerReturnRequirement(), winterReturnRequirement(true)]
-}
-
-/**
- * Represents multiple results from either `FetchReturnRequirementsService` or
  * `FetchLicenceReturnRequirementsService` that have different return versions
  *
  * @returns {object[]}
  */
 function returnRequirementsAcrossReturnVersions() {
   return [
-    ...returnRequirements(),
+    summerReturnRequirement(),
+    winterReturnRequirement(true),
     {
       abstractionPeriodEndDay: 31,
       abstractionPeriodEndMonth: 10,
@@ -443,7 +434,6 @@ function returnRequirementsAcrossReturnVersions() {
 }
 
 module.exports = {
-  returnRequirements,
   returnRequirementsAcrossReturnVersions,
   summerReturnRequirement,
   winterReturnRequirement
