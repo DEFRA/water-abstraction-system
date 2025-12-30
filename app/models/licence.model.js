@@ -170,7 +170,11 @@ class LicenceModel extends BaseModel {
           builder
             .select(['id', 'startDate', 'status', 'issueDate'])
             .where('startDate', '<=', timestampForPostgres())
-            .orderBy('startDate', 'desc')
+            .orderBy([
+              { column: 'startDate', order: 'desc' },
+              { column: 'issue', order: 'desc' },
+              { column: 'increment', order: 'desc' }
+            ])
             .limit(1)
         })
       },

@@ -565,17 +565,17 @@ describe('Licence model', () => {
 
   describe('$currentVersion', () => {
     let currentLicenceVersion
+    let licence
 
     beforeEach(async () => {
-      testRecord = await LicenceHelper.add()
-
-      currentLicenceVersion = await LicenceVersionHelper.add({ licenceId: testRecord.id, status: 'current' })
-
-      // Add a second that isn't current
-      await LicenceVersionHelper.add({ licenceId: testRecord.id, status: 'superseded' })
+      licence = await LicenceHelper.add()
     })
 
     describe('when instance does not have licence versions', () => {
+      beforeEach(async () => {
+        testRecord = await LicenceModel.query().findById(licence.id).modify('currentVersion')
+      })
+
       it('returns null', () => {
         const result = testRecord.$currentVersion()
 
@@ -586,21 +586,25 @@ describe('Licence model', () => {
     describe('when instance has licence versions', () => {
       describe('and the latest licence version start date is >= today', () => {
         beforeEach(async () => {
-          testRecord = await LicenceHelper.add()
-
           currentLicenceVersion = await LicenceVersionHelper.add({
-            licenceId: testRecord.id,
+            endDate: new Date('2999-12-31'),
+            increment: 0,
+            issue: 1,
+            licenceId: licence.id,
             status: 'superseded'
           })
 
           // future licence version - marked current
           await LicenceVersionHelper.add({
-            licenceId: testRecord.id,
+            endDate: null,
+            increment: 0,
+            issue: 2,
+            licenceId: licence.id,
             startDate: new Date('3000-01-01'),
             status: 'current'
           })
 
-          testRecord = await LicenceModel.query().findById(testRecord.id).modify('currentVersion')
+          testRecord = await LicenceModel.query().findById(licence.id).modify('currentVersion')
         })
 
         it('returns the "current" licence version', () => {
@@ -617,21 +621,79 @@ describe('Licence model', () => {
 
       describe('and the latest licence version start date is <= today', () => {
         beforeEach(async () => {
-          testRecord = await LicenceHelper.add()
+          await LicenceVersionHelper.add({
+            endDate: new Date('2021-12-31'),
+            increment: 0,
+            issue: 1,
+            issueDate: new Date('2001-01-01'),
+            licenceId: licence.id,
+            startDate: new Date('2001-01-01'),
+            status: 'superseded'
+          })
 
           currentLicenceVersion = await LicenceVersionHelper.add({
-            licenceId: testRecord.id,
+            endDate: null,
+            increment: 0,
+            issueDate: new Date('2022-01-01'),
+            issue: 2,
+            licenceId: licence.id,
+            startDate: new Date('2022-01-01'),
             status: 'current'
           })
 
+          testRecord = await LicenceModel.query().findById(licence.id).modify('currentVersion')
+        })
+
+        it('returns the "current" licence version', () => {
+          const result = testRecord.$currentVersion()
+
+          expect(result).to.equal({
+            id: currentLicenceVersion.id,
+            startDate: currentLicenceVersion.startDate,
+            issueDate: currentLicenceVersion.issueDate,
+            status: 'current'
+          })
+        })
+      })
+
+      describe('and there are multiple licence versions with the same start date that is <= today', () => {
+        beforeEach(async () => {
+          // earlier licence version - added just for completeness
           await LicenceVersionHelper.add({
-            licenceId: testRecord.id,
-            startDate: new Date('2001-01-01'),
-            status: 'superseded',
-            issueDate: new Date('2001-01-01')
+            endDate: new Date('2022-03-31'),
+            increment: 0,
+            issue: 1,
+            licenceId: licence.id,
+            issueDate: new Date('2021-01-01'),
+            startDate: new Date('2021-01-01'),
+            status: 'superseded'
           })
 
-          testRecord = await LicenceModel.query().findById(testRecord.id).modify('currentVersion')
+          // Licence version that contains a mistake so was replaced but has the same start date as the current version.
+          // As it has a lower increment number it should NOT be returned
+          await LicenceVersionHelper.add({
+            endDate: new Date('2022-04-01'),
+            increment: 0,
+            issue: 2,
+            licenceId: licence.id,
+            issueDate: new Date('2022-04-01'),
+            startDate: new Date('2022-04-01'),
+            status: 'superseded'
+          })
+
+          // The current licence version that replaced the above. Has the same start date but a higher increment number
+          // so should be returned.
+          currentLicenceVersion = await LicenceVersionHelper.add({
+            endDate: null,
+            increment: 1,
+            issue: 2,
+            licenceId: licence.id,
+            issueDate: new Date('2022-04-01'),
+            startDate: new Date('2022-04-01'),
+            status: 'current'
+          })
+
+          testRecord = await LicenceModel.query().findById(licence.id).modify('currentVersion')
         })
 
         it('returns the "current" licence version', () => {
