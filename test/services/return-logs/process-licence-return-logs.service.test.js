@@ -130,7 +130,13 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
     describe('and the licence has both "summer" and "all-year" return requirements across multiple return versions', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves(ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions())
+        fetchReturnRequirementsStub.resolves([
+          ReturnRequirementsFixture.winterReturnRequirement(),
+          ReturnRequirementsFixture.winterReturnRequirement(),
+          ReturnRequirementsFixture.winterReturnRequirement(),
+          ReturnRequirementsFixture.winterReturnRequirement(),
+          ReturnRequirementsFixture.winterReturnRequirement()
+        ])
       })
 
       describe('and the change date means multiple return cycles need processing', () => {
@@ -155,7 +161,28 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
     describe('and the licence has both "summer" and "all-year" return requirements across multiple return versions', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves(ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions())
+        const requirements = [
+          ReturnRequirementsFixture.summerReturnRequirement(),
+          ReturnRequirementsFixture.winterReturnRequirement(),
+          ReturnRequirementsFixture.summerReturnRequirement(),
+          ReturnRequirementsFixture.winterReturnRequirement(),
+          ReturnRequirementsFixture.winterReturnRequirement(),
+          ReturnRequirementsFixture.winterReturnRequirement()
+        ]
+
+        requirements[2].returnVersion.startDate = new Date('2022-04-01')
+        requirements[2].returnVersion.endDate = new Date('2024-05-26')
+
+        requirements[3].returnVersion.startDate = new Date('2024-05-27')
+        requirements[3].returnVersion.endDate = null
+
+        requirements[4].returnVersion.startDate = new Date('2025-04-01')
+        requirements[4].returnVersion.endDate = new Date('2025-05-26')
+
+        requirements[5].returnVersion.startDate = new Date('2025-07-27')
+        requirements[5].returnVersion.endDate = null
+
+        fetchReturnRequirementsStub.resolves(requirements)
       })
 
       describe('and the change date replaces the earliest return version', () => {
