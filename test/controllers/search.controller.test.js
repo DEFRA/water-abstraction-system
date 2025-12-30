@@ -75,7 +75,7 @@ describe('Search controller', () => {
               query: 'searchthis',
               showResults: true,
               noResults: false,
-              allSearchMatches: {results: [], total: 2 }
+              allSearchMatches: { results: [], total: 2 }
             })
           })
 

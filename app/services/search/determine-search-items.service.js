@@ -70,8 +70,7 @@ function _licenceHolders(resultTypes, _query, selectedResultType) {
     return
   }
 
-  // Literally anything could be a licence holder name
-  // (I'm open to suggestions for rules that could go here)
+  // Current assumption is that a licence holder name could contain pretty much anything as it is free text
   resultTypes.push('licenceHolder')
 }
 
@@ -85,8 +84,7 @@ function _licences(resultTypes, query, selectedResultType) {
     return
   }
 
-  // Licence references are alphanumeric, with slashes and stars and dots and hyphens and...anything else?
-  // (I'm open to suggestions for rules that could go here)
+  // Licence references are alphanumeric, with slashes and stars and dots and hyphens
   if (!query.match(/^[a-z0-9/*.-]+$/i)) {
     return
   }
@@ -104,8 +102,7 @@ function _monitoringStations(resultTypes, _query, selectedResultType) {
     return
   }
 
-  // Literally anything could be a monitoring station label
-  // (I'm open to suggestions for rules that could go here)
+  // Current assumption is that a monitoring station label could contain pretty much anything as it is free text
   resultTypes.push('monitoringStation')
 }
 
@@ -132,8 +129,7 @@ function _users(resultTypes, _query, selectedResultType) {
     return
   }
 
-  // Literally anything could be part of a username
-  // (I'm open to suggestions for rules that could go here)
+  // Current assumption is that a username could contain pretty much any text as it is an email address
   resultTypes.push('user')
 }
 
