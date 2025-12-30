@@ -70,12 +70,12 @@ describe('Search controller', () => {
             getOptions.url = '/search?page=1'
             Sinon.stub(ViewSearchService, 'go').resolves({
               activeNavBar: 'search',
-              pageTitle: 'Search results (page 1 of 2)',
-              pagination: { numberOfPages: 2 },
+              pageTitle: 'Search results for "searchthis"',
+              pagination: { numberOfPages: 2, showingMessage: 'Showing all 2 matches' },
               query: 'searchthis',
               showResults: true,
               noResults: false,
-              licences: []
+              allSearchMatches: { results: [], total: 2 }
             })
           })
 
@@ -83,7 +83,7 @@ describe('Search controller', () => {
             const response = await server.inject(getOptions)
 
             expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Search results (page 1 of 2)')
+            expect(response.payload).to.contain('Search results for &quot;searchthis&quot;')
           })
         })
       })
