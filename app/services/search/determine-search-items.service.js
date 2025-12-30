@@ -14,8 +14,8 @@ const MAX_LICENCE_LENGTH = 20
  *
  * Currently, the knowledge about the data types that we use to help this determination are:
  * - Billing account references are always of the format "A12345678A" where the first letter is a charge region
- * - Licence references are of the format "01/123/ABC" where there are numbers and letters and slashes and other odd
- * characters, or are just 10 numeric digits
+ * - Licence references are of the format "01/123/ABC" where there are numbers and letters and slashes, maybe with a few
+ * other special characters, or are just 10 numeric digits
  * - Return references are actually numbers
  *
  * @param {string} query - The value to search for, taken from the session

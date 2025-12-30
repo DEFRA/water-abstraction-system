@@ -16,7 +16,7 @@ const FetchSearchResultsService = require('../../../app/services/search/fetch-se
 // Thing under test
 const FindAllSearchMatchesService = require('../../../app/services/search/find-all-search-matches.service.js')
 
-describe('Search - Find all search matches service', () => {
+describe('Search - Find All Search Matches service', () => {
   let page
   let query
   let resultType

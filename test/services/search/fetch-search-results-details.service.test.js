@@ -19,7 +19,7 @@ const UserModel = require('../../../app/models/user.model.js')
 // Thing under test
 const FetchSearchResultsDetailsService = require('../../../app/services/search/fetch-search-results-details.service.js')
 
-describe('Search - Fetch search results detail service', () => {
+describe('Search - Fetch Search Results Details service', () => {
   let idsByType
 
   let billingAccountSpy

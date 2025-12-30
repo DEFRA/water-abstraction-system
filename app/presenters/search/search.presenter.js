@@ -92,15 +92,15 @@ function _filterItems(userScopes, resultType) {
 }
 
 function _licenceHolderDetail(licenceDocumentHeader) {
+  // LicenceDocumentHeader metadata has the licence holder contact details, but only for licences that are currently
+  // active - for expired licences, the contact details are removed from the base metadata, but are still held in
+  // the `contacts` array.
+  // So we need to find the contact with role 'Licence holder' to get the details we need
   const licenceHolder =
     licenceDocumentHeader.metadata.contacts?.find((contact) => {
       return contact.role === 'Licence holder'
     }) ?? {}
 
-  // Holder name is either a company name given by Name or made up of any parts of Salutation, Initials, Forename and
-  // Name that are populated, where Name provides the surname for a person.
-  // Licences that have ended don't seem to have this information populated, which makes their display a bit
-  // unhelpful.
   const { forename: firstName, initials, name: lastName, salutation, type } = licenceHolder
   const holderContactModel = ContactModel.fromJson({ firstName, initials, lastName, salutation })
 

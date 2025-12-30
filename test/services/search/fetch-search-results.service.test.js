@@ -16,7 +16,6 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
-const ReturnRequirementHelper = require('../../support/helpers/return-requirement.helper.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
 
 // Things we need to stub
@@ -25,7 +24,7 @@ const databaseConfig = require('../../../config/database.config.js')
 // Thing under test
 const FetchSearchResultsService = require('../../../app/services/search/fetch-search-results.service.js')
 
-describe('Search - Fetch search results service', () => {
+describe('Search - Fetch Search Results service', () => {
   const billingAccounts = []
   const licenceHolders = []
   const licences = []
@@ -101,16 +100,11 @@ describe('Search - Fetch search results service', () => {
     const licence2 = await LicenceHelper.add({ licenceRef: 'SEARCH-TEST-2' })
     const licence3 = await LicenceHelper.add({ licenceRef: 'SEARCH-TEST-3' })
 
-    const returnRequirement1 = await ReturnRequirementHelper.add()
-    const returnRequirement2 = await ReturnRequirementHelper.add()
-    const returnRequirement3 = await ReturnRequirementHelper.add()
-
     // Add the return logs in non-alphabetical and non-date order to prove the ordering in the results
 
     returnLog = await ReturnLogHelper.add({
       dueDate: new Date('2021-01-01'),
       endDate: new Date('2020-01-01'),
-      returnRequirementId: returnRequirement1.id,
       licenceRef: licence1.licenceRef,
       returnReference: 'TESTSEARCH8801100010'
     })
@@ -119,7 +113,6 @@ describe('Search - Fetch search results service', () => {
     returnLog = await ReturnLogHelper.add({
       dueDate: new Date('2021-01-01'),
       endDate: new Date('2020-01-01'),
-      returnRequirementId: returnRequirement2.id,
       licenceRef: licence2.licenceRef,
       returnReference: 'TESTSEARCH8801100010'
     })
@@ -129,15 +122,13 @@ describe('Search - Fetch search results service', () => {
       dueDate: new Date('2021-01-01'),
       endDate: new Date('2020-01-01'),
       licenceRef: licence3.licenceRef,
-      returnReference: 'TESTSEARCH6601100010',
-      returnRequirementId: returnRequirement3.id
+      returnReference: 'TESTSEARCH6601100010'
     })
     returnLogs.push({ returnLog, licence: licence3 })
 
     returnLog = await ReturnLogHelper.add({
       dueDate: new Date('2021-01-01'),
       endDate: new Date('2020-01-02'),
-      returnRequirementId: returnRequirement1.id,
       licenceRef: licence1.licenceRef,
       returnReference: 'TESTSEARCH8801100010'
     })

@@ -23,7 +23,7 @@ const EXPECTED_ERROR = {
   }
 }
 
-describe('Search - Submit search service', () => {
+describe('Search - Submit Search service', () => {
   let auth
   let payload
   let yar
