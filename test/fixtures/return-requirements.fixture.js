@@ -1,5 +1,6 @@
 'use strict'
 
+const PointHelper = require('../support/helpers/point.helper.js')
 const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
@@ -51,15 +52,8 @@ function summerReturnRequirement() {
       },
       quarterlyReturns: false
     },
-    points: [
-      {
-        description: 'Summer cycle - live licence - live return version - summer return requirement',
-        ngr1: 'TG 713 291',
-        ngr2: null,
-        ngr3: null,
-        ngr4: null
-      }
-    ],
+    points: [_point('Summer cycle - live licence - live return version - summer return requirement')],
+
     returnRequirementPurposes: [_returnRequirementPurpose()]
   }
 }
@@ -112,16 +106,18 @@ function winterReturnRequirement(quarterlyReturns = false) {
       quarterlyReturns,
       multipleUpload: false
     },
-    points: [
-      {
-        description: 'Winter cycle - live licence - live return version - winter return requirement',
-        ngr1: 'TG 713 291',
-        ngr2: null,
-        ngr3: null,
-        ngr4: null
-      }
-    ],
+    points: [_point('Winter cycle - live licence - live return version - winter return requirement')],
     returnRequirementPurposes: [_returnRequirementPurpose()]
+  }
+}
+
+function _point(description) {
+  return {
+    description,
+    ngr1: PointHelper.generateNationalGridReference(),
+    ngr2: null,
+    ngr3: null,
+    ngr4: null
   }
 }
 

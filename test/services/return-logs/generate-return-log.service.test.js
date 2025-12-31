@@ -64,11 +64,11 @@ describe('Return Logs - Generate Return Log service', () => {
           },
           points: [
             {
-              name: 'Winter cycle - live licence - live return version - winter return requirement',
-              ngr1: 'TG 713 291',
-              ngr2: null,
-              ngr3: null,
-              ngr4: null
+              name: returnRequirement.points[0].description,
+              ngr1: returnRequirement.points[0].ngr1,
+              ngr2: returnRequirement.points[0].ngr2,
+              ngr3: returnRequirement.points[0].ngr3,
+              ngr4: returnRequirement.points[0].ngr4
             }
           ],
           purposes: [
