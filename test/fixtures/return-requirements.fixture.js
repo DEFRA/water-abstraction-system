@@ -1,5 +1,8 @@
 'use strict'
 
+const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
+const PurposeHelper = require('../support/helpers/purpose.helper.js')
+const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 /**
@@ -57,27 +60,7 @@ function summerReturnRequirement() {
         ngr4: null
       }
     ],
-    returnRequirementPurposes: [
-      {
-        alias: 'Purpose alias for testing',
-        id: generateUUID(),
-        primaryPurpose: {
-          description: 'Agriculture',
-          id: 'b6bb3b77-cfe8-4f22-8dc9-e92713ca3156',
-          legacyId: 'A'
-        },
-        purpose: {
-          description: 'General Farming & Domestic',
-          id: '289d1644-5215-4a20-af9e-5664fa9a18c7',
-          legacyId: '140'
-        },
-        secondaryPurpose: {
-          description: 'General Agriculture',
-          id: '2457bfeb-a120-4b57-802a-46494bd22f82',
-          legacyId: 'AGR'
-        }
-      }
-    ]
+    returnRequirementPurposes: [_returnRequirementPurpose()]
   }
 }
 
@@ -138,27 +121,17 @@ function winterReturnRequirement(quarterlyReturns = false) {
         ngr4: null
       }
     ],
-    returnRequirementPurposes: [
-      {
-        alias: 'Purpose alias for testing',
-        id: generateUUID(),
-        primaryPurpose: {
-          description: 'Agriculture',
-          id: 'b6bb3b77-cfe8-4f22-8dc9-e92713ca3156',
-          legacyId: 'A'
-        },
-        purpose: {
-          description: 'General Farming & Domestic',
-          id: '289d1644-5215-4a20-af9e-5664fa9a18c7',
-          legacyId: '140'
-        },
-        secondaryPurpose: {
-          description: 'General Agriculture',
-          id: '2457bfeb-a120-4b57-802a-46494bd22f82',
-          legacyId: 'AGR'
-        }
-      }
-    ]
+    returnRequirementPurposes: [_returnRequirementPurpose()]
+  }
+}
+
+function _returnRequirementPurpose() {
+  return {
+    alias: 'Purpose alias for testing',
+    id: generateUUID(),
+    primaryPurpose: PrimaryPurposeHelper.select(0),
+    purpose: PurposeHelper.select(13),
+    secondaryPurpose: SecondaryPurposeHelper.select(0)
   }
 }
 
