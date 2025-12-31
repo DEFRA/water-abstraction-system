@@ -16,30 +16,6 @@ const routes = [
     }
   },
   {
-    method: 'GET',
-    path: '/data/deduplicate',
-    options: {
-      handler: DataController.deduplicate,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/data/deduplicate',
-    options: {
-      handler: DataController.submitDeduplicate,
-      auth: {
-        access: {
-          scope: ['billing']
-        }
-      }
-    }
-  },
-  {
     method: 'POST',
     path: '/data/load',
     options: {
