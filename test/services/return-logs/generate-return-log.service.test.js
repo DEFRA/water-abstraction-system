@@ -84,7 +84,7 @@ describe('Return Logs - Generate Return Log service', () => {
           version: 1
         },
         quarterly: true,
-        returnCycleId: '6889b98d-964f-4966-b6d6-bf511d6526a9',
+        returnCycleId: returnCycle.id,
         returnReference: returnRequirement.reference.toString(),
         returnRequirementId: returnRequirement.id,
         returnsFrequency: 'day',

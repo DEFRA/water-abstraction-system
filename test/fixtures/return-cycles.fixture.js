@@ -1,5 +1,7 @@
 'use strict'
 
+const { generateUUID } = require('../../app/lib/general.lib.js')
+
 /**
  * Returns a summer return cycle fixture with predefined dates and properties
  *
@@ -7,7 +9,7 @@
  */
 function summerCycle() {
   return {
-    id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b8',
+    id: generateUUID(),
     startDate: new Date('2025-11-01'),
     endDate: new Date('2026-10-31'),
     dueDate: new Date('2026-11-28'),
@@ -23,7 +25,7 @@ function summerCycle() {
  */
 function winterCycle() {
   return {
-    id: '6889b98d-964f-4966-b6d6-bf511d6526a9',
+    id: generateUUID(),
     startDate: new Date('2025-04-01'),
     endDate: new Date('2026-03-31'),
     dueDate: new Date('2026-04-28'),
@@ -43,7 +45,7 @@ function returnCycles(numberOfCycles = 2) {
     summerCycle(),
     winterCycle(),
     {
-      id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b4',
+      id: generateUUID(),
       startDate: new Date('2024-11-01'),
       endDate: new Date('2025-10-31'),
       dueDate: new Date('2025-11-28'),
@@ -51,7 +53,7 @@ function returnCycles(numberOfCycles = 2) {
       submittedInWrls: true
     },
     {
-      id: '6889b98d-964f-4966-b6d6-bf511d6526a1',
+      id: generateUUID(),
       startDate: new Date('2024-04-01'),
       endDate: new Date('2025-03-31'),
       dueDate: new Date('2025-04-28'),
@@ -59,7 +61,7 @@ function returnCycles(numberOfCycles = 2) {
       submittedInWrls: true
     },
     {
-      id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b5',
+      id: generateUUID(),
       startDate: new Date('2023-11-01'),
       endDate: new Date('2024-10-31'),
       dueDate: new Date('2024-11-28'),
@@ -67,7 +69,7 @@ function returnCycles(numberOfCycles = 2) {
       submittedInWrls: true
     },
     {
-      id: '6889b98d-964f-4966-b6d6-bf511d6526a2',
+      id: generateUUID(),
       startDate: new Date('2023-04-01'),
       endDate: new Date('2024-03-31'),
       dueDate: new Date('2024-04-28'),

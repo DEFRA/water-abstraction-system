@@ -74,7 +74,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
         expect(args[0]).to.equal('Return logs creation errored')
         expect(args[1].returnRequirement.id).to.equal(returnRequirement.id)
-        expect(args[1].returnCycle.id).to.equal('4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b8')
+        expect(args[1].returnCycle.id).to.equal(returnCycle.id)
         expect(args[2]).to.be.an.error()
       })
     })
@@ -116,7 +116,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
         expect(args[0]).to.equal('Return logs creation errored')
         expect(args[1].returnRequirement.id).to.equal(returnRequirement.id)
-        expect(args[1].returnCycle.id).to.equal('6889b98d-964f-4966-b6d6-bf511d6526a9')
+        expect(args[1].returnCycle.id).to.equal(returnCycle.id)
         expect(args[2]).to.be.an.error()
       })
     })
