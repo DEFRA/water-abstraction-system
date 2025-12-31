@@ -3,6 +3,7 @@
 const PointHelper = require('../support/helpers/point.helper.js')
 const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
+const RegionHelper = require('../support/helpers/region.helper.js')
 const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
@@ -18,6 +19,8 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
  * @returns {object} A summer return requirement fixture object
  */
 function summerReturnRequirement() {
+  const returnVersion = _returnVersion(false)
+
   return {
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 10,
@@ -28,30 +31,11 @@ function summerReturnRequirement() {
     legacyId: 16999652,
     reference: 16999652,
     reportingFrequency: 'day',
-    returnVersionId: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
+    returnVersionId: returnVersion.id,
     siteDescription: 'PUMP AT TINTAGEL',
     summer: true,
     twoPartTariff: false,
-    returnVersion: {
-      endDate: null,
-      id: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
-      reason: 'new-licence',
-      startDate: new Date('2022-04-01'),
-      multipleUpload: false,
-      licence: {
-        expiredDate: null,
-        id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
-        lapsedDate: null,
-        licenceRef: '01/25/90/3242',
-        revokedDate: null,
-        areacode: 'SAAR',
-        region: {
-          id: 'eb57737f-b309-49c2-9ab6-f701e3a6fd96',
-          naldRegionId: 4
-        }
-      },
-      quarterlyReturns: false
-    },
+    returnVersion,
     points: [_point('Summer cycle - live licence - live return version - summer return requirement')],
 
     returnRequirementPurposes: [_returnRequirementPurpose()]
@@ -72,6 +56,8 @@ function summerReturnRequirement() {
  * @returns {object} A winter all-year return requirement fixture object
  */
 function winterReturnRequirement(quarterlyReturns = false) {
+  const returnVersion = _returnVersion(quarterlyReturns)
+
   return {
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 3,
@@ -82,30 +68,11 @@ function winterReturnRequirement(quarterlyReturns = false) {
     legacyId: 16999651,
     reference: 16999651,
     reportingFrequency: 'day',
-    returnVersionId: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
+    returnVersionId: returnVersion.id,
     siteDescription: 'BOREHOLE AT AVALON',
     summer: false,
     twoPartTariff: false,
-    returnVersion: {
-      endDate: null,
-      id: '5a077661-05fc-4fc4-a2c6-d84ec908f093',
-      reason: 'new-licence',
-      startDate: new Date('2022-04-01'),
-      licence: {
-        expiredDate: null,
-        id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
-        lapsedDate: null,
-        licenceRef: '01/25/90/3242',
-        revokedDate: null,
-        areacode: 'SAAR',
-        region: {
-          id: 'eb57737f-b309-49c2-9ab6-f701e3a6fd96',
-          naldRegionId: 4
-        }
-      },
-      quarterlyReturns,
-      multipleUpload: false
-    },
+    returnVersion,
     points: [_point('Winter cycle - live licence - live return version - winter return requirement')],
     returnRequirementPurposes: [_returnRequirementPurpose()]
   }
@@ -128,6 +95,31 @@ function _returnRequirementPurpose() {
     primaryPurpose: PrimaryPurposeHelper.select(0),
     purpose: PurposeHelper.select(13),
     secondaryPurpose: SecondaryPurposeHelper.select(0)
+  }
+}
+
+function _returnVersion(quarterlyReturns) {
+  const region = RegionHelper.select(3)
+
+  return {
+    endDate: null,
+    id: generateUUID(),
+    reason: 'new-licence',
+    startDate: new Date('2022-04-01'),
+    licence: {
+      expiredDate: null,
+      id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
+      lapsedDate: null,
+      licenceRef: '01/25/90/3242',
+      revokedDate: null,
+      areacode: 'SAAR',
+      region: {
+        id: region.id,
+        naldRegionId: region.naldRegionId
+      }
+    },
+    quarterlyReturns,
+    multipleUpload: false
   }
 }
 
