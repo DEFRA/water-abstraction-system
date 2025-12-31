@@ -4,9 +4,26 @@ const PointHelper = require('../support/helpers/point.helper.js')
 const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
+const { generateReference } = require('../support/helpers/return-requirement.helper.js')
 const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
+
+/**
+ * Generates the return log prefix in the format v1:regionCode:licenceRef:reference from a return requirement
+ *
+ * @param {object} returnRequirement - The return requirement object
+ *
+ * @returns {string} The formatted return log prefix string
+ */
+function returnLogPrefix(returnRequirement) {
+  const { reference, returnVersion } = returnRequirement
+
+  const licenceRef = returnVersion.licence.licenceRef
+  const regionCode = returnVersion.licence.region.naldRegionId
+
+  return `v1:${regionCode}:${licenceRef}:${reference}`
+}
 
 /**
  * Represents a single 'fetch' result for a summer return requirement with associated license and purpose data
@@ -21,16 +38,17 @@ const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
  */
 function summerReturnRequirement() {
   const returnVersion = _returnVersion(false)
+  const reference = generateReference()
 
   return {
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 10,
     abstractionPeriodStartDay: 1,
     abstractionPeriodStartMonth: 5,
-    externalId: '4:16999652',
+    externalId: `${returnVersion.licence.region.naldRegionId}:${reference}`,
     id: generateUUID(),
-    legacyId: 16999652,
-    reference: 16999652,
+    legacyId: reference,
+    reference,
     reportingFrequency: 'day',
     returnVersionId: returnVersion.id,
     siteDescription: 'PUMP AT TINTAGEL',
@@ -58,16 +76,17 @@ function summerReturnRequirement() {
  */
 function winterReturnRequirement(quarterlyReturns = false) {
   const returnVersion = _returnVersion(quarterlyReturns)
+  const reference = generateReference()
 
   return {
     abstractionPeriodEndDay: 31,
     abstractionPeriodEndMonth: 3,
     abstractionPeriodStartDay: 1,
     abstractionPeriodStartMonth: 4,
-    externalId: '4:16999651',
+    externalId: `${returnVersion.licence.region.naldRegionId}:${reference}`,
     id: generateUUID(),
-    legacyId: 16999651,
-    reference: 16999651,
+    legacyId: reference,
+    reference,
     reportingFrequency: 'day',
     returnVersionId: returnVersion.id,
     siteDescription: 'BOREHOLE AT AVALON',
@@ -125,6 +144,7 @@ function _returnVersion(quarterlyReturns) {
 }
 
 module.exports = {
+  returnLogPrefix,
   summerReturnRequirement,
   winterReturnRequirement
 }
