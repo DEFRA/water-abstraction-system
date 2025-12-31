@@ -6,6 +6,7 @@ const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
 const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
 
 /**
  * Represents a single 'fetch' result for a summer return requirement with associated license and purpose data
@@ -108,9 +109,9 @@ function _returnVersion(quarterlyReturns) {
     startDate: new Date('2022-04-01'),
     licence: {
       expiredDate: null,
-      id: '3acf7d80-cf74-4e86-8128-13ef687ea091',
+      id: generateUUID(),
       lapsedDate: null,
-      licenceRef: '01/25/90/3242',
+      licenceRef: generateLicenceRef(),
       revokedDate: null,
       areacode: 'SAAR',
       region: {

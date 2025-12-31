@@ -44,8 +44,8 @@ describe('Return Logs - Generate Return Log service', () => {
       expect(result).to.equal({
         dueDate: null,
         endDate: new Date('2026-03-31'),
-        id: 'v1:4:01/25/90/3242:16999651:2025-04-01:2026-03-31',
-        licenceRef: '01/25/90/3242',
+        id: `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999651:2025-04-01:2026-03-31`,
+        licenceRef: returnRequirement.returnVersion.licence.licenceRef,
         metadata: {
           description: 'BOREHOLE AT AVALON',
           isCurrent: true,
@@ -110,7 +110,9 @@ describe('Return Logs - Generate Return Log service', () => {
       it('returns a unique identifier built from the region code, licence reference, reference, start and end date', () => {
         const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
-        expect(result.id).to.equal(`v1:4:01/25/90/3242:16999651:2025-04-01:2026-03-31`)
+        expect(result.id).to.equal(
+          `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999651:2025-04-01:2026-03-31`
+        )
       })
     })
 

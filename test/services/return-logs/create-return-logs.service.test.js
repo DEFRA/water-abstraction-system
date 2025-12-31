@@ -55,7 +55,9 @@ describe('Return Logs - Create Return Logs service', () => {
     it('will persist the return logs generated from the return requirement and cycle passed in', async () => {
       const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-      expect(results[0]).to.equal('v1:4:01/25/90/3242:16999652:2025-11-01:2026-10-31')
+      expect(results[0]).to.equal(
+        `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999652:2025-11-01:2026-10-31`
+      )
     })
 
     describe('and an error occurs when creating the return logs', () => {
@@ -91,10 +93,10 @@ describe('Return Logs - Create Return Logs service', () => {
       const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
       expect(results).to.equal([
-        'v1:4:01/25/90/3242:16999651:2025-04-01:2025-06-30',
-        'v1:4:01/25/90/3242:16999651:2025-07-01:2025-09-30',
-        'v1:4:01/25/90/3242:16999651:2025-10-01:2025-12-31',
-        'v1:4:01/25/90/3242:16999651:2026-01-01:2026-03-31'
+        `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999651:2025-04-01:2025-06-30`,
+        `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999651:2025-07-01:2025-09-30`,
+        `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999651:2025-10-01:2025-12-31`,
+        `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999651:2026-01-01:2026-03-31`
       ])
     })
 
@@ -132,7 +134,9 @@ describe('Return Logs - Create Return Logs service', () => {
     it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
       const results = await CreateReturnLogsService.go(returnRequirement, returnCycle, new Date('2025-05-01'))
 
-      expect(results[0]).to.equal('v1:4:01/25/90/3242:16999651:2025-04-01:2025-05-01')
+      expect(results[0]).to.equal(
+        `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999651:2025-04-01:2025-05-01`
+      )
     })
   })
 
@@ -153,7 +157,9 @@ describe('Return Logs - Create Return Logs service', () => {
     it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
       const results = await CreateReturnLogsService.go(returnRequirement, returnCycle, new Date('2025-05-01'))
 
-      expect(results[0]).to.equal('v1:4:01/25/90/3242:16999611:2025-04-01:2025-05-01')
+      expect(results[0]).to.equal(
+        `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999611:2025-04-01:2025-05-01`
+      )
     })
   })
 
@@ -171,9 +177,9 @@ describe('Return Logs - Create Return Logs service', () => {
       const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
       expect(results).to.equal([
-        'v1:4:01/25/90/3242:16999651:2025-07-27:2025-09-30',
-        'v1:4:01/25/90/3242:16999651:2025-10-01:2025-12-31',
-        'v1:4:01/25/90/3242:16999651:2026-01-01:2026-03-31'
+        `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999651:2025-07-27:2025-09-30`,
+        `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999651:2025-10-01:2025-12-31`,
+        `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999651:2026-01-01:2026-03-31`
       ])
     })
   })
@@ -190,7 +196,9 @@ describe('Return Logs - Create Return Logs service', () => {
     it('returns only one return log', async () => {
       const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-      expect(results).to.equal(['v1:4:01/25/90/3242:16999651:2023-04-01:2024-03-31'])
+      expect(results).to.equal([
+        `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999651:2023-04-01:2024-03-31`
+      ])
     })
   })
 
@@ -203,8 +211,8 @@ describe('Return Logs - Create Return Logs service', () => {
       returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
       returnRequirement.returnReference = 16999621
       await ReturnLogHelper.add({
-        id: 'v1:4:01/25/90/3242:16999621:2023-04-01:2024-03-31',
-        licenceRef: '01/25/90/3242',
+        id: `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999621:2023-04-01:2024-03-31`,
+        licenceRef: returnRequirement.returnVersion.licence.licenceRef,
         endDate: new Date('2024-03-31'),
         returnReference: '16999621',
         startDate: new Date('2023-04-01')
@@ -214,7 +222,9 @@ describe('Return Logs - Create Return Logs service', () => {
     it('returns one return log for the year', async () => {
       const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-      expect(results).to.equal(['v1:4:01/25/90/3242:16999651:2023-04-01:2024-03-31'])
+      expect(results).to.equal([
+        `v1:4:${returnRequirement.returnVersion.licence.licenceRef}:16999651:2023-04-01:2024-03-31`
+      ])
     })
   })
 })
