@@ -62,7 +62,7 @@ describe('Licences - View Bills service', () => {
           activeNavBar: 'search',
           activeSecondaryNav: 'bills',
           backLink: {
-            href: '/licences',
+            href: '/',
             text: 'Go back to search'
           },
           bills: [],

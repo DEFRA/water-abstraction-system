@@ -29,7 +29,7 @@ describe('Licences - Summary Heading presenter', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: '/licences',
+          href: '/',
           text: 'Go back to search'
         },
         currentVersion: 'The current version of the licence starting 1 April 2019',
