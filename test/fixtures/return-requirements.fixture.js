@@ -60,7 +60,7 @@ function summerReturnRequirement() {
     returnRequirementPurposes: [
       {
         alias: 'Purpose alias for testing',
-        id: '8a5164fd-1705-45bd-a01c-6b09d066e403',
+        id: generateUUID(),
         primaryPurpose: {
           description: 'Agriculture',
           id: 'b6bb3b77-cfe8-4f22-8dc9-e92713ca3156',
@@ -141,7 +141,7 @@ function winterReturnRequirement(quarterlyReturns = false) {
     returnRequirementPurposes: [
       {
         alias: 'Purpose alias for testing',
-        id: '06c4c2f2-3dff-4053-bbc8-e6f64cd39623',
+        id: generateUUID(),
         primaryPurpose: {
           description: 'Agriculture',
           id: 'b6bb3b77-cfe8-4f22-8dc9-e92713ca3156',
