@@ -10,7 +10,6 @@ const { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constan
 const DatesService = require('../services/data/dates/dates.service.js')
 const LoadService = require('../services/data/load/load.service.js')
 const SeedService = require('../services/data/seed/seed.service.js')
-const SubmitDeduplicateService = require('../services/data/deduplicate/submit-deduplicate.service.js')
 const TearDownService = require('../services/data/tear-down/tear-down.service.js')
 
 async function dates(_request, h) {
@@ -38,16 +37,6 @@ async function seed(_request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function submitDeduplicate(request, h) {
-  const pageData = await SubmitDeduplicateService.go(request.payload)
-
-  if (pageData.error) {
-    return h.view('data/deduplicate.njk', pageData)
-  }
-
-  return h.redirect(`/licences?query=${pageData.licenceRef}`)
-}
-
 async function tearDown(_request, h) {
   await TearDownService.go()
 
@@ -59,6 +48,5 @@ module.exports = {
   deduplicate,
   load,
   seed,
-  submitDeduplicate,
   tearDown
 }

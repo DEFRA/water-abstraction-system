@@ -9,14 +9,11 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
-const { HTTP_STATUS_FOUND, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } =
-  require('node:http2').constants
-const { postRequestOptions } = require('../support/general.js')
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
 
 // Things we need to stub
 const LoadService = require('../../app/services/data/load/load.service.js')
 const SeedService = require('../../app/services/data/seed/seed.service.js')
-const SubmitDeduplicateService = require('../../app/services/data/deduplicate/submit-deduplicate.service.js')
 const TearDownService = require('../../app/services/data/tear-down/tear-down.service.js')
 
 // For running our service
@@ -60,71 +57,6 @@ describe('Data controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('billingPeriods')
-        })
-      })
-    })
-  })
-
-  describe('/data/deduplicate', () => {
-    const auth = {
-      strategy: 'session',
-      credentials: { scope: ['billing'] }
-    }
-
-    let options
-
-    describe('GET', () => {
-      beforeEach(() => {
-        options = {
-          method: 'GET',
-          url: '/data/deduplicate',
-          auth
-        }
-      })
-
-      describe('when the request succeeds', () => {
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('De-duplicate a licence')
-        })
-      })
-    })
-
-    describe('POST', () => {
-      const licenceRef = '01/120'
-
-      describe('when a request is valid', () => {
-        beforeEach(async () => {
-          options = postRequestOptions('/data/deduplicate', { 'licence-ref': licenceRef })
-
-          Sinon.stub(SubmitDeduplicateService, 'go').resolves({ licenceRef })
-        })
-
-        it('redirects to the search page', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/licences?query=${licenceRef}`)
-        })
-      })
-
-      describe('when a request is invalid', () => {
-        beforeEach(async () => {
-          options = postRequestOptions('/data/deduplicate')
-
-          Sinon.stub(SubmitDeduplicateService, 'go').resolves({
-            error: { text: 'Enter a licence reference to de-dupe' }
-          })
-        })
-
-        it('re-renders the page with an error message', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('There is a problem')
-          expect(response.payload).to.contain('Enter a licence reference to de-dupe')
         })
       })
     })
