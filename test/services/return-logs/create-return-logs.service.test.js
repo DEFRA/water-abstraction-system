@@ -48,7 +48,7 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
 
-      returnCycle = ReturnCyclesFixture.returnCycle(true)
+      returnCycle = ReturnCyclesFixture.summerCycle()
       returnRequirement = ReturnRequirementsFixture.summerReturnRequirement()
     })
 
@@ -85,7 +85,7 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date('2025-12-01'))
 
-      returnCycle = ReturnCyclesFixture.returnCycle()
+      returnCycle = ReturnCyclesFixture.winterCycle()
       returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
     })
 
@@ -127,7 +127,7 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date('2025-05-01'))
 
-      returnCycle = ReturnCyclesFixture.returnCycles()[1]
+      returnCycle = ReturnCyclesFixture.winterCycle()
       returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
       returnRequirement.returnVersion.endDate = null
       returnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
@@ -147,7 +147,7 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date('2025-05-01'))
 
-      returnCycle = ReturnCyclesFixture.returnCycles()[1]
+      returnCycle = ReturnCyclesFixture.winterCycle()
       returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
       returnRequirement.returnVersion.endDate = new Date('2025-05-01')
     })
@@ -166,7 +166,7 @@ describe('Return Logs - Create Return Logs service', () => {
       // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
       clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
 
-      returnCycle = ReturnCyclesFixture.returnCycles()[1]
+      returnCycle = ReturnCyclesFixture.winterCycle()
       returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
       returnRequirement.returnVersion.startDate = new Date('2025-07-27')
     })

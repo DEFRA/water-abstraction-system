@@ -25,7 +25,7 @@ describe('Return Logs - Generate Return Log service', () => {
   let returnRequirement
 
   beforeEach(() => {
-    returnCycle = ReturnCyclesFixture.returnCycle()
+    returnCycle = ReturnCyclesFixture.winterCycle()
     returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
   })
 

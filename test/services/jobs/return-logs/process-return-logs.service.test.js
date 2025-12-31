@@ -44,7 +44,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
   describe('when the requested return cycle exists', () => {
     beforeEach(() => {
-      Sinon.stub(CheckReturnCycleService, 'go').resolves(ReturnCyclesFixture.returnCycle())
+      Sinon.stub(CheckReturnCycleService, 'go').resolves(ReturnCyclesFixture.winterCycle())
     })
 
     describe('and there are return requirements that need return logs created', () => {

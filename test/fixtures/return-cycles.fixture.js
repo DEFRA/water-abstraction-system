@@ -1,18 +1,35 @@
 'use strict'
 
 /**
- * Represents a complete response from `FetchCurrentReturnCycleService`
+ * Returns a summer return cycle fixture with predefined dates and properties
  *
- * @param {boolean} [summer=false] - true to return a summer return cycle else false
- *
- * @returns {object}
+ * @returns {object} A summer return cycle object with id, dates, and flags
  */
-function returnCycle(summer = false) {
-  if (summer) {
-    return returnCycles()[0]
+function summerCycle() {
+  return {
+    id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b8',
+    startDate: new Date('2025-11-01'),
+    endDate: new Date('2026-10-31'),
+    dueDate: new Date('2026-11-28'),
+    summer: true,
+    submittedInWrls: true
   }
+}
 
-  return returnCycles()[1]
+/**
+ * Returns a winter and all year return cycle fixture with predefined dates and properties
+ *
+ * @returns {object} A winter return cycle object with id, dates, and flags
+ */
+function winterCycle() {
+  return {
+    id: '6889b98d-964f-4966-b6d6-bf511d6526a9',
+    startDate: new Date('2025-04-01'),
+    endDate: new Date('2026-03-31'),
+    dueDate: new Date('2026-04-28'),
+    summer: false,
+    submittedInWrls: true
+  }
 }
 
 /**
@@ -23,22 +40,8 @@ function returnCycle(summer = false) {
  */
 function returnCycles(numberOfCycles = 2) {
   const cycles = [
-    {
-      id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b8',
-      startDate: new Date('2025-11-01'),
-      endDate: new Date('2026-10-31'),
-      dueDate: new Date('2026-11-28'),
-      summer: true,
-      submittedInWrls: true
-    },
-    {
-      id: '6889b98d-964f-4966-b6d6-bf511d6526a9',
-      startDate: new Date('2025-04-01'),
-      endDate: new Date('2026-03-31'),
-      dueDate: new Date('2026-04-28'),
-      summer: false,
-      submittedInWrls: true
-    },
+    summerCycle(),
+    winterCycle(),
     {
       id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b4',
       startDate: new Date('2024-11-01'),
@@ -77,6 +80,7 @@ function returnCycles(numberOfCycles = 2) {
 }
 
 module.exports = {
-  returnCycle,
-  returnCycles
+  returnCycles,
+  summerCycle,
+  winterCycle
 }

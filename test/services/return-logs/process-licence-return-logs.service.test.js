@@ -82,7 +82,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
       describe('but the change date means only a single return cycle needs processing', () => {
         beforeEach(() => {
-          returnCycleModelStub.resolves([ReturnCyclesFixture.returnCycle(true)])
+          returnCycleModelStub.resolves([ReturnCyclesFixture.summerCycle()])
 
           createReturnLogsStub.resolves(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
         })
@@ -220,7 +220,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
       describe('but an "all-year" return cycle needs processing', () => {
         beforeEach(() => {
-          returnCycleModelStub.resolves([ReturnCyclesFixture.returnCycle(false)])
+          returnCycleModelStub.resolves([ReturnCyclesFixture.winterCycle()])
         })
 
         it('does not process any return requirements for the licence', async () => {
@@ -241,7 +241,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
       describe('but a "summer" return cycle needs processing', () => {
         beforeEach(() => {
-          returnCycleModelStub.resolves([ReturnCyclesFixture.returnCycle(true)])
+          returnCycleModelStub.resolves([ReturnCyclesFixture.summerCycle()])
         })
 
         it('does not process any return requirements for the licence', async () => {
