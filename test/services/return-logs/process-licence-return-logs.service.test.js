@@ -30,6 +30,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
   let createReturnLogsStub
   let fetchReturnRequirementsStub
   let returnCycleModelStub
+  let returnRequirements
   let voidReturnLogsStub
 
   beforeEach(() => {
@@ -56,10 +57,11 @@ describe('Return Logs - Process Licence Return Logs service', () => {
   describe('when called with a known licence ID', () => {
     describe('and the licence has both "summer" and "all-year" return requirements', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves([
+        returnRequirements = [
           ReturnRequirementsFixture.summerReturnRequirement(),
           ReturnRequirementsFixture.winterReturnRequirement()
-        ])
+        ]
+        fetchReturnRequirementsStub.resolves(returnRequirements)
       })
 
       describe('and the change date means multiple return cycles need processing', () => {
@@ -92,7 +94,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           const createReturnLogArgs = createReturnLogsStub.firstCall.args
 
           expect(createReturnLogsStub.callCount).to.equal(1)
-          expect(createReturnLogArgs[0].id).to.equal('3bc0e31a-4bfb-47ef-aa6e-8aca37d9aac2')
+          expect(createReturnLogArgs[0].id).to.equal(returnRequirements[0].id)
 
           // Confirm we only call void once, with the return log ID generated from our summer return requirement
           const voidReturnLogArgs = voidReturnLogsStub.firstCall.args
@@ -105,10 +107,9 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
     describe('and the licence has both "summer" and "all-year" return requirements but also a revoked date', () => {
       beforeEach(() => {
-        const returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
-
-        returnRequirement.returnVersion.licence.revokedDate = new Date('2024-12-31')
-        fetchReturnRequirementsStub.resolves([returnRequirement])
+        returnRequirements = [ReturnRequirementsFixture.winterReturnRequirement(true)]
+        returnRequirements[0].returnVersion.licence.revokedDate = new Date('2024-12-31')
+        fetchReturnRequirementsStub.resolves(returnRequirements)
       })
 
       describe('and the change date means multiple return cycles need processing', () => {
@@ -130,13 +131,14 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
     describe('and the licence has both "summer" and "all-year" return requirements across multiple return versions', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves([
+        returnRequirements = [
           ReturnRequirementsFixture.winterReturnRequirement(),
           ReturnRequirementsFixture.winterReturnRequirement(),
           ReturnRequirementsFixture.winterReturnRequirement(),
           ReturnRequirementsFixture.winterReturnRequirement(),
           ReturnRequirementsFixture.winterReturnRequirement()
-        ])
+        ]
+        fetchReturnRequirementsStub.resolves(returnRequirements)
       })
 
       describe('and the change date means multiple return cycles need processing', () => {
@@ -161,7 +163,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
     describe('and the licence has both "summer" and "all-year" return requirements across multiple return versions', () => {
       beforeEach(() => {
-        const requirements = [
+        returnRequirements = [
           ReturnRequirementsFixture.summerReturnRequirement(),
           ReturnRequirementsFixture.winterReturnRequirement(),
           ReturnRequirementsFixture.summerReturnRequirement(),
@@ -170,19 +172,19 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           ReturnRequirementsFixture.winterReturnRequirement()
         ]
 
-        requirements[2].returnVersion.startDate = new Date('2022-04-01')
-        requirements[2].returnVersion.endDate = new Date('2024-05-26')
+        returnRequirements[2].returnVersion.startDate = new Date('2022-04-01')
+        returnRequirements[2].returnVersion.endDate = new Date('2024-05-26')
 
-        requirements[3].returnVersion.startDate = new Date('2024-05-27')
-        requirements[3].returnVersion.endDate = null
+        returnRequirements[3].returnVersion.startDate = new Date('2024-05-27')
+        returnRequirements[3].returnVersion.endDate = null
 
-        requirements[4].returnVersion.startDate = new Date('2025-04-01')
-        requirements[4].returnVersion.endDate = new Date('2025-05-26')
+        returnRequirements[4].returnVersion.startDate = new Date('2025-04-01')
+        returnRequirements[4].returnVersion.endDate = new Date('2025-05-26')
 
-        requirements[5].returnVersion.startDate = new Date('2025-07-27')
-        requirements[5].returnVersion.endDate = null
+        returnRequirements[5].returnVersion.startDate = new Date('2025-07-27')
+        returnRequirements[5].returnVersion.endDate = null
 
-        fetchReturnRequirementsStub.resolves(requirements)
+        fetchReturnRequirementsStub.resolves(returnRequirements)
       })
 
       describe('and the change date replaces the earliest return version', () => {
@@ -211,7 +213,8 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
     describe('and the licence has only a "summer" return requirement', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves([ReturnRequirementsFixture.summerReturnRequirement()])
+        returnRequirements = [ReturnRequirementsFixture.summerReturnRequirement()]
+        fetchReturnRequirementsStub.resolves(returnRequirements)
         createReturnLogsStub.resolves()
       })
 
@@ -231,7 +234,8 @@ describe('Return Logs - Process Licence Return Logs service', () => {
 
     describe('and the licence has only an "all-year" return requirement', () => {
       beforeEach(() => {
-        fetchReturnRequirementsStub.resolves([ReturnRequirementsFixture.winterReturnRequirement(true)])
+        returnRequirements = [ReturnRequirementsFixture.winterReturnRequirement(true)]
+        fetchReturnRequirementsStub.resolves(returnRequirements)
         createReturnLogsStub.resolves()
       })
 

@@ -1,5 +1,7 @@
 'use strict'
 
+const { generateUUID } = require('../../app/lib/general.lib.js')
+
 /**
  * Represents a single 'fetch' result for a summer return requirement with associated license and purpose data
  *
@@ -18,7 +20,7 @@ function summerReturnRequirement() {
     abstractionPeriodStartDay: 1,
     abstractionPeriodStartMonth: 5,
     externalId: '4:16999652',
-    id: '3bc0e31a-4bfb-47ef-aa6e-8aca37d9aac2',
+    id: generateUUID(),
     legacyId: 16999652,
     reference: 16999652,
     reportingFrequency: 'day',
@@ -99,7 +101,7 @@ function winterReturnRequirement(quarterlyReturns = false) {
     abstractionPeriodStartDay: 1,
     abstractionPeriodStartMonth: 4,
     externalId: '4:16999651',
-    id: '4bc1efa7-10af-4958-864e-32acae5c6fa4',
+    id: generateUUID(),
     legacyId: 16999651,
     reference: 16999651,
     reportingFrequency: 'day',

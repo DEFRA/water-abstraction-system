@@ -71,7 +71,7 @@ describe('Return Logs - Create Return Logs service', () => {
         const args = notifierStub.omfg.firstCall.args
 
         expect(args[0]).to.equal('Return logs creation errored')
-        expect(args[1].returnRequirement.id).to.equal('3bc0e31a-4bfb-47ef-aa6e-8aca37d9aac2')
+        expect(args[1].returnRequirement.id).to.equal(returnRequirement.id)
         expect(args[1].returnCycle.id).to.equal('4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b8')
         expect(args[2]).to.be.an.error()
       })
@@ -111,7 +111,7 @@ describe('Return Logs - Create Return Logs service', () => {
         const args = notifierStub.omfg.firstCall.args
 
         expect(args[0]).to.equal('Return logs creation errored')
-        expect(args[1].returnRequirement.id).to.equal('4bc1efa7-10af-4958-864e-32acae5c6fa4')
+        expect(args[1].returnRequirement.id).to.equal(returnRequirement.id)
         expect(args[1].returnCycle.id).to.equal('6889b98d-964f-4966-b6d6-bf511d6526a9')
         expect(args[2]).to.be.an.error()
       })
