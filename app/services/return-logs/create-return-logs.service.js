@@ -51,7 +51,7 @@ function _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate = nu
       const endDateInPeriod = returnRequirement.returnVersion.endDate >= period.startDate
       const endDateIsNull = returnRequirement.returnVersion.endDate === null
       const licenceEndDateIsNull = licenceEndDate === null
-      const licenceEndDateInPeriod = licenceEndDate > period.startDate
+      const licenceEndDateInPeriod = licenceEndDate >= period.startDate
 
       return startDateInPeriod && (endDateInPeriod || endDateIsNull) && (licenceEndDateIsNull || licenceEndDateInPeriod)
     })
