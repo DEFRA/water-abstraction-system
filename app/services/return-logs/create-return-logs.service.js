@@ -43,7 +43,7 @@ function _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate = nu
       const licenceEndDateIsNull = licenceEndDate === null
       const licenceEndDateInPeriod = licenceEndDate >= period.startDate
 
-      return startDateInPeriod && (endDateInPeriod || endDateIsNull) && (licenceEndDateIsNull || licenceEndDateInPeriod)
+      return startDateInPeriod && (endDateIsNull || endDateInPeriod) && (licenceEndDateIsNull || licenceEndDateInPeriod)
     })
 
     for (const quarterlyReturnPeriod of periodsToProcess) {
