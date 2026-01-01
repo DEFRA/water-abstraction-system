@@ -205,22 +205,46 @@ describe('Return Logs - Create Return Logs service', () => {
             })
           })
 
-          describe('and the licence ends during the return cycle and in the first quarter', () => {
+          describe('and the licence ends', () => {
             beforeEach(() => {
+              // NOTE: We ensure the return version end date is null to test the licence end date condition
               returnRequirement.returnVersion.endDate = null
-              returnRequirement.returnVersion.licence.expiredDate = new Date('2024-05-01')
             })
 
-            it('will create 1 return log ending on the licence end date and return the ID', async () => {
-              const results = await CreateReturnLogsService.go(
-                returnRequirement,
-                returnCycle,
-                returnRequirement.returnVersion.licence.expiredDate
-              )
+            describe('during the return cycle and in the first quarter', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2024-05-01')
+              })
 
-              const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+              it('will create 1 return log ending on the licence end date and return the ID', async () => {
+                const results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
 
-              expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-05-01`])
+                const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-05-01`])
+              })
+            })
+
+            describe('on the start date of the second quarter', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2024-07-01')
+              })
+
+              it('will still create just 1 return log ending on the licence end date and return the ID', async () => {
+                const results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-07-01`])
+              })
             })
           })
 
@@ -308,22 +332,49 @@ describe('Return Logs - Create Return Logs service', () => {
             })
           })
 
-          describe('and the licence ends during the return cycle and in the first quarter', () => {
+          describe('and the licence ends', () => {
             beforeEach(() => {
+              // NOTE: We ensure the return version end date is null to test the licence end date condition
               returnRequirement.returnVersion.endDate = null
-              returnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
             })
 
-            it('will create 1 return log ending on the licence end date and return the ID', async () => {
-              const results = await CreateReturnLogsService.go(
-                returnRequirement,
-                returnCycle,
-                returnRequirement.returnVersion.licence.expiredDate
-              )
+            describe('during the return cycle and in the first quarter', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
+              })
 
-              const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+              it('will create 1 return log ending on the licence end date and return the ID', async () => {
+                const results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
 
-              expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-05-01`])
+                const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+                expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-05-01`])
+              })
+            })
+
+            describe('on the start date of the second quarter', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2025-07-01')
+              })
+
+              it('will create 2 return logs, the second starting and ending on the licence end date and return their IDs', async () => {
+                const results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+                expect(results).to.equal([
+                  `${returnLogPrefix}:2025-04-01:2025-06-30`,
+                  `${returnLogPrefix}:2025-07-01:2025-07-01`
+                ])
+              })
             })
           })
 
