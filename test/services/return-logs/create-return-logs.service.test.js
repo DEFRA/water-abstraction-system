@@ -12,6 +12,7 @@ const { expect } = Code
 const ReturnCyclesFixture = require('../../fixtures/return-cycles.fixture.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 const ReturnRequirementsFixture = require('../../fixtures/return-requirements.fixture.js')
+const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
 const { today } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -26,10 +27,13 @@ describe('Return Logs - Create Return Logs service', () => {
 
   let clock
   let notifierStub
-  let testReturnCycle
-  let testReturnRequirement
+  let returnCycle
+  let returnRequirement
 
   beforeEach(() => {
+    // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
+    clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
+
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -44,176 +48,422 @@ describe('Return Logs - Create Return Logs service', () => {
   })
 
   describe('when called', () => {
-    beforeEach(() => {
-      // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
-      clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
+    describe('and the return cycle is "summer"', () => {
+      describe('and is before 2025-04-01 (before quarterly)', () => {
+        beforeEach(() => {
+          returnCycle = ReturnCyclesFixture.returnCycles(4)[2] // summer 2024-11-01 to 2025-10-31
+        })
 
-      testReturnCycle = ReturnCyclesFixture.returnCycle(true)
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirement(true)
-    })
+        describe('and the return requirement is "summer"', () => {
+          beforeEach(() => {
+            returnRequirement = ReturnRequirementsFixture.summerReturnRequirement()
+          })
 
-    it('will persist the return logs generated from the return requirement and cycle passed in', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+          it('will create a return log from the requirement and return its ID', async () => {
+            const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-      expect(results[0]).to.equal('v1:4:01/25/90/3242:16999652:2025-11-01:2026-10-31')
-    })
+            const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-    describe('and an error occurs when creating the return logs', () => {
-      beforeEach(() => {
-        // NOTE: We stub the generate service to throw purely because it is easier to structure our tests on that basis.
-        // But if the actual insert were to throw the expected behaviour would be the same.
-        Sinon.stub(GenerateReturnLogService, 'go').throws()
+            expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2025-10-31`])
+          })
+        })
+
+        describe('and the return requirement is "winter"', () => {
+          beforeEach(() => {
+            returnRequirement = ReturnRequirementsFixture.winterReturnRequirement()
+          })
+
+          it('will create a return log from the requirement and return its ID', async () => {
+            const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+            const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+            expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2025-10-31`])
+          })
+        })
+
+        // NOTE: The quarterly return functionality is only relevant for cycles after 2025-04-01. It is not possible to
+        // create a return version that is quarterly which starts before 2025-04-01.
       })
 
-      it('handles the error', async () => {
-        await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+      describe('and is after 2025-04-01 (after quarterly)', () => {
+        beforeEach(() => {
+          returnCycle = ReturnCyclesFixture.summerCycle()
+        })
 
-        const args = notifierStub.omfg.firstCall.args
+        describe('and the return requirement is "summer"', () => {
+          beforeEach(() => {
+            returnRequirement = ReturnRequirementsFixture.summerReturnRequirement()
+          })
 
-        expect(args[0]).to.equal('Return logs creation errored')
-        expect(args[1].returnRequirement.id).to.equal('3bc0e31a-4bfb-47ef-aa6e-8aca37d9aac2')
-        expect(args[1].returnCycle.id).to.equal('4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b8')
-        expect(args[2]).to.be.an.error()
-      })
-    })
-  })
+          it('will create a return log from the requirement and return its ID', async () => {
+            const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-  describe('when called with a quarterly return version and a return cycle after 01-04-2025', () => {
-    beforeEach(() => {
-      // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
-      clock = Sinon.useFakeTimers(new Date('2025-12-01'))
+            const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-      testReturnCycle = ReturnCyclesFixture.returnCycle()
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
-    })
+            expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2026-10-31`])
+          })
+        })
 
-    it('will persist the return logs generated from the return requirement and cycle passed in', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+        describe('and the return requirement is "winter"', () => {
+          beforeEach(() => {
+            returnRequirement = ReturnRequirementsFixture.winterReturnRequirement()
+          })
 
-      expect(results).to.equal([
-        'v1:4:01/25/90/3242:16999651:2025-04-01:2025-06-30',
-        'v1:4:01/25/90/3242:16999651:2025-07-01:2025-09-30',
-        'v1:4:01/25/90/3242:16999651:2025-10-01:2025-12-31',
-        'v1:4:01/25/90/3242:16999651:2026-01-01:2026-03-31'
-      ])
-    })
+          it('will create a return log from the requirement and return its ID', async () => {
+            const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-    describe('and an error occurs when creating the return logs', () => {
-      beforeEach(() => {
-        // NOTE: We stub the generate service to throw purely because it is easier to structure our tests on that basis.
-        // But if the actual insert were to throw the expected behaviour would be the same.
-        Sinon.stub(GenerateReturnLogService, 'go').throws()
+            const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+            expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2026-10-31`])
+          })
+        })
+
+        // NOTE: Quarterly return functionality only applies to winter return requirements linked to a return version
+        // with the quarterly flag set. You cannot set the quarterly flag on a return version that contains summer
+        // return requirements.
       })
 
-      it('handles the error', async () => {
-        await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+      describe('and the return log to be created already exists', () => {
+        let formattedStartDate
+        let formattedEndDate
 
-        const args = notifierStub.omfg.firstCall.args
+        beforeEach(async () => {
+          returnCycle = ReturnCyclesFixture.summerCycle()
+          returnRequirement = ReturnRequirementsFixture.summerReturnRequirement()
 
-        expect(args[0]).to.equal('Return logs creation errored')
-        expect(args[1].returnRequirement.id).to.equal('4bc1efa7-10af-4958-864e-32acae5c6fa4')
-        expect(args[1].returnCycle.id).to.equal('6889b98d-964f-4966-b6d6-bf511d6526a9')
-        expect(args[2]).to.be.an.error()
-      })
-    })
-  })
+          const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-  describe('when called with a quarterly return version with a licence end date that ends during the return cycle', () => {
-    beforeEach(() => {
-      // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
-      clock = Sinon.useFakeTimers(new Date('2025-05-01'))
+          formattedStartDate = formatDateObjectToISO(returnCycle.startDate)
+          formattedEndDate = formatDateObjectToISO(returnCycle.endDate)
 
-      testReturnCycle = ReturnCyclesFixture.returnCycles()[1]
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions()[4]
-      testReturnRequirement.returnVersion.endDate = null
-      testReturnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
-    })
+          await ReturnLogHelper.add({
+            id: `${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`,
+            licenceRef: returnRequirement.returnVersion.licence.licenceRef,
+            endDate: returnCycle.endDate,
+            returnReference: returnRequirement.reference,
+            startDate: returnCycle.startDate
+          })
+        })
 
-    it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle, new Date('2025-05-01'))
+        it('returns the existing return log ID instead of creating a new one', async () => {
+          const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-      expect(results[0]).to.equal('v1:4:01/25/90/3242:16999643:2025-04-01:2025-05-01')
-    })
-  })
+          const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-  describe('when called with a quarterly return version with a return version end date that ends during the return cycle', () => {
-    beforeEach(() => {
-      // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
-      clock = Sinon.useFakeTimers(new Date('2025-05-01'))
-
-      testReturnCycle = ReturnCyclesFixture.returnCycles()[1]
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions()[4]
-      testReturnRequirement.returnVersion.endDate = new Date('2025-05-01')
-
-      // These should always be in sync
-      testReturnRequirement.legacyId = 16999611
-      testReturnRequirement.reference = 16999611
-    })
-
-    it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle, new Date('2025-05-01'))
-
-      expect(results[0]).to.equal('v1:4:01/25/90/3242:16999611:2025-04-01:2025-05-01')
-    })
-  })
-
-  describe('when called with a quarterly return version with a licence start date that starts during the return cycle', () => {
-    beforeEach(() => {
-      // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
-      clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
-
-      testReturnCycle = ReturnCyclesFixture.returnCycles()[1]
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirementsAcrossReturnVersions()[5]
-    })
-
-    it('will persist the valid return logs generated from the return requirement and cycle passed in', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
-
-      expect(results).to.equal([
-        'v1:4:01/25/90/3242:16999644:2025-07-27:2025-09-30',
-        'v1:4:01/25/90/3242:16999644:2025-10-01:2025-12-31',
-        'v1:4:01/25/90/3242:16999644:2026-01-01:2026-03-31'
-      ])
-    })
-  })
-
-  describe('when called with a quarterly return version and a return cycle before 01-04-2025', () => {
-    beforeEach(() => {
-      // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
-      clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
-
-      testReturnCycle = ReturnCyclesFixture.returnCycles(6)[5]
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
-    })
-
-    it('returns only one return log', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
-
-      expect(results).to.equal(['v1:4:01/25/90/3242:16999651:2023-04-01:2024-03-31'])
-    })
-  })
-
-  describe('when called when an existing return log already exists and a return cycle before 01-04-2025', () => {
-    beforeEach(async () => {
-      // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
-      clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
-
-      testReturnCycle = ReturnCyclesFixture.returnCycles(6)[5]
-      testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
-      testReturnRequirement.returnReference = 16999621
-      await ReturnLogHelper.add({
-        id: 'v1:4:01/25/90/3242:16999621:2023-04-01:2024-03-31',
-        licenceRef: '01/25/90/3242',
-        endDate: new Date('2024-03-31'),
-        returnReference: '16999621',
-        startDate: new Date('2023-04-01')
+          expect(results).to.equal([`${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`])
+        })
       })
     })
 
-    it('returns one return log for the year', async () => {
-      const results = await CreateReturnLogsService.go(testReturnRequirement, testReturnCycle)
+    describe('and the return cycle is "winter"', () => {
+      describe('and is before 2025-04-01 (before quarterly)', () => {
+        beforeEach(() => {
+          returnCycle = ReturnCyclesFixture.returnCycles(4)[3] // winter 2024-04-01 to 2025-03-31
+        })
 
-      expect(results).to.equal(['v1:4:01/25/90/3242:16999651:2023-04-01:2024-03-31'])
+        describe('and the return requirement is "summer"', () => {
+          beforeEach(() => {
+            returnRequirement = ReturnRequirementsFixture.summerReturnRequirement()
+          })
+
+          it('will create a return log from the requirement and return its ID', async () => {
+            const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+            const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+            expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2025-03-31`])
+          })
+        })
+
+        describe('and the return requirement is "winter"', () => {
+          beforeEach(() => {
+            returnRequirement = ReturnRequirementsFixture.winterReturnRequirement()
+          })
+
+          it('will create a return log from the requirement and return its ID', async () => {
+            const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+            const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+            expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2025-03-31`])
+          })
+        })
+
+        describe('and the return requirement is "quarterly"', () => {
+          beforeEach(() => {
+            returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
+          })
+
+          describe('and neither the licence nor the return version end during the return cycle', () => {
+            it('will create just one return log from the requirement and return its ID', async () => {
+              const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+              const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+              expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2025-03-31`])
+            })
+          })
+
+          describe('and the licence ends', () => {
+            beforeEach(() => {
+              // NOTE: We ensure the return version end date is null to test the licence end date condition
+              returnRequirement.returnVersion.endDate = null
+            })
+
+            describe('during the return cycle and in the first quarter', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2024-05-01')
+              })
+
+              it('will create 1 return log ending on the licence end date and return the ID', async () => {
+                const results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-05-01`])
+              })
+            })
+
+            describe('on the start date of the second quarter', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2024-07-01')
+              })
+
+              it('will still create just 1 return log ending on the licence end date and return the ID', async () => {
+                const results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+                expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-07-01`])
+              })
+            })
+          })
+
+          describe('and the return version ends during the return cycle and in the first quarter', () => {
+            beforeEach(() => {
+              returnRequirement.returnVersion.endDate = new Date('2024-05-01')
+            })
+
+            it('will create 1 return log ending on the return version end date and return the ID', async () => {
+              const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+              const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+              expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-05-01`])
+            })
+          })
+
+          describe('and the return version starts during the return cycle and in the second quarter', () => {
+            beforeEach(() => {
+              returnRequirement.returnVersion.startDate = new Date('2024-07-27')
+            })
+
+            it('will create 1 return log, starting on the return version start date and return the ID', async () => {
+              const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+              const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+              expect(results).to.equal([`${returnLogPrefix}:2024-07-27:2025-03-31`])
+            })
+          })
+        })
+      })
+
+      describe('and is after 2025-04-01 (after quarterly)', () => {
+        beforeEach(() => {
+          returnCycle = ReturnCyclesFixture.winterCycle()
+          returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
+        })
+
+        describe('and the return requirement is "summer"', () => {
+          beforeEach(() => {
+            returnRequirement = ReturnRequirementsFixture.summerReturnRequirement()
+          })
+
+          it('will create a return log from the requirement and return its ID', async () => {
+            const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+            const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+            expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2026-03-31`])
+          })
+        })
+
+        describe('and the return requirement is "winter"', () => {
+          beforeEach(() => {
+            returnRequirement = ReturnRequirementsFixture.winterReturnRequirement()
+          })
+
+          it('will create a return log from the requirement and return its ID', async () => {
+            const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+            const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+            expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2026-03-31`])
+          })
+        })
+
+        describe('and the return requirement is "quarterly"', () => {
+          beforeEach(() => {
+            returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
+          })
+
+          describe('and neither the licence nor the return version end during the return cycle', () => {
+            it('will create 4 return logs from the requirement and return their IDs', async () => {
+              const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+              const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+              expect(results).to.equal([
+                `${returnLogPrefix}:2025-04-01:2025-06-30`,
+                `${returnLogPrefix}:2025-07-01:2025-09-30`,
+                `${returnLogPrefix}:2025-10-01:2025-12-31`,
+                `${returnLogPrefix}:2026-01-01:2026-03-31`
+              ])
+            })
+          })
+
+          describe('and the licence ends', () => {
+            beforeEach(() => {
+              // NOTE: We ensure the return version end date is null to test the licence end date condition
+              returnRequirement.returnVersion.endDate = null
+            })
+
+            describe('during the return cycle and in the first quarter', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
+              })
+
+              it('will create 1 return log ending on the licence end date and return the ID', async () => {
+                const results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+                expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-05-01`])
+              })
+            })
+
+            describe('on the start date of the second quarter', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2025-07-01')
+              })
+
+              it('will create 2 return logs, the second starting and ending on the licence end date and return their IDs', async () => {
+                const results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+                expect(results).to.equal([
+                  `${returnLogPrefix}:2025-04-01:2025-06-30`,
+                  `${returnLogPrefix}:2025-07-01:2025-07-01`
+                ])
+              })
+            })
+          })
+
+          describe('and the return version ends during the return cycle and in the first quarter', () => {
+            beforeEach(() => {
+              returnRequirement.returnVersion.endDate = new Date('2025-05-01')
+            })
+
+            it('will create 1 return log ending on the return version end date and return the ID', async () => {
+              const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+              const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+              expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-05-01`])
+            })
+          })
+
+          describe('and the return version starts during the return cycle and in the second quarter', () => {
+            beforeEach(() => {
+              returnRequirement.returnVersion.startDate = new Date('2025-07-27')
+            })
+
+            it('will create 3 return logs, the first starting on the return version start date and return their IDs', async () => {
+              const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+              const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+              expect(results).to.equal([
+                `${returnLogPrefix}:2025-07-27:2025-09-30`,
+                `${returnLogPrefix}:2025-10-01:2025-12-31`,
+                `${returnLogPrefix}:2026-01-01:2026-03-31`
+              ])
+            })
+          })
+        })
+      })
+
+      describe('and the return log to be created already exists', () => {
+        let formattedStartDate
+        let formattedEndDate
+
+        beforeEach(async () => {
+          returnCycle = ReturnCyclesFixture.winterCycle()
+          returnRequirement = ReturnRequirementsFixture.winterReturnRequirement()
+
+          const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+          formattedStartDate = formatDateObjectToISO(returnCycle.startDate)
+          formattedEndDate = formatDateObjectToISO(returnCycle.endDate)
+
+          await ReturnLogHelper.add({
+            id: `${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`,
+            licenceRef: returnRequirement.returnVersion.licence.licenceRef,
+            endDate: returnCycle.endDate,
+            returnReference: returnRequirement.reference,
+            startDate: returnCycle.startDate
+          })
+        })
+
+        it('returns the existing return log ID instead of creating a new one', async () => {
+          const results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+          const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
+
+          expect(results).to.equal([`${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`])
+        })
+      })
+    })
+  })
+
+  describe('when an error is thrown', () => {
+    beforeEach(() => {
+      returnCycle = ReturnCyclesFixture.summerCycle()
+      returnRequirement = ReturnRequirementsFixture.summerReturnRequirement()
+
+      // NOTE: We stub the generate service to throw purely because it is easier to structure our tests on that basis.
+      // But if the actual insert were to throw the expected behaviour would be the same.
+      Sinon.stub(GenerateReturnLogService, 'go').throws()
+    })
+
+    it('handles the error', async () => {
+      await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+      const args = notifierStub.omfg.firstCall.args
+
+      expect(args[0]).to.equal('Return logs creation errored')
+      expect(args[1].returnRequirement.id).to.equal(returnRequirement.id)
+      expect(args[1].returnCycle.id).to.equal(returnCycle.id)
+      expect(args[2]).to.be.an.error()
     })
   })
 })
