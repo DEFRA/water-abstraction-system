@@ -16,12 +16,14 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const FetchContactDetailsService = require('../../../app/services/licences/fetch-contact-details.service.js')
 const FetchCustomerContactsService = require('../../../app/services/licences/fetch-customer-contacts.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const ViewContactDetailsService = require('../../../app/services/licences/view-contact-details.service.js')
 
 describe('Licences - View Contact Details service', () => {
   let auth
+  let companyId
   let licenceId
   let licenceRef
 
@@ -39,13 +41,16 @@ describe('Licences - View Contact Details service', () => {
       }
     }
 
+    companyId = generateUUID()
+
     Sinon.stub(FetchLicenceService, 'go').returns({
       licenceRef
     })
+
     Sinon.stub(FetchContactDetailsService, 'go').returns([
       {
         communicationType: 'Licence Holder',
-        companyId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
+        companyId,
         companyName: 'Acme ltd',
         contactId: null,
         firstName: null,
@@ -73,6 +78,8 @@ describe('Licences - View Contact Details service', () => {
         suffix: null
       }
     ])
+
+    Sinon.stub(FeatureFlagsConfig, 'enableCustomerView').value(true)
   })
 
   afterEach(() => {
@@ -97,7 +104,8 @@ describe('Licences - View Contact Details service', () => {
             name: 'Donald Duck'
           }
         ],
-        customerId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
+        customerId: companyId,
+        customerContactLink: `/system/customers/${companyId}/contacts`,
         licenceContacts: [
           {
             address: {
