@@ -10,11 +10,13 @@ const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js
 
 const HEADERS = [
   'Licence',
+  'Return id',
   'Return reference',
   'Return start date',
   'Return end date',
   'Return due date',
   'Notification type',
+  'Notification due date',
   'Message type',
   'Contact type',
   'Email',
@@ -62,11 +64,13 @@ function _transformToCsv(recipients, notificationType) {
 
     const row = [
       recipient.licence_ref,
+      recipient.return_id,
       recipient.return_reference,
       recipient.start_date,
       recipient.end_date,
       recipient.due_date,
       notificationType,
+      recipient.notificationDueDate,
       recipient.message_type,
       recipient.contact_type,
       recipient.email || '',

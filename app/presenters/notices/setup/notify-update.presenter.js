@@ -33,10 +33,13 @@ function go(notifyResult) {
     }
   }
 
+  // NOTE: The safe navigation operator is intended here. If the request fails to connect to Notify, for example, the
+  // response object will not have a body property. In this case an error would be thrown if we did not use the safe
+  // navigation operator.
   return NotificationErrorPresenter.go(
     response.statusCode,
     `Request failed with status code ${response.statusCode}`,
-    response.body.errors
+    response.body?.errors
   )
 }
 

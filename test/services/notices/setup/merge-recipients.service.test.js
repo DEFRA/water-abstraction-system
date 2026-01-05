@@ -36,18 +36,24 @@ describe('Notices - Setup - Merge Recipients service', () => {
             contact: fetchedRecipients[0].contact,
             contact_hash_id: fetchedRecipients[0].contact_hash_id,
             contact_type: fetchedRecipients[0].contact_type,
+            due_date_status: fetchedRecipients[0].due_date_status,
             email: fetchedRecipients[0].email,
+            latest_due_date: fetchedRecipients[0].latest_due_date,
             licence_refs: fetchedRecipients[0].licence_refs,
             message_type: fetchedRecipients[0].message_type,
+            notificationDueDate: fetchedRecipients[0].notificationDueDate,
             return_log_ids: fetchedRecipients[0].return_log_ids
           },
           {
             contact: fetchedRecipients[1].contact,
             contact_hash_id: fetchedRecipients[1].contact_hash_id,
             contact_type: fetchedRecipients[1].contact_type,
+            due_date_status: fetchedRecipients[1].due_date_status,
             email: fetchedRecipients[1].email,
+            latest_due_date: fetchedRecipients[1].latest_due_date,
             licence_refs: fetchedRecipients[1].licence_refs,
             message_type: fetchedRecipients[1].message_type,
+            notificationDueDate: fetchedRecipients[1].notificationDueDate,
             return_log_ids: fetchedRecipients[1].return_log_ids
           }
         ])
@@ -67,9 +73,12 @@ describe('Notices - Setup - Merge Recipients service', () => {
             contact: fetchedRecipients[0].contact,
             contact_hash_id: fetchedRecipients[0].contact_hash_id,
             contact_type: fetchedRecipients[0].contact_type,
+            due_date_status: fetchedRecipients[0].due_date_status,
             email: fetchedRecipients[0].email,
+            latest_due_date: fetchedRecipients[0].latest_due_date,
             licence_refs: fetchedRecipients[0].licence_refs,
             message_type: fetchedRecipients[0].message_type,
+            notificationDueDate: fetchedRecipients[0].notificationDueDate,
             return_log_ids: fetchedRecipients[0].return_log_ids
           }
         ])
@@ -96,28 +105,37 @@ describe('Notices - Setup - Merge Recipients service', () => {
               contact: fetchedRecipients[0].contact,
               contact_hash_id: fetchedRecipients[0].contact_hash_id,
               contact_type: fetchedRecipients[0].contact_type,
+              due_date_status: fetchedRecipients[0].due_date_status,
               email: fetchedRecipients[0].email,
+              latest_due_date: fetchedRecipients[0].latest_due_date,
               licence_refs: fetchedRecipients[0].licence_refs,
               message_type: fetchedRecipients[0].message_type,
+              notificationDueDate: fetchedRecipients[0].notificationDueDate,
               return_log_ids: fetchedRecipients[0].return_log_ids
             },
             {
               contact: fetchedRecipients[1].contact,
               contact_hash_id: fetchedRecipients[1].contact_hash_id,
               contact_type: fetchedRecipients[1].contact_type,
+              due_date_status: fetchedRecipients[1].due_date_status,
               email: fetchedRecipients[1].email,
+              latest_due_date: fetchedRecipients[1].latest_due_date,
               licence_refs: fetchedRecipients[1].licence_refs,
               message_type: fetchedRecipients[1].message_type,
+              notificationDueDate: fetchedRecipients[1].notificationDueDate,
               return_log_ids: fetchedRecipients[1].return_log_ids
             },
             {
               contact: additionalRecipient.contact,
               contact_hash_id: additionalRecipient.contact_hash_id,
               contact_type: additionalRecipient.contact_type,
+              due_date_status: additionalRecipient.due_date_status,
               email: additionalRecipient.email,
+              latest_due_date: additionalRecipient.latest_due_date,
               licence_ref: additionalRecipient.licence_ref,
               licence_refs: additionalRecipient.licence_refs,
               message_type: additionalRecipient.message_type,
+              notificationDueDate: additionalRecipient.notificationDueDate,
               return_log_ids: fetchedRecipients[0].return_log_ids
             }
           ])
@@ -143,18 +161,24 @@ describe('Notices - Setup - Merge Recipients service', () => {
               contact: fetchedRecipients[0].contact,
               contact_hash_id: fetchedRecipients[0].contact_hash_id,
               contact_type: fetchedRecipients[0].contact_type,
+              due_date_status: fetchedRecipients[0].due_date_status,
               email: fetchedRecipients[0].email,
+              latest_due_date: fetchedRecipients[0].latest_due_date,
               licence_refs: fetchedRecipients[0].licence_refs,
               message_type: fetchedRecipients[0].message_type,
+              notificationDueDate: fetchedRecipients[0].notificationDueDate,
               return_log_ids: fetchedRecipients[0].return_log_ids
             },
             {
               contact: fetchedRecipients[1].contact,
               contact_hash_id: fetchedRecipients[1].contact_hash_id,
               contact_type: fetchedRecipients[1].contact_type,
+              due_date_status: fetchedRecipients[1].due_date_status,
               email: fetchedRecipients[1].email,
+              latest_due_date: fetchedRecipients[1].latest_due_date,
               licence_refs: fetchedRecipients[1].licence_refs,
               message_type: fetchedRecipients[1].message_type,
+              notificationDueDate: fetchedRecipients[1].notificationDueDate,
               return_log_ids: fetchedRecipients[1].return_log_ids
             }
           ])
@@ -181,28 +205,37 @@ describe('Notices - Setup - Merge Recipients service', () => {
               contact: fetchedRecipients[0].contact,
               contact_hash_id: fetchedRecipients[0].contact_hash_id,
               contact_type: fetchedRecipients[0].contact_type,
+              due_date_status: fetchedRecipients[0].due_date_status,
               email: fetchedRecipients[0].email,
+              latest_due_date: fetchedRecipients[0].latest_due_date,
               licence_refs: fetchedRecipients[0].licence_refs,
               message_type: fetchedRecipients[0].message_type,
+              notificationDueDate: fetchedRecipients[0].notificationDueDate,
               return_log_ids: fetchedRecipients[0].return_log_ids
             },
             {
               contact: fetchedRecipients[1].contact,
               contact_hash_id: fetchedRecipients[1].contact_hash_id,
               contact_type: fetchedRecipients[1].contact_type,
+              due_date_status: fetchedRecipients[1].due_date_status,
               email: fetchedRecipients[1].email,
+              latest_due_date: fetchedRecipients[1].latest_due_date,
               licence_refs: fetchedRecipients[1].licence_refs,
               message_type: fetchedRecipients[1].message_type,
+              notificationDueDate: fetchedRecipients[1].notificationDueDate,
               return_log_ids: fetchedRecipients[1].return_log_ids
             },
             {
               contact: additionalRecipient.contact,
               contact_hash_id: additionalRecipient.contact_hash_id,
               contact_type: additionalRecipient.contact_type,
+              due_date_status: additionalRecipient.due_date_status,
               email: additionalRecipient.email,
+              latest_due_date: additionalRecipient.latest_due_date,
               licence_ref: additionalRecipient.licence_ref,
               licence_refs: additionalRecipient.licence_refs,
               message_type: additionalRecipient.message_type,
+              notificationDueDate: additionalRecipient.notificationDueDate,
               return_log_ids: fetchedRecipients[0].return_log_ids
             }
           ])
@@ -229,9 +262,12 @@ describe('Notices - Setup - Merge Recipients service', () => {
               contact: fetchedRecipients[0].contact,
               contact_hash_id: fetchedRecipients[0].contact_hash_id,
               contact_type: fetchedRecipients[0].contact_type,
+              due_date_status: fetchedRecipients[0].due_date_status,
               email: fetchedRecipients[0].email,
+              latest_due_date: fetchedRecipients[0].latest_due_date,
               licence_refs: fetchedRecipients[0].licence_refs,
               message_type: fetchedRecipients[0].message_type,
+              notificationDueDate: fetchedRecipients[0].notificationDueDate,
               return_log_ids: fetchedRecipients[0].return_log_ids
             }
           ])
@@ -256,10 +292,13 @@ describe('Notices - Setup - Merge Recipients service', () => {
               contact: additionalRecipient.contact,
               contact_hash_id: additionalRecipient.contact_hash_id,
               contact_type: additionalRecipient.contact_type,
+              due_date_status: additionalRecipient.due_date_status,
               email: additionalRecipient.email,
+              latest_due_date: additionalRecipient.latest_due_date,
               licence_ref: additionalRecipient.licence_ref,
               licence_refs: additionalRecipient.licence_refs,
               message_type: additionalRecipient.message_type,
+              notificationDueDate: additionalRecipient.notificationDueDate,
               return_log_ids: fetchedRecipients[0].return_log_ids
             }
           ])
@@ -286,19 +325,25 @@ describe('Notices - Setup - Merge Recipients service', () => {
               contact: fetchedRecipients[0].contact,
               contact_hash_id: fetchedRecipients[0].contact_hash_id,
               contact_type: fetchedRecipients[0].contact_type,
+              due_date_status: fetchedRecipients[0].due_date_status,
               email: fetchedRecipients[0].email,
+              latest_due_date: fetchedRecipients[0].latest_due_date,
               licence_refs: fetchedRecipients[0].licence_refs,
               message_type: fetchedRecipients[0].message_type,
+              notificationDueDate: fetchedRecipients[0].notificationDueDate,
               return_log_ids: fetchedRecipients[0].return_log_ids
             },
             {
               contact: additionalRecipient.contact,
               contact_hash_id: additionalRecipient.contact_hash_id,
               contact_type: additionalRecipient.contact_type,
+              due_date_status: additionalRecipient.due_date_status,
               email: additionalRecipient.email,
+              latest_due_date: additionalRecipient.latest_due_date,
               licence_ref: additionalRecipient.licence_ref,
               licence_refs: additionalRecipient.licence_refs,
               message_type: additionalRecipient.message_type,
+              notificationDueDate: additionalRecipient.notificationDueDate,
               return_log_ids: fetchedRecipients[0].return_log_ids
             }
           ])

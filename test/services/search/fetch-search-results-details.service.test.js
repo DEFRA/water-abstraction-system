@@ -1,0 +1,228 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+const Sinon = require('sinon')
+
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Things to stub
+const BillingAccountModel = require('../../../app/models/billing-account.model.js')
+const LicenceDocumentHeaderModel = require('../../../app/models/licence-document-header.model.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
+const MonitoringStationModel = require('../../../app/models/monitoring-station.model.js')
+const ReturnLogModel = require('../../../app/models/return-log.model.js')
+const UserModel = require('../../../app/models/user.model.js')
+
+// Thing under test
+const FetchSearchResultsDetailsService = require('../../../app/services/search/fetch-search-results-details.service.js')
+
+describe('Search - Fetch Search Results Details service', () => {
+  let idsByType
+
+  let billingAccountSpy
+  let licenceDocumentHeaderSpy
+  let licenceSpy
+  let monitoringStationSpy
+  let returnLogSpy
+  let userSpy
+
+  beforeEach(() => {
+    idsByType = {
+      billingAccount: [1, 2],
+      licenceHolder: [3, 4],
+      licence: [5, 6],
+      monitoringStation: [7, 8],
+      returnLog: [9, 10],
+      user: [11, 12]
+    }
+
+    billingAccountSpy = Sinon.stub().resolves([])
+    Sinon.stub(BillingAccountModel, 'query').returns({
+      findByIds: billingAccountSpy,
+      withGraphFetched: Sinon.stub().returnsThis()
+    })
+
+    licenceDocumentHeaderSpy = Sinon.stub().resolves([])
+    Sinon.stub(LicenceDocumentHeaderModel, 'query').returns({
+      findByIds: licenceDocumentHeaderSpy,
+      withGraphFetched: Sinon.stub().returnsThis()
+    })
+
+    licenceSpy = Sinon.stub().resolves([])
+    Sinon.stub(LicenceModel, 'query').returns({
+      findByIds: licenceSpy,
+      withGraphFetched: Sinon.stub().returnsThis()
+    })
+
+    monitoringStationSpy = Sinon.stub().resolves([])
+    Sinon.stub(MonitoringStationModel, 'query').returns({
+      findByIds: monitoringStationSpy
+    })
+
+    returnLogSpy = Sinon.stub().resolves([])
+    Sinon.stub(ReturnLogModel, 'query').returns({
+      findByIds: returnLogSpy
+    })
+
+    userSpy = Sinon.stub().resolves([])
+    Sinon.stub(UserModel, 'query').returns({
+      findByIds: userSpy
+    })
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+  })
+
+  describe('when called', () => {
+    it('returns all the matching details', async () => {
+      const result = await FetchSearchResultsDetailsService.go(idsByType)
+
+      expect(result).to.equal({
+        billingAccount: [],
+        licenceHolder: [],
+        licence: [],
+        monitoringStation: [],
+        returnLog: [],
+        user: []
+      })
+    })
+  })
+
+  describe('when an unknown type is requested', () => {
+    beforeEach(() => {
+      idsByType = { UNKNOWN_TYPE: [13, 14] }
+    })
+
+    it('returns no matches', async () => {
+      const result = await FetchSearchResultsDetailsService.go(idsByType)
+
+      expect(result).to.equal({
+        UNKNOWN_TYPE: []
+      })
+    })
+  })
+
+  describe('when billing accounts are requested', () => {
+    beforeEach(() => {
+      idsByType = { billingAccount: [1, 2] }
+    })
+
+    it('finds the correct billing accounts', async () => {
+      const result = await FetchSearchResultsDetailsService.go(idsByType)
+
+      expect(result).to.equal({ billingAccount: [] })
+
+      expect(billingAccountSpy.calledOnce).to.be.true()
+      expect(billingAccountSpy.firstCall.args[0]).to.equal([1, 2])
+      expect(licenceDocumentHeaderSpy.called).to.be.false()
+      expect(licenceSpy.called).to.be.false()
+      expect(monitoringStationSpy.called).to.be.false()
+      expect(returnLogSpy.called).to.be.false()
+      expect(userSpy.called).to.be.false()
+    })
+  })
+
+  describe('when licence holders are requested', () => {
+    beforeEach(() => {
+      idsByType = { licenceHolder: [3, 4] }
+    })
+
+    it('finds the correct licence holders', async () => {
+      const result = await FetchSearchResultsDetailsService.go(idsByType)
+
+      expect(result).to.equal({ licenceHolder: [] })
+
+      expect(billingAccountSpy.called).to.be.false()
+      expect(licenceDocumentHeaderSpy.calledOnce).to.be.true()
+      expect(licenceDocumentHeaderSpy.firstCall.args[0]).to.equal([3, 4])
+      expect(licenceSpy.called).to.be.false()
+      expect(monitoringStationSpy.called).to.be.false()
+      expect(returnLogSpy.called).to.be.false()
+      expect(userSpy.called).to.be.false()
+    })
+  })
+
+  describe('when licences are requested', () => {
+    beforeEach(() => {
+      idsByType = { licence: [5, 6] }
+    })
+
+    it('finds the correct licences', async () => {
+      const result = await FetchSearchResultsDetailsService.go(idsByType)
+
+      expect(result).to.equal({ licence: [] })
+
+      expect(billingAccountSpy.called).to.be.false()
+      expect(licenceDocumentHeaderSpy.called).to.be.false()
+      expect(licenceSpy.calledOnce).to.be.true()
+      expect(licenceSpy.firstCall.args[0]).to.equal([5, 6])
+      expect(monitoringStationSpy.called).to.be.false()
+      expect(returnLogSpy.called).to.be.false()
+      expect(userSpy.called).to.be.false()
+    })
+  })
+
+  describe('when monitoring stations are requested', () => {
+    beforeEach(() => {
+      idsByType = { monitoringStation: [7, 8] }
+    })
+
+    it('finds the correct monitoring stations', async () => {
+      const result = await FetchSearchResultsDetailsService.go(idsByType)
+
+      expect(result).to.equal({ monitoringStation: [] })
+
+      expect(billingAccountSpy.called).to.be.false()
+      expect(licenceDocumentHeaderSpy.called).to.be.false()
+      expect(licenceSpy.called).to.be.false()
+      expect(monitoringStationSpy.calledOnce).to.be.true()
+      expect(monitoringStationSpy.firstCall.args[0]).to.equal([7, 8])
+      expect(returnLogSpy.called).to.be.false()
+      expect(userSpy.called).to.be.false()
+    })
+  })
+
+  describe('when return logs are requested', () => {
+    beforeEach(() => {
+      idsByType = { returnLog: [9, 10] }
+    })
+
+    it('finds the correct return logs', async () => {
+      const result = await FetchSearchResultsDetailsService.go(idsByType)
+
+      expect(result).to.equal({ returnLog: [] })
+
+      expect(billingAccountSpy.called).to.be.false()
+      expect(licenceDocumentHeaderSpy.called).to.be.false()
+      expect(licenceSpy.called).to.be.false()
+      expect(monitoringStationSpy.called).to.be.false()
+      expect(returnLogSpy.calledOnce).to.be.true()
+      expect(returnLogSpy.firstCall.args[0]).to.equal([9, 10])
+      expect(userSpy.called).to.be.false()
+    })
+  })
+
+  describe('when users are requested', () => {
+    beforeEach(() => {
+      idsByType = { user: [11, 12] }
+    })
+
+    it('finds the correct users', async () => {
+      const result = await FetchSearchResultsDetailsService.go(idsByType)
+
+      expect(result).to.equal({ user: [] })
+
+      expect(billingAccountSpy.called).to.be.false()
+      expect(licenceDocumentHeaderSpy.called).to.be.false()
+      expect(licenceSpy.called).to.be.false()
+      expect(monitoringStationSpy.called).to.be.false()
+      expect(returnLogSpy.called).to.be.false()
+      expect(userSpy.calledOnce).to.be.true()
+      expect(userSpy.firstCall.args[0]).to.equal([11, 12])
+    })
+  })
+})

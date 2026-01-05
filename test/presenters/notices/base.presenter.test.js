@@ -24,25 +24,23 @@ describe('Notices - Base presenter', () => {
   })
 
   describe('#addressToCSV()', () => {
-    let recipient
+    let address
 
     describe('when there is an address', () => {
       describe('and all the address lines are present', () => {
         beforeEach(() => {
-          const recipients = RecipientsFixture.recipients()
+          address = RecipientsFixture.returnsNoticeLicenceHolder().contact
 
-          recipient = recipients.licenceHolder.contact
-
-          recipient.addressLine3 = 'The Cupboard Under the Stairs'
+          address.addressLine3 = 'The Cupboard Under the Stairs'
         })
 
         it('returns a fixed array of 7 strings with all the address lines', () => {
-          const result = BasePresenter.addressToCSV(recipient)
+          const result = BasePresenter.addressToCSV(address)
 
           expect(result.length).to.equal(7)
           expect(result).to.equal([
-            'Mr H J Potter',
-            '1',
+            'J Returnsholder',
+            '4',
             'Privet Drive',
             'The Cupboard Under the Stairs',
             'Little Whinging',
@@ -54,25 +52,56 @@ describe('Notices - Base presenter', () => {
 
       describe('and some address lines are missing', () => {
         beforeEach(() => {
-          const recipients = RecipientsFixture.recipients()
+          address = RecipientsFixture.returnsNoticeLicenceHolder().contact
 
-          recipient = recipients.licenceHolder.contact
-
-          delete recipient.county
+          delete address.county
         })
 
         it('returns a fixed array of 7 strings with some of the address lines, and missing strings at the end of the array', () => {
-          const result = BasePresenter.addressToCSV(recipient)
+          const result = BasePresenter.addressToCSV(address)
 
           expect(result.length).to.equal(7)
-          expect(result).to.equal(['Mr H J Potter', '1', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', ''])
+          expect(result).to.equal(['J Returnsholder', '4', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', ''])
+        })
+      })
+
+      describe('and all the address lines are missing', () => {
+        beforeEach(() => {
+          address = RecipientsFixture.returnsNoticeLicenceHolder().contact
+
+          address.addressLine1 = null
+          address.addressLine2 = null
+          address.addressLine3 = null
+          address.addressLine4 = null
+          address.town = null
+          address.county = null
+          address.postcode = null
+        })
+
+        it('returns a fixed array of 7 strings with the contact name as address line 1, and the "INVALID ADDRESS" message', () => {
+          const result = BasePresenter.addressToCSV(address)
+
+          expect(result.length).to.equal(7)
+          expect(result).to.equal([
+            'J Returnsholder',
+            'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
+            '',
+            '',
+            '',
+            '',
+            ''
+          ])
         })
       })
     })
 
     describe('when there is no address', () => {
+      beforeEach(() => {
+        address = null
+      })
+
       it('returns a fixed array of 7 empty strings', () => {
-        const result = BasePresenter.addressToCSV()
+        const result = BasePresenter.addressToCSV(address)
 
         expect(result.length).to.equal(7)
         expect(result).to.equal(['', '', '', '', '', '', ''])

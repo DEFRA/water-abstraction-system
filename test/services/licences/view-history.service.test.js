@@ -66,7 +66,7 @@ describe('Licences - View History service', () => {
         activeNavBar: 'search',
         activeSecondaryNav: 'history',
         backLink: {
-          href: `/licences`,
+          href: '/',
           text: 'Go back to search'
         },
         licenceVersions: [

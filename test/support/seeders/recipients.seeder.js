@@ -184,8 +184,8 @@ async function returnsTo(licenceDocumentHeader, name) {
 /**
  * Transforms a recipient and return log into a 'fetch recipient for download' result
  *
- * Use when you need to verify the result of, for example, FetchAdHocReturnsRecipientsService with the `download` flag
- * set to true.
+ * Use when you need to verify the result of, for example, FetchReturnsInvitationRecipientsService with the `download`
+ * flag set to true.
  *
  * @param {object} recipient - The recipient object containing contact information
  * @param {object} returnLog - The return log object
@@ -198,10 +198,13 @@ function transformToDownloadingResult(recipient, returnLog) {
     contact_hash_id: recipient.contactHashId,
     contact_type: recipient.contactType,
     due_date: returnLog.dueDate,
+    due_date_status: returnLog.dueDate ? 'all populated' : 'all nulls',
     end_date: returnLog.endDate,
     email: recipient.email,
+    latest_due_date: returnLog.dueDate,
     licence_ref: returnLog.licenceRef,
     message_type: recipient.messageType,
+    return_id: returnLog.returnId,
     return_reference: returnLog.returnReference,
     start_date: returnLog.startDate
   }
@@ -210,8 +213,8 @@ function transformToDownloadingResult(recipient, returnLog) {
 /**
  * Transforms a recipient and return log into a 'fetch recipient for sending' result
  *
- * Use when you need to verify the result of, for example, FetchAdHocReturnsRecipientsService with the `download` flag
- * set to false.
+ * Use when you need to verify the result of, for example, FetchReturnsInvitationRecipientsService with the `download`
+ * flag set to false.
  *
  * > The `licence_refs` and `return_log_ids` properties are very much dependent on the `due_return_logs` query run as
  * > part of the fetch. This means it is not possible for this seeder to determine what these should be. Therefore,
@@ -226,7 +229,9 @@ function transformToSendingResult(recipient) {
     contact: recipient.contact,
     contact_hash_id: recipient.contactHashId,
     contact_type: recipient.contactType,
+    due_date_status: 'all nulls',
     email: recipient.email,
+    latest_due_date: null,
     licence_refs: recipient.licenceRefs,
     message_type: recipient.messageType,
     return_log_ids: recipient.returnLogIds

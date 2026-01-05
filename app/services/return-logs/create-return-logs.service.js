@@ -29,16 +29,6 @@ async function go(returnRequirement, returnCycle, licenceEndDate) {
   }
 }
 
-/**
- * NOTE: At this time we will only ever generate a single return log from a return requirement. But our very next task
- * is to amend this functionality to support quarterly returns. When we do that will oblige us to generate multiple
- * return logs from a single return requirement, if that requirement is linked to a return version flagged as quarterly.
- *
- * This is where that change will happen, and we can save ourselves some time and unnecessary refactoring if everything
- * we do after this point assumes multiple return logs are being generated for creation.
- *
- * @private
- */
 function _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate = null) {
   const isQuarterlyReturn = returnRequirement.returnVersion.quarterlyReturns
   const returnLogs = []
@@ -51,9 +41,9 @@ function _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate = nu
       const endDateInPeriod = returnRequirement.returnVersion.endDate >= period.startDate
       const endDateIsNull = returnRequirement.returnVersion.endDate === null
       const licenceEndDateIsNull = licenceEndDate === null
-      const licenceEndDateInPeriod = licenceEndDate > period.startDate
+      const licenceEndDateInPeriod = licenceEndDate >= period.startDate
 
-      return startDateInPeriod && (endDateInPeriod || endDateIsNull) && (licenceEndDateIsNull || licenceEndDateInPeriod)
+      return startDateInPeriod && (endDateIsNull || endDateInPeriod) && (licenceEndDateIsNull || licenceEndDateInPeriod)
     })
 
     for (const quarterlyReturnPeriod of periodsToProcess) {

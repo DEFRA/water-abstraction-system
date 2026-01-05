@@ -102,7 +102,7 @@ function _backLink(licenceId, chargeVersionId, companyId) {
 
   return {
     title: 'Go back to search',
-    link: '/licences'
+    link: '/'
   }
 }
 

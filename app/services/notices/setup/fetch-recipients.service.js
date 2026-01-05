@@ -6,11 +6,11 @@
  */
 
 const FetchAbstractionAlertRecipientsService = require('./abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
-const FetchAdHocReturnsRecipientsService = require('./returns-notice/fetch-ad-hoc-returns-recipients.service.js')
 const FetchPaperReturnsRecipientsService = require('./returns-notice/fetch-paper-returns-recipients.service.js')
-const FetchStandardReturnsRecipientsService = require('./returns-notice/fetch-standard-returns-recipients.service.js')
+const FetchReturnsInvitationRecipientsService = require('./returns-notice/fetch-returns-invitation-recipients.service.js')
+const FetchReturnsReminderRecipientsService = require('./returns-notice/fetch-returns-reminder-recipients.service.js')
 const MergeRecipientsService = require('./merge-recipients.service.js')
-const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
+const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates fetching and determining recipients when checking, downloading or sending notices
@@ -38,11 +38,11 @@ async function _recipientsData(session, download) {
     return FetchPaperReturnsRecipientsService.go(session, download)
   }
 
-  if (session.journey === NoticeJourney.ADHOC) {
-    return FetchAdHocReturnsRecipientsService.go(session, download)
+  if (session.noticeType === NoticeType.INVITATIONS) {
+    return FetchReturnsInvitationRecipientsService.go(session, download)
   }
 
-  return FetchStandardReturnsRecipientsService.go(session, download)
+  return FetchReturnsReminderRecipientsService.go(session, download)
 }
 
 module.exports = {

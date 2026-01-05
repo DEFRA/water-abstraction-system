@@ -16,7 +16,7 @@ const { NoticeType } = require('../../../../../app/lib/static-lookups.lib.js')
 // Thing under test
 const GenerateRecipientsQueryService = require('../../../../../app/services/notices/setup/returns-notice/generate-recipients-query.service.js')
 
-describe('Notices - Setup - Returns Notice - Generate Recipients Query Service', () => {
+describe('Notices - Setup - Returns Notice - Generate Recipients Query service', () => {
   const dueReturnLogsQuery = `
   SELECT
     rl.due_date,
@@ -41,61 +41,37 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query Service',
   `
   const licenceHolderExpectedQuery = `
     SELECT
-      contacts AS contact,
-      (md5(
-        LOWER(
-          concat(
-            contacts->>'salutation',
-            contacts->>'forename',
-            contacts->>'initials',
-            contacts->>'name',
-            contacts->>'addressLine1',
-            contacts->>'addressLine2',
-            contacts->>'addressLine3',
-            contacts->>'addressLine4',
-            contacts->>'town',
-            contacts->>'county',
-            contacts->>'postcode',
-            contacts->>'country'
-          )
-        )
-      )) AS contact_hash_id,
       ('licence holder') AS contact_type,
+      3 AS priority,
+      jc.*
+    FROM
+      json_contacts jc
+    WHERE
+      jc.contact->>'role' = 'Licence holder'
   `
   const primaryUserExpectedQuery = `
     SELECT
+      ('primary user') AS contact_type,
+      1 AS priority,
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
-      ('primary user') AS contact_type,
   `
   const returnsAgentExpectedQuery = `
     SELECT
+      ('returns agent') AS contact_type,
+      2 AS priority,
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
-      ('returns agent') AS contact_type,
   `
   const returnsToExpectedQuery = `
     SELECT
-      contacts AS contact,
-      (md5(
-        LOWER(
-          concat(
-            contacts->>'salutation',
-            contacts->>'forename',
-            contacts->>'initials',
-            contacts->>'name',
-            contacts->>'addressLine1',
-            contacts->>'addressLine2',
-            contacts->>'addressLine3',
-            contacts->>'addressLine4',
-            contacts->>'town',
-            contacts->>'county',
-            contacts->>'postcode',
-            contacts->>'country'
-          )
-        )
-      )) AS contact_hash_id,
       ('returns to') AS contact_type,
+      4 AS priority,
+      jc.*
+    FROM
+      json_contacts jc
+    WHERE
+      jc.contact->>'role' = 'Returns to'
   `
 
   let download
@@ -396,7 +372,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query Service',
     })
 
     after(async () => {
-      // await RecipientScenariosSeeder.clean(scenarios)
+      await RecipientScenariosSeeder.clean(scenarios)
     })
 
     describe('and the notice type is "invitations" or "reminders"', () => {

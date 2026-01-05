@@ -20,7 +20,7 @@ function go(licenceHistory, licence) {
 
   return {
     backLink: {
-      href: `/licences`,
+      href: '/',
       text: 'Go back to search'
     },
     licenceVersions: _licenceVersionEntries(licenceHistory),

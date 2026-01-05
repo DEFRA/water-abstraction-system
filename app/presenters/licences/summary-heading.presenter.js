@@ -28,7 +28,7 @@ function go(licence, summary) {
   return {
     backLink: {
       text: 'Go back to search',
-      href: '/licences'
+      href: '/'
     },
     currentVersion: _currentVersion(summary, startDate),
     licenceRef,

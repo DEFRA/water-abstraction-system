@@ -1,18 +1,37 @@
 'use strict'
 
-/**
- * Represents a complete response from `FetchCurrentReturnCycleService`
- *
- * @param {boolean} [summer=false] - true to return a summer return cycle else false
- *
- * @returns {object}
- */
-function returnCycle(summer = false) {
-  if (summer) {
-    return returnCycles()[0]
-  }
+const { generateUUID } = require('../../app/lib/general.lib.js')
 
-  return returnCycles()[1]
+/**
+ * Returns a summer return cycle fixture with predefined dates and properties
+ *
+ * @returns {object} A summer return cycle object with id, dates, and flags
+ */
+function summerCycle() {
+  return {
+    id: generateUUID(),
+    startDate: new Date('2025-11-01'),
+    endDate: new Date('2026-10-31'),
+    dueDate: new Date('2026-11-28'),
+    summer: true,
+    submittedInWrls: true
+  }
+}
+
+/**
+ * Returns a winter and all year return cycle fixture with predefined dates and properties
+ *
+ * @returns {object} A winter return cycle object with id, dates, and flags
+ */
+function winterCycle() {
+  return {
+    id: generateUUID(),
+    startDate: new Date('2025-04-01'),
+    endDate: new Date('2026-03-31'),
+    dueDate: new Date('2026-04-28'),
+    summer: false,
+    submittedInWrls: true
+  }
 }
 
 /**
@@ -23,24 +42,10 @@ function returnCycle(summer = false) {
  */
 function returnCycles(numberOfCycles = 2) {
   const cycles = [
+    summerCycle(),
+    winterCycle(),
     {
-      id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b8',
-      startDate: new Date('2025-11-01'),
-      endDate: new Date('2026-10-31'),
-      dueDate: new Date('2026-11-28'),
-      summer: true,
-      submittedInWrls: true
-    },
-    {
-      id: '6889b98d-964f-4966-b6d6-bf511d6526a9',
-      startDate: new Date('2025-04-01'),
-      endDate: new Date('2026-03-31'),
-      dueDate: new Date('2026-04-28'),
-      summer: false,
-      submittedInWrls: true
-    },
-    {
-      id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b4',
+      id: generateUUID(),
       startDate: new Date('2024-11-01'),
       endDate: new Date('2025-10-31'),
       dueDate: new Date('2025-11-28'),
@@ -48,7 +53,7 @@ function returnCycles(numberOfCycles = 2) {
       submittedInWrls: true
     },
     {
-      id: '6889b98d-964f-4966-b6d6-bf511d6526a1',
+      id: generateUUID(),
       startDate: new Date('2024-04-01'),
       endDate: new Date('2025-03-31'),
       dueDate: new Date('2025-04-28'),
@@ -56,7 +61,7 @@ function returnCycles(numberOfCycles = 2) {
       submittedInWrls: true
     },
     {
-      id: '4c5ff4dc-dfe0-4693-9cb5-acdebf6f76b5',
+      id: generateUUID(),
       startDate: new Date('2023-11-01'),
       endDate: new Date('2024-10-31'),
       dueDate: new Date('2024-11-28'),
@@ -64,7 +69,7 @@ function returnCycles(numberOfCycles = 2) {
       submittedInWrls: true
     },
     {
-      id: '6889b98d-964f-4966-b6d6-bf511d6526a2',
+      id: generateUUID(),
       startDate: new Date('2023-04-01'),
       endDate: new Date('2024-03-31'),
       dueDate: new Date('2024-04-28'),
@@ -77,6 +82,7 @@ function returnCycles(numberOfCycles = 2) {
 }
 
 module.exports = {
-  returnCycle,
-  returnCycles
+  returnCycles,
+  summerCycle,
+  winterCycle
 }

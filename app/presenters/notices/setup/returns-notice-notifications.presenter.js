@@ -2,12 +2,11 @@
 
 /**
  * Formats recipients into notifications for a standard or ad-hoc returns invitation or reminder
- * @module NotificationsPresenter
+ * @module ReturnsNoticeNotificationsPresenter
  */
 
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { formatLongDate } = require('../../base.presenter.js')
-const { futureDueDate } = require('../base.presenter.js')
 const { NOTIFY_TEMPLATES } = require('../../../lib/notify-templates.lib.js')
 
 const MESSAGE_REFS = {
@@ -44,7 +43,7 @@ function go(session, recipients, noticeId) {
   for (const recipient of recipients) {
     let notification
 
-    if (recipient.email) {
+    if (recipient.message_type === 'Email') {
       notification = _email(recipient, noticeId, session)
     } else {
       notification = _letter(recipient, noticeId, session)
@@ -60,11 +59,10 @@ function _email(recipient, noticeId, session) {
   const { determinedReturnsPeriod, journey, noticeType } = session
 
   const messageType = 'email'
-  const dueDate = session?.latestDueDate ?? futureDueDate(messageType)
 
   return {
     contactType: recipient.contact_type,
-    dueDate,
+    dueDate: recipient.notificationDueDate,
     eventId: noticeId,
     licences: recipient.licence_refs,
     messageType,
@@ -72,7 +70,7 @@ function _email(recipient, noticeId, session) {
     personalisation: {
       periodEndDate: formatLongDate(determinedReturnsPeriod?.endDate),
       periodStartDate: formatLongDate(determinedReturnsPeriod?.startDate),
-      returnDueDate: formatLongDate(dueDate)
+      returnDueDate: formatLongDate(recipient.notificationDueDate)
     },
     recipient: recipient.email,
     returnLogIds: recipient.return_log_ids,
@@ -86,11 +84,10 @@ function _letter(recipient, noticeId, session) {
 
   const messageType = 'letter'
   const address = NotifyAddressPresenter.go(recipient.contact)
-  const dueDate = session?.latestDueDate ?? futureDueDate(messageType)
 
   return {
     contactType: recipient.contact_type,
-    dueDate,
+    dueDate: recipient.notificationDueDate,
     eventId: noticeId,
     licences: recipient.licence_refs,
     messageType,
@@ -99,7 +96,7 @@ function _letter(recipient, noticeId, session) {
       ...address,
       periodEndDate: formatLongDate(determinedReturnsPeriod?.endDate),
       periodStartDate: formatLongDate(determinedReturnsPeriod?.startDate),
-      returnDueDate: formatLongDate(dueDate),
+      returnDueDate: formatLongDate(recipient.notificationDueDate),
       // NOTE: Address line 1 is always set to the recipient's name
       name: address.address_line_1
     },

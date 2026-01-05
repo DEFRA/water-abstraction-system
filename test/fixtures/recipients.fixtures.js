@@ -2,6 +2,7 @@
 
 const crypto = require('node:crypto')
 
+const { futureDueDate } = require('../../app/presenters/notices/base.presenter.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
 const { generateReference } = require('../support/helpers/return-requirement.helper.js')
@@ -25,10 +26,14 @@ function additionalEmailRecipient(licenceRef = null, email = null) {
     contact: null,
     contact_hash_id: _emailContactHashId(recipientEmail),
     contact_type: 'single use',
-    email,
+    due_date_status: 'all nulls',
+    email: recipientEmail,
+    latest_due_date: null,
     licence_ref: recipientLicenceRef,
     licence_refs: [recipientLicenceRef],
-    message_type: 'Email'
+    message_type: 'Email',
+    notificationDueDate: futureDueDate('email'),
+    return_log_ids: [generateUUID()]
   }
 
   return recipient
@@ -68,13 +73,17 @@ function additionalPostalRecipient(licenceRef = null, contact = null) {
   }
 
   const recipient = {
-    contact: null,
+    contact,
     contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
     contact_type: 'single use',
+    due_date_status: 'all nulls',
     email: null,
+    latest_due_date: null,
     licence_ref: recipientLicenceRef,
     licence_refs: [recipientLicenceRef],
-    message_type: 'Letter'
+    message_type: 'Letter',
+    notificationDueDate: futureDueDate('letter'),
+    return_log_ids: [generateUUID()]
   }
 
   return recipient
@@ -161,10 +170,13 @@ function returnsNoticeLicenceHolder(download = false) {
     contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
     contact_type: 'licence holder',
     due_date: new Date('2025-04-28'),
+    due_date_status: 'all nulls',
     end_date: new Date('2025-03-31'),
     email: null,
+    latest_due_date: null,
     licence_ref: generateLicenceRef(),
     message_type: 'Letter',
+    notificationDueDate: futureDueDate('letter'),
     return_reference: generateReference(),
     start_date: new Date('2024-04-01')
   }
@@ -194,10 +206,13 @@ function returnsNoticePrimaryUser(download = false) {
     contact_hash_id: _emailContactHashId(email),
     contact_type: 'primary user',
     due_date: new Date('2025-04-28'),
+    due_date_status: 'all nulls',
     end_date: new Date('2025-03-31'),
     email,
+    latest_due_date: null,
     licence_ref: generateLicenceRef(),
     message_type: 'Email',
+    notificationDueDate: futureDueDate('email'),
     return_reference: generateReference(),
     start_date: new Date('2024-04-01')
   }
@@ -227,10 +242,13 @@ function returnsNoticeReturnsAgent(download = false) {
     contact_hash_id: _emailContactHashId(email),
     contact_type: 'returns agent',
     due_date: new Date('2025-04-28'),
+    due_date_status: 'all nulls',
     end_date: new Date('2025-03-31'),
     email,
+    latest_due_date: null,
     licence_ref: generateLicenceRef(),
     message_type: 'Email',
+    notificationDueDate: futureDueDate('email'),
     return_reference: generateReference(),
     start_date: new Date('2024-04-01')
   }
@@ -260,10 +278,13 @@ function returnsNoticeReturnsTo(download = false) {
     contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
     contact_type: 'returns to',
     due_date: new Date('2025-04-28'),
+    due_date_status: 'all nulls',
     end_date: new Date('2025-03-31'),
     email: null,
+    latest_due_date: null,
     licence_ref: generateLicenceRef(),
     message_type: 'Letter',
+    notificationDueDate: futureDueDate('letter'),
     return_reference: generateReference(),
     start_date: new Date('2024-04-01')
   }
@@ -458,9 +479,12 @@ function _nonDownloadRecipient(recipient) {
     contact: recipient.contact,
     contact_hash_id: recipient.contact_hash_id,
     contact_type: recipient.contact_type,
+    due_date_status: recipient.due_date_status,
     email: recipient.email,
+    latest_due_date: recipient.latest_due_date,
     licence_refs: [recipient.licence_ref],
     message_type: recipient.message_type,
+    notificationDueDate: recipient.notificationDueDate,
     return_log_ids: [generateUUID()]
   }
 }

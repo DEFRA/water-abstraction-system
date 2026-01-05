@@ -20,12 +20,12 @@ const FetchReturnRequirementsService = require('../../../../app/services/jobs/re
 // Thing under test
 const ProcessReturnLogsService = require('../../../../app/services/jobs/return-logs/process-return-logs.service.js')
 
-describe('Jobs - Return Logs - Process return logs service', () => {
+describe('Jobs - Return Logs - Process Return Logs service', () => {
   const cycle = 'all-year'
 
   let createReturnLogsStub
   let notifierStub
-  let testReturnRequirement
+  let returnRequirement
 
   beforeEach(() => {
     createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go').resolves()
@@ -44,13 +44,13 @@ describe('Jobs - Return Logs - Process return logs service', () => {
 
   describe('when the requested return cycle exists', () => {
     beforeEach(() => {
-      Sinon.stub(CheckReturnCycleService, 'go').resolves(ReturnCyclesFixture.returnCycle())
+      Sinon.stub(CheckReturnCycleService, 'go').resolves(ReturnCyclesFixture.winterCycle())
     })
 
     describe('and there are return requirements that need return logs created', () => {
       beforeEach(() => {
-        testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
-        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([testReturnRequirement])
+        returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
+        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([returnRequirement])
       })
 
       it('logs the time taken in milliseconds and seconds', async () => {
@@ -69,9 +69,9 @@ describe('Jobs - Return Logs - Process return logs service', () => {
 
     describe('and it has a return version with an end date with return requirements that need return logs created', () => {
       beforeEach(() => {
-        testReturnRequirement = ReturnRequirementsFixture.returnRequirement()
-        testReturnRequirement.returnVersion.endDate = '2023-05-28'
-        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([testReturnRequirement])
+        returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
+        returnRequirement.returnVersion.endDate = '2023-05-28'
+        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([returnRequirement])
       })
 
       it('logs the time taken in milliseconds and seconds', async () => {

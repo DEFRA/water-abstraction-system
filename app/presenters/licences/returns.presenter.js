@@ -26,7 +26,7 @@ function go(returnLogs, hasRequirements, licence) {
   return {
     backLink: {
       text: 'Go back to search',
-      href: '/licences'
+      href: '/'
     },
     returns,
     noReturnsMessage: _noReturnsMessage(hasReturns, hasRequirements),

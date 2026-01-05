@@ -34,7 +34,7 @@ describe('Licences - Returns presenter', () => {
       expect(result).to.equal({
         backLink: {
           text: 'Go back to search',
-          href: '/licences'
+          href: '/'
         },
         noReturnsMessage: null,
         pageTitle: 'Returns',
