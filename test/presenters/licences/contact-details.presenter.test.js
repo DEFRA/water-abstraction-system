@@ -3,18 +3,23 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test Helpers
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
+// Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 // Thing under test
 const ContactDetailsPresenter = require('../../../app/presenters/licences/contact-details.presenter.js')
 
 describe('Licences - Contact Details presenter', () => {
+  let companyId
   let contacts
   let licence
 
@@ -24,10 +29,12 @@ describe('Licences - Contact Details presenter', () => {
       licenceRef: generateLicenceRef()
     }
 
+    companyId = generateUUID()
+
     contacts = [
       {
         communicationType: 'Licence Holder',
-        companyId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
+        companyId,
         companyName: 'Acme ltd',
         contactId: null,
         firstName: null,
@@ -42,6 +49,12 @@ describe('Licences - Contact Details presenter', () => {
         country: 'United Kingdom'
       }
     ]
+
+    Sinon.stub(FeatureFlagsConfig, 'enableCustomerView').value(true)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when provided with populated contacts data', () => {
@@ -53,7 +66,8 @@ describe('Licences - Contact Details presenter', () => {
           href: '/',
           text: 'Go back to search'
         },
-        customerId: 'ebe95a21-c6f6-4f15-8856-a48ffc737731',
+        customerId: companyId,
+        customerContactLink: `/system/customers/${companyId}/contacts`,
         licenceContacts: [
           {
             address: {
@@ -80,7 +94,7 @@ describe('Licences - Contact Details presenter', () => {
         it("returns that contact's company Id", () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
-          expect(result.customerId).to.equal('ebe95a21-c6f6-4f15-8856-a48ffc737731')
+          expect(result.customerId).to.equal(companyId)
         })
       })
 
@@ -130,6 +144,28 @@ describe('Licences - Contact Details presenter', () => {
 
             expect(result.licenceContacts[0].name).to.equal('Jackie Flow')
           })
+        })
+      })
+    })
+
+    describe('the "customerContactLink" property', () => {
+      describe('when the "enableCustomerView" feature toggle is enabled', () => {
+        it('correctly presents the data', () => {
+          const result = ContactDetailsPresenter.go(contacts, licence)
+
+          expect(result.customerContactLink).to.equal(`/system/customers/${companyId}/contacts`)
+        })
+      })
+
+      describe('when the "enableCustomerView" feature toggle is disabled', () => {
+        beforeEach(() => {
+          Sinon.stub(FeatureFlagsConfig, 'enableCustomerView').value(false)
+        })
+
+        it('correctly presents the data', () => {
+          const result = ContactDetailsPresenter.go(contacts, licence)
+
+          expect(result.customerContactLink).to.equal(`/customer/${companyId}/#contacts`)
         })
       })
     })

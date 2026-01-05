@@ -5,6 +5,8 @@
  * @module ContactDetailsPresenter
  */
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Formats data for the `/licences/{id}/contact-details` view contact details page
  *
@@ -16,15 +18,20 @@
 function go(contacts, licence) {
   const { licenceRef } = licence
 
+  const customerId = _findCustomerId(contacts)
+
   return {
     backLink: {
       text: 'Go back to search',
       href: '/'
     },
-    customerId: _findCustomerId(contacts),
+    customerId,
     licenceContacts: _licenceContacts(contacts),
     pageTitle: 'Contact details',
-    pageTitleCaption: `Licence ${licenceRef}`
+    pageTitleCaption: `Licence ${licenceRef}`,
+    customerContactLink: FeatureFlagsConfig.enableCustomerView
+      ? `/system/customers/${customerId}/contacts`
+      : `/customer/${customerId}/#contacts`
   }
 }
 
