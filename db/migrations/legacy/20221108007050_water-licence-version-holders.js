@@ -9,7 +9,7 @@ exports.up = function (knex) {
 
     // Data
     table.uuid('licence_version_id').notNullable()
-    table.text('holder_type').notNullable()
+    table.text('holder_type').notNullable().defaultTo('organisation')
     table.text('salutation')
     table.text('initials')
     table.text('forename')
