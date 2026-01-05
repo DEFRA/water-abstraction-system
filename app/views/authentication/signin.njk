@@ -1,0 +1,34 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block pageContent %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukInput({
+      classes: "govuk-input--width-10",
+      errorMessage: error.username,
+      id: "username",
+      label: {
+        text: "Email address"
+      },
+      name: "username",
+      value: username
+    }) }}
+
+    {{ govukInput({
+      classes: "govuk-input--width-10",
+      errorMessage: error.password,
+      id: "password-input",
+      label: {
+        text: "Password"
+      },
+      name: "password",
+      type: "password"
+    }) }}
+
+    {{ govukButton({ text: "Sign in", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}
