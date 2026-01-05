@@ -74,7 +74,7 @@
   {% endif %}
 
   {% if customerId %}
-    {% set customerContactsCaption = 'Customer contacts for this licence<p class="govuk-body"><a class="govuk-link" href="/customer/' + customerId + '/#contacts">Go to customer contacts</a></p>' %}
+    {% set customerContactsCaption = 'Customer contacts for this licence<p class="govuk-body"><a class="govuk-link" href="' + customerContactLink + '">Go to customer contacts</a></p>' %}
   {% else %}
     {% set customerContactsCaption = 'Customer contacts for this licence' %}
   {% endif %}
