@@ -29,7 +29,7 @@ describe('Fetch Return Submission service', () => {
         units: 'Ml'
       }
     })
-    testReturnLog = await ReturnLogHelper.add({ returnId: testReturnSubmission.returnLogId })
+    testReturnLog = await ReturnLogHelper.add({ id: testReturnSubmission.returnLogId })
 
     await Promise.all([
       ReturnSubmissionLineHelper.add({
@@ -87,7 +87,6 @@ describe('Fetch Return Submission service', () => {
       const { returnLog } = result
 
       expect(returnLog).to.be.an.instanceOf(ReturnLogModel)
-      expect(returnLog.returnId).to.equal(testReturnLog.returnId)
       expect(returnLog.returnReference).to.equal(testReturnLog.returnReference)
       expect(returnLog.returnsFrequency).to.equal(testReturnLog.returnsFrequency)
     })
