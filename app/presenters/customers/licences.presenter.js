@@ -30,11 +30,11 @@ function go(customer, licences) {
 function _licences(licences) {
   return licences.map((licence) => {
     return {
-      startDate: formatLongDate(licence.licenceDocument.startDate),
-      endDate: formatLongDate(licence.licenceDocument.endDate),
-      licenceRef: licence.licenceDocument.licence.licenceRef,
-      licenceName: licence.licenceDocument.licence.$licenceName(),
-      id: licence.licenceDocument.licence.id
+      startDate: formatLongDate(licence.startDate),
+      endDate: formatLongDate(licence.endDate),
+      licenceRef: licence.licenceRef,
+      licenceName: licence.$licenceName(),
+      id: licence.id
     }
   })
 }

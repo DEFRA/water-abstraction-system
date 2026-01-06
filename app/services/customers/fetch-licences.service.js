@@ -6,7 +6,8 @@
  */
 
 const DatabaseConfig = require('../../../config/database.config.js')
-const LicenceDocumentRoleModel = require('../../models/licence-document-role.model.js')
+const LicenceModel = require('../../models/licence.model.js')
+const { db } = require('../../../db/db.js')
 
 /**
  * Fetches the customer licences data needed for the view 'customers/{id}/licences'
@@ -23,21 +24,21 @@ async function go(customerId, page) {
 }
 
 async function _fetch(customerId, page) {
-  return LicenceDocumentRoleModel.query()
-    .select(['id'])
-    .where('companyId', customerId)
-    .withGraphFetched('licenceDocument')
-    .modifyGraph('licenceDocument', (licenceDocumentBuilder) => {
-      licenceDocumentBuilder
-        .select(['id', 'startDate', 'endDate'])
-        .withGraphFetched('licence')
-        .modifyGraph('licence', (licenceBuilder) => {
-          licenceBuilder.select(['id', 'licenceRef']).modify('licenceName')
-        })
-    })
+  return LicenceModel.query()
+    .select(
+      'id',
+      'licenceRef',
+      'startDate',
+      db.raw('LEAST(??, ??, ??) AS ??', ['expiredDate', 'lapsedDate', 'revokedDate', 'endDate'])
+    )
+    .modify('licenceName')
+    .whereExists(
+      LicenceModel.relatedQuery('licenceDocument')
+        .joinRelated('licenceDocumentRoles')
+        .where('licenceDocumentRoles.companyId', customerId)
+    )
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
-
 module.exports = {
   go
 }

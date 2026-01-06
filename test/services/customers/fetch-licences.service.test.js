@@ -22,18 +22,12 @@ describe('Customers - Fetch licence service', () => {
   let licence
   let licenceDocument
   let licenceDocumentHeader
-  let licenceDocumentRole
 
   describe('when there is a company', () => {
     before(async () => {
       company = await CompanyHelper.add()
 
       licenceDocument = await LicenceDocumentHelper.add()
-
-      licenceDocumentRole = await LicenceDocumentRoleHelper.add({
-        companyId: company.id,
-        licenceDocumentId: licenceDocument.id
-      })
 
       licence = await LicenceHelper.add({
         licenceRef: licenceDocument.licenceRef
@@ -43,6 +37,13 @@ describe('Customers - Fetch licence service', () => {
         licenceRef: licenceDocument.licenceRef,
         licenceName: 'Tyrell Corporation'
       })
+
+      await LicenceDocumentRoleHelper.add({
+        companyId: company.id,
+        licenceDocumentId: licenceDocument.id
+      })
+
+      await _addAdditionalLicences(company)
     })
 
     it('returns the licences for the company', async () => {
@@ -51,20 +52,14 @@ describe('Customers - Fetch licence service', () => {
       expect(result).to.equal({
         licences: [
           {
-            id: licenceDocumentRole.id,
-            licenceDocument: {
-              endDate: null,
-              id: licenceDocument.id,
-              licence: {
-                id: licence.id,
-                licenceDocumentHeader: {
-                  id: licenceDocumentHeader.id,
-                  licenceName: 'Tyrell Corporation'
-                },
-                licenceRef: licence.licenceRef
-              },
-              startDate: new Date('2022-01-01')
-            }
+            endDate: null,
+            id: licence.id,
+            licenceRef: licence.licenceRef,
+            licenceDocumentHeader: {
+              id: licenceDocumentHeader.id,
+              licenceName: 'Tyrell Corporation'
+            },
+            startDate: new Date('2022-01-01')
           }
         ],
         pagination: {
@@ -74,3 +69,28 @@ describe('Customers - Fetch licence service', () => {
     })
   })
 })
+
+async function _addAdditionalLicences(company) {
+  // Duplicate - same company -
+  // const licenceDocumentTwo = await LicenceDocumentHelper.add()
+  //
+  // await LicenceHelper.add({
+  //   licenceRef: licenceDocumentTwo.licenceRef
+  // })
+  //
+  // await LicenceDocumentRoleHelper.add({
+  //   companyId: company.id,
+  //   licenceDocumentId: licenceDocumentTwo.id
+  // })
+
+  // Add a licence document with a different company id - this should not be returned
+  const differentCompanyIdLicenceDocument = await LicenceDocumentHelper.add()
+
+  await LicenceHelper.add({
+    licenceRef: differentCompanyIdLicenceDocument.licenceRef
+  })
+
+  await LicenceDocumentRoleHelper.add({
+    licenceDocumentId: differentCompanyIdLicenceDocument.id
+  })
+}
