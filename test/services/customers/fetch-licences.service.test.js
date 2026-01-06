@@ -43,7 +43,7 @@ describe('Customers - Fetch licence service', () => {
         licenceDocumentId: licenceDocument.id
       })
 
-      await _addAdditionalLicences(company)
+      await _addAdditionalLicences()
     })
 
     it('returns the licences for the company', async () => {
@@ -70,19 +70,7 @@ describe('Customers - Fetch licence service', () => {
   })
 })
 
-async function _addAdditionalLicences(company) {
-  // Duplicate - same company -
-  // const licenceDocumentTwo = await LicenceDocumentHelper.add()
-  //
-  // await LicenceHelper.add({
-  //   licenceRef: licenceDocumentTwo.licenceRef
-  // })
-  //
-  // await LicenceDocumentRoleHelper.add({
-  //   companyId: company.id,
-  //   licenceDocumentId: licenceDocumentTwo.id
-  // })
-
+async function _addAdditionalLicences() {
   // Add a licence document with a different company id - this should not be returned
   const differentCompanyIdLicenceDocument = await LicenceDocumentHelper.add()
 
