@@ -23,22 +23,16 @@ function customer() {
  */
 function licences() {
   return [
-    {
+    LicenceModel.fromJson({
+      endDate: null,
       id: generateUUID(),
-      licenceDocument: {
-        endDate: null,
+      licenceRef: generateLicenceRef(),
+      licenceDocumentHeader: {
         id: generateUUID(),
-        licence: LicenceModel.fromJson({
-          id: generateUUID(),
-          licenceDocumentHeader: {
-            id: generateUUID(),
-            licenceName: 'Between Two Tyrell'
-          },
-          licenceRef: generateLicenceRef()
-        }),
-        startDate: new Date('2022-01-01')
-      }
-    }
+        licenceName: 'Between Two Tyrell'
+      },
+      startDate: new Date('2022-01-01')
+    })
   ]
 }
 

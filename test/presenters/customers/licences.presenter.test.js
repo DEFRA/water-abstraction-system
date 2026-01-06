@@ -34,9 +34,9 @@ describe('Customers - Licences Presenter', () => {
         licences: [
           {
             endDate: null,
-            id: licences[0].licenceDocument.licence.id,
+            id: licences[0].id,
             licenceName: 'Between Two Tyrell',
-            licenceRef: licences[0].licenceDocument.licence.licenceRef,
+            licenceRef: licences[0].licenceRef,
             startDate: '1 January 2022'
           }
         ],
