@@ -136,7 +136,8 @@ function _returnVersion(quarterlyReturns) {
       region: {
         id: region.id,
         naldRegionId: region.naldRegionId
-      }
+      },
+      startDate: new Date('2022-04-01')
     },
     quarterlyReturns,
     multipleUpload: false
