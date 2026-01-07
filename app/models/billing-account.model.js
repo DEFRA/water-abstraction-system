@@ -191,7 +191,6 @@ class BillingAccountModel extends BaseModel {
    *
    * @returns {string} the company name to use for the billing account
    */
-
   $companyName() {
     const currentBillingAccountAddress = this?.billingAccountAddresses?.[0]
 
@@ -232,7 +231,7 @@ class BillingAccountModel extends BaseModel {
    * A billing account address can have a different company address / id to the billing account. When this is
    * the case we want to use the billing account address company not the billing account company.
    *
-   * @returns {string|null} the display address for the billing account
+   * @returns {string[]} the display address for the billing account
    */
   $displayAddress() {
     const address = this.$addressLines()

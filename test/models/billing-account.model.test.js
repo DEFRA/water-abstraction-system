@@ -274,6 +274,30 @@ describe('Billing Account model', () => {
       })
     })
 
+    describe('$companyName', () => {
+      describe("when the 'current' billing account address is not linked to a company", () => {
+        it('returns the company name', async () => {
+          fetchedRecord = await BillingAccountModel.query().findById(testRecord.id).modify('contactDetails')
+
+          const result = fetchedRecord.$companyName()
+
+          expect(result).to.equal('Example Trading Ltd')
+        })
+      })
+
+      describe("when the 'current' billing account address is linked to a company", () => {
+        it('returns the company name', async () => {
+          fetchedRecord = await BillingAccountModel.query()
+            .findById(alternateBillingAccount.id)
+            .modify('contactDetails')
+
+          const result = fetchedRecord.$companyName()
+
+          expect(result).to.equal('Acme Ltd (UK)')
+        })
+      })
+    })
+
     describe('$contactName', () => {
       describe("when the 'current' billing account address is not linked to a contact", () => {
         it('returns null', async () => {
@@ -303,6 +327,25 @@ describe('Billing Account model', () => {
 
           expect(result).to.be.null()
         })
+      })
+    })
+
+    describe('$displayAddress', () => {
+      it('returns the display address', async () => {
+        fetchedRecord = await BillingAccountModel.query().findById(alternateBillingAccount.id).modify('contactDetails')
+
+        const result = fetchedRecord.$displayAddress()
+
+        expect(result).to.equal([
+          'Acme Ltd (UK)',
+          'Bugs Bunny',
+          'ENVIRONMENT AGENCY',
+          'HORIZON HOUSE',
+          'DEANERY ROAD',
+          'BRISTOL',
+          'BS1 5AH',
+          'United Kingdom'
+        ])
       })
     })
   })
