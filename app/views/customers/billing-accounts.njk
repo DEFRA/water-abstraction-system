@@ -1,4 +1,45 @@
 {% extends 'layout-customers.njk' %}
 
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% set tableRows = [] %}
+
+{% for billingAccount in billingAccounts %}
+  {% set rowIndex = loop.index0 %}
+
+  {% set tableRow = [
+    {
+      html: '<a href="' + billingAccount.link + '">' + billingAccount.accountNumber + '</a>',
+      attributes: { 'data-test': 'billing-account-number-' + rowIndex }
+    },
+    {
+      text: newLineArrayItems(billingAccount.address),
+      attributes: { 'data-test': 'billing-account-address-' + rowIndex }
+    }
+  ] %}
+
+  {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+{% endfor %}
+
+
 {% block pageContent %}
+  {{ govukTable({
+    caption: pagination.showingMessage,
+    head: [
+      {
+        text: "Account Number"
+      },
+      {
+        text: "Address"
+      }
+    ],
+    rows: tableRows
+  }) }}
+
+  {% if pagination.numberOfPages > 1  %}
+    {{ govukPagination(pagination.component) }}
+  {% endif %}
 {% endblock %}
