@@ -68,7 +68,6 @@ describe('Customers - Billing Accounts Service', () => {
               'Bristol',
               'BS1 5AH'
             ],
-            id: billingAccount.id,
             link: `/system/billing-accounts/${billingAccount.id}?company-id=${billingAccount.company.id}`
           }
         ],

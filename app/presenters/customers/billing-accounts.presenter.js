@@ -30,7 +30,6 @@ function go(customer, billingAccounts) {
 function _billingAccounts(billingAccounts) {
   return billingAccounts.map((billingAccount) => {
     return {
-      id: billingAccount.id,
       accountNumber: billingAccount.accountNumber,
       address: _address(billingAccount),
       link: `/system/billing-accounts/${billingAccount.id}?company-id=${billingAccount.company.id}`
