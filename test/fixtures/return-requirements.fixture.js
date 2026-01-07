@@ -127,12 +127,12 @@ function _returnVersion(quarterlyReturns) {
     reason: 'new-licence',
     startDate: new Date('2022-04-01'),
     licence: {
+      areacode: 'SAAR',
       expiredDate: null,
       id: generateUUID(),
       lapsedDate: null,
       licenceRef: generateLicenceRef(),
       revokedDate: null,
-      areacode: 'SAAR',
       region: {
         id: region.id,
         naldRegionId: region.naldRegionId
