@@ -98,24 +98,32 @@ describe('Billing Accounts - Fetch View Billing Account service', () => {
                 address4: 'BRISTOL',
                 address5: null,
                 address6: null,
-                postcode: 'BS1 5AH'
+                postcode: 'BS1 5AH',
+                country: 'United Kingdom'
               },
               company: {
                 id: sendToCompany.id,
-                name: 'Send It Here'
+                name: 'Send It Here',
+                type: 'organisation'
               },
               contact: {
-                id: contact.id,
                 contactType: contact.contactType,
+                dataSource: 'wrls',
                 department: contact.department,
                 firstName: contact.firstName,
-                lastName: contact.lastName
+                id: contact.id,
+                initials: null,
+                lastName: contact.lastName,
+                middleInitials: null,
+                salutation: null,
+                suffix: null
               }
             }
           ],
           company: {
             id: primaryCompany.id,
-            name: 'Example Trading Ltd'
+            name: 'Example Trading Ltd',
+            type: 'organisation'
           }
         },
         bills: [

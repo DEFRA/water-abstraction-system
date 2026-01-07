@@ -62,11 +62,12 @@ describe('Customers - Billing Accounts Service', () => {
             accountNumber: billingAccount.accountNumber,
             address: [
               'Tyrell Corporation',
-              'Environment Agency',
-              'Horizon House',
-              'Deanery Road',
-              'Bristol',
-              'BS1 5AH'
+              'ENVIRONMENT AGENCY',
+              'HORIZON HOUSE',
+              'DEANERY ROAD',
+              'BRISTOL',
+              'BS1 5AH',
+              'United Kingdom'
             ],
             link: `/system/billing-accounts/${billingAccount.id}?company-id=${billingAccount.company.id}`
           }

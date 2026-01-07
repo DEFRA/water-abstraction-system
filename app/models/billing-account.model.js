@@ -180,6 +180,29 @@ class BillingAccountModel extends BaseModel {
   }
 
   /**
+   * Determine the company name to use for the billing account
+   *
+   * > We recommend adding the `contactDetails` modifier to your query to support this determination
+   *
+   * The company name is dependent on a number of things. First, you need the 'current' billing account address record
+   * linked to the billing account. If it has a company linked to it, the company name is the linked corresponding company name.
+   *
+   * Otherwise, return the billing accounts linked corresponding company name.
+   *
+   * @returns {string} the company name to use for the billing account
+   */
+
+  $companyName() {
+    const currentBillingAccountAddress = this?.billingAccountAddresses?.[0]
+
+    if (currentBillingAccountAddress?.company) {
+      return currentBillingAccountAddress.company.name
+    }
+
+    return this?.company.name
+  }
+
+  /**
    * Determine the contact name to use for the billing account
    *
    * > We recommend adding the `contactDetails` modifier to your query to support this determination
@@ -197,6 +220,26 @@ class BillingAccountModel extends BaseModel {
     }
 
     return null
+  }
+
+  /**
+   * Determine the display address for the billing account
+   *
+   * > We recommend adding the `contactDetails` modifier to your query to support this determination
+   *
+   * The display address is built from the billing account and billing account address data.
+   *
+   * A billing account address can have a different company address / id to the billing account. When this is
+   * the case we want to use the billing account address company not the billing account company.
+   *
+   * @returns {string|null} the display address for the billing account
+   */
+  $displayAddress() {
+    const address = this.$addressLines()
+    const addressCompanyName = this.$companyName()
+    const contactName = this.$contactName()
+
+    return [addressCompanyName, contactName, ...address].filter(Boolean)
   }
 }
 
