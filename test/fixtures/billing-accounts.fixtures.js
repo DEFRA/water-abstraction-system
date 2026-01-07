@@ -1,6 +1,8 @@
 'use strict'
 
+const BillingAccountModel = require('../../app/models/billing-account.model.js')
 const ContactModel = require('../../app/models/contact.model.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
 
 /**
  * Represents a complete response from `FetchBillingAccountService`
@@ -9,7 +11,7 @@ const ContactModel = require('../../app/models/contact.model.js')
  */
 function billingAccount() {
   const contact = ContactModel.fromJson({
-    id: '93403c8c-ff7d-4ec7-a6be-7a4451e3ac72',
+    id: generateUUID(),
     contactType: 'person',
     department: 'Testing department',
     firstName: 'Test',
@@ -17,17 +19,17 @@ function billingAccount() {
   })
 
   return {
-    billingAccount: {
-      id: '9b03843e-848b-497e-878e-4a6628d4f683',
+    billingAccount: BillingAccountModel.fromJson({
+      id: generateUUID(),
       accountNumber: 'S88897992A',
       createdAt: new Date('2023-12-14T18:42:59.659Z'),
       lastTransactionFile: null,
       lastTransactionFileCreatedAt: null,
       billingAccountAddresses: [
         {
-          id: '04ba8291-fb58-40a9-9581-cfedc136eef7',
+          id: generateUUID(),
           address: {
-            id: '310ae9a7-69c1-49b3-a29f-0ba46e6cfa7b',
+            id: generateUUID(),
             address1: 'Tutsham Farm',
             address2: 'West Farleigh',
             address3: null,
@@ -41,20 +43,20 @@ function billingAccount() {
         }
       ],
       company: {
-        id: '55a71eb5-e0e1-443e-9a25-c529cccfd6df',
+        id: generateUUID(),
         name: 'Ferns Surfacing Limited'
       }
-    },
+    }),
     bills: [
       {
-        id: '3d1b5d1f-9b57-4a28-bde1-1d57cd77b203',
+        id: generateUUID(),
         createdAt: new Date('2023-12-14T18:42:59.659Z'),
         credit: false,
         invoiceNumber: false,
         netAmount: 10384,
         financialYearEnding: 2021,
         billRun: {
-          id: 'eee30072-ad12-426a-9d69-c712f38e581d',
+          id: generateUUID(),
           batchType: 'annual',
           billRunNumber: 607,
           scheme: 'alcs',
