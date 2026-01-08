@@ -24,22 +24,25 @@
   {% set tableRows = (tableRows.push(tableRow), tableRows) %}
 {% endfor %}
 
-
 {% block pageContent %}
-  {{ govukTable({
-    caption: pagination.showingMessage,
-    head: [
-      {
-        text: "Account Number"
-      },
-      {
-        text: "Address"
-      }
-    ],
-    rows: tableRows
-  }) }}
+  {% if billingAccounts.length === 0 %}
+    <p> No billing accounts for this customer. </p>
+  {% else %}
+    {{ govukTable({
+      caption: pagination.showingMessage,
+      head: [
+        {
+          text: "Account Number"
+        },
+        {
+          text: "Address"
+        }
+      ],
+      rows: tableRows
+    }) }}
 
-  {% if pagination.numberOfPages > 1  %}
-    {{ govukPagination(pagination.component) }}
+    {% if pagination.numberOfPages > 1  %}
+      {{ govukPagination(pagination.component) }}
+    {% endif %}
   {% endif %}
 {% endblock %}
