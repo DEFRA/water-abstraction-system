@@ -18,11 +18,13 @@ const FetchCustomerService = require('../../../app/services/customers/fetch-cust
 const ContactsService = require('../../../app/services/customers/contacts.service.js')
 
 describe('Customers - Contacts Service', () => {
+  const userId = '1000'
+
   let auth
   let customer
 
   beforeEach(async () => {
-    auth = { credentials: { roles: [] } }
+    auth = { credentials: { user: { id: userId }, roles: [] } }
 
     customer = CustomersFixtures.customer()
 
@@ -43,6 +45,10 @@ describe('Customers - Contacts Service', () => {
         backLink: {
           href: '/',
           text: 'Back to search'
+        },
+        links: {
+          createContact: `/contact-entry/newCompanyContact.${customer.id}.${userId}/select-contact`,
+          removeContact: `/customer/${customer.id}/contacts/remove`
         },
         pageTitle: 'Contacts',
         pageTitleCaption: 'Tyrell Corporation',

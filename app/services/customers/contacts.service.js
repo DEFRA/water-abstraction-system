@@ -21,7 +21,7 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
 async function go(customerId, auth) {
   const customer = await FetchCustomerService.go(customerId)
 
-  const pageData = ContactsPresenter.go(customer)
+  const pageData = ContactsPresenter.go(customer, auth)
 
   return {
     activeNavBar: 'search',
