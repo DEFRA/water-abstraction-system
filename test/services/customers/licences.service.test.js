@@ -19,11 +19,14 @@ const FetchLicencesService = require('../../../app/services/customers/fetch-lice
 const LicencesService = require('../../../app/services/customers/licences.service.js')
 
 describe('Customers - Licences Service', () => {
+  let auth
   let customer
   let licences
   let page
 
   beforeEach(async () => {
+    auth = { credentials: { roles: [] } }
+
     customer = CustomersFixtures.customer()
 
     licences = CustomersFixtures.licences()
@@ -43,7 +46,7 @@ describe('Customers - Licences Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await LicencesService.go(customer.id, page)
+      const result = await LicencesService.go(customer.id, auth, page)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -66,7 +69,8 @@ describe('Customers - Licences Service', () => {
         pagination: {
           numberOfPages: 1,
           showingMessage: 'Showing all 1 licences'
-        }
+        },
+        roles: []
       })
     })
   })

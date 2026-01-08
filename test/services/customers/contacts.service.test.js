@@ -18,9 +18,12 @@ const FetchCustomerService = require('../../../app/services/customers/fetch-cust
 const ContactsService = require('../../../app/services/customers/contacts.service.js')
 
 describe('Customers - Contacts Service', () => {
+  let auth
   let customer
 
   beforeEach(async () => {
+    auth = { credentials: { roles: [] } }
+
     customer = CustomersFixtures.customer()
 
     Sinon.stub(FetchCustomerService, 'go').returns(customer)
@@ -32,7 +35,7 @@ describe('Customers - Contacts Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ContactsService.go(customer.id)
+      const result = await ContactsService.go(customer.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -42,7 +45,8 @@ describe('Customers - Contacts Service', () => {
           text: 'Back to search'
         },
         pageTitle: 'Contacts',
-        pageTitleCaption: 'Tyrell Corporation'
+        pageTitleCaption: 'Tyrell Corporation',
+        roles: []
       })
     })
   })

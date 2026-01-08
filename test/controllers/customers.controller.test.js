@@ -1,6 +1,6 @@
 'use strict'
 
-const { HTTP_STATUS_OK } = require('node:http2').constants
+const { HTTP_STATUS_OK, HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
 
 // Test framework dependencies
 const Lab = require('@hapi/lab')
@@ -44,24 +44,48 @@ describe('Customers controller', () => {
 
   describe('/customers/{id}/billing-accounts', () => {
     describe('GET', () => {
-      beforeEach(() => {
-        options = {
-          method: 'GET',
-          url: `/customers/${generateUUID()}/billing-accounts`,
-          auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
+      describe('When the user has the correct permissions to view the page', () => {
+        beforeEach(() => {
+          options = {
+            method: 'GET',
+            url: `/customers/${generateUUID()}/billing-accounts`,
+            auth: {
+              strategy: 'session',
+              credentials: { scope: ['billing'] }
+            }
           }
-        }
 
-        Sinon.stub(BillingAccountsService, 'go').returns({ pageTitle: 'Billing accounts' })
+          Sinon.stub(BillingAccountsService, 'go').returns({ pageTitle: 'Billing accounts', roles: ['billing'] })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Billing accounts')
+        })
       })
 
-      it('returns the page successfully', async () => {
-        const response = await server.inject(options)
+      describe('When the user does not have the correct permissions to view the page', () => {
+        beforeEach(() => {
+          options = {
+            method: 'GET',
+            url: `/customers/${generateUUID()}/billing-accounts`,
+            auth: {
+              strategy: 'session',
+              credentials: { scope: [] }
+            }
+          }
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Billing accounts')
+          Sinon.stub(BillingAccountsService, 'go').returns({ pageTitle: 'Billing accounts', roles: [] })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
+          expect(response.payload).to.contain('Page not found')
+        })
       })
     })
   })
@@ -78,7 +102,7 @@ describe('Customers controller', () => {
           }
         }
 
-        Sinon.stub(ContactsService, 'go').returns({ pageTitle: 'Contacts' })
+        Sinon.stub(ContactsService, 'go').returns({ pageTitle: 'Contacts', roles: [] })
       })
 
       it('returns the page successfully', async () => {
@@ -102,7 +126,7 @@ describe('Customers controller', () => {
           }
         }
 
-        Sinon.stub(LicencesService, 'go').returns({ pageTitle: 'Licences' })
+        Sinon.stub(LicencesService, 'go').returns({ pageTitle: 'Licences', roles: [] })
       })
 
       it('returns the page successfully', async () => {
