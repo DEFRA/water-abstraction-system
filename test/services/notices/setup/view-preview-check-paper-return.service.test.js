@@ -25,7 +25,7 @@ describe('Notices - Setup - View Preview Check Paper Return service', () => {
     dueReturn = {
       siteDescription: 'Potable Water Supply - Direct',
       endDate: '2003-03-31',
-      returnId: generateUUID(),
+      returnLogId: generateUUID(),
       returnReference: '3135',
       startDate: '2002-04-01'
     }
@@ -33,7 +33,7 @@ describe('Notices - Setup - View Preview Check Paper Return service', () => {
     sessionData = {
       dueReturns: [dueReturn],
       referenceCode: generateNoticeReferenceCode('PRTF-'),
-      selectedReturns: [dueReturn.returnId]
+      selectedReturns: [dueReturn.returnLogId]
     }
 
     session = await SessionHelper.add({ data: sessionData })
@@ -54,7 +54,7 @@ describe('Notices - Setup - View Preview Check Paper Return service', () => {
         returnLogs: [
           {
             action: {
-              link: `/system/notices/setup/${session.id}/preview/${contactHashId}/paper-return/${dueReturn.returnId}`,
+              link: `/system/notices/setup/${session.id}/preview/${contactHashId}/paper-return/${dueReturn.returnLogId}`,
               text: 'Preview'
             },
             returnPeriod: '1 April 2002 to 31 March 2003',
