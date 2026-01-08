@@ -17,18 +17,20 @@ const FetchCustomerService = require('../../../app/services/customers/fetch-cust
 
 // Thing under test
 const BillingAccountsService = require('../../../app/services/customers/billing-accounts.service.js')
-const CustomerFixtures = require('../../fixtures/customers.fixture.js')
 
 describe('Customers - Billing Accounts Service', () => {
+  let auth
   let billingAccount
   let billingAccounts
   let customer
   let page
 
   beforeEach(async () => {
+    auth = { credentials: { roles: [] } }
+
     customer = CustomersFixtures.customer()
 
-    billingAccounts = CustomerFixtures.billingAccounts()
+    billingAccounts = CustomersFixtures.billingAccounts()
 
     billingAccount = billingAccounts[0]
 
@@ -48,7 +50,7 @@ describe('Customers - Billing Accounts Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await BillingAccountsService.go(customer.id, page)
+      const result = await BillingAccountsService.go(customer.id, auth, page)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -77,7 +79,8 @@ describe('Customers - Billing Accounts Service', () => {
         pagination: {
           numberOfPages: 1,
           showingMessage: 'Showing all 1 billing accounts'
-        }
+        },
+        roles: []
       })
     })
   })
