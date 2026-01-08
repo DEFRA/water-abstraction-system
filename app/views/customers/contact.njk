@@ -1,4 +1,22 @@
 {% extends 'layout-customers.njk' %}
 
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
 {% block pageContent %}
+  <div class="govuk-button-group">
+    {{ govukButton({
+      text: "Set up a new contact",
+      href: links.createContact,
+      preventDoubleClick: true
+    }) }}
+
+    {{ govukButton({
+      text: "Remove a contact",
+      classes: "govuk-button--secondary",
+      href: links.removeContact,
+      preventDoubleClick: true
+    }) }}
+  </div>
+
+  <p> No contacts for this customer. </p>
 {% endblock %}
