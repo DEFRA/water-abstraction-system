@@ -31,7 +31,7 @@ function _query(noticeType) {
     rl.due_date,
     rl.end_date,
     rl.licence_ref,
-    rl.return_id,
+    rl.id AS return_log_id,
     rl.return_reference,
     rl.start_date
   FROM
