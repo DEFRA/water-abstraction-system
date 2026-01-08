@@ -80,7 +80,7 @@ describe('Customers controller', () => {
           Sinon.stub(BillingAccountsService, 'go').returns({ pageTitle: 'Billing accounts', roles: [] })
         })
 
-        it('returns the page successfully', async () => {
+        it('returns "page not found"', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
