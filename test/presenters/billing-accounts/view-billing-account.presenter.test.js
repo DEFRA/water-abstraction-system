@@ -3,13 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../fixtures/billing-accounts.fixtures.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const ViewBillingAccountPresenter = require('../../../app/presenters/billing-accounts/view-billing-account.presenter.js')
@@ -25,6 +29,12 @@ describe('Billing Accounts - View Billing Account presenter', () => {
     chargeVersionId = generateUUID()
     companyId = generateUUID()
     licenceId = generateUUID()
+
+    Sinon.stub(FeatureFlagsConfig, 'enableCustomerView').value(true)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when provided with a populated billing account', () => {
@@ -122,7 +132,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
         expect(result.backLink).to.equal({
           title: 'Go back to customer',
-          link: `/customer/${companyId}/#billing-accounts`
+          link: `/system/customers/${companyId}/billing-accounts`
         })
       })
     })

@@ -5,8 +5,9 @@
  * @module ViewBillingAccountPresenter
  */
 
-const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatBillRunType } = require('../billing.presenter.js')
+const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
 
 /**
  * Formats billing account data ready for presenting in the view billing account page
@@ -55,9 +56,13 @@ function _backLink(licenceId, chargeVersionId, companyId) {
   }
 
   if (companyId) {
+    const link = FeatureFlagsConfig.enableCustomerView
+      ? `/system/customers/${companyId}/billing-accounts`
+      : `/customer/${companyId}/#billing-accounts`
+
     return {
       title: 'Go back to customer',
-      link: `/customer/${companyId}/#billing-accounts`
+      link
     }
   }
 
