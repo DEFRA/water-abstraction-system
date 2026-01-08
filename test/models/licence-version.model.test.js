@@ -11,6 +11,8 @@ const { expect } = Code
 const { generateRandomInteger } = require('../../app/lib/general.lib.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
+const LicenceVersionHolderHelper = require('../support/helpers/licence-version-holder.helper.js')
+const LicenceVersionHolderModel = require('../../app/models/licence-version-holder.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
 const LicenceVersionPurposesHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const ModLogHelper = require('../support/helpers/mod-log.helper.js')
@@ -66,6 +68,34 @@ describe('Licence Version model', () => {
 
         expect(result.licence).to.be.an.instanceOf(LicenceModel)
         expect(result.licence).to.equal(testLicence)
+      })
+    })
+
+    describe('when linking to licence version holder', () => {
+      let testLicenceVersionHolder
+
+      beforeEach(async () => {
+        testRecord = await LicenceVersionHelper.add()
+
+        testLicenceVersionHolder = await LicenceVersionHolderHelper.add({ licenceVersionId: testRecord.id })
+      })
+
+      it('can successfully run a related query', async () => {
+        const query = await LicenceVersionModel.query().innerJoinRelated('licenceVersionHolder')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the note', async () => {
+        const result = await LicenceVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceVersionHolder')
+
+        expect(result).to.be.instanceOf(LicenceVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceVersionHolder).to.be.an.instanceOf(LicenceVersionHolderModel)
+        expect(result.licenceVersionHolder).to.equal(testLicenceVersionHolder)
       })
     })
 

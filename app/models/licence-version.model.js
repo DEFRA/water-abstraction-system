@@ -24,6 +24,14 @@ class LicenceVersionModel extends BaseModel {
           to: 'licences.id'
         }
       },
+      licenceVersionHolder: {
+        relation: Model.HasOneRelation,
+        modelClass: 'licence-version-holder.model',
+        join: {
+          from: 'licenceVersions.id',
+          to: 'licenceVersionHolders.licenceVersionId'
+        }
+      },
       licenceVersionPurposes: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-version-purpose.model',
