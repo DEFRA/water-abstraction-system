@@ -17,7 +17,7 @@ const { NoticeType } = require('../../../../../app/lib/static-lookups.lib.js')
 // Thing under test
 const GenerateReturnLogsByLicenceQueryService = require('../../../../../app/services/notices/setup/returns-notice/generate-return-logs-by-licence-query.service.js')
 
-describe.only('Notices - Setup - Returns Notice - Generate Return Logs By Licence Query Service', () => {
+describe('Notices - Setup - Returns Notice - Generate Return Logs By Licence Query Service', () => {
   let licenceRef
   let noticeType
   let returnLogs
