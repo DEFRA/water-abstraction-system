@@ -30,12 +30,12 @@ describe('Notices - Setup - Submit Paper Return service', () => {
     dueReturn = {
       siteDescription: 'Potable Water Supply - Direct',
       endDate: '2003-03-31',
-      returnId: generateUUID(),
+      returnLogId: generateUUID(),
       returnReference: '3135',
       startDate: '2002-04-01'
     }
 
-    payload = { returns: [dueReturn.returnId] }
+    payload = { returns: [dueReturn.returnLogId] }
 
     sessionData = { licenceRef }
 
@@ -54,7 +54,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.selectedReturns).to.equal([dueReturn.returnId])
+      expect(refreshedSession.selectedReturns).to.equal([dueReturn.returnLogId])
     })
 
     it('continues the journey', async () => {
@@ -65,7 +65,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
     describe('and the payload has one item (is not an array)', () => {
       beforeEach(async () => {
-        payload = { returns: dueReturn.returnId }
+        payload = { returns: dueReturn.returnLogId }
         sessionData = {}
 
         session = await SessionHelper.add({ data: sessionData })
@@ -76,7 +76,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.selectedReturns).to.equal([dueReturn.returnId])
+        expect(refreshedSession.selectedReturns).to.equal([dueReturn.returnLogId])
       })
     })
 
@@ -102,7 +102,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
       describe('and the returns have not been updated', () => {
         beforeEach(async () => {
-          session = await SessionHelper.add({ data: { checkPageVisited: true, selectedReturns: [dueReturn.returnId] } })
+          session = await SessionHelper.add({ data: { checkPageVisited: true, selectedReturns: [dueReturn.returnLogId] } })
         })
 
         it('does not set a flash message', async () => {
@@ -151,7 +151,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
               text: '1 April 2002 to 31 March 2003'
             },
             text: `${dueReturn.returnReference} Potable Water Supply - Direct`,
-            value: dueReturn.returnId
+            value: dueReturn.returnLogId
           }
         ]
       })
@@ -159,7 +159,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
     describe('and there are already "selectedReturns"', () => {
       beforeEach(async () => {
-        sessionData = { licenceRef, dueReturns: [dueReturn], selectedReturns: [dueReturn.returnId] }
+        sessionData = { licenceRef, dueReturns: [dueReturn], selectedReturns: [dueReturn.returnLogId] }
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -192,7 +192,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
                 text: '1 April 2002 to 31 March 2003'
               },
               text: `${dueReturn.returnReference} Potable Water Supply - Direct`,
-              value: dueReturn.returnId
+              value: dueReturn.returnLogId
             }
           ]
         })
