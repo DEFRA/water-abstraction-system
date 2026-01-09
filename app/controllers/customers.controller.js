@@ -24,10 +24,11 @@ async function viewBillingAccounts(request, h) {
 async function viewContact(request, h) {
   const {
     params: { id },
-    auth
+    auth,
+    query: { page = 1 }
   } = request
 
-  const pageData = await ContactService.go(id, auth)
+  const pageData = await ContactService.go(id, auth, page)
 
   return h.view(`customers/contact.njk`, pageData)
 }

@@ -42,23 +42,26 @@ describe('Customers - Fetch company contacts service', () => {
     it('returns the matching company', async () => {
       const result = await FetchContactsService.go(company.id)
 
-      expect(result).to.equal([
-        {
-          id: companyContact.id,
-          contact: {
-            id: contact.id,
-            salutation: null,
-            firstName: 'Amara',
-            middleInitials: null,
-            lastName: 'Gupta',
-            initials: null,
-            contactType: 'person',
-            suffix: null,
-            department: null,
-            email: 'amara.gupta@example.com'
+      expect(result).to.equal({
+        companyContacts: [
+          {
+            id: companyContact.id,
+            contact: {
+              id: contact.id,
+              salutation: null,
+              firstName: 'Amara',
+              middleInitials: null,
+              lastName: 'Gupta',
+              initials: null,
+              contactType: 'person',
+              suffix: null,
+              department: null,
+              email: 'amara.gupta@example.com'
+            }
           }
-        }
-      ])
+        ],
+        pagination: { total: 1 }
+      })
     })
   })
 })

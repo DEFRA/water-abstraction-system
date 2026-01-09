@@ -24,6 +24,7 @@ describe('Customers - Contacts Service', () => {
   let auth
   let customer
   let companyContacts
+  let page
 
   beforeEach(async () => {
     auth = { credentials: { user: { id: userId }, roles: [] } }
@@ -34,7 +35,9 @@ describe('Customers - Contacts Service', () => {
 
     Sinon.stub(FetchCustomerService, 'go').returns(customer)
 
-    Sinon.stub(FetchCompanyContactsService, 'go').returns(companyContacts)
+    Sinon.stub(FetchCompanyContactsService, 'go').returns({ companyContacts, pagination: { total: 1 } })
+
+    page = 1
   })
 
   afterEach(() => {
@@ -43,7 +46,7 @@ describe('Customers - Contacts Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ContactsService.go(customer.id, auth)
+      const result = await ContactsService.go(customer.id, auth, page)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -54,7 +57,7 @@ describe('Customers - Contacts Service', () => {
         },
         companyContacts: [
           {
-            action: `customer/${customer.id}/contacts/${companyContacts[0].contact.id}`,
+            action: `/customer/${customer.id}/contacts/${companyContacts[0].contact.id}`,
             name: 'Rachael Tyrell',
             email: 'rachael.tyrell@tyrellcorp.com'
           }
@@ -65,6 +68,10 @@ describe('Customers - Contacts Service', () => {
         },
         pageTitle: 'Contacts',
         pageTitleCaption: 'Tyrell Corporation',
+        pagination: {
+          numberOfPages: 1,
+          showingMessage: 'Showing all 1 billing accounts'
+        },
         roles: []
       })
     })

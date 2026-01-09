@@ -39,7 +39,7 @@ describe('Customers - Contacts Presenter', () => {
         },
         companyContacts: [
           {
-            action: `customer/${customer.id}/contacts/${companyContacts[0].contact.id}`,
+            action: `/customer/${customer.id}/contacts/${companyContacts[0].contact.id}`,
             name: 'Rachael Tyrell',
             email: 'rachael.tyrell@tyrellcorp.com'
           }
