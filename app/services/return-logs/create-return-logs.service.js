@@ -64,10 +64,10 @@ async function _persistReturnLogs(returnLogs) {
     await db('returnLogs')
       .withSchema('public')
       .insert({ ...returnLog, createdAt: timestamp, updatedAt: timestamp })
-      .onConflict('id')
+      .onConflict('returnId')
       .ignore()
 
-    createdIds.push(returnLog.id)
+    createdIds.push(returnLog.returnId)
   }
 
   return createdIds
