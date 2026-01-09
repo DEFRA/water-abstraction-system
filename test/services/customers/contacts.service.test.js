@@ -12,6 +12,7 @@ const { expect } = Code
 const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 
 // Things we need to stub
+const FetchCompanyContactsService = require('../../../app/services/customers/fetch-company-contacts.service.js')
 const FetchCustomerService = require('../../../app/services/customers/fetch-customer.service.js')
 
 // Thing under test
@@ -22,13 +23,18 @@ describe('Customers - Contacts Service', () => {
 
   let auth
   let customer
+  let companyContacts
 
   beforeEach(async () => {
     auth = { credentials: { user: { id: userId }, roles: [] } }
 
     customer = CustomersFixtures.customer()
 
+    companyContacts = CustomersFixtures.companyContacts()
+
     Sinon.stub(FetchCustomerService, 'go').returns(customer)
+
+    Sinon.stub(FetchCompanyContactsService, 'go').returns(companyContacts)
   })
 
   afterEach(() => {
@@ -46,6 +52,13 @@ describe('Customers - Contacts Service', () => {
           href: '/',
           text: 'Back to search'
         },
+        companyContacts: [
+          {
+            action: `customer/${customer.id}/contacts/${companyContacts[0].contact.id}`,
+            name: 'Rachael Tyrell',
+            email: 'rachael.tyrell@tyrellcorp.com'
+          }
+        ],
         links: {
           createContact: `/contact-entry/newCompanyContact.${customer.id}.${userId}/select-contact`,
           removeContact: `/customer/${customer.id}/contacts/remove`

@@ -10,10 +10,11 @@
  *
  * @param {module:CompanyModel} customer - The customer from the companies table
  * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {object} companyContacts - the company contacts for the customer
  *
  * @returns {object} The data formatted for the view template
  */
-function go(customer, auth) {
+function go(customer, auth, companyContacts) {
   return {
     backLink: {
       href: '/',
@@ -21,10 +22,20 @@ function go(customer, auth) {
     },
     links: _links(customer, auth),
     pageTitle: 'Contacts',
-    pageTitleCaption: customer.name
+    pageTitleCaption: customer.name,
+    companyContacts: _companyContacts(companyContacts, customer)
   }
 }
 
+function _companyContacts(companyContacts, customer) {
+  return companyContacts.map((companyContact) => {
+    return {
+      action: `/customer/${customer.id}/contacts/${companyContact.contact.id}`,
+      name: companyContact.contact.$name(),
+      email: companyContact.contact.email
+    }
+  })
+}
 /**
  * When the legacy UI navigates to the create page, it uses a 'key' from the URL (https://github.com/DEFRA/water-abstraction-ui/blob/1ffa5f2a9ac481b306506776d43cd63c4ea9143c/src/internal/modules/customers/controllers.js#L260_.
  *

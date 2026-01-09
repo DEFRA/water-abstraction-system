@@ -1,6 +1,34 @@
 {% extends 'layout-customers.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set tableRows = [] %}
+
+{% for companyContact in companyContacts %}
+  {% set rowIndex = loop.index0 %}
+
+  {% set tableRow = [
+    {
+      text: companyContact.name,
+      attributes: { 'data-test': 'contact-name-' + rowIndex }
+    },
+    {
+      text: '',
+      attributes: { 'data-test': 'contact-communication-type-' + rowIndex }
+    },
+    {
+      text: companyContact.email,
+      attributes: { 'data-test': 'contact-email-' + rowIndex }
+    },
+    {
+      html: '<a href="' + companyContact.action + '"> Manage </a>',
+      attributes: { 'data-test': 'contact-action-' + rowIndex }
+    }
+  ] %}
+
+  {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+{% endfor %}
 
 {% block pageContent %}
   <div class="govuk-button-group">
@@ -18,5 +46,27 @@
     }) }}
   </div>
 
-  <p> No contacts for this customer. </p>
+  {% if companyContacts.length === 0 %}
+    <p> No contacts for this customer. </p>
+  {% else %}
+    {{ govukTable({
+      caption: pagination.showingMessage,
+      head: [
+        {
+          text: "Name"
+        },
+        {
+          text: "Communication type"
+        },
+        {
+          text: "Email"
+        },
+        {
+          text: "Action"
+        }
+      ],
+      rows: tableRows
+    }) }}
+
+  {% endif %}
 {% endblock %}
