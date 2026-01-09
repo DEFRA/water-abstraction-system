@@ -88,23 +88,24 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
 
   const generatedReturnLogIds = []
 
-  // If there is no licenceEndDate or if there is a licenceEndDate and the return cycle starts before the licenceEndDate
-  // then create the return logs, otherwise just void the return logs for that cycle
-  if (!licenceEndDate || returnCycle.startDate < licenceEndDate) {
-    // Iterate through the requirements and call CreateReturnLogsService. It will generate a return log from the data
-    // provided and attempt to insert it. If it generates a return log that already exists (denoted by the return ID
-    // matching an existing one), the insert will be ignored.
-    //
-    // All generated return ID's are returned by the service and used by VoidLicenceReturnLogsService to identify which
-    // return logs for the given cycle _not_ to mark as 'void'.
-    //
-    // Because we've processed _all_ return requirements for the cycle, we know any return logs whose ID is not in
-    // `generatedReturnLogIds` have been made redundant by whatever the 'change' was
-    for (const returnRequirement of requirementsToProcess) {
-      const returnLogIds = await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
+  // Iterate through the requirements and call CreateReturnLogsService. It will generate a return log from the data
+  // provided and attempt to insert it. If it generates a return log that already exists (denoted by the return ID
+  // matching an existing one), the insert will be ignored.
+  //
+  // All generated return ID's are returned by the service and used by VoidLicenceReturnLogsService to identify which
+  // return logs for the given cycle _not_ to mark as 'void'.
+  //
+  // Because we've processed _all_ return requirements for the cycle, we know any return logs whose ID is not in
+  // `generatedReturnLogIds` have been made redundant by whatever the 'change' was
+  for (const returnRequirement of requirementsToProcess) {
+    const returnLogIds = await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
 
-      generatedReturnLogIds.push(...returnLogIds)
-    }
+    generatedReturnLogIds.push(...returnLogIds)
+  }
+
+  // Skip calling the void service if we didn't generate any return logs
+  if (generatedReturnLogIds.length === 0) {
+    return
   }
 
   await VoidLicenceReturnLogsService.go(generatedReturnLogIds, licenceRef, returnCycle.id, changeDate)
