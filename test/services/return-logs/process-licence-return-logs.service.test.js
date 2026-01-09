@@ -96,7 +96,7 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           expect(createReturnLogsStub.callCount).to.equal(1)
           expect(createReturnLogArgs[0].id).to.equal(returnRequirements[0].id)
 
-          // Confirm we only call void once, with the return log ID generated from our summer return requirement
+          // Confirm we only call void once, with the return log returnId generated from our summer return requirement
           const voidReturnLogArgs = voidReturnLogsStub.firstCall.args
 
           expect(voidReturnLogsStub.callCount).to.equal(1)

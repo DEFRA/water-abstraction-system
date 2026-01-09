@@ -86,7 +86,7 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
     )
   })
 
-  const generatedReturnLogIds = []
+  const generatedReturnIds = []
 
   // If there is no licenceEndDate or if there is a licenceEndDate and the return cycle starts before the licenceEndDate
   // then create the return logs, otherwise just void the return logs for that cycle
@@ -99,15 +99,15 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
     // return logs for the given cycle _not_ to mark as 'void'.
     //
     // Because we've processed _all_ return requirements for the cycle, we know any return logs whose ID is not in
-    // `generatedReturnLogIds` have been made redundant by whatever the 'change' was
+    // `generatedReturnIds` have been made redundant by whatever the 'change' was
     for (const returnRequirement of requirementsToProcess) {
-      const returnLogIds = await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
+      const returnIds = await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
 
-      generatedReturnLogIds.push(...returnLogIds)
+      generatedReturnIds.push(...returnIds)
     }
   }
 
-  await VoidLicenceReturnLogsService.go(generatedReturnLogIds, licenceRef, returnCycle.id, changeDate)
+  await VoidLicenceReturnLogsService.go(generatedReturnIds, licenceRef, returnCycle.id, changeDate)
 }
 
 module.exports = {
