@@ -162,11 +162,11 @@ async function submitConfirmed(request, h) {
 
 async function submitCancel(request, h) {
   const { sessionId } = request.params
-  const { returnId } = request.payload
+  const { returnLogId } = request.payload
 
   await SubmitCancelService.go(sessionId)
 
-  return h.redirect(`/system/return-logs/${returnId}`)
+  return h.redirect(`/system/return-logs/${returnLogId}`)
 }
 
 async function submitCheck(request, h) {
