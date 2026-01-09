@@ -102,7 +102,9 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
       describe('and the returns have not been updated', () => {
         beforeEach(async () => {
-          session = await SessionHelper.add({ data: { checkPageVisited: true, selectedReturns: [dueReturn.returnLogId] } })
+          session = await SessionHelper.add({
+            data: { checkPageVisited: true, selectedReturns: [dueReturn.returnLogId] }
+          })
         })
 
         it('does not set a flash message', async () => {
