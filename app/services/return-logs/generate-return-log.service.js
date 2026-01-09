@@ -26,14 +26,14 @@ function go(returnRequirement, returnCycle) {
   return {
     dueDate: null,
     endDate,
-    id: _id(returnVersion, reference, startDate, endDate),
     licenceRef: returnVersion.licence.licenceRef,
     metadata: _metadata(returnRequirement, endDate),
     quarterly: returnRequirement.returnVersion.quarterlyReturns,
     returnCycleId,
-    returnsFrequency: reportingFrequency,
+    returnId: _returnId(returnVersion, reference, startDate, endDate),
     returnReference: reference.toString(),
     returnRequirementId,
+    returnsFrequency: reportingFrequency,
     source: 'WRLS',
     startDate,
     status: 'due'
@@ -69,21 +69,6 @@ function _endDate(returnVersion, returnCycleEndDate) {
     returnVersionEndDate,
     returnCycleEndDate
   ])
-}
-
-/**
- * For reasons known only to the previous team, the unique identifier for each return log is a mix of references and
- * date values. This function handles that.
- *
- * @private
- */
-function _id(returnVersion, reference, startDate, endDate) {
-  const regionCode = returnVersion.licence.region.naldRegionId
-  const licenceReference = returnVersion.licence.licenceRef
-  const startDateAsString = formatDateObjectToISO(startDate)
-  const endDateAsString = formatDateObjectToISO(endDate)
-
-  return `v1:${regionCode}:${licenceReference}:${reference}:${startDateAsString}:${endDateAsString}`
 }
 
 function _metadata(returnRequirement, endDate) {
@@ -155,6 +140,21 @@ function _purposes(returnRequirementPurposes) {
       }
     }
   })
+}
+
+/**
+ * For reasons known only to the previous team, the unique identifier for each return log is a mix of references and
+ * date values. This function handles that.
+ *
+ * @private
+ */
+function _returnId(returnVersion, reference, startDate, endDate) {
+  const regionCode = returnVersion.licence.region.naldRegionId
+  const licenceReference = returnVersion.licence.licenceRef
+  const startDateAsString = formatDateObjectToISO(startDate)
+  const endDateAsString = formatDateObjectToISO(endDate)
+
+  return `v1:${regionCode}:${licenceReference}:${reference}:${startDateAsString}:${endDateAsString}`
 }
 
 function _startDate(returnVersion, returnCycleStartDate) {

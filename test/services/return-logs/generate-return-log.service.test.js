@@ -46,7 +46,6 @@ describe('Return Logs - Generate Return Log service', () => {
       expect(result).to.equal({
         dueDate: null,
         endDate: new Date('2026-03-31'),
-        id: `${returnLogPrefix}:2025-04-01:2026-03-31`,
         licenceRef: returnRequirement.returnVersion.licence.licenceRef,
         metadata: {
           description: 'BOREHOLE AT AVALON',
@@ -85,6 +84,7 @@ describe('Return Logs - Generate Return Log service', () => {
         },
         quarterly: true,
         returnCycleId: returnCycle.id,
+        returnId: `${returnLogPrefix}:2025-04-01:2026-03-31`,
         returnReference: returnRequirement.reference.toString(),
         returnRequirementId: returnRequirement.id,
         returnsFrequency: 'day',
@@ -99,7 +99,7 @@ describe('Return Logs - Generate Return Log service', () => {
         returnRequirement.returnVersion.endDate = new Date('2024-08-31')
       })
 
-      // NOTE: We only add one test scenario to highlight the behaviour behind this property. It makes use of the helper
+      // NOTE: We only add one test scenario to highlight the behavior behind this property. It makes use of the helper
       // `determineEarliestDate()` which already has a suite of tests
       it('returns the earliest end date from the licence, return version, or return cycle', () => {
         const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
@@ -114,7 +114,7 @@ describe('Return Logs - Generate Return Log service', () => {
 
         const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
-        expect(result.id).to.equal(`${returnLogPrefix}:2025-04-01:2026-03-31`)
+        expect(result.returnId).to.equal(`${returnLogPrefix}:2025-04-01:2026-03-31`)
       })
     })
 
