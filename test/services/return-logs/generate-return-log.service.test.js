@@ -101,7 +101,7 @@ describe('Return Logs - Generate Return Log service', () => {
 
       describe('the "endDate" property', () => {
         beforeEach(() => {
-          returnRequirement.returnVersion.endDate = new Date('2024-08-31')
+          returnRequirement.returnVersion.endDate = new Date('2025-08-31')
         })
 
         // NOTE: We only add one test scenario to highlight the behaviour behind this property. It makes use of the helper
@@ -109,7 +109,7 @@ describe('Return Logs - Generate Return Log service', () => {
         it('returns the earliest end date from the licence, return version, or return cycle', () => {
           const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
 
-          expect(result.endDate).to.equal(new Date('2024-08-31'))
+          expect(result.endDate).to.equal(new Date('2025-08-31'))
         })
       })
 
@@ -139,7 +139,7 @@ describe('Return Logs - Generate Return Log service', () => {
         describe('the metadata "isFinal" property', () => {
           describe('when the calculated end date is less than the cycle end date', () => {
             beforeEach(() => {
-              returnRequirement.returnVersion.endDate = new Date('2024-05-01')
+              returnRequirement.returnVersion.endDate = new Date('2025-08-31')
               returnRequirement.summer = true
             })
 
