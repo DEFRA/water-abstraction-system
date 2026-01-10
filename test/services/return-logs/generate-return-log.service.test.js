@@ -3,24 +3,18 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const ReturnCyclesFixture = require('../../fixtures/return-cycles.fixture.js')
 const ReturnRequirementsFixture = require('../../fixtures/return-requirements.fixture.js')
-const { today } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const GenerateReturnLogService = require('../../../app/services/return-logs/generate-return-log.service.js')
 
 describe('Return Logs - Generate Return Log service', () => {
-  const todaysDate = today()
-  const year = todaysDate.getFullYear()
-
-  let clock
   let returnCycle
   let returnRequirement
 
@@ -29,15 +23,7 @@ describe('Return Logs - Generate Return Log service', () => {
     returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
   })
 
-  afterEach(() => {
-    clock.restore()
-  })
-
   describe('when called', () => {
-    beforeEach(() => {
-      clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
-    })
-
     describe('and the end date is determined to be after the start date', () => {
       beforeEach(() => {
         returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)

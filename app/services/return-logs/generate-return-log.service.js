@@ -6,7 +6,6 @@
  */
 
 const { determineEarliestDate, determineLatestDate, formatDateObjectToISO } = require('../../lib/dates.lib.js')
-const { determineCycleEndDate } = require('../../lib/return-cycle-dates.lib.js')
 
 /**
  * Generate return log data from a return requirement and return cycle
@@ -38,7 +37,7 @@ function go(returnRequirement, returnCycle) {
     endDate,
     id: _id(returnVersion, reference, startDate, endDate),
     licenceRef: returnVersion.licence.licenceRef,
-    metadata: _metadata(returnRequirement, endDate),
+    metadata: _metadata(returnRequirement, endDate, returnCycleEndDate),
     quarterly: returnRequirement.returnVersion.quarterlyReturns,
     returnCycleId,
     returnsFrequency: reportingFrequency,
@@ -96,7 +95,7 @@ function _id(returnVersion, reference, startDate, endDate) {
   return `v1:${regionCode}:${licenceReference}:${reference}:${startDateAsString}:${endDateAsString}`
 }
 
-function _metadata(returnRequirement, endDate) {
+function _metadata(returnRequirement, endDate, returnCycleEndDate) {
   const {
     abstractionPeriodEndDay,
     abstractionPeriodEndMonth,
@@ -114,7 +113,7 @@ function _metadata(returnRequirement, endDate) {
   return {
     description: siteDescription,
     isCurrent: true,
-    isFinal: endDate < determineCycleEndDate(summer),
+    isFinal: endDate < returnCycleEndDate,
     isSummer: summer,
     isTwoPartTariff: twoPartTariff,
     isUpload: returnVersion.multipleUpload,

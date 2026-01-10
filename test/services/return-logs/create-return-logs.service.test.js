@@ -14,7 +14,6 @@ const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const ReturnRequirementsFixture = require('../../fixtures/return-requirements.fixture.js')
 const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
-const { today } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const GenerateReturnLogService = require('../../../app/services/return-logs/generate-return-log.service.js')
@@ -23,19 +22,12 @@ const GenerateReturnLogService = require('../../../app/services/return-logs/gene
 const CreateReturnLogsService = require('../../../app/services/return-logs/create-return-logs.service.js')
 
 describe('Return Logs - Create Return Logs service', () => {
-  const todaysDate = today()
-  const year = todaysDate.getFullYear()
-
-  let clock
   let notifierStub
   let results
   let returnCycle
   let returnRequirement
 
   beforeEach(() => {
-    // NOTE: GenerateReturnLogService's results will depend on what the current date is, hence we control it
-    clock = Sinon.useFakeTimers(new Date(`${year - 1}-12-01`))
-
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -45,7 +37,6 @@ describe('Return Logs - Create Return Logs service', () => {
 
   afterEach(async () => {
     Sinon.restore()
-    clock.restore()
     delete global.GlobalNotifier
 
     await ReturnLogModel.query()
