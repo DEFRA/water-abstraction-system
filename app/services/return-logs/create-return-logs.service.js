@@ -53,7 +53,10 @@ function _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate = nu
     returnLogs.push(GenerateReturnLogService.go(returnRequirement, returnCycle))
   }
 
-  return returnLogs
+  // It is possible that a licence can be ended _before_ the return cycle starts. On the rare occasions this happens
+  // GenerateReturnLogService will return NULL instead of an object (else you'd get a return log that ends before it
+  // finishes!) So, we filter out any nulls from returnLogs before returning it.
+  return returnLogs.filter(Boolean)
 }
 
 async function _persistReturnLogs(returnLogs) {

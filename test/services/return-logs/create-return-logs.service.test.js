@@ -108,6 +108,22 @@ describe('Return Logs - Create Return Logs service', () => {
               })
             })
 
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2024-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                expect(results).to.be.empty()
+              })
+            })
+
             describe('starts during the return cycle', () => {
               beforeEach(() => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-05-01')
@@ -163,6 +179,18 @@ describe('Return Logs - Create Return Logs service', () => {
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
                 expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2024-11-01`])
+              })
+            })
+
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.endDate = new Date('2024-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+                expect(results).to.be.empty()
               })
             })
 
@@ -253,6 +281,22 @@ describe('Return Logs - Create Return Logs service', () => {
               })
             })
 
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2024-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                expect(results).to.be.empty()
+              })
+            })
+
             describe('starts during the return cycle', () => {
               beforeEach(() => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-05-01')
@@ -308,6 +352,18 @@ describe('Return Logs - Create Return Logs service', () => {
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
                 expect(results).to.equal([`${returnLogPrefix}:2024-11-01:2024-11-01`])
+              })
+            })
+
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.endDate = new Date('2024-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+                expect(results).to.be.empty()
               })
             })
 
@@ -407,6 +463,22 @@ describe('Return Logs - Create Return Logs service', () => {
               })
             })
 
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                expect(results).to.be.empty()
+              })
+            })
+
             describe('starts during the return cycle', () => {
               beforeEach(() => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2026-05-01')
@@ -462,6 +534,18 @@ describe('Return Logs - Create Return Logs service', () => {
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
                 expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2025-11-01`])
+              })
+            })
+
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.endDate = new Date('2025-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+                expect(results).to.be.empty()
               })
             })
 
@@ -552,6 +636,22 @@ describe('Return Logs - Create Return Logs service', () => {
               })
             })
 
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                expect(results).to.be.empty()
+              })
+            })
+
             describe('starts during the return cycle', () => {
               beforeEach(() => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2026-05-01')
@@ -607,6 +707,18 @@ describe('Return Logs - Create Return Logs service', () => {
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
                 expect(results).to.equal([`${returnLogPrefix}:2025-11-01:2025-11-01`])
+              })
+            })
+
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.endDate = new Date('2025-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+                expect(results).to.be.empty()
               })
             })
 
@@ -740,6 +852,22 @@ describe('Return Logs - Create Return Logs service', () => {
               })
             })
 
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2023-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                expect(results).to.be.empty()
+              })
+            })
+
             describe('starts during the return cycle', () => {
               beforeEach(() => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2024-05-01')
@@ -795,6 +923,18 @@ describe('Return Logs - Create Return Logs service', () => {
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
                 expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-04-01`])
+              })
+            })
+
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.endDate = new Date('2023-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+                expect(results).to.be.empty()
               })
             })
 
@@ -885,6 +1025,22 @@ describe('Return Logs - Create Return Logs service', () => {
               })
             })
 
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2023-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                expect(results).to.be.empty()
+              })
+            })
+
             describe('starts during the return cycle', () => {
               beforeEach(() => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2024-05-01')
@@ -940,6 +1096,18 @@ describe('Return Logs - Create Return Logs service', () => {
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
                 expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-04-01`])
+              })
+            })
+
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.endDate = new Date('2023-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+                expect(results).to.be.empty()
               })
             })
 
@@ -1030,6 +1198,22 @@ describe('Return Logs - Create Return Logs service', () => {
               })
             })
 
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2023-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                expect(results).to.be.empty()
+              })
+            })
+
             describe('starts during the return cycle and in the first quarter', () => {
               beforeEach(() => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2024-05-01')
@@ -1099,6 +1283,18 @@ describe('Return Logs - Create Return Logs service', () => {
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
                 expect(results).to.equal([`${returnLogPrefix}:2024-04-01:2024-07-01`])
+              })
+            })
+
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.endDate = new Date('2023-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+                expect(results).to.be.empty()
               })
             })
 
@@ -1196,6 +1392,22 @@ describe('Return Logs - Create Return Logs service', () => {
               })
             })
 
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2023-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                expect(results).to.be.empty()
+              })
+            })
+
             describe('starts during the return cycle', () => {
               beforeEach(() => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-05-01')
@@ -1251,6 +1463,18 @@ describe('Return Logs - Create Return Logs service', () => {
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
                 expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-04-01`])
+              })
+            })
+
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.endDate = new Date('2023-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+                expect(results).to.be.empty()
               })
             })
 
@@ -1341,6 +1565,22 @@ describe('Return Logs - Create Return Logs service', () => {
               })
             })
 
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2023-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                expect(results).to.be.empty()
+              })
+            })
+
             describe('starts during the return cycle', () => {
               beforeEach(() => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-05-01')
@@ -1396,6 +1636,18 @@ describe('Return Logs - Create Return Logs service', () => {
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
 
                 expect(results).to.equal([`${returnLogPrefix}:2025-04-01:2025-04-01`])
+              })
+            })
+
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.endDate = new Date('2023-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+                expect(results).to.be.empty()
               })
             })
 
@@ -1494,6 +1746,22 @@ describe('Return Logs - Create Return Logs service', () => {
               })
             })
 
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.licence.expiredDate = new Date('2023-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(
+                  returnRequirement,
+                  returnCycle,
+                  returnRequirement.returnVersion.licence.expiredDate
+                )
+
+                expect(results).to.be.empty()
+              })
+            })
+
             describe('starts during the return cycle and in the first quarter', () => {
               beforeEach(() => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-05-01')
@@ -1579,6 +1847,18 @@ describe('Return Logs - Create Return Logs service', () => {
                   `${returnLogPrefix}:2025-04-01:2025-06-30`,
                   `${returnLogPrefix}:2025-07-01:2025-07-01`
                 ])
+              })
+            })
+
+            describe('ends before the start date of the return cycle', () => {
+              beforeEach(() => {
+                returnRequirement.returnVersion.endDate = new Date('2023-05-01')
+              })
+
+              it('will return an empty array', async () => {
+                results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
+
+                expect(results).to.be.empty()
               })
             })
 
