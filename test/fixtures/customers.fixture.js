@@ -1,10 +1,11 @@
 'use strict'
 
 const BillingAccountModel = require('../../app/models/billing-account.model.js')
+const ContactModel = require('../../app/models/contact.model.js')
 const LicenceModel = require('../../app/models/licence.model.js')
+const { generateAccountNumber } = require('../support/helpers/billing-account.helper.js')
 const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
-const { generateAccountNumber } = require('../support/helpers/billing-account.helper.js')
 
 /**
  * A representation from the billing accounts 'FetchBillingAccountsService'
@@ -44,6 +45,31 @@ function billingAccounts() {
 }
 
 /**
+ * A representation from the company contact 'FetchBillingAccountsService'
+ *
+ * @returns {object[]} An array of company contact
+ */
+function companyContacts() {
+  return [
+    {
+      id: generateUUID(),
+      contact: ContactModel.fromJson({
+        id: generateUUID(),
+        salutation: null,
+        firstName: 'Rachael',
+        middleInitials: null,
+        lastName: 'Tyrell',
+        initials: null,
+        contactType: 'person',
+        suffix: null,
+        department: 'Tyrell Corporation',
+        email: 'rachael.tyrell@tyrellcorp.com'
+      })
+    }
+  ]
+}
+
+/**
  * A representation from the customers 'FetchCustomerService'
  *
  * @returns {object} A customer object
@@ -77,6 +103,7 @@ function licences() {
 
 module.exports = {
   billingAccounts,
+  companyContacts,
   customer,
   licences
 }
