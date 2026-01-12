@@ -35,6 +35,7 @@ describe('Customers - Contacts Presenter', () => {
         companyContacts: [
           {
             action: `/customer/${customer.id}/contacts/${companyContacts[0].contact.id}`,
+            communicationType: 'Additional Contact',
             name: 'Rachael Tyrell',
             email: 'rachael.tyrell@tyrellcorp.com'
           }
@@ -49,6 +50,32 @@ describe('Customers - Contacts Presenter', () => {
     })
 
     describe('the "companyContacts" property', () => {
+      describe('the "communicationType" property', () => {
+        describe('when the company contact is marked for abstraction alerts', () => {
+          beforeEach(() => {
+            companyContacts[0].abstractionAlerts = true
+          })
+
+          it('returns the string "Water abstraction alerts"', () => {
+            const {
+              companyContacts: [result]
+            } = ContactsPresenter.go(customer, companyContacts)
+
+            expect(result.communicationType).to.equal('Water abstraction alerts')
+          })
+        })
+
+        describe('when the company contact is not marked for abstraction alerts', () => {
+          it('returns the licence role', () => {
+            const {
+              companyContacts: [result]
+            } = ContactsPresenter.go(customer, companyContacts)
+
+            expect(result.communicationType).to.equal('Additional Contact')
+          })
+        })
+      })
+
       describe('the "email" property', () => {
         describe('when there is an email', () => {
           it('returns the email', () => {
@@ -62,7 +89,7 @@ describe('Customers - Contacts Presenter', () => {
 
         describe('when there is no email', () => {
           beforeEach(() => {
-            companyContacts[0].email = null
+            companyContacts[0].contact.email = null
           })
 
           it('returns null', () => {
@@ -70,7 +97,7 @@ describe('Customers - Contacts Presenter', () => {
               companyContacts: [result]
             } = ContactsPresenter.go(customer, companyContacts)
 
-            expect(result.email).to.equal('rachael.tyrell@tyrellcorp.com')
+            expect(result.email).to.be.null()
           })
         })
       })

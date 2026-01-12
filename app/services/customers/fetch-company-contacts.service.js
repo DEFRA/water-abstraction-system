@@ -24,7 +24,7 @@ async function go(customerId, page) {
 
 async function _fetch(customerId, page) {
   return CompanyContactModel.query()
-    .select(['id'])
+    .select(['id', 'abstractionAlerts'])
     .where('companyId', customerId)
     .withGraphFetched('contact')
     .modifyGraph('contact', (contactBuilder) => {
@@ -40,6 +40,10 @@ async function _fetch(customerId, page) {
         'department',
         'email'
       ])
+    })
+    .withGraphFetched('licenceRole')
+    .modifyGraph('licenceRole', (licenceRoleBuilder) => {
+      licenceRoleBuilder.select(['label'])
     })
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
