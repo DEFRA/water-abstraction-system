@@ -66,7 +66,7 @@ describe('Customers - Contacts Presenter', () => {
         })
 
         describe('when the company contact is not marked for abstraction alerts', () => {
-          it('returns the email', () => {
+          it('returns the licence role', () => {
             const {
               companyContacts: [result]
             } = ContactsPresenter.go(customer, companyContacts)
