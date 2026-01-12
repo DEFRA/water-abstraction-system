@@ -105,11 +105,6 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
     generatedReturnLogIds.push(...returnLogIds)
   }
 
-  // Skip calling the void service if we didn't generate any return logs
-  if (generatedReturnLogIds.length === 0) {
-    return
-  }
-
   await VoidLicenceReturnLogsService.go(generatedReturnLogIds, licenceRef, returnCycle.id, changeDate)
 }
 

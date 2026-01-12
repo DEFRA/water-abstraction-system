@@ -170,12 +170,16 @@ describe('Return Logs - Process Licence Return Logs service', () => {
               fetchReturnRequirementsStub.resolves(returnRequirements)
             })
 
-            it('does not attempt to generate or void any return logs', async () => {
+            it('does not attempt to generate return logs', async () => {
               await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
 
-              expect(returnCycleModelStub.called).to.be.true()
               expect(createReturnLogsStub.called).to.be.false()
-              expect(voidReturnLogsStub.called).to.be.false()
+            })
+
+            it('still checks if return logs should be voided', async () => {
+              await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+
+              expect(voidReturnLogsStub.called).to.be.true()
             })
           })
         })
@@ -195,11 +199,15 @@ describe('Return Logs - Process Licence Return Logs service', () => {
             fetchReturnRequirementsStub.resolves(returnRequirements)
           })
 
-          it('does not attempt to generate or void any return logs', async () => {
+          it('does not attempt to generate return logs', async () => {
             await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
 
-            expect(returnCycleModelStub.called).to.be.true()
             expect(createReturnLogsStub.called).to.be.false()
+          })
+
+          it('does not check if return logs should be voided (no return cycles were processed)', async () => {
+            await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+
             expect(voidReturnLogsStub.called).to.be.false()
           })
         })
@@ -236,11 +244,15 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           returnCycleModelStub.resolves(returnCycles)
         })
 
-        it('would process the return requirements for _all_ matching return cycles that exist', async () => {
+        it('processes the return requirements for _all_ matching return cycles that exist', async () => {
           await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
 
+          // The requirement matches with two of the return cycles (winter), so 'create' is called twice
           expect(createReturnLogsStub.callCount).to.equal(2)
-          expect(voidReturnLogsStub.callCount).to.equal(2)
+
+          // For every return cycle fetched, we need to call the void service, even if no return logs were created. If
+          // this is the case, it means any existing return logs for that cycle need to be voided.
+          expect(voidReturnLogsStub.callCount).to.equal(returnCycles.length)
 
           // First cycle is summer ending 2026-10-31; should be ignored
           // Second cycle is winter ending 2026-03-31; should process our new requirement
@@ -272,11 +284,15 @@ describe('Return Logs - Process Licence Return Logs service', () => {
           returnCycleModelStub.resolves(returnCycles)
         })
 
-        it('would process the return requirements for _only_ the matching return cycles that exist', async () => {
+        it('processes the return requirements for _only_ the matching return cycles that exist', async () => {
           await ProcessLicenceReturnLogsService.go(licenceId, changeDate, returnVersionEndDate)
 
+          // The requirement only matches with one of the return cycles, hence 'create' is only called once
           expect(createReturnLogsStub.callCount).to.equal(1)
-          expect(voidReturnLogsStub.callCount).to.equal(1)
+
+          // For every return cycle fetched, we need to call the void service, even if no return logs were created. If
+          // this is the case, it means any existing return logs for that cycle need to be voided.
+          expect(voidReturnLogsStub.callCount).to.equal(returnCycles.length)
 
           // First cycle is winter ending 2025-03-31; should process our new requirement
           // Second cycle is summer ending 2024-10-31; should be ignored
@@ -303,11 +319,15 @@ describe('Return Logs - Process Licence Return Logs service', () => {
         fetchReturnRequirementsStub.resolves(returnRequirements)
       })
 
-      it('does not attempt to generate or void any return logs', async () => {
+      it('does not attempt to generate return logs', async () => {
         await ProcessLicenceReturnLogsService.go(licenceId, changeDate, returnVersionEndDate)
 
-        expect(returnCycleModelStub.called).to.be.true()
         expect(createReturnLogsStub.called).to.be.false()
+      })
+
+      it('does not check if return logs should be voided (no return cycles were processed)', async () => {
+        await ProcessLicenceReturnLogsService.go(licenceId, changeDate, returnVersionEndDate)
+
         expect(voidReturnLogsStub.called).to.be.false()
       })
     })
