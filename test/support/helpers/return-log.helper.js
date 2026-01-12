@@ -86,7 +86,7 @@ function defaults(data = {}) {
       version: 1
     },
     receivedDate,
-    returnId: generateReturnLogId(startDate, endDate, 1, licenceRef, returnReference),
+    returnId: generateReturnId(startDate, endDate, 1, licenceRef, returnReference),
     returnReference,
     returnsFrequency: 'month',
     startDate,
@@ -120,7 +120,7 @@ function defaults(data = {}) {
  *
  * @returns {string} the generated return log ID
  */
-function generateReturnLogId(
+function generateReturnId(
   startDate = new Date('2022-04-01'),
   endDate = new Date('2023-03-31'),
   version = 1,
@@ -182,6 +182,6 @@ function _areDatesSequential(endDate, startDate) {
 module.exports = {
   add,
   defaults,
-  generateReturnLogId,
+  generateReturnId,
   hasContinuousReturnLogs
 }

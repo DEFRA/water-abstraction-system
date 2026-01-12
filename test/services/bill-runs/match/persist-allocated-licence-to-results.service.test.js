@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const { generateReturnLogId } = require('../../../support/helpers/return-log.helper.js')
+const { generateReturnId } = require('../../../support/helpers/return-log.helper.js')
 const ReviewLicenceModel = require('../../../../app/models/review-licence.model.js')
 
 // Thing under test
@@ -227,7 +227,7 @@ describe('Persist Allocated Licence to Results service', () => {
 })
 
 function _generateData(returnMatched = true) {
-  const returnId = generateReturnLogId()
+  const returnId = generateReturnId()
 
   const chargeElementReturnLogs = [
     {

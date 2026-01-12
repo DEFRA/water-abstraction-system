@@ -29,7 +29,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
       session = {
         journey: 'enterReturn',
         note: { content: 'TEST_NOTE' },
-        returnId: ReturnLogHelper.generateReturnLogId(),
+        returnId: ReturnLogHelper.generateReturnId(),
         returnLogId: generateUUID()
       }
     })

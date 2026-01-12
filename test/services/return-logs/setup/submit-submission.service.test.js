@@ -23,15 +23,14 @@ describe('Return Logs - Setup - Submit Submission service', () => {
   let session
 
   beforeEach(async () => {
-    returnLogId = ReturnLogHelper.generateReturnLogId()
+    returnLogId = ReturnLogHelper.generateReturnId()
 
     session = await SessionHelper.add({
       data: {
         beenReceived: false,
         receivedDateOptions: 'today',
         receivedDate: new Date('2025-02-14'),
-        returnId: '4010bc46-e556-4e1f-b66b-1388f3fe5340',
-        returnLogId,
+        returnLogId: '4010bc46-e556-4e1f-b66b-1388f3fe5340',
         returnReference: ReturnRequirementHelper.generateReference()
       }
     })
