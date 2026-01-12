@@ -41,10 +41,10 @@ describe('Search - Search presenter', () => {
         {
           exact: true,
           model: {
-            metadata: {
-              contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr', type: 'Person' }]
-            },
-            licence: { id: 'licence-1', licenceRef: '01/123' }
+            id: 'licence-holder-1',
+            licenceDocumentRoles: [{ licenceDocumentId: 'licence-1', licenceRole: { name: 'licenceHolder' } }],
+            name: 'Mr F Surname',
+            type: 'organisation'
           },
           type: 'licenceHolder'
         },
@@ -112,10 +112,10 @@ describe('Search - Search presenter', () => {
         {
           exact: false,
           model: {
-            metadata: {
-              contacts: [{ initials: 'F', name: 'Surname', role: 'Licence holder', salutation: 'Mr', type: 'Person' }]
-            },
-            licence: { id: 'licence-1', licenceRef: '01/123' }
+            id: 'licence-holder-1',
+            licenceDocumentRoles: [{ licenceDocumentId: 'licence-1', licenceRole: { name: 'licenceHolder' } }],
+            name: 'Mr F Surname',
+            type: 'organisation'
           },
           type: 'licenceHolder'
         },
@@ -233,12 +233,12 @@ describe('Search - Search presenter', () => {
           type: 'Billing account'
         },
         {
-          col2Title: 'Licence',
-          col2Value: '01/123',
+          col2Title: 'Number of licences',
+          col2Value: 1,
           col3Title: 'Type',
-          col3Value: 'Person',
+          col3Value: 'organisation',
           exact: true,
-          link: '/system/licences/licence-1/summary',
+          link: '/system/customers/licence-holder-1/licences',
           reference: 'Mr F Surname',
           statusTag: null,
           type: 'Holder'
@@ -299,12 +299,12 @@ describe('Search - Search presenter', () => {
           type: 'Billing account'
         },
         {
-          col2Title: 'Licence',
-          col2Value: '01/123',
+          col2Title: 'Number of licences',
+          col2Value: 1,
           col3Title: 'Type',
-          col3Value: 'Person',
+          col3Value: 'organisation',
           exact: false,
-          link: '/system/licences/licence-1/summary',
+          link: '/system/customers/licence-holder-1/licences',
           reference: 'Mr F Surname',
           statusTag: null,
           type: 'Holder'
