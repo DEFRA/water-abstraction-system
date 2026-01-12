@@ -210,6 +210,28 @@ describe('Return Logs - Generate Return Log service', () => {
           expect(result.quarterly).to.equal(false)
         })
       })
+
+      describe('the "returnsFrequency" property', () => {
+        describe('when the return requirement reporting frequency is NOT "fortnight"', () => {
+          it('returns the reporting frequency as-is', () => {
+            const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+
+            expect(result.returnsFrequency).to.equal('day')
+          })
+        })
+
+        describe('when the return requirement reporting frequency is "fortnight"', () => {
+          beforeEach(() => {
+            returnRequirement.reportingFrequency = 'fortnight'
+          })
+
+          it('returns the reporting frequency as "week"', () => {
+            const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+
+            expect(result.returnsFrequency).to.equal('week')
+          })
+        })
+      })
     })
 
     describe('and the end date is determined to be the same as start date', () => {
