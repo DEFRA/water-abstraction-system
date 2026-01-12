@@ -387,7 +387,7 @@ async function submitSubmission(request, h) {
   // NOTE: If the user selected 'Record receipt' on the submission page, then we mark the return log as received, delete
   // the session, and redirect to the confirm-received page
   if (pageData.redirect === 'confirm-received') {
-    return h.redirect(`/system/return-logs/setup/confirmed/${pageData.returnId}`)
+    return h.redirect(`/system/return-logs/setup/confirmed/${pageData.returnLogId}`)
   }
 
   return h.redirect(`/system/return-logs/setup/${sessionId}/${pageData.redirect}`)
