@@ -109,18 +109,6 @@ describe('Return Logs - Generate Return Log service', () => {
         })
       })
 
-      describe('the "quarterly" property', () => {
-        beforeEach(() => {
-          returnRequirement.returnVersion.quarterlyReturns = false
-        })
-
-        it('returns false when the return versions quarterly-returns flag is false', () => {
-          const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
-
-          expect(result.quarterly).to.equal(false)
-        })
-      })
-
       describe('the "metadata" property', () => {
         describe('the metadata "isFinal" property', () => {
           describe('when the calculated end date is less than the cycle end date', () => {
@@ -207,6 +195,40 @@ describe('Return Logs - Generate Return Log service', () => {
                 periodEndMonth: 'null'
               })
             })
+          })
+        })
+      })
+
+      describe('the "quarterly" property', () => {
+        beforeEach(() => {
+          returnRequirement.returnVersion.quarterlyReturns = false
+        })
+
+        it('returns false when the return versions quarterly-returns flag is false', () => {
+          const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+
+          expect(result.quarterly).to.equal(false)
+        })
+      })
+
+      describe('the "returnsFrequency" property', () => {
+        describe('when the return requirement reporting frequency is NOT "fortnight"', () => {
+          it('returns the reporting frequency as-is', () => {
+            const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+
+            expect(result.returnsFrequency).to.equal('day')
+          })
+        })
+
+        describe('when the return requirement reporting frequency is "fortnight"', () => {
+          beforeEach(() => {
+            returnRequirement.reportingFrequency = 'fortnight'
+          })
+
+          it('returns the reporting frequency as "week"', () => {
+            const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+
+            expect(result.returnsFrequency).to.equal('week')
           })
         })
       })

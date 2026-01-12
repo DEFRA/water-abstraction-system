@@ -40,7 +40,7 @@ function go(returnRequirement, returnCycle) {
     metadata: _metadata(returnRequirement, endDate, returnCycleEndDate),
     quarterly: returnRequirement.returnVersion.quarterlyReturns,
     returnCycleId,
-    returnsFrequency: reportingFrequency,
+    returnsFrequency: _returnsFrequency(reportingFrequency),
     returnReference: reference.toString(),
     returnRequirementId,
     source: 'WRLS',
@@ -164,6 +164,25 @@ function _purposes(returnRequirementPurposes) {
       }
     }
   })
+}
+
+/**
+ * For whatever reason, when the previous team added the `returns.returns` table they didn't add 'fortnight' as a value
+ * for the custom `"returns".returns_period` type they created. Instead, they translated it as 'week' when creating
+ * return logs for these return requirements.
+ *
+ * Later, the business decided to only use day, month, and year, so you'll only find values like quarter, fortnight, and
+ * week on the older return requirements. But if someone makes a change to one of these licences, and the change date is
+ * way in the past, we need to still be able to convert the return requirement into a return log.
+ *
+ * @private
+ */
+function _returnsFrequency(reportingFrequency) {
+  if (reportingFrequency === 'fortnight') {
+    return 'week'
+  }
+
+  return reportingFrequency
 }
 
 function _startDate(returnVersion, returnCycleStartDate) {
