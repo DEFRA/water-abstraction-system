@@ -19,15 +19,13 @@ const FetchCustomerService = require('../../../app/services/customers/fetch-cust
 const ContactsService = require('../../../app/services/customers/contacts.service.js')
 
 describe('Customers - Contacts Service', () => {
-  const userId = '1000'
-
   let auth
   let customer
   let companyContacts
   let page
 
   beforeEach(async () => {
-    auth = { credentials: { user: { id: userId }, roles: [] } }
+    auth = { credentials: { roles: [] } }
 
     customer = CustomersFixtures.customer()
 
@@ -63,7 +61,7 @@ describe('Customers - Contacts Service', () => {
           }
         ],
         links: {
-          createContact: `/contact-entry/newCompanyContact.${customer.id}.${userId}/select-contact`,
+          createContact: `/customer/${customer.id}/contacts/new`,
           removeContact: `/customer/${customer.id}/contacts/remove`
         },
         pageTitle: 'Contacts',

@@ -26,7 +26,7 @@ async function go(customerId, auth, page) {
 
   const { companyContacts, pagination } = await FetchContactsService.go(customerId, page)
 
-  const pageData = ContactsPresenter.go(customer, auth, companyContacts)
+  const pageData = ContactsPresenter.go(customer, companyContacts)
 
   const paginationData = PaginatorPresenter.go(
     pagination.total,
