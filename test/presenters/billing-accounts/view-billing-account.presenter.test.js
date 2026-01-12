@@ -3,12 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../fixtures/billing-accounts.fixtures.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const ViewBillingAccountPresenter = require('../../../app/presenters/billing-accounts/view-billing-account.presenter.js')
@@ -21,9 +26,15 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
   beforeEach(() => {
     billingAccountData = BillingAccountsFixture.billingAccount()
-    chargeVersionId = 'db25beca-d05c-480e-9e2d-e2420342d781'
-    companyId = '3a0b3f4f-4836-493f-bf70-a37b443a9aad'
-    licenceId = '634aecc9-1086-41b1-a1cd-37247f8d321b'
+    chargeVersionId = generateUUID()
+    companyId = generateUUID()
+    licenceId = generateUUID()
+
+    Sinon.stub(FeatureFlagsConfig, 'enableCustomerView').value(true)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when provided with a populated billing account', () => {
@@ -34,7 +45,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         accountNumber: 'S88897992A',
         address: [
           'Ferns Surfacing Limited',
-          'FAO Test Testingson',
+          'Test Testingson',
           'Tutsham Farm',
           'West Farleigh',
           'Maidstone',
@@ -45,10 +56,10 @@ describe('Billing Accounts - View Billing Account presenter', () => {
           title: 'Go back to charge information',
           link: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`
         },
-        billingAccountId: '9b03843e-848b-497e-878e-4a6628d4f683',
+        billingAccountId: billingAccountData.billingAccount.id,
         bills: [
           {
-            billId: '3d1b5d1f-9b57-4a28-bde1-1d57cd77b203',
+            billId: billingAccountData.bills[0].id,
             billNumber: 'Zero value bill',
             billRunNumber: 607,
             billRunType: 'Annual',
@@ -62,129 +73,6 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         lastUpdated: null,
         pageTitle: 'Billing account for Ferns Surfacing Limited',
         pagination: { total: 1 }
-      })
-    })
-  })
-
-  describe('the "address" property', () => {
-    describe('when all address lines are populated', () => {
-      beforeEach(() => {
-        billingAccountData.billingAccount.billingAccountAddresses[0].address.address3 = 'test road'
-        billingAccountData.billingAccount.billingAccountAddresses[0].address.address4 = 'test town'
-      })
-
-      it('returns an array of address lines title cased with the postcode capitalised', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
-
-        expect(result.address).to.equal([
-          'Ferns Surfacing Limited',
-          'FAO Test Testingson',
-          'Tutsham Farm',
-          'West Farleigh',
-          'Test Road',
-          'Test Town',
-          'Maidstone',
-          'Kent',
-          'ME15 0NE'
-        ])
-      })
-    })
-
-    describe('when some address lines are null', () => {
-      it('returns an array of populated address lines title cased with the postcode capitalised', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
-
-        expect(result.address).to.equal([
-          'Ferns Surfacing Limited',
-          'FAO Test Testingson',
-          'Tutsham Farm',
-          'West Farleigh',
-          'Maidstone',
-          'Kent',
-          'ME15 0NE'
-        ])
-      })
-    })
-
-    describe('when there is no contact', () => {
-      beforeEach(() => {
-        billingAccountData.billingAccount.billingAccountAddresses[0].contact = null
-      })
-
-      it('returns an array of populated address lines title cased, the postcode capitalised, and no contact included', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
-
-        expect(result.address).to.equal([
-          'Ferns Surfacing Limited',
-          'Tutsham Farm',
-          'West Farleigh',
-          'Maidstone',
-          'Kent',
-          'ME15 0NE'
-        ])
-      })
-    })
-
-    describe('when the contact is a department', () => {
-      beforeEach(() => {
-        billingAccountData.billingAccount.billingAccountAddresses[0].contact.contactType = 'department'
-      })
-
-      it('returns an array of populated address lines title cased, the postcode capitalised, and the department name included', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
-
-        expect(result.address).to.equal([
-          'Ferns Surfacing Limited',
-          'FAO Testing department',
-          'Tutsham Farm',
-          'West Farleigh',
-          'Maidstone',
-          'Kent',
-          'ME15 0NE'
-        ])
-      })
-    })
-
-    describe('when the contact is a person', () => {
-      beforeEach(() => {
-        billingAccountData.billingAccount.billingAccountAddresses[0].contact.contactType = 'person'
-      })
-
-      it('returns an array of populated address lines title cased, the postcode capitalised, and the persons first and last names included', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
-
-        expect(result.address).to.equal([
-          'Ferns Surfacing Limited',
-          'FAO Test Testingson',
-          'Tutsham Farm',
-          'West Farleigh',
-          'Maidstone',
-          'Kent',
-          'ME15 0NE'
-        ])
-      })
-    })
-
-    describe('when there is a company against the billing account address (send bills to)', () => {
-      beforeEach(() => {
-        billingAccountData.billingAccount.billingAccountAddresses[0].company = {
-          id: 'baef8037-ecde-49dc-b763-9ac75df7121d',
-          name: 'Andy Dufresne Accountants'
-        }
-      })
-
-      it('returns an array of populated address lines title cased, the postcode capitalised, and the "sent to" company name instead of the primary', () => {
-        const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
-
-        expect(result.address).to.equal([
-          'Andy Dufresne Accountants',
-          'FAO Test Testingson',
-          'Tutsham Farm',
-          'West Farleigh',
-          'Maidstone',
-          'Kent',
-          'ME15 0NE'
-        ])
       })
     })
   })
@@ -244,7 +132,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
         expect(result.backLink).to.equal({
           title: 'Go back to customer',
-          link: `/customer/${companyId}/#billing-accounts`
+          link: `/system/customers/${companyId}/billing-accounts`
         })
       })
     })

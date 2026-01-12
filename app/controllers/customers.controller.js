@@ -10,17 +10,25 @@ const ContactService = require('../services/customers/contacts.service.js')
 const LicencesService = require('../services/customers/licences.service.js')
 
 async function viewBillingAccounts(request, h) {
-  const { id } = request.params
+  const {
+    params: { id },
+    auth,
+    query: { page = 1 }
+  } = request
 
-  const pageData = await BillingAccountsService.go(id)
+  const pageData = await BillingAccountsService.go(id, auth, page)
 
   return h.view(`customers/billing-accounts.njk`, pageData)
 }
 
 async function viewContact(request, h) {
-  const { id } = request.params
+  const {
+    params: { id },
+    auth,
+    query: { page = 1 }
+  } = request
 
-  const pageData = await ContactService.go(id)
+  const pageData = await ContactService.go(id, auth, page)
 
   return h.view(`customers/contact.njk`, pageData)
 }
@@ -28,10 +36,11 @@ async function viewContact(request, h) {
 async function viewLicences(request, h) {
   const {
     params: { id },
+    auth,
     query: { page = 1 }
   } = request
 
-  const pageData = await LicencesService.go(id, page)
+  const pageData = await LicencesService.go(id, auth, page)
 
   return h.view(`customers/licences.njk`, pageData)
 }

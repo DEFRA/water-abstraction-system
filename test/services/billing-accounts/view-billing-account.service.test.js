@@ -18,8 +18,12 @@ const FetchViewBillingAccountService = require('../../../app/services/billing-ac
 const ViewBillingAccountService = require('../../../app/services/billing-accounts/view-billing-account.service.js')
 
 describe('Billing Accounts - View Billing Account service', () => {
+  let billingAccountData
+
   beforeEach(() => {
-    Sinon.stub(FetchViewBillingAccountService, 'go').returns(BillingAccountsFixture.billingAccount())
+    billingAccountData = BillingAccountsFixture.billingAccount()
+
+    Sinon.stub(FetchViewBillingAccountService, 'go').returns(billingAccountData)
   })
 
   afterEach(() => {
@@ -40,7 +44,7 @@ describe('Billing Accounts - View Billing Account service', () => {
         accountNumber: 'S88897992A',
         address: [
           'Ferns Surfacing Limited',
-          'FAO Test Testingson',
+          'Test Testingson',
           'Tutsham Farm',
           'West Farleigh',
           'Maidstone',
@@ -51,10 +55,10 @@ describe('Billing Accounts - View Billing Account service', () => {
           title: 'Go back to charge information',
           link: `/licences/53325713-1364-4f6b-a244-8771a36a1248/charge-information/6e2cbd57-81d6-4653-a063-c93bae4fe6ee/view`
         },
-        billingAccountId: '9b03843e-848b-497e-878e-4a6628d4f683',
+        billingAccountId: billingAccountData.billingAccount.id,
         bills: [
           {
-            billId: '3d1b5d1f-9b57-4a28-bde1-1d57cd77b203',
+            billId: billingAccountData.bills[0].id,
             billNumber: 'Zero value bill',
             billRunNumber: 607,
             billRunType: 'Annual',

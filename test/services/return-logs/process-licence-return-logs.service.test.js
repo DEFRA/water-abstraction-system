@@ -22,31 +22,44 @@ const VoidLicenceReturnLogsService = require('../../../app/services/return-logs/
 const ProcessLicenceReturnLogsService = require('../../../app/services/return-logs/process-licence-return-logs.service.js')
 
 describe('Return Logs - Process Licence Return Logs service', () => {
-  const changeDate = new Date('2024-05-26')
-  const currentDate = new Date('2024-07-15')
   const licenceId = '3acf7d80-cf74-4e86-8128-13ef687ea091'
 
+  let changeDate
   let clock
   let createReturnLogsStub
   let fetchReturnRequirementsStub
+  let returnCycles
   let returnCycleModelStub
   let returnRequirements
+  let returnVersionEndDate
   let voidReturnLogsStub
 
   beforeEach(() => {
-    // We control what the 'current' date is, so we can assert what the service does when not provided with `changeDate`
-    clock = Sinon.useFakeTimers(currentDate)
+    // NOTE: We set the clock, not because it is needed for the services called, but so that the test data we're
+    // providing makes sense in the context we use it.
+    //
+    // For example, each year new return cycles are added, which means one year a 'change date' would result in no
+    // matching return cycles, but the next year there would be one, then two, and so on. By fixing the date we can use
+    // test data that still covers all possible scenarios, but doesn't require us to make them overly complicated by
+    // trying to make it dynamic.
+    clock = Sinon.useFakeTimers(new Date('2026-01-09'))
 
-    fetchReturnRequirementsStub = Sinon.stub(FetchLicenceReturnRequirementsService, 'go')
-    createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go')
-    voidReturnLogsStub = Sinon.stub(VoidLicenceReturnLogsService, 'go').resolves()
-
-    returnCycleModelStub = Sinon.stub().resolves(ReturnCyclesFixture.returnCycles())
+    returnCycleModelStub = Sinon.stub()
     Sinon.stub(ReturnCycleModel, 'query').returns({
       select: Sinon.stub().returnsThis(),
       where: Sinon.stub().returnsThis(),
       orderBy: returnCycleModelStub
     })
+
+    fetchReturnRequirementsStub = Sinon.stub(FetchLicenceReturnRequirementsService, 'go')
+
+    // Whatever CreateReturnLogsService is pushed into an array that is then passed to VoidLicenceReturnLogsService.
+    // Our tests check that CreateReturnLogsService returns the results expected depending on what is passed in, so
+    // we control what values are coming back. And the tests for VoidLicenceReturnLogsService ensure it does what is
+    // expected with those values. So, any further tests here would not only complicate the tests further, they'd just
+    // be duplicating work elsewhere.
+    createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go').resolves(['6662dd0f-8065-485c-bb6c-e99ffb1aa3fc'])
+    voidReturnLogsStub = Sinon.stub(VoidLicenceReturnLogsService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -54,242 +67,249 @@ describe('Return Logs - Process Licence Return Logs service', () => {
     clock.restore()
   })
 
-  describe('when called with a known licence ID', () => {
-    describe('and the licence has both "summer" and "all-year" return requirements', () => {
-      beforeEach(() => {
-        returnRequirements = [
-          ReturnRequirementsFixture.summerReturnRequirement(),
-          ReturnRequirementsFixture.winterReturnRequirement()
-        ]
-        fetchReturnRequirementsStub.resolves(returnRequirements)
-      })
+  describe('when processing a licence end date change', () => {
+    beforeEach(() => {
+      // NOTE: This is never passed in when processing a licence end date change. We set it to null here to highlight
+      // this, but like ProcessLicenceEndDateChangesService, we don't ever pass the argument in
+      returnVersionEndDate = null
+    })
 
-      describe('and the change date means multiple return cycles need processing', () => {
+    describe('and the licence has been "ended" in NALD', () => {
+      describe('and the "changeDate" aligns with a return cycle', () => {
         beforeEach(() => {
-          returnCycleModelStub.resolves(ReturnCyclesFixture.returnCycles())
+          changeDate = new Date('2025-06-15')
 
-          createReturnLogsStub.onCall(0).resolves(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
-          createReturnLogsStub.onCall(1).resolves(['v1:4:01/25/90/3242:16999652:2024-04-01:2025-03-31'])
+          // NOTE: The query to fetch return cycles is based on returnCycle.endDate > changeDate. This means we'll
+          // normally pull back at least two return cycles: a summer and a winter in that order. In this scenario we
+          // have
+          //
+          // - Summer ending 2026-10-31
+          // - Winter ending 2026-03-31
+          // - Summer ending 2025-10-31
+          //
+          // The next winter ends 2025-03-31, which is before our change date, so the results would stop here.
+          returnCycles = ReturnCyclesFixture.returnCycles(3)
+          returnCycleModelStub.resolves(returnCycles)
         })
 
-        it('processes all the return requirements for the licence', async () => {
+        describe('and the licence has return versions that align with the cycles', () => {
+          beforeEach(() => {
+            // NOTE: In most cases a licence will have a single return version that aligns, and one or two return
+            // requirements that are for the same cycle (summer or winter).
+            //
+            // To fully test the service whilst avoiding lots of duplication in the tests, we create a gnarly scenario!
+            // We have two return versions, each with a return requirement for summer and winter, giving us four
+            // return requirements to process against the three return cycles above.
+            //
+            // We're not testing the return logs that created here; that is the responsibility of the
+            // CreateReturnLogsService tests. We are testing that the service processes the 'right' return requirements.
+
+            const previousSummerReq = ReturnRequirementsFixture.summerReturnRequirement()
+            previousSummerReq.siteDescription = 'Previous Summer Requirement'
+            previousSummerReq.returnVersion.startDate = new Date('2020-04-01')
+            previousSummerReq.returnVersion.endDate = new Date('2025-04-30')
+
+            const previousWinterReq = ReturnRequirementsFixture.winterReturnRequirement()
+            previousWinterReq.siteDescription = 'Previous Winter Requirement'
+            previousWinterReq.returnVersion = previousSummerReq.returnVersion
+
+            const currentSummerReq = ReturnRequirementsFixture.summerReturnRequirement()
+            currentSummerReq.siteDescription = 'Current Summer Requirement'
+            currentSummerReq.returnVersion.startDate = new Date('2025-05-01')
+
+            const currentWinterReq = ReturnRequirementsFixture.winterReturnRequirement()
+            currentWinterReq.siteDescription = 'Current Winter Requirement'
+            currentWinterReq.returnVersion = currentSummerReq.returnVersion
+
+            returnRequirements = [currentSummerReq, currentWinterReq, previousSummerReq, previousWinterReq]
+            fetchReturnRequirementsStub.resolves(returnRequirements)
+          })
+
+          it('processes the _right_ return requirements for each return cycle', async () => {
+            await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+
+            expect(createReturnLogsStub.callCount).to.equal(5)
+            expect(voidReturnLogsStub.callCount).to.equal(3)
+
+            // First cycle is summer ending 2026-10-31; should process current summer req only
+            expect(createReturnLogsStub.getCall(0).args).to.equal([returnRequirements[0], returnCycles[0], null])
+
+            // Second cycle is winter ending 2026-03-31; should process current and previous winter req
+            expect(createReturnLogsStub.getCall(1).args).to.equal([returnRequirements[1], returnCycles[1], null])
+            expect(createReturnLogsStub.getCall(2).args).to.equal([returnRequirements[3], returnCycles[1], null])
+
+            // Third cycle is summer ending 2025-10-31; should process current and previous summer req
+            expect(createReturnLogsStub.getCall(3).args).to.equal([returnRequirements[0], returnCycles[2], null])
+            expect(createReturnLogsStub.getCall(4).args).to.equal([returnRequirements[2], returnCycles[2], null])
+          })
+        })
+
+        describe('and the licence has no return versions that align with the cycles', () => {
+          describe('because it has none', () => {
+            beforeEach(() => {
+              returnRequirements = []
+              fetchReturnRequirementsStub.resolves(returnRequirements)
+            })
+
+            it('does not attempt to process any return cycles', async () => {
+              await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+
+              expect(fetchReturnRequirementsStub.called).to.be.true()
+              expect(returnCycleModelStub.called).to.be.false()
+            })
+          })
+
+          describe('because the return version starts in the future', () => {
+            beforeEach(() => {
+              const futureWinterReq = ReturnRequirementsFixture.winterReturnRequirement()
+
+              futureWinterReq.siteDescription = 'Previous Summer Requirement'
+              futureWinterReq.returnVersion.startDate = new Date('2026-07-01')
+
+              returnRequirements = [futureWinterReq]
+              fetchReturnRequirementsStub.resolves(returnRequirements)
+            })
+
+            it('does not attempt to generate or void any return logs', async () => {
+              await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+
+              expect(returnCycleModelStub.called).to.be.true()
+              expect(createReturnLogsStub.called).to.be.false()
+              expect(voidReturnLogsStub.called).to.be.false()
+            })
+          })
+        })
+      })
+
+      describe('but the "changeDate" does not align with a return cycle (it is in the future)', () => {
+        beforeEach(() => {
+          changeDate = new Date('2030-06-15')
+
+          returnCycleModelStub.resolves([])
+        })
+
+        describe('though the licence has return requirements', () => {
+          beforeEach(() => {
+            returnRequirements = [ReturnRequirementsFixture.winterReturnRequirement()]
+
+            fetchReturnRequirementsStub.resolves(returnRequirements)
+          })
+
+          it('does not attempt to generate or void any return logs', async () => {
+            await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+
+            expect(returnCycleModelStub.called).to.be.true()
+            expect(createReturnLogsStub.called).to.be.false()
+            expect(voidReturnLogsStub.called).to.be.false()
+          })
+        })
+      })
+    })
+  })
+
+  describe('when submitting a new return version', () => {
+    describe('and it aligns with the return cycles', () => {
+      beforeEach(() => {
+        changeDate = new Date('2024-04-01')
+
+        const returnRequirement = ReturnRequirementsFixture.winterReturnRequirement()
+
+        returnRequirement.returnVersion.startDate = changeDate
+        returnRequirements = [returnRequirement]
+      })
+
+      describe('and does not have an end date', () => {
+        beforeEach(() => {
+          returnVersionEndDate = returnRequirements[0].returnVersion.endDate
+
+          fetchReturnRequirementsStub.resolves(returnRequirements)
+
+          // NOTE: If todays date was 2026-01-09, these are the return cycles that would be fetched for a "change date"
+          // of 2024-04-01 and no end date on the return version
+          //
+          // - Summer ending 2026-10-31
+          // - Winter ending 2026-03-31
+          // - Summer ending 2025-10-31
+          // - Winter ending 2025-03-31
+          // - Summer ending 2024-10-31
+          returnCycles = ReturnCyclesFixture.returnCycles(5)
+          returnCycleModelStub.resolves(returnCycles)
+        })
+
+        it('would process the return requirements for _all_ matching return cycles that exist', async () => {
           await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
 
           expect(createReturnLogsStub.callCount).to.equal(2)
           expect(voidReturnLogsStub.callCount).to.equal(2)
+
+          // First cycle is summer ending 2026-10-31; should be ignored
+          // Second cycle is winter ending 2026-03-31; should process our new requirement
+          // Third cycle is summer ending 2025-10-31; should be ignored
+          // Fourth cycle is winter ending 2025-03-31; should process our new requirement
+          // Fifth cycle is summer ending 2024-10-31; should be ignored
+          expect(createReturnLogsStub.getCall(0).args).to.equal([returnRequirements[0], returnCycles[1], null])
+          expect(createReturnLogsStub.getCall(1).args).to.equal([returnRequirements[0], returnCycles[3], null])
         })
       })
 
-      describe('but the change date means only a single return cycle needs processing', () => {
+      describe('and does have an end date', () => {
         beforeEach(() => {
-          returnCycleModelStub.resolves([ReturnCyclesFixture.summerCycle()])
+          returnRequirements[0].returnVersion.endDate = new Date('2024-12-31')
 
-          createReturnLogsStub.resolves(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
+          returnVersionEndDate = returnRequirements[0].returnVersion.endDate
+
+          fetchReturnRequirementsStub.resolves(returnRequirements)
+
+          // NOTE: If todays date was 2026-01-09, and "change date" is 2024-04-01 we'd fetch the same 5 as previous.
+          // However, because the return version has an end date of 2024-12-31, only the return cycles that start before
+          // that date would be fetched.
+          //
+          // - Winter ending 2025-03-31
+          // - Summer ending 2024-10-31
+          const allReturnCycles = ReturnCyclesFixture.returnCycles(5)
+
+          returnCycles = [allReturnCycles[3], allReturnCycles[4]]
+          returnCycleModelStub.resolves(returnCycles)
         })
 
-        it('processes only the matching return requirements for the licence', async () => {
-          await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
-
-          // Confirm we only call create once with our summer return requirement
-          const createReturnLogArgs = createReturnLogsStub.firstCall.args
+        it('would process the return requirements for _only_ the matching return cycles that exist', async () => {
+          await ProcessLicenceReturnLogsService.go(licenceId, changeDate, returnVersionEndDate)
 
           expect(createReturnLogsStub.callCount).to.equal(1)
-          expect(createReturnLogArgs[0].id).to.equal(returnRequirements[0].id)
-
-          // Confirm we only call void once, with the return log returnId generated from our summer return requirement
-          const voidReturnLogArgs = voidReturnLogsStub.firstCall.args
-
           expect(voidReturnLogsStub.callCount).to.equal(1)
-          expect(voidReturnLogArgs[0]).to.equal(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
+
+          // First cycle is winter ending 2025-03-31; should process our new requirement
+          // Second cycle is summer ending 2024-10-31; should be ignored
+          expect(createReturnLogsStub.getCall(0).args).to.equal([returnRequirements[0], returnCycles[0], null])
         })
       })
     })
 
-    describe('and the licence has both "summer" and "all-year" return requirements but also a revoked date', () => {
+    describe('but it does not align with a return cycle (it is in the future)', () => {
       beforeEach(() => {
-        returnRequirements = [ReturnRequirementsFixture.winterReturnRequirement(true)]
-        returnRequirements[0].returnVersion.licence.revokedDate = new Date('2024-12-31')
-        fetchReturnRequirementsStub.resolves(returnRequirements)
-      })
+        changeDate = new Date('2030-06-15')
 
-      describe('and the change date means multiple return cycles need processing', () => {
-        beforeEach(() => {
-          returnCycleModelStub.resolves(ReturnCyclesFixture.returnCycles(4))
+        const returnRequirement = ReturnRequirementsFixture.winterReturnRequirement()
 
-          createReturnLogsStub.onCall(0).resolves(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
-          createReturnLogsStub.onCall(1).resolves(['v1:4:01/25/90/3242:16999652:2024-04-01:2025-03-31'])
-        })
+        returnRequirement.returnVersion.startDate = changeDate
+        returnRequirements = [returnRequirement]
 
-        it('processes all the return requirements for the licence', async () => {
-          await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
+        // NOTE: If todays date was 2026-01-09, no return cycles would be fetched for a "change date" of 2024-04-01 by
+        // the service (they wouldn't exist yet)
+        returnCycleModelStub.resolves([])
 
-          expect(createReturnLogsStub.callCount).to.equal(1)
-          expect(voidReturnLogsStub.callCount).to.equal(4)
-        })
-      })
-    })
-
-    describe('and the licence has both "summer" and "all-year" return requirements across multiple return versions', () => {
-      beforeEach(() => {
-        returnRequirements = [
-          ReturnRequirementsFixture.winterReturnRequirement(),
-          ReturnRequirementsFixture.winterReturnRequirement(),
-          ReturnRequirementsFixture.winterReturnRequirement(),
-          ReturnRequirementsFixture.winterReturnRequirement(),
-          ReturnRequirementsFixture.winterReturnRequirement()
-        ]
-        fetchReturnRequirementsStub.resolves(returnRequirements)
-      })
-
-      describe('and the change date means multiple return cycles need processing', () => {
-        beforeEach(() => {
-          returnCycleModelStub.resolves(ReturnCyclesFixture.returnCycles())
-
-          createReturnLogsStub.onCall(0).resolves(['v1:4:01/25/90/3242:16999651:2024-11-01:2025-10-31'])
-          createReturnLogsStub.onCall(1).resolves(['v1:4:01/25/90/3242:16999652:2024-04-01:2025-05-26'])
-          createReturnLogsStub.onCall(2).resolves(['v1:4:01/25/90/3242:16999652:2024-05-27:2025-03-31'])
-          createReturnLogsStub.onCall(3).resolves(['v1:4:01/25/90/3242:16999653:2024-04-01:2025-05-26'])
-          createReturnLogsStub.onCall(4).resolves(['v1:4:01/25/90/3242:16999654:2025-05-27:2026-03-31'])
-        })
-
-        it('processes all the return requirements for the licence', async () => {
-          await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
-
-          expect(createReturnLogsStub.callCount).to.equal(5)
-          expect(voidReturnLogsStub.callCount).to.equal(2)
-        })
-      })
-    })
-
-    describe('and the licence has both "summer" and "all-year" return requirements across multiple return versions', () => {
-      beforeEach(() => {
-        returnRequirements = [
-          ReturnRequirementsFixture.summerReturnRequirement(),
-          ReturnRequirementsFixture.winterReturnRequirement(),
-          ReturnRequirementsFixture.summerReturnRequirement(),
-          ReturnRequirementsFixture.winterReturnRequirement(),
-          ReturnRequirementsFixture.winterReturnRequirement(),
-          ReturnRequirementsFixture.winterReturnRequirement()
-        ]
-
-        returnRequirements[2].returnVersion.startDate = new Date('2022-04-01')
-        returnRequirements[2].returnVersion.endDate = new Date('2024-05-26')
-
-        returnRequirements[3].returnVersion.startDate = new Date('2024-05-27')
-        returnRequirements[3].returnVersion.endDate = null
-
-        returnRequirements[4].returnVersion.startDate = new Date('2025-04-01')
-        returnRequirements[4].returnVersion.endDate = new Date('2025-05-26')
-
-        returnRequirements[5].returnVersion.startDate = new Date('2025-07-27')
-        returnRequirements[5].returnVersion.endDate = null
+        returnVersionEndDate = returnRequirement.returnVersion.endDate
 
         fetchReturnRequirementsStub.resolves(returnRequirements)
       })
 
-      describe('and the change date replaces the earliest return version', () => {
-        beforeEach(() => {
-          returnCycleModelStub.resolves(ReturnCyclesFixture.returnCycles(4))
+      it('does not attempt to generate or void any return logs', async () => {
+        await ProcessLicenceReturnLogsService.go(licenceId, changeDate, returnVersionEndDate)
 
-          createReturnLogsStub.onCall(0).resolves(['v1:4:01/25/90/3242:16999652:2024-11-01:2025-10-31'])
-          createReturnLogsStub.onCall(1).resolves(['v1:4:01/25/90/3242:16999651:2024-04-01:2025-03-31'])
-          createReturnLogsStub.onCall(2).resolves(['v1:4:01/25/90/3242:16999641:2024-04-01:2025-03-31'])
-          createReturnLogsStub.onCall(3).resolves(['v1:4:01/25/90/3242:16999652:2023-11-01:2024-10-31'])
-          createReturnLogsStub.onCall(4).resolves(['v1:4:01/25/90/3242:16999642:2023-11-01:2024-10-31'])
-          createReturnLogsStub.onCall(5).resolves(['v1:4:01/25/90/3242:16999651:2023-04-01:2024-03-31'])
-          createReturnLogsStub.onCall(6).resolves(['v1:4:01/25/90/3242:16999653:2024-04-01:2025-05-26'])
-          createReturnLogsStub.onCall(7).resolves(['v1:4:01/25/90/3242:16999654:2025-05-27:2026-03-31'])
-        })
-
-        it('processes all the return requirements for the licence', async () => {
-          const oldestReturnVersionStartDate = new Date('2022-04-01')
-          await ProcessLicenceReturnLogsService.go(licenceId, oldestReturnVersionStartDate)
-
-          expect(createReturnLogsStub.callCount).to.equal(8)
-          expect(voidReturnLogsStub.callCount).to.equal(4)
-        })
+        expect(returnCycleModelStub.called).to.be.true()
+        expect(createReturnLogsStub.called).to.be.false()
+        expect(voidReturnLogsStub.called).to.be.false()
       })
-    })
-
-    describe('and the licence has only a "summer" return requirement', () => {
-      beforeEach(() => {
-        returnRequirements = [ReturnRequirementsFixture.summerReturnRequirement()]
-        fetchReturnRequirementsStub.resolves(returnRequirements)
-        createReturnLogsStub.resolves()
-      })
-
-      describe('but an "all-year" return cycle needs processing', () => {
-        beforeEach(() => {
-          returnCycleModelStub.resolves([ReturnCyclesFixture.winterCycle()])
-        })
-
-        it('does not process any return requirements for the licence', async () => {
-          await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
-
-          expect(createReturnLogsStub.called).to.be.false()
-          expect(voidReturnLogsStub.called).to.be.true()
-        })
-      })
-    })
-
-    describe('and the licence has only an "all-year" return requirement', () => {
-      beforeEach(() => {
-        returnRequirements = [ReturnRequirementsFixture.winterReturnRequirement(true)]
-        fetchReturnRequirementsStub.resolves(returnRequirements)
-        createReturnLogsStub.resolves()
-      })
-
-      describe('but a "summer" return cycle needs processing', () => {
-        beforeEach(() => {
-          returnCycleModelStub.resolves([ReturnCyclesFixture.summerCycle()])
-        })
-
-        it('does not process any return requirements for the licence', async () => {
-          await ProcessLicenceReturnLogsService.go(licenceId, changeDate)
-
-          expect(createReturnLogsStub.called).to.be.false()
-          expect(voidReturnLogsStub.called).to.be.true()
-        })
-      })
-    })
-  })
-
-  describe('when called with a unknown licence ID, or licence with no return requirements', () => {
-    beforeEach(() => {
-      fetchReturnRequirementsStub.resolves([])
-      returnCycleModelStub.resolves()
-      createReturnLogsStub.resolves()
-      voidReturnLogsStub.resolves()
-    })
-
-    it('does not attempt to process the licence', async () => {
-      await ProcessLicenceReturnLogsService.go(licenceId)
-
-      expect(fetchReturnRequirementsStub.called).to.be.true()
-      expect(returnCycleModelStub.called).to.be.false()
-      expect(createReturnLogsStub.called).to.be.false()
-      expect(voidReturnLogsStub.called).to.be.false()
-    })
-  })
-
-  describe('when called with no "change date"', () => {
-    beforeEach(() => {
-      returnCycleModelStub.resolves(ReturnCyclesFixture.returnCycles())
-      fetchReturnRequirementsStub.resolves([])
-      createReturnLogsStub.resolves()
-      voidReturnLogsStub.resolves()
-    })
-
-    it('defaults to using the current date as the change date', async () => {
-      await ProcessLicenceReturnLogsService.go(licenceId)
-
-      const fetchArgs = fetchReturnRequirementsStub.firstCall.args
-
-      expect(fetchArgs[1]).to.equal(currentDate)
-
-      expect(returnCycleModelStub.called).to.be.false()
-      expect(createReturnLogsStub.called).to.be.false()
-      expect(voidReturnLogsStub.called).to.be.false()
     })
   })
 })

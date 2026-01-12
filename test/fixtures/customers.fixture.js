@@ -1,8 +1,73 @@
 'use strict'
 
+const BillingAccountModel = require('../../app/models/billing-account.model.js')
+const ContactModel = require('../../app/models/contact.model.js')
 const LicenceModel = require('../../app/models/licence.model.js')
+const { generateAccountNumber } = require('../support/helpers/billing-account.helper.js')
 const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
+
+/**
+ * A representation from the billing accounts 'FetchBillingAccountsService'
+ *
+ * @returns {object[]} A array of billing accounts
+ */
+function billingAccounts() {
+  return [
+    BillingAccountModel.fromJson({
+      accountNumber: generateAccountNumber(),
+      billingAccountAddresses: [
+        {
+          address: {
+            address1: 'ENVIRONMENT AGENCY',
+            address2: 'HORIZON HOUSE',
+            address3: 'DEANERY ROAD',
+            address4: 'BRISTOL',
+            address5: null,
+            address6: null,
+            country: 'United Kingdom',
+            id: generateUUID(),
+            postcode: 'BS1 5AH'
+          },
+          company: null,
+          contact: null,
+          id: generateUUID()
+        }
+      ],
+      company: {
+        id: generateUUID(),
+        name: 'Tyrell Corporation',
+        type: 'organisation'
+      },
+      id: generateUUID()
+    })
+  ]
+}
+
+/**
+ * A representation from the company contact 'FetchBillingAccountsService'
+ *
+ * @returns {object[]} An array of company contact
+ */
+function companyContacts() {
+  return [
+    {
+      id: generateUUID(),
+      contact: ContactModel.fromJson({
+        id: generateUUID(),
+        salutation: null,
+        firstName: 'Rachael',
+        middleInitials: null,
+        lastName: 'Tyrell',
+        initials: null,
+        contactType: 'person',
+        suffix: null,
+        department: 'Tyrell Corporation',
+        email: 'rachael.tyrell@tyrellcorp.com'
+      })
+    }
+  ]
+}
 
 /**
  * A representation from the customers 'FetchCustomerService'
@@ -23,26 +88,22 @@ function customer() {
  */
 function licences() {
   return [
-    {
+    LicenceModel.fromJson({
+      endDate: null,
       id: generateUUID(),
-      licenceDocument: {
-        endDate: null,
+      licenceRef: generateLicenceRef(),
+      licenceDocumentHeader: {
         id: generateUUID(),
-        licence: LicenceModel.fromJson({
-          id: generateUUID(),
-          licenceDocumentHeader: {
-            id: generateUUID(),
-            licenceName: 'Between Two Tyrell'
-          },
-          licenceRef: generateLicenceRef()
-        }),
-        startDate: new Date('2022-01-01')
-      }
-    }
+        licenceName: 'Between Two Tyrell'
+      },
+      startDate: new Date('2022-01-01')
+    })
   ]
 }
 
 module.exports = {
+  billingAccounts,
+  companyContacts,
   customer,
   licences
 }

@@ -8,7 +8,11 @@ const routes = [
     path: '/customers/{id}/billing-accounts',
     options: {
       handler: CustomersController.viewBillingAccounts,
-      auth: {}
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      }
     }
   },
   {

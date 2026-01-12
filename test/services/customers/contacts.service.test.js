@@ -12,18 +12,32 @@ const { expect } = Code
 const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 
 // Things we need to stub
+const FetchCompanyContactsService = require('../../../app/services/customers/fetch-company-contacts.service.js')
 const FetchCustomerService = require('../../../app/services/customers/fetch-customer.service.js')
 
 // Thing under test
 const ContactsService = require('../../../app/services/customers/contacts.service.js')
 
 describe('Customers - Contacts Service', () => {
+  const userId = '1000'
+
+  let auth
   let customer
+  let companyContacts
+  let page
 
   beforeEach(async () => {
+    auth = { credentials: { user: { id: userId }, roles: [] } }
+
     customer = CustomersFixtures.customer()
 
+    companyContacts = CustomersFixtures.companyContacts()
+
     Sinon.stub(FetchCustomerService, 'go').returns(customer)
+
+    Sinon.stub(FetchCompanyContactsService, 'go').returns({ companyContacts, pagination: { total: 1 } })
+
+    page = 1
   })
 
   afterEach(() => {
@@ -32,7 +46,7 @@ describe('Customers - Contacts Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ContactsService.go(customer.id)
+      const result = await ContactsService.go(customer.id, auth, page)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -41,8 +55,24 @@ describe('Customers - Contacts Service', () => {
           href: '/',
           text: 'Back to search'
         },
+        companyContacts: [
+          {
+            action: `/customer/${customer.id}/contacts/${companyContacts[0].contact.id}`,
+            name: 'Rachael Tyrell',
+            email: 'rachael.tyrell@tyrellcorp.com'
+          }
+        ],
+        links: {
+          createContact: `/contact-entry/newCompanyContact.${customer.id}.${userId}/select-contact`,
+          removeContact: `/customer/${customer.id}/contacts/remove`
+        },
         pageTitle: 'Contacts',
-        pageTitleCaption: 'Tyrell Corporation'
+        pageTitleCaption: 'Tyrell Corporation',
+        pagination: {
+          numberOfPages: 1,
+          showingMessage: 'Showing all 1 billing accounts'
+        },
+        roles: []
       })
     })
   })
