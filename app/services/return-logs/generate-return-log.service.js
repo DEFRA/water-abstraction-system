@@ -6,7 +6,6 @@
  */
 
 const { determineEarliestDate, determineLatestDate, formatDateObjectToISO } = require('../../lib/dates.lib.js')
-const { determineCycleEndDate } = require('../../lib/return-cycle-dates.lib.js')
 
 /**
  * Generate return log data from a return requirement and return cycle
@@ -14,7 +13,8 @@ const { determineCycleEndDate } = require('../../lib/return-cycle-dates.lib.js')
  * @param {module:ReturnRequirement} returnRequirement - the return requirement to generate a return log from
  * @param {module:ReturnCycle} returnCycle - the return cycle for the return log
  *
- * @returns {object} the generated return log data
+ * @returns {object|null} the generated return log data, or null if the licence or return version ends before the return
+ * cycle starts
  */
 function go(returnRequirement, returnCycle) {
   const { id: returnRequirementId, reference, reportingFrequency, returnVersion } = returnRequirement
@@ -23,12 +23,21 @@ function go(returnRequirement, returnCycle) {
   const startDate = _startDate(returnVersion, returnCycleStartDate)
   const endDate = _endDate(returnVersion, returnCycleEndDate)
 
+  // The calling services don't check if the return cycle starts after the return version or licence ends. This is
+  // intentional. At the time of writing this we are having to fix the return log creation engine again, because similar
+  // checks were implemented at different stages inconsistently. We resolved that problem by just doing checks once at
+  // pertinent stages in the process.
+  // This service shouldn't generate invalid return log data so it is right the check exists here.
+  if (endDate < startDate) {
+    return null
+  }
+
   return {
     dueDate: null,
     endDate,
     id: _id(returnVersion, reference, startDate, endDate),
     licenceRef: returnVersion.licence.licenceRef,
-    metadata: _metadata(returnRequirement, endDate),
+    metadata: _metadata(returnRequirement, endDate, returnCycleEndDate),
     quarterly: returnRequirement.returnVersion.quarterlyReturns,
     returnCycleId,
     returnsFrequency: reportingFrequency,
@@ -86,7 +95,7 @@ function _id(returnVersion, reference, startDate, endDate) {
   return `v1:${regionCode}:${licenceReference}:${reference}:${startDateAsString}:${endDateAsString}`
 }
 
-function _metadata(returnRequirement, endDate) {
+function _metadata(returnRequirement, endDate, returnCycleEndDate) {
   const {
     abstractionPeriodEndDay,
     abstractionPeriodEndMonth,
@@ -104,7 +113,7 @@ function _metadata(returnRequirement, endDate) {
   return {
     description: siteDescription,
     isCurrent: true,
-    isFinal: endDate < determineCycleEndDate(summer),
+    isFinal: endDate < returnCycleEndDate,
     isSummer: summer,
     isTwoPartTariff: twoPartTariff,
     isUpload: returnVersion.multipleUpload,
