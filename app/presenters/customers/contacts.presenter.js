@@ -9,18 +9,17 @@
  * Formats data for the 'customers/{id}/contacts' page
  *
  * @param {module:CompanyModel} customer - The customer from the companies table
- * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {object} companyContacts - the company contacts for the customer
  *
  * @returns {object} The data formatted for the view template
  */
-function go(customer, auth, companyContacts) {
+function go(customer, companyContacts) {
   return {
     backLink: {
       href: '/',
       text: 'Back to search'
     },
-    links: _links(customer, auth),
+    links: _links(customer),
     pageTitle: 'Contacts',
     pageTitleCaption: customer.name,
     companyContacts: _companyContacts(companyContacts, customer)
@@ -47,9 +46,9 @@ function _companyContacts(companyContacts, customer) {
  *
  * @private
  */
-function _links(customer, auth) {
+function _links(customer) {
   return {
-    createContact: `/contact-entry/newCompanyContact.${customer.id}.${auth.credentials.user.id}/select-contact`,
+    createContact: `/customer/${customer.id}/contacts/new`,
 
     removeContact: `/customer/${customer.id}/contacts/remove`
   }
