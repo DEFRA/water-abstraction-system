@@ -43,7 +43,6 @@ function go(returnRequirement, returnCycle) {
     returnsFrequency: _returnsFrequency(reportingFrequency),
     returnReference: reference.toString(),
     returnRequirementId,
-    returnsFrequency: reportingFrequency,
     source: 'WRLS',
     startDate,
     status: 'due'
@@ -81,7 +80,7 @@ function _endDate(returnVersion, returnCycleEndDate) {
   ])
 }
 
-function _metadata(returnRequirement, endDate) {
+function _metadata(returnRequirement, endDate, returnCycleEndDate) {
   const {
     abstractionPeriodEndDay,
     abstractionPeriodEndMonth,
