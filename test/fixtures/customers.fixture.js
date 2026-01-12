@@ -53,6 +53,7 @@ function companyContacts() {
   return [
     {
       id: generateUUID(),
+      abstractionAlerts: false,
       contact: ContactModel.fromJson({
         id: generateUUID(),
         salutation: null,
@@ -64,7 +65,10 @@ function companyContacts() {
         suffix: null,
         department: 'Tyrell Corporation',
         email: 'rachael.tyrell@tyrellcorp.com'
-      })
+      }),
+      licenceRole: {
+        label: 'Additional Contact'
+      }
     }
   ]
 }
