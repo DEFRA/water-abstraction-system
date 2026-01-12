@@ -986,14 +986,19 @@ describe('Return Logs - Setup - Controller', () => {
 
         describe('and "Record receipt" has been selected', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitSubmissionService, 'go').resolves({ redirect: 'confirm-received', returnLogId: 'fb875afa-de26-44d3-9255-370020cceb3b' })
+            Sinon.stub(SubmitSubmissionService, 'go').resolves({
+              redirect: 'confirm-received',
+              returnLogId: 'fb875afa-de26-44d3-9255-370020cceb3b'
+            })
           })
 
           it('redirects to the "confirmed" page', async () => {
             const response = await server.inject(_postOptions(path, { journey: 'recordReceipt' }))
 
             expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal('/system/return-logs/setup/confirmed/fb875afa-de26-44d3-9255-370020cceb3b')
+            expect(response.headers.location).to.equal(
+              '/system/return-logs/setup/confirmed/fb875afa-de26-44d3-9255-370020cceb3b'
+            )
           })
         })
 
