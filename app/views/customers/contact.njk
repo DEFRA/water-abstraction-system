@@ -32,20 +32,22 @@
 {% endfor %}
 
 {% block pageContent %}
-  <div class="govuk-button-group">
-    {{ govukButton({
-      text: "Set up a new contact",
-      href: links.createContact,
-      preventDoubleClick: true
-    }) }}
+  {% if 'hof_notifications' in roles %}
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Set up a new contact",
+        href: links.createContact,
+        preventDoubleClick: true
+      }) }}
 
-    {{ govukButton({
-      text: "Remove a contact",
-      classes: "govuk-button--secondary",
-      href: links.removeContact,
-      preventDoubleClick: true
-    }) }}
-  </div>
+      {{ govukButton({
+        text: "Remove a contact",
+        classes: "govuk-button--secondary",
+        href: links.removeContact,
+        preventDoubleClick: true
+      }) }}
+    </div>
+  {% endif %}
 
   {% if companyContacts.length === 0 %}
     <p> No contacts for this customer. </p>
