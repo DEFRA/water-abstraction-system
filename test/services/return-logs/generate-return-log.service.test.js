@@ -109,18 +109,6 @@ describe('Return Logs - Generate Return Log service', () => {
         })
       })
 
-      describe('the "quarterly" property', () => {
-        beforeEach(() => {
-          returnRequirement.returnVersion.quarterlyReturns = false
-        })
-
-        it('returns false when the return versions quarterly-returns flag is false', () => {
-          const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
-
-          expect(result.quarterly).to.equal(false)
-        })
-      })
-
       describe('the "metadata" property', () => {
         describe('the metadata "isFinal" property', () => {
           describe('when the calculated end date is less than the cycle end date', () => {
@@ -208,6 +196,18 @@ describe('Return Logs - Generate Return Log service', () => {
               })
             })
           })
+        })
+      })
+
+      describe('the "quarterly" property', () => {
+        beforeEach(() => {
+          returnRequirement.returnVersion.quarterlyReturns = false
+        })
+
+        it('returns false when the return versions quarterly-returns flag is false', () => {
+          const result = GenerateReturnLogService.go(returnRequirement, returnCycle)
+
+          expect(result.quarterly).to.equal(false)
         })
       })
     })
