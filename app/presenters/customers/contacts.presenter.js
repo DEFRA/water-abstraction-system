@@ -26,15 +26,25 @@ function go(customer, companyContacts) {
   }
 }
 
+function _communicationType(companyContact) {
+  if (companyContact.abstractionAlerts) {
+    return 'Water abstraction alerts'
+  }
+
+  return companyContact.licenceRole.label
+}
+
 function _companyContacts(companyContacts, customer) {
   return companyContacts.map((companyContact) => {
     return {
       action: `/customer/${customer.id}/contacts/${companyContact.contact.id}`,
+      communicationType: _communicationType(companyContact),
       name: companyContact.contact.$name(),
       email: companyContact.contact.email
     }
   })
 }
+
 /**
  * When the legacy UI navigates to the create page, it uses a 'key' from the URL (https://github.com/DEFRA/water-abstraction-ui/blob/1ffa5f2a9ac481b306506776d43cd63c4ea9143c/src/internal/modules/customers/controllers.js#L260_.
  *

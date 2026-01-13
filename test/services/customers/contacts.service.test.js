@@ -56,6 +56,7 @@ describe('Customers - Contacts Service', () => {
         companyContacts: [
           {
             action: `/customer/${customer.id}/contacts/${companyContacts[0].contact.id}`,
+            communicationType: 'Additional Contact',
             name: 'Rachael Tyrell',
             email: 'rachael.tyrell@tyrellcorp.com'
           }

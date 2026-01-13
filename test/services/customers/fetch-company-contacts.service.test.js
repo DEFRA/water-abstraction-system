@@ -11,14 +11,16 @@ const { expect } = Code
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
+const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 
 // Thing under test
 const FetchContactsService = require('../../../app/services/customers/fetch-company-contacts.service.js')
 
 describe('Customers - Fetch company contacts service', () => {
   let company
-  let contact
   let companyContact
+  let contact
+  let licenceRole
 
   describe('when there is a company contact', () => {
     before(async () => {
@@ -26,9 +28,12 @@ describe('Customers - Fetch company contacts service', () => {
 
       contact = await ContactHelper.add()
 
+      licenceRole = LicenceRoleHelper.select('additionalContact')
+
       companyContact = await CompanyContactHelper.add({
         companyId: company.id,
-        contactId: contact.id
+        contactId: contact.id,
+        licenceRoleId: licenceRole.id
       })
 
       // Add additional contact - not related to the company
@@ -46,6 +51,7 @@ describe('Customers - Fetch company contacts service', () => {
         companyContacts: [
           {
             id: companyContact.id,
+            abstractionAlerts: false,
             contact: {
               id: contact.id,
               salutation: null,
@@ -57,6 +63,9 @@ describe('Customers - Fetch company contacts service', () => {
               suffix: null,
               department: null,
               email: 'amara.gupta@example.com'
+            },
+            licenceRole: {
+              label: licenceRole.label
             }
           }
         ],
