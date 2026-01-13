@@ -38,8 +38,14 @@ async function go(auth, payload, yar) {
     }
   }
 
+  // If no search query was provided, it can only have been a valid request if they clicked on a filter button, but with
+  // no search query there's nothing to filter, so just redirect back to the main search page
+  if (!validationResult.value.query) {
+    return { redirect: '/system/search' }
+  }
+
   yar.set('searchQuery', validationResult.value.query)
-  if (validationResult.value.clearFilter === 'reset') {
+  if (validationResult.value.filter === 'clear') {
     yar.set('searchResultType', 'all')
   } else {
     yar.set('searchResultType', validationResult.value.resultType)

@@ -24,17 +24,17 @@ const MAX_LENGTH = 100
  */
 function go(payload) {
   const schema = Joi.object({
-    clearFilter: Joi.string(),
+    filter: Joi.string(),
     query: Joi.string()
       .trim()
-      .required()
       .max(MAX_LENGTH)
       .messages({
         'any.required': ERROR_MESSAGE,
         'string.base': ERROR_MESSAGE,
         'string.empty': ERROR_MESSAGE,
         'string.max': `Search query must be ${MAX_LENGTH} characters or less`
-      }),
+      })
+      .when('filter', { is: Joi.exist(), otherwise: Joi.required(), then: Joi.string().allow('') }),
     resultType: Joi.string()
   })
 

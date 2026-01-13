@@ -14,7 +14,7 @@ describe('Search - Search validator', () => {
   let payload
 
   describe('when a valid payload is provided', () => {
-    describe('because the user provided a search term and page number', () => {
+    describe('because the user provided a search term', () => {
       beforeEach(() => {
         payload = { query: 'This is a valid search term' }
       })
@@ -24,6 +24,32 @@ describe('Search - Search validator', () => {
 
         expect(result.error).to.not.exist()
         expect(result.value.query).to.equal('This is a valid search term')
+      })
+    })
+
+    describe('because the user clicked a filter button but did not provide a search term', () => {
+      beforeEach(() => {
+        payload = { filter: 'apply' }
+      })
+
+      it('confirms the search is valid', () => {
+        const result = SearchValidator.go(payload)
+
+        expect(result.error).to.not.exist()
+        expect(result.value.query).to.not.exist()
+      })
+    })
+
+    describe('because the user clicked a filter button but provided an empty search term', () => {
+      beforeEach(() => {
+        payload = { filter: 'clear', query: '' }
+      })
+
+      it('confirms the search is valid', () => {
+        const result = SearchValidator.go(payload)
+
+        expect(result.error).to.not.exist()
+        expect(result.value.query).to.equal('')
       })
     })
   })
