@@ -9,10 +9,10 @@ const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = La
 const { expect } = Code
 
 // Test helpers
-const NoticesFixture = require('../../../fixtures/notices.fixture.js')
+const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 const NotificationModel = require('../../../../app/models/notification.model.js')
-const NotificationsFixture = require('../../../fixtures/notifications.fixture.js')
+const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
 const { today } = require('../../../../app/lib/general.lib.js')
 const { yesterday } = require('../../../support/general.js')
 

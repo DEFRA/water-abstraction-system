@@ -9,7 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
+const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
 
 // Thing under test
 const PreparePaperReturnPresenter = require('../../../../app/presenters/notices/setup/prepare-paper-return.presenter.js')

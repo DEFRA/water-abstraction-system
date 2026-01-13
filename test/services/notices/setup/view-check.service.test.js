@@ -9,8 +9,8 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const NoticeSessionFixture = require('../../../fixtures/notice-session.fixture.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
+const NoticeSessionFixture = require('../../../support/fixtures/notice-session.fixture.js')
 
 // Things we need to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')

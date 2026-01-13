@@ -8,7 +8,7 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const NoticeSessionFixture = require('../../../../fixtures/notice-session.fixture.js')
+const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
 const RecipientsSeeder = require('../../../../support/seeders/recipients.seeder.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')

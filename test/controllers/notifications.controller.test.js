@@ -10,8 +10,8 @@ const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
-const NoticesFixture = require('../fixtures/notices.fixture.js')
-const NotificationsFixture = require('../fixtures/notifications.fixture.js')
+const NoticesFixture = require('../support/fixtures/notices.fixture.js')
+const NotificationsFixture = require('../support/fixtures/notifications.fixture.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
 

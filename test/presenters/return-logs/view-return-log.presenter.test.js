@@ -11,7 +11,7 @@ const { expect } = Code
 const ViewReturnLogPresenter = require('../../../app/presenters/return-logs/view-return-log.presenter.js')
 
 // Test helpers
-const ReturnLogsFixture = require('../../fixtures/return-logs.fixture.js')
+const ReturnLogsFixture = require('../../support/fixtures/return-logs.fixture.js')
 const { formatNumber } = require('../../../app/presenters/base.presenter.js')
 const { today } = require('../../../app/lib/general.lib.js')
 const { unitNames } = require('../../../app/lib/static-lookups.lib.js')

@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } = require('node:http2').constants
-const BillRunsReviewFixture = require('../../../fixtures/bill-runs-review.fixture.js')
+const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
 
 // Things we need to stub
 const CalculateChargeRequest = require('../../../../app/requests/charging-module/calculate-charge.request.js')
