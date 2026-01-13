@@ -47,7 +47,7 @@ function _financialYearsData(licenceSupplementaryYears, selectedYear) {
       financialYearsData.push({
         text: `${financialYearEnd - 1} to ${financialYearEnd}`,
         value: financialYearEnd,
-        checked: parseInt(selectedYear) === financialYearEnd
+        checked: Number.parseInt(selectedYear) === financialYearEnd
       })
     })
   }
