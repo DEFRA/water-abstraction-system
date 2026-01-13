@@ -22,7 +22,7 @@ const { determineFinancialYearEnd } = require('../../../lib/dates.lib.js')
  *
  * @param {string} chargeVersionId - The UUID for the charge version which has changed
  *
- * @returns {object} - An object containing the charge version and related SROC bill runs
+ * @returns {Promise<object>} - An object containing the charge version and related SROC bill runs
  */
 async function go(chargeVersionId) {
   const chargeVersion = await _fetchChargeVersion(chargeVersionId)

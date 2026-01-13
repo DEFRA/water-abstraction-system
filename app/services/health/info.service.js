@@ -31,7 +31,7 @@ const SERVICE_RUNNING_MESSAGE = 'Up and running'
  * Each data set is returned in the format needed to populate the gov.uk table elements ie. an array containing one
  * array per row, where each row array contains multiple `{ text: '...' }` elements, one for each cell in the row.
  *
- * @returns {object} data about each service formatted for the view
+ * @returns {Promise<object>} data about each service formatted for the view
  */
 async function go() {
   const addressFacadeData = await _addressFacadeData()

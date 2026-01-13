@@ -15,8 +15,8 @@ const SessionModel = require('../../../models/session.model.js')
  *
  * @param {string} sessionId - The UUID of the current session
  *
- * @returns {number} - The index of the new requirement. Needed by the setup pages so they know which requirement to
- * display and update
+ * @returns {Promise<number>} The index of the new requirement. Needed by the setup pages so they know which requirement
+ * to display and update
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)

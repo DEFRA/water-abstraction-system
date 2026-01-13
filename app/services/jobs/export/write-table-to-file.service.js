@@ -17,7 +17,7 @@ const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js
  * Converts data into CSV format and writes it to a file
  *
  * @param {string[]} headers - The table headers as an array
- * @param {object} rows - The rows of the table as an object
+ * @param {Promise<object[]>} rows - The rows of the table as an object
  * @param {string} schemaFolderPath - The folder path of the schema
  * @param {string} tableName - The name of the table
  */
