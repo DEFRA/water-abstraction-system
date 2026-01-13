@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
@@ -66,18 +67,7 @@ describe('Licences - View Contact Details service', () => {
       }
     ])
 
-    Sinon.stub(FetchCustomerContactsService, 'go').returns([
-      {
-        communicationType: 'Additional Contact',
-        email: 'dfd@email.com',
-        firstName: 'Donald',
-        initials: null,
-        lastName: 'Duck',
-        middleInitials: null,
-        salutation: null,
-        suffix: null
-      }
-    ])
+    Sinon.stub(FetchCustomerContactsService, 'go').returns(CustomersFixtures.companyContacts())
 
     Sinon.stub(FeatureFlagsConfig, 'enableCustomerView').value(true)
   })
@@ -100,8 +90,8 @@ describe('Licences - View Contact Details service', () => {
         customerContacts: [
           {
             communicationType: 'Additional Contact',
-            email: 'dfd@email.com',
-            name: 'Donald Duck'
+            email: 'rachael.tyrell@tyrellcorp.com',
+            name: 'Rachael Tyrell'
           }
         ],
         customerId: companyId,
