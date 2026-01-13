@@ -1,19 +1,19 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the 'customers/{id}/billing-accounts' page
+ * Orchestrates fetching and presenting the data for the 'customers/{id}/contacts' page
  *
- * @module BillingAccountsService
+ * @module ViewContactsService
  */
 
-const BillingAccountsPresenter = require('../../presenters/customers/billing-accounts.presenter.js')
-const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
+const ContactsPresenter = require('../../presenters/customers/contacts.presenter.js')
+const FetchContactsService = require('./fetch-company-contacts.service.js')
 const FetchCustomerService = require('./fetch-customer.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data for the 'customers/{id}/billing-accounts' page
+ * Orchestrates fetching and presenting the data for the 'customers/{id}/contacts' page
  *
  * @param {string} customerId - the UUID of the customer
  * @param {object} auth - The auth object taken from `request.auth` containing user details
@@ -24,21 +24,21 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
 async function go(customerId, auth, page) {
   const customer = await FetchCustomerService.go(customerId)
 
-  const { billingAccounts, pagination } = await FetchBillingAccountsService.go(customerId, page)
+  const { companyContacts, pagination } = await FetchContactsService.go(customerId, page)
 
-  const pageData = BillingAccountsPresenter.go(customer, billingAccounts)
+  const pageData = ContactsPresenter.go(customer, companyContacts)
 
   const paginationData = PaginatorPresenter.go(
     pagination.total,
     Number(page),
-    `/system/customers/${customerId}/billing-accounts`,
-    billingAccounts.length,
+    `/system/customers/${customerId}/contacts`,
+    companyContacts.length,
     'billing accounts'
   )
 
   return {
     activeNavBar: 'search',
-    activeSecondaryNav: 'billing-accounts',
+    activeSecondaryNav: 'contacts',
     ...pageData,
     pagination: paginationData,
     roles: userRoles(auth)
