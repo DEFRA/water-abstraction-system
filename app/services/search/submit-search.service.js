@@ -28,14 +28,7 @@ async function go(auth, payload, yar) {
   const validationResult = SearchValidator.go(payload)
 
   if (validationResult.error) {
-    const { query, resultType } = payload
-    const userScopes = auth.credentials.scope
-
-    return {
-      activeNavBar: 'search',
-      error: formatValidationResult(validationResult),
-      ...SearchPresenter.go(userScopes, query, resultType)
-    }
+    return _failedValidationResponse(auth, payload, validationResult)
   }
 
   // If no search query was provided, it can only have been a valid request if they clicked on a filter button, but with
@@ -52,6 +45,17 @@ async function go(auth, payload, yar) {
   }
 
   return { redirect: '/system/search?page=1' }
+}
+
+function _failedValidationResponse(auth, payload, validationResult) {
+  const { query, resultType } = payload
+  const userScopes = auth.credentials.scope
+
+  return {
+    activeNavBar: 'search',
+    error: formatValidationResult(validationResult),
+    ...SearchPresenter.go(userScopes, query, resultType)
+  }
 }
 
 module.exports = {
