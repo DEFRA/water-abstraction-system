@@ -59,19 +59,11 @@ describe('Search - Fetch Search Results service', () => {
 
     licence = await LicenceHelper.add({ licenceRef: '02/01/TESTHOLDERSEARCH01/05' })
     licenceHolderSeedData = await LicenceHolderSeeder.seed(licence.licenceRef, 'TESTSEARCH holder 2')
-    licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-      licenceRef: licence.licenceRef,
-      metadata: { contacts: [{ name: 'TESTSEARCH holder 2', role: 'Licence holder' }] }
-    })
-    licenceHolders.push({ licence, licenceDocumentHeader, licenceHolderSeedData })
+    licenceHolders.push({ licence, licenceHolderSeedData })
 
     licence = await LicenceHelper.add({ licenceRef: '01/02/TESTHOLDERSEARCH02/06' })
     licenceHolderSeedData = await LicenceHolderSeeder.seed(licence.licenceRef, 'TESTSEARCH holder 11')
-    licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-      licenceRef: licence.licenceRef,
-      metadata: { contacts: [{ name: 'TESTSEARCH holder 11', role: 'Licence holder' }] }
-    })
-    licenceHolders.push({ licence, licenceDocumentHeader, licenceHolderSeedData })
+    licenceHolders.push({ licence, licenceHolderSeedData })
 
     // Add the licences in non-alphabetical order to prove the ordering in the results
 
@@ -168,12 +160,12 @@ describe('Search - Fetch Search Results service', () => {
           },
           {
             exact: false,
-            id: licenceHolders[1].licenceDocumentHeader.id,
+            id: licenceHolders[1].licenceHolderSeedData.companyId,
             type: 'licenceHolder'
           },
           {
             exact: false,
-            id: licenceHolders[0].licenceDocumentHeader.id,
+            id: licenceHolders[0].licenceHolderSeedData.companyId,
             type: 'licenceHolder'
           },
           {
@@ -431,12 +423,12 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: licenceHolders[1].licenceDocumentHeader.id,
+              id: licenceHolders[1].licenceHolderSeedData.companyId,
               type: 'licenceHolder'
             },
             {
               exact: false,
-              id: licenceHolders[0].licenceDocumentHeader.id,
+              id: licenceHolders[0].licenceHolderSeedData.companyId,
               type: 'licenceHolder'
             }
           ],
@@ -457,7 +449,7 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: licenceHolders[1].licenceDocumentHeader.id,
+              id: licenceHolders[1].licenceHolderSeedData.companyId,
               type: 'licenceHolder'
             }
           ],
@@ -478,12 +470,12 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: licenceHolders[1].licenceDocumentHeader.id,
+              id: licenceHolders[1].licenceHolderSeedData.companyId,
               type: 'licenceHolder'
             },
             {
               exact: false,
-              id: licenceHolders[0].licenceDocumentHeader.id,
+              id: licenceHolders[0].licenceHolderSeedData.companyId,
               type: 'licenceHolder'
             }
           ],
@@ -519,7 +511,7 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: true,
-              id: licenceHolders[1].licenceDocumentHeader.id,
+              id: licenceHolders[1].licenceHolderSeedData.companyId,
               type: 'licenceHolder'
             }
           ],

@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Things to stub
 const BillingAccountModel = require('../../../app/models/billing-account.model.js')
-const LicenceDocumentHeaderModel = require('../../../app/models/licence-document-header.model.js')
+const CompanyModel = require('../../../app/models/company.model.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
 const MonitoringStationModel = require('../../../app/models/monitoring-station.model.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
@@ -23,7 +23,7 @@ describe('Search - Fetch Search Results Details service', () => {
   let idsByType
 
   let billingAccountSpy
-  let licenceDocumentHeaderSpy
+  let companySpy
   let licenceSpy
   let monitoringStationSpy
   let returnLogSpy
@@ -45,9 +45,9 @@ describe('Search - Fetch Search Results Details service', () => {
       withGraphFetched: Sinon.stub().returnsThis()
     })
 
-    licenceDocumentHeaderSpy = Sinon.stub().resolves([])
-    Sinon.stub(LicenceDocumentHeaderModel, 'query').returns({
-      findByIds: licenceDocumentHeaderSpy,
+    companySpy = Sinon.stub().resolves([])
+    Sinon.stub(CompanyModel, 'query').returns({
+      findByIds: companySpy,
       withGraphFetched: Sinon.stub().returnsThis()
     })
 
@@ -118,7 +118,7 @@ describe('Search - Fetch Search Results Details service', () => {
 
       expect(billingAccountSpy.calledOnce).to.be.true()
       expect(billingAccountSpy.firstCall.args[0]).to.equal([1, 2])
-      expect(licenceDocumentHeaderSpy.called).to.be.false()
+      expect(companySpy.called).to.be.false()
       expect(licenceSpy.called).to.be.false()
       expect(monitoringStationSpy.called).to.be.false()
       expect(returnLogSpy.called).to.be.false()
@@ -137,8 +137,8 @@ describe('Search - Fetch Search Results Details service', () => {
       expect(result).to.equal({ licenceHolder: [] })
 
       expect(billingAccountSpy.called).to.be.false()
-      expect(licenceDocumentHeaderSpy.calledOnce).to.be.true()
-      expect(licenceDocumentHeaderSpy.firstCall.args[0]).to.equal([3, 4])
+      expect(companySpy.calledOnce).to.be.true()
+      expect(companySpy.firstCall.args[0]).to.equal([3, 4])
       expect(licenceSpy.called).to.be.false()
       expect(monitoringStationSpy.called).to.be.false()
       expect(returnLogSpy.called).to.be.false()
@@ -157,7 +157,7 @@ describe('Search - Fetch Search Results Details service', () => {
       expect(result).to.equal({ licence: [] })
 
       expect(billingAccountSpy.called).to.be.false()
-      expect(licenceDocumentHeaderSpy.called).to.be.false()
+      expect(companySpy.called).to.be.false()
       expect(licenceSpy.calledOnce).to.be.true()
       expect(licenceSpy.firstCall.args[0]).to.equal([5, 6])
       expect(monitoringStationSpy.called).to.be.false()
@@ -177,7 +177,7 @@ describe('Search - Fetch Search Results Details service', () => {
       expect(result).to.equal({ monitoringStation: [] })
 
       expect(billingAccountSpy.called).to.be.false()
-      expect(licenceDocumentHeaderSpy.called).to.be.false()
+      expect(companySpy.called).to.be.false()
       expect(licenceSpy.called).to.be.false()
       expect(monitoringStationSpy.calledOnce).to.be.true()
       expect(monitoringStationSpy.firstCall.args[0]).to.equal([7, 8])
@@ -197,7 +197,7 @@ describe('Search - Fetch Search Results Details service', () => {
       expect(result).to.equal({ returnLog: [] })
 
       expect(billingAccountSpy.called).to.be.false()
-      expect(licenceDocumentHeaderSpy.called).to.be.false()
+      expect(companySpy.called).to.be.false()
       expect(licenceSpy.called).to.be.false()
       expect(monitoringStationSpy.called).to.be.false()
       expect(returnLogSpy.calledOnce).to.be.true()
@@ -217,7 +217,7 @@ describe('Search - Fetch Search Results Details service', () => {
       expect(result).to.equal({ user: [] })
 
       expect(billingAccountSpy.called).to.be.false()
-      expect(licenceDocumentHeaderSpy.called).to.be.false()
+      expect(companySpy.called).to.be.false()
       expect(licenceSpy.called).to.be.false()
       expect(monitoringStationSpy.called).to.be.false()
       expect(returnLogSpy.called).to.be.false()
