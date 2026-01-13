@@ -19,59 +19,71 @@ const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js'
 // Thing under test
 const FetchCustomerContactDetailsService = require('../../../app/services/licences/fetch-customer-contacts.service.js')
 
-describe('Fetch Customer Contacts service', () => {
-  let companyId
-  let contactId
-  let licenceId
+describe('Licences - Fetch Customer Contacts service', () => {
+  let company
+  let companyContact
+  let contact
+  let licence
+  let licenceRole
 
   describe('when the licence has customer contact details', () => {
     beforeEach(async () => {
-      const licence = await LicenceHelper.add()
+      licence = await LicenceHelper.add()
 
-      licenceId = licence.id
+      company = await CompanyHelper.add()
 
-      const company = await CompanyHelper.add()
-
-      companyId = company.id
-
-      const contact = await ContactHelper.add()
-
-      contactId = contact.id
+      contact = await ContactHelper.add()
 
       const { id: licenceDocumentId } = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
-      const { id: licenceRoleId } = await LicenceRoleHelper.select()
+      licenceRole = await LicenceRoleHelper.select()
 
-      await CompanyContactHelper.add({
-        companyId,
-        contactId,
-        licenceRoleId
+      companyContact = await CompanyContactHelper.add({
+        companyId: company.id,
+        contactId: contact.id,
+        licenceRoleId: licenceRole.id
       })
 
       await LicenceDocumentRoleHelper.add({
-        companyId,
-        contactId,
+        companyId: company.id,
+        contactId: contact.id,
         endDate: null,
         licenceDocumentId,
-        licenceRoleId
+        licenceRoleId: licenceRole.id
+      })
+
+      // additional licence role in the past
+      await LicenceDocumentRoleHelper.add({
+        companyId: company.id,
+        contactId: contact.id,
+        startDate: new Date('2001-01-01'),
+        endDate: new Date('2001-01-01'),
+        licenceDocumentId,
+        licenceRoleId: licenceRole.id
       })
     })
 
     it('returns the matching licence customer contacts', async () => {
-      const results = await FetchCustomerContactDetailsService.go(licenceId)
+      const results = await FetchCustomerContactDetailsService.go(licence.id)
 
       expect(results).to.equal([
         {
-          communicationType: 'Licence Holder',
-          contactType: 'person',
-          dataSource: 'wrls',
-          department: null,
-          email: 'amara.gupta@example.com',
-          firstName: 'Amara',
-          initials: null,
-          lastName: 'Gupta',
-          middleInitials: null,
-          salutation: null,
-          suffix: null
+          id: companyContact.id,
+          abstractionAlerts: false,
+          contact: {
+            id: contact.id,
+            salutation: null,
+            firstName: 'Amara',
+            middleInitials: null,
+            lastName: 'Gupta',
+            initials: null,
+            contactType: 'person',
+            suffix: null,
+            department: null,
+            email: 'amara.gupta@example.com'
+          },
+          licenceRole: {
+            label: licenceRole.label
+          }
         }
       ])
     })
