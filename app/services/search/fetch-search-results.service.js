@@ -27,7 +27,7 @@ const BILLING_ACCOUNT_SQL = `
 // type of record
 const ID_FIELD_FOR_TABLE = {
   billingAccount: 'row_uu_id',
-  licenceHolder: 'row_text_id',
+  licenceHolder: 'row_uu_id',
   licence: 'row_uu_id',
   monitoringStation: 'row_uu_id',
   // returnLog does have a UUID but currently the defined ID field is a text field
@@ -35,32 +35,23 @@ const ID_FIELD_FOR_TABLE = {
   user: 'row_int_id'
 }
 
-// Knex doesn't fully support/understand PostgreSQL JSONB path query syntax, so any question marks in the query get
-// interpreted by Knex as placeholders for query parameters, which it then replaces with whatever actual parameter value
-// we have provided to the query.
-// To prevent this, we define a placeholder parameter for the JSONB path query in our main query and then pass this
-// JSONB path query in as the parameter value.
-const LICENCE_HOLDER_ROLE_JSONB_PATH_QUERY = '$[*] ? (@.role == "Licence holder")'
-
 const LICENCE_HOLDER_SQL = `
-  SELECT
-    'licenceHolder' AS row_type,
-    CAST (NULL AS UUID) AS row_uu_id,
-    id AS row_text_id,
-    CAST (NULL AS INT) AS row_int_id,
-    dh.holder->>'name' ILIKE ? AS exact,
-    2 AS table_order,
-    CONCAT(
-      LOWER(dh.holder->>'name'), ' ',
-      LOWER(COALESCE(dh.holder->>'forename', dh.holder->>'initials')), ' ',
-      LOWER(dh.holder->>'salutation'
-    ), dh.licence_ref) AS row_order,
-    CAST (NULL AS DATE) AS date_order
-  FROM (
-    SELECT id, licence_ref, jsonb_path_query_first(metadata->'contacts', ?) AS holder
-    FROM licence_document_headers
-  ) dh
-  WHERE dh.holder->>'name' ILIKE ?
+SELECT
+  'licenceHolder' AS row_type,
+  c.id AS row_uu_id,
+  NULL AS row_text_id,
+  CAST (NULL AS INT) AS row_int_id,
+  c."name" ILIKE ? AS exact,
+  2 AS table_order,
+  LOWER(c."name") AS row_order,
+  CAST (NULL AS DATE) AS date_order
+FROM
+  companies c
+WHERE
+  EXISTS (SELECT 1 FROM licence_document_roles ldr
+    INNER JOIN licence_roles lr ON lr.id = ldr.licence_role_id
+    WHERE lr."name" = 'licenceHolder' AND ldr.company_id = c.id)
+  AND c."name" ILIKE ?
 `
 
 const LICENCE_SQL = `
@@ -204,12 +195,17 @@ function _exactQuery(query) {
 function _licenceHolderSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) {
   if (resultTypes.includes('licenceHolder')) {
     searchSqls.statements.push(LICENCE_HOLDER_SQL)
-    searchSqls.params.push(exactQuery, LICENCE_HOLDER_ROLE_JSONB_PATH_QUERY, partialQuery)
+    searchSqls.params.push(exactQuery, partialQuery)
 
     countSqls.statements.push(`
-      (SELECT COUNT(*) FROM licence_document_headers WHERE jsonb_path_query_first(metadata->'contacts', ?)->>'name' ILIKE ?)
+      (SELECT COUNT(*) FROM companies c
+      WHERE
+        EXISTS (SELECT 1 FROM licence_document_roles ldr
+          INNER JOIN licence_roles lr ON lr.id = ldr.licence_role_id
+          WHERE lr."name" = 'licenceHolder' AND ldr.company_id = c.id)
+        AND c."name" ILIKE ?)
     `)
-    countSqls.params.push(LICENCE_HOLDER_ROLE_JSONB_PATH_QUERY, partialQuery)
+    countSqls.params.push(partialQuery)
   }
 }
 

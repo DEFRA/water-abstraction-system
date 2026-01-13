@@ -6,7 +6,7 @@
  */
 
 const BillingAccountModel = require('../../models/billing-account.model.js')
-const LicenceDocumentHeaderModel = require('../../models/licence-document-header.model.js')
+const CompanyModel = require('../../models/company.model.js')
 const LicenceModel = require('../../models/licence.model.js')
 const MonitoringStationModel = require('../../models/monitoring-station.model.js')
 const ReturnLogModel = require('../../models/return-log.model.js')
@@ -41,7 +41,7 @@ async function _findByType(type, ids) {
     case 'billingAccount':
       return BillingAccountModel.query().withGraphFetched('company').findByIds(ids)
     case 'licenceHolder':
-      return LicenceDocumentHeaderModel.query().withGraphFetched('licence').findByIds(ids)
+      return CompanyModel.query().withGraphFetched('licenceDocumentRoles.[licenceRole]').findByIds(ids)
     case 'licence':
       return LicenceModel.query().withGraphFetched('licenceDocumentHeader').findByIds(ids)
     case 'monitoringStation':
