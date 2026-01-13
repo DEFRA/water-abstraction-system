@@ -6,6 +6,7 @@
  */
 
 const CompanyContactModel = require('../../models/company-contact.model.js')
+const { db } = require('../../../db/db.js')
 
 /**
  * Fetches all customer contacts for a licence which is needed for the view '/licences/{id}/contact-details` page
@@ -21,6 +22,13 @@ async function go(licenceId) {
 async function _fetch(licenceId) {
   return CompanyContactModel.query()
     .select(['companyContacts.id', 'abstractionAlerts'])
+    .innerJoin('licenceDocumentRoles AS ldr', 'ldr.company_id', '=', 'companyContacts.companyId')
+    .innerJoin('licenceDocuments AS ld', 'ld.id', '=', 'ldr.licenceDocumentId')
+    .innerJoin('licences AS l', 'l.licenceRef', '=', 'ld.licenceRef')
+    .where('l.id', licenceId)
+    .andWhere((builder) => {
+      builder.whereNull('ldr.end_date').orWhere('ldr.end_date', '>', db.raw('NOW()'))
+    })
     .withGraphFetched('contact')
     .modifyGraph('contact', (contactBuilder) => {
       contactBuilder.select([
@@ -40,10 +48,6 @@ async function _fetch(licenceId) {
     .modifyGraph('licenceRole', (licenceRoleBuilder) => {
       licenceRoleBuilder.select(['label'])
     })
-    .innerJoin('licenceDocumentRoles AS ldr', 'ldr.company_id', '=', 'companyContacts.companyId')
-    .innerJoin('licenceDocuments AS ld', 'ld.id', '=', 'ldr.licenceDocumentId')
-    .innerJoin('licences AS l', 'l.licenceRef', '=', 'ld.licenceRef')
-    .where('l.id', licenceId)
 }
 
 module.exports = {

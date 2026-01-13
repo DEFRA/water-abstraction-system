@@ -50,6 +50,16 @@ describe('Licences - Fetch Customer Contacts service', () => {
         licenceDocumentId,
         licenceRoleId: licenceRole.id
       })
+
+      // additional licence role in the past
+      await LicenceDocumentRoleHelper.add({
+        companyId: company.id,
+        contactId: contact.id,
+        startDate: new Date('2001-01-01'),
+        endDate: new Date('2001-01-01'),
+        licenceDocumentId,
+        licenceRoleId: licenceRole.id
+      })
     })
 
     it('returns the matching licence customer contacts', async () => {
