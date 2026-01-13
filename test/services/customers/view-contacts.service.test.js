@@ -16,9 +16,9 @@ const FetchCompanyContactsService = require('../../../app/services/customers/fet
 const FetchCustomerService = require('../../../app/services/customers/fetch-customer.service.js')
 
 // Thing under test
-const ContactsService = require('../../../app/services/customers/contacts.service.js')
+const ViewContactsService = require('../../../app/services/customers/view-contacts.service.js')
 
-describe('Customers - Contacts Service', () => {
+describe('Customers - View Contacts Service', () => {
   let auth
   let customer
   let companyContacts
@@ -44,7 +44,7 @@ describe('Customers - Contacts Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ContactsService.go(customer.id, auth, page)
+      const result = await ViewContactsService.go(customer.id, auth, page)
 
       expect(result).to.equal({
         activeNavBar: 'search',

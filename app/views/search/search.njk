@@ -34,16 +34,18 @@
 
   <div class="govuk-button-group">
     {{ govukButton({
+      name: "filter",
       preventDoubleClick: true,
-      text: "Apply filter"
+      text: "Apply filter",
+      value: "apply"
     }) }}
 
     {{ govukButton({
       classes: "govuk-button--secondary",
-      name: "clearFilter",
+      name: "filter",
       preventDoubleClick: true,
       text: "Clear filter",
-      value: 'reset'
+      value: "clear"
     }) }}
   </div>
 {% endset %}

@@ -28,24 +28,34 @@ async function go(auth, payload, yar) {
   const validationResult = SearchValidator.go(payload)
 
   if (validationResult.error) {
-    const { query, resultType } = payload
-    const userScopes = auth.credentials.scope
+    return _failedValidationResponse(auth, payload, validationResult)
+  }
 
-    return {
-      activeNavBar: 'search',
-      error: formatValidationResult(validationResult),
-      ...SearchPresenter.go(userScopes, query, resultType)
-    }
+  // If no search query was provided, it can only have been a valid request if they clicked on a filter button, but with
+  // no search query there's nothing to filter, so just redirect back to the main search page
+  if (!validationResult.value.query) {
+    return { redirect: '/system/search' }
   }
 
   yar.set('searchQuery', validationResult.value.query)
-  if (validationResult.value.clearFilter === 'reset') {
+  if (validationResult.value.filter === 'clear') {
     yar.set('searchResultType', 'all')
   } else {
     yar.set('searchResultType', validationResult.value.resultType)
   }
 
   return { redirect: '/system/search?page=1' }
+}
+
+function _failedValidationResponse(auth, payload, validationResult) {
+  const { query, resultType } = payload
+  const userScopes = auth.credentials.scope
+
+  return {
+    activeNavBar: 'search',
+    error: formatValidationResult(validationResult),
+    ...SearchPresenter.go(userScopes, query, resultType)
+  }
 }
 
 module.exports = {

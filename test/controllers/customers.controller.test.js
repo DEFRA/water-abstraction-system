@@ -13,9 +13,9 @@ const { expect } = Code
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
-const BillingAccountsService = require('../../app/services/customers/billing-accounts.service.js')
-const ContactsService = require('../../app/services/customers/contacts.service.js')
-const LicencesService = require('../../app/services/customers/licences.service.js')
+const ViewBillingAccountsService = require('../../app/services/customers/view-billing-accounts.service.js')
+const ViewContactsService = require('../../app/services/customers/view-contacts.service.js')
+const ViewLicencesService = require('../../app/services/customers/view-licences.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -55,7 +55,7 @@ describe('Customers controller', () => {
             }
           }
 
-          Sinon.stub(BillingAccountsService, 'go').returns({ pageTitle: 'Billing accounts', roles: ['billing'] })
+          Sinon.stub(ViewBillingAccountsService, 'go').returns({ pageTitle: 'Billing accounts', roles: ['billing'] })
         })
 
         it('returns the page successfully', async () => {
@@ -77,7 +77,7 @@ describe('Customers controller', () => {
             }
           }
 
-          Sinon.stub(BillingAccountsService, 'go').returns({ pageTitle: 'Billing accounts', roles: [] })
+          Sinon.stub(ViewBillingAccountsService, 'go').returns({ pageTitle: 'Billing accounts', roles: [] })
         })
 
         it('returns "page not found"', async () => {
@@ -102,7 +102,7 @@ describe('Customers controller', () => {
           }
         }
 
-        Sinon.stub(ContactsService, 'go').returns({ pageTitle: 'Contacts', roles: [] })
+        Sinon.stub(ViewContactsService, 'go').returns({ pageTitle: 'Contacts', roles: [] })
       })
 
       it('returns the page successfully', async () => {
@@ -126,7 +126,7 @@ describe('Customers controller', () => {
           }
         }
 
-        Sinon.stub(LicencesService, 'go').returns({ pageTitle: 'Licences', roles: [] })
+        Sinon.stub(ViewLicencesService, 'go').returns({ pageTitle: 'Licences', roles: [] })
       })
 
       it('returns the page successfully', async () => {

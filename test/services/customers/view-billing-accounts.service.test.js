@@ -12,16 +12,17 @@ const { expect } = Code
 const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 
 // Things we need to stub
+const FetchBillingAccountsService = require('../../../app/services/customers/fetch-billing-accounts.service.js')
 const FetchCustomerService = require('../../../app/services/customers/fetch-customer.service.js')
-const FetchLicencesService = require('../../../app/services/customers/fetch-licences.service.js')
 
 // Thing under test
-const LicencesService = require('../../../app/services/customers/licences.service.js')
+const ViewBillingAccountsService = require('../../../app/services/customers/view-billing-accounts.service.js')
 
-describe('Customers - Licences Service', () => {
+describe('Customers - View Billing Accounts Service', () => {
   let auth
+  let billingAccount
+  let billingAccounts
   let customer
-  let licences
   let page
 
   beforeEach(async () => {
@@ -29,11 +30,14 @@ describe('Customers - Licences Service', () => {
 
     customer = CustomersFixtures.customer()
 
-    licences = CustomersFixtures.licences()
+    billingAccounts = CustomersFixtures.billingAccounts()
+
+    billingAccount = billingAccounts[0]
 
     Sinon.stub(FetchCustomerService, 'go').returns(customer)
-    Sinon.stub(FetchLicencesService, 'go').returns({
-      licences,
+
+    Sinon.stub(FetchBillingAccountsService, 'go').returns({
+      billingAccounts,
       pagination: { total: 1 }
     })
 
@@ -46,29 +50,35 @@ describe('Customers - Licences Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await LicencesService.go(customer.id, auth, page)
+      const result = await ViewBillingAccountsService.go(customer.id, auth, page)
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        activeSecondaryNav: 'licences',
+        activeSecondaryNav: 'billing-accounts',
         backLink: {
           href: '/',
           text: 'Back to search'
         },
-        licences: [
+        billingAccounts: [
           {
-            endDate: null,
-            id: licences[0].id,
-            licenceName: 'Between Two Tyrell',
-            licenceRef: licences[0].licenceRef,
-            startDate: '1 January 2022'
+            accountNumber: billingAccount.accountNumber,
+            address: [
+              'Tyrell Corporation',
+              'ENVIRONMENT AGENCY',
+              'HORIZON HOUSE',
+              'DEANERY ROAD',
+              'BRISTOL',
+              'BS1 5AH',
+              'United Kingdom'
+            ],
+            link: `/system/billing-accounts/${billingAccount.id}?company-id=${billingAccount.company.id}`
           }
         ],
-        pageTitle: 'Licences',
+        pageTitle: 'Billing accounts',
         pageTitleCaption: 'Tyrell Corporation',
         pagination: {
           numberOfPages: 1,
-          showingMessage: 'Showing all 1 licences'
+          showingMessage: 'Showing all 1 billing accounts'
         },
         roles: []
       })

@@ -1,19 +1,19 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the 'customers/{id}/licences' page
+ * Orchestrates fetching and presenting the data for the 'customers/{id}/billing-accounts' page
  *
- * @module LicencesService
+ * @module ViewBillingAccountsService
  */
 
-const LicencesPresenter = require('../../presenters/customers/licences.presenter.js')
+const BillingAccountsPresenter = require('../../presenters/customers/billing-accounts.presenter.js')
+const FetchBillingAccountsService = require('./fetch-billing-accounts.service.js')
 const FetchCustomerService = require('./fetch-customer.service.js')
-const FetchLicencesService = require('./fetch-licences.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data for the 'customers/{id}/licences' page
+ * Orchestrates fetching and presenting the data for the 'customers/{id}/billing-accounts' page
  *
  * @param {string} customerId - the UUID of the customer
  * @param {object} auth - The auth object taken from `request.auth` containing user details
@@ -24,21 +24,21 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
 async function go(customerId, auth, page) {
   const customer = await FetchCustomerService.go(customerId)
 
-  const { licences, pagination } = await FetchLicencesService.go(customerId, page)
+  const { billingAccounts, pagination } = await FetchBillingAccountsService.go(customerId, page)
 
-  const pageData = LicencesPresenter.go(customer, licences)
+  const pageData = BillingAccountsPresenter.go(customer, billingAccounts)
 
   const paginationData = PaginatorPresenter.go(
     pagination.total,
     Number(page),
-    `/system/customers/${customerId}/licences`,
-    licences.length,
-    'licences'
+    `/system/customers/${customerId}/billing-accounts`,
+    billingAccounts.length,
+    'billing accounts'
   )
 
   return {
     activeNavBar: 'search',
-    activeSecondaryNav: 'licences',
+    activeSecondaryNav: 'billing-accounts',
     ...pageData,
     pagination: paginationData,
     roles: userRoles(auth)
