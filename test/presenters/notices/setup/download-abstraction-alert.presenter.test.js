@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
 
 // Thing under test
 const DownloadAbstractionAlertPresenter = require('../../../../app/presenters/notices/setup/download-abstraction-alert.presenter.js')

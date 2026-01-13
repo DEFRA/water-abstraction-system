@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const LicenceModel = require('../../../app/models/licence.model.js')
-const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
+const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
 
 // Thing under test
 const SummaryHeadingPresenter = require('../../../app/presenters/licences/summary-heading.presenter.js')

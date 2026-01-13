@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const ReturnCyclesFixture = require('../../fixtures/return-cycles.fixture.js')
+const ReturnCyclesFixture = require('../../support/fixtures/return-cycles.fixture.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnRequirementsFixture = require('../../fixtures/return-requirements.fixture.js')
+const ReturnRequirementsFixture = require('../../support/fixtures/return-requirements.fixture.js')
 const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
 
 // Things we need to stub

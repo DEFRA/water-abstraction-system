@@ -10,9 +10,9 @@ const { expect } = Code
 
 // Test helpers
 const EventModel = require('../../../../app/models/event.model.js')
-const NoticesFixture = require('../../../fixtures/notices.fixture.js')
+const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
 const NotificationModel = require('../../../../app/models/notification.model.js')
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
 const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
