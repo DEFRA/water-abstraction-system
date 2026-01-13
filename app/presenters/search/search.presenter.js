@@ -150,21 +150,44 @@ function _licence(licence) {
   }
 }
 
+/**
+ * Count the number of unique licences linked through the given licence document roles for a company
+ *
+ * We count *all* the linked licences, regardless of whether the company is listed as the licence holder on them or not.
+ * This is so that the count matches the number of licences shown on the licence holder's customer page.
+ *
+ * Otherwise, we would filter the roles to only those where the company is the licence holder:
+ * ```
+ * .filter((role) => {
+ *   return role.licenceRole.name === 'licenceHolder'
+ * })
+ * ```
+ *
+ * @private
+ */
+function _licenceCount(licenceDocumentRoles) {
+  const licenceIds = licenceDocumentRoles.map((role) => {
+    return role.licenceDocumentId
+  })
+
+  const uniqueLicenceIds = [...new Set(licenceIds)]
+  return uniqueLicenceIds.length
+}
+
 function _licenceHolder(licenceHolder) {
   const { exact, model } = licenceHolder
-  const {
-    licence: { id, licenceRef }
-  } = model
 
-  const { holderName, holderType } = _licenceHolderDetail(model)
+  const { id, licenceDocumentRoles, name: holderName, type } = model
+
+  const licenceCount = _licenceCount(licenceDocumentRoles)
 
   return {
-    col2Title: 'Licence',
-    col2Value: licenceRef,
+    col2Title: 'Number of licences',
+    col2Value: licenceCount,
     col3Title: 'Type',
-    col3Value: holderType,
+    col3Value: type,
     exact,
-    link: `/system/licences/${id}/summary`,
+    link: `/system/customers/${id}/licences`,
     reference: holderName,
     statusTag: null,
     type: 'Holder'

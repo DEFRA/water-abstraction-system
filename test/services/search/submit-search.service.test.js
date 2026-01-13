@@ -111,9 +111,9 @@ describe('Search - Submit Search service', () => {
     })
   })
 
-  describe('when called called to clear the filter', () => {
+  describe('when called to clear the filter', () => {
     beforeEach(() => {
-      payload = { query: 'searchthis', resultType: 'monitoringStation', clearFilter: 'reset' }
+      payload = { query: 'searchthis', resultType: 'monitoringStation', filter: 'clear' }
     })
 
     it('sets the session value and returns a redirect to the search results page', async () => {
@@ -122,6 +122,32 @@ describe('Search - Submit Search service', () => {
       expect(yarSpy.calledWithExactly('searchQuery', 'searchthis')).to.be.true()
       expect(yarSpy.calledWithExactly('searchResultType', 'all')).to.be.true()
       expect(result).to.equal({ redirect: '/system/search?page=1' })
+    })
+  })
+
+  describe('when called to apply the filter without a search query', () => {
+    beforeEach(() => {
+      payload = { query: '', resultType: 'monitoringStation', filter: 'apply' }
+    })
+
+    it('redirects to the blank search page without setting session values', async () => {
+      const result = await SubmitSearchService.go(auth, payload, yar)
+
+      expect(yarSpy.called).to.be.false()
+      expect(result).to.equal({ redirect: '/system/search' })
+    })
+  })
+
+  describe('when called to clear the filter without a search query', () => {
+    beforeEach(() => {
+      payload = { query: '', resultType: 'monitoringStation', filter: 'clear' }
+    })
+
+    it('redirects to the blank search page without setting session values', async () => {
+      const result = await SubmitSearchService.go(auth, payload, yar)
+
+      expect(yarSpy.called).to.be.false()
+      expect(result).to.equal({ redirect: '/system/search' })
     })
   })
 })
