@@ -5,6 +5,7 @@
  * @module FetchCustomerContactsService
  */
 
+const CompanyContactModel = require('../../models/company-contact.model.js')
 const { db } = require('../../../db/db.js')
 
 /**
@@ -19,32 +20,34 @@ async function go(licenceId) {
 }
 
 async function _fetch(licenceId) {
-  return db
-    .withSchema('public')
-    .select([
-      'con.contact_type',
-      'con.data_source',
-      'con.department',
-      'con.email',
-      'con.firstName',
-      'con.initials',
-      'con.lastName',
-      'con.middle_initials',
-      'con.salutation',
-      'con.suffix',
-      'lr.label AS communicationType'
-    ])
-    .distinct()
-    .from('licenceDocuments AS ld')
+  return CompanyContactModel.query()
+    .select(['companyContacts.id', 'abstractionAlerts'])
+    .innerJoin('licenceDocumentRoles AS ldr', 'ldr.company_id', '=', 'companyContacts.companyId')
+    .innerJoin('licenceDocuments AS ld', 'ld.id', '=', 'ldr.licenceDocumentId')
     .innerJoin('licences AS l', 'l.licenceRef', '=', 'ld.licenceRef')
-    .innerJoin('licenceDocumentRoles AS ldr', 'ldr.licenceDocumentId', '=', 'ld.id')
-    .where('l.id', '=', licenceId)
+    .where('l.id', licenceId)
     .andWhere((builder) => {
       builder.whereNull('ldr.end_date').orWhere('ldr.end_date', '>', db.raw('NOW()'))
     })
-    .innerJoin('companyContacts AS cct', 'cct.companyId', '=', 'ldr.companyId')
-    .innerJoin('contacts AS con', 'con.id', '=', 'cct.contactId')
-    .innerJoin('licenceRoles AS lr', 'lr.id', '=', 'cct.licenceRoleId')
+    .withGraphFetched('contact')
+    .modifyGraph('contact', (contactBuilder) => {
+      contactBuilder.select([
+        'id',
+        'salutation',
+        'firstName',
+        'middleInitials',
+        'lastName',
+        'initials',
+        'contactType',
+        'suffix',
+        'department',
+        'email'
+      ])
+    })
+    .withGraphFetched('licenceRole')
+    .modifyGraph('licenceRole', (licenceRoleBuilder) => {
+      licenceRoleBuilder.select(['label'])
+    })
 }
 
 module.exports = {

@@ -5,7 +5,7 @@
  * @module CustomerContactsPresenter
  */
 
-const ContactModel = require('../../models/contact.model.js')
+const { companyContact } = require('../customer.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/contact-details` view customer contact details page
@@ -21,19 +21,9 @@ function go(customerContacts) {
   }
 }
 
-function _buildCustomerName(customer) {
-  const contact = ContactModel.fromJson(customer)
-
-  return contact.$name()
-}
-
 function _customerContacts(customerContacts) {
   return customerContacts.map((customer) => {
-    return {
-      email: customer.email,
-      name: _buildCustomerName(customer),
-      communicationType: customer.communicationType
-    }
+    return companyContact(customer)
   })
 }
 
