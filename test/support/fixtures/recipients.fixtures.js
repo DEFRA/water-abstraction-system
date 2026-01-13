@@ -2,10 +2,10 @@
 
 const crypto = require('node:crypto')
 
-const { futureDueDate } = require('../../app/presenters/notices/base.presenter.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
-const { generateReference } = require('../support/helpers/return-requirement.helper.js')
+const { futureDueDate } = require('../../../app/presenters/notices/base.presenter.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../helpers/licence.helper.js')
+const { generateReference } = require('../helpers/return-requirement.helper.js')
 
 /**
  * Creates a fixture for an ad-hoc additional email recipient

@@ -1,8 +1,8 @@
 'use strict'
 
-const { generateAccountNumber } = require('../support/helpers/billing-account.helper.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
+const { generateAccountNumber } = require('../helpers/billing-account.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../helpers/licence.helper.js')
 
 /**
  * Represents a bill run object with generated UUIDs for the ID and external ID
