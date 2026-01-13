@@ -9,6 +9,7 @@ exports.up = function (knex) {
 
     // Data
     table.uuid('review_licence_id').notNullable()
+    table.uuid('return_log_id').notNullable()
     table.string('return_id').notNullable()
     table.string('return_reference').notNullable()
     // Specifying `null, null` creates a decimal column that can store numbers of any precision and scale
