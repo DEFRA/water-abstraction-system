@@ -13,9 +13,9 @@ const { expect } = Code
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
-const BillingAccountsService = require('../../app/services/customers/billing-accounts.service.js')
-const ContactsService = require('../../app/services/customers/contacts.service.js')
-const LicencesService = require('../../app/services/customers/licences.service.js')
+const BillingAccountsService = require('../../app/services/customers/view-billing-accounts.service.js')
+const ContactsService = require('../../app/services/customers/view-contacts.service.js')
+const LicencesService = require('../../app/services/customers/view-licences.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
