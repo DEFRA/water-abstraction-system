@@ -9,7 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 

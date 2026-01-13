@@ -9,9 +9,9 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../fixtures/notices.fixture.js')
+const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
 const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
+const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
 
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 

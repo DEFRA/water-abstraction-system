@@ -1,8 +1,8 @@
 'use strict'
 
-const BillingAccountModel = require('../../app/models/billing-account.model.js')
-const ContactModel = require('../../app/models/contact.model.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
+const BillingAccountModel = require('../../../app/models/billing-account.model.js')
+const ContactModel = require('../../../app/models/contact.model.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
  * Represents a complete response from `FetchBillingAccountService`

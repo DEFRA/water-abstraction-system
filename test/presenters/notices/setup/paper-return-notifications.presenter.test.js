@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
+const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')

@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const PointModel = require('../../app/models/point.model.js')
-const ViewLicencesFixture = require('../fixtures/view-licences.fixture.js')
+const ViewLicencesFixture = require('../support/fixtures/view-licences.fixture.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Thing under test

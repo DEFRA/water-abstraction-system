@@ -1,6 +1,6 @@
 'use strict'
 
-const BillingAccountModel = require('../../app/models/billing-account.model.js')
+const BillingAccountModel = require('../../../app/models/billing-account.model.js')
 
 /**
  * Represents a complete response from `FetchRemoveReviewLicenceService`

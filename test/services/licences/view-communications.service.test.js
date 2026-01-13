@@ -9,8 +9,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test Helpers
-const NoticesFixture = require('../../fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
+const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 

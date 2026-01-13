@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
-const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
+const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
