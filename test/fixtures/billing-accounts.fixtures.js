@@ -2,6 +2,7 @@
 
 const BillingAccountModel = require('../../app/models/billing-account.model.js')
 const ContactModel = require('../../app/models/contact.model.js')
+const { generateAccountNumber } = require('../support/helpers/billing-account.helper.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 /**
@@ -21,7 +22,7 @@ function billingAccount() {
   return {
     billingAccount: BillingAccountModel.fromJson({
       id: generateUUID(),
-      accountNumber: 'S88897992A',
+      accountNumber: generateAccountNumber(),
       createdAt: new Date('2023-12-14T18:42:59.659Z'),
       lastTransactionFile: null,
       lastTransactionFileCreatedAt: null,
