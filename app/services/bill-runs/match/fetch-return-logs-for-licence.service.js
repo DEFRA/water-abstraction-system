@@ -44,6 +44,7 @@ async function _fetch(licenceRef, billingPeriod) {
   const returnLogs = await ReturnLogModel.query()
     .select([
       'id',
+      'returnId',
       'returnReference',
       ref('metadata:description').castText().as('description'),
       'startDate',

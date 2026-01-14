@@ -157,6 +157,7 @@ async function _persistReviewChargeElement(chargeElement, reviewChargeReferenceI
 async function _persistReviewReturn(returnLog, reviewLicenceId) {
   const data = {
     returnId: returnLog.id,
+    returnLogId: returnLog.returnId,
     reviewLicenceId,
     returnReference: returnLog.returnReference,
     startDate: returnLog.startDate,
