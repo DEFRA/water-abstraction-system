@@ -65,6 +65,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
         expect(result).to.have.length(1)
         expect(result[0].id).to.equal(returnLogRecord.id)
+        expect(result[0].returnId).to.equal(returnLogRecord.returnId)
         expect(result[0].description).to.equal('The Description')
         expect(result[0].startDate).to.equal(new Date('2022-04-01'))
         expect(result[0].endDate).to.equal(new Date('2023-03-31'))
