@@ -57,7 +57,7 @@ describe('Bill Runs - Setup - Create service', () => {
       expect(
         startBillRunProcessServiceStub.calledWith(regionId, 'supplementary', 'carol.shaw@atari.com', 2025)
       ).to.be.true()
-      expect(legacyCreateBillRunRequestStub.calledWith('supplementary', regionId, 2025, user, undefined)).to.be.true()
+      expect(legacyCreateBillRunRequestStub.calledWith('supplementary', regionId, 2025, user, false)).to.be.true()
     })
 
     it('deletes the setup session', async () => {
@@ -101,7 +101,7 @@ describe('Bill Runs - Setup - Create service', () => {
   describe('when the "blockingResults" determines only the "old" bill run should be triggered', () => {
     beforeEach(async () => {
       session = await SessionHelper.add({
-        data: { region: regionId, type: 'two_part_tariff', summer: true }
+        data: { region: regionId, type: 'two_part_tariff', season: 'summer' }
       })
       // NOTE: We make these additional $afterFind() calls to trigger the hook that would have been called when the
       // create service queries for the session. The hook elevates properties from `data` onto the session instance
