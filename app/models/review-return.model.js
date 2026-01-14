@@ -33,7 +33,7 @@ class ReviewReturnModel extends BaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: 'return-log.model',
         join: {
-          from: 'reviewReturns.returnId',
+          from: 'reviewReturns.returnLogId',
           to: 'returnLogs.id'
         }
       },
