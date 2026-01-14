@@ -51,6 +51,7 @@ describe('Persist Allocated Licence to Results service', () => {
         expect(reviewReturns).to.have.length(1)
         expect(reviewReturns[0].reviewLicenceId).to.equal(result[0].id)
         expect(reviewReturns[0].returnId).to.equal(testLicence.returnLogs[0].id)
+        expect(reviewReturns[0].returnLogId).to.equal(testLicence.returnLogs[0].returnId)
         expect(reviewReturns[0].returnReference).to.equal(testLicence.returnLogs[0].returnReference)
         expect(reviewReturns[0].quantity).to.equal(testLicence.returnLogs[0].quantity)
         expect(reviewReturns[0].allocated).to.equal(testLicence.returnLogs[0].allocatedQuantity)
@@ -280,6 +281,7 @@ function _generateData(returnMatched = true) {
     returnLogs: [
       {
         id: returnId,
+        returnId: generateUUID(),
         returnReference: '10021668',
         description: 'DRAINS ETC-DEEPING FEN AND OTHER LINKED SITES',
         startDate: new Date('2022-04-01'),
