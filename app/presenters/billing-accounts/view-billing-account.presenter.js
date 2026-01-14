@@ -23,11 +23,10 @@ const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js
  * @returns {object} The data formatted for the view template
  */
 function go(billingAccountData, licenceId, chargeVersionId, companyId) {
-  const { billingAccount, bills, pagination } = billingAccountData
+  const { billingAccount, bills } = billingAccountData
   const { company, createdAt, id, lastTransactionFile, lastTransactionFileCreatedAt } = billingAccount
 
   return {
-    accountNumber: billingAccount.accountNumber,
     address: billingAccount.$displayAddress(),
     backLink: _backLink(licenceId, chargeVersionId, companyId),
     billingAccountId: id,
@@ -36,7 +35,7 @@ function go(billingAccountData, licenceId, chargeVersionId, companyId) {
     customerFile: lastTransactionFile,
     lastUpdated: lastTransactionFileCreatedAt ? formatLongDate(lastTransactionFileCreatedAt) : null,
     pageTitle: 'Billing account for ' + titleCase(company.name),
-    pagination
+    pageTitleCaption: `Billing account ${billingAccount.accountNumber}`
   }
 }
 
@@ -44,31 +43,31 @@ function _backLink(licenceId, chargeVersionId, companyId) {
   if (licenceId && chargeVersionId) {
     return {
       title: 'Go back to charge information',
-      link: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`
+      href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`
     }
   }
 
   if (licenceId) {
     return {
       title: 'Go back to bills',
-      link: `/system/licences/${licenceId}/bills`
+      href: `/system/licences/${licenceId}/bills`
     }
   }
 
   if (companyId) {
-    const link = FeatureFlagsConfig.enableCustomerView
+    const href = FeatureFlagsConfig.enableCustomerView
       ? `/system/customers/${companyId}/billing-accounts`
       : `/customer/${companyId}/#billing-accounts`
 
     return {
       title: 'Go back to customer',
-      link
+      href
     }
   }
 
   return {
     title: 'Go back to search',
-    link: '/'
+    href: '/'
   }
 }
 

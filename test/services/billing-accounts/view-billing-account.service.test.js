@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../fixtures/billing-accounts.fixtures.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchViewBillingAccountService = require('../../../app/services/billing-accounts/fetch-view-billing-account.service.js')
@@ -19,9 +20,16 @@ const ViewBillingAccountService = require('../../../app/services/billing-account
 
 describe('Billing Accounts - View Billing Account service', () => {
   let billingAccountData
+  let chargeVersionId
+  let companyId
+  let licenceId
 
   beforeEach(() => {
     billingAccountData = BillingAccountsFixture.billingAccount()
+
+    chargeVersionId = generateUUID()
+    companyId = generateUUID()
+    licenceId = generateUUID()
 
     Sinon.stub(FetchViewBillingAccountService, 'go').returns(billingAccountData)
   })
@@ -33,15 +41,15 @@ describe('Billing Accounts - View Billing Account service', () => {
   describe('when a billing account with a matching ID exists', () => {
     it('correctly presents the data', async () => {
       const result = await ViewBillingAccountService.go(
-        '64d7fc10-f046-4444-ba32-bb917dd8cde6',
+        billingAccountData.billingAccount.id,
         1,
-        '53325713-1364-4f6b-a244-8771a36a1248',
-        '6e2cbd57-81d6-4653-a063-c93bae4fe6ee'
+        licenceId,
+        chargeVersionId,
+        companyId
       )
 
       expect(result).to.equal({
         activeNavBar: 'search',
-        accountNumber: 'S88897992A',
         address: [
           'Ferns Surfacing Limited',
           'Test Testingson',
@@ -53,7 +61,7 @@ describe('Billing Accounts - View Billing Account service', () => {
         ],
         backLink: {
           title: 'Go back to charge information',
-          link: `/licences/53325713-1364-4f6b-a244-8771a36a1248/charge-information/6e2cbd57-81d6-4653-a063-c93bae4fe6ee/view`
+          href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`
         },
         billingAccountId: billingAccountData.billingAccount.id,
         bills: [
@@ -71,7 +79,8 @@ describe('Billing Accounts - View Billing Account service', () => {
         customerFile: null,
         lastUpdated: null,
         pageTitle: 'Billing account for Ferns Surfacing Limited',
-        pagination: { numberOfPages: 1, showingMessage: 'Showing all 1 bills' }
+        pagination: { numberOfPages: 1, showingMessage: 'Showing all 1 bills' },
+        pageTitleCaption: `Billing account ${billingAccountData.billingAccount.accountNumber}`
       })
     })
   })

@@ -81,21 +81,21 @@
 
   {% set customerContactsTableRows = [] %}
 
-  {% for customerContact in customerContacts %}
+  {% for companyContact in companyContacts %}
     {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
     {% set rowIndex = loop.index0 %}
 
     {% set transactionRow = [
       {
-        text: customerContact.name,
+        text: companyContact.name,
         attributes: { 'data-test': 'customer-contact-name-' + rowIndex }
       },
       {
-        text: customerContact.communicationType,
+        text: companyContact.communicationType,
         attributes: { 'data-test': 'customer-contact-type-' + rowIndex }
       },
       {
-        text: customerContact.email,
+        text: companyContact.email,
         attributes: { 'data-test': 'customer-contact-send-to-' + rowIndex }
       }
     ] %}
@@ -108,11 +108,11 @@
     caption: customerContactsCaption|safe,
     captionClasses: "govuk-table__caption--m",
     firstCellIsHeader: false,
-    head: tableHeaders if customerContacts.length > 0,
-    rows: customerContactsTableRows if customerContacts.length > 0
+    head: tableHeaders if companyContacts.length > 0,
+    rows: customerContactsTableRows if companyContacts.length > 0
   }) }}
 
-  {% if customerContacts.length === 0 %}
+  {% if companyContacts.length === 0 %}
     <p>No customer contacts found.</p>
   {% endif %}
 {% endblock %}

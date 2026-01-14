@@ -42,7 +42,7 @@ function go(session) {
     billRunLink: null,
     billRunNumber: null,
     billRunStatus: null,
-    billRunType: formatBillRunType(session.type, 'sroc', session.summer),
+    billRunType: formatBillRunType(session.type, 'sroc', session.season === 'summer'),
     chargeScheme: formatChargeScheme('sroc'),
     dateCreated: null,
     financialYearEnd: null,

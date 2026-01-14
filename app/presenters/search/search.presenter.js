@@ -196,11 +196,11 @@ function _licenceHolder(licenceHolder) {
 
 function _monitoringStation(monitoringStation) {
   const { exact, model } = monitoringStation
-  const { gridReference, id, label, river } = model
+  const { gridReference, id, label, riverName } = model
 
   return {
     col2Title: 'River',
-    col2Value: river,
+    col2Value: riverName,
     col3Title: 'Grid reference',
     col3Value: gridReference,
     exact,
@@ -248,7 +248,7 @@ function _results(results) {
 
 function _returnLog(returnLog) {
   const { exact, model } = returnLog
-  const { endDate, returnId, licenceRef, returnReference } = model
+  const { endDate, licenceRef, returnId, returnReference } = model
 
   const statusTag = formatReturnLogStatus(model)
 
