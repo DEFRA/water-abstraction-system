@@ -5,7 +5,7 @@
  * @module CompanyContactsPresenter
  */
 
-const { companyContact } = require('../customer.presenter.js')
+const { formatCompanyContact } = require('../customer.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/contact-details` view contact details page
@@ -22,8 +22,8 @@ function go(companyContactsData) {
 }
 
 function _companyContacts(companyContacts) {
-  return companyContacts.map((_companyContactData) => {
-    return companyContact(_companyContactData)
+  return companyContacts.map((companyContact) => {
+    return formatCompanyContact(companyContact)
   })
 }
 
