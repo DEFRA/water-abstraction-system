@@ -42,34 +42,43 @@ describe('Search - Fetch Search Results Details service', () => {
     billingAccountSpy = Sinon.stub().resolves([])
     Sinon.stub(BillingAccountModel, 'query').returns({
       findByIds: billingAccountSpy,
+      modifyGraph: Sinon.stub().returnsThis(),
+      select: Sinon.stub().returnsThis(),
       withGraphFetched: Sinon.stub().returnsThis()
     })
 
     companySpy = Sinon.stub().resolves([])
     Sinon.stub(CompanyModel, 'query').returns({
       findByIds: companySpy,
+      modifyGraph: Sinon.stub().returnsThis(),
+      select: Sinon.stub().returnsThis(),
       withGraphFetched: Sinon.stub().returnsThis()
     })
 
     licenceSpy = Sinon.stub().resolves([])
     Sinon.stub(LicenceModel, 'query').returns({
       findByIds: licenceSpy,
+      modifyGraph: Sinon.stub().returnsThis(),
+      select: Sinon.stub().returnsThis(),
       withGraphFetched: Sinon.stub().returnsThis()
     })
 
     monitoringStationSpy = Sinon.stub().resolves([])
     Sinon.stub(MonitoringStationModel, 'query').returns({
-      findByIds: monitoringStationSpy
+      findByIds: monitoringStationSpy,
+      select: Sinon.stub().returnsThis()
     })
 
     returnLogSpy = Sinon.stub().resolves([])
     Sinon.stub(ReturnLogModel, 'query').returns({
-      findByIds: returnLogSpy
+      findByIds: returnLogSpy,
+      select: Sinon.stub().returnsThis()
     })
 
     userSpy = Sinon.stub().resolves([])
     Sinon.stub(UserModel, 'query').returns({
-      findByIds: userSpy
+      findByIds: userSpy,
+      select: Sinon.stub().returnsThis()
     })
   })
 
