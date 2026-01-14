@@ -52,6 +52,14 @@ class ReturnLogModel extends BaseModel {
           from: 'returnLogs.id',
           to: 'returnSubmissions.returnLogId'
         }
+      },
+      reviewReturns: {
+        relation: Model.HasManyRelation,
+        modelClass: 'review-return.model',
+        join: {
+          from: 'returnLogs.id',
+          to: 'reviewReturns.returnLogId'
+        }
       }
     }
   }
