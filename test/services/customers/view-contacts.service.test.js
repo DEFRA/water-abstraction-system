@@ -69,7 +69,7 @@ describe('Customers - View Contacts Service', () => {
         pageTitleCaption: 'Tyrell Corporation',
         pagination: {
           numberOfPages: 1,
-          showingMessage: 'Showing all 1 billing accounts'
+          showingMessage: 'Showing all 1 contacts'
         },
         roles: []
       })

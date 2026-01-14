@@ -33,7 +33,7 @@ async function go(customerId, auth, page) {
     Number(page),
     `/system/customers/${customerId}/contacts`,
     companyContacts.length,
-    'billing accounts'
+    'contacts'
   )
 
   return {
