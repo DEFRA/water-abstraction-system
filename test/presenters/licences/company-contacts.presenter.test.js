@@ -11,21 +11,21 @@ const { expect } = Code
 const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 
 // Thing under test
-const CustomerContactsPresenter = require('../../../app/presenters/licences/customer-contacts.presenter.js')
+const CompanyContactsPresenter = require('../../../app/presenters/licences/company-contacts.presenter.js')
 
-describe('Customer Contacts presenter', () => {
+describe('Company Contacts presenter', () => {
   let companyContacts
 
   beforeEach(() => {
     companyContacts = CustomersFixtures.companyContacts()
   })
 
-  describe('when provided with populated customer contacts data', () => {
+  describe('when provided with populated company contacts data', () => {
     it('correctly presents the data', () => {
-      const result = CustomerContactsPresenter.go(companyContacts)
+      const result = CompanyContactsPresenter.go(companyContacts)
 
       expect(result).to.equal({
-        customerContacts: [
+        companyContacts: [
           {
             communicationType: 'Additional Contact',
             email: 'rachael.tyrell@tyrellcorp.com',

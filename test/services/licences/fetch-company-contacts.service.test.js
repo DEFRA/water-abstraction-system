@@ -17,9 +17,9 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 
 // Thing under test
-const FetchCustomerContactDetailsService = require('../../../app/services/licences/fetch-customer-contacts.service.js')
+const FetchCompanyContactsService = require('../../../app/services/licences/fetch-company-contacts.service.js')
 
-describe('Licences - Fetch Customer Contacts service', () => {
+describe('Licences - Fetch Company Contacts service', () => {
   let company
   let companyContact
   let contact
@@ -62,8 +62,8 @@ describe('Licences - Fetch Customer Contacts service', () => {
       })
     })
 
-    it('returns the matching licence customer contacts', async () => {
-      const results = await FetchCustomerContactDetailsService.go(licence.id)
+    it('returns the matching licence company contacts', async () => {
+      const results = await FetchCompanyContactsService.go(licence.id)
 
       expect(results).to.equal([
         {
