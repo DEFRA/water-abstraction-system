@@ -256,7 +256,7 @@ describe('Search - Search presenter', () => {
         },
         {
           col2Title: 'River',
-          col2Value: undefined,
+          col2Value: 'River 1',
           col3Title: 'Grid reference',
           col3Value: 'SX1234512345',
           exact: true,
@@ -322,7 +322,7 @@ describe('Search - Search presenter', () => {
         },
         {
           col2Title: 'River',
-          col2Value: undefined,
+          col2Value: 'River 1',
           col3Title: 'Grid reference',
           col3Value: 'SX1234512345',
           exact: false,
