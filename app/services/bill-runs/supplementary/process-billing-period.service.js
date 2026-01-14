@@ -25,7 +25,7 @@ const TransactionModel = require('../../../models/transaction.model.js')
  * @param {object} billingPeriod - An object representing the financial year the transactions are for
  * @param {module:ChargeVersionModel[]} chargeVersions - The charge versions to create transactions for
  *
- * @returns {boolean} true if the bill run is not empty (there are transactions to bill) else false
+ * @returns {Promise<boolean>} true if the bill run is not empty (there are transactions to bill) else false
  */
 async function go(billRun, billingPeriod, chargeVersions) {
   if (chargeVersions.length === 0) {
