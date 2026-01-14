@@ -9,12 +9,13 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
+const FetchCompanyContactsService = require('../../../app/services/licences/fetch-company-contacts.service.js')
 const FetchContactDetailsService = require('../../../app/services/licences/fetch-contact-details.service.js')
-const FetchCustomerContactsService = require('../../../app/services/licences/fetch-customer-contacts.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
@@ -66,18 +67,7 @@ describe('Licences - View Contact Details service', () => {
       }
     ])
 
-    Sinon.stub(FetchCustomerContactsService, 'go').returns([
-      {
-        communicationType: 'Additional Contact',
-        email: 'dfd@email.com',
-        firstName: 'Donald',
-        initials: null,
-        lastName: 'Duck',
-        middleInitials: null,
-        salutation: null,
-        suffix: null
-      }
-    ])
+    Sinon.stub(FetchCompanyContactsService, 'go').returns(CustomersFixtures.companyContacts())
 
     Sinon.stub(FeatureFlagsConfig, 'enableCustomerView').value(true)
   })
@@ -97,11 +87,11 @@ describe('Licences - View Contact Details service', () => {
           href: '/',
           text: 'Go back to search'
         },
-        customerContacts: [
+        companyContacts: [
           {
             communicationType: 'Additional Contact',
-            email: 'dfd@email.com',
-            name: 'Donald Duck'
+            email: 'rachael.tyrell@tyrellcorp.com',
+            name: 'Rachael Tyrell'
           }
         ],
         customerId: companyId,

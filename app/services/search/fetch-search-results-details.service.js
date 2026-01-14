@@ -36,23 +36,65 @@ async function go(idsByType) {
   return modelsByType
 }
 
+async function _billingAccount(ids) {
+  return BillingAccountModel.query()
+    .select('accountNumber', 'createdAt', 'id')
+    .withGraphFetched('company')
+    .modifyGraph('company', (builder) => {
+      builder.select('name')
+    })
+    .findByIds(ids)
+}
+
 async function _findByType(type, ids) {
   switch (type) {
     case 'billingAccount':
-      return BillingAccountModel.query().withGraphFetched('company').findByIds(ids)
+      return _billingAccount(ids)
     case 'licenceHolder':
-      return CompanyModel.query().withGraphFetched('licenceDocumentRoles.[licenceRole]').findByIds(ids)
+      return _licenceHolder(ids)
     case 'licence':
-      return LicenceModel.query().withGraphFetched('licenceDocumentHeader').findByIds(ids)
+      return _licence(ids)
     case 'monitoringStation':
-      return MonitoringStationModel.query().findByIds(ids)
+      return _monitoringStation(ids)
     case 'returnLog':
-      return ReturnLogModel.query().findByIds(ids)
+      return _returnLog(ids)
     case 'user':
-      return UserModel.query().findByIds(ids)
+      return _user(ids)
     default:
       return []
   }
+}
+
+async function _licence(ids) {
+  return LicenceModel.query()
+    .select('expiredDate', 'id', 'lapsedDate', 'licenceRef', 'revokedDate')
+    .withGraphFetched('licenceDocumentHeader')
+    .modifyGraph('licenceDocumentHeader', (builder) => {
+      builder.select('metadata')
+    })
+    .findByIds(ids)
+}
+
+async function _licenceHolder(ids) {
+  return CompanyModel.query()
+    .select('id', 'name', 'type')
+    .withGraphFetched('licenceDocumentRoles')
+    .modifyGraph('licenceDocumentRoles', (builder) => {
+      builder.select('licenceDocumentId')
+    })
+    .findByIds(ids)
+}
+
+async function _monitoringStation(ids) {
+  return MonitoringStationModel.query().select('gridReference', 'id', 'label', 'riverName').findByIds(ids)
+}
+
+async function _returnLog(ids) {
+  return ReturnLogModel.query().select('endDate', 'id', 'licenceRef', 'returnId', 'returnReference').findByIds(ids)
+}
+
+async function _user(ids) {
+  return UserModel.query().select('application', 'id', 'lastLogin', 'username').findByIds(ids)
 }
 
 module.exports = {

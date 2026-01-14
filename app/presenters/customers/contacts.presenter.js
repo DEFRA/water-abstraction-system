@@ -5,6 +5,8 @@
  * @module ContactsPresenter
  */
 
+const { companyContact } = require('../customer.presenter.js')
+
 /**
  * Formats data for the 'customers/{id}/contacts' page
  *
@@ -26,21 +28,13 @@ function go(customer, companyContacts) {
   }
 }
 
-function _communicationType(companyContact) {
-  if (companyContact.abstractionAlerts) {
-    return 'Water abstraction alerts'
-  }
-
-  return companyContact.licenceRole.label
-}
-
 function _companyContacts(companyContacts, customer) {
-  return companyContacts.map((companyContact) => {
+  return companyContacts.map((companyContactData) => {
+    const contact = companyContact(companyContactData)
+
     return {
-      action: `/customer/${customer.id}/contacts/${companyContact.contact.id}`,
-      communicationType: _communicationType(companyContact),
-      name: companyContact.contact.$name(),
-      email: companyContact.contact.email
+      action: `/customer/${customer.id}/contacts/${companyContactData.contact.id}`,
+      ...contact
     }
   })
 }

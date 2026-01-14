@@ -94,7 +94,7 @@ function _lines(returnsFrequency, startDate, endDate) {
 }
 
 function _meter(meter) {
-  const multiplier = meter?.multiplier ? parseInt(meter?.multiplier) : null
+  const multiplier = meter?.multiplier ? Number.parseInt(meter?.multiplier) : null
 
   let meter10TimesDisplay = null
   if (multiplier === 10) {
@@ -147,10 +147,10 @@ function _referenceData(returnLog) {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     lines: _lines(returnsFrequency, startDate, endDate),
-    periodEndDay: parseInt(metadata.nald.periodEndDay),
-    periodEndMonth: parseInt(metadata.nald.periodEndMonth),
-    periodStartDay: parseInt(metadata.nald.periodStartDay),
-    periodStartMonth: parseInt(metadata.nald.periodStartMonth),
+    periodEndDay: Number.parseInt(metadata.nald.periodEndDay),
+    periodEndMonth: Number.parseInt(metadata.nald.periodEndMonth),
+    periodStartDay: Number.parseInt(metadata.nald.periodStartDay),
+    periodStartMonth: Number.parseInt(metadata.nald.periodStartMonth),
     purposes: _purposes(metadata.purposes),
     receivedDate,
     returnId,

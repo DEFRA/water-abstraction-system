@@ -24,7 +24,7 @@ const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
  * @param {module:UserModel} user - Instance of `UserModel` that represents the user making the request
  */
 async function go(session, blockingResults, user) {
-  const { region: regionId, type, summer } = session
+  const { region: regionId, type, season } = session
   const { toFinancialYearEnding, trigger } = blockingResults
 
   if (trigger === engineTriggers.current || trigger === engineTriggers.both) {
@@ -32,7 +32,7 @@ async function go(session, blockingResults, user) {
   }
 
   if (trigger === engineTriggers.old || trigger === engineTriggers.both) {
-    await LegacyCreateBillRunRequest.send(type, regionId, toFinancialYearEnding, user, summer)
+    await LegacyCreateBillRunRequest.send(type, regionId, toFinancialYearEnding, user, season === 'summer')
   }
 
   await session.$query().delete()

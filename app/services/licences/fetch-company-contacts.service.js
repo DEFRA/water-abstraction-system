@@ -1,33 +1,31 @@
 'use strict'
 
 /**
- * Fetches the company contacts data needed for the view 'customers/{id}/contacts'
+ * Fetches all company contacts for a licence which is needed for the view '/licences/{id}/contact-details` page
  * @module FetchCompanyContactsService
  */
 
 const CompanyContactModel = require('../../models/company-contact.model.js')
-const DatabaseConfig = require('../../../config/database.config.js')
 const { db } = require('../../../db/db.js')
 
 /**
- * Fetches the company contacts data needed for the view 'customers/{id}/contacts'
+ * Fetches all company contacts for a licence which is needed for the view '/licences/{id}/contact-details` page
  *
- * @param {string} customerId - The customer id for the company
- * @param {number} page - The current page for the pagination service
+ * @param {string} licenceId - The UUID for the licence to fetch
  *
- * @returns {Promise<object>} the company contacts for the customer and the pagination object
+ * @returns {Promise<object[]>} the data needed to populate the view licence page's contact details tab
  */
-async function go(customerId, page) {
-  const { results, total } = await _fetch(customerId, page)
-
-  return { companyContacts: results, pagination: { total } }
+async function go(licenceId) {
+  return _fetch(licenceId)
 }
 
-async function _fetch(customerId, page) {
+async function _fetch(licenceId) {
   return CompanyContactModel.query()
     .select(['companyContacts.id', 'abstractionAlerts'])
     .innerJoin('licenceDocumentRoles AS ldr', 'ldr.company_id', '=', 'companyContacts.companyId')
-    .where('companyContacts.companyId', customerId)
+    .innerJoin('licenceDocuments AS ld', 'ld.id', '=', 'ldr.licenceDocumentId')
+    .innerJoin('licences AS l', 'l.licenceRef', '=', 'ld.licenceRef')
+    .where('l.id', licenceId)
     .andWhere((builder) => {
       builder.whereNull('ldr.end_date').orWhere('ldr.end_date', '>', db.raw('NOW()'))
     })
@@ -50,8 +48,6 @@ async function _fetch(customerId, page) {
     .modifyGraph('licenceRole', (licenceRoleBuilder) => {
       licenceRoleBuilder.select(['label'])
     })
-    .distinctOn('companyContacts.id')
-    .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 
 module.exports = {

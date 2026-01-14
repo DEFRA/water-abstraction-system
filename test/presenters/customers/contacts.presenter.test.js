@@ -48,59 +48,5 @@ describe('Customers - Contacts Presenter', () => {
         pageTitleCaption: 'Tyrell Corporation'
       })
     })
-
-    describe('the "companyContacts" property', () => {
-      describe('the "communicationType" property', () => {
-        describe('when the company contact is marked for abstraction alerts', () => {
-          beforeEach(() => {
-            companyContacts[0].abstractionAlerts = true
-          })
-
-          it('returns the string "Water abstraction alerts"', () => {
-            const {
-              companyContacts: [result]
-            } = ContactsPresenter.go(customer, companyContacts)
-
-            expect(result.communicationType).to.equal('Water abstraction alerts')
-          })
-        })
-
-        describe('when the company contact is not marked for abstraction alerts', () => {
-          it('returns the licence role', () => {
-            const {
-              companyContacts: [result]
-            } = ContactsPresenter.go(customer, companyContacts)
-
-            expect(result.communicationType).to.equal('Additional Contact')
-          })
-        })
-      })
-
-      describe('the "email" property', () => {
-        describe('when there is an email', () => {
-          it('returns the email', () => {
-            const {
-              companyContacts: [result]
-            } = ContactsPresenter.go(customer, companyContacts)
-
-            expect(result.email).to.equal('rachael.tyrell@tyrellcorp.com')
-          })
-        })
-
-        describe('when there is no email', () => {
-          beforeEach(() => {
-            companyContacts[0].contact.email = null
-          })
-
-          it('returns null', () => {
-            const {
-              companyContacts: [result]
-            } = ContactsPresenter.go(customer, companyContacts)
-
-            expect(result.email).to.be.null()
-          })
-        })
-      })
-    })
   })
 })

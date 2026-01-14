@@ -11,7 +11,7 @@ require('dotenv').config()
 
 const config = {
   endDates: {
-    batchSize: parseInt(process.env.LICENCE_END_DATES_BATCH_SIZE) || 10
+    batchSize: Number.parseInt(process.env.LICENCE_END_DATES_BATCH_SIZE) || 10
   },
   returnVersionBatchUser: process.env.RETURN_VERSION_BATCH_USER
 }
