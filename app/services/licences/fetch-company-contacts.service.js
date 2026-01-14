@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Fetches all customer contacts for a licence which is needed for the view '/licences/{id}/contact-details` page
- * @module FetchCustomerContactsService
+ * Fetches all company contacts for a licence which is needed for the view '/licences/{id}/contact-details` page
+ * @module FetchCompanyContactsService
  */
 
 const CompanyContactModel = require('../../models/company-contact.model.js')
 const { db } = require('../../../db/db.js')
 
 /**
- * Fetches all customer contacts for a licence which is needed for the view '/licences/{id}/contact-details` page
+ * Fetches all company contacts for a licence which is needed for the view '/licences/{id}/contact-details` page
  *
  * @param {string} licenceId - The UUID for the licence to fetch
  *
