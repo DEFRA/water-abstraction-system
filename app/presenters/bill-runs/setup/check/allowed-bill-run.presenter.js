@@ -23,7 +23,7 @@ function go(session, blockingResults) {
   const { toFinancialYearEnding, trigger } = blockingResults
 
   const scheme = trigger === engineTriggers.old ? 'presroc' : 'sroc'
-  const billRunType = formatBillRunType(session.type, scheme, session.summer)
+  const billRunType = formatBillRunType(session.type, scheme, session.season === 'summer')
 
   return {
     backLink: checkPageBackLink(session),
