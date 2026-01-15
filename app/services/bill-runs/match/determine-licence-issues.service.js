@@ -102,7 +102,7 @@ function _determineReturnSplitOverChargeReference(licence, returnLog) {
         const { returnLogs: chargeElementReturnLogs } = chargeElement
 
         return chargeElementReturnLogs.some((chargeElementReturnLog) => {
-          return chargeElementReturnLog.returnId === returnLog.id
+          return chargeElementReturnLog.returnLogId === returnLog.id
         })
       })
 
@@ -153,7 +153,7 @@ function _elementIssues(chargeReference, chargeElement, licenceReturnLogs, retur
 
 function _getMatchingReturns(returnLogs, licenceReturnLogs) {
   const returnLogIds = returnLogs.map((returnLog) => {
-    return returnLog.returnId
+    return returnLog.returnLogId
   })
 
   // We need to filter the returnLogs on the licence to find the matching returns for our charge element.

@@ -160,9 +160,9 @@ describe('Determine Licence Issues Service', () => {
 
       describe('that has two matching returns', () => {
         beforeEach(() => {
-          licence.chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[1] = { returnId: '2345' }
+          licence.chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[1] = { returnLogId: 'faf38f5f-9ca1-4c64-aca5-308cfdc72db7' }
           licence.returnLogs[1] = {
-            id: '2345',
+            id: 'faf38f5f-9ca1-4c64-aca5-308cfdc72db7',
             abstractionOutsidePeriod: false,
             underQuery: false,
             status: 'completed',
@@ -277,7 +277,7 @@ function _generateNoIssuesLicenceData() {
                 chargeDatesOverlap: false,
                 returnLogs: [
                   {
-                    returnId: '1234'
+                    returnLogId: '65003312-7d1a-4ecb-99bb-8c928d414c4a'
                   }
                 ]
               }
@@ -288,7 +288,7 @@ function _generateNoIssuesLicenceData() {
     ],
     returnLogs: [
       {
-        id: '1234',
+        id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
         abstractionOutsidePeriod: false,
         underQuery: false,
         status: 'completed',
@@ -314,7 +314,7 @@ function _generateOneIssueLicenceData(status) {
                   chargeDatesOverlap: false,
                   returnLogs: [
                     {
-                      returnId: '1234'
+                      returnLogId: '65003312-7d1a-4ecb-99bb-8c928d414c4a'
                     }
                   ]
                 }
@@ -325,7 +325,7 @@ function _generateOneIssueLicenceData(status) {
       ],
       returnLogs: [
         {
-          id: '1234',
+          id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
           abstractionOutsidePeriod: false,
           underQuery: true,
           status: 'completed',
@@ -348,7 +348,7 @@ function _generateOneIssueLicenceData(status) {
                   chargeDatesOverlap: false,
                   returnLogs: [
                     {
-                      returnId: '1234'
+                      returnLogId: '65003312-7d1a-4ecb-99bb-8c928d414c4a'
                     }
                   ]
                 }
@@ -359,7 +359,7 @@ function _generateOneIssueLicenceData(status) {
       ],
       returnLogs: [
         {
-          id: '1234',
+          id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
           abstractionOutsidePeriod: false,
           underQuery: false,
           status: 'completed',
@@ -385,10 +385,10 @@ function _generateMultipleIssuesLicenceData() {
                 chargeDatesOverlap: true,
                 returnLogs: [
                   {
-                    returnId: '1234'
+                    returnLogId: '65003312-7d1a-4ecb-99bb-8c928d414c4a'
                   },
                   {
-                    returnId: '5678'
+                    returnLogId: '5963059f-f91a-4f34-9efb-0a30b265cf5e'
                   }
                 ]
               },
@@ -405,7 +405,7 @@ function _generateMultipleIssuesLicenceData() {
                 chargeDatesOverlap: false,
                 returnLogs: [
                   {
-                    returnId: '1234'
+                    returnLogId: '65003312-7d1a-4ecb-99bb-8c928d414c4a'
                   }
                 ]
               }
@@ -416,7 +416,7 @@ function _generateMultipleIssuesLicenceData() {
     ],
     returnLogs: [
       {
-        id: '1234',
+        id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
         abstractionOutsidePeriod: true,
         underQuery: true,
         status: 'completed',
@@ -426,7 +426,7 @@ function _generateMultipleIssuesLicenceData() {
         dueDate: new Date('2024 01 01')
       },
       {
-        id: '5678',
+        id: '5963059f-f91a-4f34-9efb-0a30b265cf5e',
         abstractionOutsidePeriod: false,
         underQuery: false,
         status: 'due',
@@ -436,7 +436,7 @@ function _generateMultipleIssuesLicenceData() {
         dueDate: new Date('2024 01 01')
       },
       {
-        id: '91011',
+        id: 'd2535659-1d87-4eaa-850f-d87afa40c6b2',
         abstractionOutsidePeriod: false,
         underQuery: false,
         status: 'received',
@@ -461,10 +461,10 @@ function _generateMultipleReadyIssuesLicenceData() {
                 chargeDatesOverlap: false,
                 returnLogs: [
                   {
-                    returnId: '1234'
+                    returnLogId: '65003312-7d1a-4ecb-99bb-8c928d414c4a'
                   },
                   {
-                    returnId: '5678'
+                    returnLogId: '5963059f-f91a-4f34-9efb-0a30b265cf5e'
                   }
                 ]
               }
@@ -475,7 +475,7 @@ function _generateMultipleReadyIssuesLicenceData() {
     ],
     returnLogs: [
       {
-        id: '1234',
+        id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
         abstractionOutsidePeriod: true,
         underQuery: false,
         status: 'completed',
@@ -485,7 +485,7 @@ function _generateMultipleReadyIssuesLicenceData() {
         dueDate: new Date('2024 01 01')
       },
       {
-        id: '5678',
+        id: '5963059f-f91a-4f34-9efb-0a30b265cf5e',
         abstractionOutsidePeriod: false,
         underQuery: false,
         status: 'due',
@@ -510,7 +510,7 @@ function _generateMultipleReviewIssuesLicenceData() {
                 chargeDatesOverlap: true,
                 returnLogs: [
                   {
-                    returnId: '1234'
+                    returnLogId: '65003312-7d1a-4ecb-99bb-8c928d414c4a'
                   }
                 ]
               },
@@ -527,7 +527,7 @@ function _generateMultipleReviewIssuesLicenceData() {
                 chargeDatesOverlap: false,
                 returnLogs: [
                   {
-                    returnId: '1234'
+                    returnLogId: '65003312-7d1a-4ecb-99bb-8c928d414c4a'
                   }
                 ]
               }
@@ -538,7 +538,7 @@ function _generateMultipleReviewIssuesLicenceData() {
     ],
     returnLogs: [
       {
-        id: '1234',
+        id: '65003312-7d1a-4ecb-99bb-8c928d414c4a',
         abstractionOutsidePeriod: false,
         underQuery: true,
         status: 'completed',
@@ -548,7 +548,7 @@ function _generateMultipleReviewIssuesLicenceData() {
         dueDate: new Date('2024 01 01')
       },
       {
-        id: '91011',
+        id: 'd2535659-1d87-4eaa-850f-d87afa40c6b2',
         abstractionOutsidePeriod: false,
         underQuery: false,
         status: 'received',
