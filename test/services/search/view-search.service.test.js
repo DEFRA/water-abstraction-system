@@ -201,6 +201,56 @@ describe('Search - View Search service', () => {
     })
   })
 
+  describe('when called with no search query set because the session has expired', () => {
+    beforeEach(() => {
+      searchQuery = undefined
+    })
+
+    it('returns page data for the blank search page', async () => {
+      const result = await ViewSearchService.go(auth, yar, page)
+
+      expect(result).to.equal({
+        activeNavBar: 'search',
+        filterItems: [
+          {
+            checked: false,
+            text: 'Billing accounts',
+            value: 'billingAccount'
+          },
+          {
+            checked: false,
+            text: 'Licence holders',
+            value: 'licenceHolder'
+          },
+          {
+            checked: false,
+            text: 'Licences',
+            value: 'licence'
+          },
+          {
+            checked: false,
+            text: 'Monitoring stations',
+            value: 'monitoringStation'
+          },
+          {
+            checked: false,
+            text: 'Return logs',
+            value: 'returnLog'
+          },
+          {
+            checked: false,
+            text: 'Users',
+            value: 'user'
+          }
+        ],
+        pageTitle: 'Search',
+        query: undefined,
+        resultType: undefined,
+        showResults: false
+      })
+    })
+  })
+
   describe('when called with no result type specified', () => {
     beforeEach(() => {
       searchResultType = null
