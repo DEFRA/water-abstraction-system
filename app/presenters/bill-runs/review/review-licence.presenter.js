@@ -178,17 +178,8 @@ function _formatReviewReturns(reviewReturns) {
   const unmatchedReturns = []
 
   reviewReturns.forEach((reviewReturn) => {
-    const {
-      description,
-      endDate,
-      issues,
-      purposes,
-      returnLog,
-      returnId,
-      returnLogId,
-      returnReference,
-      startDate
-    } = reviewReturn
+    const { description, endDate, issues, purposes, returnLog, returnId, returnLogId, returnReference, startDate } =
+      reviewReturn
     const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth } = returnLog
 
     const formattedReviewReturn = {
