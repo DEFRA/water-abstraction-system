@@ -5,6 +5,8 @@
  */
 
 const LicenceModel = require('../../app/models/licence.model.js')
+const LicenceVersionHolderModel = require('../../app/models/licence-version-holder.model.js')
+const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const PointModel = require('../../app/models/point.model.js')
 const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
@@ -69,9 +71,57 @@ function licence() {
 }
 
 /**
+ * Represents a licence version
+ *
+ * @returns {object} - licence version
+ */
+function licenceVersion() {
+  const licenceVersionHolder = LicenceVersionHolderModel.fromJson({
+    id: generateUUID(),
+    holderType: 'organisation',
+    salutation: null,
+    initials: null,
+    forename: null,
+    name: 'ORDER OF THE PHOENIX',
+    addressLine1: '12 GRIMMAULD PLACE',
+    addressLine2: 'ISLINGTON',
+    addressLine3: null,
+    addressLine4: null,
+    town: 'LONDON',
+    county: 'GREATER LONDON',
+    country: 'UNITED KINGDOM',
+    postcode: 'N1 9LX'
+  })
+
+  return LicenceVersionModel.fromJson({
+    administrative: null,
+    applicationNumber: null,
+    createdAt: new Date('2022-01-01'),
+    endDate: null,
+    id: generateUUID(),
+    issueDate: null,
+    licence: {
+      id: generateUUID(),
+      licenceRef: generateLicenceRef()
+    },
+    licenceVersionPurposes: [],
+    licenceVersionHolder,
+    modLogs: [
+      {
+        id: generateUUID(),
+        reasonDescription: 'Licence Holder Name/Address Change',
+        userId: 'JOBSWORTH01',
+        note: 'Whole licence trade'
+      }
+    ],
+    startDate: new Date('2022-01-01')
+  })
+}
+
+/**
  * Represents a licence version purpose
  *
- * @returns {object} - licence
+ * @returns {object} - licence version purpose
  **/
 function licenceVersionPurpose() {
   return {
@@ -190,6 +240,7 @@ function purpose() {
 module.exports = {
   condition,
   licence,
+  licenceVersion,
   licenceVersionPurpose,
   point,
   pointWithSource,

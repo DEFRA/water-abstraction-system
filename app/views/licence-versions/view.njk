@@ -4,9 +4,9 @@
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-
 {% from "macros/conditions-summary-cards.njk" import conditionsSummaryCards %}
 {% from "macros/licence-version-change-type-tag.njk" import changeTypeTag as licenceVersionChangeTypeTag %}
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 {% from "macros/points-summary-cards.njk" import pointsSummaryCards %}
 {% from "macros/purposes-summary-cards.njk" import purposesSummaryCards %}
 
@@ -55,8 +55,20 @@
     </h2>
 
     {{ govukSummaryList({
-      card: {},
+      card: {
+        title: {
+          text: licenceDetails.licenceHolderName
+        }
+      },
       rows: [
+        {
+          key: {
+          text: "Address"
+        },
+          value: {
+          text: newLineArrayItems(licenceDetails.address)
+        }
+        },
         {
           key: {
           text: "Licence version start date"

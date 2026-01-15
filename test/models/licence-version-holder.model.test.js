@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -19,13 +19,15 @@ describe('Licence Version Holder model', () => {
   let testRecord
   let testLicenceVersion
 
-  before(async () => {
+  beforeEach(async () => {
     testLicenceVersion = await LicenceVersionHelper.add()
-
-    testRecord = await LicenceVersionHolderHelper.add({ licenceVersionId: testLicenceVersion.id })
   })
 
   describe('Basic query', () => {
+    beforeEach(async () => {
+      testRecord = await LicenceVersionHolderHelper.add({ licenceVersionId: testLicenceVersion.id })
+    })
+
     it('can successfully run a basic query', async () => {
       const result = await LicenceVersionHolderModel.query().findById(testRecord.id)
 
@@ -35,6 +37,10 @@ describe('Licence Version Holder model', () => {
   })
 
   describe('Relationships', () => {
+    beforeEach(async () => {
+      testRecord = await LicenceVersionHolderHelper.add({ licenceVersionId: testLicenceVersion.id })
+    })
+
     describe('when linking to licence version', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceVersionHolderModel.query().innerJoinRelated('licenceVersion')
@@ -53,6 +59,60 @@ describe('Licence Version Holder model', () => {
         expect(result.licenceVersion).to.be.an.instanceOf(LicenceVersionModel)
         expect(result.licenceVersion).to.equal(testLicenceVersion)
       })
+    })
+  })
+
+  describe('$address', () => {
+    beforeEach(async () => {
+      testRecord = await LicenceVersionHolderHelper.add({
+        licenceVersionId: testLicenceVersion.id,
+        holderType: 'organisation',
+        salutation: null,
+        initials: null,
+        forename: null,
+        name: 'ORDER OF THE PHOENIX',
+        addressLine1: '12 GRIMMAULD PLACE',
+        addressLine2: 'ISLINGTON',
+        addressLine3: null,
+        addressLine4: null,
+        town: 'LONDON',
+        county: 'GREATER LONDON',
+        country: 'UNITED KINGDOM',
+        postcode: 'N1 9LX'
+      })
+    })
+
+    it('returns the address as an array, and does not include the "contactName"', () => {
+      const result = testRecord.$address()
+
+      expect(result).to.equal(['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'])
+    })
+  })
+
+  describe('$name', () => {
+    beforeEach(async () => {
+      testRecord = await LicenceVersionHolderHelper.add({
+        licenceVersionId: testLicenceVersion.id,
+        holderType: 'organisation',
+        salutation: null,
+        initials: null,
+        forename: null,
+        name: 'ORDER OF THE PHOENIX',
+        addressLine1: '12 GRIMMAULD PLACE',
+        addressLine2: 'ISLINGTON',
+        addressLine3: null,
+        addressLine4: null,
+        town: 'LONDON',
+        county: 'GREATER LONDON',
+        country: 'UNITED KINGDOM',
+        postcode: 'N1 9LX'
+      })
+    })
+
+    it('returns the licence version holders name', () => {
+      const result = testRecord.$name()
+
+      expect(result).to.equal('ORDER OF THE PHOENIX')
     })
   })
 })

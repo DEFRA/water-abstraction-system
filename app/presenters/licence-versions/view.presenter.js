@@ -54,9 +54,11 @@ function _errorInDataEmail(billingAndDataRole) {
 
 function _licenceDetails(licenceVersion) {
   return {
+    address: licenceVersion.licenceVersionHolder.$address(),
     applicationNumber: licenceVersion.applicationNumber,
     endDate: formatLongDate(licenceVersion.endDate),
     issueDate: formatLongDate(licenceVersion.issueDate),
+    licenceHolderName: licenceVersion.licenceVersionHolder.$name(),
     startDate: formatLongDate(licenceVersion.startDate)
   }
 }
