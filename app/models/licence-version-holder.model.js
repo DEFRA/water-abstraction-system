@@ -39,7 +39,7 @@ class LicenceVersionHolderModel extends BaseModel {
    *
    * We format the response from the address presenter into an array.
    *
-   * The address presenter is a generic solution and returns the 'contactName' as the first element.
+   * The address presenter returns the 'contactName' as the first element.
    *
    * We do not want to show this in the address, so we remove it before returning the array of address lines.
    *
