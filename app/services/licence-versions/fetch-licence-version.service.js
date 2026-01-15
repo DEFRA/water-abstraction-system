@@ -46,8 +46,27 @@ async function _fetch(licenceVersionId) {
       ).as('administrative')
     ])
     .withGraphFetched('licence')
-    .modifyGraph('licence', (builder) => {
-      builder.select(['id', 'licenceRef'])
+    .modifyGraph('licence', (licenceBuilder) => {
+      licenceBuilder.select(['id', 'licenceRef'])
+    })
+    .withGraphFetched('licenceVersionHolder')
+    .modifyGraph('licenceVersionHolder', (licenceVersionHolderBuilder) => {
+      licenceVersionHolderBuilder.select([
+        'id',
+        'addressLine1',
+        'addressLine2',
+        'addressLine3',
+        'addressLine4',
+        'country',
+        'county',
+        'forename',
+        'holderType',
+        'initials',
+        'name',
+        'postcode',
+        'salutation',
+        'town'
+      ])
     })
     .modify('history')
     .withGraphFetched('licenceVersionPurposes')
