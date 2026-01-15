@@ -58,7 +58,7 @@ class LicenceVersionHolderModel extends BaseModel {
   }
 
   /**
-   * Determine the licence version hodler name
+   * Determine the licence version holder name
    *
    * This uses the existing logic in the crm presenter.
    *
