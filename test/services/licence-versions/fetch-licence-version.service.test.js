@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const LicenceVersionHolderHelper = require('../../support/helpers/licence-version-holder.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-version-purpose-point.helper.js')
 const PointHelper = require('../../support/helpers/point.helper.js')
@@ -24,6 +25,7 @@ describe('Licence Versions - Fetch licence version service', () => {
   let additionalLicenceVersionTwo
   let licence
   let licenceVersion
+  let licenceVersionHolder
   let licenceVersionPurpose
   let point
   let purpose
@@ -59,6 +61,10 @@ describe('Licence Versions - Fetch licence version service', () => {
         purposeId: purpose.id
       })
 
+      licenceVersionHolder = await LicenceVersionHolderHelper.add({
+        licenceVersionId: licenceVersion.id
+      })
+
       source = SourceHelper.select()
       point = await PointHelper.add({ sourceId: source.id })
       await LicenceVersionPurposePointHelper.add({
@@ -81,6 +87,22 @@ describe('Licence Versions - Fetch licence version service', () => {
           licence: {
             id: licence.id,
             licenceRef: licence.licenceRef
+          },
+          licenceVersionHolder: {
+            id: licenceVersionHolder.id,
+            addressLine1: null,
+            addressLine2: null,
+            addressLine3: null,
+            addressLine4: null,
+            country: null,
+            county: null,
+            forename: null,
+            holderType: 'organisation',
+            initials: null,
+            name: null,
+            postcode: null,
+            salutation: null,
+            town: null
           },
           licenceVersionPurposes: [
             {

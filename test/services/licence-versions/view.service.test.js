@@ -9,9 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
 
 // Things we need to stub
 const FetchConditionsService = require('../../../app/services/licences/fetch-conditions.service.js')
@@ -23,7 +21,6 @@ const ViewService = require('../../../app/services/licence-versions/view.service
 describe('Licence Versions - View service', () => {
   let auth
   let conditions
-  let licence
   let licenceVersion
 
   beforeEach(() => {
@@ -33,23 +30,7 @@ describe('Licence Versions - View service', () => {
       }
     }
 
-    licence = {
-      id: generateUUID(),
-      licenceRef: generateLicenceRef()
-    }
-
-    licenceVersion = LicenceVersionModel.fromJson({
-      administrative: null,
-      applicationNumber: null,
-      createdAt: new Date('2022-01-01'),
-      endDate: null,
-      id: generateUUID(),
-      issueDate: null,
-      licence,
-      licenceVersionPurposes: [],
-      modLogs: [{ id: generateUUID(), reasonDescription: 'Licence Holder Name/Address Change', userId: 'JOBSWORTH01' }],
-      startDate: new Date('2022-01-01')
-    })
+    licenceVersion = ViewLicencesFixture.licenceVersion()
 
     conditions = []
 
@@ -72,21 +53,23 @@ describe('Licence Versions - View service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         backLink: {
-          href: `/system/licences/${licence.id}/history`,
+          href: `/system/licences/${licenceVersion.licence.id}/history`,
           text: 'Go back to history'
         },
         changeType: 'licence issued',
         conditionTypes: [],
         errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
         licenceDetails: {
+          address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
           applicationNumber: null,
           endDate: null,
           issueDate: null,
+          licenceHolderName: 'ORDER OF THE PHOENIX',
           startDate: '1 January 2022'
         },
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
-        pageTitleCaption: `Licence ${licence.licenceRef}`,
+        pageTitleCaption: `Licence ${licenceVersion.licence.licenceRef}`,
         pagination: null,
         points: [],
         purposes: [],

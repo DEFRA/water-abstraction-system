@@ -8,9 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
 const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
-const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -19,7 +17,6 @@ const ViewPresenter = require('../../../app/presenters/licence-versions/view.pre
 describe('Licence Versions - View presenter', () => {
   let auth
   let conditions
-  let licence
   let licenceVersion
   let licenceVersionData
 
@@ -30,30 +27,7 @@ describe('Licence Versions - View presenter', () => {
       }
     }
 
-    licence = {
-      id: generateUUID(),
-      licenceRef: generateLicenceRef()
-    }
-
-    licenceVersion = LicenceVersionModel.fromJson({
-      administrative: null,
-      applicationNumber: null,
-      createdAt: new Date('2022-01-01'),
-      endDate: null,
-      id: generateUUID(),
-      issueDate: null,
-      licence,
-      licenceVersionPurposes: [],
-      modLogs: [
-        {
-          id: generateUUID(),
-          reasonDescription: 'Licence Holder Name/Address Change',
-          userId: 'JOBSWORTH01',
-          note: 'Whole licence trade'
-        }
-      ],
-      startDate: new Date('2022-01-01')
-    })
+    licenceVersion = ViewLicencesFixture.licenceVersion()
 
     licenceVersionData = {
       licenceVersion,
@@ -69,21 +43,23 @@ describe('Licence Versions - View presenter', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: `/system/licences/${licence.id}/history`,
+          href: `/system/licences/${licenceVersion.licence.id}/history`,
           text: 'Go back to history'
         },
         changeType: 'licence issued',
         conditionTypes: [],
         errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
         licenceDetails: {
+          address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
           applicationNumber: null,
           endDate: null,
           issueDate: null,
+          licenceHolderName: 'ORDER OF THE PHOENIX',
           startDate: '1 January 2022'
         },
         notes: null,
         pageTitle: 'Licence version starting 1 January 2022',
-        pageTitleCaption: `Licence ${licence.licenceRef}`,
+        pageTitleCaption: `Licence ${licenceVersion.licence.licenceRef}`,
         pagination: null,
         points: [],
         purposes: [],
@@ -186,9 +162,11 @@ describe('Licence Versions - View presenter', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.licenceDetails).to.equal({
+          address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
           applicationNumber: 'R.1',
           endDate: '1 February 2024',
           issueDate: '3 March 2023',
+          licenceHolderName: 'ORDER OF THE PHOENIX',
           startDate: '1 January 2022'
         })
       })
@@ -199,9 +177,11 @@ describe('Licence Versions - View presenter', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.licenceDetails).to.equal({
+          address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
           applicationNumber: null,
           endDate: null,
           issueDate: null,
+          licenceHolderName: 'ORDER OF THE PHOENIX',
           startDate: '1 January 2022'
         })
       })
