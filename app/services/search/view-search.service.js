@@ -30,6 +30,13 @@ async function go(auth, yar, page) {
 
   // Otherwise, this is a request for a page of results
   const searchQuery = yar.get('searchQuery')
+
+  // If the user's wrlsSession has expired, there won't be any search query stored in the session, so just show the
+  // blank search page again
+  if (!searchQuery) {
+    return _blankPage(userScopes)
+  }
+
   const searchResultType = yar.get('searchResultType')
   const resultType = searchResultType === 'all' ? null : searchResultType
   const pageNumber = Number(page)
