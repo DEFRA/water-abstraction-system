@@ -160,7 +160,9 @@ describe('Determine Licence Issues Service', () => {
 
       describe('that has two matching returns', () => {
         beforeEach(() => {
-          licence.chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[1] = { returnLogId: 'faf38f5f-9ca1-4c64-aca5-308cfdc72db7' }
+          licence.chargeVersions[0].chargeReferences[0].chargeElements[0].returnLogs[1] = {
+            returnLogId: 'faf38f5f-9ca1-4c64-aca5-308cfdc72db7'
+          }
           licence.returnLogs[1] = {
             id: 'faf38f5f-9ca1-4c64-aca5-308cfdc72db7',
             abstractionOutsidePeriod: false,
