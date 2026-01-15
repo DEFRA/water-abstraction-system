@@ -32,6 +32,10 @@ async function _fetch(licenceId) {
     .modifyGraph('region', (builder) => {
       builder.select(['id', 'displayName'])
     })
+    .withGraphFetched('licenceVersions.licenceVersionHolder')
+    .modifyGraph('licenceVersions.licenceVersionHolder', (licenceVersionHolderBuilder) => {
+      licenceVersionHolderBuilder.select(['id', 'forename', 'holderType', 'initials', 'name', 'salutation'])
+    })
     .withGraphFetched('licenceVersions.licenceVersionPurposes')
     .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {
       builder.select([
