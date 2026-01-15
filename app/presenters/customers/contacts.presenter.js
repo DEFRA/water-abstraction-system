@@ -5,7 +5,7 @@
  * @module ContactsPresenter
  */
 
-const { companyContact } = require('../customer.presenter.js')
+const { formatCompanyContact } = require('../customer.presenter.js')
 
 /**
  * Formats data for the 'customers/{id}/contacts' page
@@ -29,11 +29,11 @@ function go(customer, companyContacts) {
 }
 
 function _companyContacts(companyContacts, customer) {
-  return companyContacts.map((companyContactData) => {
-    const contact = companyContact(companyContactData)
+  return companyContacts.map((companyContact) => {
+    const contact = formatCompanyContact(companyContact)
 
     return {
-      action: `/customer/${customer.id}/contacts/${companyContactData.contact.id}`,
+      action: `/customer/${customer.id}/contacts/${companyContact.contact.id}`,
       ...contact
     }
   })

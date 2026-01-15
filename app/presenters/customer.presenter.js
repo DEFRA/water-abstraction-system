@@ -5,11 +5,11 @@
  *
  * This function formats the company contact into an object used to show the company contacts.
  *
- * @param companyContact
+ * @param {module:CompanyContactModel} companyContact - a company contact
  *
  * @returns {object} The company contact for the view
  */
-function companyContact(companyContact) {
+function formatCompanyContact(companyContact) {
   return {
     communicationType: _communicationType(companyContact),
     name: companyContact.contact.$name(),
@@ -26,5 +26,5 @@ function _communicationType(companyContact) {
 }
 
 module.exports = {
-  companyContact
+  formatCompanyContact
 }

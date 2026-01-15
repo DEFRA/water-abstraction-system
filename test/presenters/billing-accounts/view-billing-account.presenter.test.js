@@ -42,7 +42,6 @@ describe('Billing Accounts - View Billing Account presenter', () => {
       const result = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
       expect(result).to.equal({
-        accountNumber: 'S88897992A',
         address: [
           'Ferns Surfacing Limited',
           'Test Testingson',
@@ -54,7 +53,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         ],
         backLink: {
           title: 'Go back to charge information',
-          link: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`
+          href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`
         },
         billingAccountId: billingAccountData.billingAccount.id,
         bills: [
@@ -72,7 +71,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
         customerFile: null,
         lastUpdated: null,
         pageTitle: 'Billing account for Ferns Surfacing Limited',
-        pagination: { total: 1 }
+        pageTitleCaption: `Billing account ${billingAccountData.billingAccount.accountNumber}`
       })
     })
   })
@@ -90,7 +89,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
         expect(result.backLink).to.equal({
           title: 'Go back to search',
-          link: '/'
+          href: '/'
         })
       })
     })
@@ -101,7 +100,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
         expect(result.backLink).to.equal({
           title: 'Go back to charge information',
-          link: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`
+          href: `/licences/${licenceId}/charge-information/${chargeVersionId}/view`
         })
       })
     })
@@ -116,7 +115,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
         expect(result.backLink).to.equal({
           title: 'Go back to bills',
-          link: `/system/licences/${licenceId}/bills`
+          href: `/system/licences/${licenceId}/bills`
         })
       })
     })
@@ -132,7 +131,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
         expect(result.backLink).to.equal({
           title: 'Go back to customer',
-          link: `/system/customers/${companyId}/billing-accounts`
+          href: `/system/customers/${companyId}/billing-accounts`
         })
       })
     })

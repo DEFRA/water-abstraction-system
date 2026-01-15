@@ -24,14 +24,14 @@ const ViewBillingAccountPresenter = require('../../presenters/billing-accounts/v
  * @returns {Promise<object>} an object representing the `pageData` needed by the view billing account template.
  */
 async function go(id, page, licenceId, chargeVersionId, companyId) {
-  const billingAccountData = await FetchViewBillingAccountService.go(id, page)
+  const { pagination: paginationData, ...billingAccountData } = await FetchViewBillingAccountService.go(id, page)
 
   const pageData = ViewBillingAccountPresenter.go(billingAccountData, licenceId, chargeVersionId, companyId)
 
   const queryArgs = _queryArgs(chargeVersionId, licenceId)
 
   const pagination = PaginatorPresenter.go(
-    pageData.pagination.total,
+    paginationData.total,
     Number(page),
     `/system/billing-accounts/${id}`,
     billingAccountData.bills.length,

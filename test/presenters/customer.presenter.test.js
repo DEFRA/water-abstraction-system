@@ -14,7 +14,7 @@ const CustomersFixtures = require('../fixtures/customers.fixture.js')
 const CustomerPresenter = require('../../app/presenters/customer.presenter.js')
 
 describe('Customer presenter', () => {
-  describe('#companyContact', () => {
+  describe('#formatCompanyContact', () => {
     let companyContact
 
     beforeEach(() => {
@@ -24,7 +24,7 @@ describe('Customer presenter', () => {
     })
 
     it('returns the company contact', () => {
-      const result = CustomerPresenter.companyContact(companyContact)
+      const result = CustomerPresenter.formatCompanyContact(companyContact)
 
       expect(result).to.equal({
         communicationType: 'Additional Contact',
@@ -40,7 +40,7 @@ describe('Customer presenter', () => {
         })
 
         it('returns the string "Water abstraction alerts"', () => {
-          const result = CustomerPresenter.companyContact(companyContact)
+          const result = CustomerPresenter.formatCompanyContact(companyContact)
 
           expect(result.communicationType).to.equal('Water abstraction alerts')
         })
@@ -48,7 +48,7 @@ describe('Customer presenter', () => {
 
       describe('when the company contact is not marked for abstraction alerts', () => {
         it('returns the licence role', () => {
-          const result = CustomerPresenter.companyContact(companyContact)
+          const result = CustomerPresenter.formatCompanyContact(companyContact)
 
           expect(result.communicationType).to.equal('Additional Contact')
         })
@@ -58,7 +58,7 @@ describe('Customer presenter', () => {
     describe('the "email" property', () => {
       describe('when there is an email', () => {
         it('returns the email', () => {
-          const result = CustomerPresenter.companyContact(companyContact)
+          const result = CustomerPresenter.formatCompanyContact(companyContact)
 
           expect(result.email).to.equal('rachael.tyrell@tyrellcorp.com')
         })
@@ -70,7 +70,7 @@ describe('Customer presenter', () => {
         })
 
         it('returns null', () => {
-          const result = CustomerPresenter.companyContact(companyContact)
+          const result = CustomerPresenter.formatCompanyContact(companyContact)
 
           expect(result.email).to.be.null()
         })
