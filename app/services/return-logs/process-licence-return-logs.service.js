@@ -97,17 +97,12 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
   // All generated return ID's are returned by the service and used by VoidLicenceReturnLogsService to identify which
   // return logs for the given cycle _not_ to mark as 'void'.
   //
-  // Because we've processed _all_ return requirements for the cycle, we know any return logs whose returnId is not in
-  // `generatedReturnIds` have been made redundant by whatever the 'change' was
+  // Because we've processed _all_ return requirements for the cycle, we know any return logs whose ID is not in
+  // `generatedReturnLogIds` have been made redundant by whatever the 'change' was
   for (const returnRequirement of requirementsToProcess) {
-    const returnLogIds = await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
+    const returnIds = await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
 
-    generatedReturnIds.push(...returnLogIds)
-  }
-
-  // Skip calling the void service if we didn't generate any return logs
-  if (generatedReturnIds.length === 0) {
-    return
+    generatedReturnIds.push(...returnIds)
   }
 
   await VoidLicenceReturnLogsService.go(generatedReturnIds, licenceRef, returnCycle.id, changeDate)
