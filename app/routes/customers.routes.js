@@ -19,16 +19,14 @@ const routes = [
     method: 'GET',
     path: '/customers/{id}/contacts',
     options: {
-      handler: CustomersController.viewContact,
-      auth: {}
+      handler: CustomersController.viewContact
     }
   },
   {
     method: 'GET',
     path: '/customers/{id}/licences',
     options: {
-      handler: CustomersController.viewLicences,
-      auth: {}
+      handler: CustomersController.viewLicences
     }
   }
 ]
