@@ -111,7 +111,7 @@ describe('Notifications - Notification Table presenter', () => {
   })
 
   describe('when someone has removed the query params from the url', () => {
-    describe('and neither licenceId nor returnId are present', () => {
+    describe('and neither licenceId nor returnLogId are present', () => {
       it('correctly presents the data', () => {
         const result = NotificationsTablePresenter.go([notification], null, null)
 
