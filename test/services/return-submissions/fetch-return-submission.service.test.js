@@ -19,7 +19,7 @@ const ReturnSubmissionLineModel = require('../../../app/models/return-submission
 // Thing under test
 const FetchReturnSubmissionService = require('../../../app/services/return-submissions/fetch-return-submission.service.js')
 
-describe.only('Fetch Return Submission service', () => {
+describe('Fetch Return Submission service', () => {
   let testReturnSubmission
   let testReturnLog
 
