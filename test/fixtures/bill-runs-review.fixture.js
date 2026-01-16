@@ -81,17 +81,18 @@ function reviewChargeElement() {
           }
         ],
         returnId: 'v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31',
+        returnLogId: 'e0e3957d-ab75-4a49-bb04-36a332053448',
         returnReference: '11142960',
         returnStatus: 'completed',
         startDate: new Date('2022-11-01'),
         underQuery: false,
         returnLog: {
-          id: 'v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31',
+          id: 'e0e3957d-ab75-4a49-bb04-36a332053448',
           periodStartDay: 1,
           periodStartMonth: 4,
           periodEndDay: 30,
           periodEndMonth: 9,
-          returnId: 'e0e3957d-ab75-4a49-bb04-36a332053448'
+          returnId: 'v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31'
         }
       }
     ]
@@ -194,17 +195,18 @@ function reviewLicence() {
           }
         ],
         returnId: 'v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31',
+        returnLogId: 'b22626c5-db4e-450e-9897-b615d605b110',
         returnReference: '11142960',
         returnStatus: 'completed',
         startDate: new Date('2022-11-01'),
         underQuery: false,
         returnLog: {
-          id: 'v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31',
+          id: 'b22626c5-db4e-450e-9897-b615d605b110',
           periodStartDay: 1,
           periodStartMonth: 4,
           periodEndDay: 30,
           periodEndMonth: 9,
-          returnId: 'b22626c5-db4e-450e-9897-b615d605b110'
+          returnId: 'v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31'
         },
         reviewChargeElements: [
           {
@@ -236,17 +238,18 @@ function reviewLicence() {
           }
         ],
         returnId: 'v1:5:1/11/11/*11/1111:11142961:2022-11-01:2023-10-31',
+        returnLogId: '41d6c667-16d6-4a1e-b0e2-9e9cf52d3325',
         returnReference: '11142961',
         returnStatus: 'completed',
         startDate: new Date('2022-11-01'),
         underQuery: false,
         returnLog: {
-          id: 'v1:5:1/11/11/*11/1111:11142961:2022-11-01:2023-10-31',
+          id: '41d6c667-16d6-4a1e-b0e2-9e9cf52d3325',
           periodStartDay: 1,
           periodStartMonth: 4,
           periodEndDay: 30,
           periodEndMonth: 9,
-          returnId: '41d6c667-16d6-4a1e-b0e2-9e9cf52d3325'
+          returnId: 'v1:5:1/11/11/*11/1111:11142961:2022-11-01:2023-10-31'
         },
         reviewChargeElements: []
       }

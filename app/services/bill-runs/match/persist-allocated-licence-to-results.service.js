@@ -53,14 +53,14 @@ async function go(billRunId, licence) {
 async function _persistChargeElement(chargeElement, reviewReturnIds, reviewChargeReferenceId) {
   const reviewChargeElementId = await _persistReviewChargeElement(chargeElement, reviewChargeReferenceId)
 
-  for (const returnLog of chargeElement.returnLogs) {
+  for (const chargeElementReturnLog of chargeElement.returnLogs) {
     // When we persist the review result we need the Id's for both the charge element and return log's review result
     // records. Though it looks like we're iterating return logs here, these are copies assigned during matching and
     // allocation. We don't create `ReviewReturn` records until this service is called, and those are based
     // on the `returnLogs` property of each licence. Hence, we need to pass in the ID's created and search them for
     // a match in order to get the `reviewReturnId`.
     const { reviewReturnId } = reviewReturnIds.find((reviewReturn) => {
-      return reviewReturn.returnId === returnLog.returnId
+      return reviewReturn.returnLogId === chargeElementReturnLog.returnLogId
     })
 
     await _persistChargeElementsReturns(reviewChargeElementId, reviewReturnId)
@@ -132,7 +132,7 @@ async function _persistReturnLogs(returnLogs, reviewLicenceId) {
   for (const returnLog of returnLogs) {
     const reviewReturnId = await _persistReviewReturn(returnLog, reviewLicenceId)
 
-    reviewReturnIds.push({ returnId: returnLog.id, reviewReturnId })
+    reviewReturnIds.push({ returnLogId: returnLog.id, reviewReturnId })
   }
 
   return reviewReturnIds
@@ -156,8 +156,8 @@ async function _persistReviewChargeElement(chargeElement, reviewChargeReferenceI
 
 async function _persistReviewReturn(returnLog, reviewLicenceId) {
   const data = {
-    returnId: returnLog.id,
-    returnLogId: returnLog.returnId,
+    returnId: returnLog.returnId,
+    returnLogId: returnLog.id,
     reviewLicenceId,
     returnReference: returnLog.returnReference,
     startDate: returnLog.startDate,

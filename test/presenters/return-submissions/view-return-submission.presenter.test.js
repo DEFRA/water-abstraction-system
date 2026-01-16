@@ -37,7 +37,7 @@ describe('View Return Submissions presenter', () => {
       it('returns the expected result', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
-        expect(result.backLink).to.equal(`/system/return-logs/${testReturnSubmission.returnLog.returnId}`)
+        expect(result.backLink).to.equal(`/system/return-logs/${testReturnSubmission.returnLogId}`)
       })
     })
 
@@ -50,7 +50,7 @@ describe('View Return Submissions presenter', () => {
         const result = ViewReturnSubmissionPresenter.go(testReturnSubmission, '2025-1')
 
         expect(result.backLink).to.equal(
-          `/system/return-logs/${testReturnSubmission.returnLog.returnId}?version=${testReturnSubmission.version}`
+          `/system/return-logs/${testReturnSubmission.returnLogId}?version=${testReturnSubmission.version}`
         )
       })
     })

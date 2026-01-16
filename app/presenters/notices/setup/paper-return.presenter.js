@@ -41,12 +41,12 @@ function _backLink(sessionId, checkPageVisited) {
 function _returns(returns, selectedReturns = []) {
   return returns.map((returnItem) => {
     return {
-      checked: selectedReturns.includes(returnItem.returnId),
+      checked: selectedReturns.includes(returnItem.returnLogId),
       hint: {
         text: `${formatLongDate(new Date(returnItem.startDate))} to ${formatLongDate(new Date(returnItem.endDate))}`
       },
       text: `${returnItem.returnReference} ${returnItem.siteDescription}`,
-      value: returnItem.returnId
+      value: returnItem.returnLogId
     }
   })
 }

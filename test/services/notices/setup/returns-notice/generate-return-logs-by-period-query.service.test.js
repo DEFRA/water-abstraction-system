@@ -86,7 +86,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     rl.due_date,
     rl.end_date,
     rl.licence_ref,
-    rl.return_id,
+    rl.id AS return_log_id,
     rl.return_reference,
     rl.start_date
   FROM
@@ -127,7 +127,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By Period Quer
     rl.due_date,
     rl.end_date,
     rl.licence_ref,
-    rl.return_id,
+    rl.id AS return_log_id,
     rl.return_reference,
     rl.start_date
   FROM
@@ -301,7 +301,7 @@ function _transformToResult(returnLog) {
     due_date: returnLog.dueDate,
     end_date: returnLog.endDate,
     licence_ref: returnLog.licenceRef,
-    return_id: returnLog.returnId,
+    return_log_id: returnLog.id,
     return_reference: returnLog.returnReference,
     start_date: returnLog.startDate
   }

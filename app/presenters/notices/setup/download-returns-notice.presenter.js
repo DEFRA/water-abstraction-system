@@ -64,7 +64,7 @@ function _transformToCsv(recipients, notificationType) {
 
     const row = [
       recipient.licence_ref,
-      recipient.return_id,
+      recipient.return_log_id,
       recipient.return_reference,
       recipient.start_date,
       recipient.end_date,

@@ -29,7 +29,7 @@ describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients 
 
     licenceHolder = await RecipientsSeeder.licenceHolder('Test Licence Holder', licenceRef)
     licenceHolder.licenceRefs = [licenceRef]
-    licenceHolder.returnLogIds = [returnLog.returnId]
+    licenceHolder.returnLogIds = [returnLog.id]
   })
 
   after(async () => {
@@ -40,7 +40,7 @@ describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients 
 
   describe('when service is called for sending the "alternate notice"', () => {
     it('fetches the correct recipient data for sending the notice', async () => {
-      const results = await FetchAlternateReturnsRecipients.go([returnLog.returnId], notificationDueDate)
+      const results = await FetchAlternateReturnsRecipients.go([returnLog.id], notificationDueDate)
 
       const sendingResult = RecipientsSeeder.transformToSendingResult(licenceHolder)
       sendingResult.notificationDueDate = notificationDueDate

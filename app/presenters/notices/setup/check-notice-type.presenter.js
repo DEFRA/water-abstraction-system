@@ -66,7 +66,7 @@ function _returnsPeriod(determinedReturnsPeriod) {
 
 function _selectedDueReturns(selectedReturns, dueReturns) {
   const selectedDueReturns = dueReturns.filter((dueReturn) => {
-    return selectedReturns.includes(dueReturn.returnId)
+    return selectedReturns.includes(dueReturn.returnLogId)
   })
 
   return selectedDueReturns.map((returnItem) => {

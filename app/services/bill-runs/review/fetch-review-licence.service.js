@@ -46,6 +46,7 @@ async function _fetch(reviewLicenceId) {
           'quantity',
           'purposes',
           'returnId',
+          'returnLogId',
           'returnReference',
           'returnStatus',
           'startDate',

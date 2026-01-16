@@ -17,7 +17,7 @@ const ReturnRequirementHelper = require('../../support/helpers/return-requiremen
 const VoidLicenceReturnLogsService = require('../../../app/services/return-logs/void-licence-return-logs.service.js')
 
 describe('Return Logs - Void Licence Return Logs service', () => {
-  let reissuedReturnLogIds
+  let reissuedReturnIds
 
   let changeDate
   let licenceRef
@@ -78,11 +78,11 @@ describe('Return Logs - Void Licence Return Logs service', () => {
                 returnReference
               })
 
-              reissuedReturnLogIds = [reissuedReturnLog1.id]
+              reissuedReturnIds = [reissuedReturnLog1.returnId]
             })
 
             it('voids only the return log [C] that matches the cycle and ends after the "change date"', async () => {
-              await VoidLicenceReturnLogsService.go(reissuedReturnLogIds, licenceRef, returnCycleId, changeDate)
+              await VoidLicenceReturnLogsService.go(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
 
               let returnLogBeingChecked
 
@@ -151,11 +151,11 @@ describe('Return Logs - Void Licence Return Logs service', () => {
                 returnReference
               })
 
-              reissuedReturnLogIds = [reissuedReturnLog1.id]
+              reissuedReturnIds = [reissuedReturnLog1.returnId]
             })
 
             it('voids only the return log [C] that matches the cycle', async () => {
-              await VoidLicenceReturnLogsService.go(reissuedReturnLogIds, licenceRef, returnCycleId, changeDate)
+              await VoidLicenceReturnLogsService.go(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
 
               let returnLogBeingChecked
 
@@ -206,11 +206,11 @@ describe('Return Logs - Void Licence Return Logs service', () => {
             startDate: changeDate
           })
 
-          reissuedReturnLogIds = [reissuedReturnLog1.id]
+          reissuedReturnIds = [reissuedReturnLog1.returnId]
         })
 
         it('voids only the existing return log [A]', async () => {
-          await VoidLicenceReturnLogsService.go(reissuedReturnLogIds, licenceRef, returnCycleId, changeDate)
+          await VoidLicenceReturnLogsService.go(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
 
           let returnLogBeingChecked
 
@@ -261,11 +261,11 @@ describe('Return Logs - Void Licence Return Logs service', () => {
             startDate: changeDate
           })
 
-          reissuedReturnLogIds = [reissuedReturnLog1.id, reissuedReturnLog2.id]
+          reissuedReturnIds = [reissuedReturnLog1.returnId, reissuedReturnLog2.returnId]
         })
 
         it('voids only the existing return log [A]', async () => {
-          await VoidLicenceReturnLogsService.go(reissuedReturnLogIds, licenceRef, returnCycleId, changeDate)
+          await VoidLicenceReturnLogsService.go(reissuedReturnIds, licenceRef, returnCycleId, changeDate)
 
           let returnLogBeingChecked
 

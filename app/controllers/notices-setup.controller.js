@@ -74,9 +74,9 @@ async function processDownloadRecipients(request, h) {
 }
 
 async function processPreviewPaperReturn(request, h) {
-  const { contactHashId, sessionId, returnId } = request.params
+  const { contactHashId, sessionId, returnLogId } = request.params
 
-  const fileBuffer = await ProcessPreviewPaperReturnService.go(sessionId, contactHashId, returnId)
+  const fileBuffer = await ProcessPreviewPaperReturnService.go(sessionId, contactHashId, returnLogId)
 
   return h.response(fileBuffer).type('application/pdf').header('Content-Disposition', 'inline; filename="example.pdf"')
 }

@@ -5,7 +5,7 @@
  */
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const { generateReturnLogId } = require('./return-log.helper.js')
+const { generateReturnId } = require('./return-log.helper.js')
 const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
 
 /**
@@ -50,7 +50,7 @@ function defaults(data = {}) {
   const defaults = {
     id: generateUUID(),
     returnLogId: generateUUID(),
-    returnId: generateReturnLogId(),
+    returnId: generateReturnId(),
     userId: 'admin-internal@wrls.gov.uk',
     userType: 'internal',
     version: 1,

@@ -21,19 +21,11 @@ class ReviewReturnModel extends BaseModel {
 
   static get relationMappings() {
     return {
-      reviewLicence: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: 'review-licence.model',
-        join: {
-          from: 'reviewReturns.reviewLicenceId',
-          to: 'reviewLicences.id'
-        }
-      },
       returnLog: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'return-log.model',
         join: {
-          from: 'reviewReturns.returnId',
+          from: 'reviewReturns.returnLogId',
           to: 'returnLogs.id'
         }
       },
@@ -47,6 +39,14 @@ class ReviewReturnModel extends BaseModel {
             to: 'reviewChargeElementReturns.reviewChargeElementId'
           },
           to: 'reviewChargeElements.id'
+        }
+      },
+      reviewLicence: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'review-licence.model',
+        join: {
+          from: 'reviewReturns.reviewLicenceId',
+          to: 'reviewLicences.id'
         }
       }
     }

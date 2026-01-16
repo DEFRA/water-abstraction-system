@@ -74,6 +74,7 @@ async function _fetch(reviewChargeElementId) {
           'reviewReturns.quantity',
           'reviewReturns.purposes',
           'reviewReturns.returnId',
+          'reviewReturns.returnLogId',
           'reviewReturns.returnReference',
           'reviewReturns.returnStatus',
           'reviewReturns.startDate',

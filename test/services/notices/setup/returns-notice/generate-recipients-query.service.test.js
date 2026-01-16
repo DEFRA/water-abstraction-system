@@ -22,14 +22,14 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
     rl.due_date,
     rl.end_date,
     rl.licence_ref,
-    rl.return_id,
+    rl.id as return_log_id,
     rl.return_reference,
     rl.start_date
   FROM
     public.return_logs rl
   WHERE
     rl.status = 'due'
-    AND rl.return_id = ANY (?)
+    AND rl.id = ANY (?)
   `
   const processForSendingExpectedQuery = `
   -- PROCESS FOR SENDING NOTICES
@@ -367,7 +367,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
       // Prepare the array of returnLogIds for the query parameter
       returnLogIds = returnLogs.map((returnLog) => {
-        return returnLog.returnId
+        return returnLog.id
       })
     })
 

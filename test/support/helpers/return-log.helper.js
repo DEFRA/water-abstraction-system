@@ -15,12 +15,13 @@ const { generateReference } = require('./return-requirement.helper.js')
  *
  * If no `data` is provided, default values will be used. These are
  *
- * - `id` - v1:1:[the generated licenceRef]:[the generated returnReference]:2022-04-01:2023-03-31
+ * - `id` - UUID
  * - `createdAt` - new Date()
  * - `endDate` - 2023-03-31
  * - `licenceRef` - [randomly generated - 1/23/45/76/3672]
  * - `metadata` - {}
  * - `receivedDate` - 2023-04-12
+ * - `returnId` - v1:1:[the generated licenceRef]:[the generated returnReference]:2022-04-01:2023-03-31
  * - `returnReference` - [randomly generated - 10000321]
  * - `returnsFrequency` - month
  * - `startDate` - 2022-04-01
@@ -59,7 +60,7 @@ function defaults(data = {}) {
   const dueDate = data.dueDate ? new Date(data.dueDate) : null
 
   const defaults = {
-    id: generateReturnLogId(startDate, endDate, 1, licenceRef, returnReference),
+    id: generateUUID(),
     createdAt: timestamp,
     dueDate,
     endDate,
@@ -85,7 +86,7 @@ function defaults(data = {}) {
       version: 1
     },
     receivedDate,
-    returnId: generateUUID(),
+    returnId: generateReturnId(startDate, endDate, 1, licenceRef, returnReference),
     returnReference,
     returnsFrequency: 'month',
     startDate,
@@ -119,7 +120,7 @@ function defaults(data = {}) {
  *
  * @returns {string} the generated return log ID
  */
-function generateReturnLogId(
+function generateReturnId(
   startDate = new Date('2022-04-01'),
   endDate = new Date('2023-03-31'),
   version = 1,
@@ -181,6 +182,6 @@ function _areDatesSequential(endDate, startDate) {
 module.exports = {
   add,
   defaults,
-  generateReturnLogId,
+  generateReturnId,
   hasContinuousReturnLogs
 }

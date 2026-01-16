@@ -34,7 +34,7 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  * - are for the licence that changed
  * - are for the return cycle being processed
  * - that have an end date on or after the change date
- * - that do not have a return ID that matches one in `reissuedReturnLogIds`
+ * - that do not have a returnId that matches one in `reissuedReturnIds`
  *
  * ## Scenarios
  *
@@ -43,7 +43,7 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  * This replicates the example provided above. A licence with two existing return logs that span the all-year cycle
  * is revoked on 2022-12-31. The first return log is left unchanged, as is the reissue. But second is voided.
  *
- * |Return log ID                           |Lic ref|Start date|End date  |Ref. |Return cycle ID   |Before  |After   |
+ * |Return log returnId                     |Lic ref|Start date|End date  |Ref. |Return cycle ID   |Before  |After   |
  * |----------------------------------------|-------|----------|----------|-----|------------------|--------|--------|
  * |v1:9:01/1234:12345:2022-04-01:2022-09-30|01/1234|2022-04-01|2022-09-30|12345|813c6c4a-2b8b-49bb|complete|complete|
  * |v1:9:01/1234:12346:2022-10-01:2023-03-31|01/1234|2022-10-01|2023-03-31|12346|813c6c4a-2b8b-49bb|complete|void    |
@@ -55,7 +55,7 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  * That return version is superseded (the purpose was incorrect). The "change date" is taken from the start of the new
  * return version but in this case it remains the same as the existing one.
  *
- * |Return log ID                           |Lic ref|Start date|End date  |Ref. |Return cycle ID   |Before  |After   |
+ * |Return log returnId                     |Lic ref|Start date|End date  |Ref. |Return cycle ID   |Before  |After   |
  * |----------------------------------------|-------|----------|----------|-----|------------------|--------|--------|
  * |v1:9:02/1234:17890:2022-04-01:2023-03-31|02/1234|2022-04-01|2023-03-31|17890|813c6c4a-2b8b-49bb|complete|void    |
  * |v1:9:02/1234:29876:2022-04-01:2023-03-31|02/1234|2022-04-01|2023-03-31|29876|813c6c4a-2b8b-49bb|due     |due     |
@@ -66,24 +66,24 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  * A new return version is added, which means it will have a different start date. The "change date" is that new start
  * date.
  *
- * |Return log ID                           |Lic ref|Start date|End date  |Ref. |Return cycle ID   |Before  |After   |
+ * |Return log returnId                     |Lic ref|Start date|End date  |Ref. |Return cycle ID   |Before  |After   |
  * |----------------------------------------|-------|----------|----------|-----|------------------|--------|--------|
  * |v1:9:03/1234:10023:2022-04-01:2023-03-31|03/1234|2022-04-01|2023-03-31|10023|813c6c4a-2b8b-49bb|complete|void    |
  * |v1:9:03/1234:10023:2022-04-01:2022-08-31|03/1234|2022-04-01|2022-08-31|10023|813c6c4a-2b8b-49bb|due     |due     |
  * |v1:9:03/1234:30014:2022-09-01:2023-03-31|03/1234|2022-09-01|2023-03-31|30014|813c6c4a-2b8b-49bb|due     |due     |
  *
- * @param {string[]} reissuedReturnLogIds - The IDs from the return logs generated for the return cycle being processed
+ * @param {string[]} reissuedReturnIds - The returnIds from the return logs generated for the return cycle
  * @param {licenceRef} licenceRef - The licence reference for the 'changed' licence
  * @param {string} returnCycleId - The ID of the return cycle being processed
  * @param {Date} changeDate - The date from which the 'change' applies
  */
-async function go(reissuedReturnLogIds, licenceRef, returnCycleId, changeDate) {
+async function go(reissuedReturnIds, licenceRef, returnCycleId, changeDate) {
   await ReturnLogModel.query()
     .patch({ status: 'void', updatedAt: timestampForPostgres() })
     .where('returnCycleId', returnCycleId)
     .where('licenceRef', licenceRef)
     .where('endDate', '>=', changeDate)
-    .whereNotIn('id', reissuedReturnLogIds)
+    .whereNotIn('returnId', reissuedReturnIds)
 }
 
 module.exports = {

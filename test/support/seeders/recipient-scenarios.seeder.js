@@ -422,7 +422,7 @@ function _aggregatedData(returnLogs) {
   })
 
   const allReturnLogIds = returnLogs.map((returnLog) => {
-    return returnLog.returnId
+    return returnLog.id
   })
 
   const distinctLicenceRefs = [...new Set(allLicenceRefs)]

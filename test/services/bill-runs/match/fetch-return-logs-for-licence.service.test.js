@@ -42,8 +42,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
     describe('which have return submission lines within the billing period', () => {
       beforeEach(async () => {
-        const { returnId } = returnLogRecord
-        const { id: returnSubmissionId } = await ReturnSubmissionHelper.add({ returnLogId: returnId })
+        const { id: returnSubmissionId } = await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
 
         await ReturnSubmissionLineHelper.add({
           returnSubmissionId,
@@ -93,8 +92,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
     describe('which have NO return submission lines within the billing period', () => {
       beforeEach(async () => {
-        const { returnId } = returnLogRecord
-        const { id: returnSubmissionId } = await ReturnSubmissionHelper.add({ returnLogId: returnId })
+        const { id: returnSubmissionId } = await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
 
         await ReturnSubmissionLineHelper.add({
           returnSubmissionId,
@@ -122,9 +120,7 @@ describe('Fetch Return Logs for Licence service', () => {
 
     describe('which is a nil return', () => {
       beforeEach(async () => {
-        const { returnId } = returnLogRecord
-
-        await ReturnSubmissionHelper.add({ returnLogId: returnId, nilReturn: true })
+        await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id, nilReturn: true })
       })
 
       it('returns the return log with "nilreturn" set to "true" and no return submission lines', async () => {
@@ -146,9 +142,7 @@ describe('Fetch Return Logs for Licence service', () => {
           startDate: new Date('2022-01-01'),
           endDate: new Date('2022-12-31')
         })
-        const { returnId } = returnLogRecord
-
-        await ReturnSubmissionHelper.add({ returnLogId: returnId })
+        await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
       })
 
       it('returns the return log and return submission lines that are applicable', async () => {
@@ -169,9 +163,7 @@ describe('Fetch Return Logs for Licence service', () => {
           startDate: new Date('2023-04-01'),
           endDate: new Date('2024-03-31')
         })
-        const { returnId } = returnLogRecord
-
-        await ReturnSubmissionHelper.add({ returnLogId: returnId })
+        await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
       })
 
       it('returns no records', async () => {
@@ -188,9 +180,7 @@ describe('Fetch Return Logs for Licence service', () => {
           startDate: new Date('2023-01-01'),
           endDate: new Date('2023-12-31')
         })
-        const { returnId } = returnLogRecord
-
-        await ReturnSubmissionHelper.add({ returnLogId: returnId })
+        await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
       })
 
       it('returns no records', async () => {
@@ -204,9 +194,8 @@ describe('Fetch Return Logs for Licence service', () => {
     describe('because the return log is not two-part-tariff', () => {
       beforeEach(async () => {
         returnLogRecord = await ReturnLogHelper.add({ metadata: _metadata(false) })
-        const { returnId } = returnLogRecord
 
-        await ReturnSubmissionHelper.add({ returnLogId: returnId })
+        await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
       })
 
       it('returns no records', async () => {
@@ -228,9 +217,8 @@ describe('Fetch Return Logs for Licence service', () => {
     describe('because the return is void', () => {
       beforeEach(async () => {
         returnLogRecord = await ReturnLogHelper.add({ metadata: _metadata(true), status: 'void' })
-        const { returnId } = returnLogRecord
 
-        await ReturnSubmissionHelper.add({ returnLogId: returnId })
+        await ReturnSubmissionHelper.add({ returnLogId: returnLogRecord.id })
       })
 
       it('returns no records', async () => {

@@ -28,13 +28,13 @@ function go(session, contactHashId) {
 
 function _returnLogs(dueReturns, selectedReturns, sessionId, contactHashId) {
   const returnLogs = dueReturns.filter((dueReturn) => {
-    return selectedReturns.includes(dueReturn.returnId)
+    return selectedReturns.includes(dueReturn.returnLogId)
   })
 
   return returnLogs.map((dueReturn) => {
     return {
       action: {
-        link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnId}`,
+        link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnLogId}`,
         text: 'Preview'
       },
       returnPeriod: `${formatLongDate(new Date(dueReturn.startDate))} to ${formatLongDate(new Date(dueReturn.endDate))}`,

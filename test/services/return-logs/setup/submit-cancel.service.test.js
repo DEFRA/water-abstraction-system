@@ -26,7 +26,7 @@ describe('Return Logs Setup - Submit Cancel service', () => {
         periodStartMonth: 1,
         purposes: 'Evaporative Cooling',
         receivedDate: '2025-01-31T00:00:00.000Z',
-        returnLogId: 'v1:6:09/999:1003992:2022-04-01:2023-03-31',
+        returnLogId: '610ac214-03c2-4b25-a89a-65bb81d1624f',
         returnReference: '1234',
         siteDescription: 'POINT A, TEST SITE DESCRIPTION',
         startDate: '2004-04-01T00:00:00.000Z',

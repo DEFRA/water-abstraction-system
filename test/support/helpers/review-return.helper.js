@@ -6,7 +6,7 @@
 
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('./licence.helper.js')
-const { generateReturnLogId } = require('./return-log.helper.js')
+const { generateReturnId } = require('./return-log.helper.js')
 const { generateReference } = require('./return-requirement.helper.js')
 const ReviewReturnModel = require('../../../app/models/review-return.model.js')
 
@@ -57,7 +57,7 @@ function defaults(data = {}) {
 
   const defaults = {
     reviewLicenceId: generateUUID(),
-    returnId: generateReturnLogId(new Date('2022-04-01'), new Date('2023-03-31'), 1, licenceRef, returnReference),
+    returnId: generateReturnId(new Date('2022-04-01'), new Date('2023-03-31'), 1, licenceRef, returnReference),
     returnLogId: generateUUID(),
     returnReference,
     returnStatus: 'completed',

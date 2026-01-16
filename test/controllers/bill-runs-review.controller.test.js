@@ -174,8 +174,7 @@ describe('Bill Runs Review controller', () => {
               issues: [Array],
               purpose: 'Spray Irrigation - Direct',
               reference: '11142960',
-              returnId: 'v1:5:1/11/10/*S/0084:11142960:2022-11-01:2023-10-31',
-              returnLink: '/returns/return?id=v1:5:1/11/10/*S/0084:11142960:2022-11-01:2023-10-31',
+              returnLink: '/system/return-logs/dbe8fd0c-7ae1-4dad-8b98-c6dd51a9cba1',
               returnPeriod: '1 November 2022 to 31 October 2023',
               returnStatus: 'completed',
               returnTotal: '0 ML / 0 ML'
@@ -584,8 +583,7 @@ describe('Bill Runs Review controller', () => {
               issues: ['Returns received late'],
               purpose: 'Spray Irrigation - Direct',
               reference: '11142960',
-              returnId: 'v1:5:1/11/10/*S/0084:11142960:2022-11-01:2023-10-31',
-              returnLink: '/returns/return?id=v1:5:1/11/10/*S/0084:11142960:2022-11-01:2023-10-31',
+              returnLink: '/system/return-logs/e63573be-d66e-4c89-9af3-b292d744a28e',
               returnPeriod: '1 November 2022 to 31 October 2023',
               returnStatus: 'completed',
               returnTotal: '0 ML / 0 ML'
@@ -605,7 +603,8 @@ describe('Bill Runs Review controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('1/11/10/*S/0084')
+          expect(response.payload).to.contain('Licence 13/43/028/S/045')
+          expect(response.payload).to.contain('/system/return-logs/e63573be-d66e-4c89-9af3-b292d744a28e')
           expect(response.payload).to.contain('two-part tariff')
           expect(response.payload).to.contain('Test Road. Points 1 and 2.')
         })

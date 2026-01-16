@@ -52,7 +52,7 @@ function _notification(recipient, selectedReturnLog, noticeId, licenceRef) {
     messageRef: 'paper return',
     messageType: 'letter',
     personalisation: _personalisation(recipient, selectedReturnLog, licenceRef),
-    returnLogIds: [selectedReturnLog.returnId],
+    returnLogIds: [selectedReturnLog.returnLogId],
     status: 'pending'
   }
 }
@@ -65,7 +65,7 @@ function _personalisation(recipient, selectedReturnLog, licenceRef) {
     purpose,
     regionCode,
     regionName,
-    returnId,
+    returnLogId,
     returnReference,
     returnsFrequency,
     siteDescription,
@@ -82,7 +82,7 @@ function _personalisation(recipient, selectedReturnLog, licenceRef) {
     licence_ref: licenceRef,
     naldAreaCode,
     purpose,
-    qr_url: returnId,
+    qr_url: returnLogId,
     region_code: regionCode,
     region_name: regionName,
     returns_frequency: returnsFrequency,
@@ -95,7 +95,7 @@ function _selectedReturnLogs(session) {
   const { dueReturns: dueReturnLogs, selectedReturns: selectedReturnLogIds } = session
 
   return dueReturnLogs.filter((dueReturnLog) => {
-    return selectedReturnLogIds.includes(dueReturnLog.returnId)
+    return selectedReturnLogIds.includes(dueReturnLog.returnLogId)
   })
 }
 

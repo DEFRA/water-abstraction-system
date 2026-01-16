@@ -24,7 +24,7 @@ describe('Notices - Setup - Check Paper Return presenter', () => {
     dueReturn = {
       siteDescription: 'Potable Water Supply - Direct',
       endDate: '2003-03-31',
-      returnId: generateUUID(),
+      returnLogId: generateUUID(),
       returnReference: '3135',
       startDate: '2002-04-01'
     }
@@ -33,7 +33,7 @@ describe('Notices - Setup - Check Paper Return presenter', () => {
       id: sessionId,
       dueReturns: [dueReturn],
       referenceCode: 'PRTF-WJUKBX',
-      selectedReturns: [dueReturn.returnId]
+      selectedReturns: [dueReturn.returnLogId]
     }
   })
 
@@ -48,7 +48,7 @@ describe('Notices - Setup - Check Paper Return presenter', () => {
         returnLogs: [
           {
             action: {
-              link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnId}`,
+              link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnLogId}`,
               text: 'Preview'
             },
             returnPeriod: '1 April 2002 to 31 March 2003',
@@ -67,7 +67,7 @@ describe('Notices - Setup - Check Paper Return presenter', () => {
           additionalDueReturn = {
             siteDescription: 'Not a moon',
             endDate: '2003-05-04',
-            returnId: generateUUID(),
+            returnLogId: generateUUID(),
             returnReference: '5653',
             startDate: '2002-04-01'
           }
@@ -76,7 +76,7 @@ describe('Notices - Setup - Check Paper Return presenter', () => {
         describe('and they are all "selectedReturns"', () => {
           beforeEach(() => {
             session.dueReturns = [dueReturn, additionalDueReturn]
-            session.selectedReturns = [dueReturn.returnId, additionalDueReturn.returnId]
+            session.selectedReturns = [dueReturn.returnLogId, additionalDueReturn.returnLogId]
           })
 
           it('returns page data for the view', () => {
@@ -85,7 +85,7 @@ describe('Notices - Setup - Check Paper Return presenter', () => {
             expect(result.returnLogs).to.equal([
               {
                 action: {
-                  link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnId}`,
+                  link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnLogId}`,
                   text: 'Preview'
                 },
                 returnPeriod: '1 April 2002 to 31 March 2003',
@@ -94,7 +94,7 @@ describe('Notices - Setup - Check Paper Return presenter', () => {
               },
               {
                 action: {
-                  link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${additionalDueReturn.returnId}`,
+                  link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${additionalDueReturn.returnLogId}`,
                   text: 'Preview'
                 },
                 returnPeriod: '1 April 2002 to 4 May 2003',
@@ -108,7 +108,7 @@ describe('Notices - Setup - Check Paper Return presenter', () => {
         describe('and there are some "selectedReturns"', () => {
           beforeEach(() => {
             session.dueReturns = [dueReturn, additionalDueReturn]
-            session.selectedReturns = [dueReturn.returnId]
+            session.selectedReturns = [dueReturn.returnLogId]
           })
 
           it('returns page data for the view - with only the selected returns', () => {
@@ -117,7 +117,7 @@ describe('Notices - Setup - Check Paper Return presenter', () => {
             expect(result.returnLogs).to.equal([
               {
                 action: {
-                  link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnId}`,
+                  link: `/system/notices/setup/${sessionId}/preview/${contactHashId}/paper-return/${dueReturn.returnLogId}`,
                   text: 'Preview'
                 },
                 returnPeriod: '1 April 2002 to 31 March 2003',

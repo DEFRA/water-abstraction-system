@@ -9,6 +9,7 @@ const { expect } = Code
 const Sinon = require('sinon')
 
 // Test helpers
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
@@ -23,14 +24,13 @@ describe('Return Logs - Setup - Submit Submission service', () => {
   let session
 
   beforeEach(async () => {
-    returnLogId = ReturnLogHelper.generateReturnLogId()
+    returnLogId = generateUUID()
 
     session = await SessionHelper.add({
       data: {
         beenReceived: false,
         receivedDateOptions: 'today',
         receivedDate: new Date('2025-02-14'),
-        returnId: '4010bc46-e556-4e1f-b66b-1388f3fe5340',
         returnLogId,
         returnReference: ReturnRequirementHelper.generateReference()
       }

@@ -18,7 +18,7 @@ const { generateLicenceRef } = require('../../support/helpers/licence.helper.js'
 // Thing under test
 const FetchReturnLogNotificationsService = require('../../../app/services/return-logs/fetch-return-log-notifications.service.js')
 
-describe('Return Logs - Fetch Return Log Communications service', () => {
+describe('Return Logs - Fetch Return Log Notifications service', () => {
   let notice
   let notification
 

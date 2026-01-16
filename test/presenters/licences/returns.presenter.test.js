@@ -155,7 +155,7 @@ describe('Licences - Returns presenter', () => {
 
 function _returnLogs() {
   const returnLog = {
-    id: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
+    id: 'c4458436-4766-4271-b978-6af7a0e4fd95',
     dueDate: new Date('2020-11-28'),
     status: 'completed',
     startDate: new Date('2020/01/02'),
@@ -180,7 +180,7 @@ function _returnLogs() {
       ],
       description: 'empty description'
     },
-    returnId: 'c4458436-4766-4271-b978-6af7a0e4fd95',
+    returnId: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
     returnReference: '10046821'
   }
 
@@ -188,9 +188,9 @@ function _returnLogs() {
     { ...returnLog },
     {
       ...returnLog,
-      id: 'v1:1:01/123:10046820:2020-01-02:2020-02-01',
+      id: '2e35c9c6-5017-46ea-8fa8-8960dc1a8ae7',
       status: 'due',
-      returnId: '2e35c9c6-5017-46ea-8fa8-8960dc1a8ae7',
+      returnId: 'v1:1:01/123:10046820:2020-01-02:2020-02-01',
       returnReference: '10046820'
     }
   ]

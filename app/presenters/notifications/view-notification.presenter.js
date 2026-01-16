@@ -20,18 +20,18 @@ const { formatLongDate, formatNoticeType, formatRestrictionType, formatValueUnit
  *
  * @param {module:NotificationModel} notification - The selected notification with attached notice
  * @param {module:LicenceModel} [licence=null] - The related licence if coming from the view licence communications page
- * @param {string} [returnId=null] - The return id of the return log if coming from the return log page
+ * @param {string} [returnLogId=null] - The UUID of the return log if coming from the return log page
  *
  * @returns {object} The data formatted for the view template
  */
-function go(notification, licence = null, returnId = null) {
+function go(notification, licence = null, returnLogId = null) {
   const { createdAt, event, messageType, plaintext, returnedAt } = notification
 
   return {
     activeNavBar: licence ? 'search' : 'notices',
     address: _address(notification),
     alertDetails: _alertDetails(notification),
-    backLink: _backLink(notification, licence, returnId),
+    backLink: _backLink(notification, licence, returnLogId),
     contents: plaintext,
     errorDetails: NotificationErrorPresenter.go(notification),
     messageType,
@@ -86,13 +86,13 @@ function _alertDetails(notification) {
   }
 }
 
-function _backLink(notification, licence, returnId) {
+function _backLink(notification, licence, returnLogId) {
   if (licence) {
     return { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' }
   }
 
-  if (returnId) {
-    return { href: `/system/return-logs/${returnId}`, text: 'Go back to return log' }
+  if (returnLogId) {
+    return { href: `/system/return-logs/${returnLogId}`, text: 'Go back to return log' }
   }
 
   const { event } = notification

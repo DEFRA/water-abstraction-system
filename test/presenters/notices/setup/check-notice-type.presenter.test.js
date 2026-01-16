@@ -173,7 +173,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
           dueReturnOne = {
             description: 'Potable Water Supply - Direct',
             endDate: '2003-03-31',
-            returnId: generateUUID(),
+            returnLogId: generateUUID(),
             returnReference: '3135',
             startDate: '2002-04-01'
           }
@@ -181,14 +181,14 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
           dueReturnTwo = {
             description: 'Potable Water Supply - Direct',
             endDate: '2004-03-31',
-            returnId: generateUUID(),
+            returnLogId: generateUUID(),
             returnReference: '3135',
             startDate: '2003-04-01'
           }
 
           session.dueReturns = [dueReturnOne, dueReturnTwo]
 
-          session.selectedReturns = [dueReturnOne.returnId]
+          session.selectedReturns = [dueReturnOne.returnLogId]
         })
 
         it('returns the page data', () => {
@@ -211,7 +211,7 @@ describe('Notices - Setup - Check Notice Type presenter', () => {
 
         describe('and there are more than one "selectedReturns"', () => {
           beforeEach(() => {
-            session.selectedReturns = [dueReturnOne.returnId, dueReturnTwo.returnId]
+            session.selectedReturns = [dueReturnOne.returnLogId, dueReturnTwo.returnLogId]
           })
 
           it('returns an array of "selectedDueReturns"', () => {

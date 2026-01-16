@@ -80,8 +80,7 @@ describe('Search - Search presenter', () => {
           model: {
             dueDates: [new Date('2001-01-01')],
             endDates: [new Date('2000-12-31')],
-            id: 'licence-1',
-            ids: ['v1:1:1/2/3:1:2000-01-01:2000-12-31'],
+            id: 'return-log-1',
             licenceRef: '01/123',
             returnReference: '123',
             returnRequirementId: 'return-requirement-1',
@@ -151,8 +150,7 @@ describe('Search - Search presenter', () => {
           model: {
             dueDates: [new Date('2001-01-01')],
             endDates: [new Date('2000-12-31')],
-            id: 'licence-1',
-            ids: ['v1:1:1/2/3:1:2000-01-01:2000-12-31'],
+            id: 'return-log-1',
             licenceRef: '01/123',
             returnReference: '123',
             returnRequirementId: 'return-requirement-1',
@@ -271,7 +269,7 @@ describe('Search - Search presenter', () => {
           col3Title: 'End date',
           col3Value: null,
           exact: true,
-          link: '/system/return-logs/undefined',
+          link: '/system/return-logs/return-log-1',
           reference: '123',
           statusTag: undefined,
           type: 'Return reference'
@@ -337,7 +335,7 @@ describe('Search - Search presenter', () => {
           col3Title: 'End date',
           col3Value: null,
           exact: false,
-          link: '/system/return-logs/undefined',
+          link: '/system/return-logs/return-log-1',
           reference: '123',
           statusTag: undefined,
           type: 'Return reference'

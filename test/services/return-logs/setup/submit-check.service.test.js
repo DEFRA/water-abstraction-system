@@ -52,7 +52,7 @@ describe('Return Logs Setup - Submit Check service', () => {
     })
 
     const initialReturnSubmission = await ReturnSubmissionHelper.add({
-      returnLogId: returnLog.returnId
+      returnLogId: returnLog.id
     })
 
     sessionData = {
@@ -196,7 +196,7 @@ describe('Return Logs Setup - Submit Check service', () => {
       it('returns the original returnLogId', async () => {
         const result = await SubmitCheckService.go(session.id, user)
 
-        expect(result).to.equal({ returnId: returnLog.returnId })
+        expect(result).to.equal({ returnLogId: returnLog.id })
       })
     })
   })

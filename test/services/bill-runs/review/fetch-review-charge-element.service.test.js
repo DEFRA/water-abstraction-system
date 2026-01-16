@@ -49,7 +49,8 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
           secondary: { code: 'AGR', description: 'General Agriculture' }
         }
       ],
-      returnId: returnLog.id,
+      returnId: returnLog.returnId,
+      returnLogId: returnLog.id,
       returnReference: returnLog.returnReference,
       reviewLicenceId: reviewLicence.id
     })
@@ -123,6 +124,7 @@ describe('Bill Runs Review - Fetch Review Charge Element service', () => {
               }
             ],
             returnId: reviewReturn.returnId,
+            returnLogId: reviewReturn.returnLogId,
             returnReference: reviewReturn.returnReference,
             returnStatus: 'completed',
             startDate: new Date('2022-04-01'),
