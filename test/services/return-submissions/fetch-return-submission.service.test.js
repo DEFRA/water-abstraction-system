@@ -19,7 +19,7 @@ const ReturnSubmissionLineModel = require('../../../app/models/return-submission
 // Thing under test
 const FetchReturnSubmissionService = require('../../../app/services/return-submissions/fetch-return-submission.service.js')
 
-describe('Fetch Return Submission service', () => {
+describe.only('Fetch Return Submission service', () => {
   let testReturnSubmission
   let testReturnLog
 
@@ -82,7 +82,7 @@ describe('Fetch Return Submission service', () => {
       expect(returnSubmissionLines[1].startDate.toISOString()).to.equal('2023-03-01T00:00:00.000Z')
     })
 
-    it('includes the linked return log with its returnId, reference and frequency', async () => {
+    it('includes the linked return log with its reference and frequency', async () => {
       const result = await FetchReturnSubmissionService.go(testReturnSubmission.id)
       const { returnLog } = result
 
