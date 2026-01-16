@@ -15,6 +15,7 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const LicenceVersionHolderHelper = require('../../support/helpers/licence-version-holder.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
@@ -39,6 +40,7 @@ describe('Licences - Fetch Summary service', () => {
   let licenceHolderSeed
   let licenceMonitoringStation
   let licenceVersion
+  let licenceVersionHolder
   let licenceVersionPurpose
   let licenceVersionPurposeCondition
   let licenceVersionPurposeConditionType
@@ -72,6 +74,10 @@ describe('Licences - Fetch Summary service', () => {
     licenceVersion = await LicenceVersionHelper.add({
       licenceId: licence.id,
       startDate: new Date('2022-05-01')
+    })
+
+    licenceVersionHolder = await LicenceVersionHolderHelper.add({
+      licenceVersionId: licenceVersion.id
     })
 
     purpose = PurposeHelper.select()
@@ -138,6 +144,14 @@ describe('Licences - Fetch Summary service', () => {
             issueDate: null,
             startDate: new Date('2022-05-01'),
             status: 'current',
+            licenceVersionHolder: {
+              id: licenceVersionHolder.id,
+              forename: null,
+              holderType: 'organisation',
+              initials: null,
+              name: null,
+              salutation: null
+            },
             licenceVersionPurposes: [
               {
                 id: licenceVersionPurpose.id,
