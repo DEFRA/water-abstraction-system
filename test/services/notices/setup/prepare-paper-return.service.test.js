@@ -96,7 +96,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
       expect(result.response.body.byteLength).to.equal(9)
     })
 
-    it('should call "GeneratePaperReturnRequest" with the page data for the provided "returnId"', async () => {
+    it('should call "GeneratePaperReturnRequest" with the page data for the provided "returnLogId"', async () => {
       await PreparePaperReturnService.go(notification)
 
       expect(GeneratePaperReturnRequest.send.calledOnce).to.be.true()
