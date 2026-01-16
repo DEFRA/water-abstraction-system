@@ -138,14 +138,19 @@ function _issueDate(licence, issueDate) {
   return formatLongDate(issueDate)
 }
 
+/**
+ * We need a guard clause on the licence versions.
+ *
+ * There have been licences created with no licence versions. This guards against this edge case.
+ *
+ * @private
+ */
 function _licenceHolder(licence) {
-  const licenceHolder = licence.$licenceHolder()
-
-  if (!licenceHolder) {
-    return 'Unregistered licence'
+  if (licence.licenceVersions.length === 0) {
+    return ''
   }
 
-  return licenceHolder
+  return licence.licenceVersions[0].licenceVersionHolder.$name()
 }
 
 function _licenceVersionPurposes(licence) {

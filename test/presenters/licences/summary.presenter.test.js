@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const LicenceModel = require('../../../app/models/licence.model.js')
+const LicenceVersionHolderModel = require('../../../app/models/licence-version-holder.model.js')
 const PointModel = require('../../../app/models/point.model.js')
 const { today, generateUUID } = require('../../../app/lib/general.lib.js')
 
@@ -35,7 +36,7 @@ describe('Licences - Summary Presenter', () => {
       activeSecondaryNav: 'summary',
       endDate: null,
       issueDate: null,
-      licenceHolder: 'Unregistered licence',
+      licenceHolder: 'ORDER OF THE PHOENIX',
       licenceId: summary.id,
       monitoringStations: [
         {
@@ -629,33 +630,22 @@ describe('Licences - Summary Presenter', () => {
 
   describe('the "licenceHolder" property', () => {
     describe('when the licence holder is not set', () => {
-      it('returns "Unregistered licence"', () => {
+      beforeEach(() => {
+        summary.licenceVersions = []
+      })
+
+      it('returns an empty string"', () => {
         const result = SummaryPresenter.go(summary)
 
-        expect(result.licenceHolder).to.equal('Unregistered licence')
+        expect(result.licenceHolder).to.equal('')
       })
     })
 
     describe('when the licence holder is set', () => {
-      beforeEach(() => {
-        // We 'mimic' licenceDocument containing a ContactModel instance that is populated. If it was the call to its
-        // instance method $name() would return the contact's name. We pretend in order to test the logic in the
-        // presenter
-        const contact = {
-          $name: () => {
-            return 'Barbara Liskov'
-          }
-        }
-
-        summary.licenceDocument = {
-          licenceDocumentRoles: [{ contact }]
-        }
-      })
-
-      it('returns "Barbara Liskov"', () => {
+      it('returns "ORDER OF THE PHOENIX"', () => {
         const result = SummaryPresenter.go(summary)
 
-        expect(result.licenceHolder).to.equal('Barbara Liskov')
+        expect(result.licenceHolder).to.equal('ORDER OF THE PHOENIX')
       })
     })
   })
@@ -897,6 +887,15 @@ function _summary() {
     source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
   })
 
+  const licenceVersionHolder = LicenceVersionHolderModel.fromJson({
+    id: generateUUID(),
+    holderType: 'organisation',
+    salutation: null,
+    initials: null,
+    forename: null,
+    name: 'ORDER OF THE PHOENIX'
+  })
+
   return LicenceModel.fromJson({
     id: generateUUID(),
     expiredDate: null,
@@ -910,6 +909,7 @@ function _summary() {
         id: generateUUID(),
         startDate: new Date('2022-04-01'),
         status: 'current',
+        licenceVersionHolder,
         licenceVersionPurposes: [
           {
             id: generateUUID(),

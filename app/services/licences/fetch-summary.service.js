@@ -29,59 +29,67 @@ async function _fetch(licenceId) {
     .modify('currentVersion')
     .modify('licenceHolder')
     .withGraphFetched('region')
-    .modifyGraph('region', (builder) => {
-      builder.select(['id', 'displayName'])
+    .modifyGraph('region', (regionBuilder) => {
+      regionBuilder.select(['id', 'displayName'])
     })
-    .withGraphFetched('licenceVersions.licenceVersionPurposes')
-    .modifyGraph('licenceVersions.licenceVersionPurposes', (builder) => {
-      builder.select([
-        'id',
-        'abstractionPeriodStartDay',
-        'abstractionPeriodStartMonth',
-        'abstractionPeriodEndDay',
-        'abstractionPeriodEndMonth',
-        'annualQuantity',
-        'dailyQuantity',
-        'hourlyQuantity',
-        'instantQuantity'
-      ])
+    .withGraphFetched('licenceVersions')
+    .modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
+      licenceVersionsBuilder
+        .withGraphFetched('licenceVersionHolder')
+        .modifyGraph('licenceVersionHolder', (licenceVersionHolderBuilder) => {
+          licenceVersionHolderBuilder.select(['id', 'forename', 'holderType', 'initials', 'name', 'salutation'])
+        })
+        .withGraphFetched('licenceVersionPurposes')
+        .modifyGraph('licenceVersionPurposes', (licenceVersionPurposesBuilder) => {
+          licenceVersionPurposesBuilder
+            .select([
+              'id',
+              'abstractionPeriodStartDay',
+              'abstractionPeriodStartMonth',
+              'abstractionPeriodEndDay',
+              'abstractionPeriodEndMonth',
+              'annualQuantity',
+              'dailyQuantity',
+              'hourlyQuantity',
+              'instantQuantity'
+            ])
+            .withGraphFetched('points')
+            .modifyGraph('points', (pointsBuilder) => {
+              pointsBuilder
+                .select(['points.description', 'points.id', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
+                .withGraphFetched('source')
+                .modifyGraph('source', (sourceBuilder) => {
+                  sourceBuilder.select(['sources.description', 'sources.id'])
+                })
+            })
+            .withGraphFetched('purpose')
+            .modifyGraph('purpose', (purposeBuilder) => {
+              purposeBuilder.select(['id', 'description'])
+            })
+            .withGraphFetched('licenceVersionPurposeConditions')
+            .modifyGraph('licenceVersionPurposeConditions', (licenceVersionPurposeConditionsBuilder) => {
+              licenceVersionPurposeConditionsBuilder
+                .select(['id'])
+                .withGraphFetched('licenceVersionPurposeConditionType')
+                .modifyGraph('licenceVersionPurposeConditionType', (licenceVersionPurposeConditionTypeBuilder) => {
+                  licenceVersionPurposeConditionTypeBuilder.select(['id', 'displayTitle'])
+                })
+            })
+        })
     })
-    .withGraphFetched('licenceVersions.licenceVersionPurposes.points')
-    .modifyGraph('licenceVersions.licenceVersionPurposes.points', (builder) => {
-      builder.select(['points.description', 'points.id', 'points.ngr1', 'points.ngr2', 'points.ngr3', 'points.ngr4'])
-    })
-    .withGraphFetched('licenceVersions.licenceVersionPurposes.points.source')
-    .modifyGraph('licenceVersions.licenceVersionPurposes.points.source', (builder) => {
-      builder.select(['sources.description', 'sources.id'])
-    })
-    .withGraphFetched('licenceVersions.licenceVersionPurposes.purpose')
-    .modifyGraph('licenceVersions.licenceVersionPurposes.purpose', (builder) => {
-      builder.select(['id', 'description'])
-    })
-    .withGraphFetched('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions')
-    .modifyGraph('licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions', (builder) => {
-      builder.select(['id'])
-    })
-    .withGraphFetched(
-      'licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions.licenceVersionPurposeConditionType'
-    )
-    .modifyGraph(
-      'licenceVersions.licenceVersionPurposes.licenceVersionPurposeConditions.licenceVersionPurposeConditionType',
-      (builder) => {
-        builder.select(['id', 'displayTitle'])
-      }
-    )
     .withGraphFetched('licenceMonitoringStations')
-    .modifyGraph('licenceMonitoringStations', (builder) => {
-      builder.select(['id']).whereNull('deletedAt')
-    })
-    .withGraphFetched('licenceMonitoringStations.monitoringStation')
-    .modifyGraph('licenceMonitoringStations.monitoringStation', (builder) => {
-      builder.select(['id', 'label'])
+    .modifyGraph('licenceMonitoringStations', (licenceMonitoringStationsBuilder) => {
+      licenceMonitoringStationsBuilder
+        .select(['id'])
+        .whereNull('deletedAt')
+        .withGraphFetched('monitoringStation')
+        .modifyGraph('monitoringStation', (monitoringStationBuilder) => {
+          monitoringStationBuilder.select(['id', 'label'])
+        })
     })
     .withGraphFetched('workflows')
-    .modifyGraph('workflows', (builder) => {
-      builder.select(['id', 'status']).whereNull('deletedAt')
+    .modifyGraph('workflows', (workflowsBuilder) => {
+      workflowsBuilder.select(['id', 'status']).whereNull('deletedAt')
     })
 }
 

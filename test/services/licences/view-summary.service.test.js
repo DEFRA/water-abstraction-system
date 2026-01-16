@@ -72,7 +72,7 @@ describe('Licences - View Summary service', () => {
           currentVersion: 'The current version of the licence starting 1 April 2019',
           endDate: null,
           issueDate: null,
-          licenceHolder: 'Unregistered licence',
+          licenceHolder: '',
           licenceId: licence.id,
           licenceRef: licence.licenceRef,
           monitoringStations: [
