@@ -48,7 +48,7 @@ describe('Notifications controller', () => {
   })
 
   describe('Notifications controller', () => {
-    describe('/notifications/{notificationId}', () => {
+    describe('/notifications/{id}', () => {
       describe('GET', () => {
         beforeEach(async () => {
           options = {
@@ -103,7 +103,7 @@ describe('Notifications controller', () => {
       })
     })
 
-    describe('/notifications/{notificationId}?id={LICENCE_ID}', () => {
+    describe('/notifications/{id}?id={LICENCE_ID}', () => {
       describe('GET', () => {
         beforeEach(async () => {
           options = {
@@ -158,12 +158,12 @@ describe('Notifications controller', () => {
       })
     })
 
-    describe('/notifications/{notificationId}?return={RETURN_ID}', () => {
+    describe.only('/notifications/{id}?return={RETURN_LOG_ID}', () => {
       describe('GET', () => {
         beforeEach(async () => {
           options = {
             method: 'GET',
-            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?return=RETURN_ID',
+            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?return=RETURN_LOG_ID',
             auth: {
               strategy: 'session',
               credentials: { scope: ['returns'] }
@@ -178,7 +178,7 @@ describe('Notifications controller', () => {
               licenceRef: generateLicenceRef()
             }
 
-            const returnId = generateUUID()
+            const returnLogId = generateUUID()
             const notice = NoticesFixture.returnsInvitation()
             const notification = NotificationsFixture.returnsInvitationEmail(notice)
             notification.event = notice
@@ -187,7 +187,7 @@ describe('Notifications controller', () => {
               activeNavBar: 'search',
               address: [],
               alertDetails: null,
-              backLink: { href: `/system/return-logs/${returnId}`, text: 'Go back to return log' },
+              backLink: { href: `/system/return-logs/${returnLogId}`, text: 'Go back to return log' },
               contents: notification.plaintext,
               licenceRef: licence.licenceRef,
               messageType: 'email',
@@ -214,7 +214,7 @@ describe('Notifications controller', () => {
       })
     })
 
-    describe('/notifications/{notificationId}/download', () => {
+    describe('/notifications/{id}/download', () => {
       let buffer
 
       describe('GET', () => {
