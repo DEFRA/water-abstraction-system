@@ -158,7 +158,7 @@ describe('Notifications controller', () => {
       })
     })
 
-    describe.only('/notifications/{id}?return={RETURN_LOG_ID}', () => {
+    describe('/notifications/{id}?return={RETURN_LOG_ID}', () => {
       describe('GET', () => {
         beforeEach(async () => {
           options = {
