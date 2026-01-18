@@ -4,6 +4,7 @@
  * @module SecondaryPurposeHelper
  */
 
+const SecondaryPurposeModel = require('../../../app/models/secondary-purpose.model.js')
 const { selectRandomEntry } = require('../general.js')
 const { data: secondaryPurposes } = require('../../../db/seeds/data/secondary-purposes.js')
 
@@ -19,14 +20,14 @@ const { data: secondaryPurposes } = require('../../../db/seeds/data/secondary-pu
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
  *
- * @returns {object} The selected reference entry or one picked at random
+ * @returns {module:SecondaryPurposeModel} The selected reference entry or one picked at random
  */
 function select(index = -1) {
   if (index > -1) {
-    return secondaryPurposes[index]
+    return SecondaryPurposeModel.fromJson(secondaryPurposes[index])
   }
 
-  return selectRandomEntry(secondaryPurposes)
+  return SecondaryPurposeModel.fromJson(selectRandomEntry(secondaryPurposes))
 }
 
 module.exports = {

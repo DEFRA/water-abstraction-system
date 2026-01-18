@@ -4,6 +4,7 @@
  * @module RegionHelper
  */
 
+const RegionModel = require('../../../app/models/region.model.js')
 const { generateRandomInteger } = require('../../../app/lib/general.lib.js')
 const { data: regions } = require('../../../db/seeds/data/regions.js')
 
@@ -24,17 +25,17 @@ const TEST_REGION_INDEX = 8
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
  *
- * @returns {object} The selected reference entry or one picked at random
+ * @returns {module:RegionModel} The selected reference entry or one picked at random
  */
 function select(index = -1) {
   if (index > -1) {
-    return regions[index]
+    return RegionModel.fromJson(regions[index])
   }
 
   // 2 is deducted from the length of the array so that the Test Bill Run Region is not selected randomly
   const randomIndex = generateRandomInteger(0, regions.length - 2)
 
-  return regions[randomIndex]
+  return RegionModel.fromJson(regions[randomIndex])
 }
 
 module.exports = {

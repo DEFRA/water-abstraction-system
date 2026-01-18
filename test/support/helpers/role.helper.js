@@ -4,6 +4,7 @@
  * @module RoleHelper
  */
 
+const RoleModel = require('../../../app/models/role.model.js')
 const { selectRandomEntry } = require('../general.js')
 const { data: roles } = require('../../../db/seeds/data/roles.js')
 
@@ -19,14 +20,14 @@ const { data: roles } = require('../../../db/seeds/data/roles.js')
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
  *
- * @returns {object} The selected reference entry or one picked at random
+ * @returns {module:RoleModel} The selected reference entry or one picked at random
  */
 function select(index = -1) {
   if (index > -1) {
-    return roles[index]
+    return RoleModel.fromJson(roles[index])
   }
 
-  return selectRandomEntry(roles)
+  return RoleModel.fromJson(selectRandomEntry(roles))
 }
 
 module.exports = {

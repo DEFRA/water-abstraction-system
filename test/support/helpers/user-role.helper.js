@@ -69,14 +69,14 @@ function defaults(data = {}) {
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
  *
- * @returns {object} The selected reference entry or one picked at random
+ * @returns {module:UserRoleModel} The selected reference entry or one picked at random
  */
 function select(index = -1) {
   if (index > -1) {
-    return userRoles[index]
+    return UserRoleModel.fromJson(userRoles[index])
   }
 
-  return selectRandomEntry(userRoles)
+  return UserRoleModel.fromJson(selectRandomEntry(userRoles))
 }
 
 module.exports = {

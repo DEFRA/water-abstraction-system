@@ -4,6 +4,7 @@
  * @module ChargeCategoryHelper
  */
 
+const ChargeCategoryModel = require('../../../app/models/charge-category.model.js')
 const { data: chargeCategories } = require('../../../db/seeds/data/charge-categories.js')
 const { selectRandomEntry } = require('../general.js')
 
@@ -19,14 +20,14 @@ const { selectRandomEntry } = require('../general.js')
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
  *
- * @returns {object} The selected reference entry or one picked at random
+ * @returns {module:ChargeCategoryModel} The selected reference entry or one picked at random
  */
 function select(index = -1) {
   if (index > -1) {
-    return chargeCategories[index]
+    return ChargeCategoryModel.fromJson(chargeCategories[index])
   }
 
-  return selectRandomEntry(chargeCategories)
+  return ChargeCategoryModel.fromJson(selectRandomEntry(chargeCategories))
 }
 
 module.exports = {

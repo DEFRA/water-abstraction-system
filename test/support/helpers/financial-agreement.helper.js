@@ -4,6 +4,7 @@
  * @module FinancialAgreementHelper
  */
 
+const FinancialAgreementModel = require('../../../app/models/financial-agreement.model.js')
 const { data: financialAgreements } = require('../../../db/seeds/data/financial-agreements.js')
 const { selectRandomEntry } = require('../general.js')
 
@@ -19,14 +20,14 @@ const { selectRandomEntry } = require('../general.js')
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
  *
- * @returns {object} The selected reference entry or one picked at random
+ * @returns {module:FinancialAgreementModel} The selected reference entry or one picked at random
  */
 function select(index = -1) {
   if (index > -1) {
-    return financialAgreements[index]
+    return FinancialAgreementModel.fromJson(financialAgreements[index])
   }
 
-  return selectRandomEntry(financialAgreements)
+  return FinancialAgreementModel.fromJson(selectRandomEntry(financialAgreements))
 }
 
 module.exports = {

@@ -4,6 +4,7 @@
  * @module LicenceRoleHelper
  */
 
+const LicenceRoleModel = require('../../../app/models/licence-role.model.js')
 const { data: licenceRoles } = require('../../../db/seeds/data/licence-roles.js')
 
 /**
@@ -17,12 +18,14 @@ const { data: licenceRoles } = require('../../../db/seeds/data/licence-roles.js'
  *
  * @param {string} [name] - The reference entry to select. Defaults to 'licenceHolder'
  *
- * @returns {object} The selected reference entry or one picked at random
+ * @returns {module:LicenceRoleModel} The selected reference entry or one picked at random
  */
 function select(name = 'licenceHolder') {
-  return licenceRoles.find((licenceRole) => {
+  const licenceRole = licenceRoles.find((licenceRole) => {
     return licenceRole.name === name
   })
+
+  return LicenceRoleModel.fromJson(licenceRole)
 }
 
 module.exports = {
