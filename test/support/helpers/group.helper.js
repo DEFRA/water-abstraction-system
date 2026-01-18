@@ -4,8 +4,9 @@
  * @module GroupHelper
  */
 
+const GroupModel = require('../../../app/models/group.model.js')
 const { selectRandomEntry } = require('../general.js')
-const Groups = require('../../../db/seeds/data/groups.js')
+const { data: groups } = require('../../../db/seeds/data/groups.js')
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -19,17 +20,17 @@ const Groups = require('../../../db/seeds/data/groups.js')
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
  *
- * @returns {object} The selected reference entry or one picked at random
+ * @returns {module:GroupModel} The selected reference entry or one picked at random
  */
 function select(index = -1) {
   if (index > -1) {
-    return Groups.data[index]
+    return GroupModel.fromJson(groups[index])
   }
 
-  return selectRandomEntry(Groups.data)
+  return GroupModel.fromJson(selectRandomEntry(groups))
 }
 
 module.exports = {
-  data: Groups.data,
+  data: groups,
   select
 }
