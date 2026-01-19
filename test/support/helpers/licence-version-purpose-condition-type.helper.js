@@ -4,6 +4,7 @@
  * @module LicenceVersionPurposeConditionTypeHelper
  */
 
+const LicenceVersionConditionTypeModel = require('../../../app/models/licence-version-purpose-condition-type.model.js')
 const { selectRandomEntry } = require('../general.js')
 const {
   data: licenceVersionPurposeConditionTypes
@@ -21,14 +22,14 @@ const {
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
  *
- * @returns {object} The selected reference entry or one picked at random
+ * @returns {module:LicenceVersionConditionTypeModel} The selected reference entry or one picked at random
  */
 function select(index = -1) {
   if (index > -1) {
-    return licenceVersionPurposeConditionTypes[index]
+    return LicenceVersionConditionTypeModel.fromJson(licenceVersionPurposeConditionTypes[index])
   }
 
-  return selectRandomEntry(licenceVersionPurposeConditionTypes)
+  return LicenceVersionConditionTypeModel.fromJson(selectRandomEntry(licenceVersionPurposeConditionTypes))
 }
 
 module.exports = {

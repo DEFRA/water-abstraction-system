@@ -4,6 +4,7 @@
  * @module PurposeHelper
  */
 
+const PurposeModel = require('../../../app/models/purpose.model.js')
 const { selectRandomEntry } = require('../general.js')
 const { data: purposes } = require('../../../db/seeds/data/purposes.js')
 
@@ -19,14 +20,14 @@ const { data: purposes } = require('../../../db/seeds/data/purposes.js')
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
  *
- * @returns {object} The selected reference entry or one picked at random
+ * @returns {module:PurposeModel} The selected reference entry or one picked at random
  */
 function select(index = -1) {
   if (index > -1) {
-    return purposes[index]
+    return PurposeModel.fromJson(purposes[index])
   }
 
-  return selectRandomEntry(purposes)
+  return PurposeModel.fromJson(selectRandomEntry(purposes))
 }
 
 module.exports = {

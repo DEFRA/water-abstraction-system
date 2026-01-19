@@ -78,7 +78,7 @@ function defaults(data = {}) {
  * random from the reference data
  * @param {boolean} summer - select either a summer or all year one
  *
- * @returns {object} The selected reference entry or one picked at random
+ * @returns {module:ReturnCycleModel} The selected reference entry or one picked at random
  */
 async function select(index = -1, summer = false) {
   const returnCycles = await ReturnCycleModel.query().where('summer', summer).orderBy('startDate', 'DESC')
