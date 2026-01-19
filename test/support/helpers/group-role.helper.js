@@ -4,8 +4,9 @@
  * @module GroupRoleHelper
  */
 
+const GroupRoleModel = require('../../../app/models/group-role.model.js')
 const { selectRandomEntry } = require('../general.js')
-const GroupRoles = require('../../../db/seeds/data/group-roles.js')
+const { data: groupRoles } = require('../../../db/seeds/data/group-roles.js')
 
 /**
  * Select an entry from the reference data entries seeded at the start of testing
@@ -19,17 +20,17 @@ const GroupRoles = require('../../../db/seeds/data/group-roles.js')
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
  *
- * @returns {object} The selected reference entry or one picked at random
+ * @returns {module:GroupRoleModel} The selected reference entry or one picked at random
  */
 function select(index = -1) {
   if (index > -1) {
-    return GroupRoles.data[index]
+    return GroupRoleModel.fromJson(groupRoles[index])
   }
 
-  return selectRandomEntry(GroupRoles.data)
+  return GroupRoleModel.fromJson(selectRandomEntry(groupRoles))
 }
 
 module.exports = {
-  data: GroupRoles.data,
+  data: groupRoles,
   select
 }

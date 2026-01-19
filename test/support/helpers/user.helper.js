@@ -89,14 +89,14 @@ function generateUserId() {
  * @param {number} [index=-1] - The reference entry to select. Defaults to -1 which means an entry will be returned at
  * random from the reference data
  *
- * @returns {object} The selected reference entry or one picked at random
+ * @returns {module:UserModel} The selected reference entry or one picked at random
  */
 function select(index = -1) {
   if (index > -1) {
-    return users[index]
+    return UserModel.fromJson(users[index])
   }
 
-  return selectRandomEntry(users)
+  return UserModel.fromJson(selectRandomEntry(users))
 }
 
 module.exports = {
