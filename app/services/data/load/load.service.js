@@ -36,6 +36,7 @@ const LicenceEntityHelper = require('../../../../test/support/helpers/licence-en
 const LicenceMonitoringStationHelper = require('../../../../test/support/helpers/licence-monitoring-station.helper.js')
 const LicenceRoleHelper = require('../../../../test/support/helpers/licence-role.helper.js')
 const LicenceSupplementaryYearHelper = require('../../../../test/support/helpers/licence-supplementary-year.helper.js')
+const LicenceVersionHolderHelper = require('../../../../test/support/helpers/licence-version-holder.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../../../test/support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeHelper = require('../../../../test/support/helpers/licence-version-purpose.helper.js')
 const LicenceVersionPurposePointHelper = require('../../../../test/support/helpers/licence-version-purpose-point.helper.js')
@@ -142,6 +143,7 @@ const LOAD_HELPERS = {
   },
   licenceRoles: { helper: LicenceRoleHelper, test: false },
   LicenceSupplementaryYears: { helper: LicenceSupplementaryYearHelper, test: false },
+  licenceVersionHolders: { helper: LicenceVersionHolderHelper, test: false },
   licenceVersionPurposeConditions: { helper: LicenceVersionPurposeConditionHelper, test: false },
   licenceVersionPurposes: {
     helper: LicenceVersionPurposeHelper,
