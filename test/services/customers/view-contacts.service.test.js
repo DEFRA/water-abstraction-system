@@ -12,6 +12,7 @@ const { expect } = Code
 const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 
 // Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchCompanyContactsService = require('../../../app/services/customers/fetch-company-contacts.service.js')
 const FetchCustomerService = require('../../../app/services/customers/fetch-customer.service.js')
 
@@ -36,6 +37,8 @@ describe('Customers - View Contacts Service', () => {
     Sinon.stub(FetchCompanyContactsService, 'go').returns({ companyContacts, pagination: { total: 1 } })
 
     page = 1
+
+    Sinon.stub(FeatureFlagsConfig, 'enableCustomerManage').value(true)
   })
 
   afterEach(() => {
@@ -55,7 +58,7 @@ describe('Customers - View Contacts Service', () => {
         },
         companyContacts: [
           {
-            action: `/customer/${customer.id}/contacts/${companyContacts[0].contact.id}`,
+            action: `/system/customers/${customer.id}/contact/${companyContacts[0].contact.id}`,
             communicationType: 'Additional Contact',
             name: 'Rachael Tyrell',
             email: 'rachael.tyrell@tyrellcorp.com'

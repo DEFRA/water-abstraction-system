@@ -5,6 +5,7 @@
  * @module ContactsPresenter
  */
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatCompanyContact } = require('../customer.presenter.js')
 
 /**
@@ -33,7 +34,9 @@ function _companyContacts(companyContacts, customer) {
     const contact = formatCompanyContact(companyContact)
 
     return {
-      action: `/customer/${customer.id}/contacts/${companyContact.contact.id}`,
+      action: FeatureFlagsConfig.enableCustomerManage
+        ? `/system/customers/${customer.id}/contact/${companyContact.contact.id}`
+        : `/customer/${customer.id}/contacts/${companyContact.contact.id}`,
       ...contact
     }
   })
