@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Controller for /customers{customerId}/contact/{contactId} endpoints
+ * Controller for /customers/{customerId}/contact/{contactId} endpoints
  * @module CustomersContactController
  */
 

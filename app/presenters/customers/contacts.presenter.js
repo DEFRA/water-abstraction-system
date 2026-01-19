@@ -5,8 +5,8 @@
  * @module ContactsPresenter
  */
 
-const { formatCompanyContact } = require('../customer.presenter.js')
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+const { formatCompanyContact } = require('../customer.presenter.js')
 
 /**
  * Formats data for the 'customers/{id}/contacts' page
