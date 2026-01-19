@@ -61,7 +61,7 @@ describe('CRM presenter', () => {
   })
 
   describe('#contactName()', () => {
-    describe('when the "type" is "person"', () => {
+    describe('when the "type" is "Person"', () => {
       describe('and they have initials', () => {
         it('correctly formats the name to use the initials', () => {
           const result = CRMPresenter.contactName(contact)
@@ -87,6 +87,30 @@ describe('CRM presenter', () => {
           const result = CRMPresenter.contactName(contact)
 
           expect(result).to.equal('Mr Bruce Wayne')
+        })
+      })
+
+      describe('when the "type" is "person" (lower case contact type)', () => {
+        beforeEach(() => {
+          contact.type = 'person'
+        })
+
+        it('correctly formats the "person"', () => {
+          const result = CRMPresenter.contactName(contact)
+
+          expect(result).to.equal('Mr B T Wayne')
+        })
+      })
+
+      describe('when there is no contact "type"', () => {
+        beforeEach(() => {
+          delete contact.type
+        })
+
+        it('correctly formats the name', () => {
+          const result = CRMPresenter.contactName(contact)
+
+          expect(result).to.equal('Wayne')
         })
       })
     })
