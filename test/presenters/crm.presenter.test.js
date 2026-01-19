@@ -49,6 +49,7 @@ describe('CRM presenter', () => {
       })
     })
   })
+
   describe('#contactAddress()', () => {
     describe('when given an address', () => {
       it('correctly returns the address, with only the required fields and no falsey values', () => {
