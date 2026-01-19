@@ -44,7 +44,7 @@ function contactAddress(contact) {
  * @returns {string} A string representing the full name of the contact.
  */
 function contactName(contact) {
-  if (contact.type === 'Person') {
+  if (contact.type && contact.type.toLowerCase() === 'person') {
     const { salutation, forename, initials, name } = contact
 
     // NOTE: Prioritise the initials and use the contact forename if initials is null
