@@ -92,6 +92,28 @@ class UserModel extends BaseModel {
     }
   }
 
+  /**
+   * Modifiers allow us to reuse logic in queries, eg. select the user and everything to get their permissions:
+   *
+   * ```javascript
+   * return UserModel.query()
+   *   .findById(userId)
+   *   .modify('permissions')
+   * ```
+   *
+   * See {@link https://vincit.github.io/objection.js/recipes/modifiers.html | Modifiers} for more details
+   *
+   * @returns {object}
+   */
+  static get modifiers() {
+    return {
+      // status modifier ensures all the properties we need to determine the user's status are selected
+      status(query) {
+        query.select(['enabled', 'lastLogin'])
+      }
+    }
+  }
+
   static generateHashedPassword(password) {
     // 10 is the number of salt rounds to perform to generate the salt. The legacy code uses
     // const salt = bcrypt.genSaltSync(10) to pre-generate the salt before passing it to hashSync(). But this is
@@ -99,6 +121,31 @@ class UserModel extends BaseModel {
     // autogenerate the salt for you.
     // https://github.com/kelektiv/node.bcrypt.js#usage
     return hashSync(password, 10)
+  }
+
+  /**
+   * Returns the user's status
+   *
+   * Each user record has an `enabled` field. But they also have a `last_login`. If `enabled` is false we return
+   * 'disabled'.
+   *
+   * But if `enabled` is true, we also look at `last_login`. If it is null we return 'awaiting' to indicate that the
+   * user has never logged in, which means they have not responded to their invite.
+   *
+   * If it is not null, then we return `enabled` to indicate the user is live and has been used.
+   *
+   * @returns {string} the user's status
+   */
+  $status() {
+    if (!this.enabled) {
+      return 'disabled'
+    }
+
+    if (!this.lastLogin) {
+      return 'awaiting'
+    }
+
+    return 'enabled'
   }
 }
 

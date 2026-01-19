@@ -278,4 +278,54 @@ describe('User model', () => {
       expect(result.charAt(0)).to.equal('$')
     })
   })
+
+  describe('$status()', () => {
+    let statusTestRecord
+
+    beforeEach(() => {
+      statusTestRecord = UserHelper.select()
+    })
+
+    describe('when the user is "disabled"', () => {
+      beforeEach(() => {
+        statusTestRecord.enabled = false
+      })
+
+      it('returns "disabled"', async () => {
+        const result = statusTestRecord.$status()
+
+        expect(result).to.equal('disabled')
+      })
+    })
+
+    describe('when the user is "enabled"', () => {
+      beforeEach(() => {
+        statusTestRecord.enabled = true
+      })
+
+      describe('and ""lastLogin" is not null', () => {
+        beforeEach(() => {
+          statusTestRecord.lastLogin = new Date()
+        })
+
+        it('returns "enabled"', async () => {
+          const result = statusTestRecord.$status()
+
+          expect(result).to.equal('enabled')
+        })
+      })
+
+      describe('but "lastLogin" is null', () => {
+        beforeEach(() => {
+          statusTestRecord.lastLogin = null
+        })
+
+        it('returns "awaiting"', async () => {
+          const result = statusTestRecord.$status()
+
+          expect(result).to.equal('awaiting')
+        })
+      })
+    })
+  })
 })
