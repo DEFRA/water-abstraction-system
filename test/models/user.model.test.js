@@ -25,6 +25,7 @@ const UserGroupModel = require('../../app/models/user-group.model.js')
 const UserHelper = require('../support/helpers/user.helper.js')
 const UserRoleHelper = require('../support/helpers/user-role.helper.js')
 const UserRoleModel = require('../../app/models/user-role.model.js')
+const { userPermissions } = require('../../app/lib/static-lookups.lib.js')
 
 // Thing under test
 const UserModel = require('../../app/models/user.model.js')
@@ -276,6 +277,145 @@ describe('User model', () => {
 
       // Hashed passwords always begin with $
       expect(result.charAt(0)).to.equal('$')
+    })
+  })
+
+  describe('$permissions()', () => {
+    let permissionRecord
+
+    beforeEach(() => {
+      permissionRecord = UserHelper.select()
+    })
+
+    describe('when the user is "external"', () => {
+      beforeEach(() => {
+        permissionRecord.application = 'water_vml'
+      })
+
+      it('returns null', () => {
+        const result = permissionRecord.$permissions()
+
+        expect(result).to.be.null()
+      })
+    })
+
+    describe('when the user is "internal"', () => {
+      beforeEach(() => {
+        permissionRecord.application = 'water_admin'
+      })
+
+      describe('but the instance has not be populated properly', () => {
+        describe('because "groups" is not present (it was not fetched)', () => {
+          it('returns null', () => {
+            const result = permissionRecord.$permissions()
+
+            expect(result).to.be.null()
+          })
+        })
+
+        describe('because "roles" is not present (it was not fetched)', () => {
+          beforeEach(() => {
+            permissionRecord.groups = []
+          })
+
+          it('returns null', () => {
+            const result = permissionRecord.$permissions()
+
+            expect(result).to.be.null()
+          })
+        })
+      })
+
+      describe('and the instance has been populated properly', () => {
+        beforeEach(() => {
+          permissionRecord.groups = []
+          permissionRecord.roles = []
+        })
+
+        describe('but has no groups', () => {
+          it('returns "Basic" permissions', () => {
+            const result = permissionRecord.$permissions()
+
+            expect(result).to.equal(userPermissions.basic)
+          })
+        })
+
+        describe('and has a group', () => {
+          beforeEach(() => {
+            permissionRecord.groups = [{ group: 'nps' }]
+          })
+
+          describe('but no roles that start with "ar_"', () => {
+            it('returns the matching permissions', () => {
+              const result = permissionRecord.$permissions()
+
+              expect(result).to.equal(userPermissions.nps)
+            })
+          })
+
+          describe('and a role that start with "ar_"', () => {
+            beforeEach(() => {
+              permissionRecord.roles = [{ role: 'ar_approver' }]
+            })
+
+            it('returns the matching "Digitise!" permissions', () => {
+              const result = permissionRecord.$permissions()
+
+              expect(result).to.equal(userPermissions.nps_ar_approver)
+            })
+          })
+        })
+      })
+    })
+  })
+
+  describe('$status()', () => {
+    let statusTestRecord
+
+    beforeEach(() => {
+      statusTestRecord = UserHelper.select()
+    })
+
+    describe('when the user is "disabled"', () => {
+      beforeEach(() => {
+        statusTestRecord.enabled = false
+      })
+
+      it('returns "disabled"', async () => {
+        const result = statusTestRecord.$status()
+
+        expect(result).to.equal('disabled')
+      })
+    })
+
+    describe('when the user is "enabled"', () => {
+      beforeEach(() => {
+        statusTestRecord.enabled = true
+      })
+
+      describe('and ""lastLogin" is not null', () => {
+        beforeEach(() => {
+          statusTestRecord.lastLogin = new Date()
+        })
+
+        it('returns "enabled"', async () => {
+          const result = statusTestRecord.$status()
+
+          expect(result).to.equal('enabled')
+        })
+      })
+
+      describe('but "lastLogin" is null', () => {
+        beforeEach(() => {
+          statusTestRecord.lastLogin = null
+        })
+
+        it('returns "awaiting"', async () => {
+          const result = statusTestRecord.$status()
+
+          expect(result).to.equal('awaiting')
+        })
+      })
     })
   })
 })
