@@ -6,6 +6,8 @@
  * @module ViewManageService
  */
 
+const FetchCompanyContactService = require('./fetch-company-contact.service.js')
+const FetchCustomerService = require('../customers/fetch-customer.service.js')
 const ViewManagePresenter = require('../../presenters/customers-contacts/view-manage.presenter.js')
 
 /**
@@ -16,9 +18,14 @@ const ViewManagePresenter = require('../../presenters/customers-contacts/view-ma
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(id) {
-  const pageData = ViewManagePresenter.go()
+  const companyContact = await FetchCompanyContactService.go(id)
+
+  const company = await FetchCustomerService.go(companyContact.companyId)
+
+  const pageData = ViewManagePresenter.go(company, companyContact)
 
   return {
+    activeNavBar: 'search',
     ...pageData
   }
 }
