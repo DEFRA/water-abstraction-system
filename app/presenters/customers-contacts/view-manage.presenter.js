@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the '/customers/{customerId}/contact/{contactId}' page
+ * Formats data for the '/customers-contacts/{id}/manage' page
  * @module ViewManagePresenter
  */
 
 /**
- * Formats data for the '/customers/{customerId}/contact/{contactId}' page
+ * Formats data for the '/customers-contacts/{id}/manage' page
  *
  * @returns {object} The data formatted for the view template
  */
