@@ -9,6 +9,7 @@ const { hashSync } = require('bcryptjs')
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
+const { userPermissions } = require('../lib/static-lookups.lib.js')
 
 class UserModel extends BaseModel {
   static get tableName() {
@@ -107,6 +108,19 @@ class UserModel extends BaseModel {
    */
   static get modifiers() {
     return {
+      // permissions modifier fetches the groups and roles for the user which are needed to determine their permissions
+      permissions(query) {
+        query
+          .select(['application'])
+          .withGraphFetched('groups')
+          .modifyGraph('groups', (groupsBuilder) => {
+            groupsBuilder.select(['groups.group', 'groups.id'])
+          })
+          .withGraphFetched('roles')
+          .modifyGraph('roles', (rolesBuilder) => {
+            rolesBuilder.select(['roles.id', 'roles.role'])
+          })
+      },
       // status modifier ensures all the properties we need to determine the user's status are selected
       status(query) {
         query.select(['enabled', 'lastLogin'])
@@ -121,6 +135,64 @@ class UserModel extends BaseModel {
     // autogenerate the salt for you.
     // https://github.com/kelektiv/node.bcrypt.js#usage
     return hashSync(password, 10)
+  }
+
+  /**
+   * Returns details of the user's permissions for internal users (always null for external).
+   *
+   * > We recommend adding the `permissions` modifier to your query if you need to determine a user's permissions
+   *
+   * When you add or edit an internal user, you select from a list of permissions. They are:
+   *
+   * - Basic access
+   * - Billing and Data
+   * - Environment Officer
+   * - National Permitting Service
+   * - National Permitting Service and Digitise! approver
+   * - National Permitting Service and Digitise! editor
+   * - Permitting and Support Centre
+   * - Waste and Industry Regulatory Service
+   *
+   * > There is also a 'Superuser' permission but this is not assigned via the UI.
+   *
+   * What these determine are the 'roles' a user has, which translate to 'scopes' we assign on our routes or check for
+   * in our presenters and services.
+   *
+   * For the most part, those roles are grouped, and each user is assigned one group (though in theory they could be
+   * assigned multiple groups). For example, a user with the permission "Environment Officer" is linked to the group
+   * `environment_officer`, which in turn is linked to the roles `manage_gauging_station_licence_links` and
+   * `hof_notifications`.
+   *
+   * The exceptions are "Basic access" and the "Digitise!" permissions. A basic user is _not_ assigned to any groups or
+   * roles. A user with one of the Digitise permissions is assigned to the group `nps` _and_ a specific role, either
+   * `ar_user` or `ar_approver`.
+   *
+   * This instance function uses this knowledge to determine what "permission" a user has
+   *
+   * @returns {object|null} For internal users an object containing the groups, roles and label for the 'permission'.
+   * For external users it returns NULL
+   */
+  $permissions() {
+    if (this.application === 'water_vml') {
+      return null
+    }
+
+    if (!this.groups || !this.roles) {
+      return null
+    }
+
+    const group = this.groups[0]?.group || 'basic'
+    const digitiseRoles = this.roles.filter((role) => {
+      return role.role.startsWith('ar_')
+    })
+
+    if (digitiseRoles.length === 0) {
+      return userPermissions[group]
+    }
+
+    const digitisePermission = `${group}_${digitiseRoles[0].role}`
+
+    return userPermissions[digitisePermission]
   }
 
   /**
