@@ -34,7 +34,8 @@ describe('Billing Accounts - Setup - Select Existing Address Presenter', () => {
 
   beforeEach(() => {
     session = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+      billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+      id: generateUUID()
     }
   })
 

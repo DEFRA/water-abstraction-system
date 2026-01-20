@@ -62,6 +62,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/billing-accounts/setup/{sessionId}/for-attention-of',
+    options: {
+      handler: BillingAccountsSetupController.viewForAttentionOf,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/billing-accounts/setup/{sessionId}/for-attention-of',
+    options: {
+      handler: BillingAccountsSetupController.submitForAttentionOf,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
   }
 ]
 

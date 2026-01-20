@@ -6,8 +6,10 @@
  */
 
 const InitiateSessionService = require('../services/billing-accounts/setup/initiate-session.service.js')
+const SubmitForAttentionOfService = require('../services/billing-accounts/setup/submit-for-attention-of.service.js')
 const SubmitSelectAccountService = require('../services/billing-accounts/setup/submit-select-account.service.js')
 const SubmitSelectExistingAddressService = require('../services/billing-accounts/setup/submit-select-existing-address.service.js')
+const ViewForAttentionOfService = require('../services/billing-accounts/setup/view-for-attention-of.service.js')
 const ViewSelectAccountService = require('../services/billing-accounts/setup/view-select-account.service.js')
 const ViewSelectExistingAddressService = require('../services/billing-accounts/setup/view-select-existing-address.service.js')
 
@@ -17,6 +19,25 @@ async function setup(request, h) {
   const session = await InitiateSessionService.go(billingAccountId)
 
   return h.redirect(`/system/billing-accounts/setup/${session.id}/select-account`)
+}
+
+async function submitForAttentionOf(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitForAttentionOfService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`billing-accounts/setup/for-attention-of.njk`, pageData)
+  }
+
+  if (pageData.forAttentionOf === 'yes') {
+    return h.redirect(`/system/billing-accounts/setup/${sessionId}/select-contact`)
+  }
+
+  return h.redirect(`/system/billing-accounts/setup/${sessionId}/check`)
 }
 
 async function submitSelectExistingAddress(request, h) {
@@ -57,6 +78,14 @@ async function submitSelectAccount(request, h) {
   return h.redirect(`/system/billing-accounts/setup/${sessionId}/select-existing-account`)
 }
 
+async function viewForAttentionOf(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewForAttentionOfService.go(sessionId)
+
+  return h.view(`billing-accounts/setup/for-attention-of.njk`, pageData)
+}
+
 async function viewSelectAccount(request, h) {
   const { sessionId } = request.params
 
@@ -75,8 +104,10 @@ async function viewSelectExistingAddress(request, h) {
 
 module.exports = {
   setup,
+  submitForAttentionOf,
   submitSelectAccount,
   submitSelectExistingAddress,
+  viewForAttentionOf,
   viewSelectAccount,
   viewSelectExistingAddress
 }
