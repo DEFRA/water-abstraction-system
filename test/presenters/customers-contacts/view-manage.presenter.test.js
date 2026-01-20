@@ -38,7 +38,8 @@ describe('Customers contacts - View Manage Presenter', () => {
           name: 'Rachael Tyrell'
         },
         pageTitle: 'Contact details for Rachael Tyrell',
-        pageTitleCaption: 'Tyrell Corporation'
+        pageTitleCaption: 'Tyrell Corporation',
+        removeContactLink: `/system/customers-contacts/${companyContact.id}/remove`
       })
     })
   })
