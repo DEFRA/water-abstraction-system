@@ -19,10 +19,13 @@ const FetchCompanyContactService = require('../../../app/services/customers-cont
 const ViewManageService = require('../../../app/services/customers-contacts/view-manage.service.js')
 
 describe('Customers contacts - View Manage Service', () => {
+  let auth
   let companyContact
   let company
 
   beforeEach(async () => {
+    auth = { credentials: { roles: [] } }
+
     companyContact = CustomersFixtures.companyContact()
 
     company = CustomersFixtures.customer()
@@ -37,7 +40,7 @@ describe('Customers contacts - View Manage Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewManageService.go(companyContact.id)
+      const result = await ViewManageService.go(companyContact.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -51,7 +54,9 @@ describe('Customers contacts - View Manage Service', () => {
           name: 'Rachael Tyrell'
         },
         pageTitle: 'Contact details for Rachael Tyrell',
-        pageTitleCaption: 'Tyrell Corporation'
+        pageTitleCaption: 'Tyrell Corporation',
+        removeContactLink: `/system/customers-contacts/${companyContact.id}/remove`,
+        roles: []
       })
     })
   })

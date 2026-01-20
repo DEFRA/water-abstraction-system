@@ -25,7 +25,8 @@ function go(company, companyContact) {
       abstractionAlerts: companyContact.abstractionAlerts ? 'Yes' : 'No'
     },
     pageTitle: `Contact details for ${companyContact.contact.$name()}`,
-    pageTitleCaption: company.name
+    pageTitleCaption: company.name,
+    removeContactLink: `/system/customers-contacts/${companyContact.id}/remove`
   }
 }
 
