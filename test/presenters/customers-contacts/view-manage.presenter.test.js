@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ViewManagePresenter = require('../../../../app/presenters/customers/contact/view-manage.presenter.js')
+const ViewManagePresenter = require('../../../app/presenters/customers-contacts/view-manage.presenter.js')
 
-describe('Customers - Contact - View Manage Presenter', () => {
+describe('Customers contacts - View Manage Presenter', () => {
   beforeEach(() => {})
 
   describe('when called', () => {
