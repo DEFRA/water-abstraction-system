@@ -45,6 +45,30 @@ function billingAccounts() {
 }
 
 /**
+ * A representation from the company contact table
+ *
+ * @returns {module:CompanyContactModel} A company contact
+ */
+function companyContact() {
+  return {
+    id: generateUUID(),
+    abstractionAlerts: false,
+    contact: ContactModel.fromJson({
+      id: generateUUID(),
+      salutation: null,
+      firstName: 'Rachael',
+      middleInitials: null,
+      lastName: 'Tyrell',
+      initials: null,
+      contactType: 'person',
+      suffix: null,
+      department: 'Tyrell Corporation',
+      email: 'rachael.tyrell@tyrellcorp.com'
+    })
+  }
+}
+
+/**
  * A representation from the company contact 'FetchBillingAccountsService'
  *
  * @returns {object[]} An array of company contact
@@ -52,20 +76,7 @@ function billingAccounts() {
 function companyContacts() {
   return [
     {
-      id: generateUUID(),
-      abstractionAlerts: false,
-      contact: ContactModel.fromJson({
-        id: generateUUID(),
-        salutation: null,
-        firstName: 'Rachael',
-        middleInitials: null,
-        lastName: 'Tyrell',
-        initials: null,
-        contactType: 'person',
-        suffix: null,
-        department: 'Tyrell Corporation',
-        email: 'rachael.tyrell@tyrellcorp.com'
-      }),
+      ...companyContact(),
       licenceRole: {
         label: 'Additional Contact'
       }
@@ -107,6 +118,7 @@ function licences() {
 
 module.exports = {
   billingAccounts,
+  companyContact,
   companyContacts,
   customer,
   licences
