@@ -35,7 +35,7 @@ function _companyContacts(companyContacts, customer) {
 
     return {
       action: FeatureFlagsConfig.enableCustomerManage
-        ? `/system/customers/${customer.id}/contact/${companyContact.contact.id}`
+        ? `/system/customers-contacts/${companyContact.id}`
         : `/customer/${customer.id}/contacts/${companyContact.contact.id}`,
       ...contact
     }

@@ -22,7 +22,7 @@ const BillingAccountRoutes = require('../routes/billing-accounts.routes.js')
 const BillingAccountSetupRoutes = require('../routes/billing-accounts-setup.routes.js')
 const CheckRoutes = require('../routes/check.routes.js')
 const CustomersRoutes = require('../routes/customers.routes.js')
-const CustomersContactRoutes = require('../routes/customers-contact.routes.js')
+const CustomersContactsRoutes = require('../routes/customers-contacts.routes.js')
 const DataRoutes = require('../routes/data.routes.js')
 const FilterRoutesService = require('../services/plugins/filter-routes.service.js')
 const HealthRoutes = require('../routes/health.routes.js')
@@ -63,7 +63,7 @@ const routes = [
   ...BillingAccountSetupRoutes,
   ...CheckRoutes,
   ...CustomersRoutes,
-  ...CustomersContactRoutes,
+  ...CustomersContactsRoutes,
   ...NotificationRoutes,
   ...LicenceRoutes,
   ...LicenceEndDatesRoutes,

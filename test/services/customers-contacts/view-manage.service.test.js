@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const ViewManageService = require('../../../../app/services/customers/contact/view-manage.service.js')
+const ViewManageService = require('../../../app/services/customers-contacts/view-manage.service.js')
 
-describe('View Manage Service', () => {
+describe('Customers contacts - View Manage Service', () => {
   let customerId
   let contactId
 
