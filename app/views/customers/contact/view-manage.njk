@@ -1,5 +1,64 @@
 {% extends 'layout.njk' %}
 
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
 {% block pageContent %}
+  {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: {
+        text: "Name"
+      },
+        value: {
+        text: contact.name
+      },
+        actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "name"
+          }
+        ]
+      }
+      },
+      {
+        key: {
+        text: "Email address"
+      },
+        value: {
+        text: contact.email
+      },
+        actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "email address"
+          }
+        ]
+      }
+      },
+      {
+        key: {
+        text: "Water abstraction alerts"
+      },
+        value: {
+        text: contact.abstractionAlerts
+      },
+        actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "abstraction alerts"
+          }
+        ]
+      }
+      }
+    ]
+  }) }}
 
 {% endblock %}
