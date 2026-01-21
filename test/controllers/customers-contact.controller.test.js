@@ -52,7 +52,7 @@ describe('Customers Contacts controller', () => {
           }
         }
 
-        Sinon.stub(ViewManageService, 'go').returns({ pageTitle: 'Manage contact' })
+        Sinon.stub(ViewManageService, 'go').returns({ pageTitle: 'Manage contact', roles: [] })
       })
 
       it('returns the page successfully', async () => {
