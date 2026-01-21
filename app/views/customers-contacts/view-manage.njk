@@ -8,54 +8,54 @@
     rows: [
       {
         key: {
-        text: "Name"
-      },
+          text: "Name"
+        },
         value: {
-        text: contact.name
-      },
+          text: contact.name
+        },
         actions: {
-        items: [
-          {
-            href: "#",
-            text: "Change",
-            visuallyHiddenText: "name"
-          }
-        ]
-      } if 'hof_notifications' in roles
+          items: [
+            {
+              href: "#",
+              text: "Change",
+              visuallyHiddenText: "name"
+            }
+          ]
+        } if 'hof_notifications' in roles
       },
       {
         key: {
-        text: "Email address"
-      },
+          text: "Email address"
+        },
         value: {
-        text: contact.email
-      },
+          text: contact.email
+        },
         actions: {
-        items: [
-          {
-            href: "#",
-            text: "Change",
-            visuallyHiddenText: "email address"
-          }
-        ]
-      } if 'hof_notifications' in roles
+          items: [
+            {
+              href: "#",
+              text: "Change",
+              visuallyHiddenText: "email address"
+            }
+          ]
+        } if 'hof_notifications' in roles
       },
       {
         key: {
-        text: "Water abstraction alerts"
-      },
+          text: "Water abstraction alerts"
+        },
         value: {
-        text: contact.abstractionAlerts
-      },
+          text: contact.abstractionAlerts
+        },
         actions: {
-        items: [
-          {
-            href: "#",
-            text: "Change",
-            visuallyHiddenText: "abstraction alerts"
-          }
-        ]
-      } if 'hof_notifications' in roles
+          items: [
+            {
+              href: "#",
+              text: "Change",
+              visuallyHiddenText: "abstraction alerts"
+            }
+          ]
+        } if 'hof_notifications' in roles
       }
     ]
   }) }}
