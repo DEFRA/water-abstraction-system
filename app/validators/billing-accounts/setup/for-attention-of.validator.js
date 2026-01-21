@@ -19,14 +19,16 @@ const VALID_VALUES = ['yes', 'no']
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
+  const errorMessage = 'Select who should the bills go to'
+
   const schema = Joi.object({
     forAttentionOf: Joi.string()
       .valid(...VALID_VALUES)
       .required()
       .messages({
-        'any.required': 'Select if you need to add an FAO',
-        'any.only': 'Select if you need to add an FAO',
-        'string.empty': 'Select if you need to add an FAO'
+        'any.required': errorMessage,
+        'any.only': errorMessage,
+        'string.empty': errorMessage
       })
   })
 
