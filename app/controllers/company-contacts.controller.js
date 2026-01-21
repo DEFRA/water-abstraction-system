@@ -1,23 +1,23 @@
 'use strict'
 
 /**
- * Controller for /companies-contacts endpoints
- * @module CompaniesContactsController
+ * Controller for /company-contacts endpoints
+ * @module CompanyContactsController
  */
 
-const ViewManageService = require('../services/companies-contacts/view-manage.service.js')
+const ViewCompanyContactService = require('../services/company-contacts/view-company-contact.service.js')
 
-async function viewManage(request, h) {
+async function viewCompanyContact(request, h) {
   const {
     params: { id },
     auth
   } = request
 
-  const pageData = await ViewManageService.go(id, auth)
+  const pageData = await ViewCompanyContactService.go(id, auth)
 
-  return h.view(`companies-contacts/view-manage.njk`, pageData)
+  return h.view(`company-contacts/view-company-contact.njk`, pageData)
 }
 
 module.exports = {
-  viewManage
+  viewCompanyContact
 }

@@ -2,7 +2,7 @@
 
 /**
  * Controller for /companies endpoints
- * @module CompanyController
+ * @module CompaniesController
  */
 
 const ViewBillingAccountsService = require('../services/companies/view-billing-accounts.service.js')

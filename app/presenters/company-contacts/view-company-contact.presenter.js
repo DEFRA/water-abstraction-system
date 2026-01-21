@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the '/companies-contacts/{id}/manage' page
- * @module ViewManagePresenter
+ * Formats data for the '/company-contacts/{id}/manage' page
+ * @module ViewCompanyContactPresenter
  */
 
 /**
- * Formats data for the '/companies-contacts/{id}/manage' page
+ * Formats data for the '/company-contacts/{id}/manage' page
  *
  * @param {module:CompanyModel} company - The customer from the companies table
  * @param {module:CompanyContactModel} companyContact - The customer contact from the company contacts table
@@ -26,7 +26,7 @@ function go(company, companyContact) {
     },
     pageTitle: `Contact details for ${companyContact.contact.$name()}`,
     pageTitleCaption: company.name,
-    removeContactLink: `/system/companies-contacts/${companyContact.id}/remove`
+    removeContactLink: `/system/company-contacts/${companyContact.id}/remove`
   }
 }
 

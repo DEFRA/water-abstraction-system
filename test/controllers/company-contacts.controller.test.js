@@ -13,12 +13,12 @@ const { expect } = Code
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
-const ViewManageService = require('../../app/services/companies-contacts/view-manage.service.js')
+const ViewCompanyContactService = require('../../app/services/company-contacts/view-company-contact.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe('Companies Contacts controller', () => {
+describe('Company Contacts controller', () => {
   let options
   let server
 
@@ -40,19 +40,19 @@ describe('Companies Contacts controller', () => {
     Sinon.restore()
   })
 
-  describe('/companies-contacts/{id}', () => {
+  describe('/company-contacts/{id}', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
           method: 'GET',
-          url: `/companies-contacts/${generateUUID()}`,
+          url: `/company-contacts/${generateUUID()}`,
           auth: {
             strategy: 'session',
             credentials: { scope: [] }
           }
         }
 
-        Sinon.stub(ViewManageService, 'go').returns({ pageTitle: 'Manage contact', roles: [] })
+        Sinon.stub(ViewCompanyContactService, 'go').returns({ pageTitle: 'Manage contact', roles: [] })
       })
 
       it('returns the page successfully', async () => {

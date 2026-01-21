@@ -44,7 +44,7 @@ describe('Companies - Contacts Presenter', () => {
         },
         companyContacts: [
           {
-            action: `/system/companies-contacts/${companyContacts[0].id}`,
+            action: `/system/company-contacts/${companyContacts[0].id}`,
             communicationType: 'Additional Contact',
             name: 'Rachael Tyrell',
             email: 'rachael.tyrell@tyrellcorp.com'

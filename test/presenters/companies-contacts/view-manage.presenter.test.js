@@ -11,9 +11,9 @@ const { expect } = Code
 const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 
 // Thing under test
-const ViewManagePresenter = require('../../../app/presenters/companies-contacts/view-manage.presenter.js')
+const ViewCompanyContactPresenter = require('../../../app/presenters/company-contacts/view-company-contact.presenter.js')
 
-describe('Companies contacts - View Manage Presenter', () => {
+describe('Company contacts - View Company Contact Presenter', () => {
   let companyContact
   let company
 
@@ -25,7 +25,7 @@ describe('Companies contacts - View Manage Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ViewManagePresenter.go(company, companyContact)
+      const result = ViewCompanyContactPresenter.go(company, companyContact)
 
       expect(result).to.equal({
         backLink: {
@@ -39,7 +39,7 @@ describe('Companies contacts - View Manage Presenter', () => {
         },
         pageTitle: 'Contact details for Rachael Tyrell',
         pageTitleCaption: 'Tyrell Corporation',
-        removeContactLink: `/system/companies-contacts/${companyContact.id}/remove`
+        removeContactLink: `/system/company-contacts/${companyContact.id}/remove`
       })
     })
   })

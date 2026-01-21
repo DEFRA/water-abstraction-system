@@ -12,13 +12,13 @@ const { expect } = Code
 const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 
 // Things we need to stub
-const FetchCompanyContactService = require('../../../app/services/companies-contacts/fetch-company-contact.service.js')
+const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
 
 // Thing under test
-const ViewManageService = require('../../../app/services/companies-contacts/view-manage.service.js')
+const ViewCompanyContactService = require('../../../app/services/company-contacts/view-company-contact.service.js')
 
-describe('Companies contacts - View Manage Service', () => {
+describe('Companies contacts - View Company contact Service', () => {
   let auth
   let companyContact
   let company
@@ -40,7 +40,7 @@ describe('Companies contacts - View Manage Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewManageService.go(companyContact.id, auth)
+      const result = await ViewCompanyContactService.go(companyContact.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -55,7 +55,7 @@ describe('Companies contacts - View Manage Service', () => {
         },
         pageTitle: 'Contact details for Rachael Tyrell',
         pageTitleCaption: 'Tyrell Corporation',
-        removeContactLink: `/system/companies-contacts/${companyContact.id}/remove`,
+        removeContactLink: `/system/company-contacts/${companyContact.id}/remove`,
         roles: []
       })
     })

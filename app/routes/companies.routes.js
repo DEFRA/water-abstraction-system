@@ -1,6 +1,6 @@
 'use strict'
 
-const CompaniesController = require('../controllers/company.controller.js')
+const CompaniesController = require('../controllers/companies.controller.js')
 
 const routes = [
   {

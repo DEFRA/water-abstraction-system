@@ -1,18 +1,18 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the '/companies-contacts/{id}/manage' page
+ * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/manage' page
  *
- * @module ViewManageService
+ * @module ViewCompanyContactService
  */
 
 const FetchCompanyContactService = require('./fetch-company-contact.service.js')
 const FetchCompanyService = require('../companies/fetch-company.service.js')
-const ViewManagePresenter = require('../../presenters/companies-contacts/view-manage.presenter.js')
+const ViewCompanyContactPresenter = require('../../presenters/company-contacts/view-company-contact.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data for the '/companies-contacts/{id}/manage' page
+ * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/manage' page
  *
  * @param {string} id - the UUID of the company contact
  * @param {object} auth - The auth object taken from `request.auth` containing user details
@@ -24,7 +24,7 @@ async function go(id, auth) {
 
   const company = await FetchCompanyService.go(companyContact.companyId)
 
-  const pageData = ViewManagePresenter.go(company, companyContact)
+  const pageData = ViewCompanyContactPresenter.go(company, companyContact)
 
   return {
     ...pageData,
