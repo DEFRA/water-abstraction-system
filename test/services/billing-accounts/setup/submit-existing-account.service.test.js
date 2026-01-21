@@ -16,7 +16,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitExistingAccountService = require('../../../../app/services/billing-accounts/setup/submit-existing-account.service.js')
 
-describe('Billing Accounts - Setup - Select Existing Account Service', () => {
+describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   let payload
   let session
   let sessionData
@@ -63,7 +63,7 @@ describe('Billing Accounts - Setup - Select Existing Account Service', () => {
     })
   })
 
-  describe('when the user picks to set up a new address', () => {
+  describe('when the user picks use an existing account', () => {
     beforeEach(async () => {
       payload = {
         existingAccount: 'new'

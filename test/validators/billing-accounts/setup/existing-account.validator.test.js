@@ -13,7 +13,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 // Thing under test
 const ExistingAccountValidator = require('../../../../app/validators/billing-accounts/setup/existing-account.validator.js')
 
-describe('Billing Accounts - Setup - Select Existing Account Validator', () => {
+describe('Billing Accounts - Setup - Existing Account validator', () => {
   let payload
 
   beforeEach(() => {

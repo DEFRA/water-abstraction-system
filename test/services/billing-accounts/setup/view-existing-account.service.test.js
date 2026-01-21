@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const ViewExistingAccountService = require('../../../../app/services/billing-accounts/setup/view-existing-account.service.js')
 
-describe('Billing Accounts - Setup - Select Existing Account Service', () => {
+describe('Billing Accounts - Setup - View Existing Account service', () => {
   let session
   let sessionData
 

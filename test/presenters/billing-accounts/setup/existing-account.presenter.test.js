@@ -13,7 +13,7 @@ const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtu
 // Thing under test
 const ExistingAccountPresenter = require('../../../../app/presenters/billing-accounts/setup/existing-account.presenter.js')
 
-describe('Billing Accounts - Setup - Select Existing Account Presenter', () => {
+describe('Billing Accounts - Setup - Existing Account presenter', () => {
   let session
 
   describe('when called for the first time', () => {
