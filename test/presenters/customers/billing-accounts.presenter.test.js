@@ -16,10 +16,10 @@ const BillingAccountsPresenter = require('../../../app/presenters/customers/bill
 describe('Customers - Billing Accounts Presenter', () => {
   let billingAccount
   let billingAccounts
-  let customer
+  let company
 
   beforeEach(() => {
-    customer = CustomersFixtures.customer()
+    company = CustomersFixtures.company()
 
     billingAccounts = CustomersFixtures.billingAccounts()
 
@@ -28,7 +28,7 @@ describe('Customers - Billing Accounts Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = BillingAccountsPresenter.go(customer, billingAccounts)
+      const result = BillingAccountsPresenter.go(company, billingAccounts)
 
       expect(result).to.equal({
         backLink: {

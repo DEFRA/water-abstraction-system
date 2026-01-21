@@ -20,7 +20,7 @@ describe('Customers contacts - View Manage Presenter', () => {
   beforeEach(() => {
     companyContact = CustomersFixtures.companyContact()
 
-    company = CustomersFixtures.customer()
+    company = CustomersFixtures.company()
   })
 
   describe('when called', () => {
