@@ -65,6 +65,7 @@ function companyContact() {
   return {
     id: generateUUID(),
     abstractionAlerts: false,
+    companyId: generateUUID(),
     contact: ContactModel.fromJson({
       id: generateUUID(),
       salutation: null,
