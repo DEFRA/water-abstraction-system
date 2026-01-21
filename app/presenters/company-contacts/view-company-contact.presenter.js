@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the '/company-contacts/{id}/manage' page
+ * Formats data for the '/company-contacts/{id}' page
  * @module ViewCompanyContactPresenter
  */
 
 /**
- * Formats data for the '/company-contacts/{id}/manage' page
+ * Formats data for the '/company-contacts/{id}' page
  *
  * @param {module:CompanyModel} company - The customer from the companies table
  * @param {module:CompanyContactModel} companyContact - The customer contact from the company contacts table

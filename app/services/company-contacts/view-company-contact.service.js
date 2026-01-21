@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/manage' page
+ * Orchestrates fetching and presenting the data for the '/company-contacts/{id}' page
  *
  * @module ViewCompanyContactService
  */
@@ -12,7 +12,7 @@ const ViewCompanyContactPresenter = require('../../presenters/company-contacts/v
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/manage' page
+ * Orchestrates fetching and presenting the data for the '/company-contacts/{id}' page
  *
  * @param {string} id - the UUID of the company contact
  * @param {object} auth - The auth object taken from `request.auth` containing user details
