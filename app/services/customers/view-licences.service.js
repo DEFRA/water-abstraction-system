@@ -6,40 +6,40 @@
  * @module ViewLicencesService
  */
 
-const LicencesPresenter = require('../../presenters/customers/licences.presenter.js')
-const FetchCustomerService = require('./fetch-customer.service.js')
+const FetchCompanyService = require('./fetch-company.service.js')
 const FetchLicencesService = require('./fetch-licences.service.js')
+const LicencesPresenter = require('../../presenters/customers/licences.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data for the 'customers/{id}/licences' page
  *
- * @param {string} customerId - the UUID of the customer
+ * @param {string} companyId - the UUID of the company
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {number} page - The current page for the pagination service
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(customerId, auth, page) {
-  const customer = await FetchCustomerService.go(customerId)
+async function go(companyId, auth, page) {
+  const company = await FetchCompanyService.go(companyId)
 
-  const { licences, pagination } = await FetchLicencesService.go(customerId, page)
+  const { licences, pagination } = await FetchLicencesService.go(companyId, page)
 
-  const pageData = LicencesPresenter.go(customer, licences)
+  const pageData = LicencesPresenter.go(company, licences)
 
   const paginationData = PaginatorPresenter.go(
     pagination.total,
     Number(page),
-    `/system/customers/${customerId}/licences`,
+    `/system/customers/${companyId}/licences`,
     licences.length,
     'licences'
   )
 
   return {
+    ...pageData,
     activeNavBar: 'search',
     activeSecondaryNav: 'licences',
-    ...pageData,
     pagination: paginationData,
     roles: userRoles(auth)
   }

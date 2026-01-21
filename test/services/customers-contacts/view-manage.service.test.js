@@ -12,8 +12,8 @@ const { expect } = Code
 const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 
 // Things we need to stub
-const FetchCustomerService = require('../../../app/services/customers/fetch-customer.service.js')
 const FetchCompanyContactService = require('../../../app/services/customers-contacts/fetch-company-contact.service.js')
+const FetchCompanyService = require('../../../app/services/customers/fetch-company.service.js')
 
 // Thing under test
 const ViewManageService = require('../../../app/services/customers-contacts/view-manage.service.js')
@@ -28,9 +28,9 @@ describe('Customers contacts - View Manage Service', () => {
 
     companyContact = CustomersFixtures.companyContact()
 
-    company = CustomersFixtures.customer()
+    company = CustomersFixtures.company()
 
-    Sinon.stub(FetchCustomerService, 'go').returns(company)
+    Sinon.stub(FetchCompanyService, 'go').returns(company)
     Sinon.stub(FetchCompanyContactService, 'go').returns(companyContact)
   })
 

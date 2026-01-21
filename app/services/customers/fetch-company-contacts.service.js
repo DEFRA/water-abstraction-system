@@ -12,22 +12,22 @@ const { db } = require('../../../db/db.js')
 /**
  * Fetches the company contacts data needed for the view 'customers/{id}/contacts'
  *
- * @param {string} customerId - The customer id for the company
+ * @param {string} companyId - The company id for the company
  * @param {number} page - The current page for the pagination service
  *
- * @returns {Promise<object>} the company contacts for the customer and the pagination object
+ * @returns {Promise<object>} the company contacts for the company and the pagination object
  */
-async function go(customerId, page) {
-  const { results, total } = await _fetch(customerId, page)
+async function go(companyId, page) {
+  const { results, total } = await _fetch(companyId, page)
 
   return { companyContacts: results, pagination: { total } }
 }
 
-async function _fetch(customerId, page) {
+async function _fetch(companyId, page) {
   return CompanyContactModel.query()
     .select(['companyContacts.id', 'abstractionAlerts'])
     .innerJoin('licenceDocumentRoles AS ldr', 'ldr.company_id', '=', 'companyContacts.companyId')
-    .where('companyContacts.companyId', customerId)
+    .where('companyContacts.companyId', companyId)
     .andWhere((builder) => {
       builder.whereNull('ldr.end_date').orWhere('ldr.end_date', '>', db.raw('NOW()'))
     })
