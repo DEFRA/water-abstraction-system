@@ -13,7 +13,7 @@ const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 // Thing under test
 const ViewCompanyContactPresenter = require('../../../app/presenters/company-contacts/view-company-contact.presenter.js')
 
-describe('Company contacts - View Company Contact Presenter', () => {
+describe('Company Contacts - View Company Contact presenter', () => {
   let companyContact
   let company
 
