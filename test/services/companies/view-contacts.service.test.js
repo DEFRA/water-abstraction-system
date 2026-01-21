@@ -19,7 +19,7 @@ const FetchCompanyService = require('../../../app/services/companies/fetch-compa
 // Thing under test
 const ViewContactsService = require('../../../app/services/companies/view-contacts.service.js')
 
-describe('Companies - View Contacts Service', () => {
+describe('Companies - View Contacts service', () => {
   let auth
   let company
   let companyContacts

@@ -17,7 +17,7 @@ const LicenceDocumentRoleHelper = require('../../support/helpers/licence-documen
 // Thing under test
 const FetchContactsService = require('../../../app/services/companies/fetch-company-contacts.service.js')
 
-describe('Companies - Fetch company contacts service', () => {
+describe('Companies - Fetch Company Contacts service', () => {
   let company
   let companyContact
   let contact

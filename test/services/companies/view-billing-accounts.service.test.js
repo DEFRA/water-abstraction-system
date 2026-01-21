@@ -18,7 +18,7 @@ const FetchCompanyService = require('../../../app/services/companies/fetch-compa
 // Thing under test
 const ViewBillingAccountsService = require('../../../app/services/companies/view-billing-accounts.service.js')
 
-describe('Companies - View Billing Accounts Service', () => {
+describe('Companies - View Billing Accounts service', () => {
   let auth
   let billingAccount
   let billingAccounts

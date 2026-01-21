@@ -18,7 +18,7 @@ const FetchLicencesService = require('../../../app/services/companies/fetch-lice
 // Thing under test
 const ViewLicencesService = require('../../../app/services/companies/view-licences.service.js')
 
-describe('Companies - View Licences Service', () => {
+describe('Companies - View Licences service', () => {
   let auth
   let company
   let licences

@@ -16,7 +16,7 @@ const BillingAccountAddressHelper = require('../../support/helpers/billing-accou
 // Thing under test
 const FetchBillingAccountsService = require('../../../app/services/companies/fetch-billing-accounts.service.js')
 
-describe('Companies - Fetch billing accounts service', () => {
+describe('Companies - Fetch Billing Accounts service', () => {
   let address
   let company
   let billingAccount

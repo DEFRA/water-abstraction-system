@@ -17,7 +17,7 @@ const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-docum
 // Thing under test
 const FetchLicencesService = require('../../../app/services/companies/fetch-licences.service.js')
 
-describe('Companies - Fetch licence service', () => {
+describe('Companies - Fetch Licences service', () => {
   let company
   let licence
   let licenceDocument

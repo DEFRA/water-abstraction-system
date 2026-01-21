@@ -14,7 +14,7 @@ const ContactHelper = require('../../support/helpers/contact.helper.js')
 // Thing under test
 const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
 
-describe('Companies Contacts - Fetch company contact service', () => {
+describe('Company Contacts - Fetch Company Contact service', () => {
   let companyContact
   let contact
 

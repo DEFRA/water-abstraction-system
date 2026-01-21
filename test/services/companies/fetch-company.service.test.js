@@ -13,7 +13,7 @@ const CompanyHelper = require('../../support/helpers/company.helper.js')
 // Thing under test
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
 
-describe('Companies - Fetch company service', () => {
+describe('Companies - Fetch Company service', () => {
   let company
 
   describe('when there is a company', () => {

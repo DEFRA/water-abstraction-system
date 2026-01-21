@@ -17,7 +17,7 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 // Thing under test
 const ContactsPresenter = require('../../../app/presenters/companies/contacts.presenter.js')
 
-describe('Companies - Contacts Presenter', () => {
+describe('Companies - Contacts presenter', () => {
   let company
   let companyContacts
 
