@@ -56,7 +56,7 @@ function _backLink(licenceId, chargeVersionId, companyId) {
 
   if (companyId) {
     const href = FeatureFlagsConfig.enableCustomerView
-      ? `/system/customers/${companyId}/billing-accounts`
+      ? `/system/companies/${companyId}/billing-accounts`
       : `/customer/${companyId}/#billing-accounts`
 
     return {
