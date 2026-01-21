@@ -131,7 +131,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
         expect(result.backLink).to.equal({
           title: 'Go back to customer',
-          href: `/system/customers/${companyId}/billing-accounts`
+          href: `/system/companies/${companyId}/billing-accounts`
         })
       })
     })

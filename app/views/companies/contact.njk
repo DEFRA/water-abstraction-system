@@ -1,0 +1,78 @@
+{% extends 'layout-customers.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% set tableRows = [] %}
+
+{% for companyContact in companyContacts %}
+  {% set rowIndex = loop.index0 %}
+
+  {% set tableRow = [
+    {
+      text: companyContact.name,
+      attributes: { 'data-test': 'contact-name-' + rowIndex }
+    },
+    {
+      text: companyContact.communicationType,
+      attributes: { 'data-test': 'contact-communication-type-' + rowIndex }
+    },
+    {
+      text: companyContact.email,
+      attributes: { 'data-test': 'contact-email-' + rowIndex }
+    },
+    {
+      html: '<a href="' + companyContact.action + '"> View </a>',
+      attributes: { 'data-test': 'contact-action-' + rowIndex }
+    }
+  ] %}
+
+  {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+{% endfor %}
+
+{% block pageContent %}
+  {% if 'hof_notifications' in roles %}
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Set up a new contact",
+        href: links.createContact,
+        preventDoubleClick: true
+      }) }}
+
+      {{ govukButton({
+        text: "Remove a contact",
+        classes: "govuk-button--secondary",
+        href: links.removeContact,
+        preventDoubleClick: true
+      }) }}
+    </div>
+  {% endif %}
+
+  {% if companyContacts.length === 0 %}
+    <p> No contacts for this customer. </p>
+  {% else %}
+    {{ govukTable({
+      caption: pagination.showingMessage,
+      head: [
+        {
+          text: "Name"
+        },
+        {
+          text: "Communication type"
+        },
+        {
+          text: "Email"
+        },
+        {
+          text: "Action"
+        }
+      ],
+      rows: tableRows
+    }) }}
+
+    {% if pagination.numberOfPages > 1  %}
+      {{ govukPagination(pagination.component) }}
+    {% endif %}
+  {% endif %}
+{% endblock %}
