@@ -1,0 +1,71 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block pageContent %}
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: {
+        text: "Name"
+      },
+        value: {
+        text: contact.name
+      },
+        actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "name"
+          }
+        ]
+      } if 'hof_notifications' in roles
+      },
+      {
+        key: {
+        text: "Email address"
+      },
+        value: {
+        text: contact.email
+      },
+        actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "email address"
+          }
+        ]
+      } if 'hof_notifications' in roles
+      },
+      {
+        key: {
+        text: "Water abstraction alerts"
+      },
+        value: {
+        text: contact.abstractionAlerts
+      },
+        actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "abstraction alerts"
+          }
+        ]
+      } if 'hof_notifications' in roles
+      }
+    ]
+  }) }}
+
+  {% if 'hof_notifications' in roles %}
+    {{ govukButton({
+      text: "Remove contact",
+      classes: "govuk-button--secondary",
+      href: removeContactLink,
+      preventDoubleClick: true
+    }) }}
+  {% endif %}
+{% endblock %}

@@ -22,6 +22,7 @@ const BillingAccountRoutes = require('../routes/billing-accounts.routes.js')
 const BillingAccountSetupRoutes = require('../routes/billing-accounts-setup.routes.js')
 const CheckRoutes = require('../routes/check.routes.js')
 const CustomersRoutes = require('../routes/customers.routes.js')
+const CustomersContactsRoutes = require('../routes/customers-contacts.routes.js')
 const DataRoutes = require('../routes/data.routes.js')
 const FilterRoutesService = require('../services/plugins/filter-routes.service.js')
 const HealthRoutes = require('../routes/health.routes.js')
@@ -37,7 +38,6 @@ const LicenceVersionsRoutes = require('../routes/licence-versions.routes.js')
 const ManageRoutes = require('../routes/manage.routes.js')
 const MonitoringStationRoutes = require('../routes/monitoring-station.routes.js')
 const ReportRoutes = require('../routes/reports.routes.js')
-const ReturnLogMissingRoutes = require('../routes/return-logs-missing.routes.js')
 const ReturnLogRoutes = require('../routes/return-logs.routes.js')
 const ReturnLogSetupRoutes = require('../routes/return-logs-setup.routes.js')
 const ReturnSubmissionsRoutes = require('../routes/return-submissions.routes.js')
@@ -63,6 +63,7 @@ const routes = [
   ...BillingAccountSetupRoutes,
   ...CheckRoutes,
   ...CustomersRoutes,
+  ...CustomersContactsRoutes,
   ...NotificationRoutes,
   ...LicenceRoutes,
   ...LicenceEndDatesRoutes,
@@ -75,7 +76,6 @@ const routes = [
   ...ReportRoutes,
   ...ReturnLogSetupRoutes,
   ...ReturnLogRoutes,
-  ...ReturnLogMissingRoutes,
   ...ReturnSubmissionsRoutes,
   ...ReturnVersionsRoutes,
   ...ReturnVersionsSetupRoutes,
