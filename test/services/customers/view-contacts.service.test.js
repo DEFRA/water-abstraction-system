@@ -12,30 +12,33 @@ const { expect } = Code
 const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 
 // Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchCompanyContactsService = require('../../../app/services/customers/fetch-company-contacts.service.js')
-const FetchCustomerService = require('../../../app/services/customers/fetch-customer.service.js')
+const FetchCompanyService = require('../../../app/services/customers/fetch-company.service.js')
 
 // Thing under test
 const ViewContactsService = require('../../../app/services/customers/view-contacts.service.js')
 
 describe('Customers - View Contacts Service', () => {
   let auth
-  let customer
+  let company
   let companyContacts
   let page
 
   beforeEach(async () => {
     auth = { credentials: { roles: [] } }
 
-    customer = CustomersFixtures.customer()
+    company = CustomersFixtures.company()
 
     companyContacts = CustomersFixtures.companyContacts()
 
-    Sinon.stub(FetchCustomerService, 'go').returns(customer)
+    Sinon.stub(FetchCompanyService, 'go').returns(company)
 
     Sinon.stub(FetchCompanyContactsService, 'go').returns({ companyContacts, pagination: { total: 1 } })
 
     page = 1
+
+    Sinon.stub(FeatureFlagsConfig, 'enableCustomerManage').value(true)
   })
 
   afterEach(() => {
@@ -44,7 +47,7 @@ describe('Customers - View Contacts Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewContactsService.go(customer.id, auth, page)
+      const result = await ViewContactsService.go(company.id, auth, page)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -55,15 +58,15 @@ describe('Customers - View Contacts Service', () => {
         },
         companyContacts: [
           {
-            action: `/customer/${customer.id}/contacts/${companyContacts[0].contact.id}`,
+            action: `/system/customers-contacts/${companyContacts[0].id}`,
             communicationType: 'Additional Contact',
             name: 'Rachael Tyrell',
             email: 'rachael.tyrell@tyrellcorp.com'
           }
         ],
         links: {
-          createContact: `/customer/${customer.id}/contacts/new`,
-          removeContact: `/customer/${customer.id}/contacts/remove`
+          createContact: `/customer/${company.id}/contacts/new`,
+          removeContact: `/customer/${company.id}/contacts/remove`
         },
         pageTitle: 'Contacts',
         pageTitleCaption: 'Tyrell Corporation',

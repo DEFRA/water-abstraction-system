@@ -5,35 +5,38 @@
  * @module ContactsPresenter
  */
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatCompanyContact } = require('../customer.presenter.js')
 
 /**
  * Formats data for the 'customers/{id}/contacts' page
  *
- * @param {module:CompanyModel} customer - The customer from the companies table
- * @param {object} companyContacts - the company contacts for the customer
+ * @param {module:CompanyModel} company - The company
+ * @param {module:CompanyContactModel} companyContacts - the company contacts for the customer
  *
  * @returns {object} The data formatted for the view template
  */
-function go(customer, companyContacts) {
+function go(company, companyContacts) {
   return {
     backLink: {
       href: '/',
       text: 'Back to search'
     },
-    links: _links(customer),
+    links: _links(company),
     pageTitle: 'Contacts',
-    pageTitleCaption: customer.name,
-    companyContacts: _companyContacts(companyContacts, customer)
+    pageTitleCaption: company.name,
+    companyContacts: _companyContacts(companyContacts, company)
   }
 }
 
-function _companyContacts(companyContacts, customer) {
+function _companyContacts(companyContacts, company) {
   return companyContacts.map((companyContact) => {
     const contact = formatCompanyContact(companyContact)
 
     return {
-      action: `/customer/${customer.id}/contacts/${companyContact.contact.id}`,
+      action: FeatureFlagsConfig.enableCustomerManage
+        ? `/system/customers-contacts/${companyContact.id}`
+        : `/customer/${company.id}/contacts/${companyContact.contact.id}`,
       ...contact
     }
   })
@@ -50,11 +53,11 @@ function _companyContacts(companyContacts, customer) {
  *
  * @private
  */
-function _links(customer) {
+function _links(company) {
   return {
-    createContact: `/customer/${customer.id}/contacts/new`,
+    createContact: `/customer/${company.id}/contacts/new`,
 
-    removeContact: `/customer/${customer.id}/contacts/remove`
+    removeContact: `/customer/${company.id}/contacts/remove`
   }
 }
 

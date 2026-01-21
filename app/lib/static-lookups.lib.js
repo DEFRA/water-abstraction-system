@@ -501,6 +501,54 @@ const twoPartTariffReviewIssues = {
   'multiple-issues': 'Multiple issues'
 }
 
+const userPermissions = Object.freeze({
+  basic: {
+    groups: [],
+    label: 'Basic access',
+    roles: []
+  },
+  billing_and_data: {
+    groups: ['billing_and_data'],
+    label: 'Billing and Data',
+    roles: []
+  },
+  environment_officer: {
+    groups: ['environment_officer'],
+    label: 'Environment Officer',
+    roles: []
+  },
+  nps: {
+    groups: ['nps'],
+    label: 'National Permitting Service',
+    roles: []
+  },
+  nps_ar_approver: {
+    groups: ['nps'],
+    label: 'National Permitting Service and Digitise! approver',
+    roles: ['ar_approver']
+  },
+  nps_ar_user: {
+    groups: ['nps'],
+    label: 'National Permitting Service and Digitise! editor',
+    roles: ['ar_user']
+  },
+  psc: {
+    groups: ['psc'],
+    label: 'Permitting and Support Centre',
+    roles: []
+  },
+  super: {
+    groups: ['super'],
+    label: 'Super user',
+    roles: []
+  },
+  wirs: {
+    groups: ['wirs'],
+    label: 'Waste and Industry Regulatory Service',
+    roles: []
+  }
+})
+
 module.exports = {
   billRunTypes,
   companyTypes,
@@ -525,5 +573,6 @@ module.exports = {
   twoPartTariffReviewIssues,
   quarterlyReturnPeriods,
   unitConversion,
-  unitNames
+  unitNames,
+  userPermissions
 }

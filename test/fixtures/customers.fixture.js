@@ -45,6 +45,42 @@ function billingAccounts() {
 }
 
 /**
+ * A representation of the company from the 'FetchCompanyService'
+ *
+ * @returns {object} A company object
+ */
+function company() {
+  return {
+    id: generateUUID(),
+    name: 'Tyrell Corporation'
+  }
+}
+
+/**
+ * A representation from the company contact table
+ *
+ * @returns {module:CompanyContactModel} A company contact
+ */
+function companyContact() {
+  return {
+    id: generateUUID(),
+    abstractionAlerts: false,
+    contact: ContactModel.fromJson({
+      id: generateUUID(),
+      salutation: null,
+      firstName: 'Rachael',
+      middleInitials: null,
+      lastName: 'Tyrell',
+      initials: null,
+      contactType: 'person',
+      suffix: null,
+      department: 'Tyrell Corporation',
+      email: 'rachael.tyrell@tyrellcorp.com'
+    })
+  }
+}
+
+/**
  * A representation from the company contact 'FetchBillingAccountsService'
  *
  * @returns {object[]} An array of company contact
@@ -52,37 +88,12 @@ function billingAccounts() {
 function companyContacts() {
   return [
     {
-      id: generateUUID(),
-      abstractionAlerts: false,
-      contact: ContactModel.fromJson({
-        id: generateUUID(),
-        salutation: null,
-        firstName: 'Rachael',
-        middleInitials: null,
-        lastName: 'Tyrell',
-        initials: null,
-        contactType: 'person',
-        suffix: null,
-        department: 'Tyrell Corporation',
-        email: 'rachael.tyrell@tyrellcorp.com'
-      }),
+      ...companyContact(),
       licenceRole: {
         label: 'Additional Contact'
       }
     }
   ]
-}
-
-/**
- * A representation from the customers 'FetchCustomerService'
- *
- * @returns {object} A customer object
- */
-function customer() {
-  return {
-    id: generateUUID(),
-    name: 'Tyrell Corporation'
-  }
 }
 
 /**
@@ -107,7 +118,8 @@ function licences() {
 
 module.exports = {
   billingAccounts,
+  company,
+  companyContact,
   companyContacts,
-  customer,
   licences
 }

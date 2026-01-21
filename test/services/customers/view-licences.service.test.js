@@ -12,7 +12,7 @@ const { expect } = Code
 const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 
 // Things we need to stub
-const FetchCustomerService = require('../../../app/services/customers/fetch-customer.service.js')
+const FetchCompanyService = require('../../../app/services/customers/fetch-company.service.js')
 const FetchLicencesService = require('../../../app/services/customers/fetch-licences.service.js')
 
 // Thing under test
@@ -20,18 +20,18 @@ const ViewLicencesService = require('../../../app/services/customers/view-licenc
 
 describe('Customers - View Licences Service', () => {
   let auth
-  let customer
+  let company
   let licences
   let page
 
   beforeEach(async () => {
     auth = { credentials: { roles: [] } }
 
-    customer = CustomersFixtures.customer()
+    company = CustomersFixtures.company()
 
     licences = CustomersFixtures.licences()
 
-    Sinon.stub(FetchCustomerService, 'go').returns(customer)
+    Sinon.stub(FetchCompanyService, 'go').returns(company)
     Sinon.stub(FetchLicencesService, 'go').returns({
       licences,
       pagination: { total: 1 }
@@ -46,7 +46,7 @@ describe('Customers - View Licences Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicencesService.go(customer.id, auth, page)
+      const result = await ViewLicencesService.go(company.id, auth, page)
 
       expect(result).to.equal({
         activeNavBar: 'search',
