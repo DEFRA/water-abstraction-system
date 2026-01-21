@@ -1,9 +1,9 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/billing-accounts/setup/{sessionId}/for-attention-of` page
+ * Validates data submitted for the `/billing-accounts/setup/{sessionId}/fao` page
  *
- * @module ForAttentionOfValidator
+ * @module FAOValidator
  */
 
 const Joi = require('joi')
@@ -11,7 +11,7 @@ const Joi = require('joi')
 const VALID_VALUES = ['yes', 'no']
 
 /**
- * Validates data submitted for the `/billing-accounts/setup/{sessionId}/for-attention-of` page
+ * Validates data submitted for the `/billing-accounts/setup/{sessionId}/fao` page
  *
  * @param {object} payload - The payload from the request to be validated
  *
@@ -22,7 +22,7 @@ function go(payload) {
   const errorMessage = 'Select if you need to add an FAO'
 
   const schema = Joi.object({
-    forAttentionOf: Joi.string()
+    fao: Joi.string()
       .valid(...VALID_VALUES)
       .required()
       .messages({

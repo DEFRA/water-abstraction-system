@@ -12,7 +12,7 @@ const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtu
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const SubmitForAttentionOfService = require('../../../../app/services/billing-accounts/setup/submit-for-attention-of.service.js')
+const SubmitFAOService = require('../../../../app/services/billing-accounts/setup/submit-fao.service.js')
 
 describe('Billing Accounts - Setup - Submit For Attention Of Service', () => {
   let payload
@@ -30,28 +30,28 @@ describe('Billing Accounts - Setup - Submit For Attention Of Service', () => {
   describe('when called with a "yes" value', () => {
     beforeEach(async () => {
       payload = {
-        forAttentionOf: 'yes'
+        fao: 'yes'
       }
     })
 
     it('saves the submitted value', async () => {
-      await SubmitForAttentionOfService.go(session.id, payload)
+      await SubmitFAOService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
       expect(refreshedSession.data).to.equal(
         {
-          forAttentionOf: 'yes'
+          fao: 'yes'
         },
         { skip: ['billingAccount'] }
       )
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitForAttentionOfService.go(session.id, payload)
+      const result = await SubmitFAOService.go(session.id, payload)
 
       expect(result).to.equal({
-        forAttentionOf: 'yes'
+        fao: 'yes'
       })
     })
   })
@@ -59,44 +59,44 @@ describe('Billing Accounts - Setup - Submit For Attention Of Service', () => {
   describe('when called with a "no" value', () => {
     beforeEach(async () => {
       payload = {
-        forAttentionOf: 'no'
+        fao: 'no'
       }
     })
 
     it('saves the submitted value', async () => {
-      await SubmitForAttentionOfService.go(session.id, payload)
+      await SubmitFAOService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
       expect(refreshedSession.data).to.equal(
         {
-          forAttentionOf: 'no'
+          fao: 'no'
         },
         { skip: ['billingAccount'] }
       )
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitForAttentionOfService.go(session.id, payload)
+      const result = await SubmitFAOService.go(session.id, payload)
 
       expect(result).to.equal({
-        forAttentionOf: 'no'
+        fao: 'no'
       })
     })
   })
 
   describe('when validation fails', () => {
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitForAttentionOfService.go(session.id, {})
+      const result = await SubmitFAOService.go(session.id, {})
 
       expect(result.error).to.equal({
         errorList: [
           {
-            href: '#forAttentionOf',
+            href: '#fao',
             text: 'Select if you need to add an FAO'
           }
         ],
-        forAttentionOf: { text: 'Select if you need to add an FAO' }
+        fao: { text: 'Select if you need to add an FAO' }
       })
     })
   })

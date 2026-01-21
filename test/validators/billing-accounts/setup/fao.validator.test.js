@@ -8,18 +8,18 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ForAttentionOfValidator = require('../../../../app/validators/billing-accounts/setup/for-attention-of.validator.js')
+const FAOValidator = require('../../../../app/validators/billing-accounts/setup/fao.validator.js')
 
 describe('Billing Accounts - Setup - For Attention Of Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { forAttentionOf: 'yes' }
+    payload = { fao: 'yes' }
   })
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = ForAttentionOfValidator.go(payload)
+      const result = FAOValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -32,7 +32,7 @@ describe('Billing Accounts - Setup - For Attention Of Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = ForAttentionOfValidator.go(payload)
+      const result = FAOValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()

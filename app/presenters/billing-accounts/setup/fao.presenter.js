@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the `/billing-accounts/setup/{sessionId}/for-attention-of` page
- * @module ForAttentionOfPresenter
+ * Formats data for the `/billing-accounts/setup/{sessionId}/fao` page
+ * @module FAOPresenter
  */
 
 /**
- * Formats data for the `/billing-accounts/setup/{sessionId}/for-attention-of` page
+ * Formats data for the `/billing-accounts/setup/{sessionId}/fao` page
  *
  * @param {module:SessionModel} session - The billing account setup session instance
  *
@@ -18,7 +18,7 @@ function go(session) {
       href: `/system/billing-accounts/setup/${session.id}/select-existing-address`,
       text: 'Back'
     },
-    forAttentionOf: session.forAttentionOf ?? null,
+    fao: session.fao ?? null,
     pageTitle: 'Do you need to add an FAO?',
     pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
   }

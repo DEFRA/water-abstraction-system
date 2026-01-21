@@ -1,18 +1,18 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/for-attention-of` page
+ * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/fao` page
  *
- * @module SubmitForAttentionOfService
+ * @module SubmitFAOService
  */
 
-const ForAttentionOfPresenter = require('../../../presenters/billing-accounts/setup/for-attention-of.presenter.js')
-const ForAttentionOfValidator = require('../../../validators/billing-accounts/setup/for-attention-of.validator.js')
+const FAOPresenter = require('../../../presenters/billing-accounts/setup/fao.presenter.js')
+const FAOValidator = require('../../../validators/billing-accounts/setup/fao.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
- * Orchestrates validating the data for `` page
+ * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/fao` page
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
@@ -30,7 +30,7 @@ async function go(sessionId, payload) {
     return payload
   }
 
-  const pageData = ForAttentionOfPresenter.go(session)
+  const pageData = FAOPresenter.go(session)
 
   return {
     error: validationResult,
@@ -39,13 +39,13 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.forAttentionOf = payload.forAttentionOf
+  session.fao = payload.fao
 
   return session.$update()
 }
 
 function _validate(payload) {
-  const validationResult = ForAttentionOfValidator.go(payload)
+  const validationResult = FAOValidator.go(payload)
 
   return formatValidationResult(validationResult)
 }

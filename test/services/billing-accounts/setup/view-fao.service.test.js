@@ -7,34 +7,35 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-
 // Test helpers
 const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtures.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ForAttentionOfPresenter = require('../../../../app/presenters/billing-accounts/setup/for-attention-of.presenter.js')
+const FAOService = require('../../../../app/services/billing-accounts/setup/view-fao.service.js')
 
-describe('Billing Accounts - Setup - For Attention Of Presenter', () => {
+describe('Billing Accounts - Setup - View FAO Service', () => {
   let session
+  let sessionData
 
-  beforeEach(() => {
-    session = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-      id: generateUUID()
+  beforeEach(async () => {
+    sessionData = {
+      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
+
+    session = await SessionHelper.add({ data: sessionData })
   })
 
   describe('when called', () => {
-    it('returns page data for the view', () => {
-      const result = ForAttentionOfPresenter.go(session)
+    it('returns page data for the view', async () => {
+      const result = await FAOService.go(session.id)
 
       expect(result).to.equal({
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/select-existing-address`,
           text: 'Back'
         },
-        forAttentionOf: session.forAttentionOf ?? null,
+        fao: session.fao ?? null,
         pageTitle: 'Do you need to add an FAO?',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })

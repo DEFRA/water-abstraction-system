@@ -6,10 +6,10 @@
  */
 
 const InitiateSessionService = require('../services/billing-accounts/setup/initiate-session.service.js')
-const SubmitForAttentionOfService = require('../services/billing-accounts/setup/submit-for-attention-of.service.js')
+const SubmitFAOService = require('../services/billing-accounts/setup/submit-fao.service.js')
 const SubmitSelectAccountService = require('../services/billing-accounts/setup/submit-select-account.service.js')
 const SubmitSelectExistingAddressService = require('../services/billing-accounts/setup/submit-select-existing-address.service.js')
-const ViewForAttentionOfService = require('../services/billing-accounts/setup/view-for-attention-of.service.js')
+const ViewFAOService = require('../services/billing-accounts/setup/view-fao.service.js')
 const ViewSelectAccountService = require('../services/billing-accounts/setup/view-select-account.service.js')
 const ViewSelectExistingAddressService = require('../services/billing-accounts/setup/view-select-existing-address.service.js')
 
@@ -21,19 +21,19 @@ async function setup(request, h) {
   return h.redirect(`/system/billing-accounts/setup/${session.id}/select-account`)
 }
 
-async function submitForAttentionOf(request, h) {
+async function submitFAO(request, h) {
   const {
     payload,
     params: { sessionId }
   } = request
 
-  const pageData = await SubmitForAttentionOfService.go(sessionId, payload)
+  const pageData = await SubmitFAOService.go(sessionId, payload)
 
   if (pageData.error) {
-    return h.view(`billing-accounts/setup/for-attention-of.njk`, pageData)
+    return h.view(`billing-accounts/setup/fao.njk`, pageData)
   }
 
-  if (pageData.forAttentionOf === 'yes') {
+  if (pageData.fao === 'yes') {
     return h.redirect(`/system/billing-accounts/setup/${sessionId}/select-contact`)
   }
 
@@ -56,7 +56,7 @@ async function submitSelectExistingAddress(request, h) {
     return h.redirect(`/system/address/${sessionId}/postcode`)
   }
 
-  return h.redirect(`/system/billing-accounts/setup/${sessionId}/for-attention-of`)
+  return h.redirect(`/system/billing-accounts/setup/${sessionId}/fao`)
 }
 
 async function submitSelectAccount(request, h) {
@@ -78,12 +78,12 @@ async function submitSelectAccount(request, h) {
   return h.redirect(`/system/billing-accounts/setup/${sessionId}/select-existing-account`)
 }
 
-async function viewForAttentionOf(request, h) {
+async function viewFAO(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewForAttentionOfService.go(sessionId)
+  const pageData = await ViewFAOService.go(sessionId)
 
-  return h.view(`billing-accounts/setup/for-attention-of.njk`, pageData)
+  return h.view(`billing-accounts/setup/fao.njk`, pageData)
 }
 
 async function viewSelectAccount(request, h) {
@@ -104,10 +104,10 @@ async function viewSelectExistingAddress(request, h) {
 
 module.exports = {
   setup,
-  submitForAttentionOf,
+  submitFAO,
   submitSelectAccount,
   submitSelectExistingAddress,
-  viewForAttentionOf,
+  viewFAO,
   viewSelectAccount,
   viewSelectExistingAddress
 }

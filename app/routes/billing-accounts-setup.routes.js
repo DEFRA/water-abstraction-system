@@ -65,9 +65,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/for-attention-of',
+    path: '/billing-accounts/setup/{sessionId}/fao',
     options: {
-      handler: BillingAccountsSetupController.viewForAttentionOf,
+      handler: BillingAccountsSetupController.viewFAO,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -77,9 +77,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/for-attention-of',
+    path: '/billing-accounts/setup/{sessionId}/fao',
     options: {
-      handler: BillingAccountsSetupController.submitForAttentionOf,
+      handler: BillingAccountsSetupController.submitFAO,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
