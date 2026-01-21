@@ -13,7 +13,7 @@ const FetchCompanyContactService = require('./fetch-company-contact.service.js')
  *
  * @param {string} id - the UUID of the company contact
  *
- * @returns {Promise<object>} The data formatted for the view template
+ * @returns {Promise<object>} The data to redirect the user after the company contact has been removed
  */
 async function go(id) {
   const companyContact = await FetchCompanyContactService.go(id)
