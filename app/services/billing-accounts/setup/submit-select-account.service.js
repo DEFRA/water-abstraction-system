@@ -43,7 +43,7 @@ async function go(sessionId, payload) {
 
 async function _save(session, payload) {
   session.accountSelected = payload.accountSelected
-  session.searchInput = payload.searchInput ?? null
+  session.searchInput = payload.accountSelected === 'another' ? payload.searchInput : null
 
   return session.$update()
 }
