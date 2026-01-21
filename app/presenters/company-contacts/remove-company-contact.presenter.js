@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the `` page
+ * Formats data for the '/company-contacts/{id}/remove' page
  * @module RemoveCompanyContactPresenter
  */
 
 /**
- * Formats data for the `` page
+ * Formats data for the '/company-contacts/{id}/remove' page
  *
  * @returns {object} The data formatted for the view template
  */
