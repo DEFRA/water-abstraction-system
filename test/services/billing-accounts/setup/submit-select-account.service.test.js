@@ -61,6 +61,37 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
     })
   })
 
+  describe('when the user picks the customer option but there is a previously saved search input', () => {
+    beforeEach(async () => {
+      payload = {
+        accountSelected: 'customer',
+        searchInput: 'Customer Name'
+      }
+    })
+
+    it('saves the submitted value and deletes the search input', async () => {
+      await SubmitSelectAccountService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.data).to.equal(
+        {
+          accountSelected: 'customer',
+          searchInput: null
+        },
+        { skip: ['billingAccount'] }
+      )
+    })
+
+    it('returns the correct details the controller needs to redirect the journey', async () => {
+      const result = await SubmitSelectAccountService.go(session.id, payload)
+
+      expect(result).to.equal({
+        accountSelected: 'customer'
+      })
+    })
+  })
+
   describe('when the user picks the "another" option', () => {
     beforeEach(async () => {
       payload = {
