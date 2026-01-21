@@ -18,11 +18,11 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const ContactsPresenter = require('../../../app/presenters/customers/contacts.presenter.js')
 
 describe('Customers - Contacts Presenter', () => {
-  let customer
+  let company
   let companyContacts
 
   beforeEach(() => {
-    customer = CustomersFixtures.customer()
+    company = CustomersFixtures.company()
 
     companyContacts = CustomersFixtures.companyContacts()
 
@@ -35,7 +35,7 @@ describe('Customers - Contacts Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactsPresenter.go(customer, companyContacts)
+      const result = ContactsPresenter.go(company, companyContacts)
 
       expect(result).to.equal({
         backLink: {
@@ -51,8 +51,8 @@ describe('Customers - Contacts Presenter', () => {
           }
         ],
         links: {
-          createContact: `/customer/${customer.id}/contacts/new`,
-          removeContact: `/customer/${customer.id}/contacts/remove`
+          createContact: `/customer/${company.id}/contacts/new`,
+          removeContact: `/customer/${company.id}/contacts/remove`
         },
         pageTitle: 'Contacts',
         pageTitleCaption: 'Tyrell Corporation'

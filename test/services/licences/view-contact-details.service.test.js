@@ -94,7 +94,7 @@ describe('Licences - View Contact Details service', () => {
             name: 'Rachael Tyrell'
           }
         ],
-        customerId: companyId,
+        companyId,
         customerContactLink: `/system/customers/${companyId}/contacts`,
         licenceContacts: [
           {

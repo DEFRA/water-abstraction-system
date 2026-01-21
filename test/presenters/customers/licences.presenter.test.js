@@ -14,17 +14,17 @@ const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 const LicencesPresenter = require('../../../app/presenters/customers/licences.presenter.js')
 
 describe('Customers - Licences Presenter', () => {
-  let customer
+  let company
   let licences
 
   beforeEach(() => {
-    customer = CustomersFixtures.customer()
+    company = CustomersFixtures.company()
     licences = CustomersFixtures.licences()
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = LicencesPresenter.go(customer, licences)
+      const result = LicencesPresenter.go(company, licences)
 
       expect(result).to.equal({
         backLink: {

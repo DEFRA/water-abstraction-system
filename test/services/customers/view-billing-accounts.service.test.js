@@ -13,7 +13,7 @@ const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 
 // Things we need to stub
 const FetchBillingAccountsService = require('../../../app/services/customers/fetch-billing-accounts.service.js')
-const FetchCustomerService = require('../../../app/services/customers/fetch-customer.service.js')
+const FetchCompanyService = require('../../../app/services/customers/fetch-company.service.js')
 
 // Thing under test
 const ViewBillingAccountsService = require('../../../app/services/customers/view-billing-accounts.service.js')
@@ -22,19 +22,19 @@ describe('Customers - View Billing Accounts Service', () => {
   let auth
   let billingAccount
   let billingAccounts
-  let customer
+  let company
   let page
 
   beforeEach(async () => {
     auth = { credentials: { roles: [] } }
 
-    customer = CustomersFixtures.customer()
+    company = CustomersFixtures.company()
 
     billingAccounts = CustomersFixtures.billingAccounts()
 
     billingAccount = billingAccounts[0]
 
-    Sinon.stub(FetchCustomerService, 'go').returns(customer)
+    Sinon.stub(FetchCompanyService, 'go').returns(company)
 
     Sinon.stub(FetchBillingAccountsService, 'go').returns({
       billingAccounts,
@@ -50,7 +50,7 @@ describe('Customers - View Billing Accounts Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewBillingAccountsService.go(customer.id, auth, page)
+      const result = await ViewBillingAccountsService.go(company.id, auth, page)
 
       expect(result).to.equal({
         activeNavBar: 'search',
