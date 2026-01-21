@@ -67,7 +67,7 @@ describe('Licences - Contact Details presenter', () => {
           text: 'Go back to search'
         },
         companyId,
-        customerContactLink: `/system/customers/${companyId}/contacts`,
+        customerContactLink: `/system/companies/${companyId}/contacts`,
         licenceContacts: [
           {
             address: {
@@ -153,7 +153,7 @@ describe('Licences - Contact Details presenter', () => {
         it('correctly presents the data', () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
-          expect(result.customerContactLink).to.equal(`/system/customers/${companyId}/contacts`)
+          expect(result.customerContactLink).to.equal(`/system/companies/${companyId}/contacts`)
         })
       })
 
