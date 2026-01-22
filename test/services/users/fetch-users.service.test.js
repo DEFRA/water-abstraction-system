@@ -12,10 +12,7 @@ const { expect } = Code
 const databaseConfig = require('../../../config/database.config.js')
 
 // Test helpers
-const GroupModel = require('../../../app/models/group.model.js')
-const RoleModel = require('../../../app/models/role.model.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
-const UserModel = require('../../../app/models/user.model.js')
 const UsersFixture = require('../../fixtures/users.fixture.js')
 
 // Thing under test
@@ -59,7 +56,7 @@ describe('Notices - Fetch Users service', () => {
 
       // Assert the results contain all our seeded users
       for (let i = 0; i < userSeedData.length; i++) {
-        expect(results).contains(_transformToResult(UsersFixture.user(i)))
+        expect(results).contains(_expectedResult(i))
       }
     })
   })
@@ -81,7 +78,7 @@ describe('Notices - Fetch Users service', () => {
         // Assert the results contain only users with 'lee' in their username
         for (let i = 0; i < userSeedData.length; i++) {
           if (userSeedData[i].username.toUpperCase().includes(filters.email)) {
-            expect(results).contains(_transformToResult(UsersFixture.user(i)))
+            expect(results).contains(_expectedResult(i))
           }
         }
       })
@@ -92,7 +89,7 @@ describe('Notices - Fetch Users service', () => {
         // Assert the results do not contain any users with 'lee' on their username
         for (let i = 0; i < userSeedData.length; i++) {
           if (!userSeedData[i].username.toUpperCase().includes(filters.email)) {
-            expect(results).not.contains(_transformToResult(UsersFixture.user(i)))
+            expect(results).not.contains(_expectedResult(i))
           }
         }
       })
@@ -112,7 +109,7 @@ describe('Notices - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results contain our seeded basic user
-          expect(results).contains(_transformToResult(UsersFixture.basicAccess()))
+          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess()))
         })
 
         it('excludes those that do not match', async () => {
@@ -121,7 +118,7 @@ describe('Notices - Fetch Users service', () => {
           // Assert the results do not contain our other seeded users
           for (let i = 0; i < userSeedData.length; i++) {
             if (userSeedData[i].username !== 'basic.access@wrls.gov.uk') {
-              expect(results).not.contains(_transformToResult(UsersFixture.user(i)))
+              expect(results).not.contains(_expectedResult(i))
             }
           }
         })
@@ -138,7 +135,7 @@ describe('Notices - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results contain our seeded billing and data user
-          expect(results).contains(_transformToResult(UsersFixture.billingAndData()))
+          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.billingAndData()))
         })
 
         it('excludes those that do not match', async () => {
@@ -147,7 +144,7 @@ describe('Notices - Fetch Users service', () => {
           // Assert the results do not contain our other seeded users
           for (let i = 0; i < userSeedData.length; i++) {
             if (userSeedData[i].username !== 'billing.data@wrls.gov.uk') {
-              expect(results).not.contains(_transformToResult(UsersFixture.user(i)))
+              expect(results).not.contains(_expectedResult(i))
             }
           }
         })
@@ -164,7 +161,7 @@ describe('Notices - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results contain our seeded national permitting service user
-          expect(results).contains(_transformToResult(UsersFixture.nationalPermittingService()))
+          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.nationalPermittingService()))
         })
 
         it('excludes those that do not match', async () => {
@@ -173,7 +170,7 @@ describe('Notices - Fetch Users service', () => {
           // Assert the results do not contain our other seeded users
           for (let i = 0; i < userSeedData.length; i++) {
             if (userSeedData[i].username !== 'national.permitting.service@wrls.gov.uk') {
-              expect(results).not.contains(_transformToResult(UsersFixture.user(i)))
+              expect(results).not.contains(_expectedResult(i))
             }
           }
         })
@@ -190,7 +187,7 @@ describe('Notices - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results contain our seeded national permitting service user
-          expect(results).contains(_transformToResult(UsersFixture.digitiseApprover()))
+          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.digitiseApprover()))
         })
 
         it('excludes those that do not match', async () => {
@@ -199,7 +196,7 @@ describe('Notices - Fetch Users service', () => {
           // Assert the results do not contain our other seeded users
           for (let i = 0; i < userSeedData.length; i++) {
             if (userSeedData[i].username !== 'digitise.approver@wrls.gov.uk') {
-              expect(results).not.contains(_transformToResult(UsersFixture.user(i)))
+              expect(results).not.contains(_expectedResult(i))
             }
           }
         })
@@ -216,7 +213,7 @@ describe('Notices - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results contain our seeded national permitting service user
-          expect(results).contains(_transformToResult(UsersFixture.digitiseEditor()))
+          expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.digitiseEditor()))
         })
 
         it('excludes those that do not match', async () => {
@@ -225,7 +222,7 @@ describe('Notices - Fetch Users service', () => {
           // Assert the results do not contain our other seeded users
           for (let i = 0; i < userSeedData.length; i++) {
             if (userSeedData[i].username !== 'digitise.editor@wrls.gov.uk') {
-              expect(results).not.contains(_transformToResult(UsersFixture.user(i)))
+              expect(results).not.contains(_expectedResult(i))
             }
           }
         })
@@ -248,7 +245,7 @@ describe('Notices - Fetch Users service', () => {
             const userData = userSeedData[i]
 
             if (userData.enabled && !userData.lastLogin) {
-              expect(results).contains(_transformToResult(UsersFixture.user(i)))
+              expect(results).contains(_expectedResult(i))
             }
           }
         })
@@ -262,7 +259,7 @@ describe('Notices - Fetch Users service', () => {
             const userData = userSeedData[i]
 
             if (!userData.enabled || userData.lastLogin) {
-              expect(results).not.contains(_transformToResult(UsersFixture.user(i)))
+              expect(results).not.contains(_expectedResult(i))
             }
           }
         })
@@ -279,7 +276,7 @@ describe('Notices - Fetch Users service', () => {
           // Assert the results contain our seeded users where enabled is false
           for (let i = 0; i < userSeedData.length; i++) {
             if (!userSeedData[i].enabled) {
-              expect(results).contains(_transformToResult(UsersFixture.user(i)))
+              expect(results).contains(_expectedResult(i))
             }
           }
         })
@@ -290,7 +287,7 @@ describe('Notices - Fetch Users service', () => {
           // Assert the results do not contain our seeded users where enabled is true
           for (let i = 0; i < userSeedData.length; i++) {
             if (userSeedData[i].enabled) {
-              expect(results).not.contains(_transformToResult(UsersFixture.user(i)))
+              expect(results).not.contains(_expectedResult(i))
             }
           }
         })
@@ -309,7 +306,7 @@ describe('Notices - Fetch Users service', () => {
             const userData = userSeedData[i]
 
             if (userData.enabled && userData.lastLogin) {
-              expect(results).contains(_transformToResult(UsersFixture.user(i)))
+              expect(results).contains(_expectedResult(i))
             }
           }
         })
@@ -323,7 +320,7 @@ describe('Notices - Fetch Users service', () => {
             const userData = userSeedData[i]
 
             if (!userData.enabled || !userData.lastLogin) {
-              expect(results).not.contains(_transformToResult(UsersFixture.user(i)))
+              expect(results).not.contains(_expectedResult(i))
             }
           }
         })
@@ -341,7 +338,7 @@ describe('Notices - Fetch Users service', () => {
         // Assert the results contain our seeded external users
         for (let i = 0; i < userSeedData.length; i++) {
           if (userSeedData[i].application === 'water_vml') {
-            expect(results).contains(_transformToResult(UsersFixture.user(i)))
+            expect(results).contains(_expectedResult(i))
           }
         }
       })
@@ -352,7 +349,7 @@ describe('Notices - Fetch Users service', () => {
         // Assert the results do not contain our seeded internal users
         for (let i = 0; i < userSeedData.length; i++) {
           if (userSeedData[i].application !== 'water_vml') {
-            expect(results).not.contains(_transformToResult(UsersFixture.user(i)))
+            expect(results).not.contains(_expectedResult(i))
           }
         }
       })
@@ -375,6 +372,10 @@ describe('Notices - Fetch Users service', () => {
   })
 })
 
+function _expectedResult(seedIndex) {
+  return UsersFixture.transformToFetchUsersResult(UsersFixture.user(seedIndex))
+}
+
 function _filters() {
   return {
     email: null,
@@ -382,28 +383,4 @@ function _filters() {
     status: null,
     type: null
   }
-}
-
-function _transformToResult(userInstance) {
-  const { application, enabled, id, groups, lastLogin, roles, username } = userInstance
-
-  return UserModel.fromJson({
-    application,
-    enabled,
-    id,
-    groups: groups.map((group) => {
-      return GroupModel.fromJson({
-        group: group.group,
-        id: group.id
-      })
-    }),
-    lastLogin,
-    roles: roles.map((role) => {
-      return RoleModel.fromJson({
-        id: role.id,
-        role: role.role
-      })
-    }),
-    username
-  })
 }

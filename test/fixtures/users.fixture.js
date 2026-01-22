@@ -5,6 +5,7 @@ const GroupModel = require('../../app/models/group.model.js')
 const RoleHelper = require('../support/helpers/role.helper.js')
 const RoleModel = require('../../app/models/role.model.js')
 const UserHelper = require('../support/helpers/user.helper.js')
+const UserModel = require('../../app/models/user.model.js')
 const UserGroupHelper = require('../support/helpers/user-group.helper.js')
 const UserRoleHelper = require('../support/helpers/user-role.helper.js')
 
@@ -117,6 +118,37 @@ function superUser() {
 }
 
 /**
+ * Transforms a user fixture object previously generated to the `FetchUsersService` result format
+ *
+ * @param {object} user - The user fixture object to transform to `FetchUsersService` result format
+ *
+ * @returns {module:UserModel} The transformed user fixture object
+ */
+function transformToFetchUsersResult(user) {
+  const { application, enabled, id, groups, lastLogin, roles, username } = user
+
+  return UserModel.fromJson({
+    application,
+    enabled,
+    id,
+    groups: groups.map((group) => {
+      return GroupModel.fromJson({
+        group: group.group,
+        id: group.id
+      })
+    }),
+    lastLogin,
+    roles: roles.map((role) => {
+      return RoleModel.fromJson({
+        id: role.id,
+        role: role.role
+      })
+    }),
+    username
+  })
+}
+
+/**
  * Populates a `UserModel` instance based on the specified seed user for testing purposes
  *
  * @param {integer} seedIndex - The index of the user object in `db/seeds/data/users.js`
@@ -186,6 +218,7 @@ module.exports = {
   permittingSupportCentre,
   rachelStevens,
   superUser,
+  transformToFetchUsersResult,
   user,
   wasteIndustryRegulatoryServices
 }

@@ -9,9 +9,6 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const GroupModel = require('../../../app/models/group.model.js')
-const RoleModel = require('../../../app/models/role.model.js')
-const UserModel = require('../../../app/models/user.model.js')
 const UsersFixture = require('../../fixtures/users.fixture.js')
 
 // Things to stub
@@ -22,7 +19,6 @@ const SubmitIndexUsersService = require('../../../app/services/users/submit-inde
 
 describe('Users - Submit Index Users service', () => {
   let auth
-  let user
   let payload
   let results
   let yarStub
@@ -127,8 +123,7 @@ describe('Users - Submit Index Users service', () => {
           type: 'foo'
         }
 
-        user = UsersFixture.basicAccess()
-        results = [_transformToResult(user)]
+        results = [UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess())]
       })
 
       describe('and the results are paginated', () => {
@@ -262,27 +257,3 @@ describe('Users - Submit Index Users service', () => {
     })
   })
 })
-
-function _transformToResult(userInstance) {
-  const { application, enabled, id, groups, lastLogin, roles, username } = userInstance
-
-  return UserModel.fromJson({
-    application,
-    enabled,
-    id,
-    groups: groups.map((group) => {
-      return GroupModel.fromJson({
-        group: group.group,
-        id: group.id
-      })
-    }),
-    lastLogin,
-    roles: roles.map((role) => {
-      return RoleModel.fromJson({
-        id: role.id,
-        role: role.role
-      })
-    }),
-    username
-  })
-}

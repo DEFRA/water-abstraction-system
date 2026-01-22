@@ -9,9 +9,6 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const GroupModel = require('../../../app/models/group.model.js')
-const RoleModel = require('../../../app/models/role.model.js')
-const UserModel = require('../../../app/models/user.model.js')
 const UsersFixture = require('../../fixtures/users.fixture.js')
 
 // Things to stub
@@ -41,7 +38,7 @@ describe('Users - Index Users service', () => {
       // For the purposes of this tests the filter doesn't matter
       yarStub = { get: Sinon.stub().returns(null) }
 
-      const results = [_transformToResult(UsersFixture.basicAccess())]
+      const results = [UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess())]
 
       fetchResults = { results, total: 1 }
       Sinon.stub(FetchUsersService, 'go').resolves(fetchResults)
@@ -135,28 +132,4 @@ function _filters() {
     status: null,
     type: null
   }
-}
-
-function _transformToResult(userInstance) {
-  const { application, enabled, id, groups, lastLogin, roles, username } = userInstance
-
-  return UserModel.fromJson({
-    application,
-    enabled,
-    id,
-    groups: groups.map((group) => {
-      return GroupModel.fromJson({
-        group: group.group,
-        id: group.id
-      })
-    }),
-    lastLogin,
-    roles: roles.map((role) => {
-      return RoleModel.fromJson({
-        id: role.id,
-        role: role.role
-      })
-    }),
-    username
-  })
 }

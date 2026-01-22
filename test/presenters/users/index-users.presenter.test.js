@@ -8,9 +8,6 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const GroupModel = require('../../../app/models/group.model.js')
-const RoleModel = require('../../../app/models/role.model.js')
-const UserModel = require('../../../app/models/user.model.js')
 const UsersFixture = require('../../fixtures/users.fixture.js')
 
 // Thing under test
@@ -22,10 +19,10 @@ describe('Users - Index Users presenter', () => {
 
   beforeEach(() => {
     users = [
-      _transformToResult(UsersFixture.basicAccess()),
-      _transformToResult(UsersFixture.jonLee()),
-      _transformToResult(UsersFixture.rachelStevens()),
-      _transformToResult(UsersFixture.superUser())
+      UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess()),
+      UsersFixture.transformToFetchUsersResult(UsersFixture.jonLee()),
+      UsersFixture.transformToFetchUsersResult(UsersFixture.rachelStevens()),
+      UsersFixture.transformToFetchUsersResult(UsersFixture.superUser())
     ]
 
     auth = {
@@ -146,27 +143,3 @@ describe('Users - Index Users presenter', () => {
     })
   })
 })
-
-function _transformToResult(userInstance) {
-  const { application, enabled, id, groups, lastLogin, roles, username } = userInstance
-
-  return UserModel.fromJson({
-    application,
-    enabled,
-    id,
-    groups: groups.map((group) => {
-      return GroupModel.fromJson({
-        group: group.group,
-        id: group.id
-      })
-    }),
-    lastLogin,
-    roles: roles.map((role) => {
-      return RoleModel.fromJson({
-        id: role.id,
-        role: role.role
-      })
-    }),
-    username
-  })
-}
