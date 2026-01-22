@@ -1,20 +1,20 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/select-existing-address` page
+ * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/existing-address` page
  *
- * @module SubmitSelectExistingAddressService
+ * @module SubmitExistingAddressService
  */
 
 const FetchExistingAddressesService = require('./fetch-existing-addresses.service.js')
-const SelectExistingAddressPresenter = require('../../../presenters/billing-accounts/setup/select-existing-address.presenter.js')
-const SelectExistingAddressValidator = require('../../../validators/billing-accounts/setup/select-existing-address.validator.js')
+const ExistingAddressPresenter = require('../../../presenters/billing-accounts/setup/existing-address.presenter.js')
+const ExistingAddressValidator = require('../../../validators/billing-accounts/setup/existing-address.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
- * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/select-existing-address` page
+ * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/existing-address` page
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
@@ -52,11 +52,11 @@ async function _save(session, payload) {
 function _submissionData(session, payload, companyAddresses) {
   session.addressSelected = payload.addressSelected
 
-  return SelectExistingAddressPresenter.go(session, companyAddresses)
+  return ExistingAddressPresenter.go(session, companyAddresses)
 }
 
 function _validate(payload, name) {
-  const validationResult = SelectExistingAddressValidator.go(payload, name)
+  const validationResult = ExistingAddressValidator.go(payload, name)
 
   return formatValidationResult(validationResult)
 }

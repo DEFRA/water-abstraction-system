@@ -13,9 +13,9 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtures.js')
 
 // Thing under test
-const SelectExistingAddressPresenter = require('../../../../app/presenters/billing-accounts/setup/select-existing-address.presenter.js')
+const ExistingAddressPresenter = require('../../../../app/presenters/billing-accounts/setup/existing-address.presenter.js')
 
-describe('Billing Accounts - Setup - Select Existing Address Presenter', () => {
+describe('Billing Accounts - Setup - Existing Address Presenter', () => {
   const addresses = [
     {
       address: {
@@ -40,7 +40,7 @@ describe('Billing Accounts - Setup - Select Existing Address Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = SelectExistingAddressPresenter.go(session, addresses)
+      const result = ExistingAddressPresenter.go(session, addresses)
 
       expect(result).to.equal({
         backLink: {

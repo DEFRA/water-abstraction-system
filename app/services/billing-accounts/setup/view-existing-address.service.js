@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/select-existing-address` page
+ * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/existing-address` page
  *
- * @module SelectExistingAddressService
+ * @module ExistingAddressService
  */
 
 const FetchExistingAddressesService = require('./fetch-existing-addresses.service.js')
-const SelectExistingAddressPresenter = require('../../../presenters/billing-accounts/setup/select-existing-address.presenter.js')
+const ExistingAddressPresenter = require('../../../presenters/billing-accounts/setup/existing-address.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/select-existing-address` page
+ * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/existing-address` page
  *
  * @param {string} sessionId
  *
@@ -21,7 +21,7 @@ async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
   const companyAddresses = await FetchExistingAddressesService.go(session.billingAccount.company.id)
 
-  const pageData = SelectExistingAddressPresenter.go(session, companyAddresses)
+  const pageData = ExistingAddressPresenter.go(session, companyAddresses)
 
   return {
     ...pageData

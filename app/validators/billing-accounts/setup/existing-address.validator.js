@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/billing-accounts/setup/{sessionId}/select-existing-address` page
+ * Validates data submitted for the `/billing-accounts/setup/{sessionId}/existing-address` page
  *
- * @module SelectExistingAddressValidator
+ * @module ExistingAddressValidator
  */
 
 const Joi = require('joi')
 
 /**
- * Validates data submitted for the `/billing-accounts/setup/{sessionId}/select-existing-address` page
+ * Validates data submitted for the `/billing-accounts/setup/{sessionId}/existing-address` page
  *
  * @param {object} payload - The payload from the request to be validated
  * @param {string} name - The name of the existing customer contact

@@ -11,9 +11,9 @@ const { expect } = Code
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const SelectExistingAddressValidator = require('../../../../app/validators/billing-accounts/setup/select-existing-address.validator.js')
+const ExistingAddressValidator = require('../../../../app/validators/billing-accounts/setup/existing-address.validator.js')
 
-describe('Billing Accounts - Setup - Select Existing Address Validator', () => {
+describe('Billing Accounts - Setup - Existing Address Validator', () => {
   let payload
 
   describe('when called with valid data', () => {
@@ -23,7 +23,7 @@ describe('Billing Accounts - Setup - Select Existing Address Validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = SelectExistingAddressValidator.go(payload, 'Customer Name')
+        const result = ExistingAddressValidator.go(payload, 'Customer Name')
 
         expect(result.value).to.exist()
         expect(result.error).not.to.exist()
@@ -36,7 +36,7 @@ describe('Billing Accounts - Setup - Select Existing Address Validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = SelectExistingAddressValidator.go(payload, 'Customer Name')
+        const result = ExistingAddressValidator.go(payload, 'Customer Name')
 
         expect(result.value).to.exist()
         expect(result.error).not.to.exist()
@@ -50,7 +50,7 @@ describe('Billing Accounts - Setup - Select Existing Address Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = SelectExistingAddressValidator.go(payload, 'Customer Name')
+      const result = ExistingAddressValidator.go(payload, 'Customer Name')
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
