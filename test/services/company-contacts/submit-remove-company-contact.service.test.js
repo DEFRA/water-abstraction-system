@@ -18,7 +18,7 @@ const FetchCompanyContactService = require('../../../app/services/company-contac
 // Thing under test
 const SubmitRemoveCompanyContactService = require('../../../app/services/company-contacts/submit-remove-company-contact.service.js')
 
-describe('Company Contacts - Submit Company Contact Service', () => {
+describe('Company Contacts - Submit Remove Company Contact Service', () => {
   let companyContact
   let yarStub
 
