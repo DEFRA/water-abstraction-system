@@ -12,9 +12,9 @@ const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtu
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ViewSelectAccountService = require('../../../../app/services/billing-accounts/setup/view-select-account.service.js')
+const ViewAccountService = require('../../../../app/services/billing-accounts/setup/view-account.service.js')
 
-describe('Billing Accounts - Setup - Select Account Service', () => {
+describe('Billing Accounts - Setup - View Account Service', () => {
   let session
   let sessionData
 
@@ -32,7 +32,7 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewSelectAccountService.go(session.id)
+      const result = await ViewAccountService.go(session.id)
 
       expect(result).to.equal({
         accountSelected: null,
