@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const AccountValidator = require('../../../../app/validators/billing-accounts/setup/account.validator.js')
 
-describe('Billing Accounts - Setup - Select Account Validator', () => {
+describe('Billing Accounts - Setup - Account Validator', () => {
   let payload
 
   describe('when called with a valid option', () => {
