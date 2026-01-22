@@ -18,7 +18,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const FetchExistingAddressesService = require('../../../../app/services/billing-accounts/setup/fetch-existing-addresses.service.js')
 
 // Thing under test
-const ViewSelectExistingAddressService = require('../../../../app/services/billing-accounts/setup/view-select-existing-address.service.js')
+const ViewExistingAddressService = require('../../../../app/services/billing-accounts/setup/view-existing-address.service.js')
 
 describe('Billing Accounts - Setup - Select Existing Address Service', () => {
   const addresses = _addresses()
@@ -41,7 +41,7 @@ describe('Billing Accounts - Setup - Select Existing Address Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewSelectExistingAddressService.go(session.id)
+      const result = await ViewExistingAddressService.go(session.id)
 
       expect(result).to.equal({
         backLink: {
