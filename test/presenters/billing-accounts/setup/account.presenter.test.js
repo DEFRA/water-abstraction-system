@@ -11,9 +11,9 @@ const { expect } = Code
 const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtures.js')
 
 // Thing under test
-const SelectAccountPresenter = require('../../../../app/presenters/billing-accounts/setup/select-account.presenter.js')
+const AccountPresenter = require('../../../../app/presenters/billing-accounts/setup/account.presenter.js')
 
-describe('Billing Accounts - Setup - Select Account Presenter', () => {
+describe('Billing Accounts - Setup - Account Presenter', () => {
   let session
 
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe('Billing Accounts - Setup - Select Account Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = SelectAccountPresenter.go(session)
+      const result = AccountPresenter.go(session)
 
       expect(result).to.equal({
         accountSelected: null,
@@ -47,7 +47,7 @@ describe('Billing Accounts - Setup - Select Account Presenter', () => {
     })
 
     it('returns page data for the view', () => {
-      const result = SelectAccountPresenter.go(session)
+      const result = AccountPresenter.go(session)
 
       expect(result).to.equal({
         accountSelected: 'another',
@@ -69,7 +69,7 @@ describe('Billing Accounts - Setup - Select Account Presenter', () => {
     })
 
     it('returns page data for the view', () => {
-      const result = SelectAccountPresenter.go(session)
+      const result = AccountPresenter.go(session)
 
       expect(result).to.equal({
         accountSelected: 'customer',

@@ -17,9 +17,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/select-account',
+    path: '/billing-accounts/setup/{sessionId}/account',
     options: {
-      handler: BillingAccountsSetupController.viewSelectAccount,
+      handler: BillingAccountsSetupController.viewAccount,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -29,9 +29,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/select-account',
+    path: '/billing-accounts/setup/{sessionId}/account',
     options: {
-      handler: BillingAccountsSetupController.submitSelectAccount,
+      handler: BillingAccountsSetupController.submitAccount,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -41,9 +41,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/select-existing-address',
+    path: '/billing-accounts/setup/{sessionId}/existing-address',
     options: {
-      handler: BillingAccountsSetupController.viewSelectExistingAddress,
+      handler: BillingAccountsSetupController.viewExistingAddress,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -53,9 +53,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/select-existing-address',
+    path: '/billing-accounts/setup/{sessionId}/existing-address',
     options: {
-      handler: BillingAccountsSetupController.submitSelectExistingAddress,
+      handler: BillingAccountsSetupController.submitExistingAddress,
       auth: {
         access: {
           scope: ['manage_billing_accounts']

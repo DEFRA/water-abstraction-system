@@ -6,21 +6,21 @@
  */
 
 const InitiateSessionService = require('../services/billing-accounts/setup/initiate-session.service.js')
-const SubmitFAOService = require('../services/billing-accounts/setup/submit-fao.service.js')
-const SubmitSelectAccountService = require('../services/billing-accounts/setup/submit-select-account.service.js')
+const SubmitAccountService = require('../services/billing-accounts/setup/submit-account.service.js')
 const SubmitExistingAccountService = require('../services/billing-accounts/setup/submit-existing-account.service.js')
-const SubmitSelectExistingAddressService = require('../services/billing-accounts/setup/submit-select-existing-address.service.js')
-const ViewFAOService = require('../services/billing-accounts/setup/view-fao.service.js')
-const ViewSelectAccountService = require('../services/billing-accounts/setup/view-select-account.service.js')
+const SubmitExistingAddressService = require('../services/billing-accounts/setup/submit-existing-address.service.js')
+const SubmitFAOService = require('../services/billing-accounts/setup/submit-fao.service.js')
+const ViewAccountService = require('../services/billing-accounts/setup/view-account.service.js')
+const ViewExistingAddressService = require('../services/billing-accounts/setup/view-existing-address.service.js')
 const ViewExistingAccountService = require('../services/billing-accounts/setup/view-existing-account.service.js')
-const ViewSelectExistingAddressService = require('../services/billing-accounts/setup/view-select-existing-address.service.js')
+const ViewFAOService = require('../services/billing-accounts/setup/view-fao.service.js')
 
 async function setup(request, h) {
   const { billingAccountId } = request.params
 
   const session = await InitiateSessionService.go(billingAccountId)
 
-  return h.redirect(`/system/billing-accounts/setup/${session.id}/select-account`)
+  return h.redirect(`/system/billing-accounts/setup/${session.id}/account`)
 }
 
 async function submitFAO(request, h) {
@@ -42,16 +42,16 @@ async function submitFAO(request, h) {
   return h.redirect(`/system/billing-accounts/setup/${sessionId}/check`)
 }
 
-async function submitSelectExistingAddress(request, h) {
+async function submitExistingAddress(request, h) {
   const {
     payload,
     params: { sessionId }
   } = request
 
-  const pageData = await SubmitSelectExistingAddressService.go(sessionId, payload)
+  const pageData = await SubmitExistingAddressService.go(sessionId, payload)
 
   if (pageData.error) {
-    return h.view(`billing-accounts/setup/select-existing-address.njk`, pageData)
+    return h.view(`billing-accounts/setup/existing-address.njk`, pageData)
   }
 
   if (pageData.addressSelected === 'new') {
@@ -61,20 +61,20 @@ async function submitSelectExistingAddress(request, h) {
   return h.redirect(`/system/billing-accounts/setup/${sessionId}/fao`)
 }
 
-async function submitSelectAccount(request, h) {
+async function submitAccount(request, h) {
   const {
     payload,
     params: { sessionId }
   } = request
 
-  const pageData = await SubmitSelectAccountService.go(sessionId, payload)
+  const pageData = await SubmitAccountService.go(sessionId, payload)
 
   if (pageData.error) {
-    return h.view(`billing-accounts/setup/select-account.njk`, pageData)
+    return h.view(`billing-accounts/setup/account.njk`, pageData)
   }
 
   if (pageData.accountSelected === 'customer') {
-    return h.redirect(`/system/billing-accounts/setup/${sessionId}/select-existing-address`)
+    return h.redirect(`/system/billing-accounts/setup/${sessionId}/existing-address`)
   }
 
   return h.redirect(`/system/billing-accounts/setup/${sessionId}/existing-account`)
@@ -96,20 +96,20 @@ async function viewFAO(request, h) {
   return h.view(`billing-accounts/setup/fao.njk`, pageData)
 }
 
-async function viewSelectAccount(request, h) {
+async function viewAccount(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewSelectAccountService.go(sessionId)
+  const pageData = await ViewAccountService.go(sessionId)
 
-  return h.view(`billing-accounts/setup/select-account.njk`, pageData)
+  return h.view(`billing-accounts/setup/account.njk`, pageData)
 }
 
-async function viewSelectExistingAddress(request, h) {
+async function viewExistingAddress(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await ViewSelectExistingAddressService.go(sessionId)
+  const pageData = await ViewExistingAddressService.go(sessionId)
 
-  return h.view(`billing-accounts/setup/select-existing-address.njk`, pageData)
+  return h.view(`billing-accounts/setup/existing-address.njk`, pageData)
 }
 
 async function submitExistingAccount(request, h) {
@@ -133,12 +133,12 @@ async function submitExistingAccount(request, h) {
 
 module.exports = {
   setup,
+  submitAccount,
   submitExistingAccount,
+  submitExistingAddress,
   submitFAO,
-  submitSelectAccount,
-  submitSelectExistingAddress,
+  viewAccount,
   viewExistingAccount,
-  viewFAO,
-  viewSelectAccount,
-  viewSelectExistingAddress
+  viewExistingAddress,
+  viewFAO
 }

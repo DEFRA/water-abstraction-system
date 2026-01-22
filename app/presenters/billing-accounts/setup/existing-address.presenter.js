@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the `/billing-accounts/setup/{sessionId}/select-existing-address` page
- * @module SelectExistingAddressPresenter
+ * Formats data for the `/billing-accounts/setup/{sessionId}/existing-address` page
+ * @module ExistingAddressPresenter
  */
 
 /**
- * Formats data for the `/billing-accounts/setup/{sessionId}/select-existing-address` page
+ * Formats data for the `/billing-accounts/setup/{sessionId}/existing-address` page
  *
  * @param {module:SessionModel} session - The billing account setup session instance
  * @param {module:CompanyAddressModel} companyAddresses - The addresses linked to the company
@@ -19,7 +19,7 @@ function go(session, companyAddresses) {
 
   return {
     backLink: {
-      href: `/system/billing-accounts/setup/${session.id}/select-account`,
+      href: `/system/billing-accounts/setup/${session.id}/account`,
       text: 'Back'
     },
     items: radioItems,

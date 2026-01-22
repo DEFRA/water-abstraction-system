@@ -42,10 +42,16 @@ describe('Company Contacts - View Remove Company Contact Service', () => {
       expect(result).to.equal({
         activeNavBar: 'search',
         backLink: {
-          href: '',
-          text: 'Back'
+          href: `/system/company-contacts/${companyContact.id}`,
+          text: 'Go back to contact details'
         },
-        pageTitle: `You're about to remove this contact`
+        contact: {
+          abstractionAlerts: 'No',
+          email: 'rachael.tyrell@tyrellcorp.com',
+          name: 'Rachael Tyrell'
+        },
+        pageTitle: "You're about to remove this contact",
+        pageTitleCaption: 'Tyrell Corporation'
       })
     })
   })

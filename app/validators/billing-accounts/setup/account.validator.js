@@ -1,9 +1,9 @@
 'use strict'
 
 /**
- * Validates data submitted for the `/billing-accounts/setup/{sessionId}/select-account` page
+ * Validates data submitted for the `/billing-accounts/setup/{sessionId}/account` page
  *
- * @module SelectAccountValidator
+ * @module AccountValidator
  */
 
 const Joi = require('joi')
@@ -12,7 +12,7 @@ const VALID_VALUES = ['customer', 'another']
 const MAX_LENGTH = 100
 
 /**
- * Validates data submitted for the `/billing-accounts/setup/{sessionId}/select-account` page
+ * Validates data submitted for the `/billing-accounts/setup/{sessionId}/account` page
  *
  * @param {object} payload - The payload from the request to be validated
  *
