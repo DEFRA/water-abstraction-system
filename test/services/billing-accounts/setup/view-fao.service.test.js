@@ -32,7 +32,7 @@ describe('Billing Accounts - Setup - View FAO Service', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/select-existing-address`,
+          href: `/system/billing-accounts/setup/${session.id}/existing-address`,
           text: 'Back'
         },
         fao: session.fao ?? null,

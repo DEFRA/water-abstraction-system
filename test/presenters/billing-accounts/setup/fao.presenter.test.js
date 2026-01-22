@@ -31,7 +31,7 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/select-existing-address`,
+          href: `/system/billing-accounts/setup/${session.id}/existing-address`,
           text: 'Back'
         },
         fao: session.fao ?? null,
