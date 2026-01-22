@@ -1,0 +1,11 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block pageContent %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukButton({ text: "Remove this contact", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}
