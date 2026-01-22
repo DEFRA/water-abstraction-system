@@ -12,9 +12,9 @@ const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtu
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const SubmitSelectAccountService = require('../../../../app/services/billing-accounts/setup/submit-select-account.service.js')
+const SubmitAccountService = require('../../../../app/services/billing-accounts/setup/submit-account.service.js')
 
-describe('Billing Accounts - Setup - Select Account Service', () => {
+describe('Billing Accounts - Setup - Submit Account Service', () => {
   let payload
   let session
   let sessionData
@@ -39,7 +39,7 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitSelectAccountService.go(session.id, payload)
+      await SubmitAccountService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
@@ -53,7 +53,7 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
     })
 
     it('returns the correct details the controller needs to redirect the journey', async () => {
-      const result = await SubmitSelectAccountService.go(session.id, payload)
+      const result = await SubmitAccountService.go(session.id, payload)
 
       expect(result).to.equal({
         accountSelected: 'customer'
@@ -70,7 +70,7 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
     })
 
     it('saves the submitted value and deletes the search input', async () => {
-      await SubmitSelectAccountService.go(session.id, payload)
+      await SubmitAccountService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
@@ -84,7 +84,7 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
     })
 
     it('returns the correct details the controller needs to redirect the journey', async () => {
-      const result = await SubmitSelectAccountService.go(session.id, payload)
+      const result = await SubmitAccountService.go(session.id, payload)
 
       expect(result).to.equal({
         accountSelected: 'customer'
@@ -101,7 +101,7 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitSelectAccountService.go(session.id, payload)
+      await SubmitAccountService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
@@ -115,7 +115,7 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
     })
 
     it('returns the correct details the controller needs to redirect the journey', async () => {
-      const result = await SubmitSelectAccountService.go(session.id, payload)
+      const result = await SubmitAccountService.go(session.id, payload)
 
       expect(result).to.equal({
         accountSelected: 'another'
@@ -132,7 +132,7 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitSelectAccountService.go(session.id, payload)
+        const result = await SubmitAccountService.go(session.id, payload)
 
         expect(result.error).to.equal({
           errorList: [
@@ -154,7 +154,7 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitSelectAccountService.go(session.id, payload)
+        const result = await SubmitAccountService.go(session.id, payload)
 
         expect(result.error).to.equal({
           errorList: [
@@ -177,7 +177,7 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitSelectAccountService.go(session.id, payload)
+        const result = await SubmitAccountService.go(session.id, payload)
 
         expect(result.error).to.equal({
           errorList: [

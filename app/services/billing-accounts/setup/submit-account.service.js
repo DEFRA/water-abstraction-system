@@ -1,19 +1,19 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `/billing-accounts/setup/{billingAccountId}/select-account` page
+ * Orchestrates validating the data for `/billing-accounts/setup/{billingAccountId}/account` page
  *
- * @module SubmitSelectAccountService
+ * @module SubmitAccountService
  */
 
 const SessionModel = require('../../../models/session.model.js')
-const SelectAccountPresenter = require('../../../presenters/billing-accounts/setup/select-account.presenter.js')
-const SelectAccountValidator = require('../../../validators/billing-accounts/setup/select-account.validator.js')
+const AccountPresenter = require('../../../presenters/billing-accounts/setup/account.presenter.js')
+const AccountValidator = require('../../../validators/billing-accounts/setup/account.validator.js')
 
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
- * Orchestrates validating the data for `/billing-accounts/setup/{billingAccountId}/select-account` page
+ * Orchestrates validating the data for `/billing-accounts/setup/{billingAccountId}/account` page
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
@@ -52,11 +52,11 @@ function _submissionData(session, payload) {
   session.accountSelected = payload.accountSelected
   session.searchInput = payload.searchInput ?? null
 
-  return SelectAccountPresenter.go(session)
+  return AccountPresenter.go(session)
 }
 
 function _validate(payload) {
-  const validationResult = SelectAccountValidator.go(payload)
+  const validationResult = AccountValidator.go(payload)
 
   return formatValidationResult(validationResult)
 }
