@@ -236,7 +236,7 @@ describe('Search - Search presenter', () => {
           col3Title: 'Type',
           col3Value: 'organisation',
           exact: true,
-          link: '/system/customers/licence-holder-1/licences',
+          link: '/system/companies/licence-holder-1/licences',
           reference: 'Mr F Surname',
           statusTag: null,
           type: 'Holder'
@@ -302,7 +302,7 @@ describe('Search - Search presenter', () => {
           col3Title: 'Type',
           col3Value: 'organisation',
           exact: false,
-          link: '/system/customers/licence-holder-1/licences',
+          link: '/system/companies/licence-holder-1/licences',
           reference: 'Mr F Surname',
           statusTag: null,
           type: 'Holder'

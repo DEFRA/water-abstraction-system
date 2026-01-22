@@ -30,7 +30,7 @@ function go(contacts, licence) {
     pageTitle: 'Contact details',
     pageTitleCaption: `Licence ${licenceRef}`,
     customerContactLink: FeatureFlagsConfig.enableCustomerView
-      ? `/system/customers/${companyId}/contacts`
+      ? `/system/companies/${companyId}/contacts`
       : `/customer/${companyId}/#contacts`
   }
 }

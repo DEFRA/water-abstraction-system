@@ -187,7 +187,7 @@ function _licenceHolder(licenceHolder) {
     col3Title: 'Type',
     col3Value: type,
     exact,
-    link: `/system/customers/${id}/licences`,
+    link: `/system/companies/${id}/licences`,
     reference: holderName,
     statusTag: null,
     type: 'Holder'

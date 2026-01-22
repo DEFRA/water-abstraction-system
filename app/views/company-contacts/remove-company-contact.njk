@@ -1,0 +1,40 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block pageContent %}
+  {{ govukSummaryList({
+    classes: "govuk-summary-list--no-border",
+    rows: [
+      {
+        key: { text: "Name", classes: "meta-data__label" },
+        value: { text: contact.name, classes: "meta-data__value" }
+      },
+      {
+        key: { text: "Email address", classes: "meta-data__label" },
+        value: { text: contact.email, classes: "meta-data__value" }
+      },
+      {
+        key: { text: "Water abstraction alerts", classes: "meta-data__label" },
+        value: { text:  contact.abstractionAlerts, classes: "meta-data__value" }
+      }
+    ]
+  }) }}
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
+
+    <div class="govuk-button-group">
+
+      {{ govukButton({ text: "Remove this contact", preventDoubleClick: true }) }}
+
+      {{ govukButton({
+        classes: 'govuk-button--secondary',
+        text: 'Cancel',
+        href: backLink.href
+      }) }}
+    </div>
+  </form>
+
+{% endblock %}
