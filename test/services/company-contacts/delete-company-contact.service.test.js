@@ -31,7 +31,7 @@ describe('Company Contacts - Delete Company Contact service', () => {
       })
     })
 
-    it('returns the matching company', async () => {
+    it('returns the number of rows deleted', async () => {
       const result = await DeleteCompanyContactService.go(companyContact.id)
 
       expect(result).to.equal(1)
