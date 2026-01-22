@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the `/billing-accounts/setup/{billingAccountId}/select-account` page
- * @module SelectAccountPresenter
+ * Formats data for the `/billing-accounts/setup/{billingAccountId}/account` page
+ * @module AccountPresenter
  */
 
 /**
- * Formats data for the `/billing-accounts/setup/{billingAccountId}/select-account` page
+ * Formats data for the `/billing-accounts/setup/{billingAccountId}/account` page
  *
  * @param {module:SessionModel} session - The billing account setup session instance
  *

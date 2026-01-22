@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const SelectAccountValidator = require('../../../../app/validators/billing-accounts/setup/select-account.validator.js')
+const AccountValidator = require('../../../../app/validators/billing-accounts/setup/account.validator.js')
 
 describe('Billing Accounts - Setup - Select Account Validator', () => {
   let payload
@@ -20,7 +20,7 @@ describe('Billing Accounts - Setup - Select Account Validator', () => {
       })
 
       it('returns with no errors', () => {
-        const result = SelectAccountValidator.go(payload)
+        const result = AccountValidator.go(payload)
 
         expect(result.value).to.exist()
         expect(result.error).not.to.exist()
@@ -34,7 +34,7 @@ describe('Billing Accounts - Setup - Select Account Validator', () => {
         })
 
         it('returns with no errors', () => {
-          const result = SelectAccountValidator.go(payload)
+          const result = AccountValidator.go(payload)
 
           expect(result.value).to.exist()
           expect(result.error).not.to.exist()
@@ -47,7 +47,7 @@ describe('Billing Accounts - Setup - Select Account Validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = SelectAccountValidator.go(payload)
+          const result = AccountValidator.go(payload)
 
           expect(result.value).to.exist()
           expect(result.error).to.exist()
@@ -61,7 +61,7 @@ describe('Billing Accounts - Setup - Select Account Validator', () => {
         })
 
         it('returns with errors', () => {
-          const result = SelectAccountValidator.go(payload)
+          const result = AccountValidator.go(payload)
 
           expect(result.value).to.exist()
           expect(result.error).to.exist()
@@ -77,7 +77,7 @@ describe('Billing Accounts - Setup - Select Account Validator', () => {
     })
 
     it('returns with errors', () => {
-      const result = SelectAccountValidator.go(payload)
+      const result = AccountValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()

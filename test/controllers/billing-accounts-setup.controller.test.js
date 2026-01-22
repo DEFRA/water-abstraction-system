@@ -15,9 +15,9 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/billing-accounts/setup/initiate-session.service.js')
-const ViewSelectAccountService = require('../../app/services/billing-accounts/setup/view-select-account.service.js')
+const ViewAccountService = require('../../app/services/billing-accounts/setup/view-account.service.js')
 const ViewSelectExistingAddressService = require('../../app/services/billing-accounts/setup/view-select-existing-address.service.js')
-const SubmitSelectAccountService = require('../../app/services/billing-accounts/setup/submit-select-account.service.js')
+const SubmitAccountService = require('../../app/services/billing-accounts/setup/submit-account.service.js')
 const SubmitSelectExistingAddressService = require('../../app/services/billing-accounts/setup/submit-select-existing-address.service.js')
 
 // For running our service
@@ -63,22 +63,22 @@ describe('Billing Accounts Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/select-account`)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/account`)
         })
       })
     })
   })
 
-  describe('/billing-accounts/setup/{sessionId}/select-account', () => {
+  describe('/billing-accounts/setup/{sessionId}/account', () => {
     describe('GET', () => {
       beforeEach(() => {
         sessionId = generateUUID()
-        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/select-account`)
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/account`)
       })
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewSelectAccountService, 'go').resolves({
+          Sinon.stub(ViewAccountService, 'go').resolves({
             pageTitle: 'Who should the bills go to?'
           })
         })
@@ -95,12 +95,12 @@ describe('Billing Accounts Setup controller', () => {
     describe('POST', () => {
       beforeEach(() => {
         sessionId = generateUUID()
-        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/select-account`)
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/account`)
       })
 
       describe('when the user selects existing customer option', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitSelectAccountService, 'go').resolves({
+          Sinon.stub(SubmitAccountService, 'go').resolves({
             accountSelected: 'customer'
           })
         })
@@ -117,7 +117,7 @@ describe('Billing Accounts Setup controller', () => {
 
       describe('when the user selects another billing account option', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitSelectAccountService, 'go').resolves({
+          Sinon.stub(SubmitAccountService, 'go').resolves({
             accountSelected: 'another'
           })
         })
