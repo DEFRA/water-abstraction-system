@@ -25,10 +25,11 @@ async function viewContact(request, h) {
   const {
     params: { id },
     auth,
-    query: { page = 1 }
+    query: { page = 1 },
+    yar
   } = request
 
-  const pageData = await ViewContactsService.go(id, auth, page)
+  const pageData = await ViewContactsService.go(id, auth, page, yar)
 
   return h.view(`companies/contact.njk`, pageData)
 }

@@ -29,9 +29,12 @@ async function viewRemoveCompanyContact(request, h) {
 }
 
 async function submitRemoveCompanyContact(request, h) {
-  const { id } = request.params
+  const {
+    params: { id },
+    yar
+  } = request
 
-  const { companyId } = await SubmitRemoveCompanyContactService.go(id)
+  const { companyId } = await SubmitRemoveCompanyContactService.go(id, yar)
 
   return h.redirect(`/system/companies/${companyId}/contacts`)
 }

@@ -24,6 +24,7 @@ describe('Companies - View Contacts service', () => {
   let company
   let companyContacts
   let page
+  let yarStub
 
   beforeEach(async () => {
     auth = { credentials: { roles: [] } }
@@ -39,6 +40,12 @@ describe('Companies - View Contacts service', () => {
     page = 1
 
     Sinon.stub(FeatureFlagsConfig, 'enableCustomerManage').value(true)
+
+    yarStub = {
+      flash: Sinon.stub().returns([
+        { titleText: 'Contact removed', text: 'Rachael Tyrell was removed from this company.' }
+      ])
+    }
   })
 
   afterEach(() => {
@@ -47,7 +54,7 @@ describe('Companies - View Contacts service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewContactsService.go(company.id, auth, page)
+      const result = await ViewContactsService.go(company.id, auth, page, yarStub)
 
       expect(result).to.equal({
         activeNavBar: 'search',
@@ -67,6 +74,10 @@ describe('Companies - View Contacts service', () => {
         links: {
           createContact: `/customer/${company.id}/contacts/new`,
           removeContact: `/customer/${company.id}/contacts/remove`
+        },
+        notification: {
+          text: 'Rachael Tyrell was removed from this company.',
+          titleText: 'Contact removed'
         },
         pageTitle: 'Contacts',
         pageTitleCaption: 'Tyrell Corporation',
