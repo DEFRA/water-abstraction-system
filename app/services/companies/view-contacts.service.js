@@ -10,7 +10,6 @@ const ContactsPresenter = require('../../presenters/companies/contacts.presenter
 const FetchCompanyService = require('./fetch-company.service.js')
 const FetchContactsService = require('./fetch-company-contacts.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { fetchFlashNotification } = require('../../lib/general.lib.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
@@ -38,7 +37,7 @@ async function go(companyId, auth, page, yar) {
     'contacts'
   )
 
-  const notification = fetchFlashNotification(yar)
+  const [notification] = yar.flash('notification')
 
   return {
     ...pageData,
