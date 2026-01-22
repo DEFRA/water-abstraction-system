@@ -18,9 +18,9 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const FetchExistingAddressesService = require('../../../../app/services/billing-accounts/setup/fetch-existing-addresses.service.js')
 
 // Thing under test
-const SubmitSelectExistingAddressService = require('../../../../app/services/billing-accounts/setup/submit-select-existing-address.service.js')
+const SubmitExistingAddressService = require('../../../../app/services/billing-accounts/setup/submit-existing-address.service.js')
 
-describe('Billing Accounts - Setup - Select Existing Address Service', () => {
+describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
   const addresses = _addresses()
   let payload
   let session
@@ -46,7 +46,7 @@ describe('Billing Accounts - Setup - Select Existing Address Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitSelectExistingAddressService.go(session.id, payload)
+      await SubmitExistingAddressService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
@@ -59,7 +59,7 @@ describe('Billing Accounts - Setup - Select Existing Address Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitSelectExistingAddressService.go(session.id, payload)
+      const result = await SubmitExistingAddressService.go(session.id, payload)
 
       expect(result).to.equal({
         addressSelected: payload.addressSelected
@@ -75,7 +75,7 @@ describe('Billing Accounts - Setup - Select Existing Address Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitSelectExistingAddressService.go(session.id, payload)
+      await SubmitExistingAddressService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
@@ -88,7 +88,7 @@ describe('Billing Accounts - Setup - Select Existing Address Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitSelectExistingAddressService.go(session.id, payload)
+      const result = await SubmitExistingAddressService.go(session.id, payload)
 
       expect(result).to.equal({
         addressSelected: 'new'
@@ -103,7 +103,7 @@ describe('Billing Accounts - Setup - Select Existing Address Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitSelectExistingAddressService.go(session.id, payload)
+      const result = await SubmitExistingAddressService.go(session.id, payload)
 
       expect(result.error).to.equal({
         errorList: [
