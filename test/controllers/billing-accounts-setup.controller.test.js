@@ -15,10 +15,12 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/billing-accounts/setup/initiate-session.service.js')
-const ViewSelectAccountService = require('../../app/services/billing-accounts/setup/view-select-account.service.js')
-const ViewExistingAddressService = require('../../app/services/billing-accounts/setup/view-existing-address.service.js')
-const SubmitSelectAccountService = require('../../app/services/billing-accounts/setup/submit-select-account.service.js')
+const SubmitExistingAccountService = require('../../app/services/billing-accounts/setup/submit-existing-account.service.js')
 const SubmitExistingAddressService = require('../../app/services/billing-accounts/setup/submit-existing-address.service.js')
+const SubmitSelectAccountService = require('../../app/services/billing-accounts/setup/submit-select-account.service.js')
+const ViewExistingAccountService = require('../../app/services/billing-accounts/setup/view-existing-account.service.js')
+const ViewExistingAddressService = require('../../app/services/billing-accounts/setup/view-existing-address.service.js')
+const ViewSelectAccountService = require('../../app/services/billing-accounts/setup/view-select-account.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -124,9 +126,7 @@ describe('Billing Accounts Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
-            `/system/billing-accounts/setup/${sessionId}/select-existing-account`
-          )
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/existing-account`)
         })
       })
     })
@@ -188,6 +188,67 @@ describe('Billing Accounts Setup controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/address/${sessionId}/postcode`)
+        })
+      })
+    })
+  })
+
+  describe('/billing-accounts/setup/{sessionId}/existing-account', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/existing-account`)
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ViewExistingAccountService, 'go').resolves({
+            pageTitle: 'Does this account already exist?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Does this account already exist?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/existing-account`)
+      })
+
+      describe('when the user selects an existing account option', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitExistingAccountService, 'go').resolves({
+            addressSelected: 'existing'
+          })
+        })
+
+        it('redirects to the "postcode" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/address/${sessionId}/postcode`)
+        })
+      })
+
+      describe('when the user selects to set up a new account', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitExistingAccountService, 'go').resolves({
+            existingAccount: 'new'
+          })
+        })
+
+        it('redirects to the "Select the account type" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/account-type`)
         })
       })
     })
