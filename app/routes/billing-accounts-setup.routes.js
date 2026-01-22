@@ -86,6 +86,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/billing-accounts/setup/{sessionId}/fao',
+    options: {
+      handler: BillingAccountsSetupController.viewFAO,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/billing-accounts/setup/{sessionId}/fao',
+    options: {
+      handler: BillingAccountsSetupController.submitFAO,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
   }
 ]
 

@@ -12,9 +12,9 @@ const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtu
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ViewExistingAccountService = require('../../../../app/services/billing-accounts/setup/view-existing-account.service.js')
+const FAOService = require('../../../../app/services/billing-accounts/setup/view-fao.service.js')
 
-describe('Billing Accounts - Setup - View Existing Account service', () => {
+describe('Billing Accounts - Setup - View FAO Service', () => {
   let session
   let sessionData
 
@@ -28,23 +28,15 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewExistingAccountService.go(session.id)
+      const result = await FAOService.go(session.id)
 
       expect(result).to.equal({
         backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/account`,
+          href: `/system/billing-accounts/setup/${session.id}/existing-address`,
           text: 'Back'
         },
-        items: [
-          { divider: 'or' },
-          {
-            id: 'new',
-            value: 'new',
-            text: 'Setup a new account',
-            checked: false
-          }
-        ],
-        pageTitle: 'Does this account already exist?',
+        fao: session.fao ?? null,
+        pageTitle: 'Do you need to add an FAO?',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })
     })

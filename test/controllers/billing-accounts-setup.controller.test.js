@@ -168,11 +168,11 @@ describe('Billing Accounts Setup controller', () => {
           })
         })
 
-        it('redirects to the "for attention of" page', async () => {
+        it('redirects to the "fao" page', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/for-attention-of`)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/fao`)
         })
       })
 
