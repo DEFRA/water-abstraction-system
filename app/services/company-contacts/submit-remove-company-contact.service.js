@@ -6,7 +6,7 @@
  * @module SubmitRemoveCompanyContactService
  */
 
-const DeleteCompanyContactService = require('./delete-company-contact.service.js')
+const CompanyContactModel = require('../../models/company-contact.model.js')
 const FetchCompanyContactService = require('./fetch-company-contact.service.js')
 const { flashNotification } = require('../../lib/general.lib.js')
 
@@ -21,7 +21,7 @@ const { flashNotification } = require('../../lib/general.lib.js')
 async function go(id, yar) {
   const companyContact = await FetchCompanyContactService.go(id)
 
-  await DeleteCompanyContactService.go(id)
+  await CompanyContactModel.query().deleteById(id)
 
   flashNotification(yar, 'Contact removed', `${companyContact.contact.$name()} was removed from this company.`)
 

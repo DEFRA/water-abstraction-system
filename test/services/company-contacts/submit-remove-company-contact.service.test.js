@@ -12,7 +12,7 @@ const { expect } = Code
 const CustomersFixtures = require('../../fixtures/customers.fixture.js')
 
 // Things we need to stub
-const DeleteCompanyContactService = require('../../../app/services/company-contacts/delete-company-contact.service.js')
+const CompanyContactModel = require('../../../app/models/company-contact.model.js')
 const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
 
 // Thing under test
@@ -27,7 +27,9 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
 
     Sinon.stub(FetchCompanyContactService, 'go').resolves(companyContact)
 
-    Sinon.stub(DeleteCompanyContactService, 'go').resolves()
+    Sinon.stub(CompanyContactModel, 'query').returns({
+      deleteById: Sinon.stub().returnsThis()
+    })
 
     yarStub = { flash: Sinon.stub() }
   })
