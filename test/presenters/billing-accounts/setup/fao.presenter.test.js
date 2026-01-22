@@ -15,7 +15,7 @@ const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtu
 // Thing under test
 const FAOPresenter = require('../../../../app/presenters/billing-accounts/setup/fao.presenter.js')
 
-describe('Billing Accounts - Setup - For Attention Of Presenter', () => {
+describe('Billing Accounts - Setup - FAO Presenter', () => {
   let session
 
   beforeEach(() => {

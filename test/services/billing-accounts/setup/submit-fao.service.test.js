@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitFAOService = require('../../../../app/services/billing-accounts/setup/submit-fao.service.js')
 
-describe('Billing Accounts - Setup - Submit For Attention Of Service', () => {
+describe('Billing Accounts - Setup - Submit FAO Service', () => {
   let payload
   let session
   let sessionData

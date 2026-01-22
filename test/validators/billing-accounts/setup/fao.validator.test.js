@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const FAOValidator = require('../../../../app/validators/billing-accounts/setup/fao.validator.js')
 
-describe('Billing Accounts - Setup - For Attention Of Validator', () => {
+describe('Billing Accounts - Setup - FAO Validator', () => {
   let payload
 
   beforeEach(() => {
