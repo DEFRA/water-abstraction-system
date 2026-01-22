@@ -178,6 +178,17 @@ function flashNotification(yar, titleText = 'Updated', text = 'Changes made') {
 }
 
 /**
+ * Returns the flash notification using yar.
+ *
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ *
+ * @returns {object} The notification object set by the 'flashNotification' function
+ */
+function fetchFlashNotification(yar) {
+  return yar.flash('notification')[0]
+}
+
+/**
  * Generate the pseudo-unique reference code for a notice
  *
  * We generate a reference for all notices created in the service and sent via Notify. This reference is passed to
@@ -481,6 +492,7 @@ module.exports = {
   currentTimeInNanoseconds,
   determineCurrentFinancialYear,
   flashNotification,
+  fetchFlashNotification,
   generateNoticeReferenceCode,
   generateRandomInteger,
   generateUUID,
