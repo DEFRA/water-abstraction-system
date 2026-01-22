@@ -32,7 +32,7 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/select-account`,
+          href: `/system/billing-accounts/setup/${session.id}/account`,
           text: 'Back'
         },
         items: [

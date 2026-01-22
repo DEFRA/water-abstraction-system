@@ -17,7 +17,7 @@ function go(session) {
 
   return {
     backLink: {
-      href: `/system/billing-accounts/setup/${session.id}/select-account`,
+      href: `/system/billing-accounts/setup/${session.id}/account`,
       text: 'Back'
     },
     items: _radioOptions(session.existingAccount),
