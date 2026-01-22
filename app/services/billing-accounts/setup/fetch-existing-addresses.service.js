@@ -8,7 +8,7 @@
 const CompanyAddressModel = require('../../../models/company-address.model.js')
 
 /**
- * FFetches the matching existing addresses for the commpany
+ * Fetches the matching existing addresses for the commpany
  *
  * @param {string} companyId - The UUID of the company to fetch addresses for
  *
