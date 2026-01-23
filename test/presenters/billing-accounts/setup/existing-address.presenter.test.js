@@ -44,7 +44,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       const result = ExistingAddressPresenter.go(session, addresses)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'search',
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/account`,
           text: 'Back'

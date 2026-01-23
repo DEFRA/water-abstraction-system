@@ -31,7 +31,7 @@ describe('Billing Accounts - Setup - View FAO Service', () => {
       const result = await FAOService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'manage',
+        activeNavBar: 'search',
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/existing-address`,
           text: 'Back'

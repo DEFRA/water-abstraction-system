@@ -48,7 +48,7 @@ async function _save(session, payload) {
 
   if (session.addressSelected === 'new') {
     session.addressJourney = {
-      activeNavBar: 'manage',
+      activeNavBar: 'search',
       address: {},
       backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-address`, text: 'Back' },
       pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
