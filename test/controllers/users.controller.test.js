@@ -17,6 +17,7 @@ const IndexUsersService = require('../../app/services/users/index-users.service.
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
 const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
+const ViewUserService = require('../../app/services/users/view-user.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -199,6 +200,60 @@ describe('Users controller', () => {
             expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
+        })
+      })
+    })
+  })
+
+  describe('/users/{userId}', () => {
+    describe('GET', () => {
+      describe('when the user is an internal user', () => {
+        beforeEach(async () => {
+          options = _getOptions(`/users/123`, { scope: ['billing'], user: { id: 1000 } })
+          Sinon.stub(ViewUserService, 'go').resolves({
+            backLink: {
+              href: '/',
+              text: 'Go back to search'
+            },
+            id: 100010,
+            lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+            pageTitle: 'User basic.access@wrls.gov.uk',
+            pageTitleCaption: 'Internal',
+            permissions: 'Basic access',
+            status: 'enabled'
+          })
+        })
+
+        it('returns the internal user page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Internal')
+        })
+      })
+
+      describe('when the user is an external user', () => {
+        beforeEach(async () => {
+          options = _getOptions(`/users/456`, { scope: ['billing'], user: { id: 1000 } })
+          Sinon.stub(ViewUserService, 'go').resolves({
+            backLink: {
+              href: '/',
+              text: 'Go back to search'
+            },
+            companies: [],
+            id: 100007,
+            lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+            pageTitle: 'User external@example.co.uk',
+            pageTitleCaption: 'External',
+            status: 'enabled'
+          })
+        })
+
+        it('returns the external user page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('External')
         })
       })
     })

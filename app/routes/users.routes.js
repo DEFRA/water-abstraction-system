@@ -50,6 +50,13 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/users/{userId}',
+    options: {
+      handler: UsersController.viewUser
+    }
   }
 ]
 
