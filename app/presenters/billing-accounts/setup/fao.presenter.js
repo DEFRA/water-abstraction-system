@@ -14,6 +14,7 @@
  */
 function go(session) {
   return {
+    activeNavBar: 'manage',
     backLink: {
       href: `/system/billing-accounts/setup/${session.id}/existing-address`,
       text: 'Back'

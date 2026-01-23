@@ -16,6 +16,7 @@ function go(session) {
   const { billingAccount } = session
 
   return {
+    activeNavBar: 'manage',
     backLink: {
       href: `/system/billing-accounts/setup/${session.id}/account`,
       text: 'Back'

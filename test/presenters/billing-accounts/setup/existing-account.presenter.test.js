@@ -27,6 +27,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       const result = ExistingAccountPresenter.go(session)
 
       expect(result).to.equal({
+        activeNavBar: 'manage',
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/account`,
           text: 'Back'
@@ -58,6 +59,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       const result = ExistingAccountPresenter.go(session)
 
       expect(result).to.equal({
+        activeNavBar: 'manage',
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/account`,
           text: 'Back'

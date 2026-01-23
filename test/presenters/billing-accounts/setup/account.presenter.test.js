@@ -28,6 +28,7 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
 
       expect(result).to.equal({
         accountSelected: null,
+        activeNavBar: 'manage',
         companyName: session.billingAccount.company.name,
         backLink: {
           href: `/system/billing-accounts/${session.billingAccount.id}`,
@@ -51,6 +52,7 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
 
       expect(result).to.equal({
         accountSelected: 'another',
+        activeNavBar: 'manage',
         companyName: session.billingAccount.company.name,
         backLink: {
           href: `/system/billing-accounts/${session.billingAccount.id}`,
@@ -73,6 +75,7 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
 
       expect(result).to.equal({
         accountSelected: 'customer',
+        activeNavBar: 'manage',
         companyName: session.billingAccount.company.name,
         backLink: {
           href: `/system/billing-accounts/${session.billingAccount.id}`,
