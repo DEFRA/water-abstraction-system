@@ -52,21 +52,23 @@
         classes: "govuk-radios--small",
         fieldset: {
           legend: {
-            text: "Type",
+            classes: "govuk-fieldset__legend--s",
             isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
+            text: "Type"
           }
         },
         items: [
           {
-            value: "water_vml",
+            attributes: { 'data-test': 'type-external' },
+            checked: filters.type === 'water_vml',
             text: "External",
-            checked: filters.type === 'water_vml'
+            value: "water_vml"
           },
           {
-            value: "water_admin",
+            attributes: { 'data-test': 'type-internal' },
+            checked: filters.type === 'water_admin',
             text: "Internal",
-            checked: filters.type === 'water_admin'
+            value: "water_admin"
           }
         ],
         name: "type"
@@ -77,9 +79,9 @@
         classes: "govuk-radios--small",
         fieldset: {
           legend: {
-            text: "Permissions",
+            classes: "govuk-fieldset__legend--s",
             isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
+            text: "Permissions"
           }
         },
         items: [
@@ -146,26 +148,26 @@
         classes: "govuk-radios--small",
         fieldset: {
           legend: {
-            text: "Status",
+            classes: "govuk-fieldset__legend--s",
             isPageHeading: false,
-            classes: "govuk-fieldset__legend--s"
+            text: "Status"
           }
         },
         items: [
           {
-            attributes: { 'data-test': 'status-' },
+            attributes: { 'data-test': 'status-awaiting' },
             checked: filters.status === 'awaiting',
             text: "Awaiting",
             value: "awaiting"
           },
           {
-            attributes: { 'data-test': 'disabled' },
+            attributes: { 'data-test': 'status-disabled' },
             checked: filters.status === 'disabled',
             text: "Disabled",
             value: "disabled"
           },
           {
-            attributes: { 'data-test': 'enabled' },
+            attributes: { 'data-test': 'status-enabled' },
             checked: filters.status === 'enabled',
             text: "Enabled",
             value: "enabled"
