@@ -22,7 +22,8 @@ describe('Users - Index Users presenter', () => {
       UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess()),
       UsersFixture.transformToFetchUsersResult(UsersFixture.jonLee()),
       UsersFixture.transformToFetchUsersResult(UsersFixture.rachelStevens()),
-      UsersFixture.transformToFetchUsersResult(UsersFixture.superUser())
+      UsersFixture.transformToFetchUsersResult(UsersFixture.superUser()),
+      UsersFixture.transformToFetchUsersResult(UsersFixture.tinaBarrett())
     ]
 
     auth = {
@@ -69,6 +70,13 @@ describe('Users - Index Users presenter', () => {
           permissions: 'Super user',
           status: 'enabled',
           type: 'Internal'
+        },
+        {
+          email: users[4].username,
+          link: `/user/${users[4].id}/status`,
+          permissions: '',
+          status: 'locked',
+          type: 'External'
         }
       ]
     })
