@@ -10,11 +10,10 @@
  *
  * @param {module:CompanyModel} company - The customer from the companies table
  * @param {module:CompanyContactModel} companyContact - The customer contact from the company contacts table
- * @param {number} abstractionAlertsCount - the number of abstraction alerts for the companies company contacts
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, companyContact, abstractionAlertsCount) {
+function go(company, companyContact) {
   return {
     backLink: {
       href: `/system/company-contacts/${companyContact.id}`,
@@ -27,7 +26,7 @@ function go(company, companyContact, abstractionAlertsCount) {
     },
     pageTitle: `You're about to remove this contact`,
     pageTitleCaption: company.name,
-    ..._warning(companyContact, abstractionAlertsCount)
+    ..._warning(companyContact, 0)
   }
 }
 
