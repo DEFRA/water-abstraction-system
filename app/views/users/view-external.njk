@@ -1,0 +1,20 @@
+{% extends 'layout.njk' %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% from "macros/user-status-tag.njk" import statusTag %}
+
+{% block pageContent %}
+  <p>{{ statusTag(status) }} {{ lastSignedIn }}</p>
+
+  {% for company in companies %}
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-0">{{ company.companyName }}</h2>
+    <p>{{ company.mostSignificantRoleName }}</p>
+  {% endfor %}
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukButton({ text: "Edit", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}
