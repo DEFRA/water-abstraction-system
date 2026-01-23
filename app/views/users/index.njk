@@ -1,0 +1,269 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/user-status-tag.njk" import statusTag %}
+
+{% block pageContent %}
+
+  {% if links.user %}
+    <p>Create a new internal user account.</p>
+    {{ govukButton({
+      href: links.user.href,
+      preventDoubleClick: true,
+      text: links.user.text
+    }) }}
+  {% endif %}
+
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+  <h2 class="govuk-heading-l">View a user</h2>
+
+  {# Filters #}
+  {% set filtersForm %}
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
+
+      {# Filter by email #}
+      {{ govukInput({
+        classes: "govuk-input--width-20",
+        hint: {
+          text: 'You can use partial matches, for example, "rachel" or "defra.gov.uk"'
+        },
+        id: "email",
+        label: {
+          classes: "govuk-label--s",
+          isPageHeading: false,
+          text: "Email"
+        },
+        name: "email",
+        value: filters.email,
+        errorMessage: error.email
+      }) }}
+
+      {# Filter by type #}
+      {{ govukRadios({
+        classes: "govuk-radios--small",
+        fieldset: {
+          legend: {
+            classes: "govuk-fieldset__legend--s",
+            isPageHeading: false,
+            text: "Type"
+          }
+        },
+        items: [
+          {
+            attributes: { 'data-test': 'type-external' },
+            checked: filters.type === 'water_vml',
+            text: "External",
+            value: "water_vml"
+          },
+          {
+            attributes: { 'data-test': 'type-internal' },
+            checked: filters.type === 'water_admin',
+            text: "Internal",
+            value: "water_admin"
+          }
+        ],
+        name: "type"
+      }) }}
+
+      {# Filter by permissions #}
+      {{ govukRadios({
+        classes: "govuk-radios--small",
+        fieldset: {
+          legend: {
+            classes: "govuk-fieldset__legend--s",
+            isPageHeading: false,
+            text: "Permissions"
+          }
+        },
+        items: [
+          {
+            attributes: { 'data-test': 'permission-basic-access' },
+            checked: filters.permissions === 'basic',
+            text: "Basic access",
+            value: "basic"
+          },
+          {
+            attributes: { 'data-test': 'permission-billing-and-data' },
+            checked: filters.permissions === 'billing_and_data',
+            text: "Billing and Data",
+            value: "billing_and_data"
+          },
+          {
+            attributes: { 'data-test': 'permission-environment-officer' },
+            checked: filters.permissions === 'environment_officer',
+            text: "Environment Officer",
+            value: "environment_officer"
+          },
+          {
+            attributes: { 'data-test': 'permission-nps' },
+            checked: filters.permissions === 'nps',
+            text: "National Permitting Service",
+            value: "nps"
+          },
+          {
+            attributes: { 'data-test': 'permission-nps-approver' },
+            checked: filters.permissions === 'nps_ar_approver',
+            text: "National Permitting Service and Digitise! approver",
+            value: "nps_ar_approver"
+          },
+          {
+            attributes: { 'data-test': 'permission-nps-editor' },
+            checked: filters.permissions === 'nps_ar_user',
+            text: "National Permitting Service and Digitise! editor",
+            value: "nps_ar_user"
+          },
+          {
+            attributes: { 'data-test': 'permission-psc' },
+            checked: filters.permissions === 'psc',
+            text: "Permitting and Support Centre",
+            value: "psc"
+          },
+          {
+            attributes: { 'data-test': 'permission-super' },
+            checked: filters.permissions === 'super',
+            text: "Super user",
+            value: "super"
+          },
+          {
+            attributes: { 'data-test': 'permission-wirs' },
+            checked: filters.permissions === 'wirs',
+            text: "Waste and Industry Regulatory Service",
+            value: "wirs"
+          }
+        ],
+        name: "permissions"
+      }) }}
+
+      {# Filter by status #}
+      {{ govukRadios({
+        classes: "govuk-radios--small",
+        fieldset: {
+          legend: {
+            classes: "govuk-fieldset__legend--s",
+            isPageHeading: false,
+            text: "Status"
+          }
+        },
+        items: [
+          {
+            attributes: { 'data-test': 'status-awaiting' },
+            checked: filters.status === 'awaiting',
+            text: "Awaiting",
+            value: "awaiting"
+          },
+          {
+            attributes: { 'data-test': 'status-disabled' },
+            checked: filters.status === 'disabled',
+            text: "Disabled",
+            value: "disabled"
+          },
+          {
+            attributes: { 'data-test': 'status-enabled' },
+            checked: filters.status === 'enabled',
+            text: "Enabled",
+            value: "enabled"
+          },
+          {
+            attributes: { 'data-test': 'status-locked' },
+            checked: filters.status === 'locked',
+            text: "Locked",
+            value: "locked"
+          }
+        ],
+        name: "status"
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          preventDoubleClick: true,
+          text: "Apply filters"
+        }) }}
+
+        {{ govukButton({
+          classes: "govuk-button--secondary ",
+          name: "clearFilters",
+          preventDoubleClick: true,
+          text: "Clear filters",
+          value: 'reset'
+        }) }}
+      </div>
+    </form>
+  {% endset %}
+
+  {{ govukDetails({
+    classes: "govuk-!-margin-bottom-2",
+    html: filtersForm,
+    open: filters.openFilter,
+    summaryText: "Filters"
+  }) }}
+
+  {# Results #}
+  {% if users.length === 0 %}
+    <p>No users found.</p>
+  {% else %}
+    {% set tableRows = [] %}
+    {% for user in users %}
+      {# Set an easier to use index #}
+      {% set rowIndex = loop.index0 %}
+
+      {# Link to view the user #}
+      {% set viewLink %}
+        <a class="govuk-link" href="{{ user.link }}">{{ user.email }}</a>
+      {% endset %}
+
+      {% set userStatusTag %}
+        {{ statusTag(user.status, true) }}
+      {% endset %}
+
+      {% set tableRow = [
+        {
+          attributes: { 'data-test': 'user-email-' + rowIndex },
+          html: viewLink
+        },
+        {
+          attributes: { 'data-test': 'user-type-' + rowIndex },
+          text: user.type
+        },
+        {
+          attributes: { 'data-test': 'user-permissions-' + rowIndex },
+          text: user.permissions
+        },
+        {
+          attributes: { 'data-test': 'user-status-' + rowIndex },
+          format: 'numeric',
+          html: userStatusTag
+        }
+      ] %}
+
+      {# Push our row into the table rows array #}
+      {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      attributes: { 'data-test': 'notifications' },
+      caption: pagination.showingMessage,
+      captionClasses: "govuk-table__caption--s govuk-!-margin-bottom-2",
+      firstCellIsHeader: false,
+      head: [
+        { text: 'Email' },
+        { text: 'Type' },
+        { text: 'Permissions' },
+        { text: 'Status', format: 'numeric' }
+      ],
+      rows: tableRows
+    }) }}
+
+    {% if pagination.numberOfPages > 1 %}
+      {{ govukPagination(pagination.component) }}
+    {% endif %}
+  {% endif %}
+{% endblock %}

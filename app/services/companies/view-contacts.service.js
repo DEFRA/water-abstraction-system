@@ -11,6 +11,7 @@ const FetchCompanyService = require('./fetch-company.service.js')
 const FetchContactsService = require('./fetch-company-contacts.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
+const { readFlashNotification } = require('../../lib/general.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/contacts' page
@@ -37,7 +38,7 @@ async function go(companyId, auth, page, yar) {
     'contacts'
   )
 
-  const [notification] = yar.flash('notification')
+  const notification = readFlashNotification(yar)
 
   return {
     ...pageData,
