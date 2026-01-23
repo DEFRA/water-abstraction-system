@@ -171,6 +171,12 @@
             checked: filters.status === 'enabled',
             text: "Enabled",
             value: "enabled"
+          },
+          {
+            attributes: { 'data-test': 'status-locked' },
+            checked: filters.status === 'locked',
+            text: "Locked",
+            value: "locked"
           }
         ],
         name: "status"
