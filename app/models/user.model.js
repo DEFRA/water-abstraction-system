@@ -9,6 +9,7 @@ const { hashSync } = require('bcryptjs')
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
+const { db } = require('../../db/db.js')
 const { userPermissions } = require('../lib/static-lookups.lib.js')
 
 class UserModel extends BaseModel {
@@ -121,9 +122,15 @@ class UserModel extends BaseModel {
             rolesBuilder.select(['roles.id', 'roles.role'])
           })
       },
-      // status modifier ensures all the properties we need to determine the user's status are selected
+      // status modifier ensures all the properties we need to determine the user's status are selected. For the
+      // purposes of determining the user's status, we only need to know if their password is 'VOID'. If its not, we
+      // don't want to fetch it from the DB.
       status(query) {
-        query.select(['enabled', 'lastLogin'])
+        query.select([
+          'enabled',
+          'lastLogin',
+          db.raw(`(CASE WHEN users.password = 'VOID' THEN 'VOID' ELSE NULL END) AS "statusPassword"`)
+        ])
       }
     }
   }
@@ -198,19 +205,28 @@ class UserModel extends BaseModel {
   /**
    * Returns the user's status
    *
-   * Each user record has an `enabled` field. But they also have a `last_login`. If `enabled` is false we return
-   * 'disabled'.
+   * > We recommend adding the `status` modifier to your query if you need to determine a user's status
    *
-   * But if `enabled` is true, we also look at `last_login`. If it is null we return 'awaiting' to indicate that the
-   * user has never logged in, which means they have not responded to their invite.
+   * Each user record has an `enabled` field. If `enabled` is false we return 'disabled'.
    *
-   * If it is not null, then we return `enabled` to indicate the user is live and has been used.
+   * Where it is enabled we want to break up the users further.
+   *
+   * - **locked** - Users who have attempted to login more than 10 times and had their password set to 'VOID' to prevent
+   * further login attempts.
+   * - **awaiting** - Users who are enabled but have never logged in. This indicates they have not responded to their
+   * invite.
    *
    * @returns {string} the user's status
    */
   $status() {
     if (!this.enabled) {
       return 'disabled'
+    }
+
+    // If the modifier was used, we should have a 'statusPassword' property we can use to determine if the password is
+    // 'VOID'. If not we fall back to checking the actual password property.
+    if (this.statusPassword === 'VOID' || this.password === 'VOID') {
+      return 'locked'
     }
 
     if (!this.lastLogin) {
