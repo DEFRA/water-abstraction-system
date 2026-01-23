@@ -179,22 +179,22 @@ function flashNotification(yar, titleText = 'Updated', text = 'Changes made') {
 
 /**
  * Reads and returns the last flash notification set using yar
- * 
+ *
  * {@link https://hapi.dev/module/yar/ | yar} manages our session cookie, including flash messages. We use these when
  * we need to 'flash' a one-time message to the user on the page the user is redirected to following a form submission.
- * 
+ *
  * yar supports the concept of 'flash' messages. Once written to the session (see `flashNotification()`) they are
  * deleted when read.
- * 
+ *
  * When `yar.flash()` is called, it always returns an array, meaning we were peppering our code with different ways to
  * read the notification.
- * 
+ *
  * ```javascript
  * const [notification] = yar.flash('notification')
  * // or
  * const notification = yar.flash('notification')[0]
  * ```
- * 
+ *
  * We use this helper, along with `flashNotification()`, to standardise how we read and write flash notifications.
  *
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
