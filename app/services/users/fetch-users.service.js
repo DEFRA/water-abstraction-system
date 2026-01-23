@@ -20,7 +20,8 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * _Basic access_ is a user not linked to any groups. A _Digitise!_ user is linked to the 'nps' group and has either the
  * `ar_approver` or `ar_user` role. All other permissions the user is linked to the specified group. This includes users
  * linked to 'nps' but that have no user roles.
- * - **Status** - Where the user is disabled, enabled (has logged in) or awaiting (enabled but has not yet logged in)
+ * - **Status** - Where the user is disabled, enabled (has logged in), awaiting (enabled but has not yet logged in), or
+ * locked (password has been set to 'VOID' to prevent login)
  * - **Type** - The application the user belongs to i.e. internal or external
  *
  * @param {object} filters - an object containing the different filters to apply to the query
@@ -165,10 +166,11 @@ function _applyStatusFilter(query, status) {
   // The remaining filters relate to enabled users
   query.where('users.enabled', true)
 
-  if (status === 'awaiting') {
+  if (status === 'locked') {
+    query.where('users.password', 'VOID')
+  } else if (status === 'awaiting') {
     query.whereNull('users.lastLogin')
   } else {
-    // Status is assumed to be `enabled`
     query.whereNotNull('users.lastLogin')
   }
 }

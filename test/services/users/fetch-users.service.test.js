@@ -325,6 +325,39 @@ describe('Notices - Fetch Users service', () => {
           }
         })
       })
+
+      describe('as "Locked"', () => {
+        beforeEach(() => {
+          filters.status = 'locked'
+        })
+
+        it('returns the matching users', async () => {
+          const { results } = await FetchUsersService.go(filters, pageNumber)
+
+          // Assert the results contain our seeded users where enabled is true and password is 'VOID'
+          for (let i = 0; i < userSeedData.length; i++) {
+            const userData = userSeedData[i]
+
+            if (userData.enabled && userData.password === 'VOID') {
+              expect(results).contains(_expectedResult(i))
+            }
+          }
+        })
+
+        it('excludes those that do not match', async () => {
+          const { results } = await FetchUsersService.go(filters, pageNumber)
+
+          // Assert the results do not contain our seeded users where enabled is false, or enabled is true but password
+          // is not 'VOID'
+          for (let i = 0; i < userSeedData.length; i++) {
+            const userData = userSeedData[i]
+
+            if (!userData.enabled || userData.password !== 'VOID') {
+              expect(results).not.contains(_expectedResult(i))
+            }
+          }
+        })
+      })
     })
 
     describe('and "Type" has been set', () => {
