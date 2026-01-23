@@ -156,6 +156,18 @@ const data = [
     application: 'water_admin',
     resetGuidCreatedAt: null,
     enabled: true
+  },
+  {
+    id: 100013,
+    username: 'tina.barrett@example.co.uk',
+    password: 'VOID',
+    resetGuid: null,
+    resetRequired: 0,
+    lastLogin: new Date('2022-10-06T10:00:00Z'),
+    badLogins: 10,
+    application: 'water_vml',
+    resetGuidCreatedAt: null,
+    enabled: true
   }
 ]
 

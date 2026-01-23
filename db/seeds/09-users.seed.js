@@ -16,9 +16,10 @@ async function seed() {
     return
   }
 
-  const password = _generateHashedPassword()
+  const defaultPassword = _generateHashedPassword()
 
   for (const user of users) {
+    const password = _password(user, defaultPassword)
     const exists = await _exists(user)
 
     if (exists) {
@@ -29,6 +30,28 @@ async function seed() {
 
     await _applyRoleToExternalUsers(user)
   }
+}
+
+/**
+ * Determines the password to use for the user being seeded
+ *
+ * In nearly all cases we want to seed the user with the default password we specify in an env var then hash. This makes
+ * testing easier as all our seeded test users can be accessed with the same password.
+ *
+ * For testing purposes though we need a user who is 'locked'. Currently, this is handled by the legacy service setting
+ * their password to `VOID`. So in this case, we don't want to create or update the test user with the default password
+ * but to leave it as 'VOID'.
+ *
+ * @private
+ */
+function _password(user, defaultPassword) {
+  const { password } = user
+
+  if (password === 'VOID') {
+    return password
+  }
+
+  return defaultPassword
 }
 
 /**
