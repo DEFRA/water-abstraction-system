@@ -10,6 +10,8 @@
     {% set color = 'govuk-tag--green' %}
   {% elif status === 'disabled' %}
     {% set color = 'govuk-tag--grey' %}
+  {% elif status === 'locked' %}
+    {% set color = 'govuk-tag--orange' %}
   {% else %}
     {% set color = 'govuk-tag--blue' %}
   {% endif %}
