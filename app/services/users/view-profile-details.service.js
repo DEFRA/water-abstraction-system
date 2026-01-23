@@ -9,6 +9,7 @@ const { ref } = require('objection')
 
 const ProfileDetailsPresenter = require('../../presenters/users/profile-details.presenter.js')
 const UserModel = require('../../models/user.model.js')
+const { readFlashNotification } = require('../../lib/general.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/users/me/profile-details` page
@@ -25,7 +26,7 @@ const UserModel = require('../../models/user.model.js')
 async function go(userId, yar) {
   const profileDetails = await _fetchProfileDetails(userId)
 
-  const notification = yar.flash('notification')[0]
+  const notification = readFlashNotification(yar)
 
   const pageData = ProfileDetailsPresenter.go(profileDetails)
 

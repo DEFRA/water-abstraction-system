@@ -5,9 +5,10 @@
  * @module CheckService
  */
 
+const ApplyQuantitiesService = require('../../../services/return-logs/setup/apply-quantities.service.js')
 const CheckPresenter = require('../../../presenters/return-logs/setup/check.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
-const ApplyQuantitiesService = require('../../../services/return-logs/setup/apply-quantities.service.js')
+const { readFlashNotification } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the `/return-logs/setup/{sessionId}/check` page
@@ -24,7 +25,7 @@ async function go(sessionId, yar) {
 
   const formattedData = CheckPresenter.go(session)
 
-  const notification = yar.flash('notification')[0]
+  const notification = readFlashNotification(yar)
 
   return {
     activeNavBar: 'search',
