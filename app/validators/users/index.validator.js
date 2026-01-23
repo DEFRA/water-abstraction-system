@@ -10,7 +10,7 @@ const Joi = require('joi').extend(require('@joi/date'))
 const { userPermissions } = require('../../lib/static-lookups.lib.js')
 
 const MAX_EMAIL_LENGTH = 255
-const VALID_STATUSES = ['awaiting', 'disabled', 'enabled']
+const VALID_STATUSES = ['awaiting', 'disabled', 'enabled', 'locked']
 const VALID_TYPES = ['water_admin', 'water_vml']
 
 /**
