@@ -81,6 +81,16 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
       expect(refreshedSession.data).to.equal(
         {
+          addressJourney: {
+            activeNavBar: 'search',
+            address: {},
+            backLink: {
+              href: `/system/billing-accounts/setup/${session.id}/existing-address`,
+              text: 'Back'
+            },
+            pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+            redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+          },
           addressSelected: 'new'
         },
         { skip: ['billingAccount'] }

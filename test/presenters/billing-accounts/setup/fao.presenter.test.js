@@ -30,6 +30,7 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
       const result = FAOPresenter.go(session)
 
       expect(result).to.equal({
+        activeNavBar: 'search',
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/existing-address`,
           text: 'Back'
