@@ -5,6 +5,20 @@ const UsersController = require('../controllers/users.controller.js')
 const routes = [
   {
     method: 'GET',
+    path: '/users',
+    options: {
+      handler: UsersController.index
+    }
+  },
+  {
+    method: 'POST',
+    path: '/users',
+    options: {
+      handler: UsersController.submitIndex
+    }
+  },
+  {
+    method: 'GET',
     path: '/users/me/profile-details',
     options: {
       handler: UsersController.viewProfileDetails,

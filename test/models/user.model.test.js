@@ -393,27 +393,41 @@ describe('User model', () => {
         statusTestRecord.enabled = true
       })
 
-      describe('and ""lastLogin" is not null', () => {
+      describe('and "password" is VOID', () => {
         beforeEach(() => {
-          statusTestRecord.lastLogin = new Date()
+          statusTestRecord.password = 'VOID'
         })
 
-        it('returns "enabled"', async () => {
+        it('returns "locked"', async () => {
           const result = statusTestRecord.$status()
 
-          expect(result).to.equal('enabled')
+          expect(result).to.equal('locked')
         })
       })
 
-      describe('but "lastLogin" is null', () => {
-        beforeEach(() => {
-          statusTestRecord.lastLogin = null
+      describe('and "password" is not VOID', () => {
+        describe('and "lastLogin" is not null', () => {
+          beforeEach(() => {
+            statusTestRecord.lastLogin = new Date()
+          })
+
+          it('returns "enabled"', async () => {
+            const result = statusTestRecord.$status()
+
+            expect(result).to.equal('enabled')
+          })
         })
 
-        it('returns "awaiting"', async () => {
-          const result = statusTestRecord.$status()
+        describe('but "lastLogin" is null', () => {
+          beforeEach(() => {
+            statusTestRecord.lastLogin = null
+          })
 
-          expect(result).to.equal('awaiting')
+          it('returns "awaiting"', async () => {
+            const result = statusTestRecord.$status()
+
+            expect(result).to.equal('awaiting')
+          })
         })
       })
     })
