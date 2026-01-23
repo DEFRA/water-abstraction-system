@@ -118,6 +118,15 @@ function superUser() {
 }
 
 /**
+ * Populates a `UserModel` instance as the 'tina.barrett@example.co.uk' user for testing purposes
+ *
+ * @returns {module:UserModel} the populated `UserModel` instance
+ */
+function tinaBarrett() {
+  return user(13)
+}
+
+/**
  * Transforms a user fixture object previously generated to the `FetchUsersService` result format
  *
  * @param {object} user - The user fixture object to transform to `FetchUsersService` result format
@@ -125,7 +134,7 @@ function superUser() {
  * @returns {module:UserModel} The transformed user fixture object
  */
 function transformToFetchUsersResult(user) {
-  const { application, enabled, id, groups, lastLogin, roles, username } = user
+  const { application, enabled, id, groups, lastLogin, password, roles, username } = user
 
   return UserModel.fromJson({
     application,
@@ -138,6 +147,7 @@ function transformToFetchUsersResult(user) {
       })
     }),
     lastLogin,
+    statusPassword: password === 'VOID' ? 'VOID' : null,
     roles: roles.map((role) => {
       return RoleModel.fromJson({
         id: role.id,
@@ -218,6 +228,7 @@ module.exports = {
   permittingSupportCentre,
   rachelStevens,
   superUser,
+  tinaBarrett,
   transformToFetchUsersResult,
   user,
   wasteIndustryRegulatoryServices
