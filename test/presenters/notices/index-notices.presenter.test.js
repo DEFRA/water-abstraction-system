@@ -23,7 +23,6 @@ describe('Notices - Index Notices presenter', () => {
     auth = {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }
     }
-    notices = NoticesFixture.mapToFetchNoticesResult(NoticesFixture.notices())
   })
 
   it('correctly presents the data', () => {

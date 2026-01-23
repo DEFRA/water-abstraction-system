@@ -81,6 +81,7 @@ function select(index = -1) {
 
 module.exports = {
   add,
+  data: userRoles,
   defaults,
   select
 }
