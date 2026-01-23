@@ -36,8 +36,6 @@ async function go(filters, page) {
 
   query.orderBy('users.username', 'asc').page(page - 1, DatabaseConfig.defaultPageSize)
 
-  query.whereRaw('')
-
   return query
 }
 

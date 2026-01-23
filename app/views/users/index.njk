@@ -207,7 +207,7 @@
   }) }}
 
   {# Results #}
-  {% if users|length === 0 %}
+  {% if users.length === 0 %}
     <p>No users found.</p>
   {% else %}
     {% set tableRows = [] %}
