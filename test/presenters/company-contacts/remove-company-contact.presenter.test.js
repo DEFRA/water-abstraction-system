@@ -46,8 +46,8 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
       describe('when the "companyContact" is marked for "abstractionAlerts"', () => {
         describe('and the "abstractionAlertsCount" is 1', () => {
           beforeEach(() => {
-            // abstractionAlertsCount = 1
             companyContact.abstractionAlerts = true
+            companyContact.abstractionAlertsCount = 1
           })
 
           it('returns the warning', () => {
@@ -62,9 +62,8 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
 
         describe('and the "abstractionAlertsCount" is greater than 1', () => {
           beforeEach(() => {
-            // abstractionAlertsCount = 2
-
             companyContact.abstractionAlerts = true
+            companyContact.abstractionAlertsCount = 2
           })
 
           it('does not return the warning', () => {
@@ -77,9 +76,8 @@ describe('Company Contacts - Remove Company Contact Presenter', () => {
 
       describe('when the "companyContact" is not marked for "abstractionAlerts"', () => {
         beforeEach(() => {
-          // abstractionAlertsCount = 1
-
           companyContact.abstractionAlerts = false
+          companyContact.abstractionAlertsCount = 1
         })
 
         it('does not return the warning', () => {

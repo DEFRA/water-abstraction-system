@@ -26,11 +26,13 @@ function go(company, companyContact) {
     },
     pageTitle: `You're about to remove this contact`,
     pageTitleCaption: company.name,
-    ..._warning(companyContact, 0)
+    ..._warning(companyContact)
   }
 }
 
-function _warning(companyContact, abstractionAlertsCount) {
+function _warning(companyContact) {
+  const { abstractionAlertsCount } = companyContact
+
   if (companyContact.abstractionAlerts && abstractionAlertsCount === 1) {
     return {
       warning: {

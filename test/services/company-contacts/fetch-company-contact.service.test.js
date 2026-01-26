@@ -16,7 +16,7 @@ const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js'
 // Thing under test
 const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
 
-describe.only('Company Contacts - Fetch Company Contact service', () => {
+describe('Company Contacts - Fetch Company Contact service', () => {
   let companyContact
   let contact
 
@@ -54,7 +54,7 @@ describe.only('Company Contacts - Fetch Company Contact service', () => {
       })
     })
 
-    describe.only('when the ', () => {
+    describe('when the ', () => {
       let licenceRole
 
       beforeEach(async () => {

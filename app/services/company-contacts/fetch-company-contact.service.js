@@ -6,7 +6,7 @@
  */
 
 const CompanyContactModel = require('../../models/company-contact.model.js')
-const LicenceDocumentRoleModel = require('../../models/licence-document-role.model.js')
+const { db } = require('../../../db/db.js')
 
 /**
  * Fetches the company contact data needed for the view '/company-contacts/{id}' pages
@@ -21,27 +21,24 @@ async function go(companyContactId) {
 
 async function _fetch(companyContactId) {
   return CompanyContactModel.query()
+    .alias('cc')
     .select([
-      'id',
-      'companyId',
-      'abstractionAlerts',
-      // Add a subquery to get the total for the company
+      'cc.id',
+      'cc.companyId',
+      'cc.abstractionAlerts',
       CompanyContactModel.query()
-        // Use countDistinct on the primary key to avoid duplicates from the join
-        // .countDistinct('ccSub.id')
-        .count('abstractionAlerts')
-        .from('companyContacts as ccSub')
-        // .innerJoin('licenceDocumentRoles AS ldr', 'ldr.company_id', 'ccSub.companyId')
-        .where('ccSub.companyId', CompanyContactModel.ref('companyId'))
-        // .andWhere('ccSub.abstractionAlerts', true)
-        // .andWhere((builder) => {
-        //   builder.whereNull('ldr.end_date').orWhere('ldr.end_date', '>', CompanyContactModel.raw('NOW()'))
-        // })
+        .alias('sub_cc')
+        .countDistinct('sub_cc.id')
+        .innerJoin('licence_document_roles AS ldr', 'ldr.company_id', 'sub_cc.company_id')
+        .whereColumn('sub_cc.company_id', 'cc.companyId')
+        .where('sub_cc.abstraction_alerts', true)
+        .andWhere((builder) => {
+          builder.whereNull('ldr.end_date').orWhere('ldr.end_date', '>', db.raw('NOW()'))
+        })
         .as('abstractionAlertsCount')
     ])
-    .where('id', companyContactId)
-    .withGraphFetched('contact')
-    .modifyGraph('contact', (contactBuilder) => {
+    .where('cc.id', companyContactId)
+    .withGraphFetched('contact', (contactBuilder) => {
       contactBuilder.select([
         'id',
         'salutation',
