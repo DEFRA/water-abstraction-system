@@ -200,20 +200,6 @@ describe('Licences - Fetch Summary service', () => {
             }
           }
         ],
-        licenceDocument: {
-          id: licenceHolderSeed.licenceDocumentId,
-          licenceDocumentRoles: [
-            {
-              id: licenceHolderSeed.licenceDocumentRoleId,
-              contact: null,
-              company: {
-                id: licenceHolderSeed.companyId,
-                name: 'Licence Holder Ltd',
-                type: 'organisation'
-              }
-            }
-          ]
-        },
         licenceDocumentHeader: {
           id: licenceDocumentHeader.id,
           licenceName: 'Licence Holder Ltd',
