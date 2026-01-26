@@ -110,6 +110,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/billing-accounts/setup/{sessionId}/check',
+    options: {
+      handler: BillingAccountsSetupController.viewCheck,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/billing-accounts/setup/{sessionId}/check',
+    options: {
+      handler: BillingAccountsSetupController.submitCheck,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
   }
 ]
 
