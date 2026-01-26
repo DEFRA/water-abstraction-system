@@ -21,7 +21,7 @@ describe('Company Contacts - Fetch Company Contact service', () => {
   let contact
 
   describe('when there is a company contact', () => {
-    describe('', () => {
+    describe('when a company contact is not marked for "abstractionAlerts"', () => {
       beforeEach(async () => {
         contact = await ContactHelper.add()
 
