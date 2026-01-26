@@ -41,6 +41,8 @@ function _warning(companyContact) {
       }
     }
   }
+
+  return {}
 }
 
 module.exports = {
