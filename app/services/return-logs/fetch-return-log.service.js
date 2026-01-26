@@ -13,19 +13,19 @@ const ReturnSubmissionModel = require('../../models/return-submission.model.js')
 /**
  * Fetches the matching return log and associated submission and licence data needed for the view
  *
- * @param {string} returnId - The return log ID
+ * @param {string} returnLogId - The return log ID
  * @param {number} [version=0] - Optional version number of the submission to display. Defaults to 0 which means
  * 'current'
  *
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
  * and licence data
  */
-async function go(returnId, version = 0) {
-  const allReturnSubmissions = await _fetchAllReturnSubmissions(returnId)
+async function go(returnLogId, version = 0) {
+  const allReturnSubmissions = await _fetchAllReturnSubmissions(returnLogId)
 
   const selectedReturnSubmission = _returnSubmission(allReturnSubmissions, version)
 
-  const returnLog = await _fetch(returnId, selectedReturnSubmission)
+  const returnLog = await _fetch(returnLogId, selectedReturnSubmission)
 
   if (selectedReturnSubmission) {
     returnLog.returnSubmissions[0].$applyReadings()
@@ -35,8 +35,9 @@ async function go(returnId, version = 0) {
   return returnLog
 }
 
-async function _fetch(returnId, selectedReturnSubmission) {
+async function _fetch(returnLogId, selectedReturnSubmission) {
   const query = ReturnLogModel.query()
+    .findById(returnLogId)
     .select([
       'dueDate',
       'endDate',
@@ -57,12 +58,10 @@ async function _fetch(returnId, selectedReturnSubmission) {
       ref('metadata:isCurrent').castBool().as('current'),
       ref('metadata:isTwoPartTariff').castBool().as('twoPartTariff')
     ])
-    .where('returnId', returnId)
     .withGraphFetched('licence')
     .modifyGraph('licence', (licenceBuilder) => {
       licenceBuilder.select(['id', 'licenceRef'])
     })
-    .first()
 
   if (selectedReturnSubmission) {
     query.withGraphFetched('returnSubmissions').modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
@@ -81,10 +80,10 @@ async function _fetch(returnId, selectedReturnSubmission) {
   return query
 }
 
-async function _fetchAllReturnSubmissions(returnId) {
+async function _fetchAllReturnSubmissions(returnLogId) {
   return ReturnSubmissionModel.query()
     .select(['createdAt', 'id', 'notes', 'version', 'userId'])
-    .where('returnLogId', returnId)
+    .where('returnLogId', returnLogId)
     .orderBy('version', 'desc')
 }
 

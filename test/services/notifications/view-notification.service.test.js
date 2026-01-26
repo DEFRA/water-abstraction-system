@@ -24,7 +24,7 @@ describe('Notifications - View Notification service', () => {
   let licence
   let notice
   let notification
-  let returnId
+  let returnLogId
 
   beforeEach(() => {
     notice = NoticesFixture.returnsInvitation()
@@ -105,19 +105,19 @@ describe('Notifications - View Notification service', () => {
 
     describe('from the view return log page', () => {
       beforeEach(() => {
-        returnId = generateUUID()
+        returnLogId = generateUUID()
         Sinon.stub(FetchNotificationService, 'go').resolves({ licence: null, notification })
       })
 
       it('returns the page data for the view', async () => {
-        const result = await ViewNotificationService.go(notification.id, null, returnId)
+        const result = await ViewNotificationService.go(notification.id, null, returnLogId)
 
         expect(result).to.equal({
           activeNavBar: 'notices',
           address: [],
           alertDetails: null,
           backLink: {
-            href: `/system/return-logs/${returnId}`,
+            href: `/system/return-logs/${returnLogId}`,
             text: 'Go back to return log'
           },
           contents: notification.plaintext,

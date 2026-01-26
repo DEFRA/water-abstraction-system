@@ -88,7 +88,7 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
     )
   })
 
-  const generatedReturnLogIds = []
+  const generatedReturnIds = []
 
   // Iterate through the requirements and call CreateReturnLogsService. It will generate a return log from the data
   // provided and attempt to insert it. If it generates a return log that already exists (denoted by the return ID
@@ -100,12 +100,12 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
   // Because we've processed _all_ return requirements for the cycle, we know any return logs whose ID is not in
   // `generatedReturnLogIds` have been made redundant by whatever the 'change' was
   for (const returnRequirement of requirementsToProcess) {
-    const returnLogIds = await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
+    const returnIds = await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
 
-    generatedReturnLogIds.push(...returnLogIds)
+    generatedReturnIds.push(...returnIds)
   }
 
-  await VoidLicenceReturnLogsService.go(generatedReturnLogIds, licenceRef, returnCycle.id, changeDate)
+  await VoidLicenceReturnLogsService.go(generatedReturnIds, licenceRef, returnCycle.id, changeDate)
 }
 
 module.exports = {

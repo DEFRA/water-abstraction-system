@@ -21,7 +21,7 @@ describe('Return Logs - Setup - Received presenter', () => {
     session = {
       id: '61e07498-f309-4829-96a9-72084a54996d',
       licenceId: 'a96ce5c6-2c42-4b3f-946d-0428b5f07ce6',
-      returnId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
+      returnLogId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
       returnReference: '012345'
     }
   })

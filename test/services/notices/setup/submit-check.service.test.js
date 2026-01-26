@@ -53,8 +53,8 @@ describe('Notices - Setup - Submit Check service', () => {
         purpose: 'Spray Irrigation - Direct',
         regionCode: 3,
         regionName: 'North East',
-        returnId: generateUUID(),
-        returnLogId: `v1:3:${licenceRef}:10059610:2024-04-01:2025-03-31`,
+        returnId: `v1:3:${licenceRef}:10059610:2024-04-01:2025-03-31`,
+        returnLogId: generateUUID(),
         returnReference: '10059610',
         returnsFrequency: 'month',
         siteDescription: 'BOREHOLE AT AVALON',
@@ -67,7 +67,7 @@ describe('Notices - Setup - Submit Check service', () => {
       {
         ...fixtureData.primaryUser,
         licence_refs: [licenceRef],
-        return_log_ids: [dueReturns[0].returnId]
+        return_log_ids: [dueReturns[0].returnLogId]
       }
     ]
     Sinon.stub(FetchRecipientsService, 'go').resolves(recipients)

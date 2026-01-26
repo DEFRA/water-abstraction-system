@@ -36,7 +36,7 @@ async function go(sessionId, user) {
   if (!error) {
     await _save(session, user)
 
-    return { returnId: session.returnId }
+    return { returnLogId: session.returnLogId }
   }
 
   const formattedData = CheckPresenter.go(session)

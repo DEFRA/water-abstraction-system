@@ -36,7 +36,7 @@ async function _deleteAllTestData(endDates) {
   WHERE
     "r"."is_test" = TRUE
     AND "l"."version_id" = "v"."version_id"
-    AND "v"."return_id" = "r"."return_id";
+    AND "v"."return_log_id" = "r"."id";
 
   DELETE
   FROM
@@ -44,7 +44,7 @@ async function _deleteAllTestData(endDates) {
       USING "returns"."returns" AS "r"
   WHERE
     "r"."is_test" = TRUE
-    AND "v"."return_id" = "r"."return_id";
+    AND "v"."return_log_id" = "r"."id";
 
   DELETE
   FROM
@@ -82,14 +82,14 @@ async function _deleteAllTestData(endDates) {
         "returns"."returns" AS "r",
         "future_cycles" AS "fc"
   WHERE "r"."return_cycle_id" = "fc"."return_cycle_id"
-    AND "rv"."return_id" = "r"."return_id"
+    AND "rv"."return_log_id" = "r"."id"
     AND "rl"."version_id" = "rv"."version_id";
 
   DELETE FROM "returns".versions AS "rv"
   USING "returns"."returns" AS r,
         "future_cycles" AS "fc"
   WHERE "r"."return_cycle_id" = "fc"."return_cycle_id"
-    AND "rv"."return_id" = "r"."return_id";
+    AND "rv"."return_log_id" = "r"."id";
 
   DELETE FROM "returns"."returns" AS "r"
   USING "future_cycles" AS "fc"

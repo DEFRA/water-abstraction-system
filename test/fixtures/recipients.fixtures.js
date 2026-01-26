@@ -285,6 +285,7 @@ function returnsNoticeReturnsTo(download = false) {
     licence_ref: generateLicenceRef(),
     message_type: 'Letter',
     notificationDueDate: futureDueDate('letter'),
+    return_log_id: generateUUID(),
     return_reference: generateReference(),
     start_date: new Date('2024-04-01')
   }

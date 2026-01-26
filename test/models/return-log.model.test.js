@@ -17,6 +17,8 @@ const ReturnRequirementHelper = require('../support/helpers/return-requirement.h
 const ReturnRequirementModel = require('../../app/models/return-requirement.model.js')
 const ReturnSubmissionHelper = require('../support/helpers/return-submission.helper.js')
 const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
+const ReviewReturnHelper = require('../support/helpers/review-return.helper.js')
+const ReviewReturnModel = require('../../app/models/review-return.model.js')
 
 // Thing under test
 const ReturnLogModel = require('../../app/models/return-log.model.js')
@@ -27,6 +29,7 @@ describe('Return Log model', () => {
   let testReturnCycle
   let testReturnRequirements
   let testReturnSubmissions
+  let testReviewReturns
 
   before(async () => {
     testLicence = await LicenceHelper.add()
@@ -42,9 +45,16 @@ describe('Return Log model', () => {
     testReturnSubmissions = []
     for (let i = 0; i < 2; i++) {
       const version = i
-      const returnSubmission = await ReturnSubmissionHelper.add({ returnLogId: testRecord.returnId, version })
+      const returnSubmission = await ReturnSubmissionHelper.add({ returnLogId: testRecord.id, version })
 
       testReturnSubmissions.push(returnSubmission)
+    }
+
+    testReviewReturns = []
+    for (let i = 0; i < 2; i++) {
+      const reviewReturn = await ReviewReturnHelper.add({ returnLogId: testRecord.id })
+
+      testReviewReturns.push(reviewReturn)
     }
   })
 
@@ -129,6 +139,26 @@ describe('Return Log model', () => {
         expect(result.returnSubmissions[0]).to.be.an.instanceOf(ReturnSubmissionModel)
         expect(result.returnSubmissions).to.include(testReturnSubmissions[0])
         expect(result.returnSubmissions).to.include(testReturnSubmissions[1])
+      })
+    })
+
+    describe('when linking to review returns', () => {
+      it('can successfully run a related query', async () => {
+        const query = await ReturnLogModel.query().innerJoinRelated('reviewReturns')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the review returns', async () => {
+        const result = await ReturnLogModel.query().findById(testRecord.id).withGraphFetched('reviewReturns')
+
+        expect(result).to.be.instanceOf(ReturnLogModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.reviewReturns).to.be.an.array()
+        expect(result.reviewReturns[0]).to.be.an.instanceOf(ReviewReturnModel)
+        expect(result.reviewReturns).to.include(testReviewReturns[0])
+        expect(result.reviewReturns).to.include(testReviewReturns[1])
       })
     })
   })

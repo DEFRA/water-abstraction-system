@@ -13,8 +13,16 @@
  * @returns {object} page data needed by the view template
  */
 function go(returnLog) {
-  const { licenceId, licenceRef, purposes, returnId, returnReference, siteDescription, status, submissionCount } =
-    returnLog
+  const {
+    id: returnLogId,
+    licenceId,
+    licenceRef,
+    purposes,
+    returnReference,
+    siteDescription,
+    status,
+    submissionCount
+  } = returnLog
 
   return {
     licenceId,
@@ -24,7 +32,7 @@ function go(returnLog) {
     siteDescription,
     status,
     viewReturnsLink: `/system/licences/${licenceId}/returns`,
-    viewThisReturnLink: `/system/return-logs/${returnId}`
+    viewThisReturnLink: `/system/return-logs/${returnLogId}`
   }
 }
 

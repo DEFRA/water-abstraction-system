@@ -37,9 +37,9 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
     nullDueDateReturnLog = await ReturnLogHelper.add({
       dueDate: null,
       endDate: new Date('2025-03-01'),
+      id: returnLogIds[0],
       licenceRef,
       quarterly: false,
-      returnId: returnLogIds[0],
       startDate: new Date('2024-04-01')
     })
 
@@ -47,9 +47,9 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
     setDueDateReturnLog = await ReturnLogHelper.add({
       dueDate: '2025-04-28',
       endDate: new Date('2025-03-01'),
+      id: returnLogIds[1],
       licenceRef,
       quarterly: false,
-      returnId: returnLogIds[1],
       startDate: new Date('2024-04-01')
     })
 
@@ -82,7 +82,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
         // feature in the `return_log_ids` property of the result
         const sendingResult = RecipientsSeeder.transformToSendingResult({
           ...licenceHolder,
-          returnLogIds: [setDueDateReturnLog.returnId]
+          returnLogIds: [setDueDateReturnLog.id]
         })
 
         // And we know the query will _always_ return a `due_date_status` of 'all populated', and the latest due date
@@ -133,7 +133,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
         // feature in the `return_log_ids` property of the result
         const sendingResult = RecipientsSeeder.transformToSendingResult({
           ...licenceHolder,
-          returnLogIds: [setDueDateReturnLog.returnId]
+          returnLogIds: [setDueDateReturnLog.id]
         })
 
         // And we know the query will _always_ return a `due_date_status` of 'all populated', and the latest due date

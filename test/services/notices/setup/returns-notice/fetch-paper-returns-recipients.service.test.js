@@ -33,7 +33,7 @@ describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients serv
 
     licenceHolder = await RecipientsSeeder.licenceHolder('Test Licence Holder', licenceRef)
     licenceHolder.licenceRefs = [licenceRef]
-    licenceHolder.returnLogIds = [setDueDateReturnLog.returnId]
+    licenceHolder.returnLogIds = [setDueDateReturnLog.id]
   })
 
   after(async () => {

@@ -288,7 +288,7 @@ function notification() {
  * @returns {object} The generated paper return notification object
  */
 function paperReturn(notice) {
-  const returnId = generateUUID()
+  const returnLogId = generateUUID()
 
   const notification = {
     contactType: 'licence holder',
@@ -304,7 +304,7 @@ function paperReturn(notice) {
     pdf: Buffer.from('I am a paper return'),
     personalisation: {
       ...ADDRESS,
-      qr_url: returnId,
+      qr_url: returnLogId,
       purpose: 'Potable Water Supply - Direct',
       due_date: '2025-04-28',
       end_date: '2025-03-31',
@@ -320,7 +320,7 @@ function paperReturn(notice) {
     },
     plaintext: null,
     returnedAt: null,
-    returnLogIds: [returnId],
+    returnLogIds: [returnLogId],
     status: 'sent',
     templateId: null
   }
