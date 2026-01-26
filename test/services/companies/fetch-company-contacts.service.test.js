@@ -4,57 +4,46 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, after, afterEach } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
 const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 
 // Thing under test
 const FetchCompanyContactsService = require('../../../app/services/companies/fetch-company-contacts.service.js')
 
-describe('Companies - Fetch Company Contacts service', () => {
+describe.only('Companies - Fetch Company Contacts service', () => {
   let additionalCompanyContact
-  let company
   let companyContact
   let contact
   let licenceRole
 
   before(async () => {
-    contact = await ContactHelper.add()
-    company = await CompanyHelper.add()
-
     licenceRole = LicenceRoleHelper.select('additionalContact')
 
+    contact = await ContactHelper.add()
+
     companyContact = await CompanyContactHelper.add({
-      companyId: company.id,
       contactId: contact.id,
       licenceRoleId: licenceRole.id
     })
 
-    // Add additional contact - not related to the company
-    additionalCompanyContact = await ContactHelper.add()
-
-    await CompanyContactHelper.add({
-      contactId: additionalCompanyContact.id
-    })
-  })
-
-  afterEach(async () => {
-    await companyContact.$query().delete()
-    await additionalCompanyContact.$query().delete()
+    // Add additional contact - not related to the same company
+    additionalCompanyContact = await CompanyContactHelper.add({ contactId: contact.id })
   })
 
   after(async () => {
     await contact.$query().delete()
+    await companyContact.$query().delete()
+    await additionalCompanyContact.$query().delete()
   })
 
   describe('when there is a company contact', () => {
     it('returns the matching company', async () => {
-      const result = await FetchCompanyContactsService.go(company.id)
+      const result = await FetchCompanyContactsService.go(companyContact.companyId)
 
       expect(result).to.equal({
         companyContacts: [
