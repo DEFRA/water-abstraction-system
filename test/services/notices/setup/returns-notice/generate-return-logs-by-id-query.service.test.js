@@ -40,7 +40,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
     returnLogs.push(returnLog)
 
     returnLogIds = returnLogs.map((returnLog) => {
-      return returnLog.returnId
+      return returnLog.id
     })
   })
 
@@ -61,14 +61,14 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
     rl.due_date,
     rl.end_date,
     rl.licence_ref,
-    rl.return_id,
+    rl.id AS return_log_id,
     rl.return_reference,
     rl.start_date
   FROM
     public.return_logs rl
   WHERE
     rl.status = 'due'
-    AND rl.return_id = ANY (?)
+    AND rl.id = ANY (?)
   `
       })
     })
@@ -84,7 +84,7 @@ describe('Notices - Setup - Returns Notice - Generate Return Logs By ID Query Se
           due_date: returnLogs[0].dueDate,
           end_date: returnLogs[0].endDate,
           licence_ref: returnLogs[0].licenceRef,
-          return_id: returnLogs[0].returnId,
+          return_log_id: returnLogs[0].id,
           return_reference: returnLogs[0].returnReference,
           start_date: returnLogs[0].startDate
         }

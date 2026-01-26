@@ -15,9 +15,9 @@ describe('Return Logs - Setup - Confirmed presenter', () => {
 
   beforeEach(() => {
     returnLog = {
+      id: '1f4287ca-b8c5-4034-957f-5d642cdf19d5',
       licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
       licenceRef: '01/117',
-      returnId: '1f4287ca-b8c5-4034-957f-5d642cdf19d5',
       returnReference: '10032788',
       status: 'received',
       submissionCount: 0,

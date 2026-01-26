@@ -125,7 +125,7 @@ WITH
       drl.end_date,
       ldh.licence_ref,
       ldh.metadata,
-      drl.return_id,
+      drl.return_log_id,
       drl.return_reference,
       drl.start_date
     FROM public.licence_document_headers ldh
@@ -176,7 +176,7 @@ WITH
       (NULL) AS email,
       a.licence_ref,
       ('Letter') as message_type,
-      a.return_id,
+      a.return_log_id,
       a.return_reference,
       a.start_date
     FROM
@@ -269,7 +269,7 @@ function _primaryUserQuery(noticeType) {
       le."name" AS email,
       a.licence_ref,
       ('Email') as message_type,
-      a.return_id,
+      a.return_log_id,
       a.return_reference,
       a.start_date
     FROM
@@ -291,7 +291,7 @@ function _processForDownloading() {
   -- Where a contact is duplicated, for example, licence holder and returns to are the same
   -- it selects the one with the highest priority and joins it to the due returns log data
   results AS (
-    SELECT DISTINCT ON (contact_hash_id, return_id)
+    SELECT DISTINCT ON (contact_hash_id, return_log_id)
       ac.contact,
       ac.contact_hash_id,
       ac.contact_type,
@@ -302,7 +302,7 @@ function _processForDownloading() {
       ldd.latest_due_date,
       ac.licence_ref,
       ac.message_type,
-      ac.return_id,
+      ac.return_log_id,
       ac.return_reference,
       ac.start_date
     FROM
@@ -313,7 +313,7 @@ function _processForDownloading() {
       ON dds.contact_hash_id = ac.contact_hash_id
     ORDER BY
       contact_hash_id,
-      return_id,
+      return_log_id,
       priority
   )
   `
@@ -328,7 +328,7 @@ function _processForSending() {
     SELECT
       contact_hash_id,
       JSON_AGG(DISTINCT licence_ref ORDER BY licence_ref) AS licence_refs,
-      JSON_AGG(DISTINCT return_id ORDER BY return_id) AS return_ids
+      JSON_AGG(DISTINCT return_log_id ORDER BY return_log_id) AS return_log_ids
     FROM all_contacts
     GROUP BY contact_hash_id
   ),
@@ -345,7 +345,7 @@ function _processForSending() {
       ldd.latest_due_date,
       acd.licence_refs,
       ac.message_type,
-      acd.return_ids AS return_log_ids
+      acd.return_log_ids
     FROM
       all_contacts ac
     LEFT JOIN latest_due_date ldd
@@ -373,7 +373,7 @@ function _noRecipientsQuery() {
       NULL::text AS email,
       NULL::text AS licence_ref,
       ('none') as message_type,
-      NULL::uuid AS return_id,
+      NULL::uuid AS return_log_id,
       NULL::text AS return_reference,
       NULL::date AS start_date
     WHERE FALSE
@@ -393,7 +393,7 @@ function _returnsAgentQuery(noticeType) {
       le."name" AS email,
       a.licence_ref,
       ('Email') as message_type,
-      a.return_id,
+      a.return_log_id,
       a.return_reference,
       a.start_date
     FROM

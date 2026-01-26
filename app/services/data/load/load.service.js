@@ -171,7 +171,7 @@ const LOAD_HELPERS = {
     test: true,
     legacy: { schema: 'returns', table: 'return_cycles', id: 'return_cycle_id' }
   },
-  returnLogs: { helper: ReturnLogHelper, test: true, legacy: { schema: 'returns', table: 'returns', id: 'return_id' } },
+  returnLogs: { helper: ReturnLogHelper, test: true, legacy: { schema: 'returns', table: 'returns', id: 'id' } },
   returnRequirementPoints: { helper: ReturnRequirementPointHelper, test: false },
   returnRequirementPurposes: { helper: ReturnRequirementPurposeHelper, test: false },
   returnRequirements: { helper: ReturnRequirementHelper, test: false },

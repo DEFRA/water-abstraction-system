@@ -98,7 +98,8 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
           secondary: { code: 'AGR', description: 'General Agriculture' }
         }
       ],
-      returnId: returnLog.id,
+      returnId: returnLog.returnId,
+      returnLogId: returnLog.id,
       reviewLicenceId: reviewLicence.id
     })
 
@@ -160,6 +161,7 @@ describe('Bill Runs Review - Fetch Review Licence service', () => {
               }
             ],
             returnId: reviewReturn.returnId,
+            returnLogId: reviewReturn.returnLogId,
             returnReference: reviewReturn.returnReference,
             returnStatus: 'completed',
             startDate: new Date('2022-04-01'),

@@ -138,7 +138,7 @@ describe('Notifications - Check Notification Status service', () => {
             )
 
             expect(returnLogWhereInStub.called).to.be.true()
-            expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+            expect(returnLogWhereInStub.firstCall.args[0]).to.equal('id')
             expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
           })
         })
@@ -271,7 +271,7 @@ describe('Notifications - Check Notification Status service', () => {
             )
 
             expect(returnLogWhereInStub.called).to.be.true()
-            expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+            expect(returnLogWhereInStub.firstCall.args[0]).to.equal('id')
             expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
           })
         })
@@ -861,7 +861,7 @@ describe('Notifications - Check Notification Status service', () => {
           )
 
           expect(returnLogWhereInStub.called).to.be.true()
-          expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+          expect(returnLogWhereInStub.firstCall.args[0]).to.equal('id')
           expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
         })
       })

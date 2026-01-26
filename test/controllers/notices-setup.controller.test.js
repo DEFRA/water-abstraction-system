@@ -919,7 +919,7 @@ describe('Notices Setup controller', () => {
     })
   })
 
-  describe('/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnId}', () => {
+  describe('/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnLogId}', () => {
     describe('GET', () => {
       let buffer
 

@@ -20,12 +20,12 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  * return log to unmark it. When the user is redirected back to the view return log page the notification will be gone.
  *
  * @param {object} payload - The submitted form data
- * @param {string} returnId - The id of the return log to update
+ * @param {string} returnLogId - The id of the return log to update
  */
-async function go(payload, returnId) {
+async function go(payload, returnLogId) {
   const underQuery = payload['mark-query'] === 'mark'
 
-  await ReturnLogModel.query().patch({ underQuery, updatedAt: timestampForPostgres() }).where('returnId', returnId)
+  await ReturnLogModel.query().patch({ underQuery, updatedAt: timestampForPostgres() }).findById(returnLogId)
 }
 
 module.exports = {

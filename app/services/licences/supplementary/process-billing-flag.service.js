@@ -54,7 +54,7 @@ async function go(payload) {
  *
  * This function takes a payload and determines which flags should be set for supplementary billing.
  * It does this by calling the relevant service based on the presence of certain properties in the payload,
- * such as `licenceId`, `importedLicence`, `chargeVersionId`, `returnId`, `workflowId`, and `billLicenceId`.
+ * such as `licenceId`, `importedLicence`, `chargeVersionId`, `returnLogId`, `workflowId`, and `billLicenceId`.
  * The results are then returned.
  *
  * @private

@@ -36,21 +36,21 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
 
     // Create a return log with a null `dueDate`.
     nullDueDateReturnLog = await ReturnLogHelper.add({
+      id: returnLogIds[0],
       dueDate: null,
       endDate: new Date('2025-03-01'),
       licenceRef,
       quarterly: false,
-      returnId: returnLogIds[0],
       startDate: new Date('2024-04-01')
     })
 
     // Create a return log with a populated `dueDate`.
     setDueDateReturnLog = await ReturnLogHelper.add({
+      id: returnLogIds[1],
       dueDate: '2025-04-28',
       endDate: new Date('2025-03-01'),
       licenceRef,
       quarterly: false,
-      returnId: returnLogIds[1],
       startDate: new Date('2024-04-01')
     })
 
@@ -82,7 +82,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
         // query that will fetch any due return logs
         const sendingResult = RecipientsSeeder.transformToSendingResult({
           ...licenceHolder,
-          returnLogIds: [nullDueDateReturnLog.returnId, setDueDateReturnLog.returnId].sort()
+          returnLogIds: [nullDueDateReturnLog.id, setDueDateReturnLog.id].sort()
         })
 
         // In our scenario we have a mix of return logs with and without due dates, so the query will return a
@@ -140,7 +140,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
         // date will feature in the `return_log_ids` property of the result
         const sendingResult = RecipientsSeeder.transformToSendingResult({
           ...licenceHolder,
-          returnLogIds: [nullDueDateReturnLog.returnId]
+          returnLogIds: [nullDueDateReturnLog.id]
         })
 
         // And we know the query will _always_ return a `due_date_status` of 'all nulls', and the latest due date

@@ -64,11 +64,11 @@ describe('Match Returns To Charge Element Service', () => {
         returnLogs: [
           {
             allocatedQuantity: 0,
-            returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31'
+            returnLogId: '870c6cae-1f31-4e0e-bdd1-4df07b31084e'
           },
           {
             allocatedQuantity: 0,
-            returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2023-10-01'
+            returnLogId: '9341b05c-b24d-4c03-b5e3-fa19950b04d0'
           }
         ]
       })
@@ -94,7 +94,7 @@ describe('Match Returns To Charge Element Service', () => {
         expect(chargeElement.returnLogs).to.equal([
           {
             allocatedQuantity: 0,
-            returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31'
+            returnLogId: '870c6cae-1f31-4e0e-bdd1-4df07b31084e'
           }
         ])
       })
@@ -121,7 +121,7 @@ describe('Match Returns To Charge Element Service', () => {
         expect(chargeElement.returnLogs).to.equal([
           {
             allocatedQuantity: 0,
-            returnId: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31'
+            returnLogId: '870c6cae-1f31-4e0e-bdd1-4df07b31084e'
           }
         ])
       })
@@ -161,7 +161,7 @@ describe('Match Returns To Charge Element Service', () => {
 function _testReturnLogs() {
   return [
     {
-      id: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2022-10-31',
+      id: '870c6cae-1f31-4e0e-bdd1-4df07b31084e',
       purposes: [
         {
           alias: 'Spray Irrigation - Direct',
@@ -180,7 +180,7 @@ function _testReturnLogs() {
       reviewReturnId: '5f86823b-2384-48ca-b20f-e0f178122a0f'
     },
     {
-      id: 'v1:6:11/42/18.6.3/295:10055412:2021-11-01:2023-10-01',
+      id: '9341b05c-b24d-4c03-b5e3-fa19950b04d0',
       purposes: [
         {
           alias: 'Spray Irrigation - Direct',

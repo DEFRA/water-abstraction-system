@@ -29,7 +29,7 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnId}',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnLogId}',
     options: {
       handler: NoticesSetupController.processPreviewPaperReturn,
       auth: {

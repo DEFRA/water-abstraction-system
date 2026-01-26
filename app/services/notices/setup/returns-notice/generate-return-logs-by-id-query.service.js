@@ -27,14 +27,14 @@ function _query() {
     rl.due_date,
     rl.end_date,
     rl.licence_ref,
-    rl.return_id,
+    rl.id AS return_log_id,
     rl.return_reference,
     rl.start_date
   FROM
     public.return_logs rl
   WHERE
     rl.status = 'due'
-    AND rl.return_id = ANY (?)
+    AND rl.id = ANY (?)
   `
 }
 

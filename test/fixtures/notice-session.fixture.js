@@ -213,7 +213,7 @@ function paperReturn(licenceRef = null, selectedReturnLog = null) {
     notificationDueDate: null,
     notificationType: NoticeTypes[NoticeType.PAPER_RETURN].notificationType,
     referenceCode,
-    selectedReturns: [dueReturn.returnId],
+    selectedReturns: [dueReturn.returnLogId],
     subType: NoticeTypes[NoticeType.PAPER_RETURN].subType
   }
 }
@@ -331,8 +331,8 @@ function _generateReturnLog(licenceRef) {
     purpose: 'Spray Irrigation - Direct',
     regionCode: region.naldRegionId,
     regionName: region.name,
-    returnId: generateUUID(),
-    returnLogId: `v1:2:${licenceRef}:${returnReference}:2024-04-01:2025-03-31`,
+    returnId: `v1:2:${licenceRef}:${returnReference}:2024-04-01:2025-03-31`,
+    returnLogId: generateUUID(),
     returnReference,
     returnsFrequency: 'month',
     siteDescription: 'Death star trench',

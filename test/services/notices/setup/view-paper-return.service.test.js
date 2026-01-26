@@ -27,7 +27,7 @@ describe('Notices - Setup - View Paper Return service', () => {
     dueReturn = {
       siteDescription: 'Potable Water Supply - Direct',
       endDate: '2003-03-31',
-      returnId: generateUUID(),
+      returnLogId: generateUUID(),
       returnReference: '3135',
       startDate: '2002-04-01'
     }
@@ -55,7 +55,7 @@ describe('Notices - Setup - View Paper Return service', () => {
               text: '1 April 2002 to 31 March 2003'
             },
             text: `${dueReturn.returnReference} Potable Water Supply - Direct`,
-            value: dueReturn.returnId
+            value: dueReturn.returnLogId
           }
         ]
       })
