@@ -45,10 +45,8 @@ describe('Companies - Fetch Company Contacts service', () => {
 
   afterEach(async () => {
     await companyContact.$query().delete()
-
-    if (additionalCompanyContact) {
-      await additionalCompanyContact.$query().delete()
-    }
+    await companyContact.$query().delete()
+    await additionalCompanyContact.$query().delete()
   })
 
   after(async () => {
