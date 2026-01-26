@@ -5,8 +5,10 @@
  * @module BillingAccountsSetupController
  */
 
+const CheckService = require('../services/billing-accounts/setup/check.service.js')
 const InitiateSessionService = require('../services/billing-accounts/setup/initiate-session.service.js')
 const SubmitAccountService = require('../services/billing-accounts/setup/submit-account.service.js')
+const SubmitCheckService = require('../services/billing-accounts/setup/submit-check.service.js')
 const SubmitExistingAccountService = require('../services/billing-accounts/setup/submit-existing-account.service.js')
 const SubmitExistingAddressService = require('../services/billing-accounts/setup/submit-existing-address.service.js')
 const SubmitFAOService = require('../services/billing-accounts/setup/submit-fao.service.js')
@@ -21,6 +23,16 @@ async function setup(request, h) {
   const session = await InitiateSessionService.go(billingAccountId)
 
   return h.redirect(`/system/billing-accounts/setup/${session.id}/account`)
+}
+
+async function submitCheck(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  await SubmitCheckService.go(sessionId)
+
+  return h.redirect(`/system/billing-accounts/setup/${sessionId}`)
 }
 
 async function submitFAO(request, h) {
@@ -80,6 +92,14 @@ async function submitAccount(request, h) {
   return h.redirect(`/system/billing-accounts/setup/${sessionId}/existing-account`)
 }
 
+async function viewCheck(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await CheckService.go(sessionId)
+
+  return h.view(`billing-accounts/setup/check.njk`, pageData)
+}
+
 async function viewExistingAccount(request, h) {
   const { sessionId } = request.params
 
@@ -134,9 +154,11 @@ async function submitExistingAccount(request, h) {
 module.exports = {
   setup,
   submitAccount,
+  submitCheck,
   submitExistingAccount,
   submitExistingAddress,
   submitFAO,
+  viewCheck,
   viewAccount,
   viewExistingAccount,
   viewExistingAddress,
