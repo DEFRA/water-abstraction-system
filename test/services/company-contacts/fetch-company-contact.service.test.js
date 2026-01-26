@@ -54,7 +54,7 @@ describe('Company Contacts - Fetch Company Contact service', () => {
       })
     })
 
-    describe('when the ', () => {
+    describe('when a company contact is marked for "abstractionAlerts"', () => {
       let licenceRole
 
       beforeEach(async () => {
@@ -74,20 +74,20 @@ describe('Company Contacts - Fetch Company Contact service', () => {
           licenceRoleId: licenceRole.id
         })
 
-        const tt = await CompanyContactHelper.add({
+        const additionalCompanyContact = await CompanyContactHelper.add({
           contactId: contact.id,
           abstractionAlerts: true
         })
 
         await LicenceDocumentRoleHelper.add({
-          companyId: tt.companyId,
+          companyId: additionalCompanyContact.companyId,
           contactId: contact.id,
           endDate: new Date('1999-01-01'),
           licenceRoleId: licenceRole.id
         })
       })
 
-      it('returns the matching company', async () => {
+      it('returns the matching company (with the "abstractionAlertsCount")', async () => {
         const result = await FetchCompanyContactService.go(companyContact.id)
 
         expect(result).to.equal({
@@ -108,6 +108,12 @@ describe('Company Contacts - Fetch Company Contact service', () => {
             email: 'amara.gupta@example.com'
           }
         })
+      })
+
+      it('returns the "abstractionAlertsCount"', async () => {
+        const result = await FetchCompanyContactService.go(companyContact.id)
+
+        expect(result.abstractionAlertsCount).to.equal(1)
       })
     })
   })

@@ -38,7 +38,8 @@ async function _fetch(companyContactId) {
         .as('abstractionAlertsCount')
     ])
     .where('cc.id', companyContactId)
-    .withGraphFetched('contact', (contactBuilder) => {
+    .withGraphFetched('contact')
+    .modifyGraph('contact', (contactBuilder) => {
       contactBuilder.select([
         'id',
         'salutation',
