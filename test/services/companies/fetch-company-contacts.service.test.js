@@ -12,7 +12,6 @@ const CompanyContactHelper = require('../../support/helpers/company-contact.help
 const CompanyHelper = require('../../support/helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
 const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
-const LicenceDocumentRoleHelper = require('../../support/helpers/licence-document-role.helper.js')
 
 // Thing under test
 const FetchContactsService = require('../../../app/services/companies/fetch-company-contacts.service.js')
@@ -37,28 +36,11 @@ describe('Companies - Fetch Company Contacts service', () => {
         licenceRoleId: licenceRole.id
       })
 
-      const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
-        companyId: company.id,
-        contactId: contact.id,
-        endDate: null,
-        licenceRoleId: licenceRole.id
-      })
-
       // Add additional contact - not related to the company
       const additionalContact = await ContactHelper.add()
 
       await CompanyContactHelper.add({
         contactId: additionalContact.id
-      })
-
-      // additional licence role in the past
-      await LicenceDocumentRoleHelper.add({
-        companyId: company.id,
-        contactId: contact.id,
-        startDate: new Date('2001-01-01'),
-        endDate: new Date('2001-01-01'),
-        licenceDocumentId: licenceDocumentRole.id,
-        licenceRoleId: licenceRole.id
       })
     })
 

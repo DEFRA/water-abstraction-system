@@ -10,8 +10,6 @@ const { expect } = Code
 // Test helpers
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
-const LicenceDocumentRoleHelper = require('../../support/helpers/licence-document-role.helper.js')
-const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 
 // Thing under test
 const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
@@ -55,8 +53,6 @@ describe('Company Contacts - Fetch Company Contact service', () => {
     })
 
     describe('when a company contact is marked for "abstractionAlerts"', () => {
-      let licenceRole
-
       beforeEach(async () => {
         contact = await ContactHelper.add()
 
@@ -65,25 +61,10 @@ describe('Company Contacts - Fetch Company Contact service', () => {
           abstractionAlerts: true
         })
 
-        licenceRole = LicenceRoleHelper.select('additionalContact')
-
-        await LicenceDocumentRoleHelper.add({
-          companyId: companyContact.companyId,
-          contactId: contact.id,
-          endDate: null,
-          licenceRoleId: licenceRole.id
-        })
-
-        const additionalCompanyContact = await CompanyContactHelper.add({
+        // Add a company contact to the company
+        await CompanyContactHelper.add({
           contactId: contact.id,
           abstractionAlerts: true
-        })
-
-        await LicenceDocumentRoleHelper.add({
-          companyId: additionalCompanyContact.companyId,
-          contactId: contact.id,
-          endDate: new Date('1999-01-01'),
-          licenceRoleId: licenceRole.id
         })
       })
 

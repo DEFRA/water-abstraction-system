@@ -6,7 +6,6 @@
  */
 
 const CompanyContactModel = require('../../models/company-contact.model.js')
-const { db } = require('../../../db/db.js')
 
 /**
  * Fetches the company contact data needed for the view '/company-contacts/{id}' pages
@@ -21,23 +20,18 @@ async function go(companyContactId) {
 
 async function _fetch(companyContactId) {
   return CompanyContactModel.query()
-    .alias('cc')
     .select([
-      'cc.id',
-      'cc.companyId',
-      'cc.abstractionAlerts',
+      'companyContacts.id',
+      'companyContacts.companyId',
+      'companyContacts.abstractionAlerts',
       CompanyContactModel.query()
-        .alias('sub_cc')
-        .countDistinct('sub_cc.id')
-        .innerJoin('licence_document_roles AS ldr', 'ldr.company_id', 'sub_cc.company_id')
-        .whereColumn('sub_cc.company_id', 'cc.companyId')
-        .where('sub_cc.abstraction_alerts', true)
-        .andWhere((builder) => {
-          builder.whereNull('ldr.end_date').orWhere('ldr.end_date', '>', db.raw('NOW()'))
-        })
+        .alias('subCompanyContacts')
+        .count('subCompanyContacts.id')
+        .whereColumn('subCompanyContacts.company_id', 'companyContacts.companyId')
+        .where('subCompanyContacts.abstraction_alerts', true)
         .as('abstractionAlertsCount')
     ])
-    .where('cc.id', companyContactId)
+    .where('companyContacts.id', companyContactId)
     .withGraphFetched('contact')
     .modifyGraph('contact', (contactBuilder) => {
       contactBuilder.select([
