@@ -17,9 +17,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/select-account',
+    path: '/billing-accounts/setup/{sessionId}/account',
     options: {
-      handler: BillingAccountsSetupController.viewSelectAccount,
+      handler: BillingAccountsSetupController.viewAccount,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -29,9 +29,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/select-account',
+    path: '/billing-accounts/setup/{sessionId}/account',
     options: {
-      handler: BillingAccountsSetupController.submitSelectAccount,
+      handler: BillingAccountsSetupController.submitAccount,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -80,6 +80,54 @@ const routes = [
     path: '/billing-accounts/setup/{sessionId}/existing-account',
     options: {
       handler: BillingAccountsSetupController.submitExistingAccount,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/billing-accounts/setup/{sessionId}/fao',
+    options: {
+      handler: BillingAccountsSetupController.viewFAO,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/billing-accounts/setup/{sessionId}/fao',
+    options: {
+      handler: BillingAccountsSetupController.submitFAO,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/billing-accounts/setup/{sessionId}/check',
+    options: {
+      handler: BillingAccountsSetupController.viewCheck,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/billing-accounts/setup/{sessionId}/check',
+    options: {
+      handler: BillingAccountsSetupController.submitCheck,
       auth: {
         access: {
           scope: ['manage_billing_accounts']

@@ -34,7 +34,8 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
 
   beforeEach(() => {
     session = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+      billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+      id: generateUUID()
     }
   })
 
@@ -43,8 +44,9 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       const result = ExistingAddressPresenter.go(session, addresses)
 
       expect(result).to.equal({
+        activeNavBar: 'search',
         backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/select-account`,
+          href: `/system/billing-accounts/setup/${session.id}/account`,
           text: 'Back'
         },
         items: [

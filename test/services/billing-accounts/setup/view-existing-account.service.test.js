@@ -31,8 +31,9 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
       const result = await ViewExistingAccountService.go(session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'search',
         backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/select-account`,
+          href: `/system/billing-accounts/setup/${session.id}/account`,
           text: 'Back'
         },
         items: [

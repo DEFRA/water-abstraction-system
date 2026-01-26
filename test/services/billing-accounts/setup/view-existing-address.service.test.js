@@ -20,7 +20,7 @@ const FetchExistingAddressesService = require('../../../../app/services/billing-
 // Thing under test
 const ViewExistingAddressService = require('../../../../app/services/billing-accounts/setup/view-existing-address.service.js')
 
-describe('Billing Accounts - Setup - Select Existing Address Service', () => {
+describe('Billing Accounts - Setup - View Existing Address Service', () => {
   const addresses = _addresses()
   let session
   let sessionData
@@ -44,8 +44,9 @@ describe('Billing Accounts - Setup - Select Existing Address Service', () => {
       const result = await ViewExistingAddressService.go(session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'search',
         backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/select-account`,
+          href: `/system/billing-accounts/setup/${session.id}/account`,
           text: 'Back'
         },
         items: [

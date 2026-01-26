@@ -7,6 +7,8 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+
 // Test helpers
 const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtures.js')
 
@@ -19,7 +21,8 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
   describe('when called for the first time', () => {
     beforeEach(() => {
       session = {
-        billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+        billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+        id: generateUUID()
       }
     })
 
@@ -27,8 +30,9 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       const result = ExistingAccountPresenter.go(session)
 
       expect(result).to.equal({
+        activeNavBar: 'search',
         backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/select-account`,
+          href: `/system/billing-accounts/setup/${session.id}/account`,
           text: 'Back'
         },
         items: [
@@ -58,8 +62,9 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       const result = ExistingAccountPresenter.go(session)
 
       expect(result).to.equal({
+        activeNavBar: 'search',
         backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/select-account`,
+          href: `/system/billing-accounts/setup/${session.id}/account`,
           text: 'Back'
         },
         items: [

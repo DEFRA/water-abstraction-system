@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -12,9 +12,9 @@ const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtu
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ViewSelectAccountService = require('../../../../app/services/billing-accounts/setup/view-select-account.service.js')
+const CheckService = require('../../../../app/services/billing-accounts/setup/check.service.js')
 
-describe('Billing Accounts - Setup - Select Account Service', () => {
+describe('Billing Accounts - Setup - View Check Service', () => {
   let session
   let sessionData
 
@@ -26,24 +26,18 @@ describe('Billing Accounts - Setup - Select Account Service', () => {
     session = await SessionHelper.add({ data: sessionData })
   })
 
-  afterEach(async () => {
-    await session.$query().delete()
-  })
-
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewSelectAccountService.go(session.id)
+      const result = await CheckService.go(session.id)
 
       expect(result).to.equal({
-        accountSelected: null,
-        companyName: session.billingAccount.company.name,
+        activeNavBar: 'search',
         backLink: {
-          href: `/system/billing-accounts/${session.billingAccount.id}`,
+          href: `/system/billing-accounts/setup/${session.id}/select-contact`,
           text: 'Back'
         },
-        pageTitle: 'Who should the bills go to?',
-        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-        searchInput: null
+        pageTitle: 'Check billing account details',
+        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })
     })
   })

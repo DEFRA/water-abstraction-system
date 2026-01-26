@@ -312,6 +312,20 @@ describe('GeneralLib', () => {
     })
   })
 
+  describe('#readFlashNotification', () => {
+    let yarStub
+
+    beforeEach(() => {
+      yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Changes made' }]) }
+    })
+
+    it('returns the flash notification', () => {
+      const result = GeneralLib.readFlashNotification(yarStub)
+
+      expect(result).to.equal({ text: 'Changes made', title: 'Updated' })
+    })
+  })
+
   describe('#generateNoticeReferenceCode', () => {
     it('generates a 6 character reference code with the given prefix', () => {
       const result = GeneralLib.generateNoticeReferenceCode('TEST-')

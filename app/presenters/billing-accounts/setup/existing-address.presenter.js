@@ -18,8 +18,9 @@ function go(session, companyAddresses) {
   const radioItems = _radioOptions(session.addressSelected, companyAddresses)
 
   return {
+    activeNavBar: 'search',
     backLink: {
-      href: `/system/billing-accounts/setup/${session.id}/select-account`,
+      href: `/system/billing-accounts/setup/${session.id}/account`,
       text: 'Back'
     },
     items: radioItems,

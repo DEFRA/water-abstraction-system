@@ -8,6 +8,7 @@
 
 const CheckLicenceMatchesPresenter = require('../../../presenters/notices/setup/check-licence-matches.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
+const { readFlashNotification } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates presenting the data for the `/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches` page
@@ -22,7 +23,7 @@ async function go(sessionId, yar) {
 
   const pageData = CheckLicenceMatchesPresenter.go(session)
 
-  const notification = yar.flash('notification')[0]
+  const notification = readFlashNotification(yar)
 
   return {
     activeNavBar: 'notices',
