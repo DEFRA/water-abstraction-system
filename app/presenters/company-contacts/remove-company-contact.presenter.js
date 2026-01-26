@@ -31,9 +31,9 @@ function go(company, companyContact) {
 }
 
 function _warning(companyContact) {
-  const { abstractionAlertsCount } = companyContact
+  const { abstractionAlerts, abstractionAlertsCount } = companyContact
 
-  if (companyContact.abstractionAlerts && abstractionAlertsCount === 1) {
+  if (abstractionAlerts && abstractionAlertsCount === 1) {
     return {
       warning: {
         text: 'Removing this contact means the licence holder will receive future water abstraction alerts by post.',
