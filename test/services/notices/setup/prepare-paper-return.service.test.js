@@ -51,7 +51,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
         licence_ref: licenceRef,
         naldAreaCode: 'MIDLT',
         purpose: 'Mineral Washing',
-        qr_url: dueReturnLog.returnId,
+        qr_url: dueReturnLog.returnLogId,
         region_code: '1',
         region_name: 'North West',
         returns_frequency: dueReturnLog.returnsFrequency,
@@ -96,7 +96,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
       expect(result.response.body.byteLength).to.equal(9)
     })
 
-    it('should call "GeneratePaperReturnRequest" with the page data for the provided "returnId"', async () => {
+    it('should call "GeneratePaperReturnRequest" with the page data for the provided "returnLogId"', async () => {
       await PreparePaperReturnService.go(notification)
 
       expect(GeneratePaperReturnRequest.send.calledOnce).to.be.true()
@@ -121,7 +121,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
         purpose: 'Mineral Washing',
         regionAndArea: 'North West / Lower Trent',
         regionCode: '1',
-        returnId: dueReturnLog.returnId,
+        returnLogId: dueReturnLog.returnLogId,
         returnsFrequency: 'month',
         returnReference: dueReturnLog.returnReference,
         siteDescription: 'BOREHOLE AT AVALON',

@@ -57,7 +57,7 @@ function go(reviewChargeElement, elementIndex) {
 
 function _matchedReturns(reviewReturns) {
   return reviewReturns.map((reviewReturn) => {
-    const { description, endDate, issues, purposes, returnLog, returnId, returnReference, startDate } = reviewReturn
+    const { description, endDate, issues, purposes, returnLog, returnReference, startDate } = reviewReturn
     const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth } = returnLog
 
     return {
@@ -66,8 +66,7 @@ function _matchedReturns(reviewReturns) {
       issues: formatIssues(issues),
       purpose: purposes[0].tertiary.description,
       reference: returnReference,
-      returnId,
-      returnLink: `/system/return-logs/${returnLog.returnId}`,
+      returnLink: `/system/return-logs/${returnLog.id}`,
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
       returnStatus: formatReturnStatus(reviewReturn),
       returnTotal: formatReturnTotals(reviewReturn)

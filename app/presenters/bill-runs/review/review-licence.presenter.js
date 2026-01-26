@@ -178,7 +178,7 @@ function _formatReviewReturns(reviewReturns) {
   const unmatchedReturns = []
 
   reviewReturns.forEach((reviewReturn) => {
-    const { description, endDate, issues, purposes, returnLog, returnId, returnReference, startDate } = reviewReturn
+    const { description, endDate, issues, purposes, returnLog, returnReference, startDate } = reviewReturn
     const { periodStartDay, periodStartMonth, periodEndDay, periodEndMonth } = returnLog
 
     const formattedReviewReturn = {
@@ -187,8 +187,7 @@ function _formatReviewReturns(reviewReturns) {
       issues: formatIssues(issues),
       purpose: formatPurposes(purposes).join(', '),
       reference: returnReference,
-      returnId,
-      returnLink: `/system/return-logs/${returnLog.returnId}`,
+      returnLink: `/system/return-logs/${returnLog.id}`,
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
       returnStatus: formatReturnStatus(reviewReturn),
       returnTotal: formatReturnTotals(reviewReturn)

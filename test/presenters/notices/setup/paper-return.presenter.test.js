@@ -21,7 +21,7 @@ describe('Notices - Setup - Paper Return presenter', () => {
     dueReturn = {
       siteDescription: 'Potable Water Supply - Direct',
       endDate: '2003-03-31',
-      returnId: generateUUID(),
+      returnLogId: generateUUID(),
       returnReference: '3135',
       startDate: '2002-04-01'
     }
@@ -47,7 +47,7 @@ describe('Notices - Setup - Paper Return presenter', () => {
             checked: false,
             hint: { text: '1 April 2002 to 31 March 2003' },
             text: `${dueReturn.returnReference} Potable Water Supply - Direct`,
-            value: dueReturn.returnId
+            value: dueReturn.returnLogId
           }
         ]
       })
@@ -55,7 +55,7 @@ describe('Notices - Setup - Paper Return presenter', () => {
 
     describe('and returns have previously been selected', () => {
       beforeEach(() => {
-        session.selectedReturns = [dueReturn.returnId]
+        session.selectedReturns = [dueReturn.returnLogId]
       })
 
       it('returns the "returns" previously selected as checked', () => {
@@ -66,7 +66,7 @@ describe('Notices - Setup - Paper Return presenter', () => {
             checked: true,
             hint: { text: '1 April 2002 to 31 March 2003' },
             text: `${dueReturn.returnReference} Potable Water Supply - Direct`,
-            value: dueReturn.returnId
+            value: dueReturn.returnLogId
           }
         ])
       })

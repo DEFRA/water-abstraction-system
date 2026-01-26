@@ -40,13 +40,13 @@ function go(session) {
 }
 
 function _backLinkHref(session) {
-  const { checkPageVisited, id, returnId } = session
+  const { checkPageVisited, id, returnLogId } = session
 
   if (checkPageVisited) {
     return `/system/return-logs/setup/${id}/check`
   }
 
-  return `/system/return-logs/${returnId}`
+  return `/system/return-logs/${returnLogId}`
 }
 
 function _yesterdaysDate() {

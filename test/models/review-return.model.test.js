@@ -30,7 +30,7 @@ describe('Review Return model', () => {
     testReturnLog = await ReturnLogHelper.add()
     testReviewLicence = await ReviewLicenceHelper.add()
 
-    testRecord = await ReviewReturnHelper.add({ returnId: testReturnLog.id, reviewLicenceId: testReviewLicence.id })
+    testRecord = await ReviewReturnHelper.add({ returnLogId: testReturnLog.id, reviewLicenceId: testReviewLicence.id })
 
     testReviewChargeElements = []
     for (let i = 0; i < 2; i++) {
