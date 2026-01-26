@@ -36,15 +36,14 @@ describe('Companies - Fetch Company Contacts service', () => {
     })
 
     // Add additional contact - not related to the company
-    const additionalContact = await ContactHelper.add()
+    additionalCompanyContact = await ContactHelper.add()
 
     await CompanyContactHelper.add({
-      contactId: additionalContact.id
+      contactId: additionalCompanyContact.id
     })
   })
 
   afterEach(async () => {
-    await companyContact.$query().delete()
     await companyContact.$query().delete()
     await additionalCompanyContact.$query().delete()
   })
