@@ -25,8 +25,24 @@ function go(company, companyContact) {
       abstractionAlerts: companyContact.abstractionAlerts ? 'Yes' : 'No'
     },
     pageTitle: `You're about to remove this contact`,
-    pageTitleCaption: company.name
+    pageTitleCaption: company.name,
+    ..._warning(companyContact)
   }
+}
+
+function _warning(companyContact) {
+  const { abstractionAlerts, abstractionAlertsCount } = companyContact
+
+  if (abstractionAlerts && abstractionAlertsCount === 1) {
+    return {
+      warning: {
+        text: 'Removing this contact means the licence holder will receive future water abstraction alerts by post.',
+        iconFallbackText: 'Warning'
+      }
+    }
+  }
+
+  return {}
 }
 
 module.exports = {

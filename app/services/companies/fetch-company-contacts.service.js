@@ -7,7 +7,6 @@
 
 const CompanyContactModel = require('../../models/company-contact.model.js')
 const DatabaseConfig = require('../../../config/database.config.js')
-const { db } = require('../../../db/db.js')
 
 /**
  * Fetches the company contacts data needed for the view '/companies/{id}/contacts'
@@ -26,11 +25,7 @@ async function go(companyId, page) {
 async function _fetch(companyId, page) {
   return CompanyContactModel.query()
     .select(['companyContacts.id', 'abstractionAlerts'])
-    .innerJoin('licenceDocumentRoles AS ldr', 'ldr.company_id', '=', 'companyContacts.companyId')
     .where('companyContacts.companyId', companyId)
-    .andWhere((builder) => {
-      builder.whereNull('ldr.end_date').orWhere('ldr.end_date', '>', db.raw('NOW()'))
-    })
     .withGraphFetched('contact')
     .modifyGraph('contact', (contactBuilder) => {
       contactBuilder.select([
@@ -50,7 +45,6 @@ async function _fetch(companyId, page) {
     .modifyGraph('licenceRole', (licenceRoleBuilder) => {
       licenceRoleBuilder.select(['label'])
     })
-    .distinctOn('companyContacts.id')
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 
