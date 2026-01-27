@@ -51,7 +51,7 @@ describe('Companies - Contacts presenter', () => {
           }
         ],
         links: {
-          createContact: `/customer/${company.id}/contacts/new`,
+          createContact: `/system/company-contacts/setup/${company.id}`,
           removeContact: null
         },
         pageTitle: 'Contacts',
