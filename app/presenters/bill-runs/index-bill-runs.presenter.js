@@ -12,10 +12,19 @@ const { formatBillRunType } = require('../billing.presenter.js')
  * Formats the summary data for each bill run for use in the /bill-runs page
  *
  * @param {module:BillRunModel[]} billRuns - The bill runs containing the data to be summarised for the view
+ * @param {string} busyResult - The state of busy bill runs; 'cancelling', 'building', 'both', or 'none'
  *
- * @returns {object[]} Each bill run summary formatted for use in the `index.njk` template for `/bill-runs`
+ * @returns {Promise<object>} The view data for the bill runs page
  */
-function go(billRuns) {
+function go(billRuns, busyResult) {
+  return {
+    billRuns: _billRuns(billRuns),
+    notification: _notification(busyResult),
+    pageTitle: 'View a bill run'
+  }
+}
+
+function _billRuns(billRuns) {
   return billRuns.map((billRun) => {
     const { batchType, billRunNumber, createdAt, id, netTotal, numberOfBills, region, scheme, summer, status } = billRun
 
@@ -57,6 +66,29 @@ function _link(billRunId, status, scheme) {
   }
 
   return `/system/bill-runs/${billRunId}`
+}
+
+function _notification(busyResult) {
+  if (busyResult === 'both') {
+    return {
+      text: 'Please wait for these bill runs to finish before creating another one.',
+      titleText: 'Busy building and cancelling'
+    }
+  }
+
+  if (busyResult === 'building') {
+    return {
+      text: 'Please wait for this bill run to finish building before creating another one.',
+      titleText: 'Busy building'
+    }
+  }
+
+  if (busyResult === 'cancelling') {
+    return {
+      text: 'Please wait for this bill run to finish cancelling before creating another one.',
+      titleText: 'Busy cancelling'
+    }
+  }
 }
 
 module.exports = {

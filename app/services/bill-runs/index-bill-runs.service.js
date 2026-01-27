@@ -19,45 +19,23 @@ const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
  * summary details for each bill run for the page selected, the template's pagination control, the title and the
  * status of any busy bill runs
  */
-async function go(page) {
-  const selectedPageNumber = _selectedPageNumber(page)
+async function go(page = 1) {
+  const selectedPageNumber = Number(page)
 
-  // We expect the FetchBillRunsService to take longer to complete than CheckBusyBillRunsService. But running them
-  // together means we are only waiting as long as it takes FetchBillRunsService to complete rather than their combined
-  // time
-  const [fetchedBillRunResult, busyResult] = await Promise.all([
+  const [{ results: billRuns, total: totalNumber }, busyResult] = await Promise.all([
     FetchBillRunsService.go(selectedPageNumber),
     CheckBusyBillRunsService.go()
   ])
 
-  const billRuns = IndexBillRunsPresenter.go(fetchedBillRunResult.results)
-  const pagination = PaginatorPresenter.go(fetchedBillRunResult.total, selectedPageNumber, '/system/bill-runs')
+  const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, '/system/bill-runs')
 
-  const pageTitle = _pageTitle(pagination.numberOfPages, selectedPageNumber)
+  const pageData = IndexBillRunsPresenter.go(billRuns, busyResult)
 
   return {
     activeNavBar: 'bill-runs',
-    billRuns,
-    busy: busyResult,
-    pageTitle,
+    ...pageData,
     pagination
   }
-}
-
-function _pageTitle(numberOfPages, selectedPageNumber) {
-  if (numberOfPages === 1) {
-    return 'Bill runs'
-  }
-
-  return `Bill runs (page ${selectedPageNumber} of ${numberOfPages})`
-}
-
-function _selectedPageNumber(page) {
-  if (!page) {
-    return 1
-  }
-
-  return Number(page)
 }
 
 module.exports = {
