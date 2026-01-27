@@ -27,7 +27,13 @@ async function go(page = 1) {
     CheckBusyBillRunsService.go()
   ])
 
-  const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, '/system/bill-runs')
+  const pagination = PaginatorPresenter.go(
+    totalNumber,
+    selectedPageNumber,
+    '/system/bill-runs',
+    billRuns.length,
+    'bill runs'
+  )
 
   const pageData = IndexBillRunsPresenter.go(billRuns, busyResult)
 

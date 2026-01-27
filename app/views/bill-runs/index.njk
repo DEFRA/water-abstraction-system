@@ -18,8 +18,6 @@
   {% else %}
     <h2 class="govuk-heading-l">{{ pageSubHeading }}</h2>
 
-    <p>Select date to see the details of a bill run.</p>
-
     {% set tableRows = [] %}
     {% for billRun in billRuns %}
       {# Set an easier to use index #}
@@ -84,8 +82,10 @@
     {% endfor %}
 
     {{ govukTable({
-        firstCellIsHeader: false,
         attributes: { 'data-test': 'bill-runs'},
+        caption: pagination.showingMessage,
+        captionClasses: "govuk-table__caption--s govuk-!-margin-bottom-2",
+        firstCellIsHeader: false,
         head: [
           { text: 'Date' },
           { text: 'Region' },
