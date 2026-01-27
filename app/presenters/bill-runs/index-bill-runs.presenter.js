@@ -14,7 +14,7 @@ const { formatBillRunType } = require('../billing.presenter.js')
  * @param {module:BillRunModel[]} billRuns - The bill runs containing the data to be summarised for the view
  * @param {string} busyResult - The state of busy bill runs; 'cancelling', 'building', 'both', or 'none'
  *
- * @returns {Promise<object>} The view data for the bill runs page
+ * @returns {object} The data formatted for the view template
  */
 function go(billRuns, busyResult) {
   return {
