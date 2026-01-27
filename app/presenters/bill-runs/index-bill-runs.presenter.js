@@ -20,7 +20,8 @@ function go(billRuns, busyResult) {
   return {
     billRuns: _billRuns(billRuns),
     notification: _notification(busyResult),
-    pageTitle: 'View a bill run'
+    pageSubHeading: 'View a bill run',
+    pageTitle: 'Bill runs'
   }
 }
 
