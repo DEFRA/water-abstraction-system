@@ -12,41 +12,48 @@ const IndexBillRunsPresenter = require('../../../app/presenters/bill-runs/index-
 
 describe('Index Bill Runs presenter', () => {
   let billRuns
+  let busyResult
 
   describe('when provided with a populated bill run', () => {
     beforeEach(() => {
       billRuns = _billRuns()
+      busyResult = 'none'
     })
 
     it('correctly presents the data', () => {
-      const results = IndexBillRunsPresenter.go(billRuns)
+      const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-      expect(results).to.equal([
-        {
-          id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
-          createdAt: '1 January 2024',
-          link: '/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b',
-          number: 1002,
-          numberOfBills: 7,
-          region: 'Avalon',
-          scheme: 'sroc',
-          status: 'ready',
-          total: '£200.00',
-          type: 'Supplementary'
-        },
-        {
-          id: 'dfdde4c9-9a0e-440d-b297-7143903c6734',
-          createdAt: '1 October 2023',
-          link: '/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734',
-          number: 1001,
-          numberOfBills: 15,
-          region: 'Albion',
-          scheme: 'sroc',
-          status: 'sent',
-          total: '£300.00',
-          type: 'Supplementary'
-        }
-      ])
+      expect(results).to.equal({
+        billRuns: [
+          {
+            id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
+            createdAt: '1 January 2024',
+            link: '/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b',
+            number: 1002,
+            numberOfBills: 7,
+            region: 'Avalon',
+            scheme: 'sroc',
+            status: 'ready',
+            total: '£200.00',
+            type: 'Supplementary'
+          },
+          {
+            id: 'dfdde4c9-9a0e-440d-b297-7143903c6734',
+            createdAt: '1 October 2023',
+            link: '/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734',
+            number: 1001,
+            numberOfBills: 15,
+            region: 'Albion',
+            scheme: 'sroc',
+            status: 'sent',
+            total: '£300.00',
+            type: 'Supplementary'
+          }
+        ],
+        notification: undefined,
+        pageSubHeading: 'View a bill run',
+        pageTitle: 'Bill runs'
+      })
     })
 
     describe('the "link" property', () => {
@@ -56,28 +63,28 @@ describe('Index Bill Runs presenter', () => {
         })
 
         it('does not generate a href (returns null)', () => {
-          const results = IndexBillRunsPresenter.go(billRuns)
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-          expect(results[0].link).to.be.null()
-          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).to.be.null()
+          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
       describe('when a bill run has the status "empty"', () => {
         it('generates the href needed to link to the bill run', () => {
-          const results = IndexBillRunsPresenter.go(billRuns)
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-          expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
-          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
       describe('when a bill run has the status "error"', () => {
         it('generates the href needed to link to the bill run', () => {
-          const results = IndexBillRunsPresenter.go(billRuns)
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-          expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
-          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
@@ -87,10 +94,10 @@ describe('Index Bill Runs presenter', () => {
         })
 
         it('does not generate a href (returns null)', () => {
-          const results = IndexBillRunsPresenter.go(billRuns)
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-          expect(results[0].link).to.be.null()
-          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).to.be.null()
+          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
@@ -100,10 +107,10 @@ describe('Index Bill Runs presenter', () => {
         })
 
         it('does not generate a href (returns null)', () => {
-          const results = IndexBillRunsPresenter.go(billRuns)
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-          expect(results[0].link).to.be.null()
-          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).to.be.null()
+          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
@@ -113,10 +120,10 @@ describe('Index Bill Runs presenter', () => {
         })
 
         it('generates the href needed to link to the bill run', () => {
-          const results = IndexBillRunsPresenter.go(billRuns)
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-          expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
-          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
@@ -131,21 +138,21 @@ describe('Index Bill Runs presenter', () => {
           })
 
           it('generates the href needed to link to the old bill run review', () => {
-            const results = IndexBillRunsPresenter.go(billRuns)
+            const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-            expect(results[0].link).to.equal(
+            expect(results.billRuns[0].link).to.equal(
               '/billing/batch/31fec553-f2de-40cf-a8d7-a5fb65f5761b/two-part-tariff-review'
             )
-            expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+            expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
           })
         })
 
         describe('and is for the "SROC" charge scheme', () => {
           it('generates the href needed to link to bill run review', () => {
-            const results = IndexBillRunsPresenter.go(billRuns)
+            const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-            expect(results[0].link).to.equal('/system/bill-runs/review/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
-            expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+            expect(results.billRuns[0].link).to.equal('/system/bill-runs/review/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+            expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
           })
         })
       })
@@ -156,10 +163,10 @@ describe('Index Bill Runs presenter', () => {
         })
 
         it('does not generate a href (returns null)', () => {
-          const results = IndexBillRunsPresenter.go(billRuns)
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-          expect(results[0].link).to.be.null()
-          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).to.be.null()
+          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
         })
       })
 
@@ -169,10 +176,69 @@ describe('Index Bill Runs presenter', () => {
         })
 
         it('generates the href needed to link to the bill run', () => {
-          const results = IndexBillRunsPresenter.go(billRuns)
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-          expect(results[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
-          expect(results[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+          expect(results.billRuns[0].link).to.equal('/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b')
+          expect(results.billRuns[1].link).to.equal('/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734')
+        })
+      })
+    })
+
+    describe('the "notification" property', () => {
+      describe('when the state of busy bill runs is "none"', () => {
+        beforeEach(() => {
+          busyResult = 'none'
+        })
+
+        it('does not generate a notification', () => {
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult)
+
+          expect(results.notification).to.be.undefined()
+        })
+      })
+
+      describe('when the state of busy bill runs is "both"', () => {
+        beforeEach(() => {
+          busyResult = 'both'
+        })
+
+        it('returns the correct notification details', () => {
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult)
+
+          expect(results.notification).to.equal({
+            text: 'Please wait for these bill runs to finish before creating another one.',
+            titleText: 'Busy building and cancelling'
+          })
+        })
+      })
+
+      describe('when the state of busy bill runs is "building"', () => {
+        beforeEach(() => {
+          busyResult = 'building'
+        })
+
+        it('returns the correct notification details', () => {
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult)
+
+          expect(results.notification).to.equal({
+            text: 'Please wait for this bill run to finish building before creating another one.',
+            titleText: 'Busy building'
+          })
+        })
+      })
+
+      describe('when the state of busy bill runs is "cancelling"', () => {
+        beforeEach(() => {
+          busyResult = 'cancelling'
+        })
+
+        it('returns the correct notification details', () => {
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult)
+
+          expect(results.notification).to.equal({
+            text: 'Please wait for this bill run to finish cancelling before creating another one.',
+            titleText: 'Busy cancelling'
+          })
         })
       })
     })
@@ -186,9 +252,9 @@ describe('Index Bill Runs presenter', () => {
           })
 
           it('does not return a pound value', () => {
-            const results = IndexBillRunsPresenter.go(billRuns)
+            const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-            expect(results[0].total).to.equal('')
+            expect(results.billRuns[0].total).to.equal('')
           })
         })
       })
@@ -201,9 +267,9 @@ describe('Index Bill Runs presenter', () => {
           })
 
           it('does not return a pound value', () => {
-            const results = IndexBillRunsPresenter.go(billRuns)
+            const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-            expect(results[0].total).to.equal('')
+            expect(results.billRuns[0].total).to.equal('')
           })
         })
       })
