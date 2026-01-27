@@ -14,6 +14,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/company-contacts/setup/{sessionId}/contact-name',
+    options: {
+      handler: CompanyContactsSetupController.viewContactName,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/company-contacts/setup/{sessionId}/contact-name',
+    options: {
+      handler: CompanyContactsSetupController.submitContactName,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
   }
 ]
 
