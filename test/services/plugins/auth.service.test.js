@@ -9,12 +9,17 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchUserRolesAndGroupsService = require('../../../app/services/idm/fetch-user-roles-and-groups.service.js')
 
 // Thing under test
 const AuthService = require('../../../app/services/plugins/auth.service.js')
 
 describe('Plugins - Auth service', () => {
+  beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
+  })
+
   afterEach(() => {
     Sinon.restore()
   })
@@ -65,7 +70,8 @@ describe('Plugins - Auth service', () => {
         abstractionReform: false,
         billRuns: false,
         manage: false,
-        notices: false
+        notices: false,
+        users: false
       })
     })
   })
@@ -87,7 +93,8 @@ describe('Plugins - Auth service', () => {
           abstractionReform: true,
           billRuns: false,
           manage: false,
-          notices: false
+          notices: false,
+          users: false
         })
       })
     })
@@ -110,7 +117,8 @@ describe('Plugins - Auth service', () => {
           abstractionReform: false,
           billRuns: true,
           manage: true,
-          notices: false
+          notices: false,
+          users: false
         })
       })
     })
@@ -131,7 +139,8 @@ describe('Plugins - Auth service', () => {
           abstractionReform: false,
           billRuns: false,
           manage: true,
-          notices: true
+          notices: true,
+          users: false
         })
       })
     })
@@ -152,7 +161,30 @@ describe('Plugins - Auth service', () => {
           abstractionReform: false,
           billRuns: false,
           manage: true,
-          notices: true
+          notices: true,
+          users: false
+        })
+      })
+    })
+
+    describe('such as "manage_accounts"', () => {
+      beforeEach(() => {
+        Sinon.stub(FetchUserRolesAndGroupsService, 'go').resolves({
+          user: { name: 'User' },
+          roles: [{ role: 'manage_accounts' }],
+          groups: [{ group: 'Group' }]
+        })
+      })
+
+      it('returns the matching top level permission as true', async () => {
+        const result = await AuthService.go(12345)
+
+        expect(result.credentials.permission).to.equal({
+          abstractionReform: false,
+          billRuns: false,
+          manage: false,
+          notices: false,
+          users: true
         })
       })
     })

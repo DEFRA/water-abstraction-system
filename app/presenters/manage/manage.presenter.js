@@ -5,6 +5,8 @@
  * @module ManagePresenter
  */
 
+const featureFlags = require('../../../config/feature-flags.config.js')
+
 /**
  * Formats data for the `/manage` page
  *
@@ -52,7 +54,7 @@ function _hasPermission(userScopes, linkScopes) {
 
 function _manageUsers(userScopes) {
   const links = {
-    createAccount: _hasPermission(userScopes, ['manage_accounts'])
+    createAccount: featureFlags.enableUsersView ? false : _hasPermission(userScopes, ['manage_accounts'])
   }
 
   return { show: links.createAccount, links }
