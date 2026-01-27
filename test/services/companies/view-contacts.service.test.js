@@ -73,7 +73,7 @@ describe('Companies - View Contacts service', () => {
         ],
         links: {
           createContact: `/customer/${company.id}/contacts/new`,
-          removeContact: `/customer/${company.id}/contacts/remove`
+          removeContact: null
         },
         notification: {
           text: 'Rachael Tyrell was removed from this company.',
