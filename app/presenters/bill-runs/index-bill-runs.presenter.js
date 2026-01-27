@@ -70,13 +70,6 @@ function _link(billRunId, status, scheme) {
 }
 
 function _notification(busyResult) {
-  if (busyResult === 'both') {
-    return {
-      text: 'Please wait for these bill runs to finish before creating another one.',
-      titleText: 'Busy building and cancelling'
-    }
-  }
-
   if (busyResult === 'building') {
     return {
       text: 'Please wait for this bill run to finish building before creating another one.',
@@ -91,7 +84,10 @@ function _notification(busyResult) {
     }
   }
 
-  return {}
+  return {
+    text: 'Please wait for these bill runs to finish before creating another one.',
+    titleText: 'Busy building and cancelling'
+  }
 }
 
 module.exports = {

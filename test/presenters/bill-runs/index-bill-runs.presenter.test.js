@@ -50,7 +50,7 @@ describe('Index Bill Runs presenter', () => {
             type: 'Supplementary'
           }
         ],
-        notification: undefined,
+        notification: null,
         pageSubHeading: 'View a bill run',
         pageTitle: 'Bill runs'
       })
@@ -193,7 +193,7 @@ describe('Index Bill Runs presenter', () => {
         it('does not generate a notification', () => {
           const results = IndexBillRunsPresenter.go(billRuns, busyResult)
 
-          expect(results.notification).to.be.undefined()
+          expect(results.notification).to.be.null()
         })
       })
 
