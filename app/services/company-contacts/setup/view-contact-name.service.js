@@ -12,7 +12,7 @@ const SessionModel = require('../../../models/session.model.js')
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/setup/{sessionId}/contact-name' page
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
