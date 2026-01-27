@@ -22,6 +22,9 @@ const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 async function go(page = 1) {
   const selectedPageNumber = Number(page)
 
+  // We expect the FetchBillRunsService to take longer to complete than CheckBusyBillRunsService. But running them
+  // together means we are only waiting as long as it takes FetchBillRunsService to complete rather than their combined
+  // time
   const [{ results: billRuns, total: totalNumber }, busyResult] = await Promise.all([
     FetchBillRunsService.go(selectedPageNumber),
     CheckBusyBillRunsService.go()
