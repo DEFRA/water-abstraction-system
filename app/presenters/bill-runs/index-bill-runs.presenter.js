@@ -19,7 +19,7 @@ const { formatBillRunType } = require('../billing.presenter.js')
 function go(billRuns, busyResult) {
   return {
     billRuns: _billRuns(billRuns),
-    notification: _notification(busyResult),
+    notification: busyResult === 'none' ? null : _notification(busyResult),
     pageSubHeading: 'View a bill run',
     pageTitle: 'Bill runs'
   }
@@ -90,6 +90,8 @@ function _notification(busyResult) {
       titleText: 'Busy cancelling'
     }
   }
+
+  return {}
 }
 
 module.exports = {
