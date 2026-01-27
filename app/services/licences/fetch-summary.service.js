@@ -27,7 +27,6 @@ async function _fetch(licenceId) {
     .modify('licenceName')
     .modify('primaryUser')
     .modify('currentVersion')
-    .modify('licenceHolder')
     .withGraphFetched('region')
     .modifyGraph('region', (regionBuilder) => {
       regionBuilder.select(['id', 'displayName'])

@@ -55,9 +55,10 @@ function _companyContacts(companyContacts, company) {
  */
 function _links(company) {
   return {
-    createContact: `/customer/${company.id}/contacts/new`,
-
-    removeContact: `/customer/${company.id}/contacts/remove`
+    createContact: FeatureFlagsConfig.enableCustomerManage
+      ? `/system/company-contacts/setup/${company.id}`
+      : `/customer/${company.id}/contacts/new`,
+    removeContact: FeatureFlagsConfig.enableCustomerManage ? null : `/customer/${company.id}/contacts/remove`
   }
 }
 
