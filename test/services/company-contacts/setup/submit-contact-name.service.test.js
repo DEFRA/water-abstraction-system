@@ -8,19 +8,24 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CustomersFixtures = require('../../../fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const SubmitContactNameService = require('../../../../app/services/company-contacts/setup/submit-contact-name.service.js')
 
 describe('Company Contacts - Setup - Contact Name Service', () => {
+  let company
   let payload
   let session
   let sessionData
 
   beforeEach(async () => {
+    company = CustomersFixtures.company()
+
+    sessionData = { company }
+
     payload = { name: 'Eric' }
-    sessionData = {}
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -31,7 +36,11 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession).to.equal(session)
+      expect(refreshedSession).to.equal({
+        ...session,
+        data: { ...session.data, name: 'Eric' },
+        name: 'Eric'
+      })
     })
 
     it('continues the journey', async () => {
@@ -50,8 +59,9 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
       const result = await SubmitContactNameService.go(session.id, payload)
 
       expect(result).to.equal({
+        activeNavBar: 'search',
         backLink: {
-          href: '',
+          href: `/system/companies/${company.id}/contacts`,
           text: 'Back'
         },
         error: {
@@ -65,7 +75,9 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
             text: 'Enter a name for the contact'
           }
         },
-        pageTitle: 'Enter a name for the contact'
+        name: '',
+        pageTitle: 'Enter a name for the contact',
+        pageTitleCaption: 'Tyrell Corporation'
       })
     })
   })

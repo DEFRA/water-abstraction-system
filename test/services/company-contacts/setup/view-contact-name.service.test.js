@@ -8,17 +8,21 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CustomersFixtures = require('../../../fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const ViewContactNameService = require('../../../../app/services/company-contacts/setup/view-contact-name.service.js')
 
 describe('Company Contacts - Setup - View Contact Name Service', () => {
+  let company
   let session
   let sessionData
 
   beforeEach(async () => {
-    sessionData = {}
+    company = CustomersFixtures.company()
+
+    sessionData = { company }
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -28,11 +32,14 @@ describe('Company Contacts - Setup - View Contact Name Service', () => {
       const result = await ViewContactNameService.go(session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'search',
         backLink: {
-          href: '',
+          href: `/system/companies/${company.id}/contacts`,
           text: 'Back'
         },
-        pageTitle: 'Enter a name for the contact'
+        name: '',
+        pageTitle: 'Enter a name for the contact',
+        pageTitleCaption: 'Tyrell Corporation'
       })
     })
   })
