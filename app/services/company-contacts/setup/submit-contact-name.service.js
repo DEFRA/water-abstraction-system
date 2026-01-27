@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for the '/company-contacts / setup/{sessionId}/contact-name' page
+ * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/contact-name' page
  *
  * @module SubmitContactNameService
  */
@@ -12,7 +12,7 @@ const SessionModel = require('../../../models/session.model.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
- * Orchestrates validating the data for the '/company-contacts / setup/{sessionId}/contact-name' page
+ * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/contact-name' page
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data

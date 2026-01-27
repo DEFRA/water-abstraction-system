@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ContactNamePresenter = require('../../../../app/presenters/company-contacts/setup/contact-name.presenter.js')
 
-describe('Contact Name Presenter', () => {
+describe('Company Contacts - Setup - Contact Name Presenter', () => {
   let session
 
   beforeEach(() => {
