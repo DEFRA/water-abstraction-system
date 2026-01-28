@@ -20,7 +20,6 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
   const companySearchResults = await FetchCompaniesService.go(session.searchInput)
-  console.log(companySearchResults.rows)
 
   const pageData = ExistingAccountPresenter.go(session, companySearchResults)
 
