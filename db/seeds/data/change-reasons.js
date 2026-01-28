@@ -174,6 +174,20 @@ const data = [
     description: 'Strategic review of charges (SRoC)',
     triggersMinimumCharge: false,
     type: 'new_chargeable_charge_version',
+    enabledForNewChargeVersions: false
+  },
+  {
+    id: '8595b08a-1209-47a9-8924-ab194de7794c',
+    description: 'Change to charge scheme',
+    triggersMinimumCharge: false,
+    type: 'new_chargeable_charge_version',
+    enabledForNewChargeVersions: true
+  },
+  {
+    id: '91728962-0f5d-465c-a8ac-855992363e18',
+    description: 'Error correction',
+    triggersMinimumCharge: false,
+    type: 'new_chargeable_charge_version',
     enabledForNewChargeVersions: true
   }
 ]
