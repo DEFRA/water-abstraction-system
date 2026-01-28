@@ -19,7 +19,7 @@ describe('__DESCRIBE_LABEL__', () => {
   let sessionData
 
   beforeEach(async () => {
-    payload = {}
+    payload = { placeholder: 'change me' }
     sessionData = {}
 
     session = await SessionHelper.add({ data: sessionData })
@@ -42,13 +42,29 @@ describe('__DESCRIBE_LABEL__', () => {
   })
 
   describe('when validation fails', () => {
+    beforeEach(() => {
+      payload = {}
+    })
+
     it('returns page data for the view, with errors', async () => {
       const result = await __MODULE_NAME__.go(session.id, payload)
 
       expect(result).to.equal({
+        activeNavBar: '',
         backLink: {
           href: '',
           text: 'Back'
+        },
+        error: {
+          errorList: [
+            {
+              href: '#placeholder',
+              text: '"placeholder" is required'
+            }
+          ],
+          placeholder: {
+            text: '"placeholder" is required'
+          }
         },
         pageTitle: ''
       })
