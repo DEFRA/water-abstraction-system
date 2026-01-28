@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const AddressHelper = require('../../../support/helpers/address.helper.js')
-const CompanyHelper = require('../../../support/helpers/company-address.helper.js')
+const CompanyHelper = require('../../../support/helpers/company.helper.js')
 const CompanyAddressHelper = require('../../../support/helpers/company-address.helper.js')
 
 // Thing under test

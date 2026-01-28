@@ -6,6 +6,7 @@
  * @module ExistingAccountService
  */
 
+const FetchCompaniesService = require('./fetch-companies.service.js')
 const ExistingAccountPresenter = require('../../../presenters/billing-accounts/setup/existing-account.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -18,8 +19,10 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
+  const companySearchResults = await FetchCompaniesService.go(session.searchInput)
+  console.log(companySearchResults.rows)
 
-  const pageData = ExistingAccountPresenter.go(session)
+  const pageData = ExistingAccountPresenter.go(session, companySearchResults)
 
   return {
     ...pageData
