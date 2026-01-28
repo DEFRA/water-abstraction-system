@@ -16,6 +16,8 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 const InitiateSessionService = require('../../app/services/company-contacts/setup/initiate-session.service.js')
 const SubmitContactEmailService = require('../../app/services/company-contacts/setup/submit-contact-email.service.js')
 const SubmitContactNameService = require('../../app/services/company-contacts/setup/submit-contact-name.service.js')
+const SubmitCheckService = require('../../app/services/company-contacts/setup/submit-check.service.js')
+const ViewCheckService = require('../../app/services/company-contacts/setup/view-check.service.js')
 const ViewContactEmailService = require('../../app/services/company-contacts/setup/view-contact-email.service.js')
 const ViewContactNameService = require('../../app/services/company-contacts/setup/view-contact-name.service.js')
 
@@ -72,6 +74,47 @@ describe('Company Contacts Setup controller', () => {
 
         expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
         expect(response.headers.location).to.equal(`/system/company-contacts/setup/${id}/contact-name`)
+      })
+    })
+  })
+
+  describe('/company-contacts/setup/{id}/check', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/check`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['hof_notifications'] }
+          }
+        }
+
+        Sinon.stub(ViewCheckService, 'go').returns({ pageTitle: 'Check' })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Check')
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+
+        postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/check`, {}, ['hof_notifications'])
+
+        Sinon.stub(SubmitCheckService, 'go').returns({})
+      })
+
+      it('redirects to companies contacts setup contact email page', async () => {
+        const response = await server.inject(postOptions)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+        expect(response.headers.location).to.equal(``)
       })
     })
   })

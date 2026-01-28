@@ -1,8 +1,10 @@
 'use strict'
 
 const InitiateSessionService = require('../services/company-contacts/setup/initiate-session.service.js')
+const SubmitCheckService = require('../services/company-contacts/setup/submit-check.service.js')
 const SubmitContactEmailService = require('../services/company-contacts/setup/submit-contact-email.service.js')
 const SubmitContactNameService = require('../services/company-contacts/setup/submit-contact-name.service.js')
+const ViewCheckService = require('../services/company-contacts/setup/view-check.service.js')
 const ViewContactEmailService = require('../services/company-contacts/setup/view-contact-email.service.js')
 const ViewContactNameService = require('../services/company-contacts/setup/view-contact-name.service.js')
 
@@ -19,6 +21,14 @@ async function setup(request, h) {
   return h.redirect(`/system/company-contacts/setup/${session.id}/contact-name`)
 }
 
+async function viewCheck(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewCheckService.go(sessionId)
+
+  return h.view(`company-contacts/setup/check.njk`, pageData)
+}
+
 async function viewContactEmail(request, h) {
   const { sessionId } = request.params
 
@@ -33,6 +43,17 @@ async function viewContactName(request, h) {
   const pageData = await ViewContactNameService.go(sessionId)
 
   return h.view(`company-contacts/setup/contact-name.njk`, pageData)
+}
+
+async function submitCheck(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  await SubmitCheckService.go(sessionId, payload)
+
+  return h.redirect('')
 }
 
 async function submitContactEmail(request, h) {
@@ -67,8 +88,10 @@ async function submitContactName(request, h) {
 
 module.exports = {
   setup,
+  viewCheck,
   viewContactEmail,
   viewContactName,
+  submitCheck,
   submitContactEmail,
   submitContactName
 }
