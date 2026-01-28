@@ -8,9 +8,11 @@
 /**
  * Formats data for the `` page
  *
+ * @param {object} session - The session instance
+ *
  * @returns {object} The data formatted for the view template
  */
-function go() {
+function go(session) {
   return {
     backLink: {
       href: '',

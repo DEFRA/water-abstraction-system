@@ -9,6 +9,8 @@ const FetchUsersService = require('./fetch-users.service.js')
 const IndexUsersPresenter = require('../../presenters/users/index-users.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 
+const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Orchestrates presenting the data for `/users` page
  *
@@ -30,7 +32,7 @@ async function go(yar, auth, page = 1) {
   const pageData = IndexUsersPresenter.go(users, auth)
 
   return {
-    activeNavBar: 'search',
+    activeNavBar: featureFlagsConfig.enableUsersView ? 'users' : 'search',
     filters,
     ...pageData,
     pagination

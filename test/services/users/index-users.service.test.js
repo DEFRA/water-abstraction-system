@@ -12,6 +12,7 @@ const { expect } = Code
 const UsersFixture = require('../../fixtures/users.fixture.js')
 
 // Things to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchUsersService = require('../../../app/services/users/fetch-users.service.js')
 
 // Thing under test
@@ -24,6 +25,8 @@ describe('Users - Index Users service', () => {
   let yarStub
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
+
     auth = {
       credentials: { scope: ['manage_accounts'] }
     }
@@ -47,7 +50,7 @@ describe('Users - Index Users service', () => {
     it('returns page data for the view', async () => {
       const result = await IndexUsersService.go(yarStub, auth, page)
       expect(result).to.equal({
-        activeNavBar: 'search',
+        activeNavBar: 'users',
         filters: {
           email: null,
           openFilter: false,

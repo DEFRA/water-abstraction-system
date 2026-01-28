@@ -51,8 +51,8 @@ describe('Companies - Contacts presenter', () => {
           }
         ],
         links: {
-          createContact: `/customer/${company.id}/contacts/new`,
-          removeContact: `/customer/${company.id}/contacts/remove`
+          createContact: `/system/company-contacts/setup/${company.id}`,
+          removeContact: null
         },
         pageTitle: 'Contacts',
         pageTitleCaption: 'Tyrell Corporation'

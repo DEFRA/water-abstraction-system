@@ -7,6 +7,8 @@
 
 const FetchUserRolesAndGroupsService = require('../idm/fetch-user-roles-and-groups.service.js')
 
+const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Used by `AuthPlugin` to authenticate and authorise users
  *
@@ -92,7 +94,6 @@ function _permission(scope = []) {
     'billing',
     'bulk_return_notifications',
     'hof_notifications',
-    'manage_accounts',
     'renewal_notifications',
     'returns'
   ]
@@ -105,11 +106,14 @@ function _permission(scope = []) {
     return noticesRoles.includes(role)
   })
 
+  const users = featureFlagsConfig.enableUsersView && scope.includes('manage_accounts')
+
   return {
     abstractionReform,
     billRuns,
     manage,
-    notices
+    notices,
+    users
   }
 }
 

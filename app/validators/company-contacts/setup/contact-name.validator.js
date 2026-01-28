@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Validates data submitted for the `` page
+ * Validates data submitted for the '/company-contacts/setup/{sessionId}/contact-name' page
  *
- * @module __MODULE_NAME__
+ * @module ContactNameValidator
  */
 
 const Joi = require('joi')
 
 /**
- * Validates data submitted for the `` page
+ * Validates data submitted for the '/company-contacts/setup/{sessionId}/contact-name' page
  *
  * @param {object} payload - The payload from the request to be validated
  *
@@ -18,7 +18,10 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    placeholder: Joi.required()
+    name: Joi.string().required().max(100).messages({
+      'any.required': 'Enter a name for the contact',
+      'string.max': 'Name must be 100 characters or less'
+    })
   })
 
   return schema.validate(payload, { abortEarly: false })
