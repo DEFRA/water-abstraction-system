@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -15,43 +15,47 @@ const CompanyHelper = require('../../../support/helpers/company.helper.js')
 const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
 
 describe('Billing Accounts - Setup - Fetch Companies service', () => {
-  let company
+  let acmeFakeCompany
+  let fakeCompany
+  let fakeLtdCompany
 
-  describe('when an exact match exists', () => {
-    beforeEach(async () => {
-      company = await CompanyHelper.add({
-        name: 'Example Fake Ltd'
-      })
+  before(async () => {
+    fakeLtdCompany = await CompanyHelper.add({
+      name: 'Fake Ltd'
     })
-
-    it('returns the matching addresses', async () => {
-      const result = await FetchCompaniesService.go('Example Fake Ltd')
-
-      expect(result).to.include([
-        CompanyModel.fromJson({
-          exact: true,
-          id: company.id,
-          name: company.name
-        })
-      ])
+    acmeFakeCompany = await CompanyHelper.add({
+      name: 'Acme fake Ltd'
+    })
+    fakeCompany = await CompanyHelper.add({
+      name: 'Fake'
     })
   })
 
-  describe('when a partial match exists', () => {
-    beforeEach(async () => {
-      company = await CompanyHelper.add({
-        name: 'Example Fake Ltd'
-      })
-    })
+  after(async () => {
+    await acmeFakeCompany.$query().delete()
+    await fakeCompany.$query().delete()
+    await fakeLtdCompany.$query().delete()
+  })
 
-    it('returns the matching addresses', async () => {
+  describe('when called with a searchInput', () => {
+    it('returns the matching companies', async () => {
       const result = await FetchCompaniesService.go('Fake')
 
-      expect(result).to.include([
+      expect(result).to.equal([
+        CompanyModel.fromJson({
+          exact: true,
+          id: fakeCompany.id,
+          name: fakeCompany.name
+        }),
         CompanyModel.fromJson({
           exact: false,
-          id: company.id,
-          name: company.name
+          id: acmeFakeCompany.id,
+          name: acmeFakeCompany.name
+        }),
+        CompanyModel.fromJson({
+          exact: false,
+          id: fakeLtdCompany.id,
+          name: fakeLtdCompany.name
         })
       ])
     })

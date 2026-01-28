@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -19,17 +19,22 @@ describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
   let address
   let company
 
-  describe('when a matching company exists', () => {
-    beforeEach(async () => {
-      address = await AddressHelper.add()
-      company = await CompanyHelper.add()
+  before(async () => {
+    address = await AddressHelper.add()
+    company = await CompanyHelper.add()
 
-      await CompanyAddressHelper.add({
-        addressId: address.id,
-        companyId: company.id
-      })
+    await CompanyAddressHelper.add({
+      addressId: address.id,
+      companyId: company.id
     })
+  })
 
+  after(async () => {
+    await address.$query().delete()
+    await company.$query().delete()
+  })
+
+  describe('when a matching company exists', () => {
     it('returns the matching addresses', async () => {
       const result = await FetchExistingAddressesService.go(company.id)
 

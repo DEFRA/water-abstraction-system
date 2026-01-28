@@ -58,49 +58,36 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
     })
   })
 
-  describe('when called and no companies were found', () => {
-    beforeEach(() => {
-      session = {
-        billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-        id: generateUUID(),
-        searchInput: 'Company Name'
-      }
-    })
+  describe('"items" property', () => {
+    describe('when a previous option was selected', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          id: generateUUID(),
+          existingAccount: 'new'
+        }
+      })
 
-    it('returns page data for the view', () => {
-      const result = ExistingAccountPresenter.go(session, [])
+      it('the checked property should be true', () => {
+        const result = ExistingAccountPresenter.go(session, exampleSearchResults)
 
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/account`,
-          text: 'Back'
-        },
-        items: [],
-        pageTitle: `No search results found for "${session.searchInput}"`,
-        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
+        expect(result.items[2].checked).to.equal(true)
       })
     })
-  })
 
-  describe('when called with a saved entry', () => {
-    beforeEach(() => {
-      session = {
-        billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-        existingAccount: 'new'
-      }
-    })
+    describe('when a previous option was not selected', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          id: generateUUID(),
+          existingAccount: null
+        }
+      })
 
-    it('returns page data for the view', () => {
-      const result = ExistingAccountPresenter.go(session, exampleSearchResults)
+      it('each of the checked properties should be false', () => {
+        const result = ExistingAccountPresenter.go(session, exampleSearchResults)
 
-      expect(result).to.equal({
-        activeNavBar: 'search',
-        backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/account`,
-          text: 'Back'
-        },
-        items: [
+        expect(result.items).to.equal([
           {
             id: exampleSearchResults[0].id,
             value: exampleSearchResults[0].id,
@@ -112,11 +99,41 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
             id: 'new',
             value: 'new',
             text: 'Setup a new account',
-            checked: true
+            checked: false
           }
-        ],
-        pageTitle: 'Does this account already exist?',
-        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
+        ])
+      })
+    })
+  })
+
+  describe('"pageTitle" property', () => {
+    describe('when there are companies returned', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          searchInput: 'Company'
+        }
+      })
+
+      it('returns the correct page title', () => {
+        const result = ExistingAccountPresenter.go(session, exampleSearchResults)
+
+        expect(result.pageTitle).to.equal('Does this account already exist?')
+      })
+    })
+
+    describe('when there are no companies returned', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          searchInput: 'Company'
+        }
+      })
+
+      it('returns the correct page title', () => {
+        const result = ExistingAccountPresenter.go(session, [])
+
+        expect(result.pageTitle).to.equal(`No search results found for "${session.searchInput}"`)
       })
     })
   })
