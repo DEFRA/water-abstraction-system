@@ -1,13 +1,13 @@
 'use strict'
 
-const GroupHelper = require('../support/helpers/group.helper.js')
-const GroupModel = require('../../app/models/group.model.js')
-const RoleHelper = require('../support/helpers/role.helper.js')
-const RoleModel = require('../../app/models/role.model.js')
-const UserHelper = require('../support/helpers/user.helper.js')
-const UserModel = require('../../app/models/user.model.js')
-const UserGroupHelper = require('../support/helpers/user-group.helper.js')
-const UserRoleHelper = require('../support/helpers/user-role.helper.js')
+const GroupHelper = require('../helpers/group.helper.js')
+const GroupModel = require('../../../app/models/group.model.js')
+const RoleHelper = require('../helpers/role.helper.js')
+const RoleModel = require('../../../app/models/role.model.js')
+const UserHelper = require('../helpers/user.helper.js')
+const UserModel = require('../../../app/models/user.model.js')
+const UserGroupHelper = require('../helpers/user-group.helper.js')
+const UserRoleHelper = require('../helpers/user-role.helper.js')
 
 /**
  * Populates a `UserModel` instance as the 'admin-internal@wrls.gov.uk' user for testing purposes
