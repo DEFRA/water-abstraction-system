@@ -27,7 +27,14 @@ describe('__DESCRIBE_LABEL__', () => {
     it('returns page data for the view', async () => {
       const result = await __MODULE_NAME__.go(session.id)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        activeNavBar: '',
+        backLink: {
+          href: '',
+          text: 'Back'
+        },
+        pageTitle: ''
+      })
     })
   })
 })

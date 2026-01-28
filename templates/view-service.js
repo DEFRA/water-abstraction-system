@@ -12,7 +12,7 @@ const SessionModel = require('__SESSION_MODEL_PATH__')
 /**
  * Orchestrates fetching and presenting the data for the `` page
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
@@ -22,6 +22,7 @@ async function go(sessionId) {
   const pageData = __PRESENTER_NAME__.go(session)
 
   return {
+    activeNavBar: '',
     ...pageData
   }
 }
