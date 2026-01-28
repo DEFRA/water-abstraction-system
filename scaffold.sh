@@ -186,10 +186,10 @@ generate_paths() {
           SOURCE_TEMPLATE="$TEMPLATE_VIEW_SERVICE"
           TEST_TEMPLATE="$TEMPLATE_TEST_VIEW_SERVICE"
 
-           # We prefix our submit services with 'view'
-           MODULE_NAME="View${MODULE_NAME}"
-           SOURCE_FILE="view-${SOURCE_FILE}"
-           TEST_FILE="view-${TEST_FILE}"
+            # We prefix our submit services with 'view'
+            MODULE_NAME="View${MODULE_NAME}"
+            SOURCE_FILE="view-${SOURCE_FILE}"
+            TEST_FILE="view-${TEST_FILE}"
           ;;
         submit)
             SOURCE_TEMPLATE="$TEMPLATE_SUBMIT_SERVICE"
