@@ -9,8 +9,8 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const NotificationsFixture = require('../../../../fixtures/notifications.fixture.js')
-const NotifyResponseFixture = require('../../../../fixtures/notify-response.fixture.js')
+const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
+const NotifyResponseFixture = require('../../../../support/fixtures/notify-response.fixture.js')
 const { generateNoticeReferenceCode } = require('../../../../../app/lib/general.lib.js')
 
 // Things we need to stub

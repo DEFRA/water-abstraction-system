@@ -1,13 +1,13 @@
 'use strict'
 
-const PointHelper = require('../support/helpers/point.helper.js')
-const PrimaryPurposeHelper = require('../support/helpers/primary-purpose.helper.js')
-const PurposeHelper = require('../support/helpers/purpose.helper.js')
-const RegionHelper = require('../support/helpers/region.helper.js')
-const { generateReference } = require('../support/helpers/return-requirement.helper.js')
-const SecondaryPurposeHelper = require('../support/helpers/secondary-purpose.helper.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
+const PointHelper = require('../helpers/point.helper.js')
+const PrimaryPurposeHelper = require('../helpers/primary-purpose.helper.js')
+const PurposeHelper = require('../helpers/purpose.helper.js')
+const RegionHelper = require('../helpers/region.helper.js')
+const SecondaryPurposeHelper = require('../helpers/secondary-purpose.helper.js')
+const { generateReference } = require('../helpers/return-requirement.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../helpers/licence.helper.js')
 
 /**
  * Generates the return log prefix in the format v1:regionCode:licenceRef:reference from a return requirement

@@ -9,7 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
+const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 

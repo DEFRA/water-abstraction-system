@@ -1,18 +1,18 @@
 'use strict'
 
-const LicenceModel = require('../../app/models/licence.model.js')
-const ReturnLogHelper = require('../support/helpers/return-log.helper.js')
-const ReturnLogModel = require('../../app/models/return-log.model.js')
-const ReturnSubmissionModel = require('../../app/models/return-submission.model.js')
-const ReturnSubmissionLineModel = require('../../app/models/return-submission-line.model.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
+const ReturnLogHelper = require('../helpers/return-log.helper.js')
+const ReturnLogModel = require('../../../app/models/return-log.model.js')
+const ReturnSubmissionModel = require('../../../app/models/return-submission.model.js')
+const ReturnSubmissionLineModel = require('../../../app/models/return-submission-line.model.js')
 const {
   formatDateObjectToISO,
   daysFromPeriod,
   weeksFromPeriod,
   monthsFromPeriod
-} = require('../../app/lib/dates.lib.js')
-const { generateRandomInteger, generateUUID } = require('../../app/lib/general.lib.js')
-const { relativeToToday } = require('../support/general.js')
+} = require('../../../app/lib/dates.lib.js')
+const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
+const { relativeToToday } = require('../general.js')
 
 /**
  * Applies the fields that are returned by the FetchReturnLogService to a return log instance

@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionModel = require('../../../../app/models/session.model.js')
-const CustomersFixtures = require('../../../fixtures/customers.fixture.js')
+const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 
 // Things we need to stub
 const FetchCompanyService = require('../../../../app/services/companies/fetch-company.service.js')

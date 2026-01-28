@@ -1,7 +1,7 @@
 'use strict'
 
-const { generateNoticeReferenceCode, generateRandomInteger, generateUUID } = require('../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
+const { generateNoticeReferenceCode, generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../helpers/licence.helper.js')
 
 /**
  * Represents a notice of type 'alert reduce'
