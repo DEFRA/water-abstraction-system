@@ -47,7 +47,7 @@ async function submitContactEmail(request, h) {
     return h.view(`company-contacts/setup/contact-email.njk`, pageData)
   }
 
-  return h.redirect('')
+  return h.redirect(`/system/company-contacts/setup/${sessionId}/check`)
 }
 
 async function submitContactName(request, h) {

@@ -14,7 +14,9 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/company-contacts/setup/initiate-session.service.js')
+const SubmitContactEmailService = require('../../app/services/company-contacts/setup/submit-contact-email.service.js')
 const SubmitContactNameService = require('../../app/services/company-contacts/setup/submit-contact-name.service.js')
+const ViewContactEmailService = require('../../app/services/company-contacts/setup/view-contact-email.service.js')
 const ViewContactNameService = require('../../app/services/company-contacts/setup/view-contact-name.service.js')
 
 // For running our service
@@ -106,11 +108,54 @@ describe('Company Contacts Setup controller', () => {
         Sinon.stub(SubmitContactNameService, 'go').returns({})
       })
 
-      it('redirects to companies contacts page', async () => {
+      it('redirects to companies contacts setup contact email page', async () => {
         const response = await server.inject(postOptions)
 
         expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
         expect(response.headers.location).to.equal(`/system/company-contacts/setup/${sessionId}/contact-email`)
+      })
+    })
+  })
+
+  describe('/company-contacts/setup/{id}/contact-email', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/contact-email`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['hof_notifications'] }
+          }
+        }
+
+        Sinon.stub(ViewContactEmailService, 'go').returns({ pageTitle: 'Contact email' })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Contact email')
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+
+        postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/contact-email`, {}, [
+          'hof_notifications'
+        ])
+
+        Sinon.stub(SubmitContactEmailService, 'go').returns({})
+      })
+
+      it('redirects to companies contacts check page', async () => {
+        const response = await server.inject(postOptions)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+        expect(response.headers.location).to.equal(`/system/company-contacts/setup/${sessionId}/check`)
       })
     })
   })
