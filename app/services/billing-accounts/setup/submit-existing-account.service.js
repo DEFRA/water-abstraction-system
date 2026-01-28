@@ -8,6 +8,7 @@
 
 const ExistingAccountPresenter = require('../../../presenters/billing-accounts/setup/existing-account.presenter.js')
 const ExistingAccountValidator = require('../../../validators/billing-accounts/setup/existing-account.validator.js')
+const FetchCompaniesService = require('./fetch-companies.service.js')
 const SessionModel = require('../../../models/session.model.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
@@ -32,7 +33,9 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = ExistingAccountPresenter.go(session)
+  const companySearchResults = await FetchCompaniesService.go(session.searchInput)
+
+  const pageData = ExistingAccountPresenter.go(session, companySearchResults)
 
   return {
     error: validationResult,

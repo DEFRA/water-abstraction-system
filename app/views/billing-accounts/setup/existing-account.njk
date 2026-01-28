@@ -7,11 +7,19 @@
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    {{ govukRadios({
-      name: "existingAccount",
-      errorMessage: error.existingAccount,
-      items: items
-    }) }}
+    {% if items.length > 0 %}
+      {{ govukRadios({
+        name: "existingAccount",
+        errorMessage: error.existingAccount,
+        items: items
+      }) }}
+    {% else %}
+      <div class="govuk-body govuk-!-padding-top-3">
+        <p>Continue to setup a new account.</p>
+
+        <input type="hidden" name="existingAccount" value="new"/>
+      </div>
+    {% endif %}
 
     {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
   </form>
