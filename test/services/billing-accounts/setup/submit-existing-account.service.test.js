@@ -15,7 +15,7 @@ const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtu
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const FetchCompanyDetailsService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
+const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
 
 // Thing under test
 const SubmitExistingAccountService = require('../../../../app/services/billing-accounts/setup/submit-existing-account.service.js')
@@ -100,7 +100,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   describe('when validation fails', () => {
     beforeEach(async () => {
       payload = {}
-      Sinon.stub(FetchCompanyDetailsService, 'go').returns(fetchResults)
+      Sinon.stub(FetchCompaniesService, 'go').returns(fetchResults)
     })
 
     it('returns page data for the view, with errors', async () => {

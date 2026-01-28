@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Fetches any companies that make the search criteria
- * @module FetchCompanyDetailsService
+ * Fetches any companies that meet the search criteria
+ * @module FetchCompaniesService
  */
 
 const CompanyModel = require('../../../models/company.model.js')
 const { db } = require('../../../../db/db.js')
 
 /**
- * Fetches any companies that make the search criteria
+ * Fetches any companies that meet the search criteria
  *
  * @param {string} searchInput - The string to search for
  *

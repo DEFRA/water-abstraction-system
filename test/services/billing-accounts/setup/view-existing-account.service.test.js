@@ -15,7 +15,7 @@ const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtu
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const FetchCompanyDetailsService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
+const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
 
 // Thing under test
 const ViewExistingAccountService = require('../../../../app/services/billing-accounts/setup/view-existing-account.service.js')
@@ -32,7 +32,7 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
     }
 
     session = await SessionHelper.add({ data: sessionData })
-    Sinon.stub(FetchCompanyDetailsService, 'go').returns(fetchResults)
+    Sinon.stub(FetchCompaniesService, 'go').returns(fetchResults)
   })
 
   describe('when called', () => {
