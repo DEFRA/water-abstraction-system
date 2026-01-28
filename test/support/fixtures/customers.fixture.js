@@ -1,11 +1,11 @@
 'use strict'
 
-const BillingAccountModel = require('../../app/models/billing-account.model.js')
-const ContactModel = require('../../app/models/contact.model.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const { generateAccountNumber } = require('../support/helpers/billing-account.helper.js')
-const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
+const BillingAccountModel = require('../../../app/models/billing-account.model.js')
+const ContactModel = require('../../../app/models/contact.model.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
+const { generateAccountNumber } = require('../helpers/billing-account.helper.js')
+const { generateLicenceRef } = require('../helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
  * A representation from the billing accounts 'FetchBillingAccountsService'

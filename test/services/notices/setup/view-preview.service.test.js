@@ -11,7 +11,7 @@ const { expect } = Code
 // Test helpers
 const { HTTP_STATUS_OK } = require('node:http2').constants
 
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')

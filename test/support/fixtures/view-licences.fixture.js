@@ -4,12 +4,12 @@
  * @module ViewLicencesFixture
  */
 
-const LicenceModel = require('../../app/models/licence.model.js')
-const LicenceVersionHolderModel = require('../../app/models/licence-version-holder.model.js')
-const LicenceVersionModel = require('../../app/models/licence-version.model.js')
-const PointModel = require('../../app/models/point.model.js')
-const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
+const LicenceVersionHolderModel = require('../../../app/models/licence-version-holder.model.js')
+const LicenceVersionModel = require('../../../app/models/licence-version.model.js')
+const PointModel = require('../../../app/models/point.model.js')
+const { generateLicenceRef } = require('../helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
  * Represents a licence condition

@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
-const ReturnLogsFixture = require('../../fixtures/return-logs.fixture.js')
+const ReturnLogsFixture = require('../../support/fixtures/return-logs.fixture.js')
 
 // Thing under test
 const DownloadReturnLogPresenter = require('../../../app/presenters/return-logs/download-return-log.presenter.js')

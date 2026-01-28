@@ -9,8 +9,8 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../../../fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../../../fixtures/notifications.fixture.js')
+const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
 const NotificationHelper = require('../../../../support/helpers/notification.helper.js')
 const { futureDueDate } = require('../../../../../app/presenters/notices/base.presenter.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
