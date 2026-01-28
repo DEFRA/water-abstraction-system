@@ -37,6 +37,7 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
 
   afterEach(async () => {
     await session.$query().delete()
+    Sinon.restore()
   })
 
   describe('when called', () => {

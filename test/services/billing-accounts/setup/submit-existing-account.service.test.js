@@ -37,6 +37,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
   afterEach(async () => {
     await session.$query().delete()
+    Sinon.restore()
   })
 
   describe('when the user picks an existing address', () => {
