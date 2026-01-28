@@ -3,27 +3,36 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
+// Things we need to stub
+const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
+
 // Thing under test
 const ViewExistingAccountService = require('../../../../app/services/billing-accounts/setup/view-existing-account.service.js')
 
 describe('Billing Accounts - Setup - View Existing Account service', () => {
+  const fetchResults = _companies()
   let session
   let sessionData
 
   beforeEach(async () => {
     sessionData = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+      billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+      searchInput: 'Company Name'
     }
 
     session = await SessionHelper.add({ data: sessionData })
+    Sinon.stub(FetchCompaniesService, 'go').returns(fetchResults)
   })
 
   describe('when called', () => {
@@ -37,6 +46,12 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
           text: 'Back'
         },
         items: [
+          {
+            id: fetchResults[0].id,
+            value: fetchResults[0].id,
+            text: fetchResults[0].name,
+            checked: false
+          },
           { divider: 'or' },
           {
             id: 'new',
@@ -51,3 +66,13 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
     })
   })
 })
+
+function _companies() {
+  return [
+    {
+      exact: true,
+      id: generateUUID(),
+      name: 'Company Name Ltd'
+    }
+  ]
+}
