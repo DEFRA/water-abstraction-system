@@ -19,7 +19,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  return {}
+  return { session }
 }
 
 module.exports = {
