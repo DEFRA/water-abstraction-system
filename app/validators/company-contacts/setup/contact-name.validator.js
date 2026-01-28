@@ -18,8 +18,9 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    name: Joi.string().required().messages({
-      'any.required': 'Enter a name for the contact'
+    name: Joi.string().required().max(100).messages({
+      'any.required': 'Enter a name for the contact',
+      'string.max': 'Name must be 100 characters or less'
     })
   })
 

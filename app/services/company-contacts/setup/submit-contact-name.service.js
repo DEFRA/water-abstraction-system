@@ -30,15 +30,20 @@ async function go(sessionId, payload) {
     return {}
   }
 
+  session.name = payload.name
+
   const pageData = ContactNamePresenter.go(session)
 
   return {
+    activeNavBar: 'search',
     error: validationResult,
     ...pageData
   }
 }
 
 async function _save(session, payload) {
+  session.name = payload.name
+
   return session.$update()
 }
 

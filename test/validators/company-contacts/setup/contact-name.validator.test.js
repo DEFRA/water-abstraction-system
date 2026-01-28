@@ -27,16 +27,32 @@ describe('Company Contacts - Setup - Contact Name Validator', () => {
   })
 
   describe('when called with invalid data', () => {
-    beforeEach(() => {
-      payload = {}
+    describe('with an empty payload', () => {
+      beforeEach(() => {
+        payload = {}
+      })
+
+      it('returns with errors', () => {
+        const result = ContactNameValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Enter a name for the contact')
+      })
     })
 
-    it('returns with errors', () => {
-      const result = ContactNameValidator.go(payload)
+    describe('with a "name" longer than 100 characters', () => {
+      beforeEach(() => {
+        payload = { name: 'a'.repeat(101) }
+      })
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Enter a name for the contact')
+      it('returns with errors', () => {
+        const result = ContactNameValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Name must be 100 characters or less')
+      })
     })
   })
 })
