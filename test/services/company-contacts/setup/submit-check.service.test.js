@@ -37,7 +37,7 @@ describe('Company Contacts - Setup - Check Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitCheckService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({ session })
     })
   })
 })
