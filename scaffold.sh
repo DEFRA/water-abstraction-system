@@ -148,11 +148,11 @@ generate_helper_snippet() {
     echo "Here is your ready-to-use controller + router snippet:"
     echo ""
 
-    local service_path="../services/${REL_DIR}/${RAW_NAME}.service.js"
+    local service_path="../services/${REL_DIR}/view-${RAW_NAME}.service.js"
     local submit_service_path="../services/${REL_DIR}/submit-${RAW_NAME}.service.js"
     local view_path="${REL_DIR}/${RAW_NAME}.njk"
 
-    sed -e "s|__SERVICE_NAME__|${PASCAL_NAME}Service|g" \
+    sed -e "s|__SERVICE_NAME__|View${PASCAL_NAME}Service|g" \
         -e "s|__SUBMIT_NAME__|Submit${PASCAL_NAME}Service|g" \
         -e "s|__SERVICE_PATH__|${service_path}|g" \
         -e "s|__NAME__|${PASCAL_NAME}|g" \
