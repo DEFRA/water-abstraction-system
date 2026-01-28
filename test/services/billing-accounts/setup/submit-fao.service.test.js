@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -25,6 +25,10 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     }
 
     session = await SessionHelper.add({ data: sessionData })
+  })
+
+  afterEach(async () => {
+    await session.$query().delete()
   })
 
   describe('when called with a "yes" value', () => {

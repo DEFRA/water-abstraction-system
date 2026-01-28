@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
@@ -25,7 +25,7 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  before(async () => {
     sessionData = {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
       searchInput: 'Company Name'
@@ -33,6 +33,11 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
 
     session = await SessionHelper.add({ data: sessionData })
     Sinon.stub(FetchCompaniesService, 'go').returns(fetchResults)
+  })
+
+  after(async () => {
+    await session.$query().delete()
+    Sinon.restore()
   })
 
   describe('when called', () => {

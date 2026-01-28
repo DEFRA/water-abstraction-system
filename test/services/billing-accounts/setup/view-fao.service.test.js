@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,12 +18,16 @@ describe('Billing Accounts - Setup - View FAO Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  before(async () => {
     sessionData = {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
 
     session = await SessionHelper.add({ data: sessionData })
+  })
+
+  after(async () => {
+    await session.$query().delete()
   })
 
   describe('when called', () => {
