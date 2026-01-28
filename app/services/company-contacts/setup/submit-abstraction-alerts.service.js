@@ -14,7 +14,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/abstraction-alerts' page
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
  *
  * @returns {Promise<object>} The data formatted for the view template
