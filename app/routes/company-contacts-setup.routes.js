@@ -17,6 +17,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/company-contacts/setup/{sessionId}/check',
+    options: {
+      handler: CompanyContactsSetupController.viewCheck,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/company-contacts/setup/{sessionId}/check',
+    options: {
+      handler: CompanyContactsSetupController.submitCheck,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/company-contacts/setup/{sessionId}/contact-email',
     options: {
       handler: CompanyContactsSetupController.viewContactEmail,
