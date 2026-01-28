@@ -17,16 +17,39 @@ const FetchCompaniesService = require('../../../../app/services/billing-accounts
 describe('Billing Accounts - Setup - Fetch Companies service', () => {
   let company
 
-  describe('when a matching company exists', () => {
+  describe('when an exact match exists', () => {
     beforeEach(async () => {
-      company = await CompanyHelper.add()
+      company = await CompanyHelper.add({
+        name: 'Example Fake Ltd'
+      })
     })
 
     it('returns the matching addresses', async () => {
-      const result = await FetchCompaniesService.go('Example')
+      const result = await FetchCompaniesService.go('Example Fake Ltd')
 
       expect(result).to.include([
         CompanyModel.fromJson({
+          exact: true,
+          id: company.id,
+          name: company.name
+        })
+      ])
+    })
+  })
+
+  describe('when a partial match exists', () => {
+    beforeEach(async () => {
+      company = await CompanyHelper.add({
+        name: 'Example Fake Ltd'
+      })
+    })
+
+    it('returns the matching addresses', async () => {
+      const result = await FetchCompaniesService.go('Fake')
+
+      expect(result).to.include([
+        CompanyModel.fromJson({
+          exact: false,
           id: company.id,
           name: company.name
         })

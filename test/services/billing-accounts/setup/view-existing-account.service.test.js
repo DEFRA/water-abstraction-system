@@ -70,6 +70,7 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
 function _companies() {
   return [
     {
+      exact: true,
       id: generateUUID(),
       name: 'Company Name Ltd'
     }
