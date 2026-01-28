@@ -1,32 +1,11 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% from "macros/bill-run-status-tag.njk" import statusTag %}
 
-{% block content %}
-  {# Bill runs busy banner #}
-  {% if busy === 'both' %}
-    {{ govukNotificationBanner({
-        html: '<p class="govuk-notification-banner__heading">Bill runs are currently busy building and cancelling.</p>
-          <p>Please wait for these bill runs to finish before creating another one.</p>'
-    }) }}
-  {% elif busy === 'building' %}
-    {{ govukNotificationBanner({
-        html: '<p class="govuk-notification-banner__heading">A bill run is currently building.</p>
-          <p>Please wait for this bill run to finish building before creating another one.</p>'
-    }) }}
-  {% elif busy === 'cancelling' %}
-    {{ govukNotificationBanner({
-        html: '<p class="govuk-notification-banner__heading">A bill run is currently cancelling.</p>
-          <p>Please wait for this bill run to finish cancelling before creating another one.</p>'
-    }) }}
-  {% endif %}
-
-  <h1 class="govuk-heading-l">Bill runs</h1>
-
+{% block pageContent %}
   <p>Create a supplementary, annual or two-part tariff bill run.</p>
 
   {{ govukButton({ text: "Create a bill run", href: "/system/bill-runs/setup", preventDoubleClick: true }) }}
@@ -37,9 +16,7 @@
   {% if billRuns|length === 0 %}
     <p>No bill runs found.</p>
   {% else %}
-    <h2 class="govuk-heading-l">View a bill run</h2>
-
-    <p>Select date to see the details of a bill run.</p>
+    <h2 class="govuk-heading-l">{{ pageSubHeading }}</h2>
 
     {% set tableRows = [] %}
     {% for billRun in billRuns %}
@@ -105,8 +82,10 @@
     {% endfor %}
 
     {{ govukTable({
-        firstCellIsHeader: false,
         attributes: { 'data-test': 'bill-runs'},
+        caption: pagination.showingMessage,
+        captionClasses: "govuk-table__caption--s govuk-!-margin-bottom-2",
+        firstCellIsHeader: false,
         head: [
           { text: 'Date' },
           { text: 'Region' },
