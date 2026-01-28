@@ -27,7 +27,7 @@ describe('Send to S3 bucket service', () => {
   })
 
   describe('when successful', () => {
-    const filePath = 'test/fixtures/compress-files.service.csv'
+    const filePath = 'test/support/fixtures/compress-files.service.csv'
 
     it('uploads a file to the S3 bucket', async () => {
       await SendToS3BucketService.go(filePath)

@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const CustomersFixtures = require('../../fixtures/customers.fixture.js')
+const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
 // Thing under test
 const CompanyContactsPresenter = require('../../../app/presenters/licences/company-contacts.presenter.js')

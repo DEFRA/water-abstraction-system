@@ -9,7 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AbstractionAlertSessionData = require('../../../fixtures/abstraction-alert-session-data.fixture.js')
+const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 const SessionModel = require('../../../../app/models/session.model.js')
 
 // Things we need to stub

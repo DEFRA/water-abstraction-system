@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
+const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
 
 // Things we need to stub
 const FetchPointsService = require('../../../app/services/licences/fetch-points.service.js')

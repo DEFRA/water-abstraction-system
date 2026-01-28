@@ -14,7 +14,7 @@ const databaseConfig = require('../../../config/database.config.js')
 // Test helpers
 const EventModel = require('../../../app/models/event.model.js')
 const EventHelper = require('../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../fixtures/notices.fixture.js')
+const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
 
 // Thing under test
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')

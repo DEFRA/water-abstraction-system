@@ -13,7 +13,7 @@ const databaseConfig = require('../../../config/database.config.js')
 
 // Test helpers
 const UserHelper = require('../../support/helpers/user.helper.js')
-const UsersFixture = require('../../fixtures/users.fixture.js')
+const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Thing under test
 const FetchUsersService = require('../../../app/services/users/fetch-users.service.js')
