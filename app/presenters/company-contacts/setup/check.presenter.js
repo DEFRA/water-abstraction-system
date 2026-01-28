@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the the '/company-contacts/setup/{sessionId}/check' page
+ * Formats data for the '/company-contacts/setup/{sessionId}/check' page
  * @module CheckPresenter
  */
 
 /**
- * Formats data for the the '/company-contacts/setup/{sessionId}/check' page
+ * Formats data for the '/company-contacts/setup/{sessionId}/check' page
  *
  * @param {object} session - The session instance
  *
