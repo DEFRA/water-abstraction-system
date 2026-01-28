@@ -18,7 +18,11 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    email: Joi.required()
+    email: Joi.string().max(100).email().required().messages({
+      'any.required': 'Enter an email address for the contact',
+      'string.email': 'Enter an email address in the correct format, like name@example.co.uk ',
+      'string.max': 'Email must be 100 characters or less'
+    })
   })
 
   return schema.validate(payload, { abortEarly: false })

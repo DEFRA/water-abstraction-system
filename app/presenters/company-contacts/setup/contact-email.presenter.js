@@ -13,12 +13,16 @@
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
+  const { id: sessionId, company } = session
+
   return {
     backLink: {
-      href: '',
+      href: `/system/company-contacts/setup/${sessionId}/contact-name`,
       text: 'Back'
     },
-    pageTitle: ''
+    pageTitle: 'Enter an email address for the contact',
+    pageTitleCaption: company.name,
+    email: session.email ?? ''
   }
 }
 

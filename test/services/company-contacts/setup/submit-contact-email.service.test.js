@@ -8,19 +8,24 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CustomersFixtures = require('../../../fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const SubmitContactEmailService = require('../../../../app/services/company-contacts/setup/submit-contact-email.service.js')
 
 describe('Company Contacts - Setup - Contact Email Service', () => {
+  let company
   let payload
   let session
   let sessionData
 
   beforeEach(async () => {
-    payload = { email: 'test@test.com' }
-    sessionData = {}
+    company = CustomersFixtures.company()
+
+    sessionData = { company }
+
+    payload = { email: 'eric@test.com' }
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -31,7 +36,11 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession).to.equal(session)
+      expect(refreshedSession).to.equal({
+        ...session,
+        data: { ...session.data, email: 'eric@test.com' },
+        email: 'eric@test.com'
+      })
     })
 
     it('continues the journey', async () => {
@@ -50,23 +59,25 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
       const result = await SubmitContactEmailService.go(session.id, payload)
 
       expect(result).to.equal({
-        activeNavBar: '',
+        activeNavBar: 'search',
         backLink: {
-          href: '',
+          href: `/system/company-contacts/setup/${session.id}/contact-name`,
           text: 'Back'
         },
+        email: '',
         error: {
+          email: {
+            text: 'Enter an email address for the contact'
+          },
           errorList: [
             {
               href: '#email',
-              text: '"email" is required'
+              text: 'Enter an email address for the contact'
             }
-          ],
-          email: {
-            text: '"email" is required'
-          }
+          ]
         },
-        pageTitle: ''
+        pageTitle: 'Enter an email address for the contact',
+        pageTitleCaption: 'Tyrell Corporation'
       })
     })
   })
