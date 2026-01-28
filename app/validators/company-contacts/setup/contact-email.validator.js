@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Validates data submitted for the `` page
+ * Validates data submitted for the '/company-contacts/setup/{sessionId}/contact-email' page
  *
- * @module __MODULE_NAME__
+ * @module ContactEmailValidator
  */
 
 const Joi = require('joi')
 
 /**
- * Validates data submitted for the `` page
+ * Validates data submitted for the '/company-contacts/setup/{sessionId}/contact-email' page
  *
  * @param {object} payload - The payload from the request to be validated
  *
@@ -18,7 +18,7 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    placeholder: Joi.required()
+    email: Joi.required()
   })
 
   return schema.validate(payload, { abortEarly: false })

@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('__SESSION_HELPER_PATH__')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const __MODULE_NAME__ = require('__REQUIRE_PATH__')
+const ViewContactEmailService = require('../../../../app/services/company-contacts/setup/view-contact-email.service.js')
 
-describe('__DESCRIBE_LABEL__', () => {
+describe('Company Contacts - Setup - Contact Email Service', () => {
   let session
   let sessionData
 
@@ -25,9 +25,16 @@ describe('__DESCRIBE_LABEL__', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await __MODULE_NAME__.go(session.id)
+      const result = await ViewContactEmailService.go(session.id)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        activeNavBar: '',
+        backLink: {
+          href: '',
+          text: 'Back'
+        },
+        pageTitle: ''
+      })
     })
   })
 })

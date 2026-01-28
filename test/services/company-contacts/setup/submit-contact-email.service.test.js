@@ -8,18 +8,18 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('__SESSION_HELPER_PATH__')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const __MODULE_NAME__ = require('__REQUIRE_PATH__')
+const SubmitContactEmailService = require('../../../../app/services/company-contacts/setup/submit-contact-email.service.js')
 
-describe('__DESCRIBE_LABEL__', () => {
+describe('Company Contacts - Setup - Contact Email Service', () => {
   let payload
   let session
   let sessionData
 
   beforeEach(async () => {
-    payload = { placeholder: 'change me' }
+    payload = { email: 'test@test.com' }
     sessionData = {}
 
     session = await SessionHelper.add({ data: sessionData })
@@ -27,7 +27,7 @@ describe('__DESCRIBE_LABEL__', () => {
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await __MODULE_NAME__.go(session.id, payload)
+      await SubmitContactEmailService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
@@ -35,7 +35,7 @@ describe('__DESCRIBE_LABEL__', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await __MODULE_NAME__.go(session.id, payload)
+      const result = await SubmitContactEmailService.go(session.id, payload)
 
       expect(result).to.equal({})
     })
@@ -47,7 +47,7 @@ describe('__DESCRIBE_LABEL__', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await __MODULE_NAME__.go(session.id, payload)
+      const result = await SubmitContactEmailService.go(session.id, payload)
 
       expect(result).to.equal({
         activeNavBar: '',
@@ -58,12 +58,12 @@ describe('__DESCRIBE_LABEL__', () => {
         error: {
           errorList: [
             {
-              href: '#placeholder',
-              text: '"placeholder" is required'
+              href: '#email',
+              text: '"email" is required'
             }
           ],
-          placeholder: {
-            text: '"placeholder" is required'
+          email: {
+            text: '"email" is required'
           }
         },
         pageTitle: ''

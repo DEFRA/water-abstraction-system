@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the `` page
- * @module __MODULE_NAME__
+ * Formats data for the '/company-contacts/setup/{sessionId}/contact-email' page
+ * @module ContactEmailPresenter
  */
 
 /**
- * Formats data for the `` page
+ * Formats data for the '/company-contacts/setup/{sessionId}/contact-email' page
  *
  * @param {object} session - The session instance
  *
