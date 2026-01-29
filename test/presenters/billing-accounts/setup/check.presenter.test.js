@@ -30,7 +30,6 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
       const result = CheckPresenter.go(session)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/select-contact`,
           text: 'Back'
