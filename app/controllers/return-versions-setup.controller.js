@@ -80,7 +80,6 @@ async function approved(request, h) {
   const { licenceId } = request.params
 
   return h.view('return-versions/setup/approved.njk', {
-    activeNavBar: 'search',
     pageTitle: 'Requirements for returns approved',
     licenceId
   })

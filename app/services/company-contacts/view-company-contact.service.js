@@ -28,7 +28,6 @@ async function go(id, auth) {
 
   return {
     ...pageData,
-    activeNavBar: 'search',
     roles: userRoles(auth)
   }
 }

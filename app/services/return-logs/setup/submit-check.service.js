@@ -42,7 +42,6 @@ async function go(sessionId, user) {
   const formattedData = CheckPresenter.go(session)
 
   return {
-    activeNavBar: 'search',
     error,
     ...formattedData
   }

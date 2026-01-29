@@ -49,7 +49,6 @@ describe('Billing Accounts - View Billing Account service', () => {
       )
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         address: [
           'Ferns Surfacing Limited',
           'Test Testingson',

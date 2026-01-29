@@ -48,7 +48,6 @@ async function go(sessionId, payload) {
   const pageData = await FullConditionService.go(sessionId)
 
   return {
-    activeNavBar: 'search',
     error: validationResult,
     ...pageData
   }

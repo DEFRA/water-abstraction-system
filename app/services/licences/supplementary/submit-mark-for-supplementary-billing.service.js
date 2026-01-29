@@ -42,7 +42,6 @@ async function go(licenceId, payload) {
   const pageData = await _getPageData(licenceId)
 
   return {
-    activeNavBar: 'search',
     pageTitle: 'Mark for the supplementary bill run',
     error: validationResult,
     ...pageData

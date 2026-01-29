@@ -110,7 +110,6 @@ describe('Return Logs - Setup - Controller', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
           Sinon.stub(ConfirmedService, 'go').resolves({
-            activeNavBar: 'search',
             licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
             licenceRef: '01/117',
             pageTitle: 'Return 10032788 received',

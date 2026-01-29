@@ -38,7 +38,6 @@ async function go(companyId, auth, page) {
 
   return {
     ...pageData,
-    activeNavBar: 'search',
     activeSecondaryNav: 'licences',
     pagination: paginationData,
     roles: userRoles(auth)

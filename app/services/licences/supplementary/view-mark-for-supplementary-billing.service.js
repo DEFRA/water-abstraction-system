@@ -22,7 +22,6 @@ async function go(licenceId) {
   const pageData = MarkForSupplementaryBillingPresenter.go(licenceData)
 
   return {
-    activeNavBar: 'search',
     ...pageData
   }
 }

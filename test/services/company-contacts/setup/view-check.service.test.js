@@ -28,7 +28,6 @@ describe('Company Contacts - Setup - Check Service', () => {
       const result = await ViewCheckService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: '',
           text: 'Back'

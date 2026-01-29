@@ -51,7 +51,6 @@ describe('Licence Monitoring Station - Remove service', () => {
       const result = await RemoveService.go(licenceMonitoringStationId)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: `/system/monitoring-stations/${monitoringStationId}/licence/${licenceId}`,
         licenceConditionTitle: 'Hands off flow threshold',
         licenceRef: '99/999/9999',

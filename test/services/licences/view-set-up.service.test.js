@@ -111,7 +111,6 @@ describe('Licences - View Set Up service', () => {
       const result = await ViewSetUpService.go(licence.id, auth)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         activeSecondaryNav: 'set-up',
         backLink: {
           href: '/',

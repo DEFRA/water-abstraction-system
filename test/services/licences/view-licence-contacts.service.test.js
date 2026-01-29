@@ -38,7 +38,6 @@ describe('Licences - View Licence Contacts service', () => {
       const result = await ViewLicenceContactService.go(licenceId)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/licences/${licenceId}/summary`,
           text: 'Go back to summary'

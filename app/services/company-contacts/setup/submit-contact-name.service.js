@@ -35,7 +35,6 @@ async function go(sessionId, payload) {
   const pageData = ContactNamePresenter.go(session)
 
   return {
-    activeNavBar: 'search',
     error: validationResult,
     ...pageData
   }

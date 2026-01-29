@@ -35,7 +35,6 @@ describe('Return Versions - View service', () => {
       const result = await ViewService.go(returnVersionId)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         createdBy: 'carol.shaw@atari.com',
         createdDate: '5 April 2022',
         licenceId: '761bc44f-80d5-49ae-ab46-0a90495417b5',

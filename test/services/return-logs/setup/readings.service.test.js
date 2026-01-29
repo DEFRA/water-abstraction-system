@@ -43,7 +43,6 @@ describe('Return Logs Setup - Readings service', () => {
       const result = await ReadingsService.go(session.id, yearMonth)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/return-logs/setup/${session.id}/check`,
           text: 'Back'

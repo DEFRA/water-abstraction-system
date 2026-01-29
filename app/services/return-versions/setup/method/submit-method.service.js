@@ -43,7 +43,6 @@ async function go(sessionId, payload) {
   const formattedData = MethodPresenter.go(session, payload)
 
   return {
-    activeNavBar: 'search',
     error: validationResult,
     ...formattedData
   }

@@ -51,7 +51,6 @@ describe('Licence Versions - View service', () => {
       const result = await ViewService.go(licenceVersion.id, auth)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/licences/${licenceVersion.licence.id}/history`,
           text: 'Go back to history'

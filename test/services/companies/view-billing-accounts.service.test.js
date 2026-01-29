@@ -53,7 +53,6 @@ describe('Companies - View Billing Accounts service', () => {
       const result = await ViewBillingAccountsService.go(company.id, auth, page)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         activeSecondaryNav: 'billing-accounts',
         backLink: {
           href: '/',

@@ -51,7 +51,6 @@ describe('Licence Monitoring Station Setup - Full Condition Service', () => {
       const result = await FullConditionService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: `/system/licence-monitoring-station/setup/${session.id}/licence-number`,
         monitoringStationLabel: 'Monitoring Station',
         pageTitle: `Select the full condition for licence LICENCE_REF`,

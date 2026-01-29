@@ -83,7 +83,6 @@ describe('Return Versions - Setup - Check service', () => {
 
       expect(result).to.equal(
         {
-          activeNavBar: 'search',
           licenceRef: '01/ABC',
           multipleUpload: false,
           note: {

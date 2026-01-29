@@ -125,7 +125,6 @@ describe('Return Versions Setup - Submit Abstraction Period service', () => {
 
         expect(result).to.equal(
           {
-            activeNavBar: 'search',
             pageTitle: 'Enter the abstraction period for the requirements for returns',
             pageTitleCaption: 'Licence 01/ABC',
             abstractionPeriod: null,

@@ -60,7 +60,6 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
 
       expect(result).to.equal({
         abstractionAlerts: null,
-        activeNavBar: 'search',
         backLink: {
           href: `/system/company-contacts/setup/${session.id}/contact-email`,
 

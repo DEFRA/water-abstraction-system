@@ -228,7 +228,6 @@ function _postOptions() {
 
 function _usersPageData(error = false) {
   const pageData = {
-    activeNavBar: 'search',
     filters: {
       email: null,
       openFilter: true,

@@ -135,7 +135,6 @@ describe('Users - Submit Index Users service', () => {
           const result = await SubmitIndexUsersService.go(payload, yarStub, auth, '2')
 
           expect(result).to.equal({
-            activeNavBar: 'search',
             error: {
               errorList: [
                 {
@@ -215,7 +214,6 @@ describe('Users - Submit Index Users service', () => {
           const result = await SubmitIndexUsersService.go(payload, yarStub, auth)
 
           expect(result).to.equal({
-            activeNavBar: 'search',
             error: {
               errorList: [
                 {
