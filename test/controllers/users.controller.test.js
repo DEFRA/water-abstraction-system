@@ -47,7 +47,7 @@ describe('Users controller', () => {
   describe('/users', () => {
     describe('GET', () => {
       beforeEach(() => {
-        options = _getOptions('/users', { scope: [] })
+        options = _getOptions('/users', { scope: ['manage_accounts'] })
       })
 
       describe('with no pagination', () => {
@@ -90,7 +90,7 @@ describe('Users controller', () => {
 
     describe('POST', () => {
       beforeEach(() => {
-        postOptions = postRequestOptions('/users', {})
+        postOptions = postRequestOptions('/users', {}, ['manage_accounts'])
       })
 
       describe('when the request succeeds', () => {
