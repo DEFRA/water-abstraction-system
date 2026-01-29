@@ -14,9 +14,11 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/company-contacts/setup/initiate-session.service.js')
+const SubmitAbstractionAlertsService = require('../../app/services/company-contacts/setup/submit-abstraction-alerts.service.js')
+const SubmitCheckService = require('../../app/services/company-contacts/setup/submit-check.service.js')
 const SubmitContactEmailService = require('../../app/services/company-contacts/setup/submit-contact-email.service.js')
 const SubmitContactNameService = require('../../app/services/company-contacts/setup/submit-contact-name.service.js')
-const SubmitCheckService = require('../../app/services/company-contacts/setup/submit-check.service.js')
+const ViewAbstractionAlertsService = require('../../app/services/company-contacts/setup/view-abstraction-alerts.service.js')
 const ViewCheckService = require('../../app/services/company-contacts/setup/view-check.service.js')
 const ViewContactEmailService = require('../../app/services/company-contacts/setup/view-contact-email.service.js')
 const ViewContactNameService = require('../../app/services/company-contacts/setup/view-contact-name.service.js')
@@ -74,6 +76,49 @@ describe('Company Contacts Setup controller', () => {
 
         expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
         expect(response.headers.location).to.equal(`/system/company-contacts/setup/${id}/contact-name`)
+      })
+    })
+  })
+
+  describe('/company-contacts/setup/{id}/abstraction-alerts', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/abstraction-alerts`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['hof_notifications'] }
+          }
+        }
+
+        Sinon.stub(ViewAbstractionAlertsService, 'go').returns({ pageTitle: 'Abstraction alerts' })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Abstraction alerts')
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+
+        postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/abstraction-alerts`, {}, [
+          'hof_notifications'
+        ])
+
+        Sinon.stub(SubmitAbstractionAlertsService, 'go').returns({})
+      })
+
+      it('redirects to companies contacts setup check page', async () => {
+        const response = await server.inject(postOptions)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+        expect(response.headers.location).to.equal(`/system/company-contacts/setup/${sessionId}/check`)
       })
     })
   })
@@ -198,7 +243,7 @@ describe('Company Contacts Setup controller', () => {
         const response = await server.inject(postOptions)
 
         expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/company-contacts/setup/${sessionId}/check`)
+        expect(response.headers.location).to.equal(`/system/company-contacts/setup/${sessionId}/abstraction-alerts`)
       })
     })
   })

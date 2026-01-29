@@ -8,19 +8,24 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const SubmitAbstractionAlertsService = require('../../../../app/services/company-contacts/setup/submit-abstraction-alerts.service.js')
 
 describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
+  let company
   let payload
   let session
   let sessionData
 
   beforeEach(async () => {
+    company = CustomersFixtures.company()
+
+    sessionData = { company }
+
     payload = { abstractionAlerts: 'yes' }
-    sessionData = {}
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -31,7 +36,11 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession).to.equal(session)
+      expect(refreshedSession).to.equal({
+        ...session,
+        data: { ...session.data, abstractionAlerts: 'yes' },
+        abstractionAlerts: 'yes'
+      })
     })
 
     it('continues the journey', async () => {
@@ -50,23 +59,26 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
       const result = await SubmitAbstractionAlertsService.go(session.id, payload)
 
       expect(result).to.equal({
+        abstractionAlerts: null,
         activeNavBar: 'search',
         backLink: {
-          href: '',
+          href: `/system/company-contacts/setup/${session.id}/contact-email`,
+
           text: 'Back'
         },
         error: {
           errorList: [
             {
               href: '#abstractionAlerts',
-              text: '"abstractionAlerts" is required'
+              text: 'Should the contact get water abstraction alerts'
             }
           ],
           abstractionAlerts: {
-            text: '"abstractionAlerts" is required'
+            text: 'Should the contact get water abstraction alerts'
           }
         },
-        pageTitle: ''
+        pageTitle: 'Should the contact get abstraction alerts?',
+        pageTitleCaption: 'Tyrell Corporation'
       })
     })
   })

@@ -1,10 +1,29 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 
 {% block pageContent %}
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukRadios({
+      id: "abstractionAlerts",
+      name: "abstractionAlerts",
+      errorMessage: error.abstractionAlerts if error.abstractionAlerts,
+      items: [
+        {
+          value: "yes",
+          text: "Yes",
+          checked: abstractionAlerts === 'yes'
+        },
+        {
+          value: "no",
+          text: "No",
+          checked: abstractionAlerts === 'no'
+        }
+      ]
+    }) }}
 
     {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
   </form>

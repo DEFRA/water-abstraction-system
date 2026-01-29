@@ -27,16 +27,18 @@ describe('Company Contacts - Setup - Abstraction Alerts Validator', () => {
   })
 
   describe('when called with invalid data', () => {
-    beforeEach(() => {
-      payload = {}
-    })
+    describe('when no option has been selected', () => {
+      beforeEach(() => {
+        payload = {}
+      })
 
-    it('returns with errors', () => {
-      const result = AbstractionAlertsValidator.go(payload)
+      it('returns with errors', () => {
+        const result = AbstractionAlertsValidator.go(payload)
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('"abstractionAlerts" is required')
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Should the contact get water abstraction alerts')
+      })
     })
   })
 })
