@@ -9,6 +9,7 @@ const IndexUsersService = require('../services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../services/users/submit-profile-details.service.js')
 const ViewProfileDetailsService = require('../services/users/view-profile-details.service.js')
+const ViewUserService = require('../services/users/view-user.service.js')
 
 async function index(request, h) {
   const {
@@ -60,9 +61,24 @@ async function viewProfileDetails(request, h) {
   return h.view('users/profile-details.njk', pageData)
 }
 
+async function viewUser(request, h) {
+  const {
+    params: { userId }
+  } = request
+
+  const pageData = await ViewUserService.go(userId)
+
+  if (pageData.pageTitleCaption === 'External') {
+    return h.view('users/view-external.njk', pageData)
+  }
+
+  return h.view('users/view-internal.njk', pageData)
+}
+
 module.exports = {
   index,
   submitIndex,
   submitProfileDetails,
-  viewProfileDetails
+  viewProfileDetails,
+  viewUser
 }
