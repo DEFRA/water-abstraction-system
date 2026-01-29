@@ -38,6 +38,7 @@ async function go(sessionId, payload) {
   const pageData = ExistingAccountPresenter.go(session, companySearchResults)
 
   return {
+    activeNavBar: 'search',
     error: validationResult,
     ...pageData
   }
