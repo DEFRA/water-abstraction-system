@@ -12,12 +12,12 @@
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
+  <h2 class="govuk-heading-l">{{ pageSubHeading }}</h2>
+
   {# Results #}
   {% if billRuns|length === 0 %}
     <p>No bill runs found.</p>
   {% else %}
-    <h2 class="govuk-heading-l">{{ pageSubHeading }}</h2>
-
     {% set tableRows = [] %}
     {% for billRun in billRuns %}
       {# Set an easier to use index #}
