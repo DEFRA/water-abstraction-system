@@ -17,6 +17,7 @@ const Boom = require('@hapi/boom')
 const GenerateTwoPartTariffBillRunService = require('../../app/services/bill-runs/generate-two-part-tariff-bill-run.service.js')
 const IndexBillRunsService = require('../../app/services/bill-runs/index-bill-runs.service.js')
 const SubmitCancelBillRunService = require('../../app/services/bill-runs/cancel/submit-cancel-bill-run.service.js')
+const SubmitIndexBillRunsService = require('../../app/services/bill-runs/submit-index-bill-runs.service.js')
 const SubmitSendBillRunService = require('../../app/services/bill-runs/send/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../../app/services/bill-runs/view-bill-run.service.js')
 const ViewCancelBillRunService = require('../../app/services/bill-runs/cancel/view-cancel-bill-run.service.js')
@@ -25,7 +26,7 @@ const ViewSendBillRunService = require('../../app/services/bill-runs/send/view-s
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe('Bill Runs controller', () => {
+describe.only('Bill Runs controller', () => {
   let options
   let server
 
@@ -49,7 +50,7 @@ describe('Bill Runs controller', () => {
 
   describe('/bill-runs', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         options = {
           method: 'GET',
           url: '/bill-runs?page=2',
@@ -61,7 +62,7 @@ describe('Bill Runs controller', () => {
       })
 
       describe('when the request succeeds', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(IndexBillRunsService, 'go').resolves({
             billRuns: [
               {
@@ -104,17 +105,54 @@ describe('Bill Runs controller', () => {
         })
       })
     })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        options = postRequestOptions('/bill-runs')
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitIndexBillRunsService, 'go').resolves({})
+        })
+
+        it('redirects to the bill runs page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal('/system/bill-runs')
+        })
+      })
+
+      describe('when the request fails', () => {
+        describe('because the validation returns an error', () => {
+          const pageData = { error: 'There is a validation error', pageTitle: 'Bill runs' }
+
+          beforeEach(() => {
+            Sinon.stub(SubmitIndexBillRunsService, 'go').resolves(pageData)
+          })
+
+          it('re-renders the bill runs page with an error', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('There is a problem')
+            expect(response.payload).to.contain('Bill runs')
+          })
+        })
+      })
+    })
   })
 
   describe('/bill-runs/{id}', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         options = _getRequestOptions()
       })
 
       describe('when the request succeeds', () => {
         describe('and it is for a bill run with multiple bill groups', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             Sinon.stub(ViewBillRunService, 'go').resolves(_multiGroupBillRun())
           })
 
@@ -129,7 +167,7 @@ describe('Bill Runs controller', () => {
         })
 
         describe('and it is for a bill run with a single bill group', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             Sinon.stub(ViewBillRunService, 'go').resolves(_singleGroupBillRun())
           })
 
@@ -149,7 +187,7 @@ describe('Bill Runs controller', () => {
 
   describe('/bill-runs/{id}/cancel', () => {
     describe('GET /bill-runs/{id}/cancel', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         options = _getRequestOptions('cancel')
       })
 
@@ -178,7 +216,7 @@ describe('Bill Runs controller', () => {
       })
 
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(SubmitCancelBillRunService, 'go').resolves()
         })
 
@@ -192,7 +230,7 @@ describe('Bill Runs controller', () => {
 
       describe('when the request fails', () => {
         describe('because the cancelling service threw an error', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             Sinon.stub(Boom, 'badImplementation').returns(
               new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
             )
@@ -212,7 +250,7 @@ describe('Bill Runs controller', () => {
 
   describe('/bill-runs/{id}/send', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         options = _getRequestOptions('send')
       })
 
@@ -241,7 +279,7 @@ describe('Bill Runs controller', () => {
       })
 
       describe('when a request is valid', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(SubmitSendBillRunService, 'go').resolves()
         })
 
@@ -255,7 +293,7 @@ describe('Bill Runs controller', () => {
 
       describe('when the request fails', () => {
         describe('because the sending service threw an error', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             Sinon.stub(Boom, 'badImplementation').returns(
               new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
             )
@@ -275,7 +313,7 @@ describe('Bill Runs controller', () => {
 
   describe('/bill-runs/{id}/two-part-tariff', () => {
     describe('GET', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         options = _getRequestOptions('two-part-tariff')
       })
 
@@ -294,7 +332,7 @@ describe('Bill Runs controller', () => {
 
       describe('when the request fails', () => {
         describe('because the generate service threw an error', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             Sinon.stub(Boom, 'badImplementation').returns(
               new Boom.Boom('Bang', { statusCode: HTTP_STATUS_INTERNAL_SERVER_ERROR })
             )
