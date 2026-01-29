@@ -26,7 +26,7 @@ const ViewSendBillRunService = require('../../app/services/bill-runs/send/view-s
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe.only('Bill Runs controller', () => {
+describe('Bill Runs controller', () => {
   let options
   let server
 
