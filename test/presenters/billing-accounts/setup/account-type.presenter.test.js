@@ -43,7 +43,7 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
   })
 
   describe('the "accountType" property', () => {
-    describe('when called with existing accout type of company', () => {
+    describe('when called with an existing "accountType" of company', () => {
       beforeEach(() => {
         session.accountType = 'company'
       })
@@ -55,7 +55,7 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
       })
     })
 
-    describe('when called with existing accout type of individual with a search input', () => {
+    describe('when called with existing "accountType" of individual with a search input', () => {
       beforeEach(() => {
         session.accountType = 'individual'
         session.searchIndividualInput = 'John Doe'
