@@ -33,6 +33,7 @@ async function go(sessionId, payload) {
   const pageData = FAOPresenter.go(session)
 
   return {
+    activeNavBar: 'search',
     error: validationResult,
     ...pageData
   }

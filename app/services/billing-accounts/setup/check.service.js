@@ -22,6 +22,7 @@ async function go(sessionId) {
   const pageData = CheckPresenter.go(session)
 
   return {
+    activeNavBar: 'search',
     ...pageData
   }
 }
