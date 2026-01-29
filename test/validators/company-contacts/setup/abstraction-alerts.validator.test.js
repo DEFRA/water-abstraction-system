@@ -37,7 +37,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Should the contact get water abstraction alerts')
+        expect(result.error.details[0].message).to.equal('Select should the contact get water abstraction alerts')
       })
     })
   })

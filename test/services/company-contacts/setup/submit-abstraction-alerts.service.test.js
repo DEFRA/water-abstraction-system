@@ -70,11 +70,11 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
           errorList: [
             {
               href: '#abstractionAlerts',
-              text: 'Should the contact get water abstraction alerts'
+              text: 'Select should the contact get water abstraction alerts'
             }
           ],
           abstractionAlerts: {
-            text: 'Should the contact get water abstraction alerts'
+            text: 'Select should the contact get water abstraction alerts'
           }
         },
         pageTitle: 'Should the contact get abstraction alerts?',

@@ -19,7 +19,7 @@ const Joi = require('joi')
 function go(payload) {
   const schema = Joi.object({
     abstractionAlerts: Joi.required().messages({
-      'any.required': 'Should the contact get water abstraction alerts'
+      'any.required': 'Select should the contact get water abstraction alerts'
     })
   })
 
