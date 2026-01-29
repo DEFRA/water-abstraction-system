@@ -38,8 +38,8 @@ async function go(noticeId) {
   return {
     dueDate,
     licenceRefs: [...new Set(licences)].sort(),
-    notificationIds,
-    returnLogIds: [...new Set(returnLogIds)]
+    notificationIds: notificationIds.sort(),
+    returnLogIds: [...new Set(returnLogIds)].sort()
   }
 }
 
