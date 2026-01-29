@@ -30,6 +30,8 @@ async function go(sessionId, payload) {
     return {}
   }
 
+  session.abstractionAlerts = payload.abstractionAlerts
+
   const pageData = AbstractionAlertsPresenter.go(session)
 
   return {
@@ -40,6 +42,8 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
+  session.abstractionAlerts = payload.abstractionAlerts
+
   return session.$update()
 }
 

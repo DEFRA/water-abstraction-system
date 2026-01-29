@@ -23,6 +23,7 @@ describe('Company Contacts - Setup - Contact Email Presenter', () => {
 
     session = { id: generateUUID(), company }
   })
+
   describe('when called', () => {
     it('returns page data for the view', () => {
       const result = ContactEmailPresenter.go(session)
