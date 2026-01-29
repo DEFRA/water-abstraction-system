@@ -1,0 +1,51 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block pageContent %}
+  {% set inputHtml %}
+    {{ govukInput({
+      id: "searchIndividualInput",
+      name: "searchIndividualInput",
+      classes: "govuk-!-width-two-thirds",
+      errorMessage: error.searchIndividualInput,
+      label: {
+        text: "Full name"
+      },
+      value: searchIndividualInput
+    }) }}
+  {% endset %}
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukRadios({
+      name: "accountType",
+      errorMessage: error.accountType,
+      items: [
+        {
+          id: "company",
+          value: "company",
+          text: "Company",
+          checked: "company" === accountType
+        },
+        {
+          divider: "or"
+        },
+        {
+          id: "individual",
+          value: "individual",
+          text: "Individual",
+          checked: "individual" === accountType,
+          conditional: {
+            html: inputHtml
+          }
+        }
+      ]
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}
