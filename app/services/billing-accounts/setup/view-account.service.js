@@ -22,6 +22,7 @@ async function go(sessionId) {
   const pageData = AccountPresenter.go(session)
 
   return {
+    activeNavBar: 'search',
     ...pageData
   }
 }

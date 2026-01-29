@@ -32,7 +32,6 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       const result = ExistingAccountPresenter.go(session, exampleSearchResults)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/account`,
           text: 'Back'
