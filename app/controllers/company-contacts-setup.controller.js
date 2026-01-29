@@ -1,9 +1,11 @@
 'use strict'
 
 const InitiateSessionService = require('../services/company-contacts/setup/initiate-session.service.js')
+const SubmitAbstractionAlertsService = require('../services/company-contacts/setup/submit-abstraction-alerts.service.js')
 const SubmitCheckService = require('../services/company-contacts/setup/submit-check.service.js')
 const SubmitContactEmailService = require('../services/company-contacts/setup/submit-contact-email.service.js')
 const SubmitContactNameService = require('../services/company-contacts/setup/submit-contact-name.service.js')
+const ViewAbstractionAlertsService = require('../services/company-contacts/setup/view-abstraction-alerts.service.js')
 const ViewCheckService = require('../services/company-contacts/setup/view-check.service.js')
 const ViewContactEmailService = require('../services/company-contacts/setup/view-contact-email.service.js')
 const ViewContactNameService = require('../services/company-contacts/setup/view-contact-name.service.js')
@@ -19,6 +21,14 @@ async function setup(request, h) {
   const session = await InitiateSessionService.go(companyId)
 
   return h.redirect(`/system/company-contacts/setup/${session.id}/contact-name`)
+}
+
+async function viewAbstractionAlerts(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewAbstractionAlertsService.go(sessionId)
+
+  return h.view(`company-contacts/setup/abstraction-alerts.njk`, pageData)
 }
 
 async function viewCheck(request, h) {
@@ -45,6 +55,21 @@ async function viewContactName(request, h) {
   return h.view(`company-contacts/setup/contact-name.njk`, pageData)
 }
 
+async function submitAbstractionAlerts(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitAbstractionAlertsService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`company-contacts/setup/abstraction-alerts.njk`, pageData)
+  }
+
+  return h.redirect(`/system/company-contacts/setup/${sessionId}/check`)
+}
+
 async function submitCheck(request, h) {
   const {
     payload,
@@ -68,7 +93,7 @@ async function submitContactEmail(request, h) {
     return h.view(`company-contacts/setup/contact-email.njk`, pageData)
   }
 
-  return h.redirect(`/system/company-contacts/setup/${sessionId}/check`)
+  return h.redirect(`/system/company-contacts/setup/${sessionId}/abstraction-alerts`)
 }
 
 async function submitContactName(request, h) {
@@ -88,9 +113,11 @@ async function submitContactName(request, h) {
 
 module.exports = {
   setup,
+  viewAbstractionAlerts,
   viewCheck,
   viewContactEmail,
   viewContactName,
+  submitAbstractionAlerts,
   submitCheck,
   submitContactEmail,
   submitContactName

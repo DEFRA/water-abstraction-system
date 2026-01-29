@@ -14,7 +14,7 @@ const { formatValidationResult } = require('__FORMAT_VALIDATOR_PATH__')
 /**
  * Orchestrates validating the data for the `` page
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
  *
  * @returns {Promise<object>} The data formatted for the view template
