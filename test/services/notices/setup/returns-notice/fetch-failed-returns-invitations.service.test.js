@@ -98,7 +98,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
               expect(result).to.equal({
                 dueDate: futureDueDate('letter'),
                 licenceRefs,
-                notificationIds: [notifications[1].id, notifications[2].id],
+                notificationIds: [notifications[1].id, notifications[2].id].sort(),
                 returnLogIds
               })
             })
@@ -135,7 +135,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
               expect(result).to.equal({
                 dueDate: new Date('2025-04-28'),
                 licenceRefs,
-                notificationIds: [notifications[1].id, notifications[2].id],
+                notificationIds: [notifications[1].id, notifications[2].id].sort(),
                 returnLogIds
               })
             })

@@ -38,6 +38,7 @@ async function go(sessionId, payload) {
   const pageData = _submissionData(session, payload, companyAddresses)
 
   return {
+    activeNavBar: 'search',
     error: validationResult,
     ...pageData
   }
