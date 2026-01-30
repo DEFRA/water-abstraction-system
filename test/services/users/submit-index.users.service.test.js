@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const UsersFixture = require('../../fixtures/users.fixture.js')
+const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Things to stub
 const FetchUsersService = require('../../../app/services/users/fetch-users.service.js')
@@ -135,7 +135,6 @@ describe('Users - Submit Index Users service', () => {
           const result = await SubmitIndexUsersService.go(payload, yarStub, auth, '2')
 
           expect(result).to.equal({
-            activeNavBar: 'search',
             error: {
               errorList: [
                 {
@@ -215,7 +214,6 @@ describe('Users - Submit Index Users service', () => {
           const result = await SubmitIndexUsersService.go(payload, yarStub, auth)
 
           expect(result).to.equal({
-            activeNavBar: 'search',
             error: {
               errorList: [
                 {

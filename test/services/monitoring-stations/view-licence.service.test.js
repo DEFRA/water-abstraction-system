@@ -95,7 +95,6 @@ describe('Monitoring Stations - View Licence service', () => {
       const result = await ViewLicenceService.go(auth, licence.id, monitoringStation.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: '/system/monitoring-stations/b9b56105-aa8b-4015-b1a4-d50c6ba7436b',
           text: 'Go back to monitoring station'

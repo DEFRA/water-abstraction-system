@@ -37,7 +37,6 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
 
       expect(result).to.equal(
         {
-          activeNavBar: 'search',
           backLink: `/system/licence-monitoring-station/setup/${session.id}/threshold-and-unit`,
           monitoringStationLabel: 'Monitoring Station Label',
           pageTitle: 'Does the licence holder need to stop or reduce at this threshold?',

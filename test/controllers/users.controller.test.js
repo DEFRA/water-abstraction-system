@@ -46,17 +46,12 @@ describe('Users controller', () => {
 
   describe('/users', () => {
     describe('GET', () => {
+      beforeEach(() => {
+        options = _getOptions('/users', { scope: ['manage_accounts'] })
+      })
+
       describe('with no pagination', () => {
         beforeEach(() => {
-          options = {
-            method: 'GET',
-            url: '/users',
-            auth: {
-              strategy: 'session',
-              credentials: { scope: ['returns'] }
-            }
-          }
-
           const pageData = _usersPageData()
 
           Sinon.stub(IndexUsersService, 'go').returns(pageData)
@@ -73,14 +68,7 @@ describe('Users controller', () => {
 
       describe('with pagination', () => {
         beforeEach(() => {
-          options = {
-            method: 'GET',
-            url: '/users?page=2',
-            auth: {
-              strategy: 'session',
-              credentials: { scope: ['returns'] }
-            }
-          }
+          options.url = '/users?page=2'
 
           const pageData = _usersPageData()
 
@@ -102,7 +90,7 @@ describe('Users controller', () => {
 
     describe('POST', () => {
       beforeEach(() => {
-        postOptions = postRequestOptions('/users', {})
+        postOptions = postRequestOptions('/users', {}, ['manage_accounts'])
       })
 
       describe('when the request succeeds', () => {
@@ -164,6 +152,8 @@ describe('Users controller', () => {
   describe('/users/me/profile-details', () => {
     describe('GET', () => {
       beforeEach(async () => {
+        options = _getOptions('/users/me/profile-details', { scope: ['hof_notifications'], user: { id: 1000 } })
+
         Sinon.stub(ViewProfileDetailsService, 'go').resolves({
           pageTitle: 'Profile details'
         })
@@ -171,7 +161,7 @@ describe('Users controller', () => {
 
       describe('when the request succeeds', () => {
         it('returns the page successfully', async () => {
-          const response = await server.inject(_getOptions())
+          const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Profile details')
@@ -180,6 +170,10 @@ describe('Users controller', () => {
     })
 
     describe('POST', () => {
+      beforeEach(() => {
+        postOptions = postRequestOptions('/users/me/profile-details', {}, ['hof_notifications'])
+      })
+
       describe('when the request succeeds', () => {
         describe('and is valid', () => {
           beforeEach(async () => {
@@ -187,7 +181,7 @@ describe('Users controller', () => {
           })
 
           it('redirects to itself', async () => {
-            const response = await server.inject(_postOptions())
+            const response = await server.inject(postOptions)
 
             expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal('/system/users/me/profile-details')
@@ -200,7 +194,7 @@ describe('Users controller', () => {
           })
 
           it('returns the page successfully with the error summary banner', async () => {
-            const response = await server.inject(_postOptions())
+            const response = await server.inject(postOptions)
 
             expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
@@ -211,24 +205,19 @@ describe('Users controller', () => {
   })
 })
 
-function _getOptions() {
+function _getOptions(url, credentials) {
   return {
     method: 'GET',
-    url: '/users/me/profile-details',
+    url,
     auth: {
       strategy: 'session',
-      credentials: { scope: ['hof_notifications'], user: { id: 1000 } }
+      credentials
     }
   }
 }
 
-function _postOptions() {
-  return postRequestOptions('/users/me/profile-details', {}, ['hof_notifications'])
-}
-
 function _usersPageData(error = false) {
   const pageData = {
-    activeNavBar: 'search',
     filters: {
       email: null,
       openFilter: true,

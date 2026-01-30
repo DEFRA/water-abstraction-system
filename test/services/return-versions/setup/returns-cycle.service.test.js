@@ -58,7 +58,6 @@ describe('Return Versions Setup - Returns Cycle service', () => {
 
       expect(result).to.equal(
         {
-          activeNavBar: 'search',
           pageTitle: 'Select the returns cycle for the requirements for returns',
           pageTitleCaption: 'Licence 01/ABC',
           backLink: {

@@ -38,7 +38,6 @@ describe('Return Logs Setup - Check service', () => {
 
       expect(result).to.equal({
         abstractionPeriod: '1 January to 31 December',
-        activeNavBar: 'search',
         displayReadings: true,
         displayUnits: true,
         enterMultipleLinkText: 'Enter multiple monthly readings',

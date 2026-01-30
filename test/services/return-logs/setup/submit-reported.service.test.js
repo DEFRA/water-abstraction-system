@@ -92,7 +92,6 @@ describe('Return Logs Setup - Submit Reported service', () => {
 
         expect(result).to.equal(
           {
-            activeNavBar: 'search',
             backLink: { href: `/system/return-logs/setup/${session.id}/submission`, text: 'Back' },
             reported: null,
             pageTitle: 'How was this return reported?',

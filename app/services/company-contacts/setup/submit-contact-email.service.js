@@ -30,16 +30,19 @@ async function go(sessionId, payload) {
     return {}
   }
 
+  session.email = payload.email
+
   const pageData = ContactEmailPresenter.go(session)
 
   return {
-    activeNavBar: '',
     error: validationResult,
     ...pageData
   }
 }
 
 async function _save(session, payload) {
+  session.email = payload.email
+
   return session.$update()
 }
 

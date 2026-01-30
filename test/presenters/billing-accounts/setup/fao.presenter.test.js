@@ -10,7 +10,7 @@ const { expect } = Code
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Test helpers
-const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtures.js')
+const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixtures.js')
 
 // Thing under test
 const FAOPresenter = require('../../../../app/presenters/billing-accounts/setup/fao.presenter.js')
@@ -30,7 +30,6 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
       const result = FAOPresenter.go(session)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/existing-address`,
           text: 'Back'

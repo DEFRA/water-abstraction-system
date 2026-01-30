@@ -22,7 +22,6 @@ async function go(sessionId) {
   const pageData = __PRESENTER_NAME__.go(session)
 
   return {
-    activeNavBar: '',
     ...pageData
   }
 }

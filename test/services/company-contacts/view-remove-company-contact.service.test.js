@@ -9,7 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const CustomersFixtures = require('../../fixtures/customers.fixture.js')
+const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
 // Things we need to stub
 const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
@@ -40,7 +40,6 @@ describe('Company Contacts - View Remove Company Contact Service', () => {
       const result = await ViewRemoveCompanyContactService.go(companyContact.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/company-contacts/${companyContact.id}`,
           text: 'Go back to contact details'

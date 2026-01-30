@@ -39,7 +39,6 @@ describe('Return Logs - Setup - Received service', () => {
 
       expect(result).to.equal(
         {
-          activeNavBar: 'search',
           backLink: {
             href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3',
             text: 'Back'

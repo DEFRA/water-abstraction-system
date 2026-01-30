@@ -47,7 +47,6 @@ async function go(sessionId, payload, yar) {
   const formattedData = NoReturnsRequiredPresenter.go(session, payload)
 
   return {
-    activeNavBar: 'search',
     error: validationResult,
     ...formattedData
   }

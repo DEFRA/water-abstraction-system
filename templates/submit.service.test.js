@@ -50,7 +50,6 @@ describe('__DESCRIBE_LABEL__', () => {
       const result = await __MODULE_NAME__.go(session.id, payload)
 
       expect(result).to.equal({
-        activeNavBar: '',
         backLink: {
           href: '',
           text: 'Back'

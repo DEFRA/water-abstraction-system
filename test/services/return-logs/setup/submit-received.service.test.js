@@ -147,7 +147,6 @@ describe('Return Logs - Setup - Submit Received service', () => {
 
         expect(result).to.equal(
           {
-            activeNavBar: 'search',
             pageTitle: 'When was the return received?',
             receivedDateDay: null,
             receivedDateMonth: null,

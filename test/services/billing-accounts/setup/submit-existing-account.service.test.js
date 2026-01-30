@@ -3,6 +3,7 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
@@ -10,13 +11,17 @@ const { expect } = Code
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Test helpers
-const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtures.js')
+const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+
+// Things we need to stub
+const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
 
 // Thing under test
 const SubmitExistingAccountService = require('../../../../app/services/billing-accounts/setup/submit-existing-account.service.js')
 
 describe('Billing Accounts - Setup - Submit Existing Account service', () => {
+  const fetchResults = _companies()
   let payload
   let session
   let sessionData
@@ -32,6 +37,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
   afterEach(async () => {
     await session.$query().delete()
+    Sinon.restore()
   })
 
   describe('when the user picks an existing address', () => {
@@ -95,6 +101,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   describe('when validation fails', () => {
     beforeEach(async () => {
       payload = {}
+      Sinon.stub(FetchCompaniesService, 'go').returns(fetchResults)
     })
 
     it('returns page data for the view, with errors', async () => {
@@ -112,3 +119,13 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
   })
 })
+
+function _companies() {
+  return [
+    {
+      exact: true,
+      id: generateUUID(),
+      name: 'Company Name Ltd'
+    }
+  ]
+}

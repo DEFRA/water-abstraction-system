@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtures.js')
+const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixtures.js')
 
 // Thing under test
 const AccountPresenter = require('../../../../app/presenters/billing-accounts/setup/account.presenter.js')
@@ -28,7 +28,6 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
 
       expect(result).to.equal({
         accountSelected: null,
-        activeNavBar: 'search',
         companyName: session.billingAccount.company.name,
         backLink: {
           href: `/system/billing-accounts/${session.billingAccount.id}`,
@@ -52,7 +51,6 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
 
       expect(result).to.equal({
         accountSelected: 'another',
-        activeNavBar: 'search',
         companyName: session.billingAccount.company.name,
         backLink: {
           href: `/system/billing-accounts/${session.billingAccount.id}`,
@@ -75,7 +73,6 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
 
       expect(result).to.equal({
         accountSelected: 'customer',
-        activeNavBar: 'search',
         companyName: session.billingAccount.company.name,
         backLink: {
           href: `/system/billing-accounts/${session.billingAccount.id}`,

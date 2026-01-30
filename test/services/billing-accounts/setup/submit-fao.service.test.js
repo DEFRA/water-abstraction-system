@@ -4,11 +4,11 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtures.js')
+const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -25,6 +25,10 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     }
 
     session = await SessionHelper.add({ data: sessionData })
+  })
+
+  afterEach(async () => {
+    await session.$query().delete()
   })
 
   describe('when called with a "yes" value', () => {
@@ -93,10 +97,10 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
         errorList: [
           {
             href: '#fao',
-            text: 'Select if you need to add an FAO'
+            text: 'Select yes if you need to add an FAO'
           }
         ],
-        fao: { text: 'Select if you need to add an FAO' }
+        fao: { text: 'Select yes if you need to add an FAO' }
       })
     })
   })

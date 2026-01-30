@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const RegionHelper = require('../../../support/helpers/region.helper.js')
-const TwoPartTariffFixture = require('../../../fixtures/two-part-tariff.fixture.js')
+const TwoPartTariffFixture = require('../../../support/fixtures/two-part-tariff.fixture.js')
 
 // Things we need to stub
 const BillModel = require('../../../../app/models/bill.model.js')

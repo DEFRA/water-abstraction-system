@@ -24,7 +24,6 @@ async function go(sessionId) {
   const formattedData = MethodPresenter.go(session)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }

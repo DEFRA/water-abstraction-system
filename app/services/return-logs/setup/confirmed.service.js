@@ -21,7 +21,6 @@ async function go(returnLogId) {
   const formattedData = ConfirmedPresenter.go(returnLog)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }

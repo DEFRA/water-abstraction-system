@@ -21,7 +21,6 @@ async function go(sessionId) {
   const pageData = StartReadingPresenter.go(session)
 
   return {
-    activeNavBar: 'search',
     ...pageData
   }
 }

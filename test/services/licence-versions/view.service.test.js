@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
+const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
 
 // Things we need to stub
 const FetchConditionsService = require('../../../app/services/licences/fetch-conditions.service.js')
@@ -51,7 +51,6 @@ describe('Licence Versions - View service', () => {
       const result = await ViewService.go(licenceVersion.id, auth)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/licences/${licenceVersion.licence.id}/history`,
           text: 'Go back to history'

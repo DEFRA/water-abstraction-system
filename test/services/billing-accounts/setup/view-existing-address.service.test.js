@@ -11,7 +11,7 @@ const { expect } = Code
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Test helpers
-const BillingAccountsFixture = require('../../../fixtures/billing-accounts.fixtures.js')
+const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
@@ -37,6 +37,7 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
 
   afterEach(async () => {
     await session.$query().delete()
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -44,7 +45,6 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
       const result = await ViewExistingAddressService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/account`,
           text: 'Back'

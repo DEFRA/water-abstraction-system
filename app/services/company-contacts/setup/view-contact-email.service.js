@@ -22,7 +22,6 @@ async function go(sessionId) {
   const pageData = ContactEmailPresenter.go(session)
 
   return {
-    activeNavBar: '',
     ...pageData
   }
 }

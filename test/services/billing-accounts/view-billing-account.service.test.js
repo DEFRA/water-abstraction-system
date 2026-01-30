@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillingAccountsFixture = require('../../fixtures/billing-accounts.fixtures.js')
+const BillingAccountsFixture = require('../../support/fixtures/billing-accounts.fixtures.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -49,7 +49,6 @@ describe('Billing Accounts - View Billing Account service', () => {
       )
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         address: [
           'Ferns Surfacing Limited',
           'Test Testingson',

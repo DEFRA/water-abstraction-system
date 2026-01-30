@@ -27,7 +27,6 @@ async function go(sessionId, requirementIndex) {
   const formattedData = SelectPurposePresenter.go(session, requirementIndex, purposesData)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }

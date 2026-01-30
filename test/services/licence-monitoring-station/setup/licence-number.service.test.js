@@ -32,7 +32,6 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
       const result = await LicenceNumberService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`,
         licenceRef: 'LICENCE_REF',
         monitoringStationLabel: 'MONITORING_STATION_LABEL',

@@ -47,7 +47,6 @@ async function go(sessionId, payload, yar) {
   const pageData = _submittedSessionData(session, payload)
 
   return {
-    activeNavBar: 'search',
     error,
     ...pageData
   }

@@ -9,7 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const CustomersFixtures = require('../../fixtures/customers.fixture.js')
+const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
 // Things we need to stub
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
@@ -49,7 +49,6 @@ describe('Companies - View Licences service', () => {
       const result = await ViewLicencesService.go(company.id, auth, page)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         activeSecondaryNav: 'licences',
         backLink: {
           href: '/',

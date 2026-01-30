@@ -48,7 +48,6 @@ async function go(sessionId, payload, yar) {
   const pageData = MeterProvidedPresenter.go(session)
 
   return {
-    activeNavBar: 'search',
     error,
     ...pageData
   }

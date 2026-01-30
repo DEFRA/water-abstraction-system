@@ -36,7 +36,6 @@ describe('Return Logs Setup - Meter Provided service', () => {
 
       expect(result).to.equal(
         {
-          activeNavBar: 'search',
           backLink: { href: `/system/return-logs/setup/${session.id}/units`, text: 'Back' },
           meterProvided: null,
           pageTitle: 'Have meter details been provided?',

@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const ReturnVersionModel = require('../../../app/models/return-version.model.js')
-const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
+const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -111,7 +111,6 @@ describe('Licences - View Set Up service', () => {
       const result = await ViewSetUpService.go(licence.id, auth)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         activeSecondaryNav: 'set-up',
         backLink: {
           href: '/',

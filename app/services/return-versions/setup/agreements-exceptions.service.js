@@ -25,7 +25,6 @@ async function go(sessionId, requirementIndex) {
   const formattedData = AgreementsExceptionsPresenter.go(session, requirementIndex)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }

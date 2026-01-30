@@ -36,7 +36,6 @@ describe('Return Logs Setup - Units service', () => {
 
       expect(result).to.equal(
         {
-          activeNavBar: 'search',
           backLink: { href: `/system/return-logs/setup/${session.id}/reported`, text: 'Back' },
           pageTitle: 'Which units were used?',
           pageTitleCaption: 'Return reference 012345',

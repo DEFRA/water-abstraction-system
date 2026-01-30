@@ -1,10 +1,10 @@
 'use strict'
 
-const EventModel = require('../../app/models/event.model.js')
-const LicenceModel = require('../../app/models/licence.model.js')
-const NotificationModel = require('../../app/models/notification.model.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const { NOTIFY_TEMPLATES } = require('../../app/lib/notify-templates.lib.js')
+const EventModel = require('../../../app/models/event.model.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
+const NotificationModel = require('../../../app/models/notification.model.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { NOTIFY_TEMPLATES } = require('../../../app/lib/notify-templates.lib.js')
 
 const ADDRESS = {
   address_line_1: 'ACME Services Ltd',

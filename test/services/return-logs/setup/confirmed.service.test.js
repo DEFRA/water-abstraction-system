@@ -54,7 +54,6 @@ describe('Return Logs - Setup - Confirmed service', () => {
       const result = await ConfirmedService.go(returnLogId)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
         licenceRef: '01/117',
         pageTitle: 'Return 10032788 received',

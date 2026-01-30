@@ -94,7 +94,6 @@ describe('Return Versions - Setup - Points service', () => {
 
       expect(result).to.equal(
         {
-          activeNavBar: 'search',
           pageTitle: 'Select the points for the requirements for returns',
           pageTitleCaption: 'Licence 01/ABC',
           backLink: {

@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const CustomersFixtures = require('../../../fixtures/customers.fixture.js')
+const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -32,7 +32,6 @@ describe('Company Contacts - Setup - View Contact Name Service', () => {
       const result = await ViewContactNameService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
           text: 'Back'
