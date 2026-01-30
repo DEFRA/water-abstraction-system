@@ -10,6 +10,7 @@ const ContactNamePresenter = require('../../../presenters/company-contacts/setup
 const ContactNameValidator = require('../../../validators/company-contacts/setup/contact-name.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { checkRedirectUrl } = require('./spike.js')
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/contact-name' page
@@ -27,7 +28,9 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return {
+      redirectUrl: checkRedirectUrl(session, `/system/company-contacts/setup/${sessionId}/contact-email`)
+    }
   }
 
   session.name = payload.name

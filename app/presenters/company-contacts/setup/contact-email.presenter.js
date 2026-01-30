@@ -5,6 +5,8 @@
  * @module ContactEmailPresenter
  */
 
+const { checkBackLink } = require('../../../services/company-contacts/setup/spike.js')
+
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/contact-email' page
  *
@@ -15,11 +17,13 @@
 function go(session) {
   const { id: sessionId, company } = session
 
+  const backLink = {
+    href: `/system/company-contacts/setup/${sessionId}/contact-name`,
+    text: 'Back'
+  }
+
   return {
-    backLink: {
-      href: `/system/company-contacts/setup/${sessionId}/contact-name`,
-      text: 'Back'
-    },
+    backLink: checkBackLink(session, backLink),
     pageTitle: 'Enter an email address for the contact',
     pageTitleCaption: company.name,
     email: session.email ?? ''

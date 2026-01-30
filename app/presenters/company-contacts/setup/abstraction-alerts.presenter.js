@@ -5,6 +5,8 @@
  * @module AbstractionAlertsPresenter
  */
 
+const { checkBackLink } = require('../../../services/company-contacts/setup/spike.js')
+
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/abstraction-alerts' page
  *
@@ -15,11 +17,13 @@
 function go(session) {
   const { id: sessionId, company } = session
 
+  const backLink = {
+    href: `/system/company-contacts/setup/${sessionId}/contact-email`,
+    text: 'Back'
+  }
+
   return {
-    backLink: {
-      href: `/system/company-contacts/setup/${sessionId}/contact-email`,
-      text: 'Back'
-    },
+    backLink: checkBackLink(session, backLink),
     pageTitle: 'Should the contact get abstraction alerts?',
     pageTitleCaption: company.name,
     abstractionAlerts: session.abstractionAlerts ?? null
