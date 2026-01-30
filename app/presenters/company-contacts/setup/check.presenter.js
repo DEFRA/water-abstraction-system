@@ -5,6 +5,8 @@
  * @module CheckPresenter
  */
 
+const { titleCase } = require('../../base.presenter.js')
+
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/check' page
  *
@@ -13,12 +15,14 @@
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
+  const { company, email, name, abstractionAlerts } = session
+
   return {
-    backLink: {
-      href: '',
-      text: 'Back'
-    },
-    pageTitle: ''
+    abstractionAlerts: titleCase(abstractionAlerts),
+    email,
+    name,
+    pageTitle: 'Check contact',
+    pageTitleCaption: company.name
   }
 }
 
