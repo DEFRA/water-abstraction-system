@@ -22,7 +22,6 @@ async function go(returnSubmissionId, yearMonth) {
   const pageData = ViewReturnSubmissionPresenter.go(returnSubmission, yearMonth)
 
   return {
-    activeNavBar: 'search',
     ...pageData
   }
 }

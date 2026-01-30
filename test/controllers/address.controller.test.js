@@ -344,7 +344,6 @@ describe('Address controller', () => {
 
 function _commonPageData() {
   return {
-    activeNavBar: 'search',
     sessionId: 'fecd5f15-bacf-4b3d-bdcd-ef279a97b061'
   }
 }

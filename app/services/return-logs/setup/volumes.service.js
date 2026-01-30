@@ -22,7 +22,6 @@ async function go(sessionId, yearMonth) {
   const formattedData = VolumesPresenter.go(session, yearMonth)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }

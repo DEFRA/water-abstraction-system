@@ -31,7 +31,6 @@ describe('Billing Accounts - Setup - View Check Service', () => {
       const result = await CheckService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/select-contact`,
           text: 'Back'

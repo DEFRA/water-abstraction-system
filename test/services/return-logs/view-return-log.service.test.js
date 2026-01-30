@@ -47,7 +47,6 @@ describe('Return Logs - View Return Log service', () => {
     // We only check a couple of items here -- the key thing is that the mock return log was fetched and successfully
     // passed to the presenter
     expect(result).to.include({
-      activeNavBar: 'search',
       pageTitle: 'Abstraction return'
     })
   })

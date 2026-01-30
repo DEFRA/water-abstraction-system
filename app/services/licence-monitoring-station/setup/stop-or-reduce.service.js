@@ -21,7 +21,6 @@ async function go(sessionId) {
   const pageData = StopOrReducePresenter.go(session)
 
   return {
-    activeNavBar: 'search',
     ...pageData
   }
 }

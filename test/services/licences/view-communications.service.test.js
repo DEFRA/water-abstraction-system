@@ -79,7 +79,6 @@ describe('Licences - View Communications service', () => {
       const result = await ViewCommunicationsService.go(licenceId, auth, page)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         activeSecondaryNav: 'communications',
         backLink: {
           href: '/',

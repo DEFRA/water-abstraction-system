@@ -26,7 +26,6 @@ describe('Return Logs Setup - Submission service', () => {
       const result = await SubmissionService.go(sessionId)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: { href: `/system/return-logs/setup/${sessionId}/received`, text: 'Back' },
         beenReceived: false,
         journey: null,

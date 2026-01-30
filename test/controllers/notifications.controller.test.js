@@ -73,7 +73,6 @@ describe('Notifications controller', () => {
             notification.event = notice
 
             Sinon.stub(ViewNotificationService, 'go').resolves({
-              activeNavBar: 'search',
               address: [],
               alertDetails: null,
               backLink: { href: `/system/notices/${notice.id}`, text: `Go back to notice ${notice.referenceCode}` },
@@ -128,7 +127,6 @@ describe('Notifications controller', () => {
             notification.event = notice
 
             Sinon.stub(ViewNotificationService, 'go').resolves({
-              activeNavBar: 'search',
               address: [],
               alertDetails: null,
               backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' },
@@ -184,7 +182,6 @@ describe('Notifications controller', () => {
             notification.event = notice
 
             Sinon.stub(ViewNotificationService, 'go').resolves({
-              activeNavBar: 'search',
               address: [],
               alertDetails: null,
               backLink: { href: `/system/return-logs/${returnLogId}`, text: 'Go back to return log' },

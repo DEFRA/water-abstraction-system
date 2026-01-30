@@ -32,7 +32,6 @@ describe('Company Contacts - Setup - Check Service', () => {
       const result = await ViewCheckService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         abstractionAlerts: 'Yes',
         email: 'eric@test.com',
         name: 'Eric',

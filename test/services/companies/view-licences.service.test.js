@@ -49,7 +49,6 @@ describe('Companies - View Licences service', () => {
       const result = await ViewLicencesService.go(company.id, auth, page)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         activeSecondaryNav: 'licences',
         backLink: {
           href: '/',

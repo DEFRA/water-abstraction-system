@@ -218,7 +218,6 @@ function _getOptions(url, credentials) {
 
 function _usersPageData(error = false) {
   const pageData = {
-    activeNavBar: 'search',
     filters: {
       email: null,
       openFilter: true,

@@ -79,7 +79,6 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
 
         expect(result).to.equal(
           {
-            activeNavBar: 'search',
             backLink: '/system/monitoring-stations/e1c44f9b-51c2-4aee-a518-5509d6f05869',
             displayUnits: [
               { value: 'Ml/d', text: 'Ml/d', hint: { text: 'megalitres per day' }, checked: false },

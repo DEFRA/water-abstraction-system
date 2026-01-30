@@ -68,7 +68,6 @@ async function _replayView(payload, error, selectedPageNumber, savedFilters, aut
   const pageData = IndexUsersPresenter.go(users, auth)
 
   return {
-    activeNavBar: 'search',
     error,
     filters: { ...savedFilters, ...payload },
     ...pageData,

@@ -116,7 +116,6 @@ describe('Return Logs Setup - Submit Note service', () => {
         const result = await SubmitNoteService.go(session.id, payload, user, yarStub)
 
         expect(result).to.equal({
-          activeNavBar: 'search',
           backLink: {
             href: `/system/return-logs/setup/${session.id}/check`,
             text: 'Back'

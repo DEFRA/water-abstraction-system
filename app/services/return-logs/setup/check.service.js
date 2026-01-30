@@ -28,7 +28,6 @@ async function go(sessionId, yar) {
   const notification = readFlashNotification(yar)
 
   return {
-    activeNavBar: 'search',
     ...formattedData,
     notification
   }

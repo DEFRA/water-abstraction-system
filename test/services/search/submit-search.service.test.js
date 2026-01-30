@@ -67,7 +67,6 @@ describe('Search - Submit Search service', () => {
       const result = await SubmitSearchService.go(auth, payload, yar)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         filterItems: [
           {
             checked: false,

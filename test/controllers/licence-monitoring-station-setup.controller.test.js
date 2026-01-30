@@ -247,8 +247,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           Sinon.stub(LicenceNumberService, 'go').resolves({
             backLink: `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`,
             monitoringStationLabel: 'Station Label',
-            pageTitle: 'Enter the licence number this threshold applies to',
-            activeNavBar: 'search'
+            pageTitle: 'Enter the licence number this threshold applies to'
           })
         })
 
@@ -297,8 +296,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
               error: { text: 'Enter a valid licence number' },
               backLink: `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`,
               monitoringStationLabel: 'Station Label',
-              pageTitle: 'Enter the licence number this threshold applies to',
-              activeNavBar: 'search'
+              pageTitle: 'Enter the licence number this threshold applies to'
             })
           })
 
@@ -323,8 +321,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           Sinon.stub(FullConditionService, 'go').resolves({
             backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
             monitoringStationLabel: 'Station Label',
-            pageTitle: 'Select the full condition for licence 01/234',
-            activeNavBar: 'search'
+            pageTitle: 'Select the full condition for licence 01/234'
           })
         })
 
@@ -373,8 +370,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
               error: { text: 'Select a condition' },
               backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
               monitoringStationLabel: 'Station Label',
-              pageTitle: 'Select the full condition for licence 01/234',
-              activeNavBar: 'search'
+              pageTitle: 'Select the full condition for licence 01/234'
             })
           })
 
@@ -399,8 +395,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           Sinon.stub(AbstractionPeriodService, 'go').resolves({
             backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
             monitoringStationLabel: 'Station Label',
-            pageTitle: 'Enter an abstraction period for licence 01/234',
-            activeNavBar: 'search'
+            pageTitle: 'Enter an abstraction period for licence 01/234'
           })
         })
 
@@ -457,8 +452,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
               text: 'Back'
             },
             monitoringStationLabel: 'Station Label',
-            pageTitle: 'Enter an abstraction period for licence 01/234',
-            activeNavBar: 'search'
+            pageTitle: 'Enter an abstraction period for licence 01/234'
           })
         })
 

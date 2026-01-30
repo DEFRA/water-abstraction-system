@@ -71,7 +71,6 @@ describe('Monitoring Stations - View service', () => {
       const result = await ViewService.go(auth, monitoringStation.id, yarStub)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         notification: 'Tag removed for 99/999/9999',
         backLink: { href: '/', text: 'Go back to search' },
         buttons: {

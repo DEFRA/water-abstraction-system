@@ -151,7 +151,6 @@ describe('Return Logs Setup - Submit Volumes service', () => {
         const result = await SubmitVolumesService.go(session.id, payload, yarStub, yearMonth)
 
         expect(result).to.equal({
-          activeNavBar: 'search',
           error: {
             errorList: [
               {

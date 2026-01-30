@@ -24,7 +24,6 @@ async function go(sessionId) {
   const formattedData = StartDatePresenter.go(session)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }

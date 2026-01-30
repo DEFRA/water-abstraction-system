@@ -50,7 +50,6 @@ describe('Licences - View Conditions service', () => {
     const result = await ViewConditionsService.go(licence.id, auth)
 
     expect(result).to.equal({
-      activeNavBar: 'search',
       activeSecondaryNav: 'summary',
       activeSummarySubNav: 'conditions',
       backLink: {

@@ -551,7 +551,6 @@ describe('Licences controller', () => {
       describe('when a request is invalid', () => {
         beforeEach(async () => {
           Sinon.stub(SubmitMarkForSupplementaryBillingService, 'go').resolves({
-            activeNavBar: 'search',
             pageTitle: 'Mark for the supplementary bill run',
             error: {
               errorList: [
@@ -639,7 +638,6 @@ function _commonData() {
 
 function _markForSupplementaryBilling() {
   return {
-    activeNavBar: 'search',
     licenceId: '7861814c-ca19-43f2-be11-3c612f0d744b',
     licenceRef: '01/test',
     financialYears: [

@@ -52,7 +52,6 @@ function _failedValidationResponse(auth, payload, validationResult) {
   const userScopes = auth.credentials.scope
 
   return {
-    activeNavBar: 'search',
     error: formatValidationResult(validationResult),
     ...SearchPresenter.go(userScopes, query, resultType)
   }

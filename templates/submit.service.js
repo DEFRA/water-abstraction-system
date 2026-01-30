@@ -33,7 +33,6 @@ async function go(sessionId, payload) {
   const pageData = __PRESENTER_NAME__.go(session)
 
   return {
-    activeNavBar: '',
     error: validationResult,
     ...pageData
   }

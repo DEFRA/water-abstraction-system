@@ -26,7 +26,6 @@ async function go(auth, licenceId, monitoringStationId) {
   const formattedData = ViewLicencePresenter.go(licence, licenceMonitoringStations, monitoringStation, auth)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }

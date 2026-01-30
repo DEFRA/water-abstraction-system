@@ -52,7 +52,6 @@ describe('Monitoring stations controller', () => {
         }
 
         Sinon.stub(ViewService, 'go').resolves({
-          activeNavBar: 'search',
           pageTitle: 'Bodney Bridge',
           monitoringStationId: '499247a2-bebf-4a94-87dc-b83af2a133f3',
           monitoringStationName: 'Bodney Bridge',
