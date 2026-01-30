@@ -67,7 +67,7 @@ describe('Company Contacts - Setup - Contact Name Presenter', () => {
           session.checkPageVisited = true
         })
 
-        it('returns the name from the session', () => {
+        it('returns the link to the "check" page', () => {
           const result = ContactNamePresenter.go(session)
 
           expect(result.backLink).to.equal({
