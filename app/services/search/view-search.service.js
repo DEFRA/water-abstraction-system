@@ -48,7 +48,6 @@ async function _blankPage(userScopes) {
   const formattedData = SearchPresenter.go(userScopes)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }
@@ -70,7 +69,6 @@ async function _pageOfResults(userScopes, searchQuery, resultType, pageNumber) {
   )
 
   return {
-    activeNavBar: 'search',
     ...formattedData,
     pagination
   }

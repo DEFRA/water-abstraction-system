@@ -26,7 +26,6 @@ async function go(sessionId, requirementIndex) {
   const formattedData = RemovePresenter.go(session, requirementIndex)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }

@@ -41,7 +41,6 @@ async function go(sessionId, payload) {
   const formattedData = SubmissionPresenter.go(session)
 
   return {
-    activeNavBar: 'search',
     error,
     ...formattedData
   }

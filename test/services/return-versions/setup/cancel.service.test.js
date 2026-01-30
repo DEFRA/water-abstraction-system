@@ -65,7 +65,6 @@ describe('Return Versions Setup - Cancel service', () => {
       const result = await CancelService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/return-versions/setup/${session.id}/check`,
           text: 'Back'

@@ -25,7 +25,6 @@ async function go(licenceVersionId, auth) {
   const pageData = ViewPresenter.go(licenceVersionData, auth, conditions)
 
   return {
-    activeNavBar: 'search',
     ...pageData
   }
 }

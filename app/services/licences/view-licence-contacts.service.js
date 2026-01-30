@@ -21,7 +21,6 @@ async function go(licenceId) {
   const pageData = LicenceContactsPresenter.go(licence)
 
   return {
-    activeNavBar: 'search',
     ...pageData
   }
 }

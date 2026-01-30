@@ -24,7 +24,6 @@ async function go(sessionId) {
   const pageData = PeriodUsedPresenter.go(session)
 
   return {
-    activeNavBar: 'search',
     ...pageData
   }
 }

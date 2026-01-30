@@ -57,7 +57,6 @@ describe('Companies - View Contacts service', () => {
       const result = await ViewContactsService.go(company.id, auth, page, yarStub)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         activeSecondaryNav: 'contacts',
         backLink: {
           href: '/',

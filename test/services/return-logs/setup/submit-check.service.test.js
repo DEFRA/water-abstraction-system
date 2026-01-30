@@ -224,7 +224,6 @@ describe('Return Logs Setup - Submit Check service', () => {
 
       expect(result).to.equal({
         abstractionPeriod: null,
-        activeNavBar: 'search',
         displayReadings: false,
         displayUnits: false,
         enterMultipleLinkText: 'Enter multiple monthly volumes',

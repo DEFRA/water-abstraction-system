@@ -25,7 +25,6 @@ async function go(licenceMonitoringStationId) {
   const formattedData = RemovePresenter.go(licenceMonitoringStation)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }

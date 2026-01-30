@@ -100,7 +100,6 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
 
         expect(result).to.equal(
           {
-            activeNavBar: 'search',
             backLink: { href: `/system/return-logs/setup/${session.id}/reported`, text: 'Back' },
             startReading: null,
             pageTitle: 'Enter the start meter reading',

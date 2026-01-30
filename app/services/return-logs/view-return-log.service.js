@@ -25,7 +25,6 @@ async function go(auth, returnLogId, version) {
   const pageData = ViewReturnLogPresenter.go(auth, returnLog, notifications)
 
   return {
-    activeNavBar: 'search',
     ...pageData
   }
 }

@@ -47,7 +47,6 @@ async function go(sessionId, payload, yar) {
   const pageData = StartReadingPresenter.go(session)
 
   return {
-    activeNavBar: 'search',
     error,
     ...pageData
   }

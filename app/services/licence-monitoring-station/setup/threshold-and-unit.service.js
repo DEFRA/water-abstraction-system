@@ -26,7 +26,6 @@ async function go(sessionId) {
   const formattedData = ThresholdAndUnitPresenter.go(session)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }

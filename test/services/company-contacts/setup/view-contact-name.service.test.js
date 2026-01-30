@@ -32,7 +32,6 @@ describe('Company Contacts - Setup - View Contact Name Service', () => {
       const result = await ViewContactNameService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
           text: 'Back'

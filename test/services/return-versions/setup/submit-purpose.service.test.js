@@ -148,7 +148,6 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
           const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result).to.equal({
-            activeNavBar: 'search',
             error: {
               errorList: [
                 {
@@ -193,7 +192,6 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
           const result = await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
 
           expect(result).to.equal({
-            activeNavBar: 'search',
             error: {
               errorList: [
                 {

@@ -143,7 +143,6 @@ describe('Submit Mark For Supplementary Billing Service', () => {
           const result = await SubmitMarkForSupplementaryBillingService.go(licence.id, payload)
 
           expect(result).to.equal({
-            activeNavBar: 'search',
             backLink: {
               href: `/system/licences/${licence.id}/set-up`,
               text: 'Back'

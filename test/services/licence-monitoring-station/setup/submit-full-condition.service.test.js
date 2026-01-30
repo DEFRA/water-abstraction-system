@@ -25,7 +25,6 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
   let session
 
   const pageData = {
-    activeNavBar: 'search',
     pageData: 'PAGE_DATA'
   }
 

@@ -52,7 +52,6 @@ describe('Licences - View Purposes service', () => {
       const result = await ViewPurposesService.go(licence.id, auth)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         activeSecondaryNav: 'summary',
         activeSummarySubNav: 'purposes',
         backLink: {

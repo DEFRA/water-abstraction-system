@@ -55,7 +55,6 @@ describe('Licences - View Points service', () => {
       const result = await ViewPointsService.go(licence.id, auth)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         activeSecondaryNav: 'summary',
         activeSummarySubNav: 'points',
         backLink: {

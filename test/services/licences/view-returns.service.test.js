@@ -65,7 +65,6 @@ describe('Licences - View Returns service', () => {
         const result = await ViewReturnsService.go(licence.id, auth, page)
 
         expect(result).to.equal({
-          activeNavBar: 'search',
           activeSecondaryNav: 'returns',
           backLink: {
             text: 'Go back to search',

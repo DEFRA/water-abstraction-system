@@ -36,7 +36,6 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
       expect(result).to.equal({
         accountType: null,
-        activeNavBar: 'search',
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/existing-account`,
           text: 'Back'

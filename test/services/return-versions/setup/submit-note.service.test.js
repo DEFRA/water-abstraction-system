@@ -158,7 +158,6 @@ describe('Return Versions Setup - Submit Note service', () => {
 
         expect(result).to.equal(
           {
-            activeNavBar: 'search',
             pageTitle: 'Add a note',
             pageTitleCaption: 'Licence 01/ABC',
             backLink: {

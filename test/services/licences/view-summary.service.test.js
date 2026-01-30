@@ -63,7 +63,6 @@ describe('Licences - View Summary service', () => {
           abstractionPeriodsCaption: 'Period of abstraction',
           abstractionPoints: [],
           abstractionPointsCaption: 'Point of abstraction',
-          activeNavBar: 'search',
           activeSecondaryNav: 'summary',
           backLink: {
             href: '/',

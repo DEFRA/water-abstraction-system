@@ -142,7 +142,6 @@ describe('Return Logs Setup - Submit Readings service', () => {
         const result = await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
 
         expect(result).to.equal({
-          activeNavBar: 'search',
           error: {
             '2023-04-30T00:00:00.000Z': {
               text: 'Reading must be a number or blank'

@@ -49,7 +49,6 @@ async function go(sessionId, requirementIndex, payload, yar) {
   const formattedData = FrequencyReportedPresenter.go(session, requirementIndex)
 
   return {
-    activeNavBar: 'search',
     error: validationResult,
     ...formattedData
   }

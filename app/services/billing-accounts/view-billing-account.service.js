@@ -40,7 +40,6 @@ async function go(id, page, licenceId, chargeVersionId, companyId) {
   )
 
   return {
-    activeNavBar: 'search',
     ...pageData,
     pagination
   }

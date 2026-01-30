@@ -350,7 +350,6 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
 
         expect(result).to.equal(
           {
-            activeNavBar: 'search',
             pageTitle: 'Select the start date for the requirements for returns',
             pageTitleCaption: 'Licence 01/ABC',
             startDateDay: null,

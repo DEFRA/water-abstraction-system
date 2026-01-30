@@ -30,7 +30,6 @@ async function go(licenceId, auth) {
   const companyContactsData = CompanyContactsPresenter.go(companyContacts)
 
   return {
-    activeNavBar: 'search',
     activeSecondaryNav: 'contact-details',
     ...companyContactsData,
     ...licenceContactsData,

@@ -19,7 +19,6 @@ async function go(licenceId) {
   const licenceData = await _fetchLicenceData(licenceId)
 
   return {
-    activeNavBar: 'search',
     licenceRef: licenceData.licenceRef,
     pageTitle: "You've marked this licence for the next supplementary bill run",
     redirectLink: `/system/licences/${licenceId}/set-up`

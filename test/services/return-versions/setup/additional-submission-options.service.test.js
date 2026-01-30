@@ -54,7 +54,6 @@ describe('Return Versions Setup - Additional Submission Options service', () => 
           noAdditionalOptions: undefined,
           quarterlyReturnSubmissions: false,
           quarterlyReturns: undefined,
-          activeNavBar: 'search',
           backLink: {
             href: `/system/return-versions/setup/${session.id}/check`,
             text: 'Back'

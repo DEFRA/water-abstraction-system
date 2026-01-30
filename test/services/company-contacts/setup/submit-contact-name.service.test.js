@@ -59,7 +59,6 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
       const result = await SubmitContactNameService.go(session.id, payload)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
           text: 'Back'

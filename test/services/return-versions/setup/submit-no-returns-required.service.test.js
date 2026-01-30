@@ -112,7 +112,6 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
 
         expect(result).to.equal(
           {
-            activeNavBar: 'search',
             pageTitle: 'Why are no returns required?',
             pageTitleCaption: 'Licence 01/ABC',
             backLink: {

@@ -26,7 +26,6 @@ async function go(licenceId, auth) {
 
   return {
     ...pageData,
-    activeNavBar: 'search',
     activeSecondaryNav: 'summary',
     activeSummarySubNav: 'points',
     roles: userRoles(auth)

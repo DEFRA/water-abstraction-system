@@ -35,7 +35,6 @@ describe('Licences - View Mark For Supplementary Billing Service', () => {
     const result = await ViewMarkForSupplementaryBillingService.go(licence.id)
 
     expect(result).to.equal({
-      activeNavBar: 'search',
       backLink: {
         href: `/system/licences/${licence.id}/set-up`,
         text: 'Back'
