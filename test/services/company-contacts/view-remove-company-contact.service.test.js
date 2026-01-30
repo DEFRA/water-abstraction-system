@@ -40,7 +40,6 @@ describe('Company Contacts - View Remove Company Contact Service', () => {
       const result = await ViewRemoveCompanyContactService.go(companyContact.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/company-contacts/${companyContact.id}`,
           text: 'Go back to contact details'

@@ -53,7 +53,6 @@ async function go(sessionId, requirementIndex, payload, yar) {
   const formattedData = PointsPresenter.go(session, requirementIndex, pointsData)
 
   return {
-    activeNavBar: 'search',
     error: validationResult,
     ...formattedData
   }

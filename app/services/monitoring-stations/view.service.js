@@ -27,7 +27,6 @@ async function go(auth, monitoringStationId, yar) {
   const notification = readFlashNotification(yar)
 
   return {
-    activeNavBar: 'search',
     notification,
     ...pageData
   }

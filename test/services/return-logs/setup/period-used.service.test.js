@@ -41,7 +41,6 @@ describe('Return Logs Setup - Period used service', () => {
       expect(result).to.equal(
         {
           abstractionPeriod: '1 April to 31 March',
-          activeNavBar: 'search',
           backLink: { href: `/system/return-logs/setup/${session.id}/single-volume`, text: 'Back' },
           pageTitle: 'What period was used for this volume?',
           pageTitleCaption: 'Return reference 012345',

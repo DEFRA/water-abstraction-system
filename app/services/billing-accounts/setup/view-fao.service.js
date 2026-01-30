@@ -22,7 +22,6 @@ async function go(sessionId) {
   const pageData = FAOPresenter.go(session)
 
   return {
-    activeNavBar: 'search',
     ...pageData
   }
 }

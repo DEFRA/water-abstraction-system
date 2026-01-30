@@ -21,7 +21,6 @@ async function go(returnVersionId) {
   const formattedData = ViewPresenter.go(requirementsForReturns)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }

@@ -86,7 +86,6 @@ describe('Return Versions - Setup - Purpose service', () => {
       const result = await PurposeService.go(session.id, requirementIndex)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         pageTitle: 'Select the purpose for the requirements for returns',
         pageTitleCaption: 'Licence 01/ABC',
         backLink: {

@@ -20,8 +20,7 @@ async function dates(_request, h) {
 
 async function deduplicate(_request, h) {
   return h.view('data/deduplicate.njk', {
-    pageTitle: 'De-duplicate a licence',
-    activeNavBar: 'search'
+    pageTitle: 'De-duplicate a licence'
   })
 }
 

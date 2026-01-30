@@ -25,7 +25,6 @@ async function go(sessionId, requirementIndex) {
   const formattedData = FrequencyCollectedPresenter.go(session, requirementIndex)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }

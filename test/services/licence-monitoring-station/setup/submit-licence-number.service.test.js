@@ -132,7 +132,6 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
       const result = await SubmitLicenceNumberService.go(session.id, payload)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         error: { text: 'Licence could not be found' },
         backLink: `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`,
         licenceRef: '1234567890',
@@ -151,7 +150,6 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
       const result = await SubmitLicenceNumberService.go(session.id, payload)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         error: { text: 'Enter a licence number' },
         backLink: `/system/licence-monitoring-station/setup/${session.id}/stop-or-reduce`,
         licenceRef: null,

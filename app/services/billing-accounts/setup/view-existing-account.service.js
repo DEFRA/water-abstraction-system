@@ -24,7 +24,6 @@ async function go(sessionId) {
   const pageData = ExistingAccountPresenter.go(session, companySearchResults)
 
   return {
-    activeNavBar: 'search',
     ...pageData
   }
 }

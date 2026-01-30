@@ -79,7 +79,6 @@ describe('Search - View Search service', () => {
       const result = await ViewSearchService.go(auth, yar, page)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         filterItems: [
           {
             checked: false,
@@ -160,7 +159,6 @@ describe('Search - View Search service', () => {
       const result = await ViewSearchService.go(auth, yar, page)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         filterItems: [
           {
             checked: false,
@@ -210,7 +208,6 @@ describe('Search - View Search service', () => {
       const result = await ViewSearchService.go(auth, yar, page)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         filterItems: [
           {
             checked: false,
@@ -261,7 +258,6 @@ describe('Search - View Search service', () => {
       const result = await ViewSearchService.go(auth, yar, page)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         filterItems: [
           {
             checked: false,

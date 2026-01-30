@@ -42,7 +42,6 @@ describe('Return Logs Setup - Cancel service', () => {
 
       expect(result).to.equal({
         abstractionPeriod: '1 January to 31 December',
-        activeNavBar: 'search',
         backLink: { href: `/system/return-logs/setup/${sessionId}/check`, text: 'Back' },
         pageTitle: 'You are about to cancel this return submission',
         purposes: 'Evaporative Cooling',

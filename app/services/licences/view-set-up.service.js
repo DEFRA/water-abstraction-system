@@ -33,7 +33,6 @@ async function go(licenceId, auth) {
 
   return {
     ...pageData,
-    activeNavBar: 'search',
     activeSecondaryNav: 'set-up',
     roles: userRoles(auth)
   }

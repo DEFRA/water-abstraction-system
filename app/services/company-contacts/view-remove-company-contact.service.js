@@ -25,8 +25,7 @@ async function go(id) {
   const pageData = RemoveCompanyContactPresenter.go(company, companyContact)
 
   return {
-    ...pageData,
-    activeNavBar: 'search'
+    ...pageData
   }
 }
 

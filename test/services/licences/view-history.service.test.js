@@ -63,7 +63,6 @@ describe('Licences - View History service', () => {
       const result = await ViewHistoryService.go(licence.id, auth)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         activeSecondaryNav: 'history',
         backLink: {
           href: '/',

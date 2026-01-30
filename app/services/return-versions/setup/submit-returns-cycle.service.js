@@ -49,7 +49,6 @@ async function go(sessionId, requirementIndex, payload, yar) {
   const formattedData = ReturnsCyclePresenter.go(session, requirementIndex)
 
   return {
-    activeNavBar: 'search',
     error: validationResult,
     ...formattedData
   }

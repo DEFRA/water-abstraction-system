@@ -136,7 +136,6 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
 
         expect(result).to.equal(
           {
-            activeNavBar: 'search',
             backLink: {
               href: `/system/return-versions/setup/${session.id}/check`,
               text: 'Back'
