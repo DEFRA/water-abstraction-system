@@ -7,14 +7,21 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
+
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/company-contacts/setup/check.presenter.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 describe('Company Contacts - Setup - Check Presenter', () => {
+  let company
   let session
 
   beforeEach(() => {
-    session = {}
+    company = CustomersFixtures.company()
+
+    session = { id: generateUUID(), company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' }
   })
 
   describe('when called', () => {
@@ -22,11 +29,11 @@ describe('Company Contacts - Setup - Check Presenter', () => {
       const result = CheckPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: {
-          href: '',
-          text: 'Back'
-        },
-        pageTitle: ''
+        abstractionAlerts: 'Yes',
+        email: 'eric@test.com',
+        name: 'Eric',
+        pageTitle: 'Check contact',
+        pageTitleCaption: 'Tyrell Corporation'
       })
     })
   })

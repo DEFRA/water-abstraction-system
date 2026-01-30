@@ -1,8 +1,66 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block pageContent %}
+
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: {
+        text: "Name"
+      },
+        value: {
+        text: name
+      },
+        actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "name"
+          }
+        ]
+      }
+      },
+      {
+        key: {
+        text: "Email address"
+      },
+        value: {
+        text: email
+      },
+        actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "email"
+          }
+        ]
+      }
+      },
+      {
+        key: {
+        text: "Water abstraction alerts"
+      },
+        value: {
+        html: abstractionAlerts
+      },
+        actions: {
+        items: [
+          {
+            href: "#",
+            text: "Change",
+            visuallyHiddenText: "abstractionAlerts"
+          }
+        ]
+      }
+      }
+    ]
+  }) }}
+
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
