@@ -94,7 +94,7 @@ async function _returnLog(ids) {
 }
 
 async function _user(ids) {
-  return UserModel.query().select('application', 'id', 'lastLogin', 'username').findByIds(ids)
+  return UserModel.query().select('id', 'lastLogin', 'username').modify('role').findByIds(ids)
 }
 
 module.exports = {

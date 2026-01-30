@@ -100,7 +100,9 @@ const USER_SQL = `
     username AS row_order,
     CAST (NULL AS DATE) AS date_order
   FROM users
-  WHERE username ILIKE ?
+  WHERE
+    application = 'water_vml'
+    AND username ILIKE ?
 `
 
 /**
