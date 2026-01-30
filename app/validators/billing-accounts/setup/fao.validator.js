@@ -19,7 +19,7 @@ const VALID_VALUES = ['yes', 'no']
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {
-  const errorMessage = 'Select if you need to add an FAO'
+  const errorMessage = 'Select yes if you need to add an FAO'
 
   const schema = Joi.object({
     fao: Joi.string()
