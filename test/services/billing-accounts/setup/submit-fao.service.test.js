@@ -97,10 +97,10 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
         errorList: [
           {
             href: '#fao',
-            text: 'Select if you need to add an FAO'
+            text: 'Select yes if you need to add an FAO'
           }
         ],
-        fao: { text: 'Select if you need to add an FAO' }
+        fao: { text: 'Select yes if you need to add an FAO' }
       })
     })
   })

@@ -36,7 +36,7 @@ describe('Billing Accounts - Setup - FAO Validator', () => {
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('Select if you need to add an FAO')
+      expect(result.error.details[0].message).to.equal('Select yes if you need to add an FAO')
     })
   })
 })
