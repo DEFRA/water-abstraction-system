@@ -14,11 +14,11 @@ const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill
 // Thing under test
 const SubmitIndexBillRunsService = require('../../../app/services/bill-runs/submit-index-bill-runs.service.js')
 
-describe('Notices - Submit Index Notices service', () => {
+describe.only('Bill Runs - Submit Index Bill Runs service', () => {
   let payload
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     yarStub = {
       clear: Sinon.stub().returns(),
       get: Sinon.stub(),
