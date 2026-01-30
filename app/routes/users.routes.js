@@ -7,14 +7,24 @@ const routes = [
     method: 'GET',
     path: '/users',
     options: {
-      handler: UsersController.index
+      handler: UsersController.index,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
     }
   },
   {
     method: 'POST',
     path: '/users',
     options: {
-      handler: UsersController.submitIndex
+      handler: UsersController.submitIndex,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
     }
   },
   {
