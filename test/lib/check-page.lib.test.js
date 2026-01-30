@@ -33,7 +33,7 @@ describe('CheckPage Lib', () => {
         session.checkPageVisited = true
       })
 
-      it('should return updated url', () => {
+      it('should return updated url to use "/check"', () => {
         const result = CheckPageLib.checkUrl(session, '/system/name')
 
         expect(result).to.equal('/system/check')
@@ -41,7 +41,7 @@ describe('CheckPage Lib', () => {
     })
 
     describe('when the page has not been visited', () => {
-      it('should return updated url', () => {
+      it('should return the original url', () => {
         const result = CheckPageLib.checkUrl(session, '/system/name')
 
         expect(result).to.equal('/system/name')
