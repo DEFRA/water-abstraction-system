@@ -5,6 +5,8 @@
  * @module ContactEmailPresenter
  */
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/contact-email' page
  *
@@ -17,7 +19,7 @@ function go(session) {
 
   return {
     backLink: {
-      href: `/system/company-contacts/setup/${sessionId}/contact-name`,
+      href: checkUrl(session, `/system/company-contacts/setup/${sessionId}/contact-name`),
       text: 'Back'
     },
     pageTitle: 'Enter an email address for the contact',

@@ -5,6 +5,8 @@
  * @module AbstractionAlertsPresenter
  */
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/abstraction-alerts' page
  *
@@ -17,7 +19,7 @@ function go(session) {
 
   return {
     backLink: {
-      href: `/system/company-contacts/setup/${sessionId}/contact-email`,
+      href: checkUrl(session, `/system/company-contacts/setup/${sessionId}/contact-email`),
       text: 'Back'
     },
     pageTitle: 'Should the contact get abstraction alerts?',
