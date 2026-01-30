@@ -9,6 +9,7 @@
 const AbstractionAlertsPresenter = require('../../../presenters/company-contacts/setup/abstraction-alerts.presenter.js')
 const AbstractionAlertsValidator = require('../../../validators/company-contacts/setup/abstraction-alerts.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { checkUrl } = require('../../../lib/check-page.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -27,7 +28,9 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return {
+      redirectUrl: checkUrl(session, `/system/company-contacts/setup/${sessionId}/check`)
+    }
   }
 
   session.abstractionAlerts = payload.abstractionAlerts

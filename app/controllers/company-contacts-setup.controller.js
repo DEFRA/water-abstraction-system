@@ -67,7 +67,7 @@ async function submitAbstractionAlerts(request, h) {
     return h.view(`company-contacts/setup/abstraction-alerts.njk`, pageData)
   }
 
-  return h.redirect(`/system/company-contacts/setup/${sessionId}/check`)
+  return h.redirect(pageData.redirectUrl)
 }
 
 async function submitCheck(request, h) {
@@ -93,7 +93,7 @@ async function submitContactEmail(request, h) {
     return h.view(`company-contacts/setup/contact-email.njk`, pageData)
   }
 
-  return h.redirect(`/system/company-contacts/setup/${sessionId}/abstraction-alerts`)
+  return h.redirect(pageData.redirectUrl)
 }
 
 async function submitContactName(request, h) {
@@ -108,7 +108,7 @@ async function submitContactName(request, h) {
     return h.view(`company-contacts/setup/contact-name.njk`, pageData)
   }
 
-  return h.redirect(`/system/company-contacts/setup/${sessionId}/contact-email`)
+  return h.redirect(pageData.redirectUrl)
 }
 
 module.exports = {

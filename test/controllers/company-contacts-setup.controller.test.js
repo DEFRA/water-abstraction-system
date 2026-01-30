@@ -111,7 +111,9 @@ describe('Company Contacts Setup controller', () => {
           'hof_notifications'
         ])
 
-        Sinon.stub(SubmitAbstractionAlertsService, 'go').returns({})
+        Sinon.stub(SubmitAbstractionAlertsService, 'go').returns({
+          redirectUrl: `/system/company-contacts/setup/${sessionId}/check`
+        })
       })
 
       it('redirects to companies contacts setup check page', async () => {
@@ -193,7 +195,9 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/contact-name`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitContactNameService, 'go').returns({})
+        Sinon.stub(SubmitContactNameService, 'go').returns({
+          redirectUrl: `/system/company-contacts/setup/${sessionId}/contact-email`
+        })
       })
 
       it('redirects to companies contacts setup contact email page', async () => {
@@ -236,7 +240,9 @@ describe('Company Contacts Setup controller', () => {
           'hof_notifications'
         ])
 
-        Sinon.stub(SubmitContactEmailService, 'go').returns({})
+        Sinon.stub(SubmitContactEmailService, 'go').returns({
+          redirectUrl: `/system/company-contacts/setup/${sessionId}/abstraction-alerts`
+        })
       })
 
       it('redirects to companies contacts check page', async () => {
