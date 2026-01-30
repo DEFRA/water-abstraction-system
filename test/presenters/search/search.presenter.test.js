@@ -282,7 +282,7 @@ describe('Search - Search presenter', () => {
           exact: true,
           link: '/user/user-1/status',
           reference: 'TESTSEARCH01@wrls.gov.uk',
-          statusTag: undefined,
+          statusTag: null,
           type: 'User'
         },
         {
@@ -348,7 +348,7 @@ describe('Search - Search presenter', () => {
           exact: false,
           link: '/user/user-1/status',
           reference: 'TESTSEARCH01@wrls.gov.uk',
-          statusTag: undefined,
+          statusTag: null,
           type: 'User'
         }
       ],

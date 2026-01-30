@@ -269,8 +269,6 @@ function _user(user) {
   const { exact, model } = user
   const { application, id, lastLogin, username } = model
 
-  const statusTag = formatReturnLogStatus(model)
-
   return {
     col2Title: 'Type',
     col2Value: application === 'water_vml' ? 'External' : 'Internal',
@@ -279,7 +277,7 @@ function _user(user) {
     exact,
     link: `/user/${id}/status`,
     reference: username,
-    statusTag,
+    statusTag: null,
     type: 'User'
   }
 }
