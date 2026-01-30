@@ -21,15 +21,30 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * If the user selects page 3 then our service fetches bill runs 51 to 75. For this to work you _must_ use an order by
  * on the query (we use `createdAt DESC`).
  *
- * @param {number} page - the page number of bill runs to be viewed
+ * @param {object} filters - an object containing the different filters to apply to the query
+ * @param {number} page - The current page for the pagination service
  *
  * @returns {Promise<module:BillRunModel[]>} an array of bill runs that match the selected 'page in the data
  */
-async function go(page = 1) {
-  return _fetch(page)
+async function go(filters, page) {
+  const query = _fetchQuery()
+
+  _applyFilters(query, filters)
+
+  query.orderBy('billRuns.createdAt', 'desc').page(page - 1, DatabaseConfig.defaultPageSize)
+
+  return query
 }
 
-async function _fetch(page) {
+function _applyFilters(query, filters) {
+  const { yearCreated } = filters
+
+  if (yearCreated) {
+    query.whereRaw('EXTRACT(YEAR FROM bill_runs.created_at) = ?', [yearCreated])
+  }
+}
+
+function _fetchQuery() {
   return BillRunModel.query()
     .select([
       'billRuns.id',
@@ -46,8 +61,6 @@ async function _fetch(page) {
       'region.displayName AS region'
     ])
     .innerJoinRelated('region')
-    .orderBy([{ column: 'createdAt', order: 'desc' }])
-    .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 
 module.exports = {
