@@ -35,9 +35,14 @@ function checkUrl(session, url) {
 }
 
 /**
- * Sets a 'checkPageVisited' flag on the session to false.
+ * Sets the `checkPageVisited` flag on the session to false
  *
- * This flag is used to determine the redirect URL for a check page.
+ * This flag is used to determine the redirect URL for a check page: should a user be redirected back to the '/check'
+ * page or to the previous or next page in the journey.
+ *
+ * However, we have some journeys where if a user goes back and changes a value, it affects the rest of the journey. We
+ * have to make them re-complete the journey because of this change. Hence, we reset the flag to false so subsequent
+ * pages will redirect to the previous/next page rather than the '/check' page.
  *
  * @param {object} session - The session instance
  */
