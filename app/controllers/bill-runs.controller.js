@@ -10,6 +10,7 @@ const Boom = require('@hapi/boom')
 const GenerateTwoPartTariffBillRunService = require('../services/bill-runs/generate-two-part-tariff-bill-run.service.js')
 const IndexBillRunsService = require('../services/bill-runs/index-bill-runs.service.js')
 const SubmitCancelBillRunService = require('../services/bill-runs/cancel/submit-cancel-bill-run.service.js')
+const SubmitIndexBillRunsService = require('../services/bill-runs/submit-index-bill-runs.service.js')
 const SubmitSendBillRunService = require('../services/bill-runs/send/submit-send-bill-run.service.js')
 const ViewBillRunService = require('../services/bill-runs/view-bill-run.service.js')
 const ViewCancelBillRunService = require('../services/bill-runs/cancel/view-cancel-bill-run.service.js')
@@ -24,9 +25,12 @@ async function cancel(request, h) {
 }
 
 async function index(request, h) {
-  const { page } = request.query
+  const {
+    query: { page },
+    yar
+  } = request
 
-  const pageData = await IndexBillRunsService.go(page)
+  const pageData = await IndexBillRunsService.go(yar, page)
 
   return h.view('bill-runs/index.njk', pageData)
 }
@@ -45,6 +49,22 @@ async function submitCancel(request, h) {
   // NOTE: What we are awaiting here is for the SubmitCancelBillRunService to update the status of the bill run to
   // `cancel'. Deleting the bill run will carry on in the background after that
   await SubmitCancelBillRunService.go(id)
+
+  return h.redirect('/system/bill-runs')
+}
+
+async function submitIndex(request, h) {
+  const {
+    payload,
+    query: { page },
+    yar
+  } = request
+
+  const pageData = await SubmitIndexBillRunsService.go(payload, yar, page)
+
+  if (pageData.error) {
+    return h.view('bill-runs/index.njk', pageData)
+  }
 
   return h.redirect('/system/bill-runs')
 }
@@ -88,6 +108,7 @@ module.exports = {
   index,
   send,
   submitCancel,
+  submitIndex,
   submitSend,
   twoPartTariff,
   view

@@ -1,0 +1,119 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Thing under test
+const IndexValidator = require('../../../app/validators/bill-runs/index.validator.js')
+
+describe('Bill Runs - Index validator', () => {
+  let payload
+
+  describe('when valid data is provided', () => {
+    describe('that is fully populated', () => {
+      beforeEach(() => {
+        payload = _payload()
+      })
+
+      it('confirms the data is valid', () => {
+        const result = IndexValidator.go(payload)
+
+        expect(result.value).to.equal({
+          yearCreated: 2026
+        })
+        expect(result.error).not.to.exist()
+      })
+    })
+
+    describe('that is empty', () => {
+      beforeEach(() => {
+        payload = {}
+      })
+
+      it('confirms the data is valid', () => {
+        const result = IndexValidator.go(payload)
+
+        expect(result.value).to.equal({})
+        expect(result.error).not.to.exist()
+      })
+    })
+  })
+
+  describe('when invalid data is provided', () => {
+    beforeEach(() => {
+      payload = _payload()
+    })
+
+    describe('because "Year created" is invalid', () => {
+      describe('as it is not a number', () => {
+        beforeEach(() => {
+          payload.yearCreated = 'xx'
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal('The year created must be a number')
+          expect(result.error.details[0].path[0]).to.equal('yearCreated')
+        })
+      })
+
+      describe('as it is greater than the current year', () => {
+        const currentYear = new Date().getFullYear()
+
+        beforeEach(() => {
+          payload.yearCreated = currentYear + 1
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal(
+            `The year created cannot exceed the current year of ${currentYear}`
+          )
+          expect(result.error.details[0].path[0]).to.equal('yearCreated')
+        })
+      })
+
+      describe('as it is less than the first year of bill runs (2014)', () => {
+        beforeEach(() => {
+          payload.yearCreated = '2013'
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal('The year created must be greater or equal to 2014')
+          expect(result.error.details[0].path[0]).to.equal('yearCreated')
+        })
+      })
+
+      describe('as it is not a whole number', () => {
+        beforeEach(() => {
+          payload.yearCreated = '2025.5'
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal('The year created must be a whole number')
+          expect(result.error.details[0].path[0]).to.equal('yearCreated')
+        })
+      })
+    })
+  })
+})
+
+function _payload() {
+  return {
+    yearCreated: '2026'
+  }
+}

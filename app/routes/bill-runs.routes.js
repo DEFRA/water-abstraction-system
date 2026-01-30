@@ -19,6 +19,21 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/bill-runs',
+    options: {
+      handler: BillRunsController.submitIndex,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
+      },
+      plugins: {
+        crumb: false
+      }
+    }
+  },
+  {
     method: 'GET',
     path: '/bill-runs/{id}',
     options: {

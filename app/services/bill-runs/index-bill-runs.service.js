@@ -13,18 +13,21 @@ const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 /**
  * Orchestrates fetching and presenting the data needed for the /bill-runs page
  *
- * @param {string} page - the page number of bill runs to be viewed
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {number|string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} The view data for the bill runs page
  */
-async function go(page = 1) {
+async function go(yar, page = 1) {
+  const filters = _filters(yar)
+
   const selectedPageNumber = Number(page)
 
   // We expect the FetchBillRunsService to take longer to complete than CheckBusyBillRunsService. But running them
   // together means we are only waiting as long as it takes FetchBillRunsService to complete rather than their combined
   // time
   const [{ results: billRuns, total: totalNumber }, busyResult] = await Promise.all([
-    FetchBillRunsService.go(selectedPageNumber),
+    FetchBillRunsService.go(filters, selectedPageNumber),
     CheckBusyBillRunsService.go()
   ])
 
@@ -40,8 +43,31 @@ async function go(page = 1) {
 
   return {
     activeNavBar: 'bill-runs',
+    filters,
     ...pageData,
     pagination
+  }
+}
+
+function _filters(yar) {
+  let openFilter = false
+
+  const savedFilters = yar.get('billRunsFilter')
+
+  if (savedFilters) {
+    for (const key of Object.keys(savedFilters)) {
+      openFilter = !!savedFilters[key]
+
+      if (openFilter) {
+        break
+      }
+    }
+  }
+
+  return {
+    yearCreated: null,
+    ...savedFilters,
+    openFilter
   }
 }
 
