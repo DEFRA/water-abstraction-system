@@ -14,7 +14,7 @@ const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill
 // Thing under test
 const SubmitIndexBillRunsService = require('../../../app/services/bill-runs/submit-index-bill-runs.service.js')
 
-describe.only('Bill Runs - Submit Index Bill Runs service', () => {
+describe('Bill Runs - Submit Index Bill Runs service', () => {
   let payload
   let yarStub
 
