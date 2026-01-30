@@ -36,6 +36,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         email: 'eric@test.com',
         links: {
           abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
+          cancel: `/system/company-contacts/setup/${session.id}/cancel`,
           email: `/system/company-contacts/setup/${session.id}/contact-email`,
           name: `/system/company-contacts/setup/${session.id}/contact-name`
         },
