@@ -50,7 +50,10 @@ async function markCheckPageNotVisited(session) {
 /**
  * Sets a 'checkPageVisited' flag on the session to true.
  *
- * This flag is used to determine the redirect URL for a check page.
+ * This flag is used to determine the redirect URL for a check page: should a user be redirected back to the '/check'
+ * page or to the previous or next page in the journey.
+ *
+ * We normally set this flag when a user first visits the `/check` page for a journey.
  *
  * @param {object} session - The session instance
  */
