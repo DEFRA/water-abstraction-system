@@ -78,7 +78,7 @@ describe('Company Contacts - Setup - Contact Name Presenter', () => {
       })
 
       describe('when the check page has not been visited', () => {
-        it('returns an empty string', () => {
+        it('returns a link to the company "contacts" page', () => {
           const result = ContactNamePresenter.go(session)
 
           expect(result.backLink).to.equal({
