@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -19,6 +20,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
   let payload
   let session
   let sessionData
+  let yarStub
 
   beforeEach(async () => {
     company = CustomersFixtures.company()
@@ -28,6 +30,12 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
     payload = { abstractionAlerts: 'yes' }
 
     session = await SessionHelper.add({ data: sessionData })
+
+    yarStub = { flash: Sinon.stub() }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -48,6 +56,53 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
 
       expect(result).to.equal({
         redirectUrl: `/system/company-contacts/setup/${session.id}/check`
+      })
+    })
+
+    describe('when the check page has', () => {
+      describe('been visited', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({
+            data: {
+              ...sessionData,
+              checkPageVisited: true,
+              abstractionAlerts: 'yes'
+            }
+          })
+        })
+
+        describe('and the "session" and "payload" value', () => {
+          describe('match', () => {
+            it('does not set a notification', async () => {
+              await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
+
+              expect(yarStub.flash.called).to.be.false()
+            })
+          })
+
+          describe('do not match', () => {
+            beforeEach(() => {
+              payload = { abstractionAlerts: 'no' }
+            })
+
+            it('sets a notification', async () => {
+              await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
+
+              const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+              expect(flashType).to.equal('notification')
+              expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Water abstraction alerts updated' })
+            })
+          })
+        })
+      })
+
+      describe('not been visited', () => {
+        it('does not set a notification', async () => {
+          await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
+
+          expect(yarStub.flash.called).to.be.false()
+        })
       })
     })
   })
