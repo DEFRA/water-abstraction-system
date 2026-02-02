@@ -91,10 +91,12 @@ describe('Search - Search presenter', () => {
         {
           exact: true,
           model: {
-            application: 'water_admin',
             id: 'user-1',
             lastLogin: new Date('2001-01-01T00:00:00Z'),
-            username: 'TESTSEARCH01@wrls.gov.uk'
+            username: 'TESTSEARCH01@example.gov.uk',
+            $role: () => {
+              return 'None'
+            }
           },
           type: 'user'
         },
@@ -161,10 +163,12 @@ describe('Search - Search presenter', () => {
         {
           exact: false,
           model: {
-            application: 'water_admin',
-            id: 'user-1',
+            id: 'user-2',
             lastLogin: new Date('2001-01-01T00:00:00Z'),
-            username: 'TESTSEARCH01@wrls.gov.uk'
+            username: 'TESTSEARCH02@example.gov.uk',
+            $role: () => {
+              return 'None'
+            }
           },
           type: 'user'
         },
@@ -275,14 +279,14 @@ describe('Search - Search presenter', () => {
           type: 'Return reference'
         },
         {
-          col2Title: 'Type',
-          col2Value: 'Internal',
+          col2Title: 'Role',
+          col2Value: 'None',
           col3Title: 'Last signed in',
           col3Value: '1 January 2001',
           exact: true,
           link: '/user/user-1/status',
-          reference: 'TESTSEARCH01@wrls.gov.uk',
-          statusTag: undefined,
+          reference: 'TESTSEARCH01@example.gov.uk',
+          statusTag: null,
           type: 'User'
         },
         {
@@ -341,14 +345,14 @@ describe('Search - Search presenter', () => {
           type: 'Return reference'
         },
         {
-          col2Title: 'Type',
-          col2Value: 'Internal',
+          col2Title: 'Role',
+          col2Value: 'None',
           col3Title: 'Last signed in',
           col3Value: '1 January 2001',
           exact: false,
-          link: '/user/user-1/status',
-          reference: 'TESTSEARCH01@wrls.gov.uk',
-          statusTag: undefined,
+          link: '/user/user-2/status',
+          reference: 'TESTSEARCH02@example.gov.uk',
+          statusTag: null,
           type: 'User'
         }
       ],
@@ -691,28 +695,6 @@ describe('Search - Search presenter', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
 
         expect(result.results[2].statusTag).to.not.exist()
-      })
-    })
-  })
-
-  describe('the user type property "col2Value" for users', () => {
-    describe('when a user is external', () => {
-      beforeEach(() => {
-        allSearchMatches.results[5].model.application = 'water_vml'
-      })
-
-      it('returns "External"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.results[5].col2Value).to.equal('External')
-      })
-    })
-
-    describe('when a user is not external', () => {
-      it('returns "Internal"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.results[5].col2Value).to.equal('Internal')
       })
     })
   })
