@@ -267,19 +267,17 @@ function _returnLog(returnLog) {
 
 function _user(user) {
   const { exact, model } = user
-  const { application, id, lastLogin, username } = model
-
-  const statusTag = formatReturnLogStatus(model)
+  const { id, lastLogin, username } = model
 
   return {
-    col2Title: 'Type',
-    col2Value: application === 'water_vml' ? 'External' : 'Internal',
+    col2Title: 'Role',
+    col2Value: model.$role(),
     col3Title: 'Last signed in',
     col3Value: formatLongDate(lastLogin),
     exact,
     link: `/user/${id}/status`,
     reference: username,
-    statusTag,
+    statusTag: null,
     type: 'User'
   }
 }
