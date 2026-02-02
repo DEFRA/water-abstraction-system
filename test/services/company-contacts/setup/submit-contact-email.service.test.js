@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -19,6 +20,7 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
   let payload
   let session
   let sessionData
+  let yarStub
 
   beforeEach(async () => {
     company = CustomersFixtures.company()
@@ -28,11 +30,17 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
     payload = { email: 'eric@test.com' }
 
     session = await SessionHelper.add({ data: sessionData })
+
+    yarStub = { flash: Sinon.stub() }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitContactEmailService.go(session.id, payload)
+      await SubmitContactEmailService.go(session.id, payload, yarStub)
 
       const refreshedSession = await session.$query()
 
@@ -44,10 +52,57 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitContactEmailService.go(session.id, payload)
+      const result = await SubmitContactEmailService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
         redirectUrl: `/system/company-contacts/setup/${session.id}/abstraction-alerts`
+      })
+    })
+
+    describe('when the check page has', () => {
+      describe('been visited', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({
+            data: {
+              ...sessionData,
+              checkPageVisited: true,
+              email: 'eric@test.com'
+            }
+          })
+        })
+
+        describe('and the "session" and "payload" value', () => {
+          describe('match', () => {
+            it('does not set a notification', async () => {
+              await SubmitContactEmailService.go(session.id, payload, yarStub)
+
+              expect(yarStub.flash.called).to.be.false()
+            })
+          })
+
+          describe('do not match', () => {
+            beforeEach(() => {
+              payload = { email: 'bob@test.com' }
+            })
+
+            it('sets a notification', async () => {
+              await SubmitContactEmailService.go(session.id, payload, yarStub)
+
+              const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+              expect(flashType).to.equal('notification')
+              expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Email address updated' })
+            })
+          })
+        })
+      })
+
+      describe('not been visited', () => {
+        it('does not set a notification', async () => {
+          await SubmitContactEmailService.go(session.id, payload, yarStub)
+
+          expect(yarStub.flash.called).to.be.false()
+        })
       })
     })
   })
@@ -58,7 +113,7 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitContactEmailService.go(session.id, payload)
+      const result = await SubmitContactEmailService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
         backLink: {

@@ -5,7 +5,7 @@
  * @module DetermineSearchItemsService
  */
 
-const RESULT_TYPES = ['billingAccount', 'licenceHolder', 'licence', 'monitoringStation', 'returnLog', 'user']
+const RESULT_TYPES = ['billingAccount', 'company', 'licence', 'monitoringStation', 'returnLog', 'user']
 
 const MAX_LICENCE_LENGTH = 20
 
@@ -33,7 +33,7 @@ function go(query, selectedResultType, userScopes) {
   const resultTypes = []
 
   _billingAccounts(resultTypes, query, resultTypeToUse, userScopes)
-  _licenceHolders(resultTypes, query, resultTypeToUse)
+  _companies(resultTypes, query, resultTypeToUse)
   _licences(resultTypes, query, resultTypeToUse)
   _monitoringStations(resultTypes, query, resultTypeToUse)
   _returnLogs(resultTypes, query, resultTypeToUse)
@@ -65,13 +65,13 @@ function _billingAccounts(resultTypes, query, selectedResultType, userScopes) {
   resultTypes.push('billingAccount')
 }
 
-function _licenceHolders(resultTypes, _query, selectedResultType) {
-  if (selectedResultType && selectedResultType !== 'licenceHolder') {
+function _companies(resultTypes, _query, selectedResultType) {
+  if (selectedResultType && selectedResultType !== 'company') {
     return
   }
 
-  // Current assumption is that a licence holder name could contain pretty much anything as it is free text
-  resultTypes.push('licenceHolder')
+  // Current assumption is that a company name could contain pretty much anything as it is free text
+  resultTypes.push('company')
 }
 
 function _licences(resultTypes, query, selectedResultType) {
