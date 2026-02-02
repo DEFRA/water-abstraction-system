@@ -39,13 +39,9 @@ async function go(payload, yar, page = 1) {
     return {}
   }
 
-  // When the page comes from the request via the controller then it will be a string. For consistency we want it as a
-  // number
-  const selectedPageNumber = Number(page)
-
   const savedFilters = _savedFilters(yar)
 
-  return _replayView(payload, error, selectedPageNumber, savedFilters)
+  return _replayView(payload, error, page, savedFilters)
 }
 
 function _clearFilters(payload, yar) {
@@ -60,7 +56,11 @@ function _clearFilters(payload, yar) {
   return false
 }
 
-async function _replayView(payload, error, selectedPageNumber, savedFilters) {
+async function _replayView(payload, error, page, savedFilters) {
+  // When the page comes from the request via the controller then it will be a string. For consistency we want it as a
+  // number
+  const selectedPageNumber = Number(page)
+
   // We expect the FetchBillRunsService to take longer to complete than CheckBusyBillRunsService. But running them
   // together means we are only waiting as long as it takes FetchBillRunsService to complete rather than their combined
   // time
