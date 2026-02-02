@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things to stub
+const CheckBusyBillRunsService = require('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
 const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill-runs.service.js')
 
 // Thing under test
@@ -19,6 +20,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
   let yarStub
 
   beforeEach(() => {
+    Sinon.stub(CheckBusyBillRunsService, 'go').resolves('none')
+
     yarStub = {
       clear: Sinon.stub().returns(),
       get: Sinon.stub(),
