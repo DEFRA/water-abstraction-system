@@ -9,6 +9,7 @@
 const ContactEmailPresenter = require('../../../presenters/company-contacts/setup/contact-email.presenter.js')
 const ContactEmailValidator = require('../../../validators/company-contacts/setup/contact-email.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { checkUrl } = require('../../../lib/check-page.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -27,7 +28,9 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return {
+      redirectUrl: checkUrl(session, `/system/company-contacts/setup/${sessionId}/abstraction-alerts`)
+    }
   }
 
   session.email = payload.email

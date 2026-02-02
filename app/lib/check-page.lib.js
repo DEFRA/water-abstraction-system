@@ -1,0 +1,75 @@
+'use strict'
+
+/**
+ * Check page helper methods
+ * @module CheckPageLib
+ */
+
+/**
+ * Checks if the '/check' page of a journey has been visited and returns the appropriate url
+ *
+ * If `session.checkPageVisited` is true, the last segment of the path is replaced with 'check'.
+ *
+ * For example, a url of '/setup/123/contact-email' becomes '/setup/123/check'.
+ *
+ * Our journeys have to support users working through the journey once, but then being able to return to a page from the
+ * '/check' page to edit the value. This method helps manage the back or redirect URLs for those pages.
+ *
+ * The 'Back' link is expected to return the user to the '/check' page if they have already visited it, else return them
+ * to the previous page in the journey. The same applies when the user submits a page - they should be redirected back
+ * to or the next page in the journey depending on whether they came from the '/check' page.
+ *
+ * @param {object} session - The session instance
+ * @param {string} url - The url
+ *
+ * @returns {string} The url to use, modified to point to the '/check' page if it has been visited
+ */
+function checkUrl(session, url) {
+  const { checkPageVisited } = session
+
+  if (checkPageVisited) {
+    return url.replace(/\/[^/]*$/, '/check')
+  }
+
+  return url
+}
+
+/**
+ * Sets the `checkPageVisited` flag on the session to false
+ *
+ * This flag is used to determine the redirect URL for a check page: should a user be redirected back to the '/check'
+ * page or to the previous or next page in the journey.
+ *
+ * However, we have some journeys where if a user goes back and changes a value, it affects the rest of the journey. We
+ * have to make them re-complete the journey because of this change. Hence, we reset the flag to false so subsequent
+ * pages will redirect to the previous/next page rather than the '/check' page.
+ *
+ * @param {object} session - The session instance
+ */
+async function markCheckPageNotVisited(session) {
+  session.checkPageVisited = false
+
+  await session.$update()
+}
+
+/**
+ * Sets a 'checkPageVisited' flag on the session to true.
+ *
+ * This flag is used to determine the redirect URL for a check page: should a user be redirected back to the '/check'
+ * page or to the previous or next page in the journey.
+ *
+ * We normally set this flag when a user first visits the `/check` page for a journey.
+ *
+ * @param {object} session - The session instance
+ */
+async function markCheckPageVisited(session) {
+  session.checkPageVisited = true
+
+  await session.$update()
+}
+
+module.exports = {
+  checkUrl,
+  markCheckPageNotVisited,
+  markCheckPageVisited
+}

@@ -9,6 +9,7 @@
 const ContactNamePresenter = require('../../../presenters/company-contacts/setup/contact-name.presenter.js')
 const ContactNameValidator = require('../../../validators/company-contacts/setup/contact-name.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { checkUrl } = require('../../../lib/check-page.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -27,7 +28,9 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return {}
+    return {
+      redirectUrl: checkUrl(session, `/system/company-contacts/setup/${sessionId}/contact-email`)
+    }
   }
 
   session.name = payload.name

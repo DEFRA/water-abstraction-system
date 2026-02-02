@@ -17,7 +17,7 @@
         actions: {
         items: [
           {
-            href: "#",
+            href: links.name,
             text: "Change",
             visuallyHiddenText: "name"
           }
@@ -34,7 +34,7 @@
         actions: {
         items: [
           {
-            href: "#",
+            href: links.email,
             text: "Change",
             visuallyHiddenText: "email"
           }
@@ -51,7 +51,7 @@
         actions: {
         items: [
           {
-            href: "#",
+            href: links.abstractionAlerts,
             text: "Change",
             visuallyHiddenText: "abstractionAlerts"
           }
@@ -64,6 +64,18 @@
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Confirm",
+        preventDoubleClick: true
+      }) }}
+
+      {{ govukButton({
+        text: "Cancel",
+        classes: "govuk-button--secondary",
+        preventDoubleClick: true,
+        href: links.cancel
+      }) }}
+    </div>
   </form>
 {% endblock %}
