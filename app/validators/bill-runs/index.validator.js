@@ -14,7 +14,7 @@ const MIN_YEAR_CREATED = 2014 // Based on the minimum year a bill run has been c
  *
  * @param {object} payload - The payload from the request to be validated
  *
- * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
+ * @returns {object} The result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
 function go(payload) {

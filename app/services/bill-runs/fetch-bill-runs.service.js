@@ -21,10 +21,10 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * If the user selects page 3 then our service fetches bill runs 51 to 75. For this to work you _must_ use an order by
  * on the query (we use `createdAt DESC`).
  *
- * @param {object} filters - an object containing the different filters to apply to the query
+ * @param {object} filters - An object containing the different filters to apply to the query
  * @param {number} page - The current page for the pagination service
  *
- * @returns {Promise<module:BillRunModel[]>} an array of bill runs that match the selected 'page in the data
+ * @returns {Promise<module:BillRunModel[]>} An array of bill runs that match the selected 'page in the data
  */
 async function go(filters, page) {
   const query = _fetchQuery()
