@@ -46,7 +46,9 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitContactEmailService.go(session.id, payload)
 
-      expect(result).to.equal({})
+      expect(result).to.equal({
+        redirectUrl: `/system/company-contacts/setup/${session.id}/abstraction-alerts`
+      })
     })
   })
 

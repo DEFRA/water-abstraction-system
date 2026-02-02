@@ -16,13 +16,26 @@ function go(session) {
   const { company } = session
 
   return {
-    backLink: {
-      href: `/system/companies/${company.id}/contacts`,
-      text: 'Back'
-    },
+    backLink: _backLink(session),
     pageTitle: 'Enter a name for the contact',
     pageTitleCaption: company.name,
     name: session.name ?? ''
+  }
+}
+
+function _backLink(session) {
+  const { id: sessionId, checkPageVisited, company } = session
+
+  if (checkPageVisited) {
+    return {
+      href: `/system/company-contacts/setup/${sessionId}/check`,
+      text: 'Back'
+    }
+  }
+
+  return {
+    href: `/system/companies/${company.id}/contacts`,
+    text: 'Back'
   }
 }
 

@@ -34,9 +34,25 @@ describe('Company Contacts - Setup - Check Service', () => {
       expect(result).to.equal({
         abstractionAlerts: 'Yes',
         email: 'eric@test.com',
+        links: {
+          abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
+          cancel: `/system/company-contacts/setup/${session.id}/cancel`,
+          email: `/system/company-contacts/setup/${session.id}/contact-email`,
+          name: `/system/company-contacts/setup/${session.id}/contact-name`
+        },
         name: 'Eric',
         pageTitle: 'Check contact',
         pageTitleCaption: 'Tyrell Corporation'
+      })
+    })
+
+    describe('marks the check page as visited', () => {
+      it('updates the session', async () => {
+        await ViewCheckService.go(session.id)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.checkPageVisited).to.be.true()
       })
     })
   })
