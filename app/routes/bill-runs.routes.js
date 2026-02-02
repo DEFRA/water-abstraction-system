@@ -27,9 +27,6 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      plugins: {
-        crumb: false
       }
     }
   },
