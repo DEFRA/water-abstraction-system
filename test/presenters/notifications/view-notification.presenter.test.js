@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const NoticesFixture = require('../../fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
+const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
@@ -241,12 +241,12 @@ describe('Notifications - View Notification presenter', () => {
 
     describe('when a return log id is provided', () => {
       it('returns a back link to the view licence communications page', () => {
-        const returnId = generateUUID()
+        const returnLogId = generateUUID()
 
-        const result = ViewNotificationPresenter.go(notification, null, returnId)
+        const result = ViewNotificationPresenter.go(notification, null, returnLogId)
 
         expect(result.backLink).to.be.equal({
-          href: `/system/return-logs/${returnId}`,
+          href: `/system/return-logs/${returnLogId}`,
           text: 'Go back to return log'
         })
       })

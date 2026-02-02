@@ -51,7 +51,6 @@ describe('View Return Submission service', () => {
     // We only check a few items here -- the key thing is that the mock return log was fetched and successfully
     // passed to the presenter
     expect(result).to.include({
-      activeNavBar: 'search',
       pageTitle: 'Water abstracted January 2025'
     })
     expect(result.tableData).to.include({ unitTotal: '1,000' })

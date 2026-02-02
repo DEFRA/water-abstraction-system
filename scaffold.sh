@@ -30,13 +30,13 @@ PASCAL_NAME=$(to_pascal_case "$RAW_NAME")
 # ------------------------------------------------------------------------------
 
 TEMPLATE_PRESENTER="templates/presenter.js"
-TEMPLATE_SERVICE="templates/service.js"
+TEMPLATE_VIEW_SERVICE="templates/view-service.js"
 TEMPLATE_SUBMIT_SERVICE="templates/submit.service.js"
 TEMPLATE_VALIDATOR="templates/validator.js"
 TEMPLATE_VIEW="templates/view.njk"
 
 TEMPLATE_TEST_PRESENTER="templates/presenter.test.js"
-TEMPLATE_TEST_SERVICE="templates/service.test.js"
+TEMPLATE_TEST_VIEW_SERVICE="templates/view-service.test.js"
 TEMPLATE_TEST_SUBMIT_SERVICE="templates/submit.service.test.js"
 TEMPLATE_TEST_VALIDATOR="templates/validator.test.js"
 
@@ -51,6 +51,33 @@ build_up_path() {
     slash_count=$(grep -o "/" <<< "$REL_DIR" | wc -l | tr -d ' ')
   fi
   printf '../%.0s' $(seq 1 $((slash_count + 2)))
+}
+
+path_to_describe_label() {
+  # Builds: companies/setup/name -> Companies - Setup - Name
+  # Also handles dashes/underscores inside each segment: company-contacts/setup -> Company Contacts - Setup
+  local input="$1"
+  awk -F'/' '
+    function title(s,   n,i,a,out,w) {
+      gsub(/[-_]+/, " ", s)
+      n = split(s, a, /[[:space:]]+/)
+      out = ""
+      for (i = 1; i <= n; i++) {
+        w = a[i]
+        if (w == "") continue
+        out = out (out ? " " : "") toupper(substr(w,1,1)) substr(w,2)
+      }
+      return out
+    }
+    {
+      for (i = 1; i <= NF; i++) {
+        seg = title($i)
+        if (seg == "") continue
+        out = out (out ? " - " : "") seg
+      }
+      print out
+    }
+  ' <<< "$input"
 }
 
 render_file() {
@@ -121,11 +148,11 @@ generate_helper_snippet() {
     echo "Here is your ready-to-use controller + router snippet:"
     echo ""
 
-    local service_path="../services/${REL_DIR}/${RAW_NAME}.service.js"
+    local service_path="../services/${REL_DIR}/view-${RAW_NAME}.service.js"
     local submit_service_path="../services/${REL_DIR}/submit-${RAW_NAME}.service.js"
     local view_path="${REL_DIR}/${RAW_NAME}.njk"
 
-    sed -e "s|__SERVICE_NAME__|${PASCAL_NAME}Service|g" \
+    sed -e "s|__SERVICE_NAME__|View${PASCAL_NAME}Service|g" \
         -e "s|__SUBMIT_NAME__|Submit${PASCAL_NAME}Service|g" \
         -e "s|__SERVICE_PATH__|${service_path}|g" \
         -e "s|__NAME__|${PASCAL_NAME}|g" \
@@ -156,8 +183,13 @@ generate_paths() {
 
       case "$service_variant" in
         service)
-          SOURCE_TEMPLATE="$TEMPLATE_SERVICE"
-          TEST_TEMPLATE="$TEMPLATE_TEST_SERVICE"
+          SOURCE_TEMPLATE="$TEMPLATE_VIEW_SERVICE"
+          TEST_TEMPLATE="$TEMPLATE_TEST_VIEW_SERVICE"
+
+            # We prefix our submit services with 'view'
+            MODULE_NAME="View${MODULE_NAME}"
+            SOURCE_FILE="view-${SOURCE_FILE}"
+            TEST_FILE="view-${TEST_FILE}"
           ;;
         submit)
             SOURCE_TEMPLATE="$TEMPLATE_SUBMIT_SERVICE"
@@ -211,8 +243,9 @@ generate_paths() {
   # Helper
   RELATIVE_UP_PATH=$(build_up_path)
 
-  # Test
-  DESCRIBE_LABEL="$(echo "$RAW_NAME" | sed -E 's/[-_]+/ /g' | awk '{for(i=1;i<=NF;++i) $i=toupper(substr($i,1,1)) substr($i,2)}1') $TYPE" # Test describe block
+  DESCRIBE_BASE="${REL_DIR:+${REL_DIR}/}${RAW_NAME}"
+  DESCRIBE_LABEL="$(path_to_describe_label "$DESCRIBE_BASE") $TYPE" # Test describe block
+
   REQUIRE_PATH="${RELATIVE_UP_PATH}../app/${SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
   SESSION_HELPER_PATH="${RELATIVE_UP_PATH}support/helpers/session.helper.js"
 

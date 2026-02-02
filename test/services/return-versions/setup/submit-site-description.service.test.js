@@ -119,7 +119,6 @@ describe('Return Versions Setup - Submit Site Description service', () => {
 
         expect(result).to.equal(
           {
-            activeNavBar: 'search',
             pageTitle: 'Enter a site description for the requirements for returns',
             pageTitleCaption: 'Licence 01/ABC',
             backLink: {

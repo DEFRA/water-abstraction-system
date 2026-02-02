@@ -75,7 +75,6 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
 
         expect(result).to.equal(
           {
-            activeNavBar: 'search',
             backLink: { href: `/system/return-logs/setup/${session.id}/meter-provided`, text: 'Back' },
             pageTitle: 'Is it a single volume?',
             pageTitleCaption: 'Return reference 12345',

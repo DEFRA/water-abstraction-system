@@ -25,7 +25,6 @@ describe('Licences -  View Marked For Supplementary Billing Service', () => {
       const result = await ViewMarkedForSupplementaryBillingService.go(licence.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         licenceRef: licence.licenceRef,
         pageTitle: "You've marked this licence for the next supplementary bill run",
         redirectLink: `/system/licences/${licence.id}/set-up`

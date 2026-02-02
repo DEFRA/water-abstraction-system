@@ -50,7 +50,6 @@ describe('Return Versions Setup - Agreements Exceptions service', () => {
 
       expect(result).to.equal(
         {
-          activeNavBar: 'search',
           pageTitle: 'Select agreements and exceptions for the requirements for returns',
           pageTitleCaption: 'Licence 01/ABC',
           agreementsExceptions: null,

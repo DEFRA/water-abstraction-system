@@ -9,8 +9,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const ReturnCyclesFixture = require('../../fixtures/return-cycles.fixture.js')
-const ReturnRequirementsFixture = require('../../fixtures/return-requirements.fixture.js')
+const ReturnCyclesFixture = require('../../support/fixtures/return-cycles.fixture.js')
+const ReturnRequirementsFixture = require('../../support/fixtures/return-requirements.fixture.js')
 
 // Things we need to stub
 const CreateReturnLogsService = require('../../../app/services/return-logs/create-return-logs.service.js')
@@ -58,7 +58,9 @@ describe('Return Logs - Process Licence Return Logs service', () => {
     // we control what values are coming back. And the tests for VoidLicenceReturnLogsService ensure it does what is
     // expected with those values. So, any further tests here would not only complicate the tests further, they'd just
     // be duplicating work elsewhere.
-    createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go').resolves(['6662dd0f-8065-485c-bb6c-e99ffb1aa3fc'])
+    createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go').resolves([
+      'v1:1:01/10/79/9184:21042654:2022-04-01:2023-03-31'
+    ])
     voidReturnLogsStub = Sinon.stub(VoidLicenceReturnLogsService, 'go').resolves()
   })
 

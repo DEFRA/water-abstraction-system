@@ -187,7 +187,7 @@ function _licenceHolder(licenceHolder) {
     col3Title: 'Type',
     col3Value: type,
     exact,
-    link: `/system/customers/${id}/licences`,
+    link: `/system/companies/${id}/licences`,
     reference: holderName,
     statusTag: null,
     type: 'Holder'
@@ -248,7 +248,7 @@ function _results(results) {
 
 function _returnLog(returnLog) {
   const { exact, model } = returnLog
-  const { endDate, licenceRef, returnId, returnReference } = model
+  const { endDate, id, licenceRef, returnReference } = model
 
   const statusTag = formatReturnLogStatus(model)
 
@@ -258,7 +258,7 @@ function _returnLog(returnLog) {
     col3Title: 'End date',
     col3Value: formatLongDate(endDate),
     exact,
-    link: `/system/return-logs/${returnId}`,
+    link: `/system/return-logs/${id}`,
     reference: returnReference,
     statusTag,
     type: 'Return reference'

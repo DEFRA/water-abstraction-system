@@ -9,6 +9,7 @@ const CheckPresenter = require('../../../../presenters/return-versions/setup/che
 const FetchPointsService = require('../fetch-points.service.js')
 const ReturnRequirementsPresenter = require('../../../../presenters/return-versions/setup/check/returns-requirements.presenter.js')
 const SessionModel = require('../../../../models/session.model.js')
+const { readFlashNotification } = require('../../../../lib/general.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/check` page
@@ -27,10 +28,9 @@ async function go(sessionId, yar) {
 
   const formattedData = CheckPresenter.go(session)
 
-  const notification = yar.flash('notification')[0]
+  const notification = readFlashNotification(yar)
 
   return {
-    activeNavBar: 'search',
     notification,
     ...returnRequirements,
     ...formattedData

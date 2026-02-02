@@ -61,7 +61,6 @@ async function go(sessionId, payload, yar) {
   const submittedSessionData = _submittedSessionData(session, payload)
 
   return {
-    activeNavBar: 'search',
     error: validationResult,
     ...submittedSessionData
   }

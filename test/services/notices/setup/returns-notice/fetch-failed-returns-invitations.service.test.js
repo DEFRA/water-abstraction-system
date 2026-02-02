@@ -9,8 +9,8 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../../../fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../../../fixtures/notifications.fixture.js')
+const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
 const NotificationHelper = require('../../../../support/helpers/notification.helper.js')
 const { futureDueDate } = require('../../../../../app/presenters/notices/base.presenter.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
@@ -98,7 +98,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
               expect(result).to.equal({
                 dueDate: futureDueDate('letter'),
                 licenceRefs,
-                notificationIds: [notifications[1].id, notifications[2].id],
+                notificationIds: [notifications[1].id, notifications[2].id].sort(),
                 returnLogIds
               })
             })
@@ -135,7 +135,7 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
               expect(result).to.equal({
                 dueDate: new Date('2025-04-28'),
                 licenceRefs,
-                notificationIds: [notifications[1].id, notifications[2].id],
+                notificationIds: [notifications[1].id, notifications[2].id].sort(),
                 returnLogIds
               })
             })

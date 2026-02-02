@@ -8,7 +8,7 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const NoticeSessionFixture = require('../../../../fixtures/notice-session.fixture.js')
+const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
 const RecipientsSeeder = require('../../../../support/seeders/recipients.seeder.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
@@ -33,7 +33,7 @@ describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients serv
 
     licenceHolder = await RecipientsSeeder.licenceHolder('Test Licence Holder', licenceRef)
     licenceHolder.licenceRefs = [licenceRef]
-    licenceHolder.returnLogIds = [setDueDateReturnLog.returnId]
+    licenceHolder.returnLogIds = [setDueDateReturnLog.id]
   })
 
   after(async () => {

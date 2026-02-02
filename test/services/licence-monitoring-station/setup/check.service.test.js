@@ -45,7 +45,6 @@ describe('Licence Monitoring Station Setup - Check Service', () => {
       const result = await CheckService.go(session.id)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         abstractionPeriod: '1 February to 3 April',
         abstractionPeriodManuallyEntered: true,
         condition: 'None',

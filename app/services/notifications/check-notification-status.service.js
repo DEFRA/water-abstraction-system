@@ -150,7 +150,7 @@ async function _recordReturnLogs(notification, status, trx) {
     .where((builder) => {
       builder.whereNull('dueDate').orWhere('dueDate', '>=', dueDateMinusOneDay)
     })
-    .whereIn('returnId', returnLogIds)
+    .whereIn('id', returnLogIds)
 }
 
 async function _recordStatus(notification, notifyStatus, status) {

@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const NoticesFixture = require('../../fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
+const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -111,7 +111,7 @@ describe('Notifications - Notification Table presenter', () => {
   })
 
   describe('when someone has removed the query params from the url', () => {
-    describe('and neither licenceId nor returnId are present', () => {
+    describe('and neither licenceId nor returnLogId are present', () => {
       it('correctly presents the data', () => {
         const result = NotificationsTablePresenter.go([notification], null, null)
 

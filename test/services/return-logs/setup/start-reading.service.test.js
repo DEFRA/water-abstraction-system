@@ -36,7 +36,6 @@ describe('Return Logs Setup - Start Reading service', () => {
 
       expect(result).to.equal(
         {
-          activeNavBar: 'search',
           backLink: { href: `/system/return-logs/setup/${session.id}/reported`, text: 'Back' },
           pageTitle: 'Enter the start meter reading',
           pageTitleCaption: 'Return reference 012345',

@@ -66,8 +66,8 @@ describe('Licences - Contact Details presenter', () => {
           href: '/',
           text: 'Go back to search'
         },
-        customerId: companyId,
-        customerContactLink: `/system/customers/${companyId}/contacts`,
+        companyId,
+        customerContactLink: `/system/companies/${companyId}/contacts`,
         licenceContacts: [
           {
             address: {
@@ -89,12 +89,12 @@ describe('Licences - Contact Details presenter', () => {
       })
     })
 
-    describe('the "customerId" property', () => {
+    describe('the "companyId" property', () => {
       describe('when one of the contacts has the communication type of "Licence Holder"', () => {
         it("returns that contact's company Id", () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
-          expect(result.customerId).to.equal(companyId)
+          expect(result.companyId).to.equal(companyId)
         })
       })
 
@@ -106,7 +106,7 @@ describe('Licences - Contact Details presenter', () => {
         it('returns null', () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
-          expect(result.customerId).to.be.null()
+          expect(result.companyId).to.be.null()
         })
       })
     })
@@ -153,7 +153,7 @@ describe('Licences - Contact Details presenter', () => {
         it('correctly presents the data', () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
-          expect(result.customerContactLink).to.equal(`/system/customers/${companyId}/contacts`)
+          expect(result.customerContactLink).to.equal(`/system/companies/${companyId}/contacts`)
         })
       })
 

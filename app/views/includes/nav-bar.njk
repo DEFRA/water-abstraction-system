@@ -3,7 +3,7 @@
   <nav id="nav" class="navbar govuk-width-container ">
     <ul class="navbar__list">
       <li class="navbar__item">
-        <a class="navbar__link govuk-link--no-visited-state {{ 'navbar__link--active' if activeNavBar === 'search' }}" href="/" id="nav-search">
+        <a class="navbar__link govuk-link--no-visited-state {{ 'navbar__link--active' if activeNavBar not in ['bill-runs', 'abstraction-reform', 'notices', 'users', 'manage'] }}" href="/" id="nav-search">
           Search
         </a>
       </li>
@@ -25,6 +25,13 @@
       <li class="navbar__item">
         <a class="navbar__link govuk-link--no-visited-state {{ 'navbar__link--active' if activeNavBar === 'notices' }}" href="/system/notices" id="nav-notices">
           Notices
+        </a>
+      </li>
+    {% endif %}
+    {% if auth.permission.users %}
+      <li class="navbar__item">
+        <a class="navbar__link govuk-link--no-visited-state {{ 'navbar__link--active' if activeNavBar === 'users' }}" href="/system/users" id="nav-users">
+          Users
         </a>
       </li>
     {% endif %}

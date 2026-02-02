@@ -212,7 +212,6 @@ describe('Billing Accounts controller', () => {
 
 function _viewBillingAccount() {
   return {
-    activeNavBar: 'search',
     accountNumber: 'S88897992A',
     address: [
       'Ferns Surfacing Limited',

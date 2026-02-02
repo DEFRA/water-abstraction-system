@@ -65,7 +65,6 @@ describe('Licences - View Returns service', () => {
         const result = await ViewReturnsService.go(licence.id, auth, page)
 
         expect(result).to.equal({
-          activeNavBar: 'search',
           activeSecondaryNav: 'returns',
           backLink: {
             text: 'Go back to search',
@@ -95,7 +94,7 @@ describe('Licences - View Returns service', () => {
 
 function _returnLogs() {
   const returnLog = {
-    id: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
+    id: 'c4458436-4766-4271-b978-6af7a0e4fd95',
     dueDate: new Date('2020-11-28'),
     status: 'completed',
     startDate: new Date('2020/01/02'),
@@ -120,7 +119,7 @@ function _returnLogs() {
       ],
       description: 'empty description'
     },
-    returnId: 'c4458436-4766-4271-b978-6af7a0e4fd95',
+    returnId: 'v1:1:01/123:10046821:2020-01-02:2020-02-01',
     returnReference: '10046821'
   }
 

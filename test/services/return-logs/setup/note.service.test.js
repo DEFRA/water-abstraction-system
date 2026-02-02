@@ -32,7 +32,6 @@ describe('Return Logs Setup - Note service', () => {
       const result = await NoteService.go(sessionId)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         backLink: {
           href: `/system/return-logs/setup/${sessionId}/check`,
           text: 'Back'

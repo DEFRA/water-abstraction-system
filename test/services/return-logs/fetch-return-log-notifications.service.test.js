@@ -9,16 +9,16 @@ const { expect } = Code
 
 // Test helpers
 const EventHelper = require('../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../fixtures/notices.fixture.js')
+const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
 const NotificationHelper = require('../../support/helpers/notification.helper.js')
-const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
+const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
 
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
 const FetchReturnLogNotificationsService = require('../../../app/services/return-logs/fetch-return-log-notifications.service.js')
 
-describe('Return Logs - Fetch Return Log Communications service', () => {
+describe('Return Logs - Fetch Return Log Notifications service', () => {
   let notice
   let notification
 

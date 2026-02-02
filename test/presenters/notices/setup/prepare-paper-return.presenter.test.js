@@ -9,7 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
+const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
 
 // Thing under test
 const PreparePaperReturnPresenter = require('../../../../app/presenters/notices/setup/prepare-paper-return.presenter.js')
@@ -47,7 +47,7 @@ describe('Notices - Setup - Prepare Paper Return presenter', () => {
         licence_ref: licenceRef,
         naldAreaCode: 'MIDLT',
         purpose: 'Mineral Washing',
-        qr_url: dueReturnLog.returnId,
+        qr_url: dueReturnLog.id,
         region_code: '1',
         region_name: 'North West',
         returns_frequency: dueReturnLog.returnsFrequency,
@@ -86,7 +86,7 @@ describe('Notices - Setup - Prepare Paper Return presenter', () => {
         purpose: 'Mineral Washing',
         regionAndArea: 'North West / Lower Trent',
         regionCode: '1',
-        returnId: dueReturnLog.returnId,
+        returnLogId: dueReturnLog.id,
         returnReference: dueReturnLog.returnReference,
         returnsFrequency: 'month',
         siteDescription: 'BOREHOLE AT AVALON',

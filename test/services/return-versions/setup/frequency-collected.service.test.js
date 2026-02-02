@@ -58,7 +58,6 @@ describe('Return Versions Setup - Frequency Collected service', () => {
 
       expect(result).to.equal(
         {
-          activeNavBar: 'search',
           pageTitle: 'Select how often readings or volumes are collected',
           pageTitleCaption: 'Licence 01/ABC',
           backLink: {

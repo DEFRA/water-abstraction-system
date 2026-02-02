@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
-const ReturnLogsFixture = require('../../fixtures/return-logs.fixture.js')
+const ReturnLogsFixture = require('../../support/fixtures/return-logs.fixture.js')
 
 // Things we need to stub
 const FetchDownloadReturnLogService = require('../../../app/services/return-logs/fetch-download-return-log.service.js')
@@ -33,7 +33,7 @@ describe('Return Logs - Download Return Log Service', () => {
   })
 
   it('correctly returns the csv string, filename and type', async () => {
-    const result = await DownloadReturnLogService.go(returnLog.returnId)
+    const result = await DownloadReturnLogService.go(returnLog.id)
 
     const { endDate, returnReference, returnSubmissions, startDate } = returnLog
 

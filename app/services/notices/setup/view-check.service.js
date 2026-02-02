@@ -9,6 +9,7 @@ const CheckPresenter = require('../../../presenters/notices/setup/check.presente
 const FetchRecipientsService = require('./fetch-recipients.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
+const { readFlashNotification } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the notices setup check page
@@ -30,7 +31,7 @@ async function go(sessionId, yar, page = 1) {
 
   const pageData = CheckPresenter.go(recipients, page, pagination, session)
 
-  const notification = yar.flash('notification')[0]
+  const notification = readFlashNotification(yar)
 
   return {
     ...pageData,

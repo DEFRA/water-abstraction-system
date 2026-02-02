@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -14,6 +14,7 @@ const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
 const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
 const LicenceEntityModel = require('../../app/models/licence-entity.model.js')
+const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
 const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
 const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
@@ -40,8 +41,10 @@ describe('User model', () => {
   let testChargeVersionNoteOne
   let testChargeVersionNoteTwo
   let testGroup
+  let testLicenceEntity
   let testRecord
   let testRole
+  let testUser
   let testUserRole
   let testUserGroup
 
@@ -55,6 +58,21 @@ describe('User model', () => {
     testChargeVersionNoteOne = await ChargeVersionNoteHelper.add({ userId: testRecord.id, note: '1st test note' })
     testChargeVersionNoteTwo = await ChargeVersionNoteHelper.add({ userId: testRecord.id, note: '2nd test note' })
     testUserRole = UserRoleHelper.select(USER_ROLE_AR_USER_INDEX)
+  })
+
+  afterEach(async () => {
+    if (testLicenceEntity) {
+      await testLicenceEntity.$query().delete()
+    }
+
+    if (testUser) {
+      await testUser.$query().delete()
+    }
+  })
+
+  after(async () => {
+    await testChargeVersionNoteOne.$query().delete()
+    await testChargeVersionNoteTwo.$query().delete()
   })
 
   describe('Basic query', () => {
@@ -115,10 +133,7 @@ describe('User model', () => {
     })
 
     describe('when linking to licence entity', () => {
-      let testAddedRecord
-      let testLicenceEntity
-
-      before(async () => {
+      beforeEach(async () => {
         testLicenceEntity = await LicenceEntityHelper.add()
 
         const { id: licenceEntityId } = testLicenceEntity
@@ -128,7 +143,7 @@ describe('User model', () => {
         // linked to a licence using the external UI.
         //
         // So, for this test we have to fall back to generating a user against which we assign the licence entity ID.
-        testAddedRecord = await UserHelper.add({ licenceEntityId })
+        testUser = await UserHelper.add({ licenceEntityId })
       })
 
       it('can successfully run a related query', async () => {
@@ -138,10 +153,10 @@ describe('User model', () => {
       })
 
       it('can eager load the licence entity', async () => {
-        const result = await UserModel.query().findById(testAddedRecord.id).withGraphFetched('licenceEntity')
+        const result = await UserModel.query().findById(testUser.id).withGraphFetched('licenceEntity')
 
         expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testAddedRecord.id)
+        expect(result.id).to.equal(testUser.id)
 
         expect(result.licenceEntity).to.be.an.instanceOf(LicenceEntityModel)
         expect(result.licenceEntity).to.equal(testLicenceEntity)
@@ -369,6 +384,145 @@ describe('User model', () => {
     })
   })
 
+  describe('$roles()', () => {
+    let licenceEntityRole
+    let otherLicenceEntityRole
+
+    afterEach(async () => {
+      if (licenceEntityRole) {
+        await licenceEntityRole.$query().delete()
+      }
+
+      if (otherLicenceEntityRole) {
+        await otherLicenceEntityRole.$query().delete()
+      }
+    })
+
+    describe('when the user is not linked to a licence entity', () => {
+      beforeEach(async () => {
+        // NOTE: The entity ID is held against the user, not the other way round!!
+        testUser = await UserHelper.add()
+      })
+
+      it('returns "None"', async () => {
+        const result = testUser.$role()
+
+        expect(result).to.equal('None')
+      })
+    })
+
+    describe('when the user is linked to a licence entity', () => {
+      beforeEach(async () => {
+        testLicenceEntity = await LicenceEntityHelper.add()
+
+        // NOTE: The entity ID is held against the user, not the other way round!!
+        testUser = await UserHelper.add({ licenceEntityId: testLicenceEntity.id })
+      })
+
+      describe('but has no licence entity roles', () => {
+        beforeEach(async () => {
+          testUser = await UserModel.query().modify('role').findById(testUser.id)
+        })
+
+        it('returns "None"', async () => {
+          const result = testUser.$role()
+
+          expect(result).to.equal('None')
+        })
+      })
+
+      describe('which is linked to a "admin" licence entity role', () => {
+        beforeEach(async () => {
+          licenceEntityRole = await LicenceEntityRoleHelper.add({
+            licenceEntityId: testLicenceEntity.id,
+            role: 'admin'
+          })
+
+          testUser = await UserModel.query().modify('role').findById(testUser.id)
+        })
+
+        it('returns "Admin"', async () => {
+          const result = testUser.$role()
+
+          expect(result).to.equal('Admin')
+        })
+      })
+
+      describe('which is linked to a "primary_user" licence entity role', () => {
+        beforeEach(async () => {
+          licenceEntityRole = await LicenceEntityRoleHelper.add({
+            licenceEntityId: testLicenceEntity.id,
+            role: 'primary_user'
+          })
+
+          testUser = await UserModel.query().modify('role').findById(testUser.id)
+        })
+
+        it('returns "Primary user"', async () => {
+          const result = testUser.$role()
+
+          expect(result).to.equal('Primary user')
+        })
+      })
+
+      describe('which is linked to a "user_returns" licence entity role', () => {
+        beforeEach(async () => {
+          licenceEntityRole = await LicenceEntityRoleHelper.add({
+            licenceEntityId: testLicenceEntity.id,
+            role: 'user_returns'
+          })
+
+          testUser = await UserModel.query().modify('role').findById(testUser.id)
+        })
+
+        it('returns "Returns agent"', async () => {
+          const result = testUser.$role()
+
+          expect(result).to.equal('Returns agent')
+        })
+      })
+
+      describe('which is linked to a "user" licence entity role', () => {
+        beforeEach(async () => {
+          licenceEntityRole = await LicenceEntityRoleHelper.add({
+            licenceEntityId: testLicenceEntity.id,
+            role: 'user'
+          })
+
+          testUser = await UserModel.query().modify('role').findById(testUser.id)
+        })
+
+        it('returns "Agent"', async () => {
+          const result = testUser.$role()
+
+          expect(result).to.equal('Agent')
+        })
+      })
+
+      describe('which is linked to multiple licence entity roles', () => {
+        beforeEach(async () => {
+          licenceEntityRole = await LicenceEntityRoleHelper.add({
+            licenceEntityId: testLicenceEntity.id,
+            role: 'primary_user'
+          })
+
+          otherLicenceEntityRole = await LicenceEntityRoleHelper.add({
+            licenceEntityId: testLicenceEntity.id,
+            role: 'user'
+          })
+
+          testUser = await UserModel.query().modify('role').findById(testUser.id)
+        })
+
+        it('returns the highest role by order of precedence', async () => {
+          const result = testUser.$role()
+
+          expect(result).to.equal('Primary user')
+        })
+      })
+    })
+  })
+
   describe('$status()', () => {
     let statusTestRecord
 
@@ -393,27 +547,41 @@ describe('User model', () => {
         statusTestRecord.enabled = true
       })
 
-      describe('and ""lastLogin" is not null', () => {
+      describe('and "password" is VOID', () => {
         beforeEach(() => {
-          statusTestRecord.lastLogin = new Date()
+          statusTestRecord.password = 'VOID'
         })
 
-        it('returns "enabled"', async () => {
+        it('returns "locked"', async () => {
           const result = statusTestRecord.$status()
 
-          expect(result).to.equal('enabled')
+          expect(result).to.equal('locked')
         })
       })
 
-      describe('but "lastLogin" is null', () => {
-        beforeEach(() => {
-          statusTestRecord.lastLogin = null
+      describe('and "password" is not VOID', () => {
+        describe('and "lastLogin" is not null', () => {
+          beforeEach(() => {
+            statusTestRecord.lastLogin = new Date()
+          })
+
+          it('returns "enabled"', async () => {
+            const result = statusTestRecord.$status()
+
+            expect(result).to.equal('enabled')
+          })
         })
 
-        it('returns "awaiting"', async () => {
-          const result = statusTestRecord.$status()
+        describe('but "lastLogin" is null', () => {
+          beforeEach(() => {
+            statusTestRecord.lastLogin = null
+          })
 
-          expect(result).to.equal('awaiting')
+          it('returns "awaiting"', async () => {
+            const result = statusTestRecord.$status()
+
+            expect(result).to.equal('awaiting')
+          })
         })
       })
     })

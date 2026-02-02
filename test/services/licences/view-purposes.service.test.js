@@ -9,7 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const ViewLicencesFixture = require('../../fixtures/view-licences.fixture.js')
+const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
 
 // Things we need to stub
 const FetchPurposesService = require('../../../app/services/licences/fetch-purposes.service.js')
@@ -52,7 +52,6 @@ describe('Licences - View Purposes service', () => {
       const result = await ViewPurposesService.go(licence.id, auth)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         activeSecondaryNav: 'summary',
         activeSummarySubNav: 'purposes',
         backLink: {

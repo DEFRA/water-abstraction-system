@@ -55,7 +55,6 @@ describe('Return Versions Setup - Reason service', () => {
 
       expect(result).to.equal(
         {
-          activeNavBar: 'search',
           pageTitle: 'Select the reason for the requirements for returns',
           pageTitleCaption: `Licence ${session.licence.licenceRef}`,
           backLink: {

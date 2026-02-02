@@ -24,7 +24,6 @@ async function go(sessionId, yearMonth) {
   const formattedData = ReadingsPresenter.go(session, yearMonth)
 
   return {
-    activeNavBar: 'search',
     ...formattedData
   }
 }

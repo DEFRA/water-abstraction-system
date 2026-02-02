@@ -67,7 +67,6 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
           abstractionPeriodStartMonth: null,
           abstractionPeriodEndDay: null,
           abstractionPeriodEndMonth: null,
-          activeNavBar: 'search',
           backLink: {
             href: `/system/licence-monitoring-station/setup/${session.id}/full-condition`,
             text: 'Back'

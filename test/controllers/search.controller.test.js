@@ -52,7 +52,6 @@ describe('Search controller', () => {
         describe('and provides the search page', () => {
           beforeEach(async () => {
             Sinon.stub(ViewSearchService, 'go').resolves({
-              activeNavBar: 'search',
               pageTitle: 'Search'
             })
           })
@@ -69,7 +68,6 @@ describe('Search controller', () => {
           beforeEach(async () => {
             getOptions.url = '/search?page=1'
             Sinon.stub(ViewSearchService, 'go').resolves({
-              activeNavBar: 'search',
               pageTitle: 'Search results for "searchthis"',
               pagination: { numberOfPages: 2, showingMessage: 'Showing all 2 matches' },
               query: 'searchthis',
@@ -116,7 +114,6 @@ describe('Search controller', () => {
           postOptions.payload.query = ''
 
           Sinon.stub(SubmitSearchService, 'go').resolves({
-            activeNavBar: 'search',
             error: {
               errorList: [
                 {

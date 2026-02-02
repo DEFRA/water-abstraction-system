@@ -24,7 +24,6 @@ async function go(sessionId) {
   const pageData = ReportedPresenter.go(session)
 
   return {
-    activeNavBar: 'search',
     ...pageData
   }
 }

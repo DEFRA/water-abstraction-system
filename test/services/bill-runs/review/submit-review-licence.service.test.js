@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../fixtures/bill-runs-review.fixture.js')
+const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
 const ReviewLicenceModel = require('../../../../app/models/review-licence.model.js')
 
 // Things we need to stub

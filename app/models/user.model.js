@@ -9,6 +9,7 @@ const { hashSync } = require('bcryptjs')
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
+const { db } = require('../../db/db.js')
 const { userPermissions } = require('../lib/static-lookups.lib.js')
 
 class UserModel extends BaseModel {
@@ -121,9 +122,26 @@ class UserModel extends BaseModel {
             rolesBuilder.select(['roles.id', 'roles.role'])
           })
       },
-      // status modifier ensures all the properties we need to determine the user's status are selected
+      // role modifier fetches all licence entity roles for the user from which their role can be determined
+      role(query) {
+        query.withGraphFetched('licenceEntity').modifyGraph('licenceEntity', (licenceEntityBuilder) => {
+          licenceEntityBuilder
+            .select(['id'])
+            .withGraphFetched('licenceEntityRoles')
+            .modifyGraph('licenceEntityRoles', (licenceEntityRolesBuilder) => {
+              licenceEntityRolesBuilder.select(['id', 'role'])
+            })
+        })
+      },
+      // status modifier ensures all the properties we need to determine the user's status are selected. For the
+      // purposes of determining the user's status, we only need to know if their password is 'VOID'. If its not, we
+      // don't want to fetch it from the DB.
       status(query) {
-        query.select(['enabled', 'lastLogin'])
+        query.select([
+          'enabled',
+          'lastLogin',
+          db.raw(`(CASE WHEN users.password = 'VOID' THEN 'VOID' ELSE NULL END) AS "statusPassword"`)
+        ])
       }
     }
   }
@@ -196,21 +214,108 @@ class UserModel extends BaseModel {
   }
 
   /**
+   * Returns the user's role
+   *
+   * > We recommend adding the `role` modifier to your query if you need to determine a user's role
+   *
+   * Role differs from permissions in that it is a higher level classification of user, relative to a licence (for the
+   * most part).
+   *
+   * In the main they are applicable to external users, though there are a great many internal users who also have
+   * roles.
+   *
+   * ## The external user journey
+   *
+   * When someone requests to create an account, the legacy service will send them an email with a link to verify their
+   * email address. It will also create a user record but will leave `licence_entity_id` null.
+   *
+   * Once they verify their email address and set their password, they can login. At this point the service will create
+   * a `LicenceEntity` and link it to the user by setting `licence_entity_id`.
+   *
+   * They can do nothing though until they request access to a licence. When they do that a `LicenceEntityRole` record
+   * will be created, linked to the `LicenceEntity` record. Its `role` field will be set to `primary_user`.
+   *
+   * The request process involves sending a letter with a code to the licence holder's address. Once the user returns
+   * to the service and enters that code, they can begin to administer the licence. This includes adding other users.
+   *
+   * Users added by the primary user will automatically have a `LicenceEntity` record added, plus a `LicenceEntityRole`
+   * record set to `user`. If the primary user selects to allow them to submit returns, an _additional_
+   * `LicenceEntityRole` will be created set to `user_returns`.
+   *
+   * If the primary users subsequently removes the submit returns permission, the `user_returns` `LicenceEntityRole`
+   * will be deleted. If they remove the user entirely, all `LicenceEntityRole` records for that user will be deleted
+   *
+   * ## Internal users
+   *
+   * We don't yet understand how some internal users can also be linked to `primary_user`, `user_returns` or `user`
+   * roles. Also, a large number of them will have a `LicenceEntityRole` with the role `admin`.
+   *
+   * ## Determining the role
+   *
+   * This all means determining the 'role' for a user is a bit of a minefield!
+   *
+   * Because a user can have multiple roles, we rank them by precedence
+   *
+   * - **Admin** (admin)
+   * - **Primary user** (primary_user)
+   * - **Returns agent** (user_returns)
+   * - **Agent** (user)
+   *
+   * If a user has no roles, we default to 'None'.
+   *
+   * @returns {string} The user's role
+   */
+  $role() {
+    const entityRoles = this.licenceEntity?.licenceEntityRoles || []
+
+    const roles = entityRoles.map((entityRole) => {
+      return entityRole.role
+    })
+
+    if (roles.includes('admin')) {
+      return 'Admin'
+    }
+
+    if (roles.includes('primary_user')) {
+      return 'Primary user'
+    }
+
+    if (roles.includes('user_returns')) {
+      return 'Returns agent'
+    }
+
+    if (roles.includes('user')) {
+      return 'Agent'
+    }
+
+    return 'None'
+  }
+
+  /**
    * Returns the user's status
    *
-   * Each user record has an `enabled` field. But they also have a `last_login`. If `enabled` is false we return
-   * 'disabled'.
+   * > We recommend adding the `status` modifier to your query if you need to determine a user's status
    *
-   * But if `enabled` is true, we also look at `last_login`. If it is null we return 'awaiting' to indicate that the
-   * user has never logged in, which means they have not responded to their invite.
+   * Each user record has an `enabled` field. If `enabled` is false we return 'disabled'.
    *
-   * If it is not null, then we return `enabled` to indicate the user is live and has been used.
+   * Where it is enabled we want to break up the users further.
+   *
+   * - **locked** - Users who have attempted to login more than 10 times and had their password set to 'VOID' to prevent
+   * further login attempts.
+   * - **awaiting** - Users who are enabled but have never logged in. This indicates they have not responded to their
+   * invite.
    *
    * @returns {string} the user's status
    */
   $status() {
     if (!this.enabled) {
       return 'disabled'
+    }
+
+    // If the modifier was used, we should have a 'statusPassword' property we can use to determine if the password is
+    // 'VOID'. If not we fall back to checking the actual password property.
+    if (this.statusPassword === 'VOID' || this.password === 'VOID') {
+      return 'locked'
     }
 
     if (!this.lastLogin) {

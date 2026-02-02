@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const NoticeSessionFixture = require('../../../fixtures/notice-session.fixture.js')
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const NoticeSessionFixture = require('../../../support/fixtures/notice-session.fixture.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
 const { addressToCSV } = require('../../../../app/presenters/notices/base.presenter.js')
 const { transformArrayToCSVRow } = require('../../../../app/lib/transform-to-csv.lib.js')
 
@@ -258,7 +258,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
 function _transformRecipientToRow(recipient, notificationType) {
   const row = [
     recipient.licence_ref,
-    recipient.return_id,
+    recipient.return_log_id,
     recipient.return_reference,
     recipient.start_date,
     recipient.end_date,

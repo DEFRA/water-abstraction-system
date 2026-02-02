@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
+const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 const { futureDueDate } = require('../../../../app/presenters/notices/base.presenter.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
@@ -49,7 +49,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
     ]
 
     const dueReturnIds = dueReturns.map((dueReturn) => {
-      return dueReturn.returnId
+      return dueReturn.returnLogId
     })
 
     const licenceHolder = RecipientsFixture.returnsNoticeLicenceHolder()
@@ -71,7 +71,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
     session = {
       licenceRef,
       dueReturns,
-      selectedReturns: [dueReturns[0].returnId, dueReturns[2].returnId]
+      selectedReturns: [dueReturns[0].returnLogId, dueReturns[2].returnLogId]
     }
   })
 
@@ -100,14 +100,14 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
           licence_ref: licenceRef,
           naldAreaCode: 'MIDLT',
           purpose: 'Mineral Washing',
-          qr_url: dueReturns[0].returnId,
+          qr_url: dueReturns[0].returnLogId,
           region_code: '1',
           region_name: 'North West',
           returns_frequency: 'month',
           site_description: 'BOREHOLE AT AVALON',
           start_date: '1 April 2022'
         },
-        returnLogIds: [dueReturns[0].returnId],
+        returnLogIds: [dueReturns[0].returnLogId],
         status: 'pending'
       },
       {
@@ -131,14 +131,14 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
           licence_ref: licenceRef,
           naldAreaCode: 'MIDLT',
           purpose: 'Mineral Washing',
-          qr_url: dueReturns[0].returnId,
+          qr_url: dueReturns[0].returnLogId,
           region_code: '1',
           region_name: 'North West',
           returns_frequency: 'month',
           site_description: 'BOREHOLE AT AVALON',
           start_date: '1 April 2022'
         },
-        returnLogIds: [dueReturns[0].returnId],
+        returnLogIds: [dueReturns[0].returnLogId],
         status: 'pending'
       },
       {
@@ -162,14 +162,14 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
           licence_ref: licenceRef,
           naldAreaCode: 'MIDLT',
           purpose: 'Mineral Washing',
-          qr_url: dueReturns[2].returnId,
+          qr_url: dueReturns[2].returnLogId,
           region_code: '1',
           region_name: 'North West',
           returns_frequency: 'month',
           site_description: 'BOREHOLE AT AVALON',
           start_date: '1 April 2022'
         },
-        returnLogIds: [dueReturns[2].returnId],
+        returnLogIds: [dueReturns[2].returnLogId],
         status: 'pending'
       },
       {
@@ -193,14 +193,14 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
           licence_ref: licenceRef,
           naldAreaCode: 'MIDLT',
           purpose: 'Mineral Washing',
-          qr_url: dueReturns[2].returnId,
+          qr_url: dueReturns[2].returnLogId,
           region_code: '1',
           region_name: 'North West',
           returns_frequency: 'month',
           site_description: 'BOREHOLE AT AVALON',
           start_date: '1 April 2022'
         },
-        returnLogIds: [dueReturns[2].returnId],
+        returnLogIds: [dueReturns[2].returnLogId],
         status: 'pending'
       }
     ])

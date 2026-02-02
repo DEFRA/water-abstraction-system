@@ -9,8 +9,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const NoticesFixture = require('../../fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../fixtures/notifications.fixture.js')
+const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
 
 // Things we need to stub
 const LicenceMonitoringStationModel = require('../../../app/models/licence-monitoring-station.model.js')
@@ -138,7 +138,7 @@ describe('Notifications - Check Notification Status service', () => {
             )
 
             expect(returnLogWhereInStub.called).to.be.true()
-            expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+            expect(returnLogWhereInStub.firstCall.args[0]).to.equal('id')
             expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
           })
         })
@@ -271,7 +271,7 @@ describe('Notifications - Check Notification Status service', () => {
             )
 
             expect(returnLogWhereInStub.called).to.be.true()
-            expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+            expect(returnLogWhereInStub.firstCall.args[0]).to.equal('id')
             expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
           })
         })
@@ -861,7 +861,7 @@ describe('Notifications - Check Notification Status service', () => {
           )
 
           expect(returnLogWhereInStub.called).to.be.true()
-          expect(returnLogWhereInStub.firstCall.args[0]).to.equal('returnId')
+          expect(returnLogWhereInStub.firstCall.args[0]).to.equal('id')
           expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
         })
       })

@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillRunsReviewFixture = require('../../../fixtures/bill-runs-review.fixture.js')
+const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
 
 // Things we need to stub
 const FetchReviewChargeElementService = require('../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js')
@@ -65,7 +65,6 @@ describe('Bill Runs Review - Review Charge Element Service', () => {
               issues: [],
               purpose: 'Spray Irrigation - Direct',
               reference: '11142960',
-              returnId: 'v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31',
               returnLink: '/system/return-logs/e0e3957d-ab75-4a49-bb04-36a332053448',
               returnPeriod: '1 November 2022 to 31 October 2023',
               returnStatus: 'completed',
@@ -108,7 +107,6 @@ describe('Bill Runs Review - Review Charge Element Service', () => {
               issues: [],
               purpose: 'Spray Irrigation - Direct',
               reference: '11142960',
-              returnId: 'v1:5:1/11/11/*11/1111:11142960:2022-11-01:2023-10-31',
               returnLink: '/system/return-logs/e0e3957d-ab75-4a49-bb04-36a332053448',
               returnPeriod: '1 November 2022 to 31 October 2023',
               returnStatus: 'completed',

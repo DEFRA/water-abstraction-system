@@ -55,7 +55,6 @@ async function go(sessionId, requirementIndex, payload, yar) {
   const submittedSessionData = _submittedSessionData(session, requirementIndex, purposes, licencePurposes)
 
   return {
-    activeNavBar: 'search',
     error: validationResult,
     ...submittedSessionData
   }

@@ -42,7 +42,6 @@ describe('Return Logs Setup - Multiple Entries service', () => {
 
       expect(result).to.equal(
         {
-          activeNavBar: 'search',
           backLink: {
             href: `/system/return-logs/setup/${session.id}/check`,
             text: 'Back'

@@ -1,0 +1,32 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block pageContent %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukRadios({
+      name: "fao",
+      hint: {
+        text: "For example, FAO Sam Burridge or FAO Accounts department"
+      },
+      items: [
+        {
+          value: "yes",
+          text: "Yes",
+          checked: fao === 'yes'
+        },
+        {
+          value: "no",
+          text: "No",
+          checked: fao === 'no'
+        }
+      ],
+      errorMessage: error.fao
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}

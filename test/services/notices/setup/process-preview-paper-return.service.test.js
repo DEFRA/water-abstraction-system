@@ -9,8 +9,8 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
-const ReturnLogFixture = require('../../../fixtures/return-logs.fixture.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
+const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 
@@ -27,7 +27,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
   let licenceRef
   let notifierStub
   let recipient
-  let returnId
+  let returnLogId
   let session
   let sessionData
 
@@ -35,7 +35,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
     dueReturnLog = ReturnLogFixture.dueReturn()
 
     licenceRef = dueReturnLog.licenceRef
-    returnId = dueReturnLog.returnId
+    returnLogId = dueReturnLog.returnLogId
 
     recipient = RecipientsFixture.recipients().licenceHolder
 
@@ -76,7 +76,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
 
   describe('when called', () => {
     it('returns generated pdf as an array buffer', async () => {
-      const result = await ProcessPreviewPaperReturnService.go(session.id, contactHashId, returnId)
+      const result = await ProcessPreviewPaperReturnService.go(session.id, contactHashId, returnLogId)
 
       expect(result).to.be.instanceOf(ArrayBuffer)
       // The encoded string is 9 chars
@@ -84,7 +84,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
     })
 
     it('should call "GeneratePaperReturnRequest"', async () => {
-      await ProcessPreviewPaperReturnService.go(session.id, contactHashId, returnId)
+      await ProcessPreviewPaperReturnService.go(session.id, contactHashId, returnLogId)
 
       expect(GeneratePaperReturnRequest.send.calledOnce).to.be.true()
 
@@ -109,7 +109,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
         purpose: 'Mineral Washing',
         regionAndArea: 'North West / Lower Trent',
         regionCode: '1',
-        returnId: dueReturnLog.returnId,
+        returnLogId: dueReturnLog.returnLogId,
         returnsFrequency: 'month',
         returnReference: dueReturnLog.returnReference,
         siteDescription: 'BOREHOLE AT AVALON',

@@ -15,10 +15,12 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/billing-accounts/setup/initiate-session.service.js')
-const ViewSelectAccountService = require('../../app/services/billing-accounts/setup/view-select-account.service.js')
-const ViewSelectExistingAddressService = require('../../app/services/billing-accounts/setup/view-select-existing-address.service.js')
-const SubmitSelectAccountService = require('../../app/services/billing-accounts/setup/submit-select-account.service.js')
-const SubmitSelectExistingAddressService = require('../../app/services/billing-accounts/setup/submit-select-existing-address.service.js')
+const SubmitAccountService = require('../../app/services/billing-accounts/setup/submit-account.service.js')
+const SubmitExistingAccountService = require('../../app/services/billing-accounts/setup/submit-existing-account.service.js')
+const SubmitExistingAddressService = require('../../app/services/billing-accounts/setup/submit-existing-address.service.js')
+const ViewAccountService = require('../../app/services/billing-accounts/setup/view-account.service.js')
+const ViewExistingAccountService = require('../../app/services/billing-accounts/setup/view-existing-account.service.js')
+const ViewExistingAddressService = require('../../app/services/billing-accounts/setup/view-existing-address.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -63,22 +65,22 @@ describe('Billing Accounts Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/select-account`)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/account`)
         })
       })
     })
   })
 
-  describe('/billing-accounts/setup/{sessionId}/select-account', () => {
+  describe('/billing-accounts/setup/{sessionId}/account', () => {
     describe('GET', () => {
       beforeEach(() => {
         sessionId = generateUUID()
-        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/select-account`)
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/account`)
       })
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewSelectAccountService, 'go').resolves({
+          Sinon.stub(ViewAccountService, 'go').resolves({
             pageTitle: 'Who should the bills go to?'
           })
         })
@@ -95,12 +97,12 @@ describe('Billing Accounts Setup controller', () => {
     describe('POST', () => {
       beforeEach(() => {
         sessionId = generateUUID()
-        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/select-account`)
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/account`)
       })
 
       describe('when the user selects existing customer option', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitSelectAccountService, 'go').resolves({
+          Sinon.stub(SubmitAccountService, 'go').resolves({
             accountSelected: 'customer'
           })
         })
@@ -109,15 +111,13 @@ describe('Billing Accounts Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
-            `/system/billing-accounts/setup/${sessionId}/select-existing-address`
-          )
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/existing-address`)
         })
       })
 
       describe('when the user selects another billing account option', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitSelectAccountService, 'go').resolves({
+          Sinon.stub(SubmitAccountService, 'go').resolves({
             accountSelected: 'another'
           })
         })
@@ -126,24 +126,22 @@ describe('Billing Accounts Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(
-            `/system/billing-accounts/setup/${sessionId}/select-existing-account`
-          )
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/existing-account`)
         })
       })
     })
   })
 
-  describe('/billing-accounts/setup/{sessionId}/select-existing-address', () => {
+  describe('/billing-accounts/setup/{sessionId}/existing-address', () => {
     describe('GET', () => {
       beforeEach(() => {
         sessionId = generateUUID()
-        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/select-existing-address`)
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/existing-address`)
       })
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewSelectExistingAddressService, 'go').resolves({
+          Sinon.stub(ViewExistingAddressService, 'go').resolves({
             pageTitle: 'Select an existing address for Test User?'
           })
         })
@@ -160,27 +158,27 @@ describe('Billing Accounts Setup controller', () => {
     describe('POST', () => {
       beforeEach(() => {
         sessionId = generateUUID()
-        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/select-existing-address`)
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/existing-address`)
       })
 
       describe('when the user selects an existing address option', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitSelectExistingAddressService, 'go').resolves({
+          Sinon.stub(SubmitExistingAddressService, 'go').resolves({
             addressSelected: 'existing'
           })
         })
 
-        it('redirects to the "for attention of" page', async () => {
+        it('redirects to the "fao" page', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/for-attention-of`)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/fao`)
         })
       })
 
       describe('when the user selects to set up a new address', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitSelectExistingAddressService, 'go').resolves({
+          Sinon.stub(SubmitExistingAddressService, 'go').resolves({
             addressSelected: 'new'
           })
         })
@@ -190,6 +188,67 @@ describe('Billing Accounts Setup controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/address/${sessionId}/postcode`)
+        })
+      })
+    })
+  })
+
+  describe('/billing-accounts/setup/{sessionId}/existing-account', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/existing-account`)
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ViewExistingAccountService, 'go').resolves({
+            pageTitle: 'Does this account already exist?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Does this account already exist?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/existing-account`)
+      })
+
+      describe('when the user selects an existing account option', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitExistingAccountService, 'go').resolves({
+            addressSelected: 'existing'
+          })
+        })
+
+        it('redirects to the "postcode" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/address/${sessionId}/postcode`)
+        })
+      })
+
+      describe('when the user selects to set up a new account', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitExistingAccountService, 'go').resolves({
+            existingAccount: 'new'
+          })
+        })
+
+        it('redirects to the "Select the account type" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/account-type`)
         })
       })
     })

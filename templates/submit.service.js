@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for `` page
+ * Orchestrates validating the data for the `` page
  *
  * @module __MODULE_NAME__
  */
@@ -12,9 +12,9 @@ const SessionModel = require('__SESSION_MODEL_PATH__')
 const { formatValidationResult } = require('__FORMAT_VALIDATOR_PATH__')
 
 /**
- * Orchestrates validating the data for `` page
+ * Orchestrates validating the data for the `` page
  *
- * @param {string} sessionId
+ * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
  *
  * @returns {Promise<object>} The data formatted for the view template

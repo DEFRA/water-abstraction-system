@@ -20,7 +20,7 @@ describe('Return Logs - Setup - Received service', () => {
     session = await SessionHelper.add({
       data: {
         licenceId: '736144f1-203d-46bb-9968-5137ae06a7bd',
-        returnId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
+        returnLogId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
         returnReference: '012345'
       },
       id: 'd958333a-4acd-4add-9e2b-09e14c6b72f3'
@@ -39,7 +39,6 @@ describe('Return Logs - Setup - Received service', () => {
 
       expect(result).to.equal(
         {
-          activeNavBar: 'search',
           backLink: {
             href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3',
             text: 'Back'

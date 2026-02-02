@@ -7,6 +7,7 @@
 
 const FetchMonitoringStationDetailsService = require('../monitoring-stations/fetch-monitoring-station-details.service.js')
 const ViewPresenter = require('../../presenters/monitoring-stations/view.presenter.js')
+const { readFlashNotification } = require('../../lib/general.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the `/monitoring-stations/{id}` page
@@ -23,10 +24,9 @@ async function go(auth, monitoringStationId, yar) {
 
   const pageData = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-  const notification = yar.flash('notification')[0]
+  const notification = readFlashNotification(yar)
 
   return {
-    activeNavBar: 'search',
     notification,
     ...pageData
   }

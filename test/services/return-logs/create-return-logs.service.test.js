@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const ReturnCyclesFixture = require('../../fixtures/return-cycles.fixture.js')
+const ReturnCyclesFixture = require('../../support/fixtures/return-cycles.fixture.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
-const ReturnRequirementsFixture = require('../../fixtures/return-requirements.fixture.js')
+const ReturnRequirementsFixture = require('../../support/fixtures/return-requirements.fixture.js')
 const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
 
 // Things we need to stub
@@ -41,7 +41,7 @@ describe('Return Logs - Create Return Logs service', () => {
 
     await ReturnLogModel.query()
       .delete()
-      .whereIn('id', results || [])
+      .whereIn('returnId', results || [])
   })
 
   describe('when called', () => {
@@ -57,7 +57,7 @@ describe('Return Logs - Create Return Logs service', () => {
           })
 
           describe('and neither the licence nor the return version start or end during the return cycle', () => {
-            it('will create a return log from the requirement and return its ID', async () => {
+            it('will create a return log from the requirement and return the returnId', async () => {
               results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -77,7 +77,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -95,7 +95,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2024-11-01')
               })
 
-              it('will create 1 return log, starting and ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -129,7 +129,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, starting on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -143,7 +143,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-10-31')
               })
 
-              it('will create 1 return log, starting and ending on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -159,7 +159,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -173,7 +173,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2024-11-01')
               })
 
-              it('will create 1 return log, starting and ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -199,7 +199,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, starting on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -213,7 +213,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2025-10-31')
               })
 
-              it('will create 1 return log, starting and ending on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -230,7 +230,7 @@ describe('Return Logs - Create Return Logs service', () => {
           })
 
           describe('and neither the licence nor the return version start or end during the return cycle', () => {
-            it('will create a return log from the requirement and return its ID', async () => {
+            it('will create a return log from the requirement and return the returnId', async () => {
               results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -250,7 +250,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -268,7 +268,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2024-11-01')
               })
 
-              it('will create 1 return log, starting and ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -302,7 +302,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, starting on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -316,7 +316,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-10-31')
               })
 
-              it('will create 1 return log, starting and ending on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -332,7 +332,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -346,7 +346,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2024-11-01')
               })
 
-              it('will create 1 return log, starting and ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -372,7 +372,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, starting on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -386,7 +386,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2025-10-31')
               })
 
-              it('will create 1 return log, starting and ending on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -412,7 +412,7 @@ describe('Return Logs - Create Return Logs service', () => {
           })
 
           describe('and neither the licence nor the return version start or end during the return cycle', () => {
-            it('will create a return log from the requirement and return its ID', async () => {
+            it('will create a return log from the requirement and return the returnId', async () => {
               results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -432,7 +432,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2026-05-01')
               })
 
-              it('will create 1 return log, ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -450,7 +450,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2025-11-01')
               })
 
-              it('will create 1 return log, starting and ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -484,7 +484,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2026-05-01')
               })
 
-              it('will create 1 return log, starting on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -498,7 +498,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2026-10-31')
               })
 
-              it('will create 1 return log, starting and ending on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -514,7 +514,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2026-05-01')
               })
 
-              it('will create 1 return log, ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -528,7 +528,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2025-11-01')
               })
 
-              it('will create 1 return log, starting and ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -554,7 +554,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2026-05-01')
               })
 
-              it('will create 1 return log, starting on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -568,7 +568,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2026-10-31')
               })
 
-              it('will create 1 return log, starting and ending on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -585,7 +585,7 @@ describe('Return Logs - Create Return Logs service', () => {
           })
 
           describe('and neither the licence nor the return version start or end during the return cycle', () => {
-            it('will create a return log from the requirement and return its ID', async () => {
+            it('will create a return log from the requirement and return the returnId', async () => {
               results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -605,7 +605,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2026-05-01')
               })
 
-              it('will create 1 return log, ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -623,7 +623,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2025-11-01')
               })
 
-              it('will create 1 return log, starting and ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -657,7 +657,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2026-05-01')
               })
 
-              it('will create 1 return log, starting on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -671,7 +671,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2026-10-31')
               })
 
-              it('will create 1 return log, starting and ending on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -687,7 +687,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2026-05-01')
               })
 
-              it('will create 1 return log, ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -701,7 +701,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2025-11-01')
               })
 
-              it('will create 1 return log, starting and ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -727,7 +727,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2026-05-01')
               })
 
-              it('will create 1 return log, starting on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -741,7 +741,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2026-10-31')
               })
 
-              it('will create 1 return log, starting and ending on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -771,7 +771,7 @@ describe('Return Logs - Create Return Logs service', () => {
           formattedEndDate = formatDateObjectToISO(returnCycle.endDate)
 
           await ReturnLogHelper.add({
-            id: `${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`,
+            returnId: `${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`,
             licenceRef: returnRequirement.returnVersion.licence.licenceRef,
             endDate: returnCycle.endDate,
             returnReference: returnRequirement.reference,
@@ -779,7 +779,7 @@ describe('Return Logs - Create Return Logs service', () => {
           })
         })
 
-        it('returns the existing return log ID instead of creating a new one', async () => {
+        it('returns the existing return log returnId instead of creating a new one', async () => {
           results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
           const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -801,7 +801,7 @@ describe('Return Logs - Create Return Logs service', () => {
           })
 
           describe('and neither the licence nor the return version start or end during the return cycle', () => {
-            it('will create a return log from the requirement and return its ID', async () => {
+            it('will create a return log from the requirement and return the returnId', async () => {
               results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -821,7 +821,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2024-05-01')
               })
 
-              it('will create 1 return log, ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -839,7 +839,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2024-04-01')
               })
 
-              it('will create 1 return log, starting and ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -873,7 +873,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2024-05-01')
               })
 
-              it('will create 1 return log, starting on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -887,7 +887,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-03-31')
               })
 
-              it('will create 1 return log, starting and ending on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -903,7 +903,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2024-05-01')
               })
 
-              it('will create 1 return log, ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -917,7 +917,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2024-04-01')
               })
 
-              it('will create 1 return log, starting and ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -943,7 +943,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2024-05-01')
               })
 
-              it('will create 1 return log, starting on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -957,7 +957,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2025-03-31')
               })
 
-              it('will create 1 return log, starting and ending on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -974,7 +974,7 @@ describe('Return Logs - Create Return Logs service', () => {
           })
 
           describe('and neither the licence nor the return version start or end during the return cycle', () => {
-            it('will create a return log from the requirement and return its ID', async () => {
+            it('will create a return log from the requirement and return the returnId', async () => {
               results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -994,7 +994,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2024-05-01')
               })
 
-              it('will create 1 return log, ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -1012,7 +1012,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2024-04-01')
               })
 
-              it('will create 1 return log, starting and ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -1046,7 +1046,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2024-05-01')
               })
 
-              it('will create 1 return log, starting on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1060,7 +1060,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-03-31')
               })
 
-              it('will create 1 return log, starting and ending on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1076,7 +1076,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2024-05-01')
               })
 
-              it('will create 1 return log, ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1090,7 +1090,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2024-04-01')
               })
 
-              it('will create 1 return log, starting and ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1116,7 +1116,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2024-05-01')
               })
 
-              it('will create 1 return log, starting on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1130,7 +1130,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2025-03-31')
               })
 
-              it('will create 1 return log, starting and ending on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1147,7 +1147,7 @@ describe('Return Logs - Create Return Logs service', () => {
           })
 
           describe('and neither the licence nor the return version start or end during the return cycle', () => {
-            it('will create just one return log from the requirement and return its ID', async () => {
+            it('will create just one return log from the requirement and return the returnId', async () => {
               results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1167,7 +1167,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2024-05-01')
               })
 
-              it('will create 1 return log, ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -1185,7 +1185,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2024-07-01')
               })
 
-              it('will create just 1 return log, ending on the licence end date, and return the ID', async () => {
+              it('will create just 1 return log, ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -1219,7 +1219,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2024-05-01')
               })
 
-              it('will create just 1 return log, starting on the licence start date, and return the ID', async () => {
+              it('will create just 1 return log, starting on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1233,7 +1233,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2024-06-30')
               })
 
-              it('will create just 1 return log, starting on the licence start date, and return the ID', async () => {
+              it('will create just 1 return log, starting on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1249,7 +1249,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2024-05-01')
               })
 
-              it('will create 1 return log, ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1263,7 +1263,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2024-07-27')
               })
 
-              it('will create just 1 return log, ending on the return version end date, and return the ID', async () => {
+              it('will create just 1 return log, ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1277,7 +1277,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2024-07-01')
               })
 
-              it('will create just 1 return log, ending on the return version end date, and return the ID', async () => {
+              it('will create just 1 return log, ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1303,7 +1303,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2024-05-01')
               })
 
-              it('will create just 1 return log, starting on the return version start date and return the ID', async () => {
+              it('will create just 1 return log, starting on the return version start date and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1317,7 +1317,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2024-06-30')
               })
 
-              it('will create just 1 return log, starting on the return version start date, and return the ID', async () => {
+              it('will create just 1 return log, starting on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1341,7 +1341,7 @@ describe('Return Logs - Create Return Logs service', () => {
           })
 
           describe('and neither the licence nor the return version start or end during the return cycle', () => {
-            it('will create a return log from the requirement and return its ID', async () => {
+            it('will create a return log from the requirement and return the returnId', async () => {
               results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1361,7 +1361,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -1379,7 +1379,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2025-04-01')
               })
 
-              it('will create 1 return log, starting and ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -1413,7 +1413,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, starting on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1427,7 +1427,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2026-03-31')
               })
 
-              it('will create 1 return log, starting and ending on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1443,7 +1443,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1457,7 +1457,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2025-04-01')
               })
 
-              it('will create 1 return log, starting and ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1483,7 +1483,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, starting on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1497,7 +1497,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2026-03-31')
               })
 
-              it('will create 1 return log, starting and ending on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1514,7 +1514,7 @@ describe('Return Logs - Create Return Logs service', () => {
           })
 
           describe('and neither the licence nor the return version start or end during the return cycle', () => {
-            it('will create a return log from the requirement and return its ID', async () => {
+            it('will create a return log from the requirement and return the returnId', async () => {
               results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1534,7 +1534,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -1552,7 +1552,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2025-04-01')
               })
 
-              it('will create 1 return log, starting and ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -1586,7 +1586,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, starting on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1600,7 +1600,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2026-03-31')
               })
 
-              it('will create 1 return log, starting and ending on the licence start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the licence start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1616,7 +1616,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1630,7 +1630,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2025-04-01')
               })
 
-              it('will create 1 return log, starting and ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1656,7 +1656,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, starting on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1670,7 +1670,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2026-03-31')
               })
 
-              it('will create 1 return log, starting and ending on the return version start date, and return the ID', async () => {
+              it('will create 1 return log, starting and ending on the return version start date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1687,7 +1687,7 @@ describe('Return Logs - Create Return Logs service', () => {
           })
 
           describe('and neither the licence nor the return version start or end during the return cycle', () => {
-            it('will create 4 return logs from the requirement and return their IDs', async () => {
+            it('will create 4 return logs from the requirement and return their returnIds', async () => {
               results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
               const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1712,7 +1712,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, ending on the licence end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the licence end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -1730,7 +1730,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.expiredDate = new Date('2025-07-01')
               })
 
-              it('will create 2 return logs, the second starting and ending on the licence end date, and return their IDs', async () => {
+              it('will create 2 return logs, the second starting and ending on the licence end date, and return their returnIds', async () => {
                 results = await CreateReturnLogsService.go(
                   returnRequirement,
                   returnCycle,
@@ -1767,7 +1767,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-05-01')
               })
 
-              it('will create 4 return logs, the first starting on the licence start date, and return the IDs', async () => {
+              it('will create 4 return logs, the first starting on the licence start date, and return the returnIds', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1786,7 +1786,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.licence.startDate = new Date('2025-06-30')
               })
 
-              it('will create 4 return logs, the first starting and ending on the licence start date, and return their IDs', async () => {
+              it('will create 4 return logs, the first starting and ending on the licence start date, and return their returnIds', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1807,7 +1807,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2025-05-01')
               })
 
-              it('will create 1 return log, ending on the return version end date, and return the ID', async () => {
+              it('will create 1 return log, ending on the return version end date, and return the returnId', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1821,7 +1821,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2025-07-27')
               })
 
-              it('will create 2 return logs, the second ending on the return version end date and return their IDs', async () => {
+              it('will create 2 return logs, the second ending on the return version end date and return their returnIds', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1838,7 +1838,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.endDate = new Date('2025-07-01')
               })
 
-              it('will create 2 return logs, the second starting and ending on the return version end date and return their IDs', async () => {
+              it('will create 2 return logs, the second starting and ending on the return version end date and return their returnIds', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1867,7 +1867,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2025-05-01')
               })
 
-              it('will create 4 return logs, the first starting on the return version start date, and return the IDs', async () => {
+              it('will create 4 return logs, the first starting on the return version start date, and return the returnIds', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1886,7 +1886,7 @@ describe('Return Logs - Create Return Logs service', () => {
                 returnRequirement.returnVersion.startDate = new Date('2025-06-30')
               })
 
-              it('will create 4 return logs, the first starting and ending on the return version start date, and return their IDs', async () => {
+              it('will create 4 return logs, the first starting and ending on the return version start date, and return their returnIds', async () => {
                 results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
                 const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)
@@ -1917,7 +1917,7 @@ describe('Return Logs - Create Return Logs service', () => {
           formattedEndDate = formatDateObjectToISO(returnCycle.endDate)
 
           await ReturnLogHelper.add({
-            id: `${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`,
+            returnId: `${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`,
             licenceRef: returnRequirement.returnVersion.licence.licenceRef,
             endDate: returnCycle.endDate,
             returnReference: returnRequirement.reference,
@@ -1925,7 +1925,7 @@ describe('Return Logs - Create Return Logs service', () => {
           })
         })
 
-        it('returns the existing return log ID instead of creating a new one', async () => {
+        it('returns the existing return log returnId instead of creating a new one', async () => {
           results = await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
           const returnLogPrefix = ReturnRequirementsFixture.returnLogPrefix(returnRequirement)

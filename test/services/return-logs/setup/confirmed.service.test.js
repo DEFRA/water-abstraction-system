@@ -15,13 +15,13 @@ const FetchReturnLogService = require('../../../../app/services/return-logs/setu
 const ConfirmedService = require('../../../../app/services/return-logs/setup/confirmed.service.js')
 
 describe('Return Logs - Setup - Confirmed service', () => {
-  const returnId = 'e8d145d9-2da4-4d2d-b338-92cedc7cea7f'
+  const returnLogId = 'e8d145d9-2da4-4d2d-b338-92cedc7cea7f'
 
   beforeEach(() => {
     Sinon.stub(FetchReturnLogService, 'go').resolves({
+      id: returnLogId,
       licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
       licenceRef: '01/117',
-      returnId,
       returnReference: '10032788',
       purposes: [
         {
@@ -51,10 +51,9 @@ describe('Return Logs - Setup - Confirmed service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ConfirmedService.go(returnId)
+      const result = await ConfirmedService.go(returnLogId)
 
       expect(result).to.equal({
-        activeNavBar: 'search',
         licenceId: '91aff99a-3204-4727-86bd-7bdf3ef24533',
         licenceRef: '01/117',
         pageTitle: 'Return 10032788 received',

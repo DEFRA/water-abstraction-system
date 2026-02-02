@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillingAccountsFixture = require('../../fixtures/billing-accounts.fixtures.js')
+const BillingAccountsFixture = require('../../support/fixtures/billing-accounts.fixtures.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -131,7 +131,7 @@ describe('Billing Accounts - View Billing Account presenter', () => {
 
         expect(result.backLink).to.equal({
           title: 'Go back to customer',
-          href: `/system/customers/${companyId}/billing-accounts`
+          href: `/system/companies/${companyId}/billing-accounts`
         })
       })
     })

@@ -9,9 +9,9 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const NoticesFixture = require('../../../fixtures/notices.fixture.js')
-const NotificationsFixture = require('../../../fixtures/notifications.fixture.js')
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
+const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
@@ -53,8 +53,8 @@ describe('Notices - Setup - Submit Check service', () => {
         purpose: 'Spray Irrigation - Direct',
         regionCode: 3,
         regionName: 'North East',
-        returnId: generateUUID(),
-        returnLogId: `v1:3:${licenceRef}:10059610:2024-04-01:2025-03-31`,
+        returnId: `v1:3:${licenceRef}:10059610:2024-04-01:2025-03-31`,
+        returnLogId: generateUUID(),
         returnReference: '10059610',
         returnsFrequency: 'month',
         siteDescription: 'BOREHOLE AT AVALON',
@@ -67,7 +67,7 @@ describe('Notices - Setup - Submit Check service', () => {
       {
         ...fixtureData.primaryUser,
         licence_refs: [licenceRef],
-        return_log_ids: [dueReturns[0].returnId]
+        return_log_ids: [dueReturns[0].returnLogId]
       }
     ]
     Sinon.stub(FetchRecipientsService, 'go').resolves(recipients)

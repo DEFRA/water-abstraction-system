@@ -10,8 +10,8 @@ const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } = require('node:http2').constants
-const NoticesFixture = require('../fixtures/notices.fixture.js')
-const NotificationsFixture = require('../fixtures/notifications.fixture.js')
+const NoticesFixture = require('../support/fixtures/notices.fixture.js')
+const NotificationsFixture = require('../support/fixtures/notifications.fixture.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../support/helpers/licence.helper.js')
 
@@ -48,7 +48,7 @@ describe('Notifications controller', () => {
   })
 
   describe('Notifications controller', () => {
-    describe('/notifications/{notificationId}', () => {
+    describe('/notifications/{id}', () => {
       describe('GET', () => {
         beforeEach(async () => {
           options = {
@@ -73,7 +73,6 @@ describe('Notifications controller', () => {
             notification.event = notice
 
             Sinon.stub(ViewNotificationService, 'go').resolves({
-              activeNavBar: 'search',
               address: [],
               alertDetails: null,
               backLink: { href: `/system/notices/${notice.id}`, text: `Go back to notice ${notice.referenceCode}` },
@@ -103,7 +102,7 @@ describe('Notifications controller', () => {
       })
     })
 
-    describe('/notifications/{notificationId}?id={LICENCE_ID}', () => {
+    describe('/notifications/{id}?id={LICENCE_ID}', () => {
       describe('GET', () => {
         beforeEach(async () => {
           options = {
@@ -128,7 +127,6 @@ describe('Notifications controller', () => {
             notification.event = notice
 
             Sinon.stub(ViewNotificationService, 'go').resolves({
-              activeNavBar: 'search',
               address: [],
               alertDetails: null,
               backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' },
@@ -158,12 +156,12 @@ describe('Notifications controller', () => {
       })
     })
 
-    describe('/notifications/{notificationId}?return={RETURN_ID}', () => {
+    describe('/notifications/{id}?return={RETURN_LOG_ID}', () => {
       describe('GET', () => {
         beforeEach(async () => {
           options = {
             method: 'GET',
-            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?return=RETURN_ID',
+            url: '/notifications/499247a2-bebf-4a94-87dc-b83af2a133f3?return=RETURN_LOG_ID',
             auth: {
               strategy: 'session',
               credentials: { scope: ['returns'] }
@@ -178,16 +176,15 @@ describe('Notifications controller', () => {
               licenceRef: generateLicenceRef()
             }
 
-            const returnId = generateUUID()
+            const returnLogId = generateUUID()
             const notice = NoticesFixture.returnsInvitation()
             const notification = NotificationsFixture.returnsInvitationEmail(notice)
             notification.event = notice
 
             Sinon.stub(ViewNotificationService, 'go').resolves({
-              activeNavBar: 'search',
               address: [],
               alertDetails: null,
-              backLink: { href: `/system/return-logs/${returnId}`, text: 'Go back to return log' },
+              backLink: { href: `/system/return-logs/${returnLogId}`, text: 'Go back to return log' },
               contents: notification.plaintext,
               licenceRef: licence.licenceRef,
               messageType: 'email',
@@ -214,7 +211,7 @@ describe('Notifications controller', () => {
       })
     })
 
-    describe('/notifications/{notificationId}/download', () => {
+    describe('/notifications/{id}/download', () => {
       let buffer
 
       describe('GET', () => {

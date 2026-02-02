@@ -11,7 +11,7 @@ const { expect } = Code
 // Test helpers
 const { HTTP_STATUS_OK } = require('node:http2').constants
 
-const RecipientsFixture = require('../../../fixtures/recipients.fixtures.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
@@ -140,8 +140,8 @@ describe('Notices - Setup - View Preview service', () => {
           purpose: 'Spray Irrigation - Direct',
           regionCode: 3,
           regionName: 'North East',
-          returnId: generateUUID(),
-          returnLogId: `v1:3:${licenceRef}:10059610:2024-04-01:2025-03-31`,
+          returnId: `v1:3:${licenceRef}:10059610:2024-04-01:2025-03-31`,
+          returnLogId: generateUUID(),
           returnReference: '10059610',
           returnsFrequency: 'month',
           siteDescription: 'BOREHOLE AT AVALON',

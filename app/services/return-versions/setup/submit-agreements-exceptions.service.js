@@ -53,7 +53,6 @@ async function go(sessionId, requirementIndex, payload, yar) {
   const formattedData = AgreementsExceptionsPresenter.go(session, requirementIndex, payload)
 
   return {
-    activeNavBar: 'search',
     error: validationResult,
     ...formattedData
   }

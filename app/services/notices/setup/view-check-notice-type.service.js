@@ -8,6 +8,7 @@
 
 const CheckNoticeTypePresenter = require('../../../presenters/notices/setup/check-notice-type.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
+const { readFlashNotification } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/check-notice-type` page
@@ -24,7 +25,7 @@ async function go(sessionId, yar) {
 
   const pageData = CheckNoticeTypePresenter.go(session)
 
-  const notification = yar.flash('notification')[0]
+  const notification = readFlashNotification(yar)
 
   return {
     ...pageData,
