@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -19,6 +20,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
   let payload
   let session
   let sessionData
+  let yarStub
 
   beforeEach(async () => {
     company = CustomersFixtures.company()
@@ -28,11 +30,17 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
     payload = { name: 'Eric' }
 
     session = await SessionHelper.add({ data: sessionData })
+
+    yarStub = { flash: Sinon.stub() }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
-      await SubmitContactNameService.go(session.id, payload)
+      await SubmitContactNameService.go(session.id, payload, yarStub)
 
       const refreshedSession = await session.$query()
 
@@ -44,10 +52,57 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitContactNameService.go(session.id, payload)
+      const result = await SubmitContactNameService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
         redirectUrl: `/system/company-contacts/setup/${session.id}/contact-email`
+      })
+    })
+
+    describe('when the check page has', () => {
+      describe('been visited', () => {
+        beforeEach(async () => {
+          session = await SessionHelper.add({
+            data: {
+              ...sessionData,
+              checkPageVisited: true,
+              name: 'Eric'
+            }
+          })
+        })
+
+        describe('and the "session" and "payload" value', () => {
+          describe('match', () => {
+            it('does not set a notification', async () => {
+              await SubmitContactNameService.go(session.id, payload, yarStub)
+
+              expect(yarStub.flash.called).to.be.false()
+            })
+          })
+
+          describe('do not match', () => {
+            beforeEach(() => {
+              payload = { name: 'Bob' }
+            })
+
+            it('does not set a notification', async () => {
+              await SubmitContactNameService.go(session.id, payload, yarStub)
+
+              const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+              expect(flashType).to.equal('notification')
+              expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Name updated' })
+            })
+          })
+        })
+      })
+
+      describe('not been visited', () => {
+        it('does not set a notification', async () => {
+          await SubmitContactNameService.go(session.id, payload, yarStub)
+
+          expect(yarStub.flash.called).to.be.false()
+        })
       })
     })
   })
@@ -58,7 +113,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitContactNameService.go(session.id, payload)
+      const result = await SubmitContactNameService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
         backLink: {
