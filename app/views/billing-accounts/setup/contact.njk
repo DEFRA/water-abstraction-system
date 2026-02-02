@@ -1,0 +1,51 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block pageContent %}
+  {% set inputHtml %}
+    {{ govukInput({
+      id: "departmentName",
+      name: "departmentName",
+      classes: "govuk-!-width-two-thirds",
+      errorMessage: error.departmentName,
+      label: {
+        text: "Department name"
+      },
+      value: departmentName
+    }) }}
+  {% endset %}
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukRadios({
+      name: "contactSelected",
+      errorMessage: error.contactSelected,
+      items: [
+        {
+          divider: "or"
+        },
+        {
+          id: "person",
+          value: "person",
+          text: "Add a new person",
+          checked: "person" === contactSelected
+        },
+        {
+          id: "department",
+          value: "department",
+          text: "Add a new department",
+          checked: "department" === contactSelected,
+          conditional: {
+            html: inputHtml
+          }
+        }
+      ]
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}

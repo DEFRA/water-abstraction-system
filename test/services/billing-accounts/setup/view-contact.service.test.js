@@ -12,9 +12,9 @@ const BillingAccountsFixture = require('../../../support/fixtures/billing-accoun
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const CheckService = require('../../../../app/services/billing-accounts/setup/check.service.js')
+const ViewContactService = require('../../../../app/services/billing-accounts/setup/view-contact.service.js')
 
-describe('Billing Accounts - Setup - View Check Service', () => {
+describe('Billing Accounts - Setup - Contact Service', () => {
   let session
   let sessionData
 
@@ -28,14 +28,16 @@ describe('Billing Accounts - Setup - View Check Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await CheckService.go(session.id)
+      const result = await ViewContactService.go(session.id)
 
       expect(result).to.equal({
         backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/contact`,
+          href: `/system/billing-accounts/setup/${session.id}/fao`,
           text: 'Back'
         },
-        pageTitle: 'Check billing account details',
+        contactSelected: null,
+        departmentName: null,
+        pageTitle: `Set up a contact for ${session.billingAccount.company.name}`,
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })
     })
