@@ -7,23 +7,26 @@
 
 const CompanyContactModel = require('../../../models/company-contact.model.js')
 const LicenceRoleModel = require('../../../models/licence-role.model.js')
-const { timestampForPostgres } = require('../../../lib/general.lib.js')
+const { today } = require('../../../lib/general.lib.js')
 
 /**
  * Persist the company contact data for the '/company-contacts/{id}' pages
  *
- * @param companyId
- * @param companyContact
- * @returns {Promise<CompanyContactModel>} the company contacts for the customer and the pagination object
+ * @param {string} companyId - the UUID of the company
+ * @param {object} companyContact - the company contact
+ *
+ * @returns {Promise<string>} the newly created company contact id
  */
 async function go(companyId, companyContact) {
-  return _persist(companyId, companyContact)
+  const result = await _persist(companyId, companyContact)
+
+  return result.id
 }
 
 async function _persist(companyId, companyContact) {
   return CompanyContactModel.query().insertGraph({
     companyId,
-    startDate: timestampForPostgres(),
+    startDate: today(),
     licenceRoleId: LicenceRoleModel.query().where('name', 'additionalContact').select('id'),
     abstractionAlerts: companyContact.abstractionAlerts,
     contact: {

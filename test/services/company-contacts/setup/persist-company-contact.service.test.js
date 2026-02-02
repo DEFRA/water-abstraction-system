@@ -46,7 +46,7 @@ describe('Company Contacts - Persist Company Contact service', () => {
 
       const licenceRole = LicenceRoleHelper.select('additionalContact')
 
-      const newCompanyContact = await CompanyContactModel.query().findById(result.id).withGraphFetched('contact')
+      const newCompanyContact = await CompanyContactModel.query().findById(result).withGraphFetched('contact')
 
       expect(newCompanyContact).to.equal(
         {
@@ -59,21 +59,21 @@ describe('Company Contacts - Persist Company Contact service', () => {
             email: 'bob@test.com',
             externalId: null,
             firstName: null,
-            id: result.contact.id,
+            id: newCompanyContact.contact.id,
             initials: null,
             lastName: null,
             middleInitials: null,
             salutation: null,
             suffix: null
           },
-          contactId: result.contact.id,
+          contactId: newCompanyContact.contact.id,
           default: false,
-          id: result.id,
+          id: result,
           licenceRoleId: licenceRole.id,
           startDate: new Date('2021-01-01')
         },
         {
-          skip: ['createdAt', 'updatedAt', 'contact.createdAt', 'contact.updatedAt', 'startDate']
+          skip: ['createdAt', 'updatedAt', 'contact.createdAt', 'contact.updatedAt']
         }
       )
     })
