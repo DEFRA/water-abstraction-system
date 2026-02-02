@@ -75,8 +75,8 @@ describe('Search - Submit Search service', () => {
           },
           {
             checked: false,
-            text: 'Licence holders',
-            value: 'licenceHolder'
+            text: 'Customers',
+            value: 'company'
           },
           {
             checked: false,
