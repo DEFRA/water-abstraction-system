@@ -85,7 +85,7 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
               payload = { email: 'bob@test.com' }
             })
 
-            it('does not set a notification', async () => {
+            it('sets a notification', async () => {
               await SubmitContactEmailService.go(session.id, payload, yarStub)
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]

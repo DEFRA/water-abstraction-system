@@ -85,7 +85,7 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
               payload = { abstractionAlerts: 'no' }
             })
 
-            it('does not set a notification', async () => {
+            it('sets a notification', async () => {
               await SubmitAbstractionAlertsService.go(session.id, payload, yarStub)
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]

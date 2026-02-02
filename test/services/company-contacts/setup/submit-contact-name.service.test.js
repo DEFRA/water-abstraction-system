@@ -85,7 +85,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
               payload = { name: 'Bob' }
             })
 
-            it('does not set a notification', async () => {
+            it('sets a notification', async () => {
               await SubmitContactNameService.go(session.id, payload, yarStub)
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]
