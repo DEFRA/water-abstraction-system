@@ -16,9 +16,11 @@ const { postRequestOptions } = require('../support/general.js')
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/billing-accounts/setup/initiate-session.service.js')
 const SubmitAccountService = require('../../app/services/billing-accounts/setup/submit-account.service.js')
+const SubmitContactService = require('../../app/services/billing-accounts/setup/submit-contact.service.js')
 const SubmitExistingAccountService = require('../../app/services/billing-accounts/setup/submit-existing-account.service.js')
 const SubmitExistingAddressService = require('../../app/services/billing-accounts/setup/submit-existing-address.service.js')
 const ViewAccountService = require('../../app/services/billing-accounts/setup/view-account.service.js')
+const ViewContactService = require('../../app/services/billing-accounts/setup/view-contact.service.js')
 const ViewExistingAccountService = require('../../app/services/billing-accounts/setup/view-existing-account.service.js')
 const ViewExistingAddressService = require('../../app/services/billing-accounts/setup/view-existing-address.service.js')
 
@@ -249,6 +251,52 @@ describe('Billing Accounts Setup controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/account-type`)
+        })
+      })
+    })
+  })
+
+  describe('/billing-accounts/setup/{sessionId}/contact', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/contact`)
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ViewContactService, 'go').resolves({
+            pageTitle: 'Set up a contact for Company Name'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Set up a contact for Company Name')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/contact`)
+      })
+
+      describe('when the user selects a new contact option', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitContactService, 'go').resolves({
+            redirectUrl: `/system/billing-accounts/setup/${sessionId}/contact-name`
+          })
+        })
+
+        it('redirects to the "contact name" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/contact-name`)
         })
       })
     })

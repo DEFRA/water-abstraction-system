@@ -32,10 +32,10 @@ describe('Billing Accounts - Setup - Contact Service', () => {
   })
 
   describe('when called with valid data', () => {
-    describe('such as "person"', () => {
+    describe('such as "new"', () => {
       it('saves the submitted value', async () => {
         payload = {
-          contactSelected: 'person'
+          contactSelected: 'new'
         }
 
         await SubmitContactService.go(session.id, payload)
@@ -47,42 +47,13 @@ describe('Billing Accounts - Setup - Contact Service', () => {
 
       it('continues the journey', async () => {
         payload = {
-          contactSelected: 'person'
+          contactSelected: 'new'
         }
 
         const result = await SubmitContactService.go(session.id, payload)
 
         expect(result).to.equal({
-          redirectUrl: `/system/billing-accounts/setup/${session.id}/create-contact`
-        })
-      })
-    })
-
-    describe('such as "department"', () => {
-      it('saves the submitted value', async () => {
-        payload = {
-          contactSelected: 'department',
-          departmentName: 'Department Name'
-        }
-
-        await SubmitContactService.go(session.id, payload)
-
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.contactSelected).to.equal(payload.contactSelected)
-        expect(refreshedSession.department).to.equal(payload.department)
-      })
-
-      it('continues the journey', async () => {
-        payload = {
-          contactSelected: 'department',
-          departmentName: 'Department Name'
-        }
-
-        const result = await SubmitContactService.go(session.id, payload)
-
-        expect(result).to.equal({
-          redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/contact-name`
         })
       })
     })
@@ -107,53 +78,6 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: {
             text: 'Select a contact'
           }
-        })
-      })
-    })
-
-    describe('because the user selected "department" but did not enter a name', () => {
-      beforeEach(() => {
-        payload = {
-          contactSelected: 'department'
-        }
-      })
-
-      it('returns page data for the view, with errors', async () => {
-        const result = await SubmitContactService.go(session.id, payload)
-
-        expect(result.error).to.equal({
-          errorList: [
-            {
-              href: '#departmentName',
-              text: 'Department name cannot be blank'
-            }
-          ],
-          departmentName: {
-            text: 'Department name cannot be blank'
-          }
-        })
-      })
-
-      describe('because the user selected "department" but entered an invalid input', () => {
-        beforeEach(async () => {
-          payload = {
-            contactSelected: 'department',
-            departmentName: 'a'.repeat(101)
-          }
-        })
-
-        it('returns page data for the view, with errors', async () => {
-          const result = await SubmitContactService.go(session.id, payload)
-
-          expect(result.error).to.equal({
-            errorList: [
-              {
-                href: '#departmentName',
-                text: 'Department name must be 100 characters or less'
-              }
-            ],
-            departmentName: { text: 'Department name must be 100 characters or less' }
-          })
         })
       })
     })

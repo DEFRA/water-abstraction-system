@@ -21,7 +21,6 @@ function go(session) {
       text: 'Back'
     },
     contactSelected: session.contactSelected ?? null,
-    departmentName: session.departmentName ?? null,
     pageTitle: `Set up a contact for ${billingAccount.company.name}`,
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`
   }

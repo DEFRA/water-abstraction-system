@@ -32,7 +32,6 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
           text: 'Back'
         },
         contactSelected: null,
-        departmentName: null,
         pageTitle: `Set up a contact for ${session.billingAccount.company.name}`,
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })

@@ -41,8 +41,8 @@ async function go(sessionId, payload) {
 }
 
 function _redirectUrl(session) {
-  if (session.contactSelected === 'person') {
-    return `/system/billing-accounts/setup/${session.id}/create-contact`
+  if (session.contactSelected === 'new') {
+    return `/system/billing-accounts/setup/${session.id}/contact-name`
   }
 
   return `/system/billing-accounts/setup/${session.id}/check`
@@ -50,14 +50,12 @@ function _redirectUrl(session) {
 
 async function _save(session, payload) {
   session.contactSelected = payload.contactSelected
-  session.department = payload.contactSelected === 'department' ? payload.department : null
 
   return session.$update()
 }
 
 function _submissionData(session, payload) {
   session.contactSelected = payload.contactSelected ?? null
-  session.department = payload.contactSelected === 'department' ? payload.department : null
 
   return ContactPresenter.go(session)
 }

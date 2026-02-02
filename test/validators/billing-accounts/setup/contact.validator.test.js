@@ -15,22 +15,10 @@ const ContactValidator = require('../../../../app/validators/billing-accounts/se
 
 describe('Billing Accounts - Setup - Contact Validator', () => {
   describe('when called with valid data', () => {
-    describe('such as "person"', () => {
+    describe('such as "new"', () => {
       it('returns with no errors', () => {
         const result = ContactValidator.go({
-          contactSelected: 'person'
-        })
-
-        expect(result.value).to.exist()
-        expect(result.error).not.to.exist()
-      })
-    })
-
-    describe('such as "department" with a "departmentName"', () => {
-      it('returns with no errors', () => {
-        const result = ContactValidator.go({
-          contactSelected: 'department',
-          departmentName: 'Department Name'
+          contactSelected: 'new'
         })
 
         expect(result.value).to.exist()
@@ -58,31 +46,6 @@ describe('Billing Accounts - Setup - Contact Validator', () => {
         expect(result.value).to.exist()
         expect(result.error).to.exist()
         expect(result.error.details[0].message).to.equal('Select a contact')
-      })
-    })
-
-    describe('such as "accountSelect" as department but no value for "departmentName"', () => {
-      it('returns with errors', () => {
-        const result = ContactValidator.go({
-          contactSelected: 'department'
-        })
-
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Department name cannot be blank')
-      })
-    })
-
-    describe('such as "accountSelect" as department but "departmentName" more than 100 characters', () => {
-      it('returns with errors', () => {
-        const result = ContactValidator.go({
-          contactSelected: 'department',
-          departmentName: 'a'.repeat(101)
-        })
-
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Department name must be 100 characters or less')
       })
     })
   })

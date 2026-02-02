@@ -85,7 +85,7 @@ async function submitContact(request, h) {
     return h.view(`billing-accounts/setup/contact.njk`, pageData)
   }
 
-  return h.redirect(`/system/billing-accounts/setup/${sessionId}/check`)
+  return h.redirect(pageData.redirectUrl)
 }
 
 async function submitExistingAccount(request, h) {
