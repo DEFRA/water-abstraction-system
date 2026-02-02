@@ -126,11 +126,12 @@ describe('Search - Fetch Search Results service', () => {
     })
     returnLogs.push({ returnLog, licence: licence1 })
 
-    // Add the users in non-alphabetical order to prove the ordering in the results
+    // Add the users in non-alphabetical order to prove the ordering in the results. We also have both internal and
+    // external users to prove that only external users are returned
 
     users.push(await UserHelper.add({ username: 'TESTSEARCH02@wrls.gov.uk', application: 'water_vml' }))
     users.push(await UserHelper.add({ username: 'TESTSEARCH03@wrls.gov.uk' }))
-    users.push(await UserHelper.add({ username: 'TESTSEARCH01@wrls.gov.uk' }))
+    users.push(await UserHelper.add({ username: 'TESTSEARCH01@wrls.gov.uk', application: 'water_vml' }))
   })
 
   beforeEach(() => {
@@ -226,11 +227,6 @@ describe('Search - Fetch Search Results service', () => {
           {
             exact: false,
             id: users[0].id,
-            type: 'user'
-          },
-          {
-            exact: false,
-            id: users[1].id,
             type: 'user'
           }
         ],
@@ -864,11 +860,6 @@ describe('Search - Fetch Search Results service', () => {
               exact: false,
               id: users[0].id,
               type: 'user'
-            },
-            {
-              exact: false,
-              id: users[1].id,
-              type: 'user'
             }
           ],
           total: 3
@@ -916,11 +907,6 @@ describe('Search - Fetch Search Results service', () => {
               exact: false,
               id: users[0].id,
               type: 'user'
-            },
-            {
-              exact: false,
-              id: users[1].id,
-              type: 'user'
             }
           ],
           total: 3
@@ -945,7 +931,7 @@ describe('Search - Fetch Search Results service', () => {
 
     describe('when searching for an exact match', () => {
       beforeEach(() => {
-        query = 'TESTSEARCH03@wrls.gov.uk'
+        query = 'TESTSEARCH01@wrls.gov.uk'
       })
 
       it('returns the correct user', async () => {
@@ -955,7 +941,7 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: true,
-              id: users[1].id,
+              id: users[2].id,
               type: 'user'
             }
           ],
