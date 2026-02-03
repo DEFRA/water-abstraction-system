@@ -76,13 +76,12 @@ async function submitAbstractionAlerts(request, h) {
 
 async function submitCheck(request, h) {
   const {
-    payload,
     params: { sessionId }
   } = request
 
-  await SubmitCheckService.go(sessionId, payload)
+  const { redirectUrl } = await SubmitCheckService.go(sessionId)
 
-  return h.redirect('')
+  return h.redirect(redirectUrl)
 }
 
 async function submitContactEmail(request, h) {

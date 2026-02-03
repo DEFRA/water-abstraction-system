@@ -149,19 +149,23 @@ describe('Company Contacts Setup controller', () => {
     })
 
     describe('POST', () => {
+      let companyId
+
       beforeEach(() => {
         sessionId = generateUUID()
 
+        companyId = generateUUID()
+
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/check`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitCheckService, 'go').returns({})
+        Sinon.stub(SubmitCheckService, 'go').returns({ redirectUrl: `/system/companies/${companyId}/contacts` })
       })
 
       it('redirects to companies contacts setup contact email page', async () => {
         const response = await server.inject(postOptions)
 
         expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(``)
+        expect(response.headers.location).to.equal(`/system/companies/${companyId}/contacts`)
       })
     })
   })
