@@ -6,20 +6,34 @@
  * @module SubmitCheckService
  */
 
+const CreateCompanyContactService = require('./create-company-contact.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/check' page
  *
  * @param {string} sessionId
- * @param {object} payload - The submitted form data
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
+async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
-  return { session }
+  const companyId = session.company.id
+
+  const companyContact = _companyContact(session)
+
+  await CreateCompanyContactService.go(companyId, companyContact)
+
+  return { redirectUrl: `/system/companies/${companyId}/contacts` }
+}
+
+function _companyContact(session) {
+  return {
+    name: session.name,
+    email: session.email,
+    abstractionAlerts: session.abstractionAlerts === 'yes'
+  }
 }
 
 module.exports = {
