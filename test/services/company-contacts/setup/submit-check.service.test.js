@@ -13,7 +13,7 @@ const CustomersFixtures = require('../../../support/fixtures/customers.fixture.j
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const PersistCompanyContactService = require('../../../../app/services/company-contacts/setup/create-company-contact.service.js')
+const CreateCompanyContactService = require('../../../../app/services/company-contacts/setup/create-company-contact.service.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/company-contacts/setup/submit-check.service.js')
@@ -26,7 +26,7 @@ describe('Company Contacts - Setup - Check Service', () => {
   beforeEach(async () => {
     company = CustomersFixtures.company()
 
-    Sinon.stub(PersistCompanyContactService, 'go').resolves()
+    Sinon.stub(CreateCompanyContactService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -56,7 +56,7 @@ describe('Company Contacts - Setup - Check Service', () => {
     it('persists the company contact details', async () => {
       await SubmitCheckService.go(session.id)
 
-      const actualContact = PersistCompanyContactService.go.args[0]
+      const actualContact = CreateCompanyContactService.go.args[0]
 
       expect(actualContact).to.equal([
         company.id,
@@ -72,7 +72,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       it('persists the "abstractionAlerts" as "true', async () => {
         await SubmitCheckService.go(session.id)
 
-        const actualContact = PersistCompanyContactService.go.args[0][1]
+        const actualContact = CreateCompanyContactService.go.args[0][1]
 
         expect(actualContact.abstractionAlerts).to.be.true()
       })
@@ -93,7 +93,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       it('persists the "abstractionAlerts" as "false', async () => {
         await SubmitCheckService.go(session.id)
 
-        const actualContact = PersistCompanyContactService.go.args[0][1]
+        const actualContact = CreateCompanyContactService.go.args[0][1]
 
         expect(actualContact.abstractionAlerts).to.be.false()
       })
