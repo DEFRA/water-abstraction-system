@@ -22,11 +22,14 @@ describe('Company Contacts - Setup - Check Service', () => {
   let company
   let session
   let sessionData
+  let yarStub
 
   beforeEach(async () => {
     company = CustomersFixtures.company()
 
     Sinon.stub(CreateCompanyContactService, 'go').resolves()
+
+    yarStub = { flash: Sinon.stub() }
   })
 
   afterEach(() => {
@@ -46,7 +49,7 @@ describe('Company Contacts - Setup - Check Service', () => {
     })
 
     it('returns the company id', async () => {
-      const result = await SubmitCheckService.go(session.id)
+      const result = await SubmitCheckService.go(session.id, yarStub)
 
       expect(result).to.equal({
         redirectUrl: `/system/companies/${company.id}/contacts`
@@ -54,7 +57,7 @@ describe('Company Contacts - Setup - Check Service', () => {
     })
 
     it('persists the company contact details', async () => {
-      await SubmitCheckService.go(session.id)
+      await SubmitCheckService.go(session.id, yarStub)
 
       const actualContact = CreateCompanyContactService.go.args[0]
 
@@ -68,9 +71,18 @@ describe('Company Contacts - Setup - Check Service', () => {
       ])
     })
 
+    it('sets a notification', async () => {
+      await SubmitCheckService.go(session.id, yarStub)
+
+      const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+      expect(flashType).to.equal('notification')
+      expect(bannerMessage).to.equal({ titleText: 'Contact added', text: `Eric was added to this company` })
+    })
+
     describe('and "abstractionAlerts" is "yes"', () => {
       it('persists the "abstractionAlerts" as "true', async () => {
-        await SubmitCheckService.go(session.id)
+        await SubmitCheckService.go(session.id, yarStub)
 
         const actualContact = CreateCompanyContactService.go.args[0][1]
 
@@ -91,7 +103,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       })
 
       it('persists the "abstractionAlerts" as "false', async () => {
-        await SubmitCheckService.go(session.id)
+        await SubmitCheckService.go(session.id, yarStub)
 
         const actualContact = CreateCompanyContactService.go.args[0][1]
 
