@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Create the data required to create a new return version
+ * Create a new return version
  * @module CreateReturnVersionService
  */
 
@@ -11,7 +11,7 @@ const ReturnRequirementPurposeModel = require('../../../../models/return-require
 const ReturnVersionModel = require('../../../../models/return-version.model.js')
 
 /**
- * Create the data required to create a new return version
+ * Create a new return version
  *
  * Using the return version data that has been generated. This service populates the `return_versions`,
  * `return_requirements`, `return_requirement_points` and `return_requirement_purposes` tables which are required to
