@@ -13,7 +13,7 @@ const CustomersFixtures = require('../../../support/fixtures/customers.fixture.j
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
-const PersistCompanyContactService = require('../../../../app/services/company-contacts/setup/persist-company-contact.service.js')
+const PersistCompanyContactService = require('../../../../app/services/company-contacts/setup/create-company-contact.service.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/company-contacts/setup/submit-check.service.js')
@@ -49,7 +49,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       const result = await SubmitCheckService.go(session.id)
 
       expect(result).to.equal({
-        companyId: company.id
+        redirectUrl: `/system/companies/${company.id}/contacts`
       })
     })
 

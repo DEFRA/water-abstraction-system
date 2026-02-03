@@ -6,7 +6,7 @@
  * @module SubmitCheckService
  */
 
-const PersistCompanyContactService = require('./persist-company-contact.service.js')
+const PersistCompanyContactService = require('./create-company-contact.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -25,7 +25,7 @@ async function go(sessionId) {
 
   await PersistCompanyContactService.go(companyId, companyContact)
 
-  return { companyId }
+  return { redirectUrl: `/system/companies/${companyId}/contacts` }
 }
 
 function _companyContact(session) {

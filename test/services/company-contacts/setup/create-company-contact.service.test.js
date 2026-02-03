@@ -14,9 +14,9 @@ const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.
 const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
 
 // Thing under test
-const PersistCompanyContactService = require('../../../../app/services/company-contacts/setup/persist-company-contact.service.js')
+const CreateCompanyContactService = require('../../../../app/services/company-contacts/setup/create-company-contact.service.js')
 
-describe('Company Contacts - Persist Company Contact service', () => {
+describe('Company Contacts - Create Company Contact service', () => {
   let clock
   let companyContact
   let company
@@ -42,7 +42,7 @@ describe('Company Contacts - Persist Company Contact service', () => {
 
   describe('when a new company contact is added', () => {
     it('inserts the company contact and links the company contact to the "additionalContact" licence role', async () => {
-      const result = await PersistCompanyContactService.go(company.id, companyContact)
+      const result = await CreateCompanyContactService.go(company.id, companyContact)
 
       const licenceRole = LicenceRoleHelper.select('additionalContact')
 

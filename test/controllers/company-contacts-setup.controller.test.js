@@ -158,7 +158,7 @@ describe('Company Contacts Setup controller', () => {
 
         postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/check`, {}, ['hof_notifications'])
 
-        Sinon.stub(SubmitCheckService, 'go').returns({ companyId })
+        Sinon.stub(SubmitCheckService, 'go').returns({ redirectUrl: `/system/companies/${companyId}/contacts` })
       })
 
       it('redirects to companies contacts setup contact email page', async () => {

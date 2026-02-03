@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Persist the company contact data for the '/company-contacts/{id}' pages
- * @module PersistCompanyContactService
+ * Creates the company contact data for the '/company-contacts/{id}' pages
+ * @module CreateCompanyContactService
  */
 
 const CompanyContactModel = require('../../../models/company-contact.model.js')
@@ -10,7 +10,7 @@ const LicenceRoleModel = require('../../../models/licence-role.model.js')
 const { today } = require('../../../lib/general.lib.js')
 
 /**
- * Persist the company contact data for the '/company-contacts/{id}' pages
+ * Creates the company contact data for the '/company-contacts/{id}' pages
  *
  * @param {string} companyId - the UUID of the company
  * @param {object} companyContact - the company contact
@@ -18,12 +18,12 @@ const { today } = require('../../../lib/general.lib.js')
  * @returns {Promise<string>} the newly created company contact id
  */
 async function go(companyId, companyContact) {
-  const result = await _persist(companyId, companyContact)
+  const result = await _create(companyId, companyContact)
 
   return result.id
 }
 
-async function _persist(companyId, companyContact) {
+async function _create(companyId, companyContact) {
   return CompanyContactModel.query().insertGraph({
     companyId,
     startDate: today(),

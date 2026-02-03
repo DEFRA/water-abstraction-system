@@ -79,9 +79,9 @@ async function submitCheck(request, h) {
     params: { sessionId }
   } = request
 
-  const { companyId } = await SubmitCheckService.go(sessionId)
+  const { redirectUrl } = await SubmitCheckService.go(sessionId)
 
-  return h.redirect(`/system/companies/${companyId}/contacts`)
+  return h.redirect(redirectUrl)
 }
 
 async function submitContactEmail(request, h) {
