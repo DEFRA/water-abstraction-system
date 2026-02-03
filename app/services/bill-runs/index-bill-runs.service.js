@@ -67,6 +67,7 @@ function _filters(yar) {
   }
 
   return {
+    regions: [],
     yearCreated: null,
     ...savedFilters,
     openFilter

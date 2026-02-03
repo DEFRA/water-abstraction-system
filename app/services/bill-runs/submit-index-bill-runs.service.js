@@ -32,6 +32,8 @@ async function go(payload, yar, page = 1) {
     return {}
   }
 
+  _handleOneOptionSelected(payload, 'regions')
+
   const error = _validate(payload)
 
   if (!error) {
@@ -55,6 +57,26 @@ function _clearFilters(payload, yar) {
   }
 
   return false
+}
+
+/**
+ * When a single type is checked by the user, it returns as a string. When multiple types are checked, the 'types' is
+ * returned as an array. When nothing is checked then the property doesn't exist in the payload.
+ *
+ * This function works to handle these discrepancies.
+ *
+ * @private
+ */
+function _handleOneOptionSelected(payload, key) {
+  if (!payload?.[key]) {
+    payload[key] = []
+
+    return
+  }
+
+  if (!Array.isArray(payload?.[key])) {
+    payload[key] = [payload?.[key]]
+  }
 }
 
 async function _replayView(payload, error, page, savedFilters) {
@@ -92,7 +114,8 @@ async function _replayView(payload, error, page, savedFilters) {
 
 function _save(payload, yar) {
   yar.set('billRunsFilter', {
-    yearCreated: payload.yearCreated
+    regions: payload.regions,
+    yearCreated: payload.yearCreated ?? null
   })
 }
 
@@ -101,6 +124,7 @@ function _savedFilters(payload) {
 
   return {
     openFilter: true,
+    regions: [],
     yearCreated: null,
     ...billRunsFilter
   }
