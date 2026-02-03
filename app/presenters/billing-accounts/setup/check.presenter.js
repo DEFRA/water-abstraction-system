@@ -32,7 +32,7 @@ function _backLink(session) {
     return `/system/billing-accounts/setup/${id}/fao`
   }
 
-  return `/system/billing-accounts/setup/${id}/select-contact`
+  return `/system/billing-accounts/setup/${id}/contact`
 }
 
 module.exports = {
