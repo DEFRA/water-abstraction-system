@@ -15,10 +15,10 @@ const ReturnRequirementPointModel = require('../../../../../app/models/return-re
 const ReturnRequirementPurposeModel = require('../../../../../app/models/return-requirement-purpose.model.js')
 
 // Thing under test
-const PersistReturnVersionService = require('../../../../../app/services/return-versions/setup/check/persist-return-version.service.js')
+const CreateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/create-return-version.service.js')
 
-describe('Return Versions Setup - Persist Return Version service', () => {
-  describe('when called with data to persist', () => {
+describe('Return Versions Setup - Create Return Version service', () => {
+  describe('when called with data to create', () => {
     let licenceId
     let returnVersionData
 
@@ -27,8 +27,8 @@ describe('Return Versions Setup - Persist Return Version service', () => {
       returnVersionData = _generateReturnVersionData(licenceId)
     })
 
-    it('persists the data to the tables required to create a new Return Version', async () => {
-      await PersistReturnVersionService.go(returnVersionData)
+    it('creates a new Return Version', async () => {
+      await CreateReturnVersionService.go(returnVersionData)
 
       const returnVersion = await ReturnVersionModel.query().where(
         'licenceId',
