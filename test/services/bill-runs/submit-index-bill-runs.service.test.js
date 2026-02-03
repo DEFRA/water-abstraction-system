@@ -11,6 +11,7 @@ const { expect } = Code
 // Things to stub
 const CheckBusyBillRunsService = require('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
 const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill-runs.service.js')
+const FetchRegionsService = require('../../../app/services/bill-runs/setup/fetch-regions.service.js')
 
 // Thing under test
 const SubmitIndexBillRunsService = require('../../../app/services/bill-runs/submit-index-bill-runs.service.js')
@@ -21,6 +22,9 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
   beforeEach(() => {
     Sinon.stub(CheckBusyBillRunsService, 'go').resolves('none')
+    Sinon.stub(FetchRegionsService, 'go').resolves([
+      { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' }
+    ])
 
     yarStub = {
       clear: Sinon.stub().returns(),
@@ -179,7 +183,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               },
               numberOfPages: 3,
               showingMessage: 'Showing 2 of 70 bill runs'
-            }
+            },
+            regions: [{ id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' }]
           })
         })
       })
@@ -234,7 +239,8 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
             pagination: {
               numberOfPages: 1,
               showingMessage: 'Showing all 2 bill runs'
-            }
+            },
+            regions: [{ id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' }]
           })
         })
       })
