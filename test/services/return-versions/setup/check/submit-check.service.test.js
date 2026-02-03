@@ -15,7 +15,7 @@ const { generateLicenceRef } = require('../../../../support/helpers/licence.help
 
 // Things we need to stub
 const GenerateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/generate-return-version.service.js')
-const PersistReturnVersionService = require('../../../../../app/services/return-versions/setup/check/persist-return-version.service.js')
+const PersistReturnVersionService = require('../../../../../app/services/return-versions/setup/check/create-return-version.service.js')
 const ProcessLicenceReturnLogsService = require('../../../../../app/services/return-logs/process-licence-return-logs.service.js')
 const VoidNoReturnRequiredLicenceReturnLogsService = require('../../../../../app/services/return-logs/void-return-logs.service.js')
 

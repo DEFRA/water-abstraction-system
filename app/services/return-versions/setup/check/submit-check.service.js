@@ -6,7 +6,7 @@
  */
 
 const GenerateReturnVersionService = require('./generate-return-version.service.js')
-const PersistReturnVersionService = require('./persist-return-version.service.js')
+const CreateReturnVersionService = require('./create-return-version.service.js')
 const ProcessLicenceReturnLogsService = require('../../../return-logs/process-licence-return-logs.service.js')
 const SessionModel = require('../../../../models/session.model.js')
 const VoidReturnLogsService = require('../../../return-logs/void-return-logs.service.js')
@@ -40,7 +40,7 @@ async function go(sessionId, userId) {
 async function _processReturnVersion(session, userId) {
   const returnVersionData = await GenerateReturnVersionService.go(session.data, userId)
 
-  const newReturnVersion = await PersistReturnVersionService.go(returnVersionData)
+  const newReturnVersion = await CreateReturnVersionService.go(returnVersionData)
 
   const changeDate = new Date(newReturnVersion.startDate)
   changeDate.setTime(changeDate.getTime() - ONE_DAY_IN_MILLISECONDS)
