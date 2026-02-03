@@ -7,6 +7,7 @@
  */
 
 const ContactPresenter = require('../../../presenters/billing-accounts/setup/contact.presenter.js')
+const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
 const SessionModel = require('../../../models/session.model.js')
 
 /**
@@ -18,8 +19,9 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
+  const companyContacts = await FetchCompanyContactsService.go(session.billingAccount.company.id)
 
-  const pageData = ContactPresenter.go(session)
+  const pageData = ContactPresenter.go(session, companyContacts)
 
   return {
     ...pageData

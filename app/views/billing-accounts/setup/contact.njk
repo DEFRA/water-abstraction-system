@@ -11,17 +11,7 @@
     {{ govukRadios({
       name: "contactSelected",
       errorMessage: error.contactSelected,
-      items: [
-        {
-          divider: "or"
-        },
-        {
-          id: "new",
-          value: "new",
-          text: "Add a new contact",
-          checked: "new" === contactSelected
-        }
-      ]
+      items: items
     }) }}
 
     {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
