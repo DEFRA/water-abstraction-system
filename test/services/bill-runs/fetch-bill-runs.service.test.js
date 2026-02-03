@@ -10,7 +10,6 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
-const BillRunModel = require('../../../app/models/bill-run.model.js')
 const DatabaseConfig = require('../../../config/database.config.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 
@@ -20,9 +19,13 @@ const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill
 describe('Fetch Bill Runs service', () => {
   const region = RegionHelper.select()
 
+  let filters
   let page
 
-  beforeEach(async () => {
+  beforeEach(() => {
+    filters = {}
+    page = 1
+
     // Set the default page size to 3 so we don't have to create loads of bill runs to test the service
     Sinon.replace(DatabaseConfig, 'defaultPageSize', 3)
   })
@@ -43,12 +46,8 @@ describe('Fetch Bill Runs service', () => {
     })
 
     describe('for the page selected', () => {
-      beforeEach(async () => {
-        page = 1
-      })
-
       it('returns a result with the correct properties', async () => {
-        const { results } = await FetchBillRunsService.go(page)
+        const { results } = await FetchBillRunsService.go(filters, page)
 
         // Due to the number of other bill runs created by other tests we can't assert on the exact values.
         // Instead we just check that the object returned contains the properties we expect
@@ -66,63 +65,67 @@ describe('Fetch Bill Runs service', () => {
     })
 
     describe('for the page selected', () => {
-      beforeEach(async () => {
-        page = 1
-      })
-
       it('returns a full page of 3 matching "results" and the correct "total"', async () => {
-        const result = await FetchBillRunsService.go(page)
+        const { results, total } = await FetchBillRunsService.go(filters, page)
 
-        expect(result.results.length).to.equal(3)
-        expect(result.total >= 5).to.be.true()
+        expect(results.length).to.equal(3)
+        expect(total >= 5).to.be.true()
       })
     })
 
     describe('for the next page selected', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         page = 2
       })
 
       it('returns a result with the matching "results" and the correct "total"', async () => {
-        const result = await FetchBillRunsService.go(page)
+        const { results, total } = await FetchBillRunsService.go(filters, page)
 
-        expect(result.results.length >= 2).to.be.true()
-        expect(result.total >= 5).to.be.true()
+        expect(results.length >= 2).to.be.true()
+        expect(total >= 5).to.be.true()
       })
     })
 
     describe('but not for the page selected', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         page = 500
       })
 
       it('returns a result with no "results" but the correct "total"', async () => {
-        const result = await FetchBillRunsService.go(page)
+        const { results, total } = await FetchBillRunsService.go(filters, page)
 
-        expect(result.results).to.be.empty()
-        expect(result.total >= 5).to.be.true()
-      })
-    })
-  })
-
-  describe('when there are no bill runs', () => {
-    beforeEach(async () => {
-      // There will usually be bill runs in the database from other tests so we stub the query to simulate no bill runs
-      const queryStub = Sinon.stub(BillRunModel, 'query')
-
-      queryStub.returns({
-        select: Sinon.stub().returnsThis(),
-        innerJoinRelated: Sinon.stub().returnsThis(),
-        orderBy: Sinon.stub().returnsThis(),
-        page: Sinon.stub().resolves({ results: [], total: 0 })
+        expect(results).to.be.empty()
+        expect(total >= 5).to.be.true()
       })
     })
 
-    it('returns a result with no "results" and 0 for "total"', async () => {
-      const result = await FetchBillRunsService.go()
+    describe('when a filter is applied', () => {
+      describe('and "Year created" has been set', () => {
+        beforeEach(() => {
+          filters = { yearCreated: 2024 }
+        })
 
-      expect(result.results).to.be.empty()
-      expect(result.total).to.equal(0)
+        it('returns the matching bill runs', async () => {
+          const { results, total } = await FetchBillRunsService.go(filters, page)
+
+          // All returned results should match the filter
+          expect(new Date(results[0].createdAt).getFullYear()).to.equal(filters.yearCreated)
+          expect(total >= 3).to.be.true()
+        })
+      })
+
+      describe('and the filter returns no results', () => {
+        beforeEach(() => {
+          filters = { yearCreated: 1000 }
+        })
+
+        it('returns no bill runs', async () => {
+          const { results, total } = await FetchBillRunsService.go(filters, page)
+
+          expect(results).to.be.empty()
+          expect(total).to.equal(0)
+        })
+      })
     })
   })
 })
