@@ -249,7 +249,7 @@ function _userSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) 
     searchSqls.params.push(exactQuery, partialQuery)
 
     countSqls.statements.push(`
-      (SELECT COUNT(*) FROM users WHERE username ILIKE ?)
+      (SELECT COUNT(*) FROM users WHERE application = 'water_vml' AND username ILIKE ?)
     `)
     countSqls.params.push(partialQuery)
   }
