@@ -13,14 +13,22 @@ const MIN_YEAR_CREATED = 2014 // Based on the minimum year a bill run has been c
  * Validates data submitted for the `/bill-runs` page
  *
  * @param {object} payload - The payload from the request to be validated
+ * @param {module:BillRunModel[]} regions - An array of regions available in the system
  *
  * @returns {object} The result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload) {
+function go(payload, regions) {
   const maxYearCreated = new Date().getFullYear()
+  const validRegionIds = _validRegionIds(regions)
 
   const schema = Joi.object({
+    regions: Joi.array()
+      .items(Joi.string().valid(...validRegionIds))
+      .optional()
+      .messages({
+        'any.only': 'Select a valid region'
+      }),
     yearCreated: Joi.number()
       .min(MIN_YEAR_CREATED)
       .integer()
@@ -34,6 +42,12 @@ function go(payload) {
   })
 
   return schema.validate(payload)
+}
+
+function _validRegionIds(regions) {
+  return regions.map((region) => {
+    return region.id
+  })
 }
 
 module.exports = {

@@ -34,7 +34,8 @@ async function go(payload, yar, page = 1) {
 
   _handleOneOptionSelected(payload, 'regions')
 
-  const error = _validate(payload)
+  const regions = await FetchRegionsService.go()
+  const error = _validate(payload, regions)
 
   if (!error) {
     _save(payload, yar)
@@ -44,7 +45,7 @@ async function go(payload, yar, page = 1) {
 
   const savedFilters = _savedFilters(yar)
 
-  return _replayView(payload, error, page, savedFilters)
+  return _replayView(payload, error, page, regions, savedFilters)
 }
 
 function _clearFilters(payload, yar) {
@@ -79,17 +80,16 @@ function _handleOneOptionSelected(payload, key) {
   }
 }
 
-async function _replayView(payload, error, page, savedFilters) {
+async function _replayView(payload, error, page, regions, savedFilters) {
   // When the page comes from the request via the controller then it will be a string. For consistency we want it as a
   // number
   const selectedPageNumber = Number(page)
 
   // We expect the FetchBillRunsService to take the longest to complete. But running them together means we are only
   // waiting as long as it takes FetchBillRunsService to complete rather than their combined time
-  const [busyResult, { results: billRuns, total: totalNumber }, regions] = await Promise.all([
+  const [busyResult, { results: billRuns, total: totalNumber }] = await Promise.all([
     CheckBusyBillRunsService.go(),
-    FetchBillRunsService.go(savedFilters, selectedPageNumber),
-    FetchRegionsService.go()
+    FetchBillRunsService.go(savedFilters, selectedPageNumber)
   ])
 
   const pagination = PaginatorPresenter.go(
@@ -130,8 +130,8 @@ function _savedFilters(payload) {
   }
 }
 
-function _validate(payload) {
-  const validationResult = IndexValidator.go(payload)
+function _validate(payload, regions) {
+  const validationResult = IndexValidator.go(payload, regions)
 
   return formatValidationResult(validationResult)
 }
