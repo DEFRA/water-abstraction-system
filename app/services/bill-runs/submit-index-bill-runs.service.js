@@ -8,6 +8,7 @@
 const { formatValidationResult } = require('../../presenters/base.presenter.js')
 const CheckBusyBillRunsService = require('./check-busy-bill-runs.service.js')
 const FetchBillRunsService = require('./fetch-bill-runs.service.js')
+const FetchRegionsService = require('./setup/fetch-regions.service.js')
 const IndexBillRunsPresenter = require('../../presenters/bill-runs/index-bill-runs.presenter.js')
 const IndexValidator = require('../../validators/bill-runs/index.validator.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
@@ -61,12 +62,12 @@ async function _replayView(payload, error, page, savedFilters) {
   // number
   const selectedPageNumber = Number(page)
 
-  // We expect the FetchBillRunsService to take longer to complete than CheckBusyBillRunsService. But running them
-  // together means we are only waiting as long as it takes FetchBillRunsService to complete rather than their combined
-  // time
-  const [{ results: billRuns, total: totalNumber }, busyResult] = await Promise.all([
+  // We expect the FetchBillRunsService to take the longest to complete. But running them together means we are only
+  // waiting as long as it takes FetchBillRunsService to complete rather than their combined time
+  const [busyResult, { results: billRuns, total: totalNumber }, regions] = await Promise.all([
+    CheckBusyBillRunsService.go(),
     FetchBillRunsService.go(savedFilters, selectedPageNumber),
-    CheckBusyBillRunsService.go()
+    FetchRegionsService.go()
   ])
 
   const pagination = PaginatorPresenter.go(
@@ -84,7 +85,8 @@ async function _replayView(payload, error, page, savedFilters) {
     error,
     filters: { ...savedFilters, ...payload },
     ...pageData,
-    pagination
+    pagination,
+    regions
   }
 }
 
