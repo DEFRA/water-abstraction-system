@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Persists the data required to create a new return version
- * @module PersistReturnVersionService
+ * Create the data required to create a new return version
+ * @module CreateReturnVersionService
  */
 
 const ReturnRequirementModel = require('../../../../models/return-requirement.model.js')
@@ -11,14 +11,14 @@ const ReturnRequirementPurposeModel = require('../../../../models/return-require
 const ReturnVersionModel = require('../../../../models/return-version.model.js')
 
 /**
- * Persists the data required to create a new return version
+ * Create the data required to create a new return version
  *
  * Using the return version data that has been generated. This service populates the `return_versions`,
  * `return_requirements`, `return_requirement_points` and `return_requirement_purposes` tables which are required to
  * create a new return version for a licence.
  *
  * @param {object} returnVersionData - The return version data required to persist a new return version for a licence
- * @returns {Promise<module:ReturnVersionModel>} The instance of the persisted return version
+ * @returns {Promise<module:ReturnVersionModel>} The instance of the created return version
  */
 async function go(returnVersionData) {
   const { returnRequirements, returnVersion } = returnVersionData
