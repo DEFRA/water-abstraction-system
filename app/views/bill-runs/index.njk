@@ -1,5 +1,6 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
@@ -34,6 +35,31 @@
         name: "yearCreated",
         value: filters.yearCreated,
         errorMessage: error.yearCreated
+      }) }}
+
+      {# Filter by region #}
+      {% set regionItems = [] %}
+      {% for region in regions %}
+        {% set regionItem = {
+          attributes: { 'data-test': region.displayName },
+          checked: filters.regions.includes(region.id),
+          text: region.displayName, value: region.id
+          } %}
+
+        {% set regionItems = (regionItems.push(regionItem), regionItems) %}
+      {% endfor %}
+
+      {{ govukCheckboxes({
+        classes: "govuk-checkboxes--small",
+        fieldset: {
+          legend: {
+            text: "Region",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: regionItems,
+        name: "regions"
       }) }}
 
       <div class="govuk-button-group">
