@@ -76,10 +76,11 @@ async function submitAbstractionAlerts(request, h) {
 
 async function submitCheck(request, h) {
   const {
-    params: { sessionId }
+    params: { sessionId },
+    yar
   } = request
 
-  const { redirectUrl } = await SubmitCheckService.go(sessionId)
+  const { redirectUrl } = await SubmitCheckService.go(sessionId, yar)
 
   return h.redirect(redirectUrl)
 }
