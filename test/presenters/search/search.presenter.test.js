@@ -41,12 +41,12 @@ describe('Search - Search presenter', () => {
         {
           exact: true,
           model: {
-            id: 'licence-holder-1',
+            id: 'company-1',
             licenceDocumentRoles: [{ licenceDocumentId: 'licence-1', licenceRole: { name: 'licenceHolder' } }],
             name: 'Mr F Surname',
             type: 'organisation'
           },
-          type: 'licenceHolder'
+          type: 'company'
         },
         {
           exact: true,
@@ -113,12 +113,12 @@ describe('Search - Search presenter', () => {
         {
           exact: false,
           model: {
-            id: 'licence-holder-1',
-            licenceDocumentRoles: [{ licenceDocumentId: 'licence-1', licenceRole: { name: 'licenceHolder' } }],
-            name: 'Mr F Surname',
+            id: 'company-2',
+            licenceDocumentRoles: [{ licenceDocumentId: 'licence-2', licenceRole: { name: 'licenceHolder' } }],
+            name: 'Mrs F Surname',
             type: 'organisation'
           },
-          type: 'licenceHolder'
+          type: 'company'
         },
         {
           exact: false,
@@ -193,8 +193,8 @@ describe('Search - Search presenter', () => {
         },
         {
           checked: false,
-          text: 'Licence holders',
-          value: 'licenceHolder'
+          text: 'Customers',
+          value: 'company'
         },
         {
           checked: false,
@@ -240,10 +240,10 @@ describe('Search - Search presenter', () => {
           col3Title: 'Type',
           col3Value: 'organisation',
           exact: true,
-          link: '/system/companies/licence-holder-1/licences',
+          link: '/system/companies/company-1/licences',
           reference: 'Mr F Surname',
           statusTag: null,
-          type: 'Holder'
+          type: 'Name'
         },
         {
           col2Title: 'Licence holder',
@@ -306,10 +306,10 @@ describe('Search - Search presenter', () => {
           col3Title: 'Type',
           col3Value: 'organisation',
           exact: false,
-          link: '/system/companies/licence-holder-1/licences',
-          reference: 'Mr F Surname',
+          link: '/system/companies/company-2/licences',
+          reference: 'Mrs F Surname',
           statusTag: null,
-          type: 'Holder'
+          type: 'Name'
         },
         {
           col2Title: 'Licence holder',
@@ -378,8 +378,8 @@ describe('Search - Search presenter', () => {
           },
           {
             checked: false,
-            text: 'Licence holders',
-            value: 'licenceHolder'
+            text: 'Customers',
+            value: 'company'
           },
           {
             checked: false,
@@ -421,8 +421,8 @@ describe('Search - Search presenter', () => {
           },
           {
             checked: false,
-            text: 'Licence holders',
-            value: 'licenceHolder'
+            text: 'Customers',
+            value: 'company'
           },
           {
             checked: false,
@@ -464,8 +464,8 @@ describe('Search - Search presenter', () => {
           },
           {
             checked: false,
-            text: 'Licence holders',
-            value: 'licenceHolder'
+            text: 'Customers',
+            value: 'company'
           },
           {
             checked: false,
@@ -502,8 +502,8 @@ describe('Search - Search presenter', () => {
         expect(result.filterItems).to.equal([
           {
             checked: false,
-            text: 'Licence holders',
-            value: 'licenceHolder'
+            text: 'Customers',
+            value: 'company'
           },
           {
             checked: false,

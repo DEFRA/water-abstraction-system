@@ -50,8 +50,8 @@ async function _findByType(type, ids) {
   switch (type) {
     case 'billingAccount':
       return _billingAccount(ids)
-    case 'licenceHolder':
-      return _licenceHolder(ids)
+    case 'company':
+      return _company(ids)
     case 'licence':
       return _licence(ids)
     case 'monitoringStation':
@@ -75,7 +75,7 @@ async function _licence(ids) {
     .findByIds(ids)
 }
 
-async function _licenceHolder(ids) {
+async function _company(ids) {
   return CompanyModel.query()
     .select('id', 'name', 'type')
     .withGraphFetched('licenceDocumentRoles')

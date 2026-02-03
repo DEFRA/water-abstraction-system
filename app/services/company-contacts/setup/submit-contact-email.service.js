@@ -10,6 +10,7 @@ const ContactEmailPresenter = require('../../../presenters/company-contacts/setu
 const ContactEmailValidator = require('../../../validators/company-contacts/setup/contact-email.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 const { checkUrl } = require('../../../lib/check-page.lib.js')
+const { flashNotification } = require('../../../lib/general.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -17,15 +18,18 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, payload) {
+async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
   const validationResult = _validate(payload)
 
   if (!validationResult) {
+    _notification(session, payload, yar)
+
     await _save(session, payload)
 
     return {
@@ -40,6 +44,12 @@ async function go(sessionId, payload) {
   return {
     error: validationResult,
     ...pageData
+  }
+}
+
+function _notification(session, payload, yar) {
+  if (session.checkPageVisited && session.email !== payload.email) {
+    flashNotification(yar, 'Updated', 'Email address updated')
   }
 }
 
