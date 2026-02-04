@@ -57,6 +57,7 @@ async function _save(session, payload) {
 
 async function _submissionData(session, payload) {
   const companyContacts = await FetchCompanyContactsService.go(session.billingAccount.company.id)
+
   session.contactSelected = payload.contactSelected ?? null
 
   return ContactPresenter.go(session, companyContacts)

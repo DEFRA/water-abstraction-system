@@ -11,14 +11,16 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixtures.js')
+const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
 
 // Thing under test
 const ContactPresenter = require('../../../../app/presenters/billing-accounts/setup/contact.presenter.js')
 
 describe('Billing Accounts - Setup - Contact Presenter', () => {
+  const exampleContacts = CustomersFixture.companyContacts()
+  const contact = exampleContacts[0].contact
+
   let session
-  const uuid = generateUUID()
-  const exampleContacts = _exampleContacts(uuid)
 
   describe('when called', () => {
     beforeEach(() => {
@@ -38,9 +40,9 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
         contactSelected: null,
         items: [
           {
-            id: uuid,
-            value: uuid,
-            text: 'Custome Name',
+            id: contact.id,
+            value: contact.id,
+            text: contact.$name(),
             checked: false
           },
           {
@@ -59,31 +61,32 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
     })
   })
 
-  describe('when the "contactSelected" is set already', () => {
-    beforeEach(() => {
-      session = {
-        billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-        contactSelected: generateUUID()
-      }
+  describe('the "contactSelected" property', () => {
+    describe('when no contact has been selected', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+        }
+      })
+      it('returns null', () => {
+        const result = ContactPresenter.go(session, exampleContacts)
+
+        expect(result.contactSelected).to.equal(null)
+      })
     })
 
-    it('returns that value', () => {
-      const result = ContactPresenter.go(session, exampleContacts)
+    describe('when a contact has been selected', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          contactSelected: generateUUID()
+        }
+      })
+      it('returns the selected contact ID', () => {
+        const result = ContactPresenter.go(session, exampleContacts)
 
-      expect(result.contactSelected).to.equal(session.contactSelected)
+        expect(result.contactSelected).to.equal(session.contactSelected)
+      })
     })
   })
 })
-
-function _exampleContacts(uuid) {
-  return [
-    {
-      contact: {
-        id: uuid,
-        $name: () => {
-          return 'Custome Name'
-        }
-      }
-    }
-  ]
-}

@@ -8,21 +8,20 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-
 // Things we need to stub
 const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixtures.js')
+const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const ViewContactService = require('../../../../app/services/billing-accounts/setup/view-contact.service.js')
 
 describe('Billing Accounts - Setup - Contact Service', () => {
-  const uuid = generateUUID()
-  const exampleContacts = _exampleContacts(uuid)
+  const exampleContacts = CustomersFixture.companyContacts()
+  const contact = exampleContacts[0].contact
 
   let session
   let sessionData
@@ -53,9 +52,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         contactSelected: null,
         items: [
           {
-            id: uuid,
-            value: uuid,
-            text: 'Custome Name',
+            id: contact.id,
+            value: contact.id,
+            text: contact.$name(),
             checked: false
           },
           {
@@ -74,16 +73,3 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     })
   })
 })
-
-function _exampleContacts(uuid) {
-  return [
-    {
-      contact: {
-        id: uuid,
-        $name: () => {
-          return 'Custome Name'
-        }
-      }
-    }
-  ]
-}

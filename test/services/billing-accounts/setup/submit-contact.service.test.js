@@ -15,14 +15,14 @@ const FetchCompanyContactsService = require('../../../../app/services/billing-ac
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixtures.js')
+const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const SubmitContactService = require('../../../../app/services/billing-accounts/setup/submit-contact.service.js')
 
 describe('Billing Accounts - Setup - Contact Service', () => {
-  const uuid = generateUUID()
-  const exampleContacts = _exampleContacts(uuid)
+  const exampleContacts = CustomersFixture.companyContacts()
 
   let payload
   let session
@@ -119,16 +119,3 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     })
   })
 })
-
-function _exampleContacts(uuid) {
-  return [
-    {
-      contact: {
-        id: uuid,
-        $name: () => {
-          return 'Custome Name'
-        }
-      }
-    }
-  ]
-}

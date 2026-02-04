@@ -9,7 +9,7 @@
  * Formats data for the `/billing-accounts/setup/{billingAccountId}/contact` page
  *
  * @param {module:SessionModel} session - The session instance
- * @param {module:CompanyContactsModel[]} companyContacts - The companys contacts
+ * @param {module:CompanyContactsModel[]} companyContacts - The company's contacts
  *
  * @returns {object} The data formatted for the view template
  */

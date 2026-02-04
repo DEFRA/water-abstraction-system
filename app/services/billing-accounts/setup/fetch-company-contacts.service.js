@@ -1,16 +1,16 @@
 'use strict'
 
 /**
- * Fetches any contacts that the provided companyId has
- * @module FetchCompaniesService
+ * Fetches all contacts for a specified company
+ * @module FetchCompanyContactsService
  */
 
 const CompanyContactModel = require('../../../models/company-contact.model.js')
 
 /**
- * Fetches any contacts that the provided companyId has
+ * Fetches all contacts for a specified company
  *
- * @param {string} companyId - The UUID of the company to search for
+ * @param {string} companyId - The UUID of the company to fetch contacts for
  *
  * @returns {Promise<object[]>} an object containing the matching contacts needed to populate the view
  */
@@ -20,6 +20,19 @@ async function go(companyId) {
     .distinctOn('contactId')
     .where('companyId', companyId)
     .withGraphFetched('contact')
+    .modifyGraph('contact', (contactBuilder) => {
+      contactBuilder.select([
+        'id',
+        'salutation',
+        'firstName',
+        'middleInitials',
+        'lastName',
+        'initials',
+        'contactType',
+        'suffix',
+        'department'
+      ])
+    })
 }
 
 module.exports = {
