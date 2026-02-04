@@ -224,7 +224,7 @@ describe('Search - Fetch Search Results service', () => {
             type: 'user'
           }
         ],
-        total: 17
+        total: 16
       })
     })
   })
@@ -266,7 +266,7 @@ describe('Search - Fetch Search Results service', () => {
             type: 'licence'
           }
         ],
-        total: 17
+        total: 16
       })
     })
   })
@@ -856,7 +856,7 @@ describe('Search - Fetch Search Results service', () => {
               type: 'user'
             }
           ],
-          total: 3
+          total: 2
         })
       })
     })
@@ -903,7 +903,7 @@ describe('Search - Fetch Search Results service', () => {
               type: 'user'
             }
           ],
-          total: 3
+          total: 2
         })
       })
     })
