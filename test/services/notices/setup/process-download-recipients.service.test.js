@@ -10,7 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const NoticeSessionFixture = require('../../../support/fixtures/notice-session.fixture.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 const { formatAbstractionPeriod, formatValueUnit } = require('../../../../app/presenters/base.presenter.js')
 const { addressToCSV } = require('../../../../app/presenters/notices/base.presenter.js')
 const { transformArrayToCSVRow } = require('../../../../app/lib/transform-to-csv.lib.js')

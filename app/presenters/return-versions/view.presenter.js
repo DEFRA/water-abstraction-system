@@ -22,6 +22,10 @@ function go(returnVersion) {
   const { licence, multipleUpload, quarterlyReturns, returnRequirements, startDate, status } = returnVersion
 
   return {
+    backLink: {
+      href: `/system/licences/${licence.id}/set-up`,
+      text: 'Go back to summary'
+    },
     createdBy: _createdBy(returnVersion),
     createdDate: formatLongDate(returnVersion.$createdAt()),
     licenceId: licence.id,
