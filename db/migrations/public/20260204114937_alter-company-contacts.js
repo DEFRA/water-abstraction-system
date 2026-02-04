@@ -43,8 +43,6 @@ exports.down = function (knex) {
         // is_test
         'date_created AS created_at',
         'date_updated AS updated_at'
-        // 'created_by',
-        // 'updated_by'
       ])
     )
   })
