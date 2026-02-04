@@ -43,7 +43,8 @@
         {% set regionItem = {
           attributes: { 'data-test': region.displayName },
           checked: filters.regions.includes(region.id),
-          text: region.displayName, value: region.id
+          text: region.displayName,
+          value: region.id
           } %}
 
         {% set regionItems = (regionItems.push(regionItem), regionItems) %}
