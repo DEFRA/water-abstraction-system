@@ -7,8 +7,6 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
@@ -17,20 +15,20 @@ const CustomersFixture = require('../../../support/fixtures/customers.fixture.js
 const ContactPresenter = require('../../../../app/presenters/billing-accounts/setup/contact.presenter.js')
 
 describe('Billing Accounts - Setup - Contact Presenter', () => {
-  const exampleContacts = CustomersFixture.companyContacts()
-  const contact = exampleContacts[0].contact
+  const companyContacts = CustomersFixture.companyContacts()
+  const contact = companyContacts[0].contact
 
   let session
 
-  describe('when called', () => {
-    beforeEach(() => {
-      session = {
-        billingAccount: BillingAccountsFixture.billingAccount().billingAccount
-      }
-    })
+  beforeEach(() => {
+    session = {
+      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+    }
+  })
 
+  describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ContactPresenter.go(session, exampleContacts)
+      const result = ContactPresenter.go(session, companyContacts)
 
       expect(result).to.equal({
         backLink: {
@@ -63,13 +61,8 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
 
   describe('the "contactSelected" property', () => {
     describe('when no contact has been selected', () => {
-      beforeEach(() => {
-        session = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
-        }
-      })
       it('returns null', () => {
-        const result = ContactPresenter.go(session, exampleContacts)
+        const result = ContactPresenter.go(session, companyContacts)
 
         expect(result.contactSelected).to.equal(null)
       })
@@ -77,13 +70,11 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
 
     describe('when a contact has been selected', () => {
       beforeEach(() => {
-        session = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-          contactSelected: generateUUID()
-        }
+        session.contactSelected = contact.id
       })
+
       it('returns the selected contact ID', () => {
-        const result = ContactPresenter.go(session, exampleContacts)
+        const result = ContactPresenter.go(session, companyContacts)
 
         expect(result.contactSelected).to.equal(session.contactSelected)
       })

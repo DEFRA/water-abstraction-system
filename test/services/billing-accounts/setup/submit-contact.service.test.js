@@ -8,8 +8,6 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-
 // Things we need to stub
 const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
 
@@ -22,7 +20,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SubmitContactService = require('../../../../app/services/billing-accounts/setup/submit-contact.service.js')
 
 describe('Billing Accounts - Setup - Contact Service', () => {
-  const exampleContacts = CustomersFixture.companyContacts()
+  const companyContacts = CustomersFixture.companyContacts()
 
   let payload
   let session
@@ -70,7 +68,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     describe('such as a UUID of a contact id', () => {
       it('saves the submitted value', async () => {
         payload = {
-          contactSelected: generateUUID()
+          contactSelected: companyContacts[0].contact.id
         }
 
         await SubmitContactService.go(session.id, payload)
@@ -82,7 +80,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
 
       it('continues the journey', async () => {
         payload = {
-          contactSelected: generateUUID()
+          contactSelected: companyContacts[0].contact.id
         }
 
         const result = await SubmitContactService.go(session.id, payload)
@@ -98,7 +96,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     describe('because the user did not select an option', () => {
       beforeEach(() => {
         payload = {}
-        Sinon.stub(FetchCompanyContactsService, 'go').resolves(exampleContacts)
+        Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
       })
 
       it('returns page data for the view, with errors', async () => {
