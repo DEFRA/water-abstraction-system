@@ -58,7 +58,11 @@ function _filters(yar) {
 
   if (savedFilters) {
     for (const key of Object.keys(savedFilters)) {
-      openFilter = !!savedFilters[key]
+      if (['regions'].includes(key)) {
+        openFilter = savedFilters[key].length > 0
+      } else {
+        openFilter = !!savedFilters[key]
+      }
 
       if (openFilter) {
         break
