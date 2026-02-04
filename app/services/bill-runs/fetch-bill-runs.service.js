@@ -37,7 +37,11 @@ async function go(filters, page) {
 }
 
 function _applyFilters(query, filters) {
-  const { yearCreated } = filters
+  const { regions, yearCreated } = filters
+
+  if (regions.length > 0) {
+    query.whereIn('region.id', regions)
+  }
 
   if (yearCreated) {
     query.whereRaw('EXTRACT(YEAR FROM bill_runs.created_at) = ?', [yearCreated])

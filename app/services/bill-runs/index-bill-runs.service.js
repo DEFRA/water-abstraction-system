@@ -7,6 +7,7 @@
 
 const CheckBusyBillRunsService = require('./check-busy-bill-runs.service.js')
 const FetchBillRunsService = require('./fetch-bill-runs.service.js')
+const FetchRegionsService = require('./setup/fetch-regions.service.js')
 const IndexBillRunsPresenter = require('../../presenters/bill-runs/index-bill-runs.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 
@@ -23,12 +24,12 @@ async function go(yar, page = 1) {
 
   const selectedPageNumber = Number(page)
 
-  // We expect the FetchBillRunsService to take longer to complete than CheckBusyBillRunsService. But running them
-  // together means we are only waiting as long as it takes FetchBillRunsService to complete rather than their combined
-  // time
-  const [{ results: billRuns, total: totalNumber }, busyResult] = await Promise.all([
+  // We expect the FetchBillRunsService to take the longest to complete. But running them together means we are only
+  // waiting as long as it takes FetchBillRunsService to complete rather than their combined time
+  const [busyResult, { results: billRuns, total: totalNumber }, regions] = await Promise.all([
+    CheckBusyBillRunsService.go(),
     FetchBillRunsService.go(filters, selectedPageNumber),
-    CheckBusyBillRunsService.go()
+    FetchRegionsService.go()
   ])
 
   const pagination = PaginatorPresenter.go(
@@ -45,7 +46,8 @@ async function go(yar, page = 1) {
     activeNavBar: 'bill-runs',
     filters,
     ...pageData,
-    pagination
+    pagination,
+    regions
   }
 }
 
@@ -56,7 +58,11 @@ function _filters(yar) {
 
   if (savedFilters) {
     for (const key of Object.keys(savedFilters)) {
-      openFilter = !!savedFilters[key]
+      if (['regions'].includes(key)) {
+        openFilter = savedFilters[key].length > 0
+      } else {
+        openFilter = !!savedFilters[key]
+      }
 
       if (openFilter) {
         break
@@ -65,6 +71,7 @@ function _filters(yar) {
   }
 
   return {
+    regions: [],
     yearCreated: null,
     ...savedFilters,
     openFilter

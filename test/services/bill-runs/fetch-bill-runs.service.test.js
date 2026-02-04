@@ -23,7 +23,7 @@ describe('Fetch Bill Runs service', () => {
   let page
 
   beforeEach(() => {
-    filters = {}
+    filters = _noFiltersApplied()
     page = 1
 
     // Set the default page size to 3 so we don't have to create loads of bill runs to test the service
@@ -99,31 +99,62 @@ describe('Fetch Bill Runs service', () => {
       })
     })
 
-    describe('when a filter is applied', () => {
+    describe('when filters are applied', () => {
       describe('and "Year created" has been set', () => {
-        beforeEach(() => {
-          filters = { yearCreated: 2024 }
+        describe('and there are matching runs', () => {
+          beforeEach(() => {
+            filters.yearCreated = 2024
+          })
+
+          it('returns the matching bill runs', async () => {
+            const { results, total } = await FetchBillRunsService.go(filters, page)
+
+            // All returned results should match the filter
+            expect(new Date(results[0].createdAt).getFullYear()).to.equal(filters.yearCreated)
+            expect(total >= 3).to.be.true()
+          })
         })
 
-        it('returns the matching bill runs', async () => {
-          const { results, total } = await FetchBillRunsService.go(filters, page)
+        describe('and there are no matching bill runs', () => {
+          beforeEach(() => {
+            filters.yearCreated = 1000
+          })
 
-          // All returned results should match the filter
-          expect(new Date(results[0].createdAt).getFullYear()).to.equal(filters.yearCreated)
-          expect(total >= 3).to.be.true()
+          it('returns no bill runs', async () => {
+            const { results, total } = await FetchBillRunsService.go(filters, page)
+
+            expect(results).to.be.empty()
+            expect(total).to.equal(0)
+          })
         })
       })
 
-      describe('and the filter returns no results', () => {
-        beforeEach(() => {
-          filters = { yearCreated: 1000 }
+      describe('and "Region" has been set', () => {
+        describe('and there are matching runs', () => {
+          beforeEach(() => {
+            filters.regions = [region.id]
+          })
+
+          it('returns the matching bill runs', async () => {
+            const { results, total } = await FetchBillRunsService.go(filters, page)
+
+            // All returned results should match the filter
+            expect(results[0].region).to.equal(region.displayName)
+            expect(total >= 5).to.be.true()
+          })
         })
 
-        it('returns no bill runs', async () => {
-          const { results, total } = await FetchBillRunsService.go(filters, page)
+        describe('and there are no matching bill runs', () => {
+          beforeEach(() => {
+            filters.regions = ['00000000-0000-0000-0000-000000000000']
+          })
 
-          expect(results).to.be.empty()
-          expect(total).to.equal(0)
+          it('returns no bill runs', async () => {
+            const { results, total } = await FetchBillRunsService.go(filters, page)
+
+            expect(results).to.be.empty()
+            expect(total).to.equal(0)
+          })
         })
       })
     })
@@ -140,4 +171,8 @@ function _addBillRun(billRunNumber, createdAt, netTotal, creditNoteCount, invoic
     regionId,
     status: 'sent'
   })
+}
+
+function _noFiltersApplied() {
+  return { regions: [], yearCreated: null, openFilter: false }
 }
