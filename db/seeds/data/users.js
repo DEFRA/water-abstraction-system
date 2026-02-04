@@ -2,7 +2,7 @@
 
 const data = [
   {
-    id: 100000,
+    userId: 100000,
     username: 'admin-internal@wrls.gov.uk',
     password: 'P@55word',
     resetGuid: null,
@@ -14,7 +14,7 @@ const data = [
     enabled: true
   },
   {
-    id: 100001,
+    userId: 100001,
     username: 'super.user@wrls.gov.uk',
     password: 'P@55word',
     resetGuid: null,
@@ -26,7 +26,7 @@ const data = [
     enabled: true
   },
   {
-    id: 100002,
+    userId: 100002,
     username: 'environment.officer@wrls.gov.uk',
     password: 'P@55word',
     resetGuid: null,
@@ -38,7 +38,7 @@ const data = [
     enabled: true
   },
   {
-    id: 100003,
+    userId: 100003,
     username: 'waste.industry.regulatory.services@wrls.gov.uk',
     password: 'P@55word',
     resetGuid: null,
@@ -50,7 +50,7 @@ const data = [
     enabled: true
   },
   {
-    id: 100004,
+    userId: 100004,
     username: 'billing.data@wrls.gov.uk',
     password: 'P@55word',
     resetGuid: null,
@@ -62,7 +62,7 @@ const data = [
     enabled: true
   },
   {
-    id: 100005,
+    userId: 100005,
     username: 'permitting.support.centre@wrls.gov.uk',
     password: 'P@55word',
     resetGuid: null,
@@ -74,7 +74,7 @@ const data = [
     enabled: true
   },
   {
-    id: 100006,
+    userId: 100006,
     username: 'national.permitting.service@wrls.gov.uk',
     password: 'P@55word',
     resetGuid: null,
@@ -86,7 +86,7 @@ const data = [
     enabled: true
   },
   {
-    id: 100007,
+    userId: 100007,
     username: 'external@example.co.uk',
     password: 'P@55word',
     resetGuid: null,
@@ -98,7 +98,7 @@ const data = [
     enabled: true
   },
   {
-    id: 100008,
+    userId: 100008,
     username: 'jon.lee@example.co.uk',
     password: 'P@55word',
     resetGuid: null,
@@ -110,7 +110,7 @@ const data = [
     enabled: false
   },
   {
-    id: 100009,
+    userId: 100009,
     username: 'rachel.stevens@example.co.uk',
     password: 'P@55word',
     resetGuid: null,
@@ -122,7 +122,7 @@ const data = [
     enabled: true
   },
   {
-    id: 100010,
+    userId: 100010,
     username: 'basic.access@wrls.gov.uk',
     password: 'P@55word',
     resetGuid: null,
@@ -134,7 +134,7 @@ const data = [
     enabled: true
   },
   {
-    id: 100011,
+    userId: 100011,
     username: 'digitise.editor@wrls.gov.uk',
     password: 'P@55word',
     resetGuid: null,
@@ -146,7 +146,7 @@ const data = [
     enabled: true
   },
   {
-    id: 100012,
+    userId: 100012,
     username: 'digitise.approver@wrls.gov.uk',
     password: 'P@55word',
     resetGuid: null,
@@ -158,7 +158,7 @@ const data = [
     enabled: true
   },
   {
-    id: 100013,
+    userId: 100013,
     username: 'tina.barrett@example.co.uk',
     password: 'VOID',
     resetGuid: null,

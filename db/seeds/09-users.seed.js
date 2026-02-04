@@ -89,7 +89,7 @@ async function _exists(user) {
   const { application, username } = user
 
   const result = await UserModel.query()
-    .select('id')
+    .select('userId')
     .where('application', application)
     .andWhere('username', username)
     .limit(1)
@@ -107,14 +107,14 @@ function _generateHashedPassword() {
   return bcrypt.hashSync(DatabaseConfig.defaultUserPassword, 10)
 }
 
-async function _idInUse(id) {
-  const result = await UserModel.query().findById(id)
+async function _idInUse(userId) {
+  const result = await UserModel.query().where('userId', userId)
 
   return !!result
 }
 
 async function _insert(user, password) {
-  const { application, badLogins, enabled, id, lastLogin, resetGuid, resetGuidCreatedAt, resetRequired, username } =
+  const { application, badLogins, enabled, userId, lastLogin, resetGuid, resetGuidCreatedAt, resetRequired, username } =
     user
 
   // NOTE: Seeding users is a pain (!) because of the previous teams choice to use a custom sequence for the ID instead
@@ -124,7 +124,7 @@ async function _insert(user, password) {
   //
   // does not exist. _But_ a user with ID 100000 does! So, we do want to insert our record, but we can't use the ID
   // because it is already in use. We only really face this problem when running the seed in our AWS environments.
-  const idInUse = await _idInUse(id)
+  const idInUse = await _idInUse(userId)
 
   if (idInUse) {
     return UserModel.query().insert({
