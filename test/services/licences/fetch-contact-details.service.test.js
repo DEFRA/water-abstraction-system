@@ -10,7 +10,6 @@ const { expect } = Code
 // Test helpers
 const AddressHelper = require('../../support/helpers/address.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
 const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
 const LicenceDocumentRolesHelper = require('../../support/helpers/licence-document-role.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
@@ -21,7 +20,6 @@ const FetchContactDetailsService = require('../../../app/services/licences/fetch
 
 describe('Licences - Fetch Contact Details service', () => {
   let companyId
-  let contactId
   let licence
 
   describe('when the licence has contact details', () => {
@@ -32,10 +30,6 @@ describe('Licences - Fetch Contact Details service', () => {
 
       companyId = company.id
 
-      const contact = await ContactHelper.add()
-
-      contactId = contact.id
-
       const { id: licenceDocumentId } = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
       const { id: licenceRoleId } = await LicenceRoleHelper.select()
       const { id: addressId } = await AddressHelper.add()
@@ -45,7 +39,6 @@ describe('Licences - Fetch Contact Details service', () => {
         licenceDocumentId,
         addressId,
         licenceRoleId,
-        contactId,
         companyId
       })
     })
@@ -58,9 +51,6 @@ describe('Licences - Fetch Contact Details service', () => {
           communicationType: 'Licence Holder',
           companyId,
           companyName: 'Example Trading Ltd',
-          contactId,
-          firstName: 'Amara',
-          lastName: 'Gupta',
           address1: 'ENVIRONMENT AGENCY',
           address2: 'HORIZON HOUSE',
           address3: 'DEANERY ROAD',
