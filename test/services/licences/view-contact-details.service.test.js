@@ -53,9 +53,6 @@ describe('Licences - View Contact Details service', () => {
         communicationType: 'Licence Holder',
         companyId,
         companyName: 'Acme ltd',
-        contactId: null,
-        firstName: null,
-        lastName: null,
         address1: '34 Eastgate',
         address2: null,
         address3: null,
@@ -93,7 +90,6 @@ describe('Licences - View Contact Details service', () => {
             name: 'Rachael Tyrell'
           }
         ],
-        companyId,
         customerContactLink: `/system/companies/${companyId}/contacts`,
         licenceContacts: [
           {
