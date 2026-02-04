@@ -36,9 +36,6 @@ describe('Licences - Contact Details presenter', () => {
         communicationType: 'Licence Holder',
         companyId,
         companyName: 'Acme ltd',
-        contactId: null,
-        firstName: null,
-        lastName: null,
         address1: '34 Eastgate',
         address2: null,
         address3: null,
@@ -66,7 +63,6 @@ describe('Licences - Contact Details presenter', () => {
           href: '/',
           text: 'Go back to search'
         },
-        companyId,
         customerContactLink: `/system/companies/${companyId}/contacts`,
         licenceContacts: [
           {
@@ -89,16 +85,16 @@ describe('Licences - Contact Details presenter', () => {
       })
     })
 
-    describe('the "companyId" property', () => {
-      describe('when one of the contacts has the communication type of "Licence Holder"', () => {
-        it("returns that contact's company Id", () => {
+    describe('the "customerContactLink" property', () => {
+      describe('when the the licence has a "licence Holder" licence contact', () => {
+        it('returns the link to customer contacts', () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
-          expect(result.companyId).to.equal(companyId)
+          expect(result.customerContactLink).to.equal(`/system/companies/${companyId}/contacts`)
         })
       })
 
-      describe('when none of the contacts has the communication type of "Licence Holder"', () => {
+      describe('when the the licence does not have a "licence Holder" licence contact', () => {
         beforeEach(() => {
           contacts[0].communicationType = 'Returns'
         })
@@ -106,66 +102,7 @@ describe('Licences - Contact Details presenter', () => {
         it('returns null', () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
-          expect(result.companyId).to.be.null()
-        })
-      })
-    })
-
-    describe('the "licenceContacts.name" property', () => {
-      describe('when the contact does not have a contact', () => {
-        it("returns the contact's company name", () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
-
-          expect(result.licenceContacts[0].name).to.equal('Acme ltd')
-        })
-      })
-
-      describe('when the contact has a contact with a last name', () => {
-        beforeEach(() => {
-          contacts[0].contactId = '0a4ebb93-2e90-4e35-acd5-a5aa73466508'
-          contacts[0].lastName = 'Flow'
-        })
-
-        describe('but no first name', () => {
-          it("returns just the contact's last name", () => {
-            const result = ContactDetailsPresenter.go(contacts, licence)
-
-            expect(result.licenceContacts[0].name).to.equal('Flow')
-          })
-        })
-
-        describe('and a first name', () => {
-          beforeEach(() => {
-            contacts[0].firstName = 'Jackie'
-          })
-
-          it("returns the contact's first and last name", () => {
-            const result = ContactDetailsPresenter.go(contacts, licence)
-
-            expect(result.licenceContacts[0].name).to.equal('Jackie Flow')
-          })
-        })
-      })
-    })
-
-    describe('the "customerContactLink" property', () => {
-      describe('when the "enableCustomerView" feature toggle is enabled', () => {
-        it('correctly presents the data', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
-
-          expect(result.customerContactLink).to.equal(`/system/companies/${companyId}/contacts`)
-        })
-      })
-
-      describe('when the "enableCustomerView" feature toggle is disabled', () => {
-        beforeEach(() => {
-          Sinon.stub(FeatureFlagsConfig, 'enableCustomerView').value(false)
-        })
-
-        it('correctly presents the data', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
-
-          expect(result.customerContactLink).to.equal(`/customer/${companyId}/#contacts`)
+          expect(result.customerContactLink).to.be.null()
         })
       })
     })
