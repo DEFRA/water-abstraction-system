@@ -25,9 +25,6 @@ async function _fetch(licenceId) {
       'lr.label AS communicationType',
       'cmp.id AS companyId',
       'cmp.name AS companyName',
-      'con.id AS contactId',
-      'con.firstName',
-      'con.lastName',
       'a.address1',
       'a.address2',
       'a.address3',
@@ -42,7 +39,6 @@ async function _fetch(licenceId) {
     .innerJoin('licenceDocumentRoles AS ldr', 'ldr.licenceDocumentId', '=', 'ld.id')
     .innerJoin('licenceRoles AS lr', 'lr.id', '=', 'ldr.licenceRoleId')
     .innerJoin('companies AS cmp', 'cmp.id', '=', 'ldr.companyId')
-    .leftJoin('contacts AS con', 'con.id', '=', 'ldr.contactId')
     .innerJoin('addresses AS a', 'a.id', '=', 'ldr.addressId')
     .where('l.id', '=', licenceId)
     .andWhere((builder) => {
