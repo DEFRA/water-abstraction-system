@@ -73,7 +73,7 @@
     <p>No licence contacts found.</p>
   {% endif %}
 
-  {% if companyId %}
+  {% if customerContactLink %}
     {% set customerContactsCaption = 'Customer contacts for this licence<p class="govuk-body"><a class="govuk-link" href="' + customerContactLink + '">Go to customer contacts</a></p>' %}
   {% else %}
     {% set customerContactsCaption = 'Customer contacts for this licence' %}

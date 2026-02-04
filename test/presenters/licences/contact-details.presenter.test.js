@@ -63,7 +63,6 @@ describe('Licences - Contact Details presenter', () => {
           href: '/',
           text: 'Go back to search'
         },
-        companyId,
         customerContactLink: `/system/companies/${companyId}/contacts`,
         licenceContacts: [
           {
@@ -86,16 +85,16 @@ describe('Licences - Contact Details presenter', () => {
       })
     })
 
-    describe('the "companyId" property', () => {
-      describe('when one of the contacts has the communication type of "Licence Holder"', () => {
-        it("returns that contact's company Id", () => {
+    describe('the "customerContactLink" property', () => {
+      describe('when the the licence has a "licence Holder" licence contact', () => {
+        it('returns the link to customer contacts', () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
-          expect(result.companyId).to.equal(companyId)
+          expect(result.customerContactLink).to.equal(`/system/companies/${companyId}/contacts`)
         })
       })
 
-      describe('when none of the contacts has the communication type of "Licence Holder"', () => {
+      describe('when the the licence does not have a "licence Holder" licence contact', () => {
         beforeEach(() => {
           contacts[0].communicationType = 'Returns'
         })
@@ -103,29 +102,7 @@ describe('Licences - Contact Details presenter', () => {
         it('returns null', () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
-          expect(result.companyId).to.be.null()
-        })
-      })
-    })
-
-    describe('the "customerContactLink" property', () => {
-      describe('when the "enableCustomerView" feature toggle is enabled', () => {
-        it('correctly presents the data', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
-
-          expect(result.customerContactLink).to.equal(`/system/companies/${companyId}/contacts`)
-        })
-      })
-
-      describe('when the "enableCustomerView" feature toggle is disabled', () => {
-        beforeEach(() => {
-          Sinon.stub(FeatureFlagsConfig, 'enableCustomerView').value(false)
-        })
-
-        it('correctly presents the data', () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
-
-          expect(result.customerContactLink).to.equal(`/customer/${companyId}/#contacts`)
+          expect(result.customerContactLink).to.be.null()
         })
       })
     })

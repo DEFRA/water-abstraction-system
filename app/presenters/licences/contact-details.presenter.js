@@ -18,21 +18,28 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 function go(licenceContacts, licence) {
   const { licenceRef } = licence
 
-  const companyId = _findCompanyId(licenceContacts)
-
   return {
     backLink: {
       text: 'Go back to search',
       href: '/'
     },
-    companyId,
     licenceContacts: _licenceContacts(licenceContacts),
     pageTitle: 'Contact details',
     pageTitleCaption: `Licence ${licenceRef}`,
-    customerContactLink: FeatureFlagsConfig.enableCustomerView
-      ? `/system/companies/${companyId}/contacts`
-      : `/customer/${companyId}/#contacts`
+    customerContactLink: _customerContactLink(licenceContacts)
   }
+}
+
+function _customerContactLink(licenceContacts) {
+  const companyId = _findCompanyId(licenceContacts)
+
+  if (!companyId) {
+    return null
+  }
+
+  return FeatureFlagsConfig.enableCustomerView
+    ? `/system/companies/${companyId}/contacts`
+    : `/customer/${companyId}/#contacts`
 }
 
 function _findCompanyId(licenceContacts) {
