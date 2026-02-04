@@ -8,17 +8,21 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const SubmitCancelService = require('../../../../app/services/company-contacts/setup/submit-cancel.service.js')
 
 describe('Company Contacts - Setup - Cancel Service', () => {
+  let company
   let session
   let sessionData
 
   beforeEach(async () => {
-    sessionData = {}
+    company = CustomersFixtures.company()
+
+    sessionData = { company }
 
     session = await SessionHelper.add({ data: sessionData })
   })
@@ -28,7 +32,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
       const result = await SubmitCancelService.go(session.id)
 
       expect(result).to.equal({
-        redirectUrl: ''
+        redirectUrl: `/system/companies/${company.id}/contacts`
       })
     })
   })
