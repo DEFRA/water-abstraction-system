@@ -33,6 +33,7 @@ function go(payload, regions) {
       .min(MIN_YEAR_CREATED)
       .integer()
       .max(maxYearCreated)
+      .optional()
       .messages({
         'number.base': 'The year created must be a number',
         'number.max': `The year created cannot exceed the current year of ${maxYearCreated}`,
