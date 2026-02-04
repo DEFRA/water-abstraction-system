@@ -42,7 +42,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
 
       const deletedSession = await SessionModel.query().findById(session.id)
 
-      expect(deletedSession).to.be.null()
+      expect(deletedSession).to.be.undefined()
     })
   })
 })
