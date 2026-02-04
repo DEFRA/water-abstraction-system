@@ -51,6 +51,7 @@ describe('Company Contacts - Create Company Contact service', () => {
       expect(newCompanyContact).to.equal(
         {
           abstractionAlerts: true,
+          createdBy: null,
           companyId: company.id,
           contact: {
             contactType: 'department',
@@ -70,7 +71,8 @@ describe('Company Contacts - Create Company Contact service', () => {
           default: false,
           id: result,
           licenceRoleId: licenceRole.id,
-          startDate: new Date('2021-01-01')
+          startDate: new Date('2021-01-01'),
+          updatedBy: null
         },
         {
           skip: ['createdAt', 'updatedAt', 'contact.createdAt', 'contact.updatedAt']
