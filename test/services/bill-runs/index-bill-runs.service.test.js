@@ -11,6 +11,7 @@ const { expect } = Code
 // Things we need to stub
 const CheckBusyBillRunsService = require('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
 const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill-runs.service.js')
+const FetchRegionsService = require('../../../app/services/bill-runs/setup/fetch-regions.service.js')
 
 // Thing under test
 const IndexBillRunsService = require('../../../app/services/bill-runs/index-bill-runs.service.js')
@@ -22,6 +23,9 @@ describe('Index Bill Runs service', () => {
   beforeEach(() => {
     // It doesn't matter for these tests what busy state the service returns, only that it returns one.
     Sinon.stub(CheckBusyBillRunsService, 'go').resolves('none')
+    Sinon.stub(FetchRegionsService, 'go').resolves([
+      { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' }
+    ])
   })
 
   afterEach(() => {
@@ -47,6 +51,7 @@ describe('Index Bill Runs service', () => {
       expect(result.pagination.component).not.to.exist()
       expect(result.pagination.numberOfPages).to.equal(1)
       expect(result.pagination.showingMessage).to.equal('Showing all 2 bill runs')
+      expect(result.regions).to.equal([{ id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' }])
     })
   })
 
