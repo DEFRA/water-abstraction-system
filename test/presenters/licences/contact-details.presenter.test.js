@@ -36,9 +36,6 @@ describe('Licences - Contact Details presenter', () => {
         communicationType: 'Licence Holder',
         companyId,
         companyName: 'Acme ltd',
-        contactId: null,
-        firstName: null,
-        lastName: null,
         address1: '34 Eastgate',
         address2: null,
         address3: null,
@@ -107,43 +104,6 @@ describe('Licences - Contact Details presenter', () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
           expect(result.companyId).to.be.null()
-        })
-      })
-    })
-
-    describe('the "licenceContacts.name" property', () => {
-      describe('when the contact does not have a contact', () => {
-        it("returns the contact's company name", () => {
-          const result = ContactDetailsPresenter.go(contacts, licence)
-
-          expect(result.licenceContacts[0].name).to.equal('Acme ltd')
-        })
-      })
-
-      describe('when the contact has a contact with a last name', () => {
-        beforeEach(() => {
-          contacts[0].contactId = '0a4ebb93-2e90-4e35-acd5-a5aa73466508'
-          contacts[0].lastName = 'Flow'
-        })
-
-        describe('but no first name', () => {
-          it("returns just the contact's last name", () => {
-            const result = ContactDetailsPresenter.go(contacts, licence)
-
-            expect(result.licenceContacts[0].name).to.equal('Flow')
-          })
-        })
-
-        describe('and a first name', () => {
-          beforeEach(() => {
-            contacts[0].firstName = 'Jackie'
-          })
-
-          it("returns the contact's first and last name", () => {
-            const result = ContactDetailsPresenter.go(contacts, licence)
-
-            expect(result.licenceContacts[0].name).to.equal('Jackie Flow')
-          })
         })
       })
     })

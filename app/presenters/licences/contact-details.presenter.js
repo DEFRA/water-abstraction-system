@@ -10,15 +10,15 @@ const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 /**
  * Formats data for the `/licences/{id}/contact-details` view contact details page
  *
- * @param {object[]} contacts - The results from `FetchContactsService` to be formatted for the view
+ * @param {object[]} licenceContacts - The results from `FetchContactsService` to be formatted for the view
  * @param {object} licence - The id and licence ref of the licence
  *
  * @returns {object} The data formatted for the view template
  */
-function go(contacts, licence) {
+function go(licenceContacts, licence) {
   const { licenceRef } = licence
 
-  const companyId = _findCompanyId(contacts)
+  const companyId = _findCompanyId(licenceContacts)
 
   return {
     backLink: {
@@ -26,7 +26,7 @@ function go(contacts, licence) {
       href: '/'
     },
     companyId,
-    licenceContacts: _licenceContacts(contacts),
+    licenceContacts: _licenceContacts(licenceContacts),
     pageTitle: 'Contact details',
     pageTitleCaption: `Licence ${licenceRef}`,
     customerContactLink: FeatureFlagsConfig.enableCustomerView
@@ -35,8 +35,8 @@ function go(contacts, licence) {
   }
 }
 
-function _findCompanyId(contacts) {
-  const customerContact = contacts.find((contact) => {
+function _findCompanyId(licenceContacts) {
+  const customerContact = licenceContacts.find((contact) => {
     return contact.communicationType === 'Licence Holder'
   })
 
@@ -47,29 +47,21 @@ function _findCompanyId(contacts) {
   return null
 }
 
-function _licenceContactName(contact) {
-  if (contact.contactId) {
-    return `${contact.firstName || ''} ${contact.lastName}`.trim()
-  }
-
-  return contact.companyName
-}
-
-function _licenceContacts(contacts) {
-  return contacts.map((contact) => {
+function _licenceContacts(licenceContacts) {
+  return licenceContacts.map((licenceContact) => {
     return {
       address: {
-        address1: contact.address1,
-        address2: contact.address2,
-        address3: contact.address3,
-        address4: contact.address4,
-        address5: contact.address5,
-        address6: contact.address6,
-        country: contact.country,
-        postcode: contact.postcode
+        address1: licenceContact.address1,
+        address2: licenceContact.address2,
+        address3: licenceContact.address3,
+        address4: licenceContact.address4,
+        address5: licenceContact.address5,
+        address6: licenceContact.address6,
+        country: licenceContact.country,
+        postcode: licenceContact.postcode
       },
-      communicationType: contact.communicationType,
-      name: _licenceContactName(contact)
+      communicationType: licenceContact.communicationType,
+      name: licenceContact.companyName
     }
   })
 }
