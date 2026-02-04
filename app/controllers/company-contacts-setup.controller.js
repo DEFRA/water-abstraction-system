@@ -2,10 +2,12 @@
 
 const InitiateSessionService = require('../services/company-contacts/setup/initiate-session.service.js')
 const SubmitAbstractionAlertsService = require('../services/company-contacts/setup/submit-abstraction-alerts.service.js')
+const SubmitCancelService = require('../services/company-contacts/setup/submit-cancel.service.js')
 const SubmitCheckService = require('../services/company-contacts/setup/submit-check.service.js')
 const SubmitContactEmailService = require('../services/company-contacts/setup/submit-contact-email.service.js')
 const SubmitContactNameService = require('../services/company-contacts/setup/submit-contact-name.service.js')
 const ViewAbstractionAlertsService = require('../services/company-contacts/setup/view-abstraction-alerts.service.js')
+const ViewCancelService = require('../services/company-contacts/setup/view-cancel.service.js')
 const ViewCheckService = require('../services/company-contacts/setup/view-check.service.js')
 const ViewContactEmailService = require('../services/company-contacts/setup/view-contact-email.service.js')
 const ViewContactNameService = require('../services/company-contacts/setup/view-contact-name.service.js')
@@ -29,6 +31,14 @@ async function viewAbstractionAlerts(request, h) {
   const pageData = await ViewAbstractionAlertsService.go(sessionId)
 
   return h.view(`company-contacts/setup/abstraction-alerts.njk`, pageData)
+}
+
+async function viewCancel(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewCancelService.go(sessionId)
+
+  return h.view(`company-contacts/setup/cancel.njk`, pageData)
 }
 
 async function viewCheck(request, h) {
@@ -72,6 +82,16 @@ async function submitAbstractionAlerts(request, h) {
   }
 
   return h.redirect(pageData.redirectUrl)
+}
+
+async function submitCancel(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const { redirectUrl } = await SubmitCancelService.go(sessionId)
+
+  return h.redirect(redirectUrl)
 }
 
 async function submitCheck(request, h) {
@@ -120,10 +140,12 @@ async function submitContactName(request, h) {
 module.exports = {
   setup,
   viewAbstractionAlerts,
+  viewCancel,
   viewCheck,
   viewContactEmail,
   viewContactName,
   submitAbstractionAlerts,
+  submitCancel,
   submitCheck,
   submitContactEmail,
   submitContactName
