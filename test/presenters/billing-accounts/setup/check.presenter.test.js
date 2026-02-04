@@ -31,7 +31,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/select-contact`,
+          href: `/system/billing-accounts/setup/${session.id}/contact`,
           text: 'Back'
         },
         pageTitle: 'Check billing account details',

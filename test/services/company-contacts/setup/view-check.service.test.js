@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,6 +19,7 @@ describe('Company Contacts - Setup - Check Service', () => {
   let company
   let session
   let sessionData
+  let yarStub
 
   beforeEach(async () => {
     company = CustomersFixtures.company()
@@ -25,21 +27,32 @@ describe('Company Contacts - Setup - Check Service', () => {
     sessionData = { company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' }
 
     session = await SessionHelper.add({ data: sessionData })
+
+    yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCheckService.go(session.id)
+      const result = await ViewCheckService.go(session.id, yarStub)
 
       expect(result).to.equal({
         abstractionAlerts: 'Yes',
         email: 'eric@test.com',
         links: {
           abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
+          cancel: `/system/company-contacts/setup/${session.id}/cancel`,
           email: `/system/company-contacts/setup/${session.id}/contact-email`,
           name: `/system/company-contacts/setup/${session.id}/contact-name`
         },
         name: 'Eric',
+        notification: {
+          text: 'Notification',
+          title: 'Test'
+        },
         pageTitle: 'Check contact',
         pageTitleCaption: 'Tyrell Corporation'
       })
@@ -47,7 +60,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     describe('marks the check page as visited', () => {
       it('updates the session', async () => {
-        await ViewCheckService.go(session.id)
+        await ViewCheckService.go(session.id, yarStub)
 
         const refreshedSession = await session.$query()
 

@@ -1,5 +1,7 @@
 {% extends 'layout.njk' %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
@@ -12,12 +14,56 @@
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
+  <h2 class="govuk-heading-l">{{ pageSubHeading }}</h2>
+
+  {# Filters #}
+  {% set filtersForm %}
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-3">Filter by</h2>
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
+
+      {# Filter by year created #}
+      {{ govukInput({
+        classes: "govuk-input--width-3",
+        id: "yearCreated",
+        label: {
+          classes: "govuk-label--s",
+          isPageHeading: false,
+          text: "Year created"
+        },
+        name: "yearCreated",
+        value: filters.yearCreated,
+        errorMessage: error.yearCreated
+      }) }}
+
+      <div class="govuk-button-group">
+        {{ govukButton({
+          preventDoubleClick: true,
+          text: "Apply filters"
+        }) }}
+
+        {{ govukButton({
+          classes: "govuk-button--secondary ",
+          name: "clearFilters",
+          preventDoubleClick: true,
+          text: "Clear filters",
+          value: 'reset'
+        }) }}
+      </div>
+    </form>
+  {% endset %}
+
+  {{ govukDetails({
+    classes: "govuk-!-margin-bottom-2",
+    html: filtersForm,
+    open: filters.openFilter,
+    summaryText: "Filters"
+  }) }}
+
   {# Results #}
   {% if billRuns|length === 0 %}
     <p>No bill runs found.</p>
   {% else %}
-    <h2 class="govuk-heading-l">{{ pageSubHeading }}</h2>
-
     {% set tableRows = [] %}
     {% for billRun in billRuns %}
       {# Set an easier to use index #}

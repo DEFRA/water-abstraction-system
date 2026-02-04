@@ -81,7 +81,7 @@ function _filterItems(userScopes, resultType) {
   }
 
   items.push(
-    { checked: resultType === 'licenceHolder', value: 'licenceHolder', text: 'Licence holders' },
+    { checked: resultType === 'company', value: 'company', text: 'Customers' },
     { checked: resultType === 'licence', value: 'licence', text: 'Licences' },
     { checked: resultType === 'monitoringStation', value: 'monitoringStation', text: 'Monitoring stations' },
     { checked: resultType === 'returnLog', value: 'returnLog', text: 'Return logs' },
@@ -174,10 +174,10 @@ function _licenceCount(licenceDocumentRoles) {
   return uniqueLicenceIds.length
 }
 
-function _licenceHolder(licenceHolder) {
-  const { exact, model } = licenceHolder
+function _company(company) {
+  const { exact, model } = company
 
-  const { id, licenceDocumentRoles, name: holderName, type } = model
+  const { id, licenceDocumentRoles, name, type } = model
 
   const licenceCount = _licenceCount(licenceDocumentRoles)
 
@@ -188,9 +188,9 @@ function _licenceHolder(licenceHolder) {
     col3Value: type,
     exact,
     link: `/system/companies/${id}/licences`,
-    reference: holderName,
+    reference: name,
     statusTag: null,
-    type: 'Holder'
+    type: 'Name'
   }
 }
 
@@ -223,10 +223,10 @@ function _result(result) {
   switch (result.type) {
     case 'billingAccount':
       return _billingAccount(result)
+    case 'company':
+      return _company(result)
     case 'licence':
       return _licence(result)
-    case 'licenceHolder':
-      return _licenceHolder(result)
     case 'monitoringStation':
       return _monitoringStation(result)
     case 'returnLog':
@@ -267,19 +267,17 @@ function _returnLog(returnLog) {
 
 function _user(user) {
   const { exact, model } = user
-  const { application, id, lastLogin, username } = model
-
-  const statusTag = formatReturnLogStatus(model)
+  const { id, lastLogin, username } = model
 
   return {
-    col2Title: 'Type',
-    col2Value: application === 'water_vml' ? 'External' : 'Internal',
+    col2Title: 'Role',
+    col2Value: model.$role(),
     col3Title: 'Last signed in',
     col3Value: formatLongDate(lastLogin),
     exact,
     link: `/user/${id}/status`,
     reference: username,
-    statusTag,
+    statusTag: null,
     type: 'User'
   }
 }

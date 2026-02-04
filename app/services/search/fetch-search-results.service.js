@@ -26,29 +26,24 @@ const BILLING_ACCOUNT_SQL = `
 // type of record
 const ID_FIELD_FOR_TABLE = {
   billingAccount: 'row_uu_id',
-  licenceHolder: 'row_uu_id',
+  company: 'row_uu_id',
   licence: 'row_uu_id',
   monitoringStation: 'row_uu_id',
   returnLog: 'row_uu_id',
   user: 'row_int_id'
 }
 
-const LICENCE_HOLDER_SQL = `
-SELECT
-  'licenceHolder' AS row_type,
-  c.id AS row_uu_id,
-  CAST (NULL AS INT) AS row_int_id,
-  c."name" ILIKE ? AS exact,
-  2 AS table_order,
-  LOWER(c."name") AS row_order,
-  CAST (NULL AS DATE) AS date_order
-FROM
-  companies c
-WHERE
-  EXISTS (SELECT 1 FROM licence_document_roles ldr
-    INNER JOIN licence_roles lr ON lr.id = ldr.licence_role_id
-    WHERE lr."name" = 'licenceHolder' AND ldr.company_id = c.id)
-  AND c."name" ILIKE ?
+const COMPANY_SQL = `
+  SELECT
+    'company' AS row_type,
+    c.id AS row_uu_id,
+    CAST (NULL AS INT) AS row_int_id,
+    c."name" ILIKE ? AS exact,
+    2 AS table_order,
+    LOWER(c."name") AS row_order,
+    CAST (NULL AS DATE) AS date_order
+  FROM companies c
+  WHERE c."name" ILIKE ?
 `
 
 const LICENCE_SQL = `
@@ -100,7 +95,9 @@ const USER_SQL = `
     username AS row_order,
     CAST (NULL AS DATE) AS date_order
   FROM users
-  WHERE username ILIKE ?
+  WHERE
+    application = 'water_vml'
+    AND username ILIKE ?
 `
 
 /**
@@ -149,7 +146,7 @@ function _allSql(exactQuery, partialQuery, resultTypes, page) {
   const searchSqls = { statements: [], params: [] }
 
   _billingAccountSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
-  _licenceHolderSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
+  _companySql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
   _licenceSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
   _monitoringStationSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
   _returnLogSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
@@ -185,18 +182,13 @@ function _exactQuery(query) {
     .replaceAll('_', String.raw`\_`)
 }
 
-function _licenceHolderSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) {
-  if (resultTypes.includes('licenceHolder')) {
-    searchSqls.statements.push(LICENCE_HOLDER_SQL)
+function _companySql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) {
+  if (resultTypes.includes('company')) {
+    searchSqls.statements.push(COMPANY_SQL)
     searchSqls.params.push(exactQuery, partialQuery)
 
     countSqls.statements.push(`
-      (SELECT COUNT(*) FROM companies c
-      WHERE
-        EXISTS (SELECT 1 FROM licence_document_roles ldr
-          INNER JOIN licence_roles lr ON lr.id = ldr.licence_role_id
-          WHERE lr."name" = 'licenceHolder' AND ldr.company_id = c.id)
-        AND c."name" ILIKE ?)
+      (SELECT COUNT(*) FROM companies c WHERE c."name" ILIKE ?)
     `)
     countSqls.params.push(partialQuery)
   }
@@ -257,7 +249,7 @@ function _userSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) 
     searchSqls.params.push(exactQuery, partialQuery)
 
     countSqls.statements.push(`
-      (SELECT COUNT(*) FROM users WHERE username ILIKE ?)
+      (SELECT COUNT(*) FROM users WHERE application = 'water_vml' AND username ILIKE ?)
     `)
     countSqls.params.push(partialQuery)
   }

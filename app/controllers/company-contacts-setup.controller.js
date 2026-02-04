@@ -32,9 +32,12 @@ async function viewAbstractionAlerts(request, h) {
 }
 
 async function viewCheck(request, h) {
-  const { sessionId } = request.params
+  const {
+    params: { sessionId },
+    yar
+  } = request
 
-  const pageData = await ViewCheckService.go(sessionId)
+  const pageData = await ViewCheckService.go(sessionId, yar)
 
   return h.view(`company-contacts/setup/check.njk`, pageData)
 }
@@ -58,10 +61,11 @@ async function viewContactName(request, h) {
 async function submitAbstractionAlerts(request, h) {
   const {
     payload,
-    params: { sessionId }
+    params: { sessionId },
+    yar
   } = request
 
-  const pageData = await SubmitAbstractionAlertsService.go(sessionId, payload)
+  const pageData = await SubmitAbstractionAlertsService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`company-contacts/setup/abstraction-alerts.njk`, pageData)
@@ -72,22 +76,23 @@ async function submitAbstractionAlerts(request, h) {
 
 async function submitCheck(request, h) {
   const {
-    payload,
-    params: { sessionId }
+    params: { sessionId },
+    yar
   } = request
 
-  await SubmitCheckService.go(sessionId, payload)
+  const { redirectUrl } = await SubmitCheckService.go(sessionId, yar)
 
-  return h.redirect('')
+  return h.redirect(redirectUrl)
 }
 
 async function submitContactEmail(request, h) {
   const {
     payload,
-    params: { sessionId }
+    params: { sessionId },
+    yar
   } = request
 
-  const pageData = await SubmitContactEmailService.go(sessionId, payload)
+  const pageData = await SubmitContactEmailService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`company-contacts/setup/contact-email.njk`, pageData)
@@ -99,10 +104,11 @@ async function submitContactEmail(request, h) {
 async function submitContactName(request, h) {
   const {
     payload,
-    params: { sessionId }
+    params: { sessionId },
+    yar
   } = request
 
-  const pageData = await SubmitContactNameService.go(sessionId, payload)
+  const pageData = await SubmitContactNameService.go(sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view(`company-contacts/setup/contact-name.njk`, pageData)

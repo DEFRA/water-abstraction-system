@@ -12,9 +12,18 @@ const routes = [
         access: {
           scope: ['billing']
         }
-      },
-      plugins: {
-        crumb: false
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/bill-runs',
+    options: {
+      handler: BillRunsController.submitIndex,
+      auth: {
+        access: {
+          scope: ['billing']
+        }
       }
     }
   },

@@ -24,9 +24,10 @@ function go(session) {
     pageTitle: 'Check contact',
     pageTitleCaption: company.name,
     links: {
+      abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
+      cancel: `/system/company-contacts/setup/${session.id}/cancel`,
       email: `/system/company-contacts/setup/${session.id}/contact-email`,
-      name: `/system/company-contacts/setup/${session.id}/contact-name`,
-      abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`
+      name: `/system/company-contacts/setup/${session.id}/contact-name`
     }
   }
 }

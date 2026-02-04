@@ -9,33 +9,30 @@ const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixtures.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const CheckService = require('../../../../app/services/billing-accounts/setup/check.service.js')
+const ContactPresenter = require('../../../../app/presenters/billing-accounts/setup/contact.presenter.js')
 
-describe('Billing Accounts - Setup - View Check Service', () => {
+describe('Billing Accounts - Setup - Contact Presenter', () => {
   let session
-  let sessionData
 
-  beforeEach(async () => {
-    sessionData = {
+  beforeEach(() => {
+    session = {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
-
-    session = await SessionHelper.add({ data: sessionData })
   })
 
   describe('when called', () => {
-    it('returns page data for the view', async () => {
-      const result = await CheckService.go(session.id)
+    it('returns page data for the view', () => {
+      const result = ContactPresenter.go(session)
 
       expect(result).to.equal({
         backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/contact`,
+          href: `/system/billing-accounts/setup/${session.id}/fao`,
           text: 'Back'
         },
-        pageTitle: 'Check billing account details',
+        contactSelected: null,
+        pageTitle: `Set up a contact for ${session.billingAccount.company.name}`,
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })
     })

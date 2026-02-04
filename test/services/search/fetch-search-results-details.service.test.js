@@ -32,7 +32,7 @@ describe('Search - Fetch Search Results Details service', () => {
   beforeEach(() => {
     idsByType = {
       billingAccount: [1, 2],
-      licenceHolder: [3, 4],
+      company: [3, 4],
       licence: [5, 6],
       monitoringStation: [7, 8],
       returnLog: [9, 10],
@@ -78,6 +78,7 @@ describe('Search - Fetch Search Results Details service', () => {
     userSpy = Sinon.stub().resolves([])
     Sinon.stub(UserModel, 'query').returns({
       findByIds: userSpy,
+      modify: Sinon.stub().returnsThis(),
       select: Sinon.stub().returnsThis()
     })
   })
@@ -92,7 +93,7 @@ describe('Search - Fetch Search Results Details service', () => {
 
       expect(result).to.equal({
         billingAccount: [],
-        licenceHolder: [],
+        company: [],
         licence: [],
         monitoringStation: [],
         returnLog: [],
@@ -135,15 +136,15 @@ describe('Search - Fetch Search Results Details service', () => {
     })
   })
 
-  describe('when licence holders are requested', () => {
+  describe('when companies are requested', () => {
     beforeEach(() => {
-      idsByType = { licenceHolder: [3, 4] }
+      idsByType = { company: [3, 4] }
     })
 
-    it('finds the correct licence holders', async () => {
+    it('finds the correct companies', async () => {
       const result = await FetchSearchResultsDetailsService.go(idsByType)
 
-      expect(result).to.equal({ licenceHolder: [] })
+      expect(result).to.equal({ company: [] })
 
       expect(billingAccountSpy.called).to.be.false()
       expect(companySpy.calledOnce).to.be.true()

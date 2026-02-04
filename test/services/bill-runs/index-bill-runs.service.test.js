@@ -17,6 +17,7 @@ const IndexBillRunsService = require('../../../app/services/bill-runs/index-bill
 
 describe('Index Bill Runs service', () => {
   let page
+  let yarStub
 
   beforeEach(() => {
     // It doesn't matter for these tests what busy state the service returns, only that it returns one.
@@ -33,12 +34,15 @@ describe('Index Bill Runs service', () => {
         results: _fetchedBillRuns(),
         total: 2
       })
+
+      yarStub = { get: Sinon.stub().returns(null) }
     })
 
     it('returns the page data for the view', async () => {
-      const result = await IndexBillRunsService.go(page)
+      const result = await IndexBillRunsService.go(yarStub, page)
 
       expect(result.billRuns).to.have.length(2)
+      expect(result.filters.openFilter).to.be.false()
       expect(result.pageTitle).to.equal('Bill runs')
       expect(result.pagination.component).not.to.exist()
       expect(result.pagination.numberOfPages).to.equal(1)
@@ -56,9 +60,10 @@ describe('Index Bill Runs service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await IndexBillRunsService.go(page)
+        const result = await IndexBillRunsService.go(yarStub, page)
 
         expect(result.billRuns).to.have.length(2)
+        expect(result.filters.openFilter).to.be.false()
         expect(result.pageTitle).to.equal('Bill runs')
         expect(result.pagination.component).to.exist()
         expect(result.pagination.numberOfPages).to.equal(3) // 70 results with 25 per page = 3 pages
@@ -77,9 +82,10 @@ describe('Index Bill Runs service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await IndexBillRunsService.go(page)
+        const result = await IndexBillRunsService.go(yarStub, page)
 
         expect(result.billRuns).to.have.length(2)
+        expect(result.filters.openFilter).to.be.false()
         expect(result.pageTitle).to.equal('Bill runs')
         expect(result.pagination.component).to.exist()
         expect(result.pagination.numberOfPages).to.equal(3) // 70 results with 25 per page = 3 pages
@@ -98,9 +104,10 @@ describe('Index Bill Runs service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await IndexBillRunsService.go(page)
+        const result = await IndexBillRunsService.go(yarStub, page)
 
         expect(result.billRuns).to.be.empty()
+        expect(result.filters.openFilter).to.be.false()
         expect(result.pageTitle).to.equal('Bill runs')
         expect(result.pagination.component).to.exist()
         expect(result.pagination.numberOfPages).to.equal(3) // 70 results with 25 per page = 3 pages
@@ -108,7 +115,59 @@ describe('Index Bill Runs service', () => {
       })
     })
   })
+
+  describe('when the filters are assessed', () => {
+    beforeEach(() => {
+      // For the purposes of these tests the results don't matter
+      Sinon.stub(FetchBillRunsService, 'go').resolves({ results: [], total: 0 })
+    })
+
+    describe('and none were ever set or they were cleared', () => {
+      beforeEach(() => {
+        yarStub = { get: Sinon.stub().returns(null) }
+      })
+
+      it('returns blank filters and that the controls should be closed', async () => {
+        const result = await IndexBillRunsService.go(yarStub, page)
+
+        expect(result.filters.openFilter).to.be.false()
+      })
+    })
+
+    describe('and the filters were submitted empty', () => {
+      beforeEach(() => {
+        yarStub = { get: Sinon.stub().returns(_billRunsFilter()) }
+      })
+
+      it('returns blank filters and that the controls should be closed', async () => {
+        const result = await IndexBillRunsService.go(yarStub, page)
+
+        expect(result.filters.openFilter).to.be.false()
+      })
+    })
+
+    describe('when a filter was applied', () => {
+      beforeEach(() => {
+        const filters = _billRunsFilter()
+
+        filters.yearCreated = 2025
+        yarStub = { get: Sinon.stub().returns(filters) }
+      })
+
+      it('returns the saved filters and that the controls should be open', async () => {
+        const result = await IndexBillRunsService.go(yarStub, page)
+
+        expect(result.filters.openFilter).to.be.true()
+      })
+    })
+  })
 })
+
+function _billRunsFilter() {
+  return {
+    yearCreated: null
+  }
+}
 
 function _fetchedBillRuns() {
   return [
