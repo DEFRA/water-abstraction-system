@@ -40,9 +40,9 @@ describe('Company Contacts - Setup - Cancel Service', () => {
     it('clears the session', async () => {
       await SubmitCancelService.go(session.id)
 
-      const noSession = await SessionModel.query().where('id', session.id)
+      const deletedSession = await SessionModel.query().findById(session.id)
 
-      expect(noSession).to.equal([])
+      expect(deletedSession).to.be.null()
     })
   })
 })
