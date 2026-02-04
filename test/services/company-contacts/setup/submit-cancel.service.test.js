@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModel = require('../../../../app/models/session.model.js')
 
 // Thing under test
 const SubmitCancelService = require('../../../../app/services/company-contacts/setup/submit-cancel.service.js')
@@ -34,6 +35,14 @@ describe('Company Contacts - Setup - Cancel Service', () => {
       expect(result).to.equal({
         redirectUrl: `/system/companies/${company.id}/contacts`
       })
+    })
+
+    it('clears the session', async () => {
+      await SubmitCancelService.go(session.id)
+
+      const noSession = await SessionModel.query().where('id', session.id)
+
+      expect(noSession).to.equal([])
     })
   })
 })
