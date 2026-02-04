@@ -11,6 +11,7 @@ const { expect } = Code
 // Things to stub
 const CheckBusyBillRunsService = require('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
 const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill-runs.service.js')
+const FetchRegionsService = require('../../../app/services/bill-runs/setup/fetch-regions.service.js')
 
 // Thing under test
 const SubmitIndexBillRunsService = require('../../../app/services/bill-runs/submit-index-bill-runs.service.js')
@@ -21,6 +22,10 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
   beforeEach(() => {
     Sinon.stub(CheckBusyBillRunsService, 'go').resolves('none')
+    Sinon.stub(FetchRegionsService, 'go').resolves([
+      { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' },
+      { id: 'fd3d1154-c83d-4580-bcd6-46bfc380f233', displayName: 'Midlands' }
+    ])
 
     yarStub = {
       clear: Sinon.stub().returns(),
@@ -71,7 +76,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         const setArgs = yarStub.set.args[0]
 
         expect(setArgs[0]).to.equal('billRunsFilter')
-        expect(setArgs[1]).to.equal({ yearCreated: undefined })
+        expect(setArgs[1]).to.equal({ regions: [], yearCreated: null })
       })
     })
 
@@ -92,7 +97,42 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         const setArgs = yarStub.set.args[0]
 
         expect(setArgs[0]).to.equal('billRunsFilter')
-        expect(setArgs[1]).to.equal({ yearCreated: '2025' })
+        expect(setArgs[1]).to.equal({ regions: [], yearCreated: '2025' })
+      })
+
+      describe('and a single region filter has been selected ("regions" is a string)', () => {
+        beforeEach(() => {
+          payload = { regions: '1d562e9a-2104-41d9-aa75-c008a7ec9059', yearCreated: '2025' }
+        })
+
+        it('saves the state of the region filter as an array in the session', async () => {
+          await SubmitIndexBillRunsService.go(payload, yarStub)
+
+          const setArgs = yarStub.set.args[0]
+
+          expect(setArgs[0]).to.equal('billRunsFilter')
+          expect(setArgs[1]).to.equal({ regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'], yearCreated: '2025' })
+        })
+      })
+
+      describe('and multiple region filters have been selected ("regions" is an array)', () => {
+        beforeEach(() => {
+          payload = {
+            regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059', 'fd3d1154-c83d-4580-bcd6-46bfc380f233']
+          }
+        })
+
+        it('saves the state of the region filter as an array in the session', async () => {
+          await SubmitIndexBillRunsService.go(payload, yarStub)
+
+          const setArgs = yarStub.set.args[0]
+
+          expect(setArgs[0]).to.equal('billRunsFilter')
+          expect(setArgs[1]).to.equal({
+            regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059', 'fd3d1154-c83d-4580-bcd6-46bfc380f233'],
+            yearCreated: null
+          })
+        })
       })
     })
 
@@ -118,7 +158,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               errorList: [{ href: '#yearCreated', text: 'The year created must be a number' }],
               yearCreated: { text: 'The year created must be a number' }
             },
-            filters: { openFilter: true, yearCreated: 'invalid-year' },
+            filters: { openFilter: true, regions: [], yearCreated: 'invalid-year' },
             billRuns: [
               {
                 id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
@@ -179,7 +219,11 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               },
               numberOfPages: 3,
               showingMessage: 'Showing 2 of 70 bill runs'
-            }
+            },
+            regions: [
+              { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' },
+              { id: 'fd3d1154-c83d-4580-bcd6-46bfc380f233', displayName: 'Midlands' }
+            ]
           })
         })
       })
@@ -201,7 +245,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               errorList: [{ href: '#yearCreated', text: 'The year created must be a number' }],
               yearCreated: { text: 'The year created must be a number' }
             },
-            filters: { openFilter: true, yearCreated: 'invalid-year' },
+            filters: { openFilter: true, regions: [], yearCreated: 'invalid-year' },
             billRuns: [
               {
                 id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
@@ -234,7 +278,11 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
             pagination: {
               numberOfPages: 1,
               showingMessage: 'Showing all 2 bill runs'
-            }
+            },
+            regions: [
+              { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' },
+              { id: 'fd3d1154-c83d-4580-bcd6-46bfc380f233', displayName: 'Midlands' }
+            ]
           })
         })
       })
