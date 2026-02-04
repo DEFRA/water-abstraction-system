@@ -11,7 +11,7 @@ const { expect } = Code
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/cancel' page
+ * Orchestrates cancelling the data for '/company-contacts/setup/{sessionId}/cancel' page
  *
  * @module SubmitCancelService
  */
@@ -9,7 +9,7 @@
 const SessionModel = require('../../../models/session.model.js')
 
 /**
- * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/cancel' page
+ * Orchestrates cancelling the data for '/company-contacts/setup/{sessionId}/cancel' page
  *
  * @param {string} sessionId - The UUID of the current session
  *
@@ -18,8 +18,12 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
 
+  const { company } = session
+
+  await SessionModel.query().delete().where('id', sessionId)
+
   return {
-    redirectUrl: `/system/companies/${session.company.id}/contacts`
+    redirectUrl: `/system/companies/${company.id}/contacts`
   }
 }
 

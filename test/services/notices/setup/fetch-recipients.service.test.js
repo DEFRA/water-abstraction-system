@@ -9,7 +9,7 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 const { NoticeJourney, NoticeType } = require('../../../../app/lib/static-lookups.lib.js')
 
 // Things we need to stub

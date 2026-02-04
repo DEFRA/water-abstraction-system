@@ -12,15 +12,21 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const ViewCancelService = require('../../../../app/services/company-contacts/setup/view-cancel.service.js')
+const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 
 describe('Company Contacts - Setup - Cancel Service', () => {
+  let company
   let session
   let sessionData
 
   beforeEach(async () => {
-    sessionData = {}
+    company = CustomersFixtures.company()
 
-    session = await SessionHelper.add({ data: sessionData })
+    sessionData = { company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' }
+
+    session = await SessionHelper.add({
+      data: sessionData
+    })
   })
 
   describe('when called', () => {
@@ -28,11 +34,15 @@ describe('Company Contacts - Setup - Cancel Service', () => {
       const result = await ViewCancelService.go(session.id)
 
       expect(result).to.equal({
+        abstractionAlerts: 'Yes',
         backLink: {
-          href: '',
+          href: `/system/company-contacts/setup/${session.id}/check`,
           text: 'Back'
         },
-        pageTitle: ''
+        email: 'eric@test.com',
+        name: 'Eric',
+        pageTitle: 'You are about to cancel this contact',
+        pageTitleCaption: 'Tyrell Corporation'
       })
     })
   })

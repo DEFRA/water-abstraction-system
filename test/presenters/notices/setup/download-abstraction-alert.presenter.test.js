@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 
 // Thing under test
 const DownloadAbstractionAlertPresenter = require('../../../../app/presenters/notices/setup/download-abstraction-alert.presenter.js')

@@ -11,7 +11,7 @@ const { expect } = Code
 // Test helpers
 const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
