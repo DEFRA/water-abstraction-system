@@ -60,7 +60,7 @@ async function submitAccountType(request, h) {
     return h.view(`billing-accounts/setup/account-type.njk`, pageData)
   }
 
-  return h.redirect('')
+  return h.redirect(pageData.redirectUrl)
 }
 
 async function submitCheck(request, h) {
@@ -100,11 +100,7 @@ async function submitExistingAccount(request, h) {
     return h.view(`billing-accounts/setup/existing-account.njk`, pageData)
   }
 
-  if (pageData.existingAccount === 'new') {
-    return h.redirect(`/system/billing-accounts/setup/${sessionId}/account-type`)
-  }
-
-  return h.redirect(`/system/address/${sessionId}/postcode`)
+  return h.redirect(pageData.redirectUrl)
 }
 
 async function submitExistingAddress(request, h) {
@@ -119,11 +115,7 @@ async function submitExistingAddress(request, h) {
     return h.view(`billing-accounts/setup/existing-address.njk`, pageData)
   }
 
-  if (pageData.addressSelected === 'new') {
-    return h.redirect(`/system/address/${sessionId}/postcode`)
-  }
-
-  return h.redirect(`/system/billing-accounts/setup/${sessionId}/fao`)
+  return h.redirect(pageData.redirectUrl)
 }
 
 async function submitFAO(request, h) {

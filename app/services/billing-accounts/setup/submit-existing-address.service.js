@@ -30,7 +30,7 @@ async function go(sessionId, payload) {
     await _save(session, payload)
 
     return {
-      addressSelected: payload.addressSelected
+      redirectUrl: _redirectUrl(session)
     }
   }
 
@@ -41,6 +41,14 @@ async function go(sessionId, payload) {
     error: validationResult,
     ...pageData
   }
+}
+
+function _redirectUrl(session) {
+  if (session.addressSelected === 'new') {
+    return `/system/address/${session.id}/postcode`
+  }
+
+  return `/system/billing-accounts/setup/${session.id}/fao`
 }
 
 async function _save(session, payload) {
@@ -54,7 +62,7 @@ async function _save(session, payload) {
       redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
     }
   } else {
-    session.addressJourney = null
+    delete session.addressJourney
   }
 
   return session.$update()

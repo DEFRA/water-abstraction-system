@@ -14,7 +14,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 // Thing under test
 const FAOPresenter = require('../../../../app/presenters/billing-accounts/setup/fao.presenter.js')
 
-describe.only('Billing Accounts - Setup - FAO Presenter', () => {
+describe('Billing Accounts - Setup - FAO Presenter', () => {
   let session
 
   beforeEach(() => {
