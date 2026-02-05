@@ -14,7 +14,6 @@
  * @returns {object} The data formatted for the view template
  */
 function go(session, companyAddresses) {
-  console.log(companyAddresses)
   const { billingAccount } = session
   const radioItems = _radioOptions(session.addressSelected, companyAddresses)
 
