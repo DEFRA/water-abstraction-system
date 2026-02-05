@@ -52,7 +52,7 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
         session.contactName = 'Contact Name'
       })
 
-      it('returns the selected contact ID', () => {
+      it('returns the selected contact name', () => {
         const result = ContactNamePresenter.go(session)
 
         expect(result.contactName).to.equal(session.contactName)
