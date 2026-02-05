@@ -77,7 +77,7 @@ describe('User model', () => {
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
-      const result = await UserModel.query().where('userId', testRecord.userId).first()
+      const result = await UserModel.query().where('userId', testRecord.userId).first().limit(1)
 
       expect(result).to.be.an.instanceOf(UserModel)
       expect(result.userId).to.equal(testRecord.userId)
@@ -96,6 +96,7 @@ describe('User model', () => {
         const result = await UserModel.query()
           .where('userId', testRecord.userId)
           .first()
+          .limit(1)
           .withGraphFetched('chargeVersionNotes')
 
         const foundChargeVersionNoteOne = result.chargeVersionNotes.find((chargeVersionNote) => {
@@ -123,7 +124,11 @@ describe('User model', () => {
       })
 
       it('can eager load the groups', async () => {
-        const result = await UserModel.query().where('userId', testRecord.userId).first().withGraphFetched('groups')
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .first()
+          .limit(1)
+          .withGraphFetched('groups')
 
         expect(result).to.be.instanceOf(UserModel)
         expect(result.userId).to.equal(testRecord.userId)
@@ -188,6 +193,7 @@ describe('User model', () => {
         const result = await UserModel.query()
           .where('userId', testRecord.userId)
           .first()
+          .limit(1)
           .withGraphFetched('licenceMonitoringStations')
 
         expect(result).to.be.instanceOf(UserModel)
@@ -222,6 +228,7 @@ describe('User model', () => {
         const result = await UserModel.query()
           .where('userId', testRecord.userId)
           .first()
+          .limit(1)
           .withGraphFetched('returnVersions')
 
         expect(result).to.be.instanceOf(UserModel)
@@ -242,7 +249,11 @@ describe('User model', () => {
       })
 
       it('can eager load the roles', async () => {
-        const result = await UserModel.query().where('userId', testRecord.userId).first().withGraphFetched('roles')
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .first()
+          .limit(1)
+          .withGraphFetched('roles')
 
         expect(result).to.be.instanceOf(UserModel)
         expect(result.userId).to.equal(testRecord.userId)
@@ -262,7 +273,11 @@ describe('User model', () => {
       })
 
       it('can eager load the user groups', async () => {
-        const result = await UserModel.query().where('userId', testRecord.userId).first().withGraphFetched('userGroups')
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .first()
+          .limit(1)
+          .withGraphFetched('userGroups')
 
         expect(result).to.be.instanceOf(UserModel)
         expect(result.userId).to.equal(testRecord.userId)
