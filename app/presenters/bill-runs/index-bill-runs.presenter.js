@@ -22,7 +22,7 @@ const { billRunTypes } = require('../../lib/static-lookups.lib.js')
 function go(billRuns, busyResult, filters, regions) {
   return {
     billRuns: _billRuns(billRuns),
-    billRunTypeItems: _billRunTypeItems(billRunTypes, filters),
+    billRunTypeItems: _billRunTypeItems(filters),
     notification: busyResult === 'none' ? null : _notification(busyResult),
     pageSubHeading: 'View a bill run',
     pageTitle: 'Bill runs',
@@ -49,19 +49,15 @@ function _billRuns(billRuns) {
   })
 }
 
-function _billRunTypeItems(billRunTypes, filters) {
-  const items = []
-
-  for (const billRunType in billRunTypes) {
-    items.push({
-      checked: filters.billRunTypes.includes(billRunType),
-      id: billRunType,
-      text: billRunTypes[billRunType],
-      value: billRunType
-    })
-  }
-
-  return items
+function _billRunTypeItems(filters) {
+  return Object.entries(billRunTypes).map(([key, value]) => {
+    return {
+      checked: filters.billRunTypes.includes(key),
+      id: key,
+      text: value,
+      value: key
+    }
+  })
 }
 
 function _formatTotal(status, batchType, netTotal) {
