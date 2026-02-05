@@ -99,7 +99,7 @@ class UserModel extends BaseModel {
    *
    * ```javascript
    * return UserModel.query()
-   *   .where('userId', userId).first()
+   *   .where('userId', userId).first().limit(1)
    *   .modify('permissions')
    * ```
    *

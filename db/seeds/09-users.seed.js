@@ -108,7 +108,7 @@ function _generateHashedPassword() {
 }
 
 async function _idInUse(userId) {
-  const result = await UserModel.query().where('userId', userId)
+  const result = await UserModel.query().where('userId', userId).first().limit(1)
 
   return !!result
 }
