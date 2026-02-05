@@ -29,7 +29,7 @@ class UserRoleModel extends BaseModel {
         modelClass: 'user.model',
         join: {
           from: 'userRoles.userId',
-          to: 'users.user_id'
+          to: 'users.userId'
         }
       }
     }

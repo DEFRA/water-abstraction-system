@@ -78,7 +78,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
     describe('and licence monitoring station records exist for them', () => {
       beforeEach(async () => {
         let licenceMonitoringStation = await LicenceMonitoringStationHelper.add({
-          createdBy: user.id,
+          createdBy: 'user.userId',
           licenceId: licence.id,
           licenceVersionPurposeConditionId: licenceVersionPurposeCondition.id,
           monitoringStationId: monitoringStation.id,
@@ -103,7 +103,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
           abstractionPeriodStartMonth: 4,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3,
-          createdBy: user.id,
+          createdBy: 'user.userId',
           licenceId: licence.id,
           monitoringStationId: monitoringStation.id,
           restrictionType: 'reduce',
@@ -132,7 +132,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
         notifications.push(notification)
 
         licenceMonitoringStation = await LicenceMonitoringStationHelper.add({
-          createdBy: user.id,
+          createdBy: 'user.userId',
           deletedAt: new Date('2025-08-27 21:22:05'),
           licenceId: licence.id,
           licenceVersionPurposeConditionId: licenceVersionPurposeCondition.id,
@@ -172,7 +172,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
             statusUpdatedAt: licenceMonitoringStations[1].statusUpdatedAt,
             thresholdUnit: licenceMonitoringStations[1].thresholdUnit,
             thresholdValue: licenceMonitoringStations[1].thresholdValue,
-            user: { id: user.id, username: user.username }
+            user: { id: user.userId, username: user.username }
           },
           {
             createdAt: licenceMonitoringStations[0].createdAt,
@@ -196,7 +196,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
             statusUpdatedAt: licenceMonitoringStations[0].statusUpdatedAt,
             thresholdUnit: licenceMonitoringStations[0].thresholdUnit,
             thresholdValue: licenceMonitoringStations[0].thresholdValue,
-            user: { id: user.id, username: user.username }
+            user: { id: user.userId, username: user.username }
           }
         ])
       })

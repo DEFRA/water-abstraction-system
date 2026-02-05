@@ -114,8 +114,18 @@ async function _idInUse(userId) {
 }
 
 async function _insert(user, password) {
-  const { application, badLogins, enabled, userId, lastLogin, resetGuid, resetGuidCreatedAt, resetRequired, username } =
-    user
+  const {
+    application,
+    badLogins,
+    enabled,
+    id,
+    userId,
+    lastLogin,
+    resetGuid,
+    resetGuidCreatedAt,
+    resetRequired,
+    username
+  } = user
 
   // NOTE: Seeding users is a pain (!) because of the previous teams choice to use a custom sequence for the ID instead
   // of sticking with UUIDs. This means it is possible that, for example, a user with
@@ -128,6 +138,8 @@ async function _insert(user, password) {
 
   if (idInUse) {
     return UserModel.query().insert({
+      id,
+      userId,
       application,
       badLogins,
       enabled,

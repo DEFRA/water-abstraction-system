@@ -23,7 +23,7 @@ const UserModel = require('../../models/user.model.js')
  * @returns {Promise<object>} returns an object containing the matching `UserModel` and an array of its roles and groups
  */
 async function go(userId) {
-  const user = await UserModel.query().findById(userId).withGraphFetched('[roles, groups.roles]')
+  const user = await UserModel.query().where('userId', userId).first().withGraphFetched('[roles, groups.roles]')
 
   if (!user) {
     return {

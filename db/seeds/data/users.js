@@ -2,6 +2,7 @@
 
 const data = [
   {
+    id: 'c669eebc-5c54-4756-87d0-97883fe2e10e',
     userId: 100000,
     username: 'admin-internal@wrls.gov.uk',
     password: 'P@55word',
@@ -14,6 +15,7 @@ const data = [
     enabled: true
   },
   {
+    id: '85cb51ba-cf1d-40be-94a8-05b60fc346fe',
     userId: 100001,
     username: 'super.user@wrls.gov.uk',
     password: 'P@55word',
@@ -26,6 +28,7 @@ const data = [
     enabled: true
   },
   {
+    id: 'ed1010c3-1e84-45a5-baff-0afdb79b15fa',
     userId: 100002,
     username: 'environment.officer@wrls.gov.uk',
     password: 'P@55word',
@@ -38,6 +41,7 @@ const data = [
     enabled: true
   },
   {
+    id: '69a702de-57e9-4804-b07c-0c5739b82629',
     userId: 100003,
     username: 'waste.industry.regulatory.services@wrls.gov.uk',
     password: 'P@55word',
@@ -50,6 +54,7 @@ const data = [
     enabled: true
   },
   {
+    id: '61b4a353-3d88-4793-a5a4-2ec0d168de10',
     userId: 100004,
     username: 'billing.data@wrls.gov.uk',
     password: 'P@55word',
@@ -62,6 +67,7 @@ const data = [
     enabled: true
   },
   {
+    id: '6415bb85-93d2-4297-8ae7-311677ef99a0',
     userId: 100005,
     username: 'permitting.support.centre@wrls.gov.uk',
     password: 'P@55word',
@@ -74,6 +80,7 @@ const data = [
     enabled: true
   },
   {
+    id: '7848db90-ed73-464a-ba08-a182e34dc36d',
     userId: 100006,
     username: 'national.permitting.service@wrls.gov.uk',
     password: 'P@55word',
@@ -86,6 +93,7 @@ const data = [
     enabled: true
   },
   {
+    id: '225101af-d916-455d-b9e3-38d9ee65bfb3',
     userId: 100007,
     username: 'external@example.co.uk',
     password: 'P@55word',
@@ -98,6 +106,7 @@ const data = [
     enabled: true
   },
   {
+    id: 'c3bfac0b-1a5c-425e-b3c1-e9c23359417b',
     userId: 100008,
     username: 'jon.lee@example.co.uk',
     password: 'P@55word',
@@ -110,6 +119,7 @@ const data = [
     enabled: false
   },
   {
+    id: 'e26e222d-1b77-4eaa-ac2e-18f6cd334907',
     userId: 100009,
     username: 'rachel.stevens@example.co.uk',
     password: 'P@55word',
@@ -122,6 +132,7 @@ const data = [
     enabled: true
   },
   {
+    id: '2ecf9343-b343-42e3-800d-202cd4ff1205',
     userId: 100010,
     username: 'basic.access@wrls.gov.uk',
     password: 'P@55word',
@@ -134,6 +145,7 @@ const data = [
     enabled: true
   },
   {
+    id: 'b5b4d51e-c33b-4905-ad5f-5e37572bf408',
     userId: 100011,
     username: 'digitise.editor@wrls.gov.uk',
     password: 'P@55word',
@@ -146,6 +158,7 @@ const data = [
     enabled: true
   },
   {
+    id: '5d32f48e-927d-457a-a178-83d5a1b66596',
     userId: 100012,
     username: 'digitise.approver@wrls.gov.uk',
     password: 'P@55word',
@@ -158,6 +171,7 @@ const data = [
     enabled: true
   },
   {
+    id: 'c9b6477a-1367-4e3e-8cba-d1166d8a4ba3',
     userId: 100013,
     username: 'tina.barrett@example.co.uk',
     password: 'VOID',

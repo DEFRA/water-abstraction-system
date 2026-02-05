@@ -38,7 +38,8 @@ async function go(userId, yar) {
 
 async function _fetchProfileDetails(userId) {
   return UserModel.query()
-    .findById(userId)
+    .where('userId', userId)
+    .first()
     .select([
       ref('userData:contactDetails.address').castText().as('address'),
       ref('userData:contactDetails.email').castText().as('email'),

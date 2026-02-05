@@ -41,7 +41,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
         expect(result).to.equal(
           {
             createdAt: timestamp,
-            createdBy: user.id,
+            createdBy: 'user.userId',
             current: true,
             metadata,
             nilReturn: false,
@@ -71,7 +71,7 @@ describe('Return Logs - Setup - Create Return Submission service', () => {
         expect(result).to.equal(
           {
             createdAt: timestamp,
-            createdBy: user.id,
+            createdBy: 'user.userId',
             current: true,
             metadata,
             nilReturn: false,
