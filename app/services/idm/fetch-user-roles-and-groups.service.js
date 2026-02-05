@@ -25,8 +25,8 @@ const UserModel = require('../../models/user.model.js')
 async function go(userId) {
   const user = await UserModel.query()
     .where('userId', userId)
-    .first()
     .limit(1)
+    .first()
     .withGraphFetched('[roles, groups.roles]')
 
   if (!user) {
