@@ -87,4 +87,26 @@ describe('Address - Postcode Presenter', () => {
       })
     })
   })
+
+  describe('the "activeNavBar" property', () => {
+    describe('when called with an activeNavBar set in the session', () => {
+      it('returns the activeNavBar', () => {
+        const result = PostcodePresenter.go(session)
+
+        expect(result.activeNavBar).to.equal(session.addressJourney.activeNavBar)
+      })
+    })
+
+    describe('when called with no activeNavBar set in the session', () => {
+      beforeEach(async () => {
+        session.addressJourney.activeNavBar = null
+      })
+
+      it('returns null', () => {
+        const result = PostcodePresenter.go(session)
+
+        expect(result.activeNavBar).to.equal(null)
+      })
+    })
+  })
 })

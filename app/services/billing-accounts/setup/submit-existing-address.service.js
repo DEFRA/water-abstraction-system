@@ -51,8 +51,10 @@ async function _save(session, payload) {
       address: {},
       backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-address`, text: 'Back' },
       pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-      redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+      redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
     }
+  } else {
+    session.addressJourney = null
   }
 
   return session.$update()
