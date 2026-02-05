@@ -297,7 +297,11 @@ describe('User model', () => {
       })
 
       it('can eager load the user roles', async () => {
-        const result = await UserModel.query().where('userId', testRecord.userId).withGraphFetched('userRoles').first()
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .withGraphFetched('userRoles')
+          .first()
+          .limit(1)
 
         expect(result).to.be.instanceOf(UserModel)
         expect(result.userId).to.equal(testRecord.userId)
