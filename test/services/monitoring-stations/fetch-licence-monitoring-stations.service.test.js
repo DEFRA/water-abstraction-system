@@ -21,7 +21,7 @@ const UserHelper = require('../../support/helpers/user.helper.js')
 // Thing under test
 const FetchLicenceMonitoringStationsService = require('../../../app/services/monitoring-stations/fetch-licence-monitoring-stations.service.js')
 
-describe.only('Monitoring Stations - Fetch Licence Monitoring Stations service', () => {
+describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () => {
   let licence
   let licenceMonitoringStations
   let licenceVersion
@@ -78,7 +78,7 @@ describe.only('Monitoring Stations - Fetch Licence Monitoring Stations service',
     describe('and licence monitoring station records exist for them', () => {
       beforeEach(async () => {
         let licenceMonitoringStation = await LicenceMonitoringStationHelper.add({
-          createdBy: 'user.userId',
+          createdBy: user.userId,
           licenceId: licence.id,
           licenceVersionPurposeConditionId: licenceVersionPurposeCondition.id,
           monitoringStationId: monitoringStation.id,
@@ -103,7 +103,7 @@ describe.only('Monitoring Stations - Fetch Licence Monitoring Stations service',
           abstractionPeriodStartMonth: 4,
           abstractionPeriodEndDay: 31,
           abstractionPeriodEndMonth: 3,
-          createdBy: 'user.userId',
+          createdBy: user.userId,
           licenceId: licence.id,
           monitoringStationId: monitoringStation.id,
           restrictionType: 'reduce',
@@ -132,7 +132,7 @@ describe.only('Monitoring Stations - Fetch Licence Monitoring Stations service',
         notifications.push(notification)
 
         licenceMonitoringStation = await LicenceMonitoringStationHelper.add({
-          createdBy: 'user.userId',
+          createdBy: user.userId,
           deletedAt: new Date('2025-08-27 21:22:05'),
           licenceId: licence.id,
           licenceVersionPurposeConditionId: licenceVersionPurposeCondition.id,
@@ -144,7 +144,7 @@ describe.only('Monitoring Stations - Fetch Licence Monitoring Stations service',
         licenceMonitoringStations.push(licenceMonitoringStation)
       })
 
-      it.only('returns the licence, monitoring station and non-deleted licence monitoring station records', async () => {
+      it('returns the licence, monitoring station and non-deleted licence monitoring station records', async () => {
         const result = await FetchLicenceMonitoringStationsService.go(licence.id, monitoringStation.id)
 
         expect(result.licence).to.equal({ id: licence.id, licenceRef: licence.licenceRef })
@@ -196,7 +196,7 @@ describe.only('Monitoring Stations - Fetch Licence Monitoring Stations service',
             statusUpdatedAt: licenceMonitoringStations[0].statusUpdatedAt,
             thresholdUnit: licenceMonitoringStations[0].thresholdUnit,
             thresholdValue: licenceMonitoringStations[0].thresholdValue,
-            user: { id: user.userId, username: user.username }
+            user: { id: user.id, userId: user.userId, username: user.username }
           }
         ])
       })

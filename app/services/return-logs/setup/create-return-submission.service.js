@@ -28,7 +28,7 @@ async function go(metadata, session, timestamp, user, trx = null) {
   const returnSubmission = {
     id: generateUUID(),
     createdAt: timestamp,
-    createdBy: 'user.userId',
+    createdBy: user.userId,
     current: true,
     nilReturn: session.journey === 'nilReturn',
     metadata,
