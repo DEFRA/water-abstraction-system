@@ -220,9 +220,19 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               numberOfPages: 3,
               showingMessage: 'Showing 2 of 70 bill runs'
             },
-            regions: [
-              { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' },
-              { id: 'fd3d1154-c83d-4580-bcd6-46bfc380f233', displayName: 'Midlands' }
+            regionItems: [
+              {
+                checked: false,
+                id: 'Anglian',
+                text: 'Anglian',
+                value: '1d562e9a-2104-41d9-aa75-c008a7ec9059'
+              },
+              {
+                checked: false,
+                id: 'Midlands',
+                text: 'Midlands',
+                value: 'fd3d1154-c83d-4580-bcd6-46bfc380f233'
+              }
             ]
           })
         })
@@ -279,9 +289,19 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               numberOfPages: 1,
               showingMessage: 'Showing all 2 bill runs'
             },
-            regions: [
-              { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' },
-              { id: 'fd3d1154-c83d-4580-bcd6-46bfc380f233', displayName: 'Midlands' }
+            regionItems: [
+              {
+                checked: false,
+                id: 'Anglian',
+                text: 'Anglian',
+                value: '1d562e9a-2104-41d9-aa75-c008a7ec9059'
+              },
+              {
+                checked: false,
+                id: 'Midlands',
+                text: 'Midlands',
+                value: 'fd3d1154-c83d-4580-bcd6-46bfc380f233'
+              }
             ]
           })
         })
