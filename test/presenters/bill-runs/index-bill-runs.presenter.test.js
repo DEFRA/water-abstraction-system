@@ -24,7 +24,7 @@ describe('Index Bill Runs presenter', () => {
     beforeEach(() => {
       billRuns = _billRuns()
       busyResult = 'none'
-      filters = { regions: [], yearCreated: null, openFilter: false }
+      filters = { billRunTypes: [], regions: [], yearCreated: null, openFilter: false }
     })
 
     it('correctly presents the data', () => {
@@ -57,6 +57,32 @@ describe('Index Bill Runs presenter', () => {
             type: 'Supplementary'
           }
         ],
+        billRunTypeItems: [
+          {
+            checked: false,
+            id: 'annual',
+            text: 'Annual',
+            value: 'annual'
+          },
+          {
+            checked: false,
+            id: 'supplementary',
+            text: 'Supplementary',
+            value: 'supplementary'
+          },
+          {
+            checked: false,
+            id: 'two_part_tariff',
+            text: 'Two-part tariff',
+            value: 'two_part_tariff'
+          },
+          {
+            checked: false,
+            id: 'two_part_supplementary',
+            text: 'Two-part tariff supplementary',
+            value: 'two_part_supplementary'
+          }
+        ],
         notification: null,
         pageSubHeading: 'View a bill run',
         pageTitle: 'Bill runs',
@@ -74,6 +100,78 @@ describe('Index Bill Runs presenter', () => {
             value: 'fd3d1154-c83d-4580-bcd6-46bfc380f233'
           }
         ]
+      })
+    })
+
+    describe('the "billRunTypeItems" property', () => {
+      describe('when no filters have been applied', () => {
+        it('returns the bill run type items, "checked" is set to false on all bill run types', () => {
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
+
+          expect(results.billRunTypeItems).to.equal([
+            {
+              checked: false,
+              id: 'annual',
+              text: 'Annual',
+              value: 'annual'
+            },
+            {
+              checked: false,
+              id: 'supplementary',
+              text: 'Supplementary',
+              value: 'supplementary'
+            },
+            {
+              checked: false,
+              id: 'two_part_tariff',
+              text: 'Two-part tariff',
+              value: 'two_part_tariff'
+            },
+            {
+              checked: false,
+              id: 'two_part_supplementary',
+              text: 'Two-part tariff supplementary',
+              value: 'two_part_supplementary'
+            }
+          ])
+        })
+      })
+
+      describe('when a filter on the "Supplementary" bill run type has been applied', () => {
+        beforeEach(() => {
+          filters.billRunTypes = ['supplementary']
+        })
+
+        it('returns the bill run type items, "checked" is set to true on the "Supplementary" bill run type', () => {
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
+
+          expect(results.billRunTypeItems).to.equal([
+            {
+              checked: false,
+              id: 'annual',
+              text: 'Annual',
+              value: 'annual'
+            },
+            {
+              checked: true,
+              id: 'supplementary',
+              text: 'Supplementary',
+              value: 'supplementary'
+            },
+            {
+              checked: false,
+              id: 'two_part_tariff',
+              text: 'Two-part tariff',
+              value: 'two_part_tariff'
+            },
+            {
+              checked: false,
+              id: 'two_part_supplementary',
+              text: 'Two-part tariff supplementary',
+              value: 'two_part_supplementary'
+            }
+          ])
+        })
       })
     })
 

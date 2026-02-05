@@ -76,7 +76,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         const setArgs = yarStub.set.args[0]
 
         expect(setArgs[0]).to.equal('billRunsFilter')
-        expect(setArgs[1]).to.equal({ regions: [], yearCreated: null })
+        expect(setArgs[1]).to.equal({ billRunTypes: [], regions: [], yearCreated: null })
       })
     })
 
@@ -97,7 +97,47 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         const setArgs = yarStub.set.args[0]
 
         expect(setArgs[0]).to.equal('billRunsFilter')
-        expect(setArgs[1]).to.equal({ regions: [], yearCreated: '2025' })
+        expect(setArgs[1]).to.equal({ billRunTypes: [], regions: [], yearCreated: '2025' })
+      })
+
+      describe('and a single bill run type filter has been selected ("billRunTypes" is a string)', () => {
+        beforeEach(() => {
+          payload = { billRunTypes: 'annual' }
+        })
+
+        it('saves the state of the bill run type filter as an array in the session', async () => {
+          await SubmitIndexBillRunsService.go(payload, yarStub)
+
+          const setArgs = yarStub.set.args[0]
+
+          expect(setArgs[0]).to.equal('billRunsFilter')
+          expect(setArgs[1]).to.equal({
+            billRunTypes: ['annual'],
+            regions: [],
+            yearCreated: null
+          })
+        })
+      })
+
+      describe('and multiple bill run type filters have been selected ("billRunTypes" is an array)', () => {
+        beforeEach(() => {
+          payload = {
+            billRunTypes: ['annual', 'supplementary']
+          }
+        })
+
+        it('saves the state of the bill run type filter as an array in the session', async () => {
+          await SubmitIndexBillRunsService.go(payload, yarStub)
+
+          const setArgs = yarStub.set.args[0]
+
+          expect(setArgs[0]).to.equal('billRunsFilter')
+          expect(setArgs[1]).to.equal({
+            billRunTypes: ['annual', 'supplementary'],
+            regions: [],
+            yearCreated: null
+          })
+        })
       })
 
       describe('and a single region filter has been selected ("regions" is a string)', () => {
@@ -111,7 +151,11 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
           const setArgs = yarStub.set.args[0]
 
           expect(setArgs[0]).to.equal('billRunsFilter')
-          expect(setArgs[1]).to.equal({ regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'], yearCreated: '2025' })
+          expect(setArgs[1]).to.equal({
+            billRunTypes: [],
+            regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'],
+            yearCreated: '2025'
+          })
         })
       })
 
@@ -129,6 +173,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
 
           expect(setArgs[0]).to.equal('billRunsFilter')
           expect(setArgs[1]).to.equal({
+            billRunTypes: [],
             regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059', 'fd3d1154-c83d-4580-bcd6-46bfc380f233'],
             yearCreated: null
           })
@@ -158,7 +203,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               errorList: [{ href: '#yearCreated', text: 'The year created must be a number' }],
               yearCreated: { text: 'The year created must be a number' }
             },
-            filters: { openFilter: true, regions: [], yearCreated: 'invalid-year' },
+            filters: { billRunTypes: [], openFilter: true, regions: [], yearCreated: 'invalid-year' },
             billRuns: [
               {
                 id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
@@ -183,6 +228,32 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
                 status: 'sent',
                 total: '£300.00',
                 type: 'Supplementary'
+              }
+            ],
+            billRunTypeItems: [
+              {
+                checked: false,
+                id: 'annual',
+                text: 'Annual',
+                value: 'annual'
+              },
+              {
+                checked: false,
+                id: 'supplementary',
+                text: 'Supplementary',
+                value: 'supplementary'
+              },
+              {
+                checked: false,
+                id: 'two_part_tariff',
+                text: 'Two-part tariff',
+                value: 'two_part_tariff'
+              },
+              {
+                checked: false,
+                id: 'two_part_supplementary',
+                text: 'Two-part tariff supplementary',
+                value: 'two_part_supplementary'
               }
             ],
             notification: null,
@@ -255,7 +326,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               errorList: [{ href: '#yearCreated', text: 'The year created must be a number' }],
               yearCreated: { text: 'The year created must be a number' }
             },
-            filters: { openFilter: true, regions: [], yearCreated: 'invalid-year' },
+            filters: { billRunTypes: [], openFilter: true, regions: [], yearCreated: 'invalid-year' },
             billRuns: [
               {
                 id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
@@ -280,6 +351,32 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
                 status: 'sent',
                 total: '£300.00',
                 type: 'Supplementary'
+              }
+            ],
+            billRunTypeItems: [
+              {
+                checked: false,
+                id: 'annual',
+                text: 'Annual',
+                value: 'annual'
+              },
+              {
+                checked: false,
+                id: 'supplementary',
+                text: 'Supplementary',
+                value: 'supplementary'
+              },
+              {
+                checked: false,
+                id: 'two_part_tariff',
+                text: 'Two-part tariff',
+                value: 'two_part_tariff'
+              },
+              {
+                checked: false,
+                id: 'two_part_supplementary',
+                text: 'Two-part tariff supplementary',
+                value: 'two_part_supplementary'
               }
             ],
             notification: null,
