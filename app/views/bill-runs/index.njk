@@ -38,18 +38,6 @@
       }) }}
 
       {# Filter by region #}
-      {% set regionItems = [] %}
-      {% for region in regions %}
-        {% set regionItem = {
-          attributes: { 'data-test': region.displayName },
-          checked: filters.regions.includes(region.id),
-          text: region.displayName,
-          value: region.id
-          } %}
-
-        {% set regionItems = (regionItems.push(regionItem), regionItems) %}
-      {% endfor %}
-
       {{ govukCheckboxes({
         classes: "govuk-checkboxes--small",
         fieldset: {

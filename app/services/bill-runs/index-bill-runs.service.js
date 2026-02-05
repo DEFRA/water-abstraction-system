@@ -40,14 +40,13 @@ async function go(yar, page = 1) {
     'bill runs'
   )
 
-  const pageData = IndexBillRunsPresenter.go(billRuns, busyResult)
+  const pageData = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
   return {
     activeNavBar: 'bill-runs',
     filters,
     ...pageData,
-    pagination,
-    regions
+    pagination
   }
 }
 
