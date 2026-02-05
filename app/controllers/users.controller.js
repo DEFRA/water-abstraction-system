@@ -41,7 +41,7 @@ async function submitIndex(request, h) {
 
 async function submitProfileDetails(request, h) {
   const { payload, yar } = request
-  const { id: userId } = request.auth.credentials.user
+  const { userId } = request.auth.credentials.user
 
   const pageData = await SubmitProfileDetailsService.go(userId, payload, yar)
 
