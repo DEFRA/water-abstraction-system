@@ -18,11 +18,13 @@ const InitiateSessionService = require('../../app/services/billing-accounts/setu
 const SubmitAccountService = require('../../app/services/billing-accounts/setup/submit-account.service.js')
 const SubmitAccountTypeService = require('../../app/services/billing-accounts/setup/submit-account-type.service.js')
 const SubmitContactService = require('../../app/services/billing-accounts/setup/submit-contact.service.js')
+const SubmitContactNameService = require('../../app/services/billing-accounts/setup/submit-contact-name.service.js')
 const SubmitExistingAccountService = require('../../app/services/billing-accounts/setup/submit-existing-account.service.js')
 const SubmitExistingAddressService = require('../../app/services/billing-accounts/setup/submit-existing-address.service.js')
 const ViewAccountService = require('../../app/services/billing-accounts/setup/view-account.service.js')
 const ViewAccountTypeService = require('../../app/services/billing-accounts/setup/view-account-type.service.js')
 const ViewContactService = require('../../app/services/billing-accounts/setup/view-contact.service.js')
+const ViewContactNameService = require('../../app/services/billing-accounts/setup/view-contact-name.service.js')
 const ViewExistingAccountService = require('../../app/services/billing-accounts/setup/view-existing-account.service.js')
 const ViewExistingAddressService = require('../../app/services/billing-accounts/setup/view-existing-address.service.js')
 
@@ -360,6 +362,52 @@ describe('Billing Accounts Setup controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/contact-name`)
+        })
+      })
+    })
+  })
+
+  describe('/billing-accounts/setup/{sessionId}/contact-name', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/contact-name`)
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ViewContactNameService, 'go').resolves({
+            pageTitle: 'Enter a name for the contact'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Enter a name for the contact')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/contact-name`)
+      })
+
+      describe('when the user enters a name for the contact', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitContactNameService, 'go').resolves({
+            redirectUrl: `/system/billing-accounts/setup/${sessionId}/check`
+          })
+        })
+
+        it('redirects to the "check" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/check`)
         })
       })
     })
