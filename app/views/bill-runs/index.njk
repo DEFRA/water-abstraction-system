@@ -51,6 +51,20 @@
         name: "regions"
       }) }}
 
+      {# Filter by bill run types #}
+      {{ govukCheckboxes({
+        classes: "govuk-checkboxes--small",
+        fieldset: {
+          legend: {
+            text: "Run type",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: billRunTypeItems,
+        name: "billRunTypes"
+      }) }}
+
       <div class="govuk-button-group">
         {{ govukButton({
           preventDoubleClick: true,

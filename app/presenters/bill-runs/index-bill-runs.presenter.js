@@ -7,6 +7,7 @@
 
 const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
 const { formatBillRunType } = require('../billing.presenter.js')
+const { billRunTypes } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats the summary data for each bill run for use in the /bill-runs page
@@ -21,6 +22,7 @@ const { formatBillRunType } = require('../billing.presenter.js')
 function go(billRuns, busyResult, filters, regions) {
   return {
     billRuns: _billRuns(billRuns),
+    billRunTypeItems: _billRunTypeItems(billRunTypes, filters),
     notification: busyResult === 'none' ? null : _notification(busyResult),
     pageSubHeading: 'View a bill run',
     pageTitle: 'Bill runs',
@@ -45,6 +47,21 @@ function _billRuns(billRuns) {
       type: formatBillRunType(batchType, scheme, summer)
     }
   })
+}
+
+function _billRunTypeItems(billRunTypes, filters) {
+  const items = []
+
+  for (const billRunType in billRunTypes) {
+    items.push({
+      checked: filters.billRunTypes.includes(billRunType),
+      id: billRunType,
+      text: billRunTypes[billRunType],
+      value: billRunType
+    })
+  }
+
+  return items
 }
 
 function _formatTotal(status, batchType, netTotal) {

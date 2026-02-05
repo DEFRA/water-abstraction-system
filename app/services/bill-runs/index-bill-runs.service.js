@@ -57,7 +57,7 @@ function _filters(yar) {
 
   if (savedFilters) {
     for (const key of Object.keys(savedFilters)) {
-      if (['regions'].includes(key)) {
+      if (['billRunTypes', 'regions'].includes(key)) {
         openFilter = savedFilters[key].length > 0
       } else {
         openFilter = !!savedFilters[key]
@@ -70,6 +70,7 @@ function _filters(yar) {
   }
 
   return {
+    billRunTypes: [],
     regions: [],
     yearCreated: null,
     ...savedFilters,
