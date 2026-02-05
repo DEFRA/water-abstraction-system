@@ -91,7 +91,7 @@ describe('Search - Search presenter', () => {
         {
           exact: true,
           model: {
-            id: 'user-1',
+            userId: 'user-1',
             lastLogin: new Date('2001-01-01T00:00:00Z'),
             username: 'TESTSEARCH01@example.gov.uk',
             $role: () => {
@@ -163,7 +163,7 @@ describe('Search - Search presenter', () => {
         {
           exact: false,
           model: {
-            id: 'user-2',
+            userId: 'user-2',
             lastLogin: new Date('2001-01-01T00:00:00Z'),
             username: 'TESTSEARCH02@example.gov.uk',
             $role: () => {

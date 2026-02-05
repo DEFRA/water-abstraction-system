@@ -53,7 +53,7 @@ async function submitProfileDetails(request, h) {
 }
 
 async function viewProfileDetails(request, h) {
-  const { id: userId } = request.auth.credentials.user
+  const { userId } = request.auth.credentials.user
 
   const pageData = await ViewProfileDetailsService.go(userId, request.yar)
 
