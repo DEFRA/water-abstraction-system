@@ -37,4 +37,26 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
       })
     })
   })
+
+  describe('the "contactName" property', () => {
+    describe('when no contact has been selected', () => {
+      it('returns null', () => {
+        const result = ContactNamePresenter.go(session)
+
+        expect(result.contactName).to.equal(null)
+      })
+    })
+
+    describe('when a contact has been selected', () => {
+      beforeEach(() => {
+        session.contactName = 'Contact Name'
+      })
+
+      it('returns the selected contact ID', () => {
+        const result = ContactNamePresenter.go(session)
+
+        expect(result.contactName).to.equal(session.contactName)
+      })
+    })
+  })
 })
