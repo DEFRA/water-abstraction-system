@@ -40,6 +40,7 @@ async function _fetchProfileDetails(userId) {
   return UserModel.query()
     .where('userId', userId)
     .first()
+    .limit(1)
     .select([
       ref('userData:contactDetails.address').castText().as('address'),
       ref('userData:contactDetails.email').castText().as('email'),

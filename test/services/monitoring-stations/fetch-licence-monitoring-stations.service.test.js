@@ -21,7 +21,7 @@ const UserHelper = require('../../support/helpers/user.helper.js')
 // Thing under test
 const FetchLicenceMonitoringStationsService = require('../../../app/services/monitoring-stations/fetch-licence-monitoring-stations.service.js')
 
-describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () => {
+describe.only('Monitoring Stations - Fetch Licence Monitoring Stations service', () => {
   let licence
   let licenceMonitoringStations
   let licenceVersion
@@ -144,7 +144,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
         licenceMonitoringStations.push(licenceMonitoringStation)
       })
 
-      it('returns the licence, monitoring station and non-deleted licence monitoring station records', async () => {
+      it.only('returns the licence, monitoring station and non-deleted licence monitoring station records', async () => {
         const result = await FetchLicenceMonitoringStationsService.go(licence.id, monitoringStation.id)
 
         expect(result.licence).to.equal({ id: licence.id, licenceRef: licence.licenceRef })
@@ -172,7 +172,7 @@ describe('Monitoring Stations - Fetch Licence Monitoring Stations service', () =
             statusUpdatedAt: licenceMonitoringStations[1].statusUpdatedAt,
             thresholdUnit: licenceMonitoringStations[1].thresholdUnit,
             thresholdValue: licenceMonitoringStations[1].thresholdValue,
-            user: { id: user.userId, username: user.username }
+            user: { id: user.id, userId: user.userId, username: user.username }
           },
           {
             createdAt: licenceMonitoringStations[0].createdAt,
