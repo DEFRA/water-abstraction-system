@@ -267,7 +267,7 @@ function _returnLog(returnLog) {
 
 function _user(user) {
   const { exact, model } = user
-  const { userId, lastLogin, username } = model
+  const { id, lastLogin, username } = model
 
   return {
     col2Title: 'Role',
@@ -275,7 +275,7 @@ function _user(user) {
     col3Title: 'Last signed in',
     col3Value: formatLongDate(lastLogin),
     exact,
-    link: `/user/${userId}/status`,
+    link: `/user/${id}/status`,
     reference: username,
     statusTag: null,
     type: 'User'
