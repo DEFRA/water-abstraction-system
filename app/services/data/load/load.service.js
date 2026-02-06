@@ -142,7 +142,7 @@ const LOAD_HELPERS = {
     legacy: { schema: 'water', table: 'licence_gauging_stations', id: 'licence_gauging_station_id' }
   },
   licenceRoles: { helper: LicenceRoleHelper, test: false },
-  LicenceSupplementaryYears: { helper: LicenceSupplementaryYearHelper, test: false },
+  licenceSupplementaryYears: { helper: LicenceSupplementaryYearHelper, test: false },
   licenceVersionHolders: { helper: LicenceVersionHolderHelper, test: false },
   licenceVersionPurposeConditions: { helper: LicenceVersionPurposeConditionHelper, test: false },
   licenceVersionPurposes: {
