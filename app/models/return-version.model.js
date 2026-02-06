@@ -45,7 +45,7 @@ class ReturnVersionModel extends BaseModel {
         modelClass: 'user.model',
         join: {
           from: 'returnVersions.createdBy',
-          to: 'users.id'
+          to: 'users.userId'
         }
       }
     }
@@ -78,7 +78,7 @@ class ReturnVersionModel extends BaseModel {
           })
           .withGraphFetched('user')
           .modifyGraph('user', (builder) => {
-            builder.select(['id', 'username'])
+            builder.select(['id', 'userId', 'username'])
           })
       }
     }

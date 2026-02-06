@@ -34,24 +34,24 @@ describe('Fetch User Roles And Groups service', () => {
 
     // Select a role and assign it directly to the user
     roleForUser = RoleHelper.select(ROLE_RETURNS_INDEX)
-    await UserRoleHelper.add({ userId: user.id, roleId: roleForUser.id })
+    await UserRoleHelper.add({ userId: user.userId, roleId: roleForUser.id })
 
     // Select a group and assign it to the user via a group
     groupForUser = GroupHelper.select(GROUP_ENV_OFFICER_INDEX)
-    await UserGroupHelper.add({ userId: user.id, groupId: groupForUser.id })
+    await UserGroupHelper.add({ userId: user.userId, groupId: groupForUser.id })
 
     // The result will be the users has 3 roles; 1 directly via user roles and 2 via the user group
   })
 
   describe('when the user exists', () => {
     it('returns the user', async () => {
-      const result = await FetchUserRolesAndGroupsService.go(user.id)
+      const result = await FetchUserRolesAndGroupsService.go(user.userId)
 
       expect(result.user).to.equal(user, { skip })
     })
 
     it("returns the user's roles", async () => {
-      const result = await FetchUserRolesAndGroupsService.go(user.id)
+      const result = await FetchUserRolesAndGroupsService.go(user.userId)
 
       const roles = result.roles.map((role) => {
         return role.role
@@ -68,7 +68,7 @@ describe('Fetch User Roles And Groups service', () => {
     })
 
     it("returns the user's groups", async () => {
-      const result = await FetchUserRolesAndGroupsService.go(user.id)
+      const result = await FetchUserRolesAndGroupsService.go(user.userId)
 
       const groups = result.groups.map((group) => {
         return group.group
@@ -82,11 +82,11 @@ describe('Fetch User Roles And Groups service', () => {
       beforeEach(async () => {
         duplicateRoleForUser = RoleHelper.select(ROLE_HOF_NOTIFICATIONS_INDEX)
 
-        await UserRoleHelper.add({ userId: user.id, roleId: duplicateRoleForUser.id })
+        await UserRoleHelper.add({ userId: user.userId, roleId: duplicateRoleForUser.id })
       })
 
       it('returns only one instance of the role', async () => {
-        const result = await FetchUserRolesAndGroupsService.go(user.id)
+        const result = await FetchUserRolesAndGroupsService.go(user.userId)
 
         const roles = result.roles.map((role) => {
           return role.role

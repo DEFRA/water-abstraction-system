@@ -4,6 +4,7 @@ const tableName = 'users'
 
 exports.up = function (knex) {
   return knex.schema.withSchema('idm').createTable(tableName, (table) => {
+    table.uuid('id').defaultTo(knex.raw('gen_random_uuid()')).notNullable()
     // Primary Key -- note `.increments()` is implicitly the primary key but we add `primary()` to make it explicit
     table.increments('user_id').primary()
 
@@ -27,6 +28,7 @@ exports.up = function (knex) {
     table.timestamp('date_updated', { useTz: false }).notNullable().defaultTo(knex.fn.now())
 
     // Constraints
+    table.unique(['id'], { indexName: 'unique_users_id', useConstraint: true })
     table.unique(['user_name', 'application'], { useConstraint: true })
   })
 }

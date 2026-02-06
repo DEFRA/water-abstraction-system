@@ -11,7 +11,7 @@ const data = [
     }).id,
     userId: users.find((user) => {
       return user.username === 'admin-internal@wrls.gov.uk'
-    }).id
+    }).userId
   },
   {
     id: '9d2aa1e8-6f36-491d-9e7f-5536b3100d4d',
@@ -20,7 +20,7 @@ const data = [
     }).id,
     userId: users.find((user) => {
       return user.username === 'super.user@wrls.gov.uk'
-    }).id
+    }).userId
   },
   {
     id: '9d9a7b55-4a31-4561-a556-f71cd367becb',
@@ -29,7 +29,7 @@ const data = [
     }).id,
     userId: users.find((user) => {
       return user.username === 'environment.officer@wrls.gov.uk'
-    }).id
+    }).userId
   },
   {
     id: 'b90c6892-6113-4a84-b5a4-fffafba26ae5',
@@ -38,7 +38,7 @@ const data = [
     }).id,
     userId: users.find((user) => {
       return user.username === 'waste.industry.regulatory.services@wrls.gov.uk'
-    }).id
+    }).userId
   },
   {
     id: '9d8fd2df-f5da-4450-8151-95f2c68c0232',
@@ -47,7 +47,7 @@ const data = [
     }).id,
     userId: users.find((user) => {
       return user.username === 'billing.data@wrls.gov.uk'
-    }).id
+    }).userId
   },
   {
     id: 'c5d7cbe2-591c-4a77-a3da-1a2acf5cdbd3',
@@ -56,7 +56,7 @@ const data = [
     }).id,
     userId: users.find((user) => {
       return user.username === 'permitting.support.centre@wrls.gov.uk'
-    }).id
+    }).userId
   },
   {
     id: 'da306f92-87e6-48f8-a521-411b19c0693f',
@@ -65,7 +65,7 @@ const data = [
     }).id,
     userId: users.find((user) => {
       return user.username === 'national.permitting.service@wrls.gov.uk'
-    }).id
+    }).userId
   },
   {
     id: 'beadcd21-1b2f-46c2-a220-625cc9d133c8',
@@ -74,7 +74,7 @@ const data = [
     }).id,
     userId: users.find((user) => {
       return user.username === 'digitise.editor@wrls.gov.uk'
-    }).id
+    }).userId
   },
   {
     id: '068b3cce-56ca-4a5e-b371-194c9e47ecf5',
@@ -83,7 +83,7 @@ const data = [
     }).id,
     userId: users.find((user) => {
       return user.username === 'digitise.approver@wrls.gov.uk'
-    }).id
+    }).userId
   }
 ]
 

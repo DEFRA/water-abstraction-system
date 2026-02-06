@@ -146,7 +146,7 @@ describe('Return Version model', () => {
       beforeEach(async () => {
         testUser = UserHelper.select()
 
-        const { id: createdBy } = testUser
+        const { userId: createdBy } = testUser
 
         testRecord = await ReturnVersionHelper.add({ createdBy })
       })
@@ -222,7 +222,7 @@ describe('Return Version model', () => {
       beforeEach(async () => {
         testUser = UserHelper.select()
 
-        const { id } = await ReturnVersionHelper.add({ createdBy: testUser.id })
+        const { id } = await ReturnVersionHelper.add({ createdBy: testUser.userId })
 
         returnVersionId = id
       })

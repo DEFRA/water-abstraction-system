@@ -11,7 +11,7 @@ const data = [
     }).id,
     userId: users.find((user) => {
       return user.username === 'digitise.editor@wrls.gov.uk'
-    }).id
+    }).userId
   },
   {
     id: '9d2aa1e8-6f36-491d-9e7f-5536b3100d4d',
@@ -20,7 +20,7 @@ const data = [
     }).id,
     userId: users.find((user) => {
       return user.username === 'digitise.approver@wrls.gov.uk'
-    }).id
+    }).userId
   }
 ]
 

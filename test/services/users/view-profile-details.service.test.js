@@ -25,17 +25,21 @@ describe('Users - View profile details service', () => {
   const testNotification = 'Profile updated!'
   const userId = 123
 
-  let findByIdStub
   let selectStub
   let userModelQueryStub
+  let whereStub
   let yarStub
 
   beforeEach(() => {
     // NOTE: We stub the UserModel `findById().select()` query to avoid hitting the DB as part of the test. It is
     // sufficiently simple running it would just be testing Objection.js and not our logic.
     selectStub = Sinon.stub().resolves(profileDetails)
-    findByIdStub = Sinon.stub().returns({ select: selectStub })
-    userModelQueryStub = Sinon.stub(UserModel, 'query').returns({ findById: findByIdStub })
+    whereStub = Sinon.stub().returns({
+      select: selectStub,
+      first: Sinon.stub().returnsThis(),
+      limit: Sinon.stub().returnsThis()
+    })
+    userModelQueryStub = Sinon.stub(UserModel, 'query').returns({ where: whereStub })
     yarStub = { flash: Sinon.stub().withArgs('notification').returns([]) }
   })
 

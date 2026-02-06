@@ -39,7 +39,7 @@ async function seed() {
   const licence = await LicenceHelper.add()
 
   // Create a return version to which we'll link multiple return requirements
-  const returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id, createdBy: user.id })
+  const returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id, createdBy: user.userId })
 
   const legacyIds = _legacyIds()
 

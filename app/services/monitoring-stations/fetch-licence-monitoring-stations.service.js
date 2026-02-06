@@ -76,7 +76,7 @@ async function _fetchLicenceMonitoringStations(licenceId, monitoringStationId) {
     })
     .withGraphFetched('user')
     .modifyGraph('user', (userBuilder) => {
-      userBuilder.select(['id', 'username'])
+      userBuilder.select(['id', 'userId', 'username'])
     })
 }
 
