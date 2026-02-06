@@ -36,14 +36,6 @@ class LicenceEntityRoleModel extends BaseModel {
           to: 'licenceEntities.id'
         }
       },
-      licenceDocumentHeader: {
-        relation: Model.BelongsToOneRelation,
-        modelClass: 'licence-document-header.model',
-        join: {
-          from: 'licenceEntityRoles.companyEntityId',
-          to: 'licenceDocumentHeaders.companyEntityId'
-        }
-      },
       licenceEntity: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence-entity.model',
