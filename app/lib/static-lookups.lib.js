@@ -1,6 +1,11 @@
 'use strict'
 
-const billRunTypes = ['annual', 'supplementary', 'two_part_tariff']
+const billRunTypes = Object.freeze({
+  annual: 'Annual',
+  supplementary: 'Supplementary',
+  two_part_tariff: 'Two-part tariff',
+  two_part_supplementary: 'Two-part tariff supplementary'
+})
 
 const companyTypes = ['person', 'organisation']
 

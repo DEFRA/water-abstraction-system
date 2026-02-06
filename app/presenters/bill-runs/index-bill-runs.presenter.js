@@ -7,21 +7,26 @@
 
 const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
 const { formatBillRunType } = require('../billing.presenter.js')
+const { billRunTypes } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats the summary data for each bill run for use in the /bill-runs page
  *
  * @param {module:BillRunModel[]} billRuns - The bill runs containing the data to be summarised for the view
  * @param {string} busyResult - The state of busy bill runs; 'cancelling', 'building', 'both', or 'none'
+ * @param {object} filters - An object containing the different filters to apply to the bill runs
+ * @param {module:RegionModel[]} regions - The display name and ID for all regions ordered by display name
  *
  * @returns {object} The data formatted for the view template
  */
-function go(billRuns, busyResult) {
+function go(billRuns, busyResult, filters, regions) {
   return {
     billRuns: _billRuns(billRuns),
+    billRunTypeItems: _billRunTypeItems(filters),
     notification: busyResult === 'none' ? null : _notification(busyResult),
     pageSubHeading: 'View a bill run',
-    pageTitle: 'Bill runs'
+    pageTitle: 'Bill runs',
+    regionItems: _regionItems(filters, regions)
   }
 }
 
@@ -40,6 +45,17 @@ function _billRuns(billRuns) {
       status,
       total: _formatTotal(status, batchType, netTotal),
       type: formatBillRunType(batchType, scheme, summer)
+    }
+  })
+}
+
+function _billRunTypeItems(filters) {
+  return Object.entries(billRunTypes).map(([key, value]) => {
+    return {
+      checked: filters.billRunTypes.includes(key),
+      id: key,
+      text: value,
+      value: key
     }
   })
 }
@@ -88,6 +104,21 @@ function _notification(busyResult) {
     text: 'Please wait for these bill runs to finish before creating another one.',
     titleText: 'Busy building and cancelling'
   }
+}
+
+function _regionItems(filters, regions) {
+  const items = []
+
+  for (const region of regions) {
+    items.push({
+      checked: filters.regions.includes(region.id),
+      id: region.displayName,
+      text: region.displayName,
+      value: region.id
+    })
+  }
+
+  return items
 }
 
 module.exports = {
