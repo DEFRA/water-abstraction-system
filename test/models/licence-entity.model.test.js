@@ -8,6 +8,8 @@ const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
+const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
 const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
 const LicenceEntityRoleModel = require('../../app/models/licence-entity-role.model.js')
@@ -18,6 +20,7 @@ const UserModel = require('../../app/models/user.model.js')
 const LicenceEntityModel = require('../../app/models/licence-entity.model.js')
 
 describe('Licence Entity model', () => {
+  let testLicenceDocumentHeaders
   let testLicenceEntityRoles
   let testRecord
   let testUser
@@ -26,6 +29,13 @@ describe('Licence Entity model', () => {
     testRecord = await LicenceEntityHelper.add()
 
     const { id: licenceEntityId } = testRecord
+
+    testLicenceDocumentHeaders = []
+    for (let i = 0; i < 2; i++) {
+      const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({ companyEntityId: licenceEntityId })
+
+      testLicenceDocumentHeaders.push(licenceDocumentHeader)
+    }
 
     testLicenceEntityRoles = []
     for (let i = 0; i < 2; i++) {
@@ -47,6 +57,28 @@ describe('Licence Entity model', () => {
   })
 
   describe('Relationships', () => {
+    describe('when linking to licence document headers', () => {
+      it('can successfully run a related query', async () => {
+        const query = await LicenceEntityModel.query().innerJoinRelated('licenceDocumentHeaders')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence document headers', async () => {
+        const result = await LicenceEntityModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceDocumentHeaders')
+
+        expect(result).to.be.instanceOf(LicenceEntityModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceDocumentHeaders).to.be.an.array()
+        expect(result.licenceDocumentHeaders[0]).to.be.an.instanceOf(LicenceDocumentHeaderModel)
+        expect(result.licenceDocumentHeaders).to.include(testLicenceDocumentHeaders[0])
+        expect(result.licenceDocumentHeaders).to.include(testLicenceDocumentHeaders[1])
+      })
+    })
+
     describe('when linking to licence entity roles', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceEntityModel.query().innerJoinRelated('licenceEntityRoles')
