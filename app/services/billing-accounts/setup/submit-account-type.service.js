@@ -28,7 +28,7 @@ async function go(sessionId, payload) {
     await _save(session, payload)
 
     return {
-      accountType: payload.accountType
+      redirectUrl: _redirectUrl(session)
     }
   }
 
@@ -38,6 +38,14 @@ async function go(sessionId, payload) {
     error: validationResult,
     ...pageData
   }
+}
+
+function _redirectUrl(session) {
+  if (session.accountType === 'individual') {
+    return `/system/billing-accounts/setup/${session.id}/existing-address`
+  }
+
+  return `/system/billing-accounts/setup/${session.id}/company-search`
 }
 
 async function _save(session, payload) {

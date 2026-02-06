@@ -39,4 +39,56 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
       })
     })
   })
+
+  describe('the "backLink.href" property', () => {
+    describe('when no "addressJourney" exists in the session', () => {
+      it('returns the link for the "existing-address" page', () => {
+        const result = FAOPresenter.go(session)
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/existing-address`)
+      })
+    })
+
+    describe('when "addressJourney" exists with an "address" and it has a "uprn" in the session', () => {
+      beforeEach(() => {
+        session.addressJourney = {
+          address: { uprn: '123456789' }
+        }
+      })
+
+      it('returns the link for the "select" address page', () => {
+        const result = FAOPresenter.go(session)
+
+        expect(result.backLink.href).to.equal(`/system/address/${session.id}/select`)
+      })
+    })
+
+    describe('when "addressJourney" exists with an "address" and it has no "uprn" and a "postcode" in the session', () => {
+      beforeEach(() => {
+        session.addressJourney = {
+          address: { postcode: 'SW1A 1AA' }
+        }
+      })
+
+      it('returns the link for the "manual" address page', () => {
+        const result = FAOPresenter.go(session)
+
+        expect(result.backLink.href).to.equal(`/system/address/${session.id}/manual`)
+      })
+    })
+
+    describe('when "addressJourney" exists with an "address" and it has no "uprn" and a "country" in the session', () => {
+      beforeEach(() => {
+        session.addressJourney = {
+          address: { country: 'France' }
+        }
+      })
+
+      it('returns the link for the "international" address page', () => {
+        const result = FAOPresenter.go(session)
+
+        expect(result.backLink.href).to.equal(`/system/address/${session.id}/international`)
+      })
+    })
+  })
 })

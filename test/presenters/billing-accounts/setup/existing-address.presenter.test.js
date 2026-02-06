@@ -15,20 +15,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const ExistingAddressPresenter = require('../../../../app/presenters/billing-accounts/setup/existing-address.presenter.js')
 
 describe('Billing Accounts - Setup - Existing Address Presenter', () => {
-  const addresses = [
-    {
-      address: {
-        id: generateUUID(),
-        address1: 'ENVIRONMENT AGENCY',
-        address2: 'HORIZON HOUSE',
-        address3: 'DEANERY ROAD',
-        address4: 'BRISTOL',
-        address5: 'BRISTOLSHIRE',
-        address6: null,
-        postcode: 'BS1 5AH'
-      }
-    }
-  ]
+  const addresses = BillingAccountsFixture.billingAccount().billingAccount.billingAccountAddresses
   let session
 
   beforeEach(() => {
@@ -51,7 +38,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
           {
             id: addresses[0].address.id,
             value: addresses[0].address.id,
-            text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BRISTOLSHIRE, BS1 5AH',
+            text: 'Tutsham Farm, West Farleigh, Maidstone, Kent, ME15 0NE',
             checked: false
           },
           { divider: 'or' },
@@ -64,6 +51,32 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
         ],
         pageTitle: `Select an existing address for ${session.billingAccount.company.name}`,
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
+      })
+    })
+  })
+
+  describe('the "backLink.href" property', () => {
+    describe('when the "accountType" exists in the session as "company"', () => {
+      beforeEach(() => {
+        session.accountType = 'company'
+      })
+
+      it('returns the link for the "account" page', () => {
+        const result = ExistingAddressPresenter.go(session, addresses)
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account`)
+      })
+    })
+
+    describe('when the "accountType" exists in the session as "individual"', () => {
+      beforeEach(() => {
+        session.accountType = 'individual'
+      })
+
+      it('returns the link for the "account-type" page', () => {
+        const result = ExistingAddressPresenter.go(session, addresses)
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account-type`)
       })
     })
   })

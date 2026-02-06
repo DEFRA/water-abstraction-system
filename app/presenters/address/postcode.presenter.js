@@ -16,7 +16,7 @@ function go(session) {
   const { addressJourney, id } = session
 
   return {
-    activeNavBar: addressJourney.activeNavBar,
+    activeNavBar: addressJourney.activeNavBar ?? null,
     backLink: addressJourney.backLink,
     internationalLink: `/system/address/${id}/international`,
     pageTitle: 'Enter a UK postcode',

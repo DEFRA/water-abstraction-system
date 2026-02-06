@@ -19,13 +19,21 @@ function go(session, companyAddresses) {
 
   return {
     backLink: {
-      href: `/system/billing-accounts/setup/${session.id}/account`,
+      href: _backLink(session),
       text: 'Back'
     },
     items: radioItems,
     pageTitle: `Select an existing address for ${billingAccount.company.name}`,
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`
   }
+}
+
+function _backLink(session) {
+  if (session.accountType === 'individual') {
+    return `/system/billing-accounts/setup/${session.id}/account-type`
+  }
+
+  return `/system/billing-accounts/setup/${session.id}/account`
 }
 
 function _radioOptions(addressSelected, companyAddresses) {
