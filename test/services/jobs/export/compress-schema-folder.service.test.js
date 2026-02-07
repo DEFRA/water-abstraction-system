@@ -4,21 +4,23 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
+const Proxyquire = require('proxyquire')
 
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Things we need to stub
-const tar = require('tar')
-
-// Thing under test
-const CompressSchemaFolderService = require('../../../../app/services/jobs/export/compress-schema-folder.service.js')
-
 describe('Compress schema folder service', () => {
   let tarCreateStub
+  let CompressSchemaFolderService
 
   beforeEach(() => {
-    tarCreateStub = Sinon.stub(tar, 'create').resolves()
+    tarCreateStub = Sinon.stub().resolves()
+
+    // NOTE: tar is an ESM module which means its exports are live bindings that cannot be changed by the importing
+    // module nor stubbed. So, we have to use proxyquire to override the dependency itself with our stubbed version.
+    CompressSchemaFolderService = Proxyquire('../../../../app/services/jobs/export/compress-schema-folder.service.js', {
+      tar: { create: tarCreateStub }
+    })
   })
 
   afterEach(() => {
