@@ -15,13 +15,31 @@
 function go(session) {
   return {
     backLink: {
-      href: `/system/billing-accounts/setup/${session.id}/existing-address`,
+      href: _backLink(session),
       text: 'Back'
     },
     fao: session.fao ?? null,
     pageTitle: 'Do you need to add an FAO?',
     pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
   }
+}
+
+function _backLink(session) {
+  const address = session?.addressJourney?.address || {}
+
+  if (address.uprn) {
+    return `/system/address/${session.id}/select`
+  }
+
+  if (address.postcode) {
+    return `/system/address/${session.id}/manual`
+  }
+
+  if (address.country) {
+    return `/system/address/${session.id}/international`
+  }
+
+  return `/system/billing-accounts/setup/${session.id}/existing-address`
 }
 
 module.exports = {

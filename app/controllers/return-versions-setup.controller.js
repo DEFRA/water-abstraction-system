@@ -274,7 +274,7 @@ async function submitCancel(request, h) {
 
 async function submitCheck(request, h) {
   const { sessionId } = request.params
-  const { id: userId } = request.auth.credentials.user
+  const { userId } = request.auth.credentials.user
 
   const licenceId = await SubmitCheckService.go(sessionId, userId)
 

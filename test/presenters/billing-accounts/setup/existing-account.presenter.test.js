@@ -7,16 +7,17 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
+const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ExistingAccountPresenter = require('../../../../app/presenters/billing-accounts/setup/existing-account.presenter.js')
 
 describe('Billing Accounts - Setup - Existing Account presenter', () => {
-  const exampleSearchResults = _companies()
+  const companies = CustomersFixture.companies()
+
   let session
 
   describe('when called for the first time', () => {
@@ -29,7 +30,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
     })
 
     it('returns page data for the view', () => {
-      const result = ExistingAccountPresenter.go(session, exampleSearchResults)
+      const result = ExistingAccountPresenter.go(session, companies)
 
       expect(result).to.equal({
         backLink: {
@@ -38,9 +39,9 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
         },
         items: [
           {
-            id: exampleSearchResults[0].id,
-            value: exampleSearchResults[0].id,
-            text: exampleSearchResults[0].name,
+            id: companies[0].id,
+            value: companies[0].id,
+            text: companies[0].name,
             checked: false
           },
           { divider: 'or' },
@@ -68,7 +69,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       })
 
       it('the checked property should be true', () => {
-        const result = ExistingAccountPresenter.go(session, exampleSearchResults)
+        const result = ExistingAccountPresenter.go(session, companies)
 
         expect(result.items[2].checked).to.equal(true)
       })
@@ -84,13 +85,13 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       })
 
       it('each of the checked properties should be false', () => {
-        const result = ExistingAccountPresenter.go(session, exampleSearchResults)
+        const result = ExistingAccountPresenter.go(session, companies)
 
         expect(result.items).to.equal([
           {
-            id: exampleSearchResults[0].id,
-            value: exampleSearchResults[0].id,
-            text: exampleSearchResults[0].name,
+            id: companies[0].id,
+            value: companies[0].id,
+            text: companies[0].name,
             checked: false
           },
           { divider: 'or' },
@@ -115,7 +116,7 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       })
 
       it('returns the correct page title', () => {
-        const result = ExistingAccountPresenter.go(session, exampleSearchResults)
+        const result = ExistingAccountPresenter.go(session, companies)
 
         expect(result.pageTitle).to.equal('Does this account already exist?')
       })
@@ -137,12 +138,3 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
     })
   })
 })
-
-function _companies() {
-  return [
-    {
-      id: generateUUID(),
-      name: 'Company Name Ltd'
-    }
-  ]
-}

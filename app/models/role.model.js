@@ -53,7 +53,7 @@ class RoleModel extends BaseModel {
             from: 'userRoles.roleId',
             to: 'userRoles.userId'
           },
-          to: 'users.id'
+          to: 'users.userId'
         }
       }
     }
