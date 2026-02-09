@@ -116,6 +116,7 @@ async function _replayView(payload, error, page, regions, savedFilters) {
 
 function _save(payload, yar) {
   yar.set('billRunsFilter', {
+    number: payload.number ?? null,
     regions: payload.regions,
     runTypes: payload.runTypes,
     yearCreated: payload.yearCreated ?? null
@@ -126,6 +127,7 @@ function _savedFilters(payload) {
   const { clear, get, set, ...billRunsFilter } = payload
 
   return {
+    number: null,
     openFilter: true,
     regions: [],
     runTypes: [],
