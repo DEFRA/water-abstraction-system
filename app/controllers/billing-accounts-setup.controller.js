@@ -10,6 +10,7 @@ const InitiateSessionService = require('../services/billing-accounts/setup/initi
 const SubmitAccountService = require('../services/billing-accounts/setup/submit-account.service.js')
 const SubmitAccountTypeService = require('../services/billing-accounts/setup/submit-account-type.service.js')
 const SubmitCheckService = require('../services/billing-accounts/setup/submit-check.service.js')
+const SubmitCompanyNameService = require('../services/billing-accounts/setup/submit-company-name.service.js')
 const SubmitContactService = require('../services/billing-accounts/setup/submit-contact.service.js')
 const SubmitContactNameService = require('../services/billing-accounts/setup/submit-contact-name.service.js')
 const SubmitExistingAccountService = require('../services/billing-accounts/setup/submit-existing-account.service.js')
@@ -17,6 +18,7 @@ const SubmitExistingAddressService = require('../services/billing-accounts/setup
 const SubmitFAOService = require('../services/billing-accounts/setup/submit-fao.service.js')
 const ViewAccountService = require('../services/billing-accounts/setup/view-account.service.js')
 const ViewAccountTypeService = require('../services/billing-accounts/setup/view-account-type.service.js')
+const ViewCompanyNameService = require('../services/billing-accounts/setup/view-company-name.service.js')
 const ViewContactService = require('../services/billing-accounts/setup/view-contact.service.js')
 const ViewContactNameService = require('../services/billing-accounts/setup/view-contact-name.service.js')
 const ViewExistingAddressService = require('../services/billing-accounts/setup/view-existing-address.service.js')
@@ -62,7 +64,7 @@ async function submitAccountType(request, h) {
     return h.view(`billing-accounts/setup/account-type.njk`, pageData)
   }
 
-  return h.redirect('')
+  return h.redirect(pageData.redirectUrl)
 }
 
 async function submitCheck(request, h) {
@@ -73,6 +75,21 @@ async function submitCheck(request, h) {
   await SubmitCheckService.go(sessionId)
 
   return h.redirect(`/system/billing-accounts/setup/${sessionId}`)
+}
+
+async function submitCompanyName(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitCompanyNameService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view(`billing-accounts/setup/company-name.njk`, pageData)
+  }
+
+  return h.redirect(pageData.redirectUrl)
 }
 
 async function submitContact(request, h) {
@@ -170,6 +187,14 @@ async function viewCheck(request, h) {
   return h.view(`billing-accounts/setup/check.njk`, pageData)
 }
 
+async function viewCompanyName(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewCompanyNameService.go(sessionId)
+
+  return h.view(`billing-accounts/setup/company-name.njk`, pageData)
+}
+
 async function viewContact(request, h) {
   const { sessionId } = request.params
 
@@ -231,12 +256,14 @@ module.exports = {
   submitAccount,
   submitAccountType,
   submitCheck,
+  submitCompanyName,
   submitContact,
   submitContactName,
   submitExistingAccount,
   submitExistingAddress,
   submitFAO,
   viewCheck,
+  viewCompanyName,
   viewContact,
   viewContactName,
   viewAccount,

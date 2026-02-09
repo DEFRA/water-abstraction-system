@@ -16,11 +16,15 @@ const { postRequestOptions } = require('../support/general.js')
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/billing-accounts/setup/initiate-session.service.js')
 const SubmitAccountService = require('../../app/services/billing-accounts/setup/submit-account.service.js')
+const SubmitAccountTypeService = require('../../app/services/billing-accounts/setup/submit-account-type.service.js')
+const SubmitCompanyNameService = require('../../app/services/billing-accounts/setup/submit-company-name.service.js')
 const SubmitContactService = require('../../app/services/billing-accounts/setup/submit-contact.service.js')
 const SubmitContactNameService = require('../../app/services/billing-accounts/setup/submit-contact-name.service.js')
 const SubmitExistingAccountService = require('../../app/services/billing-accounts/setup/submit-existing-account.service.js')
 const SubmitExistingAddressService = require('../../app/services/billing-accounts/setup/submit-existing-address.service.js')
 const ViewAccountService = require('../../app/services/billing-accounts/setup/view-account.service.js')
+const ViewAccountTypeService = require('../../app/services/billing-accounts/setup/view-account-type.service.js')
+const ViewCompanyNameService = require('../../app/services/billing-accounts/setup/view-company-name.service.js')
 const ViewContactService = require('../../app/services/billing-accounts/setup/view-contact.service.js')
 const ViewContactNameService = require('../../app/services/billing-accounts/setup/view-contact-name.service.js')
 const ViewExistingAccountService = require('../../app/services/billing-accounts/setup/view-existing-account.service.js')
@@ -345,6 +349,113 @@ describe('Billing Accounts Setup controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/check`)
+        })
+      })
+    })
+  })
+
+  describe('/billing-accounts/setup/{sessionId}/account-type', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/account-type`)
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ViewAccountTypeService, 'go').resolves({
+            pageTitle: 'Select the account type'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Select the account type')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/account-type`)
+      })
+
+      describe('when the user selects an to set up an "individual" account', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitAccountTypeService, 'go').resolves({
+            redirectUrl: `/system/billing-accounts/setup/${sessionId}/existing-address`
+          })
+        })
+
+        it('redirects to the "existing-address" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/existing-address`)
+        })
+      })
+
+      describe('when the user selects an to set up a "company" account', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitAccountTypeService, 'go').resolves({
+            redirectUrl: `/system/billing-accounts/setup/${sessionId}/company-search`
+          })
+        })
+
+        it('redirects to the "company search" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/company-search`)
+        })
+      })
+    })
+  })
+
+  describe('/billing-accounts/setup/{sessionId}/company-name', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/company-name`)
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ViewCompanyNameService, 'go').resolves({
+            pageTitle: 'Enter the company details'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Enter the company details')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/company-name`)
+      })
+
+      describe('when the user enters a company name or company number', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitCompanyNameService, 'go').resolves({
+            redirectUrl: `/system/billing-accounts/setup/${sessionId}/select-company`
+          })
+        })
+
+        it('redirects to the "select-company" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/select-company`)
         })
       })
     })
