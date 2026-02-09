@@ -29,7 +29,7 @@ class UserGroupModel extends BaseModel {
         modelClass: 'user.model',
         join: {
           from: 'userGroups.userId',
-          to: 'users.id'
+          to: 'users.userId'
         }
       }
     }

@@ -92,7 +92,7 @@ function _applyPermissionsFilter(query, permissions) {
  * @private
  */
 function _applyBasicPermissionFilter(query) {
-  query.whereRaw(`NOT EXISTS (SELECT 1 FROM public.user_groups ug WHERE ug.user_id = users.id)`)
+  query.whereRaw(`NOT EXISTS (SELECT 1 FROM public.user_groups ug WHERE ug.user_id = users.user_id)`)
 }
 
 /**
@@ -113,7 +113,7 @@ function _applyDigitisePermissionFilter(query, permissionDetails) {
     `EXISTS (
   SELECT 1 FROM public.user_roles ur
   INNER JOIN public."roles" r ON r.id = ur.role_id
-  WHERE ur.user_id = users.id AND r."role" IN (?)
+  WHERE ur.user_id = users.user_id AND r."role" IN (?)
 )
   `,
     roles
@@ -136,7 +136,7 @@ function _applyNpsPermissionFilter(query, groups) {
     `NOT EXISTS (
   SELECT 1 FROM public.user_roles ur
   INNER JOIN public."roles" r ON r.id = ur.role_id
-  WHERE ur.user_id = users.id AND r."role" IN ('ar_approver', 'ar_user')
+  WHERE ur.user_id = users.user_id AND r."role" IN ('ar_approver', 'ar_user')
 )
   `
   )
@@ -147,7 +147,7 @@ function _applyStandardPermissionFilter(query, groups) {
     `EXISTS (
   SELECT 1 FROM public.user_groups ug
   INNER JOIN public."groups" g ON g.id = ug.group_id
-  WHERE ug.user_id = users.id AND g."group" IN (?)
+  WHERE ug.user_id = users.user_id AND g."group" IN (?)
 )
   `,
     groups
@@ -174,7 +174,7 @@ function _applyStatusFilter(query, status) {
 }
 
 function _fetchQuery() {
-  return UserModel.query().select(['id', 'username']).modify('status').modify('permissions')
+  return UserModel.query().select(['id', 'userId', 'username']).modify('status').modify('permissions')
 }
 
 module.exports = {

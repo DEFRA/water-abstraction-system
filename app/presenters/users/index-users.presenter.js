@@ -38,11 +38,11 @@ function _links(scope) {
 
 function _userRowData(users) {
   return users.map((user) => {
-    const { application, id, username: email } = user
+    const { application, userId, username: email } = user
 
     return {
       email,
-      link: `/user/${id}/status`,
+      link: `/user/${userId}/status`,
       permissions: application === 'water_admin' ? user.$permissions().label : '',
       status: user.$status(),
       type: application === 'water_admin' ? 'Internal' : 'External'
