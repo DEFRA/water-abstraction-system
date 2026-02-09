@@ -53,7 +53,7 @@ class GroupModel extends BaseModel {
             from: 'userGroups.groupId',
             to: 'userGroups.userId'
           },
-          to: 'users.id'
+          to: 'users.userId'
         }
       }
     }

@@ -7,7 +7,7 @@
   <h2 class="govuk-body-l"> {{ currentVersion }} </h2>
 
   {% if primaryUser %}
-    <p>Registered to <a href="/user/{{ primaryUser.id }}/status">{{ primaryUser.username }}</a></p>
+    <p>Registered to <a href="/user/{{ primaryUser.userId }}/status">{{ primaryUser.username }}</a></p>
   {% endif %}
 
 <dl class="govuk-summary-list">

@@ -134,12 +134,13 @@ function tinaBarrett() {
  * @returns {module:UserModel} The transformed user fixture object
  */
 function transformToFetchUsersResult(user) {
-  const { application, enabled, id, groups, lastLogin, password, roles, username } = user
+  const { application, enabled, id, userId, groups, lastLogin, password, roles, username } = user
 
   return UserModel.fromJson({
     application,
     enabled,
     id,
+    userId,
     groups: groups.map((group) => {
       return GroupModel.fromJson({
         group: group.group,
@@ -168,8 +169,8 @@ function transformToFetchUsersResult(user) {
 function user(seedIndex) {
   const user = UserHelper.select(seedIndex)
 
-  user.groups = _groups(user.id)
-  user.roles = _roles(user.id)
+  user.groups = _groups(user.userId)
+  user.roles = _roles(user.userId)
 
   return user
 }
