@@ -38,8 +38,7 @@ const USER_GROUP_NPS_INDEX = 7
 const USER_ROLE_AR_USER_INDEX = 0
 
 describe('User model', () => {
-  let testChargeVersionNoteOne
-  let testChargeVersionNoteTwo
+  let testChargeVersionNotes
   let testGroup
   let testLicenceEntity
   let testRecord
@@ -54,10 +53,17 @@ describe('User model', () => {
     testRole = RoleHelper.select(ROLE_AR_USER_INDEX)
     testGroup = GroupHelper.select(GROUP_NPS_INDEX)
     testUserGroup = UserGroupHelper.select(USER_GROUP_NPS_INDEX)
-
-    testChargeVersionNoteOne = await ChargeVersionNoteHelper.add({ userId: testRecord.userId, note: '1st test note' })
-    testChargeVersionNoteTwo = await ChargeVersionNoteHelper.add({ userId: testRecord.userId, note: '2nd test note' })
     testUserRole = UserRoleHelper.select(USER_ROLE_AR_USER_INDEX)
+
+    testChargeVersionNotes = []
+    for (let i = 0; i < 2; i++) {
+      const chargeVersionNote = await ChargeVersionNoteHelper.add({
+        note: `Test note ${i}`,
+        userId: testRecord.userId
+      })
+
+      testChargeVersionNotes.push(chargeVersionNote)
+    }
   })
 
   afterEach(async () => {
@@ -71,8 +77,9 @@ describe('User model', () => {
   })
 
   after(async () => {
-    await testChargeVersionNoteOne.$query().delete()
-    await testChargeVersionNoteTwo.$query().delete()
+    for (const testChargeVersionNote of testChargeVersionNotes) {
+      await testChargeVersionNote.$query().delete()
+    }
   })
 
   describe('Basic query', () => {
@@ -99,20 +106,13 @@ describe('User model', () => {
           .first()
           .withGraphFetched('chargeVersionNotes')
 
-        const foundChargeVersionNoteOne = result.chargeVersionNotes.find((chargeVersionNote) => {
-          return chargeVersionNote.id === testChargeVersionNoteOne.id
-        })
-        const foundChargeVersionNoteTwo = result.chargeVersionNotes.find((chargeVersionNote) => {
-          return chargeVersionNote.id === testChargeVersionNoteTwo.id
-        })
-
         expect(result).to.be.instanceOf(UserModel)
         expect(result.userId).to.equal(testRecord.userId)
 
         expect(result.chargeVersionNotes).to.be.an.array()
-        expect(foundChargeVersionNoteOne).to.be.an.instanceOf(ChargeVersionNoteModel)
-        expect(foundChargeVersionNoteOne).to.equal(testChargeVersionNoteOne)
-        expect(foundChargeVersionNoteTwo).to.equal(testChargeVersionNoteTwo)
+        expect(result.chargeVersionNotes[0]).to.be.an.instanceOf(ChargeVersionNoteModel)
+        expect(result.chargeVersionNotes).includes(testChargeVersionNotes[0])
+        expect(result.chargeVersionNotes).includes(testChargeVersionNotes[1])
       })
     })
 
