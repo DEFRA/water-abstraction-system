@@ -1,0 +1,25 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+
+{% block pageContent %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukInput({
+      id: "companySearch",
+      name: "companySearch",
+      classes: "govuk-!-width-two-thirds",
+      errorMessage: error.companySearch,
+      label: {
+        text: "Enter the Companies House number or company name"
+      },
+      value: companySearch
+    }) }}
+
+    <p>We’ll use this information to search the Companies House register.</p>
+
+    {{ govukButton({ text: "Find company", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}
