@@ -80,8 +80,9 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
+          options = postRequestOptions(`/return-logs/setup`, { payload: { returnLogId: 'RETURN_LOG_ID' } }, ['billing'])
+
           Sinon.stub(InitiateSessionService, 'go').resolves(`/system/return-logs/setup/${sessionId}/check`)
-          options = postRequestOptions(`/return-logs/setup`, { payload: { returnLogId: 'RETURN_LOG_ID' } })
         })
 
         it('redirects to the returned page', async () => {
@@ -133,24 +134,17 @@ describe('Return Logs - Setup - Controller', () => {
     })
 
     describe('POST', () => {
+      beforeEach(() => {
+        options = postRequestOptions('/return-logs/setup/confirmed/227d174d-500b-4e88-ae95-c70b0676bb88', {}, ['billing'])
+      })
+
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          options = {
-            method: 'POST',
-            url: '/return-logs/setup/confirmed/227d174d-500b-4e88-ae95-c70b0676bb88',
-            auth: {
-              strategy: 'session',
-              credentials: { scope: ['billing'] }
-            }
-          }
-
           Sinon.stub(SubmitConfirmedService, 'go').resolves('91aff99a-3204-4727-86bd-7bdf3ef24533')
         })
 
         it('redirects to the licence returns page', async () => {
-          const response = await server.inject(
-            postRequestOptions('/return-logs/setup/confirmed/227d174d-500b-4e88-ae95-c70b0676bb88')
-          )
+          const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal('/system/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/returns')
@@ -248,9 +242,7 @@ describe('Return Logs - Setup - Controller', () => {
         })
 
         it('redirects to the confirmed page on success', async () => {
-          options = postRequestOptions(`/return-logs/setup/${sessionId}/check`, {})
-
-          const response = await server.inject(options)
+          const response = await server.inject(_postOptions(path, {}))
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(
@@ -271,9 +263,7 @@ describe('Return Logs - Setup - Controller', () => {
         })
 
         it('re-renders the page with an error message', async () => {
-          options = postRequestOptions(`/return-logs/setup/${sessionId}/check`, {})
-
-          const response = await server.inject(options)
+          const response = await server.inject(_postOptions(path, {}))
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Check details and enter new volumes or readings')
@@ -400,7 +390,7 @@ describe('Return Logs - Setup - Controller', () => {
         })
 
         it('re-renders the page with an error message', async () => {
-          const response = await server.inject(_postOptions(path))
+          const response = await server.inject(_postOptions(path, {}))
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select if meter details have been provided')
@@ -501,7 +491,7 @@ describe('Return Logs - Setup - Controller', () => {
           })
 
           it('re-renders the page with an error message', async () => {
-            const response = await server.inject(_postOptions(path))
+            const response = await server.inject(_postOptions(path, {}))
 
             expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Enter the make of the meter')
@@ -561,7 +551,7 @@ describe('Return Logs - Setup - Controller', () => {
           })
 
           it('re-renders the page with an error message', async () => {
-            const response = await server.inject(_postOptions(path))
+            const response = await server.inject(_postOptions(path, {}))
 
             expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('Enter 12 daily volumes')
@@ -677,7 +667,7 @@ describe('Return Logs - Setup - Controller', () => {
         })
 
         it('re-renders the page with an error message', async () => {
-          const response = await server.inject(_postOptions(path))
+          const response = await server.inject(_postOptions(path, {}))
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select what period was used for this volume')
@@ -1324,5 +1314,5 @@ function _getOptions(path) {
 }
 
 function _postOptions(path, payload) {
-  return postRequestOptions(`/return-logs/setup/${sessionId}/${path}`, payload)
+  return postRequestOptions(`/return-logs/setup/${sessionId}/${path}`, payload, ['billing'])
 }
