@@ -53,7 +53,7 @@ class LicenceMonitoringStationModel extends BaseModel {
         modelClass: 'user.model',
         join: {
           from: 'licenceMonitoringStations.createdBy',
-          to: 'users.id'
+          to: 'users.userId'
         }
       }
     }

@@ -215,5 +215,5 @@ async function _auth(username) {
     return user.username === username
   })
 
-  return AuthService.go(user.id)
+  return AuthService.go(user.userId)
 }

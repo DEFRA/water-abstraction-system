@@ -48,14 +48,14 @@ async function _save(userId, payload) {
   const { address, email, jobTitle, name, tel } = payload
 
   // Ensure userData and contactDetails objects exist - if they don't, the patch just silently fails
-  await UserModel.query().findById(userId).whereNull('userData').patch({ userData: {} })
+  await UserModel.query().where('userId', userId).whereNull('userData').patch({ userData: {} })
   await UserModel.query()
-    .findById(userId)
+    .where('userId', userId)
     .whereNull(ref('userData:contactDetails'))
     .patch({ 'userData:contactDetails': {} })
 
   return UserModel.query()
-    .findById(userId)
+    .where('userId', userId)
     .patch({
       'userData:contactDetails.address': address || '',
       'userData:contactDetails.email': email || '',
