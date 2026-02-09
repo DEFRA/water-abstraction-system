@@ -80,7 +80,7 @@ describe('Return Logs - Setup - Controller', () => {
     describe('POST', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
-          options = postRequestOptions(`/return-logs/setup`, { payload: { returnLogId: 'RETURN_LOG_ID' } }, ['billing'])
+          options = postRequestOptions(`/return-logs/setup`, { payload: { returnLogId: 'RETURN_LOG_ID' } }, ['returns'])
 
           Sinon.stub(InitiateSessionService, 'go').resolves(`/system/return-logs/setup/${sessionId}/check`)
         })
@@ -103,7 +103,7 @@ describe('Return Logs - Setup - Controller', () => {
           url: '/return-logs/setup/confirmed/227d174d-500b-4e88-ae95-c70b0676bb88',
           auth: {
             strategy: 'session',
-            credentials: { scope: ['billing'] }
+            credentials: { scope: ['returns'] }
           }
         }
       })
@@ -135,7 +135,7 @@ describe('Return Logs - Setup - Controller', () => {
 
     describe('POST', () => {
       beforeEach(() => {
-        options = postRequestOptions('/return-logs/setup/confirmed/227d174d-500b-4e88-ae95-c70b0676bb88', {}, ['billing'])
+        options = postRequestOptions('/return-logs/setup/confirmed/227d174d-500b-4e88-ae95-c70b0676bb88', {}, ['returns'])
       })
 
       describe('when the request succeeds', () => {
@@ -161,7 +161,7 @@ describe('Return Logs - Setup - Controller', () => {
           url: '/return-logs/setup/guidance',
           auth: {
             strategy: 'session',
-            credentials: { scope: ['billing'] }
+            credentials: { scope: ['returns'] }
           }
         }
       })
@@ -1308,11 +1308,11 @@ function _getOptions(path) {
     url,
     auth: {
       strategy: 'session',
-      credentials: { scope: ['billing'] }
+      credentials: { scope: ['returns'] }
     }
   }
 }
 
 function _postOptions(path, payload) {
-  return postRequestOptions(`/return-logs/setup/${sessionId}/${path}`, payload, ['billing'])
+  return postRequestOptions(`/return-logs/setup/${sessionId}/${path}`, payload, ['returns'])
 }
