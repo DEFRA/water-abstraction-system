@@ -135,7 +135,9 @@ describe('Return Logs - Setup - Controller', () => {
 
     describe('POST', () => {
       beforeEach(() => {
-        options = postRequestOptions('/return-logs/setup/confirmed/227d174d-500b-4e88-ae95-c70b0676bb88', {}, ['returns'])
+        options = postRequestOptions('/return-logs/setup/confirmed/227d174d-500b-4e88-ae95-c70b0676bb88', {}, [
+          'returns'
+        ])
       })
 
       describe('when the request succeeds', () => {
