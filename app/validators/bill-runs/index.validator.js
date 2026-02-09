@@ -25,17 +25,17 @@ function go(payload, regions) {
   const validRegionIds = _validRegionIds(regions)
 
   const schema = Joi.object({
-    billRunTypes: Joi.array()
-      .items(Joi.string().valid(...Object.keys(billRunTypes)))
-      .optional()
-      .messages({
-        'any.only': 'Select a valid run type'
-      }),
     regions: Joi.array()
       .items(Joi.string().valid(...validRegionIds))
       .optional()
       .messages({
         'any.only': 'Select a valid region'
+      }),
+    runTypes: Joi.array()
+      .items(Joi.string().valid(...Object.keys(billRunTypes)))
+      .optional()
+      .messages({
+        'any.only': 'Select a valid run type'
       }),
     yearCreated: Joi.number()
       .min(MIN_YEAR_CREATED)

@@ -103,7 +103,7 @@ describe('Fetch Bill Runs service', () => {
       describe('and "Run type" has been set', () => {
         describe('and there are matching bill runs', () => {
           beforeEach(() => {
-            filters.billRunTypes = ['supplementary']
+            filters.runTypes = ['supplementary']
           })
 
           it('returns the matching bill runs', async () => {
@@ -117,7 +117,7 @@ describe('Fetch Bill Runs service', () => {
 
         describe('and there are no matching bill runs', () => {
           beforeEach(() => {
-            filters.billRunTypes = ['unmatched-batch-type']
+            filters.runTypes = ['unmatched-batch-type']
           })
 
           it('returns no bill runs', async () => {
@@ -203,5 +203,5 @@ function _addBillRun(billRunNumber, createdAt, netTotal, creditNoteCount, invoic
 }
 
 function _noFiltersApplied() {
-  return { billRunTypes: [], openFilter: false, regions: [], yearCreated: null }
+  return { openFilter: false, regions: [], runTypes: [], yearCreated: null }
 }

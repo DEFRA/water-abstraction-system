@@ -47,7 +47,7 @@ describe('Index Bill Runs service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'bill-runs',
-        filters: { billRunTypes: [], regions: [], yearCreated: null, openFilter: false },
+        filters: { regions: [], runTypes: [], yearCreated: null, openFilter: false },
         billRuns: [
           {
             id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
@@ -74,7 +74,18 @@ describe('Index Bill Runs service', () => {
             type: 'Supplementary'
           }
         ],
-        billRunTypeItems: [
+        notification: null,
+        pageSubHeading: 'View a bill run',
+        pageTitle: 'Bill runs',
+        regionItems: [
+          {
+            checked: false,
+            id: 'Anglian',
+            text: 'Anglian',
+            value: '1d562e9a-2104-41d9-aa75-c008a7ec9059'
+          }
+        ],
+        runTypeItems: [
           {
             checked: false,
             id: 'annual',
@@ -98,17 +109,6 @@ describe('Index Bill Runs service', () => {
             id: 'two_part_supplementary',
             text: 'Two-part tariff supplementary',
             value: 'two_part_supplementary'
-          }
-        ],
-        notification: null,
-        pageSubHeading: 'View a bill run',
-        pageTitle: 'Bill runs',
-        regionItems: [
-          {
-            checked: false,
-            id: 'Anglian',
-            text: 'Anglian',
-            value: '1d562e9a-2104-41d9-aa75-c008a7ec9059'
           }
         ],
         pagination: { numberOfPages: 1, showingMessage: 'Showing all 2 bill runs' }
@@ -196,7 +196,7 @@ describe('Index Bill Runs service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await IndexBillRunsService.go(yarStub, page)
 
-        expect(result.filters).to.equal({ billRunTypes: [], regions: [], yearCreated: null, openFilter: false })
+        expect(result.filters).to.equal({ regions: [], runTypes: [], yearCreated: null, openFilter: false })
       })
     })
 
@@ -208,7 +208,7 @@ describe('Index Bill Runs service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await IndexBillRunsService.go(yarStub, page)
 
-        expect(result.filters).to.equal({ billRunTypes: [], regions: [], yearCreated: null, openFilter: false })
+        expect(result.filters).to.equal({ regions: [], runTypes: [], yearCreated: null, openFilter: false })
       })
     })
 
@@ -226,8 +226,8 @@ describe('Index Bill Runs service', () => {
         const result = await IndexBillRunsService.go(yarStub, page)
 
         expect(result.filters).to.equal({
-          billRunTypes: [],
           regions: '1d562e9a-2104-41d9-aa75-c008a7ec9059',
+          runTypes: [],
           yearCreated: 2025,
           openFilter: true
         })
@@ -238,8 +238,8 @@ describe('Index Bill Runs service', () => {
 
 function _billRunsFilter() {
   return {
-    billRunTypes: [],
     regions: [],
+    runTypes: [],
     yearCreated: null
   }
 }

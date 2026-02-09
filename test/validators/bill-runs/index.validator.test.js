@@ -25,8 +25,8 @@ describe('Bill Runs - Index validator', () => {
         const result = IndexValidator.go(payload, regions)
 
         expect(result.value).to.equal({
-          billRunTypes: ['two_part_tariff'],
           regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'],
+          runTypes: ['two_part_tariff'],
           yearCreated: 2026
         })
         expect(result.error).not.to.exist()
@@ -55,7 +55,7 @@ describe('Bill Runs - Index validator', () => {
     describe('because "Run type" is invalid', () => {
       describe('as it is not a valid bill run type', () => {
         beforeEach(() => {
-          payload.billRunTypes = ['invalid-run-type']
+          payload.runTypes = ['invalid-run-type']
         })
 
         it('fails validation', () => {
@@ -63,7 +63,7 @@ describe('Bill Runs - Index validator', () => {
 
           expect(result.value).to.exist()
           expect(result.error.details[0].message).to.equal('Select a valid run type')
-          expect(result.error.details[0].path[0]).to.equal('billRunTypes')
+          expect(result.error.details[0].path[0]).to.equal('runTypes')
         })
       })
     })
@@ -150,8 +150,8 @@ describe('Bill Runs - Index validator', () => {
 
 function _payload() {
   return {
-    billRunTypes: ['two_part_tariff'],
     regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'],
+    runTypes: ['two_part_tariff'],
     yearCreated: '2026'
   }
 }

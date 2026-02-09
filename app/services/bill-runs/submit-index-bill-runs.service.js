@@ -32,8 +32,8 @@ async function go(payload, yar, page = 1) {
     return {}
   }
 
-  _handleOneOptionSelected(payload, 'billRunTypes')
   _handleOneOptionSelected(payload, 'regions')
+  _handleOneOptionSelected(payload, 'runTypes')
 
   const regions = await FetchRegionsService.go()
   const error = _validate(payload, regions)
@@ -116,8 +116,8 @@ async function _replayView(payload, error, page, regions, savedFilters) {
 
 function _save(payload, yar) {
   yar.set('billRunsFilter', {
-    billRunTypes: payload.billRunTypes,
     regions: payload.regions,
+    runTypes: payload.runTypes,
     yearCreated: payload.yearCreated ?? null
   })
 }
@@ -126,9 +126,9 @@ function _savedFilters(payload) {
   const { clear, get, set, ...billRunsFilter } = payload
 
   return {
-    billRunTypes: [],
     openFilter: true,
     regions: [],
+    runTypes: [],
     yearCreated: null,
     ...billRunsFilter
   }
