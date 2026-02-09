@@ -25,17 +25,22 @@ function go(payload, regions) {
   const validRegionIds = _validRegionIds(regions)
 
   const schema = Joi.object({
+    number: Joi.number().integer().positive().optional().messages({
+      'number.base': 'The Number must be a number',
+      'number.integer': 'The Number must be a whole number',
+      'number.positive': 'The Number must be greater than zero'
+    }),
     regions: Joi.array()
       .items(Joi.string().valid(...validRegionIds))
       .optional()
       .messages({
-        'any.only': 'Select a valid region'
+        'any.only': 'Select a valid Region'
       }),
     runTypes: Joi.array()
       .items(Joi.string().valid(...Object.keys(billRunTypes)))
       .optional()
       .messages({
-        'any.only': 'Select a valid run type'
+        'any.only': 'Select a valid Run type'
       }),
     yearCreated: Joi.number()
       .min(MIN_YEAR_CREATED)
@@ -43,10 +48,10 @@ function go(payload, regions) {
       .max(maxYearCreated)
       .optional()
       .messages({
-        'number.base': 'The year created must be a number',
-        'number.max': `The year created cannot exceed the current year of ${maxYearCreated}`,
-        'number.min': `The year created must be greater or equal to ${MIN_YEAR_CREATED}`,
-        'number.integer': 'The year created must be a whole number'
+        'number.base': 'The Year created must be a number',
+        'number.max': `The Year created cannot exceed the current year of ${maxYearCreated}`,
+        'number.min': `The Year created must be greater or equal to ${MIN_YEAR_CREATED}`,
+        'number.integer': 'The Year created must be a whole number'
       })
   })
 
