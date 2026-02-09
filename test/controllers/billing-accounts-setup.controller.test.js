@@ -289,7 +289,7 @@ describe('Billing Accounts Setup controller', () => {
         options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/account-type`)
       })
 
-      describe('when the user selects an to set up an "individual" account', () => {
+      describe('when the user selects to set up an "individual" account', () => {
         beforeEach(() => {
           Sinon.stub(SubmitAccountTypeService, 'go').resolves({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/existing-address`
@@ -304,7 +304,7 @@ describe('Billing Accounts Setup controller', () => {
         })
       })
 
-      describe('when the user selects an to set up a "company" account', () => {
+      describe('when the user selects to set up a "company" account', () => {
         beforeEach(() => {
           Sinon.stub(SubmitAccountTypeService, 'go').resolves({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/company-search`

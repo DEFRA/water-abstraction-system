@@ -110,6 +110,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       payload = {
         addressSelected: addresses[0].address.id
       }
+
       sessionData = {
         addressJourney: {
           address: {},
@@ -121,11 +122,6 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       }
 
       session = await SessionHelper.add({ data: sessionData })
-    })
-
-    afterEach(async () => {
-      await session.$query().delete()
-      Sinon.restore()
     })
 
     it('saves the submitted value', async () => {
@@ -153,6 +149,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
   describe('when validation fails', () => {
     beforeEach(async () => {
       payload = {}
+
       Sinon.stub(FetchExistingAddressesService, 'go').returns(addresses)
     })
 

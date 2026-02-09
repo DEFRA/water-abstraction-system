@@ -20,7 +20,8 @@ const FetchCompaniesService = require('../../../../app/services/billing-accounts
 const SubmitExistingAccountService = require('../../../../app/services/billing-accounts/setup/submit-existing-account.service.js')
 
 describe('Billing Accounts - Setup - Submit Existing Account service', () => {
-  const conpanies = _companies()
+  const companies = _companies()
+
   let payload
   let session
   let sessionData
@@ -42,7 +43,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   describe('when the user picks an existing account', () => {
     beforeEach(async () => {
       payload = {
-        existingAccount: conpanies[0].id
+        existingAccount: companies[0].id
       }
     })
 
@@ -108,6 +109,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       payload = {
         existingAccount: 'new'
       }
+
       sessionData = {
         addressJourney: {
           address: {},
@@ -119,11 +121,6 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       }
 
       session = await SessionHelper.add({ data: sessionData })
-    })
-
-    afterEach(async () => {
-      await session.$query().delete()
-      Sinon.restore()
     })
 
     it('saves the submitted value', async () => {
@@ -151,7 +148,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   describe('when validation fails', () => {
     beforeEach(async () => {
       payload = {}
-      Sinon.stub(FetchCompaniesService, 'go').returns(conpanies)
+      Sinon.stub(FetchCompaniesService, 'go').returns(companies)
     })
 
     it('returns page data for the view, with errors', async () => {
