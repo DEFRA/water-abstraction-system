@@ -15,6 +15,8 @@ const ContactHelper = require('../support/helpers/contact.helper.js')
 const ContactModel = require('../../app/models/contact.model.js')
 const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
 const LicenceRoleModel = require('../../app/models/licence-role.model.js')
+const UserHelper = require('../support/helpers/user.helper.js')
+const UserModel = require('../../app/models/user.model.js')
 
 // Thing under test
 const CompanyContactModel = require('../../app/models/company-contact.model.js')
@@ -22,8 +24,10 @@ const CompanyContactModel = require('../../app/models/company-contact.model.js')
 describe('Company Contacts model', () => {
   let testCompany
   let testContact
+  let testCreatedByUser
   let testLicenceRole
   let testRecord
+  let testUpdatedByUser
 
   before(async () => {
     // Link licence role
@@ -38,8 +42,16 @@ describe('Company Contacts model', () => {
     testCompany = await CompanyHelper.add()
     const { id: companyId } = testCompany
 
+    // Link to user for createdBy
+    testCreatedByUser = await UserHelper.select(0)
+    const { id: createdBy } = testCreatedByUser
+
+    // Link to user for updatedBy
+    testUpdatedByUser = await UserHelper.select(1)
+    const { id: updatedBy } = testUpdatedByUser
+
     // Test record
-    testRecord = await CompanyContactHelper.add({ companyId, contactId, licenceRoleId })
+    testRecord = await CompanyContactHelper.add({ companyId, contactId, createdBy, licenceRoleId, updatedBy })
   })
 
   describe('Basic query', () => {
@@ -88,6 +100,26 @@ describe('Company Contacts model', () => {
       })
     })
 
+    describe('when linking to created by user', () => {
+      it('can successfully run a related query', async () => {
+        const query = await CompanyContactModel.query().innerJoinRelated('createdByUser')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the created by user', async () => {
+        const result = await CompanyContactModel.query().findById(testRecord.id).withGraphFetched('createdByUser')
+
+        expect(result).to.be.instanceOf(CompanyContactModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.createdByUser).to.be.an.instanceOf(UserModel)
+        expect(result.createdByUser).to.equal(testCreatedByUser, {
+          skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData']
+        })
+      })
+    })
+
     describe('when linking to licence role', () => {
       it('can successfully run a related query', async () => {
         const query = await CompanyContactModel.query().innerJoinRelated('licenceRole')
@@ -103,6 +135,26 @@ describe('Company Contacts model', () => {
 
         expect(result.licenceRole).to.be.an.instanceOf(LicenceRoleModel)
         expect(result.licenceRole).to.equal(testLicenceRole, { skip: ['createdAt', 'updatedAt'] })
+      })
+    })
+
+    describe('when linking to updated by user', () => {
+      it('can successfully run a related query', async () => {
+        const query = await CompanyContactModel.query().innerJoinRelated('updatedByUser')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the updated by user', async () => {
+        const result = await CompanyContactModel.query().findById(testRecord.id).withGraphFetched('updatedByUser')
+
+        expect(result).to.be.instanceOf(CompanyContactModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.updatedByUser).to.be.an.instanceOf(UserModel)
+        expect(result.updatedByUser).to.equal(testUpdatedByUser, {
+          skip: ['createdAt', 'licenceEntityId', 'password', 'updatedAt', 'userData']
+        })
       })
     })
   })

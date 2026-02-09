@@ -27,6 +27,14 @@ class UserModel extends BaseModel {
           to: 'chargeVersionNotes.userId'
         }
       },
+      createdCompanyContacts: {
+        relation: Model.HasManyRelation,
+        modelClass: 'company-contact.model',
+        join: {
+          from: 'users.id',
+          to: 'companyContacts.createdBy'
+        }
+      },
       groups: {
         relation: Model.ManyToManyRelation,
         modelClass: 'group.model',
@@ -73,6 +81,14 @@ class UserModel extends BaseModel {
             to: 'userRoles.roleId'
           },
           to: 'roles.id'
+        }
+      },
+      updatedCompanyContacts: {
+        relation: Model.HasManyRelation,
+        modelClass: 'company-contact.model',
+        join: {
+          from: 'users.id',
+          to: 'companyContacts.updatedBy'
         }
       },
       userGroups: {
