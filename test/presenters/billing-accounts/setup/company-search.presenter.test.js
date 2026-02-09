@@ -13,7 +13,7 @@ const BillingAccountsFixture = require('../../../support/fixtures/billing-accoun
 // Thing under test
 const CompanySearchPresenter = require('../../../../app/presenters/billing-accounts/setup/company-search.presenter.js')
 
-describe('Billing Accounts - Setup - Company Name Presenter', () => {
+describe('Billing Accounts - Setup - Company Search Presenter', () => {
   let session
 
   beforeEach(() => {
@@ -39,7 +39,7 @@ describe('Billing Accounts - Setup - Company Name Presenter', () => {
   })
 
   describe('the "companySearch" property', () => {
-    describe('when no company name has been entered', () => {
+    describe('when no company search value has been entered', () => {
       it('returns null', () => {
         const result = CompanySearchPresenter.go(session)
 
@@ -47,12 +47,12 @@ describe('Billing Accounts - Setup - Company Name Presenter', () => {
       })
     })
 
-    describe('when a company name has been entered', () => {
+    describe('when a company search value has been entered', () => {
       beforeEach(() => {
         session.companySearch = 'Company Name'
       })
 
-      it('returns the selected contact name', () => {
+      it('returns the company search value', () => {
         const result = CompanySearchPresenter.go(session)
 
         expect(result.companySearch).to.equal(session.companySearch)

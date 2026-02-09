@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const CompanyNameValidator = require('../../../../app/validators/billing-accounts/setup/company-search.validator.js')
+const CompanySearchValidator = require('../../../../app/validators/billing-accounts/setup/company-search.validator.js')
 
-describe('Billing Accounts - Setup - Company Name Validator', () => {
+describe('Billing Accounts - Setup - Company Search Validator', () => {
   let payload
 
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('Billing Accounts - Setup - Company Name Validator', () => {
 
   describe('when called with valid data', () => {
     it('returns with no errors', () => {
-      const result = CompanyNameValidator.go(payload)
+      const result = CompanySearchValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -33,7 +33,7 @@ describe('Billing Accounts - Setup - Company Name Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = CompanyNameValidator.go(payload)
+        const result = CompanySearchValidator.go(payload)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -41,13 +41,13 @@ describe('Billing Accounts - Setup - Company Name Validator', () => {
       })
     })
 
-    describe('with a "company name" longer than 100 characters', () => {
+    describe('with a "company search" longer than 100 characters', () => {
       beforeEach(() => {
         payload = { companySearch: 'a'.repeat(101) }
       })
 
       it('returns with errors', () => {
-        const result = CompanyNameValidator.go(payload)
+        const result = CompanySearchValidator.go(payload)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
