@@ -50,7 +50,13 @@ function _redirectUrl(session) {
 
 async function _save(session, payload) {
   session.accountType = payload.accountType
-  session.searchIndividualInput = payload.accountType === 'individual' ? payload.searchIndividualInput : null
+
+  if (payload.accountType === 'company') {
+    delete session.searchIndividualInput
+  } else {
+    session.searchIndividualInput = payload.searchIndividualInput
+    delete session.companyName
+  }
 
   return session.$update()
 }
