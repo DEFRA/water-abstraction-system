@@ -17,18 +17,18 @@ const SubmitProfileDetailsService = require('../../../app/services/users/submit-
 describe('Users - Submit profile details service', () => {
   const userId = 123
 
-  let findByIdStub
   let patchStub
   let payload
   let userModelQueryStub
+  let whereStub
   let yarStub
 
   beforeEach(() => {
     // NOTE: We stub the UserModel `findById().patch()` query to avoid hitting the DB as part of the test. It is
     // sufficiently simple running it would just be testing Objection.js and not our logic.
     patchStub = Sinon.stub().resolves()
-    findByIdStub = Sinon.stub().returns({ patch: patchStub, whereNull: Sinon.stub().returnsThis() })
-    userModelQueryStub = Sinon.stub(UserModel, 'query').returns({ findById: findByIdStub })
+    whereStub = Sinon.stub().returns({ patch: patchStub, whereNull: Sinon.stub().returnsThis() })
+    userModelQueryStub = Sinon.stub(UserModel, 'query').returns({ where: whereStub })
     yarStub = { flash: Sinon.stub() }
   })
 
@@ -52,7 +52,7 @@ describe('Users - Submit profile details service', () => {
         const result = await SubmitProfileDetailsService.go(userId, payload, yarStub)
 
         expect(patchStub.called).to.be.true()
-        expect(findByIdStub.calledWith(userId)).to.be.true()
+        expect(whereStub.calledWith('userId', userId)).to.be.true()
         expect(
           patchStub.calledWith({
             'userData:contactDetails.address': payload.address,

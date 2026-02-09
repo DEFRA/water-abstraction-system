@@ -45,7 +45,7 @@ async function _insert(id, role, username) {
     SELECT
       (?) AS id,
       (SELECT id FROM public.roles r WHERE r.role = ?) AS role_id,
-      (SELECT id FROM public.users u WHERE u.username = ?) AS user_id;
+      (SELECT user_id FROM public.users u WHERE u.username = ?) AS user_id;
     `,
     [id, role, username]
   )
@@ -57,7 +57,7 @@ function _names(userRole) {
   })
 
   const { username } = users.find((user) => {
-    return user.id === userRole.userId
+    return user.userId === userRole.userId
   })
 
   return { role, username }

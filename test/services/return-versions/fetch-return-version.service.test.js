@@ -42,7 +42,7 @@ describe('Return Versions - Fetch Return Version service', () => {
 
       expect(result).to.equal({
         createdAt: seededReturnVersion.createdAt,
-        createdBy: seededUser.id,
+        createdBy: seededUser.userId,
         id: seededReturnVersion.id,
         multipleUpload: false,
         notes: null,
@@ -50,7 +50,7 @@ describe('Return Versions - Fetch Return Version service', () => {
         reason: 'new-licence',
         startDate: new Date('2022-04-01'),
         status: 'current',
-        user: { id: seededUser.id, username: seededUser.username },
+        user: { id: seededUser.id, userId: seededUser.userId, username: seededUser.username },
         licence: {
           id: seededLicence.id,
           licenceRef: seededLicence.licenceRef,

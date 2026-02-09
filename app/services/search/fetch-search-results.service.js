@@ -89,7 +89,7 @@ const USER_SQL = `
   SELECT
     'user' AS row_type,
     CAST (NULL AS UUID) AS row_uu_id,
-    id AS row_int_id,
+    user_id AS row_int_id,
     username ILIKE ? AS exact,
     6 AS table_order,
     username AS row_order,

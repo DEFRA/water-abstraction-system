@@ -29,7 +29,7 @@ class ChargeVersionNote extends BaseModel {
         modelClass: 'user.model',
         join: {
           from: 'chargeVersionNotes.userId',
-          to: 'users.id'
+          to: 'users.userId'
         }
       }
     }
