@@ -68,7 +68,7 @@ describe('Users - Index Users service', () => {
         users: [
           {
             email: fetchResults.results[0].username,
-            link: `/user/${fetchResults.results[0].id}/status`,
+            link: `/user/${fetchResults.results[0].userId}/status`,
             permissions: 'Basic access',
             status: 'enabled',
             type: 'Internal'

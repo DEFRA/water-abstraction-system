@@ -38,7 +38,7 @@ describe('Licence Monitoring Station model', () => {
     testUser = await UserHelper.add()
 
     testRecord = await LicenceMonitoringStationHelper.add({
-      createdBy: testUser.id,
+      createdBy: testUser.userId,
       licenceId: testLicence.id,
       licenceVersionPurposeConditionId: testLicenceVersionPurposeCondition.id,
       monitoringStationId: testMonitoringStation.id
