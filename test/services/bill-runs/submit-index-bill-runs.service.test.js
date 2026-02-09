@@ -76,7 +76,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         const setArgs = yarStub.set.args[0]
 
         expect(setArgs[0]).to.equal('billRunsFilter')
-        expect(setArgs[1]).to.equal({ regions: [], yearCreated: null })
+        expect(setArgs[1]).to.equal({ regions: [], runTypes: [], yearCreated: null })
       })
     })
 
@@ -97,32 +97,76 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         const setArgs = yarStub.set.args[0]
 
         expect(setArgs[0]).to.equal('billRunsFilter')
-        expect(setArgs[1]).to.equal({ regions: [], yearCreated: '2025' })
+        expect(setArgs[1]).to.equal({ regions: [], runTypes: [], yearCreated: '2025' })
       })
 
-      describe('and a single region filter has been selected ("regions" is a string)', () => {
+      describe('and a single "Run type" filter has been selected ("runTypes" is a string)', () => {
         beforeEach(() => {
-          payload = { regions: '1d562e9a-2104-41d9-aa75-c008a7ec9059', yearCreated: '2025' }
+          payload = { runTypes: 'annual' }
         })
 
-        it('saves the state of the region filter as an array in the session', async () => {
+        it('saves the state of the "Run type" filter as an array in the session', async () => {
           await SubmitIndexBillRunsService.go(payload, yarStub)
 
           const setArgs = yarStub.set.args[0]
 
           expect(setArgs[0]).to.equal('billRunsFilter')
-          expect(setArgs[1]).to.equal({ regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'], yearCreated: '2025' })
+          expect(setArgs[1]).to.equal({
+            regions: [],
+            runTypes: ['annual'],
+            yearCreated: null
+          })
         })
       })
 
-      describe('and multiple region filters have been selected ("regions" is an array)', () => {
+      describe('and multiple "Run type" filters have been selected ("runTypes" is an array)', () => {
+        beforeEach(() => {
+          payload = {
+            runTypes: ['annual', 'supplementary']
+          }
+        })
+
+        it('saves the state of the "Run type" filter as an array in the session', async () => {
+          await SubmitIndexBillRunsService.go(payload, yarStub)
+
+          const setArgs = yarStub.set.args[0]
+
+          expect(setArgs[0]).to.equal('billRunsFilter')
+          expect(setArgs[1]).to.equal({
+            regions: [],
+            runTypes: ['annual', 'supplementary'],
+            yearCreated: null
+          })
+        })
+      })
+
+      describe('and a single "Region" filter has been selected ("regions" is a string)', () => {
+        beforeEach(() => {
+          payload = { regions: '1d562e9a-2104-41d9-aa75-c008a7ec9059', yearCreated: '2025' }
+        })
+
+        it('saves the state of the "Region" filter as an array in the session', async () => {
+          await SubmitIndexBillRunsService.go(payload, yarStub)
+
+          const setArgs = yarStub.set.args[0]
+
+          expect(setArgs[0]).to.equal('billRunsFilter')
+          expect(setArgs[1]).to.equal({
+            regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'],
+            runTypes: [],
+            yearCreated: '2025'
+          })
+        })
+      })
+
+      describe('and multiple "Region" filters have been selected ("regions" is an array)', () => {
         beforeEach(() => {
           payload = {
             regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059', 'fd3d1154-c83d-4580-bcd6-46bfc380f233']
           }
         })
 
-        it('saves the state of the region filter as an array in the session', async () => {
+        it('saves the state of the "Region" filter as an array in the session', async () => {
           await SubmitIndexBillRunsService.go(payload, yarStub)
 
           const setArgs = yarStub.set.args[0]
@@ -130,6 +174,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
           expect(setArgs[0]).to.equal('billRunsFilter')
           expect(setArgs[1]).to.equal({
             regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059', 'fd3d1154-c83d-4580-bcd6-46bfc380f233'],
+            runTypes: [],
             yearCreated: null
           })
         })
@@ -158,7 +203,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               errorList: [{ href: '#yearCreated', text: 'The year created must be a number' }],
               yearCreated: { text: 'The year created must be a number' }
             },
-            filters: { openFilter: true, regions: [], yearCreated: 'invalid-year' },
+            filters: { openFilter: true, regions: [], runTypes: [], yearCreated: 'invalid-year' },
             billRuns: [
               {
                 id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
@@ -220,9 +265,45 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               numberOfPages: 3,
               showingMessage: 'Showing 2 of 70 bill runs'
             },
-            regions: [
-              { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' },
-              { id: 'fd3d1154-c83d-4580-bcd6-46bfc380f233', displayName: 'Midlands' }
+            regionItems: [
+              {
+                checked: false,
+                id: 'Anglian',
+                text: 'Anglian',
+                value: '1d562e9a-2104-41d9-aa75-c008a7ec9059'
+              },
+              {
+                checked: false,
+                id: 'Midlands',
+                text: 'Midlands',
+                value: 'fd3d1154-c83d-4580-bcd6-46bfc380f233'
+              }
+            ],
+            runTypeItems: [
+              {
+                checked: false,
+                id: 'annual',
+                text: 'Annual',
+                value: 'annual'
+              },
+              {
+                checked: false,
+                id: 'supplementary',
+                text: 'Supplementary',
+                value: 'supplementary'
+              },
+              {
+                checked: false,
+                id: 'two_part_tariff',
+                text: 'Two-part tariff',
+                value: 'two_part_tariff'
+              },
+              {
+                checked: false,
+                id: 'two_part_supplementary',
+                text: 'Two-part tariff supplementary',
+                value: 'two_part_supplementary'
+              }
             ]
           })
         })
@@ -245,7 +326,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               errorList: [{ href: '#yearCreated', text: 'The year created must be a number' }],
               yearCreated: { text: 'The year created must be a number' }
             },
-            filters: { openFilter: true, regions: [], yearCreated: 'invalid-year' },
+            filters: { openFilter: true, regions: [], runTypes: [], yearCreated: 'invalid-year' },
             billRuns: [
               {
                 id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
@@ -279,9 +360,45 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               numberOfPages: 1,
               showingMessage: 'Showing all 2 bill runs'
             },
-            regions: [
-              { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' },
-              { id: 'fd3d1154-c83d-4580-bcd6-46bfc380f233', displayName: 'Midlands' }
+            regionItems: [
+              {
+                checked: false,
+                id: 'Anglian',
+                text: 'Anglian',
+                value: '1d562e9a-2104-41d9-aa75-c008a7ec9059'
+              },
+              {
+                checked: false,
+                id: 'Midlands',
+                text: 'Midlands',
+                value: 'fd3d1154-c83d-4580-bcd6-46bfc380f233'
+              }
+            ],
+            runTypeItems: [
+              {
+                checked: false,
+                id: 'annual',
+                text: 'Annual',
+                value: 'annual'
+              },
+              {
+                checked: false,
+                id: 'supplementary',
+                text: 'Supplementary',
+                value: 'supplementary'
+              },
+              {
+                checked: false,
+                id: 'two_part_tariff',
+                text: 'Two-part tariff',
+                value: 'two_part_tariff'
+              },
+              {
+                checked: false,
+                id: 'two_part_supplementary',
+                text: 'Two-part tariff supplementary',
+                value: 'two_part_supplementary'
+              }
             ]
           })
         })

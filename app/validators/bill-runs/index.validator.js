@@ -7,6 +7,8 @@
 
 const Joi = require('joi').extend(require('@joi/date'))
 
+const { billRunTypes } = require('../../lib/static-lookups.lib.js')
+
 const MIN_YEAR_CREATED = 2014 // Based on the minimum year a bill run has been created in the system
 
 /**
@@ -28,6 +30,12 @@ function go(payload, regions) {
       .optional()
       .messages({
         'any.only': 'Select a valid region'
+      }),
+    runTypes: Joi.array()
+      .items(Joi.string().valid(...Object.keys(billRunTypes)))
+      .optional()
+      .messages({
+        'any.only': 'Select a valid run type'
       }),
     yearCreated: Joi.number()
       .min(MIN_YEAR_CREATED)

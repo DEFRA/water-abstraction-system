@@ -40,14 +40,13 @@ async function go(yar, page = 1) {
     'bill runs'
   )
 
-  const pageData = IndexBillRunsPresenter.go(billRuns, busyResult)
+  const pageData = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
   return {
     activeNavBar: 'bill-runs',
     filters,
     ...pageData,
-    pagination,
-    regions
+    pagination
   }
 }
 
@@ -58,7 +57,7 @@ function _filters(yar) {
 
   if (savedFilters) {
     for (const key of Object.keys(savedFilters)) {
-      if (['regions'].includes(key)) {
+      if (['regions', 'runTypes'].includes(key)) {
         openFilter = savedFilters[key].length > 0
       } else {
         openFilter = !!savedFilters[key]
@@ -72,6 +71,7 @@ function _filters(yar) {
 
   return {
     regions: [],
+    runTypes: [],
     yearCreated: null,
     ...savedFilters,
     openFilter
