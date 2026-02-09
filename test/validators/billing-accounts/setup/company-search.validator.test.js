@@ -41,7 +41,7 @@ describe('Billing Accounts - Setup - Company Search Validator', () => {
       })
     })
 
-    describe('with a "company search" longer than 100 characters', () => {
+    describe('with a "company search" value longer than 100 characters', () => {
       beforeEach(() => {
         payload = { companySearch: 'a'.repeat(101) }
       })
