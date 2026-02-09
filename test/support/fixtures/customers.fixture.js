@@ -57,6 +57,20 @@ function company() {
 }
 
 /**
+ * A representation of the company from the 'FetchCompaniesService'
+ *
+ * @returns {object[]} A array of company objects
+ */
+function companies() {
+  return [
+    {
+      id: generateUUID(),
+      name: 'Tyrell Corporation'
+    }
+  ]
+}
+
+/**
  * A representation from the company contact table
  *
  * @returns {module:CompanyContactModel} A company contact
@@ -120,6 +134,7 @@ function licences() {
 module.exports = {
   billingAccounts,
   company,
+  companies,
   companyContact,
   companyContacts,
   licences

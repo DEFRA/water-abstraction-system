@@ -41,7 +41,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
   describe('when the user picks an existing address', () => {
     beforeEach(async () => {
       payload = {
-        addressSelected: generateUUID()
+        addressSelected: addresses[0].address.id
       }
     })
 
@@ -62,7 +62,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       const result = await SubmitExistingAddressService.go(session.id, payload)
 
       expect(result).to.equal({
-        addressSelected: payload.addressSelected
+        redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
       })
     })
   })
@@ -88,7 +88,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
               text: 'Back'
             },
             pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-            redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+            redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
           },
           addressSelected: 'new'
         },
@@ -100,7 +100,48 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       const result = await SubmitExistingAddressService.go(session.id, payload)
 
       expect(result).to.equal({
-        addressSelected: 'new'
+        redirectUrl: `/system/address/${session.id}/postcode`
+      })
+    })
+  })
+
+  describe('when the user selects an existing address after already having set up a new address', () => {
+    beforeEach(async () => {
+      payload = {
+        addressSelected: addresses[0].address.id
+      }
+
+      sessionData = {
+        addressJourney: {
+          address: {},
+          backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-account`, text: 'Back' },
+          pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
+        },
+        billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+      }
+
+      session = await SessionHelper.add({ data: sessionData })
+    })
+
+    it('saves the submitted value', async () => {
+      await SubmitExistingAddressService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.data).to.equal(
+        {
+          addressSelected: payload.addressSelected
+        },
+        { skip: ['billingAccount'] }
+      )
+    })
+
+    it('continues the journey', async () => {
+      const result = await SubmitExistingAddressService.go(session.id, payload)
+
+      expect(result).to.equal({
+        redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
       })
     })
   })
@@ -108,6 +149,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
   describe('when validation fails', () => {
     beforeEach(async () => {
       payload = {}
+
       Sinon.stub(FetchExistingAddressesService, 'go').returns(addresses)
     })
 
