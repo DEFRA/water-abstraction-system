@@ -12,7 +12,7 @@ const BillingAccountsFixture = require('../../../support/fixtures/billing-accoun
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const SubmitCompanyNameService = require('../../../../app/services/billing-accounts/setup/submit-company-name.service.js')
+const SubmitCompanySearchService = require('../../../../app/services/billing-accounts/setup/submit-company-search.service.js')
 
 describe('Billing Accounts - Setup - Company Name Service', () => {
   let payload
@@ -20,7 +20,6 @@ describe('Billing Accounts - Setup - Company Name Service', () => {
   let sessionData
 
   beforeEach(async () => {
-    payload = { placeholder: 'change me' }
     sessionData = {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
@@ -35,20 +34,20 @@ describe('Billing Accounts - Setup - Company Name Service', () => {
   describe('when called', () => {
     beforeEach(async () => {
       payload = {
-        companyName: 'Company Name'
+        companySearch: 'Company Name'
       }
     })
 
     it('saves the submitted value', async () => {
-      await SubmitCompanyNameService.go(session.id, payload)
+      await SubmitCompanySearchService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.companyName).to.equal(payload.companyName)
+      expect(refreshedSession.companySearch).to.equal(payload.companySearch)
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitCompanyNameService.go(session.id, payload)
+      const result = await SubmitCompanySearchService.go(session.id, payload)
 
       expect(result).to.equal({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/select-company`
@@ -63,16 +62,16 @@ describe('Billing Accounts - Setup - Company Name Service', () => {
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitCompanyNameService.go(session.id, payload)
+        const result = await SubmitCompanySearchService.go(session.id, payload)
 
         expect(result.error).to.equal({
           errorList: [
             {
-              href: '#companyName',
+              href: '#companySearch',
               text: 'Enter the Companies House number or company name'
             }
           ],
-          companyName: {
+          companySearch: {
             text: 'Enter the Companies House number or company name'
           }
         })
@@ -82,21 +81,21 @@ describe('Billing Accounts - Setup - Company Name Service', () => {
     describe('because too many characters were entered', () => {
       beforeEach(() => {
         payload = {
-          companyName: 'a'.repeat(101)
+          companySearch: 'a'.repeat(101)
         }
       })
 
       it('returns page data for the view, with errors', async () => {
-        const result = await SubmitCompanyNameService.go(session.id, payload)
+        const result = await SubmitCompanySearchService.go(session.id, payload)
 
         expect(result.error).to.equal({
           errorList: [
             {
-              href: '#companyName',
+              href: '#companySearch',
               text: 'Companies House number or company name must be 100 characters or less'
             }
           ],
-          companyName: {
+          companySearch: {
             text: 'Companies House number or company name must be 100 characters or less'
           }
         })

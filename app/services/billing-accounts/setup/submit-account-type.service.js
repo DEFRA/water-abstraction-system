@@ -45,7 +45,7 @@ function _redirectUrl(session) {
     return `/system/billing-accounts/setup/${session.id}/existing-address`
   }
 
-  return `/system/billing-accounts/setup/${session.id}/company-name`
+  return `/system/billing-accounts/setup/${session.id}/company-search`
 }
 
 async function _save(session, payload) {

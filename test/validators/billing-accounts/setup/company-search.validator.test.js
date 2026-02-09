@@ -8,13 +8,13 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const CompanyNameValidator = require('../../../../app/validators/billing-accounts/setup/company-name.validator.js')
+const CompanyNameValidator = require('../../../../app/validators/billing-accounts/setup/company-search.validator.js')
 
 describe('Billing Accounts - Setup - Company Name Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { companyName: 'Company Name' }
+    payload = { companySearch: 'Company Name' }
   })
 
   describe('when called with valid data', () => {
@@ -43,7 +43,7 @@ describe('Billing Accounts - Setup - Company Name Validator', () => {
 
     describe('with a "company name" longer than 100 characters', () => {
       beforeEach(() => {
-        payload = { companyName: 'a'.repeat(101) }
+        payload = { companySearch: 'a'.repeat(101) }
       })
 
       it('returns with errors', () => {

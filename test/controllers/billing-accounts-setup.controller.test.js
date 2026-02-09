@@ -17,14 +17,14 @@ const { postRequestOptions } = require('../support/general.js')
 const InitiateSessionService = require('../../app/services/billing-accounts/setup/initiate-session.service.js')
 const SubmitAccountService = require('../../app/services/billing-accounts/setup/submit-account.service.js')
 const SubmitAccountTypeService = require('../../app/services/billing-accounts/setup/submit-account-type.service.js')
-const SubmitCompanyNameService = require('../../app/services/billing-accounts/setup/submit-company-name.service.js')
+const SubmitCompanySearchService = require('../../app/services/billing-accounts/setup/submit-company-search.service.js')
 const SubmitContactService = require('../../app/services/billing-accounts/setup/submit-contact.service.js')
 const SubmitContactNameService = require('../../app/services/billing-accounts/setup/submit-contact-name.service.js')
 const SubmitExistingAccountService = require('../../app/services/billing-accounts/setup/submit-existing-account.service.js')
 const SubmitExistingAddressService = require('../../app/services/billing-accounts/setup/submit-existing-address.service.js')
 const ViewAccountService = require('../../app/services/billing-accounts/setup/view-account.service.js')
 const ViewAccountTypeService = require('../../app/services/billing-accounts/setup/view-account-type.service.js')
-const ViewCompanyNameService = require('../../app/services/billing-accounts/setup/view-company-name.service.js')
+const ViewCompanySearchService = require('../../app/services/billing-accounts/setup/view-company-search.service.js')
 const ViewContactService = require('../../app/services/billing-accounts/setup/view-contact.service.js')
 const ViewContactNameService = require('../../app/services/billing-accounts/setup/view-contact-name.service.js')
 const ViewExistingAccountService = require('../../app/services/billing-accounts/setup/view-existing-account.service.js')
@@ -476,16 +476,16 @@ describe('Billing Accounts Setup controller', () => {
     })
   })
 
-  describe('/billing-accounts/setup/{sessionId}/company-name', () => {
+  describe('/billing-accounts/setup/{sessionId}/company-search', () => {
     describe('GET', () => {
       beforeEach(() => {
         sessionId = generateUUID()
-        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/company-name`)
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/company-search`)
       })
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ViewCompanyNameService, 'go').resolves({
+          Sinon.stub(ViewCompanySearchService, 'go').resolves({
             pageTitle: 'Enter the company details'
           })
         })
@@ -502,12 +502,12 @@ describe('Billing Accounts Setup controller', () => {
     describe('POST', () => {
       beforeEach(() => {
         sessionId = generateUUID()
-        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/company-name`)
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/company-search`)
       })
 
       describe('when the user enters a company name or company number', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitCompanyNameService, 'go').resolves({
+          Sinon.stub(SubmitCompanySearchService, 'go').resolves({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/select-company`
           })
         })

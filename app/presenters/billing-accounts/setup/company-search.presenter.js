@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the '/billing-accounts/setup/{sessionId}/company-name' page
- * @module CompanyNamePresenter
+ * Formats data for the '/billing-accounts/setup/{sessionId}/company-search' page
+ * @module CompanySearchPresenter
  */
 
 /**
- * Formats data for the '/billing-accounts/setup/{sessionId}/company-name' page
+ * Formats data for the '/billing-accounts/setup/{sessionId}/company-search' page
  *
  * @param {object} session - The session instance
  *
@@ -20,7 +20,7 @@ function go(session) {
       href: `/system/billing-accounts/setup/${session.id}/account-type`,
       text: 'Back'
     },
-    companyName: session.companyName ?? null,
+    companySearch: session.companySearch ?? null,
     pageTitle: 'Enter the company details',
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`
   }

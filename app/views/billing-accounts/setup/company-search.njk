@@ -8,14 +8,14 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukInput({
-      id: "companyName",
-      name: "companyName",
+      id: "companySearch",
+      name: "companySearch",
       classes: "govuk-!-width-two-thirds",
-      errorMessage: error.companyName,
+      errorMessage: error.companySearch,
       label: {
         text: "Enter the Companies House number or company name"
       },
-      value: companyName
+      value: companySearch
     }) }}
 
     <p>We’ll use this information to search the Companies House register.</p>

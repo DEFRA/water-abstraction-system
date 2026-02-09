@@ -11,7 +11,7 @@ const { expect } = Code
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 
 // Thing under test
-const CompanyNamePresenter = require('../../../../app/presenters/billing-accounts/setup/company-name.presenter.js')
+const CompanySearchPresenter = require('../../../../app/presenters/billing-accounts/setup/company-search.presenter.js')
 
 describe('Billing Accounts - Setup - Company Name Presenter', () => {
   let session
@@ -24,38 +24,38 @@ describe('Billing Accounts - Setup - Company Name Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CompanyNamePresenter.go(session)
+      const result = CompanySearchPresenter.go(session)
 
       expect(result).to.equal({
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/account-type`,
           text: 'Back'
         },
-        companyName: null,
+        companySearch: null,
         pageTitle: 'Enter the company details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })
     })
   })
 
-  describe('the "companyName" property', () => {
+  describe('the "companySearch" property', () => {
     describe('when no company name has been entered', () => {
       it('returns null', () => {
-        const result = CompanyNamePresenter.go(session)
+        const result = CompanySearchPresenter.go(session)
 
-        expect(result.companyName).to.equal(null)
+        expect(result.companySearch).to.equal(null)
       })
     })
 
     describe('when a company name has been entered', () => {
       beforeEach(() => {
-        session.companyName = 'Company Name'
+        session.companySearch = 'Company Name'
       })
 
       it('returns the selected contact name', () => {
-        const result = CompanyNamePresenter.go(session)
+        const result = CompanySearchPresenter.go(session)
 
-        expect(result.companyName).to.equal(session.companyName)
+        expect(result.companySearch).to.equal(session.companySearch)
       })
     })
   })

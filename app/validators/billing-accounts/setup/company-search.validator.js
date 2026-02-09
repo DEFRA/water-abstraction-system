@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Validates data submitted for the '/billing-accounts/setup/{sessionId}/company-name' page
+ * Validates data submitted for the '/billing-accounts/setup/{sessionId}/company-search' page
  *
- * @module CompanyNameValidator
+ * @module CompanySearchValidator
  */
 
 const Joi = require('joi')
 
 /**
- * Validates data submitted for the '/billing-accounts/setup/{sessionId}/company-name' page
+ * Validates data submitted for the '/billing-accounts/setup/{sessionId}/company-search' page
  *
  * @param {object} payload - The payload from the request to be validated
  *
@@ -18,7 +18,7 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    companyName: Joi.string().required().max(100).messages({
+    companySearch: Joi.string().required().max(100).messages({
       'any.required': 'Enter the Companies House number or company name',
       'string.max': 'Companies House number or company name must be 100 characters or less'
     })

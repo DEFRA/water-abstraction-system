@@ -209,9 +209,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/billing-accounts/setup/{sessionId}/company-name',
+    path: '/billing-accounts/setup/{sessionId}/company-search',
     options: {
-      handler: BillingAccountsSetupController.viewCompanyName,
+      handler: BillingAccountsSetupController.viewCompanySearch,
       auth: {
         access: {
           scope: ['manage_billing_accounts']
@@ -221,9 +221,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/billing-accounts/setup/{sessionId}/company-name',
+    path: '/billing-accounts/setup/{sessionId}/company-search',
     options: {
-      handler: BillingAccountsSetupController.submitCompanyName,
+      handler: BillingAccountsSetupController.submitCompanySearch,
       auth: {
         access: {
           scope: ['manage_billing_accounts']

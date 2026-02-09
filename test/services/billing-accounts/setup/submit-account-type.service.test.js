@@ -45,7 +45,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       const result = await SubmitAccountTypeService.go(session.id, payload)
 
       expect(result).to.equal({
-        redirectUrl: `/system/billing-accounts/setup/${session.id}/company-name`
+        redirectUrl: `/system/billing-accounts/setup/${session.id}/company-search`
       })
     })
   })

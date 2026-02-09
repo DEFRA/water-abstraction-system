@@ -12,7 +12,7 @@ const BillingAccountsFixture = require('../../../support/fixtures/billing-accoun
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ViewCompanyNameService = require('../../../../app/services/billing-accounts/setup/view-company-name.service.js')
+const ViewCompanySearchService = require('../../../../app/services/billing-accounts/setup/view-company-search.service.js')
 
 describe('Billing Accounts - Setup - Company Name Service', () => {
   let session
@@ -32,14 +32,14 @@ describe('Billing Accounts - Setup - Company Name Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCompanyNameService.go(session.id)
+      const result = await ViewCompanySearchService.go(session.id)
 
       expect(result).to.equal({
         backLink: {
           href: `/system/billing-accounts/setup/${session.id}/account-type`,
           text: 'Back'
         },
-        companyName: null,
+        companySearch: null,
         pageTitle: 'Enter the company details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })
