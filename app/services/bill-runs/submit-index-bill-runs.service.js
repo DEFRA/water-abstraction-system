@@ -33,6 +33,7 @@ async function go(payload, yar, page = 1) {
   }
 
   _handleOneOptionSelected(payload, 'regions')
+  _handleOneOptionSelected(payload, 'runTypes')
 
   const regions = await FetchRegionsService.go()
   const error = _validate(payload, regions)
@@ -100,21 +101,23 @@ async function _replayView(payload, error, page, regions, savedFilters) {
     'bill runs'
   )
 
-  const pageData = IndexBillRunsPresenter.go(billRuns, busyResult)
+  const filters = { ...savedFilters, ...payload }
+
+  const pageData = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 
   return {
     activeNavBar: 'bill-runs',
     error,
-    filters: { ...savedFilters, ...payload },
+    filters,
     ...pageData,
-    pagination,
-    regions
+    pagination
   }
 }
 
 function _save(payload, yar) {
   yar.set('billRunsFilter', {
     regions: payload.regions,
+    runTypes: payload.runTypes,
     yearCreated: payload.yearCreated ?? null
   })
 }
@@ -125,6 +128,7 @@ function _savedFilters(payload) {
   return {
     openFilter: true,
     regions: [],
+    runTypes: [],
     yearCreated: null,
     ...billRunsFilter
   }

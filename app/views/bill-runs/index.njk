@@ -38,18 +38,6 @@
       }) }}
 
       {# Filter by region #}
-      {% set regionItems = [] %}
-      {% for region in regions %}
-        {% set regionItem = {
-          attributes: { 'data-test': region.displayName },
-          checked: filters.regions.includes(region.id),
-          text: region.displayName,
-          value: region.id
-          } %}
-
-        {% set regionItems = (regionItems.push(regionItem), regionItems) %}
-      {% endfor %}
-
       {{ govukCheckboxes({
         classes: "govuk-checkboxes--small",
         fieldset: {
@@ -61,6 +49,20 @@
         },
         items: regionItems,
         name: "regions"
+      }) }}
+
+      {# Filter by run types #}
+      {{ govukCheckboxes({
+        classes: "govuk-checkboxes--small",
+        fieldset: {
+          legend: {
+            text: "Run type",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: runTypeItems,
+        name: "runTypes"
       }) }}
 
       <div class="govuk-button-group">

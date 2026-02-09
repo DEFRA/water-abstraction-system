@@ -10,6 +10,8 @@ const { expect } = Code
 // Test helpers
 const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
 const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
+const CompanyContactHelper = require('../support/helpers/company-contact.helper.js')
+const CompanyContactModel = require('../../app/models/company-contact.model.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
 const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
@@ -38,12 +40,13 @@ const USER_GROUP_NPS_INDEX = 7
 const USER_ROLE_AR_USER_INDEX = 0
 
 describe('User model', () => {
-  let testChargeVersionNoteOne
-  let testChargeVersionNoteTwo
+  let testChargeVersionNotes
+  let testCreatedCompanyContacts
   let testGroup
   let testLicenceEntity
   let testRecord
   let testRole
+  let testUpdatedCompanyContacts
   let testUser
   let testUserRole
   let testUserGroup
@@ -54,10 +57,27 @@ describe('User model', () => {
     testRole = RoleHelper.select(ROLE_AR_USER_INDEX)
     testGroup = GroupHelper.select(GROUP_NPS_INDEX)
     testUserGroup = UserGroupHelper.select(USER_GROUP_NPS_INDEX)
-
-    testChargeVersionNoteOne = await ChargeVersionNoteHelper.add({ userId: testRecord.userId, note: '1st test note' })
-    testChargeVersionNoteTwo = await ChargeVersionNoteHelper.add({ userId: testRecord.userId, note: '2nd test note' })
     testUserRole = UserRoleHelper.select(USER_ROLE_AR_USER_INDEX)
+
+    testChargeVersionNotes = []
+    testCreatedCompanyContacts = []
+    testUpdatedCompanyContacts = []
+    for (let i = 0; i < 2; i++) {
+      const chargeVersionNote = await ChargeVersionNoteHelper.add({ note: `Test note ${i}`, userId: testRecord.userId })
+      testChargeVersionNotes.push(chargeVersionNote)
+
+      const createdCompanyContact = await CompanyContactHelper.add({
+        startDate: `2022-04-0${i + 1}`,
+        createdBy: testRecord.id
+      })
+      testCreatedCompanyContacts.push(createdCompanyContact)
+
+      const updatedCompanyContact = await CompanyContactHelper.add({
+        startDate: `2022-04-0${i + 1}`,
+        updatedBy: testRecord.id
+      })
+      testUpdatedCompanyContacts.push(updatedCompanyContact)
+    }
   })
 
   afterEach(async () => {
@@ -71,8 +91,17 @@ describe('User model', () => {
   })
 
   after(async () => {
-    await testChargeVersionNoteOne.$query().delete()
-    await testChargeVersionNoteTwo.$query().delete()
+    for (const testChargeVersionNote of testChargeVersionNotes) {
+      await testChargeVersionNote.$query().delete()
+    }
+
+    for (const testCreatedCompanyContact of testCreatedCompanyContacts) {
+      await testCreatedCompanyContact.$query().delete()
+    }
+
+    for (const testUpdatedCompanyContact of testUpdatedCompanyContacts) {
+      await testUpdatedCompanyContact.$query().delete()
+    }
   })
 
   describe('Basic query', () => {
@@ -99,20 +128,37 @@ describe('User model', () => {
           .first()
           .withGraphFetched('chargeVersionNotes')
 
-        const foundChargeVersionNoteOne = result.chargeVersionNotes.find((chargeVersionNote) => {
-          return chargeVersionNote.id === testChargeVersionNoteOne.id
-        })
-        const foundChargeVersionNoteTwo = result.chargeVersionNotes.find((chargeVersionNote) => {
-          return chargeVersionNote.id === testChargeVersionNoteTwo.id
-        })
-
         expect(result).to.be.instanceOf(UserModel)
         expect(result.userId).to.equal(testRecord.userId)
 
         expect(result.chargeVersionNotes).to.be.an.array()
-        expect(foundChargeVersionNoteOne).to.be.an.instanceOf(ChargeVersionNoteModel)
-        expect(foundChargeVersionNoteOne).to.equal(testChargeVersionNoteOne)
-        expect(foundChargeVersionNoteTwo).to.equal(testChargeVersionNoteTwo)
+        expect(result.chargeVersionNotes[0]).to.be.an.instanceOf(ChargeVersionNoteModel)
+        expect(result.chargeVersionNotes).includes(testChargeVersionNotes[0])
+        expect(result.chargeVersionNotes).includes(testChargeVersionNotes[1])
+      })
+    })
+
+    describe('when linking to created company contacts', () => {
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query().innerJoinRelated('createdCompanyContacts')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the created company contacts', async () => {
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .limit(1)
+          .first()
+          .withGraphFetched('createdCompanyContacts')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.userId).to.equal(testRecord.userId)
+
+        expect(result.createdCompanyContacts).to.be.an.array()
+        expect(result.createdCompanyContacts[0]).to.be.an.instanceOf(CompanyContactModel)
+        expect(result.createdCompanyContacts).includes(testCreatedCompanyContacts[0])
+        expect(result.createdCompanyContacts).includes(testCreatedCompanyContacts[1])
       })
     })
 
@@ -262,6 +308,30 @@ describe('User model', () => {
         expect(result.roles).to.have.length(1)
         expect(result.roles[0]).to.be.an.instanceOf(RoleModel)
         expect(result.roles[0]).to.equal(testRole, { skip: ['createdAt', 'updatedAt'] })
+      })
+    })
+
+    describe('when linking to updated company contacts', () => {
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query().innerJoinRelated('updatedCompanyContacts')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the updated company contacts', async () => {
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .limit(1)
+          .first()
+          .withGraphFetched('updatedCompanyContacts')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.userId).to.equal(testRecord.userId)
+
+        expect(result.updatedCompanyContacts).to.be.an.array()
+        expect(result.updatedCompanyContacts[0]).to.be.an.instanceOf(CompanyContactModel)
+        expect(result.updatedCompanyContacts).includes(testUpdatedCompanyContacts[0])
+        expect(result.updatedCompanyContacts).includes(testUpdatedCompanyContacts[1])
       })
     })
 
