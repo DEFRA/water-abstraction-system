@@ -32,12 +32,28 @@ class CompanyContactModel extends BaseModel {
           to: 'contacts.id'
         }
       },
+      createdByUser: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'user.model',
+        join: {
+          from: 'companyContacts.createdBy',
+          to: 'users.id'
+        }
+      },
       licenceRole: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence-role.model',
         join: {
           from: 'companyContacts.licenceRoleId',
           to: 'licenceRoles.id'
+        }
+      },
+      updatedByUser: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'user.model',
+        join: {
+          from: 'companyContacts.updatedBy',
+          to: 'users.id'
         }
       }
     }
