@@ -22,11 +22,11 @@ function go(company, companyContact) {
       text: 'Go back to contacts'
     },
     contact: {
-      name: companyContact.contact.$name(),
-      email: companyContact.contact.email,
       abstractionAlerts: companyContact.abstractionAlerts ? 'Yes' : 'No',
       created: _created(companyContact),
-      lastUpdated: _lastUpdated(companyContact)
+      email: companyContact.contact.email,
+      lastUpdated: _lastUpdated(companyContact),
+      name: companyContact.contact.$name()
     },
     pageTitle: `Contact details for ${companyContact.contact.$name()}`,
     pageTitleCaption: company.name,
