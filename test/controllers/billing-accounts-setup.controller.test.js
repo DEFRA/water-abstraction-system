@@ -22,6 +22,7 @@ const SubmitContactService = require('../../app/services/billing-accounts/setup/
 const SubmitContactNameService = require('../../app/services/billing-accounts/setup/submit-contact-name.service.js')
 const SubmitExistingAccountService = require('../../app/services/billing-accounts/setup/submit-existing-account.service.js')
 const SubmitExistingAddressService = require('../../app/services/billing-accounts/setup/submit-existing-address.service.js')
+const SubmitSelectCompanyService = require('../../app/services/billing-accounts/setup/submit-select-company.service.js')
 const ViewAccountService = require('../../app/services/billing-accounts/setup/view-account.service.js')
 const ViewAccountTypeService = require('../../app/services/billing-accounts/setup/view-account-type.service.js')
 const ViewCompanySearchService = require('../../app/services/billing-accounts/setup/view-company-search.service.js')
@@ -29,6 +30,7 @@ const ViewContactService = require('../../app/services/billing-accounts/setup/vi
 const ViewContactNameService = require('../../app/services/billing-accounts/setup/view-contact-name.service.js')
 const ViewExistingAccountService = require('../../app/services/billing-accounts/setup/view-existing-account.service.js')
 const ViewExistingAddressService = require('../../app/services/billing-accounts/setup/view-existing-address.service.js')
+const ViewSelectCompanyService = require('../../app/services/billing-accounts/setup/view-select-company.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -517,6 +519,52 @@ describe('Billing Accounts Setup controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/select-company`)
+        })
+      })
+    })
+  })
+
+  describe('/billing-accounts/setup/{sessionId}/select-company', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/select-company`)
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ViewSelectCompanyService, 'go').resolves({
+            pageTitle: 'Select the registered company details'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Select the registered company details')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/select-company`)
+      })
+
+      describe('when the user enters a company name or company number', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitSelectCompanyService, 'go').resolves({
+            redirectUrl: `/system/billing-accounts/setup/${sessionId}/existing-address`
+          })
+        })
+
+        it('redirects to the "select-company" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/existing-address`)
         })
       })
     })
