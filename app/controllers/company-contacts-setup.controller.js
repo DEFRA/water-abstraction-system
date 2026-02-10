@@ -96,11 +96,12 @@ async function submitCancel(request, h) {
 
 async function submitCheck(request, h) {
   const {
+    auth,
     params: { sessionId },
     yar
   } = request
 
-  const { redirectUrl } = await SubmitCheckService.go(sessionId, yar)
+  const { redirectUrl } = await SubmitCheckService.go(sessionId, yar, auth)
 
   return h.redirect(redirectUrl)
 }
