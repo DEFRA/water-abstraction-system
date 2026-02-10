@@ -65,6 +65,20 @@
         name: "runTypes"
       }) }}
 
+      {# Filter by number #}
+      {{ govukInput({
+        classes: "govuk-input--width-10",
+        id: "number",
+        label: {
+          classes: "govuk-label--s",
+          isPageHeading: false,
+          text: "Number"
+        },
+        name: "number",
+        value: filters.number,
+        errorMessage: error.number
+      }) }}
+
       <div class="govuk-button-group">
         {{ govukButton({
           preventDoubleClick: true,
