@@ -24,6 +24,14 @@ class RegionModel extends BaseModel {
           to: 'billRuns.regionId'
         }
       },
+      companies: {
+        relation: Model.HasManyRelation,
+        modelClass: 'company.model',
+        join: {
+          from: 'regions.id',
+          to: 'companies.regionId'
+        }
+      },
       licences: {
         relation: Model.HasManyRelation,
         modelClass: 'licence.model',
