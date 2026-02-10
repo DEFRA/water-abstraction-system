@@ -29,6 +29,7 @@ async function _create(companyId, companyContact) {
     startDate: today(),
     licenceRoleId: LicenceRoleModel.query().where('name', 'additionalContact').select('id'),
     abstractionAlerts: companyContact.abstractionAlerts,
+    createdBy: companyContact.createdBy,
     contact: {
       department: companyContact.name,
       email: companyContact.email,
