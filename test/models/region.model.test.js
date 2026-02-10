@@ -26,14 +26,15 @@ describe('Region model', () => {
     testRecord = RegionHelper.select()
 
     testBillRuns = []
+    testLicences = []
+
     for (let i = 0; i < 2; i++) {
+      // Create test bill runs
       const billRun = await BillRunHelper.add({ regionId: testRecord.id })
 
       testBillRuns.push(billRun)
-    }
 
-    testLicences = []
-    for (let i = 0; i < 2; i++) {
+      // Create test licences
       const licence = await LicenceHelper.add({
         licenceRef: LicenceHelper.generateLicenceRef(),
         regionId: testRecord.id
