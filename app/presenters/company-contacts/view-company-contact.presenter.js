@@ -5,6 +5,8 @@
  * @module ViewCompanyContactPresenter
  */
 
+const { formatLongDate } = require('../base.presenter.js')
+
 /**
  * Formats data for the '/company-contacts/{id}' page
  *
@@ -22,12 +24,30 @@ function go(company, companyContact) {
     contact: {
       name: companyContact.contact.$name(),
       email: companyContact.contact.email,
-      abstractionAlerts: companyContact.abstractionAlerts ? 'Yes' : 'No'
+      abstractionAlerts: companyContact.abstractionAlerts ? 'Yes' : 'No',
+      created: _created(companyContact),
+      lastUpdated: _lastUpdated(companyContact)
     },
     pageTitle: `Contact details for ${companyContact.contact.$name()}`,
     pageTitleCaption: company.name,
     removeContactLink: `/system/company-contacts/${companyContact.id}/remove`
   }
+}
+
+function _created(companyContact) {
+  if (!companyContact.createdByUser) {
+    return formatLongDate(companyContact.createdAt)
+  }
+
+  return `${formatLongDate(companyContact.createdAt)} by ${companyContact.createdByUser.username}`
+}
+
+function _lastUpdated(companyContact) {
+  if (!companyContact.updatedByUser) {
+    return formatLongDate(companyContact.updatedAt)
+  }
+
+  return `${formatLongDate(companyContact.updatedAt)} by ${companyContact.updatedByUser.username}`
 }
 
 module.exports = {

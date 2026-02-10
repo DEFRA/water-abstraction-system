@@ -91,7 +91,17 @@ function companyContact() {
       suffix: null,
       department: 'Tyrell Corporation',
       email: 'rachael.tyrell@tyrellcorp.com'
-    })
+    }),
+    createdAt: new Date('2022-01-01'),
+    createdByUser: {
+      id: generateUUID(),
+      username: 'nexus6.hunter@offworld.net'
+    },
+    updatedAt: new Date('2022-01-01'),
+    updatedByUser: {
+      id: generateUUID(),
+      username: 'void.kampff@tyrell.com'
+    }
   }
 }
 
