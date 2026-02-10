@@ -28,8 +28,8 @@ function go(payload, regions) {
   const schema = Joi.object({
     number: Joi.number()
       .integer()
-      .positive()
       .max(MAX_BILL_RUN_NUMBER)
+      .positive()
       .optional()
       .messages({
         'number.base': 'The Number must be a number',
