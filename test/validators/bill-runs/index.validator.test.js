@@ -28,6 +28,7 @@ describe('Bill Runs - Index validator', () => {
           number: 1001,
           regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'],
           runTypes: ['two_part_tariff'],
+          statuses: ['review'],
           yearCreated: 2026
         })
         expect(result.error).not.to.exist()
@@ -190,6 +191,22 @@ describe('Bill Runs - Index validator', () => {
         })
       })
     })
+
+    describe('because "Status" is invalid', () => {
+      describe('as it is not a valid status', () => {
+        beforeEach(() => {
+          payload.statuses = ['invalid-status']
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload, regions)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal('Select a valid Status')
+          expect(result.error.details[0].path[0]).to.equal('statuses')
+        })
+      })
+    })
   })
 })
 
@@ -198,6 +215,7 @@ function _payload() {
     number: '1001',
     regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'],
     runTypes: ['two_part_tariff'],
+    statuses: ['review'],
     yearCreated: '2026'
   }
 }
