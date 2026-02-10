@@ -10,7 +10,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitSetup,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -22,7 +22,7 @@ const routes = [
       handler: ReturnLogsSetupController.confirmed,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -34,7 +34,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitConfirmed,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -46,7 +46,7 @@ const routes = [
       handler: ReturnLogsSetupController.guidance,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -58,7 +58,7 @@ const routes = [
       handler: ReturnLogsSetupController.cancel,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -70,7 +70,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitCancel,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -82,7 +82,7 @@ const routes = [
       handler: ReturnLogsSetupController.check,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -94,7 +94,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitCheck,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -106,7 +106,7 @@ const routes = [
       handler: ReturnLogsSetupController.deleteNote,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -118,7 +118,7 @@ const routes = [
       handler: ReturnLogsSetupController.meterDetails,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -130,7 +130,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitMeterDetails,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -142,7 +142,7 @@ const routes = [
       handler: ReturnLogsSetupController.meterProvided,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -154,7 +154,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitMeterProvided,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -166,7 +166,7 @@ const routes = [
       handler: ReturnLogsSetupController.note,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -178,7 +178,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitNote,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -190,7 +190,7 @@ const routes = [
       handler: ReturnLogsSetupController.periodUsed,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -202,7 +202,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitPeriodUsed,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -214,7 +214,7 @@ const routes = [
       handler: ReturnLogsSetupController.readings,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -226,7 +226,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitReadings,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -238,7 +238,7 @@ const routes = [
       handler: ReturnLogsSetupController.volumes,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -250,7 +250,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitVolumes,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -262,7 +262,7 @@ const routes = [
       handler: ReturnLogsSetupController.received,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -274,7 +274,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitReceived,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -286,7 +286,7 @@ const routes = [
       handler: ReturnLogsSetupController.reported,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -298,7 +298,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitReported,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -310,7 +310,7 @@ const routes = [
       handler: ReturnLogsSetupController.singleVolume,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -322,7 +322,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitSingleVolume,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -334,7 +334,7 @@ const routes = [
       handler: ReturnLogsSetupController.startReading,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -346,7 +346,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitStartReading,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -358,7 +358,7 @@ const routes = [
       handler: ReturnLogsSetupController.submission,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -370,7 +370,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitSubmission,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -382,7 +382,7 @@ const routes = [
       handler: ReturnLogsSetupController.units,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -394,7 +394,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitUnits,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -406,7 +406,7 @@ const routes = [
       handler: ReturnLogsSetupController.multipleEntries,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
@@ -418,7 +418,7 @@ const routes = [
       handler: ReturnLogsSetupController.submitMultipleEntries,
       auth: {
         access: {
-          scope: ['billing']
+          scope: ['returns']
         }
       }
     }
