@@ -35,19 +35,23 @@ function go(company, companyContact) {
 }
 
 function _created(companyContact) {
+  const formattedDate = formatLongDate(companyContact.createdAt)
+
   if (!companyContact.createdByUser) {
-    return formatLongDate(companyContact.createdAt)
+    return formattedDate
   }
 
-  return `${formatLongDate(companyContact.createdAt)} by ${companyContact.createdByUser.username}`
+  return `${formattedDate} by ${companyContact.createdByUser.username}`
 }
 
 function _lastUpdated(companyContact) {
+  const formattedDate = formatLongDate(companyContact.updatedAt)
+
   if (!companyContact.updatedByUser) {
-    return formatLongDate(companyContact.updatedAt)
+    return formattedDate
   }
 
-  return `${formatLongDate(companyContact.updatedAt)} by ${companyContact.updatedByUser.username}`
+  return `${formattedDate} by ${companyContact.updatedByUser.username}`
 }
 
 module.exports = {
