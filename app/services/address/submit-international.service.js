@@ -59,6 +59,7 @@ function _applyPayload(session, payload) {
   session.addressJourney.address.addressLine4 = payload.addressLine4 ?? null
   session.addressJourney.address.country = payload.country
   session.addressJourney.address.postcode = payload.postcode
+  session.addressJourney.backUrl = `/system/address/${session.id}/international`
 }
 
 async function _save(session) {
