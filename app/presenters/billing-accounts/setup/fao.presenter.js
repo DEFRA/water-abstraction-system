@@ -25,21 +25,7 @@ function go(session) {
 }
 
 function _backLink(session) {
-  const address = session?.addressJourney?.address || {}
-
-  if (address.uprn) {
-    return `/system/address/${session.id}/select`
-  }
-
-  if (address.postcode) {
-    return `/system/address/${session.id}/manual`
-  }
-
-  if (address.country) {
-    return `/system/address/${session.id}/international`
-  }
-
-  return `/system/billing-accounts/setup/${session.id}/existing-address`
+  return session?.addressJourney?.backUrl ?? `/system/billing-accounts/setup/${session.id}/existing-address`
 }
 
 module.exports = {

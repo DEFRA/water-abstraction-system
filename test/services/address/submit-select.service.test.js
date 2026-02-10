@@ -98,6 +98,7 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
+          expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
         })
       })
 
@@ -139,6 +140,7 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
+          expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
         })
       })
 
@@ -180,6 +182,7 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
+          expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
         })
       })
 
@@ -221,6 +224,7 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
+          expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
         })
       })
 
@@ -262,6 +266,7 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
+          expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
         })
       })
 
