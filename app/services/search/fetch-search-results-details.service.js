@@ -77,7 +77,8 @@ async function _licence(ids) {
 
 async function _company(ids) {
   return CompanyModel.query()
-    .select('id', 'name', 'type')
+    .select(['companies.id', 'companies.name', 'region.displayName AS region'])
+    .innerJoinRelated('region')
     .withGraphFetched('licenceDocumentRoles')
     .modifyGraph('licenceDocumentRoles', (builder) => {
       builder.select('licenceDocumentId')

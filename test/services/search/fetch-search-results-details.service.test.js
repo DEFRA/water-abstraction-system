@@ -51,6 +51,7 @@ describe('Search - Fetch Search Results Details service', () => {
     companySpy = Sinon.stub().resolves([])
     Sinon.stub(CompanyModel, 'query').returns({
       findByIds: companySpy,
+      innerJoinRelated: Sinon.stub().returnsThis(),
       modifyGraph: Sinon.stub().returnsThis(),
       select: Sinon.stub().returnsThis(),
       withGraphFetched: Sinon.stub().returnsThis()
