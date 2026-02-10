@@ -68,7 +68,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
         }
       })
 
-      it('returns the correct page title', () => {
+      it('returns the correct value', () => {
         const result = SelectCompanyPresenter.go(session, companies)
 
         expect(result.companiesHouseId).to.equal(session.companiesHouseId)
@@ -86,6 +86,37 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
         const result = SelectCompanyPresenter.go(session, [])
 
         expect(result.companiesHouseId).to.equal(null)
+      })
+    })
+  })
+
+  describe('"companies" property', () => {
+    describe('when there is one company in the companies array', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          companiesHouseId: '12345678'
+        }
+      })
+
+      it('returns the correct label', () => {
+        const result = SelectCompanyPresenter.go(session, companies)
+
+        expect(result.companies[0].text).to.equal('1 company found')
+      })
+    })
+
+    describe('when there is more than one company in the companies array', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+        }
+      })
+
+      it('returns the correct label', () => {
+        const result = SelectCompanyPresenter.go(session, [...companies, ...companies])
+
+        expect(result.companies[0].text).to.equal('2 companies found')
       })
     })
   })

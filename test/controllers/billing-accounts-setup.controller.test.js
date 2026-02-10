@@ -553,14 +553,14 @@ describe('Billing Accounts Setup controller', () => {
         options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/select-company`)
       })
 
-      describe('when the user enters a company name or company number', () => {
+      describe('when the user selects a company', () => {
         beforeEach(() => {
           Sinon.stub(SubmitSelectCompanyService, 'go').resolves({
             redirectUrl: `/system/billing-accounts/setup/${sessionId}/existing-address`
           })
         })
 
-        it('redirects to the "select-company" page', async () => {
+        it('redirects to the "existing-address" page', async () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)

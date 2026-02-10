@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitSelectCompanyService = require('../../../../app/services/billing-accounts/setup/submit-select-company.service.js')
 
-describe('Billing Accounts - Setup - Select Company Service', () => {
+describe('Billing Accounts - Setup - Submit Select Company Service', () => {
   let payload
   let session
   let sessionData

@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const ViewSelectCompanyService = require('../../../../app/services/billing-accounts/setup/view-select-company.service.js')
 
-describe('Billing Accounts - Setup - Select Company Service', () => {
+describe('Billing Accounts - Setup - View Select Company Service', () => {
   let session
   let sessionData
 
