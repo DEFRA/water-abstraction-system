@@ -14,17 +14,21 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
 const CreateCompanyContactService = require('../../../../app/services/company-contacts/setup/create-company-contact.service.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/company-contacts/setup/submit-check.service.js')
 
 describe('Company Contacts - Setup - Check Service', () => {
+  let auth
   let company
   let session
   let sessionData
   let yarStub
 
   beforeEach(async () => {
+    auth = { credentials: { user: { id: generateUUID() } } }
+
     company = CustomersFixtures.company()
 
     Sinon.stub(CreateCompanyContactService, 'go').resolves()
@@ -49,7 +53,7 @@ describe('Company Contacts - Setup - Check Service', () => {
     })
 
     it('returns the company id', async () => {
-      const result = await SubmitCheckService.go(session.id, yarStub)
+      const result = await SubmitCheckService.go(session.id, yarStub, auth)
 
       expect(result).to.equal({
         redirectUrl: `/system/companies/${company.id}/contacts`
@@ -57,22 +61,23 @@ describe('Company Contacts - Setup - Check Service', () => {
     })
 
     it('persists the company contact details', async () => {
-      await SubmitCheckService.go(session.id, yarStub)
+      await SubmitCheckService.go(session.id, yarStub, auth)
 
       const actualContact = CreateCompanyContactService.go.args[0]
 
       expect(actualContact).to.equal([
         company.id,
         {
-          name: 'Eric',
+          abstractionAlerts: true,
+          createdBy: auth.credentials.user.id,
           email: 'eric@test.com',
-          abstractionAlerts: true
+          name: 'Eric'
         }
       ])
     })
 
     it('sets a notification', async () => {
-      await SubmitCheckService.go(session.id, yarStub)
+      await SubmitCheckService.go(session.id, yarStub, auth)
 
       const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -82,7 +87,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     describe('and "abstractionAlerts" is "yes"', () => {
       it('persists the "abstractionAlerts" as "true', async () => {
-        await SubmitCheckService.go(session.id, yarStub)
+        await SubmitCheckService.go(session.id, yarStub, auth)
 
         const actualContact = CreateCompanyContactService.go.args[0][1]
 
@@ -103,7 +108,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       })
 
       it('persists the "abstractionAlerts" as "false', async () => {
-        await SubmitCheckService.go(session.id, yarStub)
+        await SubmitCheckService.go(session.id, yarStub, auth)
 
         const actualContact = CreateCompanyContactService.go.args[0][1]
 

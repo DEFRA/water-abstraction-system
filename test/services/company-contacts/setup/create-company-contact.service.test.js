@@ -9,9 +9,10 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
 const CompanyHelper = require('../../../support/helpers/company.helper.js')
 const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.js')
-const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const CreateCompanyContactService = require('../../../../app/services/company-contacts/setup/create-company-contact.service.js')
@@ -25,7 +26,8 @@ describe('Company Contacts - Create Company Contact service', () => {
     companyContact = {
       abstractionAlerts: true,
       email: 'bob@test.com',
-      name: 'Bob'
+      name: 'Bob',
+      createdBy: generateUUID()
     }
 
     company = await CompanyHelper.add()
@@ -51,7 +53,7 @@ describe('Company Contacts - Create Company Contact service', () => {
       expect(newCompanyContact).to.equal(
         {
           abstractionAlerts: true,
-          createdBy: null,
+          createdBy: companyContact.createdBy,
           companyId: company.id,
           contact: {
             contactType: 'department',
