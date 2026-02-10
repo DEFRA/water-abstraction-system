@@ -67,6 +67,7 @@ describe('Address - Submit International Service', () => {
           country: 'Germany',
           postcode: '80802'
         })
+        expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/international`)
       })
     })
 

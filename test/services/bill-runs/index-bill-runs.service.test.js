@@ -11,6 +11,7 @@ const { expect } = Code
 // Things we need to stub
 const CheckBusyBillRunsService = require('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
 const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill-runs.service.js')
+const FetchRegionsService = require('../../../app/services/bill-runs/setup/fetch-regions.service.js')
 
 // Thing under test
 const IndexBillRunsService = require('../../../app/services/bill-runs/index-bill-runs.service.js')
@@ -22,6 +23,9 @@ describe('Index Bill Runs service', () => {
   beforeEach(() => {
     // It doesn't matter for these tests what busy state the service returns, only that it returns one.
     Sinon.stub(CheckBusyBillRunsService, 'go').resolves('none')
+    Sinon.stub(FetchRegionsService, 'go').resolves([
+      { id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' }
+    ])
   })
 
   afterEach(() => {
@@ -41,12 +45,74 @@ describe('Index Bill Runs service', () => {
     it('returns the page data for the view', async () => {
       const result = await IndexBillRunsService.go(yarStub, page)
 
-      expect(result.billRuns).to.have.length(2)
-      expect(result.filters.openFilter).to.be.false()
-      expect(result.pageTitle).to.equal('Bill runs')
-      expect(result.pagination.component).not.to.exist()
-      expect(result.pagination.numberOfPages).to.equal(1)
-      expect(result.pagination.showingMessage).to.equal('Showing all 2 bill runs')
+      expect(result).to.equal({
+        activeNavBar: 'bill-runs',
+        filters: { number: null, regions: [], runTypes: [], yearCreated: null, openFilter: false },
+        billRuns: [
+          {
+            id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
+            createdAt: '1 January 2024',
+            link: '/system/bill-runs/31fec553-f2de-40cf-a8d7-a5fb65f5761b',
+            number: 1002,
+            numberOfBills: 7,
+            region: 'Avalon',
+            scheme: 'sroc',
+            status: 'ready',
+            total: '£200.00',
+            type: 'Supplementary'
+          },
+          {
+            id: 'dfdde4c9-9a0e-440d-b297-7143903c6734',
+            createdAt: '1 October 2023',
+            link: '/system/bill-runs/dfdde4c9-9a0e-440d-b297-7143903c6734',
+            number: 1001,
+            numberOfBills: 15,
+            region: 'Albion',
+            scheme: 'sroc',
+            status: 'sent',
+            total: '£300.00',
+            type: 'Supplementary'
+          }
+        ],
+        notification: null,
+        pageSubHeading: 'View a bill run',
+        pageTitle: 'Bill runs',
+        regionItems: [
+          {
+            checked: false,
+            id: 'Anglian',
+            text: 'Anglian',
+            value: '1d562e9a-2104-41d9-aa75-c008a7ec9059'
+          }
+        ],
+        runTypeItems: [
+          {
+            checked: false,
+            id: 'annual',
+            text: 'Annual',
+            value: 'annual'
+          },
+          {
+            checked: false,
+            id: 'supplementary',
+            text: 'Supplementary',
+            value: 'supplementary'
+          },
+          {
+            checked: false,
+            id: 'two_part_tariff',
+            text: 'Two-part tariff',
+            value: 'two_part_tariff'
+          },
+          {
+            checked: false,
+            id: 'two_part_supplementary',
+            text: 'Two-part tariff supplementary',
+            value: 'two_part_supplementary'
+          }
+        ],
+        pagination: { numberOfPages: 1, showingMessage: 'Showing all 2 bill runs' }
+      })
     })
   })
 
@@ -130,7 +196,13 @@ describe('Index Bill Runs service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await IndexBillRunsService.go(yarStub, page)
 
-        expect(result.filters.openFilter).to.be.false()
+        expect(result.filters).to.equal({
+          number: null,
+          regions: [],
+          runTypes: [],
+          yearCreated: null,
+          openFilter: false
+        })
       })
     })
 
@@ -142,22 +214,36 @@ describe('Index Bill Runs service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await IndexBillRunsService.go(yarStub, page)
 
-        expect(result.filters.openFilter).to.be.false()
+        expect(result.filters).to.equal({
+          number: null,
+          regions: [],
+          runTypes: [],
+          yearCreated: null,
+          openFilter: false
+        })
       })
     })
 
-    describe('when a filter was applied', () => {
+    describe('when filters are applied', () => {
       beforeEach(() => {
         const filters = _billRunsFilter()
 
+        filters.regions = '1d562e9a-2104-41d9-aa75-c008a7ec9059'
         filters.yearCreated = 2025
+
         yarStub = { get: Sinon.stub().returns(filters) }
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
         const result = await IndexBillRunsService.go(yarStub, page)
 
-        expect(result.filters.openFilter).to.be.true()
+        expect(result.filters).to.equal({
+          number: null,
+          regions: '1d562e9a-2104-41d9-aa75-c008a7ec9059',
+          runTypes: [],
+          yearCreated: 2025,
+          openFilter: true
+        })
       })
     })
   })
@@ -165,6 +251,9 @@ describe('Index Bill Runs service', () => {
 
 function _billRunsFilter() {
   return {
+    number: null,
+    regions: [],
+    runTypes: [],
     yearCreated: null
   }
 }

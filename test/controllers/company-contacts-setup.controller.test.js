@@ -15,10 +15,12 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/company-contacts/setup/initiate-session.service.js')
 const SubmitAbstractionAlertsService = require('../../app/services/company-contacts/setup/submit-abstraction-alerts.service.js')
+const SubmitCancelService = require('../../app/services/company-contacts/setup/submit-cancel.service.js')
 const SubmitCheckService = require('../../app/services/company-contacts/setup/submit-check.service.js')
 const SubmitContactEmailService = require('../../app/services/company-contacts/setup/submit-contact-email.service.js')
 const SubmitContactNameService = require('../../app/services/company-contacts/setup/submit-contact-name.service.js')
 const ViewAbstractionAlertsService = require('../../app/services/company-contacts/setup/view-abstraction-alerts.service.js')
+const ViewCancelService = require('../../app/services/company-contacts/setup/view-cancel.service.js')
 const ViewCheckService = require('../../app/services/company-contacts/setup/view-check.service.js')
 const ViewContactEmailService = require('../../app/services/company-contacts/setup/view-contact-email.service.js')
 const ViewContactNameService = require('../../app/services/company-contacts/setup/view-contact-name.service.js')
@@ -121,6 +123,51 @@ describe('Company Contacts Setup controller', () => {
 
         expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
         expect(response.headers.location).to.equal(`/system/company-contacts/setup/${sessionId}/check`)
+      })
+    })
+  })
+
+  describe('/company-contacts/setup/{id}/cancel', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/cancel`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['hof_notifications'] }
+          }
+        }
+
+        Sinon.stub(ViewCancelService, 'go').returns({ pageTitle: 'Cancel' })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Cancel')
+      })
+    })
+
+    describe('POST', () => {
+      let companyId
+
+      beforeEach(() => {
+        sessionId = generateUUID()
+
+        companyId = generateUUID()
+
+        postOptions = postRequestOptions(`/company-contacts/setup/${sessionId}/cancel`, {}, ['hof_notifications'])
+
+        Sinon.stub(SubmitCancelService, 'go').returns({ redirectUrl: `/system/companies/${companyId}/contacts` })
+      })
+
+      it('redirects to companies contacts setup contact email page', async () => {
+        const response = await server.inject(postOptions)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+        expect(response.headers.location).to.equal(`/system/companies/${companyId}/contacts`)
       })
     })
   })

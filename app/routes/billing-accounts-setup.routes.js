@@ -182,6 +182,78 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/billing-accounts/setup/{sessionId}/contact-name',
+    options: {
+      handler: BillingAccountsSetupController.viewContactName,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/billing-accounts/setup/{sessionId}/contact-name',
+    options: {
+      handler: BillingAccountsSetupController.submitContactName,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/billing-accounts/setup/{sessionId}/company-search',
+    options: {
+      handler: BillingAccountsSetupController.viewCompanySearch,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/billing-accounts/setup/{sessionId}/company-search',
+    options: {
+      handler: BillingAccountsSetupController.submitCompanySearch,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/billing-accounts/setup/{sessionId}/select-company',
+    options: {
+      handler: BillingAccountsSetupController.viewSelectCompany,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/billing-accounts/setup/{sessionId}/select-company',
+    options: {
+      handler: BillingAccountsSetupController.submitSelectCompany,
+      auth: {
+        access: {
+          scope: ['manage_billing_accounts']
+        }
+      }
+    }
   }
 ]
 

@@ -41,6 +41,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/company-contacts/setup/{sessionId}/cancel',
+    options: {
+      handler: CompanyContactsSetupController.viewCancel,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/company-contacts/setup/{sessionId}/cancel',
+    options: {
+      handler: CompanyContactsSetupController.submitCancel,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/company-contacts/setup/{sessionId}/check',
     options: {
       handler: CompanyContactsSetupController.viewCheck,

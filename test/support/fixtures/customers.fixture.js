@@ -57,6 +57,20 @@ function company() {
 }
 
 /**
+ * A representation of the company from the 'FetchCompaniesService'
+ *
+ * @returns {object[]} A array of company objects
+ */
+function companies() {
+  return [
+    {
+      id: generateUUID(),
+      name: 'Tyrell Corporation'
+    }
+  ]
+}
+
+/**
  * A representation from the company contact table
  *
  * @returns {module:CompanyContactModel} A company contact
@@ -77,7 +91,17 @@ function companyContact() {
       suffix: null,
       department: 'Tyrell Corporation',
       email: 'rachael.tyrell@tyrellcorp.com'
-    })
+    }),
+    createdAt: new Date('2022-01-01'),
+    createdByUser: {
+      id: generateUUID(),
+      username: 'nexus6.hunter@offworld.net'
+    },
+    updatedAt: new Date('2022-01-01'),
+    updatedByUser: {
+      id: generateUUID(),
+      username: 'void.kampff@tyrell.com'
+    }
   }
 }
 
@@ -120,6 +144,7 @@ function licences() {
 module.exports = {
   billingAccounts,
   company,
+  companies,
   companyContact,
   companyContacts,
   licences

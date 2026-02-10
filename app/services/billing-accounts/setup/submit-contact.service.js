@@ -8,6 +8,7 @@
 
 const ContactPresenter = require('../../../presenters/billing-accounts/setup/contact.presenter.js')
 const ContactValidator = require('../../../validators/billing-accounts/setup/contact.validator.js')
+const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
 const SessionModel = require('../../../models/session.model.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
@@ -32,7 +33,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = _submissionData(session, payload)
+  const pageData = await _submissionData(session, payload)
 
   return {
     error: validationResult,
@@ -54,10 +55,12 @@ async function _save(session, payload) {
   return session.$update()
 }
 
-function _submissionData(session, payload) {
+async function _submissionData(session, payload) {
+  const companyContacts = await FetchCompanyContactsService.go(session.billingAccount.company.id)
+
   session.contactSelected = payload.contactSelected ?? null
 
-  return ContactPresenter.go(session)
+  return ContactPresenter.go(session, companyContacts)
 }
 
 function _validate(payload) {

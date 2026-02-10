@@ -10,6 +10,8 @@ const { expect } = Code
 // Test helpers
 const ChargeVersionNoteHelper = require('../support/helpers/charge-version-note.helper.js')
 const ChargeVersionNoteModel = require('../../app/models/charge-version-note.model.js')
+const CompanyContactHelper = require('../support/helpers/company-contact.helper.js')
+const CompanyContactModel = require('../../app/models/company-contact.model.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
 const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
@@ -38,12 +40,13 @@ const USER_GROUP_NPS_INDEX = 7
 const USER_ROLE_AR_USER_INDEX = 0
 
 describe('User model', () => {
-  let testChargeVersionNoteOne
-  let testChargeVersionNoteTwo
+  let testChargeVersionNotes
+  let testCreatedCompanyContacts
   let testGroup
   let testLicenceEntity
   let testRecord
   let testRole
+  let testUpdatedCompanyContacts
   let testUser
   let testUserRole
   let testUserGroup
@@ -54,10 +57,27 @@ describe('User model', () => {
     testRole = RoleHelper.select(ROLE_AR_USER_INDEX)
     testGroup = GroupHelper.select(GROUP_NPS_INDEX)
     testUserGroup = UserGroupHelper.select(USER_GROUP_NPS_INDEX)
-
-    testChargeVersionNoteOne = await ChargeVersionNoteHelper.add({ userId: testRecord.id, note: '1st test note' })
-    testChargeVersionNoteTwo = await ChargeVersionNoteHelper.add({ userId: testRecord.id, note: '2nd test note' })
     testUserRole = UserRoleHelper.select(USER_ROLE_AR_USER_INDEX)
+
+    testChargeVersionNotes = []
+    testCreatedCompanyContacts = []
+    testUpdatedCompanyContacts = []
+    for (let i = 0; i < 2; i++) {
+      const chargeVersionNote = await ChargeVersionNoteHelper.add({ note: `Test note ${i}`, userId: testRecord.userId })
+      testChargeVersionNotes.push(chargeVersionNote)
+
+      const createdCompanyContact = await CompanyContactHelper.add({
+        startDate: `2022-04-0${i + 1}`,
+        createdBy: testRecord.id
+      })
+      testCreatedCompanyContacts.push(createdCompanyContact)
+
+      const updatedCompanyContact = await CompanyContactHelper.add({
+        startDate: `2022-04-0${i + 1}`,
+        updatedBy: testRecord.id
+      })
+      testUpdatedCompanyContacts.push(updatedCompanyContact)
+    }
   })
 
   afterEach(async () => {
@@ -71,16 +91,25 @@ describe('User model', () => {
   })
 
   after(async () => {
-    await testChargeVersionNoteOne.$query().delete()
-    await testChargeVersionNoteTwo.$query().delete()
+    for (const testChargeVersionNote of testChargeVersionNotes) {
+      await testChargeVersionNote.$query().delete()
+    }
+
+    for (const testCreatedCompanyContact of testCreatedCompanyContacts) {
+      await testCreatedCompanyContact.$query().delete()
+    }
+
+    for (const testUpdatedCompanyContact of testUpdatedCompanyContacts) {
+      await testUpdatedCompanyContact.$query().delete()
+    }
   })
 
   describe('Basic query', () => {
     it('can successfully run a basic query', async () => {
-      const result = await UserModel.query().findById(testRecord.id)
+      const result = await UserModel.query().where('userId', testRecord.userId).limit(1).first()
 
       expect(result).to.be.an.instanceOf(UserModel)
-      expect(result.id).to.equal(testRecord.id)
+      expect(result.userId).to.equal(testRecord.userId)
     })
   })
 
@@ -93,22 +122,43 @@ describe('User model', () => {
       })
 
       it('can eager load the charge version notes', async () => {
-        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('chargeVersionNotes')
-
-        const foundChargeVersionNoteOne = result.chargeVersionNotes.find((chargeVersionNote) => {
-          return chargeVersionNote.id === testChargeVersionNoteOne.id
-        })
-        const foundChargeVersionNoteTwo = result.chargeVersionNotes.find((chargeVersionNote) => {
-          return chargeVersionNote.id === testChargeVersionNoteTwo.id
-        })
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .limit(1)
+          .first()
+          .withGraphFetched('chargeVersionNotes')
 
         expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result.userId).to.equal(testRecord.userId)
 
         expect(result.chargeVersionNotes).to.be.an.array()
-        expect(foundChargeVersionNoteOne).to.be.an.instanceOf(ChargeVersionNoteModel)
-        expect(foundChargeVersionNoteOne).to.equal(testChargeVersionNoteOne)
-        expect(foundChargeVersionNoteTwo).to.equal(testChargeVersionNoteTwo)
+        expect(result.chargeVersionNotes[0]).to.be.an.instanceOf(ChargeVersionNoteModel)
+        expect(result.chargeVersionNotes).includes(testChargeVersionNotes[0])
+        expect(result.chargeVersionNotes).includes(testChargeVersionNotes[1])
+      })
+    })
+
+    describe('when linking to created company contacts', () => {
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query().innerJoinRelated('createdCompanyContacts')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the created company contacts', async () => {
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .limit(1)
+          .first()
+          .withGraphFetched('createdCompanyContacts')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.userId).to.equal(testRecord.userId)
+
+        expect(result.createdCompanyContacts).to.be.an.array()
+        expect(result.createdCompanyContacts[0]).to.be.an.instanceOf(CompanyContactModel)
+        expect(result.createdCompanyContacts).includes(testCreatedCompanyContacts[0])
+        expect(result.createdCompanyContacts).includes(testCreatedCompanyContacts[1])
       })
     })
 
@@ -120,10 +170,14 @@ describe('User model', () => {
       })
 
       it('can eager load the groups', async () => {
-        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('groups')
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .limit(1)
+          .first()
+          .withGraphFetched('groups')
 
         expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result.userId).to.equal(testRecord.userId)
 
         expect(result.groups).to.be.an.array()
         expect(result.groups).to.have.length(1)
@@ -169,7 +223,7 @@ describe('User model', () => {
       beforeEach(async () => {
         testLicenceMonitoringStations = []
         for (let i = 0; i < 2; i++) {
-          const licenceMonitoringStation = await LicenceMonitoringStationHelper.add({ createdBy: testRecord.id })
+          const licenceMonitoringStation = await LicenceMonitoringStationHelper.add({ createdBy: testRecord.userId })
 
           testLicenceMonitoringStations.push(licenceMonitoringStation)
         }
@@ -182,10 +236,14 @@ describe('User model', () => {
       })
 
       it('can eager load the licence monitoring stations', async () => {
-        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('licenceMonitoringStations')
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .limit(1)
+          .first()
+          .withGraphFetched('licenceMonitoringStations')
 
         expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result.userId).to.equal(testRecord.userId)
 
         expect(result.licenceMonitoringStations).to.be.an.array()
         expect(result.licenceMonitoringStations[0]).to.be.an.instanceOf(LicenceMonitoringStationModel)
@@ -200,7 +258,7 @@ describe('User model', () => {
       beforeEach(async () => {
         testReturnVersions = []
         for (let i = 0; i < 2; i++) {
-          const returnVersion = await ReturnVersionHelper.add({ createdBy: testRecord.id })
+          const returnVersion = await ReturnVersionHelper.add({ createdBy: testRecord.userId })
 
           testReturnVersions.push(returnVersion)
         }
@@ -213,10 +271,14 @@ describe('User model', () => {
       })
 
       it('can eager load the return versions', async () => {
-        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('returnVersions')
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .limit(1)
+          .first()
+          .withGraphFetched('returnVersions')
 
         expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result.userId).to.equal(testRecord.userId)
 
         expect(result.returnVersions).to.be.an.array()
         expect(result.returnVersions[0]).to.be.an.instanceOf(ReturnVersionModel)
@@ -233,15 +295,43 @@ describe('User model', () => {
       })
 
       it('can eager load the roles', async () => {
-        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('roles')
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .limit(1)
+          .first()
+          .withGraphFetched('roles')
 
         expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result.userId).to.equal(testRecord.userId)
 
         expect(result.roles).to.be.an.array()
         expect(result.roles).to.have.length(1)
         expect(result.roles[0]).to.be.an.instanceOf(RoleModel)
         expect(result.roles[0]).to.equal(testRole, { skip: ['createdAt', 'updatedAt'] })
+      })
+    })
+
+    describe('when linking to updated company contacts', () => {
+      it('can successfully run a related query', async () => {
+        const query = await UserModel.query().innerJoinRelated('updatedCompanyContacts')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the updated company contacts', async () => {
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .limit(1)
+          .first()
+          .withGraphFetched('updatedCompanyContacts')
+
+        expect(result).to.be.instanceOf(UserModel)
+        expect(result.userId).to.equal(testRecord.userId)
+
+        expect(result.updatedCompanyContacts).to.be.an.array()
+        expect(result.updatedCompanyContacts[0]).to.be.an.instanceOf(CompanyContactModel)
+        expect(result.updatedCompanyContacts).includes(testUpdatedCompanyContacts[0])
+        expect(result.updatedCompanyContacts).includes(testUpdatedCompanyContacts[1])
       })
     })
 
@@ -253,10 +343,14 @@ describe('User model', () => {
       })
 
       it('can eager load the user groups', async () => {
-        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('userGroups')
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .limit(1)
+          .first()
+          .withGraphFetched('userGroups')
 
         expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result.userId).to.equal(testRecord.userId)
 
         expect(result.userGroups).to.be.an.array()
         expect(result.userGroups).to.have.length(1)
@@ -273,10 +367,14 @@ describe('User model', () => {
       })
 
       it('can eager load the user roles', async () => {
-        const result = await UserModel.query().findById(testRecord.id).withGraphFetched('userRoles')
+        const result = await UserModel.query()
+          .where('userId', testRecord.userId)
+          .withGraphFetched('userRoles')
+          .limit(1)
+          .first()
 
         expect(result).to.be.instanceOf(UserModel)
-        expect(result.id).to.equal(testRecord.id)
+        expect(result.userId).to.equal(testRecord.userId)
 
         expect(result.userRoles).to.be.an.array()
         expect(result.userRoles).to.have.length(1)

@@ -23,15 +23,23 @@ class UserModel extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'charge-version-note.model',
         join: {
-          from: 'users.id',
+          from: 'users.userId',
           to: 'chargeVersionNotes.userId'
+        }
+      },
+      createdCompanyContacts: {
+        relation: Model.HasManyRelation,
+        modelClass: 'company-contact.model',
+        join: {
+          from: 'users.id',
+          to: 'companyContacts.createdBy'
         }
       },
       groups: {
         relation: Model.ManyToManyRelation,
         modelClass: 'group.model',
         join: {
-          from: 'users.id',
+          from: 'users.userId',
           through: {
             from: 'userGroups.userId',
             to: 'userGroups.groupId'
@@ -51,7 +59,7 @@ class UserModel extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'licence-monitoring-station.model',
         join: {
-          from: 'users.id',
+          from: 'users.userId',
           to: 'licenceMonitoringStations.createdBy'
         }
       },
@@ -59,7 +67,7 @@ class UserModel extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'return-version.model',
         join: {
-          from: 'users.id',
+          from: 'users.userId',
           to: 'returnVersions.createdBy'
         }
       },
@@ -67,7 +75,7 @@ class UserModel extends BaseModel {
         relation: Model.ManyToManyRelation,
         modelClass: 'role.model',
         join: {
-          from: 'users.id',
+          from: 'users.userId',
           through: {
             from: 'userRoles.userId',
             to: 'userRoles.roleId'
@@ -75,11 +83,19 @@ class UserModel extends BaseModel {
           to: 'roles.id'
         }
       },
+      updatedCompanyContacts: {
+        relation: Model.HasManyRelation,
+        modelClass: 'company-contact.model',
+        join: {
+          from: 'users.id',
+          to: 'companyContacts.updatedBy'
+        }
+      },
       userGroups: {
         relation: Model.HasManyRelation,
         modelClass: 'user-group.model',
         join: {
-          from: 'users.id',
+          from: 'users.userId',
           to: 'userGroups.userId'
         }
       },
@@ -87,7 +103,7 @@ class UserModel extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: 'user-role.model',
         join: {
-          from: 'users.id',
+          from: 'users.userId',
           to: 'userRoles.userId'
         }
       }
@@ -99,7 +115,7 @@ class UserModel extends BaseModel {
    *
    * ```javascript
    * return UserModel.query()
-   *   .findById(userId)
+   *   .where('userId', userId).limit(1).first()
    *   .modify('permissions')
    * ```
    *

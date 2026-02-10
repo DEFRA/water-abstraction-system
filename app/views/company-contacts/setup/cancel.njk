@@ -1,0 +1,33 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block pageContent %}
+
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: { text: "Name" },
+        value: { text: name }
+      },
+      {
+        key: { text: "Email address" },
+        value: { text: email }
+      },
+      {
+        key: { text: "Water abstraction alerts" },
+        value: { html: abstractionAlerts }
+      }
+    ]
+  }) }}
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
+
+    {{ govukButton({
+      text: "Confirm cancel",
+      preventDoubleClick: true
+    }) }}
+  </form>
+{% endblock %}

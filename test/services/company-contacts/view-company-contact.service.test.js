@@ -49,7 +49,9 @@ describe('Company Contacts - View Company Contact Service', () => {
         },
         contact: {
           abstractionAlerts: 'No',
+          created: '1 January 2022 by nexus6.hunter@offworld.net',
           email: 'rachael.tyrell@tyrellcorp.com',
+          lastUpdated: '1 January 2022 by void.kampff@tyrell.com',
           name: 'Rachael Tyrell'
         },
         pageTitle: 'Contact details for Rachael Tyrell',

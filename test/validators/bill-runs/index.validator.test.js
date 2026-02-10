@@ -13,6 +13,8 @@ const IndexValidator = require('../../../app/validators/bill-runs/index.validato
 describe('Bill Runs - Index validator', () => {
   let payload
 
+  const regions = [{ id: '1d562e9a-2104-41d9-aa75-c008a7ec9059', displayName: 'Anglian' }]
+
   describe('when valid data is provided', () => {
     describe('that is fully populated', () => {
       beforeEach(() => {
@@ -20,9 +22,12 @@ describe('Bill Runs - Index validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator.go(payload, regions)
 
         expect(result.value).to.equal({
+          number: 1001,
+          regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'],
+          runTypes: ['two_part_tariff'],
           yearCreated: 2026
         })
         expect(result.error).not.to.exist()
@@ -35,7 +40,7 @@ describe('Bill Runs - Index validator', () => {
       })
 
       it('confirms the data is valid', () => {
-        const result = IndexValidator.go(payload)
+        const result = IndexValidator.go(payload, regions)
 
         expect(result.value).to.equal({})
         expect(result.error).not.to.exist()
@@ -48,6 +53,66 @@ describe('Bill Runs - Index validator', () => {
       payload = _payload()
     })
 
+    describe('because "Number" is invalid', () => {
+      describe('as it is not a number', () => {
+        beforeEach(() => {
+          payload.number = 'xx'
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload, regions)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal('The Number must be a number')
+          expect(result.error.details[0].path[0]).to.equal('number')
+        })
+      })
+
+      describe('as it is not greater than zero', () => {
+        beforeEach(() => {
+          payload.number = '0'
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload, regions)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal('The Number must be greater than zero')
+          expect(result.error.details[0].path[0]).to.equal('number')
+        })
+      })
+
+      describe('as it is not a whole number', () => {
+        beforeEach(() => {
+          payload.number = '1001.5'
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload, regions)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal('The Number must be a whole number')
+          expect(result.error.details[0].path[0]).to.equal('number')
+        })
+      })
+    })
+
+    describe('because "Run type" is invalid', () => {
+      describe('as it is not a valid bill run type', () => {
+        beforeEach(() => {
+          payload.runTypes = ['invalid-run-type']
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload, regions)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal('Select a valid Run type')
+          expect(result.error.details[0].path[0]).to.equal('runTypes')
+        })
+      })
+    })
+
     describe('because "Year created" is invalid', () => {
       describe('as it is not a number', () => {
         beforeEach(() => {
@@ -55,10 +120,10 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload)
+          const result = IndexValidator.go(payload, regions)
 
           expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('The year created must be a number')
+          expect(result.error.details[0].message).to.equal('The Year created must be a number')
           expect(result.error.details[0].path[0]).to.equal('yearCreated')
         })
       })
@@ -71,11 +136,11 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload)
+          const result = IndexValidator.go(payload, regions)
 
           expect(result.value).to.exist()
           expect(result.error.details[0].message).to.equal(
-            `The year created cannot exceed the current year of ${currentYear}`
+            `The Year created cannot exceed the current year of ${currentYear}`
           )
           expect(result.error.details[0].path[0]).to.equal('yearCreated')
         })
@@ -87,10 +152,10 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload)
+          const result = IndexValidator.go(payload, regions)
 
           expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('The year created must be greater or equal to 2014')
+          expect(result.error.details[0].message).to.equal('The Year created must be greater or equal to 2014')
           expect(result.error.details[0].path[0]).to.equal('yearCreated')
         })
       })
@@ -101,11 +166,27 @@ describe('Bill Runs - Index validator', () => {
         })
 
         it('fails validation', () => {
-          const result = IndexValidator.go(payload)
+          const result = IndexValidator.go(payload, regions)
 
           expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('The year created must be a whole number')
+          expect(result.error.details[0].message).to.equal('The Year created must be a whole number')
           expect(result.error.details[0].path[0]).to.equal('yearCreated')
+        })
+      })
+    })
+
+    describe('because "Region" is invalid', () => {
+      describe('as it is not a valid region', () => {
+        beforeEach(() => {
+          payload.regions = ['invalid-region-id']
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload, regions)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal('Select a valid Region')
+          expect(result.error.details[0].path[0]).to.equal('regions')
         })
       })
     })
@@ -114,6 +195,9 @@ describe('Bill Runs - Index validator', () => {
 
 function _payload() {
   return {
+    number: '1001',
+    regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'],
+    runTypes: ['two_part_tariff'],
     yearCreated: '2026'
   }
 }

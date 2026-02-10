@@ -28,7 +28,7 @@ async function go(sessionId, payload) {
     await _save(session, payload)
 
     return {
-      accountType: payload.accountType
+      redirectUrl: _redirectUrl(session)
     }
   }
 
@@ -40,9 +40,23 @@ async function go(sessionId, payload) {
   }
 }
 
+function _redirectUrl(session) {
+  if (session.accountType === 'individual') {
+    return `/system/billing-accounts/setup/${session.id}/existing-address`
+  }
+
+  return `/system/billing-accounts/setup/${session.id}/company-search`
+}
+
 async function _save(session, payload) {
   session.accountType = payload.accountType
-  session.searchIndividualInput = payload.accountType === 'individual' ? payload.searchIndividualInput : null
+
+  if (payload.accountType === 'company') {
+    delete session.searchIndividualInput
+  } else {
+    session.searchIndividualInput = payload.searchIndividualInput
+    delete session.companyName
+  }
 
   return session.$update()
 }

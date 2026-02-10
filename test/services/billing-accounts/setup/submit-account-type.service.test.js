@@ -8,7 +8,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixtures.js')
+const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
@@ -45,7 +45,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       const result = await SubmitAccountTypeService.go(session.id, payload)
 
       expect(result).to.equal({
-        accountType: 'company'
+        redirectUrl: `/system/billing-accounts/setup/${session.id}/company-search`
       })
     })
   })
@@ -73,7 +73,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       const result = await SubmitAccountTypeService.go(session.id, payload)
 
       expect(result).to.equal({
-        accountType: 'individual'
+        redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
       })
     })
   })

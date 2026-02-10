@@ -17,6 +17,8 @@ exports.up = function (knex) {
     table.date('end_date')
     table.boolean('is_test').notNullable().defaultTo(false)
     table.boolean('water_abstraction_alerts_enabled').defaultTo(false)
+    table.uuid('created_by')
+    table.uuid('updated_by')
 
     // Legacy timestamps
     table.timestamp('date_created', { useTz: false }).notNullable().defaultTo(knex.fn.now())

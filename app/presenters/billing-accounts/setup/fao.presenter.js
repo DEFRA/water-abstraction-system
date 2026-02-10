@@ -15,13 +15,17 @@
 function go(session) {
   return {
     backLink: {
-      href: `/system/billing-accounts/setup/${session.id}/existing-address`,
+      href: _backLink(session),
       text: 'Back'
     },
     fao: session.fao ?? null,
     pageTitle: 'Do you need to add an FAO?',
     pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
   }
+}
+
+function _backLink(session) {
+  return session?.addressJourney?.backUrl ?? `/system/billing-accounts/setup/${session.id}/existing-address`
 }
 
 module.exports = {

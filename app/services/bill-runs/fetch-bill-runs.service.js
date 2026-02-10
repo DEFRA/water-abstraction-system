@@ -37,7 +37,19 @@ async function go(filters, page) {
 }
 
 function _applyFilters(query, filters) {
-  const { yearCreated } = filters
+  const { number, regions, runTypes, yearCreated } = filters
+
+  if (number) {
+    query.where('billRuns.billRunNumber', number)
+  }
+
+  if (regions.length > 0) {
+    query.whereIn('region.id', regions)
+  }
+
+  if (runTypes.length > 0) {
+    query.whereIn('billRuns.batchType', runTypes)
+  }
 
   if (yearCreated) {
     query.whereRaw('EXTRACT(YEAR FROM bill_runs.created_at) = ?', [yearCreated])

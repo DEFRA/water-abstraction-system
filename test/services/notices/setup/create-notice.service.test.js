@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const EventModel = require('../../../../app/models/event.model.js')
-const RecipientsFixture = require('../../../support/fixtures/recipients.fixtures.js')
+const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test

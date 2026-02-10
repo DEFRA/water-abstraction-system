@@ -8,11 +8,10 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixtures.js')
+const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchExistingAddressesService = require('../../../../app/services/billing-accounts/setup/fetch-existing-addresses.service.js')

@@ -36,6 +36,14 @@ class LicenceEntityModel extends BaseModel {
 
   static get relationMappings() {
     return {
+      licenceDocumentHeaders: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-document-header.model',
+        join: {
+          from: 'licenceEntities.id',
+          to: 'licenceDocumentHeaders.companyEntityId'
+        }
+      },
       licenceEntityRoles: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-entity-role.model',
