@@ -37,7 +37,7 @@ async function go(filters, page) {
 }
 
 function _applyFilters(query, filters) {
-  const { number, regions, runTypes, yearCreated } = filters
+  const { number, regions, runTypes, statuses, yearCreated } = filters
 
   if (number) {
     query.where('billRuns.billRunNumber', number)
@@ -49,6 +49,10 @@ function _applyFilters(query, filters) {
 
   if (runTypes.length > 0) {
     query.whereIn('billRuns.batchType', runTypes)
+  }
+
+  if (statuses.length > 0) {
+    query.whereIn('billRuns.status', statuses)
   }
 
   if (yearCreated) {
