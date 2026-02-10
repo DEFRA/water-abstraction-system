@@ -79,6 +79,20 @@
         errorMessage: error.number
       }) }}
 
+      {# Filter by status #}
+      {{ govukCheckboxes({
+        classes: "govuk-checkboxes--small",
+        fieldset: {
+          legend: {
+            text: "Status",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--s"
+          }
+        },
+        items: statusItems,
+        name: "statuses"
+      }) }}
+
       <div class="govuk-button-group">
         {{ govukButton({
           preventDoubleClick: true,
