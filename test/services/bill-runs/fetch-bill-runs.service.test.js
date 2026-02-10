@@ -37,7 +37,7 @@ describe('Fetch Bill Runs service', () => {
   describe('when there are bill runs', () => {
     before(async () => {
       await Promise.all([
-        _addBillRun(1005, new Date('2024-03-01'), 10000, 1, 2, region.id),
+        _addBillRun(123498767, new Date('2024-03-01'), 10000, 1, 2, region.id),
         _addBillRun(1002, new Date('2023-01-01'), 20000, 3, 4, region.id),
         _addBillRun(1003, new Date('2024-01-01'), 30000, 5, 6, region.id),
         _addBillRun(1001, new Date('2022-10-01'), 30000, 7, 8, region.id),
@@ -100,6 +100,35 @@ describe('Fetch Bill Runs service', () => {
     })
 
     describe('when filters are applied', () => {
+      describe('and "Number" has been set', () => {
+        describe('and there are matching bill runs', () => {
+          beforeEach(() => {
+            filters.number = 123498767
+          })
+
+          it('returns the matching bill runs', async () => {
+            const { results, total } = await FetchBillRunsService.go(filters, page)
+
+            // All returned results should match the filter
+            expect(results[0].billRunNumber).to.equal(filters.number)
+            expect(total).to.equal(1)
+          })
+        })
+
+        describe('and there are no matching bill runs', () => {
+          beforeEach(() => {
+            filters.number = 99887766
+          })
+
+          it('returns no bill runs', async () => {
+            const { results, total } = await FetchBillRunsService.go(filters, page)
+
+            expect(results).to.be.empty()
+            expect(total).to.equal(0)
+          })
+        })
+      })
+
       describe('and "Run type" has been set', () => {
         describe('and there are matching bill runs', () => {
           beforeEach(() => {

@@ -70,6 +70,7 @@ function _filters(yar) {
   }
 
   return {
+    number: null,
     regions: [],
     runTypes: [],
     yearCreated: null,
