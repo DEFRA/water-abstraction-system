@@ -506,7 +506,7 @@ describe('Index Bill Runs presenter', () => {
         })
       })
 
-      describe('when a filter on the "Sent" status has been applied', () => {
+      describe('when a filter on the "Empty" and "Sent" statuses has been applied', () => {
         beforeEach(() => {
           filters.statuses = ['empty', 'sent']
         })

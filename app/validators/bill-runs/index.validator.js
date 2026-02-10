@@ -7,7 +7,7 @@
 
 const Joi = require('joi').extend(require('@joi/date'))
 
-const { billRunTypes, billRunStatuses } = require('../../lib/static-lookups.lib.js')
+const { billRunStatuses, billRunTypes } = require('../../lib/static-lookups.lib.js')
 
 const MIN_YEAR_CREATED = 2014 // Based on the minimum year a bill run has been created in the system
 

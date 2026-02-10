@@ -7,7 +7,7 @@
 
 const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
 const { formatBillRunType } = require('../billing.presenter.js')
-const { billRunTypes, billRunStatuses } = require('../../lib/static-lookups.lib.js')
+const { billRunStatuses, billRunTypes } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats the summary data for each bill run for use in the /bill-runs page
