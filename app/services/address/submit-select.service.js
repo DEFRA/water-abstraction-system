@@ -83,6 +83,7 @@ async function _save(session, address) {
   mappedAddress.postcode = address.postcode
 
   session.addressJourney.address = mappedAddress
+  session.addressJourney.backUrl = `/system/address/${session.id}/select`
 
   return session.$update()
 }

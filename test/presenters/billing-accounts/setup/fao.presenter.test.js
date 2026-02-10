@@ -49,45 +49,17 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
       })
     })
 
-    describe('when "addressJourney" exists with an "address" and it has a "uprn" in the session', () => {
+    describe('when "addressJourney" exists and it has a "backUrl" in the session', () => {
       beforeEach(() => {
         session.addressJourney = {
-          address: { uprn: '123456789' }
+          backUrl: `/system/address/${session.id}/select`
         }
       })
 
-      it('returns the link for the "select" address page', () => {
+      it('returns that link', () => {
         const result = FAOPresenter.go(session)
 
         expect(result.backLink.href).to.equal(`/system/address/${session.id}/select`)
-      })
-    })
-
-    describe('when "addressJourney" exists with an "address" and it has no "uprn" and a "postcode" in the session', () => {
-      beforeEach(() => {
-        session.addressJourney = {
-          address: { postcode: 'SW1A 1AA' }
-        }
-      })
-
-      it('returns the link for the "manual" address page', () => {
-        const result = FAOPresenter.go(session)
-
-        expect(result.backLink.href).to.equal(`/system/address/${session.id}/manual`)
-      })
-    })
-
-    describe('when "addressJourney" exists with an "address" and it has no "uprn" and a "country" in the session', () => {
-      beforeEach(() => {
-        session.addressJourney = {
-          address: { country: 'France' }
-        }
-      })
-
-      it('returns the link for the "international" address page', () => {
-        const result = FAOPresenter.go(session)
-
-        expect(result.backLink.href).to.equal(`/system/address/${session.id}/international`)
       })
     })
   })

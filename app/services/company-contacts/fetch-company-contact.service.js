@@ -22,8 +22,10 @@ async function _fetch(companyContactId) {
   return CompanyContactModel.query()
     .select([
       'companyContacts.id',
-      'companyContacts.companyId',
       'companyContacts.abstractionAlerts',
+      'companyContacts.companyId',
+      'companyContacts.createdAt',
+      'companyContacts.updatedAt',
       CompanyContactModel.query()
         .alias('subCompanyContacts')
         .count('subCompanyContacts.id')
@@ -46,6 +48,14 @@ async function _fetch(companyContactId) {
         'department',
         'email'
       ])
+    })
+    .withGraphFetched('createdByUser')
+    .modifyGraph('createdByUser', (createdByUserBuilder) => {
+      createdByUserBuilder.select(['id', 'username'])
+    })
+    .withGraphFetched('updatedByUser')
+    .modifyGraph('updatedByUser', (updatedByUserBuilder) => {
+      updatedByUserBuilder.select(['id', 'username'])
     })
     .first()
 }

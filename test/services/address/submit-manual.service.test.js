@@ -64,6 +64,7 @@ describe('Address - Submit Manual Service', () => {
           addressLine4: 'Fake City',
           postcode: 'SW1A 1AA'
         })
+        expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/manual`)
       })
     })
 
