@@ -21,7 +21,7 @@ const FetchUsersService = require('../../../app/services/users/fetch-users.servi
 // NOTE: The users are seeded as part of setting up the test database, along with with their groups and roles. So,
 // unlike other fetch tests we don't create any test records and assert they are in our results as we already have
 // sufficient data to work with.
-describe('Notices - Fetch Users service', () => {
+describe('Users - Fetch Users service', () => {
   // We refer to this in all our tests. Pulling it in here means we only do it once
   const userSeedData = UserHelper.data
 
