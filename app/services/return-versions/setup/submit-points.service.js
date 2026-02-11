@@ -36,9 +36,9 @@ async function go(sessionId, requirementIndex, payload, yar) {
 
   handleOneOptionSelected(payload, 'points')
 
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
@@ -54,7 +54,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
   const formattedData = PointsPresenter.go(session, requirementIndex, pointsData)
 
   return {
-    error: validationResult,
+    error,
     ...formattedData
   }
 }
