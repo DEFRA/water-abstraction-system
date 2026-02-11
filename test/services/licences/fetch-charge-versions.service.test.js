@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
+const ChargeVersionModel = require('../../../app/models/charge-version.model.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -27,6 +28,14 @@ describe('Licences - Fetch Charge Versions service', () => {
 
   afterEach(async () => {
     await chargeVersion.$query().delete()
+    await ChargeVersionModel.query()
+      .delete()
+      .whereIn('id', [
+        currentChargeVersionWithEndDateId,
+        currentChargeVersionWithoutEndDateId,
+        supersededChargeVersionWithEndDateId,
+        supersededChargeVersionWithoutEndDateId
+      ])
   })
 
   describe('when the licence has charge versions data', () => {
