@@ -28,6 +28,7 @@ function go(company, companyContact) {
       lastUpdated: _lastUpdated(companyContact),
       name: companyContact.contact.$name()
     },
+    editContactLink: `/system/company-contacts/setup/${companyContact.id}/edit`,
     pageTitle: `Contact details for ${companyContact.contact.$name()}`,
     pageTitleCaption: company.name,
     removeContactLink: `/system/company-contacts/${companyContact.id}/remove`
