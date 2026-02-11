@@ -11,7 +11,8 @@
  *
  * This function works to handle these discrepancies.
  *
- * @private
+ * @param {object} payload - The payload object containing the form data
+ * @param {string} key - The key of the property to check in the payload
  */
 function handleOneOptionSelected(payload, key) {
   if (!payload?.[key]) {
