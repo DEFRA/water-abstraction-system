@@ -87,6 +87,14 @@ class CompanyModel extends BaseModel {
           from: 'companies.id',
           to: 'licenceDocumentRoles.companyId'
         }
+      },
+      region: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'region.model',
+        join: {
+          from: 'companies.regionId',
+          to: 'regions.id'
+        }
       }
     }
   }

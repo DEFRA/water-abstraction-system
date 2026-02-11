@@ -10,6 +10,8 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../support/helpers/bill-run.helper.js')
 const BillRunModel = require('../../app/models/bill-run.model.js')
+const CompanyHelper = require('../support/helpers/company.helper.js')
+const CompanyModel = require('../../app/models/company.model.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
@@ -19,6 +21,7 @@ const RegionModel = require('../../app/models/region.model.js')
 
 describe('Region model', () => {
   let testBillRuns
+  let testCompanies
   let testLicences
   let testRecord
 
@@ -26,14 +29,21 @@ describe('Region model', () => {
     testRecord = RegionHelper.select()
 
     testBillRuns = []
+    testCompanies = []
+    testLicences = []
+
     for (let i = 0; i < 2; i++) {
+      // Create test bill runs
       const billRun = await BillRunHelper.add({ regionId: testRecord.id })
 
       testBillRuns.push(billRun)
-    }
 
-    testLicences = []
-    for (let i = 0; i < 2; i++) {
+      // Create test companies
+      const company = await CompanyHelper.add({ regionId: testRecord.id })
+
+      testCompanies.push(company)
+
+      // Create test licences
       const licence = await LicenceHelper.add({
         licenceRef: LicenceHelper.generateLicenceRef(),
         regionId: testRecord.id
@@ -70,6 +80,26 @@ describe('Region model', () => {
         expect(result.billRuns[0]).to.be.an.instanceOf(BillRunModel)
         expect(result.billRuns).to.include(testBillRuns[0])
         expect(result.billRuns).to.include(testBillRuns[1])
+      })
+    })
+
+    describe('when linking to companies', () => {
+      it('can successfully run a related query', async () => {
+        const query = await RegionModel.query().innerJoinRelated('companies')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the companies', async () => {
+        const result = await RegionModel.query().findById(testRecord.id).withGraphFetched('companies')
+
+        expect(result).to.be.instanceOf(RegionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.companies).to.be.an.array()
+        expect(result.companies[0]).to.be.an.instanceOf(CompanyModel)
+        expect(result.companies).to.include(testCompanies[0])
+        expect(result.companies).to.include(testCompanies[1])
       })
     })
 

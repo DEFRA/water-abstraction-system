@@ -44,7 +44,7 @@ describe('Search - Search presenter', () => {
             id: 'company-1',
             licenceDocumentRoles: [{ licenceDocumentId: 'licence-1', licenceRole: { name: 'licenceHolder' } }],
             name: 'Mr F Surname',
-            type: 'organisation'
+            region: 'Albion'
           },
           type: 'company'
         },
@@ -116,7 +116,7 @@ describe('Search - Search presenter', () => {
             id: 'company-2',
             licenceDocumentRoles: [{ licenceDocumentId: 'licence-2', licenceRole: { name: 'licenceHolder' } }],
             name: 'Mrs F Surname',
-            type: 'organisation'
+            region: null
           },
           type: 'company'
         },
@@ -237,8 +237,8 @@ describe('Search - Search presenter', () => {
         {
           col2Title: 'Number of licences',
           col2Value: 1,
-          col3Title: 'Type',
-          col3Value: 'organisation',
+          col3Title: 'Region',
+          col3Value: 'Albion',
           exact: true,
           link: '/system/companies/company-1/licences',
           reference: 'Mr F Surname',
@@ -303,8 +303,8 @@ describe('Search - Search presenter', () => {
         {
           col2Title: 'Number of licences',
           col2Value: 1,
-          col3Title: 'Type',
-          col3Value: 'organisation',
+          col3Title: 'Region',
+          col3Value: 'None',
           exact: false,
           link: '/system/companies/company-2/licences',
           reference: 'Mrs F Surname',
