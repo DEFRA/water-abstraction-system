@@ -22,19 +22,17 @@ const InitiateEditSessionService = require('../../../../app/services/company-con
 describe('Company Contacts - Setup - Initiate edit Session service', () => {
   let company
   let companyContact
+  let contact
 
   beforeEach(async () => {
     company = CustomersFixtures.company()
+    contact = CustomersFixtures.contact()
 
     companyContact = {
       id: generateUUID(),
       abstractionAlerts: false,
       company,
-      contact: {
-        id: generateUUID(),
-        department: 'Tyrell Corporation',
-        email: 'rachael.tyrell@tyrellcorp.com'
-      }
+      contact
     }
   })
 
@@ -52,7 +50,7 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
 
       const matchingSession = await SessionModel.query().findById(result.id)
 
-      const expectedSessionData = _expectedSessionData(companyContact, company)
+      const expectedSessionData = _expectedSessionData(companyContact, company, contact)
 
       expect(matchingSession).to.equal({
         ...expectedSessionData,
@@ -101,17 +99,17 @@ describe('Company Contacts - Setup - Initiate edit Session service', () => {
       Sinon.stub(FetchCompanyContactService, 'go').returns(companyContact)
     })
 
-    it('converts the "department" key to "name"', async () => {
+    it('formats the name', async () => {
       const result = await InitiateEditSessionService.go(companyContact.id)
 
       const matchingSession = await SessionModel.query().findById(result.id)
 
-      expect(matchingSession.name).to.equal(companyContact.contact.department)
+      expect(matchingSession.name).to.equal('Rachael Tyrell')
     })
   })
 })
 
-function _expectedSessionData(companyContact, company) {
+function _expectedSessionData(companyContact, company, contact) {
   return {
     abstractionAlerts: 'no',
     companyContact: {
@@ -120,15 +118,11 @@ function _expectedSessionData(companyContact, company) {
         id: company.id,
         name: 'Tyrell Corporation'
       },
-      contact: {
-        department: 'Tyrell Corporation',
-        email: 'rachael.tyrell@tyrellcorp.com',
-        id: companyContact.contact.id
-      },
+      contact,
       id: companyContact.id
     },
     company,
     email: 'rachael.tyrell@tyrellcorp.com',
-    name: 'Tyrell Corporation'
+    name: 'Rachael Tyrell'
   }
 }

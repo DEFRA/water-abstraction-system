@@ -23,7 +23,7 @@ describe('Company Contacts - Setup - Fetch Company Contact service', () => {
   before(async () => {
     company = await CompanyHelper.add()
 
-    contact = await ContactHelper.add({ department: 'Tyrell Corp' })
+    contact = await ContactHelper.add()
 
     companyContact = await CompanyContactHelper.add({
       abstractionAlerts: false,
@@ -48,9 +48,16 @@ describe('Company Contacts - Setup - Fetch Company Contact service', () => {
           name: 'Example Trading Ltd'
         },
         contact: {
-          department: 'Tyrell Corp',
+          id: contact.id,
+          contactType: 'person',
+          department: null,
           email: 'amara.gupta@example.com',
-          id: contact.id
+          firstName: 'Amara',
+          initials: null,
+          lastName: 'Gupta',
+          middleInitials: null,
+          salutation: null,
+          suffix: null
         },
         id: companyContact.id
       })

@@ -28,7 +28,18 @@ async function _fetch(companyContactId) {
     })
     .withGraphFetched('contact')
     .modifyGraph('contact', (contactBuilder) => {
-      contactBuilder.select(['id', 'department', 'email'])
+      contactBuilder.select([
+        'id',
+        'salutation',
+        'firstName',
+        'middleInitials',
+        'lastName',
+        'initials',
+        'contactType',
+        'suffix',
+        'department',
+        'email'
+      ])
     })
     .first()
 }

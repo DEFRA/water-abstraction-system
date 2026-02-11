@@ -38,18 +38,14 @@ async function go(companyContactId) {
  * @private
  */
 function _formatDataForJourney(companyContact) {
-  const {
-    abstractionAlerts,
-    company,
-    contact: { email, department }
-  } = companyContact
+  const { abstractionAlerts, company, contact } = companyContact
 
   return {
     abstractionAlerts: abstractionAlerts === true ? 'yes' : 'no',
     company,
-    email,
-    name: department,
-    companyContact
+    companyContact,
+    email: contact.email,
+    name: contact.$name()
   }
 }
 
