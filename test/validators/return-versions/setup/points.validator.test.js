@@ -12,10 +12,10 @@ const PointsValidator = require('../../../../app/validators/return-versions/setu
 
 describe('Return Versions Setup - Point validator', () => {
   describe('when valid data is provided', () => {
-    const points = ['c083c0cc-42ca-4917-a929-e1fed906ff66', '90764459-d9af-4e13-850b-cf4299fd5e8a']
+    const payload = { points: ['c083c0cc-42ca-4917-a929-e1fed906ff66', '90764459-d9af-4e13-850b-cf4299fd5e8a'] }
 
     it('confirms the data is valid', () => {
-      const result = PointsValidator.go(points)
+      const result = PointsValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -23,10 +23,10 @@ describe('Return Versions Setup - Point validator', () => {
   })
 
   describe('when invalid data is provided', () => {
-    const points = ['100345']
+    const payload = { points: ['100345'] }
 
     it('fails validation', () => {
-      const result = PointsValidator.go(points)
+      const result = PointsValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
@@ -35,10 +35,10 @@ describe('Return Versions Setup - Point validator', () => {
   })
 
   describe('when no data is provided', () => {
-    const points = [undefined]
+    const payload = { points: [] }
 
     it('fails validation', () => {
-      const result = PointsValidator.go(points)
+      const result = PointsValidator.go(payload)
 
       expect(result.value).to.exist()
       expect(result.error).to.exist()
