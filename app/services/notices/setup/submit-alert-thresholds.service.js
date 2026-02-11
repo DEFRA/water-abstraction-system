@@ -25,27 +25,25 @@ async function go(sessionId, payload) {
 
   handleOneOptionSelected(payload, 'alertThresholds')
 
-  const validationResult = _validate(payload)
+  session.alertThresholds = payload.alertThresholds
 
-  if (!validationResult) {
-    await _save(session, payload)
+  const error = _validate(payload)
+
+  if (!error) {
+    await _save(session)
 
     return {}
   }
 
-  session.alertThresholds = []
-
   const pageData = AlertThresholdsPresenter.go(session)
 
   return {
-    error: validationResult,
+    error,
     ...pageData
   }
 }
 
-async function _save(session, payload) {
-  session.alertThresholds = payload.alertThresholds
-
+async function _save(session) {
   return session.$update()
 }
 
