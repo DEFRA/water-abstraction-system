@@ -20,9 +20,10 @@ const errorMessage = 'Select the returns for the paper return'
  */
 function go(payload) {
   const schema = Joi.object({
-    returns: Joi.array().required().messages({
+    returns: Joi.array().min(1).required().messages({
       'any.required': errorMessage,
-      'any.only': errorMessage
+      'any.only': errorMessage,
+      'array.min': errorMessage
     })
   })
 
