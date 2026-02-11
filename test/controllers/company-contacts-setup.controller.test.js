@@ -13,6 +13,7 @@ const { expect } = Code
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
+const InitiateEditSessionService = require('../../app/services/company-contacts/setup/initiate-edit-session.service.js')
 const InitiateSessionService = require('../../app/services/company-contacts/setup/initiate-session.service.js')
 const SubmitAbstractionAlertsService = require('../../app/services/company-contacts/setup/submit-abstraction-alerts.service.js')
 const SubmitCancelService = require('../../app/services/company-contacts/setup/submit-cancel.service.js')
@@ -78,6 +79,34 @@ describe('Company Contacts Setup controller', () => {
 
         expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
         expect(response.headers.location).to.equal(`/system/company-contacts/setup/${id}/contact-name`)
+      })
+    })
+  })
+
+  describe('/company-contacts/setup/{companyContactId}/edit', () => {
+    let id
+
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: `/company-contacts/setup/${generateUUID()}/edit`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['hof_notifications'] }
+          }
+        }
+
+        id = generateUUID()
+
+        Sinon.stub(InitiateEditSessionService, 'go').returns({ id })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+        expect(response.headers.location).to.equal(`/system/company-contacts/setup/${id}/check`)
       })
     })
   })
