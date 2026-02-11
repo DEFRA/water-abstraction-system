@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -23,33 +23,42 @@ describe('Licences - Fetch Purposes service', () => {
   let licence
   let licenceVersion
   let licenceVersionPurpose
+  let licenceVersionPurposePoint
   let point
   let purpose
   let source
 
-  describe('when the licence has licence versions, licence version purposes, points, purposes, and sources', () => {
-    before(async () => {
-      licence = await LicenceHelper.add()
+  before(async () => {
+    licence = await LicenceHelper.add()
 
-      licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
+    licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
 
-      purpose = await PurposeHelper.select()
+    purpose = await PurposeHelper.select()
 
-      licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
-        licenceVersionId: licenceVersion.id,
-        purposeId: purpose.id
-      })
-
-      source = await SourceHelper.select()
-      point = await PointHelper.add({ sourceId: source.id })
-
-      await LicenceVersionPurposePointHelper.add({
-        abstractionMethod: 'Unspecified Pump',
-        licenceVersionPurposeId: licenceVersionPurpose.id,
-        pointId: point.id
-      })
+    licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
+      licenceVersionId: licenceVersion.id,
+      purposeId: purpose.id
     })
 
+    source = await SourceHelper.select()
+    point = await PointHelper.add({ sourceId: source.id })
+
+    licenceVersionPurposePoint = await LicenceVersionPurposePointHelper.add({
+      abstractionMethod: 'Unspecified Pump',
+      licenceVersionPurposeId: licenceVersionPurpose.id,
+      pointId: point.id
+    })
+  })
+
+  after(async () => {
+    await licence.$query().delete()
+    await licenceVersion.$query().delete()
+    await licenceVersionPurpose.$query().delete()
+    await licenceVersionPurposePoint.$query().delete()
+    await point.$query().delete()
+  })
+
+  describe('when the licence has licence versions, licence version purposes, points, purposes, and sources', () => {
     it('returns the matching licence version purposes, points, purposes, and sources', async () => {
       const result = await FetchPurposesService.go(licence.id)
 

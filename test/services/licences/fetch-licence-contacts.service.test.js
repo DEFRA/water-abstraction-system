@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,31 +16,31 @@ const FetchLicenceContactsService = require('../../../app/services/licences/fetc
 
 describe('Licences - Fetch Licence Contacts service', () => {
   let licence
-  let licenceId
-  let licenceRef
-  let licenceDocumentHeaderId
+  let licenceDocumentHeader
+
+  before(async () => {
+    const { licenceHolder } = await LicenceDocumentHeaderSeeder.seed()
+
+    licenceDocumentHeader = licenceHolder
+
+    licence = await LicenceHelper.add({
+      licenceRef: licenceDocumentHeader.licenceRef
+    })
+  })
+
+  after(async () => {
+    await licence.$query().delete()
+  })
 
   describe('when the licence has a licence document header', () => {
-    before(async () => {
-      const { licenceHolder: licenceDocumentHeader } = await LicenceDocumentHeaderSeeder.seed()
-
-      licence = await LicenceHelper.add({
-        licenceRef: licenceDocumentHeader.licenceRef
-      })
-
-      licenceId = licence.id
-      licenceRef = licence.licenceRef
-      licenceDocumentHeaderId = licenceDocumentHeader.id
-    })
-
     it('returns the matching licence and licence document header', async () => {
-      const result = await FetchLicenceContactsService.go(licenceId)
+      const result = await FetchLicenceContactsService.go(licence.id)
 
       expect(result).to.equal({
-        id: licenceId,
-        licenceRef,
+        id: licence.id,
+        licenceRef: licence.licenceRef,
         licenceDocumentHeader: {
-          id: licenceDocumentHeaderId,
+          id: licenceDocumentHeader.id,
           licenceEntityRoles: [],
           metadata: {
             contacts: [

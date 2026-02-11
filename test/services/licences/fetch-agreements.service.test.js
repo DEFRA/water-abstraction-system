@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,7 +16,7 @@ const FetchAgreementsService = require('../../../app/services/licences/fetch-agr
 
 const FINANCIAL_AGREEMENT_S130U_INDEX = 5
 
-describe('Fetch Agreements service', () => {
+describe('Licences - Fetch Agreements service', () => {
   const endDate = new Date('2040-05-01')
   const signedOn = new Date('2022-04-01')
   const startDate = new Date('2022-04-01')
@@ -24,11 +24,15 @@ describe('Fetch Agreements service', () => {
   let licenceAgreement
   let financialAgreement
 
-  describe('when the licence has agreements data', () => {
-    before(async () => {
-      financialAgreement = FinancialAgreementHelper.select(FINANCIAL_AGREEMENT_S130U_INDEX)
-    })
+  before(async () => {
+    financialAgreement = FinancialAgreementHelper.select(FINANCIAL_AGREEMENT_S130U_INDEX)
+  })
 
+  afterEach(async () => {
+    await licenceAgreement.$query().delete()
+  })
+
+  describe('when the licence has agreements data', () => {
     describe('and the agreement has not been deleted', () => {
       beforeEach(async () => {
         licenceAgreement = await LicenceAgreementHelper.add({
