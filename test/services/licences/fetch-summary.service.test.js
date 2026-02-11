@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -44,14 +44,16 @@ describe('Licences - Fetch Summary service', () => {
   let licenceVersionPurpose
   let licenceVersionPurposeCondition
   let licenceVersionPurposeConditionType
+  let licenceVersionPurposePoint
   let monitoringStation
+  let oldLicenceVersion
   let point
   let purpose
   let region
   let source
   let workflow
 
-  beforeEach(async () => {
+  before(async () => {
     licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.data.find((conditionType) => {
       return conditionType.displayTitle === 'Aggregate condition link between licences'
     })
@@ -65,7 +67,7 @@ describe('Licences - Fetch Summary service', () => {
     })
 
     // Create 2 licence versions so we can test the service only gets the 'current' version
-    await LicenceVersionHelper.add({
+    oldLicenceVersion = await LicenceVersionHelper.add({
       licenceId: licence.id,
       startDate: new Date('2021-10-11'),
       status: 'superseded'
@@ -89,7 +91,11 @@ describe('Licences - Fetch Summary service', () => {
 
     source = SourceHelper.select()
     point = await PointHelper.add({ sourceId: source.id })
-    await LicenceVersionPurposePointHelper.add({ licenceVersionPurposeId: licenceVersionPurpose.id, pointId: point.id })
+
+    licenceVersionPurposePoint = await LicenceVersionPurposePointHelper.add({
+      licenceVersionPurposeId: licenceVersionPurpose.id,
+      pointId: point.id
+    })
 
     licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
       licenceVersionPurposeId: licenceVersionPurpose.id,
@@ -123,6 +129,23 @@ describe('Licences - Fetch Summary service', () => {
     // as changed incorrectly
     workflow = await WorkflowHelper.add({ licenceId: licence.id })
     await WorkflowHelper.add({ deletedAt: new Date('2023-06-01'), licenceId: licence.id })
+  })
+
+  after(async () => {
+    await licence.$query().delete()
+    await licenceDocumentHeader.$query().delete()
+    await licenceEntity.$query().delete()
+    await licenceEntityRole.$query().delete()
+    await licenceMonitoringStation.$query().delete()
+    await licenceVersion.$query().delete()
+    await licenceVersionHolder.$query().delete()
+    await licenceVersionPurpose.$query().delete()
+    await licenceVersionPurposeCondition.$query().delete()
+    await licenceVersionPurposePoint.$query().delete()
+    await monitoringStation.$query().delete()
+    await oldLicenceVersion.$query().delete()
+    await point.$query().delete()
+    await workflow.$query().delete()
   })
 
   describe('when called', () => {

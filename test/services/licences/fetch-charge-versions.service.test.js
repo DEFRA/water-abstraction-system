@@ -4,32 +4,46 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
 const ChangeReasonHelper = require('../../support/helpers/change-reason.helper.js')
+const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
+const ChargeVersionModel = require('../../../app/models/charge-version.model.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchChargeVersionsService = require('../../../app/services/licences/fetch-charge-versions.service.js')
 
-describe('Fetch Charge Versions service', () => {
+describe('Licences - Fetch Charge Versions service', () => {
   const licenceId = generateUUID()
 
   let changeReason
+  let chargeVersion
   let currentChargeVersionWithEndDateId
   let currentChargeVersionWithoutEndDateId
   let supersededChargeVersionWithEndDateId
   let supersededChargeVersionWithoutEndDateId
+
+  afterEach(async () => {
+    await chargeVersion.$query().delete()
+    await ChargeVersionModel.query()
+      .delete()
+      .whereIn('id', [
+        currentChargeVersionWithEndDateId,
+        currentChargeVersionWithoutEndDateId,
+        supersededChargeVersionWithEndDateId,
+        supersededChargeVersionWithoutEndDateId
+      ])
+  })
 
   describe('when the licence has charge versions data', () => {
     beforeEach(async () => {
       changeReason = ChangeReasonHelper.select()
 
       // Create multiple charge versions to ensure we get them in the right order
-      let chargeVersion = await ChargeVersionHelper.add({
+      chargeVersion = await ChargeVersionHelper.add({
         changeReasonId: changeReason.id,
         endDate: new Date('2030-03-31'),
         licenceId,

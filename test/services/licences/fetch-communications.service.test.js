@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -31,6 +31,12 @@ describe('Licences - Fetch Communications service', () => {
     })
 
     notification = await NotificationHelper.add(NotificationsFixture.returnsInvitationEmail(notice))
+  })
+
+  afterEach(async () => {
+    await licence.$query().delete()
+    await notice.$query().delete()
+    await notification.$query().delete()
   })
 
   describe('when the licence has notifications', () => {
