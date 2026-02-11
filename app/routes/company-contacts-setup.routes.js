@@ -17,6 +17,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/company-contacts/setup/{companyContactId}/edit',
+    options: {
+      handler: CompanyContactsSetupController.setupEdit,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/company-contacts/setup/{sessionId}/abstraction-alerts',
     options: {
       handler: CompanyContactsSetupController.viewAbstractionAlerts,
