@@ -107,8 +107,8 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
           const result = await SubmitSingleVolumeService.go(session.id, payload)
 
           expect(result.error).to.equal({
-            errorList: [{ href: '#singleVolumeQuantity', text: 'Enter a total figure greater than zero' }],
-            singleVolumeQuantity: { text: 'Enter a total figure greater than zero' }
+            errorList: [{ href: '#singleVolumeQuantity', text: 'Enter a total amount greater than zero' }],
+            singleVolumeQuantity: { text: 'Enter a total amount greater than zero' }
           })
         })
       })
