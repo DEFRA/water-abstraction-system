@@ -194,7 +194,7 @@ describe('Company Contacts - Setup - Check Service', () => {
         session = await SessionHelper.add({ data: sessionData })
       })
 
-      it('lowercases the email', async () => {
+      it('persists the "email" in lowercase', async () => {
         await SubmitCheckService.go(session.id, yarStub, auth)
 
         const actualContact = CreateCompanyContactService.go.args[0][1]
