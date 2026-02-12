@@ -24,13 +24,9 @@ async function go(sessionId, yar, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
   if (session.companyContact) {
-    await _updateCompanyContact(session, auth, yar)
-
-    return { redirectUrl: `/system/company-contacts/${session.companyContact.id}` }
+    return _updateCompanyContact(session, auth, yar)
   } else {
-    await _createCompanyContact(session, auth, yar)
-
-    return { redirectUrl: `/system/companies/${session.company.id}/contacts` }
+    return _createCompanyContact(session, auth, yar)
   }
 }
 
@@ -49,6 +45,8 @@ async function _createCompanyContact(session, auth, yar) {
   await CreateCompanyContactService.go(session.company.id, companyContact)
 
   flashNotification(yar, 'Contact added', `${session.name} was added to this company`)
+
+  return { redirectUrl: `/system/companies/${session.company.id}/contacts` }
 }
 
 async function _updateCompanyContact(session, auth, yar) {
@@ -64,6 +62,8 @@ async function _updateCompanyContact(session, auth, yar) {
   await UpdateCompanyContactService.go(companyContact)
 
   flashNotification(yar, 'Updated', 'Contact details updated.')
+
+  return { redirectUrl: `/system/company-contacts/${session.companyContact.id}` }
 }
 
 module.exports = {
