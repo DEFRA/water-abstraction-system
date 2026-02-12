@@ -20,7 +20,7 @@ const UpdateCompanyContactService = require('../../../../app/services/company-co
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/company-contacts/setup/submit-check.service.js')
 
-describe.only('Company Contacts - Setup - Check Service', () => {
+describe('Company Contacts - Setup - Check Service', () => {
   let auth
   let company
   let companyContact
