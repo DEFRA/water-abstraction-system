@@ -7,6 +7,7 @@
 
 const CompanyModel = require('../../../models/company.model.js')
 const { db } = require('../../../../db/db.js')
+const NUMBER_OF_RESULTS = 15
 
 /**
  * Fetches any companies that meet the search criteria from the database
@@ -28,7 +29,7 @@ async function go(searchInput) {
       { column: 'exact', order: 'desc' },
       { column: 'name', order: 'asc' }
     ])
-    .limit(15)
+    .limit(NUMBER_OF_RESULTS)
 }
 
 module.exports = {

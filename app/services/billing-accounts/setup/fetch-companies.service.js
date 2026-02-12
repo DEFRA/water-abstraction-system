@@ -5,6 +5,8 @@
  * @module FetchCompaniesService
  */
 
+const { HTTP_STATUS_OK } = require('node:http2').constants
+
 const CompaniesRequest = require('../../../requests/companies-house/companies.request.js')
 
 /**
@@ -17,7 +19,7 @@ const CompaniesRequest = require('../../../requests/companies-house/companies.re
 async function go(companySearch) {
   const result = await CompaniesRequest.send(companySearch)
 
-  if (result.response.statusCode !== 200) {
+  if (result.response.statusCode !== HTTP_STATUS_OK) {
     return []
   }
 
