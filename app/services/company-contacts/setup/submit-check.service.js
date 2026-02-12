@@ -10,7 +10,6 @@ const CreateCompanyContactService = require('./create-company-contact.service.js
 const SessionModel = require('../../../models/session.model.js')
 const UpdateCompanyContactService = require('./update-company-contact.service.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
-const { func } = require('joi')
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/check' page
