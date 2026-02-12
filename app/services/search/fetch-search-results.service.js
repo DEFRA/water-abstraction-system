@@ -43,7 +43,9 @@ const COMPANY_SQL = `
     LOWER(c."name") AS row_order,
     CAST (NULL AS DATE) AS date_order
   FROM companies c
-  WHERE c."name" ILIKE ?
+  WHERE
+    c.external_id IS NOT NULL
+    AND c."name" ILIKE ?
 `
 
 const LICENCE_SQL = `
@@ -188,7 +190,7 @@ function _companySql(resultTypes, searchSqls, countSqls, exactQuery, partialQuer
     searchSqls.params.push(exactQuery, partialQuery)
 
     countSqls.statements.push(`
-      (SELECT COUNT(*) FROM companies c WHERE c."name" ILIKE ?)
+      (SELECT COUNT(*) FROM companies c WHERE c.external_id IS NOT NULL AND c."name" ILIKE ?)
     `)
     countSqls.params.push(partialQuery)
   }
