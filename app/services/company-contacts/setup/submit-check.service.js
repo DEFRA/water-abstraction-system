@@ -8,6 +8,7 @@
 
 const CreateCompanyContactService = require('./create-company-contact.service.js')
 const SessionModel = require('../../../models/session.model.js')
+const UpdateCompanyContactService = require('./update-company-contact.service.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
 
 /**
@@ -22,24 +23,47 @@ const { flashNotification } = require('../../../lib/general.lib.js')
 async function go(sessionId, yar, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const companyId = session.company.id
+  if (session.companyContact) {
+    await _updateCompanyContact(session, auth, yar)
 
-  const companyContact = _companyContact(session, auth)
+    return { redirectUrl: `/system/company-contacts/${session.companyContact.id}` }
+  }
 
-  await CreateCompanyContactService.go(companyId, companyContact)
+  await _createCompanyContact(session, auth, yar)
 
-  flashNotification(yar, 'Contact added', `${session.name} was added to this company`)
-
-  return { redirectUrl: `/system/companies/${companyId}/contacts` }
+  return { redirectUrl: `/system/companies/${session.company.id}/contacts` }
 }
 
-function _companyContact(session, auth) {
-  return {
-    abstractionAlerts: session.abstractionAlerts === 'yes',
+function _abstractionAlerts(session) {
+  return session.abstractionAlerts === 'yes'
+}
+
+async function _createCompanyContact(session, auth, yar) {
+  const companyContact = {
     createdBy: auth.credentials.user.id,
+    abstractionAlerts: _abstractionAlerts(session),
     email: session.email,
     name: session.name
   }
+
+  await CreateCompanyContactService.go(session.company.id, companyContact)
+
+  flashNotification(yar, 'Contact added', `${session.name} was added to this company`)
+}
+
+async function _updateCompanyContact(session, auth, yar) {
+  const companyContact = {
+    id: session.companyContact.id,
+    abstractionAlerts: _abstractionAlerts(session),
+    contactId: session.companyContact.contact.id,
+    email: session.email,
+    name: session.name,
+    updatedBy: auth.credentials.user.id
+  }
+
+  await UpdateCompanyContactService.go(companyContact)
+
+  flashNotification(yar, 'Updated', 'Contact details updated.')
 }
 
 module.exports = {
