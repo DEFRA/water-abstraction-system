@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -24,7 +24,16 @@ describe('Licences - Fetch Company Contacts service', () => {
   let companyContact
   let contact
   let licence
+  let licenceDocument
   let licenceRole
+
+  afterEach(async () => {
+    await company.$query().delete()
+    await companyContact.$query().delete()
+    await contact.$query().delete()
+    await licence.$query().delete()
+    await licenceDocument.$query().delete()
+  })
 
   describe('when the licence has customer contact details', () => {
     beforeEach(async () => {
@@ -34,7 +43,7 @@ describe('Licences - Fetch Company Contacts service', () => {
 
       contact = await ContactHelper.add()
 
-      const { id: licenceDocumentId } = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
+      licenceDocument = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
       licenceRole = await LicenceRoleHelper.select()
 
       companyContact = await CompanyContactHelper.add({
@@ -47,7 +56,7 @@ describe('Licences - Fetch Company Contacts service', () => {
         companyId: company.id,
         contactId: contact.id,
         endDate: null,
-        licenceDocumentId,
+        licenceDocumentId: licenceDocument.id,
         licenceRoleId: licenceRole.id
       })
 
@@ -57,7 +66,7 @@ describe('Licences - Fetch Company Contacts service', () => {
         contactId: contact.id,
         startDate: new Date('2001-01-01'),
         endDate: new Date('2001-01-01'),
-        licenceDocumentId,
+        licenceDocumentId: licenceDocument.id,
         licenceRoleId: licenceRole.id
       })
     })

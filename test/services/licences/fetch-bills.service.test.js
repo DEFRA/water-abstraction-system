@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -34,6 +34,11 @@ describe('Licences - Fetch Bills service', () => {
     billLicence = await BillLicenceHelper.add({
       licenceId: licence.id
     })
+  })
+
+  afterEach(async () => {
+    await billLicence.$query().delete()
+    await licence.$query().delete()
   })
 
   describe('when the licence has bills', () => {

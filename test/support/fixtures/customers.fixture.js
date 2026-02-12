@@ -80,18 +80,7 @@ function companyContact() {
     id: generateUUID(),
     abstractionAlerts: false,
     companyId: generateUUID(),
-    contact: ContactModel.fromJson({
-      id: generateUUID(),
-      salutation: null,
-      firstName: 'Rachael',
-      middleInitials: null,
-      lastName: 'Tyrell',
-      initials: null,
-      contactType: 'person',
-      suffix: null,
-      department: 'Tyrell Corporation',
-      email: 'rachael.tyrell@tyrellcorp.com'
-    }),
+    contact: contact(),
     createdAt: new Date('2022-01-01'),
     createdByUser: {
       id: generateUUID(),
@@ -122,6 +111,26 @@ function companyContacts() {
 }
 
 /**
+ * A representation of a contact
+ *
+ * @returns {object[]} A contact
+ */
+function contact() {
+  return ContactModel.fromJson({
+    id: generateUUID(),
+    salutation: null,
+    firstName: 'Rachael',
+    middleInitials: null,
+    lastName: 'Tyrell',
+    initials: null,
+    contactType: 'person',
+    suffix: null,
+    department: 'Tyrell Corporation',
+    email: 'rachael.tyrell@tyrellcorp.com'
+  })
+}
+
+/**
  * A representation from the customers 'FetchLicencesService'
  *
  * @returns {object[]} A array of licences
@@ -147,5 +156,6 @@ module.exports = {
   companies,
   companyContact,
   companyContacts,
+  contact,
   licences
 }

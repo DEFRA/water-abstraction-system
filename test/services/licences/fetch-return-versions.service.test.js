@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -19,37 +19,46 @@ describe('Fetch Return Versions service', () => {
 
   let currentReturnVersion
   let currentReturnVersionModLog
+  let draftReturnVersion
   let supersededReturnVersion
 
-  describe('when the licence has return versions data', () => {
-    beforeEach(async () => {
-      // NOTE: We add these 2, both with the same start date to ensure the order that they are returned as expected
-      supersededReturnVersion = await ReturnVersionHelper.add({
-        startDate,
-        status: 'superseded',
-        version: 100
-      })
-      currentReturnVersion = await ReturnVersionHelper.add({
-        licenceId: supersededReturnVersion.licenceId,
-        startDate,
-        status: 'current',
-        version: 101
-      })
-
-      // We add this 3rd one with a status of draft to ensure it is not included
-      await ReturnVersionHelper.add({
-        licenceId: supersededReturnVersion.licenceId,
-        startDate: new Date('2022-05-01'),
-        status: 'draft',
-        version: 102
-      })
-
-      currentReturnVersionModLog = await ModLogHelper.add({
-        reasonDescription: 'Record Loaded During Migration',
-        returnVersionId: currentReturnVersion.id
-      })
+  before(async () => {
+    // NOTE: We add these 2, both with the same start date to ensure the order that they are returned as expected
+    supersededReturnVersion = await ReturnVersionHelper.add({
+      startDate,
+      status: 'superseded',
+      version: 100
     })
 
+    currentReturnVersion = await ReturnVersionHelper.add({
+      licenceId: supersededReturnVersion.licenceId,
+      startDate,
+      status: 'current',
+      version: 101
+    })
+
+    currentReturnVersionModLog = await ModLogHelper.add({
+      reasonDescription: 'Record Loaded During Migration',
+      returnVersionId: currentReturnVersion.id
+    })
+
+    // We add this 3rd one with a status of draft to ensure it is not included
+    draftReturnVersion = await ReturnVersionHelper.add({
+      licenceId: supersededReturnVersion.licenceId,
+      startDate: new Date('2022-05-01'),
+      status: 'draft',
+      version: 102
+    })
+  })
+
+  after(async () => {
+    await currentReturnVersion.$query().delete()
+    await currentReturnVersionModLog.$query().delete()
+    await draftReturnVersion.$query().delete()
+    await supersededReturnVersion.$query().delete()
+  })
+
+  describe('when the licence has return versions data', () => {
     it('returns the matching return versions data', async () => {
       const result = await FetchReturnVersionsService.go(supersededReturnVersion.licenceId)
 

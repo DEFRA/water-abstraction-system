@@ -30,6 +30,7 @@ function go(payload, regions) {
       .integer()
       .max(MAX_BILL_RUN_NUMBER)
       .positive()
+      .unsafe()
       .optional()
       .messages({
         'number.base': 'The Number must be a number',
@@ -59,6 +60,7 @@ function go(payload, regions) {
       .min(MIN_YEAR_CREATED)
       .integer()
       .max(maxYearCreated)
+      .unsafe()
       .optional()
       .messages({
         'number.base': 'The Year created must be a number',
@@ -68,7 +70,7 @@ function go(payload, regions) {
       })
   })
 
-  return schema.validate(payload)
+  return schema.validate(payload, { abortEarly: false })
 }
 
 function _validRegionIds(regions) {
