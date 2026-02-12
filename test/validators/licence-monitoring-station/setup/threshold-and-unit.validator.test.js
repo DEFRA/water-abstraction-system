@@ -57,7 +57,25 @@ describe('Licence Monitoring Station Setup - Threshold and Unit validator', () =
         const result = ThresholdAndUnitValidator.go(payload)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a threshold less than 10000000')
+        expect(result.error.details[0].message).to.equal('Enter a threshold less than or equal to 10000000')
+      })
+    })
+
+    describe('because it contains a "threshold" that is an unsafe number', () => {
+      const MAX_SAFE_NUMBER = 9007199254740991
+
+      beforeEach(() => {
+        payload = {
+          'threshold-m3/d': MAX_SAFE_NUMBER + 1,
+          unit: 'm3/d'
+        }
+      })
+
+      it('fails validation', () => {
+        const result = ThresholdAndUnitValidator.go(payload)
+
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Enter a threshold between 0 and 10000000')
       })
     })
   })
