@@ -22,6 +22,7 @@ describe('Company Contacts - View Company Contact Service', () => {
   let auth
   let companyContact
   let company
+  let yarStub
 
   beforeEach(async () => {
     auth = { credentials: { roles: [] } }
@@ -32,6 +33,10 @@ describe('Company Contacts - View Company Contact Service', () => {
 
     Sinon.stub(FetchCompanyService, 'go').returns(company)
     Sinon.stub(FetchCompanyContactService, 'go').returns(companyContact)
+
+    yarStub = {
+      flash: Sinon.stub().returns([{ titleText: 'Updated', text: 'Contact details updated.' }])
+    }
   })
 
   afterEach(() => {
@@ -40,7 +45,7 @@ describe('Company Contacts - View Company Contact Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCompanyContactService.go(companyContact.id, auth)
+      const result = await ViewCompanyContactService.go(companyContact.id, auth, yarStub)
 
       expect(result).to.equal({
         backLink: {
@@ -55,6 +60,10 @@ describe('Company Contacts - View Company Contact Service', () => {
           name: 'Rachael Tyrell'
         },
         editContactLink: `/system/company-contacts/setup/${companyContact.id}/edit`,
+        notification: {
+          text: 'Contact details updated.',
+          titleText: 'Updated'
+        },
         pageTitle: 'Contact details for Rachael Tyrell',
         pageTitleCaption: 'Tyrell Corporation',
         removeContactLink: `/system/company-contacts/${companyContact.id}/remove`,
