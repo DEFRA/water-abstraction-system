@@ -12,34 +12,41 @@ const { expect } = Code
 const CompanyContactHelper = require('../../../support/helpers/company-contact.helper.js')
 const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
 const ContactHelper = require('../../../support/helpers/contact.helper.js')
+const LicenceRoleHelper = require('../../../support/helpers/licence-role.helper.js')
 const UserHelper = require('../../../support/helpers/user.helper.js')
 
 // Thing under test
 const UpdateCompanyContactService = require('../../../../app/services/company-contacts/setup/update-company-contact.service.js')
 
-describe.only('Company Contacts - Update Company Contact service', () => {
+describe('Company Contacts - Update Company Contact service', () => {
   let today
   let clock
   let companyContact
   let contact
   let updatedCompanyContact
   let user
+  let licenceRole
+  let seedDate
 
   before(async () => {
+    seedDate = new Date('2021-01-01')
     today = new Date('2025-06-02')
 
     clock = Sinon.useFakeTimers(today)
 
+    licenceRole = LicenceRoleHelper.select('additionalContact')
+
     contact = await ContactHelper.add({
-      createdAt: new Date('2021-01-01'),
-      updatedAt: new Date('2021-01-01')
+      createdAt: seedDate,
+      updatedAt: seedDate
     })
 
     companyContact = await CompanyContactHelper.add({
       contactId: contact.id,
       abstractionAlerts: false,
-      createdAt: new Date('2021-01-01'),
-      updatedAt: new Date('2021-01-01')
+      createdAt: seedDate,
+      updatedAt: seedDate,
+      licenceRoleId: licenceRole.id
     })
 
     user = UserHelper.select()
@@ -72,21 +79,24 @@ describe.only('Company Contacts - Update Company Contact service', () => {
 
       expect(updatedCompanyContactResult).to.equal(
         {
+          id: companyContact.id,
           abstractionAlerts: true,
           companyId: companyContact.companyId,
           contactId: contact.id,
+          createdAt: seedDate,
           createdBy: null,
           default: false,
-          id: companyContact.id,
-          updatedBy: user.id,
-          updateAt: today
+          licenceRoleId: licenceRole.id,
+          startDate: new Date('2022-04-01'),
+          updatedAt: today,
+          updatedBy: user.id
         },
-        { skip: ['startDate', 'createdAt', 'contact', 'licenceRoleId'] }
+        { skip: ['contact'] }
       )
 
       expect(updatedCompanyContactResult.contact).to.equal({
         contactType: 'department',
-        createdAt: new Date('2021-01-01'),
+        createdAt: seedDate,
         dataSource: 'wrls',
         department: 'Rachael Tyrell',
         email: 'rachael.tyrell@tyrellcorp.com',
