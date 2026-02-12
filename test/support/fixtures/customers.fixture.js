@@ -80,18 +80,17 @@ function companyContact() {
     id: generateUUID(),
     abstractionAlerts: false,
     companyId: generateUUID(),
-    contact: ContactModel.fromJson({
+    contact: contact(),
+    createdAt: new Date('2022-01-01'),
+    createdByUser: {
       id: generateUUID(),
-      salutation: null,
-      firstName: 'Rachael',
-      middleInitials: null,
-      lastName: 'Tyrell',
-      initials: null,
-      contactType: 'person',
-      suffix: null,
-      department: 'Tyrell Corporation',
-      email: 'rachael.tyrell@tyrellcorp.com'
-    })
+      username: 'nexus6.hunter@offworld.net'
+    },
+    updatedAt: new Date('2022-01-01'),
+    updatedByUser: {
+      id: generateUUID(),
+      username: 'void.kampff@tyrell.com'
+    }
   }
 }
 
@@ -109,6 +108,26 @@ function companyContacts() {
       }
     }
   ]
+}
+
+/**
+ * A representation of a contact
+ *
+ * @returns {object[]} A contact
+ */
+function contact() {
+  return ContactModel.fromJson({
+    id: generateUUID(),
+    salutation: null,
+    firstName: 'Rachael',
+    middleInitials: null,
+    lastName: 'Tyrell',
+    initials: null,
+    contactType: 'person',
+    suffix: null,
+    department: 'Tyrell Corporation',
+    email: 'rachael.tyrell@tyrellcorp.com'
+  })
 }
 
 /**
@@ -137,5 +156,6 @@ module.exports = {
   companies,
   companyContact,
   companyContacts,
+  contact,
   licences
 }

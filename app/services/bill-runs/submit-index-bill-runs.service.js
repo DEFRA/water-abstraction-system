@@ -34,6 +34,7 @@ async function go(payload, yar, page = 1) {
 
   _handleOneOptionSelected(payload, 'regions')
   _handleOneOptionSelected(payload, 'runTypes')
+  _handleOneOptionSelected(payload, 'statuses')
 
   const regions = await FetchRegionsService.go()
   const error = _validate(payload, regions)
@@ -119,6 +120,7 @@ function _save(payload, yar) {
     number: payload.number ?? null,
     regions: payload.regions,
     runTypes: payload.runTypes,
+    statuses: payload.statuses,
     yearCreated: payload.yearCreated ?? null
   })
 }
@@ -131,6 +133,7 @@ function _savedFilters(payload) {
     openFilter: true,
     regions: [],
     runTypes: [],
+    statuses: [],
     yearCreated: null,
     ...billRunsFilter
   }

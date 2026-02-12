@@ -1,5 +1,15 @@
 'use strict'
 
+const billRunStatuses = Object.freeze({
+  processing: 'Building',
+  cancel: 'Cancelling',
+  empty: 'Empty',
+  error: 'Error',
+  ready: 'Ready',
+  review: 'Review',
+  sent: 'Sent'
+})
+
 const billRunTypes = Object.freeze({
   annual: 'Annual',
   supplementary: 'Supplementary',
@@ -555,6 +565,7 @@ const userPermissions = Object.freeze({
 })
 
 module.exports = {
+  billRunStatuses,
   billRunTypes,
   companyTypes,
   contactTypes,

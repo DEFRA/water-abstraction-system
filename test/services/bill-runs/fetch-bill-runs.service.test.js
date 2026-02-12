@@ -187,6 +187,35 @@ describe('Fetch Bill Runs service', () => {
         })
       })
 
+      describe('and "Status" has been set', () => {
+        describe('and there are matching bill runs', () => {
+          beforeEach(() => {
+            filters.statuses = ['sent']
+          })
+
+          it('returns the matching bill runs', async () => {
+            const { results, total } = await FetchBillRunsService.go(filters, page)
+
+            // All returned results should match the filter
+            expect(results[0].status).to.equal('sent')
+            expect(total >= 5).to.be.true()
+          })
+        })
+
+        describe('and there are no matching bill runs', () => {
+          beforeEach(() => {
+            filters.statuses = ['unmatched-status']
+          })
+
+          it('returns no bill runs', async () => {
+            const { results, total } = await FetchBillRunsService.go(filters, page)
+
+            expect(results).to.be.empty()
+            expect(total).to.equal(0)
+          })
+        })
+      })
+
       describe('and "Year created" has been set', () => {
         describe('and there are matching bill runs', () => {
           beforeEach(() => {
@@ -232,5 +261,5 @@ function _addBillRun(billRunNumber, createdAt, netTotal, creditNoteCount, invoic
 }
 
 function _noFiltersApplied() {
-  return { openFilter: false, regions: [], runTypes: [], yearCreated: null }
+  return { openFilter: false, regions: [], runTypes: [], statuses: [], yearCreated: null }
 }

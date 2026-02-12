@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -20,29 +20,38 @@ const FetchLicenceService = require('../../../app/services/licences/fetch-licenc
 describe('Licences - Fetch Licence service', () => {
   let licence
   let licenceVersion
+  let licenceSupplementaryYear
+  let additionalLicenceVersion
 
-  describe('when there is a matching licence', () => {
-    beforeEach(async () => {
-      licence = await LicenceHelper.add()
+  before(async () => {
+    licence = await LicenceHelper.add()
 
-      await LicenceSupplementaryYearModel.add({
-        licenceId: licence.id,
-        twoPartTariff: true
-      })
-
-      licenceVersion = await LicenceVersionHelper.add({
-        licenceId: licence.id,
-        startDate: new Date('2022-05-01')
-      })
-
-      // Create 2 licence versions so we can test the service only gets the 'current' version
-      await LicenceVersionHelper.add({
-        licenceId: licence.id,
-        startDate: new Date('2021-10-11'),
-        status: 'superseded'
-      })
+    licenceSupplementaryYear = await LicenceSupplementaryYearModel.add({
+      licenceId: licence.id,
+      twoPartTariff: true
     })
 
+    licenceVersion = await LicenceVersionHelper.add({
+      licenceId: licence.id,
+      startDate: new Date('2022-05-01')
+    })
+
+    // Create 2 licence versions so we can test the service only gets the 'current' version
+    additionalLicenceVersion = await LicenceVersionHelper.add({
+      licenceId: licence.id,
+      startDate: new Date('2021-10-11'),
+      status: 'superseded'
+    })
+  })
+
+  after(async () => {
+    await additionalLicenceVersion.$query().delete()
+    await licence.$query().delete()
+    await licenceSupplementaryYear.$query().delete()
+    await licenceVersion.$query().delete()
+  })
+
+  describe('when there is a matching licence', () => {
     it('returns the matching licence', async () => {
       const result = await FetchLicenceService.go(licence.id)
 

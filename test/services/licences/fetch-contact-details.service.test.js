@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -19,37 +19,46 @@ const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js'
 const FetchContactDetailsService = require('../../../app/services/licences/fetch-contact-details.service.js')
 
 describe('Licences - Fetch Contact Details service', () => {
-  let companyId
+  let address
+  let company
   let licence
+  let licenceDocument
+  let licenceDocumentRole
+
+  before(async () => {
+    licence = await LicenceHelper.add()
+
+    company = await CompanyHelper.add()
+
+    licenceDocument = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
+    const licenceRole = await LicenceRoleHelper.select()
+    address = await AddressHelper.add()
+
+    licenceDocumentRole = await LicenceDocumentRolesHelper.add({
+      endDate: null,
+      licenceDocumentId: licenceDocument.id,
+      addressId: address.id,
+      licenceRoleId: licenceRole.id,
+      companyId: company.id
+    })
+  })
+
+  after(async () => {
+    await address.$query().delete()
+    await company.$query().delete()
+    await licence.$query().delete()
+    await licenceDocument.$query().delete()
+    await licenceDocumentRole.$query().delete()
+  })
 
   describe('when the licence has contact details', () => {
-    beforeEach(async () => {
-      licence = await LicenceHelper.add()
-
-      const company = await CompanyHelper.add()
-
-      companyId = company.id
-
-      const { id: licenceDocumentId } = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
-      const { id: licenceRoleId } = await LicenceRoleHelper.select()
-      const { id: addressId } = await AddressHelper.add()
-
-      await LicenceDocumentRolesHelper.add({
-        endDate: null,
-        licenceDocumentId,
-        addressId,
-        licenceRoleId,
-        companyId
-      })
-    })
-
     it('returns the matching licence contacts', async () => {
       const results = await FetchContactDetailsService.go(licence.id)
 
       expect(results).to.equal([
         {
           communicationType: 'Licence Holder',
-          companyId,
+          companyId: company.id,
           companyName: 'Example Trading Ltd',
           address1: 'ENVIRONMENT AGENCY',
           address2: 'HORIZON HOUSE',

@@ -28,6 +28,7 @@ describe('Bill Runs - Index validator', () => {
           number: 1001,
           regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'],
           runTypes: ['two_part_tariff'],
+          statuses: ['review'],
           yearCreated: 2026
         })
         expect(result.error).not.to.exist()
@@ -49,6 +50,8 @@ describe('Bill Runs - Index validator', () => {
   })
 
   describe('when invalid data is provided', () => {
+    const MAX_SAFE_NUMBER = 9007199254740991
+
     beforeEach(() => {
       payload = _payload()
     })
@@ -92,6 +95,34 @@ describe('Bill Runs - Index validator', () => {
 
           expect(result.value).to.exist()
           expect(result.error.details[0].message).to.equal('The Number must be a whole number')
+          expect(result.error.details[0].path[0]).to.equal('number')
+        })
+      })
+
+      describe('as it exceeds 999999', () => {
+        beforeEach(() => {
+          payload.number = MAX_SAFE_NUMBER
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload, regions)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal('The Number cannot exceed 999999')
+          expect(result.error.details[0].path[0]).to.equal('number')
+        })
+      })
+
+      describe('as it exceeds the maximum safe number', () => {
+        beforeEach(() => {
+          payload.number = MAX_SAFE_NUMBER + 1
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload, regions)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal('The Number cannot exceed 999999')
           expect(result.error.details[0].path[0]).to.equal('number')
         })
       })
@@ -173,6 +204,24 @@ describe('Bill Runs - Index validator', () => {
           expect(result.error.details[0].path[0]).to.equal('yearCreated')
         })
       })
+
+      describe('as it exceeds the maximum safe number', () => {
+        const currentYear = new Date().getFullYear()
+
+        beforeEach(() => {
+          payload.yearCreated = MAX_SAFE_NUMBER + 1
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload, regions)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal(
+            `The Year created cannot exceed the current year of ${currentYear}`
+          )
+          expect(result.error.details[0].path[0]).to.equal('yearCreated')
+        })
+      })
     })
 
     describe('because "Region" is invalid', () => {
@@ -190,6 +239,41 @@ describe('Bill Runs - Index validator', () => {
         })
       })
     })
+
+    describe('because "Status" is invalid', () => {
+      describe('as it is not a valid status', () => {
+        beforeEach(() => {
+          payload.statuses = ['invalid-status']
+        })
+
+        it('fails validation', () => {
+          const result = IndexValidator.go(payload, regions)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal('Select a valid Status')
+          expect(result.error.details[0].path[0]).to.equal('statuses')
+        })
+      })
+    })
+
+    describe('that generates multiple errors', () => {
+      describe('because "Run type" and "Region" are invalid', () => {
+        beforeEach(() => {
+          payload.regions = ['invalid-region-id']
+          payload.runTypes = ['invalid-run-type']
+        })
+
+        it('fails validation and displays all errors', () => {
+          const result = IndexValidator.go(payload, regions)
+
+          expect(result.value).to.exist()
+          expect(result.error.details[0].message).to.equal('Select a valid Region')
+          expect(result.error.details[0].path[0]).to.equal('regions')
+          expect(result.error.details[1].message).to.equal('Select a valid Run type')
+          expect(result.error.details[1].path[0]).to.equal('runTypes')
+        })
+      })
+    })
   })
 })
 
@@ -198,6 +282,7 @@ function _payload() {
     number: '1001',
     regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'],
     runTypes: ['two_part_tariff'],
+    statuses: ['review'],
     yearCreated: '2026'
   }
 }

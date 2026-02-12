@@ -7,8 +7,9 @@
 
 const Joi = require('joi').extend(require('@joi/date'))
 
-const { billRunTypes } = require('../../lib/static-lookups.lib.js')
+const { billRunStatuses, billRunTypes } = require('../../lib/static-lookups.lib.js')
 
+const MAX_BILL_RUN_NUMBER = 999999
 const MIN_YEAR_CREATED = 2014 // Based on the minimum year a bill run has been created in the system
 
 /**
@@ -25,11 +26,18 @@ function go(payload, regions) {
   const validRegionIds = _validRegionIds(regions)
 
   const schema = Joi.object({
-    number: Joi.number().integer().positive().optional().messages({
-      'number.base': 'The Number must be a number',
-      'number.integer': 'The Number must be a whole number',
-      'number.positive': 'The Number must be greater than zero'
-    }),
+    number: Joi.number()
+      .integer()
+      .max(MAX_BILL_RUN_NUMBER)
+      .positive()
+      .unsafe()
+      .optional()
+      .messages({
+        'number.base': 'The Number must be a number',
+        'number.integer': 'The Number must be a whole number',
+        'number.max': `The Number cannot exceed ${MAX_BILL_RUN_NUMBER}`,
+        'number.positive': 'The Number must be greater than zero'
+      }),
     regions: Joi.array()
       .items(Joi.string().valid(...validRegionIds))
       .optional()
@@ -42,10 +50,17 @@ function go(payload, regions) {
       .messages({
         'any.only': 'Select a valid Run type'
       }),
+    statuses: Joi.array()
+      .items(Joi.string().valid(...Object.keys(billRunStatuses)))
+      .optional()
+      .messages({
+        'any.only': 'Select a valid Status'
+      }),
     yearCreated: Joi.number()
       .min(MIN_YEAR_CREATED)
       .integer()
       .max(maxYearCreated)
+      .unsafe()
       .optional()
       .messages({
         'number.base': 'The Year created must be a number',
@@ -55,7 +70,7 @@ function go(payload, regions) {
       })
   })
 
-  return schema.validate(payload)
+  return schema.validate(payload, { abortEarly: false })
 }
 
 function _validRegionIds(regions) {

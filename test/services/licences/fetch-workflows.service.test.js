@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -13,30 +13,36 @@ const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 // Thing under test
 const FetchWorkflowsService = require('../../../app/services/licences/fetch-workflows.service.js')
 
-describe('Fetch Workflows service', () => {
-  let testRecord
+describe('Licences - Fetch Workflows service', () => {
+  let workflow
+  let additionalWorkflow
 
-  beforeEach(async () => {
-    testRecord = await WorkflowHelper.add()
+  before(async () => {
+    workflow = await WorkflowHelper.add()
 
-    await WorkflowHelper.add({
+    additionalWorkflow = await WorkflowHelper.add({
       deletedAt: new Date(),
-      licenceId: testRecord.licenceId
+      licenceId: workflow.licenceId
     })
+  })
+
+  after(async () => {
+    await additionalWorkflow.$query().delete()
+    await workflow.$query().delete()
   })
 
   describe('when the licence has workflow data', () => {
     it('returns the matching workflow data', async () => {
-      const result = await FetchWorkflowsService.go(testRecord.licenceId)
+      const result = await FetchWorkflowsService.go(workflow.licenceId)
 
       expect(result).to.equal([
         {
-          createdAt: testRecord.createdAt,
+          createdAt: workflow.createdAt,
           data: {
             chargeVersion: null
           },
-          id: testRecord.id,
-          licenceId: testRecord.licenceId,
+          id: workflow.id,
+          licenceId: workflow.licenceId,
           status: 'to_setup'
         }
       ])

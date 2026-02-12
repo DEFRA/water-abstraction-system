@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -17,29 +17,33 @@ const FetchHistoryService = require('../../../app/services/licences/fetch-histor
 
 describe('Licences - Fetch History service', () => {
   let licence
-  let licenceId
   let licenceVersion
   let licenceVersionTwo
   let modLog
 
-  describe('when the licence has licence versions', () => {
-    before(async () => {
-      licence = await LicenceHelper.add()
+  before(async () => {
+    licence = await LicenceHelper.add()
 
-      licenceId = licence.id
+    licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
 
-      licenceVersion = await LicenceVersionHelper.add({ licenceId })
+    licenceVersionTwo = await LicenceVersionHelper.add({ licenceId: licence.id, issue: 1, increment: 1 })
 
-      licenceVersionTwo = await LicenceVersionHelper.add({ licenceId, issue: 1, increment: 1 })
-
-      modLog = await ModLogHelper.add({
-        licenceVersionId: licenceVersion.id,
-        reasonDescription: 'Licence Holder Name/Address Change'
-      })
+    modLog = await ModLogHelper.add({
+      licenceVersionId: licenceVersion.id,
+      reasonDescription: 'Licence Holder Name/Address Change'
     })
+  })
 
+  after(async () => {
+    await licence.$query().delete()
+    await licenceVersion.$query().delete()
+    await licenceVersionTwo.$query().delete()
+    await modLog.$query().delete()
+  })
+
+  describe('when the licence has licence versions', () => {
     it('returns the matching licence versions', async () => {
-      const result = await FetchHistoryService.go(licenceId)
+      const result = await FetchHistoryService.go(licence.id)
 
       expect(result).to.equal([
         {

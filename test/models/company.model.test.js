@@ -19,6 +19,8 @@ const CompanyContactModel = require('../../app/models/company-contact.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
 const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
+const RegionHelper = require('../support/helpers/region.helper.js')
+const RegionModel = require('../../app/models/region.model.js')
 
 // Thing under test
 const CompanyModel = require('../../app/models/company.model.js')
@@ -29,11 +31,14 @@ describe('Company model', () => {
   let testCompanyAddresses
   let testCompanyContacts
   let testLicenceDocumentRoles
+  let testRegion
   let testRecord
 
   before(async () => {
+    testRegion = RegionHelper.select()
+
     // Test record
-    testRecord = await CompanyHelper.add()
+    testRecord = await CompanyHelper.add({ regionId: testRegion.id })
     const { id: companyId } = testRecord
 
     // Link billing account addresses
@@ -187,6 +192,24 @@ describe('Company model', () => {
         expect(result.licenceDocumentRoles[0]).to.be.an.instanceOf(LicenceDocumentRoleModel)
         expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[0])
         expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[1])
+      })
+    })
+
+    describe('when linking to region', () => {
+      it('can successfully run a related query', async () => {
+        const query = await CompanyModel.query().innerJoinRelated('region')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the region', async () => {
+        const result = await CompanyModel.query().findById(testRecord.id).withGraphFetched('region')
+
+        expect(result).to.be.instanceOf(CompanyModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.region).to.be.an.instanceOf(RegionModel)
+        expect(result.region).to.equal(testRegion, { skip: ['createdAt', 'updatedAt'] })
       })
     })
   })

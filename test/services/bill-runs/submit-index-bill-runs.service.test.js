@@ -76,7 +76,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         const setArgs = yarStub.set.args[0]
 
         expect(setArgs[0]).to.equal('billRunsFilter')
-        expect(setArgs[1]).to.equal({ number: null, regions: [], runTypes: [], yearCreated: null })
+        expect(setArgs[1]).to.equal({ number: null, regions: [], runTypes: [], statuses: [], yearCreated: null })
       })
     })
 
@@ -97,7 +97,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
         const setArgs = yarStub.set.args[0]
 
         expect(setArgs[0]).to.equal('billRunsFilter')
-        expect(setArgs[1]).to.equal({ number: '1001', regions: [], runTypes: [], yearCreated: '2025' })
+        expect(setArgs[1]).to.equal({ number: '1001', regions: [], runTypes: [], statuses: [], yearCreated: '2025' })
       })
 
       describe('and a single "Run type" filter has been selected ("runTypes" is a string)', () => {
@@ -115,6 +115,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
             number: null,
             regions: [],
             runTypes: ['annual'],
+            statuses: [],
             yearCreated: null
           })
         })
@@ -137,6 +138,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
             number: null,
             regions: [],
             runTypes: ['annual', 'supplementary'],
+            statuses: [],
             yearCreated: null
           })
         })
@@ -157,6 +159,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
             number: null,
             regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059'],
             runTypes: [],
+            statuses: [],
             yearCreated: '2025'
           })
         })
@@ -179,6 +182,51 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
             number: null,
             regions: ['1d562e9a-2104-41d9-aa75-c008a7ec9059', 'fd3d1154-c83d-4580-bcd6-46bfc380f233'],
             runTypes: [],
+            statuses: [],
+            yearCreated: null
+          })
+        })
+      })
+
+      describe('and a single "Status" filter has been selected ("statuses" is a string)', () => {
+        beforeEach(() => {
+          payload = { statuses: 'sent' }
+        })
+
+        it('saves the state of the "Status" filter as an array in the session', async () => {
+          await SubmitIndexBillRunsService.go(payload, yarStub)
+
+          const setArgs = yarStub.set.args[0]
+
+          expect(setArgs[0]).to.equal('billRunsFilter')
+          expect(setArgs[1]).to.equal({
+            number: null,
+            regions: [],
+            runTypes: [],
+            statuses: ['sent'],
+            yearCreated: null
+          })
+        })
+      })
+
+      describe('and multiple "Status" filters have been selected ("statuses" is an array)', () => {
+        beforeEach(() => {
+          payload = {
+            statuses: ['ready', 'review']
+          }
+        })
+
+        it('saves the state of the "Status" filter as an array in the session', async () => {
+          await SubmitIndexBillRunsService.go(payload, yarStub)
+
+          const setArgs = yarStub.set.args[0]
+
+          expect(setArgs[0]).to.equal('billRunsFilter')
+          expect(setArgs[1]).to.equal({
+            number: null,
+            regions: [],
+            runTypes: [],
+            statuses: ['ready', 'review'],
             yearCreated: null
           })
         })
@@ -207,7 +255,14 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               errorList: [{ href: '#yearCreated', text: 'The Year created must be a number' }],
               yearCreated: { text: 'The Year created must be a number' }
             },
-            filters: { number: null, openFilter: true, regions: [], runTypes: [], yearCreated: 'invalid-year' },
+            filters: {
+              number: null,
+              openFilter: true,
+              regions: [],
+              runTypes: [],
+              statuses: [],
+              yearCreated: 'invalid-year'
+            },
             billRuns: [
               {
                 id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
@@ -308,6 +363,50 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
                 text: 'Two-part tariff supplementary',
                 value: 'two_part_supplementary'
               }
+            ],
+            statusItems: [
+              {
+                checked: false,
+                id: 'processing',
+                text: 'Building',
+                value: 'processing'
+              },
+              {
+                checked: false,
+                id: 'cancel',
+                text: 'Cancelling',
+                value: 'cancel'
+              },
+              {
+                checked: false,
+                id: 'empty',
+                text: 'Empty',
+                value: 'empty'
+              },
+              {
+                checked: false,
+                id: 'error',
+                text: 'Error',
+                value: 'error'
+              },
+              {
+                checked: false,
+                id: 'ready',
+                text: 'Ready',
+                value: 'ready'
+              },
+              {
+                checked: false,
+                id: 'review',
+                text: 'Review',
+                value: 'review'
+              },
+              {
+                checked: false,
+                id: 'sent',
+                text: 'Sent',
+                value: 'sent'
+              }
             ]
           })
         })
@@ -330,7 +429,14 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
               errorList: [{ href: '#yearCreated', text: 'The Year created must be a number' }],
               yearCreated: { text: 'The Year created must be a number' }
             },
-            filters: { number: null, openFilter: true, regions: [], runTypes: [], yearCreated: 'invalid-year' },
+            filters: {
+              number: null,
+              openFilter: true,
+              regions: [],
+              runTypes: [],
+              statuses: [],
+              yearCreated: 'invalid-year'
+            },
             billRuns: [
               {
                 id: '31fec553-f2de-40cf-a8d7-a5fb65f5761b',
@@ -402,6 +508,50 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
                 id: 'two_part_supplementary',
                 text: 'Two-part tariff supplementary',
                 value: 'two_part_supplementary'
+              }
+            ],
+            statusItems: [
+              {
+                checked: false,
+                id: 'processing',
+                text: 'Building',
+                value: 'processing'
+              },
+              {
+                checked: false,
+                id: 'cancel',
+                text: 'Cancelling',
+                value: 'cancel'
+              },
+              {
+                checked: false,
+                id: 'empty',
+                text: 'Empty',
+                value: 'empty'
+              },
+              {
+                checked: false,
+                id: 'error',
+                text: 'Error',
+                value: 'error'
+              },
+              {
+                checked: false,
+                id: 'ready',
+                text: 'Ready',
+                value: 'ready'
+              },
+              {
+                checked: false,
+                id: 'review',
+                text: 'Review',
+                value: 'review'
+              },
+              {
+                checked: false,
+                id: 'sent',
+                text: 'Sent',
+                value: 'sent'
               }
             ]
           })

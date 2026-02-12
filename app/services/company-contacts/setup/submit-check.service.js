@@ -15,15 +15,16 @@ const { flashNotification } = require('../../../lib/general.lib.js')
  *
  * @param {string} sessionId - the UUID of the session
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId, yar) {
+async function go(sessionId, yar, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
   const companyId = session.company.id
 
-  const companyContact = _companyContact(session)
+  const companyContact = _companyContact(session, auth)
 
   await CreateCompanyContactService.go(companyId, companyContact)
 
@@ -32,11 +33,12 @@ async function go(sessionId, yar) {
   return { redirectUrl: `/system/companies/${companyId}/contacts` }
 }
 
-function _companyContact(session) {
+function _companyContact(session, auth) {
   return {
-    name: session.name,
+    abstractionAlerts: session.abstractionAlerts === 'yes',
+    createdBy: auth.credentials.user.id,
     email: session.email,
-    abstractionAlerts: session.abstractionAlerts === 'yes'
+    name: session.name
   }
 }
 
