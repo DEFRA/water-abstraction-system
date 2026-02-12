@@ -1,5 +1,6 @@
 'use strict'
 
+const InitiateEditSessionService = require('../services/company-contacts/setup/initiate-edit-session.service.js')
 const InitiateSessionService = require('../services/company-contacts/setup/initiate-session.service.js')
 const SubmitAbstractionAlertsService = require('../services/company-contacts/setup/submit-abstraction-alerts.service.js')
 const SubmitCancelService = require('../services/company-contacts/setup/submit-cancel.service.js')
@@ -23,6 +24,14 @@ async function setup(request, h) {
   const session = await InitiateSessionService.go(companyId)
 
   return h.redirect(`/system/company-contacts/setup/${session.id}/contact-name`)
+}
+
+async function setupEdit(request, h) {
+  const { companyContactId } = request.params
+
+  const session = await InitiateEditSessionService.go(companyContactId)
+
+  return h.redirect(`/system/company-contacts/setup/${session.id}/check`)
 }
 
 async function viewAbstractionAlerts(request, h) {
@@ -96,11 +105,12 @@ async function submitCancel(request, h) {
 
 async function submitCheck(request, h) {
   const {
+    auth,
     params: { sessionId },
     yar
   } = request
 
-  const { redirectUrl } = await SubmitCheckService.go(sessionId, yar)
+  const { redirectUrl } = await SubmitCheckService.go(sessionId, yar, auth)
 
   return h.redirect(redirectUrl)
 }
@@ -139,6 +149,7 @@ async function submitContactName(request, h) {
 
 module.exports = {
   setup,
+  setupEdit,
   viewAbstractionAlerts,
   viewCancel,
   viewCheck,

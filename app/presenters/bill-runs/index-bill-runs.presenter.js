@@ -7,7 +7,7 @@
 
 const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
 const { formatBillRunType } = require('../billing.presenter.js')
-const { billRunTypes } = require('../../lib/static-lookups.lib.js')
+const { billRunStatuses, billRunTypes } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats the summary data for each bill run for use in the /bill-runs page
@@ -26,7 +26,8 @@ function go(billRuns, busyResult, filters, regions) {
     pageSubHeading: 'View a bill run',
     pageTitle: 'Bill runs',
     regionItems: _regionItems(filters, regions),
-    runTypeItems: _runTypeItems(filters)
+    runTypeItems: _runTypeItems(filters),
+    statusItems: _statusItems(filters)
   }
 }
 
@@ -114,6 +115,17 @@ function _runTypeItems(filters) {
   return Object.entries(billRunTypes).map(([key, value]) => {
     return {
       checked: filters.runTypes.includes(key),
+      id: key,
+      text: value,
+      value: key
+    }
+  })
+}
+
+function _statusItems(filters) {
+  return Object.entries(billRunStatuses).map(([key, value]) => {
+    return {
+      checked: filters.statuses.includes(key),
       id: key,
       text: value,
       value: key

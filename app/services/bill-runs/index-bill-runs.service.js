@@ -57,7 +57,7 @@ function _filters(yar) {
 
   if (savedFilters) {
     for (const key of Object.keys(savedFilters)) {
-      if (['regions', 'runTypes'].includes(key)) {
+      if (['regions', 'runTypes', 'statuses'].includes(key)) {
         openFilter = savedFilters[key].length > 0
       } else {
         openFilter = !!savedFilters[key]
@@ -73,6 +73,7 @@ function _filters(yar) {
     number: null,
     regions: [],
     runTypes: [],
+    statuses: [],
     yearCreated: null,
     ...savedFilters,
     openFilter

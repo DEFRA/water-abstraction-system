@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -16,10 +16,10 @@ const LicenceVersionPurposeHelper = require('../../support/helpers/licence-versi
 const LicenceVersionPurposePointHelper = require('../../support/helpers/licence-version-purpose-point.helper.js')
 const PointHelper = require('../../support/helpers/point.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchConditionsService = require('../../../app/services/licences/fetch-conditions.service.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 describe('Licences - Fetch Conditions service', () => {
   let licence
@@ -68,6 +68,13 @@ describe('Licences - Fetch Conditions service', () => {
       licenceVersionPurposeId: licenceVersionPurpose.id,
       pointId: point.id
     })
+  })
+
+  afterEach(async () => {
+    await licence.$query().delete()
+    await licenceVersion.$query().delete()
+    await licenceVersionPurpose.$query().delete()
+    await licenceVersionPurposePoint.$query().delete()
   })
 
   describe('when the licence has licence versions, licence version purposes, conditions and condition types', () => {

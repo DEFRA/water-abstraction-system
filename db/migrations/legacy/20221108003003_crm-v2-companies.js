@@ -16,6 +16,7 @@ exports.up = function (knex) {
     table.string('organisation_type')
     table.string('last_hash')
     table.uuid('current_hash')
+    table.uuid('region_id')
 
     // Legacy timestamps
     table.timestamp('date_created').notNullable().defaultTo(knex.fn.now())

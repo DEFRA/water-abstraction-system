@@ -7,65 +7,42 @@
   {{ govukSummaryList({
     rows: [
       {
-        key: {
-          text: "Name"
-        },
-        value: {
-          text: contact.name
-        },
-        actions: {
-          items: [
-            {
-              href: "#",
-              text: "Change",
-              visuallyHiddenText: "name"
-            }
-          ]
-        } if 'hof_notifications' in roles
+        key: { text: "Name" },
+        value: { text: contact.name }
       },
       {
-        key: {
-          text: "Email address"
-        },
-        value: {
-          text: contact.email
-        },
-        actions: {
-          items: [
-            {
-              href: "#",
-              text: "Change",
-              visuallyHiddenText: "email address"
-            }
-          ]
-        } if 'hof_notifications' in roles
+        key: { text: "Email address" },
+        value: { text: contact.email }
       },
       {
-        key: {
-          text: "Water abstraction alerts"
-        },
-        value: {
-          text: contact.abstractionAlerts
-        },
-        actions: {
-          items: [
-            {
-              href: "#",
-              text: "Change",
-              visuallyHiddenText: "abstraction alerts"
-            }
-          ]
-        } if 'hof_notifications' in roles
+        key: { text: "Water abstraction alerts" },
+        value: { text: contact.abstractionAlerts }
+      },
+      {
+        key: { text: "Created" },
+        value: { text: contact.created }
+      },
+      {
+        key: { text: "Last updated" },
+        value: { text: contact.lastUpdated }
       }
     ]
   }) }}
 
   {% if 'hof_notifications' in roles %}
-    {{ govukButton({
-      text: "Remove contact",
-      classes: "govuk-button--secondary",
-      href: removeContactLink,
-      preventDoubleClick: true
-    }) }}
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Edit contact",
+        preventDoubleClick: true,
+        href: editContactLink
+      }) }}
+
+      {{ govukButton({
+        text: "Remove contact",
+        classes: "govuk-button--secondary",
+        href: removeContactLink,
+        preventDoubleClick: true
+      }) }}
+    </div>
   {% endif %}
 {% endblock %}

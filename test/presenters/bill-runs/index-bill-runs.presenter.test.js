@@ -24,7 +24,7 @@ describe('Index Bill Runs presenter', () => {
     beforeEach(() => {
       billRuns = _billRuns()
       busyResult = 'none'
-      filters = { regions: [], runTypes: [], yearCreated: null, openFilter: false }
+      filters = { regions: [], runTypes: [], statuses: [], yearCreated: null, openFilter: false }
     })
 
     it('correctly presents the data', () => {
@@ -98,6 +98,50 @@ describe('Index Bill Runs presenter', () => {
             id: 'two_part_supplementary',
             text: 'Two-part tariff supplementary',
             value: 'two_part_supplementary'
+          }
+        ],
+        statusItems: [
+          {
+            checked: false,
+            id: 'processing',
+            text: 'Building',
+            value: 'processing'
+          },
+          {
+            checked: false,
+            id: 'cancel',
+            text: 'Cancelling',
+            value: 'cancel'
+          },
+          {
+            checked: false,
+            id: 'empty',
+            text: 'Empty',
+            value: 'empty'
+          },
+          {
+            checked: false,
+            id: 'error',
+            text: 'Error',
+            value: 'error'
+          },
+          {
+            checked: false,
+            id: 'ready',
+            text: 'Ready',
+            value: 'ready'
+          },
+          {
+            checked: false,
+            id: 'review',
+            text: 'Review',
+            value: 'review'
+          },
+          {
+            checked: false,
+            id: 'sent',
+            text: 'Sent',
+            value: 'sent'
           }
         ]
       })
@@ -404,6 +448,114 @@ describe('Index Bill Runs presenter', () => {
               id: 'two_part_supplementary',
               text: 'Two-part tariff supplementary',
               value: 'two_part_supplementary'
+            }
+          ])
+        })
+      })
+    })
+
+    describe('the "statusItems" property', () => {
+      describe('when no filters have been applied', () => {
+        it('returns the status type items, "checked" is set to false on all statuses', () => {
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
+
+          expect(results.statusItems).to.equal([
+            {
+              checked: false,
+              id: 'processing',
+              text: 'Building',
+              value: 'processing'
+            },
+            {
+              checked: false,
+              id: 'cancel',
+              text: 'Cancelling',
+              value: 'cancel'
+            },
+            {
+              checked: false,
+              id: 'empty',
+              text: 'Empty',
+              value: 'empty'
+            },
+            {
+              checked: false,
+              id: 'error',
+              text: 'Error',
+              value: 'error'
+            },
+            {
+              checked: false,
+              id: 'ready',
+              text: 'Ready',
+              value: 'ready'
+            },
+            {
+              checked: false,
+              id: 'review',
+              text: 'Review',
+              value: 'review'
+            },
+            {
+              checked: false,
+              id: 'sent',
+              text: 'Sent',
+              value: 'sent'
+            }
+          ])
+        })
+      })
+
+      describe('when a filter on the "Empty" and "Sent" statuses has been applied', () => {
+        beforeEach(() => {
+          filters.statuses = ['empty', 'sent']
+        })
+
+        it('returns the status type items, "checked" is set to true on the "Empty" and "Sent" statuses', () => {
+          const results = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
+
+          expect(results.statusItems).to.equal([
+            {
+              checked: false,
+              id: 'processing',
+              text: 'Building',
+              value: 'processing'
+            },
+            {
+              checked: false,
+              id: 'cancel',
+              text: 'Cancelling',
+              value: 'cancel'
+            },
+            {
+              checked: true,
+              id: 'empty',
+              text: 'Empty',
+              value: 'empty'
+            },
+            {
+              checked: false,
+              id: 'error',
+              text: 'Error',
+              value: 'error'
+            },
+            {
+              checked: false,
+              id: 'ready',
+              text: 'Ready',
+              value: 'ready'
+            },
+            {
+              checked: false,
+              id: 'review',
+              text: 'Review',
+              value: 'review'
+            },
+            {
+              checked: true,
+              id: 'sent',
+              text: 'Sent',
+              value: 'sent'
             }
           ])
         })

@@ -177,15 +177,15 @@ function _licenceCount(licenceDocumentRoles) {
 function _company(company) {
   const { exact, model } = company
 
-  const { id, licenceDocumentRoles, name, type } = model
+  const { id, licenceDocumentRoles, name, region } = model
 
   const licenceCount = _licenceCount(licenceDocumentRoles)
 
   return {
     col2Title: 'Number of licences',
     col2Value: licenceCount,
-    col3Title: 'Type',
-    col3Value: type,
+    col3Title: 'Region',
+    col3Value: region ?? 'None',
     exact,
     link: `/system/companies/${id}/licences`,
     reference: name,
