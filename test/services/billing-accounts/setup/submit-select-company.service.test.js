@@ -19,8 +19,9 @@ const SubmitSelectCompanyService = require('../../../../app/services/billing-acc
 describe('Billing Accounts - Setup - Submit Select Company Service', () => {
   const companies = [
     {
-      address: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
-      companiesHouseId: '12345678'
+      address: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+      companiesHouseId: '12345678',
+      title: 'ENVIRONMENT AGENCY'
     }
   ]
 

@@ -25,8 +25,9 @@ async function go(companySearch) {
 
   const companies = result.matches.map((company) => {
     return {
+      address: company.address_snippet,
       companiesHouseId: company.company_number,
-      address: `${company.title}, ${company.address_snippet}`
+      title: company.title
     }
   })
 

@@ -17,8 +17,9 @@ const SelectCompanyPresenter = require('../../../../app/presenters/billing-accou
 describe('Billing Accounts - Setup - Select Company Presenter', () => {
   const companies = [
     {
-      address: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
-      companiesHouseId: '12345678'
+      address: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+      companiesHouseId: '12345678',
+      title: 'ENVIRONMENT AGENCY'
     }
   ]
 
@@ -42,9 +43,10 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
         },
         companies: [
           {
-            id: companies[0].companiesHouseId,
             checked: false,
-            text: companies[0].address,
+            id: companies[0].companiesHouseId,
+            hint: { text: companies[0].address },
+            text: companies[0].title,
             value: companies[0].companiesHouseId
           }
         ],
