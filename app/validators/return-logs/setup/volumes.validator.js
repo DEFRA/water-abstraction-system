@@ -26,11 +26,11 @@ function go(payload) {
       .max(MAX_ALLOWED_VOLUME)
       .custom(_maxDecimals, 'Max decimals')
       .messages({
-        'any.invalid': 'Enter a number with no more than 6 decimal places',
+        'any.invalid': 'Enter a Volume with no more than 6 decimal places',
         'number.base': 'Volume must be a number or blank',
-        'number.min': 'Volume must be a positive number',
+        'number.min': 'Volume cannot be negative',
         'number.max': `Volume entered exceeds the maximum of ${MAX_ALLOWED_VOLUME}`,
-        'number.unsafe': `Volume entered exceeds the maximum of ${MAX_ALLOWED_VOLUME}`
+        'number.unsafe': `Volume must be blank or between 0 and ${MAX_ALLOWED_VOLUME}`
       })
   )
 
