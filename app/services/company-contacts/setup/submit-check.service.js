@@ -24,19 +24,11 @@ async function go(sessionId, yar, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
   if (session.companyContact) {
-    const companyContact = _updateCompanyContact(session, auth)
-
-    await UpdateCompanyContactService.go(companyContact)
-
-    flashNotification(yar, 'Updated', 'Contact details updated.')
+    await _updateCompanyContact(session, auth, yar)
 
     return { redirectUrl: `/system/company-contacts/${session.companyContact.id}` }
   } else {
-    const companyContact = _createCompanyContact(session, auth)
-
-    await CreateCompanyContactService.go(session.company.id, companyContact)
-
-    flashNotification(yar, 'Contact added', `${session.name} was added to this company`)
+    await _createCompanyContact(session, auth, yar)
 
     return { redirectUrl: `/system/companies/${session.company.id}/contacts` }
   }
@@ -46,17 +38,21 @@ function _abstractionAlerts(session) {
   return session.abstractionAlerts === 'yes'
 }
 
-function _createCompanyContact(session, auth) {
-  return {
+async function _createCompanyContact(session, auth, yar) {
+  const companyContact = {
     createdBy: auth.credentials.user.id,
     abstractionAlerts: _abstractionAlerts(session),
     email: session.email,
     name: session.name
   }
+
+  await CreateCompanyContactService.go(session.company.id, companyContact)
+
+  flashNotification(yar, 'Contact added', `${session.name} was added to this company`)
 }
 
-function _updateCompanyContact(session, auth) {
-  return {
+async function _updateCompanyContact(session, auth, yar) {
+  const companyContact = {
     id: session.companyContact.id,
     abstractionAlerts: _abstractionAlerts(session),
     contactId: session.companyContact.contact.id,
@@ -64,6 +60,10 @@ function _updateCompanyContact(session, auth) {
     name: session.name,
     updatedBy: auth.credentials.user.id
   }
+
+  await UpdateCompanyContactService.go(companyContact)
+
+  flashNotification(yar, 'Updated', 'Contact details updated.')
 }
 
 module.exports = {

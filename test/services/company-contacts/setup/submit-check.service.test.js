@@ -55,7 +55,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       session = await SessionHelper.add({ data: sessionData })
     })
 
-    it('returns the company id', async () => {
+    it('returns the redirect URL', async () => {
       const result = await SubmitCheckService.go(session.id, yarStub, auth)
 
       expect(result).to.equal({
@@ -104,7 +104,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       session = await SessionHelper.add({ data: sessionData })
     })
 
-    it('returns the company id', async () => {
+    it('returns the redirect URL', async () => {
       const result = await SubmitCheckService.go(session.id, yarStub, auth)
 
       expect(result).to.equal({
