@@ -149,34 +149,57 @@ describe('Company Contacts - Setup - Check Service', () => {
       session = await SessionHelper.add({ data: sessionData })
     })
 
-    describe('and "abstractionAlerts" is "yes"', () => {
-      it('persists the "abstractionAlerts" as "true', async () => {
-        await SubmitCheckService.go(session.id, yarStub, auth)
+    describe('the "abstractionAlerts" property', () => {
+      describe('is "yes"', () => {
+        it('persists the "abstractionAlerts" as "true"', async () => {
+          await SubmitCheckService.go(session.id, yarStub, auth)
 
-        const actualContact = CreateCompanyContactService.go.args[0][1]
+          const actualContact = CreateCompanyContactService.go.args[0][1]
 
-        expect(actualContact.abstractionAlerts).to.be.true()
+          expect(actualContact.abstractionAlerts).to.be.true()
+        })
+      })
+
+      describe(' is "no"', () => {
+        beforeEach(async () => {
+          sessionData = {
+            company,
+            name: 'Eric',
+            email: 'eric@test.com',
+            abstractionAlerts: 'no'
+          }
+
+          session = await SessionHelper.add({ data: sessionData })
+        })
+
+        it('persists the "abstractionAlerts" as "false"', async () => {
+          await SubmitCheckService.go(session.id, yarStub, auth)
+
+          const actualContact = CreateCompanyContactService.go.args[0][1]
+
+          expect(actualContact.abstractionAlerts).to.be.false()
+        })
       })
     })
 
-    describe('and "abstractionAlerts" is "no"', () => {
+    describe('the "email" property', () => {
       beforeEach(async () => {
         sessionData = {
           company,
           name: 'Eric',
-          email: 'eric@test.com',
+          email: 'ERICE@TEST.COM',
           abstractionAlerts: 'no'
         }
 
         session = await SessionHelper.add({ data: sessionData })
       })
 
-      it('persists the "abstractionAlerts" as "false', async () => {
+      it('lowercases the email', async () => {
         await SubmitCheckService.go(session.id, yarStub, auth)
 
         const actualContact = CreateCompanyContactService.go.args[0][1]
 
-        expect(actualContact.abstractionAlerts).to.be.false()
+        expect(actualContact.email).to.equal('erice@test.com')
       })
     })
   })
