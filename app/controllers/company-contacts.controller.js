@@ -12,10 +12,11 @@ const SubmitRemoveCompanyContactService = require('../services/company-contacts/
 async function viewCompanyContact(request, h) {
   const {
     params: { id },
-    auth
+    auth,
+    yar
   } = request
 
-  const pageData = await ViewCompanyContactService.go(id, auth)
+  const pageData = await ViewCompanyContactService.go(id, auth, yar)
 
   return h.view(`company-contacts/view-company-contact.njk`, pageData)
 }

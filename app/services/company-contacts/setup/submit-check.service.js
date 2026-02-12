@@ -8,7 +8,9 @@
 
 const CreateCompanyContactService = require('./create-company-contact.service.js')
 const SessionModel = require('../../../models/session.model.js')
+const UpdateCompanyContactService = require('./update-company-contact.service.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
+const { func } = require('joi')
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/check' page
@@ -22,23 +24,46 @@ const { flashNotification } = require('../../../lib/general.lib.js')
 async function go(sessionId, yar, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const companyId = session.company.id
+  if (session.companyContact) {
+    const companyContact = _updateCompanyContact(session, auth)
 
-  const companyContact = _companyContact(session, auth)
+    await UpdateCompanyContactService.go(companyContact)
 
-  await CreateCompanyContactService.go(companyId, companyContact)
+    flashNotification(yar, 'Updated', 'Contact details updated.')
 
-  flashNotification(yar, 'Contact added', `${session.name} was added to this company`)
+    return { redirectUrl: `/system/company-contacts/${session.companyContact.id}` }
+  } else {
+    const companyContact = _createCompanyContact(session, auth)
 
-  return { redirectUrl: `/system/companies/${companyId}/contacts` }
+    await CreateCompanyContactService.go(session.company.id, companyContact)
+
+    flashNotification(yar, 'Contact added', `${session.name} was added to this company`)
+
+    return { redirectUrl: `/system/companies/${session.company.id}/contacts` }
+  }
 }
 
-function _companyContact(session, auth) {
+function _abstractionAlerts(session) {
+  return session.abstractionAlerts === 'yes'
+}
+
+function _createCompanyContact(session, auth) {
   return {
-    abstractionAlerts: session.abstractionAlerts === 'yes',
     createdBy: auth.credentials.user.id,
+    abstractionAlerts: _abstractionAlerts(session),
     email: session.email,
     name: session.name
+  }
+}
+
+function _updateCompanyContact(session, auth) {
+  return {
+    id: session.companyContact.id,
+    abstractionAlerts: _abstractionAlerts(session),
+    contactId: session.companyContact.contact.id,
+    email: session.email,
+    name: session.name,
+    updatedBy: auth.credentials.user.id
   }
 }
 
