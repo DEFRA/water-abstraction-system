@@ -1,63 +1,99 @@
 'use strict'
 
+const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before, after } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const CompanyModel = require('../../../../app/models/company.model.js')
-const CompanyHelper = require('../../../support/helpers/company.helper.js')
+// Things we need to stub
+const CompaniesRequest = require('../../../../app/requests/companies-house/companies.request.js')
 
 // Thing under test
 const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
 
 describe('Billing Accounts - Setup - Fetch Companies service', () => {
-  let acmeFakeCompany
-  let fakeCompany
-  let fakeLtdCompany
+  const matches = [
+    {
+      address_snippet: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+      company_number: 340116,
+      title: 'ENVIRONMENT AGENCY'
+    }
+  ]
 
-  before(async () => {
-    fakeLtdCompany = await CompanyHelper.add({
-      name: 'Fake Ltd'
-    })
-    acmeFakeCompany = await CompanyHelper.add({
-      name: 'Acme fake Ltd'
-    })
-    fakeCompany = await CompanyHelper.add({
-      name: 'Fake'
-    })
+  afterEach(() => {
+    Sinon.restore()
   })
 
-  after(async () => {
-    await acmeFakeCompany.$query().delete()
-    await fakeCompany.$query().delete()
-    await fakeLtdCompany.$query().delete()
-  })
+  describe('when called with a "companySearch" that has responses', () => {
+    beforeEach(async () => {
+      Sinon.stub(CompaniesRequest, 'send').resolves({
+        succeeded: true,
+        response: {
+          statusCode: HTTP_STATUS_OK,
+          body: {
+            items: matches
+          }
+        },
+        matches
+      })
+    })
 
-  describe('when called with a searchInput', () => {
     it('returns the matching companies', async () => {
-      const result = await FetchCompaniesService.go('Fake')
+      const result = await FetchCompaniesService.go('ENVIRONMENT')
 
       expect(result).to.equal([
-        CompanyModel.fromJson({
-          exact: true,
-          id: fakeCompany.id,
-          name: fakeCompany.name
-        }),
-        CompanyModel.fromJson({
-          exact: false,
-          id: acmeFakeCompany.id,
-          name: acmeFakeCompany.name
-        }),
-        CompanyModel.fromJson({
-          exact: false,
-          id: fakeLtdCompany.id,
-          name: fakeLtdCompany.name
-        })
+        {
+          companiesHouseId: matches[0].company_number,
+          address: `${matches[0].title}, ${matches[0].address_snippet}`
+        }
       ])
+    })
+  })
+
+  describe('when called with a "companySearch" that has no responses', () => {
+    beforeEach(async () => {
+      Sinon.stub(CompaniesRequest, 'send').resolves({
+        succeeded: true,
+        response: {
+          statusCode: HTTP_STATUS_OK,
+          body: {
+            items: []
+          }
+        },
+        matches: []
+      })
+    })
+
+    it('returns an empty array', async () => {
+      const result = await FetchCompaniesService.go('ENVIRONMENT')
+
+      expect(result).to.equal([])
+    })
+  })
+
+  describe('when called with a "companySearch" and a not 200 status is returned', () => {
+    beforeEach(async () => {
+      Sinon.stub(CompaniesRequest, 'send').resolves({
+        succeeded: true,
+        response: {
+          statusCode: HTTP_STATUS_NOT_FOUND,
+          body: {
+            items: []
+          }
+        },
+        matches: []
+      })
+    })
+
+    it('returns an empty array', async () => {
+      const result = await FetchCompaniesService.go('ENVIRONMENT')
+
+      expect(result).to.equal([])
     })
   })
 })

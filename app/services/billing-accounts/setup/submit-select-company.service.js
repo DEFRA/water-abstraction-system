@@ -6,6 +6,7 @@
  * @module SubmitSelectCompanyService
  */
 
+const FetchCompaniesService = require('./fetch-companies.service.js')
 const SelectCompanyPresenter = require('../../../presenters/billing-accounts/setup/select-company.presenter.js')
 const SelectCompanyValidator = require('../../../validators/billing-accounts/setup/select-company.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -32,7 +33,8 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = _submissionData(session, payload, [])
+  const companies = await FetchCompaniesService.go(session.companySearch)
+  const pageData = _submissionData(session, payload, companies)
 
   return {
     error: validationResult,

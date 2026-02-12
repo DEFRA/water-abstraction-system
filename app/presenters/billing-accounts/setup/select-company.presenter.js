@@ -21,27 +21,22 @@ function go(session, companies) {
       href: `/system/billing-accounts/setup/${session.id}/company-search`,
       text: 'Back'
     },
-    companies: _selectOptions(companies),
+    companies: _radioOptions(companies, session.companiesHouseId),
     companiesHouseId: session.companiesHouseId ?? null,
     pageTitle: 'Select the registered company details',
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`
   }
 }
 
-function _selectOptions(companies, companiesHouseId) {
-  const items = [
-    {
-      selected: !companiesHouseId,
-      text: companies.length === 1 ? '1 company found' : `${companies.length} companies found`,
-      value: 'select'
-    }
-  ]
+function _radioOptions(companies, companiesHouseId) {
+  const items = []
 
   for (const company of companies) {
     items.push({
+      id: company.companiesHouseId,
       text: company.address,
       value: company.companiesHouseId,
-      selected: company.companiesHouseId === companiesHouseId
+      checked: company.companiesHouseId === companiesHouseId
     })
   }
 

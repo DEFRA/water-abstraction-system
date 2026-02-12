@@ -6,7 +6,7 @@
  * @module ExistingAccountService
  */
 
-const FetchCompaniesService = require('./fetch-companies.service.js')
+const FetchCompaniesService = require('./fetch-existing-companies.service.js')
 const ExistingAccountPresenter = require('../../../presenters/billing-accounts/setup/existing-account.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 

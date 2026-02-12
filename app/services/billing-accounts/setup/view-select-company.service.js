@@ -6,6 +6,7 @@
  * @module ViewSelectCompanyService
  */
 
+const FetchCompaniesService = require('./fetch-companies.service.js')
 const SelectCompanyPresenter = require('../../../presenters/billing-accounts/setup/select-company.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -18,8 +19,9 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
+  const companies = await FetchCompaniesService.go(session.companySearch)
 
-  const pageData = SelectCompanyPresenter.go(session, [])
+  const pageData = SelectCompanyPresenter.go(session, companies)
 
   return {
     ...pageData
