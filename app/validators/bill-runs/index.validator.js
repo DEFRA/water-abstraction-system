@@ -30,13 +30,13 @@ function go(payload, regions) {
       .integer()
       .max(MAX_BILL_RUN_NUMBER)
       .positive()
-      .unsafe()
       .optional()
       .messages({
         'number.base': 'The Number must be a number',
         'number.integer': 'The Number must be a whole number',
         'number.max': `The Number cannot exceed ${MAX_BILL_RUN_NUMBER}`,
-        'number.positive': 'The Number must be greater than zero'
+        'number.positive': 'The Number must be greater than zero',
+        'number.unsafe': `The Number must be between 1 and ${MAX_BILL_RUN_NUMBER}`
       }),
     regions: Joi.array()
       .items(Joi.string().valid(...validRegionIds))
@@ -57,16 +57,16 @@ function go(payload, regions) {
         'any.only': 'Select a valid Status'
       }),
     yearCreated: Joi.number()
-      .min(MIN_YEAR_CREATED)
       .integer()
       .max(maxYearCreated)
-      .unsafe()
+      .min(MIN_YEAR_CREATED)
       .optional()
       .messages({
         'number.base': 'The Year created must be a number',
+        'number.integer': 'The Year created must be a whole number',
         'number.max': `The Year created cannot exceed the current year of ${maxYearCreated}`,
         'number.min': `The Year created must be greater or equal to ${MIN_YEAR_CREATED}`,
-        'number.integer': 'The Year created must be a whole number'
+        'number.unsafe': `The Year created must be between ${MIN_YEAR_CREATED} and ${maxYearCreated}`
       })
   })
 
