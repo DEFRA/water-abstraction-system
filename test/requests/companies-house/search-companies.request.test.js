@@ -14,9 +14,9 @@ const { expect } = Code
 const CompaniesHouseRequest = require('../../../app/requests/companies-house.request.js')
 
 // Thing under test
-const CompaniesRequest = require('../../../app/requests/companies-house/companies.request.js')
+const SearchCompaniesRequest = require('../../../app/requests/companies-house/search-companies.request.js')
 
-describe('Companies House - Companies request', () => {
+describe('Companies House - Search Companies request', () => {
   const matches = [
     {
       address_snippet: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
@@ -45,7 +45,7 @@ describe('Companies House - Companies request', () => {
     })
 
     it('hits the correct endpoint', async () => {
-      await CompaniesRequest.send(queryString)
+      await SearchCompaniesRequest.send(queryString)
 
       const requestArgs = CompaniesHouseRequest.get.firstCall.args
 
@@ -53,13 +53,13 @@ describe('Companies House - Companies request', () => {
     })
 
     it('returns a "true" success status', async () => {
-      const result = await CompaniesRequest.send(queryString)
+      const result = await SearchCompaniesRequest.send(queryString)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the matching addresses', async () => {
-      const result = await CompaniesRequest.send(queryString)
+      const result = await SearchCompaniesRequest.send(queryString)
 
       expect(result.matches).to.equal(matches)
     })
@@ -79,13 +79,13 @@ describe('Companies House - Companies request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest.send(queryString)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns an error in the "response"', async () => {
-        const result = await CompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest.send(queryString)
 
         expect(result.response.body).to.equal({
           statusCode: HTTP_STATUS_NOT_FOUND,
@@ -95,7 +95,7 @@ describe('Companies House - Companies request', () => {
       })
 
       it('does not returns any matches', async () => {
-        const result = await CompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest.send(queryString)
 
         expect(result.response.body.items).not.to.exist()
         expect(result.matches).to.be.instanceOf(Array)
@@ -113,13 +113,13 @@ describe('Companies House - Companies request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await CompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest.send(queryString)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await CompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest.send(queryString)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()
@@ -127,7 +127,7 @@ describe('Companies House - Companies request', () => {
       })
 
       it('does not returns any matches', async () => {
-        const result = await CompaniesRequest.send(queryString)
+        const result = await SearchCompaniesRequest.send(queryString)
 
         expect(result.matches).to.exist()
         expect(result.matches).to.be.instanceOf(Array)

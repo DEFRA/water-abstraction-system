@@ -5,9 +5,7 @@
  * @module FetchCompaniesService
  */
 
-const { HTTP_STATUS_OK } = require('node:http2').constants
-
-const CompaniesRequest = require('../../../requests/companies-house/companies.request.js')
+const SearchCompaniesRequest = require('../../../requests/companies-house/search-companies.request.js')
 
 /**
  * Fetches any companies that meet the search criteria from Companies House
@@ -17,9 +15,9 @@ const CompaniesRequest = require('../../../requests/companies-house/companies.re
  * @returns {Promise<object[]>} an object containing the matching companies needed to populate the view
  */
 async function go(companySearch) {
-  const result = await CompaniesRequest.send(companySearch)
+  const result = await SearchCompaniesRequest.send(companySearch)
 
-  if (result.response.statusCode !== HTTP_STATUS_OK) {
+  if (!result.succeeded) {
     return []
   }
 
