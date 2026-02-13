@@ -11,6 +11,7 @@ const { expect } = Code
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SessionModel = require('../../../../app/models/session.model.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const SubmitCancelService = require('../../../../app/services/company-contacts/setup/submit-cancel.service.js')
@@ -43,6 +44,22 @@ describe('Company Contacts - Setup - Cancel Service', () => {
       const deletedSession = await SessionModel.query().findById(session.id)
 
       expect(deletedSession).to.be.undefined()
+    })
+
+    describe('and the company contact is being edited', () => {
+      beforeEach(async () => {
+        sessionData.companyContact = { id: generateUUID() }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitCancelService.go(session.id)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/company-contacts/${sessionData.companyContact.id}`
+        })
+      })
     })
   })
 })
