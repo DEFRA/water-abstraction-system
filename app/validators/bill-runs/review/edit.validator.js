@@ -62,7 +62,7 @@ function _maxDecimals(value, helpers) {
 
 function _validateCustomQuantity(customQuantity, authorisedVolume) {
   const schema = Joi.number().min(0).max(authorisedVolume).custom(_maxDecimals, 'Max decimals').required().messages({
-    'number.unsafe': 'The quantity must be a number',
+    'number.unsafe': 'The quantity must be between zero and the authorised amount',
     'number.base': 'The quantity must be a number',
     'number.min': 'The quantity must be zero or higher',
     'number.max': 'The quantity must be the same as or less than the authorised amount',

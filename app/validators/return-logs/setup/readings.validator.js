@@ -39,9 +39,9 @@ function go(payload, requestedYear, requestedMonth, session) {
       .messages({
         'number.base': 'Reading must be a number or blank',
         'number.integer': 'Reading must be a whole number',
-        'number.min': 'Reading must be a positive number',
+        'number.min': 'Reading cannot be negative',
         'number.max': `Reading entered exceeds the maximum of ${MAX_ALLOWED_READING}`,
-        'number.unsafe': `Reading entered exceeds the maximum of ${MAX_ALLOWED_READING}`
+        'number.unsafe': `Reading must be blank or between 0 and ${MAX_ALLOWED_READING}`
       })
   )
 

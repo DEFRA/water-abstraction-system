@@ -121,6 +121,23 @@ describe('Bill Runs Review - Edit validator', () => {
           )
         })
       })
+
+      describe('but entered an unsafe number', () => {
+        const MAX_SAFE_NUMBER = 9007199254740991
+
+        beforeEach(() => {
+          payload = { quantityOptions: 'customQuantity', customQuantity: MAX_SAFE_NUMBER + 1, authorisedVolume: 25 }
+        })
+
+        it('fails validation with the message "The quantity must be between zero and the authorised amount"', () => {
+          const result = EditValidator.go(payload)
+
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal(
+            'The quantity must be between zero and the authorised amount'
+          )
+        })
+      })
     })
   })
 })
