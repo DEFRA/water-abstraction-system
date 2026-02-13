@@ -54,6 +54,7 @@ describe('Search - Fetch Search Results Details service', () => {
       leftJoinRelated: Sinon.stub().returnsThis(),
       modifyGraph: Sinon.stub().returnsThis(),
       select: Sinon.stub().returnsThis(),
+      whereNotNull: Sinon.stub().returnsThis(),
       withGraphFetched: Sinon.stub().returnsThis()
     })
 
