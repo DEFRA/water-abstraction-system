@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
+const FetchExistingCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js')
 
 // Thing under test
 const SubmitExistingAccountService = require('../../../../app/services/billing-accounts/setup/submit-existing-account.service.js')
@@ -148,7 +148,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   describe('when validation fails', () => {
     beforeEach(async () => {
       payload = {}
-      Sinon.stub(FetchCompaniesService, 'go').returns(companies)
+      Sinon.stub(FetchExistingCompaniesService, 'go').returns(companies)
     })
 
     it('returns page data for the view, with errors', async () => {

@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
+const FetchExistingCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js')
 
 // Thing under test
 const ViewExistingAccountService = require('../../../../app/services/billing-accounts/setup/view-existing-account.service.js')
@@ -31,7 +31,7 @@ describe('Billing Accounts - Setup - View Existing Account service', () => {
     }
 
     session = await SessionHelper.add({ data: sessionData })
-    Sinon.stub(FetchCompaniesService, 'go').returns(fetchResults)
+    Sinon.stub(FetchExistingCompaniesService, 'go').returns(fetchResults)
   })
 
   after(async () => {

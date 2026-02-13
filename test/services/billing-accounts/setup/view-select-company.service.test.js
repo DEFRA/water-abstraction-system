@@ -3,9 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Things we need to stub
+const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
@@ -15,6 +19,14 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const ViewSelectCompanyService = require('../../../../app/services/billing-accounts/setup/view-select-company.service.js')
 
 describe('Billing Accounts - Setup - View Select Company Service', () => {
+  const companies = [
+    {
+      address: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+      companiesHouseId: '12345678',
+      title: 'ENVIRONMENT AGENCY'
+    }
+  ]
+
   let session
   let sessionData
 
@@ -24,6 +36,7 @@ describe('Billing Accounts - Setup - View Select Company Service', () => {
     }
 
     session = await SessionHelper.add({ data: sessionData })
+    Sinon.stub(FetchCompaniesService, 'go').returns(companies)
   })
 
   afterEach(async () => {
@@ -41,9 +54,11 @@ describe('Billing Accounts - Setup - View Select Company Service', () => {
         },
         companies: [
           {
-            selected: true,
-            text: '0 companies found',
-            value: 'select'
+            checked: false,
+            id: companies[0].companiesHouseId,
+            hint: { text: companies[0].address },
+            text: companies[0].title,
+            value: companies[0].companiesHouseId
           }
         ],
         companiesHouseId: null,
