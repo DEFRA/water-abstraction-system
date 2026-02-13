@@ -56,10 +56,10 @@ describe('Search - Fetch Search Results service', () => {
     )
 
     // Add the Companies in non-alphabetical order to prove the ordering in the results
-    company = await CompanyHelper.add({ name: 'TESTSEARCH company 2' })
+    company = await CompanyHelper.add({ externalId: '1:123', name: 'TESTSEARCH company 2' })
     companies.push(company)
 
-    company = await CompanyHelper.add({ name: 'TESTSEARCH company 11' })
+    company = await CompanyHelper.add({ externalId: '1:124', name: 'TESTSEARCH company 11' })
     companies.push(company)
 
     // Add the licences in non-alphabetical order to prove the ordering in the results
