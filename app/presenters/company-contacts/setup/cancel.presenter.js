@@ -25,9 +25,17 @@ function go(session) {
     abstractionAlerts: titleCase(abstractionAlerts),
     email,
     name,
-    pageTitle: 'You are about to cancel this contact',
+    pageTitle: _pageTitle(session),
     pageTitleCaption: company.name
   }
+}
+
+function _pageTitle(session) {
+  if (session.companyContact) {
+    return 'You are about to cancel editing this contact'
+  }
+
+  return 'You are about to cancel this contact'
 }
 
 module.exports = {
