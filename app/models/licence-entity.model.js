@@ -16,15 +16,16 @@ const BaseModel = require('./base.model.js')
  * It sits in the old `crm` schema and was not migrated to `crm_v2` as part of the previous team's efforts to replace
  * the old legacy CRM setup.
  *
- * Currently, the only reason we need it is to identify if a licence has a 'registered user'. You'll see this
- * highlighted when you view a licence.
+ * We need it to identify the 'registered users' for licences. You'll see the registered user highlighted when you view
+ * a licence and the list of associated "companies" and licences when viewing an external user.
  *
  * But the reason it is called `entity` in the `crm` schema is because it was intended to be a generic bucket of
  * 'things'. So, you'll find 4 types if you look at the raw data.
  *
  * - regime (only one record has this type and comes from the original team being pressured to create a tactical CRM for
  * all regimes, not just water abstraction)
- * - company (this has been replaced by `crm_v2.companies`)
+ * - company (this has been replaced by `crm_v2.companies`, but the concept remains as a kind of "bucket" of licences
+ * that have been collectively claimed by a registered user and so can be managed by that user)
  * - individual (this has been replaced by `crm_v2.companies`, except for registered users which is the only reason we
  * need to add this model)
  * - delete_me (no idea! But only one record has this type so it can be ignored)
