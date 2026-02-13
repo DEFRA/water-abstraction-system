@@ -34,9 +34,9 @@ async function go(sessionId, requirementIndex, payload, yar) {
 
   handleOneOptionSelected(payload, 'agreementsExceptions')
 
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
@@ -53,7 +53,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
   const formattedData = AgreementsExceptionsPresenter.go(session, requirementIndex, payload)
 
   return {
-    error: validationResult,
+    error,
     ...formattedData
   }
 }
