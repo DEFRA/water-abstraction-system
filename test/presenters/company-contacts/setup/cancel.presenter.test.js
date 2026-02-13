@@ -40,5 +40,17 @@ describe('Company Contacts - Setup - Cancel Presenter', () => {
         pageTitleCaption: 'Tyrell Corporation'
       })
     })
+
+    describe('and the company contact is being edited', () => {
+      beforeEach(() => {
+        session.companyContact = { id: generateUUID() }
+      })
+
+      it('returns page data for the view', () => {
+        const result = CancelPresenter.go(session)
+
+        expect(result.pageTitle).to.equal('You are about to cancel editing this contact')
+      })
+    })
   })
 })

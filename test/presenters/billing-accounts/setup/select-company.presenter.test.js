@@ -17,8 +17,9 @@ const SelectCompanyPresenter = require('../../../../app/presenters/billing-accou
 describe('Billing Accounts - Setup - Select Company Presenter', () => {
   const companies = [
     {
-      address: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
-      companiesHouseId: '12345678'
+      address: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+      companiesHouseId: '12345678',
+      title: 'ENVIRONMENT AGENCY'
     }
   ]
 
@@ -42,14 +43,11 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
         },
         companies: [
           {
-            selected: true,
-            text: '1 company found',
-            value: 'select'
-          },
-          {
-            selected: false,
-            text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
-            value: '12345678'
+            checked: false,
+            id: companies[0].companiesHouseId,
+            hint: { text: companies[0].address },
+            text: companies[0].title,
+            value: companies[0].companiesHouseId
           }
         ],
         companiesHouseId: null,
@@ -86,37 +84,6 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
         const result = SelectCompanyPresenter.go(session, [])
 
         expect(result.companiesHouseId).to.equal(null)
-      })
-    })
-  })
-
-  describe('"companies" property', () => {
-    describe('when there is one company in the companies array', () => {
-      beforeEach(() => {
-        session = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-          companiesHouseId: '12345678'
-        }
-      })
-
-      it('returns the correct label', () => {
-        const result = SelectCompanyPresenter.go(session, companies)
-
-        expect(result.companies[0].text).to.equal('1 company found')
-      })
-    })
-
-    describe('when there is more than one company in the companies array', () => {
-      beforeEach(() => {
-        session = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
-        }
-      })
-
-      it('returns the correct label', () => {
-        const result = SelectCompanyPresenter.go(session, [...companies, ...companies])
-
-        expect(result.companies[0].text).to.equal('2 companies found')
       })
     })
   })

@@ -3,11 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
@@ -15,6 +17,14 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SubmitSelectCompanyService = require('../../../../app/services/billing-accounts/setup/submit-select-company.service.js')
 
 describe('Billing Accounts - Setup - Submit Select Company Service', () => {
+  const companies = [
+    {
+      address: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
+      companiesHouseId: '12345678',
+      title: 'ENVIRONMENT AGENCY'
+    }
+  ]
+
   let payload
   let session
   let sessionData
@@ -53,6 +63,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
   describe('when validation fails', () => {
     beforeEach(() => {
       payload = {}
+      Sinon.stub(FetchCompaniesService, 'go').returns(companies)
     })
 
     it('returns page data for the view, with errors', async () => {
