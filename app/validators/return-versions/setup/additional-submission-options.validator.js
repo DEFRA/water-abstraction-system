@@ -24,13 +24,14 @@ function go(payload, session) {
   const errorMessage = 'Select additional submission options for the requirements for returns'
 
   const schema = Joi.object({
-    additionalSubmissionOptions: Joi.array().items(Joi.string()).required()
+    additionalSubmissionOptions: Joi.array().items(Joi.string()).required().min(1)
   })
     .custom((value, helpers) => {
       return _noQuarterlyReturnsForSummerCycle(value, helpers, session)
     }, 'No quarterly returns for summer cycle')
     .messages({
       'any.required': errorMessage,
+      'array.min': errorMessage,
       'array.sparse': errorMessage,
       'any.invalid': 'Quarterly returns submissions cannot be set for returns requirements in the summer cycle'
     })
