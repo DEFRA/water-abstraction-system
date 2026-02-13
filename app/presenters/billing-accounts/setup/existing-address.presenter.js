@@ -33,6 +33,10 @@ function _backLink(session) {
     return `/system/billing-accounts/setup/${session.id}/account-type`
   }
 
+  if (session.accountType === 'company') {
+    return `/system/billing-accounts/setup/${session.id}/select-company`
+  }
+
   return `/system/billing-accounts/setup/${session.id}/account`
 }
 

@@ -56,6 +56,18 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
   })
 
   describe('the "backLink.href" property', () => {
+    describe('when there is no "accountType" and "existingAccount" is a UUID', () => {
+      beforeEach(() => {
+        session.existingAccount = generateUUID()
+      })
+
+      it('returns the link for the "account" page', () => {
+        const result = ExistingAddressPresenter.go(session, addresses)
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account`)
+      })
+    })
+
     describe('when the "accountType" exists in the session as "company"', () => {
       beforeEach(() => {
         session.accountType = 'company'
@@ -64,7 +76,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       it('returns the link for the "account" page', () => {
         const result = ExistingAddressPresenter.go(session, addresses)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account`)
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/select-company`)
       })
     })
 

@@ -36,6 +36,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
 
   afterEach(async () => {
     await session.$query().delete()
+    Sinon.restore()
   })
 
   describe('when called with valid data', () => {
