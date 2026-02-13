@@ -28,9 +28,9 @@ async function go(sessionId, payload, yar) {
 
   handleOneOptionSelected(payload, 'recipients')
 
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, payload)
 
     GeneralLib.flashNotification(
@@ -51,7 +51,7 @@ async function go(sessionId, payload, yar) {
   const pageData = SelectRecipientsPresenter.go(session, recipients, selectedRecipients)
 
   return {
-    error: validationResult,
+    error,
     ...pageData
   }
 }
