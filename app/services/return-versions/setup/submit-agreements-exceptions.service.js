@@ -5,12 +5,12 @@
  * @module SubmitAgreementsExceptions
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
 const AgreementsExceptionsPresenter = require('../../../presenters/return-versions/setup/agreements-exceptions.presenter.js')
 const AgreementsExceptionsValidator = require('../../../validators/return-versions/setup/agreements-exceptions.validator.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const SessionModel = require('../../../models/session.model.js')
+const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/agreements-exceptions` page
@@ -32,7 +32,7 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  _handleOneOptionSelected(payload)
+  handleOneOptionSelected(payload, 'agreementsExceptions')
 
   const validationResult = _validate(payload)
 
@@ -55,19 +55,6 @@ async function go(sessionId, requirementIndex, payload, yar) {
   return {
     error: validationResult,
     ...formattedData
-  }
-}
-
-/**
- * When a single agreement and exception is checked by the user, it returns as a string. When multiple agreements and
- * exceptions are checked, the 'agreementsExceptions' is returned as an array. This function works to make those single
- * selected string 'agreementsExceptions' into an array for uniformity.
- *
- * @private
- */
-function _handleOneOptionSelected(payload) {
-  if (!Array.isArray(payload.agreementsExceptions)) {
-    payload.agreementsExceptions = [payload.agreementsExceptions]
   }
 }
 
