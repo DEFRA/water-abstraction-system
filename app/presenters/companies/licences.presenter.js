@@ -23,20 +23,35 @@ function go(company, licences) {
     },
     pageTitleCaption: company.name,
     pageTitle: 'Licences',
-    licences: _licences(licences)
+    licenceRoles: _licenceRoles(licences)
   }
 }
 
-function _licences(licences) {
-  return licences.map((licence) => {
-    return {
-      startDate: formatLongDate(licence.startDate),
-      endDate: formatLongDate(licence.endDate),
-      licenceRef: licence.licenceRef,
-      licenceName: licence.$licenceName(),
-      id: licence.id
+function _licenceRoles(licences) {
+  const licenceRoles = []
+
+  for (const licence of licences) {
+    // const licenceEndDetails = licence.$ends()
+
+    const { licenceDocumentRoles } = licence.licenceDocument
+
+    for (const licenceDocumentRole of licenceDocumentRoles) {
+      const { endDate, licenceRole: role, startDate } = licenceDocumentRole
+
+      const licenceRoleDetails = {
+        communicationType: role.label,
+        endDate: formatLongDate(endDate),
+        licenceId: licence.id,
+        licenceRef: licence.licenceRef,
+        licenceRoleCount: licenceDocumentRoles.length,
+        startDate: formatLongDate(startDate)
+      }
+
+      licenceRoles.push(licenceRoleDetails)
     }
-  })
+  }
+
+  return licenceRoles
 }
 
 module.exports = {

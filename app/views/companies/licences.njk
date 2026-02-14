@@ -5,27 +5,48 @@
 
 {% set tableRows = [] %}
 
-{% for licence in licences %}
+{% for licenceRole in licenceRoles %}
   {% set rowIndex = loop.index0 %}
 
-  {% set tableRow = [
+  {% if rowIndex > 0 %}
+    {% set lastLicenceId = licenceRoles[rowIndex - 1].licenceId %}
+  {% else %}
+    {% set lastLicenceId = null %}
+  {% endif %}
+
+  {% set tableRow = [] %}
+
+  {% if lastLicenceId !== licenceRole.licenceId %}
+    {% set licenceCell =
+      {
+        html: '<a class="govuk-link govuk-body-m" href="/system/licences/' + licenceRole.licenceId + '/summary">' + licenceRole.licenceRef + '</a>',
+        attributes: { 'data-test': 'licence-ref-' + rowIndex },
+        rowspan: licenceRole.licenceRoleCount
+      } %}
+
+    {% set tableRow = (tableRow.push(licenceCell), tableRow) %}
+  {% endif %}
+
+  {% set communicationTypeCell =
     {
-      html: '<a href="/system/licences/' + licence.id + '/summary">' + licence.licenceRef + '</a>',
-      attributes: { 'data-test': 'licence-ref-' + rowIndex }
-    },
+      text: licenceRole.communicationType,
+      attributes: { 'data-test': 'communication-type-' + rowIndex }
+    } %}
+  {% set tableRow = (tableRow.push(communicationTypeCell), tableRow) %}
+
+  {% set startDateCell =
     {
-      text: licence.licenceName,
-      attributes: { 'data-test': 'licence-name-' + rowIndex }
-    },
-    {
-      text: licence.startDate,
+      text: licenceRole.startDate,
       attributes: { 'data-test': 'start-date-' + rowIndex }
-    },
+    } %}
+  {% set tableRow = (tableRow.push(startDateCell), tableRow) %}
+
+  {% set endDateCell =
     {
-      text: licence.endDate,
+      text: licenceRole.endDate,
       attributes: { 'data-test': 'end-date-' + rowIndex }
-    }
-  ] %}
+    } %}
+  {% set tableRow = (tableRow.push(endDateCell), tableRow) %}
 
   {% set tableRows = (tableRows.push(tableRow), tableRows) %}
 {% endfor %}
@@ -39,7 +60,7 @@
         text: "Licence"
       },
       {
-        text: "Licence name"
+        text: "Communication type"
       },
       {
         text: "Start date"

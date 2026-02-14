@@ -7,7 +7,6 @@
 
 const DatabaseConfig = require('../../../config/database.config.js')
 const LicenceModel = require('../../models/licence.model.js')
-const { db } = require('../../../db/db.js')
 
 /**
  * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
@@ -25,13 +24,7 @@ async function go(companyId, page) {
 
 async function _fetch(companyId, page) {
   return LicenceModel.query()
-    .select(
-      'id',
-      'licenceRef',
-      'startDate',
-      db.raw('LEAST(??, ??, ??) AS ??', ['expiredDate', 'lapsedDate', 'revokedDate', 'endDate'])
-    )
-    .modify('licenceName')
+    .select(['expiredDate', 'id', 'lapsedDate', 'licenceRef', 'revokedDate', 'startDate'])
     .whereExists(
       LicenceModel.relatedQuery('licenceDocument')
         .innerJoinRelated('licenceDocumentRoles')
@@ -39,6 +32,26 @@ async function _fetch(companyId, page) {
         .where('licenceDocumentRoles.companyId', companyId)
         .where('licenceRoles.name', 'licenceHolder')
     )
+    .withGraphFetched('licenceDocument')
+    .modifyGraph('licenceDocument', (licenceDocumentBuilder) => {
+      licenceDocumentBuilder
+        .select(['id', 'licenceRef'])
+        .withGraphFetched('licenceDocumentRoles')
+        .modifyGraph('licenceDocumentRoles', (licenceDocumentRolesBuilder) => {
+          licenceDocumentRolesBuilder
+            .select(['endDate', 'id', 'startDate', 'endDate'])
+            .where('companyId', companyId)
+            .orderBy([
+              { column: 'licenceRoleId', order: 'asc' },
+              { column: 'startDate', order: 'desc' }
+            ])
+            .withGraphFetched('licenceRole')
+            .modifyGraph('licenceRole', (licenceRoleBuilder) => {
+              licenceRoleBuilder.select(['id', 'label', 'name'])
+            })
+        })
+    })
+    .orderBy('licenceRef', 'asc')
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }
 module.exports = {
