@@ -22,15 +22,16 @@ function go(payload) {
   const errorMessage = 'Select any points for the requirements for returns'
 
   const schema = Joi.object({
-    points: Joi.array().items(Joi.string().guid()).required()
+    points: Joi.array().items(Joi.string().guid()).min(1).required()
   }).messages({
     'any.required': errorMessage,
+    'array.min': errorMessage,
     'array.sparse': errorMessage,
     'string.base': errorMessage,
     'string.guid': errorMessage
   })
 
-  return schema.validate({ points: payload }, { abortEarly: false })
+  return schema.validate(payload, { abortEarly: false })
 }
 
 module.exports = {

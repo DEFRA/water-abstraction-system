@@ -10,6 +10,7 @@ const AlertThresholdsPresenter = require('../../../presenters/notices/setup/aler
 const AlertThresholdsValidator = require('../../../validators/notices/setup/alert-thresholds.validator.js')
 const SessionModel = require('../../../models/session.model.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/abstraction-alerts/alert-thresholds` page
@@ -22,42 +23,27 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
 
-  _handleOneOptionSelected(payload)
+  handleOneOptionSelected(payload, 'alertThresholds')
 
-  const validationResult = _validate(payload)
+  session.alertThresholds = payload.alertThresholds
 
-  if (!validationResult) {
-    await _save(session, payload)
+  const error = _validate(payload)
+
+  if (!error) {
+    await _save(session)
 
     return {}
   }
 
-  session.alertThresholds = []
-
   const pageData = AlertThresholdsPresenter.go(session)
 
   return {
-    error: validationResult,
+    error,
     ...pageData
   }
 }
 
-/**
- * When a single alert threshold is checked by the user, it returns as a string. When multiple alert thresholds are checked, the
- * 'alert-thresholds' is returned as an array. This function works to make those single selected string 'alert-thresholds' into an array
- * for uniformity.
- *
- * @private
- */
-function _handleOneOptionSelected(payload) {
-  if (!Array.isArray(payload.alertThresholds)) {
-    payload.alertThresholds = [payload.alertThresholds]
-  }
-}
-
-async function _save(session, payload) {
-  session.alertThresholds = payload.alertThresholds
-
+async function _save(session) {
   return session.$update()
 }
 

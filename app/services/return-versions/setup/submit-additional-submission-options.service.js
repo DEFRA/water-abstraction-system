@@ -5,11 +5,11 @@
  * @module AdditionalSubmissionOptionsService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
 const AdditionalSubmissionOptionsPresenter = require('../../../presenters/return-versions/setup/additional-submission-options.presenter.js')
 const AdditionalSubmissionOptionsValidator = require('../../../validators/return-versions/setup/additional-submission-options.validator.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
+const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/additional-submission-options` page
@@ -30,11 +30,11 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  _handleOneOptionSelected(payload)
+  handleOneOptionSelected(payload, 'additionalSubmissionOptions')
 
-  const validationResult = _validate(payload, session)
+  const error = _validate(payload, session)
 
-  if (!validationResult) {
+  if (!error) {
     const notification = _notification(session, payload)
 
     await _save(session, payload)
@@ -49,21 +49,8 @@ async function go(sessionId, payload, yar) {
   const submittedSessionData = _submittedSessionData(session, payload)
 
   return {
-    error: validationResult,
+    error,
     ...submittedSessionData
-  }
-}
-
-/**
- * When a single additional submission option is checked by the user, it returns as a string. When multiple options are
- * checked, the 'additionalSubmissionOptions' is returned as an array.
- * This function works to make those single selected string 'additionalSubmissionOptions' into an array for uniformity.
- *
- * @private
- */
-function _handleOneOptionSelected(payload) {
-  if (!Array.isArray(payload.additionalSubmissionOptions)) {
-    payload.additionalSubmissionOptions = [payload.additionalSubmissionOptions]
   }
 }
 
