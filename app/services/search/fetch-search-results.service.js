@@ -26,16 +26,16 @@ const BILLING_ACCOUNT_SQL = `
 // type of record
 const ID_FIELD_FOR_TABLE = {
   billingAccount: 'row_uu_id',
-  company: 'row_uu_id',
+  licenceHolder: 'row_uu_id',
   licence: 'row_uu_id',
   monitoringStation: 'row_uu_id',
   returnLog: 'row_uu_id',
   user: 'row_int_id'
 }
 
-const COMPANY_SQL = `
+const LICENCE_HOLDER_SQL = `
   SELECT
-    'company' AS row_type,
+    'licenceHolder' AS row_type,
     c.id AS row_uu_id,
     CAST (NULL AS INT) AS row_int_id,
     c."name" ILIKE ? AS exact,
@@ -45,6 +45,11 @@ const COMPANY_SQL = `
   FROM companies c
   WHERE
     c.external_id IS NOT NULL
+    AND EXISTS (
+      SELECT 1 FROM licence_document_roles ldr
+      INNER JOIN licence_roles lr ON lr.id = ldr.licence_role_id
+      WHERE lr."name" = 'licenceHolder' AND ldr.company_id = c.id
+    )
     AND c."name" ILIKE ?
 `
 
@@ -148,7 +153,7 @@ function _allSql(exactQuery, partialQuery, resultTypes, page) {
   const searchSqls = { statements: [], params: [] }
 
   _billingAccountSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
-  _companySql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
+  _licenceHolderSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
   _licenceSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
   _monitoringStationSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
   _returnLogSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery)
@@ -184,13 +189,21 @@ function _exactQuery(query) {
     .replaceAll('_', String.raw`\_`)
 }
 
-function _companySql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) {
-  if (resultTypes.includes('company')) {
-    searchSqls.statements.push(COMPANY_SQL)
+function _licenceHolderSql(resultTypes, searchSqls, countSqls, exactQuery, partialQuery) {
+  if (resultTypes.includes('licenceHolder')) {
+    searchSqls.statements.push(LICENCE_HOLDER_SQL)
     searchSqls.params.push(exactQuery, partialQuery)
 
     countSqls.statements.push(`
-      (SELECT COUNT(*) FROM companies c WHERE c.external_id IS NOT NULL AND c."name" ILIKE ?)
+      (SELECT COUNT(*) FROM companies c
+      WHERE
+        c.external_id IS NOT NULL
+        AND EXISTS (
+          SELECT 1 FROM licence_document_roles ldr
+          INNER JOIN licence_roles lr ON lr.id = ldr.licence_role_id
+          WHERE lr."name" = 'licenceHolder' AND ldr.company_id = c.id
+        )
+        AND c."name" ILIKE ?)
     `)
     countSqls.params.push(partialQuery)
   }
