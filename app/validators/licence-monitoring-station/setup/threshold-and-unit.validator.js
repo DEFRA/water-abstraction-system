@@ -41,10 +41,10 @@ function go(payload) {
       .messages({
         'any.required': thresholdErrorMessage,
         'any.only': thresholdErrorMessage,
-        'number.max': `Enter a threshold less than ${MAX_VALUE}`,
+        'number.max': `Enter a threshold less than or equal to ${MAX_VALUE}`,
         'number.base': thresholdErrorMessage,
         'number.positive': 'Enter a threshold of 0 or greater',
-        'number.unsafe': 'Enter a threshold of 0 or greater'
+        'number.unsafe': `Enter a threshold between 0 and ${MAX_VALUE}`
       })
   })
 

@@ -89,11 +89,28 @@ describe('Bill Runs Review - Factors validator', () => {
           payload.amendedAggregate = -1
         })
 
-        it('fails the validation with the message "The aggregate factor must be greater than 0"', () => {
+        it('fails the validation with the message "The aggregate factor must be 0 or more"', () => {
           const result = FactorsValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The aggregate factor must be greater than 0')
+          expect(result.error.details[0].message).to.equal('The aggregate factor must be 0 or more')
+        })
+      })
+
+      describe('because the user entered an unsafe number', () => {
+        const MAX_SAFE_NUMBER = 9007199254740991
+
+        beforeEach(() => {
+          payload.amendedAggregate = MAX_SAFE_NUMBER + 1
+        })
+
+        it('fails the validation with the message "The aggregate factor must be between 0 and 9007199254740991"', () => {
+          const result = FactorsValidator.go(payload)
+
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal(
+            'The aggregate factor must be between 0 and 9007199254740991'
+          )
         })
       })
     })
@@ -145,11 +162,26 @@ describe('Bill Runs Review - Factors validator', () => {
           payload.amendedChargeAdjustment = -1
         })
 
-        it('fails the validation with the message "The charge factor must be greater than 0"', () => {
+        it('fails the validation with the message "The charge factor must be 0 or more"', () => {
           const result = FactorsValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('The charge factor must be greater than 0')
+          expect(result.error.details[0].message).to.equal('The charge factor must be 0 or more')
+        })
+      })
+
+      describe('because the user entered an unsafe number', () => {
+        const MAX_SAFE_NUMBER = 9007199254740991
+
+        beforeEach(() => {
+          payload.amendedChargeAdjustment = MAX_SAFE_NUMBER + 1
+        })
+
+        it('fails the validation with the message "The charge factor must be between 0 and 9007199254740991"', () => {
+          const result = FactorsValidator.go(payload)
+
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal('The charge factor must be between 0 and 9007199254740991')
         })
       })
     })

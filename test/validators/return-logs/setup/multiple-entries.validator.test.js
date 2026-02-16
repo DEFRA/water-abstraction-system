@@ -92,11 +92,11 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
         }
       })
 
-      it('fails validation with the message "Volumes must be a positive number"', () => {
+      it('fails validation with the message "Volumes must be 0 or more"', () => {
         const result = MultipleEntriesValidator.go(frequency, length, measurementType, payload, startReading)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Volumes must be a positive number')
+        expect(result.error.details[0].message).to.equal('Volumes must be 0 or more')
       })
     })
 
@@ -150,6 +150,36 @@ describe('Return Logs Setup - Multiple Entries validator', () => {
         expect(result.error.details[0].message).to.equal(
           'Each meter reading must be greater than or equal to the previous reading'
         )
+      })
+    })
+
+    describe('because the user entered an unsafe number (a number greater than 9007199254740991)', () => {
+      beforeEach(() => {
+        frequency = 'daily'
+        measurementType = 'volumes'
+        payload = {
+          multipleEntries: [
+            '100',
+            '101',
+            '102',
+            '103',
+            '104',
+            null,
+            '106',
+            '107',
+            '108',
+            '109',
+            '110',
+            '9007199254740992'
+          ]
+        }
+      })
+
+      it('fails validation with the message "Volumes must be between 0 and 9007199254740991"', () => {
+        const result = MultipleEntriesValidator.go(frequency, length, measurementType, payload, startReading)
+
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Volumes must be between 0 and 9007199254740991')
       })
     })
   })

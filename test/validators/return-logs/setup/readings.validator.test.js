@@ -71,11 +71,11 @@ describe('Return Logs Setup - Readings validator', () => {
         requestedMonth = 4 // May
       })
 
-      it('fails validation with the message "Reading must be a positive number"', () => {
+      it('fails validation with the message "Reading cannot be negative"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Reading must be a positive number')
+        expect(result.error.details[0].message).to.equal('Reading cannot be negative')
       })
     })
 
@@ -163,11 +163,11 @@ describe('Return Logs Setup - Readings validator', () => {
         requestedMonth = 4 // May
       })
 
-      it('fails validation with the message "Reading entered exceeds the maximum of 99999999999"', () => {
+      it('fails validation with the message "Reading must be blank or between 0 and 99999999999"', () => {
         const result = ReadingsValidator.go(payload, requestedYear, requestedMonth, session)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Reading entered exceeds the maximum of 99999999999')
+        expect(result.error.details[0].message).to.equal('Reading must be blank or between 0 and 99999999999')
       })
     })
   })

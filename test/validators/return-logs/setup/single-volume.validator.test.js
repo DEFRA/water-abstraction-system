@@ -59,11 +59,11 @@ describe('Return Logs Setup - Single Volume validator', () => {
       })
 
       describe('but then entered no volume', () => {
-        it('fails validation with the message "Enter a total figure"', () => {
+        it('fails validation with the message "Enter a total amount"', () => {
           const result = SingleVolumeValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a total figure')
+          expect(result.error.details[0].message).to.equal('Enter a total amount')
         })
       })
 
@@ -72,11 +72,11 @@ describe('Return Logs Setup - Single Volume validator', () => {
           payload.singleVolumeQuantity = 'Test'
         })
 
-        it('fails validation with the message "Enter a total figure"', () => {
+        it('fails validation with the message "Enter a number for the total amount"', () => {
           const result = SingleVolumeValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a total figure')
+          expect(result.error.details[0].message).to.equal('Enter a number for the total amount')
         })
       })
 
@@ -85,11 +85,11 @@ describe('Return Logs Setup - Single Volume validator', () => {
           payload.singleVolumeQuantity = '-0.1'
         })
 
-        it('fails validation with the message "Enter a total figure greater than zero"', () => {
+        it('fails validation with the message "Enter a total amount greater than zero"', () => {
           const result = SingleVolumeValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a total figure greater than zero')
+          expect(result.error.details[0].message).to.equal('Enter a total amount greater than zero')
         })
       })
 
@@ -98,24 +98,28 @@ describe('Return Logs Setup - Single Volume validator', () => {
           payload.singleVolumeQuantity = '0'
         })
 
-        it('fails validation with the message "Enter a total figure greater than zero"', () => {
+        it('fails validation with the message "Enter a total amount greater than zero"', () => {
           const result = SingleVolumeValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a total figure greater than zero')
+          expect(result.error.details[0].message).to.equal('Enter a total amount greater than zero')
         })
       })
 
-      describe('but entered a volume too big', () => {
+      describe('but entered an unsafe number', () => {
+        const MAX_SAFE_NUMBER = 9007199254740991
+
         beforeEach(() => {
-          payload.singleVolumeQuantity = '9007199254740992'
+          payload.singleVolumeQuantity = MAX_SAFE_NUMBER + 1
         })
 
-        it('fails validation with the message "Enter a smaller total figure"', () => {
+        it('fails validation with the message "Enter a positive total amount up to a maximum of 9007199254740991"', () => {
           const result = SingleVolumeValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a smaller total figure')
+          expect(result.error.details[0].message).to.equal(
+            'Enter a positive total amount up to a maximum of 9007199254740991'
+          )
         })
       })
 
@@ -124,11 +128,11 @@ describe('Return Logs Setup - Single Volume validator', () => {
           payload.singleVolumeQuantity = '1.1234567'
         })
 
-        it('fails validation with the message "Enter a number with no more than 6 decimal places"', () => {
+        it('fails validation with the message "Enter a total amount with no more than 6 decimal places"', () => {
           const result = SingleVolumeValidator.go(payload)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Enter a number with no more than 6 decimal places')
+          expect(result.error.details[0].message).to.equal('Enter a total amount with no more than 6 decimal places')
         })
       })
     })

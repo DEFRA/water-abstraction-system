@@ -26,17 +26,17 @@ function go(payload, lines) {
 
   const schema = Joi.object({
     startReading: Joi.number()
-      .min(0)
       .integer()
-      .required()
       .max(maxMeterReading)
+      .min(0)
+      .required()
       .messages({
         'any.required': 'Enter a start meter reading',
         'number.base': 'Start meter reading must 0 or higher',
+        'number.integer': 'Start meter reading must be a whole number',
         'number.max': maxValidationMessage,
-        'number.unsafe': `Start meter reading exceeds the maximum of ${MAX_ALLOWED_READING}`,
         'number.min': 'Start meter reading must not be negative',
-        'number.integer': 'Start meter reading must be a whole number'
+        'number.unsafe': `Start meter reading must be between 0 and ${MAX_ALLOWED_READING}`
       })
   })
 
