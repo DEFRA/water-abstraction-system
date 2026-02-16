@@ -406,6 +406,34 @@ const data = [
     description: 'Wet Fencing and Agriculture',
     lossFactor: 'very low',
     twoPartTariff: false
+  },
+  {
+    id: '0ff77fa9-fc68-427c-bb9a-d6b801d963a6',
+    legacyId: '700',
+    description: 'Transfer Reabstract Low Loss Spray Irrigation - Direct',
+    lossFactor: 'low',
+    twoPartTariff: true
+  },
+  {
+    id: 'c32c5613-f22e-4c64-94dd-ce23053591b7',
+    legacyId: '710',
+    description: 'Transfer Reabstract Low Loss Trickle Irrigation - Direct',
+    lossFactor: 'low',
+    twoPartTariff: true
+  },
+  {
+    id: 'dd00fac4-21e9-4f5c-85c1-16f9451fce8b',
+    legacyId: '720',
+    description: 'Transfer Reabstract Low Loss Spray Irrigation - Storage',
+    lossFactor: 'low',
+    twoPartTariff: true
+  },
+  {
+    id: '5c18ff47-976c-40b3-8e6b-9e7d5d15068d',
+    legacyId: '730',
+    description: 'Transfer Reabstract Low Loss Trickle Irrigation - Storage',
+    lossFactor: 'low',
+    twoPartTariff: true
   }
 ]
 
