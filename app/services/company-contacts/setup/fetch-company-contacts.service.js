@@ -23,9 +23,12 @@ async function go(companyId, companyContact) {
 }
 
 async function _fetch(companyId, companyContact) {
-  const query = CompanyContactModel.query()
+  const excluded = companyContact ? [companyContact.id] : []
+
+  return CompanyContactModel.query()
     .select(['companyContacts.id'])
     .where('companyContacts.companyId', companyId)
+    .whereNotIn('companyContacts.id', excluded)
     .withGraphFetched('contact')
     .modifyGraph('contact', (contactBuilder) => {
       contactBuilder.select([
@@ -41,12 +44,6 @@ async function _fetch(companyId, companyContact) {
         'email'
       ])
     })
-
-  if (companyContact) {
-    query.whereNotIn('companyContacts.id', [companyContact.id])
-  }
-
-  return query
 }
 
 module.exports = {
