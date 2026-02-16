@@ -11,7 +11,7 @@ const { titleCase } = require('../../base.presenter.js')
  * Formats data for the '/company-contacts/setup/{sessionId}/check' page
  *
  * @param {object} session - The session instance
- * @param {object[]} savedCompanyContacts - An array of company contacts
+ * @param {object[]} savedCompanyContacts - An array of company contacts stored in the database
  *
  * @returns {object} The data formatted for the view template
  */
