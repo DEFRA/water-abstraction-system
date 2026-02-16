@@ -60,6 +60,14 @@ class LicenceEntityModel extends BaseModel {
           from: 'licenceEntities.id',
           to: 'users.licenceEntityId'
         }
+      },
+      userVerifications: {
+        relation: Model.HasManyRelation,
+        modelClass: 'user-verification.model',
+        join: {
+          from: 'licenceEntities.id',
+          to: 'userVerifications.licenceEntityId'
+        }
       }
     }
   }
