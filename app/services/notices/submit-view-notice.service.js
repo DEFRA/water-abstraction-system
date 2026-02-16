@@ -5,11 +5,12 @@
  * @module SubmitViewNoticeService
  */
 
+const { formatValidationResult } = require('../../presenters/base.presenter.js')
 const FetchNoticeService = require('../../services/notices/fetch-notice.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const ViewNoticePresenter = require('../../presenters/notices/view-notice.presenter.js')
 const ViewValidator = require('../../validators/notices/view.validator.js')
-const { formatValidationResult } = require('../../presenters/base.presenter.js')
+const { clearFilters } = require('../../lib/submit-page.lib.js')
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -26,9 +27,10 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
  */
 async function go(noticeId, payload, yar, page = 1) {
   const filterKey = `noticeFilter-${noticeId}`
-  const clearFilters = _clearFilters(payload, yar, filterKey)
 
-  if (clearFilters) {
+  const filterCleared = clearFilters(payload, yar, filterKey)
+
+  if (filterCleared) {
     return {}
   }
 
@@ -47,18 +49,6 @@ async function go(noticeId, payload, yar, page = 1) {
   const savedFilters = _savedFilters(yar, filterKey)
 
   return _replayView(noticeId, payload, error, selectedPageNumber, savedFilters)
-}
-
-function _clearFilters(payload, yar, filterKey) {
-  const clearFilters = payload.clearFilters
-
-  if (clearFilters) {
-    yar.clear(filterKey)
-
-    return true
-  }
-
-  return false
 }
 
 async function _replayView(noticeId, payload, error, selectedPageNumber, savedFilters) {

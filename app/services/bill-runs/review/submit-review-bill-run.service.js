@@ -5,6 +5,8 @@
  * @module SubmitReviewBillRunService
  */
 
+const { clearFilters } = require('../../../lib/submit-page.lib.js')
+
 /**
  * Updates the session cookie with the filter data needed for the two-part tariff review bill run page
  *
@@ -13,16 +15,16 @@
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
 async function go(billRunId, payload, yar) {
-  const clearFilters = payload?.clearFilters
+  const filterKey = `review-${billRunId}`
+
+  const filterCleared = clearFilters(payload, yar, filterKey)
   const filterIssues = payload?.filterIssues
   const filterLicenceHolderNumber = payload?.filterLicenceHolderNumber
   const filterLicenceStatus = payload?.filterLicenceStatus
   const filterProgress = payload?.filterProgress
 
-  if (clearFilters) {
-    yar.clear(`review-${billRunId}`)
-  } else {
-    yar.set(`review-${billRunId}`, {
+  if (!filterCleared) {
+    yar.set(filterKey, {
       filterIssues,
       filterLicenceHolderNumber,
       filterLicenceStatus,
