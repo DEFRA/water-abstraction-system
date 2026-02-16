@@ -14,7 +14,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/company-contacts/setup/check.presenter.js')
 
-describe('Company Contacts - Setup - Check Presenter', () => {
+describe.only('Company Contacts - Setup - Check Presenter', () => {
   let company
   let companyContact
   let companyContacts
@@ -129,12 +129,29 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               ]
             })
 
-            it('returns a warning', () => {
-              const result = CheckPresenter.go(session, companyContacts)
+            describe('in the same case', () => {
+              it('returns a warning', () => {
+                const result = CheckPresenter.go(session, companyContacts)
 
-              expect(result.warning).to.equal({
-                text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
-                iconFallbackText: 'Warning'
+                expect(result.warning).to.equal({
+                  text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
+                  iconFallbackText: 'Warning'
+                })
+              })
+            })
+
+            describe('in a different case (TYRELL CORPORATION)', () => {
+              beforeEach(() => {
+                session.name = companyContact.contact.department.toUpperCase()
+              })
+
+              it('still returns a warning', () => {
+                const result = CheckPresenter.go(session, companyContacts)
+
+                expect(result.warning).to.equal({
+                  text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
+                  iconFallbackText: 'Warning'
+                })
               })
             })
           })
@@ -152,7 +169,6 @@ describe('Company Contacts - Setup - Check Presenter', () => {
             expect(result.warning).to.be.null()
           })
         })
-      })
       })
     })
   })
