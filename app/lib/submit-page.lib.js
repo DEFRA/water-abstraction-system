@@ -13,9 +13,9 @@
  * @returns {boolean} True if filters were cleared, false otherwise
  */
 function clearFilters(payload, yar, filterKey) {
-  const clearFilters = payload.clearFilters
+  const clearFilter = payload.clearFilters
 
-  if (clearFilters) {
+  if (clearFilter) {
     yar.clear(filterKey)
 
     return true
