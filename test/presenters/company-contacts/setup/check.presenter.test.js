@@ -61,18 +61,35 @@ describe('Company Contacts - Setup - Check Presenter', () => {
 
     describe('the "warning" property', () => {
       describe('when creating a new company contact', () => {
-        describe('and the contact already exists (name and email match)', () => {
-          it('returns the warning', () => {
-            const result = CheckPresenter.go(session, companyContacts)
+        describe('and a contact with a matching name and email exists', () => {
+          describe('in the same case', () => {
+            it('returns a warning', () => {
+              const result = CheckPresenter.go(session, companyContacts)
 
-            expect(result.warning).to.equal({
-              text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
-              iconFallbackText: 'Warning'
+              expect(result.warning).to.equal({
+                text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
+                iconFallbackText: 'Warning'
+              })
+            })
+          })
+
+          describe('in a different case (TYRELL CORPORATION)', () => {
+            beforeEach(() => {
+              session.name = companyContact.contact.department.toUpperCase()
+            })
+
+            it('still returns a warning', () => {
+              const result = CheckPresenter.go(session, companyContacts)
+
+              expect(result.warning).to.equal({
+                text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
+                iconFallbackText: 'Warning'
+              })
             })
           })
         })
 
-        describe('and the contact does not exist (name and email do not match)', () => {
+        describe('and a contact with a matching name and email does not exist', () => {
           beforeEach(() => {
             session.name = 'Eric'
             session.email = 'Eric@test.com'
@@ -87,41 +104,43 @@ describe('Company Contacts - Setup - Check Presenter', () => {
       })
 
       describe('when editing an existing company contact', () => {
-        describe('and the contact already exists (name and email match) and is not the editing company contact', () => {
-          beforeEach(() => {
-            session.companyContact = companyContact
+        describe('and a contact with a matching name and email exists', () => {
+          describe('but its the contact being edited', () => {
+            beforeEach(() => {
+              session.companyContact = companyContact
+            })
 
-            companyContacts = [
-              {
-                ...companyContact,
-                id: generateUUID()
-              }
-            ]
+            it('returns no warning', () => {
+              const result = CheckPresenter.go(session, companyContacts)
+
+              expect(result.warning).to.null()
+            })
           })
 
-          it('returns the warning', () => {
-            const result = CheckPresenter.go(session, companyContacts)
+          describe('and its a different contact to the one being edited', () => {
+            beforeEach(() => {
+              session.companyContact = companyContact
 
-            expect(result.warning).to.equal({
-              text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
-              iconFallbackText: 'Warning'
+              companyContacts = [
+                {
+                  ...companyContact,
+                  id: generateUUID()
+                }
+              ]
+            })
+
+            it('returns a warning', () => {
+              const result = CheckPresenter.go(session, companyContacts)
+
+              expect(result.warning).to.equal({
+                text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
+                iconFallbackText: 'Warning'
+              })
             })
           })
         })
 
-        describe('and the contact already exists (name and email exist) and is the editing company contact', () => {
-          beforeEach(() => {
-            session.companyContact = companyContact
-          })
-
-          it('returns no warning', () => {
-            const result = CheckPresenter.go(session, companyContacts)
-
-            expect(result.warning).to.null()
-          })
-        })
-
-        describe('and the contact does not exist (name and email do not match)', () => {
+        describe('and a contact with a matching name and email does not exist', () => {
           beforeEach(() => {
             session.name = 'Eric'
             session.email = 'Eric@test.com'
@@ -134,20 +153,6 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           })
         })
       })
-
-      describe('when the user has entered the same data in a different case "TYRELL CORPORATION"', () => {
-        beforeEach(() => {
-          session.name = companyContact.contact.department.toUpperCase()
-        })
-
-        it('returns the warning', () => {
-          const result = CheckPresenter.go(session, companyContacts)
-
-          expect(result.warning).to.equal({
-            text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
-            iconFallbackText: 'Warning'
-          })
-        })
       })
     })
   })
