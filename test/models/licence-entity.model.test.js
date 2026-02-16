@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -15,6 +15,8 @@ const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.
 const LicenceEntityRoleModel = require('../../app/models/licence-entity-role.model.js')
 const UserHelper = require('../support/helpers/user.helper.js')
 const UserModel = require('../../app/models/user.model.js')
+const UserVerificationHelper = require('../support/helpers/user-verification.helper.js')
+const UserVerificationModel = require('../../app/models/user-verification.model.js')
 
 // Thing under test
 const LicenceEntityModel = require('../../app/models/licence-entity.model.js')
@@ -24,6 +26,7 @@ describe('Licence Entity model', () => {
   let testLicenceEntityRoles
   let testRecord
   let testUser
+  let testUserVerifications
 
   before(async () => {
     testRecord = await LicenceEntityHelper.add()
@@ -32,19 +35,40 @@ describe('Licence Entity model', () => {
 
     testLicenceDocumentHeaders = []
     for (let i = 0; i < 2; i++) {
-      const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({ companyEntityId: licenceEntityId })
+      const testLicenceDocumentHeader = await LicenceDocumentHeaderHelper.add({ companyEntityId: licenceEntityId })
 
-      testLicenceDocumentHeaders.push(licenceDocumentHeader)
+      testLicenceDocumentHeaders.push(testLicenceDocumentHeader)
     }
 
     testLicenceEntityRoles = []
     for (let i = 0; i < 2; i++) {
-      const licenceEntityRole = await LicenceEntityRoleHelper.add({ licenceEntityId })
+      const testLicenceEntityRole = await LicenceEntityRoleHelper.add({ licenceEntityId })
 
-      testLicenceEntityRoles.push(licenceEntityRole)
+      testLicenceEntityRoles.push(testLicenceEntityRole)
     }
 
     testUser = await UserHelper.add({ licenceEntityId })
+
+    testUserVerifications = []
+    for (let i = 0; i < 2; i++) {
+      const testUserVerification = await UserVerificationHelper.add({ licenceEntityId })
+
+      testUserVerifications.push(testUserVerification)
+    }
+  })
+
+  after(async () => {
+    for (const testUserVerification of testUserVerifications) {
+      await testUserVerification.$query().delete()
+    }
+    await testUser.$query().delete()
+    for (const testLicenceEntityRole of testLicenceEntityRoles) {
+      await testLicenceEntityRole.$query().delete()
+    }
+    for (const testLicenceDocumentHeader of testLicenceDocumentHeaders) {
+      await testLicenceDocumentHeader.$query().delete()
+    }
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {
@@ -114,6 +138,26 @@ describe('Licence Entity model', () => {
 
         expect(result.user).to.be.an.instanceOf(UserModel)
         expect(result.user).to.equal(testUser)
+      })
+    })
+
+    describe('when linking to user verifications', () => {
+      it('can successfully run a related query', async () => {
+        const query = await LicenceEntityModel.query().innerJoinRelated('userVerifications')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the user verifications', async () => {
+        const result = await LicenceEntityModel.query().findById(testRecord.id).withGraphFetched('userVerifications')
+
+        expect(result).to.be.instanceOf(LicenceEntityModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.userVerifications).to.be.an.array()
+        expect(result.userVerifications[0]).to.be.an.instanceOf(UserVerificationModel)
+        expect(result.userVerifications).to.include(testUserVerifications[0])
+        expect(result.userVerifications).to.include(testUserVerifications[1])
       })
     })
   })
