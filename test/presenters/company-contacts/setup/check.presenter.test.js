@@ -61,8 +61,8 @@ describe('Company Contacts - Setup - Check Presenter', () => {
 
     describe('the "warning" property', () => {
       describe('when creating a new company contact', () => {
-        describe('and the contact already exists (name and email exist)', () => {
-          it('return the warning', () => {
+        describe('and the contact already exists (name and email match)', () => {
+          it('returns the warning', () => {
             const result = CheckPresenter.go(session, companyContacts)
 
             expect(result.warning).to.equal({
@@ -87,7 +87,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
       })
 
       describe('when editing an existing company contact', () => {
-        describe('and the contact already exists (name and email exist) and is not the editing company contact', () => {
+        describe('and the contact already exists (name and email match) and is not the editing company contact', () => {
           beforeEach(() => {
             session.companyContact = companyContact
 
@@ -99,7 +99,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
             ]
           })
 
-          it('return the warning', () => {
+          it('returns the warning', () => {
             const result = CheckPresenter.go(session, companyContacts)
 
             expect(result.warning).to.equal({
@@ -114,7 +114,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
             session.companyContact = companyContact
           })
 
-          it('return the warning', () => {
+          it('returns no warning', () => {
             const result = CheckPresenter.go(session, companyContacts)
 
             expect(result.warning).to.null()
@@ -140,7 +140,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           session.name = companyContact.contact.department.toUpperCase()
         })
 
-        it('return the warning', () => {
+        it('returns the warning', () => {
           const result = CheckPresenter.go(session, companyContacts)
 
           expect(result.warning).to.equal({
