@@ -15,14 +15,16 @@ const { clearFilters } = require('../../../lib/submit-page.lib.js')
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
 async function go(billRunId, payload, yar) {
-  const filterCleared = clearFilters(payload, yar, `review-${billRunId}`)
+  const filterKey = `review-${billRunId}`
+
+  const filterCleared = clearFilters(payload, yar, filterKey)
   const filterIssues = payload?.filterIssues
   const filterLicenceHolderNumber = payload?.filterLicenceHolderNumber
   const filterLicenceStatus = payload?.filterLicenceStatus
   const filterProgress = payload?.filterProgress
 
   if (!filterCleared) {
-    yar.set(`review-${billRunId}`, {
+    yar.set(filterKey, {
       filterIssues,
       filterLicenceHolderNumber,
       filterLicenceStatus,
