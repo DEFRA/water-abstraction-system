@@ -12,7 +12,7 @@ const CompanyContactModel = require('../../../models/company-contact.model.js')
  *
  * @param {string} companyId - The company id for the company
  *
- * @returns {Promise<object>} the company contacts for the company and the pagination object
+ * @returns {Promise<object>} the company contacts for the company
  */
 async function go(companyId) {
   return _fetch(companyId)
