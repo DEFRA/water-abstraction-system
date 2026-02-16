@@ -14,7 +14,7 @@ const SubmitPageLib = require('../../app/lib/submit-page.lib.js')
 describe('SubmitPageLib', () => {
   let payload
 
-  describe.only('#clearFilters()', () => {
+  describe('#clearFilters()', () => {
     const filterKey = 'filterToClear'
 
     let yarStub
