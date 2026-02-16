@@ -14,6 +14,7 @@ const LicenceDocumentHelper = require('../../support/helpers/licence-document.he
 const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
 const LicenceDocumentRoleHelper = require('../../support/helpers/licence-document-role.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 
 // Things we need to stub
 const databaseConfig = require('../../../config/database.config.js')
@@ -55,9 +56,13 @@ describe('Companies - Fetch Licences service', () => {
         licenceName: 'Tyrell Corporation'
       })
 
+      // NOTE: It defaults to returning the licenceHolder role. This service will only return licences linked to the
+      // company where the `LicenceDocumentRole` is linked to the `licenceHolder` role.
+      const licenceRole = LicenceRoleHelper.select()
       await LicenceDocumentRoleHelper.add({
         companyId: company.id,
-        licenceDocumentId: licenceDocument.id
+        licenceDocumentId: licenceDocument.id,
+        licenceRoleId: licenceRole.id
       })
 
       await _addAdditionalLicences()
