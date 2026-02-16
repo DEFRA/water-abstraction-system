@@ -39,6 +39,8 @@ describe('Companies - Fetch Licences service', () => {
       licenceRef: licenceDocument.licenceRef
     })
 
+    // NOTE: This is needed to confirm we can retrieve the 'name' for the licence, which can be assigned by external
+    // users when the register as the primary user.
     licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
       licenceRef: licenceDocument.licenceRef,
       licenceName: 'Tyrell Corporation'
