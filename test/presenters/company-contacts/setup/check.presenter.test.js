@@ -56,27 +56,11 @@ describe('Company Contacts - Setup - Check Presenter', () => {
     })
 
     describe('the "warning" property', () => {
-      describe('when the contact already exists (name and email exist)', () => {
-        beforeEach(() => {
-          companyContact.contact.department = name
-          companyContact.contact.email = email
-
-          companyContacts = [companyContact]
-        })
-
-        it('return the warning', () => {
-          const result = CheckPresenter.go(session, companyContacts)
-
-          expect(result.warning).to.equal({
-            text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
-            iconFallbackText: 'Warning'
-          })
-        })
-
-        describe('and the user has entered the same data in a different case "TYRELL CORPORATION"', () => {
+      describe('when creating a new company contact', () => {
+        describe('and the contact already exists (name and email exist)', () => {
           beforeEach(() => {
-            companyContact.contact.department = name.toUpperCase()
-            companyContact.contact.email = email.toUpperCase()
+            companyContact.contact.department = name
+            companyContact.contact.email = email
 
             companyContacts = [companyContact]
           })
@@ -89,14 +73,82 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               iconFallbackText: 'Warning'
             })
           })
+
+          describe('and the user has entered the same data in a different case "TYRELL CORPORATION"', () => {
+            beforeEach(() => {
+              companyContact.contact.department = name.toUpperCase()
+              companyContact.contact.email = email.toUpperCase()
+
+              companyContacts = [companyContact]
+            })
+
+            it('return the warning', () => {
+              const result = CheckPresenter.go(session, companyContacts)
+
+              expect(result.warning).to.equal({
+                text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
+                iconFallbackText: 'Warning'
+              })
+            })
+          })
+        })
+
+        describe('and the contact does not exist (name and email do not match)', () => {
+          it('returns no warning', () => {
+            const result = CheckPresenter.go(session, companyContacts)
+
+            expect(result.warning).to.be.null()
+          })
         })
       })
 
-      describe('when the contact does not exist (name and email do not match)', () => {
-        it('returns no warning', () => {
-          const result = CheckPresenter.go(session, companyContacts)
+      describe('when editing an existing company contact', () => {
+        describe('and the contact already exists (name and email exist) and is not the editing company contact', () => {
+          beforeEach(() => {
+            companyContact.contact.department = name
+            companyContact.contact.email = email
 
-          expect(result.warning).to.be.null()
+            companyContacts = [companyContact]
+
+            session.companyContact = {
+              ...companyContact,
+              id: generateUUID()
+            }
+          })
+
+          it('return the warning', () => {
+            const result = CheckPresenter.go(session, companyContacts)
+
+            expect(result.warning).to.equal({
+              text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
+              iconFallbackText: 'Warning'
+            })
+          })
+        })
+
+        describe('and the contact already exists (name and email exist) and is the editing company contact', () => {
+          beforeEach(() => {
+            companyContact.contact.department = name
+            companyContact.contact.email = email
+
+            companyContacts = [companyContact]
+
+            session.companyContact = companyContact
+          })
+
+          it('return the warning', () => {
+            const result = CheckPresenter.go(session, companyContacts)
+
+            expect(result.warning).to.null()
+          })
+        })
+
+        describe('and the contact does not exist (name and email do not match)', () => {
+          it('returns no warning', () => {
+            const result = CheckPresenter.go(session, companyContacts)
+
+            expect(result.warning).to.be.null()
+          })
         })
       })
     })

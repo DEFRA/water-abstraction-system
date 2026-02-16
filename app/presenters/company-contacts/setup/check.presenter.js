@@ -16,7 +16,7 @@ const { titleCase } = require('../../base.presenter.js')
  * @returns {object} The data formatted for the view template
  */
 function go(session, savedCompanyContacts) {
-  const { company, email, name, abstractionAlerts } = session
+  const { company, email, name, abstractionAlerts, companyContact } = session
 
   return {
     abstractionAlerts: titleCase(abstractionAlerts),
@@ -30,28 +30,40 @@ function go(session, savedCompanyContacts) {
       email: `/system/company-contacts/setup/${session.id}/contact-email`,
       name: `/system/company-contacts/setup/${session.id}/contact-name`
     },
-    warning: _warning(savedCompanyContacts, email, name)
+    warning: _warning(savedCompanyContacts, email, name, companyContact)
   }
 }
 
-function _matchingContact(savedCompanyContacts, email, name) {
-  const match = savedCompanyContacts.filter((companyContact) => {
+/*
+ * Check if the contact already exists, if it does, then this is a match.
+ *
+ * However, when editing we want to check the matching contact is not the one we are currently editing.
+ *
+ * To do this, we perform two checks:
+ * 1. Identity Check: Skip the record if it's the one we are currently editing.
+ * 2. Similarity Check: Check if any OTHER record matches the unique criteria.
+ */
+function _matchingContact(savedCompanyContacts, email, name, companyContact) {
+  const lowerEmail = email.toLowerCase()
+  const lowerName = name.toLowerCase()
+
+  return savedCompanyContacts.some((savedCompanyContact) => {
     return (
-      companyContact.contact.email.toLowerCase() === email.toLowerCase() &&
-      companyContact.contact.department.toLowerCase() === name.toLowerCase()
+      savedCompanyContact.id !== companyContact?.id &&
+      savedCompanyContact.contact.email.toLowerCase() === lowerEmail &&
+      savedCompanyContact.contact.department.toLowerCase() === lowerName
     )
   })
-
-  return match.length > 0
 }
 
 /*
- * Show the warning if the contact already exists
+ * Show the warning if the contact already exists.
  *
- * This variable is used to show / hide the confirm button, we do not allow a user to submit if the contact already exists
+ * This variable is also used to show / hide the 'confirm' button, we do not allow a user to submit if the contact already
+ * exists (when creating a company contact).
  */
-function _warning(savedCompanyContacts, email, name) {
-  const matchingContact = _matchingContact(savedCompanyContacts, email, name)
+function _warning(savedCompanyContacts, email, name, companyContact) {
+  const matchingContact = _matchingContact(savedCompanyContacts, email, name, companyContact)
 
   if (matchingContact) {
     return {
