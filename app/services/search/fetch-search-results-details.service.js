@@ -50,8 +50,8 @@ async function _findByType(type, ids) {
   switch (type) {
     case 'billingAccount':
       return _billingAccount(ids)
-    case 'company':
-      return _company(ids)
+    case 'licenceHolder':
+      return _licenceHolder(ids)
     case 'licence':
       return _licence(ids)
     case 'monitoringStation':
@@ -75,14 +75,17 @@ async function _licence(ids) {
     .findByIds(ids)
 }
 
-async function _company(ids) {
+async function _licenceHolder(ids) {
   return CompanyModel.query()
     .select(['companies.id', 'companies.name', 'region.displayName AS region'])
     .leftJoinRelated('region')
     .whereNotNull('externalId')
     .withGraphFetched('licenceDocumentRoles')
     .modifyGraph('licenceDocumentRoles', (builder) => {
-      builder.select('licenceDocumentId')
+      builder
+        .select(['licenceDocumentRoles.licenceDocumentId'])
+        .innerJoinRelated('licenceRole', { alias: 'lr' })
+        .where('lr.name', 'licenceHolder')
     })
     .findByIds(ids)
 }
