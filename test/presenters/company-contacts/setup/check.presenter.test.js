@@ -73,24 +73,6 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               iconFallbackText: 'Warning'
             })
           })
-
-          describe('and the user has entered the same data in a different case "TYRELL CORPORATION"', () => {
-            beforeEach(() => {
-              companyContact.contact.department = name.toUpperCase()
-              companyContact.contact.email = email.toUpperCase()
-
-              companyContacts = [companyContact]
-            })
-
-            it('return the warning', () => {
-              const result = CheckPresenter.go(session, companyContacts)
-
-              expect(result.warning).to.equal({
-                text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
-                iconFallbackText: 'Warning'
-              })
-            })
-          })
         })
 
         describe('and the contact does not exist (name and email do not match)', () => {
@@ -148,6 +130,24 @@ describe('Company Contacts - Setup - Check Presenter', () => {
             const result = CheckPresenter.go(session, companyContacts)
 
             expect(result.warning).to.be.null()
+          })
+        })
+      })
+
+      describe('when the user has entered the same data in a different case "TYRELL CORPORATION"', () => {
+        beforeEach(() => {
+          companyContact.contact.department = name.toUpperCase()
+          companyContact.contact.email = email.toUpperCase()
+
+          companyContacts = [companyContact]
+        })
+
+        it('return the warning', () => {
+          const result = CheckPresenter.go(session, companyContacts)
+
+          expect(result.warning).to.equal({
+            text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
+            iconFallbackText: 'Warning'
           })
         })
       })
