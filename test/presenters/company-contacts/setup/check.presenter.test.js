@@ -14,7 +14,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/company-contacts/setup/check.presenter.js')
 
-describe.only('Company Contacts - Setup - Check Presenter', () => {
+describe('Company Contacts - Setup - Check Presenter', () => {
   let company
   let companyContact
   let companyContacts
@@ -105,18 +105,6 @@ describe.only('Company Contacts - Setup - Check Presenter', () => {
 
       describe('when editing an existing company contact', () => {
         describe('and a contact with a matching name and email exists', () => {
-          describe('but its the contact being edited', () => {
-            beforeEach(() => {
-              session.companyContact = companyContact
-            })
-
-            it('returns no warning', () => {
-              const result = CheckPresenter.go(session, companyContacts)
-
-              expect(result.warning).to.null()
-            })
-          })
-
           describe('and its a different contact to the one being edited', () => {
             beforeEach(() => {
               session.companyContact = companyContact

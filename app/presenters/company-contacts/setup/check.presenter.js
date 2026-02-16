@@ -10,18 +10,13 @@ const { titleCase } = require('../../base.presenter.js')
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/check' page
  *
- * When editing a company contact, we have the 'companyContact' object to signify which company contact we are editing.
- *
- * This is renamed to 'editingCompanyContact' in the code show a clear distinction between the 'savedCompanyContacts'
- * and the 'editingCompanyContact'.
- *
  * @param {object} session - The session instance
  * @param {object[]} savedCompanyContacts - An array of company contacts stored in the database
  *
  * @returns {object} The data formatted for the view template
  */
 function go(session, savedCompanyContacts) {
-  const { company, email, name, abstractionAlerts, companyContact: editingCompanyContact } = session
+  const { company, email, name, abstractionAlerts } = session
 
   return {
     abstractionAlerts: titleCase(abstractionAlerts),
@@ -35,7 +30,7 @@ function go(session, savedCompanyContacts) {
       email: `/system/company-contacts/setup/${session.id}/contact-email`,
       name: `/system/company-contacts/setup/${session.id}/contact-name`
     },
-    warning: _warning(email, name, savedCompanyContacts, editingCompanyContact)
+    warning: _warning(email, name, savedCompanyContacts)
   }
 }
 
@@ -48,13 +43,12 @@ function go(session, savedCompanyContacts) {
  * 1. Identity Check: Skip the record if it's the one we are currently editing.
  * 2. Similarity Check: Check if any OTHER record matches the unique criteria.
  */
-function _matchingContact(email, name, savedCompanyContacts, editingCompanyContact) {
+function _matchingContact(email, name, savedCompanyContacts) {
   const lowerEmail = email.toLowerCase()
   const lowerName = name.toLowerCase()
 
   return savedCompanyContacts.some((savedCompanyContact) => {
     return (
-      savedCompanyContact.id !== editingCompanyContact?.id &&
       savedCompanyContact.contact.email.toLowerCase() === lowerEmail &&
       savedCompanyContact.contact.$name().toLowerCase() === lowerName
     )
@@ -67,8 +61,8 @@ function _matchingContact(email, name, savedCompanyContacts, editingCompanyConta
  * This variable is also used to show / hide the 'confirm' button, we do not allow a user to submit if the contact already
  * exists (when creating a company contact).
  */
-function _warning(email, name, savedCompanyContacts, editingCompanyContact) {
-  const matchingContact = _matchingContact(email, name, savedCompanyContacts, editingCompanyContact)
+function _warning(email, name, savedCompanyContacts) {
+  const matchingContact = _matchingContact(email, name, savedCompanyContacts)
 
   if (matchingContact) {
     return {

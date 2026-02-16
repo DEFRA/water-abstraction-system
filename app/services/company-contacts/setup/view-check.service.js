@@ -23,7 +23,7 @@ const { readFlashNotification } = require('../../../lib/general.lib.js')
 async function go(sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const companyContacts = await FetchCompanyContactsService.go(session.company.id)
+  const companyContacts = await FetchCompanyContactsService.go(session.company.id, session.companyContact)
 
   await markCheckPageVisited(session)
 

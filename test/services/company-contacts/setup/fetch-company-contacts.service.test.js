@@ -17,9 +17,11 @@ const FetchCompanyContactsService = require('../../../../app/services/company-co
 describe('Company Contacts - Setup - Fetch Company Contacts service', () => {
   let additionalCompanyContact
   let companyContact
+  let companyContactToIgnore
   let contact
 
   before(async () => {
+    contact = await ContactHelper.add()
     contact = await ContactHelper.add()
 
     companyContact = await CompanyContactHelper.add({
@@ -31,14 +33,15 @@ describe('Company Contacts - Setup - Fetch Company Contacts service', () => {
   })
 
   after(async () => {
-    await contact.$query().delete()
-    await companyContact.$query().delete()
     await additionalCompanyContact.$query().delete()
+    await companyContact.$query().delete()
+    await contact.$query().delete()
+    await companyContactToIgnore.$query().delete()
   })
 
-  describe('when there is a company contact', () => {
+  describe('when there are company contacts', () => {
     it('returns the matching company contacts', async () => {
-      const result = await FetchCompanyContactsService.go(companyContact.companyId)
+      const result = await FetchCompanyContactsService.go(companyContact.companyId, undefined)
 
       expect(result).to.equal([
         {
@@ -57,6 +60,37 @@ describe('Company Contacts - Setup - Fetch Company Contacts service', () => {
           }
         }
       ])
+    })
+
+    describe('and there is a company contact to ignore', () => {
+      before(async () => {
+        companyContactToIgnore = await CompanyContactHelper.add({
+          contactId: contact.id,
+          companyId: companyContact.companyId
+        })
+      })
+
+      it('returns the matching company contacts', async () => {
+        const result = await FetchCompanyContactsService.go(companyContact.companyId, companyContactToIgnore)
+
+        expect(result).to.equal([
+          {
+            id: companyContact.id,
+            contact: {
+              id: contact.id,
+              salutation: null,
+              firstName: 'Amara',
+              middleInitials: null,
+              lastName: 'Gupta',
+              initials: null,
+              contactType: 'person',
+              suffix: null,
+              department: null,
+              email: 'amara.gupta@example.com'
+            }
+          }
+        ])
+      })
     })
   })
 })
