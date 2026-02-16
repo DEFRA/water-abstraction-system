@@ -1,6 +1,30 @@
 'use strict'
 
 /**
+ * Clears stored filters from session storage based on form submission
+ *
+ * Checks if the payload contains a clearFilters flag. If true, removes the stored filter data from the session
+ * using the provided key and returns true. Otherwise, returns false without modifying the session.
+ *
+ * @param {object} payload - The form payload object containing the clearFilters flag
+ * @param {object} yar - The Hapi Yar session storage object
+ * @param {string} filterKey - The key identifying which filter data to clear from session storage
+ *
+ * @returns {boolean} True if filters were cleared, false otherwise
+ */
+function clearFilters(payload, yar, filterKey) {
+  const clearFilters = payload.clearFilters
+
+  if (clearFilters) {
+    yar.clear(filterKey)
+
+    return true
+  }
+
+  return false
+}
+
+/**
  * Submit page helper methods
  * @module SubmitPageLib
  */
@@ -52,5 +76,6 @@ function handleOneOptionSelected(payload, key) {
 }
 
 module.exports = {
+  clearFilters,
   handleOneOptionSelected
 }
