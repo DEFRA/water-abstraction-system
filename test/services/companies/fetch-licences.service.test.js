@@ -27,7 +27,34 @@ describe('Companies - Fetch Licences service', () => {
   let licence
   let licenceDocument
   let licenceDocumentHeader
+  let licenceDocumentRole
   let pageNumber
+
+  before(async () => {
+    company = await CompanyHelper.add()
+
+    licenceDocument = await LicenceDocumentHelper.add()
+
+    licence = await LicenceHelper.add({
+      licenceRef: licenceDocument.licenceRef
+    })
+
+    licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+      licenceRef: licenceDocument.licenceRef,
+      licenceName: 'Tyrell Corporation'
+    })
+
+    // NOTE: It defaults to returning the licenceHolder role. This service will only return licences linked to the
+    // company where the `LicenceDocumentRole` is linked to the `licenceHolder` role.
+    const licenceRole = LicenceRoleHelper.select()
+    licenceDocumentRole = await LicenceDocumentRoleHelper.add({
+      companyId: company.id,
+      licenceDocumentId: licenceDocument.id,
+      licenceRoleId: licenceRole.id
+    })
+
+    await _addAdditionalLicences()
+  })
 
   beforeEach(() => {
     pageNumber = 1
@@ -41,34 +68,16 @@ describe('Companies - Fetch Licences service', () => {
     Sinon.restore()
   })
 
-  describe('when there is a company', () => {
-    before(async () => {
-      company = await CompanyHelper.add()
+  afterEach(async () => {
+    await licenceDocumentRole.$query().delete()
+    await licenceDocumentHeader.$query().delete()
+    await licenceDocument.$query().delete()
+    await licence.$query().delete()
+    await company.$query().delete()
+  })
 
-      licenceDocument = await LicenceDocumentHelper.add()
-
-      licence = await LicenceHelper.add({
-        licenceRef: licenceDocument.licenceRef
-      })
-
-      licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-        licenceRef: licenceDocument.licenceRef,
-        licenceName: 'Tyrell Corporation'
-      })
-
-      // NOTE: It defaults to returning the licenceHolder role. This service will only return licences linked to the
-      // company where the `LicenceDocumentRole` is linked to the `licenceHolder` role.
-      const licenceRole = LicenceRoleHelper.select()
-      await LicenceDocumentRoleHelper.add({
-        companyId: company.id,
-        licenceDocumentId: licenceDocument.id,
-        licenceRoleId: licenceRole.id
-      })
-
-      await _addAdditionalLicences()
-    })
-
-    it('returns the licences for the company', async () => {
+  describe('when called', () => {
+    it('returns licences linked to the company where it is the licence holder', async () => {
       const result = await FetchLicencesService.go(company.id, pageNumber)
 
       expect(result).to.equal({
