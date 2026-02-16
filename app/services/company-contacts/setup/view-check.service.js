@@ -10,6 +10,7 @@ const CheckPresenter = require('../../../presenters/company-contacts/setup/check
 const SessionModel = require('../../../models/session.model.js')
 const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
 const { readFlashNotification } = require('../../../lib/general.lib.js')
+const FetchCompanyContactService = require('./fetch-company-contacts.service.js')
 
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/setup/{sessionId}/check' page
@@ -22,9 +23,11 @@ const { readFlashNotification } = require('../../../lib/general.lib.js')
 async function go(sessionId, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
+  const companyContacts = await FetchCompanyContactService.go(session.company.id)
+
   await markCheckPageVisited(session)
 
-  const pageData = CheckPresenter.go(session)
+  const pageData = CheckPresenter.go(session, companyContacts)
 
   const notification = readFlashNotification(yar)
 

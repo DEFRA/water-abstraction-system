@@ -65,10 +65,12 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     <div class="govuk-button-group">
+      {% if not warning %}
       {{ govukButton({
         text: "Confirm",
         preventDoubleClick: true
       }) }}
+      {% endif %}
 
       {{ govukButton({
         text: "Cancel",
