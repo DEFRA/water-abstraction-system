@@ -14,7 +14,7 @@ const SubmitPageLib = require('../../app/lib/submit-page.lib.js')
 describe('SubmitPageLib', () => {
   let payload
 
-  describe('#clearFilters()', () => {
+  describe.only('#clearFilters()', () => {
     const filterKey = 'filterToClear'
 
     let yarStub
@@ -34,7 +34,7 @@ describe('SubmitPageLib', () => {
         payload = { clearFilters: 'reset' }
       })
 
-      it('clears the specified filter object from the session and returns true', () => {
+      it('clears the specified filter object from the session and returns TRUE', () => {
         const result = SubmitPageLib.clearFilters(payload, yarStub, filterKey)
 
         expect(yarStub.clear.calledWith(filterKey)).to.be.true()
@@ -42,12 +42,12 @@ describe('SubmitPageLib', () => {
       })
     })
 
-    describe('when called with an empty payload', () => {
+    describe('when there are no instructions to clear filters', () => {
       before(() => {
         payload = {}
       })
 
-      it('leaves the payload untouched and returns FALSE', () => {
+      it('leaves the specified filter object untouched and returns FALSE', () => {
         const result = SubmitPageLib.clearFilters(payload, yarStub, filterKey)
 
         expect(yarStub.clear.called).to.be.false()
