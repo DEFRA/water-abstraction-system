@@ -33,10 +33,10 @@ describe('Companies - Fetch Licences service', () => {
   before(async () => {
     company = await CompanyHelper.add()
 
-    licenceDocument = await LicenceDocumentHelper.add()
+    licence = await LicenceHelper.add()
 
-    licence = await LicenceHelper.add({
-      licenceRef: licenceDocument.licenceRef
+    licenceDocument = await LicenceDocumentHelper.add({
+      licenceRef: licence.licenceRef
     })
 
     // NOTE: This is needed to confirm we can retrieve the 'name' for the licence, which can be assigned by external
