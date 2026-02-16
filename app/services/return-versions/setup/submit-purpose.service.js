@@ -6,12 +6,12 @@
  */
 
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-
 const FetchPurposesService = require('./fetch-purposes.service.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const PurposePresenter = require('../../../presenters/return-versions/setup/purpose.presenter.js')
 const PurposeValidation = require('../../../validators/return-versions/setup/purpose.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/purpose` page
@@ -34,13 +34,13 @@ async function go(sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
   const licencePurposes = await FetchPurposesService.go(session.licenceVersion.id)
 
-  _handleOneOptionSelected(payload)
+  handleOneOptionSelected(payload, 'purposes')
 
   const purposes = _combinePurposeDetails(payload, licencePurposes)
 
-  const validationResult = await _validate(purposes, licencePurposes)
+  const error = await _validate(purposes, licencePurposes)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, requirementIndex, purposes)
 
     if (session.checkPageVisited) {
@@ -55,7 +55,7 @@ async function go(sessionId, requirementIndex, payload, yar) {
   const submittedSessionData = _submittedSessionData(session, requirementIndex, purposes, licencePurposes)
 
   return {
-    error: validationResult,
+    error,
     ...submittedSessionData
   }
 }
@@ -77,23 +77,6 @@ function _combinePurposeDetails(payload, licencePurposes) {
   }
 
   return combinedValues
-}
-
-/**
- * When a single purpose is checked by the user, it returns as a string. When multiple purposes are checked, the
- * 'purposes' is returned as an array. This function works to make those single selected string 'purposes' into an array
- * for uniformity.
- *
- * @private
- */
-function _handleOneOptionSelected(payload) {
-  if (!payload.purposes) {
-    payload.purposes = []
-  }
-
-  if (!Array.isArray(payload.purposes)) {
-    payload.purposes = [payload.purposes]
-  }
 }
 
 async function _save(session, requirementIndex, purposes) {

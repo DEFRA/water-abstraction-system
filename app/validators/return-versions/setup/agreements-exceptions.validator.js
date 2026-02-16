@@ -25,12 +25,14 @@ function go(payload) {
   const schema = Joi.object({
     agreementsExceptions: Joi.array()
       .items(Joi.string().valid(...VALID_VALUES))
+      .min(1)
       .required()
       .messages({
         'any.required': errorMessage,
         'any.only': errorMessage,
         'array.includesOne': errorMessage,
         'array.includes': errorMessage,
+        'array.min': errorMessage,
         'array.sparse': errorMessage
       })
   })
