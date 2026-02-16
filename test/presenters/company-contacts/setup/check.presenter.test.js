@@ -9,10 +9,10 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/company-contacts/setup/check.presenter.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 describe('Company Contacts - Setup - Check Presenter', () => {
   let company
@@ -23,14 +23,15 @@ describe('Company Contacts - Setup - Check Presenter', () => {
   let session
 
   beforeEach(() => {
-    name = 'Eric'
-    email = 'eric@test.com'
-
     company = CustomersFixtures.company()
-
     companyContact = CustomersFixtures.companyContact()
 
+    companyContact.contact.contactType = 'department'
+
     companyContacts = [companyContact]
+
+    name = companyContact.contact.department
+    email = companyContact.contact.email
 
     session = { id: generateUUID(), company, abstractionAlerts: 'yes', name, email }
   })
@@ -51,20 +52,16 @@ describe('Company Contacts - Setup - Check Presenter', () => {
         name,
         pageTitle: 'Check contact',
         pageTitleCaption: 'Tyrell Corporation',
-        warning: null
+        warning: {
+          iconFallbackText: 'Warning',
+          text: 'A contact with this name and email already exist. Change the name or email, or cancel.'
+        }
       })
     })
 
     describe('the "warning" property', () => {
       describe('when creating a new company contact', () => {
         describe('and the contact already exists (name and email exist)', () => {
-          beforeEach(() => {
-            companyContact.contact.department = name
-            companyContact.contact.email = email
-
-            companyContacts = [companyContact]
-          })
-
           it('return the warning', () => {
             const result = CheckPresenter.go(session, companyContacts)
 
@@ -76,6 +73,11 @@ describe('Company Contacts - Setup - Check Presenter', () => {
         })
 
         describe('and the contact does not exist (name and email do not match)', () => {
+          beforeEach(() => {
+            session.name = 'Eric'
+            session.email = 'Eric@test.com'
+          })
+
           it('returns no warning', () => {
             const result = CheckPresenter.go(session, companyContacts)
 
@@ -87,15 +89,14 @@ describe('Company Contacts - Setup - Check Presenter', () => {
       describe('when editing an existing company contact', () => {
         describe('and the contact already exists (name and email exist) and is not the editing company contact', () => {
           beforeEach(() => {
-            companyContact.contact.department = name
-            companyContact.contact.email = email
+            session.companyContact = companyContact
 
-            companyContacts = [companyContact]
-
-            session.companyContact = {
-              ...companyContact,
-              id: generateUUID()
-            }
+            companyContacts = [
+              {
+                ...companyContact,
+                id: generateUUID()
+              }
+            ]
           })
 
           it('return the warning', () => {
@@ -110,11 +111,6 @@ describe('Company Contacts - Setup - Check Presenter', () => {
 
         describe('and the contact already exists (name and email exist) and is the editing company contact', () => {
           beforeEach(() => {
-            companyContact.contact.department = name
-            companyContact.contact.email = email
-
-            companyContacts = [companyContact]
-
             session.companyContact = companyContact
           })
 
@@ -126,6 +122,11 @@ describe('Company Contacts - Setup - Check Presenter', () => {
         })
 
         describe('and the contact does not exist (name and email do not match)', () => {
+          beforeEach(() => {
+            session.name = 'Eric'
+            session.email = 'Eric@test.com'
+          })
+
           it('returns no warning', () => {
             const result = CheckPresenter.go(session, companyContacts)
 
@@ -136,10 +137,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
 
       describe('when the user has entered the same data in a different case "TYRELL CORPORATION"', () => {
         beforeEach(() => {
-          companyContact.contact.department = name.toUpperCase()
-          companyContact.contact.email = email.toUpperCase()
-
-          companyContacts = [companyContact]
+          session.name = companyContact.contact.department.toUpperCase()
         })
 
         it('return the warning', () => {

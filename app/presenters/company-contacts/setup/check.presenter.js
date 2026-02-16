@@ -56,7 +56,7 @@ function _matchingContact(email, name, savedCompanyContacts, editingCompanyConta
     return (
       savedCompanyContact.id !== editingCompanyContact?.id &&
       savedCompanyContact.contact.email.toLowerCase() === lowerEmail &&
-      savedCompanyContact.contact.department.toLowerCase() === lowerName
+      savedCompanyContact.contact.$name().toLowerCase() === lowerName
     )
   })
 }
