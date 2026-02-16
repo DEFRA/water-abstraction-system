@@ -154,15 +154,17 @@ describe('Return Logs Setup - Start Reading validator', () => {
       })
 
       describe('and the user entered a number greater than the the maximum safe number 9007199254740991', () => {
+        const MAX_SAFE_NUMBER = 9007199254740991
+
         beforeEach(() => {
-          payload = { startReading: '9007199254740992' }
+          payload = { startReading: MAX_SAFE_NUMBER + 1 }
         })
 
-        it('fails validation with the message "Start meter reading exceeds the maximum of 99999999999"', () => {
+        it('fails validation with the message "Start meter reading must be between 0 and 99999999999"', () => {
           const result = StartReadingValidator.go(payload, lines)
 
           expect(result.error).to.exist()
-          expect(result.error.details[0].message).to.equal('Start meter reading exceeds the maximum of 99999999999')
+          expect(result.error.details[0].message).to.equal('Start meter reading must be between 0 and 99999999999')
         })
       })
     })
