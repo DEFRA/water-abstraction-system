@@ -16,10 +16,10 @@ const BaseModel = require('./base.model.js')
  * built. It sits in the old `crm` schema and was not migrated to `crm_v2` as part of the previous team's efforts to
  * replace the old legacy CRM setup.
  *
- * Currently, the only reason we need it is to identify if a licence has a 'registered user'. You'll see this
- * highlighted when you view a licence.
+ * We need it to identify the 'registered users' for licences. You'll see the registered user highlighted when you view
+ * a licence and the list of associated "companies" and licences when viewing an external user.
  *
- * From it we can identify the 'entity' which has the role of primary user.
+ * Through it we can identify which 'entities' have which roles for licences.
  */
 class LicenceEntityRoleModel extends BaseModel {
   static get tableName() {
