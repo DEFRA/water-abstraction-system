@@ -42,7 +42,7 @@ describe('SubmitPageLib', () => {
       })
     })
 
-    describe('when there are no instructions to clear filters', () => {
+    describe('when there is no instruction to clear filters', () => {
       before(() => {
         payload = {}
       })
