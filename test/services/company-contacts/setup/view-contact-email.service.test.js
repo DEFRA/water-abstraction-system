@@ -36,7 +36,7 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
           href: `/system/company-contacts/setup/${session.id}/contact-name`,
           text: 'Back'
         },
-        email: '',
+        email: null,
         pageTitle: 'Enter an email address for the contact',
         pageTitleCaption: 'Tyrell Corporation'
       })

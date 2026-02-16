@@ -7,6 +7,7 @@
 
 const FetchCompanyContactService = require('./fetch-company-contact.service.js')
 const SessionModel = require('../../../models/session.model.js')
+const { formatEmail } = require('../../../presenters/customer.presenter.js')
 
 /**
  * Initiates the session record used for setting up an existing company contact
@@ -44,7 +45,7 @@ function _formatDataForJourney(companyContact) {
     abstractionAlerts: abstractionAlerts === true ? 'yes' : 'no',
     company,
     companyContact,
-    email: contact.email,
+    email: formatEmail(contact.email),
     name: contact.$name()
   }
 }

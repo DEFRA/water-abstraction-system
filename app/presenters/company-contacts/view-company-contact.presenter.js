@@ -5,6 +5,7 @@
  * @module ViewCompanyContactPresenter
  */
 
+const { formatEmail } = require('../customer.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
 
 /**
@@ -24,7 +25,7 @@ function go(company, companyContact) {
     contact: {
       abstractionAlerts: companyContact.abstractionAlerts ? 'Yes' : 'No',
       created: _created(companyContact),
-      email: companyContact.contact.email,
+      email: formatEmail(companyContact.contact.email),
       lastUpdated: _lastUpdated(companyContact),
       name: companyContact.contact.$name()
     },

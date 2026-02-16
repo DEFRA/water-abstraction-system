@@ -5,6 +5,8 @@
  * @module RemoveCompanyContactPresenter
  */
 
+const { formatEmail } = require('../customer.presenter.js')
+
 /**
  * Formats data for the '/company-contacts/{id}/remove' page
  *
@@ -21,7 +23,7 @@ function go(company, companyContact) {
     },
     contact: {
       name: companyContact.contact.$name(),
-      email: companyContact.contact.email,
+      email: formatEmail(companyContact.contact.email),
       abstractionAlerts: companyContact.abstractionAlerts ? 'Yes' : 'No'
     },
     pageTitle: `You're about to remove this contact`,
