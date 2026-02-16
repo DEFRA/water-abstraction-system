@@ -12,6 +12,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
 const PointsPresenter = require('../../../presenters/return-versions/setup/points.presenter.js')
 const PointsValidator = require('../../../validators/return-versions/setup/points.validator.js')
 const SessionModel = require('../../../models/session.model.js')
+const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/points` page
@@ -33,11 +34,11 @@ const SessionModel = require('../../../models/session.model.js')
 async function go(sessionId, requirementIndex, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  _handleOneOptionSelected(payload)
+  handleOneOptionSelected(payload, 'points')
 
-  const validationResult = _validate(payload.points)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, requirementIndex, payload)
 
     if (session.checkPageVisited) {
@@ -53,21 +54,8 @@ async function go(sessionId, requirementIndex, payload, yar) {
   const formattedData = PointsPresenter.go(session, requirementIndex, pointsData)
 
   return {
-    error: validationResult,
+    error,
     ...formattedData
-  }
-}
-
-/**
- * When a single point is checked by the user, it returns as a string. When multiple points are checked, the
- * 'points' is returned as an array. This function works to make those single selected string 'points' into an array
- * for uniformity.
- *
- * @private
- */
-function _handleOneOptionSelected(payload) {
-  if (!Array.isArray(payload.points)) {
-    payload.points = [payload.points]
   }
 }
 

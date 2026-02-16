@@ -14,7 +14,7 @@ describe('Paper Return Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { returns: [] }
+    payload = { returns: ['f8243c89-880c-4a66-9452-5da019ef4f4e'] }
   })
 
   describe('when called with valid data', () => {
@@ -28,7 +28,7 @@ describe('Paper Return Validator', () => {
 
   describe('when called with invalid data', () => {
     beforeEach(() => {
-      payload = {}
+      payload = { returns: [] }
     })
 
     it('returns with errors', () => {
