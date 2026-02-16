@@ -27,7 +27,9 @@ const { clearFilters, handleOneOptionSelected } = require('../../lib/submit-page
  * else the data needed to re-render the page
  */
 async function go(payload, yar, page = 1) {
-  if (clearFilters(payload, yar, 'billRunsFilter')) {
+  const filterCleared = clearFilters(payload, yar, 'billRunsFilter')
+
+  if (filterCleared) {
     return {}
   }
 
