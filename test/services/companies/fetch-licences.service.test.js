@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, before, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -14,6 +15,9 @@ const LicenceDocumentHelper = require('../../support/helpers/licence-document.he
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
 
+// Things we need to stub
+const databaseConfig = require('../../../config/database.config.js')
+
 // Thing under test
 const FetchLicencesService = require('../../../app/services/companies/fetch-licences.service.js')
 
@@ -22,6 +26,19 @@ describe('Companies - Fetch Licences service', () => {
   let licence
   let licenceDocument
   let licenceDocumentHeader
+  let pageNumber
+
+  beforeEach(() => {
+    pageNumber = 1
+
+    // NOTE: We set the default page size to 1000 to ensure we get all records and avoid failed tests when run as
+    // part of the full suite, and the risk our test record is returned in the second page of results.
+    Sinon.stub(databaseConfig, 'defaultPageSize').value(1000)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
+  })
 
   describe('when there is a company', () => {
     before(async () => {
@@ -47,7 +64,7 @@ describe('Companies - Fetch Licences service', () => {
     })
 
     it('returns the licences for the company', async () => {
-      const result = await FetchLicencesService.go(company.id)
+      const result = await FetchLicencesService.go(company.id, pageNumber)
 
       expect(result).to.equal({
         licences: [
