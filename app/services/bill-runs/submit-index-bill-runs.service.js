@@ -12,7 +12,7 @@ const FetchRegionsService = require('./setup/fetch-regions.service.js')
 const IndexBillRunsPresenter = require('../../presenters/bill-runs/index-bill-runs.presenter.js')
 const IndexValidator = require('../../validators/bill-runs/index.validator.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { handleOneOptionSelected } = require('../../lib/submit-page.lib.js')
+const { clearFilters, handleOneOptionSelected } = require('../../lib/submit-page.lib.js')
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -27,9 +27,9 @@ const { handleOneOptionSelected } = require('../../lib/submit-page.lib.js')
  * else the data needed to re-render the page
  */
 async function go(payload, yar, page = 1) {
-  const clearFilters = _clearFilters(payload, yar)
+  const filterCleared = clearFilters(payload, yar, 'billRunsFilter')
 
-  if (clearFilters) {
+  if (filterCleared) {
     return {}
   }
 
@@ -49,18 +49,6 @@ async function go(payload, yar, page = 1) {
   const savedFilters = _savedFilters(yar)
 
   return _replayView(payload, error, page, regions, savedFilters)
-}
-
-function _clearFilters(payload, yar) {
-  const clearFilters = payload.clearFilters
-
-  if (clearFilters) {
-    yar.clear('billRunsFilter')
-
-    return true
-  }
-
-  return false
 }
 
 async function _replayView(payload, error, page, regions, savedFilters) {
