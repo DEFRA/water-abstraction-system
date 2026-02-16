@@ -81,7 +81,7 @@ function _filterItems(userScopes, resultType) {
   }
 
   items.push(
-    { checked: resultType === 'company', value: 'company', text: 'Customers' },
+    { checked: resultType === 'licenceHolder', value: 'licenceHolder', text: 'Licence holders' },
     { checked: resultType === 'licence', value: 'licence', text: 'Licences' },
     { checked: resultType === 'monitoringStation', value: 'monitoringStation', text: 'Monitoring stations' },
     { checked: resultType === 'returnLog', value: 'returnLog', text: 'Return logs' },
@@ -150,36 +150,10 @@ function _licence(licence) {
   }
 }
 
-/**
- * Count the number of unique licences linked through the given licence document roles for a company
- *
- * We count *all* the linked licences, regardless of whether the company is listed as the licence holder on them or not.
- * This is so that the count matches the number of licences shown on the licence holder's customer page.
- *
- * Otherwise, we would filter the roles to only those where the company is the licence holder:
- * ```
- * .filter((role) => {
- *   return role.licenceRole.name === 'licenceHolder'
- * })
- * ```
- *
- * @private
- */
-function _licenceCount(licenceDocumentRoles) {
-  const licenceIds = licenceDocumentRoles.map((role) => {
-    return role.licenceDocumentId
-  })
+function _licenceHolder(licenceHolder) {
+  const { exact, model } = licenceHolder
 
-  const uniqueLicenceIds = [...new Set(licenceIds)]
-  return uniqueLicenceIds.length
-}
-
-function _company(company) {
-  const { exact, model } = company
-
-  const { id, licenceDocumentRoles, name, region } = model
-
-  const licenceCount = _licenceCount(licenceDocumentRoles)
+  const { id, licenceCount, name, region } = model
 
   return {
     col2Title: 'Number of licences',
@@ -190,7 +164,7 @@ function _company(company) {
     link: `/system/companies/${id}/licences`,
     reference: name,
     statusTag: null,
-    type: 'Name'
+    type: 'Holder'
   }
 }
 
@@ -223,10 +197,10 @@ function _result(result) {
   switch (result.type) {
     case 'billingAccount':
       return _billingAccount(result)
-    case 'company':
-      return _company(result)
     case 'licence':
       return _licence(result)
+    case 'licenceHolder':
+      return _licenceHolder(result)
     case 'monitoringStation':
       return _monitoringStation(result)
     case 'returnLog':

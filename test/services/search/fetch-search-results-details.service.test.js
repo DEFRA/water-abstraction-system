@@ -23,7 +23,7 @@ describe('Search - Fetch Search Results Details service', () => {
   let idsByType
 
   let billingAccountSpy
-  let companySpy
+  let licenceHolderSpy
   let licenceSpy
   let monitoringStationSpy
   let returnLogSpy
@@ -33,7 +33,7 @@ describe('Search - Fetch Search Results Details service', () => {
   beforeEach(() => {
     idsByType = {
       billingAccount: [1, 2],
-      company: [3, 4],
+      licenceHolder: [3, 4],
       licence: [5, 6],
       monitoringStation: [7, 8],
       returnLog: [9, 10],
@@ -48,9 +48,9 @@ describe('Search - Fetch Search Results Details service', () => {
       withGraphFetched: Sinon.stub().returnsThis()
     })
 
-    companySpy = Sinon.stub().resolves([])
+    licenceHolderSpy = Sinon.stub().resolves([])
     Sinon.stub(CompanyModel, 'query').returns({
-      findByIds: companySpy,
+      findByIds: licenceHolderSpy,
       leftJoinRelated: Sinon.stub().returnsThis(),
       modifyGraph: Sinon.stub().returnsThis(),
       select: Sinon.stub().returnsThis(),
@@ -99,7 +99,7 @@ describe('Search - Fetch Search Results Details service', () => {
 
       expect(result).to.equal({
         billingAccount: [],
-        company: [],
+        licenceHolder: [],
         licence: [],
         monitoringStation: [],
         returnLog: [],
@@ -134,7 +134,7 @@ describe('Search - Fetch Search Results Details service', () => {
 
       expect(billingAccountSpy.calledOnce).to.be.true()
       expect(billingAccountSpy.firstCall.args[0]).to.equal([1, 2])
-      expect(companySpy.called).to.be.false()
+      expect(licenceHolderSpy.called).to.be.false()
       expect(licenceSpy.called).to.be.false()
       expect(monitoringStationSpy.called).to.be.false()
       expect(returnLogSpy.called).to.be.false()
@@ -142,19 +142,19 @@ describe('Search - Fetch Search Results Details service', () => {
     })
   })
 
-  describe('when companies are requested', () => {
+  describe('when licence holders are requested', () => {
     beforeEach(() => {
-      idsByType = { company: [3, 4] }
+      idsByType = { licenceHolder: [3, 4] }
     })
 
-    it('finds the correct companies', async () => {
+    it('finds the correct licence holders', async () => {
       const result = await FetchSearchResultsDetailsService.go(idsByType)
 
-      expect(result).to.equal({ company: [] })
+      expect(result).to.equal({ licenceHolder: [] })
 
       expect(billingAccountSpy.called).to.be.false()
-      expect(companySpy.calledOnce).to.be.true()
-      expect(companySpy.firstCall.args[0]).to.equal([3, 4])
+      expect(licenceHolderSpy.calledOnce).to.be.true()
+      expect(licenceHolderSpy.firstCall.args[0]).to.equal([3, 4])
       expect(licenceSpy.called).to.be.false()
       expect(monitoringStationSpy.called).to.be.false()
       expect(returnLogSpy.called).to.be.false()
@@ -173,7 +173,7 @@ describe('Search - Fetch Search Results Details service', () => {
       expect(result).to.equal({ licence: [] })
 
       expect(billingAccountSpy.called).to.be.false()
-      expect(companySpy.called).to.be.false()
+      expect(licenceHolderSpy.called).to.be.false()
       expect(licenceSpy.calledOnce).to.be.true()
       expect(licenceSpy.firstCall.args[0]).to.equal([5, 6])
       expect(monitoringStationSpy.called).to.be.false()
@@ -193,7 +193,7 @@ describe('Search - Fetch Search Results Details service', () => {
       expect(result).to.equal({ monitoringStation: [] })
 
       expect(billingAccountSpy.called).to.be.false()
-      expect(companySpy.called).to.be.false()
+      expect(licenceHolderSpy.called).to.be.false()
       expect(licenceSpy.called).to.be.false()
       expect(monitoringStationSpy.calledOnce).to.be.true()
       expect(monitoringStationSpy.firstCall.args[0]).to.equal([7, 8])
@@ -213,7 +213,7 @@ describe('Search - Fetch Search Results Details service', () => {
       expect(result).to.equal({ returnLog: [] })
 
       expect(billingAccountSpy.called).to.be.false()
-      expect(companySpy.called).to.be.false()
+      expect(licenceHolderSpy.called).to.be.false()
       expect(licenceSpy.called).to.be.false()
       expect(monitoringStationSpy.called).to.be.false()
       expect(returnLogSpy.calledOnce).to.be.true()
@@ -233,7 +233,7 @@ describe('Search - Fetch Search Results Details service', () => {
       expect(result).to.equal({ user: [] })
 
       expect(billingAccountSpy.called).to.be.false()
-      expect(companySpy.called).to.be.false()
+      expect(licenceHolderSpy.called).to.be.false()
       expect(licenceSpy.called).to.be.false()
       expect(monitoringStationSpy.called).to.be.false()
       expect(returnLogSpy.called).to.be.false()

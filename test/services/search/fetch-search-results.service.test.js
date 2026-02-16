@@ -26,7 +26,7 @@ const FetchSearchResultsService = require('../../../app/services/search/fetch-se
 
 describe('Search - Fetch Search Results service', () => {
   const billingAccounts = []
-  const companies = []
+  const licenceHolders = []
   const licences = []
   const monitoringStations = []
   const returnLogs = []
@@ -37,14 +37,14 @@ describe('Search - Fetch Search Results service', () => {
   let page
 
   before(async () => {
-    let company
     let licence
     let licenceDocumentHeader
     let licenceHolderSeedData
+    let licenceRef
     let returnLog
 
     // Add the billing accounts in non-alphabetical order to prove the ordering in the results
-    company = await CompanyHelper.add()
+    const company = await CompanyHelper.add()
     billingAccounts.push(
       await BillingAccountHelper.add({ accountNumber: 'TESTSEARCH-Y97327242A', companyId: company.id })
     )
@@ -55,12 +55,14 @@ describe('Search - Fetch Search Results service', () => {
       await BillingAccountHelper.add({ accountNumber: 'TESTSEARCH-Y97327241A', companyId: company.id })
     )
 
-    // Add the Companies in non-alphabetical order to prove the ordering in the results
-    company = await CompanyHelper.add({ externalId: '1:123', name: 'TESTSEARCH company 2' })
-    companies.push(company)
+    // Add the Licence holders in non-alphabetical order to prove the ordering in the results
+    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceHolderSeedData = await LicenceHolderSeeder.seed(licenceRef, 'TESTSEARCH licence holder 2')
+    licenceHolders.push({ id: licenceHolderSeedData.companyId })
 
-    company = await CompanyHelper.add({ externalId: '1:124', name: 'TESTSEARCH company 11' })
-    companies.push(company)
+    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceHolderSeedData = await LicenceHolderSeeder.seed(licenceRef, 'TESTSEARCH licence holder 11')
+    licenceHolders.push({ id: licenceHolderSeedData.companyId })
 
     // Add the licences in non-alphabetical order to prove the ordering in the results
     licence = await LicenceHelper.add({ licenceRef: '02/01/TESTSEARCH01/05' })
@@ -129,7 +131,7 @@ describe('Search - Fetch Search Results service', () => {
   })
 
   beforeEach(() => {
-    resultTypes = ['billingAccount', 'company', 'licence', 'monitoringStation', 'returnLog', 'user']
+    resultTypes = ['billingAccount', 'licenceHolder', 'licence', 'monitoringStation', 'returnLog', 'user']
     page = 1
   })
 
@@ -155,13 +157,13 @@ describe('Search - Fetch Search Results service', () => {
           },
           {
             exact: false,
-            id: companies[1].id,
-            type: 'company'
+            id: licenceHolders[1].id,
+            type: 'licenceHolder'
           },
           {
             exact: false,
-            id: companies[0].id,
-            type: 'company'
+            id: licenceHolders[0].id,
+            type: 'licenceHolder'
           },
           {
             exact: false,
@@ -396,30 +398,30 @@ describe('Search - Fetch Search Results service', () => {
     })
   })
 
-  describe('when searching for companies', () => {
+  describe('when searching for licence holders', () => {
     beforeEach(() => {
-      resultTypes = ['company']
+      resultTypes = ['licenceHolder']
     })
 
-    describe('when matching companies exist', () => {
+    describe('when matching licence holders exist', () => {
       beforeEach(() => {
-        query = 'TESTSEARCH company'
+        query = 'TESTSEARCH licence holder'
       })
 
-      it('returns the correctly ordered matching companies', async () => {
+      it('returns the correctly ordered matching licence holders', async () => {
         const result = await FetchSearchResultsService.go(query, resultTypes, page)
 
         expect(result).to.equal({
           results: [
             {
               exact: false,
-              id: companies[1].id,
-              type: 'company'
+              id: licenceHolders[1].id,
+              type: 'licenceHolder'
             },
             {
               exact: false,
-              id: companies[0].id,
-              type: 'company'
+              id: licenceHolders[0].id,
+              type: 'licenceHolder'
             }
           ],
           total: 2
@@ -427,20 +429,20 @@ describe('Search - Fetch Search Results service', () => {
       })
     })
 
-    describe('when only one matching company exists', () => {
+    describe('when only one matching licence holder exists', () => {
       beforeEach(() => {
-        query = 'TESTSEARCH company 1'
+        query = 'TESTSEARCH licence holder 1'
       })
 
-      it('returns the correct company', async () => {
+      it('returns the correct licence holder', async () => {
         const result = await FetchSearchResultsService.go(query, resultTypes, page)
 
         expect(result).to.equal({
           results: [
             {
               exact: false,
-              id: companies[1].id,
-              type: 'company'
+              id: licenceHolders[1].id,
+              type: 'licenceHolder'
             }
           ],
           total: 1
@@ -448,25 +450,25 @@ describe('Search - Fetch Search Results service', () => {
       })
     })
 
-    describe('when the case of the search text does not match that of the company', () => {
+    describe('when the case of the search text does not match that of the licence holder', () => {
       beforeEach(() => {
-        query = 'tEsTsEaRcH cOmPaNy'
+        query = 'tEsTsEaRcH lIcEnCe hOlDeR'
       })
 
-      it('still returns the correct companies', async () => {
+      it('still returns the correct licence holders', async () => {
         const result = await FetchSearchResultsService.go(query, resultTypes, page)
 
         expect(result).to.equal({
           results: [
             {
               exact: false,
-              id: companies[1].id,
-              type: 'company'
+              id: licenceHolders[1].id,
+              type: 'licenceHolder'
             },
             {
               exact: false,
-              id: companies[0].id,
-              type: 'company'
+              id: licenceHolders[0].id,
+              type: 'licenceHolder'
             }
           ],
           total: 2
@@ -474,9 +476,9 @@ describe('Search - Fetch Search Results service', () => {
       })
     })
 
-    describe('when no matching companies exist', () => {
+    describe('when no matching licence holders exist', () => {
       beforeEach(() => {
-        query = 'TESTSEARCH company 99'
+        query = 'TESTSEARCH licence holder 99'
       })
 
       it('returns empty query results', async () => {
@@ -491,18 +493,18 @@ describe('Search - Fetch Search Results service', () => {
 
     describe('when searching for an exact match', () => {
       beforeEach(() => {
-        query = 'TESTSEARCH company 11'
+        query = 'TESTSEARCH licence holder 11'
       })
 
-      it('returns the correct company', async () => {
+      it('returns the correct licence holder', async () => {
         const result = await FetchSearchResultsService.go(query, resultTypes, page)
 
         expect(result).to.equal({
           results: [
             {
               exact: true,
-              id: companies[1].id,
-              type: 'company'
+              id: licenceHolders[1].id,
+              type: 'licenceHolder'
             }
           ],
           total: 1

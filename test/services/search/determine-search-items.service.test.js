@@ -25,7 +25,7 @@ describe('Search - Determine Search Items service', () => {
     it('returns the correct list', () => {
       const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
 
-      expect(result).to.equal(['billingAccount', 'company', 'licence', 'monitoringStation', 'returnLog', 'user'])
+      expect(result).to.equal(['billingAccount', 'licenceHolder', 'licence', 'monitoringStation', 'returnLog', 'user'])
     })
   })
 
@@ -42,16 +42,16 @@ describe('Search - Determine Search Items service', () => {
     })
   })
 
-  describe('when companies are requested', () => {
+  describe('when licence holders are requested', () => {
     beforeEach(() => {
-      selectedResultType = 'company'
+      selectedResultType = 'licenceHolder'
       query = 'Walker'
       userScopes = []
     })
 
-    it('returns only the company type', () => {
+    it('returns only the licence holder type', () => {
       const result = DetermineSearchItemsService.go(query, selectedResultType, userScopes)
-      expect(result).to.equal(['company'])
+      expect(result).to.equal(['licenceHolder'])
     })
   })
 
