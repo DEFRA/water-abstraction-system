@@ -10,10 +10,10 @@ const { expect } = Code
 
 // Test helpers
 const CompanyHelper = require('../../support/helpers/company.helper.js')
-const LicenceDocumentRoleHelper = require('../../support/helpers/licence-document-role.helper.js')
 const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
+const LicenceDocumentRoleHelper = require('../../support/helpers/licence-document-role.helper.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
 
 // Things we need to stub
 const databaseConfig = require('../../../config/database.config.js')
