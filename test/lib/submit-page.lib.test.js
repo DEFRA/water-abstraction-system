@@ -47,7 +47,7 @@ describe('SubmitPageLib', () => {
         payload = {}
       })
 
-      it('does not clear any filters and returns false', () => {
+      it('leaves the payload untouched and returns FALSE', () => {
         const result = SubmitPageLib.clearFilters(payload, yarStub, filterKey)
 
         expect(yarStub.clear.called).to.be.false()
