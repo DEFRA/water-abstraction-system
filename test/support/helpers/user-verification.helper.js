@@ -4,8 +4,11 @@
  * @module UserVerificationHelper
  */
 
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
 const UserVerificationModel = require('../../../app/models/user-verification.model.js')
+
+const VERIFICATION_CODE_CHARACTERS = '23456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXY'
+const VERIFICATION_CODE_LENGTH = 5
 
 /**
  * Add a new user verification
@@ -14,7 +17,7 @@ const UserVerificationModel = require('../../../app/models/user-verification.mod
  *
  * - `id` - [random UUID]
  * - `licenceEntityId` - [random UUID]
- * - `verificationCode` - 123Abc
+ * - `verificationCode` - [random verification code]
  * - `verificationMethod` - post (all verification is done by post)
  * - `companyEntityId` - [random UUID]
  * - `verifiedAt` - null (indicates not yet verified)
@@ -47,7 +50,7 @@ function defaults(data = {}) {
     createdAt: new Date(),
     id: generateUUID(),
     licenceEntityId: generateUUID(),
-    verificationCode: '123Abc',
+    verificationCode: generateVerificationCode(),
     verificationMethod: 'post',
     verifiedAt: null
   }
@@ -58,7 +61,19 @@ function defaults(data = {}) {
   }
 }
 
+/**
+ * Generates a random verification code
+ *
+ * @returns {string} a random 5-character verification code, using the allowed characters
+ */
+function generateVerificationCode() {
+  return Array.from({ length: VERIFICATION_CODE_LENGTH }, () => {
+    return VERIFICATION_CODE_CHARACTERS.charAt(generateRandomInteger(0, VERIFICATION_CODE_CHARACTERS.length - 1))
+  }).join('')
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateVerificationCode
 }
