@@ -47,7 +47,7 @@ describe('Return Versions Setup - Agreements Exception validator', () => {
 
   describe('when no data is provided', () => {
     beforeEach(() => {
-      payload = {}
+      payload = { agreementsExceptions: [] }
     })
 
     it('fails validation', () => {

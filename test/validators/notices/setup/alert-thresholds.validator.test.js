@@ -31,7 +31,7 @@ describe('Notices Setup - Setup - Alert Thresholds validator', () => {
           payload = { alertThresholds: ['0'] }
         })
 
-        it('returns with errors', () => {
+        it('returns with no errors', () => {
           const result = AlertThresholdsValidator.go(payload)
 
           expect(result.value).to.exist()
@@ -59,7 +59,7 @@ describe('Notices Setup - Setup - Alert Thresholds validator', () => {
 
       describe('is an array with no items', () => {
         beforeEach(() => {
-          payload = { alertThresholds: [undefined] }
+          payload = { alertThresholds: [] }
         })
 
         it('returns with errors', () => {

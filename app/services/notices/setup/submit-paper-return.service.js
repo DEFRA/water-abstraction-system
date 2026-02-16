@@ -6,11 +6,12 @@
  * @module SubmitPaperReturnService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const PaperReturnPresenter = require('../../../presenters/notices/setup/paper-return.presenter.js')
 const PaperReturnValidator = require('../../../validators/notices/setup/paper-return.validator.js')
 const SessionModel = require('../../../models/session.model.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for the `/notices/setup/{sessionId}/paper-return` page
@@ -24,11 +25,11 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
 async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  _handleOneOptionSelected(payload)
+  handleOneOptionSelected(payload, 'returns')
 
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     if (session.checkPageVisited && _arraysDiffer(payload.returns, session.selectedReturns)) {
       GeneralLib.flashNotification(yar, 'Updated', 'Returns updated')
     }
@@ -44,7 +45,7 @@ async function go(sessionId, payload, yar) {
 
   return {
     activeNavBar: 'notices',
-    error: validationResult,
+    error,
     ...pageData
   }
 }
@@ -80,12 +81,6 @@ function _arraysDiffer(arrayA, arrayB) {
   }
 
   return result
-}
-
-function _handleOneOptionSelected(payload) {
-  if (payload.returns && !Array.isArray(payload?.returns)) {
-    payload.returns = [payload?.returns]
-  }
 }
 
 async function _save(session, payload) {

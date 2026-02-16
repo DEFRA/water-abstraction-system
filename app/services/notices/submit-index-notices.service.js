@@ -10,6 +10,7 @@ const IndexValidator = require('../../validators/notices/index.validator.js')
 const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const { formatValidationResult } = require('../../presenters/base.presenter.js')
+const { handleOneOptionSelected } = require('../../lib/submit-page.lib.js')
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -31,8 +32,8 @@ async function go(payload, yar, auth, page = 1) {
     return {}
   }
 
-  _handleOneOptionSelected(payload, 'noticeTypes')
-  _handleOneOptionSelected(payload, 'statuses')
+  handleOneOptionSelected(payload, 'noticeTypes')
+  handleOneOptionSelected(payload, 'statuses')
 
   const error = _validate(payload)
 
@@ -61,26 +62,6 @@ function _clearFilters(payload, yar) {
   }
 
   return false
-}
-
-/**
- * When a single type is checked by the user, it returns as a string. When multiple types are checked, the 'types' is
- * returned as an array. When nothing is checked then the property doesn't exist in the payload.
- *
- * This function works to handle these discrepancies.
- *
- * @private
- */
-function _handleOneOptionSelected(payload, key) {
-  if (!payload?.[key]) {
-    payload[key] = []
-
-    return
-  }
-
-  if (!Array.isArray(payload?.[key])) {
-    payload[key] = [payload?.[key]]
-  }
 }
 
 async function _replayView(payload, error, selectedPageNumber, savedFilters, auth) {

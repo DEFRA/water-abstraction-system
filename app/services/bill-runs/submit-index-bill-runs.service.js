@@ -12,6 +12,7 @@ const FetchRegionsService = require('./setup/fetch-regions.service.js')
 const IndexBillRunsPresenter = require('../../presenters/bill-runs/index-bill-runs.presenter.js')
 const IndexValidator = require('../../validators/bill-runs/index.validator.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+const { handleOneOptionSelected } = require('../../lib/submit-page.lib.js')
 
 /**
  * Handles validation of the requested filters, saving them to the session else re-rendering the page if invalid
@@ -32,9 +33,9 @@ async function go(payload, yar, page = 1) {
     return {}
   }
 
-  _handleOneOptionSelected(payload, 'regions')
-  _handleOneOptionSelected(payload, 'runTypes')
-  _handleOneOptionSelected(payload, 'statuses')
+  handleOneOptionSelected(payload, 'regions')
+  handleOneOptionSelected(payload, 'runTypes')
+  handleOneOptionSelected(payload, 'statuses')
 
   const regions = await FetchRegionsService.go()
   const error = _validate(payload, regions)
@@ -60,26 +61,6 @@ function _clearFilters(payload, yar) {
   }
 
   return false
-}
-
-/**
- * When a single type is checked by the user, it returns as a string. When multiple types are checked, the 'types' is
- * returned as an array. When nothing is checked then the property doesn't exist in the payload.
- *
- * This function works to handle these discrepancies.
- *
- * @private
- */
-function _handleOneOptionSelected(payload, key) {
-  if (!payload?.[key]) {
-    payload[key] = []
-
-    return
-  }
-
-  if (!Array.isArray(payload?.[key])) {
-    payload[key] = [payload?.[key]]
-  }
 }
 
 async function _replayView(payload, error, page, regions, savedFilters) {

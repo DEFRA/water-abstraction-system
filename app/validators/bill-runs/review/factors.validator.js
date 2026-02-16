@@ -22,15 +22,15 @@ function go(payload) {
   const schema = Joi.object({
     amendedAggregate: Joi.number().min(0).required().custom(_maxDecimals, 'Max decimals').messages({
       'number.base': 'The aggregate factor must be a number',
-      'number.unsafe': 'The aggregate factor must be a number',
-      'number.min': 'The aggregate factor must be greater than 0',
+      'number.unsafe': 'The aggregate factor must be between 0 and 9007199254740991',
+      'number.min': 'The aggregate factor must be 0 or more',
       'any.required': 'Enter an aggregate factor',
       'any.invalid': 'The aggregate factor must not have more than 15 decimal places'
     }),
     amendedChargeAdjustment: Joi.number().min(0).required().custom(_maxDecimals, 'Max decimals').messages({
       'number.base': 'The charge factor must be a number',
-      'number.unsafe': 'The charge factor must be a number',
-      'number.min': 'The charge factor must be greater than 0',
+      'number.unsafe': 'The charge factor must be between 0 and 9007199254740991',
+      'number.min': 'The charge factor must be 0 or more',
       'any.required': 'Enter a charge factor',
       'any.invalid': 'The charge factor must not have more than 15 decimal places'
     })

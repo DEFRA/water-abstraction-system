@@ -6,12 +6,13 @@
  * @module SubmitSelectRecipientsService
  */
 
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
 const SelectRecipientsValidator = require('../../../validators/notices/setup/select-recipients.validator.js')
 const SessionModel = require('../../../models/session.model.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates validating the data for '/notices/setup/{sessionId}/select-recipients' page
@@ -25,11 +26,11 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
 async function go(sessionId, payload, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  _handleOneOptionSelected(payload)
+  handleOneOptionSelected(payload, 'recipients')
 
-  const validationResult = _validate(payload)
+  const error = _validate(payload)
 
-  if (!validationResult) {
+  if (!error) {
     await _save(session, payload)
 
     GeneralLib.flashNotification(
@@ -50,14 +51,8 @@ async function go(sessionId, payload, yar) {
   const pageData = SelectRecipientsPresenter.go(session, recipients, selectedRecipients)
 
   return {
-    error: validationResult,
+    error,
     ...pageData
-  }
-}
-
-function _handleOneOptionSelected(payload) {
-  if (payload.recipients && !Array.isArray(payload?.recipients)) {
-    payload.recipients = [payload?.recipients]
   }
 }
 
