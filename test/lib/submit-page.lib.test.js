@@ -34,7 +34,7 @@ describe('SubmitPageLib', () => {
         payload = { clearFilters: 'reset' }
       })
 
-      it('clears the "billRunsFilter" object from the session and returns true', () => {
+      it('clears the specified filter object from the session and returns true', () => {
         const result = SubmitPageLib.clearFilters(payload, yarStub, filterKey)
 
         expect(yarStub.clear.calledWith(filterKey)).to.be.true()
