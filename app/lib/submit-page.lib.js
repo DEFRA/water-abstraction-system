@@ -4,7 +4,7 @@
  * Clears stored filters from session storage based on form submission
  *
  * Checks if the payload contains a clearFilters flag. If true, removes the stored filter data from the session
- * using the provided key and returns true. Otherwise, returns false without modifying the session.
+ * using the provided key and returns true. Otherwise, returns false without modifying the filter data.
  *
  * @param {object} payload - The form payload object containing the clearFilters flag
  * @param {object} yar - The Hapi Yar session storage object
