@@ -98,7 +98,7 @@ describe('SubmitPageLib', () => {
     })
   })
 
-  describe('#processFilters()', () => {
+  describe('#processSavedFilters()', () => {
     const filterKey = 'filterToProcess'
 
     let yarStub
@@ -115,7 +115,7 @@ describe('SubmitPageLib', () => {
       })
 
       it('returns the expected results, "openFilter" is set to FALSE', () => {
-        const result = SubmitPageLib.processSavedFilters(filterKey, yarStub)
+        const result = SubmitPageLib.processSavedFilters(yarStub, filterKey)
 
         expect(result).to.equal({ openFilter: false })
       })
@@ -129,7 +129,7 @@ describe('SubmitPageLib', () => {
       })
 
       it('returns the expected results, "openFilter" is set to FALSE', () => {
-        const result = SubmitPageLib.processSavedFilters(filterKey, yarStub)
+        const result = SubmitPageLib.processSavedFilters(yarStub, filterKey)
 
         expect(result).to.equal({ regions: [], status: null, openFilter: false })
       })
@@ -143,7 +143,7 @@ describe('SubmitPageLib', () => {
       })
 
       it('returns the expected results, "openFilter" is set to TRUE', () => {
-        const result = SubmitPageLib.processSavedFilters(filterKey, yarStub)
+        const result = SubmitPageLib.processSavedFilters(yarStub, filterKey)
 
         expect(result).to.equal({ regions: ['south', 'north'], openFilter: true })
       })
@@ -157,7 +157,7 @@ describe('SubmitPageLib', () => {
       })
 
       it('returns the expected results, "openFilter" is set to TRUE', () => {
-        const result = SubmitPageLib.processSavedFilters(filterKey, yarStub)
+        const result = SubmitPageLib.processSavedFilters(yarStub, filterKey)
 
         expect(result).to.equal({ status: 'review', openFilter: true })
       })

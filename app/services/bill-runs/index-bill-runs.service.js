@@ -52,7 +52,7 @@ async function go(yar, page = 1) {
 }
 
 function _filters(yar) {
-  const savedFilters = processSavedFilters('billRunsFilter', yar)
+  const savedFilters = processSavedFilters(yar, 'billRunsFilter')
 
   return {
     number: null,
