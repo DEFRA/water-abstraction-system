@@ -11,7 +11,7 @@ const ContactEmailValidator = require('../../../validators/company-contacts/setu
 const SessionModel = require('../../../models/session.model.js')
 const { checkUrl } = require('../../../lib/check-page.lib.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { formatEmail, formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/contact-email' page
@@ -48,13 +48,13 @@ async function go(sessionId, payload, yar) {
 }
 
 function _notification(session, payload, yar) {
-  if (session.checkPageVisited && session.email !== payload.email) {
+  if (session.checkPageVisited && session.email !== formatEmail(payload.email)) {
     flashNotification(yar, 'Updated', 'Email address updated')
   }
 }
 
 async function _save(session, payload) {
-  session.email = payload.email
+  session.email = formatEmail(payload.email)
 
   return session.$update()
 }

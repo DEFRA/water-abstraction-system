@@ -1,5 +1,7 @@
 'use strict'
 
+const { formatEmail } = require('../base.presenter.js')
+
 /**
  * Formats data for the `/users/me/profile-details` page
  * @module ProfileDetailsPresenter
@@ -25,7 +27,7 @@ function go(profileDetails) {
       href: '/',
       text: 'Go back to search'
     },
-    email: profileDetails.email || '',
+    email: formatEmail(profileDetails.email),
     jobTitle: profileDetails.jobTitle || '',
     name: profileDetails.name || '',
     navigationLinks: NAVIGATION_LINKS,

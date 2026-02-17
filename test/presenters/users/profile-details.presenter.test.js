@@ -27,7 +27,7 @@ describe('Users - Profile Details Presenter', () => {
           href: '/',
           text: 'Go back to search'
         },
-        email: '',
+        email: null,
         jobTitle: '',
         name: '',
         navigationLinks: [

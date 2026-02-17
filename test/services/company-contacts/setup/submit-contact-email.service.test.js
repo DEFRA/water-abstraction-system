@@ -27,7 +27,7 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
 
     sessionData = { company }
 
-    payload = { email: 'eric@test.com' }
+    payload = { email: 'ERic@test.Com' }
 
     session = await SessionHelper.add({ data: sessionData })
 
@@ -120,7 +120,7 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
           href: `/system/company-contacts/setup/${session.id}/contact-name`,
           text: 'Back'
         },
-        email: '',
+        email: null,
         error: {
           email: {
             text: 'Enter an email address for the contact'

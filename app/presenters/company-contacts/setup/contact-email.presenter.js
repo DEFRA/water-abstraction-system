@@ -6,6 +6,7 @@
  */
 
 const { checkUrl } = require('../../../lib/check-page.lib.js')
+const { formatEmail } = require('../../base.presenter.js')
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/contact-email' page
@@ -24,7 +25,7 @@ function go(session) {
     },
     pageTitle: 'Enter an email address for the contact',
     pageTitleCaption: company.name,
-    email: session.email ?? ''
+    email: formatEmail(session.email)
   }
 }
 
