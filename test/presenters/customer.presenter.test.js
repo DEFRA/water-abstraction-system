@@ -107,7 +107,7 @@ describe('Customer presenter', () => {
       })
 
       describe('and the email is empty', () => {
-        it('return null', () => {
+        it('returns null', () => {
           const result = CustomerPresenter.formatEmail()
 
           expect(result).to.be.null()
