@@ -8,8 +8,6 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
-const ContactHelper = require('../../support/helpers/contact.helper.js')
 const EventHelper = require('../../support/helpers/event.helper.js')
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
 const NotificationHelper = require('../../support/helpers/notification.helper.js')
@@ -20,26 +18,16 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const FetchNotificationsService = require('../../../app/services/company-contacts/fetch-notifications.service.js')
 
 describe('Company contact - Fetch Communications service', () => {
-  let companyContact
-  let contact
   let notice
   let noticeTwo
   let notification
   let notificationTwo
   let email
-  let excludedNotication
+  let excludedNotification
 
   beforeEach(async () => {
     // We want to ensure the email is unique so we do not pick up email seeded from other tests
     email = `${generateUUID()}@acme.co.uk`
-
-    contact = await ContactHelper.add({
-      email
-    })
-
-    companyContact = await CompanyContactHelper.add({
-      contactId: contact.id
-    })
 
     notice = await EventHelper.add(NoticesFixture.returnsInvitation())
 
@@ -56,7 +44,7 @@ describe('Company contact - Fetch Communications service', () => {
     })
 
     // This should not be returned as it is an excluded message type
-    excludedNotication = await NotificationHelper.add({
+    excludedNotification = await NotificationHelper.add({
       ...NotificationsFixture.abstractionAlertEmail(notice),
       recipient: email,
       messageRef: 'password_reset_email'
@@ -64,9 +52,7 @@ describe('Company contact - Fetch Communications service', () => {
   })
 
   afterEach(async () => {
-    await companyContact.$query().delete()
-    await contact.$query().delete()
-    await excludedNotication.$query().delete()
+    await excludedNotification.$query().delete()
     await notice.$query().delete()
     await noticeTwo.$query().delete()
     await notification.$query().delete()
@@ -75,7 +61,7 @@ describe('Company contact - Fetch Communications service', () => {
 
   describe('when the company contact has notifications', () => {
     it('returns the matching notifications', async () => {
-      const result = await FetchNotificationsService.go(companyContact.id, 1)
+      const result = await FetchNotificationsService.go(email, 1)
 
       expect(result).to.equal({
         notifications: [
@@ -110,16 +96,12 @@ describe('Company contact - Fetch Communications service', () => {
   })
 
   describe('when the company contact has no notifications', () => {
-    beforeEach(async () => {
-      contact = await ContactHelper.add()
-
-      companyContact = await CompanyContactHelper.add({
-        contactId: contact.id
-      })
+    beforeEach(() => {
+      email = `${generateUUID()}@acme.co.uk`
     })
 
     it('returns no notifications', async () => {
-      const result = await FetchNotificationsService.go(companyContact.id, 1)
+      const result = await FetchNotificationsService.go(email, 1)
 
       expect(result).to.equal({
         notifications: [],

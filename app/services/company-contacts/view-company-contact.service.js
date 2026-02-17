@@ -29,7 +29,7 @@ async function go(id, auth, yar, page = 1) {
 
   const company = await FetchCompanyService.go(companyContact.companyId)
 
-  const { notifications, totalNumber } = await FetchNotificationsService.go(companyContact.id, page)
+  const { notifications, totalNumber } = await FetchNotificationsService.go(companyContact.contact.email, page)
 
   const pageData = ViewCompanyContactPresenter.go(company, companyContact, notifications)
 
