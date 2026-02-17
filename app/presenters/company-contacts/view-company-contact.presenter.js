@@ -13,7 +13,7 @@ const { formatEmail, formatLongDate } = require('../base.presenter.js')
  *
  * @param {module:CompanyModel} company - The customer from the companies table
  * @param {module:CompanyContactModel} companyContact - The customer contact from the company contacts table
- * @param {module:NotificationModel[]} notifications - All notifications linked to the licence
+ * @param {module:NotificationModel[]} notifications - All notifications linked to the company contact email address
  *
  * @returns {object} The data formatted for the view template
  */

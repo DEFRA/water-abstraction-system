@@ -1,9 +1,16 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block pageContent %}
+
+  {% if emailInUse %}
+    {{ govukInsetText({
+      text: emailInUse
+    }) }}
+ {% endif %}
 
   {{ govukSummaryList({
     rows: [
@@ -37,7 +44,7 @@
             href: links.email,
             text: "Change",
             visuallyHiddenText: "email"
-          }
+          } if not emailInUse
         ]
       }
       },
