@@ -27,6 +27,7 @@ describe('Company contact - Fetch Communications service', () => {
   let notification
   let notificationTwo
   let email
+  let excludedNotication
 
   beforeEach(async () => {
     // We want to ensure the email is unique so we do not pick up email seeded from other tests
@@ -53,14 +54,22 @@ describe('Company contact - Fetch Communications service', () => {
       ...NotificationsFixture.abstractionAlertEmail(noticeTwo),
       recipient: email
     })
+
+    // This should not be returned as it is an excluded message type
+    excludedNotication = await NotificationHelper.add({
+      ...NotificationsFixture.abstractionAlertEmail(notice),
+      recipient: email,
+      messageRef: 'password_reset_email'
+    })
   })
 
   afterEach(async () => {
-    await contact.$query().delete()
     await companyContact.$query().delete()
+    await contact.$query().delete()
+    await excludedNotication.$query().delete()
     await notice.$query().delete()
-    await notification.$query().delete()
     await noticeTwo.$query().delete()
+    await notification.$query().delete()
     await notificationTwo.$query().delete()
   })
 
