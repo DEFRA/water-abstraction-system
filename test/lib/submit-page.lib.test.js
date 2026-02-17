@@ -97,4 +97,70 @@ describe('SubmitPageLib', () => {
       })
     })
   })
+
+  describe('#processFilters()', () => {
+    const filterKey = 'filterToProcess'
+
+    let yarStub
+
+    afterEach(() => {
+      Sinon.restore()
+    })
+
+    describe('when no filters have been saved', () => {
+      before(() => {
+        yarStub = {
+          get: Sinon.stub().returns(null)
+        }
+      })
+
+      it('returns the expected results, "openFilter" is set to FALSE', () => {
+        const result = SubmitPageLib.processSavedFilters(filterKey, yarStub)
+
+        expect(result).to.equal({ openFilter: false })
+      })
+    })
+
+    describe('when filters have been saved with empty values', () => {
+      before(() => {
+        yarStub = {
+          get: Sinon.stub().returns({ regions: [], status: null })
+        }
+      })
+
+      it('returns the expected results, "openFilter" is set to FALSE', () => {
+        const result = SubmitPageLib.processSavedFilters(filterKey, yarStub)
+
+        expect(result).to.equal({ regions: [], status: null, openFilter: false })
+      })
+    })
+
+    describe('when a filter with array values been saved', () => {
+      before(() => {
+        yarStub = {
+          get: Sinon.stub().returns({ regions: ['south', 'north'] })
+        }
+      })
+
+      it('returns the expected results, "openFilter" is set to TRUE', () => {
+        const result = SubmitPageLib.processSavedFilters(filterKey, yarStub)
+
+        expect(result).to.equal({ regions: ['south', 'north'], openFilter: true })
+      })
+    })
+
+    describe('when a filter with non array values been saved', () => {
+      before(() => {
+        yarStub = {
+          get: Sinon.stub().returns({ status: 'review' })
+        }
+      })
+
+      it('returns the expected results, "openFilter" is set to TRUE', () => {
+        const result = SubmitPageLib.processSavedFilters(filterKey, yarStub)
+
+        expect(result).to.equal({ status: 'review', openFilter: true })
+      })
+    })
+  })
 })
