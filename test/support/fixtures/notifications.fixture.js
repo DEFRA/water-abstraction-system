@@ -27,6 +27,7 @@ function abstractionAlertEmail(notice) {
   const licenceMonitoringStationId = generateUUID()
 
   const notification = {
+    id: generateUUID(),
     contactType: 'primary user',
     createdAt: new Date('2025-10-09'),
     dueDate: null,
