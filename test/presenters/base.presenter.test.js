@@ -137,6 +137,44 @@ describe('Base presenter', () => {
     })
   })
 
+  describe('#formatEmail', () => {
+    let email
+
+    describe('when formatting an email', () => {
+      describe('and there is an email', () => {
+        beforeEach(() => {
+          email = 'person@test.com'
+        })
+
+        it('returns the email', () => {
+          const result = BasePresenter.formatEmail(email)
+
+          expect(result).to.equal('person@test.com')
+        })
+
+        describe('but it is not lowercase', () => {
+          beforeEach(() => {
+            email = 'PERSON@test.Com'
+          })
+
+          it('returns the email in lower case', () => {
+            const result = BasePresenter.formatEmail(email)
+
+            expect(result).to.equal('person@test.com')
+          })
+        })
+      })
+
+      describe('and the email is empty', () => {
+        it('returns null', () => {
+          const result = BasePresenter.formatEmail()
+
+          expect(result).to.be.null()
+        })
+      })
+    })
+  })
+
   describe('#formatFinancialYear()', () => {
     let financialYearEnding
 

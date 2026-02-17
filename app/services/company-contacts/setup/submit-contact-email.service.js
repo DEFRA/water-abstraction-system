@@ -11,8 +11,7 @@ const ContactEmailValidator = require('../../../validators/company-contacts/setu
 const SessionModel = require('../../../models/session.model.js')
 const { checkUrl } = require('../../../lib/check-page.lib.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
-const { formatEmail } = require('../../../presenters/customer.presenter.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { formatEmail, formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/contact-email' page

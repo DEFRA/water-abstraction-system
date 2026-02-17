@@ -1,6 +1,6 @@
 'use strict'
 
-const { formatEmail } = require('../customer.presenter.js')
+const { formatEmail } = require('../base.presenter.js')
 
 /**
  * Formats data for the `/users/me/profile-details` page

@@ -6,7 +6,7 @@
  */
 
 const { checkUrl } = require('../../../lib/check-page.lib.js')
-const { formatEmail } = require('../../customer.presenter.js')
+const { formatEmail } = require('../../base.presenter.js')
 
 /**
  * Formats data for the '/company-contacts/setup/{sessionId}/contact-email' page

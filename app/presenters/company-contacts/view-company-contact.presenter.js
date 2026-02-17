@@ -5,8 +5,7 @@
  * @module ViewCompanyContactPresenter
  */
 
-const { formatEmail } = require('../customer.presenter.js')
-const { formatLongDate } = require('../base.presenter.js')
+const { formatEmail, formatLongDate } = require('../base.presenter.js')
 
 /**
  * Formats data for the '/company-contacts/{id}' page

@@ -5,7 +5,7 @@
  * @module RemoveCompanyContactPresenter
  */
 
-const { formatEmail } = require('../customer.presenter.js')
+const { formatEmail } = require('../base.presenter.js')
 
 /**
  * Formats data for the '/company-contacts/{id}/remove' page

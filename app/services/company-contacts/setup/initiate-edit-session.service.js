@@ -7,7 +7,7 @@
 
 const FetchCompanyContactService = require('./fetch-company-contact.service.js')
 const SessionModel = require('../../../models/session.model.js')
-const { formatEmail } = require('../../../presenters/customer.presenter.js')
+const { formatEmail } = require('../../../presenters/base.presenter.js')
 
 /**
  * Initiates the session record used for setting up an existing company contact
