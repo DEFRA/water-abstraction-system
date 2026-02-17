@@ -106,7 +106,7 @@ function handleOneOptionSelected(payload, key) {
  * processFilters('billRunsFilter', yar)
  * // Returns { regions: [], status: null, openFilter: false }
  */
-function processFilters(filterKey, yar) {
+function processSavedFilters(filterKey, yar) {
   let openFilter = false
 
   const savedFilters = yar.get(filterKey)
@@ -134,5 +134,5 @@ function processFilters(filterKey, yar) {
 module.exports = {
   clearFilters,
   handleOneOptionSelected,
-  processFilters
+  processSavedFilters
 }
