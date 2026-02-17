@@ -8,6 +8,7 @@
 const FetchNoticesService = require('./fetch-notices.service.js')
 const NoticesIndexPresenter = require('../../presenters/notices/index-notices.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+const { processSavedFilters } = require('../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates presenting the data for `/notices` page
@@ -44,23 +45,7 @@ async function go(yar, auth, page = 1) {
 }
 
 function _filters(yar) {
-  let openFilter = false
-
-  const savedFilters = yar.get('noticesFilter')
-
-  if (savedFilters) {
-    for (const key of Object.keys(savedFilters)) {
-      if (['noticeTypes', 'statuses'].includes(key)) {
-        openFilter = savedFilters[key].length > 0
-      } else {
-        openFilter = !!savedFilters[key]
-      }
-
-      if (openFilter) {
-        break
-      }
-    }
-  }
+  const savedFilters = processSavedFilters(yar, 'noticesFilter')
 
   return {
     fromDate: null,
@@ -69,8 +54,7 @@ function _filters(yar) {
     sentBy: null,
     statuses: [],
     toDate: null,
-    ...savedFilters,
-    openFilter
+    ...savedFilters
   }
 }
 
