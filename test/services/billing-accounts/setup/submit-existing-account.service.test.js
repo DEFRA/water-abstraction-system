@@ -115,7 +115,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
     describe('and the user had previously completed the "new" journey', () => {
       beforeEach(async () => {
-        sessionData = _newAccountSessionData(session)
+        sessionData = _newAccountSessionData()
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -127,7 +127,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            ..._newAccountExpectedValues(session),
+            ..._newAccountExpectedValues(),
             addressJourney: {
               address: {},
               backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-account`, text: 'Back' },
@@ -297,9 +297,9 @@ function _newAccountExpectedValues() {
   }
 }
 
-function _newAccountSessionData(session) {
+function _newAccountSessionData() {
   return {
-    ..._commonSessionData(session),
+    ..._commonSessionData(),
     accountType: 'company',
     companiesHouseId: '12345678',
     companySearch: 'Company Name',
@@ -310,7 +310,7 @@ function _newAccountSessionData(session) {
 
 function _existingAccountSessionData(session) {
   return {
-    ..._commonSessionData(session),
+    ..._commonSessionData(),
     addressJourney: {
       address: {},
       backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-account`, text: 'Back' },

@@ -112,7 +112,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            ..._newAddressExpectedValues(session),
+            ..._newAddressExpectedValues(),
             addressSelected: payload.addressSelected
           },
           { skip: ['billingAccount'] }
@@ -194,7 +194,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
     describe('when the user selects a new address after already having chosen an existing address', () => {
       beforeEach(async () => {
-        sessionData = _commonSessionData(session)
+        sessionData = _commonSessionData()
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -206,7 +206,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            ..._commonSessionData(sessionData),
+            ..._commonSessionData(),
             addressJourney: _newAddressSessionData(session).addressJourney,
             addressSelected: payload.addressSelected
           },
@@ -283,7 +283,7 @@ function _newAddressExpectedValues() {
 
 function _newAddressSessionData(session) {
   return {
-    ..._commonSessionData(session),
+    ..._commonSessionData(),
     addressSelected: 'new',
     addressJourney: {
       address: {},
