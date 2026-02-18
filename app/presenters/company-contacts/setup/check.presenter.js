@@ -61,7 +61,7 @@ function _matchingContact(email, name, savedCompanyContacts) {
 
   return savedCompanyContacts.some((savedCompanyContact) => {
     return (
-      savedCompanyContact.contact.email.toLowerCase() === lowerEmail &&
+      savedCompanyContact.contact.email?.toLowerCase() === lowerEmail &&
       savedCompanyContact.contact.$name().toLowerCase() === lowerName
     )
   })
