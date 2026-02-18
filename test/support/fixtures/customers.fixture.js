@@ -126,7 +126,8 @@ function contact() {
     contactType: 'person',
     suffix: null,
     department: 'Tyrell Corporation',
-    email: 'rachael.tyrell@tyrellcorp.com'
+    // The upper case T is used to catch any code where we do not lowercase the email address. This will be legacy data
+    email: 'rachael.Tyrell@tyrellcorp.com'
   })
 }
 

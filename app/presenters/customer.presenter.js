@@ -1,5 +1,7 @@
 'use strict'
 
+const { formatEmail } = require('./base.presenter.js')
+
 /**
  * We have a couple of places where we need to show the company contact (in some places this is referred to as the customer contact)
  *
@@ -13,7 +15,7 @@ function formatCompanyContact(companyContact) {
   return {
     communicationType: _communicationType(companyContact),
     name: companyContact.contact.$name(),
-    email: companyContact.contact.email
+    email: formatEmail(companyContact.contact.email)
   }
 }
 

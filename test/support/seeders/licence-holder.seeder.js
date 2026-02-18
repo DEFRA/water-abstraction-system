@@ -23,7 +23,7 @@ async function seed(licenceRef, name = 'Licence Holder Ltd') {
   const { id: licenceRoleId } = await LicenceRoleHelper.select()
 
   // Create a company record
-  const { id: companyId } = await CompanyHelper.add({ name })
+  const { id: companyId } = await CompanyHelper.add({ externalId: CompanyHelper.generateExternalId(), name })
 
   // We have to create a licence document to link our licence record to (eventually!) the company or contact record that
   // is the 'licence holder'

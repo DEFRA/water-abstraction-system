@@ -30,7 +30,8 @@ function go(frequency, length, measurementType, payload, startReading) {
           .allow(null)
           .messages({
             'number.base': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be a number or x for a blank row`,
-            'number.min': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be a positive number`
+            'number.min': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be 0 or more`,
+            'number.unsafe': `${measurementType.charAt(0).toUpperCase() + measurementType.slice(1)} must be between 0 and 9007199254740991`
           })
       )
       .custom((value, helpers) => {

@@ -34,8 +34,10 @@ async function _fetch(companyId, page) {
     .modify('licenceName')
     .whereExists(
       LicenceModel.relatedQuery('licenceDocument')
-        .joinRelated('licenceDocumentRoles')
+        .innerJoinRelated('licenceDocumentRoles')
+        .innerJoin('licenceRoles', 'licenceRoles.id', 'licenceDocumentRoles.licenceRoleId')
         .where('licenceDocumentRoles.companyId', companyId)
+        .where('licenceRoles.name', 'licenceHolder')
     )
     .page(page - 1, DatabaseConfig.defaultPageSize)
 }

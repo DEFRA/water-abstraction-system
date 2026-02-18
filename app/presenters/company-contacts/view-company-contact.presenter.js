@@ -5,17 +5,19 @@
  * @module ViewCompanyContactPresenter
  */
 
-const { formatLongDate } = require('../base.presenter.js')
+const NotificationsTablePresenter = require('../notifications/notifications-table.presenter.js')
+const { formatEmail, formatLongDate } = require('../base.presenter.js')
 
 /**
  * Formats data for the '/company-contacts/{id}' page
  *
  * @param {module:CompanyModel} company - The customer from the companies table
  * @param {module:CompanyContactModel} companyContact - The customer contact from the company contacts table
+ * @param {module:NotificationModel[]} notifications - All notifications linked to the licence
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, companyContact) {
+function go(company, companyContact, notifications) {
   return {
     backLink: {
       href: `/system/companies/${company.id}/contacts`,
@@ -24,11 +26,12 @@ function go(company, companyContact) {
     contact: {
       abstractionAlerts: companyContact.abstractionAlerts ? 'Yes' : 'No',
       created: _created(companyContact),
-      email: companyContact.contact.email,
+      email: formatEmail(companyContact.contact.email),
       lastUpdated: _lastUpdated(companyContact),
       name: companyContact.contact.$name()
     },
     editContactLink: `/system/company-contacts/setup/${companyContact.id}/edit`,
+    notifications: NotificationsTablePresenter.go(notifications),
     pageTitle: `Contact details for ${companyContact.contact.$name()}`,
     pageTitleCaption: company.name,
     removeContactLink: `/system/company-contacts/${companyContact.id}/remove`

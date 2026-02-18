@@ -35,11 +35,11 @@ function go(payload) {
       .when('singleVolume', { is: 'yes', then: Joi.required() })
       .custom(_maxDecimals, 'Max decimals')
       .messages({
-        'any.invalid': 'Enter a number with no more than 6 decimal places',
-        'any.required': 'Enter a total figure',
-        'number.base': 'Enter a total figure',
-        'number.unsafe': 'Enter a smaller total figure',
-        'number.positive': 'Enter a total figure greater than zero'
+        'any.invalid': 'Enter a total amount with no more than 6 decimal places',
+        'any.required': 'Enter a total amount',
+        'number.base': 'Enter a number for the total amount',
+        'number.unsafe': 'Enter a positive total amount up to a maximum of 9007199254740991',
+        'number.positive': 'Enter a total amount greater than zero'
       })
   })
 

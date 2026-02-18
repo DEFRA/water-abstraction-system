@@ -12,6 +12,9 @@ const { expect } = Code
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
+// Things we need to stub
+const FetchCompanyContactsService = require('../../../../app/services/company-contacts/setup/fetch-company-contacts.service.js')
+
 // Thing under test
 const ViewCheckService = require('../../../../app/services/company-contacts/setup/view-check.service.js')
 
@@ -27,6 +30,8 @@ describe('Company Contacts - Setup - Check Service', () => {
     sessionData = { company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' }
 
     session = await SessionHelper.add({ data: sessionData })
+
+    Sinon.stub(FetchCompanyContactsService, 'go').returns(CustomersFixtures.companyContacts())
 
     yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
   })
@@ -54,7 +59,8 @@ describe('Company Contacts - Setup - Check Service', () => {
           title: 'Test'
         },
         pageTitle: 'Check contact',
-        pageTitleCaption: 'Tyrell Corporation'
+        pageTitleCaption: 'Tyrell Corporation',
+        warning: null
       })
     })
 

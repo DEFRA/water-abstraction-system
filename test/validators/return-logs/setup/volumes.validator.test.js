@@ -46,11 +46,11 @@ describe('Return Logs Setup - Volumes validator', () => {
         payload = { '2023-05-31T00:00:00.000Z': '10.1234567' }
       })
 
-      it('fails validation with the message "Enter a number with no more than 6 decimal places"', () => {
+      it('fails validation with the message "Enter a Volume with no more than 6 decimal places"', () => {
         const result = VolumesValidator.go(payload)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Enter a number with no more than 6 decimal places')
+        expect(result.error.details[0].message).to.equal('Enter a Volume with no more than 6 decimal places')
       })
     })
 
@@ -59,11 +59,11 @@ describe('Return Logs Setup - Volumes validator', () => {
         payload = { '2023-05-31T00:00:00.000Z': '-200' }
       })
 
-      it('fails validation with the message "Volume must be a positive number"', () => {
+      it('fails validation with the message "Volume cannot be negative"', () => {
         const result = VolumesValidator.go(payload)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Volume must be a positive number')
+        expect(result.error.details[0].message).to.equal('Volume cannot be negative')
       })
     })
 
@@ -81,15 +81,17 @@ describe('Return Logs Setup - Volumes validator', () => {
     })
 
     describe('because the user entered a number that exceeds the maximum safe number "9007199254740991"', () => {
+      const MAX_SAFE_NUMBER = 9007199254740991
+
       beforeEach(() => {
-        payload = { '2023-05-31T00:00:00.000Z': '9007199254740992' }
+        payload = { '2023-05-31T00:00:00.000Z': MAX_SAFE_NUMBER + 1 }
       })
 
-      it('fails validation with the message "Volume entered exceeds the maximum of 9999999999"', () => {
+      it('fails validation with the message "Volume must be blank or between 0 and 9999999999"', () => {
         const result = VolumesValidator.go(payload)
 
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal('Volume entered exceeds the maximum of 9999999999')
+        expect(result.error.details[0].message).to.equal('Volume must be blank or between 0 and 9999999999')
       })
     })
   })

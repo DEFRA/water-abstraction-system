@@ -33,7 +33,7 @@ describe('Company Contacts - Setup - Contact Email Presenter', () => {
           href: `/system/company-contacts/setup/${session.id}/contact-name`,
           text: 'Back'
         },
-        email: '',
+        email: null,
         pageTitle: 'Enter an email address for the contact',
         pageTitleCaption: 'Tyrell Corporation'
       })
@@ -56,7 +56,7 @@ describe('Company Contacts - Setup - Contact Email Presenter', () => {
         it('returns an empty string', () => {
           const result = ContactEmailPresenter.go(session)
 
-          expect(result.email).to.equal('')
+          expect(result.email).to.be.null()
         })
       })
     })

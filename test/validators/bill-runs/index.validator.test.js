@@ -122,7 +122,7 @@ describe('Bill Runs - Index validator', () => {
           const result = IndexValidator.go(payload, regions)
 
           expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal('The Number cannot exceed 999999')
+          expect(result.error.details[0].message).to.equal('The Number must be between 1 and 999999')
           expect(result.error.details[0].path[0]).to.equal('number')
         })
       })
@@ -216,9 +216,7 @@ describe('Bill Runs - Index validator', () => {
           const result = IndexValidator.go(payload, regions)
 
           expect(result.value).to.exist()
-          expect(result.error.details[0].message).to.equal(
-            `The Year created cannot exceed the current year of ${currentYear}`
-          )
+          expect(result.error.details[0].message).to.equal(`The Year created must be between 2014 and ${currentYear}`)
           expect(result.error.details[0].path[0]).to.equal('yearCreated')
         })
       })
