@@ -49,21 +49,31 @@ function _redirectUrl(session) {
 }
 
 async function _save(session, payload) {
-  session.accountType = payload.accountType
+  if (session.accountType && session.accountType !== payload.accountType) {
+    session.addressJourney = null
+    session.addressSelected = null
+    session.fao = null
+    session.contactSelected = null
+    session.contactName = null
+    session.existingAddress = null
 
-  if (payload.accountType === 'company') {
-    delete session.searchIndividualInput
-  } else {
-    session.searchIndividualInput = payload.searchIndividualInput
-    delete session.companyName
+    if (payload.accountType === 'individual') {
+      session.companiesHouseId = null
+      session.companySearch = null
+    } else {
+      session.searchIndividualInput = null
+    }
   }
+
+  session.accountType = payload.accountType
+  session.searchIndividualInput = payload.searchIndividualInput ?? null
 
   return session.$update()
 }
 
 function _submissionData(session, payload) {
   session.accountType = payload.accountType
-  session.searchInput = payload.searchIndividualInput ?? null
+  session.searchIndividualInput = payload.accountType === 'individual' ? payload.searchIndividualInput : null
 
   return AccountTypePresenter.go(session)
 }

@@ -52,17 +52,22 @@ function _redirectUrl(session) {
 }
 
 async function _save(session, payload) {
+  if (session.addressSelected && session.addressSelected !== payload.addressSelected) {
+    session.addressJourney = null
+    session.contactName = null
+    session.contactSelected = null
+    session.fao = null
+  }
+
   session.addressSelected = payload.addressSelected
 
-  if (session.addressSelected === 'new') {
+  if (!session.addressJourney && payload.addressSelected === 'new') {
     session.addressJourney = {
       address: {},
       backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-address`, text: 'Back' },
       pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
       redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
     }
-  } else {
-    delete session.addressJourney
   }
 
   return session.$update()

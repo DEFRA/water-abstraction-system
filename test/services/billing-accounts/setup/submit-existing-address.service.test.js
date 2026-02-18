@@ -65,6 +65,83 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
         redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
       })
     })
+
+    describe('and the user has returned to the page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          addressSelected: addresses[0].address.id,
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitExistingAddressService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            addressSelected: payload.addressSelected
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitExistingAddressService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
+        })
+      })
+    })
+
+    describe('and the user selects an existing address after already having set up a new address', () => {
+      beforeEach(async () => {
+        sessionData = {
+          addressJourney: {
+            address: {},
+            backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-account`, text: 'Back' },
+            pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+            redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
+          },
+          addressSelected: 'new',
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          contactName: 'Customer Name',
+          contactSelected: 'new',
+          fao: 'yes'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitExistingAddressService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            addressJourney: null,
+            addressSelected: payload.addressSelected,
+            contactName: null,
+            contactSelected: null,
+            fao: null
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitExistingAddressService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
+        })
+      })
+    })
   })
 
   describe('when the user picks to set up a new address', () => {
@@ -103,45 +180,93 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
         redirectUrl: `/system/address/${session.id}/postcode`
       })
     })
-  })
 
-  describe('when the user selects an existing address after already having set up a new address', () => {
-    beforeEach(async () => {
-      payload = {
-        addressSelected: addresses[0].address.id
-      }
+    describe('and the user has returned to the page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          addressJourney: {
+            address: {},
+            backLink: {
+              href: `/system/billing-accounts/setup/${session.id}/existing-address`,
+              text: 'Back'
+            },
+            pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+            redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
+          },
+          addressSelected: 'new',
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+        }
 
-      sessionData = {
-        addressJourney: {
-          address: {},
-          backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-account`, text: 'Back' },
-          pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-          redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
-        },
-        billingAccount: BillingAccountsFixture.billingAccount().billingAccount
-      }
+        session = await SessionHelper.add({ data: sessionData })
+      })
 
-      session = await SessionHelper.add({ data: sessionData })
+      it('saves the submitted value', async () => {
+        await SubmitExistingAddressService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            addressJourney: sessionData.addressJourney,
+            addressSelected: 'new'
+          },
+          { skip: ['addressJourney', 'billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitExistingAddressService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/address/${session.id}/postcode`
+        })
+      })
     })
 
-    it('saves the submitted value', async () => {
-      await SubmitExistingAddressService.go(session.id, payload)
+    describe('when the user selects a new address after already having chosen an existing address', () => {
+      beforeEach(async () => {
+        sessionData = {
+          addressSelected: addresses[0].address.id,
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          contactName: 'Customer Name',
+          contactSelected: 'new',
+          fao: 'yes'
+        }
 
-      const refreshedSession = await session.$query()
+        session = await SessionHelper.add({ data: sessionData })
+      })
 
-      expect(refreshedSession.data).to.equal(
-        {
-          addressSelected: payload.addressSelected
-        },
-        { skip: ['billingAccount'] }
-      )
-    })
+      it('saves the submitted value', async () => {
+        await SubmitExistingAddressService.go(session.id, payload)
 
-    it('continues the journey', async () => {
-      const result = await SubmitExistingAddressService.go(session.id, payload)
+        const refreshedSession = await session.$query()
 
-      expect(result).to.equal({
-        redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
+        expect(refreshedSession.data).to.equal(
+          {
+            addressJourney: {
+              address: {},
+              backLink: {
+                href: `/system/billing-accounts/setup/${session.id}/existing-address`,
+                text: 'Back'
+              },
+              pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+              redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
+            },
+            addressSelected: payload.addressSelected,
+            contactName: null,
+            contactSelected: null,
+            fao: null
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitExistingAddressService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/address/${session.id}/postcode`
+        })
       })
     })
   })

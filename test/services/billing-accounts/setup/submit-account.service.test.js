@@ -31,7 +31,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     await session.$query().delete()
   })
 
-  describe('when the user picks the customer option', () => {
+  describe('when the user picks the "customer" option', () => {
     beforeEach(async () => {
       payload = {
         accountSelected: 'customer'
@@ -52,42 +52,100 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       )
     })
 
-    it('returns the correct details the controller needs to redirect the journey', async () => {
+    it('continues the journey', async () => {
       const result = await SubmitAccountService.go(session.id, payload)
 
-      expect(result).to.equal({
-        accountSelected: 'customer'
+      expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/existing-address`)
+    })
+
+    describe('and the user has returned to the page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          accountSelected: 'customer'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitAccountService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            accountSelected: 'customer',
+            searchInput: null
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitAccountService.go(session.id, payload)
+
+        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/existing-address`)
       })
     })
-  })
 
-  describe('when the user picks the customer option but there is a previously saved search input', () => {
-    beforeEach(async () => {
-      payload = {
-        accountSelected: 'customer',
-        searchInput: 'Customer Name'
-      }
-    })
+    describe('and the user had previously completed the "another" journey', () => {
+      beforeEach(async () => {
+        sessionData = {
+          accountSelected: 'another',
+          accountType: 'individual',
+          addressJourney: {
+            address: {},
+            backLink: {
+              href: `/system/billing-accounts/setup/${session.id}/existing-address`,
+              text: 'Back'
+            },
+            pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+            redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
+          },
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          contactName: 'Contact Name',
+          companiesHouseId: '12345678',
+          companySearch: 'Company Name',
+          contactSelected: 'Existing Contact',
+          existingAddress: 'yes',
+          existingAccount: 'new',
+          fao: 'yes',
+          searchIndividualInput: 'Customer Name',
+          searchInput: 'Existing Customer Name'
+        }
 
-    it('saves the submitted value and deletes the search input', async () => {
-      await SubmitAccountService.go(session.id, payload)
+        session = await SessionHelper.add({ data: sessionData })
+      })
 
-      const refreshedSession = await session.$query()
+      it('saves the submitted value and deletes the other previously saved data', async () => {
+        await SubmitAccountService.go(session.id, payload)
 
-      expect(refreshedSession.data).to.equal(
-        {
-          accountSelected: 'customer',
-          searchInput: null
-        },
-        { skip: ['billingAccount'] }
-      )
-    })
+        const refreshedSession = await session.$query()
 
-    it('returns the correct details the controller needs to redirect the journey', async () => {
-      const result = await SubmitAccountService.go(session.id, payload)
+        expect(refreshedSession.data).to.equal(
+          {
+            accountSelected: 'customer',
+            accountType: null,
+            addressJourney: null,
+            addressSelected: null,
+            companiesHouseId: null,
+            companySearch: null,
+            contactName: null,
+            contactSelected: null,
+            existingAccount: null,
+            existingAddress: null,
+            fao: null,
+            searchIndividualInput: null,
+            searchInput: null
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
 
-      expect(result).to.equal({
-        accountSelected: 'customer'
+      it('continues the journey', async () => {
+        const result = await SubmitAccountService.go(session.id, payload)
+
+        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/existing-address`)
       })
     })
   })
@@ -100,7 +158,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       }
     })
 
-    it('saves the submitted value', async () => {
+    it('saves the submitted values', async () => {
       await SubmitAccountService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
@@ -114,11 +172,94 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       )
     })
 
-    it('returns the correct details the controller needs to redirect the journey', async () => {
+    it('continues the journey', async () => {
       const result = await SubmitAccountService.go(session.id, payload)
 
-      expect(result).to.equal({
-        accountSelected: 'another'
+      expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/existing-account`)
+    })
+
+    describe('and the user has returned to the page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          accountSelected: 'another',
+          searchInput: 'Customer Name'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted values', async () => {
+        await SubmitAccountService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            accountSelected: 'another',
+            searchInput: 'Customer Name'
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitAccountService.go(session.id, payload)
+
+        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/existing-account`)
+      })
+    })
+
+    describe('and the user had previously completed the "customer" journey', () => {
+      beforeEach(async () => {
+        payload = {
+          accountSelected: 'another',
+          searchInput: 'Customer Name'
+        }
+
+        sessionData = {
+          accountSelected: 'customer',
+          addressJourney: {
+            address: {},
+            backLink: {
+              href: `/system/billing-accounts/setup/${session.id}/existing-address`,
+              text: 'Back'
+            },
+            pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+            redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
+          },
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          contactName: 'Contact Name',
+          contactSelected: 'new',
+          existingAddress: 'new',
+          fao: 'yes'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value and deletes the other previously saved data', async () => {
+        await SubmitAccountService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            accountSelected: 'another',
+            addressJourney: null,
+            contactName: null,
+            contactSelected: null,
+            existingAddress: null,
+            fao: null,
+            searchInput: 'Customer Name'
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitAccountService.go(session.id, payload)
+
+        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/existing-account`)
       })
     })
   })

@@ -52,17 +52,31 @@ function _redirectUrl(session) {
 }
 
 async function _save(session, payload) {
+  if (session.existingAccount && session.existingAccount !== payload.existingAccount) {
+    session.addressJourney = null
+    session.fao = null
+    session.contactSelected = null
+    session.contactName = null
+    session.existingAddress = null
+
+    if (payload.existingAccount !== 'new') {
+      session.accountType = null
+      session.addressSelected = null
+      session.companiesHouseId = null
+      session.companySearch = null
+      session.searchIndividualInput = null
+    }
+  }
+
   session.existingAccount = payload.existingAccount
 
-  if (session.existingAccount !== 'new') {
+  if (!session.addressJourney && session.existingAccount !== 'new') {
     session.addressJourney = {
       address: {},
       backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-account`, text: 'Back' },
       pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
       redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
     }
-  } else {
-    delete session.addressJourney
   }
 
   return session.$update()
