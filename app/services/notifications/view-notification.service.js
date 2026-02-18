@@ -18,17 +18,19 @@ const ViewNotificationPresenter = require('../../presenters/notifications/view-n
  * the notice reference in `pageTitleCaption` instead of in the metadata.
  *
  * @param {string} notificationId - The UUID of the notifications to view
- * @param {string} [licenceId=null] - If coming from the licence communications page, the UUID of the licence that
+ * @param {string|undefined} [licenceId=null] - If coming from the licence communications page, the UUID of the licence that
  * relates to the notification
- * @param {string} [returnLogId=null] - If coming from the return log page, the UUID of the return log that
+ * @param {string|undefined} [returnLogId=null] - If coming from the return log page, the UUID of the return log that
+ * relates to the notification
+ * @param {string|undefined} [companyContactId=null] - If coming from the company contact page, the UUID of the company contact that
  * relates to the notification
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the view notification template.
  */
-async function go(notificationId, licenceId = null, returnLogId = null) {
+async function go(notificationId, licenceId = null, returnLogId = null, companyContactId = null) {
   const { licence, notification } = await FetchNotificationService.go(notificationId, licenceId)
 
-  return ViewNotificationPresenter.go(notification, licence, returnLogId)
+  return ViewNotificationPresenter.go(notification, licence, returnLogId, companyContactId)
 }
 
 module.exports = {
