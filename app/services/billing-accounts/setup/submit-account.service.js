@@ -55,15 +55,15 @@ async function _save(session, payload) {
     session.fao = null
     session.contactSelected = null
     session.contactName = null
-    session.existingAddress = null
 
     if (payload.accountSelected === 'customer') {
       session.accountType = null
-      session.addressSelected = null
       session.companiesHouseId = null
       session.companySearch = null
       session.existingAccount = null
       session.searchIndividualInput = null
+    } else {
+      session.addressSelected = null
     }
   }
 

@@ -100,19 +100,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
     describe('and the user selects an existing address after already having set up a new address', () => {
       beforeEach(async () => {
-        sessionData = {
-          addressJourney: {
-            address: {},
-            backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-account`, text: 'Back' },
-            pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-            redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
-          },
-          addressSelected: 'new',
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-          contactName: 'Customer Name',
-          contactSelected: 'new',
-          fao: 'yes'
-        }
+        sessionData = _newAddressSessionData(session)
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -124,11 +112,8 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            addressJourney: null,
-            addressSelected: payload.addressSelected,
-            contactName: null,
-            contactSelected: null,
-            fao: null
+            ..._newAddressExpectedValues(session),
+            addressSelected: payload.addressSelected
           },
           { skip: ['billingAccount'] }
         )
@@ -158,15 +143,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
       expect(refreshedSession.data).to.equal(
         {
-          addressJourney: {
-            address: {},
-            backLink: {
-              href: `/system/billing-accounts/setup/${session.id}/existing-address`,
-              text: 'Back'
-            },
-            pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-            redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
-          },
+          addressJourney: _newAddressSessionData(session).addressJourney,
           addressSelected: 'new'
         },
         { skip: ['billingAccount'] }
@@ -184,15 +161,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
     describe('and the user has returned to the page and made the same choice', () => {
       beforeEach(async () => {
         sessionData = {
-          addressJourney: {
-            address: {},
-            backLink: {
-              href: `/system/billing-accounts/setup/${session.id}/existing-address`,
-              text: 'Back'
-            },
-            pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-            redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
-          },
+          addressJourney: _newAddressSessionData(session).addressJourney,
           addressSelected: 'new',
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount
         }
@@ -225,13 +194,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
     describe('when the user selects a new address after already having chosen an existing address', () => {
       beforeEach(async () => {
-        sessionData = {
-          addressSelected: addresses[0].address.id,
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-          contactName: 'Customer Name',
-          contactSelected: 'new',
-          fao: 'yes'
-        }
+        sessionData = _commonSessionData(session)
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -243,19 +206,9 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            addressJourney: {
-              address: {},
-              backLink: {
-                href: `/system/billing-accounts/setup/${session.id}/existing-address`,
-                text: 'Back'
-              },
-              pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-              redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
-            },
-            addressSelected: payload.addressSelected,
-            contactName: null,
-            contactSelected: null,
-            fao: null
+            ..._commonSessionData(sessionData),
+            addressJourney: _newAddressSessionData(session).addressJourney,
+            addressSelected: payload.addressSelected
           },
           { skip: ['billingAccount'] }
         )
@@ -309,4 +262,49 @@ function _addresses() {
       }
     }
   ]
+}
+
+function _commonExpectedValues() {
+  return {
+    accountSelected: 'existing',
+    addressJourney: null,
+    contactName: null,
+    contactSelected: null,
+    fao: null
+  }
+}
+
+function _newAddressExpectedValues() {
+  return {
+    ..._commonExpectedValues(),
+    addressSelected: 'new'
+  }
+}
+
+function _newAddressSessionData(session) {
+  return {
+    ..._commonSessionData(session),
+    addressSelected: 'new',
+    addressJourney: {
+      address: {},
+      backLink: {
+        href: `/system/billing-accounts/setup/${session.id}/existing-address`,
+        text: 'Back'
+      },
+      pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+      redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
+    }
+  }
+}
+
+function _commonSessionData() {
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+
+  return {
+    accountSelected: 'existing',
+    billingAccount,
+    contactName: 'Contact Name',
+    contactSelected: 'new',
+    fao: 'yes'
+  }
 }

@@ -57,7 +57,6 @@ async function _save(session, payload) {
     session.fao = null
     session.contactSelected = null
     session.contactName = null
-    session.existingAddress = null
 
     if (payload.existingAccount !== 'new') {
       session.accountType = null

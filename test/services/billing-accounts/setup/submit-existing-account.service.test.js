@@ -115,29 +115,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
     describe('and the user had previously completed the "new" journey', () => {
       beforeEach(async () => {
-        sessionData = {
-          accountSelected: 'another',
-          accountType: 'individual',
-          addressJourney: {
-            address: {},
-            backLink: {
-              href: `/system/billing-accounts/setup/${session.id}/existing-address`,
-              text: 'Back'
-            },
-            pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-            redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
-          },
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-          contactName: 'Contact Name',
-          companiesHouseId: '12345678',
-          companySearch: 'Company Name',
-          contactSelected: 'Existing Contact',
-          existingAddress: 'yes',
-          existingAccount: 'new',
-          fao: 'yes',
-          searchIndividualInput: 'Customer Name',
-          searchInput: 'Existing Customer Name'
-        }
+        sessionData = _newAccountSessionData(session)
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -149,24 +127,14 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            accountSelected: 'another',
-            accountType: null,
+            ..._newAccountExpectedValues(session),
             addressJourney: {
               address: {},
               backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-account`, text: 'Back' },
               pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
               redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
             },
-            addressSelected: null,
-            companiesHouseId: null,
-            companySearch: null,
-            contactName: null,
-            contactSelected: null,
-            existingAccount: companies[0].id,
-            existingAddress: null,
-            fao: null,
-            searchIndividualInput: null,
-            searchInput: 'Existing Customer Name'
+            existingAccount: companies[0].id
           },
           { skip: ['billingAccount'] }
         )
@@ -244,29 +212,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
     describe('and the user had previously completed the existing account journey', () => {
       beforeEach(async () => {
-        payload = {
-          existingAccount: 'new'
-        }
-
-        sessionData = {
-          accountSelected: 'another',
-          addressJourney: {
-            address: {},
-            backLink: {
-              href: `/system/billing-accounts/setup/${session.id}/existing-account`,
-              text: 'Back'
-            },
-            pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-            redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
-          },
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-          contactName: 'Contact Name',
-          contactSelected: 'new',
-          existingAccount: companies[0].id,
-          existingAddress: 'yes',
-          fao: 'yes',
-          searchInput: 'Existing Customer Name'
-        }
+        sessionData = _existingAccountSessionData(session)
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -278,14 +224,9 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            accountSelected: 'another',
+            ..._commonExpectedValues(),
             addressJourney: null,
-            contactName: null,
-            contactSelected: null,
-            existingAccount: 'new',
-            existingAddress: null,
-            fao: null,
-            searchInput: 'Existing Customer Name'
+            existingAccount: 'new'
           },
           { skip: ['billingAccount'] }
         )
@@ -331,4 +272,64 @@ function _companies() {
       name: 'Company Name Ltd'
     }
   ]
+}
+
+function _commonExpectedValues() {
+  return {
+    accountSelected: 'another',
+    addressJourney: null,
+    contactName: null,
+    contactSelected: null,
+    fao: null,
+    searchInput: 'Customer Name'
+  }
+}
+
+function _newAccountExpectedValues() {
+  return {
+    ..._commonExpectedValues(),
+    accountType: null,
+    addressSelected: null,
+    companiesHouseId: null,
+    companySearch: null,
+    existingAccount: null,
+    searchIndividualInput: null
+  }
+}
+
+function _newAccountSessionData(session) {
+  return {
+    ..._commonSessionData(session),
+    accountType: 'company',
+    companiesHouseId: '12345678',
+    companySearch: 'Company Name',
+    existingAccount: 'new',
+    searchIndividualInput: 'Contact Name'
+  }
+}
+
+function _existingAccountSessionData(session) {
+  return {
+    ..._commonSessionData(session),
+    addressJourney: {
+      address: {},
+      backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-account`, text: 'Back' },
+      pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+      redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
+    },
+    existingAccount: 'customer'
+  }
+}
+
+function _commonSessionData() {
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+
+  return {
+    accountSelected: 'another',
+    billingAccount,
+    contactName: 'Contact Name',
+    contactSelected: 'new',
+    fao: 'yes',
+    searchInput: 'Customer Name'
+  }
 }
