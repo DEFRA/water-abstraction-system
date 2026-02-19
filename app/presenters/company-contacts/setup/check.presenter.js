@@ -44,12 +44,12 @@ function go(session, savedCompanyContacts) {
  * 2. Similarity Check: Check if any OTHER record matches the unique criteria.
  */
 function _matchingContact(email, name, savedCompanyContacts) {
-  const lowerEmail = email.toLowerCase()
+  const lowerEmail = email?.toLowerCase()
   const lowerName = name.toLowerCase()
 
   return savedCompanyContacts.some((savedCompanyContact) => {
     return (
-      savedCompanyContact.contact.email.toLowerCase() === lowerEmail &&
+      savedCompanyContact.contact.email?.toLowerCase() === lowerEmail &&
       savedCompanyContact.contact.$name().toLowerCase() === lowerName
     )
   })

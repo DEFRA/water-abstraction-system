@@ -13,10 +13,11 @@ async function viewCompanyContact(request, h) {
   const {
     params: { id },
     auth,
-    yar
+    yar,
+    query: { page = 1 }
   } = request
 
-  const pageData = await ViewCompanyContactService.go(id, auth, yar)
+  const pageData = await ViewCompanyContactService.go(id, auth, yar, page)
 
   return h.view(`company-contacts/view-company-contact.njk`, pageData)
 }
