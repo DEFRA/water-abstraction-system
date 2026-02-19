@@ -11,8 +11,8 @@ const { expect } = Code
 // Test helpers
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchNotificationService = require('../../../app/services/notifications/fetch-notification.service.js')
@@ -21,6 +21,7 @@ const FetchNotificationService = require('../../../app/services/notifications/fe
 const ViewNotificationService = require('../../../app/services/notifications/view-notification.service.js')
 
 describe('Notifications - View Notification service', () => {
+  let companyContactId
   let licence
   let notice
   let notification
@@ -30,6 +31,11 @@ describe('Notifications - View Notification service', () => {
     notice = NoticesFixture.returnsInvitation()
     notification = NotificationsFixture.returnsInvitationEmail(notice)
     notification.event = notice
+
+    // These will be undefined if not in the query string
+    companyContactId = undefined
+    licence = undefined
+    returnLogId = undefined
   })
 
   afterEach(() => {
@@ -110,7 +116,7 @@ describe('Notifications - View Notification service', () => {
       })
 
       it('returns the page data for the view', async () => {
-        const result = await ViewNotificationService.go(notification.id, null, returnLogId)
+        const result = await ViewNotificationService.go(notification.id, licence, returnLogId)
 
         expect(result).to.equal({
           activeNavBar: 'notices',
@@ -119,6 +125,39 @@ describe('Notifications - View Notification service', () => {
           backLink: {
             href: `/system/return-logs/${returnLogId}`,
             text: 'Go back to return log'
+          },
+          contents: notification.plaintext,
+          errorDetails: null,
+          messageType: 'email',
+          pageTitle: 'Returns invitation',
+          pageTitleCaption: `Notice ${notice.referenceCode}`,
+          paperForm: null,
+          reference: null,
+          returnedDate: null,
+          sentDate: '2 April 2025',
+          sentBy: notice.issuer,
+          sentTo: notification.recipient,
+          status: notification.status
+        })
+      })
+    })
+
+    describe('from the view company contacts page', () => {
+      beforeEach(() => {
+        companyContactId = generateUUID()
+        Sinon.stub(FetchNotificationService, 'go').resolves({ licence: null, notification })
+      })
+
+      it('returns the page data for the view', async () => {
+        const result = await ViewNotificationService.go(notification.id, licence, returnLogId, companyContactId)
+
+        expect(result).to.equal({
+          activeNavBar: 'notices',
+          address: [],
+          alertDetails: null,
+          backLink: {
+            href: `/system/company-contacts/${companyContactId}`,
+            text: 'Go back to company contact'
           },
           contents: notification.plaintext,
           errorDetails: null,
