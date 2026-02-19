@@ -38,15 +38,11 @@ function _abstractionAlerts(session) {
   return session.abstractionAlerts === 'yes'
 }
 
-function _email(session) {
-  return session.email.toLowerCase()
-}
-
 async function _createCompanyContact(session, auth, yar) {
   const companyContact = {
     createdBy: auth.credentials.user.id,
     abstractionAlerts: _abstractionAlerts(session),
-    email: _email(session),
+    email: session.email.toLowerCase(),
     name: session.name
   }
 
@@ -60,7 +56,7 @@ async function _updateCompanyContact(session, auth, yar) {
     id: session.companyContact.id,
     abstractionAlerts: _abstractionAlerts(session),
     contactId: session.companyContact.contact.id,
-    email: _email(session),
+    email: session.email?.toLowerCase() || null,
     name: session.name,
     updatedBy: auth.credentials.user.id
   }
