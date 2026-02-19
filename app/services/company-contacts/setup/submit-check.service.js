@@ -24,7 +24,11 @@ async function go(sessionId, yar, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
   if (session.companyContact) {
-    await _updateCompanyContact(session, auth, yar)
+    const dataChanged = _determineCreateOrUpdate(session)
+
+    if (dataChanged) {
+      await _updateCompanyContact(session, auth, yar)
+    }
 
     return { redirectUrl: `/system/company-contacts/${session.companyContact.id}` }
   }
@@ -40,6 +44,18 @@ function _abstractionAlerts(session) {
 
 function _email(session) {
   return session.email.toLowerCase()
+}
+
+function _determineCreateOrUpdate(session) {
+  if (
+    session.abstractionAlerts === session.data?.abstractionAlerts &&
+    session.email === session.data?.email &&
+    session.name === session.data?.name
+  ) {
+    return false
+  }
+
+  return true
 }
 
 async function _createCompanyContact(session, auth, yar) {

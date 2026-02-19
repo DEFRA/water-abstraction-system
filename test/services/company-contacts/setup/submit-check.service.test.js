@@ -20,21 +20,23 @@ const UpdateCompanyContactService = require('../../../../app/services/company-co
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/company-contacts/setup/submit-check.service.js')
 
-describe('Company Contacts - Setup - Check Service', () => {
+describe.only('Company Contacts - Setup - Check Service', () => {
   let auth
   let company
   let companyContact
   let session
   let sessionData
   let yarStub
+  let createStub
+  let updateStub
 
   beforeEach(async () => {
     auth = { credentials: { user: { id: generateUUID() } } }
 
     company = CustomersFixtures.company()
 
-    Sinon.stub(CreateCompanyContactService, 'go').resolves()
-    Sinon.stub(UpdateCompanyContactService, 'go').resolves()
+    createStub = Sinon.stub(CreateCompanyContactService, 'go').resolves()
+    updateStub = Sinon.stub(UpdateCompanyContactService, 'go').resolves()
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -89,51 +91,84 @@ describe('Company Contacts - Setup - Check Service', () => {
     })
   })
 
-  describe('when updating a company contact', () => {
-    beforeEach(async () => {
-      companyContact = CustomersFixtures.companyContact()
+  describe('when updating / editing a company contact', () => {
+    describe('and the company contact is updated', () => {
+      beforeEach(async () => {
+        companyContact = CustomersFixtures.companyContact()
 
-      sessionData = {
-        abstractionAlerts: 'yes',
-        company,
-        companyContact,
-        email: 'eric@test.com',
-        name: 'Eric'
-      }
+        sessionData = {
+          abstractionAlerts: 'yes',
+          company,
+          companyContact,
+          email: 'eric@test.com',
+          name: 'Eric'
+        }
 
-      session = await SessionHelper.add({ data: sessionData })
-    })
+        session = await SessionHelper.add({ data: sessionData })
+      })
 
-    it('returns the redirect URL', async () => {
-      const result = await SubmitCheckService.go(session.id, yarStub, auth)
+      it('returns the redirect URL', async () => {
+        const result = await SubmitCheckService.go(session.id, yarStub, auth)
 
-      expect(result).to.equal({
-        redirectUrl: `/system/company-contacts/${companyContact.id}`
+        expect(result).to.equal({
+          redirectUrl: `/system/company-contacts/${companyContact.id}`
+        })
+      })
+
+      it('persists the company contact details', async () => {
+        await SubmitCheckService.go(session.id, yarStub, auth)
+
+        const [actualContact] = UpdateCompanyContactService.go.args[0]
+
+        expect(actualContact).to.equal({
+          id: companyContact.id,
+          abstractionAlerts: true,
+          contactId: companyContact.contact.id,
+          email: 'eric@test.com',
+          name: 'Eric',
+          updatedBy: auth.credentials.user.id
+        })
+      })
+
+      it('sets a notification', async () => {
+        await SubmitCheckService.go(session.id, yarStub, auth)
+
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('notification')
+        expect(bannerMessage).to.equal({ titleText: 'Updated', text: `Contact details updated.` })
       })
     })
 
-    it('persists the company contact details', async () => {
-      await SubmitCheckService.go(session.id, yarStub, auth)
+    describe('and the company contact is not updated (no values have been changed)', () => {
+      beforeEach(async () => {
+        companyContact = CustomersFixtures.companyContact()
 
-      const [actualContact] = UpdateCompanyContactService.go.args[0]
+        sessionData = {
+          abstractionAlerts: companyContact.abstractionAlerts === 'yes',
+          company,
+          companyContact,
+          email: companyContact.contact.email,
+          name: companyContact.contact.department
+        }
 
-      expect(actualContact).to.equal({
-        id: companyContact.id,
-        abstractionAlerts: true,
-        contactId: companyContact.contact.id,
-        email: 'eric@test.com',
-        name: 'Eric',
-        updatedBy: auth.credentials.user.id
+        session = await SessionHelper.add({ data: sessionData })
       })
-    })
 
-    it('sets a notification', async () => {
-      await SubmitCheckService.go(session.id, yarStub, auth)
+      it('returns the redirect URL', async () => {
+        const result = await SubmitCheckService.go(session.id, yarStub, auth)
 
-      const [flashType, bannerMessage] = yarStub.flash.args[0]
+        expect(result).to.equal({
+          redirectUrl: `/system/company-contacts/${companyContact.id}`
+        })
+      })
 
-      expect(flashType).to.equal('notification')
-      expect(bannerMessage).to.equal({ titleText: 'Updated', text: `Contact details updated.` })
+      it('does not persists the company contact details', async () => {
+        await SubmitCheckService.go(session.id, yarStub, auth)
+
+        expect(createStub.called).to.be.false()
+        expect(updateStub.called).to.be.false()
+      })
     })
   })
 
