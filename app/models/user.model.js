@@ -172,6 +172,28 @@ class UserModel extends BaseModel {
   }
 
   /**
+   * Returns whether the user is an internal user
+   *
+   * Each user record has an `application` field that indicates whether they are an internal user (`application` is
+   * `water_admin`) or an external user (where `application` is `water_vml`).
+   *
+   * If the user is internal, we return `true`. If they are external we return `false`.
+   *
+   * Technically, the database does allow a value of `water_dev` as well, and the field could theoretically be `null`,
+   * but we have no user records with those values and they don't mean anything within the application, so we treat them
+   * the same as external users.
+   *
+   * @returns {boolean} whether the user is internal
+   */
+  $internal() {
+    if (this.application === 'water_admin') {
+      return true
+    }
+
+    return false
+  }
+
+  /**
    * Returns details of the user's permissions for internal users (always null for external).
    *
    * > We recommend adding the `permissions` modifier to your query if you need to determine a user's permissions

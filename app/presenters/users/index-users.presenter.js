@@ -45,7 +45,7 @@ function _userRowData(users) {
       link: `/user/${userId}/status`,
       permissions: application === 'water_admin' ? user.$permissions().label : '',
       status: user.$status(),
-      type: application === 'water_admin' ? 'Internal' : 'External'
+      type: user.$internal() ? 'Internal' : 'External'
     }
   })
 }
