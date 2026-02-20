@@ -20,37 +20,50 @@ async function go(userId) {
   const user = await UserModel.query()
     .select(['id', 'username'])
     .modify('status')
-    .withGraphFetched('licenceEntity.licenceEntityRoles.companyEntity.licenceDocumentHeaders.licence')
-    .withGraphFetched('licenceEntity.userVerifications.companyEntity')
-    .withGraphFetched('licenceEntity.userVerifications.licenceDocumentHeaders.licence')
-    .modifyGraph('licenceEntity', (builder) => {
-      builder.select(['id'])
-    })
-    .modifyGraph('licenceEntity.licenceEntityRoles', (builder) => {
-      builder.select(['role'])
-    })
-    .modifyGraph('licenceEntity.licenceEntityRoles.companyEntity', (builder) => {
-      builder.select(['id', 'name'])
-    })
-    .modifyGraph('licenceEntity.licenceEntityRoles.companyEntity.licenceDocumentHeaders', (builder) => {
-      builder.select(['licenceRef', 'metadata'])
-      builder.orderBy('licenceRef', 'asc')
-    })
-    .modifyGraph('licenceEntity.licenceEntityRoles.companyEntity.licenceDocumentHeaders.licence', (builder) => {
-      builder.select(['id'])
-    })
-    .modifyGraph('licenceEntity.userVerifications', (builder) => {
-      builder.select(['createdAt', 'verificationCode']).whereNull('verifiedAt')
-    })
-    .modifyGraph('licenceEntity.userVerifications.companyEntity', (builder) => {
-      builder.select(['id', 'name'])
-    })
-    .modifyGraph('licenceEntity.userVerifications.licenceDocumentHeaders', (builder) => {
-      builder.select(['licenceRef', 'metadata'])
-      builder.orderBy('licenceRef', 'asc')
-    })
-    .modifyGraph('licenceEntity.userVerifications.licenceDocumentHeaders.licence', (builder) => {
-      builder.select(['id'])
+    .withGraphFetched('licenceEntity')
+    .modifyGraph('licenceEntity', (licenceEntityBuilder) => {
+      licenceEntityBuilder
+        .select(['id'])
+        .withGraphFetched('licenceEntityRoles')
+        .modifyGraph('licenceEntityRoles', (licenceEntityRolesBuilder) => {
+          licenceEntityRolesBuilder
+            .select(['role'])
+            .withGraphFetched('companyEntity')
+            .modifyGraph('companyEntity', (companyEntityBuilder) => {
+              companyEntityBuilder
+                .select(['id', 'name'])
+                .withGraphFetched('licenceDocumentHeaders')
+                .modifyGraph('licenceDocumentHeaders', (licenceDocumentHeadersBuilder) => {
+                  licenceDocumentHeadersBuilder
+                    .select(['licenceRef', 'metadata'])
+                    .orderBy('licenceRef', 'asc')
+                    .withGraphFetched('licence')
+                    .modifyGraph('licence', (licenceBuilder) => {
+                      licenceBuilder.select(['id'])
+                    })
+                })
+            })
+        })
+        .withGraphFetched('userVerifications')
+        .modifyGraph('userVerifications', (userVerificationsBuilder) => {
+          userVerificationsBuilder
+            .select(['createdAt', 'verificationCode'])
+            .whereNull('verifiedAt')
+            .withGraphFetched('companyEntity')
+            .modifyGraph('companyEntity', (companyEntityBuilder) => {
+              companyEntityBuilder.select(['id', 'name'])
+            })
+            .withGraphFetched('licenceDocumentHeaders')
+            .modifyGraph('licenceDocumentHeaders', (licenceDocumentHeadersBuilder) => {
+              licenceDocumentHeadersBuilder
+                .select(['licenceRef', 'metadata'])
+                .orderBy('licenceRef', 'asc')
+                .withGraphFetched('licence')
+                .modifyGraph('licence', (licenceBuilder) => {
+                  licenceBuilder.select(['id'])
+                })
+            })
+        })
     })
     .findById(userId)
 
