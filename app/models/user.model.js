@@ -186,11 +186,7 @@ class UserModel extends BaseModel {
    * @returns {boolean} whether the user is internal
    */
   $internal() {
-    if (this.application === 'water_admin') {
-      return true
-    }
-
-    return false
+    return this.application === 'water_admin'
   }
 
   /**
@@ -229,7 +225,7 @@ class UserModel extends BaseModel {
    * For external users it returns NULL
    */
   $permissions() {
-    if (this.application === 'water_vml') {
+    if (!this.$internal()) {
       return null
     }
 
