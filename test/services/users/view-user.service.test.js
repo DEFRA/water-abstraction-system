@@ -8,8 +8,11 @@ const Sinon = require('sinon')
 const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const UsersFixture = require('../../support/fixtures/users.fixture.js')
+
 // Things we want to stub
-const UserModel = require('../../../app/models/user.model.js')
+const FetchUserTypeService = require('../../../app/services/users/fetch-user-type.service.js')
 const ViewExternalUserService = require('../../../app/services/users/view-external-user.service.js')
 const ViewInternalUserService = require('../../../app/services/users/view-internal-user.service.js')
 
@@ -17,6 +20,7 @@ const ViewInternalUserService = require('../../../app/services/users/view-intern
 const ViewUserService = require('../../../app/services/users/view-user.service.js')
 
 describe('Users - View User service', () => {
+  let fetchUserTypeServiceStub
   let viewExternalUserServiceStub
   let viewInternalUserServiceStub
 
@@ -25,14 +29,14 @@ describe('Users - View User service', () => {
   })
 
   describe('when the user is an internal user', () => {
-    const userId = 100010
-    const uuid = '00000000-0000-0000-0000-000000000001'
+    const user = UsersFixture.basicAccess()
+
     const internalUserData = {
       backLink: {
         href: '/',
         text: 'Go back to search'
       },
-      id: uuid,
+      id: user.id,
       lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
       pageTitle: 'User basic.access@wrls.gov.uk',
       pageTitleCaption: 'Internal',
@@ -41,33 +45,29 @@ describe('Users - View User service', () => {
     }
 
     beforeEach(() => {
-      Sinon.stub(UserModel, 'query').returns({
-        findOne: Sinon.stub().returnsThis(),
-        select: Sinon.stub().resolves({ application: 'water_admin', id: uuid })
-      })
-
+      fetchUserTypeServiceStub = Sinon.stub(FetchUserTypeService, 'go').resolves(user)
       viewInternalUserServiceStub = Sinon.stub(ViewInternalUserService, 'go').resolves(internalUserData)
       viewExternalUserServiceStub = Sinon.stub(ViewExternalUserService, 'go')
     })
 
     it('returns the internal user page data', async () => {
-      const result = await ViewUserService.go(userId)
+      const result = await ViewUserService.go(user.userId)
 
-      expect(viewInternalUserServiceStub.calledWith(uuid)).to.be.true()
+      expect(viewInternalUserServiceStub.calledWith(user.id)).to.be.true()
       expect(viewExternalUserServiceStub.called).to.be.false()
       expect(result).to.equal(internalUserData)
     })
   })
 
   describe('when the user is an external user', () => {
-    const userId = 100007
-    const uuid = '00000000-0000-0000-0000-000000000007'
+    const user = UsersFixture.external()
+
     const externalUserData = {
       backLink: {
         href: '/',
         text: 'Go back to search'
       },
-      id: uuid,
+      id: user.id,
       lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
       pageTitle: 'User external@example.co.uk',
       pageTitleCaption: 'External',
@@ -75,19 +75,15 @@ describe('Users - View User service', () => {
     }
 
     beforeEach(() => {
-      Sinon.stub(UserModel, 'query').returns({
-        findOne: Sinon.stub().returnsThis(),
-        select: Sinon.stub().resolves({ application: 'water_vml', id: uuid })
-      })
-
+      fetchUserTypeServiceStub = Sinon.stub(FetchUserTypeService, 'go').resolves(user)
       viewExternalUserServiceStub = Sinon.stub(ViewExternalUserService, 'go').resolves(externalUserData)
       viewInternalUserServiceStub = Sinon.stub(ViewInternalUserService, 'go')
     })
 
     it('returns the external user page data', async () => {
-      const result = await ViewUserService.go(userId)
+      const result = await ViewUserService.go(user.userId)
 
-      expect(viewExternalUserServiceStub.calledWith(uuid)).to.be.true()
+      expect(viewExternalUserServiceStub.calledWith(user.id)).to.be.true()
       expect(viewInternalUserServiceStub.called).to.be.false()
       expect(result).to.equal(externalUserData)
     })
