@@ -38,7 +38,7 @@ describe('Company Contacts - Setup - Fetch Notification service', () => {
     await notification.$query().delete()
   })
 
-  describe('when there are notification for the recipient', () => {
+  describe('when there are notifications for the recipient', () => {
     beforeEach(async () => {
       notification = await NotificationHelper.add({
         ...NotificationsFixture.returnsInvitationEmail(notice),
@@ -55,7 +55,7 @@ describe('Company Contacts - Setup - Fetch Notification service', () => {
     })
   })
 
-  describe('when there are no notification for the recipient', () => {
+  describe('when there are no notifications for the recipient', () => {
     describe('because the email does not match', () => {
       beforeEach(async () => {
         notification = await NotificationHelper.add({
@@ -64,7 +64,7 @@ describe('Company Contacts - Setup - Fetch Notification service', () => {
         })
       })
 
-      it('returns without a notification', async () => {
+      it('returns undefined', async () => {
         const result = await FetchNotificationService.go(email)
 
         expect(result).to.be.undefined()
@@ -80,7 +80,7 @@ describe('Company Contacts - Setup - Fetch Notification service', () => {
         })
       })
 
-      it('returns without a notification', async () => {
+      it('returns undefined', async () => {
         const result = await FetchNotificationService.go(email)
 
         expect(result).to.be.undefined()

@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches data needed to determine id an email address has been used to send notifications.
+ * Fetches data needed to determine if an email address has been used to send notifications.
  * @module FetchNotificationService
  */
 
 const NotificationModel = require('../../../models/notification.model.js')
 
 /**
- * Fetches data needed to determine id an email address has been used to send notifications.
+ * Fetches data needed to determine if an email address has been used to send notifications.
  *
  * We only need to fetch the first notification, as we are only interested in whether the email address has been used to
  * send notifications. We do not need to know anything about the notification, just the email has been used.
