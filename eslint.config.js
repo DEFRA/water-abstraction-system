@@ -6,10 +6,10 @@ const globals = require('globals')
 const neostandard = require('neostandard')
 
 module.exports = [
-  {
-    ignores: ['docs/**/*']
-  },
-  // Start with neostandard ESLint rules. neostandard is the successor to StandardJS (which has stalled due to a
+  // We moved the ignores object to the top level as in ESLint Flat Config, an object is only treated as a Global Ignore
+  // if it contains the ignores key and nothing else.
+  //
+  // We then use neostandard ESLint rules. neostandard is the successor to StandardJS (which has stalled due to a
   // governance issue https://github.com/standard/standard/issues/1948#issuecomment-2138078249). The maintainers of
   // neostandard have opted to lean into ESLint rather than follow the ethos of a standalone tool.
   //
@@ -24,6 +24,9 @@ module.exports = [
   //
   // We add it first, so if anything we do conflicts with the StandardJS rules, our customisations take precedence.
   // https://github.com/neostandard/neostandard
+  {
+    ignores: ['docs/**/*']
+  },
   ...neostandard({ noStyle: true }),
   {
     languageOptions: {
