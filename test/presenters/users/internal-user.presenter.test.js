@@ -40,10 +40,8 @@ describe('Users - Internal User Presenter', () => {
   describe('the "lastSignedIn" property', () => {
     describe('when the lastLogin is "null"', () => {
       beforeEach(() => {
-        const basicAccessUser = UsersFixture.basicAccess()
-        const { $permissions, $status } = basicAccessUser
-
-        user = { ...basicAccessUser, lastLogin: null, $permissions, $status }
+        user = UsersFixture.basicAccess()
+        user.lastLogin = null
       })
 
       it('returns "Never signed in"', () => {
