@@ -1,6 +1,11 @@
 'use strict'
 
 /**
+ * Submit page helper methods
+ * @module SubmitPageLib
+ */
+
+/**
  * Clears stored filters from session storage based on form submission
  *
  * Checks if the payload contains a clearFilters flag. If true, removes the stored filter data from the session
@@ -23,11 +28,6 @@ function clearFilters(payload, yar, filterKey) {
 
   return false
 }
-
-/**
- * Submit page helper methods
- * @module SubmitPageLib
- */
 
 /**
  * Normalizes checkbox form data to always be an array
@@ -75,7 +75,64 @@ function handleOneOptionSelected(payload, key) {
   }
 }
 
+/**
+ * Retrieves saved filters from session storage and determines if any filters are active
+ *
+ * This function fetches filter data from the session using the provided key and checks whether any filter values
+ * have been set. For array-type filters (like multi-select checkboxes), it checks if the array has any elements.
+ * For non-array filters (like text inputs), it checks if the value is truthy. The `openFilter` flag indicates
+ * whether the filter panel should be displayed in an open state on the page.
+ *
+ * @param {object} yar - The Hapi Yar session storage object
+ * @param {string} filterKey - The key identifying which filter data to retrieve from session storage
+ *
+ * @returns {object} An object containing all saved filter properties plus an `openFilter` boolean indicating
+ * whether any filters are active
+ *
+ * @example
+ * // No filters saved
+ * processSavedFilters(yar, 'billRunsFilter')
+ * // Returns { openFilter: false }
+ *
+ * @example
+ * // Filters with array values
+ * // Assumes yar.get('billRunsFilter') returns { regions: ['south', 'north'], status: null }
+ * processSavedFilters(yar, 'billRunsFilter')
+ * // Returns { regions: ['south', 'north'], status: null, openFilter: true }
+ *
+ * @example
+ * // Filters with empty values
+ * // Assumes yar.get('billRunsFilter') returns { regions: [], status: null }
+ * processSavedFilters(yar, 'billRunsFilter')
+ * // Returns { regions: [], status: null, openFilter: false }
+ */
+function processSavedFilters(yar, filterKey) {
+  let openFilter = false
+
+  const savedFilters = yar.get(filterKey)
+
+  if (savedFilters) {
+    for (const key of Object.keys(savedFilters)) {
+      if (Array.isArray(savedFilters[key])) {
+        openFilter = savedFilters[key].length > 0
+      } else {
+        openFilter = !!savedFilters[key]
+      }
+
+      if (openFilter) {
+        break
+      }
+    }
+  }
+
+  return {
+    ...savedFilters,
+    openFilter
+  }
+}
+
 module.exports = {
   clearFilters,
-  handleOneOptionSelected
+  handleOneOptionSelected,
+  processSavedFilters
 }

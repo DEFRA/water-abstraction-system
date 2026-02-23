@@ -8,6 +8,7 @@
 
 const FetchNoticeService = require('../../services/notices/fetch-notice.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+const { processSavedFilters } = require('../../lib/submit-page.lib.js')
 const ViewNoticePresenter = require('../../presenters/notices/view-notice.presenter.js')
 
 /**
@@ -53,23 +54,10 @@ async function go(noticeId, yar, page) {
 }
 
 function _filters(yar, filterKey) {
-  let openFilter = false
-
-  const savedFilters = yar.get(filterKey)
-
-  if (savedFilters) {
-    for (const key of Object.keys(savedFilters)) {
-      openFilter = !!savedFilters[key]
-
-      if (openFilter) {
-        break
-      }
-    }
-  }
+  const savedFilters = processSavedFilters(yar, filterKey)
 
   return {
     licence: null,
-    openFilter,
     recipient: null,
     status: null,
     ...savedFilters

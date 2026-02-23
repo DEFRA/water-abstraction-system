@@ -8,6 +8,7 @@
 const FetchUsersService = require('./fetch-users.service.js')
 const IndexUsersPresenter = require('../../presenters/users/index-users.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+const { processSavedFilters } = require('../../lib/submit-page.lib.js')
 
 const featureFlagsConfig = require('../../../config/feature-flags.config.js')
 
@@ -40,27 +41,14 @@ async function go(yar, auth, page = 1) {
 }
 
 function _filters(yar) {
-  let openFilter = false
-
-  const savedFilters = yar.get('usersFilter')
-
-  if (savedFilters) {
-    for (const key of Object.keys(savedFilters)) {
-      openFilter = !!savedFilters[key]
-
-      if (openFilter) {
-        break
-      }
-    }
-  }
+  const savedFilters = processSavedFilters(yar, 'usersFilter')
 
   return {
     email: null,
     permissions: null,
     status: null,
     type: null,
-    ...savedFilters,
-    openFilter
+    ...savedFilters
   }
 }
 
