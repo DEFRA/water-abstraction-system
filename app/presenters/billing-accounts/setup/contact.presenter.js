@@ -23,7 +23,7 @@ function go(session, companyContacts) {
     },
     contactSelected: session.contactSelected ?? null,
     items: _items(companyContacts, session.contactSelected),
-    pageTitle: `Set up a contact for ${billingAccount.company.name}`,
+    pageTitle: _pageTitle(session, companyContacts),
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`
   }
 }
@@ -53,6 +53,16 @@ function _items(companyContacts, contactSelected) {
   )
 
   return items
+}
+
+function _pageTitle(session, companyContacts) {
+  const name = session.billingAccount.company.name
+
+  if (companyContacts.length === 0) {
+    return `No company contacts found for "${name}"`
+  }
+
+  return `Set up a contact for ${name}`
 }
 
 module.exports = {

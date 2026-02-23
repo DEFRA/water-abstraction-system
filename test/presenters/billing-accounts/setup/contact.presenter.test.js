@@ -80,4 +80,34 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       })
     })
   })
+
+  describe('"pageTitle" property', () => {
+    describe('when there are contacts returned', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+        }
+      })
+
+      it('returns the correct page title', () => {
+        const result = ContactPresenter.go(session, companyContacts)
+
+        expect(result.pageTitle).to.equal(`Set up a contact for ${session.billingAccount.company.name}`)
+      })
+    })
+
+    describe('when there are no contacts returned', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+        }
+      })
+
+      it('returns the correct page title', () => {
+        const result = ContactPresenter.go(session, [])
+
+        expect(result.pageTitle).to.equal(`No company contacts found for "${session.billingAccount.company.name}"`)
+      })
+    })
+  })
 })
