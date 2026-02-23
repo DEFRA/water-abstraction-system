@@ -8,6 +8,7 @@
 
 const CheckPresenter = require('../../../presenters/company-contacts/setup/check.presenter.js')
 const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
+const FetchNotificationService = require('./fetch-notification.service.js')
 const SessionModel = require('../../../models/session.model.js')
 const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
 const { readFlashNotification } = require('../../../lib/general.lib.js')
@@ -25,9 +26,11 @@ async function go(sessionId, yar) {
 
   const companyContacts = await FetchCompanyContactsService.go(session.company.id, session.companyContact)
 
+  const sentNotification = await FetchNotificationService.go(session.email)
+
   await markCheckPageVisited(session)
 
-  const pageData = CheckPresenter.go(session, companyContacts)
+  const pageData = CheckPresenter.go(session, companyContacts, sentNotification)
 
   const notification = readFlashNotification(yar)
 
