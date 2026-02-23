@@ -56,7 +56,7 @@ describe('Company Contacts - Setup - Fetch Company Contacts service', () => {
             contactType: 'person',
             suffix: null,
             department: null,
-            email: 'amara.gupta@example.com'
+            email: null
           }
         }
       ])
@@ -86,7 +86,7 @@ describe('Company Contacts - Setup - Fetch Company Contacts service', () => {
               contactType: 'person',
               suffix: null,
               department: null,
-              email: 'amara.gupta@example.com'
+              email: null
             }
           }
         ])
