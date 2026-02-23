@@ -66,13 +66,13 @@ async function viewUser(request, h) {
     params: { userId }
   } = request
 
-  const pageData = await ViewUserService.go(userId)
+  const { pageData, userIsInternal } = await ViewUserService.go(userId)
 
-  if (pageData.pageTitleCaption === 'External') {
-    return h.view('users/view-external.njk', pageData)
+  if (userIsInternal) {
+    return h.view('users/view-internal.njk', pageData)
   }
 
-  return h.view('users/view-internal.njk', pageData)
+  return h.view('users/view-external.njk', pageData)
 }
 
 module.exports = {

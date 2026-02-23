@@ -54,7 +54,10 @@ describe('Users - View User service', () => {
 
       expect(viewInternalUserServiceStub.calledWith(user.id)).to.be.true()
       expect(viewExternalUserServiceStub.called).to.be.false()
-      expect(result).to.equal(internalUserData)
+      expect(result).to.equal({
+        pageData: internalUserData,
+        userIsInternal: true
+      })
     })
   })
 
@@ -84,7 +87,10 @@ describe('Users - View User service', () => {
 
       expect(viewExternalUserServiceStub.calledWith(user.id)).to.be.true()
       expect(viewInternalUserServiceStub.called).to.be.false()
-      expect(result).to.equal(externalUserData)
+      expect(result).to.equal({
+        pageData: externalUserData,
+        userIsInternal: false
+      })
     })
   })
 })

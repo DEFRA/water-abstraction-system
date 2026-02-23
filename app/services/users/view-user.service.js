@@ -17,16 +17,19 @@ const ViewInternalUserService = require('./view-internal-user.service.js')
  *
  * @param {number} userId - The user's ID
  *
- * @returns {Promise<object>} The view data for the relevant user page
+ * @returns {Promise<object>} The view data for the relevant user page and a flag to indicate whether the user is
+ * internal or external
  */
 async function go(userId) {
   const user = await FetchUserTypeService.go(userId)
+  const internal = user.$internal()
 
-  if (user.$internal()) {
-    return ViewInternalUserService.go(user.id)
+  const pageData = internal ? await ViewInternalUserService.go(user.id) : await ViewExternalUserService.go(user.id)
+
+  return {
+    pageData,
+    userIsInternal: internal
   }
-
-  return ViewExternalUserService.go(user.id)
 }
 
 module.exports = {
