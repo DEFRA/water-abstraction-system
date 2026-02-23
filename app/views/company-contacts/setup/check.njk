@@ -10,7 +10,7 @@
     {{ govukInsetText({
       text: emailInUse
     }) }}
- {% endif %}
+  {% endif %}
 
   {{ govukSummaryList({
     rows: [
@@ -69,14 +69,14 @@
   }) }}
 
   <form method="post">
-    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+    <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
 
     <div class="govuk-button-group">
       {% if not warning %}
-      {{ govukButton({
-        text: "Confirm",
-        preventDoubleClick: true
-      }) }}
+        {{ govukButton({
+          text: "Confirm",
+          preventDoubleClick: true
+        }) }}
       {% endif %}
 
       {{ govukButton({
