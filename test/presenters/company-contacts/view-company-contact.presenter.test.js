@@ -69,7 +69,7 @@ describe('Company Contacts - View Company Contact presenter', () => {
           {
             link: {
               hiddenText: 'sent 9 October 2025 via email',
-              href: `/system/notifications/${notification.id}`
+              href: `/system/notifications/${notification.id}?companyContactId=${companyContact.id}`
             },
             method: 'Email',
             sentBy: 'admin-internal@wrls.gov.uk',
@@ -124,6 +124,16 @@ describe('Company Contacts - View Company Contact presenter', () => {
             expect(result.contact.lastUpdated).to.equal('1 January 2022')
           })
         })
+      })
+    })
+
+    describe('the "notifications" property', () => {
+      it('returns the notifications with the company id as query string in the link', () => {
+        const result = ViewCompanyContactPresenter.go(company, companyContact, notifications)
+
+        expect(result.notifications[0].link.href).to.equal(
+          `/system/notifications/${notification.id}?companyContactId=${companyContact.id}`
+        )
       })
     })
   })

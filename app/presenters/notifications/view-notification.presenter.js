@@ -19,19 +19,20 @@ const { formatLongDate, formatNoticeType, formatRestrictionType, formatValueUnit
  * repeating it in the metadata.
  *
  * @param {module:NotificationModel} notification - The selected notification with attached notice
- * @param {module:LicenceModel} [licence=null] - The related licence if coming from the view licence communications page
- * @param {string} [returnLogId=null] - The UUID of the return log if coming from the return log page
+ * @param {module:LicenceModel|null} [licence=null] - The related licence if coming from the view licence communications page
+ * @param {string|null} [returnLogId=null] - The UUID of the return log if coming from the return log page
+ * @param {string|null} [companyContactId=null] - The UUID of the company contact if coming from the company contact page
  *
  * @returns {object} The data formatted for the view template
  */
-function go(notification, licence = null, returnLogId = null) {
+function go(notification, licence = null, returnLogId = null, companyContactId = null) {
   const { createdAt, event, messageType, plaintext, returnedAt } = notification
 
   return {
     activeNavBar: licence ? 'search' : 'notices',
     address: _address(notification),
     alertDetails: _alertDetails(notification),
-    backLink: _backLink(notification, licence, returnLogId),
+    backLink: _backLink(notification, licence, returnLogId, companyContactId),
     contents: plaintext,
     errorDetails: NotificationErrorPresenter.go(notification),
     messageType,
@@ -86,13 +87,17 @@ function _alertDetails(notification) {
   }
 }
 
-function _backLink(notification, licence, returnLogId) {
+function _backLink(notification, licence, returnLogId, companyContactId) {
   if (licence) {
     return { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' }
   }
 
   if (returnLogId) {
     return { href: `/system/return-logs/${returnLogId}`, text: 'Go back to return log' }
+  }
+
+  if (companyContactId) {
+    return { href: `/system/company-contacts/${companyContactId}`, text: 'Go back to company contact' }
   }
 
   const { event } = notification

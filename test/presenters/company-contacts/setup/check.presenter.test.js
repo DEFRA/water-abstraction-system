@@ -176,7 +176,8 @@ describe('Company Contacts - Setup - Check Presenter', () => {
         describe('and a contact with a matching name and no email (email is null)', () => {
           beforeEach(() => {
             session.name = 'Eric'
-            session.email = 'Eric@test.com'
+            // The session will have been with company contact email which can be null
+            session.email = null
 
             companyContact.contact.email = null
           })

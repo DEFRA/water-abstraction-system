@@ -20,7 +20,6 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
   let sessionData
 
   beforeEach(async () => {
-    payload = { accountType: 'company' }
     sessionData = {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
@@ -33,12 +32,22 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
   })
 
   describe('when called with "company" selected', () => {
+    beforeEach(async () => {
+      payload = { accountType: 'company' }
+    })
+
     it('saves the submitted value', async () => {
       await SubmitAccountTypeService.go(session.id, payload)
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.accountType).to.equal('company')
+      expect(refreshedSession.data).to.equal(
+        {
+          accountType: 'company',
+          searchIndividualInput: null
+        },
+        { skip: ['billingAccount'] }
+      )
     })
 
     it('continues the journey', async () => {
@@ -48,16 +57,75 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
         redirectUrl: `/system/billing-accounts/setup/${session.id}/company-search`
       })
     })
+
+    describe('and the user has returned to the page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          accountType: 'company',
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitAccountTypeService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            accountType: 'company',
+            searchIndividualInput: null
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitAccountTypeService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/company-search`
+        })
+      })
+    })
+
+    describe('and the user had previously completed the "individual" journey', () => {
+      beforeEach(async () => {
+        sessionData = _individualSessionData(session)
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitAccountTypeService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            ..._commonExpectedValues(),
+            accountType: 'company',
+            searchIndividualInput: null
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitAccountTypeService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/company-search`
+        })
+      })
+    })
   })
 
   describe('when called with "individual" selected and a search term entered', () => {
     beforeEach(async () => {
       payload = { accountType: 'individual', searchIndividualInput: 'John Doe' }
-      sessionData = {
-        billingAccount: BillingAccountsFixture.billingAccount().billingAccount
-      }
-
-      session = await SessionHelper.add({ data: sessionData })
     })
 
     it('saves the submitted value', async () => {
@@ -65,8 +133,13 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.accountType).to.equal('individual')
-      expect(refreshedSession.searchIndividualInput).to.equal('John Doe')
+      expect(refreshedSession.data).to.equal(
+        {
+          accountType: 'individual',
+          searchIndividualInput: 'John Doe'
+        },
+        { skip: ['billingAccount'] }
+      )
     })
 
     it('continues the journey', async () => {
@@ -74,6 +147,73 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
       expect(result).to.equal({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
+      })
+    })
+
+    describe('and the user has returned to the page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          accountType: 'individual',
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          searchIndividualInput: 'John Doe'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitAccountTypeService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            accountType: 'individual',
+            searchIndividualInput: 'John Doe'
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitAccountTypeService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
+        })
+      })
+    })
+
+    describe('and the user had previously completed the "company" journey', () => {
+      beforeEach(async () => {
+        sessionData = _companySessionData(session)
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitAccountTypeService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            ..._commonExpectedValues(),
+            accountType: 'individual',
+            companiesHouseId: null,
+            companySearch: null,
+            searchIndividualInput: 'John Doe'
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitAccountTypeService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
+        })
       })
     })
   })
@@ -122,3 +262,57 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
   })
 })
+
+function _commonExpectedValues() {
+  return {
+    accountSelected: 'another',
+    addressJourney: null,
+    addressSelected: null,
+    contactName: null,
+    contactSelected: null,
+    existingAccount: 'new',
+    fao: null,
+    searchInput: 'Existing Customer Name'
+  }
+}
+
+function _commonSessionData(session) {
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+
+  return {
+    accountSelected: 'another',
+    addressJourney: {
+      address: {},
+      backLink: {
+        href: `/system/billing-accounts/setup/${session.id}/existing-address`,
+        text: 'Back'
+      },
+      pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
+      redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
+    },
+    addressSelected: 'new',
+    billingAccount,
+    contactName: 'Contact Name',
+    contactSelected: 'new',
+    existingAccount: 'new',
+    fao: 'yes',
+    searchInput: 'Existing Customer Name'
+  }
+}
+
+function _companySessionData(session) {
+  return {
+    ..._commonSessionData(session),
+    accountType: 'company',
+    companiesHouseId: '12345678',
+    companySearch: 'Company Name'
+  }
+}
+
+function _individualSessionData(session) {
+  return {
+    ..._commonSessionData(session),
+    accountType: 'individual',
+    searchIndividualInput: 'John Doe'
+  }
+}

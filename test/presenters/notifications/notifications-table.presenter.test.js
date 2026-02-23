@@ -16,10 +16,17 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const NotificationsTablePresenter = require('../../../app/presenters/notifications/notifications-table.presenter.js')
 
 describe('Notifications - Notification Table presenter', () => {
+  let companyContactId
   let licenceId
   let notice
   let notification
   let returnLogId
+
+  beforeEach(() => {
+    companyContactId = null
+    licenceId = null
+    returnLogId = null
+  })
 
   describe('when there is a returns notice notification', () => {
     beforeEach(() => {
@@ -28,13 +35,37 @@ describe('Notifications - Notification Table presenter', () => {
       notification.event = notice
     })
 
+    describe('and you have come from a company contact', () => {
+      beforeEach(() => {
+        companyContactId = generateUUID()
+      })
+
+      it('correctly presents the data', () => {
+        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+
+        expect(result).to.equal([
+          {
+            link: {
+              hiddenText: 'sent 2 April 2025 via email',
+              href: `/system/notifications/${notification.id}?companyContactId=${companyContactId}`
+            },
+            method: 'Email',
+            sentBy: notification.event.issuer,
+            sentDate: '2 April 2025',
+            status: notification.status,
+            type: 'Returns invitation'
+          }
+        ])
+      })
+    })
+
     describe('and you have come from a return log', () => {
       beforeEach(() => {
         returnLogId = generateUUID()
       })
 
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], null, returnLogId)
+        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).to.equal([
           {
@@ -58,7 +89,7 @@ describe('Notifications - Notification Table presenter', () => {
       })
 
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId)
+        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).to.equal([
           {
@@ -79,7 +110,6 @@ describe('Notifications - Notification Table presenter', () => {
 
   describe('when there is an abstraction alert notification', () => {
     beforeEach(() => {
-      licenceId = generateUUID()
       notice = NoticesFixture.alertStop()
       notification = NotificationsFixture.abstractionAlertEmail(notice)
       notification.event = notice
@@ -87,11 +117,12 @@ describe('Notifications - Notification Table presenter', () => {
 
     describe('and you have come from a licence', () => {
       beforeEach(() => {
+        licenceId = generateUUID()
         returnLogId = generateUUID()
       })
 
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], licenceId)
+        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).to.equal([
           {
@@ -108,12 +139,36 @@ describe('Notifications - Notification Table presenter', () => {
         ])
       })
     })
+
+    describe('and you have come from a company contact', () => {
+      beforeEach(() => {
+        companyContactId = generateUUID()
+      })
+
+      it('correctly presents the data', () => {
+        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
+
+        expect(result).to.equal([
+          {
+            link: {
+              hiddenText: 'sent 9 October 2025 via email',
+              href: `/system/notifications/${notification.id}?companyContactId=${companyContactId}`
+            },
+            method: 'Email',
+            sentBy: notification.event.issuer,
+            sentDate: '9 October 2025',
+            status: notification.status,
+            type: 'alert'
+          }
+        ])
+      })
+    })
   })
 
   describe('when someone has removed the query params from the url', () => {
-    describe('and neither licenceId nor returnLogId are present', () => {
+    describe('and neither licenceId,  returnLogId or companyContactId are present', () => {
       it('correctly presents the data', () => {
-        const result = NotificationsTablePresenter.go([notification], null, null)
+        const result = NotificationsTablePresenter.go([notification], licenceId, returnLogId, companyContactId)
 
         expect(result).to.equal([
           {
@@ -138,7 +193,7 @@ describe('Notifications - Notification Table presenter', () => {
     })
 
     it('returns an empty array', () => {
-      const result = NotificationsTablePresenter.go([], licenceId)
+      const result = NotificationsTablePresenter.go([], licenceId, returnLogId, companyContactId)
 
       expect(result).to.equal([])
     })
