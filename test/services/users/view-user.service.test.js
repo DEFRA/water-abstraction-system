@@ -20,7 +20,6 @@ const ViewInternalUserService = require('../../../app/services/users/view-intern
 const ViewUserService = require('../../../app/services/users/view-user.service.js')
 
 describe('Users - View User service', () => {
-  let fetchUserTypeServiceStub
   let viewExternalUserServiceStub
   let viewInternalUserServiceStub
 
@@ -45,7 +44,7 @@ describe('Users - View User service', () => {
     }
 
     beforeEach(() => {
-      fetchUserTypeServiceStub = Sinon.stub(FetchUserTypeService, 'go').resolves(user)
+      Sinon.stub(FetchUserTypeService, 'go').resolves(user)
       viewInternalUserServiceStub = Sinon.stub(ViewInternalUserService, 'go').resolves(internalUserData)
       viewExternalUserServiceStub = Sinon.stub(ViewExternalUserService, 'go')
     })
@@ -75,7 +74,7 @@ describe('Users - View User service', () => {
     }
 
     beforeEach(() => {
-      fetchUserTypeServiceStub = Sinon.stub(FetchUserTypeService, 'go').resolves(user)
+      Sinon.stub(FetchUserTypeService, 'go').resolves(user)
       viewExternalUserServiceStub = Sinon.stub(ViewExternalUserService, 'go').resolves(externalUserData)
       viewInternalUserServiceStub = Sinon.stub(ViewInternalUserService, 'go')
     })
