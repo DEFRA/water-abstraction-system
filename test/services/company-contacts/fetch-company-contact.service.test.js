@@ -145,7 +145,7 @@ function _transformToFetchResult(companyContact, contact, user, licenceRole, abs
       contactType: 'person',
       suffix: null,
       department: null,
-      email: 'amara.gupta@example.com'
+      email: null
     },
     createdAt: companyContact.createdAt,
     createdByUser: {

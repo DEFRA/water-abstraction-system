@@ -44,8 +44,7 @@ function defaults(data = {}) {
     firstName: 'Amara',
     lastName: 'Gupta',
     dataSource: 'wrls',
-    contactType: 'person',
-    email: 'amara.gupta@example.com'
+    contactType: 'person'
   }
 
   return {

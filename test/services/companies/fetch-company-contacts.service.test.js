@@ -60,7 +60,7 @@ describe('Companies - Fetch Company Contacts service', () => {
               contactType: 'person',
               suffix: null,
               department: null,
-              email: 'amara.gupta@example.com'
+              email: null
             },
             licenceRole: {
               label: licenceRole.label
