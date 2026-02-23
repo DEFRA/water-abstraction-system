@@ -53,6 +53,10 @@ async function _fetch(companyContactId) {
     .modifyGraph('createdByUser', (createdByUserBuilder) => {
       createdByUserBuilder.select(['id', 'username'])
     })
+    .withGraphFetched('licenceRole')
+    .modifyGraph('licenceRole', (licenceRoleBuilder) => {
+      licenceRoleBuilder.select(['id', 'name'])
+    })
     .withGraphFetched('updatedByUser')
     .modifyGraph('updatedByUser', (updatedByUserBuilder) => {
       updatedByUserBuilder.select(['id', 'username'])
