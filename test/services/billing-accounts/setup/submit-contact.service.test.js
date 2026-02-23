@@ -39,13 +39,40 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     Sinon.restore()
   })
 
-  describe('when called with valid data', () => {
-    describe('such as "new"', () => {
-      it('saves the submitted value', async () => {
-        payload = {
+  describe('when the user picks to set up a "new" contact', () => {
+    beforeEach(async () => {
+      payload = {
+        contactSelected: 'new'
+      }
+    })
+
+    it('saves the submitted value', async () => {
+      await SubmitContactService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.contactSelected).to.equal(payload.contactSelected)
+    })
+
+    it('continues the journey', async () => {
+      const result = await SubmitContactService.go(session.id, payload)
+
+      expect(result).to.equal({
+        redirectUrl: `/system/billing-accounts/setup/${session.id}/contact-name`
+      })
+    })
+
+    describe('and the user has returned to the page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
           contactSelected: 'new'
         }
 
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
         await SubmitContactService.go(session.id, payload)
 
         const refreshedSession = await session.$query()
@@ -54,10 +81,6 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('continues the journey', async () => {
-        payload = {
-          contactSelected: 'new'
-        }
-
         const result = await SubmitContactService.go(session.id, payload)
 
         expect(result).to.equal({
@@ -65,13 +88,46 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         })
       })
     })
+  })
 
-    describe('such as a UUID of a contact id', () => {
-      it('saves the submitted value', async () => {
+  describe('when the user picks to an existing contact', () => {
+    beforeEach(async () => {
+      payload = {
+        contactSelected: companyContacts[0].contact.id
+      }
+    })
+
+    it('saves the submitted value', async () => {
+      await SubmitContactService.go(session.id, payload)
+
+      const refreshedSession = await session.$query()
+
+      expect(refreshedSession.contactSelected).to.equal(payload.contactSelected)
+    })
+
+    it('continues the journey', async () => {
+      const result = await SubmitContactService.go(session.id, payload)
+
+      expect(result).to.equal({
+        redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+      })
+    })
+
+    describe('and the user has returned to the page and made the same choice', () => {
+      beforeEach(async () => {
         payload = {
           contactSelected: companyContacts[0].contact.id
         }
 
+        sessionData = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          contactSelected: companyContacts[0].contact.id
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
         await SubmitContactService.go(session.id, payload)
 
         const refreshedSession = await session.$query()
@@ -80,10 +136,39 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       it('continues the journey', async () => {
+        const result = await SubmitContactService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+        })
+      })
+    })
+
+    describe('and the user had previously completed the "new" journey', () => {
+      beforeEach(async () => {
         payload = {
           contactSelected: companyContacts[0].contact.id
         }
 
+        sessionData = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          contactSelected: 'new',
+          contactName: 'Contact Name'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitContactService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.contactSelected).to.equal(payload.contactSelected)
+        expect(refreshedSession.contactName).to.equal(null)
+      })
+
+      it('continues the journey', async () => {
         const result = await SubmitContactService.go(session.id, payload)
 
         expect(result).to.equal({

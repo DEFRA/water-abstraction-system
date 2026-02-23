@@ -7,7 +7,9 @@
 
 const Joi = require('joi')
 
-const MAX_DECIMAL = 6
+const { maxDecimalPlaces } = require('../../helpers/max-decimal-places.validator.js')
+
+const MAX_DECIMALS = 6
 const VALID_VALUES = ['yes', 'no']
 
 /**
@@ -33,10 +35,10 @@ function go(payload) {
     singleVolumeQuantity: Joi.number()
       .positive()
       .when('singleVolume', { is: 'yes', then: Joi.required() })
-      .custom(_maxDecimals, 'Max decimals')
+      .custom(maxDecimalPlaces(MAX_DECIMALS), 'maxDecimals')
       .messages({
-        'any.invalid': 'Enter a total amount with no more than 6 decimal places',
         'any.required': 'Enter a total amount',
+        'custom.maxDecimals': 'Enter a total amount with no more than 6 decimal places',
         'number.base': 'Enter a number for the total amount',
         'number.unsafe': 'Enter a positive total amount up to a maximum of 9007199254740991',
         'number.positive': 'Enter a total amount greater than zero'
@@ -44,35 +46,6 @@ function go(payload) {
   })
 
   return schema.validate(payload, { abortEarly: false })
-}
-
-/**
- * Custom JOI validator to check a value does not have more than 6 decimal places
- *
- * Due to limitations in Joi validation for decimals, achieving validation for numbers with more than 6 decimal places
- * requires a custom approach.
- *
- * See {@link https://github.com/hapijs/joi/blob/master/API.md#anycustommethod-description | Joi custom validation}.
- *
- * @param {number} value - the value to be validated
- * @param {object} helpers - a Joi object containing a numbers of helpers
- *
- * @returns {number|object} if valid the original value else a Joi 'any.invalid' error. Knowing we return this means
- * you can assign what error message to use when a number has too many decimals.
- */
-function _maxDecimals(value, helpers) {
-  // Guard clause to ensure we don't try and interact with a null or undefined value
-  if (!value) {
-    return value
-  }
-
-  const parts = value.toString().split('.')
-
-  if (parts.length === 1 || parts[1].length <= MAX_DECIMAL) {
-    return value
-  }
-
-  return helpers.error('any.invalid')
 }
 
 module.exports = {

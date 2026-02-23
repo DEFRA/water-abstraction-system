@@ -33,7 +33,7 @@ async function go(sessionId, payload) {
     }
   }
 
-  const pageData = await _submissionData(session, payload)
+  const pageData = await _submissionData(session)
 
   return {
     error: validationResult,
@@ -50,15 +50,17 @@ function _redirectUrl(session) {
 }
 
 async function _save(session, payload) {
+  if (payload.contactSelected !== 'new') {
+    session.contactName = null
+  }
+
   session.contactSelected = payload.contactSelected
 
   return session.$update()
 }
 
-async function _submissionData(session, payload) {
+async function _submissionData(session) {
   const companyContacts = await FetchCompanyContactsService.go(session.billingAccount.company.id)
-
-  session.contactSelected = payload.contactSelected ?? null
 
   return ContactPresenter.go(session, companyContacts)
 }

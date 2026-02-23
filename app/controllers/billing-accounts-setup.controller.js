@@ -47,11 +47,7 @@ async function submitAccount(request, h) {
     return h.view(`billing-accounts/setup/account.njk`, pageData)
   }
 
-  if (pageData.accountSelected === 'customer') {
-    return h.redirect(`/system/billing-accounts/setup/${sessionId}/existing-address`)
-  }
-
-  return h.redirect(`/system/billing-accounts/setup/${sessionId}/existing-account`)
+  return h.redirect(pageData.redirectUrl)
 }
 
 async function submitAccountType(request, h) {
@@ -166,11 +162,7 @@ async function submitFAO(request, h) {
     return h.view(`billing-accounts/setup/fao.njk`, pageData)
   }
 
-  if (pageData.fao === 'yes') {
-    return h.redirect(`/system/billing-accounts/setup/${sessionId}/contact`)
-  }
-
-  return h.redirect(`/system/billing-accounts/setup/${sessionId}/check`)
+  return h.redirect(pageData.redirectUrl)
 }
 
 async function submitSelectCompany(request, h) {

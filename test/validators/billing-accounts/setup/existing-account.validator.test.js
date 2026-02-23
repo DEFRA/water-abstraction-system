@@ -16,10 +16,6 @@ const ExistingAccountValidator = require('../../../../app/validators/billing-acc
 describe('Billing Accounts - Setup - Existing Account validator', () => {
   let payload
 
-  beforeEach(() => {
-    payload = { placeholder: '' }
-  })
-
   describe('when called with valid data', () => {
     describe('and the option is "new"', () => {
       beforeEach(() => {

@@ -22,6 +22,7 @@ const SubmitContactService = require('../../app/services/billing-accounts/setup/
 const SubmitContactNameService = require('../../app/services/billing-accounts/setup/submit-contact-name.service.js')
 const SubmitExistingAccountService = require('../../app/services/billing-accounts/setup/submit-existing-account.service.js')
 const SubmitExistingAddressService = require('../../app/services/billing-accounts/setup/submit-existing-address.service.js')
+const SubmitFaoService = require('../../app/services/billing-accounts/setup/submit-fao.service.js')
 const SubmitSelectCompanyService = require('../../app/services/billing-accounts/setup/submit-select-company.service.js')
 const ViewAccountService = require('../../app/services/billing-accounts/setup/view-account.service.js')
 const ViewAccountTypeService = require('../../app/services/billing-accounts/setup/view-account-type.service.js')
@@ -30,6 +31,7 @@ const ViewContactService = require('../../app/services/billing-accounts/setup/vi
 const ViewContactNameService = require('../../app/services/billing-accounts/setup/view-contact-name.service.js')
 const ViewExistingAccountService = require('../../app/services/billing-accounts/setup/view-existing-account.service.js')
 const ViewExistingAddressService = require('../../app/services/billing-accounts/setup/view-existing-address.service.js')
+const ViewFaoService = require('../../app/services/billing-accounts/setup/view-fao.service.js')
 const ViewSelectCompanyService = require('../../app/services/billing-accounts/setup/view-select-company.service.js')
 
 // For running our service
@@ -113,7 +115,7 @@ describe('Billing Accounts Setup controller', () => {
       describe('when the user selects existing customer option', () => {
         beforeEach(() => {
           Sinon.stub(SubmitAccountService, 'go').resolves({
-            accountSelected: 'customer'
+            redirectUrl: `/system/billing-accounts/setup/${sessionId}/existing-address`
           })
         })
 
@@ -128,7 +130,7 @@ describe('Billing Accounts Setup controller', () => {
       describe('when the user selects another billing account option', () => {
         beforeEach(() => {
           Sinon.stub(SubmitAccountService, 'go').resolves({
-            accountSelected: 'another'
+            redirectUrl: `/system/billing-accounts/setup/${sessionId}/existing-account`
           })
         })
 
@@ -565,6 +567,67 @@ describe('Billing Accounts Setup controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/existing-address`)
+        })
+      })
+    })
+  })
+
+  describe('/billing-accounts/setup/{sessionId}/fao', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/fao`)
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ViewFaoService, 'go').resolves({
+            pageTitle: 'Do you need to add an FAO?'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Do you need to add an FAO?')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/fao`)
+      })
+
+      describe('when the user selects "yes"', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitFaoService, 'go').resolves({
+            redirectUrl: `/system/billing-accounts/setup/${sessionId}/contact`
+          })
+        })
+
+        it('redirects to the "contact" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/contact`)
+        })
+      })
+
+      describe('when the user selects "no"', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitFaoService, 'go').resolves({
+            redirectUrl: `/system/billing-accounts/setup/${sessionId}/check`
+          })
+        })
+
+        it('redirects to the "check" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/check`)
         })
       })
     })
