@@ -86,6 +86,10 @@ function companyContact() {
       id: generateUUID(),
       username: 'nexus6.hunter@offworld.net'
     },
+    licenceRole: {
+      id: generateUUID(),
+      name: 'additionalContact'
+    },
     updatedAt: new Date('2022-01-01'),
     updatedByUser: {
       id: generateUUID(),

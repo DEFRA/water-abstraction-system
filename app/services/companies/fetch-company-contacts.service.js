@@ -24,8 +24,8 @@ async function go(companyId, page) {
 
 async function _fetch(companyId, page) {
   return CompanyContactModel.query()
-    .select(['companyContacts.id', 'abstractionAlerts'])
-    .where('companyContacts.companyId', companyId)
+    .select(['id', 'abstractionAlerts'])
+    .where('companyId', companyId)
     .withGraphFetched('contact')
     .modifyGraph('contact', (contactBuilder) => {
       contactBuilder.select([

@@ -19,6 +19,7 @@ const { formatEmail, formatLongDate } = require('../base.presenter.js')
  */
 function go(company, companyContact, notifications) {
   return {
+    additionalContact: companyContact.licenceRole.name === 'additionalContact',
     backLink: {
       href: `/system/companies/${company.id}/contacts`,
       text: 'Go back to contacts'
