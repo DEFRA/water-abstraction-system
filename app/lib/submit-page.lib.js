@@ -1,6 +1,11 @@
 'use strict'
 
 /**
+ * Submit page helper methods
+ * @module SubmitPageLib
+ */
+
+/**
  * Clears stored filters from session storage based on form submission
  *
  * Checks if the payload contains a clearFilters flag. If true, removes the stored filter data from the session
@@ -23,11 +28,6 @@ function clearFilters(payload, yar, filterKey) {
 
   return false
 }
-
-/**
- * Submit page helper methods
- * @module SubmitPageLib
- */
 
 /**
  * Normalizes checkbox form data to always be an array
