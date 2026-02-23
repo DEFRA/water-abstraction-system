@@ -10,6 +10,7 @@ const FetchBillRunsService = require('./fetch-bill-runs.service.js')
 const FetchRegionsService = require('./setup/fetch-regions.service.js')
 const IndexBillRunsPresenter = require('../../presenters/bill-runs/index-bill-runs.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+const { processSavedFilters } = require('../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the /bill-runs page
@@ -51,23 +52,7 @@ async function go(yar, page = 1) {
 }
 
 function _filters(yar) {
-  let openFilter = false
-
-  const savedFilters = yar.get('billRunsFilter')
-
-  if (savedFilters) {
-    for (const key of Object.keys(savedFilters)) {
-      if (['regions', 'runTypes', 'statuses'].includes(key)) {
-        openFilter = savedFilters[key].length > 0
-      } else {
-        openFilter = !!savedFilters[key]
-      }
-
-      if (openFilter) {
-        break
-      }
-    }
-  }
+  const savedFilters = processSavedFilters(yar, 'billRunsFilter')
 
   return {
     number: null,
@@ -75,8 +60,7 @@ function _filters(yar) {
     runTypes: [],
     statuses: [],
     yearCreated: null,
-    ...savedFilters,
-    openFilter
+    ...savedFilters
   }
 }
 
