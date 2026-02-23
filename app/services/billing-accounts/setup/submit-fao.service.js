@@ -27,7 +27,9 @@ async function go(sessionId, payload) {
   if (!validationResult) {
     await _save(session, payload)
 
-    return payload
+    return {
+      redirectUrl: _redirectUrl(session)
+    }
   }
 
   const pageData = FAOPresenter.go(session)
@@ -38,7 +40,20 @@ async function go(sessionId, payload) {
   }
 }
 
+function _redirectUrl(session) {
+  if (session.fao === 'yes') {
+    return `/system/billing-accounts/setup/${session.id}/contact`
+  }
+
+  return `/system/billing-accounts/setup/${session.id}/check`
+}
+
 async function _save(session, payload) {
+  if (session.fao && payload.fao !== session.fao) {
+    session.contactName = null
+    session.contactSelected = null
+  }
+
   session.fao = payload.fao
 
   return session.$update()
