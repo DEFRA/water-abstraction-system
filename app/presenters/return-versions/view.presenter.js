@@ -26,19 +26,16 @@ function go(returnVersion) {
       href: `/system/licences/${licence.id}/set-up`,
       text: 'Go back to summary'
     },
-    createdBy: _createdBy(returnVersion),
-    createdDate: formatLongDate(returnVersion.$createdAt()),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     multipleUpload: multipleUpload === true ? 'Yes' : 'No',
     notes: returnVersion.$notes(),
-    pageTitle: `Requirements for returns for ${licence.$licenceHolder()}`,
+    pageTitle: `Requirements for returns starting ${formatLongDate(startDate)}`,
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(startDate),
     quarterlyReturns: quarterlyReturns === true ? 'Yes' : 'No',
     reason: _reason(returnVersion),
     requirements: _requirements(returnRequirements),
-    startDate: formatLongDate(startDate),
     status
   }
 }
@@ -99,16 +96,6 @@ function _buildAgreementExceptions(returnRequirement) {
   return agreementsExceptions
 }
 
-function _createdBy(returnVersion) {
-  const createdBy = returnVersion.$createdBy()
-
-  if (createdBy) {
-    return createdBy
-  }
-
-  return 'Migrated from NALD'
-}
-
 function _mapRequirement(requirement) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement),
@@ -149,14 +136,21 @@ function _points(points) {
  * @private
  */
 function _reason(returnVersion) {
+  const createdAt = formatLongDate(returnVersion.$createdAt())
+  const createdBy = returnVersion.$createdBy()
   const reason = returnVersion.$reason()
-  const mappedReason = returnRequirementReasons[reason]
 
-  if (mappedReason) {
-    return mappedReason
+  const mappedReason = returnRequirementReasons[reason] ?? reason
+
+  if (!mappedReason) {
+    return `Created on ${createdAt}`
   }
 
-  return reason ?? ''
+  if (!createdBy) {
+    return `${mappedReason} migrated from NALD on ${createdAt}`
+  }
+
+  return `${mappedReason} created on ${createdAt} by ${createdBy}`
 }
 
 function _requirements(requirements) {
