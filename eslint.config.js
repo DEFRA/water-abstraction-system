@@ -38,7 +38,6 @@ module.exports = [
       },
       sourceType: 'commonjs'
     },
-    // Ignore the folder created when JSDocs are generated
     plugins: {
       // https://github.com/gajus/eslint-plugin-jsdoc
       jsdoc: jsdocPlugin,
