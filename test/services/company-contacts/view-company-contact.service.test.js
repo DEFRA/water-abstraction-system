@@ -55,6 +55,7 @@ describe('Company Contacts - View Company Contact Service', () => {
       const result = await ViewCompanyContactService.go(companyContact.id, auth, yarStub, page)
 
       expect(result).to.equal({
+        additionalContact: true,
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
           text: 'Go back to contacts'

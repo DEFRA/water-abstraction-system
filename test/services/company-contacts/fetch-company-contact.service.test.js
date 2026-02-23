@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
+const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
 
 // Thing under test
@@ -19,12 +20,15 @@ describe('Company Contacts - Fetch Company Contact service', () => {
   let additionalCompanyContact
   let companyContact
   let contact
+  let licenceRole
   let user
 
   before(async () => {
     contact = await ContactHelper.add()
 
     user = UserHelper.select()
+
+    licenceRole = LicenceRoleHelper.select('additionalContact')
   })
 
   afterEach(async () => {
@@ -47,6 +51,7 @@ describe('Company Contacts - Fetch Company Contact service', () => {
             abstractionAlerts: false,
             contactId: contact.id,
             createdBy: user.id,
+            licenceRoleId: licenceRole.id,
             updatedBy: user.id
           })
         })
@@ -54,7 +59,7 @@ describe('Company Contacts - Fetch Company Contact service', () => {
         it('returns the matching company contact with "abstractionAlertsCount" as 0', async () => {
           const result = await FetchCompanyContactService.go(companyContact.id)
 
-          expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, 0))
+          expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 0))
         })
       })
 
@@ -64,6 +69,7 @@ describe('Company Contacts - Fetch Company Contact service', () => {
             abstractionAlerts: true,
             contactId: contact.id,
             createdBy: user.id,
+            licenceRoleId: licenceRole.id,
             updatedBy: user.id
           })
         })
@@ -71,7 +77,7 @@ describe('Company Contacts - Fetch Company Contact service', () => {
         it('returns the matching company contact with "abstractionAlertsCount" as 1', async () => {
           const result = await FetchCompanyContactService.go(companyContact.id)
 
-          expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, 1))
+          expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 1))
         })
       })
     })
@@ -82,7 +88,8 @@ describe('Company Contacts - Fetch Company Contact service', () => {
           companyContact = await CompanyContactHelper.add({
             contactId: contact.id,
             createdBy: user.id,
-            updatedBy: user.id
+            updatedBy: user.id,
+            licenceRoleId: licenceRole.id
           })
         })
 
@@ -98,7 +105,7 @@ describe('Company Contacts - Fetch Company Contact service', () => {
           it('returns the matching company contact with "abstractionAlertsCount" as 0', async () => {
             const result = await FetchCompanyContactService.go(companyContact.id)
 
-            expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, 0))
+            expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 0))
           })
         })
 
@@ -114,7 +121,7 @@ describe('Company Contacts - Fetch Company Contact service', () => {
           it('returns the matching company contact with "abstractionAlertsCount" as 1', async () => {
             const result = await FetchCompanyContactService.go(companyContact.id)
 
-            expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, 1))
+            expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 1))
           })
         })
       })
@@ -122,7 +129,7 @@ describe('Company Contacts - Fetch Company Contact service', () => {
   })
 })
 
-function _transformToFetchResult(companyContact, contact, user, abstractionAlertsCount = 0) {
+function _transformToFetchResult(companyContact, contact, user, licenceRole, abstractionAlertsCount = 0) {
   return {
     id: companyContact.id,
     abstractionAlerts: companyContact.abstractionAlerts,
@@ -144,6 +151,10 @@ function _transformToFetchResult(companyContact, contact, user, abstractionAlert
     createdByUser: {
       id: user.id,
       username: user.username
+    },
+    licenceRole: {
+      id: licenceRole.id,
+      name: licenceRole.name
     },
     updatedAt: companyContact.updatedAt,
     updatedByUser: {

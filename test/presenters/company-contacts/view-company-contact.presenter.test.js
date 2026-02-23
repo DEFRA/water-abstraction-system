@@ -50,6 +50,7 @@ describe('Company Contacts - View Company Contact presenter', () => {
       const result = ViewCompanyContactPresenter.go(company, companyContact, notifications)
 
       expect(result).to.equal({
+        additionalContact: true,
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
           text: 'Go back to contacts'
@@ -100,6 +101,28 @@ describe('Company Contacts - View Company Contact presenter', () => {
             const result = ViewCompanyContactPresenter.go(company, companyContact, notifications)
 
             expect(result.contact.created).to.equal('1 January 2022')
+          })
+        })
+      })
+
+      describe('the "abstractionAlerts" property', () => {
+        describe('when the contact is an additional contact', () => {
+          it('returns true', () => {
+            const result = ViewCompanyContactPresenter.go(company, companyContact, notifications)
+
+            expect(result.additionalContact).to.be.true()
+          })
+        })
+
+        describe('when the contact is not an additional contact', () => {
+          beforeEach(() => {
+            companyContact.licenceRole.name = 'licenceHolder'
+          })
+
+          it('returns false', () => {
+            const result = ViewCompanyContactPresenter.go(company, companyContact, notifications)
+
+            expect(result.additionalContact).to.be.false()
           })
         })
       })
