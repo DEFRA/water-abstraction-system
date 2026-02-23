@@ -6,6 +6,9 @@ const globals = require('globals')
 const neostandard = require('neostandard')
 
 module.exports = [
+  // Ignore the folder created when JSDocs are generated
+  // NOTE: In an ESLint Flat Config, an object is only treated as a Global Ignore if it contains the ignores key and
+  // nothing else.
   {
     ignores: ['docs/**/*']
   },
@@ -35,7 +38,6 @@ module.exports = [
       },
       sourceType: 'commonjs'
     },
-    // Ignore the folder created when JSDocs are generated
     plugins: {
       // https://github.com/gajus/eslint-plugin-jsdoc
       jsdoc: jsdocPlugin,
