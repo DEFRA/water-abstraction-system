@@ -40,6 +40,7 @@ async function _fetch(email) {
       'share_existing_user',
       'share_new_user'
     ])
+    .limit(1)
     .first()
 }
 
