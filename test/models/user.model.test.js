@@ -393,6 +393,62 @@ describe('User model', () => {
     })
   })
 
+  describe('$internal()', () => {
+    let internalTestRecord
+
+    beforeEach(() => {
+      internalTestRecord = UserHelper.select()
+    })
+
+    describe('when the "application" field is "water_admin"', () => {
+      beforeEach(() => {
+        internalTestRecord.application = 'water_admin'
+      })
+
+      it('returns true', async () => {
+        const result = internalTestRecord.$internal()
+
+        expect(result).to.be.true()
+      })
+    })
+
+    describe('when the "application" field is "water_vml"', () => {
+      beforeEach(() => {
+        internalTestRecord.application = 'water_vml'
+      })
+
+      it('returns false', async () => {
+        const result = internalTestRecord.$internal()
+
+        expect(result).to.be.false()
+      })
+    })
+
+    describe('when the "application" field is "water_dev"', () => {
+      beforeEach(() => {
+        internalTestRecord.application = 'water_dev'
+      })
+
+      it('returns false', async () => {
+        const result = internalTestRecord.$internal()
+
+        expect(result).to.be.false()
+      })
+    })
+
+    describe('when the "application" field is null', () => {
+      beforeEach(() => {
+        internalTestRecord.application = null
+      })
+
+      it('returns false', async () => {
+        const result = internalTestRecord.$internal()
+
+        expect(result).to.be.false()
+      })
+    })
+  })
+
   describe('$permissions()', () => {
     let permissionRecord
 
