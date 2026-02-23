@@ -45,12 +45,7 @@ describe('Company Contacts - Setup - Check Service', () => {
 
   describe('when creating a company contact', () => {
     beforeEach(async () => {
-      sessionData = {
-        company,
-        name: 'Eric',
-        email: 'eric@test.com',
-        abstractionAlerts: 'yes'
-      }
+      sessionData = _createSessionData(company)
 
       session = await SessionHelper.add({ data: sessionData })
     })
@@ -87,19 +82,57 @@ describe('Company Contacts - Setup - Check Service', () => {
       expect(flashType).to.equal('notification')
       expect(bannerMessage).to.equal({ titleText: 'Contact added', text: `Eric was added to this company` })
     })
+
+    describe('the "abstractionAlerts" property', () => {
+      describe('is "yes"', () => {
+        it('persists the "abstractionAlerts" as "true"', async () => {
+          await SubmitCheckService.go(session.id, yarStub, auth)
+
+          const actualContact = CreateCompanyContactService.go.args[0][1]
+
+          expect(actualContact.abstractionAlerts).to.be.true()
+        })
+      })
+
+      describe(' is "no"', () => {
+        beforeEach(async () => {
+          sessionData = _createSessionData(company)
+
+          session = await SessionHelper.add({ data: { ...sessionData, abstractionAlerts: 'no' } })
+        })
+
+        it('persists the "abstractionAlerts" as "false"', async () => {
+          await SubmitCheckService.go(session.id, yarStub, auth)
+
+          const actualContact = CreateCompanyContactService.go.args[0][1]
+
+          expect(actualContact.abstractionAlerts).to.be.false()
+        })
+      })
+    })
+
+    describe('the "email" property', () => {
+      beforeEach(async () => {
+        sessionData = _createSessionData(company)
+
+        session = await SessionHelper.add({ data: { ...sessionData, email: 'ERICE@TEST.COM' } })
+      })
+
+      it('persists the "email" in lowercase', async () => {
+        await SubmitCheckService.go(session.id, yarStub, auth)
+
+        const actualContact = CreateCompanyContactService.go.args[0][1]
+
+        expect(actualContact.email).to.equal('erice@test.com')
+      })
+    })
   })
 
   describe('when updating a company contact', () => {
     beforeEach(async () => {
       companyContact = CustomersFixtures.companyContact()
 
-      sessionData = {
-        abstractionAlerts: 'yes',
-        company,
-        companyContact,
-        email: 'eric@test.com',
-        name: 'Eric'
-      }
+      sessionData = _updateSessionData(company, companyContact)
 
       session = await SessionHelper.add({ data: sessionData })
     })
@@ -135,26 +168,13 @@ describe('Company Contacts - Setup - Check Service', () => {
       expect(flashType).to.equal('notification')
       expect(bannerMessage).to.equal({ titleText: 'Updated', text: `Contact details updated.` })
     })
-  })
-
-  describe('when formatting the company contact', () => {
-    beforeEach(async () => {
-      sessionData = {
-        company,
-        name: 'Eric',
-        email: 'eric@test.com',
-        abstractionAlerts: 'yes'
-      }
-
-      session = await SessionHelper.add({ data: sessionData })
-    })
 
     describe('the "abstractionAlerts" property', () => {
       describe('is "yes"', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
           await SubmitCheckService.go(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactService.go.args[0][1]
+          const [actualContact] = UpdateCompanyContactService.go.args[0]
 
           expect(actualContact.abstractionAlerts).to.be.true()
         })
@@ -162,20 +182,15 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       describe(' is "no"', () => {
         beforeEach(async () => {
-          sessionData = {
-            company,
-            name: 'Eric',
-            email: 'eric@test.com',
-            abstractionAlerts: 'no'
-          }
+          sessionData = _updateSessionData(company, companyContact)
 
-          session = await SessionHelper.add({ data: sessionData })
+          session = await SessionHelper.add({ data: { ...sessionData, abstractionAlerts: 'no' } })
         })
 
         it('persists the "abstractionAlerts" as "false"', async () => {
           await SubmitCheckService.go(session.id, yarStub, auth)
 
-          const actualContact = CreateCompanyContactService.go.args[0][1]
+          const [actualContact] = UpdateCompanyContactService.go.args[0]
 
           expect(actualContact.abstractionAlerts).to.be.false()
         })
@@ -183,24 +198,40 @@ describe('Company Contacts - Setup - Check Service', () => {
     })
 
     describe('the "email" property', () => {
-      beforeEach(async () => {
-        sessionData = {
-          company,
-          name: 'Eric',
-          email: 'ERICE@TEST.COM',
-          abstractionAlerts: 'no'
-        }
+      describe('when email is in multi cases', () => {
+        beforeEach(async () => {
+          sessionData = _updateSessionData(company, companyContact)
 
-        session = await SessionHelper.add({ data: sessionData })
-      })
+          session = await SessionHelper.add({ data: { ...sessionData, email: 'ERICE@TEST.COM' } })
+        })
 
-      it('persists the "email" in lowercase', async () => {
-        await SubmitCheckService.go(session.id, yarStub, auth)
+        it('persists the "email" in lowercase', async () => {
+          await SubmitCheckService.go(session.id, yarStub, auth)
 
-        const actualContact = CreateCompanyContactService.go.args[0][1]
+          const [actualContact] = UpdateCompanyContactService.go.args[0]
 
-        expect(actualContact.email).to.equal('erice@test.com')
+          expect(actualContact.email).to.equal('erice@test.com')
+        })
       })
     })
   })
 })
+
+function _createSessionData(company) {
+  return {
+    abstractionAlerts: 'yes',
+    company,
+    email: 'eric@test.com',
+    name: 'Eric'
+  }
+}
+
+function _updateSessionData(company, companyContact) {
+  return {
+    abstractionAlerts: 'yes',
+    company,
+    companyContact,
+    email: 'eric@test.com',
+    name: 'Eric'
+  }
+}

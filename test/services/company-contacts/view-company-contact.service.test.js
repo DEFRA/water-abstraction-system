@@ -14,14 +14,17 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 // Things we need to stub
 const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
+const FetchNotificationsService = require('../../../app/services/company-contacts/fetch-notifications.service.js')
 
 // Thing under test
 const ViewCompanyContactService = require('../../../app/services/company-contacts/view-company-contact.service.js')
 
 describe('Company Contacts - View Company Contact Service', () => {
+  const page = 1
+
   let auth
-  let companyContact
   let company
+  let companyContact
   let yarStub
 
   beforeEach(async () => {
@@ -33,6 +36,10 @@ describe('Company Contacts - View Company Contact Service', () => {
 
     Sinon.stub(FetchCompanyService, 'go').returns(company)
     Sinon.stub(FetchCompanyContactService, 'go').returns(companyContact)
+    Sinon.stub(FetchNotificationsService, 'go').returns({
+      notifications: [],
+      totalNumber: 0
+    })
 
     yarStub = {
       flash: Sinon.stub().returns([{ titleText: 'Updated', text: 'Contact details updated.' }])
@@ -45,9 +52,10 @@ describe('Company Contacts - View Company Contact Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCompanyContactService.go(companyContact.id, auth, yarStub)
+      const result = await ViewCompanyContactService.go(companyContact.id, auth, yarStub, page)
 
       expect(result).to.equal({
+        additionalContact: true,
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
           text: 'Go back to contacts'
@@ -64,8 +72,13 @@ describe('Company Contacts - View Company Contact Service', () => {
           text: 'Contact details updated.',
           titleText: 'Updated'
         },
+        notifications: [],
         pageTitle: 'Contact details for Rachael Tyrell',
         pageTitleCaption: 'Tyrell Corporation',
+        pagination: {
+          numberOfPages: 0,
+          showingMessage: 'Showing all 0 communications'
+        },
         removeContactLink: `/system/company-contacts/${companyContact.id}/remove`,
         roles: []
       })

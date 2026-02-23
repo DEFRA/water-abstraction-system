@@ -252,6 +252,19 @@ describe('Notifications - View Notification presenter', () => {
       })
     })
 
+    describe('when a company contact id is provided', () => {
+      it('returns a back link to the view company contact page', () => {
+        const companyContactId = generateUUID()
+
+        const result = ViewNotificationPresenter.go(notification, null, null, companyContactId)
+
+        expect(result.backLink).to.be.equal({
+          href: `/system/company-contacts/${companyContactId}`,
+          text: 'Go back to company contact'
+        })
+      })
+    })
+
     describe('when no licence is provided', () => {
       it('returns a back link to the view notice page', () => {
         const result = ViewNotificationPresenter.go(notification)

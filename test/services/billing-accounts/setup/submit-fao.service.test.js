@@ -54,8 +54,36 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitFAOService.go(session.id, payload)
 
-      expect(result).to.equal({
-        fao: 'yes'
+      expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/contact`)
+    })
+
+    describe('and the user has returned to the page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          fao: 'yes'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitFAOService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            fao: 'yes'
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitFAOService.go(session.id, payload)
+
+        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/contact`)
       })
     })
   })
@@ -83,8 +111,70 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     it('continues the journey', async () => {
       const result = await SubmitFAOService.go(session.id, payload)
 
-      expect(result).to.equal({
-        fao: 'no'
+      expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+    })
+
+    describe('and the user has returned to the page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          fao: 'no'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitFAOService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            fao: 'no'
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitFAOService.go(session.id, payload)
+
+        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+      })
+    })
+
+    describe('and the user had previously completed the "yes" journey', () => {
+      beforeEach(async () => {
+        sessionData = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          contactName: 'Customer Name',
+          contactSelected: 'new',
+          fao: 'yes'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitFAOService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            contactName: null,
+            contactSelected: null,
+            fao: 'no'
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitFAOService.go(session.id, payload)
+
+        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
       })
     })
   })

@@ -101,6 +101,21 @@ describe('Company Contacts - Setup - Check Presenter', () => {
             expect(result.warning).to.be.null()
           })
         })
+
+        describe('and a contact with a matching name and no email (email is null)', () => {
+          beforeEach(() => {
+            session.name = 'Eric'
+            session.email = 'Eric@test.com'
+
+            companyContact.contact.email = null
+          })
+
+          it('returns no warning', () => {
+            const result = CheckPresenter.go(session, companyContacts)
+
+            expect(result.warning).to.be.null()
+          })
+        })
       })
 
       describe('when editing an existing company contact', () => {
@@ -149,6 +164,22 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           beforeEach(() => {
             session.name = 'Eric'
             session.email = 'Eric@test.com'
+          })
+
+          it('returns no warning', () => {
+            const result = CheckPresenter.go(session, companyContacts)
+
+            expect(result.warning).to.be.null()
+          })
+        })
+
+        describe('and a contact with a matching name and no email (email is null)', () => {
+          beforeEach(() => {
+            session.name = 'Eric'
+            // The session will have been with company contact email which can be null
+            session.email = null
+
+            companyContact.contact.email = null
           })
 
           it('returns no warning', () => {
