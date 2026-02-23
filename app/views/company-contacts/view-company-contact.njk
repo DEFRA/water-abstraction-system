@@ -32,7 +32,7 @@
     ]
   }) }}
 
-  {% if 'hof_notifications' in roles %}
+  {% if 'hof_notifications' in roles and additionalContact%}
     <div class="govuk-button-group">
       {{ govukButton({
         text: "Edit contact",

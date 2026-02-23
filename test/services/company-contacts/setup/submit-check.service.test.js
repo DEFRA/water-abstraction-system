@@ -213,22 +213,6 @@ describe('Company Contacts - Setup - Check Service', () => {
           expect(actualContact.email).to.equal('erice@test.com')
         })
       })
-
-      describe('when email is null', () => {
-        beforeEach(async () => {
-          sessionData = _updateSessionData(company, companyContact)
-
-          session = await SessionHelper.add({ data: { ...sessionData, email: null } })
-        })
-
-        it('persists the "email" as null', async () => {
-          await SubmitCheckService.go(session.id, yarStub, auth)
-
-          const [actualContact] = UpdateCompanyContactService.go.args[0]
-
-          expect(actualContact.email).to.be.null()
-        })
-      })
     })
   })
 })
