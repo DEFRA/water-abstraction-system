@@ -19,8 +19,11 @@ const ExternalUserPresenter = require('../../presenters/users/external-user.pres
  */
 async function go(userId) {
   const externalUser = await FetchExternalUserService.go(userId)
+  const formattedData = ExternalUserPresenter.go(externalUser)
 
-  return ExternalUserPresenter.go(externalUser)
+  return {
+    ...formattedData
+  }
 }
 
 module.exports = {

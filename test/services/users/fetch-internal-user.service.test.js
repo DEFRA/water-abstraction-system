@@ -17,16 +17,17 @@ const FetchInternalUserService = require('../../../app/services/users/fetch-inte
 // unlike other fetch tests we don't create any test records and assert they are in our results as we already have
 // sufficient data to work with.
 describe('Users - Fetch Internal User service', () => {
-  let userId
+  let user
 
   describe('when called', () => {
     beforeEach(() => {
-      userId = UsersFixture.adminInternal().id
+      user = UsersFixture.adminInternal()
     })
 
     it('returns the requested user', async () => {
-      const result = await FetchInternalUserService.go(userId)
-      expect(result.username).to.equal(UsersFixture.adminInternal().username)
+      const result = await FetchInternalUserService.go(user.id)
+
+      expect(result.username).to.equal(user.username)
     })
   })
 })

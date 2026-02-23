@@ -8,9 +8,9 @@ const { describe, it, before, after, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
 const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
-const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const UserModel = require('../../../app/models/user.model.js')
 const UsersFixture = require('../../support/fixtures/users.fixture.js')

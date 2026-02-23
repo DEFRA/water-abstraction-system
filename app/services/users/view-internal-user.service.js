@@ -19,8 +19,11 @@ const InternalUserPresenter = require('../../presenters/users/internal-user.pres
  */
 async function go(userId) {
   const internalUser = await FetchInternalUserService.go(userId)
+  const formattedData = InternalUserPresenter.go(internalUser)
 
-  return InternalUserPresenter.go(internalUser)
+  return {
+    ...formattedData
+  }
 }
 
 module.exports = {
