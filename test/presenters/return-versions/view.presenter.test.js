@@ -117,7 +117,7 @@ describe('Return Versions - View presenter', () => {
         }
       })
 
-      describe('and there are both "previous" and "next" licence versions', () => {
+      describe('and there are both "previous" and "next" return versions', () => {
         beforeEach(() => {
           returnVersionData.returnVersionsForPagination = [previousReturnVersion, returnVersion, nextReturnVersion]
         })
@@ -140,7 +140,7 @@ describe('Return Versions - View presenter', () => {
         })
       })
 
-      describe('and there is only a "next" licence version', () => {
+      describe('and there is only a "next" return version', () => {
         beforeEach(() => {
           returnVersionData.returnVersionsForPagination = [returnVersion, nextReturnVersion]
         })
@@ -158,7 +158,7 @@ describe('Return Versions - View presenter', () => {
         })
       })
 
-      describe('and there is only a "previous" licence version', () => {
+      describe('and there is only a "previous" return version', () => {
         beforeEach(() => {
           returnVersionData.returnVersionsForPagination = [previousReturnVersion, returnVersion]
         })
