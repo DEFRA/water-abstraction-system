@@ -888,12 +888,13 @@ function _summary() {
   })
 
   const licenceVersionHolder = LicenceVersionHolderModel.fromJson({
-    id: generateUUID(),
-    holderType: 'organisation',
-    salutation: null,
-    initials: null,
+    derivedName: 'ORDER OF THE PHOENIX',
     forename: null,
-    name: 'ORDER OF THE PHOENIX'
+    holderType: 'organisation',
+    id: generateUUID(),
+    initials: null,
+    name: 'ORDER OF THE PHOENIX',
+    salutation: null
   })
 
   return LicenceModel.fromJson({
