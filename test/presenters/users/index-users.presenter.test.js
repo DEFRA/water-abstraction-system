@@ -3,12 +3,16 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
+
+// Things to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const IndexUsersPresenter = require('../../../app/presenters/users/index-users.presenter.js')
@@ -18,6 +22,8 @@ describe('Users - Index Users presenter', () => {
   let users
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
+
     users = [
       UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess()),
       UsersFixture.transformToFetchUsersResult(UsersFixture.jonLee('user_returns')),
@@ -29,6 +35,10 @@ describe('Users - Index Users presenter', () => {
     auth = {
       credentials: { scope: ['manage_accounts'] }
     }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   it('correctly presents the data', () => {
@@ -45,35 +55,35 @@ describe('Users - Index Users presenter', () => {
       users: [
         {
           email: users[0].username,
-          link: `/user/${users[0].userId}/status`,
+          link: `/system/internal-users/${users[0].id}`,
           permissions: 'Basic access',
           status: 'enabled',
           type: 'Internal'
         },
         {
           email: users[1].username,
-          link: `/user/${users[1].userId}/status`,
+          link: `/system/external-users/${users[1].id}`,
           permissions: 'Returns user',
           status: 'disabled',
           type: 'External'
         },
         {
           email: users[2].username,
-          link: `/user/${users[2].userId}/status`,
+          link: `/system/external-users/${users[2].id}`,
           permissions: 'None',
           status: 'awaiting',
           type: 'External'
         },
         {
           email: users[3].username,
-          link: `/user/${users[3].userId}/status`,
+          link: `/system/internal-users/${users[3].id}`,
           permissions: 'Super user',
           status: 'enabled',
           type: 'Internal'
         },
         {
           email: users[4].username,
-          link: `/user/${users[4].userId}/status`,
+          link: `/system/external-users/${users[4].id}`,
           permissions: 'Basic access',
           status: 'locked',
           type: 'External'

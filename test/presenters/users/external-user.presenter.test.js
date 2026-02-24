@@ -21,7 +21,7 @@ describe('Users - External User Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ExternalUserPresenter.go(user)
+    const result = ExternalUserPresenter.go(user, true)
 
     expect(result).to.equal({
       backLink: {
@@ -33,6 +33,7 @@ describe('Users - External User Presenter', () => {
       lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
       pageTitle: 'User external@example.co.uk',
       pageTitleCaption: 'External',
+      showEditButton: true,
       status: 'enabled'
     })
   })
@@ -40,7 +41,7 @@ describe('Users - External User Presenter', () => {
   describe('the "lastSignedIn" property', () => {
     describe('when the lastLogin is set', () => {
       it('returns the last signed in date and time', () => {
-        const result = ExternalUserPresenter.go(user)
+        const result = ExternalUserPresenter.go(user, true)
 
         expect(result.lastSignedIn).to.equal('Last signed in 6 October 2022 at 10:00:00')
       })

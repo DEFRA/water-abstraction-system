@@ -12,17 +12,20 @@ const { formatLongDateTime, formatLongDate } = require('../base.presenter.js')
 /**
  * Formats data for external users on the `/users/{userId}` page
  *
- * @param {module:UserModel} user - The user, including their related companies and the licence document headers that
- * are attached to those companies
+ * @param {module:UserModel} user - The user to view, including their related companies and the licence document headers
+ * that are attached to those companies
+ * @param {boolean} canEdit - Whether the current user can edit the user being viewed, used to determine whether to show
+ * the edit button on the page
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user) {
+function go(user, canEdit) {
   return {
     backLink: {
       href: '/',
       text: 'Go back to search'
     },
+    showEditButton: canEdit,
     companies: _companies(user),
     id: user.id,
     lastSignedIn: _lastSignedIn(user),

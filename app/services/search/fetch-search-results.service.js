@@ -12,8 +12,7 @@ const { db } = require('../../../db/db.js')
 const BILLING_ACCOUNT_SQL = `
   SELECT
     'billingAccount' AS row_type,
-    id AS row_uu_id,
-    CAST (NULL AS INT) AS row_int_id,
+    id,
     account_number ILIKE ? AS exact,
     5 AS table_order,
     account_number AS row_order,
@@ -22,22 +21,10 @@ const BILLING_ACCOUNT_SQL = `
   WHERE account_number ILIKE ?
 `
 
-// The database tables don't use consistent field types as identifiers, so we need to know which field to use for each
-// type of record
-const ID_FIELD_FOR_TABLE = {
-  billingAccount: 'row_uu_id',
-  licenceHolder: 'row_uu_id',
-  licence: 'row_uu_id',
-  monitoringStation: 'row_uu_id',
-  returnLog: 'row_uu_id',
-  user: 'row_int_id'
-}
-
 const LICENCE_HOLDER_SQL = `
   SELECT
     'licenceHolder' AS row_type,
-    c.id AS row_uu_id,
-    CAST (NULL AS INT) AS row_int_id,
+    c.id,
     c."name" ILIKE ? AS exact,
     2 AS table_order,
     LOWER(c."name") AS row_order,
@@ -56,8 +43,7 @@ const LICENCE_HOLDER_SQL = `
 const LICENCE_SQL = `
   SELECT
     'licence' AS row_type,
-    id AS row_uu_id,
-    CAST (NULL AS INT) AS row_int_id,
+    id,
     licence_ref ILIKE ? AS exact,
     1 AS table_order,
     licence_ref AS row_order,
@@ -69,8 +55,7 @@ const LICENCE_SQL = `
 const MONITORING_STATION_SQL = `
   SELECT
     'monitoringStation' AS row_type,
-    id AS row_uu_id,
-    CAST (NULL AS INT) AS row_int_id,
+    id,
     label ILIKE ? AS exact,
     3 AS table_order,
     label AS row_order,
@@ -82,8 +67,7 @@ const MONITORING_STATION_SQL = `
 const RETURN_LOG_SQL = `
   SELECT
     'returnLog' AS row_type,
-    id AS row_uu_id,
-    CAST (NULL AS INT) AS row_int_id,
+    id,
     return_reference ILIKE ? AS exact,
     4 AS table_order,
     CONCAT(return_reference, ' ', licence_ref, ' ') AS row_order,
@@ -95,8 +79,7 @@ const RETURN_LOG_SQL = `
 const USER_SQL = `
   SELECT
     'user' AS row_type,
-    CAST (NULL AS UUID) AS row_uu_id,
-    user_id AS row_int_id,
+    id,
     username ILIKE ? AS exact,
     6 AS table_order,
     username AS row_order,
@@ -235,8 +218,7 @@ function _monitoringStationSql(resultTypes, searchSqls, countSqls, exactQuery, p
 
 function _results(rows) {
   return rows.map((row) => {
-    const { exact, row_type: type } = row
-    const id = row[ID_FIELD_FOR_TABLE[type]]
+    const { exact, id, row_type: type } = row
 
     return {
       exact,

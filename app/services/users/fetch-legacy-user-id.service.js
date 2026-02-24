@@ -2,7 +2,7 @@
 
 /**
  * Fetches a user to determine their type for display on the /users/{userId} page
- * @module FetchUserTypeService
+ * @module FetchLegacyUserIdService
  */
 
 const UserModel = require('../../models/user.model.js')
@@ -16,13 +16,13 @@ const UserModel = require('../../models/user.model.js')
  * At some point, the other code will be switched over to using the new `id` field and this service can just return the
  * necessary user record.
  *
- * @param {number} userId - The (legacy) numeric ID of the requested user, equating to the `user_id` field in the
- * database
+ * @param {string} id - The new UUID ID of the requested user
  *
- * @returns {Promise<module:UserModel>} the requested user, including its internal ID value
+ * @returns {Promise<module:UserModel>} the requested user with its legacy numeric ID, equating to the `user_id` field
+ * in the database
  */
-async function go(userId) {
-  return UserModel.query().select(['application', 'id']).findOne({ userId })
+async function go(id) {
+  return UserModel.query().select(['userId']).findById(id)
 }
 
 module.exports = {

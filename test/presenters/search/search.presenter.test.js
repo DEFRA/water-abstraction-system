@@ -3,9 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Things to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const SearchPresenter = require('../../../app/presenters/search/search.presenter.js')
@@ -18,6 +22,8 @@ describe('Search - Search presenter', () => {
   let userScopes
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
+
     userScopes = ['billing']
     query = 'searchthis'
     resultType = null
@@ -94,6 +100,9 @@ describe('Search - Search presenter', () => {
             username: 'TESTSEARCH01@example.gov.uk',
             $permissions: () => {
               return { label: 'None' }
+            },
+            $status: () => {
+              return 'enabled'
             }
           },
           type: 'user'
@@ -166,6 +175,9 @@ describe('Search - Search presenter', () => {
             username: 'TESTSEARCH02@example.gov.uk',
             $permissions: () => {
               return { label: 'None' }
+            },
+            $status: () => {
+              return 'enabled'
             }
           },
           type: 'user'
@@ -177,6 +189,10 @@ describe('Search - Search presenter', () => {
       ],
       total: 13
     }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   it('correctly presents the data', () => {
@@ -280,9 +296,9 @@ describe('Search - Search presenter', () => {
           col3Title: 'Last signed in',
           col3Value: '1 January 2001',
           exact: true,
-          link: '/user/user-1/status',
+          link: '/system/external-users/user-1',
           reference: 'TESTSEARCH01@example.gov.uk',
-          statusTag: null,
+          statusTag: 'enabled',
           type: 'User'
         },
         {
@@ -346,9 +362,9 @@ describe('Search - Search presenter', () => {
           col3Title: 'Last signed in',
           col3Value: '1 January 2001',
           exact: false,
-          link: '/user/user-2/status',
+          link: '/system/external-users/user-2',
           reference: 'TESTSEARCH02@example.gov.uk',
-          statusTag: null,
+          statusTag: 'enabled',
           type: 'User'
         }
       ],

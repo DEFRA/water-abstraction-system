@@ -217,12 +217,12 @@ describe('Search - Fetch Search Results service', () => {
           },
           {
             exact: false,
-            id: users[2].userId,
+            id: users[2].id,
             type: 'user'
           },
           {
             exact: false,
-            id: users[0].userId,
+            id: users[0].id,
             type: 'user'
           }
         ],
@@ -849,12 +849,12 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: users[2].userId,
+              id: users[2].id,
               type: 'user'
             },
             {
               exact: false,
-              id: users[0].userId,
+              id: users[0].id,
               type: 'user'
             }
           ],
@@ -875,7 +875,7 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: users[0].userId,
+              id: users[0].id,
               type: 'user'
             }
           ],
@@ -896,12 +896,12 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: users[2].userId,
+              id: users[2].id,
               type: 'user'
             },
             {
               exact: false,
-              id: users[0].userId,
+              id: users[0].id,
               type: 'user'
             }
           ],
@@ -937,7 +937,7 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: true,
-              id: users[2].userId,
+              id: users[2].id,
               type: 'user'
             }
           ],
