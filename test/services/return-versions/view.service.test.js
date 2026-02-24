@@ -23,12 +23,11 @@ const ViewService = require('../../../app/services/return-versions/view.service.
 describe('Return Versions - View service', () => {
   const returnVersionId = generateUUID()
 
-  let returnVersion
+  const returnVersionData = _returnVersionData()
+  const returnVersion = returnVersionData.returnVersion
 
   beforeEach(() => {
-    returnVersion = _returnVersion()
-
-    Sinon.stub(FetchReturnVersionService, 'go').resolves(returnVersion)
+    Sinon.stub(FetchReturnVersionService, 'go').resolves(returnVersionData)
   })
 
   afterEach(() => {
@@ -44,17 +43,16 @@ describe('Return Versions - View service', () => {
           href: `/system/licences/${returnVersion.licence.id}/set-up`,
           text: 'Go back to summary'
         },
-        createdBy: 'carol.shaw@atari.com',
-        createdDate: '5 April 2022',
         licenceId: returnVersion.licence.id,
         licenceRef: '01/123',
         multipleUpload: 'No',
         notes: ['A special note'],
-        pageTitle: 'Requirements for returns for Mrs A J Easley',
+        pageTitle: 'Requirements for returns starting 1 April 2022',
         pageTitleCaption: 'Licence 01/123',
+        pagination: null,
         quarterlyReturnSubmissions: false,
         quarterlyReturns: 'No',
-        reason: 'New licence',
+        reason: 'New licence created on 5 April 2022 by carol.shaw@atari.com',
         requirements: [
           {
             abstractionPeriod: '1 April to 31 October',
@@ -69,14 +67,13 @@ describe('Return Versions - View service', () => {
             title: 'Borehole in field'
           }
         ],
-        startDate: '1 April 2022',
         status: 'current'
       })
     })
   })
 })
 
-function _returnVersion() {
+function _returnVersionData() {
   const contact = ContactModel.fromJson({
     firstName: 'Annie',
     middleInitials: 'J',
@@ -145,5 +142,15 @@ function _returnVersion() {
     ]
   }
 
-  return ReturnVersionModel.fromJson(returnVersionData)
+  const returnVersionsForPagination = [
+    {
+      id: returnVersionData.id,
+      startDate: returnVersionData.startDate
+    }
+  ]
+
+  return {
+    returnVersion: ReturnVersionModel.fromJson(returnVersionData),
+    returnVersionsForPagination
+  }
 }
