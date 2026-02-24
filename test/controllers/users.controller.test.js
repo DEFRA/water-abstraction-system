@@ -4,21 +4,24 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
+const Boom = require('@hapi/boom')
 
 const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
-const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+const { HTTP_STATUS_FOUND, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { generateUUID } = require('../../app/lib/general.lib.js')
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const FetchLegacyIdService = require('../../app/services/users/fetch-legacy-id.service.js')
 const IndexUsersService = require('../../app/services/users/index-users.service.js')
+const SubmitEditUserInternalService = require('../../app/services/users/internal/submit-edit-user.service.js')
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
+const ViewEditUserInternalService = require('../../app/services/users/internal/view-edit-user.service.js')
 const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
 const ViewUserExternalService = require('../../app/services/users/external/view-user.service.js')
 const ViewUserInternalService = require('../../app/services/users/internal/view-user.service.js')
@@ -231,6 +234,122 @@ describe('Users controller', () => {
 
         expect(response.statusCode).to.equal(HTTP_STATUS_OK)
         expect(response.payload).to.contain('Internal')
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        id = generateUUID()
+        postOptions = postRequestOptions(`/users/internal/${id}`, {}, ['manage_accounts'])
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(FetchLegacyIdService, 'go').returns({ userId: 123 })
+        })
+
+        it('redirects to the edit internal user page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/users/internal/${id}/edit`)
+        })
+      })
+    })
+  })
+
+  describe('/users/internal/{id}/edit', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        id = generateUUID()
+        options = _getOptions(`/users/internal/${id}/edit`, { scope: ['manage_accounts'] })
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewEditUserInternalService, 'go').resolves({
+            activeNavBar: 'users',
+            cancelLink: { href: `/system/users/internal/${id}`, text: 'Cancel' },
+            id,
+            lastSignedIn: '6 October 2022 at 10:00:00',
+            pageTitle: 'User basic.access@wrls.gov.uk',
+            pageTitleCaption: 'Internal',
+            permissionOptions: [],
+            permissions: 'basic',
+            roles: [],
+            status: 'enabled'
+          })
+        })
+
+        it('returns the edit internal user page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Internal')
+        })
+      })
+
+      describe('when the request fails', () => {
+        describe('because the current user does not have permission to edit the selected user', () => {
+          beforeEach(async () => {
+            Sinon.stub(ViewEditUserInternalService, 'go').resolves(Boom.forbidden())
+          })
+
+          it('returns a "not found" response', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
+          })
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        id = generateUUID()
+        postOptions = postRequestOptions(`/users/internal/${id}/edit`, {}, ['manage_accounts'])
+      })
+
+      describe('when the request succeeds', () => {
+        describe('and is valid', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitEditUserInternalService, 'go').resolves({})
+          })
+
+          it('redirects to the view internal user page', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+            expect(response.headers.location).to.equal(`/system/users/internal/${id}`)
+          })
+        })
+
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitEditUserInternalService, 'go').resolves({ error: { details: [] } })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+
+      describe('when the request fails', () => {
+        describe('because the current user does not have permission to make the edit to the selected user', () => {
+          beforeEach(async () => {
+            Sinon.stub(SubmitEditUserInternalService, 'go').resolves(Boom.forbidden())
+          })
+
+          it('returns a "not found" response', async () => {
+            const response = await server.inject(postOptions)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
+          })
+        })
       })
     })
   })

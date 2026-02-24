@@ -1,0 +1,32 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% from "macros/user-status-tag.njk" import statusTag %}
+
+{% block pageContent %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukRadios({
+      name: 'permissions',
+      errorMessage: error.permissions,
+      fieldset: {
+        legend: {
+          text: 'Permissions',
+          isPageHeading: false,
+          classes: 'govuk-fieldset__legend--l'
+        }
+      },
+      items: permissionOptions,
+      value: permissions
+    }) }}
+
+    <div class="govuk-button-group">
+      {{ govukButton({ text: "Update", preventDoubleClick: true }) }}
+
+      <a class="govuk-link" href="{{ cancelLink.href }}">{{ cancelLink.text }}</a>
+    </div>
+  </form>
+{% endblock %}
