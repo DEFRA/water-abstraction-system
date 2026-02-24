@@ -29,28 +29,61 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
       const result = CheckPresenter.go(session)
 
       expect(result).to.equal({
-        backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/contact`,
-          text: 'Back'
+        accountSelected: 'Another billing account',
+        links: {
+          accountSelected: `/system/billing-accounts/setup/${session.id}/account`
         },
         pageTitle: 'Check billing account details',
-        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
+        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+        searchInput: ''
       })
     })
   })
 
-  describe('backLink', () => {
-    describe('when called with the fao set to no', () => {
-      it('returns the backLink set to the fao page', () => {
+  describe('the "accountSelected" property', () => {
+    describe('when called with the "accountSelected" set to "customer"', () => {
+      it('returns the name from the billing account', () => {
         const result = CheckPresenter.go({
           ...session,
-          fao: 'no'
+          accountSelected: 'customer'
         })
 
-        expect(result.backLink).to.equal({
-          href: `/system/billing-accounts/setup/${session.id}/fao`,
-          text: 'Back'
+        expect(result.accountSelected).to.equal(session.billingAccount.company.name)
+      })
+    })
+
+    describe('when called with the "accountSelected" set to "another"', () => {
+      it('returns the name from the billing account', () => {
+        const result = CheckPresenter.go({
+          ...session,
+          accountSelected: 'another'
         })
+
+        expect(result.accountSelected).to.equal('Another billing account')
+      })
+    })
+  })
+
+  describe('the "searchInput" property', () => {
+    describe('when called with the "searchInput" set', () => {
+      it('returns the saved search input', () => {
+        const result = CheckPresenter.go({
+          ...session,
+          searchInput: 'Customer name'
+        })
+
+        expect(result.searchInput).to.equal('Customer name')
+      })
+    })
+
+    describe('when called with the "searchInput" set to null', () => {
+      it('returns an empty string', () => {
+        const result = CheckPresenter.go({
+          ...session,
+          searchInput: null
+        })
+
+        expect(result.searchInput).to.equal('')
       })
     })
   })

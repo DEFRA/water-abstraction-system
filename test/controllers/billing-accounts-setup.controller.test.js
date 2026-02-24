@@ -17,6 +17,7 @@ const { postRequestOptions } = require('../support/general.js')
 const InitiateSessionService = require('../../app/services/billing-accounts/setup/initiate-session.service.js')
 const SubmitAccountService = require('../../app/services/billing-accounts/setup/submit-account.service.js')
 const SubmitAccountTypeService = require('../../app/services/billing-accounts/setup/submit-account-type.service.js')
+const SubmitCheckService = require('../../app/services/billing-accounts/setup/submit-check.service.js')
 const SubmitCompanySearchService = require('../../app/services/billing-accounts/setup/submit-company-search.service.js')
 const SubmitContactService = require('../../app/services/billing-accounts/setup/submit-contact.service.js')
 const SubmitContactNameService = require('../../app/services/billing-accounts/setup/submit-contact-name.service.js')
@@ -26,6 +27,7 @@ const SubmitFaoService = require('../../app/services/billing-accounts/setup/subm
 const SubmitSelectCompanyService = require('../../app/services/billing-accounts/setup/submit-select-company.service.js')
 const ViewAccountService = require('../../app/services/billing-accounts/setup/view-account.service.js')
 const ViewAccountTypeService = require('../../app/services/billing-accounts/setup/view-account-type.service.js')
+const ViewCheckService = require('../../app/services/billing-accounts/setup/view-check.service.js')
 const ViewCompanySearchService = require('../../app/services/billing-accounts/setup/view-company-search.service.js')
 const ViewContactService = require('../../app/services/billing-accounts/setup/view-contact.service.js')
 const ViewContactNameService = require('../../app/services/billing-accounts/setup/view-contact-name.service.js')
@@ -628,6 +630,52 @@ describe('Billing Accounts Setup controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/check`)
+        })
+      })
+    })
+  })
+
+  describe('/billing-accounts/setup/{sessionId}/check', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _getRequestOptions(`/billing-accounts/setup/${sessionId}/check`)
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ViewCheckService, 'go').resolves({
+            pageTitle: 'Check billing account details'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Check billing account details')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        sessionId = generateUUID()
+        options = _postRequestOptions(`/billing-accounts/setup/${sessionId}/check`)
+      })
+
+      describe('when the user clicks "Confirm"', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitCheckService, 'go').resolves({
+            redirectUrl: `/system/billing-accounts/setup/${sessionId}/confirmation`
+          })
+        })
+
+        it('redirects to the "confirmation" page', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/confirmation`)
         })
       })
     })
