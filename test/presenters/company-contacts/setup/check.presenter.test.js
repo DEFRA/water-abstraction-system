@@ -21,6 +21,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
   let email
   let name
   let session
+  let singleNotification
 
   beforeEach(() => {
     company = CustomersFixtures.company()
@@ -33,16 +34,19 @@ describe('Company Contacts - Setup - Check Presenter', () => {
     name = companyContact.contact.department
     email = companyContact.contact.email
 
+    singleNotification = undefined
+
     session = { id: generateUUID(), company, abstractionAlerts: 'yes', name, email }
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CheckPresenter.go(session, companyContacts)
+      const result = CheckPresenter.go(session, companyContacts, singleNotification)
 
       expect(result).to.equal({
         abstractionAlerts: 'Yes',
         email,
+        emailInUse: null,
         links: {
           abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
           cancel: `/system/company-contacts/setup/${session.id}/cancel`,
@@ -54,8 +58,40 @@ describe('Company Contacts - Setup - Check Presenter', () => {
         pageTitleCaption: 'Tyrell Corporation',
         warning: {
           iconFallbackText: 'Warning',
-          text: 'A contact with this name and email already exist. Change the name or email, or cancel.'
+          text: 'A contact with this name and email already exists. Change the name or email, or cancel.'
         }
+      })
+    })
+
+    describe('the "emailInUse" property', () => {
+      describe('when editing a company contact', () => {
+        beforeEach(() => {
+          session.companyContact = companyContact
+        })
+
+        describe('when the email has not been used for notifications', () => {
+          it('returns null', () => {
+            const result = CheckPresenter.go(session, companyContacts, singleNotification)
+
+            expect(result.emailInUse).to.be.null()
+          })
+        })
+
+        describe('when the email has been used for notifications', () => {
+          beforeEach(() => {
+            singleNotification = {
+              id: generateUUID()
+            }
+          })
+
+          it('returns null', () => {
+            const result = CheckPresenter.go(session, companyContacts, singleNotification)
+
+            expect(result.emailInUse).to.equal(
+              'Notifications have been sent to this contact, so the email address cannot be changed.'
+            )
+          })
+        })
       })
     })
 
@@ -64,10 +100,10 @@ describe('Company Contacts - Setup - Check Presenter', () => {
         describe('and a contact with a matching name and email exists', () => {
           describe('in the same case', () => {
             it('returns a warning', () => {
-              const result = CheckPresenter.go(session, companyContacts)
+              const result = CheckPresenter.go(session, companyContacts, singleNotification)
 
               expect(result.warning).to.equal({
-                text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
+                text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
                 iconFallbackText: 'Warning'
               })
             })
@@ -79,10 +115,10 @@ describe('Company Contacts - Setup - Check Presenter', () => {
             })
 
             it('still returns a warning', () => {
-              const result = CheckPresenter.go(session, companyContacts)
+              const result = CheckPresenter.go(session, companyContacts, singleNotification)
 
               expect(result.warning).to.equal({
-                text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
+                text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
                 iconFallbackText: 'Warning'
               })
             })
@@ -96,7 +132,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           })
 
           it('returns no warning', () => {
-            const result = CheckPresenter.go(session, companyContacts)
+            const result = CheckPresenter.go(session, companyContacts, singleNotification)
 
             expect(result.warning).to.be.null()
           })
@@ -111,7 +147,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           })
 
           it('returns no warning', () => {
-            const result = CheckPresenter.go(session, companyContacts)
+            const result = CheckPresenter.go(session, companyContacts, singleNotification)
 
             expect(result.warning).to.be.null()
           })
@@ -134,10 +170,10 @@ describe('Company Contacts - Setup - Check Presenter', () => {
 
             describe('in the same case', () => {
               it('returns a warning', () => {
-                const result = CheckPresenter.go(session, companyContacts)
+                const result = CheckPresenter.go(session, companyContacts, singleNotification)
 
                 expect(result.warning).to.equal({
-                  text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
+                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
                   iconFallbackText: 'Warning'
                 })
               })
@@ -149,10 +185,10 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               })
 
               it('still returns a warning', () => {
-                const result = CheckPresenter.go(session, companyContacts)
+                const result = CheckPresenter.go(session, companyContacts, singleNotification)
 
                 expect(result.warning).to.equal({
-                  text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
+                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
                   iconFallbackText: 'Warning'
                 })
               })
@@ -167,7 +203,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           })
 
           it('returns no warning', () => {
-            const result = CheckPresenter.go(session, companyContacts)
+            const result = CheckPresenter.go(session, companyContacts, singleNotification)
 
             expect(result.warning).to.be.null()
           })
@@ -183,7 +219,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           })
 
           it('returns no warning', () => {
-            const result = CheckPresenter.go(session, companyContacts)
+            const result = CheckPresenter.go(session, companyContacts, singleNotification)
 
             expect(result.warning).to.be.null()
           })

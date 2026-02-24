@@ -58,7 +58,7 @@ function _licenceDetails(licenceVersion) {
     applicationNumber: licenceVersion.applicationNumber,
     endDate: formatLongDate(licenceVersion.endDate),
     issueDate: formatLongDate(licenceVersion.issueDate),
-    licenceHolderName: licenceVersion.licenceVersionHolder.$name(),
+    licenceHolderName: licenceVersion.licenceVersionHolder.derivedName,
     startDate: formatLongDate(licenceVersion.startDate)
   }
 }

@@ -27,6 +27,9 @@ exports.up = function (knex) {
     table.text('local_name')
     table.date('last_changed')
     table.boolean('disabled').notNullable().defaultTo(false)
+    table.text('derived_name')
+    table.text('external_id')
+    table.uuid('company_id')
 
     // Timestamps
     table.timestamp('created_at', { useTz: false }).notNullable().defaultTo(knex.fn.now())

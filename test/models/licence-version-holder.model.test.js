@@ -23,20 +23,21 @@ describe('Licence Version Holder model', () => {
     testLicenceVersion = await LicenceVersionHelper.add()
 
     testRecord = await LicenceVersionHolderHelper.add({
-      licenceVersionId: testLicenceVersion.id,
-      holderType: 'organisation',
-      salutation: null,
-      initials: null,
-      forename: null,
-      name: 'ORDER OF THE PHOENIX',
       addressLine1: '12 GRIMMAULD PLACE',
       addressLine2: 'ISLINGTON',
       addressLine3: null,
       addressLine4: null,
-      town: 'LONDON',
-      county: 'GREATER LONDON',
       country: 'UNITED KINGDOM',
-      postcode: 'N1 9LX'
+      county: 'GREATER LONDON',
+      derivedName: 'ORDER OF THE PHOENIX',
+      forename: null,
+      holderType: 'organisation',
+      initials: null,
+      licenceVersionId: testLicenceVersion.id,
+      postcode: 'N1 9LX',
+      name: 'ORDER OF THE PHOENIX',
+      salutation: null,
+      town: 'LONDON'
     })
   })
 
@@ -76,14 +77,6 @@ describe('Licence Version Holder model', () => {
       const result = testRecord.$address()
 
       expect(result).to.equal(['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'])
-    })
-  })
-
-  describe('$name', () => {
-    it('returns the licence version holders name', () => {
-      const result = testRecord.$name()
-
-      expect(result).to.equal('ORDER OF THE PHOENIX')
     })
   })
 })
