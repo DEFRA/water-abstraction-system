@@ -24,13 +24,12 @@
     {{ govukPagination(pagination) }}
   {% endif %}
 
-{% if requirements.length > 0 %}
-    <div class="govuk-!-margin-bottom-9">
-      <h2 class="govuk-heading-l govuk-!-margin-bottom-4">Requirements for returns</h2>
-
+  {% if requirements.length > 0 %}
+    <ul class="govuk-list govuk-!-margin-bottom-6">
+      <li><a class="govuk-link" href="#requirements-for-returns">Requirements for returns</a></li>
       {# Bookmarks - only displays when there is more than 1 return requirement #}
       {% if requirements.length > 1 %}
-        <ul class="govuk-!-margin-bottom-6">
+        <ul>
           {% for requirement in requirements %}
             {% set requirementIndex = loop.index0 %}
             {% set bookmarkTitle %}
@@ -40,10 +39,15 @@
                 Return reference {{ requirement.returnReference }} - {{ requirement.siteDescription | safe }}
               {% endif %}
             {% endset %}
-            <li><a class='govuk-link govuk-body' href="#requirement-{{ requirementIndex }}">{{ bookmarkTitle }}</a></li>
+            <li><a class='govuk-link' href="#requirement-{{ requirementIndex }}">{{ bookmarkTitle }}</a></li>
           {% endfor %}
         </ul>
       {% endif %}
+      <li><a class="govuk-link" href="#additional-submission-options">Additional submission options</a></li>
+    </ul>
+
+    <section id="requirements-for-returns">
+      <h2 class="govuk-heading-m govuk-!-margin-top-3">Requirements for returns</h2>
 
       {% for requirement in requirements %}
         {% set rowIndex = loop.index0 %}
@@ -151,36 +155,38 @@
             ]
           }) }}
       {% endfor %}
-    </div>
+    </section>
 
-    {{ govukSummaryList({
-      rows: [
-        {
-          key: {
-            text: 'Additional submission options',
-            classes: "govuk-heading-m govuk-!-width-one-half"
-          }
-        },
-        {
-          classes: 'govuk-summary-list__row--no-border',
-          key: {
-            text: 'Multiple upload'
+    <section id="additional-submission-options">
+      {{ govukSummaryList({
+        rows: [
+          {
+            key: {
+              text: 'Additional submission options',
+              classes: "govuk-heading-m govuk-!-width-one-half"
+            }
           },
-          value: {
-            text: multipleUpload
-        }
-        },
-        {
-          classes: 'govuk-summary-list__row--no-border',
-          key: {
-          text: 'Quarterly return submissions'
-        },
-          value: {
-          text: quarterlyReturns
-        }
-        } if quarterlyReturnSubmissions
-      ]
-    }) }}
+          {
+            classes: 'govuk-summary-list__row--no-border',
+            key: {
+              text: 'Multiple upload'
+            },
+            value: {
+              text: multipleUpload
+          }
+          },
+          {
+            classes: 'govuk-summary-list__row--no-border',
+            key: {
+            text: 'Quarterly return submissions'
+          },
+            value: {
+            text: quarterlyReturns
+          }
+          } if quarterlyReturnSubmissions
+        ]
+      }) }}
+    </section>
   {% else %}
     <h3 class="govuk-heading-m">Returns are not required for this licence</h3>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
