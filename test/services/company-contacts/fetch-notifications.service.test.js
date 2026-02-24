@@ -17,7 +17,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 // Thing under test
 const FetchNotificationsService = require('../../../app/services/company-contacts/fetch-notifications.service.js')
 
-describe('Company contact - Fetch Communications service', () => {
+describe('Company contact - Fetch Notifications service', () => {
   let notice
   let noticeTwo
   let notification
