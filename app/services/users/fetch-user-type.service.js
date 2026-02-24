@@ -22,7 +22,7 @@ const UserModel = require('../../models/user.model.js')
  * @returns {Promise<module:UserModel>} the requested user, including its internal ID value
  */
 async function go(userId) {
-  return UserModel.query().select(['application', 'id']).findById(userId)
+  return UserModel.query().select(['application', 'id']).findOne({ userId })
 }
 
 module.exports = {

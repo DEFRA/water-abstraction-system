@@ -21,7 +21,7 @@ describe('Users - Fetch User Type service', () => {
 
   describe('when called for an internal user', () => {
     beforeEach(() => {
-      userId = UsersFixture.adminInternal().id
+      userId = UsersFixture.adminInternal().userId
     })
 
     it('returns the correct user type', async () => {
@@ -32,7 +32,7 @@ describe('Users - Fetch User Type service', () => {
 
   describe('when called for an external user', () => {
     beforeEach(() => {
-      userId = UsersFixture.external().id
+      userId = UsersFixture.external().userId
     })
 
     it('returns the correct user type', async () => {
