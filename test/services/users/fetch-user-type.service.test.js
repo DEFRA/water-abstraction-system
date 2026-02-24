@@ -17,27 +17,29 @@ const FetchUserTypeService = require('../../../app/services/users/fetch-user-typ
 // unlike other fetch tests we don't create any test records and assert they are in our results as we already have
 // sufficient data to work with.
 describe('Users - Fetch User Type service', () => {
-  let userId
+  let user
 
   describe('when called for an internal user', () => {
     beforeEach(() => {
-      userId = UsersFixture.adminInternal().userId
+      user = UsersFixture.adminInternal()
     })
 
-    it('returns the correct user type', async () => {
-      const result = await FetchUserTypeService.go(userId)
+    it('returns the correct user type and ID', async () => {
+      const result = await FetchUserTypeService.go(user.userId)
       expect(result.$internal()).to.be.true()
+      expect(result.id).to.equal(user.id)
     })
   })
 
   describe('when called for an external user', () => {
     beforeEach(() => {
-      userId = UsersFixture.external().userId
+      user = UsersFixture.external()
     })
 
-    it('returns the correct user type', async () => {
-      const result = await FetchUserTypeService.go(userId)
+    it('returns the correct user type and ID', async () => {
+      const result = await FetchUserTypeService.go(user.userId)
       expect(result.$internal()).to.be.false()
+      expect(result.id).to.equal(user.id)
     })
   })
 })
