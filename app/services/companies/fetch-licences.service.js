@@ -5,8 +5,10 @@
  * @module FetchLicencesService
  */
 
-const DatabaseConfig = require('../../../config/database.config.js')
 const LicenceModel = require('../../models/licence.model.js')
+const LicenceVersionModel = require('../../models/licence-version.model.js')
+
+const databaseConfig = require('../../../config/database.config.js')
 
 /**
  * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
@@ -18,6 +20,8 @@ const LicenceModel = require('../../models/licence.model.js')
  */
 async function go(companyId, page) {
   const { results, total } = await _fetch(companyId, page)
+  console.log('🚀🚀🚀 ~ results:')
+  console.dir(results, { depth: null, colors: true })
 
   return { licences: results, pagination: { total } }
 }
@@ -26,33 +30,21 @@ async function _fetch(companyId, page) {
   return LicenceModel.query()
     .select(['expiredDate', 'id', 'lapsedDate', 'licenceRef', 'revokedDate', 'startDate'])
     .whereExists(
-      LicenceModel.relatedQuery('licenceDocument')
-        .innerJoinRelated('licenceDocumentRoles')
-        .innerJoin('licenceRoles', 'licenceRoles.id', 'licenceDocumentRoles.licenceRoleId')
-        .where('licenceDocumentRoles.companyId', companyId)
-        .where('licenceRoles.name', 'licenceHolder')
+      LicenceModel.relatedQuery('licenceVersions')
+        .innerJoinRelated('licenceVersionHolder')
+        .where('licenceVersionHolder.companyId', companyId)
     )
-    .withGraphFetched('licenceDocument')
-    .modifyGraph('licenceDocument', (licenceDocumentBuilder) => {
-      licenceDocumentBuilder
-        .select(['id', 'licenceRef'])
-        .withGraphFetched('licenceDocumentRoles')
-        .modifyGraph('licenceDocumentRoles', (licenceDocumentRolesBuilder) => {
-          licenceDocumentRolesBuilder
-            .select(['endDate', 'id', 'startDate', 'endDate'])
-            .where('companyId', companyId)
-            .orderBy([
-              { column: 'licenceRoleId', order: 'asc' },
-              { column: 'startDate', order: 'desc' }
-            ])
-            .withGraphFetched('licenceRole')
-            .modifyGraph('licenceRole', (licenceRoleBuilder) => {
-              licenceRoleBuilder.select(['id', 'label', 'name'])
-            })
-        })
+    .withGraphFetched('licenceVersions')
+    .modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
+      licenceVersionsBuilder
+        .select(['endDate', 'id', 'startDate'])
+        .whereExists(
+          LicenceVersionModel.relatedQuery('licenceVersionHolder').where('licenceVersionHolder.companyId', companyId)
+        )
+        .orderBy([{ column: 'startDate', order: 'desc' }])
     })
     .orderBy('licenceRef', 'asc')
-    .page(page - 1, DatabaseConfig.defaultPageSize)
+    .page(page - 1, databaseConfig.defaultPageSize)
 }
 module.exports = {
   go

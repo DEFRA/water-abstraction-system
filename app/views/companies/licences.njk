@@ -3,59 +3,68 @@
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% from "macros/return-status-tag.njk" import statusTag as returnStatusTag %}
+{% from "macros/licence-status-tag.njk" import statusTag %}
 
 {% set tableRows = [] %}
 
-{% for licenceRole in licenceRoles %}
+{% for licenceVersion in licenceVersions %}
   {% set rowIndex = loop.index0 %}
 
   {% if rowIndex > 0 %}
-    {% set lastLicenceId = licenceRoles[rowIndex - 1].licenceId %}
+    {% set lastLicenceId = licenceVersions[rowIndex - 1].licenceId %}
   {% else %}
     {% set lastLicenceId = null %}
   {% endif %}
 
   {% set tableRow = [] %}
 
-  {% if lastLicenceId !== licenceRole.licenceId %}
+  {% if lastLicenceId !== licenceVersion.licenceId %}
     {% set licenceCell =
       {
-        html: '<a class="govuk-link govuk-body-m" href="/system/licences/' + licenceRole.licenceId + '/summary">' + licenceRole.licenceRef + '</a>',
         attributes: { 'data-test': 'licence-ref-' + rowIndex },
-        rowspan: licenceRole.licenceRoleCount
+        text: licenceVersion.licenceRef,
+        rowspan: licenceVersion.count
       } %}
 
     {% set tableRow = (tableRow.push(licenceCell), tableRow) %}
-  {% endif %}
 
-  {% set communicationTypeCell =
-    {
-      text: licenceRole.communicationType,
-      attributes: { 'data-test': 'communication-type-' + rowIndex }
-    } %}
-  {% set tableRow = (tableRow.push(communicationTypeCell), tableRow) %}
+    {% set licenceStatusTag %}
+      {{ statusTag(licenceVersion.status, true) }}
+    {% endset %}
+
+    {% set statusCell =
+      {
+        attributes: { 'data-test': 'end-date-' + rowIndex },
+        html: licenceStatusTag,
+        rowspan: licenceVersion.count
+      } %}
+    {% set tableRow = (tableRow.push(statusCell), tableRow) %}
+  {% endif %}
 
   {% set startDateCell =
     {
-      text: licenceRole.startDate,
-      attributes: { 'data-test': 'start-date-' + rowIndex }
+      attributes: { 'data-test': 'start-date-' + rowIndex },
+      text: licenceVersion.startDate
     } %}
   {% set tableRow = (tableRow.push(startDateCell), tableRow) %}
 
   {% set endDateCell =
     {
-      text: licenceRole.endDate,
-      attributes: { 'data-test': 'end-date-' + rowIndex }
+      attributes: { 'data-test': 'end-date-' + rowIndex },
+      text: licenceVersion.endDate
     } %}
   {% set tableRow = (tableRow.push(endDateCell), tableRow) %}
 
-  {% set statusCell =
+  {% set viewLink %}
+    <a class="govuk-link" href="{{ licenceVersion.link.href }}">View <span class="govuk-visually-hidden">{{ licenceVersion.link.hiddenText }}</span></a>
+  {% endset %}
+
+  {% set actionCell =
     {
-      html: licenceRole.endDate,
-      attributes: { 'data-test': 'end-date-' + rowIndex }
+      attributes: { 'data-test': 'action-' + rowIndex },
+      html: viewLink
     } %}
-  {% set tableRow = (tableRow.push(endDateCell), tableRow) %}
+  {% set tableRow = (tableRow.push(actionCell), tableRow) %}
 
   {% set tableRows = (tableRows.push(tableRow), tableRows) %}
 {% endfor %}
@@ -69,13 +78,16 @@
         text: "Licence"
       },
       {
-        text: "Communication type"
+        text: "Status"
       },
       {
         text: "Start date"
       },
       {
         text: "End date"
+      },
+      {
+        text: "Action"
       }
     ],
     rows: tableRows

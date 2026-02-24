@@ -23,36 +23,47 @@ function go(company, licences) {
     },
     pageTitleCaption: company.name,
     pageTitle: 'Licences',
-    licenceRoles: _licenceRoles(licences)
+    licenceVersions: _licenceVersions(licences)
   }
 }
 
-function _licenceRoles(licences) {
-  const licenceRoles = []
+function _hiddenText(endDate) {
+  if (!endDate) {
+    return 'current licence version'
+  }
+
+  return `licence version ending on ${formatLongDate(endDate)}`
+}
+
+function _licenceVersions(licences) {
+  const versions = []
 
   for (const licence of licences) {
     const licenceEndDetails = licence.$ends()
 
-    const { licenceDocumentRoles } = licence.licenceDocument
+    const { licenceVersions } = licence
 
-    for (const licenceDocumentRole of licenceDocumentRoles) {
-      const { endDate, licenceRole: role, startDate } = licenceDocumentRole
+    for (const licenceVersion of licenceVersions) {
+      const { endDate, id, startDate } = licenceVersion
 
-      const licenceRoleDetails = {
-        communicationType: role.label,
+      const versionDetails = {
+        count: licenceVersions.length,
         endDate: formatLongDate(endDate),
         licenceId: licence.id,
         licenceRef: licence.licenceRef,
-        licenceRoleCount: licenceDocumentRoles.length,
+        link: {
+          hiddenText: _hiddenText(endDate),
+          href: `/system/licence-versions/${id}`
+        },
         startDate: formatLongDate(startDate),
-        status: licenceEndDetails.status
+        status: licenceEndDetails?.reason ?? 'current'
       }
 
-      licenceRoles.push(licenceRoleDetails)
+      versions.push(versionDetails)
     }
   }
 
-  return licenceRoles
+  return versions
 }
 
 module.exports = {
