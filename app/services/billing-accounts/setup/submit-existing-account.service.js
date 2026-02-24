@@ -48,19 +48,19 @@ function _redirectUrl(session) {
     return `/system/billing-accounts/setup/${session.id}/account-type`
   }
 
-  return `/system/address/${session.id}/postcode`
+  return `/system/billing-accounts/setup/${session.id}/existing-address`
 }
 
 async function _save(session, payload) {
   if (session.existingAccount && session.existingAccount !== payload.existingAccount) {
     session.addressJourney = null
+    session.addressSelected = null
     session.fao = null
     session.contactSelected = null
     session.contactName = null
 
     if (payload.existingAccount !== 'new') {
       session.accountType = null
-      session.addressSelected = null
       session.companiesHouseId = null
       session.companySearch = null
       session.searchIndividualInput = null
@@ -68,15 +68,6 @@ async function _save(session, payload) {
   }
 
   session.existingAccount = payload.existingAccount
-
-  if (!session.addressJourney && session.existingAccount !== 'new') {
-    session.addressJourney = {
-      address: {},
-      backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-account`, text: 'Back' },
-      pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-      redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
-    }
-  }
 
   return session.$update()
 }
