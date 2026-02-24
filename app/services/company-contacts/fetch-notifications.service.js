@@ -25,8 +25,13 @@ async function go(email, page) {
 }
 
 async function _fetch(email, page) {
+  if (!email) {
+    return { results: [], total: 0 }
+  }
+
   return NotificationModel.query()
     .select(['createdAt', 'id', 'messageType', 'status'])
+    .whereNotNull('recipient')
     .where('recipient', email)
     .whereNotIn('messageRef', [
       'email_change_email_in_use_email',
