@@ -13,11 +13,11 @@
   <hr class="govuk-section-break govuk-!-margin-bottom-5 govuk-section-break">
 
   {% if reason %}
-    <p class="govuk-body-l"> {{ reason }} </p>
+    <p class="govuk-body-l">{{ reason }}</p>
   {% endif %}
 
   {% if notes %}
-    <p><strong>Notes:</strong> {{ newLineArrayItems(notes) }} </p>
+    <p><strong>Notes:</strong>{{ newLineArrayItems(notes) }}</p>
   {% endif %}
 
   {% if pagination %}
@@ -77,7 +77,7 @@
         {{ govukSummaryList({
             card: {
               title: {
-                html: "<p> Return reference " + requirement.returnReference + "</p>" + requirement.title
+                html: "<p>Return reference " + requirement.returnReference + "</p>" + requirement.title
               },
               attributes: {
                 id: 'requirement-' + rowIndex
