@@ -36,7 +36,7 @@ async function _fetch(licenceId) {
       licenceVersionsBuilder
         .withGraphFetched('licenceVersionHolder')
         .modifyGraph('licenceVersionHolder', (licenceVersionHolderBuilder) => {
-          licenceVersionHolderBuilder.select(['id', 'forename', 'holderType', 'initials', 'name', 'salutation'])
+          licenceVersionHolderBuilder.select(['derivedName', 'id'])
         })
         .withGraphFetched('licenceVersionPurposes')
         .modifyGraph('licenceVersionPurposes', (licenceVersionPurposesBuilder) => {
