@@ -14,12 +14,14 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
 const FetchCompanyContactsService = require('../../../../app/services/company-contacts/setup/fetch-company-contacts.service.js')
+const FetchNotificationService = require('../../../../app/services/company-contacts/setup/fetch-notification.service.js')
 
 // Thing under test
 const ViewCheckService = require('../../../../app/services/company-contacts/setup/view-check.service.js')
 
 describe('Company Contacts - Setup - Check Service', () => {
   let company
+  let notification
   let session
   let sessionData
   let yarStub
@@ -31,7 +33,11 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     session = await SessionHelper.add({ data: sessionData })
 
+    notification = undefined
+
     Sinon.stub(FetchCompanyContactsService, 'go').returns(CustomersFixtures.companyContacts())
+
+    Sinon.stub(FetchNotificationService, 'go').returns(notification)
 
     yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
   })
@@ -47,6 +53,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       expect(result).to.equal({
         abstractionAlerts: 'Yes',
         email: 'eric@test.com',
+        emailInUse: null,
         links: {
           abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
           cancel: `/system/company-contacts/setup/${session.id}/cancel`,

@@ -51,7 +51,7 @@ describe('Company Contacts - Setup - Fetch Company Contact service', () => {
           id: contact.id,
           contactType: 'person',
           department: null,
-          email: 'amara.gupta@example.com',
+          email: null,
           firstName: 'Amara',
           initials: null,
           lastName: 'Gupta',
