@@ -1,6 +1,7 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
@@ -17,6 +18,10 @@
 
   {% if notes %}
     <p><strong>Notes:</strong> {{ newLineArrayItems(notes) }} </p>
+  {% endif %}
+
+  {% if pagination %}
+    {{ govukPagination(pagination) }}
   {% endif %}
 
 {% if requirements.length > 0 %}

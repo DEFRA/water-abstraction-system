@@ -5,20 +5,21 @@
  * @module ViewPresenter
  */
 
-const { formatAbstractionPeriod } = require('../base.presenter.js')
-const { formatLongDate } = require('../base.presenter.js')
+const { formatAbstractionPeriod, formatLongDate } = require('../base.presenter.js')
 const { isQuarterlyReturnSubmissions } = require('../../lib/dates.lib.js')
+const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
 const { returnRequirementReasons, returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats return version data ready for presenting in the view return version page
  *
- * @param {ReturnVersionModel} returnVersion - The return version and associated, licence, and return requirements
- * (requirement, points, purposes)
+ * @param {ReturnVersionModel} returnVersionData - The return version and the return versions for pagination
  *
- * @returns {object} page data needed by the view template
+ * @returns {object} page data formatted for the view template
  */
-function go(returnVersion) {
+function go(returnVersionData) {
+  const { returnVersion, returnVersionsForPagination } = returnVersionData
+
   const { licence, multipleUpload, quarterlyReturns, returnRequirements, startDate, status } = returnVersion
 
   return {
@@ -32,6 +33,7 @@ function go(returnVersion) {
     notes: returnVersion.$notes(),
     pageTitle: `Requirements for returns starting ${formatLongDate(startDate)}`,
     pageTitleCaption: `Licence ${licence.licenceRef}`,
+    pagination: _pagination(returnVersionsForPagination, returnVersion),
     quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(startDate),
     quarterlyReturns: quarterlyReturns === true ? 'Yes' : 'No',
     reason: _reason(returnVersion),
@@ -109,6 +111,40 @@ function _mapRequirement(requirement) {
     siteDescription: requirement.siteDescription ?? '',
     title: requirement.siteDescription ?? ''
   }
+}
+
+/**
+ * Calculate the previous and next licence versions to create the pagination object. This feeds directly into the GDS
+ * component.
+ *
+ * @private
+ */
+function _pagination(returnVersionsForPagination, returnVersion) {
+  const { previous, next } = PreviousAndNextPresenter.go(returnVersionsForPagination, returnVersion)
+
+  if (!next && !previous) {
+    return null
+  }
+
+  const pagination = {}
+
+  if (previous) {
+    pagination.previous = {
+      text: 'Previous version',
+      labelText: `Starting ${formatLongDate(previous.startDate)}`,
+      href: `/system/return-versions/${previous.id}`
+    }
+  }
+
+  if (next) {
+    pagination.next = {
+      text: 'Next version',
+      labelText: `Starting ${formatLongDate(next.startDate)}`,
+      href: `/system/return-versions/${next.id}`
+    }
+  }
+
+  return pagination
 }
 
 function _purposes(returnRequirementPurposes) {
