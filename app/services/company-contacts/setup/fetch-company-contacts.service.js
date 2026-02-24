@@ -16,7 +16,7 @@ const CompanyContactModel = require('../../../models/company-contact.model.js')
  * @param {string} companyId - The company id for the company
  * @param {object} companyContact - The company contact being edited (if it exists)
  *
- * @returns {Promise<object>} the company contacts for the company
+ * @returns {Promise<object[]>} the company contacts for the company
  */
 async function go(companyId, companyContact) {
   return _fetch(companyId, companyContact)

@@ -12,11 +12,15 @@ const { titleCase } = require('../../base.presenter.js')
  *
  * @param {object} session - The session instance
  * @param {object[]} savedCompanyContacts - An array of company contacts stored in the database
+ * @param {module:NotificationModel | undefined} sentNotification - A notification, or undefined if the email address
+ * has not been used to send notifications
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session, savedCompanyContacts) {
-  const { company, email, name, abstractionAlerts } = session
+function go(session, savedCompanyContacts, sentNotification) {
+  const { company, email, name, abstractionAlerts, companyContact } = session
+
+  const matchingContact = _matchingContact(email, name, savedCompanyContacts)
 
   return {
     abstractionAlerts: titleCase(abstractionAlerts),
@@ -30,8 +34,25 @@ function go(session, savedCompanyContacts) {
       email: `/system/company-contacts/setup/${session.id}/contact-email`,
       name: `/system/company-contacts/setup/${session.id}/contact-name`
     },
-    warning: _warning(email, name, savedCompanyContacts)
+    warning: _warning(matchingContact),
+    emailInUse: _emailInUse(sentNotification, companyContact)
   }
+}
+
+/**
+ * The presence of the 'companyContact' in session indicates that we are editing an existing contact.
+ *
+ * When editing, we do not want to allow the user to change the email address if the email address has been used to send a
+ * notification.
+ *
+ * @private
+ */
+function _emailInUse(sentNotification, companyContact) {
+  if (sentNotification && companyContact) {
+    return 'Notifications have been sent to this contact, so the email address cannot be changed.'
+  }
+
+  return null
 }
 
 /*
@@ -61,12 +82,10 @@ function _matchingContact(email, name, savedCompanyContacts) {
  * This variable is also used to show / hide the 'confirm' button, we do not allow a user to submit if the contact already
  * exists (when creating a company contact).
  */
-function _warning(email, name, savedCompanyContacts) {
-  const matchingContact = _matchingContact(email, name, savedCompanyContacts)
-
+function _warning(matchingContact) {
   if (matchingContact) {
     return {
-      text: 'A contact with this name and email already exist. Change the name or email, or cancel.',
+      text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
       iconFallbackText: 'Warning'
     }
   }
