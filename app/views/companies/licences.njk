@@ -3,6 +3,8 @@
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
+{% from "macros/return-status-tag.njk" import statusTag as returnStatusTag %}
+
 {% set tableRows = [] %}
 
 {% for licenceRole in licenceRoles %}
@@ -44,6 +46,13 @@
   {% set endDateCell =
     {
       text: licenceRole.endDate,
+      attributes: { 'data-test': 'end-date-' + rowIndex }
+    } %}
+  {% set tableRow = (tableRow.push(endDateCell), tableRow) %}
+
+  {% set statusCell =
+    {
+      html: licenceRole.endDate,
       attributes: { 'data-test': 'end-date-' + rowIndex }
     } %}
   {% set tableRow = (tableRow.push(endDateCell), tableRow) %}

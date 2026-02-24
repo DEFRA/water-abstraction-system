@@ -31,7 +31,7 @@ function _licenceRoles(licences) {
   const licenceRoles = []
 
   for (const licence of licences) {
-    // const licenceEndDetails = licence.$ends()
+    const licenceEndDetails = licence.$ends()
 
     const { licenceDocumentRoles } = licence.licenceDocument
 
@@ -44,7 +44,8 @@ function _licenceRoles(licences) {
         licenceId: licence.id,
         licenceRef: licence.licenceRef,
         licenceRoleCount: licenceDocumentRoles.length,
-        startDate: formatLongDate(startDate)
+        startDate: formatLongDate(startDate),
+        status: licenceEndDetails.status
       }
 
       licenceRoles.push(licenceRoleDetails)
