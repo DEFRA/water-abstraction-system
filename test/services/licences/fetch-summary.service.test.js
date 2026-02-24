@@ -168,12 +168,8 @@ describe('Licences - Fetch Summary service', () => {
             startDate: new Date('2022-05-01'),
             status: 'current',
             licenceVersionHolder: {
-              id: licenceVersionHolder.id,
-              forename: null,
-              holderType: 'organisation',
-              initials: null,
-              name: null,
-              salutation: null
+              derivedName: null,
+              id: licenceVersionHolder.id
             },
             licenceVersionPurposes: [
               {

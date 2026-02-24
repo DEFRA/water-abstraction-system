@@ -150,7 +150,7 @@ function _licenceHolder(licence) {
     return ''
   }
 
-  return licence.licenceVersions[0].licenceVersionHolder.$name()
+  return licence.licenceVersions[0].licenceVersionHolder.derivedName
 }
 
 function _licenceVersionPurposes(licence) {

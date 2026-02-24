@@ -77,20 +77,21 @@ function licence() {
  */
 function licenceVersion() {
   const licenceVersionHolder = LicenceVersionHolderModel.fromJson({
-    id: generateUUID(),
-    holderType: 'organisation',
-    salutation: null,
-    initials: null,
-    forename: null,
-    name: 'ORDER OF THE PHOENIX',
     addressLine1: '12 GRIMMAULD PLACE',
     addressLine2: 'ISLINGTON',
     addressLine3: null,
     addressLine4: null,
-    town: 'LONDON',
     county: 'GREATER LONDON',
     country: 'UNITED KINGDOM',
-    postcode: 'N1 9LX'
+    derivedName: 'ORDER OF THE PHOENIX',
+    forename: null,
+    holderType: 'organisation',
+    id: generateUUID(),
+    initials: null,
+    postcode: 'N1 9LX',
+    name: 'ORDER OF THE PHOENIX',
+    salutation: null,
+    town: 'LONDON'
   })
 
   return LicenceVersionModel.fromJson({
