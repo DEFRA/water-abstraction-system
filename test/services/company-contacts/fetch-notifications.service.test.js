@@ -109,4 +109,19 @@ describe('Company contact - Fetch Notifications service', () => {
       })
     })
   })
+
+  describe('when the company contact has no email', () => {
+    beforeEach(() => {
+      email = null
+    })
+
+    it('returns no notifications', async () => {
+      const result = await FetchNotificationsService.go(email, 1)
+
+      expect(result).to.equal({
+        notifications: [],
+        totalNumber: 0
+      })
+    })
+  })
 })
