@@ -64,7 +64,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       it('returns the link for the "account" page', () => {
         const result = ExistingAddressPresenter.go(session, addresses)
 
-        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account`)
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/existing-account`)
       })
     })
 
@@ -89,6 +89,19 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
         const result = ExistingAddressPresenter.go(session, addresses)
 
         expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account-type`)
+      })
+    })
+
+    describe('when "accountType" and "existingAccount" are null in the session', () => {
+      beforeEach(() => {
+        session.accountType = null
+        session.existingAccount = null
+      })
+
+      it('returns the link for the "account-type" page', () => {
+        const result = ExistingAddressPresenter.go(session, addresses)
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account`)
       })
     })
   })

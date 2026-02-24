@@ -37,6 +37,10 @@ function _backLink(session) {
     return `/system/billing-accounts/setup/${session.id}/select-company`
   }
 
+  if (session.existingAccount) {
+    return `/system/billing-accounts/setup/${session.id}/existing-account`
+  }
+
   return `/system/billing-accounts/setup/${session.id}/account`
 }
 
