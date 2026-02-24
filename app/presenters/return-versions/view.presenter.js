@@ -13,7 +13,7 @@ const { returnRequirementReasons, returnRequirementFrequencies } = require('../.
 /**
  * Formats return version data ready for presenting in the view return version page
  *
- * @param {ReturnVersionModel} returnVersionData - The return version and the return versions for pagination
+ * @param {object} returnVersionData - The selected return version, and the return versions for pagination
  *
  * @returns {object} page data formatted for the view template
  */

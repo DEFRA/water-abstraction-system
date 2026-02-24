@@ -10,7 +10,7 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
 /**
  * Fetches the matching return version and associated licence, return requirements, points and purposes data
  *
- * @param {string} returnVersionId - The UUID for the return version to fetch
+ * @param {string} returnVersionId - The UUID of the return version to fetch
  *
  * @returns {Promise<ReturnVersionModel>} The return version plus linked licence, return requirements (requirement,
  * points, purposes)
