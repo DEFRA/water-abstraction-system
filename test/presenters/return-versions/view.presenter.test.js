@@ -19,30 +19,31 @@ const ViewPresenter = require('../../../app/presenters/return-versions/view.pres
 
 describe('Return Versions - View presenter', () => {
   let returnVersion
+  let returnVersionData
 
   beforeEach(() => {
-    returnVersion = _returnVersion()
+    returnVersionData = _returnVersionData()
+    returnVersion = returnVersionData.returnVersion
   })
 
   it('correctly presents the data', () => {
-    const result = ViewPresenter.go(returnVersion)
+    const result = ViewPresenter.go(returnVersionData)
 
     expect(result).to.equal({
       backLink: {
         href: `/system/licences/${returnVersion.licence.id}/set-up`,
         text: 'Go back to summary'
       },
-      createdBy: 'carol.shaw@atari.com',
-      createdDate: '5 April 2022',
       licenceId: returnVersion.licence.id,
       licenceRef: '01/123',
       multipleUpload: 'No',
       notes: ['A special note'],
-      pageTitle: 'Requirements for returns for Mrs A J Easley',
+      pageTitle: 'Requirements for returns starting 1 April 2022',
       pageTitleCaption: 'Licence 01/123',
+      pagination: null,
       quarterlyReturnSubmissions: false,
       quarterlyReturns: 'No',
-      reason: 'New licence',
+      reason: 'New licence created on 5 April 2022 by carol.shaw@atari.com',
       requirements: [
         {
           abstractionPeriod: '1 April to 31 October',
@@ -57,38 +58,7 @@ describe('Return Versions - View presenter', () => {
           title: 'Borehole in field'
         }
       ],
-      startDate: '1 April 2022',
       status: 'current'
-    })
-  })
-
-  describe('the "createdBy" property', () => {
-    describe('when there is no user linked to the return', () => {
-      beforeEach(() => {
-        returnVersion.user = null
-      })
-
-      it('returns "Migrated from NALD" ', () => {
-        const result = ViewPresenter.go(returnVersion)
-
-        expect(result.createdBy).to.equal('Migrated from NALD')
-      })
-    })
-
-    describe('when there is a user linked to the return', () => {
-      it("returns the user's username", () => {
-        const result = ViewPresenter.go(returnVersion)
-
-        expect(result.createdBy).to.equal('carol.shaw@atari.com')
-      })
-    })
-  })
-
-  describe('the "createdDate" property', () => {
-    it('returns created date', () => {
-      const result = ViewPresenter.go(returnVersion)
-
-      expect(result.createdDate).to.equal('5 April 2022')
     })
   })
 
@@ -99,7 +69,7 @@ describe('Return Versions - View presenter', () => {
       })
 
       it('returns "Yes"', () => {
-        const result = ViewPresenter.go(returnVersion)
+        const result = ViewPresenter.go(returnVersionData)
 
         expect(result.multipleUpload).to.equal('Yes')
       })
@@ -107,7 +77,7 @@ describe('Return Versions - View presenter', () => {
 
     describe('when multipleUpload is false', () => {
       it('returns "No"', () => {
-        const result = ViewPresenter.go(returnVersion)
+        const result = ViewPresenter.go(returnVersionData)
 
         expect(result.multipleUpload).to.equal('No')
       })
@@ -115,10 +85,96 @@ describe('Return Versions - View presenter', () => {
   })
 
   describe('the "pageTitle" property', () => {
-    it("returns the title incorporating the licence holder's name", () => {
-      const result = ViewPresenter.go(returnVersion)
+    it('returns the title incorporating the return versions start date', () => {
+      const result = ViewPresenter.go(returnVersionData)
 
-      expect(result.pageTitle).to.equal('Requirements for returns for Mrs A J Easley')
+      expect(result.pageTitle).to.equal('Requirements for returns starting 1 April 2022')
+    })
+  })
+
+  describe('the "pagination" property', () => {
+    describe('when there is no "pagination" required', () => {
+      it('returns null', () => {
+        const result = ViewPresenter.go(returnVersionData)
+
+        expect(result.pagination).to.be.null()
+      })
+    })
+
+    describe('when there is "pagination"', () => {
+      let previousReturnVersion
+      let nextReturnVersion
+
+      beforeEach(() => {
+        previousReturnVersion = {
+          id: generateUUID(),
+          startDate: new Date('2019-01-01')
+        }
+
+        nextReturnVersion = {
+          id: generateUUID(),
+          startDate: new Date('2025-01-01')
+        }
+      })
+
+      describe('and there are both "previous" and "next" licence versions', () => {
+        beforeEach(() => {
+          returnVersionData.returnVersionsForPagination = [previousReturnVersion, returnVersion, nextReturnVersion]
+        })
+
+        it('returns the "previous" and "next" links', () => {
+          const result = ViewPresenter.go(returnVersionData)
+
+          expect(result.pagination).to.equal({
+            next: {
+              href: `/system/return-versions/${nextReturnVersion.id}`,
+              labelText: 'Starting 1 January 2025',
+              text: 'Next version'
+            },
+            previous: {
+              href: `/system/return-versions/${previousReturnVersion.id}`,
+              labelText: 'Starting 1 January 2019',
+              text: 'Previous version'
+            }
+          })
+        })
+      })
+
+      describe('and there is only a "next" licence version', () => {
+        beforeEach(() => {
+          returnVersionData.returnVersionsForPagination = [returnVersion, nextReturnVersion]
+        })
+
+        it('returns the "next" link', () => {
+          const result = ViewPresenter.go(returnVersionData)
+
+          expect(result.pagination).to.equal({
+            next: {
+              href: `/system/return-versions/${nextReturnVersion.id}`,
+              labelText: 'Starting 1 January 2025',
+              text: 'Next version'
+            }
+          })
+        })
+      })
+
+      describe('and there is only a "previous" licence version', () => {
+        beforeEach(() => {
+          returnVersionData.returnVersionsForPagination = [previousReturnVersion, returnVersion]
+        })
+
+        it('returns the "previous" link', () => {
+          const result = ViewPresenter.go(returnVersionData)
+
+          expect(result.pagination).to.equal({
+            previous: {
+              href: `/system/return-versions/${previousReturnVersion.id}`,
+              labelText: 'Starting 1 January 2019',
+              text: 'Previous version'
+            }
+          })
+        })
+      })
     })
   })
 
@@ -129,7 +185,7 @@ describe('Return Versions - View presenter', () => {
       })
 
       it('returns "Yes"', () => {
-        const result = ViewPresenter.go(returnVersion)
+        const result = ViewPresenter.go(returnVersionData)
 
         expect(result.quarterlyReturns).to.equal('Yes')
       })
@@ -137,7 +193,7 @@ describe('Return Versions - View presenter', () => {
 
     describe('when quarterlyReturns is false', () => {
       it('returns "No"', () => {
-        const result = ViewPresenter.go(returnVersion)
+        const result = ViewPresenter.go(returnVersionData)
 
         expect(result.quarterlyReturns).to.equal('No')
       })
@@ -151,7 +207,7 @@ describe('Return Versions - View presenter', () => {
       })
 
       it('returns true', () => {
-        const result = ViewPresenter.go(returnVersion)
+        const result = ViewPresenter.go(returnVersionData)
 
         expect(result.quarterlyReturnSubmissions).to.be.true()
       })
@@ -159,7 +215,7 @@ describe('Return Versions - View presenter', () => {
 
     describe('when return version start date is not for quarterly return submissions', () => {
       it('returns false', () => {
-        const result = ViewPresenter.go(returnVersion)
+        const result = ViewPresenter.go(returnVersionData)
 
         expect(result.quarterlyReturnSubmissions).to.be.false()
       })
@@ -168,10 +224,24 @@ describe('Return Versions - View presenter', () => {
 
   describe('the "reason" property', () => {
     describe('when there is a reason', () => {
-      it('returns the formatted reason', () => {
-        const result = ViewPresenter.go(returnVersion)
+      describe('and the record has a user associated with it', () => {
+        it('returns the formatted reason including the user that created it', () => {
+          const result = ViewPresenter.go(returnVersionData)
 
-        expect(result.reason).to.equal('New licence')
+          expect(result.reason).to.equal('New licence created on 5 April 2022 by carol.shaw@atari.com')
+        })
+      })
+
+      describe('and the record has no user associated with it', () => {
+        beforeEach(() => {
+          returnVersion.user = null
+        })
+
+        it('returns the formatted reason specifying that it was migrated from NALD', () => {
+          const result = ViewPresenter.go(returnVersionData)
+
+          expect(result.reason).to.equal('New licence migrated from NALD on 5 April 2022')
+        })
       })
     })
 
@@ -181,29 +251,30 @@ describe('Return Versions - View presenter', () => {
       })
 
       describe('and no mod log entries', () => {
-        it('returns an empty string', () => {
-          const result = ViewPresenter.go(returnVersion)
+        it('returns the date the record was created', () => {
+          const result = ViewPresenter.go(returnVersionData)
 
-          expect(result.reason).to.equal('')
+          expect(result.reason).to.equal('Created on 5 April 2022')
         })
       })
 
       describe('but there is a mod log entry with a reason', () => {
         beforeEach(() => {
+          returnVersion.user = null
           returnVersion.modLogs = [
             {
               naldDate: new Date('2019-03-01'),
               note: null,
               reasonDescription: 'Record loaded during migration',
-              userId: 'TTESTER'
+              userId: 'TESTER'
             }
           ]
         })
 
         it('returns reason from the mod log', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
-          expect(result.reason).to.equal('Record loaded during migration')
+          expect(result.reason).to.equal('Record loaded during migration created on 1 March 2019 by TESTER')
         })
       })
     })
@@ -213,7 +284,7 @@ describe('Return Versions - View presenter', () => {
     describe('the requirements "abstractionPeriod" property', () => {
       describe('when the abstraction period has been set', () => {
         it('formats the abstraction period for display', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           const { abstractionPeriod } = result.requirements[0]
 
@@ -230,7 +301,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           expect(result.requirements[0].abstractionPeriod).to.equal('')
         })
@@ -240,7 +311,7 @@ describe('Return Versions - View presenter', () => {
     describe('the requirements "agreementsExceptions" property', () => {
       describe('when no agreements or exceptions have been applied', () => {
         it('returns "None"', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           const { agreementsExceptions } = result.requirements[0]
 
@@ -254,7 +325,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it("returns it's display text (Gravity fill)", () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           const { agreementsExceptions } = result.requirements[0]
 
@@ -269,7 +340,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('returns them joined with an "and" (Gravity fill and Transfer re-abstraction scheme)', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           const { agreementsExceptions } = result.requirements[0]
 
@@ -286,7 +357,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('returns them joined with an ", and" (Gravity fill, Transfer re-abstraction scheme, Two-part tariff, and 56 returns exception)', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           const { agreementsExceptions } = result.requirements[0]
 
@@ -300,7 +371,7 @@ describe('Return Versions - View presenter', () => {
     describe('the requirements "points" property', () => {
       // Formatting of the points is handled by PointModel.$describe() so testing is light here
       it('formats the points for display', () => {
-        const result = ViewPresenter.go(returnVersion)
+        const result = ViewPresenter.go(returnVersionData)
 
         const { points } = result.requirements[0]
 
@@ -315,7 +386,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('formats the purposes for display with the purpose description in brackets', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           const { purposes } = result.requirements[0]
 
@@ -325,7 +396,7 @@ describe('Return Versions - View presenter', () => {
 
       describe('when a purpose description (alias) was not added to the purpose', () => {
         it('formats the purposes for display with just the default description', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           const { purposes } = result.requirements[0]
 
@@ -341,7 +412,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('formats the cycle for display (Summer)', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           const { returnsCycle } = result.requirements[0]
 
@@ -351,7 +422,7 @@ describe('Return Versions - View presenter', () => {
 
       describe('when the requirement is for the "winter-and-all-year" returns cycle', () => {
         it('formats the cycle for display (Winter and all year)', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           const { returnsCycle } = result.requirements[0]
 
@@ -363,7 +434,7 @@ describe('Return Versions - View presenter', () => {
     describe('the requirements "siteDescription" property', () => {
       describe('when there is a site description', () => {
         it('returns the site description', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           const { siteDescription } = result.requirements[0]
 
@@ -377,7 +448,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('returns an empty string', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           const { siteDescription } = result.requirements[0]
 
@@ -389,7 +460,7 @@ describe('Return Versions - View presenter', () => {
     describe('the requirements "title" property', () => {
       describe('when there is a site description', () => {
         it('returns the site description as the title', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           const { title } = result.requirements[0]
 
@@ -403,7 +474,7 @@ describe('Return Versions - View presenter', () => {
         })
 
         it('returns an empty string as the title', () => {
-          const result = ViewPresenter.go(returnVersion)
+          const result = ViewPresenter.go(returnVersionData)
 
           const { title } = result.requirements[0]
 
@@ -414,7 +485,7 @@ describe('Return Versions - View presenter', () => {
   })
 })
 
-function _returnVersion() {
+function _returnVersionData() {
   const contact = ContactModel.fromJson({
     firstName: 'Annie',
     middleInitials: 'J',
@@ -483,5 +554,15 @@ function _returnVersion() {
     ]
   }
 
-  return ReturnVersionModel.fromJson(returnVersionData)
+  const returnVersionsForPagination = [
+    {
+      id: returnVersionData.id,
+      startDate: returnVersionData.startDate
+    }
+  ]
+
+  return {
+    returnVersion: ReturnVersionModel.fromJson(returnVersionData),
+    returnVersionsForPagination
+  }
 }
