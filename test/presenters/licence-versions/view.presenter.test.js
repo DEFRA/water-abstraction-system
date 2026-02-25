@@ -206,7 +206,10 @@ describe('Licence Versions - View presenter', () => {
         it('returns the notes', () => {
           const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-          expect(result.notes).to.equal(['Whole licence trade'])
+          expect(result.notes).to.equal({
+            additionalNotes: [],
+            firstNote: 'Whole licence trade'
+          })
         })
       })
 
