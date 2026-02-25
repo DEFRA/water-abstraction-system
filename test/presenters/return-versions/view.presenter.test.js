@@ -37,7 +37,10 @@ describe('Return Versions - View presenter', () => {
       licenceId: returnVersion.licence.id,
       licenceRef: '01/123',
       multipleUpload: 'No',
-      notes: ['A special note'],
+      notes: {
+        additionalNotes: [],
+        firstNote: 'A note on the return version record'
+      },
       pageTitle: 'Requirements for returns starting 1 April 2022',
       pageTitleCaption: 'Licence 01/123',
       pagination: null,
@@ -80,6 +83,69 @@ describe('Return Versions - View presenter', () => {
         const result = ViewPresenter.go(returnVersionData)
 
         expect(result.multipleUpload).to.equal('No')
+      })
+    })
+  })
+
+  describe('the "notes" property', () => {
+    describe('when there are no notes', () => {
+      beforeEach(() => {
+        returnVersion.modLogs = []
+        returnVersion.notes = null
+      })
+
+      it('returns "null"', () => {
+        const result = ViewPresenter.go(returnVersionData)
+
+        expect(result.notes).to.be.null()
+      })
+    })
+
+    describe('when there is a note on the return version and not the mod log', () => {
+      beforeEach(() => {
+        returnVersion.modLogs = []
+        returnVersion.notes = 'A note on the return version record'
+      })
+
+      it('returns the note', () => {
+        const result = ViewPresenter.go(returnVersionData)
+
+        expect(result.notes).to.equal({
+          additionalNotes: [],
+          firstNote: 'A note on the return version record'
+        })
+      })
+    })
+
+    describe('when there is a note on the mod logs and not the return version', () => {
+      beforeEach(() => {
+        returnVersion.modLogs = [{ note: 'Mod log note 1' }]
+        returnVersion.notes = null
+      })
+
+      it('returns the note', () => {
+        const result = ViewPresenter.go(returnVersionData)
+
+        expect(result.notes).to.equal({
+          additionalNotes: [],
+          firstNote: 'Mod log note 1'
+        })
+      })
+    })
+
+    describe('when there are notes on both the mod logs and the return version', () => {
+      beforeEach(() => {
+        returnVersion.modLogs = [{ note: 'Mod log note 1' }, { note: 'Mod log note 2' }]
+        returnVersion.notes = 'A note on the return version record'
+      })
+
+      it('returns the notes, with the mod log notes taking precedence over those on the return version', () => {
+        const result = ViewPresenter.go(returnVersionData)
+
+        expect(result.notes).to.equal({
+          additionalNotes: ['Mod log note 2', 'A note on the return version record'],
+          firstNote: 'Mod log note 1'
+        })
       })
     })
   })
@@ -519,7 +585,7 @@ function _returnVersionData() {
     createdAt: new Date('2022-04-05'),
     id: generateUUID(),
     multipleUpload: false,
-    notes: 'A special note',
+    notes: 'A note on the return version record',
     reason: 'new-licence',
     startDate: new Date('2022-04-01'),
     status: 'current',
