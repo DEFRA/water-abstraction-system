@@ -162,7 +162,7 @@ function _purposes(licenceVersionPurposes) {
 function _reason(licenceVersion, billingAndDataRole) {
   const reason = licenceVersion.$reason()
   const createdBy = licenceVersion.$createdBy()
-  const createdAt = formatLongDate(licenceVersion.createdAt)
+  const createdAt = formatLongDate(licenceVersion.$createdAt())
 
   if (!billingAndDataRole) {
     return reason
