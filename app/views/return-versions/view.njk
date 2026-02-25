@@ -17,7 +17,10 @@
   {% endif %}
 
   {% if notes %}
-    <p><strong>Notes:</strong>{{ newLineArrayItems(notes) }}</p>
+    <div class="govuk-!-margin-bottom-4">
+      <p class="govuk-!-margin-bottom-1"><strong>Notes:</strong> {{ notes.firstNote }}</p>
+      {{ newLineArrayItems(notes.additionalNotes) }}
+    </div>
   {% endif %}
 
   {% if pagination %}

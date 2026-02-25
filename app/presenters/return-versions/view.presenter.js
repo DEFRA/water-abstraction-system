@@ -30,7 +30,7 @@ function go(returnVersionData) {
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     multipleUpload: multipleUpload === true ? 'Yes' : 'No',
-    notes: returnVersion.$notes(),
+    notes: _notes(returnVersion),
     pageTitle: `Requirements for returns starting ${formatLongDate(startDate)}`,
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     pagination: _pagination(returnVersionsForPagination, returnVersion),
@@ -110,6 +110,19 @@ function _mapRequirement(requirement) {
     returnsCycle: requirement.summer === true ? 'Summer' : 'Winter and all year',
     siteDescription: requirement.siteDescription ?? '',
     title: requirement.siteDescription ?? ''
+  }
+}
+
+function _notes(returnVersion) {
+  const notes = returnVersion.$notes()
+
+  if (notes.length === 0) {
+    return null
+  }
+
+  return {
+    firstNote: notes.shift(),
+    additionalNotes: notes
   }
 }
 
