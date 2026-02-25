@@ -179,15 +179,15 @@ function _reason(licenceVersion, billingAndDataRole) {
     return `${reason} created on ${createdAt} by ${createdBy}`
   }
 
-  if (reason && !createdBy) {
+  if (!reason && !createdBy) {
+    return `Created on ${createdAt}`
+  }
+
+  if (reason) {
     return `${reason} created on ${createdAt}`
   }
 
-  if (!reason && createdBy) {
-    return `Created on ${createdAt} by ${createdBy}`
-  }
-
-  return `Created on ${createdAt}`
+  return `Created on ${createdAt} by ${createdBy}`
 }
 
 /**
