@@ -525,21 +525,9 @@ describe('Licence Versions - View presenter', () => {
         auth.credentials.scope = ['billing']
       })
 
-      describe('and there is no "reason" or "userId"', () => {
-        beforeEach(() => {
-          licenceVersion.modLogs[0].reasonDescription = null
-        })
-
-        it('returns just the created on', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
-
-          expect(result.reason).to.equal('Created on 1 January 2022')
-        })
-      })
-
       describe('and there is a reason', () => {
         describe('and we know who created it', () => {
-          it('returns the reason with who created it', () => {
+          it('returns the reason, when it was created and who created it', () => {
             const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
             expect(result.reason).to.equal(
@@ -548,15 +536,41 @@ describe('Licence Versions - View presenter', () => {
           })
         })
 
+        describe('but we do not know who created it', () => {
+          beforeEach(() => {
+            licenceVersion.modLogs[0].userId = null
+          })
+
+          it('returns the reason and the created on but not who created it', () => {
+            const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+
+            expect(result.reason).to.equal('Licence Holder Name/Address Change created on 1 January 2022')
+          })
+        })
+      })
+
+      describe('but there is no reason', () => {
+        beforeEach(() => {
+          licenceVersion.modLogs[0].reasonDescription = null
+        })
+
+        describe('though we know who created it', () => {
+          it('returns the created on and who created it', () => {
+            const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+
+            expect(result.reason).to.equal('Created on 1 January 2022 by JOBSWORTH01')
+          })
+        })
+
         describe('and we do not know who created it', () => {
           beforeEach(() => {
             licenceVersion.modLogs[0].userId = null
           })
 
-          it('returns the reason without who created it', () => {
+          it('returns just the created on', () => {
             const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-            expect(result.reason).to.equal('Licence Holder Name/Address Change created on 1 January 2022')
+            expect(result.reason).to.equal('Created on 1 January 2022')
           })
         })
       })
