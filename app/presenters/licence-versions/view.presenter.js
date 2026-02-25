@@ -91,7 +91,14 @@ function _notes(licenceVersion, billingAndDataRole) {
 
   const notes = licenceVersion.$notes()
 
-  return notes.length > 0 ? notes : null
+  if (notes.length === 0) {
+    return null
+  }
+
+  return {
+    firstNote: notes.shift(),
+    additionalNotes: notes
+  }
 }
 
 /**
