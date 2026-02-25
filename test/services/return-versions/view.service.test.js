@@ -46,7 +46,10 @@ describe('Return Versions - View service', () => {
         licenceId: returnVersion.licence.id,
         licenceRef: '01/123',
         multipleUpload: 'No',
-        notes: ['A special note'],
+        notes: {
+          additionalNotes: [],
+          firstNote: 'A special note'
+        },
         pageTitle: 'Requirements for returns starting 1 April 2022',
         pageTitleCaption: 'Licence 01/123',
         pagination: null,
