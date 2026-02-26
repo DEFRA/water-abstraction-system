@@ -47,8 +47,8 @@ async function _fetchPoints(licenceId) {
     .innerJoin('sources AS s', 'p.sourceId', 's.id')
     .whereIn('p.id', function () {
       this.select('lvpp.pointId')
-        .from('licenceVersion_purpose_points as lvpp')
-        .innerJoin('licenceVersion_purposes as lvp', 'lvp.id', 'lvpp.licenceVersionPurposeId')
+        .from('licenceVersionPurposePoints as lvpp')
+        .innerJoin('licenceVersionPurposes as lvp', 'lvp.id', 'lvpp.licenceVersionPurposeId')
         .innerJoin('licenceVersions as lv', 'lv.id', 'lvp.licenceVersionId')
         .innerJoin('licences as l', 'l.id', 'lv.licenceId')
         .where('l.id', licenceId)
