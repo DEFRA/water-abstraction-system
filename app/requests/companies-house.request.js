@@ -13,11 +13,12 @@ const companiesHouseConfig = require('../../config/companies-house.config.js')
  * Sends a GET request to Companies House
  *
  * @param {string} path - The path to send the request to (do not include the starting /)
+ * @param {object} searchParams - Any parameters to add to the url
  *
  * @returns {Promise<object>} An object representing the result of the request
  */
-async function get(path) {
-  const result = await _sendRequest(path, BaseRequest.get)
+async function get(path, searchParams) {
+  const result = await _sendRequest(path, BaseRequest.get, searchParams)
 
   return _parseResult(result)
 }
@@ -27,10 +28,10 @@ async function get(path) {
  *
  * @private
  */
-async function _sendRequest(path, method, body) {
+async function _sendRequest(path, method, searchParams) {
   const accessToken = Buffer.from(companiesHouseConfig.apiKey).toString('base64')
 
-  const options = _requestOptions(accessToken, body)
+  const options = _requestOptions(accessToken, searchParams)
 
   const result = await method(path, options)
 
@@ -70,14 +71,14 @@ function _parseResult(result) {
  *
  * @private
  */
-function _requestOptions(accessToken, body) {
+function _requestOptions(accessToken, searchParams) {
   return {
     prefixUrl: companiesHouseConfig.url,
     headers: {
       authorization: `Basic ${accessToken}`
     },
     responseType: 'json',
-    json: body
+    ...(searchParams && { searchParams })
   }
 }
 

@@ -22,6 +22,8 @@ describe('Companies House Request', () => {
   const accessToken = Buffer.from('API_KEY').toString('base64')
   const testRoute = 'TEST_ROUTE'
 
+  let searchParams
+
   beforeEach(() => {
     Sinon.stub(companiesHouseConfig, 'apiKey').value('API_KEY')
     Sinon.stub(serverConfig, 'requestTimeout').value(1000)
@@ -34,6 +36,12 @@ describe('Companies House Request', () => {
   describe('#get', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
+        searchParams = {
+          q: 'Company name',
+          start_index: 0,
+          items_per_page: 15
+        }
+
         Sinon.stub(BaseRequest, 'get').resolves({
           succeeded: true,
           response: {
@@ -44,28 +52,29 @@ describe('Companies House Request', () => {
       })
 
       it('calls Companies House with the required options', async () => {
-        await CompaniesHouseRequest.get(testRoute)
+        await CompaniesHouseRequest.get(testRoute, searchParams)
 
         const requestArgs = BaseRequest.get.firstCall.args
 
         expect(requestArgs[0]).to.endWith('TEST_ROUTE')
         expect(requestArgs[1].headers).to.include({ authorization: `Basic ${accessToken}` })
+        expect(requestArgs[1].searchParams).to.equal(searchParams)
       })
 
       it('returns a "true" success status', async () => {
-        const result = await CompaniesHouseRequest.get(testRoute)
+        const result = await CompaniesHouseRequest.get(testRoute, searchParams)
 
         expect(result.succeeded).to.be.true()
       })
 
       it('returns the response body as an object', async () => {
-        const result = await CompaniesHouseRequest.get(testRoute)
+        const result = await CompaniesHouseRequest.get(testRoute, searchParams)
 
         expect(result.response.body.items[0].company_number).to.equal('12345678')
       })
 
       it('returns the status code', async () => {
-        const result = await CompaniesHouseRequest.get(testRoute)
+        const result = await CompaniesHouseRequest.get(testRoute, searchParams)
 
         expect(result.response.statusCode).to.equal(HTTP_STATUS_OK)
       })
