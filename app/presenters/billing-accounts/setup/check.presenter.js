@@ -16,23 +16,18 @@ function go(session) {
   const { billingAccount } = session
 
   return {
-    backLink: {
-      href: _backLink(session),
-      text: 'Back'
-    },
+    accountSelected: session.accountSelected === 'customer' ? billingAccount.company.name : 'Another billing account',
+    links: _links(session),
     pageTitle: 'Check billing account details',
-    pageTitleCaption: `Billing account ${billingAccount.accountNumber}`
+    pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
+    searchInput: session.searchInput ?? ''
   }
 }
 
-function _backLink(session) {
-  const { id } = session
-
-  if (session.fao === 'no') {
-    return `/system/billing-accounts/setup/${id}/fao`
+function _links(session) {
+  return {
+    accountSelected: `/system/billing-accounts/setup/${session.id}/account`
   }
-
-  return `/system/billing-accounts/setup/${id}/contact`
 }
 
 module.exports = {
