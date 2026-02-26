@@ -15,9 +15,14 @@ const CompaniesHouseRequest = require('../companies-house.request.js')
  * @returns {Promise<object>} The result of the request; whether it succeeded and the response or error returned
  */
 async function send(queryString) {
-  const path = `search/companies?q=${queryString}&start_index=0&items_per_page=15`
+  const path = `search/companies`
+  const searchParams = {
+    q: queryString,
+    start_index: 0,
+    items_per_page: 15
+  }
 
-  return CompaniesHouseRequest.get(path)
+  return CompaniesHouseRequest.get(path, searchParams)
 }
 
 module.exports = {
