@@ -6,6 +6,7 @@
  */
 
 const { db } = require('../../../db/db.js')
+const { timestampForPostgres } = require('../../lib/general.lib.js')
 
 /**
  * Fetches the points data needed for the points page
@@ -43,15 +44,16 @@ async function _fetchPoints(licenceId) {
       's.sourceType'
     )
     .from('points AS p')
-    .innerJoin('sources AS s', 'p.source_id', 's.id')
+    .innerJoin('sources AS s', 'p.sourceId', 's.id')
     .whereIn('p.id', function () {
-      this.select('lvpp.point_id')
-        .from('licence_version_purpose_points as lvpp')
-        .innerJoin('licence_version_purposes as lvp', 'lvp.id', 'lvpp.licence_version_purpose_id')
-        .innerJoin('licence_versions as lv', 'lv.id', 'lvp.licence_version_id')
-        .innerJoin('licences as l', 'l.id', 'lv.licence_id')
+      this.select('lvpp.pointId')
+        .from('licenceVersion_purpose_points as lvpp')
+        .innerJoin('licenceVersion_purposes as lvp', 'lvp.id', 'lvpp.licenceVersionPurposeId')
+        .innerJoin('licenceVersions as lv', 'lv.id', 'lvp.licenceVersionId')
+        .innerJoin('licences as l', 'l.id', 'lv.licenceId')
         .where('l.id', licenceId)
         .andWhere('lv.status', 'current')
+        .andWhere('lv.startDate', '<=', timestampForPostgres())
     })
     .orderBy('p.description')
 }
