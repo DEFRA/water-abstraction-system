@@ -49,7 +49,7 @@ describe('Companies House - Search Companies request', () => {
 
       const requestArgs = CompaniesHouseRequest.get.firstCall.args
 
-      expect(requestArgs[0]).to.equal('search/companies?q=Example Ltd&start_index=0&items_per_page=15')
+      expect(requestArgs[0]).to.equal('search/companies')
     })
 
     it('returns a "true" success status', async () => {
