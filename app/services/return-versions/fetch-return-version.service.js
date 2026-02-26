@@ -10,18 +10,21 @@ const ReturnVersionModel = require('../../models/return-version.model.js')
 /**
  * Fetches the matching return version and associated licence, return requirements, points and purposes data
  *
- * @param {string} id - The UUID for the bill run to fetch
+ * @param {string} returnVersionId - The UUID of the return version to fetch
  *
  * @returns {Promise<ReturnVersionModel>} The return version plus linked licence, return requirements (requirement,
  * points, purposes)
  */
-async function go(id) {
-  return _fetch(id)
+async function go(returnVersionId) {
+  return {
+    returnVersion: await _fetch(returnVersionId),
+    returnVersionsForPagination: await _fetchPagination(returnVersionId)
+  }
 }
 
-async function _fetch(id) {
+async function _fetch(returnVersionId) {
   return ReturnVersionModel.query()
-    .findById(id)
+    .findById(returnVersionId)
     .select(['createdAt', 'id', 'multipleUpload', 'notes', 'reason', 'quarterlyReturns', 'startDate', 'status'])
     .modify('history')
     .withGraphFetched('licence')
@@ -69,6 +72,16 @@ async function _fetch(id) {
             })
         })
     })
+}
+
+async function _fetchPagination(returnVersionId) {
+  return ReturnVersionModel.query()
+    .where('licenceId', ReturnVersionModel.query().select('licenceId').findById(returnVersionId))
+    .select(['id', 'startDate'])
+    .orderBy([
+      { column: 'startDate', order: 'asc' },
+      { column: 'endDate', order: 'asc' }
+    ])
 }
 
 module.exports = {

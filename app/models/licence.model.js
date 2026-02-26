@@ -255,7 +255,7 @@ class LicenceModel extends BaseModel {
           })
           .withGraphFetched('licenceDocumentHeader.licenceEntityRoles.licenceEntity.user')
           .modifyGraph('licenceDocumentHeader.licenceEntityRoles.licenceEntity.user', (builder) => {
-            builder.select(['id', 'username'])
+            builder.select(['id', 'userId', 'username'])
           })
       }
     }
