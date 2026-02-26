@@ -16,7 +16,7 @@ const CompaniesHouseRequest = require('../../../app/requests/companies-house.req
 // Thing under test
 const SearchCompaniesRequest = require('../../../app/requests/companies-house/search-companies.request.js')
 
-describe.only('Companies House - Search Companies request', () => {
+describe('Companies House - Search Companies request', () => {
   const matches = [
     {
       address_snippet: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
