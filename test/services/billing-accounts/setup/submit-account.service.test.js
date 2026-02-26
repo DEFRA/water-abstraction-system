@@ -283,6 +283,7 @@ function _commonExpectedValues(session) {
   return {
     addressJourney: null,
     billingAccount: session.billingAccount,
+    checkPageVisited: false,
     contactName: null,
     contactSelected: null,
     fao: null,

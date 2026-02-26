@@ -29,7 +29,7 @@ async function go(sessionId, payload) {
     await _save(session, payload)
 
     return {
-      redirectUrl: _redirectUrl(session)
+      redirectUrl: _redirectUrl(session, payload)
     }
   }
 
@@ -41,7 +41,17 @@ async function go(sessionId, payload) {
   }
 }
 
-function _redirectUrl(session) {
+function _redirectUrl(session, payload) {
+  const searchInput = payload.searchInput ?? null
+
+  if (
+    session.checkPageVisited &&
+    session.accountSelected === payload.accountSelected &&
+    session.searchInput === searchInput
+  ) {
+    return `/system/billing-accounts/setup/${session.id}/check`
+  }
+
   if (session.accountSelected === 'another') {
     return `/system/billing-accounts/setup/${session.id}/existing-account`
   }
@@ -50,8 +60,13 @@ function _redirectUrl(session) {
 }
 
 async function _save(session, payload) {
-  if (session.accountSelected && payload.accountSelected !== session.accountSelected) {
+  const differentSearchInput = session.searchInput !== payload.searchInput
+  const selectedDifferentRadioOption = session.accountSelected !== payload.accountSelected
+  const selectedAnotherButChangedSearch = payload.accountSelected === 'another' && differentSearchInput
+
+  if (session.accountSelected && (selectedDifferentRadioOption || selectedAnotherButChangedSearch)) {
     session.addressJourney = null
+    session.checkPageVisited = false
     session.fao = null
     session.contactSelected = null
     session.contactName = null

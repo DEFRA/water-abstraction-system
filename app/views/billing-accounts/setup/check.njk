@@ -1,8 +1,33 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block pageContent %}
+  {{ govukSummaryList({
+    rows: [
+      {
+        classes: "govuk-summary-list__row--no-border" if searchInput,
+        key: { text: "Billing account" },
+        value: { text: accountSelected },
+        actions: {
+          items: [
+            {
+              href: links.accountSelected,
+              text: "Change",
+              visuallyHiddenText: "account selected"
+            }
+          ]
+        }
+      },
+      {
+        classes: "govuk-summary-list__row--no-actions",
+        key: { text: "Search term" },
+        value: { text: searchInput }
+      } if searchInput
+    ]
+  }) }}
+
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
