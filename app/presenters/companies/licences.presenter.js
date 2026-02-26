@@ -5,6 +5,7 @@
  * @module LicencesPresenter
  */
 
+const { formatLicenceVersions } = require('../licence-versions.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
 
 /**
@@ -43,11 +44,13 @@ function _licenceVersions(licences) {
 
     const { licenceVersions } = licence
 
-    for (const licenceVersion of licenceVersions) {
+    const formattedLicenceVersions = formatLicenceVersions(licenceVersions)
+
+    for (const licenceVersion of formattedLicenceVersions) {
       const { endDate, id, startDate } = licenceVersion
 
       const versionDetails = {
-        count: licenceVersions.length,
+        count: formattedLicenceVersions.length,
         endDate: formatLongDate(endDate),
         licenceId: licence.id,
         licenceRef: licence.licenceRef,

@@ -44,6 +44,7 @@ async function _fetch(companyId, page) {
     .orderBy('licenceRef', 'asc')
     .page(page - 1, databaseConfig.defaultPageSize)
 }
+
 module.exports = {
   go
 }
