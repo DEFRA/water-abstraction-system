@@ -19,7 +19,7 @@ const SourceHelper = require('../../support/helpers/source.helper.js')
 // Thing under test
 const FetchPurposesService = require('../../../app/services/licences/fetch-purposes.service.js')
 
-describe('Licences - Fetch Purposes service', () => {
+describe.only('Licences - Fetch Purposes service', () => {
   let licence
   let licenceVersion
   let licenceVersionPurpose
@@ -28,37 +28,37 @@ describe('Licences - Fetch Purposes service', () => {
   let purpose
   let source
 
-  before(async () => {
-    licence = await LicenceHelper.add()
-
-    licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
-
-    purpose = await PurposeHelper.select()
-
-    licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
-      licenceVersionId: licenceVersion.id,
-      purposeId: purpose.id
-    })
-
-    source = await SourceHelper.select()
-    point = await PointHelper.add({ sourceId: source.id })
-
-    licenceVersionPurposePoint = await LicenceVersionPurposePointHelper.add({
-      abstractionMethod: 'Unspecified Pump',
-      licenceVersionPurposeId: licenceVersionPurpose.id,
-      pointId: point.id
-    })
-  })
-
-  after(async () => {
-    await licence.$query().delete()
-    await licenceVersion.$query().delete()
-    await licenceVersionPurpose.$query().delete()
-    await licenceVersionPurposePoint.$query().delete()
-    await point.$query().delete()
-  })
-
   describe('when the licence has licence versions, licence version purposes, points, purposes, and sources', () => {
+    before(async () => {
+      licence = await LicenceHelper.add()
+
+      licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
+
+      purpose = await PurposeHelper.select()
+
+      licenceVersionPurpose = await LicenceVersionPurposeHelper.add({
+        licenceVersionId: licenceVersion.id,
+        purposeId: purpose.id
+      })
+
+      source = await SourceHelper.select()
+      point = await PointHelper.add({ sourceId: source.id })
+
+      licenceVersionPurposePoint = await LicenceVersionPurposePointHelper.add({
+        abstractionMethod: 'Unspecified Pump',
+        licenceVersionPurposeId: licenceVersionPurpose.id,
+        pointId: point.id
+      })
+    })
+
+    after(async () => {
+      await licence.$query().delete()
+      await licenceVersion.$query().delete()
+      await licenceVersionPurpose.$query().delete()
+      await licenceVersionPurposePoint.$query().delete()
+      await point.$query().delete()
+    })
+
     it('returns the matching licence version purposes, points, purposes, and sources', async () => {
       const result = await FetchPurposesService.go(licence.id)
 
@@ -97,6 +97,41 @@ describe('Licences - Fetch Purposes service', () => {
           }
         }
       ])
+    })
+  })
+
+  describe('when the licence has no licence versions', () => {
+    before(async () => {
+      licence = await LicenceHelper.add()
+    })
+
+    after(async () => {
+      await licence.$query().delete()
+    })
+
+    it('returns an empty array', async () => {
+      const result = await FetchPurposesService.go(licence.id)
+
+      expect(result).to.equal([])
+    })
+  })
+
+  describe('when the licence has licence versions but no licence version purposes, points or purposes', () => {
+    before(async () => {
+      licence = await LicenceHelper.add()
+
+      licenceVersion = await LicenceVersionHelper.add({ licenceId: licence.id })
+    })
+
+    after(async () => {
+      await licence.$query().delete()
+      await licenceVersion.$query().delete()
+    })
+
+    it('returns an empty array', async () => {
+      const result = await FetchPurposesService.go(licence.id)
+
+      expect(result).to.equal([])
     })
   })
 })
