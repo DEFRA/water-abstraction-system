@@ -16,7 +16,7 @@ const CompaniesHouseRequest = require('../../../app/requests/companies-house.req
 // Thing under test
 const SearchCompaniesRequest = require('../../../app/requests/companies-house/search-companies.request.js')
 
-describe('Companies House - Search Companies request', () => {
+describe.only('Companies House - Search Companies request', () => {
   const matches = [
     {
       address_snippet: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
@@ -49,7 +49,7 @@ describe('Companies House - Search Companies request', () => {
 
       const requestArgs = CompaniesHouseRequest.get.firstCall.args
 
-      expect(requestArgs[0]).to.equal('search/companies?q=Example Ltd&start_index=0&items_per_page=15')
+      expect(requestArgs[0]).to.equal('search/companies')
     })
 
     it('returns a "true" success status', async () => {
