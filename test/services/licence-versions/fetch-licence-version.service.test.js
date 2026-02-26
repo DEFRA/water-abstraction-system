@@ -96,12 +96,8 @@ describe('Licence Versions - Fetch licence version service', () => {
             addressLine4: null,
             country: null,
             county: null,
-            forename: null,
-            holderType: 'organisation',
-            initials: null,
-            name: null,
+            derivedName: null,
             postcode: null,
-            salutation: null,
             town: null
           },
           licenceVersionPurposes: [

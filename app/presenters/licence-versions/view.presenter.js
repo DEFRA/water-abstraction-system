@@ -58,7 +58,7 @@ function _licenceDetails(licenceVersion) {
     applicationNumber: licenceVersion.applicationNumber,
     endDate: formatLongDate(licenceVersion.endDate),
     issueDate: formatLongDate(licenceVersion.issueDate),
-    licenceHolderName: licenceVersion.licenceVersionHolder.$name(),
+    licenceHolderName: licenceVersion.licenceVersionHolder.derivedName,
     startDate: formatLongDate(licenceVersion.startDate)
   }
 }
@@ -91,7 +91,14 @@ function _notes(licenceVersion, billingAndDataRole) {
 
   const notes = licenceVersion.$notes()
 
-  return notes.length > 0 ? notes : null
+  if (notes.length === 0) {
+    return null
+  }
+
+  return {
+    firstNote: notes.shift(),
+    additionalNotes: notes
+  }
 }
 
 /**
@@ -162,7 +169,7 @@ function _purposes(licenceVersionPurposes) {
 function _reason(licenceVersion, billingAndDataRole) {
   const reason = licenceVersion.$reason()
   const createdBy = licenceVersion.$createdBy()
-  const createdAt = formatLongDate(licenceVersion.createdAt)
+  const createdAt = formatLongDate(licenceVersion.$createdAt())
 
   if (!billingAndDataRole) {
     return reason

@@ -10,7 +10,6 @@ const { Model } = require('objection')
 const BaseModel = require('./base.model.js')
 
 const NotifyAddressPresenter = require('../presenters/notices/setup/notify-address.presenter.js')
-const { contactName } = require('../presenters/crm.presenter.js')
 
 class LicenceVersionHolderModel extends BaseModel {
   static get tableName() {
@@ -31,24 +30,23 @@ class LicenceVersionHolderModel extends BaseModel {
   }
 
   /**
-   * Determine the address lines for the licence version holder
+   * Determine 'just' the address lines for the licence version holder
    *
-   * This uses the existing logic in the address presenter.
+   * This uses the existing logic in `NotifyAddressPresenter`. To ensure the address returned is only 6 lines long,
+   * blanks are removed, and the country is correctly set.
    *
-   * We need to format part of the object to use the 'contactName' function.
+   * > GOV.UK Notify sets the requirements for what a 'valid' address is for us. It has a limit of 7 address lines, but
+   * the first covers the name, which we always send. That leaves 6 for the actual address lines.
    *
-   * We format the response from the address presenter into an array.
+   * We generate a 'contact' object from the details in this instance so `NotifyAddressPresenter` can do 'its thing!'.
+   * We then drop the first address line, which will be the name, and return 'just' the address lines.
    *
-   * The address presenter returns the 'contactName' as the first element.
-   *
-   * We do not want to show this in the address, so we remove it before returning the array of address lines.
-   *
-   * @returns {string[]} the address lines for the licence version hodler
+   * @returns {string[]} just the address lines for the licence version holder
    */
   $address() {
-    const licenceVersionHolder = _formatLicenceVersionHolder(this)
+    const contact = _contact(this)
 
-    const address = NotifyAddressPresenter.go(licenceVersionHolder)
+    const address = NotifyAddressPresenter.go(contact)
 
     const addressLines = Object.values(address)
 
@@ -56,29 +54,20 @@ class LicenceVersionHolderModel extends BaseModel {
 
     return addressLinesNoName
   }
-
-  /**
-   * Determine the licence version holder name
-   *
-   * This uses the existing logic in the crm presenter.
-   *
-   * We need to format part of the object to use the 'contactName' function.
-   *
-   * @returns {string} the licence version hodler name
-   */
-  $name() {
-    const licenceVersionHolder = _formatLicenceVersionHolder(this)
-
-    return contactName(licenceVersionHolder)
-  }
 }
 
-function _formatLicenceVersionHolder(licenceVersionHolder) {
-  const { holderType, ...contact } = licenceVersionHolder
-
-  contact.type = holderType
-
-  return contact
+function _contact(licenceVersionHolder) {
+  return {
+    addressLine1: licenceVersionHolder?.addressLine1,
+    addressLine2: licenceVersionHolder?.addressLine2,
+    addressLine3: licenceVersionHolder?.addressLine3,
+    addressLine4: licenceVersionHolder?.addressLine4,
+    country: licenceVersionHolder?.country,
+    county: licenceVersionHolder?.county,
+    name: licenceVersionHolder?.derivedName,
+    postcode: licenceVersionHolder?.postcode,
+    town: licenceVersionHolder?.town
+  }
 }
 
 module.exports = LicenceVersionHolderModel

@@ -17,7 +17,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 // Thing under test
 const FetchNotificationsService = require('../../../app/services/company-contacts/fetch-notifications.service.js')
 
-describe('Company contact - Fetch Communications service', () => {
+describe('Company contact - Fetch Notifications service', () => {
   let notice
   let noticeTwo
   let notification
@@ -98,6 +98,21 @@ describe('Company contact - Fetch Communications service', () => {
   describe('when the company contact has no notifications', () => {
     beforeEach(() => {
       email = `${generateUUID()}@acme.co.uk`
+    })
+
+    it('returns no notifications', async () => {
+      const result = await FetchNotificationsService.go(email, 1)
+
+      expect(result).to.equal({
+        notifications: [],
+        totalNumber: 0
+      })
+    })
+  })
+
+  describe('when the company contact has no email', () => {
+    beforeEach(() => {
+      email = null
     })
 
     it('returns no notifications', async () => {

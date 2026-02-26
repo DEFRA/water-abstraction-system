@@ -5,20 +5,21 @@
  * @module ViewPresenter
  */
 
-const { formatAbstractionPeriod } = require('../base.presenter.js')
-const { formatLongDate } = require('../base.presenter.js')
+const { formatAbstractionPeriod, formatLongDate } = require('../base.presenter.js')
 const { isQuarterlyReturnSubmissions } = require('../../lib/dates.lib.js')
+const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
 const { returnRequirementReasons, returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats return version data ready for presenting in the view return version page
  *
- * @param {ReturnVersionModel} returnVersion - The return version and associated, licence, and return requirements
- * (requirement, points, purposes)
+ * @param {object} returnVersionData - The selected return version, and the return versions for pagination
  *
- * @returns {object} page data needed by the view template
+ * @returns {object} page data formatted for the view template
  */
-function go(returnVersion) {
+function go(returnVersionData) {
+  const { returnVersion, returnVersionsForPagination } = returnVersionData
+
   const { licence, multipleUpload, quarterlyReturns, returnRequirements, startDate, status } = returnVersion
 
   return {
@@ -26,19 +27,17 @@ function go(returnVersion) {
       href: `/system/licences/${licence.id}/set-up`,
       text: 'Go back to summary'
     },
-    createdBy: _createdBy(returnVersion),
-    createdDate: formatLongDate(returnVersion.$createdAt()),
     licenceId: licence.id,
     licenceRef: licence.licenceRef,
     multipleUpload: multipleUpload === true ? 'Yes' : 'No',
-    notes: returnVersion.$notes(),
-    pageTitle: `Requirements for returns for ${licence.$licenceHolder()}`,
+    notes: _notes(returnVersion),
+    pageTitle: `Requirements for returns starting ${formatLongDate(startDate)}`,
     pageTitleCaption: `Licence ${licence.licenceRef}`,
+    pagination: _pagination(returnVersionsForPagination, returnVersion),
     quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(startDate),
     quarterlyReturns: quarterlyReturns === true ? 'Yes' : 'No',
     reason: _reason(returnVersion),
     requirements: _requirements(returnRequirements),
-    startDate: formatLongDate(startDate),
     status
   }
 }
@@ -99,16 +98,6 @@ function _buildAgreementExceptions(returnRequirement) {
   return agreementsExceptions
 }
 
-function _createdBy(returnVersion) {
-  const createdBy = returnVersion.$createdBy()
-
-  if (createdBy) {
-    return createdBy
-  }
-
-  return 'Migrated from NALD'
-}
-
 function _mapRequirement(requirement) {
   return {
     abstractionPeriod: _abstractionPeriod(requirement),
@@ -122,6 +111,53 @@ function _mapRequirement(requirement) {
     siteDescription: requirement.siteDescription ?? '',
     title: requirement.siteDescription ?? ''
   }
+}
+
+function _notes(returnVersion) {
+  const notes = returnVersion.$notes()
+
+  if (notes.length === 0) {
+    return null
+  }
+
+  return {
+    firstNote: notes.shift(),
+    additionalNotes: notes
+  }
+}
+
+/**
+ * Calculate the previous and next licence versions to create the pagination object. This feeds directly into the GDS
+ * component.
+ *
+ * @private
+ */
+function _pagination(returnVersionsForPagination, returnVersion) {
+  const { previous, next } = PreviousAndNextPresenter.go(returnVersionsForPagination, returnVersion)
+
+  if (!next && !previous) {
+    return null
+  }
+
+  const pagination = {}
+
+  if (previous) {
+    pagination.previous = {
+      text: 'Previous version',
+      labelText: `Starting ${formatLongDate(previous.startDate)}`,
+      href: `/system/return-versions/${previous.id}`
+    }
+  }
+
+  if (next) {
+    pagination.next = {
+      text: 'Next version',
+      labelText: `Starting ${formatLongDate(next.startDate)}`,
+      href: `/system/return-versions/${next.id}`
+    }
+  }
+
+  return pagination
 }
 
 function _purposes(returnRequirementPurposes) {
@@ -149,14 +185,21 @@ function _points(points) {
  * @private
  */
 function _reason(returnVersion) {
+  const createdAt = formatLongDate(returnVersion.$createdAt())
+  const createdBy = returnVersion.$createdBy()
   const reason = returnVersion.$reason()
-  const mappedReason = returnRequirementReasons[reason]
 
-  if (mappedReason) {
-    return mappedReason
+  const mappedReason = returnRequirementReasons[reason] ?? reason
+
+  if (!mappedReason) {
+    return `Created on ${createdAt}`
   }
 
-  return reason ?? ''
+  if (!createdBy) {
+    return `${mappedReason} migrated from NALD on ${createdAt}`
+  }
+
+  return `${mappedReason} created on ${createdAt} by ${createdBy}`
 }
 
 function _requirements(requirements) {

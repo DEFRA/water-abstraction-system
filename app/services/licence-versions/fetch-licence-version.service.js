@@ -59,12 +59,8 @@ async function _fetch(licenceVersionId) {
         'addressLine4',
         'country',
         'county',
-        'forename',
-        'holderType',
-        'initials',
-        'name',
+        'derivedName',
         'postcode',
-        'salutation',
         'town'
       ])
     })
