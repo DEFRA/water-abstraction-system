@@ -100,7 +100,7 @@ describe('Licences - Fetch Purposes service', () => {
     })
   })
 
-  describe('when the licence has no licence versions', () => {
+  describe('when the licence has no current licence versions', () => {
     before(async () => {
       licence = await LicenceHelper.add()
     })
