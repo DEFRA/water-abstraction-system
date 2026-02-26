@@ -3,11 +3,12 @@
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/check` page
  *
- * @module CheckService
+ * @module ViewCheckService
  */
 
 const CheckPresenter = require('../../../presenters/billing-accounts/setup/check.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
+const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data for the `/billing-accounts/setup/{sessionId}/check` page
@@ -18,6 +19,8 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
+
+  await markCheckPageVisited(session)
 
   const pageData = CheckPresenter.go(session)
 

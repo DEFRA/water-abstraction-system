@@ -280,6 +280,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
 function _commonExpectedValues() {
   return {
     addressJourney: null,
+    checkPageVisited: false,
     contactName: null,
     contactSelected: null,
     fao: null,

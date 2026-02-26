@@ -5,7 +5,6 @@
  * @module BillingAccountsSetupController
  */
 
-const CheckService = require('../services/billing-accounts/setup/check.service.js')
 const InitiateSessionService = require('../services/billing-accounts/setup/initiate-session.service.js')
 const SubmitAccountService = require('../services/billing-accounts/setup/submit-account.service.js')
 const SubmitAccountTypeService = require('../services/billing-accounts/setup/submit-account-type.service.js')
@@ -19,6 +18,7 @@ const SubmitFAOService = require('../services/billing-accounts/setup/submit-fao.
 const SubmitSelectCompanyService = require('../services/billing-accounts/setup/submit-select-company.service.js')
 const ViewAccountService = require('../services/billing-accounts/setup/view-account.service.js')
 const ViewAccountTypeService = require('../services/billing-accounts/setup/view-account-type.service.js')
+const ViewCheckService = require('../services/billing-accounts/setup/view-check.service.js')
 const ViewCompanySearchService = require('../services/billing-accounts/setup/view-company-search.service.js')
 const ViewContactService = require('../services/billing-accounts/setup/view-contact.service.js')
 const ViewContactNameService = require('../services/billing-accounts/setup/view-contact-name.service.js')
@@ -70,9 +70,9 @@ async function submitCheck(request, h) {
     params: { sessionId }
   } = request
 
-  await SubmitCheckService.go(sessionId)
+  const pageData = await SubmitCheckService.go(sessionId)
 
-  return h.redirect(`/system/billing-accounts/setup/${sessionId}`)
+  return h.redirect(pageData.redirectUrl)
 }
 
 async function submitCompanySearch(request, h) {
@@ -199,7 +199,7 @@ async function viewAccountType(request, h) {
 async function viewCheck(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await CheckService.go(sessionId)
+  const pageData = await ViewCheckService.go(sessionId)
 
   return h.view(`billing-accounts/setup/check.njk`, pageData)
 }
