@@ -23,7 +23,7 @@ async function go(licenceId, auth) {
 
   const currentLicenceVersion = licence.$currentVersion()
 
-  const conditions = await FetchConditionsService.go(currentLicenceVersion.id)
+  const conditions = currentLicenceVersion ? await FetchConditionsService.go(currentLicenceVersion.id) : []
 
   const pageData = ConditionsPresenter.go(conditions, licence)
 
