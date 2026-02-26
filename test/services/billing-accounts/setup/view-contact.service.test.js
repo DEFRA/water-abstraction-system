@@ -20,20 +20,25 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const ViewContactService = require('../../../../app/services/billing-accounts/setup/view-contact.service.js')
 
 describe('Billing Accounts - Setup - Contact Service', () => {
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
   const exampleContacts = CustomersFixture.companyContacts()
   const contact = exampleContacts[0].contact
+  const companyContacts = {
+    company: billingAccount.company,
+    contacts: [contact]
+  }
 
   let session
   let sessionData
 
   beforeEach(async () => {
     sessionData = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+      billingAccount
     }
 
     session = await SessionHelper.add({ data: sessionData })
 
-    Sinon.stub(FetchCompanyContactsService, 'go').resolves(exampleContacts)
+    Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
   })
 
   afterEach(async () => {

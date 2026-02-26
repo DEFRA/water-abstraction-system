@@ -26,13 +26,13 @@
       errorMessage: error.accountSelected,
       items: [
         {
-          id: "customer",
+          id: companyId,
           hint: {
             text: "Customer"
           },
-          value: "customer",
+          value: companyId,
           text: companyName,
-          checked: "customer" === accountSelected
+          checked: companyId === accountSelected
         },
         {
           id: "another",

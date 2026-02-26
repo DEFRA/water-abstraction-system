@@ -6,6 +6,7 @@
  */
 
 const CompanyContactModel = require('../../../models/company-contact.model.js')
+const CompanyModel = require('../../../models/company.model.js')
 
 /**
  * Fetches all contacts for a specified company
@@ -15,7 +16,8 @@ const CompanyContactModel = require('../../../models/company-contact.model.js')
  * @returns {Promise<object[]>} an object containing the matching contacts needed to populate the view
  */
 async function go(companyId) {
-  return CompanyContactModel.query()
+  const company = await CompanyModel.query().select(['id', 'name']).where('id', companyId)
+  const companyContacts = await CompanyContactModel.query()
     .select(['id', 'contactId'])
     .distinctOn('contactId')
     .where('companyId', companyId)
@@ -33,6 +35,15 @@ async function go(companyId) {
         'department'
       ])
     })
+
+  const contacts = companyContacts.map((companyContact) => {
+    return companyContact.contact
+  })
+
+  return {
+    company: company[0],
+    contacts
+  }
 }
 
 module.exports = {

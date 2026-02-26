@@ -15,15 +15,14 @@
  */
 function go(session, companyAddresses) {
   const { billingAccount } = session
-  const radioItems = _radioOptions(session.addressSelected, companyAddresses)
 
   return {
     backLink: {
       href: _backLink(session),
       text: 'Back'
     },
-    items: radioItems,
-    pageTitle: `Select an existing address for ${billingAccount.company.name}`,
+    items: _radioOptions(session.addressSelected, companyAddresses.addresses),
+    pageTitle: _pageTitle(companyAddresses),
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`
   }
 }
@@ -44,12 +43,20 @@ function _backLink(session) {
   return `/system/billing-accounts/setup/${session.id}/account`
 }
 
+function _pageTitle(companyAddresses) {
+  const { addresses, company } = companyAddresses
+
+  if (addresses.length === 0) {
+    return `No addresses found for ${company.name}`
+  }
+
+  return `Select an existing address for ${company.name}`
+}
+
 function _radioOptions(addressSelected, companyAddresses) {
   const items = []
 
-  for (const company of companyAddresses) {
-    const { address } = company
-
+  for (const address of companyAddresses) {
     const addressParts = [
       address.address1,
       address.address2,

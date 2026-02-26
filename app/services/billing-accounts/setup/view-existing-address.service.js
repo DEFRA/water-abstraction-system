@@ -6,7 +6,7 @@
  * @module ExistingAddressService
  */
 
-const FetchExistingAddressesService = require('./fetch-existing-addresses.service.js')
+const FetchCompanyAddressesService = require('./fetch-company-addresses.service.js')
 const ExistingAddressPresenter = require('../../../presenters/billing-accounts/setup/existing-address.presenter.js')
 const SessionModel = require('../../../models/session.model.js')
 
@@ -19,7 +19,8 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const companyAddresses = await FetchExistingAddressesService.go(session.billingAccount.company.id)
+  const companyId = session.accountSelected === 'another' ? session.existingAccount : session.accountSelected
+  const companyAddresses = await FetchCompanyAddressesService.go(companyId)
 
   const pageData = ExistingAddressPresenter.go(session, companyAddresses)
 

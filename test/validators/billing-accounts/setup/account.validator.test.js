@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+
 // Thing under test
 const AccountValidator = require('../../../../app/validators/billing-accounts/setup/account.validator.js')
 
@@ -14,9 +17,9 @@ describe('Billing Accounts - Setup - Account Validator', () => {
   let payload
 
   describe('when called with a valid option', () => {
-    describe('and that option is "customer"', () => {
+    describe('and that option is a customer id', () => {
       beforeEach(() => {
-        payload = { accountSelected: 'customer' }
+        payload = { accountSelected: generateUUID() }
       })
 
       it('returns with no errors', () => {
@@ -41,7 +44,7 @@ describe('Billing Accounts - Setup - Account Validator', () => {
         })
       })
 
-      describe('and the user did not enter a value', () => {
+      describe('and the user did not enter a search input value', () => {
         beforeEach(() => {
           payload = { accountSelected: 'another' }
         })
@@ -71,9 +74,9 @@ describe('Billing Accounts - Setup - Account Validator', () => {
     })
   })
 
-  describe('when called with invalid data', () => {
+  describe('when called with no data', () => {
     beforeEach(() => {
-      payload = { accountSelected: 'wrong' }
+      payload = {}
     })
 
     it('returns with errors', () => {

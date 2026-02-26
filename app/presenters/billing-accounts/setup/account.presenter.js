@@ -17,6 +17,7 @@ function go(session) {
 
   return {
     accountSelected: session.accountSelected ?? null,
+    companyId: billingAccount.company.id,
     companyName: billingAccount.company.name,
     backLink: {
       href: `/system/billing-accounts/${billingAccount.id}`,
