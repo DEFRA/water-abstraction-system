@@ -1061,7 +1061,7 @@ describe('Licence model', () => {
         const result = testRecord.$primaryUser()
 
         expect(result).to.be.an.instanceOf(UserModel)
-        expect(result).to.equal({ id: primaryUser.id, username: primaryUser.username })
+        expect(result).to.equal({ id: primaryUser.id, userId: primaryUser.userId, username: primaryUser.username })
       })
     })
   })
