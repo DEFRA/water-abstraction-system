@@ -5,7 +5,7 @@
  * @module FetchCompanyAddressesService
  */
 
-const CompanyAddressModel = require('../../../models/company-address.model.js')
+const AddressModel = require('../../../models/address.model.js')
 const CompanyModel = require('../../../models/company.model.js')
 
 /**
@@ -16,22 +16,15 @@ const CompanyModel = require('../../../models/company.model.js')
  * @returns {Promise<object[]>} an object containing the matching addresses needed to populate the view
  */
 async function go(companyId) {
-  const company = await CompanyModel.query().select(['id', 'name']).where('id', companyId)
-  const companyAddresses = await CompanyAddressModel.query()
-    .select(['id', 'addressId', 'companyId'])
-    .withGraphFetched('address')
-    .modifyGraph('address', (addressBuilder) => {
-      addressBuilder.select(['id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'postcode'])
-    })
-    .distinctOn('addressId')
-    .where('companyId', companyId)
-
-  const addresses = companyAddresses.map((companyAddress) => {
-    return companyAddress.address
-  })
+  const company = await CompanyModel.query().select(['id', 'name']).findById(companyId)
+  const addresses = await AddressModel.query()
+    .select(['addresses.id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'postcode'])
+    .innerJoinRelated('companyAddresses')
+    .where('companyAddresses.companyId', companyId)
+    .distinct('addresses.id')
 
   return {
-    company: company[0],
+    company,
     addresses
   }
 }

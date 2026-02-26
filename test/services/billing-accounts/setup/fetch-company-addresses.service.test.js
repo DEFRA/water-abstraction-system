@@ -19,6 +19,7 @@ describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
   let address
   let company
   let companyAddress
+  let companyAddressDuplicate
   let companyWithNoAddress
 
   before(async () => {
@@ -30,12 +31,17 @@ describe('Billing Accounts - Setup - Fetch Existing Addresses service', () => {
       addressId: address.id,
       companyId: company.id
     })
+    companyAddressDuplicate = await CompanyAddressHelper.add({
+      addressId: address.id,
+      companyId: company.id
+    })
   })
 
   after(async () => {
     await address.$query().delete()
     await company.$query().delete()
     await companyAddress.$query().delete()
+    await companyAddressDuplicate.$query().delete()
     await companyWithNoAddress.$query().delete()
   })
 

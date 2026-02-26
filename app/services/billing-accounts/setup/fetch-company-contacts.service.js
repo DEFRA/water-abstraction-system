@@ -5,8 +5,8 @@
  * @module FetchCompanyContactsService
  */
 
-const CompanyContactModel = require('../../../models/company-contact.model.js')
 const CompanyModel = require('../../../models/company.model.js')
+const ContactModel = require('../../../models/contact.model.js')
 
 /**
  * Fetches all contacts for a specified company
@@ -16,32 +16,25 @@ const CompanyModel = require('../../../models/company.model.js')
  * @returns {Promise<object[]>} an object containing the matching contacts needed to populate the view
  */
 async function go(companyId) {
-  const company = await CompanyModel.query().select(['id', 'name']).where('id', companyId)
-  const companyContacts = await CompanyContactModel.query()
-    .select(['id', 'contactId'])
-    .distinctOn('contactId')
-    .where('companyId', companyId)
-    .withGraphFetched('contact')
-    .modifyGraph('contact', (contactBuilder) => {
-      contactBuilder.select([
-        'id',
-        'salutation',
-        'firstName',
-        'middleInitials',
-        'lastName',
-        'initials',
-        'contactType',
-        'suffix',
-        'department'
-      ])
-    })
-
-  const contacts = companyContacts.map((companyContact) => {
-    return companyContact.contact
-  })
+  const company = await CompanyModel.query().select(['id', 'name']).findById(companyId)
+  const contacts = await ContactModel.query()
+    .select([
+      'contacts.id',
+      'salutation',
+      'firstName',
+      'middleInitials',
+      'lastName',
+      'initials',
+      'contactType',
+      'suffix',
+      'department'
+    ])
+    .innerJoinRelated('companyContacts')
+    .where('companyContacts.companyId', companyId)
+    .distinctOn('companyContacts.contactId')
 
   return {
-    company: company[0],
+    company,
     contacts
   }
 }

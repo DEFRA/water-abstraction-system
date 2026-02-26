@@ -18,6 +18,7 @@ const FetchCompanyContactsService = require('../../../../app/services/billing-ac
 describe('Billing Accounts - Setup - Fetch Company Contacts service', () => {
   let company
   let companyContact
+  let companyContactDuplicate
   let companyWithNoContact
   let contact
 
@@ -30,11 +31,16 @@ describe('Billing Accounts - Setup - Fetch Company Contacts service', () => {
       companyId: company.id,
       contactId: contact.id
     })
+    companyContactDuplicate = await CompanyContactHelper.add({
+      companyId: company.id,
+      contactId: contact.id
+    })
   })
 
   after(async () => {
     await company.$query().delete()
     await companyContact.$query().delete()
+    await companyContactDuplicate.$query().delete()
     await companyWithNoContact.$query().delete()
     await contact.$query().delete()
   })
