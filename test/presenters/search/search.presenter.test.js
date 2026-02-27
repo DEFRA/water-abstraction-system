@@ -12,7 +12,6 @@ const SearchPresenter = require('../../../app/presenters/search/search.presenter
 
 describe('Search - Search presenter', () => {
   let allSearchMatches
-  let numberOfPages
   let page
   let query
   let resultType
@@ -23,7 +22,6 @@ describe('Search - Search presenter', () => {
     query = 'searchthis'
     resultType = null
 
-    numberOfPages = 1
     page = 1
 
     allSearchMatches = {
@@ -182,7 +180,7 @@ describe('Search - Search presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+    const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
     expect(result).to.equal({
       filterItems: [
@@ -218,9 +216,7 @@ describe('Search - Search presenter', () => {
         }
       ],
       noResults: false,
-      page: 1,
       pageTitle: 'Search results for "searchthis"',
-      pageTitleCaption: null,
       query: 'searchthis',
       results: [
         {
@@ -368,7 +364,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns no selected items', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.filterItems).to.equal([
           {
@@ -411,7 +407,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns the selected item', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.filterItems).to.equal([
           {
@@ -454,7 +450,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns no selected items', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.filterItems).to.equal([
           {
@@ -497,7 +493,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('does not include the "billingAccount" item', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.filterItems).to.equal([
           {
@@ -540,7 +536,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "true"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.noResults).to.be.true()
       })
@@ -551,13 +547,12 @@ describe('Search - Search presenter', () => {
     describe('when the blank search page is shown', () => {
       beforeEach(() => {
         allSearchMatches = undefined
-        numberOfPages = undefined
         page = undefined
         query = undefined
       })
 
       it('returns "Search"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.pageTitle).to.equal('Search')
       })
@@ -565,47 +560,9 @@ describe('Search - Search presenter', () => {
 
     describe('when there are search results', () => {
       it('returns "Search results" with the text being searched for', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.pageTitle).to.equal('Search results for "searchthis"')
-      })
-    })
-  })
-
-  describe('the "pageTitleCaption" property', () => {
-    describe('when the blank search page is shown', () => {
-      beforeEach(() => {
-        allSearchMatches = undefined
-        numberOfPages = undefined
-        page = undefined
-        query = undefined
-      })
-
-      it('is not displayed', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.pageTitleCaption).to.be.undefined()
-      })
-    })
-
-    describe('when there are multiple pages of results', () => {
-      beforeEach(() => {
-        numberOfPages = 6
-        page = 2
-      })
-
-      it('returns the page number and total page count', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.pageTitleCaption).to.equal('Page 2 of 6')
-      })
-    })
-
-    describe('when there is a single page of results', () => {
-      it('returns "null"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
-
-        expect(result.pageTitleCaption).to.be.null()
       })
     })
   })
@@ -617,7 +574,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.showResults).to.be.false()
       })
@@ -625,7 +582,7 @@ describe('Search - Search presenter', () => {
 
     describe('when a search result page is requested', () => {
       it('returns "true"', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.showResults).to.be.true()
       })
@@ -639,7 +596,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns a blank name', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.results[2].col2Value).to.equal('')
       })
@@ -653,7 +610,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns a blank name', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.results[2].col2Value).to.equal('')
       })
@@ -672,7 +629,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns the `reason` value', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.results[2].statusTag).to.equal('revoked')
       })
@@ -692,7 +649,7 @@ describe('Search - Search presenter', () => {
       })
 
       it('returns an empty value', () => {
-        const result = SearchPresenter.go(userScopes, query, resultType, page, numberOfPages, allSearchMatches)
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.results[2].statusTag).to.not.exist()
       })
