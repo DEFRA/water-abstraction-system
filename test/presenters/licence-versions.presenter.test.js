@@ -13,7 +13,7 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 // Thing under test
 const LicenceVersionsPresenter = require('../../app/presenters/licence-versions.presenter.js')
 
-describe.only('Licences versions presenter', () => {
+describe('Licences versions presenter', () => {
   describe('#formatLicenceVersions()', () => {
     let licenceVersions
 
