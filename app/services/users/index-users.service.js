@@ -17,18 +17,16 @@ const featureFlagsConfig = require('../../../config/feature-flags.config.js')
  *
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {number|string} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} The view data for the users page
  */
-async function go(yar, auth, page = 1) {
+async function go(yar, auth, page) {
   const filters = _filters(yar)
 
-  const selectedPageNumber = Number(page)
+  const { results: users, total: totalNumber } = await FetchUsersService.go(filters, page)
 
-  const { results: users, total: totalNumber } = await FetchUsersService.go(filters, selectedPageNumber)
-
-  const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/users`, users.length, 'users')
+  const pagination = PaginatorPresenter.go(totalNumber, page, `/system/users`, users.length, 'users')
 
   const pageData = IndexUsersPresenter.go(users, auth)
 

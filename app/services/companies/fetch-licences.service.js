@@ -13,7 +13,7 @@ const { db } = require('../../../db/db.js')
  * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
  *
  * @param {string} companyId - The company id for the company
- * @param {number} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} the licences for the company and the pagination object
  */
@@ -39,7 +39,7 @@ async function _fetch(companyId, page) {
         .where('licenceDocumentRoles.companyId', companyId)
         .where('licenceRoles.name', 'licenceHolder')
     )
-    .page(page - 1, DatabaseConfig.defaultPageSize)
+    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 module.exports = {
   go

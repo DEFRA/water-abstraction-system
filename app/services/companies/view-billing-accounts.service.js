@@ -17,7 +17,7 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @param {string} companyId - the UUID of the company
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {number} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
@@ -30,7 +30,7 @@ async function go(companyId, auth, page) {
 
   const paginationData = PaginatorPresenter.go(
     pagination.total,
-    Number(page),
+    page,
     `/system/companies/${companyId}/billing-accounts`,
     billingAccounts.length,
     'billing accounts'

@@ -15,7 +15,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * Fetches the matching billing account and additional records needed for the view billing account page
  *
  * @param {string} id - The UUID for the billing account to fetch
- * @param {number|string} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} an object containing the billing account and matching bills needed to populate the view
  * billing account page
@@ -59,7 +59,7 @@ async function _fetchBills(billingAccountId, page) {
     .modifyGraph('billRun', (builder) => {
       builder.select(['id', 'batchType', 'billRunNumber', 'scheme', 'source', 'summer', 'status'])
     })
-    .page(page - 1, DatabaseConfig.defaultPageSize)
+    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
 module.exports = {

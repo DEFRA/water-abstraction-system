@@ -17,7 +17,7 @@ const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
 
 // Things we need to stub
-const databaseConfig = require('../../../config/database.config.js')
+const DatabaseConfig = require('../../../config/database.config.js')
 
 // Thing under test
 const FetchLicencesService = require('../../../app/services/companies/fetch-licences.service.js')
@@ -67,7 +67,7 @@ describe('Companies - Fetch Licences service', () => {
 
     // NOTE: We set the default page size to 1000 to ensure we get all records and avoid failed tests when run as
     // part of the full suite, and the risk our test record is returned in the second page of results.
-    Sinon.stub(databaseConfig, 'defaultPageSize').value(1000)
+    Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
   })
 
   afterEach(() => {

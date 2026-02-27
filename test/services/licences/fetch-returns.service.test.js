@@ -67,7 +67,7 @@ describe('Licences - Fetch Returns service', () => {
 
   describe('when the licence has return logs', () => {
     it('returns results', async () => {
-      const result = await FetchReturnsService.go(licence.id, 1)
+      const result = await FetchReturnsService.go(licence.id, '1')
 
       expect(result).to.equal({
         pagination: {

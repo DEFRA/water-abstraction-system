@@ -27,9 +27,11 @@ async function go(sessionId, yar, page = 1) {
 
   await _initialiseSelectedRecipients(recipients, session)
 
-  const pagination = PaginatorPresenter.go(recipients.length, Number(page), `/system/notices/setup/${sessionId}/check`)
+  const selectedPageNumber = page ? Number(page) : 1
 
-  const pageData = CheckPresenter.go(recipients, page, pagination, session)
+  const pagination = PaginatorPresenter.go(recipients.length, page, `/system/notices/setup/${sessionId}/check`)
+
+  const pageData = CheckPresenter.go(recipients, selectedPageNumber, pagination, session)
 
   const notification = readFlashNotification(yar)
 

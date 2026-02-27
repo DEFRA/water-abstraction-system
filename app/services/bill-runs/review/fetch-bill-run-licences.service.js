@@ -106,7 +106,7 @@ async function _fetchBillRunLicences(
       { column: 'status', order: 'desc' },
       { column: 'licenceRef', order: 'asc' }
     ])
-    .page(page - 1, DatabaseConfig.defaultPageSize)
+    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 
   _applyFilters(reviewLicenceQuery, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress)
 

@@ -9,7 +9,7 @@ const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = La
 const { expect } = Code
 
 // Things we need to stub
-const databaseConfig = require('../../../config/database.config.js')
+const DatabaseConfig = require('../../../config/database.config.js')
 
 // Test helpers
 const EventModel = require('../../../app/models/event.model.js')
@@ -77,7 +77,7 @@ describe('Notices - Fetch Notices service', () => {
     beforeEach(() => {
       // NOTE: We set the default page size to 1000 to ensure we get all records and avoid failed tests when run as
       // part of the full suite, and the risk our test record is returned in the second page of results.
-      Sinon.stub(databaseConfig, 'defaultPageSize').value(1000)
+      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
     })
 
     it('returns all notices ordered by the date they were created (newest to oldest)', async () => {
@@ -98,7 +98,7 @@ describe('Notices - Fetch Notices service', () => {
 
   describe('when a filter is applied', () => {
     beforeEach(() => {
-      Sinon.stub(databaseConfig, 'defaultPageSize').value(1000)
+      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
     })
 
     describe('and "From Date" has been set', () => {
@@ -344,7 +344,7 @@ describe('Notices - Fetch Notices service', () => {
       pageNumber = 2
 
       // NOTE: We know we create 3 records so we set the value to 2 to ensure the results are paginated
-      Sinon.stub(databaseConfig, 'defaultPageSize').value(2)
+      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(2)
     })
 
     it('can return the selected page', async () => {

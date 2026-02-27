@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const databaseConfig = require('../../../config/database.config.js')
+const DatabaseConfig = require('../../../config/database.config.js')
 
 // Test helpers
 const UserHelper = require('../../support/helpers/user.helper.js')
@@ -44,7 +44,7 @@ describe('Users - Fetch Users service', () => {
     beforeEach(() => {
       // NOTE: We set the default page size to 1000 to ensure we get all records and avoid failed tests when run as
       // part of the full suite, and the risk our test record is returned in the second page of results.
-      Sinon.stub(databaseConfig, 'defaultPageSize').value(1000)
+      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
     })
 
     it('returns all users ordered by their username (email) ascending', async () => {
@@ -63,7 +63,7 @@ describe('Users - Fetch Users service', () => {
 
   describe('when a filter is applied', () => {
     beforeEach(() => {
-      Sinon.stub(databaseConfig, 'defaultPageSize').value(1000)
+      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
     })
 
     describe('and "Email" has been set', () => {
@@ -394,7 +394,7 @@ describe('Users - Fetch Users service', () => {
       pageNumber = 2
 
       // NOTE: We know we create 3 records so we set the value to 2 to ensure the results are paginated
-      Sinon.stub(databaseConfig, 'defaultPageSize').value(2)
+      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(2)
     })
 
     it('can return the selected page', async () => {

@@ -13,7 +13,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * Fetches all bills for a licence which is needed for the view '/licences/{id}/bills` page
  *
  * @param {string} licenceId - The UUID for the licence to fetch
- * @param {number|string} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's bills tab
  */
@@ -46,7 +46,7 @@ async function _fetch(licenceId, page) {
       builder.select(['id', 'batchType', 'scheme', 'summer'])
     })
     .orderBy([{ column: 'createdAt', order: 'desc' }])
-    .page(page - 1, DatabaseConfig.defaultPageSize)
+    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
 module.exports = {

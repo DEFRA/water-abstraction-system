@@ -103,7 +103,7 @@ const COMPLEX_END_PAGINATOR = 'end'
  * `<- Previous 1 ... 38 [39] 40 41 42 Next ->`
  *
  * @param {number} numberOfRecords - the total number of records or results of the thing being paginated
- * @param {number} selectedPageNumber - the page of results selected for viewing
+ * @param {string} page - the page of results selected for viewing
  * @param {string} path - the URL path the paginator should use, for example, `'/system/bill-runs'`
  * @param {number} numberOfShownItems - The number of items currently being shown (e.g. items on the current page).
  * @param {string} message - A label appended to the end of the 'Showing x of y' string (e.g. "returns", "results").
@@ -112,9 +112,11 @@ const COMPLEX_END_PAGINATOR = 'end'
  * @returns {object} if no pagination is needed just the `numberOfPages` is returned else a `component:` property is
  * also included that can be directly passed to the `govukPagination()` in the view.
  */
-function go(numberOfRecords, selectedPageNumber, path, numberOfShownItems, message, queryArgs = {}) {
+function go(numberOfRecords, page, path, numberOfShownItems, message, queryArgs = {}) {
   const numberOfPages = Math.ceil(numberOfRecords / DatabaseConfig.defaultPageSize)
   const showingMessage = _showingXofY(numberOfRecords, numberOfShownItems, message)
+
+  const selectedPageNumber = page ? Number(page) : 1
 
   if (numberOfPages < 2) {
     return { numberOfPages, showingMessage }

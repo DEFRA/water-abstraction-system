@@ -15,7 +15,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * Fetches the notices for the `/notices` page
  *
  * @param {object} filters - an object containing the different filters to apply to the query
- * @param {number} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} an object containing the matching notices and the total count of notices
  */
@@ -24,7 +24,7 @@ async function go(filters, page) {
 
   _applyFilters(query, filters)
 
-  query.orderBy('events.createdAt', 'desc').page(page - 1, DatabaseConfig.defaultPageSize)
+  query.orderBy('events.createdAt', 'desc').page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 
   return query
 }

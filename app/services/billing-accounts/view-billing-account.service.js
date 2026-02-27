@@ -13,7 +13,7 @@ const ViewBillingAccountPresenter = require('../../presenters/billing-accounts/v
  * Orchestrates fetching and presenting the data needed for the view billing account page
  *
  * @param {string} id - The UUID of the billing account to view
- * @param {number|string} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  * @param {string|undefined} licenceId - The UUID of the licence related to the billing account, if available, used to
  * determine the backlink
  * @param {string|undefined} chargeVersionId - The UUID of the charge version related to the billing account, if
@@ -32,7 +32,7 @@ async function go(id, page, licenceId, chargeVersionId, companyId) {
 
   const pagination = PaginatorPresenter.go(
     paginationData.total,
-    Number(page),
+    page,
     `/system/billing-accounts/${id}`,
     billingAccountData.bills.length,
     'bills',

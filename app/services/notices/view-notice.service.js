@@ -16,7 +16,7 @@ const ViewNoticePresenter = require('../../presenters/notices/view-notice.presen
  *
  * @param {string} noticeId - The UUID of the selected notice
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
- * @param {number|string} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} - The data formatted for the view template
  */
@@ -24,25 +24,17 @@ async function go(noticeId, yar, page) {
   const filterKey = `noticeFilter-${noticeId}`
   const filters = _filters(yar, filterKey)
 
-  const selectedPageNumber = page ? Number(page) : 1
-
-  const { notice, notifications, totalNumber } = await FetchNoticeService.go(noticeId, selectedPageNumber, filters)
+  const { notice, notifications, totalNumber } = await FetchNoticeService.go(noticeId, page, filters)
 
   const pagination = PaginatorPresenter.go(
     totalNumber,
-    selectedPageNumber,
+    page,
     `/system/notices/${notice.id}`,
     notifications.length,
     'notifications'
   )
 
-  const pageData = ViewNoticePresenter.go(
-    notice,
-    notifications,
-    totalNumber,
-    selectedPageNumber,
-    pagination.numberOfPages
-  )
+  const pageData = ViewNoticePresenter.go(notice, notifications, totalNumber, page, pagination.numberOfPages)
 
   return {
     activeNavBar: 'notices',

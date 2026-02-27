@@ -22,15 +22,13 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/review/rev
 async function go(id, page, yar) {
   const { filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress } = _getFilters(id, yar)
 
-  const selectedPageNumber = page ? Number(page) : 1
-
   const { billRun, licences } = await FetchBillRunLicencesService.go(
     id,
     filterIssues,
     filterLicenceHolderNumber,
     filterLicenceStatus,
     filterProgress,
-    selectedPageNumber
+    page
   )
 
   const [bannerMessage] = yar.flash('banner')
@@ -44,9 +42,9 @@ async function go(id, page, yar) {
     licences.results
   )
 
-  const pagination = PaginatorPresenter.go(licences.total, selectedPageNumber, `/system/bill-runs/review/${id}`)
+  const pagination = PaginatorPresenter.go(licences.total, page, `/system/bill-runs/review/${id}`)
 
-  const pageTitle = _pageTitle(pagination.numberOfPages, selectedPageNumber)
+  const pageTitle = _pageTitle(pagination.numberOfPages, page)
 
   return { activeNavBar: 'bill-runs', bannerMessage, ...pageData, pageTitle, pagination }
 }
@@ -61,7 +59,9 @@ function _getFilters(id, yar) {
   return { filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress }
 }
 
-function _pageTitle(numberOfPages, selectedPageNumber) {
+function _pageTitle(numberOfPages, page) {
+  const selectedPageNumber = page ? Number(page) : 1
+
   if (numberOfPages < 2) {
     return 'Review licences'
   }

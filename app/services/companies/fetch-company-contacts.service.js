@@ -12,7 +12,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * Fetches the company contacts data needed for the view '/companies/{id}/contacts'
  *
  * @param {string} companyId - The company id for the company
- * @param {number} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} the company contacts for the company and the pagination object
  */
@@ -45,7 +45,7 @@ async function _fetch(companyId, page) {
     .modifyGraph('licenceRole', (licenceRoleBuilder) => {
       licenceRoleBuilder.select(['label'])
     })
-    .page(page - 1, DatabaseConfig.defaultPageSize)
+    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
 module.exports = {

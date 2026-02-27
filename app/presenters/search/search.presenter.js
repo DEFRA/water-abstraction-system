@@ -185,12 +185,12 @@ function _monitoringStation(monitoringStation) {
   }
 }
 
-function _pageTitleCaption(numberOfPages, selectedPageNumber) {
+function _pageTitleCaption(numberOfPages, page) {
   if (numberOfPages < 2) {
     return null
   }
 
-  return `Page ${selectedPageNumber} of ${numberOfPages}`
+  return `Page ${page} of ${numberOfPages}`
 }
 
 function _result(result) {

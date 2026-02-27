@@ -16,7 +16,7 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @param {string} licenceId - The UUID of the licence
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {number|string} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence bills template.
  */
@@ -29,7 +29,7 @@ async function go(licenceId, auth, page) {
 
   const paginationData = PaginatorPresenter.go(
     pagination.total,
-    Number(page),
+    page,
     `/system/licences/${licenceId}/bills`,
     bills.length,
     'bills'

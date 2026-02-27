@@ -10,13 +10,13 @@ const { ref } = require('objection')
 const EventModel = require('../../models/event.model.js')
 const NotificationModel = require('../../models/notification.model.js')
 
-const databaseConfig = require('../../../config/database.config.js')
+const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
  * Fetch the selected notice and its associated notifications for the 'notices/{id}' page
  *
  * @param {string} noticeId - the UUID of the selected notice
- * @param {number} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  * @param {object} filters - an object containing the different filters to apply to the query
  *
  * @returns {Promise<object>} the notice and its associated notifications
@@ -34,7 +34,7 @@ async function go(noticeId, page, filters) {
       { column: 'notifications.licences', order: 'asc' },
       { column: 'notifications.createdAt', order: 'asc' }
     ])
-    .page(page - 1, databaseConfig.defaultPageSize)
+    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 
   const { results: notifications, total: totalNumber } = await notificationsQuery
 

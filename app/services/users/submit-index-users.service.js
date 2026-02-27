@@ -20,12 +20,12 @@ const { clearFilters } = require('../../lib/submit-page.lib.js')
  * @param {object} payload - The `request.payload` containing the filter data.
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {number|string} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} If no errors an empty object signifying the request can be redirected to the index page
  * else the data needed to re-render the page
  */
-async function go(payload, yar, auth, page = 1) {
+async function go(payload, yar, auth, page) {
   const filterCleared = clearFilters(payload, yar, 'usersFilter')
 
   if (filterCleared) {
@@ -40,19 +40,15 @@ async function go(payload, yar, auth, page = 1) {
     return {}
   }
 
-  // When the page comes from the request via the controller then it will be a string. For consistency we want it as a
-  // number
-  const selectedPageNumber = Number(page)
-
   const savedFilters = _savedFilters(yar)
 
-  return _replayView(payload, error, selectedPageNumber, savedFilters, auth)
+  return _replayView(payload, error, page, savedFilters, auth)
 }
 
-async function _replayView(payload, error, selectedPageNumber, savedFilters, auth) {
-  const { results: users, total: totalNumber } = await FetchUsersService.go(savedFilters, selectedPageNumber)
+async function _replayView(payload, error, page, savedFilters, auth) {
+  const { results: users, total: totalNumber } = await FetchUsersService.go(savedFilters, page)
 
-  const pagination = PaginatorPresenter.go(totalNumber, selectedPageNumber, `/system/users`, users.length, 'users')
+  const pagination = PaginatorPresenter.go(totalNumber, page, `/system/users`, users.length, 'users')
 
   const pageData = IndexUsersPresenter.go(users, auth)
 

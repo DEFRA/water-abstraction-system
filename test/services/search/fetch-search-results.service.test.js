@@ -19,7 +19,7 @@ const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
 
 // Things we need to stub
-const databaseConfig = require('../../../config/database.config.js')
+const DatabaseConfig = require('../../../config/database.config.js')
 
 // Thing under test
 const FetchSearchResultsService = require('../../../app/services/search/fetch-search-results.service.js')
@@ -247,7 +247,7 @@ describe('Search - Fetch Search Results service', () => {
   describe('when multiple pages of results exist', () => {
     beforeEach(() => {
       // Set the page size to 1 to force multiple pages of results
-      Sinon.stub(databaseConfig, 'defaultPageSize').value(1)
+      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1)
 
       query = 'TESTSEARCH'
       page = 2
