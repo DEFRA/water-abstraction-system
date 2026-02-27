@@ -8,6 +8,7 @@
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
+const { returnRequirementReasons } = require('../lib/static-lookups.lib.js')
 
 class ReturnVersionModel extends BaseModel {
   static get tableName() {
@@ -205,11 +206,12 @@ class ReturnVersionModel extends BaseModel {
    *
    * If neither 'source' records have a reason then it returns `null`
    *
-   * @returns {string} the reason the 'source' record was created, else `null` if it cannot be determined
+   * @returns {string} the reason description why the 'source' record was created, else `null` if it cannot be
+   * determined
    */
   $reason() {
     if (this.reason) {
-      return this.reason
+      return returnRequirementReasons[this.reason]
     }
 
     const firstModLog = this._firstModLog()

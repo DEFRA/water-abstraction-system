@@ -6,7 +6,6 @@
  */
 
 const { formatLongDate } = require('../base.presenter.js')
-const { returnRequirementReasons } = require('../../lib/static-lookups.lib.js')
 const { supplementaryBillingNotification } = require('./base-licences.presenter.js')
 
 const ROLES = {
@@ -179,25 +178,6 @@ function _hasTwoPartTariffAgreement(agreements) {
   })
 }
 
-/**
- * The history helper $reason() will return either the reason saved against the return version record, the reason
- * captured in the first mod log entry, or null.
- *
- * If its the reason saved against the return version we have to map it to its display version first.
- *
- * @private
- */
-function _reason(returnVersion) {
-  const reason = returnVersion.$reason()
-  const mappedReason = returnRequirementReasons[reason]
-
-  if (mappedReason) {
-    return mappedReason
-  }
-
-  return reason ?? ''
-}
-
 function _recalculateBills(agreements, auth, licenceData) {
   if (auth.credentials.scope.includes(ROLES.billing) && _hasTwoPartTariffAgreement(agreements)) {
     return { markForSupplementaryBilling: `/system/licences/${licenceData.licenceId}/mark-for-supplementary-billing` }
@@ -217,7 +197,7 @@ function _returnVersions(returnVersions = [{}]) {
         }
       ],
       endDate: returnVersion.endDate ? formatLongDate(returnVersion.endDate) : '',
-      reason: _reason(returnVersion),
+      reason: returnVersion.$reason() ?? '',
       startDate: formatLongDate(returnVersion.startDate),
       status: returnVersion.status
     }

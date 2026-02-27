@@ -455,7 +455,7 @@ describe('Return Version model', () => {
         it('returns the return version reason', () => {
           const result = testRecord.$reason()
 
-          expect(result).to.equal('new-licence')
+          expect(result).to.equal('New licence')
         })
       })
     })
@@ -535,7 +535,7 @@ describe('Return Version model', () => {
         it('returns the return version reason', () => {
           const result = testRecord.$reason()
 
-          expect(result).to.equal('major-change')
+          expect(result).to.equal('Major change')
         })
       })
     })
