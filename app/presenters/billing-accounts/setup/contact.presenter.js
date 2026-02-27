@@ -22,8 +22,8 @@ function go(session, companyContacts) {
       text: 'Back'
     },
     contactSelected: session.contactSelected ?? null,
-    items: _items(companyContacts, session.contactSelected),
-    pageTitle: _pageTitle(session, companyContacts),
+    items: _items(companyContacts.contacts, session.contactSelected),
+    pageTitle: _pageTitle(companyContacts),
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`
   }
 }
@@ -31,12 +31,12 @@ function go(session, companyContacts) {
 function _items(companyContacts, contactSelected) {
   const items = []
 
-  for (const companyContact of companyContacts) {
+  for (const contact of companyContacts) {
     items.push({
-      id: companyContact.contact.id,
-      value: companyContact.contact.id,
-      text: companyContact.contact.$name(),
-      checked: companyContact.contact.id === contactSelected
+      id: contact.id,
+      value: contact.id,
+      text: contact.$name(),
+      checked: contact.id === contactSelected
     })
   }
 
@@ -55,10 +55,10 @@ function _items(companyContacts, contactSelected) {
   return items
 }
 
-function _pageTitle(session, companyContacts) {
-  const name = session.billingAccount.company.name
+function _pageTitle(companyContacts) {
+  const name = companyContacts.company.name
 
-  if (companyContacts.length === 0) {
+  if (companyContacts.contacts.length === 0) {
     return `No company contacts found for "${name}"`
   }
 

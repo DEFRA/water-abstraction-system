@@ -15,13 +15,15 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SubmitAccountService = require('../../../../app/services/billing-accounts/setup/submit-account.service.js')
 
 describe('Billing Accounts - Setup - Submit Account Service', () => {
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+
   let payload
   let session
   let sessionData
 
   beforeEach(async () => {
     sessionData = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+      billingAccount
     }
 
     session = await SessionHelper.add({ data: sessionData })
@@ -34,7 +36,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
   describe('when the user picks the "customer" option', () => {
     beforeEach(async () => {
       payload = {
-        accountSelected: 'customer'
+        accountSelected: billingAccount.company.id
       }
     })
 
@@ -45,7 +47,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
 
       expect(refreshedSession.data).to.equal(
         {
-          accountSelected: 'customer',
+          accountSelected: billingAccount.company.id,
           searchInput: null
         },
         { skip: ['billingAccount'] }
@@ -61,7 +63,8 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     describe('and the user has returned to the page and made the same choice', () => {
       beforeEach(async () => {
         sessionData = {
-          accountSelected: 'customer'
+          accountSelected: billingAccount.company.id,
+          billingAccount
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -74,7 +77,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            accountSelected: 'customer',
+            accountSelected: billingAccount.company.id,
             searchInput: null
           },
           { skip: ['billingAccount'] }
@@ -102,8 +105,8 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            ..._anotherExpectedValues(),
-            accountSelected: 'customer',
+            ..._anotherExpectedValues(session),
+            accountSelected: billingAccount.company.id,
             searchInput: null
           },
           { skip: ['billingAccount'] }
@@ -150,6 +153,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
       beforeEach(async () => {
         sessionData = {
           accountSelected: 'another',
+          billingAccount,
           searchInput: 'Customer Name'
         }
 
@@ -191,7 +195,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            ..._customerExpectedValues(),
+            ..._customerExpectedValues(session),
             accountSelected: 'another',
             searchInput: 'Customer Name'
           },
@@ -210,9 +214,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
   describe('when validation fails', () => {
     describe('because the user did not select an option', () => {
       beforeEach(async () => {
-        payload = {
-          accountSelected: 'wrong'
-        }
+        payload = {}
       })
 
       it('returns page data for the view, with errors', async () => {
@@ -277,9 +279,10 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
   })
 })
 
-function _commonExpectedValues() {
+function _commonExpectedValues(session) {
   return {
     addressJourney: null,
+    billingAccount: session.billingAccount,
     checkPageVisited: false,
     contactName: null,
     contactSelected: null,
@@ -288,16 +291,16 @@ function _commonExpectedValues() {
   }
 }
 
-function _customerExpectedValues() {
+function _customerExpectedValues(session) {
   return {
-    ..._commonExpectedValues(),
+    ..._commonExpectedValues(session),
     addressSelected: null
   }
 }
 
-function _anotherExpectedValues() {
+function _anotherExpectedValues(session) {
   return {
-    ..._commonExpectedValues(),
+    ..._commonExpectedValues(session),
     accountType: null,
     companiesHouseId: null,
     companySearch: null,
@@ -322,14 +325,12 @@ function _anotherSessionData(session) {
 function _customerSessionData(session) {
   return {
     ..._commonSessionData(session),
-    accountSelected: 'customer',
+    accountSelected: session.billingAccount.company.id,
     addressSelected: 'new'
   }
 }
 
 function _commonSessionData(session) {
-  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
-
   return {
     addressJourney: {
       address: {},
@@ -337,10 +338,10 @@ function _commonSessionData(session) {
         href: `/system/billing-accounts/setup/${session.id}/existing-address`,
         text: 'Back'
       },
-      pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
+      pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
       redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
     },
-    billingAccount,
+    billingAccount: session.billingAccount,
     contactName: 'Contact Name',
     contactSelected: 'new',
     fao: 'yes'

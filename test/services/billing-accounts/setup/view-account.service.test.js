@@ -36,11 +36,12 @@ describe('Billing Accounts - Setup - View Account Service', () => {
 
       expect(result).to.equal({
         accountSelected: null,
-        companyName: session.billingAccount.company.name,
         backLink: {
           href: `/system/billing-accounts/${session.billingAccount.id}`,
           text: 'Back'
         },
+        companyId: session.billingAccount.company.id,
+        companyName: session.billingAccount.company.name,
         pageTitle: 'Who should the bills go to?',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
         searchInput: null

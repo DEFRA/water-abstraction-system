@@ -6,7 +6,7 @@
  * @module SubmitExistingAddressService
  */
 
-const FetchExistingAddressesService = require('./fetch-existing-addresses.service.js')
+const FetchCompanyAddressesService = require('./fetch-company-addresses.service.js')
 const ExistingAddressPresenter = require('../../../presenters/billing-accounts/setup/existing-address.presenter.js')
 const ExistingAddressValidator = require('../../../validators/billing-accounts/setup/existing-address.validator.js')
 const SessionModel = require('../../../models/session.model.js')
@@ -23,8 +23,10 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  */
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
+  const companyId = session.accountSelected === 'another' ? session.existingAccount : session.accountSelected
+  const companyAddresses = await FetchCompanyAddressesService.go(companyId)
 
-  const validationResult = _validate(payload, session.billingAccount.company.name)
+  const validationResult = _validate(payload, companyAddresses.company.name)
 
   if (!validationResult) {
     await _save(session, payload)
@@ -34,7 +36,6 @@ async function go(sessionId, payload) {
     }
   }
 
-  const companyAddresses = await FetchExistingAddressesService.go(session.billingAccount.company.id)
   const pageData = _submissionData(session, payload, companyAddresses)
 
   return {
