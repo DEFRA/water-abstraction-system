@@ -554,6 +554,61 @@ function formatValueUnit(value, unit) {
 }
 
 /**
+ * Formats the licence or return version 'reason' for the view page
+ *
+ * > It is assumed that the service that fetched the the version used the model's `$history()` modifier, or equivalent
+ *
+ * All licence versions are created and managed in NALD. Early return versions were done in NALD but are now done in
+ * WRLS.
+ *
+ * In NALD, the who, when and why is not recorded against the record, but in the 'mod log', a series of records linked
+ * to other records intended to record all their changes.
+ *
+ * Unfortunately, NALD being NALD, there is no validation, so it is common for not all fields to be completed. You can
+ * even opt to close the screen and record nothing!
+ *
+ * Because of this, it becomes convoluted to work out the the 'reason' for a version, i.e. the text we display that
+ * tells a user why it was created, when, and by whom.
+ *
+ * Hence the need for this helper. Assuming the version has its associated `ModLogModel` instances linked to it, the
+ * who, when and why will be taken from it.
+ *
+ * Because the versions' `$createdBy()` will fall back to the WRLS creation time it will also be populated. However, the
+ * reason and who created it may be empty. So, we have to cater for all possible variations.
+ *
+ * Finally, it has been agreed that only users with the `billing' role have permission to see when and who create a
+ * record.
+ *
+ * @param {module:LicenceVersionModel|module:ReturnVersionModel} version - The version instance to generate a reason for
+ * @param {boolean} billingAndDataRole - Whether the user has the 'billing' role
+ *
+ * @returns {string} The formatted version reason string
+ */
+function formatVersionReason(version, billingAndDataRole) {
+  const reason = version.$reason()
+  const createdBy = version.$createdBy()
+  const createdAt = formatLongDate(version.$createdAt())
+
+  if (!billingAndDataRole) {
+    return reason
+  }
+
+  if (reason && createdBy) {
+    return `${reason} created on ${createdAt} by ${createdBy}`
+  }
+
+  if (!reason && !createdBy) {
+    return `Created on ${createdAt}`
+  }
+
+  if (reason) {
+    return `${reason} created on ${createdAt}`
+  }
+
+  return `Created on ${createdAt} by ${createdBy}`
+}
+
+/**
  * Pads a number to a given length with leading zeroes and returns the result as a string
  *
  * @param {number} number - The number to be padded
@@ -626,6 +681,7 @@ module.exports = {
   formatReturnLogStatus,
   formatValidationResult,
   formatValueUnit,
+  formatVersionReason,
   leftPadZeroes,
   sentenceCase,
   titleCase
