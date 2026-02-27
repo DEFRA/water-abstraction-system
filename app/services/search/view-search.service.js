@@ -59,14 +59,7 @@ async function _pageOfResults(userScopes, searchQuery, resultType, pageNumber) {
 
   const pagination = PaginatorPresenter.go(total, pageNumber, `/system/search`, results.length, 'matches')
 
-  const formattedData = SearchPresenter.go(
-    userScopes,
-    searchQuery,
-    resultType,
-    pageNumber,
-    pagination.numberOfPages,
-    allSearchMatches
-  )
+  const formattedData = SearchPresenter.go(userScopes, searchQuery, resultType, pageNumber, allSearchMatches)
 
   return {
     ...formattedData,
