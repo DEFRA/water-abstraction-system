@@ -13,7 +13,7 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 // Thing under test
 const LicenceVersionsPresenter = require('../../app/presenters/licence-versions.presenter.js')
 
-describe('Licences versions presenter', () => {
+describe.only('Licences versions presenter', () => {
   describe('#formatLicenceVersions()', () => {
     let licenceVersions
 
@@ -49,6 +49,35 @@ describe('Licences versions presenter', () => {
               startDate: new Date('1977-04-01')
             }
           ])
+        })
+
+        describe('and the licence versions are one day apart', () => {
+          beforeEach(() => {
+            licenceVersions = [
+              {
+                id: generateUUID(),
+                startDate: new Date('2022-01-02'),
+                endDate: new Date('2022-01-02')
+              },
+              {
+                id: generateUUID(),
+                startDate: new Date('2022-01-01'),
+                endDate: new Date('2022-01-01')
+              }
+            ]
+          })
+
+          it('returns the', () => {
+            const result = LicenceVersionsPresenter.formatLicenceVersions(licenceVersions)
+
+            expect(result).to.equal([
+              {
+                id: licenceVersions[0].id,
+                startDate: new Date('2022-01-01'),
+                endDate: new Date('2022-01-02')
+              }
+            ])
+          })
         })
       })
 
@@ -120,32 +149,92 @@ describe('Licences versions presenter', () => {
         })
       })
 
-      describe('have an older licence version entirely contained within a newer version', () => {
-        beforeEach(() => {
-          licenceVersions = [
-            {
-              id: generateUUID(),
-              startDate: new Date('2022-01-01'),
-              endDate: new Date('2022-01-10')
-            },
-            {
-              id: generateUUID(),
-              startDate: new Date('2022-01-05'), // Starts LATER than the one above
-              endDate: new Date('2022-01-06') // Ends EARLIER than the one above
-            }
-          ]
+      describe('two licence versions with the same start date', () => {
+        describe('but the first ends before the second ends', () => {
+          beforeEach(() => {
+            licenceVersions = [
+              {
+                id: generateUUID(),
+                startDate: new Date('2022-01-05'), // Starts SAME as the one above
+                endDate: new Date('2022-01-10') // Ends EARLIER than the one above
+              },
+              {
+                id: generateUUID(),
+                startDate: new Date('2022-01-05'),
+                endDate: new Date('2022-01-15')
+              }
+            ]
+          })
+
+          it('returns the licence versions earliest start and and latest end date', () => {
+            const result = LicenceVersionsPresenter.formatLicenceVersions(licenceVersions)
+
+            expect(result).to.equal([
+              {
+                id: licenceVersions[1].id,
+                startDate: new Date('2022-01-05'),
+                endDate: new Date('2022-01-15')
+              }
+            ])
+          })
         })
 
-        it('does not shrink the start date to a later date', () => {
-          const result = LicenceVersionsPresenter.formatLicenceVersions(licenceVersions)
+        describe('but the first ends after the second ends', () => {
+          beforeEach(() => {
+            licenceVersions = [
+              {
+                id: generateUUID(),
+                startDate: new Date('2022-01-05'),
+                endDate: new Date('2022-01-15')
+              },
+              {
+                id: generateUUID(),
+                startDate: new Date('2022-01-05'), // Starts SAME as the one above
+                endDate: new Date('2022-01-10') // Ends EARLIER than the one above
+              }
+            ]
+          })
 
-          expect(result).to.equal([
-            {
-              id: licenceVersions[0].id,
-              startDate: new Date('2022-01-01'),
-              endDate: new Date('2022-01-10')
-            }
-          ])
+          it('returns the details of the wrapping licence version', () => {
+            const result = LicenceVersionsPresenter.formatLicenceVersions(licenceVersions)
+
+            expect(result).to.equal([
+              {
+                id: licenceVersions[0].id,
+                startDate: new Date('2022-01-05'),
+                endDate: new Date('2022-01-15')
+              }
+            ])
+          })
+        })
+
+        describe('and the same end date', () => {
+          beforeEach(() => {
+            licenceVersions = [
+              {
+                id: generateUUID(),
+                startDate: new Date('2022-01-01'),
+                endDate: new Date('2022-01-01')
+              },
+              {
+                id: generateUUID(),
+                startDate: new Date('2022-01-01'),
+                endDate: new Date('2022-01-01')
+              }
+            ]
+          })
+
+          it('returns the details of the merged licence version', () => {
+            const result = LicenceVersionsPresenter.formatLicenceVersions(licenceVersions)
+
+            expect(result).to.equal([
+              {
+                id: licenceVersions[0].id,
+                startDate: new Date('2022-01-01'),
+                endDate: new Date('2022-01-01')
+              }
+            ])
+          })
         })
       })
     })

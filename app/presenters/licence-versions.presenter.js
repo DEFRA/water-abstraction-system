@@ -65,6 +65,7 @@ function formatLicenceVersions(licenceVersions) {
 
     const prev = acc[acc.length - 1]
     const prevStart = prev.startDate
+    const prevEnd = prev.endDate
     const currentEnd = curr.endDate
     const currStart = curr.startDate
 
@@ -74,7 +75,12 @@ function formatLicenceVersions(licenceVersions) {
 
     if (currentEnd.getTime() >= prevStart.getTime() || currentEnd.getTime() === lastStartYesterday.getTime()) {
       if (currStart.getTime() < prevStart.getTime()) {
-        prev.startDate = curr.startDate
+        prev.startDate = currStart
+      }
+
+      if (currStart.getTime() === prevStart.getTime() && currentEnd.getTime() > prevEnd.getTime()) {
+        prev.endDate = currentEnd
+        prev.id = curr.id
       }
     } else {
       acc.push({ ...curr })
