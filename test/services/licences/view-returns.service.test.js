@@ -20,7 +20,7 @@ const FetchLicenceService = require('../../../app/services/licences/fetch-licenc
 const ViewReturnsService = require('../../../app/services/licences/view-returns.service.js')
 
 describe('Licences - View Returns service', () => {
-  const page = 1
+  const page = '1'
 
   let auth
   let licence

@@ -41,7 +41,7 @@ describe('Companies - View Billing Accounts service', () => {
       pagination: { total: 1 }
     })
 
-    page = 1
+    page = '1'
   })
 
   afterEach(() => {

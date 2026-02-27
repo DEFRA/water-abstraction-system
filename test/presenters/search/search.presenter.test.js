@@ -24,7 +24,7 @@ describe('Search - Search presenter', () => {
     resultType = null
 
     numberOfPages = 1
-    page = 1
+    page = '1'
 
     allSearchMatches = {
       results: [
@@ -218,7 +218,7 @@ describe('Search - Search presenter', () => {
         }
       ],
       noResults: false,
-      page: 1,
+      page: '1',
       pageTitle: 'Search results for "searchthis"',
       pageTitleCaption: null,
       query: 'searchthis',
@@ -591,7 +591,7 @@ describe('Search - Search presenter', () => {
     describe('when there are multiple pages of results', () => {
       beforeEach(() => {
         numberOfPages = 6
-        page = 2
+        page = '2'
       })
 
       it('returns the page number and total page count', () => {

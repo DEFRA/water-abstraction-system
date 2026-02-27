@@ -37,7 +37,7 @@ describe('Companies - View Licences service', () => {
       pagination: { total: 1 }
     })
 
-    page = 1
+    page = '1'
   })
 
   afterEach(() => {

@@ -61,7 +61,7 @@ describe('Company contact - Fetch Notifications service', () => {
 
   describe('when the company contact has notifications', () => {
     it('returns the matching notifications', async () => {
-      const result = await FetchNotificationsService.go(email, 1)
+      const result = await FetchNotificationsService.go(email, '1')
 
       expect(result).to.equal({
         notifications: [
@@ -101,7 +101,7 @@ describe('Company contact - Fetch Notifications service', () => {
     })
 
     it('returns no notifications', async () => {
-      const result = await FetchNotificationsService.go(email, 1)
+      const result = await FetchNotificationsService.go(email, '1')
 
       expect(result).to.equal({
         notifications: [],
@@ -116,7 +116,7 @@ describe('Company contact - Fetch Notifications service', () => {
     })
 
     it('returns no notifications', async () => {
-      const result = await FetchNotificationsService.go(email, 1)
+      const result = await FetchNotificationsService.go(email, '1')
 
       expect(result).to.equal({
         notifications: [],
