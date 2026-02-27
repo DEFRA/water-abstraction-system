@@ -222,7 +222,7 @@ describe('Bill Runs Review - Review Bill Run Service', () => {
         expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
         expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
         expect(result.filter).to.equal(presenterStubData.filter)
-        expect(result.pageTitle).to.equal('Review licences (page 1 of 3)')
+        expect(result.pageTitle).to.equal('Review licences')
         expect(result.pagination.numberOfPages).to.equal(3)
         expect(result.pagination.component).to.exist()
 
@@ -243,7 +243,7 @@ describe('Bill Runs Review - Review Bill Run Service', () => {
         expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
         expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
         expect(result.filter).to.equal(presenterStubData.filter)
-        expect(result.pageTitle).to.equal('Review licences (page 2 of 3)')
+        expect(result.pageTitle).to.equal('Review licences')
         expect(result.pagination.numberOfPages).to.equal(3)
         expect(result.pagination.component).to.exist()
 
