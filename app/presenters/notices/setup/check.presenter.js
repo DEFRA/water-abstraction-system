@@ -20,22 +20,21 @@ const NOTIFICATION_TYPES = {
  * Formats data for the `/notices/setup/check` page
  *
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
- * @param {number} selectedPageNumber - The currently selected page
  * @param {object} pagination - The result from `PaginatorPresenter`
  * @param {object} session - The session instance
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(recipients, selectedPageNumber, pagination, session) {
+function go(recipients, pagination, session) {
   const { noticeType, referenceCode } = session
 
-  const formattedRecipients = _recipients(noticeType, selectedPageNumber, recipients, session.id)
+  const formattedRecipients = _recipients(noticeType, pagination.currentPageNumber, recipients, session.id)
   const canSendNotice = _canSendNotice(formattedRecipients)
 
   return {
     canSendNotice,
     links: _links(session),
-    pageTitle: _pageTitle(selectedPageNumber, pagination),
+    pageTitle: _pageTitle(pagination.currentPageNumber, pagination),
     pageTitleCaption: `Notice ${referenceCode}`,
     readyToSend: _readyToSend(recipients, noticeType, canSendNotice),
     recipients: formattedRecipients,

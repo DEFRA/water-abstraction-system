@@ -64,6 +64,7 @@ describe('Notices - Setup - View Check service', () => {
       pageTitle: 'Check the recipients',
       pageTitleCaption: session.addressJourney.pageTitleCaption,
       pagination: {
+        currentPageNumber: 1,
         numberOfPages: 1,
         showingMessage: 'Showing all 1 undefined'
       },

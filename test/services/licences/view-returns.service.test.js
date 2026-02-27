@@ -73,7 +73,7 @@ describe('Licences - View Returns service', () => {
           noReturnsMessage: null,
           pageTitle: 'Returns',
           pageTitleCaption: `Licence ${licence.licenceRef}`,
-          pagination: { numberOfPages: 1, showingMessage: 'Showing all 1 returns' },
+          pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 1 returns' },
           returns: [
             {
               dates: '2 January 2020 to 1 February 2020',

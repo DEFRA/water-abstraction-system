@@ -151,6 +151,7 @@ describe('Notices - View Notice service', () => {
         sentDate: '21 February 2025',
         status: 'error',
         pagination: {
+          currentPageNumber: 1,
           numberOfPages: 1,
           showingMessage: 'Showing all 2 notifications'
         },

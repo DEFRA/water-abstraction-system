@@ -116,6 +116,7 @@ describe('Search - View Search service', () => {
         pageTitle: 'Search results for "12345678"',
         pageTitleCaption: null,
         pagination: {
+          currentPageNumber: 1,
           numberOfPages: 1,
           showingMessage: 'Showing all 2 matches'
         },
@@ -295,6 +296,7 @@ describe('Search - View Search service', () => {
         pageTitle: 'Search results for "12345678"',
         pageTitleCaption: null,
         pagination: {
+          currentPageNumber: 1,
           numberOfPages: 1,
           showingMessage: 'Showing all 2 matches'
         },

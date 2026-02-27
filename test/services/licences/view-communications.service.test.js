@@ -100,6 +100,7 @@ describe('Licences - View Communications service', () => {
         pageTitle: 'Communications',
         pageTitleCaption: `Licence ${licenceRef}`,
         pagination: {
+          currentPageNumber: 1,
           numberOfPages: 1,
           showingMessage: 'Showing all 1 communications'
         },

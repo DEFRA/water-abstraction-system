@@ -308,6 +308,7 @@ function _noticePageData(error = false) {
     reference,
     status: 'error',
     pagination: {
+      currentPageNumber: 1,
       numberOfPages: 1,
       showingMessage: 'Showing all 1 notifications'
     },

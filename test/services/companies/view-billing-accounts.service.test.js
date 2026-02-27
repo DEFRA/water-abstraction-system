@@ -76,6 +76,7 @@ describe('Companies - View Billing Accounts service', () => {
         pageTitle: 'Billing accounts',
         pageTitleCaption: 'Tyrell Corporation',
         pagination: {
+          currentPageNumber: 1,
           numberOfPages: 1,
           showingMessage: 'Showing all 1 billing accounts'
         },

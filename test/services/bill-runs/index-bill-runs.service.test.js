@@ -77,7 +77,7 @@ describe('Index Bill Runs service', () => {
         notification: null,
         pageSubHeading: 'View a bill run',
         pageTitle: 'Bill runs',
-        pagination: { numberOfPages: 1, showingMessage: 'Showing all 2 bill runs' },
+        pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 2 bill runs' },
         regionItems: [
           {
             checked: false,

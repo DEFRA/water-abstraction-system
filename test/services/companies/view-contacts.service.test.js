@@ -81,6 +81,7 @@ describe('Companies - View Contacts service', () => {
         pageTitle: 'Contacts',
         pageTitleCaption: 'Tyrell Corporation',
         pagination: {
+          currentPageNumber: 1,
           numberOfPages: 1,
           showingMessage: 'Showing all 1 contacts'
         },

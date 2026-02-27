@@ -76,6 +76,7 @@ describe('Company Contacts - View Company Contact Service', () => {
         pageTitle: 'Contact details for Rachael Tyrell',
         pageTitleCaption: 'Tyrell Corporation',
         pagination: {
+          currentPageNumber: 1,
           numberOfPages: 0,
           showingMessage: 'Showing all 0 communications'
         },

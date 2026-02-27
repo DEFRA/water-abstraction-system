@@ -19,14 +19,13 @@ const CheckPresenter = require('../../../../app/presenters/notices/setup/check.p
 
 describe('Notices - Setup - Check presenter', () => {
   let session
-  let page
   let pagination
   let recipients
   let testRecipients
 
   beforeEach(() => {
-    page = 1
     pagination = {
+      currentPageNumber: 1,
       numberOfPages: 1
     }
 
@@ -43,7 +42,7 @@ describe('Notices - Setup - Check presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = CheckPresenter.go(recipients, page, pagination, session)
+    const result = CheckPresenter.go(recipients, pagination, session)
 
     expect(result).to.equal({
       canSendNotice: true,
@@ -109,7 +108,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       it('returns false', () => {
-        const result = CheckPresenter.go(recipients, page, pagination, session)
+        const result = CheckPresenter.go(recipients, pagination, session)
 
         expect(result.canSendNotice).to.be.false()
       })
@@ -124,7 +123,7 @@ describe('Notices - Setup - Check presenter', () => {
         })
 
         it('returns false', () => {
-          const result = CheckPresenter.go(recipients, page, pagination, session)
+          const result = CheckPresenter.go(recipients, pagination, session)
 
           expect(result.canSendNotice).to.be.false()
         })
@@ -132,7 +131,7 @@ describe('Notices - Setup - Check presenter', () => {
 
       describe('and some have invalid addresses but the rest are valid', () => {
         it('returns false', () => {
-          const result = CheckPresenter.go(recipients, page, pagination, session)
+          const result = CheckPresenter.go(recipients, pagination, session)
 
           expect(result.canSendNotice).to.be.true()
         })
@@ -147,7 +146,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       it('should return the links for the "adhoc" journey', () => {
-        const result = CheckPresenter.go(recipients, page, pagination, session)
+        const result = CheckPresenter.go(recipients, pagination, session)
         expect(result.links).to.equal({
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`,
@@ -165,7 +164,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       it('should return the links for "alerts" journey', () => {
-        const result = CheckPresenter.go(recipients, page, pagination, session)
+        const result = CheckPresenter.go(recipients, pagination, session)
 
         expect(result.links).to.equal({
           cancel: `/system/notices/setup/${session.id}/cancel`,
@@ -176,7 +175,7 @@ describe('Notices - Setup - Check presenter', () => {
 
     describe('when the journey is for "standard"', () => {
       it('should return the links for the "standard" journey', () => {
-        const result = CheckPresenter.go(recipients, page, pagination, session)
+        const result = CheckPresenter.go(recipients, pagination, session)
         expect(result.links).to.equal({
           cancel: `/system/notices/setup/${session.id}/cancel`,
           download: `/system/notices/setup/${session.id}/download`,
@@ -193,7 +192,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       it('returns the message "No recipients with due returns."', () => {
-        const result = CheckPresenter.go(recipients, page, pagination, session)
+        const result = CheckPresenter.go(recipients, pagination, session)
 
         expect(result.readyToSend).to.equal('No recipients with due returns.')
       })
@@ -208,7 +207,7 @@ describe('Notices - Setup - Check presenter', () => {
         })
 
         it('returns the message "No valid notifications to send."', () => {
-          const result = CheckPresenter.go(recipients, page, pagination, session)
+          const result = CheckPresenter.go(recipients, pagination, session)
 
           expect(result.readyToSend).to.equal('No valid notifications to send.')
         })
@@ -216,7 +215,7 @@ describe('Notices - Setup - Check presenter', () => {
 
       describe('and some have invalid addresses but the rest are valid', () => {
         it('returns the message that the notifications "are ready to send."', () => {
-          const result = CheckPresenter.go(recipients, page, pagination, session)
+          const result = CheckPresenter.go(recipients, pagination, session)
 
           expect(result.readyToSend).to.equal('Returns invitations are ready to send.')
         })
@@ -227,7 +226,7 @@ describe('Notices - Setup - Check presenter', () => {
   describe('the "pageTitle" property', () => {
     describe('and there is only one page of results', () => {
       it('returns the "pageTitle" without page info', () => {
-        const result = CheckPresenter.go(recipients, page, pagination, session)
+        const result = CheckPresenter.go(recipients, pagination, session)
 
         expect(result.pageTitle).to.equal('Check the recipients')
       })
@@ -239,7 +238,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       it('returns the "pageTitle" with page info', () => {
-        const result = CheckPresenter.go(recipients, page, pagination, session)
+        const result = CheckPresenter.go(recipients, pagination, session)
 
         expect(result.pageTitle).to.equal('Check the recipients (page 1 of 3)')
       })
@@ -250,7 +249,7 @@ describe('Notices - Setup - Check presenter', () => {
     describe('the "contact" property', () => {
       describe('when the contact is an email', () => {
         it('should return the email address', () => {
-          const result = CheckPresenter.go(recipients, page, pagination, session)
+          const result = CheckPresenter.go(recipients, pagination, session)
 
           expect(result.recipients[3].contact).to.equal(['primary.user@important.com'])
         })
@@ -259,7 +258,7 @@ describe('Notices - Setup - Check presenter', () => {
       describe('when the contact is an address', () => {
         describe('and it is valid', () => {
           it('should return the postal address', () => {
-            const result = CheckPresenter.go(recipients, page, pagination, session)
+            const result = CheckPresenter.go(recipients, pagination, session)
 
             expect(result.recipients[0].contact).to.equal([
               'Mr H J Potter',
@@ -274,7 +273,7 @@ describe('Notices - Setup - Check presenter', () => {
 
         describe('and it is invalid', () => {
           it('should return the postal address flagged as INVALID', () => {
-            const result = CheckPresenter.go(recipients, page, pagination, session)
+            const result = CheckPresenter.go(recipients, pagination, session)
 
             expect(result.recipients[2].contact).to.equal([
               'Mr H J Weasley',
@@ -292,7 +291,7 @@ describe('Notices - Setup - Check presenter', () => {
     describe('the "licences" property', () => {
       describe('when the recipient has a single licence number', () => {
         it('should return licence numbers as an array', () => {
-          const result = CheckPresenter.go(recipients, page, pagination, session)
+          const result = CheckPresenter.go(recipients, pagination, session)
 
           expect(result.recipients[0].licences).to.equal(testRecipients.licenceHolder.licence_refs)
         })
@@ -300,7 +299,7 @@ describe('Notices - Setup - Check presenter', () => {
 
       describe('when the recipient has multiple licence numbers', () => {
         it('should return licence numbers as an array', () => {
-          const result = CheckPresenter.go(recipients, page, pagination, session)
+          const result = CheckPresenter.go(recipients, pagination, session)
 
           expect(result.recipients[1].licences).to.equal(testRecipients.licenceHolderWithMultipleLicences.licence_refs)
         })
@@ -317,7 +316,7 @@ describe('Notices - Setup - Check presenter', () => {
           describe('and the method is "letter"', () => {
             describe('and the address is valid', () => {
               it('should return a link to the "preview" page', () => {
-                const result = CheckPresenter.go(recipients, page, pagination, session)
+                const result = CheckPresenter.go(recipients, pagination, session)
 
                 expect(result.recipients[0].previewLink).to.equal(
                   `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolder.contact_hash_id}`
@@ -327,7 +326,7 @@ describe('Notices - Setup - Check presenter', () => {
 
             describe('and the address is invalid', () => {
               it('should return null', () => {
-                const result = CheckPresenter.go(recipients, page, pagination, session)
+                const result = CheckPresenter.go(recipients, pagination, session)
 
                 expect(result.recipients[2].previewLink).to.be.null()
               })
@@ -342,7 +341,7 @@ describe('Notices - Setup - Check presenter', () => {
           })
 
           it('should return null', () => {
-            const result = CheckPresenter.go(recipients, page, pagination, session)
+            const result = CheckPresenter.go(recipients, pagination, session)
 
             expect(result.recipients[0].previewLink).to.equal(
               `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolder.contact_hash_id}/check-paper-return`
@@ -362,7 +361,7 @@ describe('Notices - Setup - Check presenter', () => {
         describe('and the method is "letter"', () => {
           describe('and the address is valid', () => {
             it('should return a link to the "check alert" page', () => {
-              const result = CheckPresenter.go(recipients, page, pagination, session)
+              const result = CheckPresenter.go(recipients, pagination, session)
 
               expect(result.recipients[0].previewLink).to.equal(
                 `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolder.contact_hash_id}/check-alert`
@@ -372,7 +371,7 @@ describe('Notices - Setup - Check presenter', () => {
 
           describe('and the address is invalid', () => {
             it('should return null', () => {
-              const result = CheckPresenter.go(recipients, page, pagination, session)
+              const result = CheckPresenter.go(recipients, pagination, session)
 
               expect(result.recipients[2].previewLink).to.be.null()
             })
@@ -385,7 +384,7 @@ describe('Notices - Setup - Check presenter', () => {
           describe('and the method is "letter"', () => {
             describe('and the address is valid', () => {
               it('should return a link to the "preview" page', () => {
-                const result = CheckPresenter.go(recipients, page, pagination, session)
+                const result = CheckPresenter.go(recipients, pagination, session)
 
                 expect(result.recipients[0].previewLink).to.equal(
                   `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolder.contact_hash_id}`
@@ -395,7 +394,7 @@ describe('Notices - Setup - Check presenter', () => {
 
             describe('and the address is invalid', () => {
               it('should return null', () => {
-                const result = CheckPresenter.go(recipients, page, pagination, session)
+                const result = CheckPresenter.go(recipients, pagination, session)
 
                 expect(result.recipients[2].previewLink).to.be.null()
               })
@@ -412,7 +411,7 @@ describe('Notices - Setup - Check presenter', () => {
           describe('and the method is "letter"', () => {
             describe('and the address is valid', () => {
               it('should return a link to the "preview" page', () => {
-                const result = CheckPresenter.go(recipients, page, pagination, session)
+                const result = CheckPresenter.go(recipients, pagination, session)
 
                 expect(result.recipients[0].previewLink).to.equal(
                   `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolder.contact_hash_id}`
@@ -422,7 +421,7 @@ describe('Notices - Setup - Check presenter', () => {
 
             describe('and the address is invalid', () => {
               it('should return null', () => {
-                const result = CheckPresenter.go(recipients, page, pagination, session)
+                const result = CheckPresenter.go(recipients, pagination, session)
 
                 expect(result.recipients[2].previewLink).to.be.null()
               })
@@ -434,7 +433,7 @@ describe('Notices - Setup - Check presenter', () => {
 
     describe('when there are <= 25 recipients ', () => {
       it('returns all the recipients', () => {
-        const result = CheckPresenter.go(recipients, page, pagination, session)
+        const result = CheckPresenter.go(recipients, pagination, session)
 
         expect(result.recipients.length).to.equal(recipients.length)
       })
@@ -444,20 +443,18 @@ describe('Notices - Setup - Check presenter', () => {
       beforeEach(() => {
         recipients = [...recipients, ...recipients, ...recipients, ...recipients, ...recipients, recipients[0]]
 
-        pagination = {
-          numberOfPages: 2
-        }
+        pagination.numberOfPages = 2
       })
 
       describe('and the page is 1', () => {
         it('returns the first 25 recipients', () => {
-          const result = CheckPresenter.go(recipients, page, pagination, session)
+          const result = CheckPresenter.go(recipients, pagination, session)
 
           expect(result.recipients.length).to.equal(25)
         })
 
         it('returns the updated "pageTitle"', () => {
-          const result = CheckPresenter.go(recipients, page, pagination, session)
+          const result = CheckPresenter.go(recipients, pagination, session)
 
           expect(result.pageTitle).to.equal('Check the recipients (page 1 of 2)')
         })
@@ -465,17 +462,17 @@ describe('Notices - Setup - Check presenter', () => {
 
       describe('and there is more than one page', () => {
         beforeEach(() => {
-          page = '2'
+          pagination.currentPageNumber = '2'
         })
 
         it('returns the remaining recipients', () => {
-          const result = CheckPresenter.go(recipients, page, pagination, session)
+          const result = CheckPresenter.go(recipients, pagination, session)
 
           expect(result.recipients.length).to.equal(1)
         })
 
         it('returns the updated "pageTitle"', () => {
-          const result = CheckPresenter.go(recipients, page, pagination, session)
+          const result = CheckPresenter.go(recipients, pagination, session)
 
           expect(result.pageTitle).to.equal('Check the recipients (page 2 of 2)')
         })
@@ -486,7 +483,7 @@ describe('Notices - Setup - Check presenter', () => {
   describe('the "tableCaption" property', () => {
     describe('when there is only one page of results', () => {
       it('returns the "tableCaption" with the "Showing all" message', () => {
-        const result = CheckPresenter.go(recipients, page, pagination, session)
+        const result = CheckPresenter.go(recipients, pagination, session)
 
         expect(result.tableCaption).to.equal(`Showing all ${recipients.length} recipients`)
       })
@@ -504,7 +501,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       it('returns the "tableCaption" with the "Showing x of y" message', () => {
-        const result = CheckPresenter.go(recipients, page, pagination, session)
+        const result = CheckPresenter.go(recipients, pagination, session)
 
         expect(result.tableCaption).to.equal(`Showing 25 of ${recipients.length} recipients`)
       })
@@ -518,7 +515,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       it('returns null', () => {
-        const result = CheckPresenter.go(recipients, page, pagination, session)
+        const result = CheckPresenter.go(recipients, pagination, session)
 
         expect(result.warning).to.be.null()
       })
@@ -526,7 +523,7 @@ describe('Notices - Setup - Check presenter', () => {
 
     describe('when there is one recipient with an invalid address', () => {
       it('returns a warning for that recipient', () => {
-        const result = CheckPresenter.go(recipients, page, pagination, session)
+        const result = CheckPresenter.go(recipients, pagination, session)
 
         expect(result.warning).to.equal({
           iconFallbackText: 'Warning',
@@ -541,7 +538,7 @@ describe('Notices - Setup - Check presenter', () => {
       })
 
       it('returns a warning that lists the recipients', () => {
-        const result = CheckPresenter.go(recipients, page, pagination, session)
+        const result = CheckPresenter.go(recipients, pagination, session)
 
         expect(result.warning).to.equal({
           iconFallbackText: 'Warning',

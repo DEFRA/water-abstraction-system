@@ -66,6 +66,7 @@ describe('Companies - View Licences service', () => {
         pageTitle: 'Licences',
         pageTitleCaption: 'Tyrell Corporation',
         pagination: {
+          currentPageNumber: 1,
           numberOfPages: 1,
           showingMessage: 'Showing all 1 licences'
         },
