@@ -218,7 +218,7 @@ class ReturnVersionModel extends BaseModel {
   }
 
   _firstModLog() {
-    if (this.modLogs.length > 0) {
+    if (this.modLogs && this.modLogs.length > 0) {
       return this.modLogs[0]
     }
 
