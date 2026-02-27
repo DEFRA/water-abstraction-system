@@ -15,19 +15,24 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const ExistingAddressPresenter = require('../../../../app/presenters/billing-accounts/setup/existing-address.presenter.js')
 
 describe('Billing Accounts - Setup - Existing Address Presenter', () => {
-  const addresses = BillingAccountsFixture.billingAccount().billingAccount.billingAccountAddresses
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+  const companyAddresses = {
+    company: billingAccount.company,
+    addresses: [billingAccount.billingAccountAddresses[0].address]
+  }
+
   let session
 
   beforeEach(() => {
     session = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+      billingAccount,
       id: generateUUID()
     }
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = ExistingAddressPresenter.go(session, addresses)
+      const result = ExistingAddressPresenter.go(session, companyAddresses)
 
       expect(result).to.equal({
         backLink: {
@@ -36,8 +41,8 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
         },
         items: [
           {
-            id: addresses[0].address.id,
-            value: addresses[0].address.id,
+            id: companyAddresses.addresses[0].id,
+            value: companyAddresses.addresses[0].id,
             text: 'Tutsham Farm, West Farleigh, Maidstone, Kent, ME15 0NE',
             checked: false
           },
@@ -49,7 +54,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
             checked: false
           }
         ],
-        pageTitle: `Select an existing address for ${session.billingAccount.company.name}`,
+        pageTitle: `Select an existing address for ${companyAddresses.company.name}`,
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })
     })
@@ -62,7 +67,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       })
 
       it('returns the link for the "account" page', () => {
-        const result = ExistingAddressPresenter.go(session, addresses)
+        const result = ExistingAddressPresenter.go(session, companyAddresses)
 
         expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/existing-account`)
       })
@@ -74,7 +79,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       })
 
       it('returns the link for the "account" page', () => {
-        const result = ExistingAddressPresenter.go(session, addresses)
+        const result = ExistingAddressPresenter.go(session, companyAddresses)
 
         expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/select-company`)
       })
@@ -86,7 +91,7 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       })
 
       it('returns the link for the "account-type" page', () => {
-        const result = ExistingAddressPresenter.go(session, addresses)
+        const result = ExistingAddressPresenter.go(session, companyAddresses)
 
         expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account-type`)
       })
@@ -99,9 +104,31 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
       })
 
       it('returns the link for the "account-type" page', () => {
-        const result = ExistingAddressPresenter.go(session, addresses)
+        const result = ExistingAddressPresenter.go(session, companyAddresses)
 
         expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account`)
+      })
+    })
+  })
+
+  describe('the "pageTitle" property', () => {
+    describe('when there are addresses in the companyAddresses object', () => {
+      it('returns the correct page title', () => {
+        const result = ExistingAddressPresenter.go(session, companyAddresses)
+
+        expect(result.pageTitle).to.equal(`Select an existing address for ${companyAddresses.company.name}`)
+      })
+    })
+
+    describe('when there are no addresses in the companyAddresses object', () => {
+      beforeEach(() => {
+        companyAddresses.addresses = []
+      })
+
+      it('returns the correct page title', () => {
+        const result = ExistingAddressPresenter.go(session, companyAddresses)
+
+        expect(result.pageTitle).to.equal(`No addresses found for ${companyAddresses.company.name}`)
       })
     })
   })

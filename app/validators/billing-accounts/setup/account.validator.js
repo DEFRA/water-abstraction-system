@@ -8,7 +8,6 @@
 
 const Joi = require('joi')
 
-const VALID_VALUES = ['customer', 'another']
 const MAX_LENGTH = 100
 
 /**
@@ -24,14 +23,11 @@ function go(payload) {
   const inpputErrorMessage = 'Enter the name of an organisation or individual.'
 
   const schema = Joi.object({
-    accountSelected: Joi.string()
-      .required()
-      .valid(...VALID_VALUES)
-      .messages({
-        'any.required': errorMessage,
-        'any.only': errorMessage,
-        'string.empty': errorMessage
-      }),
+    accountSelected: Joi.alternatives().try(Joi.string().valid('another'), Joi.string().uuid()).required().messages({
+      'any.required': errorMessage,
+      'any.only': errorMessage,
+      'string.empty': errorMessage
+    }),
     searchInput: Joi.alternatives().conditional('accountSelected', {
       is: 'another',
       then: Joi.string()

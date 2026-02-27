@@ -11,27 +11,31 @@ const { expect } = Code
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchExistingAddressesService = require('../../../../app/services/billing-accounts/setup/fetch-existing-addresses.service.js')
+const FetchCompanyAddressesService = require('../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js')
 
 // Thing under test
 const ViewExistingAddressService = require('../../../../app/services/billing-accounts/setup/view-existing-address.service.js')
 
 describe('Billing Accounts - Setup - View Existing Address Service', () => {
-  const addresses = _addresses()
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+  const companyAddresses = {
+    company: billingAccount.company,
+    addresses: [billingAccount.billingAccountAddresses[0].address]
+  }
+
   let session
   let sessionData
 
   beforeEach(async () => {
     sessionData = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+      billingAccount
     }
 
     session = await SessionHelper.add({ data: sessionData })
 
-    Sinon.stub(FetchExistingAddressesService, 'go').returns(addresses)
+    Sinon.stub(FetchCompanyAddressesService, 'go').returns(companyAddresses)
   })
 
   afterEach(async () => {
@@ -40,139 +44,83 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
   })
 
   describe('when called', () => {
-    it('returns page data for the view', async () => {
-      const result = await ViewExistingAddressService.go(session.id)
+    describe('and the user has come from the account page', () => {
+      beforeEach(async () => {
+        sessionData = {
+          accountSelected: billingAccount.company.id,
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+        }
 
-      expect(result).to.equal({
-        backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/account`,
-          text: 'Back'
-        },
-        items: [
-          {
-            id: addresses[0].address.id,
-            value: addresses[0].address.id,
-            text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BRISTOLSHIRE, BS1 5AH',
-            checked: false
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('returns page data for the view', async () => {
+        const result = await ViewExistingAddressService.go(session.id)
+
+        expect(result).to.equal({
+          backLink: {
+            href: `/system/billing-accounts/setup/${session.id}/account`,
+            text: 'Back'
           },
-          {
-            id: addresses[1].address.id,
-            value: addresses[1].address.id,
-            text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BRISTOLSHIRE, BS1 5AH',
-            checked: false
+          items: [
+            {
+              id: companyAddresses.addresses[0].id,
+              value: companyAddresses.addresses[0].id,
+              text: 'Tutsham Farm, West Farleigh, Maidstone, Kent, ME15 0NE',
+              checked: false
+            },
+            { divider: 'or' },
+            {
+              id: 'new',
+              value: 'new',
+              text: 'Setup a new address',
+              checked: false
+            }
+          ],
+          pageTitle: `Select an existing address for ${session.billingAccount.company.name}`,
+          pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
+        })
+      })
+    })
+
+    describe('and the user has come from the existing account page', () => {
+      beforeEach(async () => {
+        sessionData = {
+          accountSelected: 'another',
+          billingAccount,
+          existingAccount: billingAccount.company.id
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('returns page data for the view', async () => {
+        const result = await ViewExistingAddressService.go(session.id)
+
+        expect(result).to.equal({
+          backLink: {
+            href: `/system/billing-accounts/setup/${session.id}/existing-account`,
+            text: 'Back'
           },
-          {
-            id: addresses[2].address.id,
-            value: addresses[2].address.id,
-            text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BRISTOLSHIRE, BS1 5AH',
-            checked: false
-          },
-          {
-            id: addresses[3].address.id,
-            value: addresses[3].address.id,
-            text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BRISTOLSHIRE, BS1 5AH',
-            checked: false
-          },
-          {
-            id: addresses[4].address.id,
-            value: addresses[4].address.id,
-            text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BRISTOLSHIRE, BS1 5AH',
-            checked: false
-          },
-          {
-            id: addresses[5].address.id,
-            value: addresses[5].address.id,
-            text: 'ENVIRONMENT AGENCY, HORIZON HOUSE, DEANERY ROAD, BRISTOL, BRISTOLSHIRE, BS1 5AH',
-            checked: false
-          },
-          { divider: 'or' },
-          {
-            id: 'new',
-            value: 'new',
-            text: 'Setup a new address',
-            checked: false
-          }
-        ],
-        pageTitle: `Select an existing address for ${session.billingAccount.company.name}`,
-        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
+          items: [
+            {
+              id: companyAddresses.addresses[0].id,
+              value: companyAddresses.addresses[0].id,
+              text: 'Tutsham Farm, West Farleigh, Maidstone, Kent, ME15 0NE',
+              checked: false
+            },
+            { divider: 'or' },
+            {
+              id: 'new',
+              value: 'new',
+              text: 'Setup a new address',
+              checked: false
+            }
+          ],
+          pageTitle: `Select an existing address for ${session.billingAccount.company.name}`,
+          pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
+        })
       })
     })
   })
 })
-
-function _addresses() {
-  return [
-    {
-      address: {
-        id: generateUUID(),
-        address1: 'ENVIRONMENT AGENCY',
-        address2: 'HORIZON HOUSE',
-        address3: 'DEANERY ROAD',
-        address4: 'BRISTOL',
-        address5: 'BRISTOLSHIRE',
-        address6: null,
-        postcode: 'BS1 5AH'
-      }
-    },
-    {
-      address: {
-        id: generateUUID(),
-        address1: 'ENVIRONMENT AGENCY',
-        address2: 'HORIZON HOUSE',
-        address3: 'DEANERY ROAD',
-        address4: 'BRISTOL',
-        address5: null,
-        address6: 'BRISTOLSHIRE',
-        postcode: 'BS1 5AH'
-      }
-    },
-    {
-      address: {
-        id: generateUUID(),
-        address1: 'ENVIRONMENT AGENCY',
-        address2: 'HORIZON HOUSE',
-        address3: 'DEANERY ROAD',
-        address4: null,
-        address5: 'BRISTOL',
-        address6: 'BRISTOLSHIRE',
-        postcode: 'BS1 5AH'
-      }
-    },
-    {
-      address: {
-        id: generateUUID(),
-        address1: 'ENVIRONMENT AGENCY',
-        address2: 'HORIZON HOUSE',
-        address3: null,
-        address4: 'DEANERY ROAD',
-        address5: 'BRISTOL',
-        address6: 'BRISTOLSHIRE',
-        postcode: 'BS1 5AH'
-      }
-    },
-    {
-      address: {
-        id: generateUUID(),
-        address1: 'ENVIRONMENT AGENCY',
-        address2: null,
-        address3: 'HORIZON HOUSE',
-        address4: 'DEANERY ROAD',
-        address5: 'BRISTOL',
-        address6: 'BRISTOLSHIRE',
-        postcode: 'BS1 5AH'
-      }
-    },
-    {
-      address: {
-        id: generateUUID(),
-        address1: null,
-        address2: 'ENVIRONMENT AGENCY',
-        address3: 'HORIZON HOUSE',
-        address4: 'DEANERY ROAD',
-        address5: 'BRISTOL',
-        address6: 'BRISTOLSHIRE',
-        postcode: 'BS1 5AH'
-      }
-    }
-  ]
-}
