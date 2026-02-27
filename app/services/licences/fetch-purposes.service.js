@@ -17,7 +17,7 @@ const LicenceModel = require('../../models/licence.model.js')
 async function go(licenceId) {
   const licence = await _fetch(licenceId)
 
-  return licence.licenceVersions[0].licenceVersionPurposes
+  return licence.licenceVersions?.[0]?.licenceVersionPurposes || []
 }
 
 async function _fetch(licenceId) {
