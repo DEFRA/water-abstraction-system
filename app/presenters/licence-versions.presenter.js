@@ -55,7 +55,9 @@
  * @returns {object[]} A new array containing the merged licence versions, maintaining the original descending order
  */
 function formatLicenceVersions(licenceVersions) {
-  if (!licenceVersions || licenceVersions.length === 0) return []
+  if (!licenceVersions || licenceVersions.length === 0) {
+    return []
+  }
 
   return licenceVersions.reduce((acc, curr) => {
     if (acc.length === 0) {
