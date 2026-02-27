@@ -60,7 +60,7 @@ describe('Companies - Licences presenter', () => {
           })
         })
 
-        describe('has an end date end date detail', () => {
+        describe('has an "end date"', () => {
           beforeEach(() => {
             licences[0].revokedDate = new Date('2022-01-01')
           })

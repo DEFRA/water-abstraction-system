@@ -17,8 +17,8 @@ describe('Licences versions presenter', () => {
   describe('#formatLicenceVersions()', () => {
     let licenceVersions
 
-    describe('when licence versions', () => {
-      describe('have contiguous licence versions', () => {
+    describe('when the licence versions', () => {
+      describe('have contiguous start and end dates', () => {
         beforeEach(() => {
           licenceVersions = [
             {
@@ -51,7 +51,7 @@ describe('Licences versions presenter', () => {
           ])
         })
 
-        describe('and the licence versions are one day apart', () => {
+        describe('that are one day apart', () => {
           beforeEach(() => {
             licenceVersions = [
               {
@@ -67,7 +67,7 @@ describe('Licences versions presenter', () => {
             ]
           })
 
-          it('returns the', () => {
+          it('returns the licence versions merged', () => {
             const result = LicenceVersionsPresenter.formatLicenceVersions(licenceVersions)
 
             expect(result).to.equal([
@@ -81,7 +81,7 @@ describe('Licences versions presenter', () => {
         })
       })
 
-      describe('have overlapping licence versions (the same start date, end date)', () => {
+      describe('have overlapping dates (the same start date, end date)', () => {
         beforeEach(() => {
           licenceVersions = [
             {
@@ -110,7 +110,7 @@ describe('Licences versions presenter', () => {
         })
       })
 
-      describe('have non contiguous licence versions', () => {
+      describe('have non-contiguous start and end dates', () => {
         beforeEach(() => {
           licenceVersions = [
             {
@@ -149,7 +149,7 @@ describe('Licences versions presenter', () => {
         })
       })
 
-      describe('two licence versions with the same start date', () => {
+      describe('have the same start date', () => {
         describe('but the first ends before the second ends', () => {
           beforeEach(() => {
             licenceVersions = [
@@ -166,7 +166,7 @@ describe('Licences versions presenter', () => {
             ]
           })
 
-          it('returns the licence versions earliest start and and latest end date', () => {
+          it('returns the earliest start and latest end date, and details from the latest', () => {
             const result = LicenceVersionsPresenter.formatLicenceVersions(licenceVersions)
 
             expect(result).to.equal([
