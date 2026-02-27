@@ -44,7 +44,7 @@ async function go(id, page, yar) {
 
   const pagination = PaginatorPresenter.go(licences.total, page, `/system/bill-runs/review/${id}`)
 
-  const pageTitle = _pageTitle(pagination.numberOfPages, page)
+  const pageTitle = _pageTitle(pagination)
 
   return { activeNavBar: 'bill-runs', bannerMessage, ...pageData, pageTitle, pagination }
 }
@@ -59,14 +59,12 @@ function _getFilters(id, yar) {
   return { filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress }
 }
 
-function _pageTitle(numberOfPages, page) {
-  const selectedPageNumber = page ? Number(page) : 1
-
-  if (numberOfPages < 2) {
+function _pageTitle(pagination) {
+  if (pagination.numberOfPages < 2) {
     return 'Review licences'
   }
 
-  return `Review licences (page ${selectedPageNumber} of ${numberOfPages})`
+  return `Review licences (page ${pagination.currentPageNumber} of ${pagination.numberOfPages})`
 }
 
 module.exports = {

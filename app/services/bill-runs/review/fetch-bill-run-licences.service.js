@@ -27,7 +27,7 @@ const DatabaseConfig = require('../../../../config/database.config.js')
  * data when there is a POST request.
  * @param {string} filterProgress - The progress of the licence to filter the results by. This also only contains data
  * when there is a POST request.
- * @param {number} page - the page number of licences to be viewed
+ * @param {string} page - the page number of licences to be viewed
  *
  * @returns {Promise<object>} An object containing the billRun data and an array of licences for the bill run that match
  * the selected page in the data. Also included is any data that has been used to filter the results
