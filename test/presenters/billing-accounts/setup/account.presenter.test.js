@@ -28,11 +28,12 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
 
       expect(result).to.equal({
         accountSelected: null,
-        companyName: session.billingAccount.company.name,
         backLink: {
           href: `/system/billing-accounts/${session.billingAccount.id}`,
           text: 'Back'
         },
+        companyId: session.billingAccount.company.id,
+        companyName: session.billingAccount.company.name,
         pageTitle: 'Who should the bills go to?',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
         searchInput: null
@@ -51,11 +52,12 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
 
       expect(result).to.equal({
         accountSelected: 'another',
-        companyName: session.billingAccount.company.name,
         backLink: {
           href: `/system/billing-accounts/${session.billingAccount.id}`,
           text: 'Back'
         },
+        companyId: session.billingAccount.company.id,
+        companyName: session.billingAccount.company.name,
         pageTitle: 'Who should the bills go to?',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
         searchInput: 'Company Name'
@@ -73,11 +75,12 @@ describe('Billing Accounts - Setup - Account Presenter', () => {
 
       expect(result).to.equal({
         accountSelected: 'customer',
-        companyName: session.billingAccount.company.name,
         backLink: {
           href: `/system/billing-accounts/${session.billingAccount.id}`,
           text: 'Back'
         },
+        companyId: session.billingAccount.company.id,
+        companyName: session.billingAccount.company.name,
         pageTitle: 'Who should the bills go to?',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
         searchInput: null

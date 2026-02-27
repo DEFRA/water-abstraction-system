@@ -14,23 +14,24 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things to stub
-const FetchExistingAddressesService = require('../../../../app/services/billing-accounts/setup/fetch-existing-addresses.service.js')
+const FetchCompanyAddressesService = require('../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js')
 
 // Thing under test
 const SubmitExistingAddressService = require('../../../../app/services/billing-accounts/setup/submit-existing-address.service.js')
 
 describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
-  const addresses = _addresses()
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+  const companyAddresses = {
+    company: billingAccount.company,
+    addresses: _addresses()
+  }
+
   let payload
   let session
   let sessionData
 
   beforeEach(async () => {
-    sessionData = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
-    }
-
-    session = await SessionHelper.add({ data: sessionData })
+    Sinon.stub(FetchCompanyAddressesService, 'go').returns(companyAddresses)
   })
 
   afterEach(async () => {
@@ -40,8 +41,15 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
   describe('when the user picks an existing address', () => {
     beforeEach(async () => {
+      sessionData = {
+        accountSelected: billingAccount.company.id,
+        billingAccount
+      }
+
+      session = await SessionHelper.add({ data: sessionData })
+
       payload = {
-        addressSelected: addresses[0].address.id
+        addressSelected: companyAddresses.addresses[0].id
       }
     })
 
@@ -54,7 +62,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
         {
           addressSelected: payload.addressSelected
         },
-        { skip: ['billingAccount'] }
+        { skip: ['accountSelected', 'billingAccount'] }
       )
     })
 
@@ -69,8 +77,8 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
     describe('and the user has returned to the page and made the same choice', () => {
       beforeEach(async () => {
         sessionData = {
-          addressSelected: addresses[0].address.id,
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+          addressSelected: companyAddresses.addresses[0].id,
+          billingAccount
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -85,7 +93,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
           {
             addressSelected: payload.addressSelected
           },
-          { skip: ['billingAccount'] }
+          { skip: ['accountSelected', 'billingAccount'] }
         )
       })
 
@@ -112,10 +120,10 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            ..._newAddressExpectedValues(),
+            ..._newAddressExpectedValues(session),
             addressSelected: payload.addressSelected
           },
-          { skip: ['billingAccount'] }
+          { skip: ['accountSelected', 'billingAccount'] }
         )
       })
 
@@ -131,6 +139,14 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
   describe('when the user picks to set up a new address', () => {
     beforeEach(async () => {
+      sessionData = {
+        accountSelected: 'another',
+        existingAccount: billingAccount.company.id,
+        billingAccount
+      }
+
+      session = await SessionHelper.add({ data: sessionData })
+
       payload = {
         addressSelected: 'new'
       }
@@ -146,7 +162,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
           addressJourney: _newAddressSessionData(session).addressJourney,
           addressSelected: 'new'
         },
-        { skip: ['billingAccount'] }
+        { skip: ['accountSelected', 'billingAccount', 'existingAccount'] }
       )
     })
 
@@ -179,7 +195,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
             addressJourney: sessionData.addressJourney,
             addressSelected: 'new'
           },
-          { skip: ['addressJourney', 'billingAccount'] }
+          { skip: ['accountSelected', 'addressJourney', 'billingAccount', 'existingAccount'] }
         )
       })
 
@@ -194,7 +210,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
     describe('when the user selects a new address after already having chosen an existing address', () => {
       beforeEach(async () => {
-        sessionData = _commonSessionData()
+        sessionData = _commonSessionData(session.billingAccount)
 
         session = await SessionHelper.add({ data: sessionData })
       })
@@ -206,11 +222,11 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            ..._commonSessionData(),
+            ..._commonSessionData(session.billingAccount),
             addressJourney: _newAddressSessionData(session).addressJourney,
             addressSelected: payload.addressSelected
           },
-          { skip: ['billingAccount'] }
+          { skip: ['accountSelected', 'billingAccount', 'existingAccount'] }
         )
       })
 
@@ -226,9 +242,15 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 
   describe('when validation fails', () => {
     beforeEach(async () => {
-      payload = {}
+      sessionData = {
+        accountSelected: 'another',
+        existingAccount: billingAccount.company.id,
+        billingAccount
+      }
 
-      Sinon.stub(FetchExistingAddressesService, 'go').returns(addresses)
+      session = await SessionHelper.add({ data: sessionData })
+
+      payload = {}
     })
 
     it('returns page data for the view, with errors', async () => {
@@ -238,10 +260,10 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
         errorList: [
           {
             href: '#addressSelected',
-            text: `Select an existing address for ${session.billingAccount.company.name}`
+            text: `Select an existing address for ${companyAddresses.company.name}`
           }
         ],
-        addressSelected: { text: `Select an existing address for ${session.billingAccount.company.name}` }
+        addressSelected: { text: `Select an existing address for ${companyAddresses.company.name}` }
       })
     })
   })
@@ -250,40 +272,42 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
 function _addresses() {
   return [
     {
-      address: {
-        id: generateUUID(),
-        address1: 'ENVIRONMENT AGENCY',
-        address2: 'HORIZON HOUSE',
-        address3: 'DEANERY ROAD',
-        address4: 'BRISTOL',
-        address5: 'BRISTOLSHIRE',
-        address6: null,
-        postcode: 'BS1 5AH'
-      }
+      id: generateUUID(),
+      address1: 'ENVIRONMENT AGENCY',
+      address2: 'HORIZON HOUSE',
+      address3: 'DEANERY ROAD',
+      address4: 'BRISTOL',
+      address5: 'BRISTOLSHIRE',
+      address6: null,
+      postcode: 'BS1 5AH'
     }
   ]
 }
 
-function _commonExpectedValues() {
+function _commonExpectedValues(session) {
   return {
-    accountSelected: 'existing',
+    accountSelected: session.billingAccount.company.id,
     addressJourney: null,
+    billingAccount: session.billingAccount,
     contactName: null,
     contactSelected: null,
     fao: null
   }
 }
 
-function _newAddressExpectedValues() {
+function _newAddressExpectedValues(session) {
   return {
-    ..._commonExpectedValues(),
-    addressSelected: 'new'
+    ..._commonExpectedValues(session),
+    accountSelected: 'another',
+    addressSelected: 'new',
+    existingAccount: session.billingAccount.company.id
   }
 }
 
 function _newAddressSessionData(session) {
   return {
-    ..._commonSessionData(),
+    ..._commonSessionData(session.billingAccount),
+    accountSelected: 'another',
     addressSelected: 'new',
     addressJourney: {
       address: {},
@@ -293,15 +317,14 @@ function _newAddressSessionData(session) {
       },
       pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
       redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
-    }
+    },
+    existingAccount: session.billingAccount.company.id
   }
 }
 
-function _commonSessionData() {
-  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
-
+function _commonSessionData(billingAccount) {
   return {
-    accountSelected: 'existing',
+    accountSelected: billingAccount.company.id,
     billingAccount,
     contactName: 'Contact Name',
     contactSelected: 'new',

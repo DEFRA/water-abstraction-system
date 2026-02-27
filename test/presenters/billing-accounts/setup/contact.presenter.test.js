@@ -15,14 +15,20 @@ const CustomersFixture = require('../../../support/fixtures/customers.fixture.js
 const ContactPresenter = require('../../../../app/presenters/billing-accounts/setup/contact.presenter.js')
 
 describe('Billing Accounts - Setup - Contact Presenter', () => {
-  const companyContacts = CustomersFixture.companyContacts()
-  const contact = companyContacts[0].contact
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+  const exampleContacts = CustomersFixture.companyContacts()
+  const company = billingAccount.company
+  const contact = exampleContacts[0].contact
+  const companyContacts = {
+    company,
+    contacts: [contact]
+  }
 
   let session
 
   beforeEach(() => {
     session = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+      billingAccount
     }
   })
 
@@ -53,7 +59,7 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
             checked: false
           }
         ],
-        pageTitle: `Set up a contact for ${session.billingAccount.company.name}`,
+        pageTitle: `Set up a contact for ${company.name}`,
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })
     })
@@ -83,30 +89,22 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
 
   describe('"pageTitle" property', () => {
     describe('when there are contacts returned', () => {
-      beforeEach(() => {
-        session = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
-        }
-      })
-
       it('returns the correct page title', () => {
         const result = ContactPresenter.go(session, companyContacts)
 
-        expect(result.pageTitle).to.equal(`Set up a contact for ${session.billingAccount.company.name}`)
+        expect(result.pageTitle).to.equal(`Set up a contact for ${company.name}`)
       })
     })
 
     describe('when there are no contacts returned', () => {
       beforeEach(() => {
-        session = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
-        }
+        companyContacts.contacts = []
       })
 
       it('returns the correct page title', () => {
-        const result = ContactPresenter.go(session, [])
+        const result = ContactPresenter.go(session, companyContacts)
 
-        expect(result.pageTitle).to.equal(`No company contacts found for "${session.billingAccount.company.name}"`)
+        expect(result.pageTitle).to.equal(`No company contacts found for "${company.name}"`)
       })
     })
   })

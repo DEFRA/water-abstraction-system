@@ -20,19 +20,19 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SubmitContactService = require('../../../../app/services/billing-accounts/setup/submit-contact.service.js')
 
 describe('Billing Accounts - Setup - Contact Service', () => {
-  const companyContacts = CustomersFixture.companyContacts()
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+  const exampleContacts = CustomersFixture.companyContacts()
+  const contact = exampleContacts[0].contact
+  const companyContacts = {
+    company: billingAccount.company,
+    contacts: [contact]
+  }
 
   let payload
   let session
   let sessionData
 
-  beforeEach(async () => {
-    sessionData = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
-    }
-
-    session = await SessionHelper.add({ data: sessionData })
-  })
+  beforeEach(async () => {})
 
   afterEach(async () => {
     await session.$query().delete()
@@ -44,6 +44,12 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       payload = {
         contactSelected: 'new'
       }
+
+      sessionData = {
+        billingAccount
+      }
+
+      session = await SessionHelper.add({ data: sessionData })
     })
 
     it('saves the submitted value', async () => {
@@ -65,7 +71,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     describe('and the user has returned to the page and made the same choice', () => {
       beforeEach(async () => {
         sessionData = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          billingAccount,
           contactSelected: 'new'
         }
 
@@ -90,11 +96,17 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     })
   })
 
-  describe('when the user picks to an existing contact', () => {
+  describe('when the user picks an existing contact', () => {
     beforeEach(async () => {
       payload = {
-        contactSelected: companyContacts[0].contact.id
+        contactSelected: contact.id
       }
+
+      sessionData = {
+        billingAccount
+      }
+
+      session = await SessionHelper.add({ data: sessionData })
     })
 
     it('saves the submitted value', async () => {
@@ -116,12 +128,12 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     describe('and the user has returned to the page and made the same choice', () => {
       beforeEach(async () => {
         payload = {
-          contactSelected: companyContacts[0].contact.id
+          contactSelected: contact.id
         }
 
         sessionData = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-          contactSelected: companyContacts[0].contact.id
+          billingAccount,
+          contactSelected: contact.id
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -147,11 +159,11 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     describe('and the user had previously completed the "new" journey', () => {
       beforeEach(async () => {
         payload = {
-          contactSelected: companyContacts[0].contact.id
+          contactSelected: contact.id
         }
 
         sessionData = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          billingAccount,
           contactSelected: 'new',
           contactName: 'Contact Name'
         }
@@ -180,24 +192,68 @@ describe('Billing Accounts - Setup - Contact Service', () => {
 
   describe('when validation fails', () => {
     describe('because the user did not select an option', () => {
-      beforeEach(() => {
-        payload = {}
-        Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
-      })
+      describe('and the user had chosen the current customer', () => {
+        beforeEach(async () => {
+          payload = {}
+          sessionData = {
+            accountSelected: billingAccount.company.id,
+            billingAccount,
+            contactSelected: 'new',
+            contactName: 'Contact Name'
+          }
 
-      it('returns page data for the view, with errors', async () => {
-        const result = await SubmitContactService.go(session.id, payload)
+          session = await SessionHelper.add({ data: sessionData })
 
-        expect(result.error).to.equal({
-          errorList: [
-            {
-              href: '#contactSelected',
+          Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
+        })
+
+        it('returns page data for the view, with errors', async () => {
+          const result = await SubmitContactService.go(session.id, payload)
+
+          expect(result.error).to.equal({
+            errorList: [
+              {
+                href: '#contactSelected',
+                text: 'Select a contact'
+              }
+            ],
+            contactSelected: {
               text: 'Select a contact'
             }
-          ],
-          contactSelected: {
-            text: 'Select a contact'
+          })
+        })
+      })
+
+      describe('and the user had chosen another customer', () => {
+        beforeEach(async () => {
+          payload = {}
+          sessionData = {
+            accountSelected: 'another',
+            billingAccount,
+            contactSelected: 'new',
+            contactName: 'Contact Name',
+            existingAccount: billingAccount.company.id
           }
+
+          session = await SessionHelper.add({ data: sessionData })
+
+          Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
+        })
+
+        it('returns page data for the view, with errors', async () => {
+          const result = await SubmitContactService.go(session.id, payload)
+
+          expect(result.error).to.equal({
+            errorList: [
+              {
+                href: '#contactSelected',
+                text: 'Select a contact'
+              }
+            ],
+            contactSelected: {
+              text: 'Select a contact'
+            }
+          })
         })
       })
     })
