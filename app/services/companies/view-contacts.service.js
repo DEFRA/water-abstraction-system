@@ -19,7 +19,6 @@ const { readFlashNotification } = require('../../lib/general.lib.js')
  * @param {string} companyId - the UUID of the company
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {string} page - The current page for the pagination service
- *
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<object>} The data formatted for the view template
