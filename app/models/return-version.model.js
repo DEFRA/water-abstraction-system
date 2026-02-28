@@ -210,13 +210,25 @@ class ReturnVersionModel extends BaseModel {
    * determined
    */
   $reason() {
-    if (this.reason) {
-      return returnRequirementReasons[this.reason]
-    }
-
     const firstModLog = this._firstModLog()
 
-    return firstModLog?.reasonDescription ?? null
+    const localReason = this.reason ?? null
+    const mappedReasonDescription = localReason ? returnRequirementReasons[this.reason] : null
+    const naldReasonDescription = firstModLog?.reasonDescription ?? null
+
+    // If the return version has a reason we recognise, then it takes priority
+    if (mappedReasonDescription) {
+      return mappedReasonDescription
+    }
+
+    // If we don't have a locally mapped reason, then the NALD reason description takes priority
+    if (naldReasonDescription) {
+      return naldReasonDescription
+    }
+
+    // If we get here, we either have a local reason we don't recognise (we're not sure this is possible but better safe
+    // than sorry when it comes to NALD data! Else, we are returning null: we simply don't have a reason.
+    return localReason
   }
 
   _firstModLog() {
