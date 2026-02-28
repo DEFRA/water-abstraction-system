@@ -112,9 +112,7 @@ describe('Search - View Search service', () => {
           }
         ],
         noResults: false,
-        page: 1,
         pageTitle: 'Search results for "12345678"',
-        pageTitleCaption: null,
         pagination: {
           numberOfPages: 1,
           showingMessage: 'Showing all 2 matches'
@@ -291,9 +289,7 @@ describe('Search - View Search service', () => {
           }
         ],
         noResults: false,
-        page: 1,
         pageTitle: 'Search results for "12345678"',
-        pageTitleCaption: null,
         pagination: {
           numberOfPages: 1,
           showingMessage: 'Showing all 2 matches'

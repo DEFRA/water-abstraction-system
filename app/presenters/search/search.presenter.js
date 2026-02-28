@@ -16,14 +16,13 @@ const { today } = require('../../lib/general.lib.js')
  * @param {string} query - The user-entered search query, if any
  * @param {string} resultType - The type of search results being displayed
  * @param {string} page - The requested page, when displaying search results
- * @param {string} numberOfPages - The total number of pages available for the search results
  * @param {object} allSearchMatches - All the search matches found, in the same form returned by Objection pagination,
  * i.e. an object with an array of `results` for the current page and a `total` of the full number of matching results
  * in the database
  *
  * @returns {object} - The data formatted for the view template
  */
-function go(userScopes, query, resultType, page, numberOfPages, allSearchMatches) {
+function go(userScopes, query, resultType, page, allSearchMatches) {
   // If there's no page number provided, we're just displaying the blank search page, potentially with any search
   // query that the user may have entered but was not searchable, e.g. whitespace or other unsearchable text
   if (!page) {
@@ -35,9 +34,7 @@ function go(userScopes, query, resultType, page, numberOfPages, allSearchMatches
   return {
     filterItems: _filterItems(userScopes, resultType),
     noResults: total === 0,
-    page,
     pageTitle: `Search results for "${query}"`,
-    pageTitleCaption: _pageTitleCaption(numberOfPages, page),
     query,
     results: _results(results),
     resultType,
@@ -183,14 +180,6 @@ function _monitoringStation(monitoringStation) {
     statusTag: null,
     type: 'Monitoring station'
   }
-}
-
-function _pageTitleCaption(numberOfPages, selectedPageNumber) {
-  if (numberOfPages < 2) {
-    return null
-  }
-
-  return `Page ${selectedPageNumber} of ${numberOfPages}`
 }
 
 function _result(result) {
