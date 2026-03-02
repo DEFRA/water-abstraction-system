@@ -5,10 +5,10 @@
  * @module ViewPresenter
  */
 
-const { formatAbstractionPeriod, formatLongDate } = require('../base.presenter.js')
+const { formatAbstractionPeriod, formatLongDate, formatVersionReason } = require('../base.presenter.js')
 const { isQuarterlyReturnSubmissions } = require('../../lib/dates.lib.js')
 const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
-const { returnRequirementReasons, returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
+const { returnRequirementFrequencies } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats return version data ready for presenting in the view return version page
@@ -36,7 +36,7 @@ function go(returnVersionData) {
     pagination: _pagination(returnVersionsForPagination, returnVersion),
     quarterlyReturnSubmissions: isQuarterlyReturnSubmissions(startDate),
     quarterlyReturns: quarterlyReturns === true ? 'Yes' : 'No',
-    reason: _reason(returnVersion),
+    reason: formatVersionReason(returnVersion, true),
     requirements: _requirements(returnRequirements),
     status
   }
@@ -174,32 +174,6 @@ function _points(points) {
   return points.map((point) => {
     return point.$describe()
   })
-}
-
-/**
- * The history helper $reason() will return either the reason saved against the return version record, the reason
- * captured in the first mod log entry, or null.
- *
- * If its the reason saved against the return version we have to map it to its display version first.
- *
- * @private
- */
-function _reason(returnVersion) {
-  const createdAt = formatLongDate(returnVersion.$createdAt())
-  const createdBy = returnVersion.$createdBy()
-  const reason = returnVersion.$reason()
-
-  const mappedReason = returnRequirementReasons[reason] ?? reason
-
-  if (!mappedReason) {
-    return `Created on ${createdAt}`
-  }
-
-  if (!createdBy) {
-    return `${mappedReason} migrated from NALD on ${createdAt}`
-  }
-
-  return `${mappedReason} created on ${createdAt} by ${createdBy}`
 }
 
 function _requirements(requirements) {

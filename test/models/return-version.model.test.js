@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -26,8 +26,19 @@ const ReturnVersionModel = require('../../app/models/return-version.model.js')
 const { SKIP_COMPARE_LIST: skip } = UserHelper
 
 describe('Return Version model', () => {
+  let modLogs
   let returnVersionId
   let testRecord
+
+  beforeEach(async () => {
+    modLogs = []
+  })
+
+  afterEach(async () => {
+    for (const modLog of modLogs) {
+      await modLog.$query().delete()
+    }
+  })
 
   describe('Basic query', () => {
     beforeEach(async () => {
@@ -426,14 +437,118 @@ describe('Return Version model', () => {
   })
 
   describe('$reason', () => {
-    describe('when a return version has no mod log history', () => {
-      describe('and no reason recorded', () => {
+    let regionCode
+    let firstNaldId
+
+    beforeEach(() => {
+      // The "first" mod log record is determined by sorting them by external ID ASC and using the first in the
+      // list. So, we have to control the external ID used rather than leaving the helper generate one.
+      regionCode = randomRegionCode()
+      firstNaldId = generateRandomInteger(100, 99998)
+    })
+
+    describe('when the return version has a "local" reason recorded against it', () => {
+      describe('that maps to a known "reason"', () => {
         beforeEach(async () => {
-          const { id } = await ReturnVersionHelper.add({ reason: null })
+          testRecord = await ReturnVersionHelper.add({ reason: 'major-change' })
+        })
 
-          returnVersionId = id
+        describe('even if the version has mod log history', () => {
+          beforeEach(async () => {
+            let modLog = await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId}`,
+              reasonDescription: 'New licence',
+              returnVersionId: testRecord.id
+            })
+            modLogs.push(modLog)
 
-          testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+            modLog = await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`,
+              reasonDescription: 'Minor change',
+              returnVersionId: testRecord.id
+            })
+            modLogs.push(modLog)
+
+            testRecord = await ReturnVersionModel.query().findById(testRecord.id).modify('history')
+          })
+
+          it('returns the mapped reason description', () => {
+            const result = testRecord.$reason()
+
+            expect(result).to.equal('Major change')
+          })
+        })
+      })
+
+      describe('that does not map to a known "reason"', () => {
+        beforeEach(async () => {
+          testRecord = await ReturnVersionHelper.add({ reason: 'unknown-reason' })
+        })
+
+        describe('if the version has mod log history', () => {
+          describe('and it has a reason description', () => {
+            beforeEach(async () => {
+              let modLog = await ModLogHelper.add({
+                externalId: `${regionCode}:${firstNaldId}`,
+                reasonDescription: 'New licence',
+                returnVersionId: testRecord.id
+              })
+              modLogs.push(modLog)
+
+              modLog = await ModLogHelper.add({
+                externalId: `${regionCode}:${firstNaldId + 1}`,
+                reasonDescription: 'Minor change',
+                returnVersionId: testRecord.id
+              })
+              modLogs.push(modLog)
+
+              testRecord = await ReturnVersionModel.query().findById(testRecord.id).modify('history')
+            })
+
+            it('returns the NALD reason description', () => {
+              const result = testRecord.$reason()
+
+              expect(result).to.equal('New licence')
+            })
+          })
+
+          describe('but it does not have a reason description', () => {
+            beforeEach(async () => {
+              let modLog = await ModLogHelper.add({
+                externalId: `${regionCode}:${firstNaldId}`,
+                reasonDescription: null,
+                returnVersionId: testRecord.id
+              })
+              modLogs.push(modLog)
+
+              modLog = await ModLogHelper.add({
+                externalId: `${regionCode}:${firstNaldId + 1}`,
+                reasonDescription: 'Minor change',
+                returnVersionId: testRecord.id
+              })
+              modLogs.push(modLog)
+
+              testRecord = await ReturnVersionModel.query().findById(testRecord.id).modify('history')
+            })
+
+            it('returns the unknown reason', () => {
+              const result = testRecord.$reason()
+
+              expect(result).to.equal('unknown-reason')
+            })
+          })
+        })
+      })
+    })
+
+    describe('when the return version does not have a "local" reason recorded against it', () => {
+      beforeEach(async () => {
+        testRecord = await ReturnVersionHelper.add({ reason: null })
+      })
+
+      describe('and no mod log history', () => {
+        beforeEach(async () => {
+          testRecord = await ReturnVersionModel.query().findById(testRecord.id).modify('history')
         })
 
         it('returns null', () => {
@@ -443,74 +558,24 @@ describe('Return Version model', () => {
         })
       })
 
-      describe('but a reason recorded', () => {
-        beforeEach(async () => {
-          const { id } = await ReturnVersionHelper.add({ reason: 'new-licence' })
-
-          returnVersionId = id
-
-          testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
-        })
-
-        it('returns the return version reason', () => {
-          const result = testRecord.$reason()
-
-          expect(result).to.equal('new-licence')
-        })
-      })
-    })
-
-    describe('when a return version has mod log history', () => {
-      describe('and no reason recorded against the return version', () => {
-        beforeEach(async () => {
-          const { id } = await ReturnVersionHelper.add({ reason: null })
-
-          returnVersionId = id
-        })
-
-        describe('but the mod log history has no reason description recorded in the first entry', () => {
+      describe('if the version has mod log history', () => {
+        describe('and it has a reason description', () => {
           beforeEach(async () => {
-            const regionCode = randomRegionCode()
-            const firstNaldId = generateRandomInteger(100, 99998)
-
-            await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId}`,
-              reasonDescription: null,
-              returnVersionId
-            })
-            await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId + 1}`,
-              reasonDescription: 'New licence',
-              returnVersionId
-            })
-
-            testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
-          })
-
-          it('returns null', () => {
-            const result = testRecord.$reason()
-
-            expect(result).to.be.null()
-          })
-        })
-
-        describe('and the mod log history has a reason description recorded in the first entry', () => {
-          beforeEach(async () => {
-            const regionCode = randomRegionCode()
-            const firstNaldId = generateRandomInteger(100, 99998)
-
-            await ModLogHelper.add({
+            let modLog = await ModLogHelper.add({
               externalId: `${regionCode}:${firstNaldId}`,
               reasonDescription: 'New licence',
-              returnVersionId
+              returnVersionId: testRecord.id
             })
-            await ModLogHelper.add({
-              externalId: `${regionCode}:${firstNaldId + 1}`,
-              reasonDescription: 'Transferred',
-              returnVersionId
-            })
+            modLogs.push(modLog)
 
-            testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
+            modLog = await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`,
+              reasonDescription: 'Minor change',
+              returnVersionId: testRecord.id
+            })
+            modLogs.push(modLog)
+
+            testRecord = await ReturnVersionModel.query().findById(testRecord.id).modify('history')
           })
 
           it('returns the NALD reason description', () => {
@@ -519,23 +584,31 @@ describe('Return Version model', () => {
             expect(result).to.equal('New licence')
           })
         })
-      })
 
-      describe('but a reason recorded against the return version', () => {
-        beforeEach(async () => {
-          const { id } = await ReturnVersionHelper.add({ reason: 'major-change' })
+        describe('but it does not have a reason description', () => {
+          beforeEach(async () => {
+            let modLog = await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId}`,
+              reasonDescription: null,
+              returnVersionId: testRecord.id
+            })
+            modLogs.push(modLog)
 
-          returnVersionId = id
+            modLog = await ModLogHelper.add({
+              externalId: `${regionCode}:${firstNaldId + 1}`,
+              reasonDescription: 'Minor change',
+              returnVersionId: testRecord.id
+            })
+            modLogs.push(modLog)
 
-          await ModLogHelper.add({ reasonDescription: 'New licence', returnVersionId })
+            testRecord = await ReturnVersionModel.query().findById(testRecord.id).modify('history')
+          })
 
-          testRecord = await ReturnVersionModel.query().findById(returnVersionId).modify('history')
-        })
+          it('returns null', () => {
+            const result = testRecord.$reason()
 
-        it('returns the return version reason', () => {
-          const result = testRecord.$reason()
-
-          expect(result).to.equal('major-change')
+            expect(result).to.be.null()
+          })
         })
       })
     })
