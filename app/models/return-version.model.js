@@ -8,6 +8,7 @@
 const { Model } = require('objection')
 
 const BaseModel = require('./base.model.js')
+const { returnRequirementReasons } = require('../lib/static-lookups.lib.js')
 
 class ReturnVersionModel extends BaseModel {
   static get tableName() {
@@ -205,20 +206,33 @@ class ReturnVersionModel extends BaseModel {
    *
    * If neither 'source' records have a reason then it returns `null`
    *
-   * @returns {string} the reason the 'source' record was created, else `null` if it cannot be determined
+   * @returns {string} the reason description why the 'source' record was created, else `null` if it cannot be
+   * determined
    */
   $reason() {
-    if (this.reason) {
-      return this.reason
-    }
-
     const firstModLog = this._firstModLog()
 
-    return firstModLog?.reasonDescription ?? null
+    const localReason = this.reason ?? null
+    const mappedReasonDescription = localReason ? returnRequirementReasons[this.reason] : null
+    const naldReasonDescription = firstModLog?.reasonDescription ?? null
+
+    // If the return version has a reason we recognise, then it takes priority
+    if (mappedReasonDescription) {
+      return mappedReasonDescription
+    }
+
+    // If we don't have a locally mapped reason, then the NALD reason description takes priority
+    if (naldReasonDescription) {
+      return naldReasonDescription
+    }
+
+    // If we get here, we either have a local reason we don't recognise (we're not sure this is possible but better safe
+    // than sorry when it comes to NALD data! Else, we are returning null: we simply don't have a reason.
+    return localReason
   }
 
   _firstModLog() {
-    if (this.modLogs.length > 0) {
+    if (this.modLogs && this.modLogs.length > 0) {
       return this.modLogs[0]
     }
 
