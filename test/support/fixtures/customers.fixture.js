@@ -143,13 +143,18 @@ function contact() {
 function licences() {
   return [
     LicenceModel.fromJson({
-      endDate: null,
+      expiredDate: null,
       id: generateUUID(),
+      lapsedDate: null,
       licenceRef: generateLicenceRef(),
-      licenceDocumentHeader: {
-        id: generateUUID(),
-        licenceName: 'Between Two Tyrell'
-      },
+      licenceVersions: [
+        {
+          endDate: null,
+          id: generateUUID(),
+          startDate: new Date('2022-01-01')
+        }
+      ],
+      revokedDate: null,
       startDate: new Date('2022-01-01')
     })
   ]

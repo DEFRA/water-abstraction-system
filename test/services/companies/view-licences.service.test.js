@@ -54,13 +54,18 @@ describe('Companies - View Licences service', () => {
           href: '/',
           text: 'Back to search'
         },
-        licences: [
+        licenceVersions: [
           {
+            count: 1,
             endDate: null,
-            id: licences[0].id,
-            licenceName: 'Between Two Tyrell',
+            licenceId: licences[0].id,
             licenceRef: licences[0].licenceRef,
-            startDate: '1 January 2022'
+            link: {
+              hiddenText: 'current licence version',
+              href: `/system/licence-versions/${licences[0].licenceVersions[0].id}`
+            },
+            startDate: '1 January 2022',
+            status: 'current'
           }
         ],
         pageTitle: 'Licences',

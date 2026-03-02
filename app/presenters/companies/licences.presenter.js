@@ -5,6 +5,7 @@
  * @module LicencesPresenter
  */
 
+const { formatLicenceVersions } = require('../licence-versions.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
 
 /**
@@ -23,20 +24,49 @@ function go(company, licences) {
     },
     pageTitleCaption: company.name,
     pageTitle: 'Licences',
-    licences: _licences(licences)
+    licenceVersions: _licenceVersions(licences)
   }
 }
 
-function _licences(licences) {
-  return licences.map((licence) => {
-    return {
-      startDate: formatLongDate(licence.startDate),
-      endDate: formatLongDate(licence.endDate),
-      licenceRef: licence.licenceRef,
-      licenceName: licence.$licenceName(),
-      id: licence.id
+function _hiddenText(endDate) {
+  if (!endDate) {
+    return 'current licence version'
+  }
+
+  return `licence version ending on ${formatLongDate(endDate)}`
+}
+
+function _licenceVersions(licences) {
+  const versions = []
+
+  for (const licence of licences) {
+    const licenceEndDetails = licence.$ends()
+
+    const { licenceVersions } = licence
+
+    const formattedLicenceVersions = formatLicenceVersions(licenceVersions)
+
+    for (const licenceVersion of formattedLicenceVersions) {
+      const { endDate, id, startDate } = licenceVersion
+
+      const versionDetails = {
+        count: formattedLicenceVersions.length,
+        endDate: formatLongDate(endDate),
+        licenceId: licence.id,
+        licenceRef: licence.licenceRef,
+        link: {
+          hiddenText: _hiddenText(endDate),
+          href: `/system/licence-versions/${id}`
+        },
+        startDate: formatLongDate(startDate),
+        status: licenceEndDetails?.reason ?? 'current'
+      }
+
+      versions.push(versionDetails)
     }
-  })
+  }
+
+  return versions
 }
 
 module.exports = {
