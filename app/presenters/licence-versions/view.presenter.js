@@ -7,7 +7,7 @@
 
 const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
 const { formatLicencePoints, formatLicencePurposes, formatConditionTypes } = require('../licence.presenter.js')
-const { formatLongDate } = require('../base.presenter.js')
+const { formatLongDate, formatVersionReason } = require('../base.presenter.js')
 
 /**
  * Formats data for the `/licence-versions/{id}` page
@@ -40,7 +40,7 @@ function go(licenceVersionData, auth, conditions) {
     pagination: _pagination(licenceVersionsForPagination, licenceVersion),
     points: _points(licenceVersion.licenceVersionPurposes),
     purposes: _purposes(licenceVersion.licenceVersionPurposes),
-    reason: _reason(licenceVersion, billingAndDataRole)
+    reason: formatVersionReason(licenceVersion, billingAndDataRole)
   }
 }
 
@@ -164,26 +164,6 @@ function _purposes(licenceVersionPurposes) {
   }
 
   return []
-}
-
-function _reason(licenceVersion, billingAndDataRole) {
-  const reason = licenceVersion.$reason()
-  const createdBy = licenceVersion.$createdBy()
-  const createdAt = formatLongDate(licenceVersion.$createdAt())
-
-  if (!billingAndDataRole) {
-    return reason
-  }
-
-  if (!reason) {
-    return `Created on ${createdAt}`
-  }
-
-  if (!createdBy) {
-    return `${reason} created on ${createdAt}`
-  }
-
-  return `${reason} created on ${createdAt} by ${createdBy}`
 }
 
 /**

@@ -68,28 +68,6 @@ describe('Licence Versions - View presenter', () => {
     })
   })
 
-  describe('the "errorInDataEmail" property', () => {
-    describe('when the user does NOT have the "billing" role', () => {
-      it('returns the email address', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
-
-        expect(result.errorInDataEmail).to.equal('water_abstractiondigital@environment-agency.gov.uk')
-      })
-    })
-
-    describe('when the user has the "billing" role', () => {
-      beforeEach(() => {
-        auth.credentials.scope = ['billing']
-      })
-
-      it('returns null', () => {
-        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
-
-        expect(result.errorInDataEmail).to.be.null()
-      })
-    })
-  })
-
   describe('the "changeType" property', () => {
     describe('when the licence version is not administrative', () => {
       it('returns "licence issued"', () => {
@@ -147,6 +125,28 @@ describe('Licence Versions - View presenter', () => {
           displayTitle: 'Political cessation condition'
         }
       ])
+    })
+  })
+
+  describe('the "errorInDataEmail" property', () => {
+    describe('when the user does NOT have the "billing" role', () => {
+      it('returns the email address', () => {
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+
+        expect(result.errorInDataEmail).to.equal('water_abstractiondigital@environment-agency.gov.uk')
+      })
+    })
+
+    describe('when the user has the "billing" role', () => {
+      beforeEach(() => {
+        auth.credentials.scope = ['billing']
+      })
+
+      it('returns null', () => {
+        const result = ViewPresenter.go(licenceVersionData, auth, conditions)
+
+        expect(result.errorInDataEmail).to.be.null()
+      })
     })
   })
 
@@ -493,72 +493,6 @@ describe('Licence Versions - View presenter', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
         expect(result.purposes).to.equal([])
-      })
-    })
-  })
-
-  describe('the "reason" property', () => {
-    describe('when the user does not have the "billing" role', () => {
-      describe('and there is a "reason"', () => {
-        it('returns the "reason"', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
-
-          expect(result.reason).to.equal('Licence Holder Name/Address Change')
-        })
-      })
-
-      describe('and there is no "reason"', () => {
-        beforeEach(() => {
-          licenceVersion.modLogs[0].reasonDescription = null
-        })
-
-        it('returns null', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
-
-          expect(result.reason).to.be.null()
-        })
-      })
-    })
-
-    describe('when the user has the "billing" role', () => {
-      beforeEach(() => {
-        auth.credentials.scope = ['billing']
-      })
-
-      describe('and there is no "reason" or "userId"', () => {
-        beforeEach(() => {
-          licenceVersion.modLogs[0].reasonDescription = null
-        })
-
-        it('returns just the created on', () => {
-          const result = ViewPresenter.go(licenceVersionData, auth, conditions)
-
-          expect(result.reason).to.equal('Created on 1 January 2022')
-        })
-      })
-
-      describe('and there is a reason', () => {
-        describe('and we know who created it', () => {
-          it('returns the reason with who created it', () => {
-            const result = ViewPresenter.go(licenceVersionData, auth, conditions)
-
-            expect(result.reason).to.equal(
-              'Licence Holder Name/Address Change created on 1 January 2022 by JOBSWORTH01'
-            )
-          })
-        })
-
-        describe('and we do not know who created it', () => {
-          beforeEach(() => {
-            licenceVersion.modLogs[0].userId = null
-          })
-
-          it('returns the reason without who created it', () => {
-            const result = ViewPresenter.go(licenceVersionData, auth, conditions)
-
-            expect(result.reason).to.equal('Licence Holder Name/Address Change created on 1 January 2022')
-          })
-        })
       })
     })
   })
