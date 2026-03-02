@@ -288,64 +288,6 @@ describe('Return Versions - View presenter', () => {
     })
   })
 
-  describe('the "reason" property', () => {
-    describe('when there is a reason', () => {
-      describe('and the record has a user associated with it', () => {
-        it('returns the formatted reason including the user that created it', () => {
-          const result = ViewPresenter.go(returnVersionData)
-
-          expect(result.reason).to.equal('New licence created on 5 April 2022 by carol.shaw@atari.com')
-        })
-      })
-
-      describe('and the record has no user associated with it', () => {
-        beforeEach(() => {
-          returnVersion.user = null
-        })
-
-        it('returns the formatted reason specifying that it was migrated from NALD', () => {
-          const result = ViewPresenter.go(returnVersionData)
-
-          expect(result.reason).to.equal('New licence migrated from NALD on 5 April 2022')
-        })
-      })
-    })
-
-    describe('when there is no reason', () => {
-      beforeEach(() => {
-        returnVersion.reason = null
-      })
-
-      describe('and no mod log entries', () => {
-        it('returns the date the record was created', () => {
-          const result = ViewPresenter.go(returnVersionData)
-
-          expect(result.reason).to.equal('Created on 5 April 2022')
-        })
-      })
-
-      describe('but there is a mod log entry with a reason', () => {
-        beforeEach(() => {
-          returnVersion.user = null
-          returnVersion.modLogs = [
-            {
-              naldDate: new Date('2019-03-01'),
-              note: null,
-              reasonDescription: 'Record loaded during migration',
-              userId: 'TESTER'
-            }
-          ]
-        })
-
-        it('returns reason from the mod log', () => {
-          const result = ViewPresenter.go(returnVersionData)
-
-          expect(result.reason).to.equal('Record loaded during migration created on 1 March 2019 by TESTER')
-        })
-      })
-    })
-  })
-
   describe('the "requirements" property', () => {
     describe('the requirements "abstractionPeriod" property', () => {
       describe('when the abstraction period has been set', () => {

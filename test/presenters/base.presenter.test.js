@@ -8,8 +8,10 @@ const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const LicenceVersionModel = require('../../app/models/licence-version.model.js')
+const ReturnVersionModel = require('../../app/models/return-version.model.js')
 const { ValidationError } = require('joi')
-const { today } = require('../../app/lib/general.lib.js')
+const { generateUUID, today } = require('../../app/lib/general.lib.js')
 const { tomorrow, yesterday } = require('../support/general.js')
 
 // Thing under test
@@ -798,6 +800,298 @@ describe('Base presenter', () => {
       const result = BasePresenter.formatValueUnit(100, 'Ml/d')
 
       expect(result).to.equal('100Ml/d')
+    })
+  })
+
+  describe('#formatVersionReason()', () => {
+    let billingAndDataRole
+    let modLog
+    let version
+
+    describe('when the version is a "LicenceVersionModel" instance', () => {
+      beforeEach(() => {
+        version = LicenceVersionModel.fromJson({ createdAt: new Date(), id: generateUUID() })
+      })
+
+      describe('and the user does not have the "billing" role', () => {
+        beforeEach(() => {
+          billingAndDataRole = false
+        })
+
+        describe('and the licence version has no connected "mod log" records', () => {
+          it('returns null', () => {
+            const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+            expect(result).to.be.null()
+          })
+        })
+
+        describe('and the licence version has connected "mod log" records', () => {
+          beforeEach(() => {
+            // NOTE: We set date created and the user ID to prove that the function is not returning these values
+            // intentionally when the user does not have the "billing" role
+            modLog = {
+              id: generateUUID(),
+              licenceVersionId: version.id,
+              naldDate: new Date('2022-04-01'),
+              userId: 'PSTEWART'
+            }
+
+            version.modLogs = [modLog]
+          })
+
+          describe('but the "mod log" does not have a reason', () => {
+            it('returns null', () => {
+              const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+              expect(result).to.be.null()
+            })
+          })
+
+          describe('and the "mod log" has a reason', () => {
+            beforeEach(() => {
+              modLog.reasonDescription = 'Minor Variation'
+            })
+
+            it('returns only the reason', () => {
+              const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+              expect(result).to.equal('Minor Variation')
+            })
+          })
+        })
+      })
+
+      describe('and the user does have the "billing" role', () => {
+        beforeEach(() => {
+          billingAndDataRole = true
+        })
+
+        describe('and the licence version has no connected "mod log" records', () => {
+          it('returns just the "Created on" part', () => {
+            const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+            expect(result).to.equal(`Created on ${BasePresenter.formatLongDate(version.createdAt)}`)
+          })
+        })
+
+        describe('and the licence version has connected "mod log" records', () => {
+          beforeEach(() => {
+            modLog = {
+              id: generateUUID(),
+              licenceVersionId: version.id,
+              naldDate: new Date('2022-04-01')
+            }
+
+            version.modLogs = [modLog]
+          })
+
+          describe('but the "mod log" does not have a reason', () => {
+            describe('nor who created it', () => {
+              it('returns just the "Created on" part', () => {
+                const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+                expect(result).to.equal(`Created on ${BasePresenter.formatLongDate(modLog.naldDate)}`)
+              })
+            })
+
+            describe('though it does have who created it', () => {
+              beforeEach(() => {
+                modLog.userId = 'PSTEWART'
+              })
+
+              it('returns the "Created on" and "created by" parts', () => {
+                const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+                expect(result).to.equal(
+                  `Created on ${BasePresenter.formatLongDate(modLog.naldDate)} by ${modLog.userId}`
+                )
+              })
+            })
+          })
+
+          describe('and the "mod log" has a reason', () => {
+            beforeEach(() => {
+              modLog.reasonDescription = 'Minor Variation'
+            })
+
+            describe('but not who created it', () => {
+              it('returns the "Reason" and "created on" parts', () => {
+                const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+                expect(result).to.equal(`Minor Variation created on ${BasePresenter.formatLongDate(modLog.naldDate)}`)
+              })
+            })
+
+            describe('and who created it', () => {
+              beforeEach(() => {
+                modLog.userId = 'PSTEWART'
+              })
+
+              it('returns the "Reason", "Created on" and "created by" parts', () => {
+                const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+                expect(result).to.equal(
+                  `Minor Variation created on ${BasePresenter.formatLongDate(modLog.naldDate)} by ${modLog.userId}`
+                )
+              })
+            })
+          })
+        })
+      })
+    })
+
+    // NOTE: Originally created in NALD and imported to WRLS, since June 2025 they have been created in WRLS. Imported
+    // ones _should_ have at least one mod log. Those created in WRLS have none.
+    describe('when the version is a "ReturnVersionModel" instance', () => {
+      beforeEach(() => {
+        version = ReturnVersionModel.fromJson({ createdAt: new Date(), id: generateUUID() })
+      })
+
+      describe('and the user does not have the "billing" role', () => {
+        beforeEach(() => {
+          billingAndDataRole = false
+        })
+
+        describe('and the return version has no connected "mod log" records', () => {
+          it('returns null', () => {
+            const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+            expect(result).to.be.null()
+          })
+        })
+
+        describe('and the return version has connected "mod log" records', () => {
+          beforeEach(() => {
+            // NOTE: We set date created and the user ID to prove that the function is not returning these values
+            // intentionally when the user does not have the "billing" role
+            modLog = {
+              id: generateUUID(),
+              returnVersionId: version.id,
+              naldDate: new Date('2022-04-01'),
+              userId: 'PSTEWART'
+            }
+
+            version.modLogs = [modLog]
+          })
+
+          describe('but the "mod log" does not have a reason', () => {
+            it('returns null', () => {
+              const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+              expect(result).to.be.null()
+            })
+          })
+
+          describe('and the "mod log" has a reason', () => {
+            beforeEach(() => {
+              modLog.reasonDescription = 'Minor Variation'
+            })
+
+            it('returns only the reason', () => {
+              const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+              expect(result).to.equal('Minor Variation')
+            })
+          })
+        })
+      })
+
+      describe('and the user does have the "billing" role', () => {
+        beforeEach(() => {
+          billingAndDataRole = true
+        })
+
+        describe('and the return version has no connected "mod log" records', () => {
+          describe('nor who created it in WRLS', () => {
+            it('returns just the "Created on" part', () => {
+              const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+              expect(result).to.equal(`Created on ${BasePresenter.formatLongDate(version.createdAt)}`)
+            })
+          })
+
+          describe('though it does have who created it in WRLS', () => {
+            beforeEach(() => {
+              version.user = { id: generateUUID(), username: 'p.stewart@wrls.gov.uk' }
+            })
+
+            it('returns the "Created on" and "created by" parts', () => {
+              const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+              expect(result).to.equal(
+                `Created on ${BasePresenter.formatLongDate(version.createdAt)} by ${version.user.username}`
+              )
+            })
+          })
+        })
+
+        // NOTE: If the ReturnVersion has mod log records then it was not created in WRLS, so you wouldn't see WRLS
+        // usernames and dates returned
+        describe('and the return version has connected "mod log" records', () => {
+          beforeEach(() => {
+            modLog = {
+              id: generateUUID(),
+              returnVersionId: version.id,
+              naldDate: new Date('2022-04-01')
+            }
+
+            version.modLogs = [modLog]
+          })
+
+          describe('but the "mod log" does not have a reason', () => {
+            describe('nor who created it in NALD', () => {
+              it('returns just the "Created on" part', () => {
+                const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+                expect(result).to.equal(`Created on ${BasePresenter.formatLongDate(modLog.naldDate)}`)
+              })
+            })
+
+            describe('though it does have who created it', () => {
+              beforeEach(() => {
+                modLog.userId = 'PSTEWART'
+              })
+
+              it('returns the "Created on" and "created by" parts', () => {
+                const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+                expect(result).to.equal(
+                  `Created on ${BasePresenter.formatLongDate(modLog.naldDate)} by ${modLog.userId}`
+                )
+              })
+            })
+          })
+
+          describe('and the "mod log" has a reason', () => {
+            beforeEach(() => {
+              modLog.reasonDescription = 'Minor Variation'
+            })
+
+            describe('but not who created it', () => {
+              it('returns the "Reason" and "created on" parts', () => {
+                const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+                expect(result).to.equal(`Minor Variation created on ${BasePresenter.formatLongDate(modLog.naldDate)}`)
+              })
+            })
+
+            describe('and who created it', () => {
+              beforeEach(() => {
+                modLog.userId = 'PSTEWART'
+              })
+
+              it('returns the "Reason", "Created on" and "created by" parts', () => {
+                const result = BasePresenter.formatVersionReason(version, billingAndDataRole)
+
+                expect(result).to.equal(
+                  `Minor Variation created on ${BasePresenter.formatLongDate(modLog.naldDate)} by ${modLog.userId}`
+                )
+              })
+            })
+          })
+        })
+      })
     })
   })
 
