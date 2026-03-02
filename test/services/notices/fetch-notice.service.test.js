@@ -16,7 +16,7 @@ const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js
 const FetchNoticeService = require('../../../app/services/notices/fetch-notice.service.js')
 
 describe('Notices - Fetch Notice service', () => {
-  const pageNumber = 1
+  const pageNumber = '1'
 
   let event
   let filters
@@ -110,7 +110,7 @@ describe('Notices - Fetch Notice service', () => {
 
   describe('when no filter is applied', () => {
     it('returns the matching notice and associated notifications ordered by recipient name', async () => {
-      const result = await FetchNoticeService.go(event.id, pageNumber, filters)
+      const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
       expect(result.notice).to.equal({
         createdAt: event.createdAt,
@@ -156,7 +156,7 @@ describe('Notices - Fetch Notice service', () => {
         })
 
         it('returns the matching notifications', async () => {
-          const result = await FetchNoticeService.go(event.id, pageNumber, filters)
+          const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
           expect(result.notifications).to.equal([
             {
@@ -174,7 +174,7 @@ describe('Notices - Fetch Notice service', () => {
         })
 
         it('excludes those that do not match', async () => {
-          const result = await FetchNoticeService.go(event.id, pageNumber, filters)
+          const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
           expect(result.notifications).not.contains({
             id: notificationLetter.id,
@@ -194,7 +194,7 @@ describe('Notices - Fetch Notice service', () => {
         })
 
         it('returns the matching notifications (none in this case)', async () => {
-          const result = await FetchNoticeService.go(event.id, pageNumber, filters)
+          const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
           expect(result.notifications).to.be.empty()
 
@@ -202,7 +202,7 @@ describe('Notices - Fetch Notice service', () => {
         })
 
         it('excludes those that do not match (all in this case)', async () => {
-          const result = await FetchNoticeService.go(event.id, pageNumber, filters)
+          const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
           expect(result.notifications).not.contains({
             id: notificationEmail.id,
@@ -232,7 +232,7 @@ describe('Notices - Fetch Notice service', () => {
         })
 
         it('returns the matching notifications', async () => {
-          const result = await FetchNoticeService.go(event.id, pageNumber, filters)
+          const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
           expect(result.notifications).to.equal([
             {
@@ -250,7 +250,7 @@ describe('Notices - Fetch Notice service', () => {
         })
 
         it('excludes those that do not match', async () => {
-          const result = await FetchNoticeService.go(event.id, pageNumber, filters)
+          const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
           expect(result.notifications).not.contains({
             id: notificationEmail.id,
@@ -272,7 +272,7 @@ describe('Notices - Fetch Notice service', () => {
       })
 
       it('returns the matching notifications', async () => {
-        const result = await FetchNoticeService.go(event.id, pageNumber, filters)
+        const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
         expect(result.notifications).to.equal([
           {
@@ -290,7 +290,7 @@ describe('Notices - Fetch Notice service', () => {
       })
 
       it('excludes those that do not match', async () => {
-        const result = await FetchNoticeService.go(event.id, pageNumber, filters)
+        const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
         expect(result.notifications).not.contains({
           id: notificationEmail.id,
@@ -310,7 +310,7 @@ describe('Notices - Fetch Notice service', () => {
       })
 
       it('returns the matching notifications', async () => {
-        const result = await FetchNoticeService.go(event.id, pageNumber, filters)
+        const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
         expect(result.notifications).to.equal([
           {
@@ -328,7 +328,7 @@ describe('Notices - Fetch Notice service', () => {
       })
 
       it('excludes those that do not match', async () => {
-        const result = await FetchNoticeService.go(event.id, pageNumber, filters)
+        const result = await FetchNoticeService.go(event.id, filters, pageNumber)
 
         expect(result.notifications).not.contains({
           id: notificationLetter.id,

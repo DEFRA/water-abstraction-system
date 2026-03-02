@@ -341,7 +341,7 @@ describe('Notices - Fetch Notices service', () => {
 
   describe('when the results are paginated', () => {
     beforeEach(() => {
-      pageNumber = 2
+      pageNumber = '2'
 
       // NOTE: We know we create 3 records so we set the value to 2 to ensure the results are paginated
       Sinon.stub(DatabaseConfig, 'defaultPageSize').value(2)

@@ -24,7 +24,7 @@ async function go(noticeId, yar, page) {
   const filterKey = `noticeFilter-${noticeId}`
   const filters = _filters(yar, filterKey)
 
-  const { notice, notifications, totalNumber } = await FetchNoticeService.go(noticeId, page, filters)
+  const { notice, notifications, totalNumber } = await FetchNoticeService.go(noticeId, filters, page)
 
   const pagination = PaginatorPresenter.go(
     totalNumber,
@@ -34,7 +34,7 @@ async function go(noticeId, yar, page) {
     'notifications'
   )
 
-  const pageData = ViewNoticePresenter.go(notice, notifications, totalNumber, page, pagination.numberOfPages)
+  const pageData = ViewNoticePresenter.go(notice, notifications)
 
   return {
     activeNavBar: 'notices',

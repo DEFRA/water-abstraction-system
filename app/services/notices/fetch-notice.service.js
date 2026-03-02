@@ -16,12 +16,12 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * Fetch the selected notice and its associated notifications for the 'notices/{id}' page
  *
  * @param {string} noticeId - the UUID of the selected notice
- * @param {string} [page=1] - The current page for the pagination service
  * @param {object} filters - an object containing the different filters to apply to the query
+ * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<object>} the notice and its associated notifications
  */
-async function go(noticeId, page = 1, filters) {
+async function go(noticeId, filters, page = 1) {
   const notice = await _fetchNotice(noticeId)
 
   const notificationsQuery = _fetchNotificationsQuery(noticeId)

@@ -33,7 +33,7 @@ describe('Users - Fetch Users service', () => {
     // has been applied by the user
     filters = _filters()
 
-    pageNumber = 1
+    pageNumber = '1'
   })
 
   afterEach(() => {
