@@ -146,45 +146,39 @@ function _component(currentPageNumber, numberOfPages, path, queryString) {
 }
 
 function _complexPaginatorEnd(currentPageNumber, numberOfPages, path, queryString) {
-  const items = []
-
-  items.push(_item(1, currentPageNumber, path, queryString))
-  items.push({ ellipsis: true })
-  items.push(_item(numberOfPages - 4, currentPageNumber, path, queryString))
-  items.push(_item(numberOfPages - 3, currentPageNumber, path, queryString))
-  items.push(_item(numberOfPages - 2, currentPageNumber, path, queryString))
-  items.push(_item(numberOfPages - 1, currentPageNumber, path, queryString))
-  items.push(_item(numberOfPages, currentPageNumber, path, queryString))
-
-  return items
+  return [
+    _item(1, currentPageNumber, path, queryString),
+    { ellipsis: true },
+    _item(numberOfPages - 4, currentPageNumber, path, queryString),
+    _item(numberOfPages - 3, currentPageNumber, path, queryString),
+    _item(numberOfPages - 2, currentPageNumber, path, queryString),
+    _item(numberOfPages - 1, currentPageNumber, path, queryString),
+    _item(numberOfPages, currentPageNumber, path, queryString)
+  ]
 }
 
 function _complexPaginatorMiddle(currentPageNumber, numberOfPages, path, queryString) {
-  const items = []
-
-  items.push(_item(1, currentPageNumber, path, queryString))
-  items.push({ ellipsis: true })
-  items.push(_item(currentPageNumber - 1, currentPageNumber, path, queryString))
-  items.push(_item(currentPageNumber, currentPageNumber, path, queryString))
-  items.push(_item(currentPageNumber + 1, currentPageNumber, path, queryString))
-  items.push({ ellipsis: true })
-  items.push(_item(numberOfPages, currentPageNumber, path, queryString))
-
-  return items
+  return [
+    _item(1, currentPageNumber, path, queryString),
+    { ellipsis: true },
+    _item(currentPageNumber - 1, currentPageNumber, path, queryString),
+    _item(currentPageNumber, currentPageNumber, path, queryString),
+    _item(currentPageNumber + 1, currentPageNumber, path, queryString),
+    { ellipsis: true },
+    _item(numberOfPages, currentPageNumber, path, queryString)
+  ]
 }
 
 function _complexPaginatorStart(currentPageNumber, numberOfPages, path, queryString) {
-  const items = []
-
-  items.push(_item(1, currentPageNumber, path, queryString))
-  items.push(_item(2, currentPageNumber, path, queryString))
-  items.push(_item(3, currentPageNumber, path, queryString))
-  items.push(_item(4, currentPageNumber, path, queryString))
-  items.push(_item(5, currentPageNumber, path, queryString))
-  items.push({ ellipsis: true })
-  items.push(_item(numberOfPages, currentPageNumber, path, queryString))
-
-  return items
+  return [
+    _item(1, currentPageNumber, path, queryString),
+    _item(2, currentPageNumber, path, queryString),
+    _item(3, currentPageNumber, path, queryString),
+    _item(4, currentPageNumber, path, queryString),
+    _item(5, currentPageNumber, path, queryString),
+    { ellipsis: true },
+    _item(numberOfPages, currentPageNumber, path, queryString)
+  ]
 }
 
 function _item(pageNumber, currentPageNumber, path, queryString) {
