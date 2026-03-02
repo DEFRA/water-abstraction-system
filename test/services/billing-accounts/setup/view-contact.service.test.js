@@ -32,48 +32,97 @@ describe('Billing Accounts - Setup - Contact Service', () => {
   let sessionData
 
   beforeEach(async () => {
-    sessionData = {
-      billingAccount
-    }
-
-    session = await SessionHelper.add({ data: sessionData })
-
     Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
   })
 
   afterEach(async () => {
     await session.$query().delete()
+    Sinon.restore()
   })
 
   describe('when called', () => {
-    it('returns page data for the view', async () => {
-      const result = await ViewContactService.go(session.id)
+    describe('and the contact is for the existing account', () => {
+      beforeEach(async () => {
+        sessionData = {
+          accountSelected: billingAccount.company.id,
+          billingAccount
+        }
 
-      expect(result).to.equal({
-        backLink: {
-          href: `/system/billing-accounts/setup/${session.id}/fao`,
-          text: 'Back'
-        },
-        contactSelected: null,
-        items: [
-          {
-            id: contact.id,
-            value: contact.id,
-            text: contact.$name(),
-            checked: false
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('returns page data for the view', async () => {
+        const result = await ViewContactService.go(session.id)
+
+        expect(result).to.equal({
+          backLink: {
+            href: `/system/billing-accounts/setup/${session.id}/fao`,
+            text: 'Back'
           },
-          {
-            divider: 'or'
+          contactSelected: null,
+          items: [
+            {
+              id: contact.id,
+              value: contact.id,
+              text: contact.$name(),
+              checked: false
+            },
+            {
+              divider: 'or'
+            },
+            {
+              id: 'new',
+              value: 'new',
+              text: 'Add a new contact',
+              checked: false
+            }
+          ],
+          pageTitle: `Set up a contact for ${session.billingAccount.company.name}`,
+          pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
+        })
+      })
+    })
+
+    describe('and the contact is for a new account', () => {
+      beforeEach(async () => {
+        sessionData = {
+          accountSelected: 'another',
+          billingAccount,
+          existingAccount: billingAccount.company.id
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('returns page data for the view', async () => {
+        const result = await ViewContactService.go(session.id)
+
+        expect(result).to.equal({
+          backLink: {
+            href: `/system/billing-accounts/setup/${session.id}/fao`,
+            text: 'Back'
           },
-          {
-            id: 'new',
-            value: 'new',
-            text: 'Add a new contact',
-            checked: false
-          }
-        ],
-        pageTitle: `Set up a contact for ${session.billingAccount.company.name}`,
-        pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
+          contactSelected: null,
+          items: [
+            {
+              id: contact.id,
+              value: contact.id,
+              text: contact.$name(),
+              checked: false
+            },
+            {
+              divider: 'or'
+            },
+            {
+              id: 'new',
+              value: 'new',
+              text: 'Add a new contact',
+              checked: false
+            }
+          ],
+          pageTitle: `Set up a contact for ${session.billingAccount.company.name}`,
+          pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
+        })
       })
     })
   })
