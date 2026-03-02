@@ -10,11 +10,10 @@ const { expect } = Code
 
 // Test helpers
 const CompanyHelper = require('../../support/helpers/company.helper.js')
-const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
-const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
-const LicenceDocumentRoleHelper = require('../../support/helpers/licence-document-role.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
+const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
+const LicenceVersionHolder = require('../../support/helpers/licence-version-holder.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const DatabaseConfig = require('../../../config/database.config.js')
@@ -25,40 +24,46 @@ const FetchLicencesService = require('../../../app/services/companies/fetch-lice
 describe('Companies - Fetch Licences service', () => {
   let company
   let licence
-  let licenceDocument
-  let licenceDocumentHeader
-  let licenceDocumentOther
-  let licenceDocumentRole
-  let licenceDocumentRoleOther
+  let licenceVersion
+  let licenceVersionHolder
+  let licenceVersionSameLicenceNoCompany
+  let licenceVersionSameLicenceHolderNoCompany
+  let licenceVersionHolderSameLicenceDifferentCompany
+  let licenceVersionSameLicenceDifferentCompany
   let pageNumber
 
   before(async () => {
     company = await CompanyHelper.add()
     licence = await LicenceHelper.add()
-    licenceDocument = await LicenceDocumentHelper.add({
-      licenceRef: licence.licenceRef
+
+    // A licence version/holder linked to the company
+    licenceVersion = await LicenceVersionHelper.add({
+      licenceId: licence.id
     })
 
-    // NOTE: This is needed to confirm we can retrieve the 'name' for the licence, which can be assigned by external
-    // users when the register as the primary user.
-    licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-      licenceRef: licenceDocument.licenceRef,
-      licenceName: 'Tyrell Corporation'
-    })
-
-    licenceDocumentRole = await LicenceDocumentRoleHelper.add({
+    licenceVersionHolder = await LicenceVersionHolder.add({
       companyId: company.id,
-      licenceDocumentId: licenceDocument.id,
-      licenceRoleId: LicenceRoleHelper.select('licenceHolder').id
+      licenceVersionId: licenceVersion.id
     })
 
-    // NOTE: This role is for the same company, but a different licence where they are only the 'returns to' contact.
-    // This should NOT be returned in the results.
-    licenceDocumentOther = await LicenceDocumentHelper.add()
-    licenceDocumentRoleOther = await LicenceDocumentRoleHelper.add({
-      companyId: company.id,
-      licenceDocumentId: licenceDocumentOther.id,
-      licenceRoleId: LicenceRoleHelper.select('returnsTo').id
+    // A licence version/holder not linked to the company
+    licenceVersionSameLicenceDifferentCompany = await LicenceVersionHelper.add({
+      licenceId: licence.id
+    })
+
+    licenceVersionHolderSameLicenceDifferentCompany = await LicenceVersionHolder.add({
+      companyId: generateUUID(),
+      licenceVersionId: licenceVersionSameLicenceDifferentCompany.id
+    })
+
+    // A licence version/holder not linked to any company
+    licenceVersionSameLicenceNoCompany = await LicenceVersionHelper.add({
+      licenceId: licence.id
+    })
+
+    licenceVersionSameLicenceHolderNoCompany = await LicenceVersionHolder.add({
+      companyId: null,
+      licenceVersionId: licenceVersionSameLicenceNoCompany.id
     })
   })
 
@@ -75,12 +80,14 @@ describe('Companies - Fetch Licences service', () => {
   })
 
   afterEach(async () => {
-    await licenceDocumentRole.$query().delete()
-    await licenceDocumentRoleOther.$query().delete()
-    await licenceDocumentHeader.$query().delete()
-    await licenceDocument.$query().delete()
-    await licence.$query().delete()
     await company.$query().delete()
+    await licence.$query().delete()
+    await licenceVersion.$query().delete()
+    await licenceVersionHolder.$query().delete()
+    await licenceVersionSameLicenceDifferentCompany.$query().delete()
+    await licenceVersionHolderSameLicenceDifferentCompany.$query().delete()
+    await licenceVersionSameLicenceNoCompany.$query().delete()
+    await licenceVersionSameLicenceHolderNoCompany.$query().delete()
   })
 
   describe('when called', () => {
@@ -90,13 +97,18 @@ describe('Companies - Fetch Licences service', () => {
       expect(result).to.equal({
         licences: [
           {
-            endDate: null,
+            expiredDate: null,
             id: licence.id,
+            lapsedDate: null,
             licenceRef: licence.licenceRef,
-            licenceDocumentHeader: {
-              id: licenceDocumentHeader.id,
-              licenceName: 'Tyrell Corporation'
-            },
+            licenceVersions: [
+              {
+                endDate: null,
+                id: licenceVersion.id,
+                startDate: new Date('2022-01-01')
+              }
+            ],
+            revokedDate: null,
             startDate: new Date('2022-01-01')
           }
         ],

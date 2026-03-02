@@ -3,29 +3,70 @@
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
+{% from "macros/licence-status-tag.njk" import statusTag %}
+
 {% set tableRows = [] %}
 
-{% for licence in licences %}
+{% for licenceVersion in licenceVersions %}
   {% set rowIndex = loop.index0 %}
 
-  {% set tableRow = [
+  {% if rowIndex > 0 %}
+    {% set lastLicenceId = licenceVersions[rowIndex - 1].licenceId %}
+  {% else %}
+    {% set lastLicenceId = null %}
+  {% endif %}
+
+  {% set tableRow = [] %}
+
+  {% if lastLicenceId !== licenceVersion.licenceId %}
+    {% set licenceCell =
+      {
+        attributes: { 'data-test': 'licence-ref-' + rowIndex },
+        text: licenceVersion.licenceRef,
+        rowspan: licenceVersion.count
+      } %}
+
+    {% set tableRow = (tableRow.push(licenceCell), tableRow) %}
+
+    {% set licenceStatusTag %}
+      {{ statusTag(licenceVersion.status, true) }}
+    {% endset %}
+
+    {% set statusCell =
+      {
+        attributes: { 'data-test': 'end-date-' + rowIndex },
+        html: licenceStatusTag,
+        rowspan: licenceVersion.count
+      } %}
+
+    {% set tableRow = (tableRow.push(statusCell), tableRow) %}
+  {% endif %}
+
+  {% set startDateCell =
     {
-      html: '<a href="/system/licences/' + licence.id + '/summary">' + licence.licenceRef + '</a>',
-      attributes: { 'data-test': 'licence-ref-' + rowIndex }
-    },
+      attributes: { 'data-test': 'start-date-' + rowIndex },
+      text: licenceVersion.startDate
+    } %}
+  {% set tableRow = (tableRow.push(startDateCell), tableRow) %}
+
+  {% set endDateCell =
     {
-      text: licence.licenceName,
-      attributes: { 'data-test': 'licence-name-' + rowIndex }
-    },
+      attributes: { 'data-test': 'end-date-' + rowIndex },
+      text: licenceVersion.endDate
+    } %}
+
+  {% set tableRow = (tableRow.push(endDateCell), tableRow) %}
+
+  {% set viewLink %}
+    <a class="govuk-link" href="{{ licenceVersion.link.href }}">View <span class="govuk-visually-hidden">{{ licenceVersion.link.hiddenText }}</span></a>
+  {% endset %}
+
+  {% set actionCell =
     {
-      text: licence.startDate,
-      attributes: { 'data-test': 'start-date-' + rowIndex }
-    },
-    {
-      text: licence.endDate,
-      attributes: { 'data-test': 'end-date-' + rowIndex }
-    }
-  ] %}
+      attributes: { 'data-test': 'action-' + rowIndex },
+      html: viewLink
+    } %}
+  {% set tableRow = (tableRow.push(actionCell), tableRow) %}
 
   {% set tableRows = (tableRows.push(tableRow), tableRows) %}
 {% endfor %}
@@ -39,13 +80,16 @@
         text: "Licence"
       },
       {
-        text: "Licence name"
+        text: "Status"
       },
       {
         text: "Start date"
       },
       {
         text: "End date"
+      },
+      {
+        text: "Action"
       }
     ],
     rows: tableRows
