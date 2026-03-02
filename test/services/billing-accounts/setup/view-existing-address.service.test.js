@@ -122,5 +122,46 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
         })
       })
     })
+
+    describe('and the user has come from the account type page', () => {
+      beforeEach(async () => {
+        sessionData = {
+          accountSelected: 'another',
+          accountType: 'individual',
+          billingAccount,
+          existingAccount: 'new'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('returns page data for the view', async () => {
+        const result = await ViewExistingAddressService.go(session.id)
+
+        expect(result).to.equal({
+          backLink: {
+            href: `/system/billing-accounts/setup/${session.id}/account-type`,
+            text: 'Back'
+          },
+          items: [
+            {
+              id: companyAddresses.addresses[0].id,
+              value: companyAddresses.addresses[0].id,
+              text: 'Tutsham Farm, West Farleigh, Maidstone, Kent, ME15 0NE',
+              checked: false
+            },
+            { divider: 'or' },
+            {
+              id: 'new',
+              value: 'new',
+              text: 'Setup a new address',
+              checked: false
+            }
+          ],
+          pageTitle: `Select an existing address for ${session.billingAccount.company.name}`,
+          pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
+        })
+      })
+    })
   })
 })

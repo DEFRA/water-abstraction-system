@@ -23,8 +23,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  */
 async function go(sessionId, payload) {
   const session = await SessionModel.query().findById(sessionId)
-  const companyId = session.accountSelected === 'another' ? session.existingAccount : session.accountSelected
-  const companyAddresses = await FetchCompanyAddressesService.go(companyId)
+  const companyAddresses = await _fetchCompanyAddresses(session)
 
   const validationResult = _validate(payload, companyAddresses.company.name)
 
@@ -42,6 +41,15 @@ async function go(sessionId, payload) {
     error: validationResult,
     ...pageData
   }
+}
+
+async function _fetchCompanyAddresses(session) {
+  const newAccount = !!session.existingAccount && session.existingAccount !== 'new'
+  const companyId = newAccount ? session.existingAccount : session.billingAccount.company.id
+
+  const companyAddresses = await FetchCompanyAddressesService.go(companyId)
+
+  return companyAddresses
 }
 
 function _redirectUrl(session) {
