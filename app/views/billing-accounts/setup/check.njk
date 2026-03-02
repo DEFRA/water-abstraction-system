@@ -24,7 +24,20 @@
         classes: "govuk-summary-list__row--no-actions",
         key: { text: "Search term" },
         value: { text: searchInput }
-      } if searchInput
+      } if searchInput,
+      {
+        key: { text: "Existing account" },
+        value: { text: existingAccount },
+        actions: {
+          items: [
+            {
+              href: links.existingAccount,
+              text: "Change",
+              visuallyHiddenText: "existing account selected"
+            }
+          ]
+        }
+      } if existingAccount
     ]
   }) }}
 

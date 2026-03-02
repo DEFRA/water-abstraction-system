@@ -7,6 +7,7 @@
  */
 
 const CheckPresenter = require('../../../presenters/billing-accounts/setup/check.presenter.js')
+const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
 const SessionModel = require('../../../models/session.model.js')
 const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
 
@@ -19,10 +20,12 @@ const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
+  const companyId = session.accountSelected === 'another' ? session.existingAccount : session.accountSelected
+  const companyContacts = await FetchCompanyContactsService.go(companyId)
 
   await markCheckPageVisited(session)
 
-  const pageData = CheckPresenter.go(session)
+  const pageData = CheckPresenter.go(session, companyContacts)
 
   return {
     ...pageData
