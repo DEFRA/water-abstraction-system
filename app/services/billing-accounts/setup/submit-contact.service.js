@@ -60,7 +60,9 @@ async function _save(session, payload) {
 }
 
 async function _submissionData(session) {
-  const companyId = session.accountSelected === 'another' ? session.existingAccount : session.accountSelected
+  const newAccount = !!session.existingAccount && session.existingAccount !== 'new'
+  const companyId = newAccount ? session.existingAccount : session.billingAccount.company.id
+
   const companyContacts = await FetchCompanyContactsService.go(companyId)
 
   return ContactPresenter.go(session, companyContacts)

@@ -19,14 +19,22 @@ const SessionModel = require('../../../models/session.model.js')
  */
 async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
-  const companyId = session.accountSelected === 'another' ? session.existingAccount : session.accountSelected
-  const companyContacts = await FetchCompanyContactsService.go(companyId)
+  const companyContacts = await _fetchCompanyContacts(session)
 
   const pageData = ContactPresenter.go(session, companyContacts)
 
   return {
     ...pageData
   }
+}
+
+async function _fetchCompanyContacts(session) {
+  const newAccount = !!session.existingAccount && session.existingAccount !== 'new'
+  const companyId = newAccount ? session.existingAccount : session.billingAccount.company.id
+
+  const companyContacts = await FetchCompanyContactsService.go(companyId)
+
+  return companyContacts
 }
 
 module.exports = {
