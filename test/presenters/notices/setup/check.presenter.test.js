@@ -24,7 +24,7 @@ describe('Notices - Setup - Check presenter', () => {
   let testRecipients
 
   beforeEach(() => {
-    page = 1
+    page = '1'
 
     session = {
       id: generateUUID(),
@@ -429,7 +429,7 @@ describe('Notices - Setup - Check presenter', () => {
 
       describe('and there is more than one page', () => {
         beforeEach(() => {
-          page = 2
+          page = '2'
         })
 
         it('returns the remaining recipients', () => {

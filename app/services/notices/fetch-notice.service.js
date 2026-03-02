@@ -21,7 +21,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} the notice and its associated notifications
  */
-async function go(noticeId, filters, page = 1) {
+async function go(noticeId, filters, page = '1') {
   const notice = await _fetchNotice(noticeId)
 
   const notificationsQuery = _fetchNotificationsQuery(noticeId)

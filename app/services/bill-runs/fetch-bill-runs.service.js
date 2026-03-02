@@ -26,7 +26,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<module:BillRunModel[]>} An array of bill runs that match the selected 'page in the data
  */
-async function go(filters, page = 1) {
+async function go(filters, page = '1') {
   const query = _fetchQuery()
 
   _applyFilters(query, filters)

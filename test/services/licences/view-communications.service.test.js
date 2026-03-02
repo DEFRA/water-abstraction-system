@@ -22,7 +22,7 @@ const FetchLicenceService = require('../../../app/services/licences/fetch-licenc
 const ViewCommunicationsService = require('../../../app/services/licences/view-communications.service.js')
 
 describe('Licences - View Communications service', () => {
-  const page = 1
+  const page = '1'
 
   let auth
   let licenceId

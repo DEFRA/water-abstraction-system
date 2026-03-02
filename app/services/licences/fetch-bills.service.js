@@ -17,7 +17,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's bills tab
  */
-async function go(licenceId, page = 1) {
+async function go(licenceId, page = '1') {
   const { results: bills, total: totalNumber } = await _fetch(licenceId, page)
 
   return { bills, totalNumber }

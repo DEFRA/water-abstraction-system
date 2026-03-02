@@ -233,7 +233,7 @@ describe('Bill Runs Review - Review Bill Run Service', () => {
 
     describe('and a page other than page 1 is selected', () => {
       beforeEach(() => {
-        page = 2
+        page = '2'
       })
 
       it('will fetch the data for the review page and return it once formatted by the presenter', async () => {

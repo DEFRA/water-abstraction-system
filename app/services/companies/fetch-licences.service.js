@@ -17,7 +17,7 @@ const LicenceVersionModel = require('../../models/licence-version.model.js')
  *
  * @returns {Promise<object>} the licences for the company and the pagination object
  */
-async function go(companyId, page = 1) {
+async function go(companyId, page = '1') {
   const { results: licences, total: totalNumber } = await _fetch(companyId, page)
 
   return { licences, totalNumber }

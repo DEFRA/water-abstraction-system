@@ -37,7 +37,7 @@ describe('Companies - View Contacts service', () => {
 
     Sinon.stub(FetchCompanyContactsService, 'go').returns({ companyContacts, totalNumber: 1 })
 
-    page = 1
+    page = '1'
 
     Sinon.stub(FeatureFlagsConfig, 'enableCustomerManage').value(true)
 

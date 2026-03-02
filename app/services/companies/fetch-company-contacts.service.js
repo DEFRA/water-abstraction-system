@@ -16,7 +16,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} the company contacts for the company and the pagination object
  */
-async function go(companyId, page = 1) {
+async function go(companyId, page = '1') {
   const { results: companyContacts, total: totalNumber } = await _fetch(companyId, page)
 
   return { companyContacts, totalNumber }

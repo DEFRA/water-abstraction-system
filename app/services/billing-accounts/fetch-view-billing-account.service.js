@@ -20,7 +20,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * @returns {Promise<object>} an object containing the billing account and matching bills needed to populate the view
  * billing account page
  */
-async function go(id, page = 1) {
+async function go(id, page = '1') {
   const billingAccount = await _fetchBillingAccount(id)
   const { results: bills, total: totalNumber } = await _fetchBills(id, page)
 

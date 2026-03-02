@@ -19,7 +19,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's communications tab
  */
-async function go(licenceRef, page = 1) {
+async function go(licenceRef, page = '1') {
   const { results: notifications, total: totalNumber } = await _fetch(licenceRef, page)
 
   return { notifications, totalNumber }
