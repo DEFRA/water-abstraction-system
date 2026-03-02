@@ -22,11 +22,11 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * on the query (we use `createdAt DESC`).
  *
  * @param {object} filters - An object containing the different filters to apply to the query
- * @param {string} page - The current page for the pagination service
+ * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<module:BillRunModel[]>} An array of bill runs that match the selected 'page in the data
  */
-async function go(filters, page) {
+async function go(filters, page = 1) {
   const query = _fetchQuery()
 
   _applyFilters(query, filters)

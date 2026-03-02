@@ -20,7 +20,7 @@ const FetchNotificationsService = require('../../../app/services/company-contact
 const ViewCompanyContactService = require('../../../app/services/company-contacts/view-company-contact.service.js')
 
 describe('Company Contacts - View Company Contact Service', () => {
-  const page = '1'
+  const page = 1
 
   let auth
   let company

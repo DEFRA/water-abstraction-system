@@ -20,7 +20,7 @@ const FetchLicenceService = require('../../../app/services/licences/fetch-licenc
 const ViewReturnsService = require('../../../app/services/licences/view-returns.service.js')
 
 describe('Licences - View Returns service', () => {
-  const page = '1'
+  const page = 1
 
   let auth
   let licence
@@ -50,7 +50,7 @@ describe('Licences - View Returns service', () => {
     Sinon.stub(FetchLicenceService, 'go').resolves(licence)
 
     Sinon.stub(FetchReturnsService, 'go').resolves({
-      pagination: { total: 1 },
+      totalNumber: 1,
       returns: _returnLogs()
     })
   })

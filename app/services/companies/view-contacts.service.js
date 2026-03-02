@@ -26,12 +26,12 @@ const { readFlashNotification } = require('../../lib/general.lib.js')
 async function go(companyId, auth, page, yar) {
   const company = await FetchCompanyService.go(companyId)
 
-  const { companyContacts, pagination } = await FetchContactsService.go(companyId, page)
+  const { companyContacts, totalNumber } = await FetchContactsService.go(companyId, page)
 
   const pageData = ContactsPresenter.go(company, companyContacts)
 
-  const paginationData = PaginatorPresenter.go(
-    pagination.total,
+  const pagination = PaginatorPresenter.go(
+    totalNumber,
     page,
     `/system/companies/${companyId}/contacts`,
     companyContacts.length,
@@ -43,7 +43,7 @@ async function go(companyId, auth, page, yar) {
   return {
     ...pageData,
     activeSecondaryNav: 'contacts',
-    pagination: paginationData,
+    pagination,
     roles: userRoles(auth),
     notification
   }

@@ -15,22 +15,19 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * Fetches the matching billing account and additional records needed for the view billing account page
  *
  * @param {string} id - The UUID for the billing account to fetch
- * @param {string} page - The current page for the pagination service
+ * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<object>} an object containing the billing account and matching bills needed to populate the view
  * billing account page
  */
-async function go(id, page) {
+async function go(id, page = 1) {
   const billingAccount = await _fetchBillingAccount(id)
-  const { results, total } = await _fetchBills(id, page)
+  const { results: bills, total: totalNumber } = await _fetchBills(id, page)
 
   return {
     billingAccount,
-    bills: results,
-
-    pagination: {
-      total
-    }
+    bills,
+    totalNumber
   }
 }
 

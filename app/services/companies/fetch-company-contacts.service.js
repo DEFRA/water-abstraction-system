@@ -12,14 +12,14 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * Fetches the company contacts data needed for the view '/companies/{id}/contacts'
  *
  * @param {string} companyId - The company id for the company
- * @param {string} page - The current page for the pagination service
+ * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<object>} the company contacts for the company and the pagination object
  */
-async function go(companyId, page) {
-  const { results, total } = await _fetch(companyId, page)
+async function go(companyId, page = 1) {
+  const { results: companyContacts, total: totalNumber } = await _fetch(companyId, page)
 
-  return { companyContacts: results, pagination: { total } }
+  return { companyContacts, totalNumber }
 }
 
 async function _fetch(companyId, page) {

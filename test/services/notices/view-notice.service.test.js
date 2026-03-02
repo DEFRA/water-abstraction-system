@@ -94,7 +94,7 @@ describe('Notices - View Notice service', () => {
 
   describe('when called', () => {
     beforeEach(() => {
-      page = '1'
+      page = 1
 
       // For the purposes of this tests the filter doesn't matter
       yarStub = { get: Sinon.stub().returns(_noticeFilters()) }

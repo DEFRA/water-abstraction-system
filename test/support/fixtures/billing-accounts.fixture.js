@@ -66,7 +66,7 @@ function billingAccount() {
         }
       }
     ],
-    pagination: { total: 1 }
+    totalNumber: 1
   }
 }
 

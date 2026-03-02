@@ -15,11 +15,11 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * Fetches data needed for the view '/licences/{id}/communications` page
  *
  * @param {string} licenceRef - The licence ref for the licence
- * @param {string} page - The current page for the pagination service
+ * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's communications tab
  */
-async function go(licenceRef, page) {
+async function go(licenceRef, page = 1) {
   const { results: notifications, total: totalNumber } = await _fetch(licenceRef, page)
 
   return { notifications, totalNumber }

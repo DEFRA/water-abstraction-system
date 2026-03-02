@@ -13,14 +13,14 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * Fetches all bills for a licence which is needed for the view '/licences/{id}/bills` page
  *
  * @param {string} licenceId - The UUID for the licence to fetch
- * @param {string} page - The current page for the pagination service
+ * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<object>} the data needed to populate the view licence page's bills tab
  */
-async function go(licenceId, page) {
-  const { results, total } = await _fetch(licenceId, page)
+async function go(licenceId, page = 1) {
+  const { results: bills, total: totalNumber } = await _fetch(licenceId, page)
 
-  return { bills: results, pagination: { total } }
+  return { bills, totalNumber }
 }
 
 async function _fetch(licenceId, page) {

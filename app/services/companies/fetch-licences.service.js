@@ -13,14 +13,14 @@ const { db } = require('../../../db/db.js')
  * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
  *
  * @param {string} companyId - The company id for the company
- * @param {string} page - The current page for the pagination service
+ * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<object>} the licences for the company and the pagination object
  */
-async function go(companyId, page) {
-  const { results, total } = await _fetch(companyId, page)
+async function go(companyId, page = 1) {
+  const { results: licences, total: totalNumber } = await _fetch(companyId, page)
 
-  return { licences: results, pagination: { total } }
+  return { licences, totalNumber }
 }
 
 async function _fetch(companyId, page) {

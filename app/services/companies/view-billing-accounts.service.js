@@ -24,12 +24,12 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
 async function go(companyId, auth, page) {
   const company = await FetchCompanyService.go(companyId)
 
-  const { billingAccounts, pagination } = await FetchBillingAccountsService.go(companyId, page)
+  const { billingAccounts, totalNumber } = await FetchBillingAccountsService.go(companyId, page)
 
   const pageData = BillingAccountsPresenter.go(company, billingAccounts)
 
-  const paginationData = PaginatorPresenter.go(
-    pagination.total,
+  const pagination = PaginatorPresenter.go(
+    totalNumber,
     page,
     `/system/companies/${companyId}/billing-accounts`,
     billingAccounts.length,
@@ -39,7 +39,7 @@ async function go(companyId, auth, page) {
   return {
     ...pageData,
     activeSecondaryNav: 'billing-accounts',
-    pagination: paginationData,
+    pagination,
     roles: userRoles(auth)
   }
 }

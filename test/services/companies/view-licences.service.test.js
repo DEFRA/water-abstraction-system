@@ -34,10 +34,10 @@ describe('Companies - View Licences service', () => {
     Sinon.stub(FetchCompanyService, 'go').returns(company)
     Sinon.stub(FetchLicencesService, 'go').returns({
       licences,
-      pagination: { total: 1 }
+      totalNumber: 1
     })
 
-    page = '1'
+    page = 1
   })
 
   afterEach(() => {

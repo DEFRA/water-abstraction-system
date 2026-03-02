@@ -67,12 +67,9 @@ describe('Licences - Fetch Returns service', () => {
 
   describe('when the licence has return logs', () => {
     it('returns results', async () => {
-      const result = await FetchReturnsService.go(licence.id, '1')
+      const result = await FetchReturnsService.go(licence.id)
 
       expect(result).to.equal({
-        pagination: {
-          total: 3
-        },
         //  This should be ordered first by start date, then by return reference
         //
         // - 2020-05-01 - 123
@@ -110,7 +107,8 @@ describe('Licences - Fetch Returns service', () => {
             startDate: returnLogs[0].startDate,
             status: returnLogs[0].status
           }
-        ]
+        ],
+        totalNumber: 3
       })
     })
   })

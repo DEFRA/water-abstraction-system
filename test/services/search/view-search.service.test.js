@@ -36,7 +36,7 @@ describe('Search - View Search service', () => {
   }
 
   beforeEach(() => {
-    page = '1'
+    page = 1
 
     Sinon.stub(FindAllSearchMatchesService, 'go').resolves({
       results: [

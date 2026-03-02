@@ -24,7 +24,7 @@ describe('Fetch Bill Runs service', () => {
 
   beforeEach(() => {
     filters = _noFiltersApplied()
-    page = '1'
+    page = 1
 
     // Set the default page size to 3 so we don't have to create loads of bill runs to test the service
     Sinon.replace(DatabaseConfig, 'defaultPageSize', 3)
@@ -75,7 +75,7 @@ describe('Fetch Bill Runs service', () => {
 
     describe('for the next page selected', () => {
       beforeEach(() => {
-        page = '2'
+        page = 2
       })
 
       it('returns a result with the matching "results" and the correct "total"', async () => {
@@ -88,7 +88,7 @@ describe('Fetch Bill Runs service', () => {
 
     describe('but not for the page selected', () => {
       beforeEach(() => {
-        page = '500'
+        page = 500
       })
 
       it('returns a result with no "results" but the correct "total"', async () => {

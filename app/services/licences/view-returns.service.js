@@ -26,12 +26,12 @@ async function go(licenceId, auth, page) {
 
   const hasRequirements = await DetermineLicenceHasReturnVersionsService.go(licenceId)
 
-  const { returns, pagination } = await FetchReturnsService.go(licenceId, page)
+  const { returns, totalNumber } = await FetchReturnsService.go(licenceId, page)
 
   const pageData = ReturnsPresenter.go(returns, hasRequirements, licence)
 
-  const paginationData = PaginatorPresenter.go(
-    pagination.total,
+  const pagination = PaginatorPresenter.go(
+    totalNumber,
     page,
     `/system/licences/${licenceId}/returns`,
     returns.length,
@@ -41,7 +41,7 @@ async function go(licenceId, auth, page) {
   return {
     ...pageData,
     activeSecondaryNav: 'returns',
-    pagination: paginationData,
+    pagination,
     roles: userRoles(auth)
   }
 }

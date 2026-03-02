@@ -100,9 +100,7 @@ describe('Companies - Fetch Licences service', () => {
             startDate: new Date('2022-01-01')
           }
         ],
-        pagination: {
-          total: 1
-        }
+        totalNumber: 1
       })
     })
   })

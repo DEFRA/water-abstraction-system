@@ -38,10 +38,10 @@ describe('Companies - View Billing Accounts service', () => {
 
     Sinon.stub(FetchBillingAccountsService, 'go').returns({
       billingAccounts,
-      pagination: { total: 1 }
+      totalNumber: 1
     })
 
-    page = '1'
+    page = 1
   })
 
   afterEach(() => {

@@ -132,7 +132,7 @@ describe('Search - Fetch Search Results service', () => {
 
   beforeEach(() => {
     resultTypes = ['billingAccount', 'licenceHolder', 'licence', 'monitoringStation', 'returnLog', 'user']
-    page = '1'
+    page = 1
   })
 
   describe('when called', () => {
@@ -812,7 +812,7 @@ describe('Search - Fetch Search Results service', () => {
     describe('when searching for an exact match', () => {
       beforeEach(() => {
         query = 'TESTSEARCH6601100010'
-        page = '1'
+        page = 1
       })
 
       it('returns the correct return log', async () => {
