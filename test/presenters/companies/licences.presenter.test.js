@@ -9,10 +9,10 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+const { today } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const LicencesPresenter = require('../../../app/presenters/companies/licences.presenter.js')
-const { today } = require('../../../app/lib/general.lib.js')
 
 describe('Companies - Licences presenter', () => {
   let company
