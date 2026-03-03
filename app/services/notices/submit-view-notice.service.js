@@ -20,12 +20,12 @@ const { clearFilters } = require('../../lib/submit-page.lib.js')
  * @param {string} noticeId - The UUID of the selected notice
  * @param {object} payload - The `request.payload` containing the filter data.
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
- * @param {number|string} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} If no errors an empty object signifying the request can be redirected to the view page
  * else the data needed to re-render the page
  */
-async function go(noticeId, payload, yar, page = 1) {
+async function go(noticeId, payload, yar, page) {
   const filterKey = `noticeFilter-${noticeId}`
 
   const filterCleared = clearFilters(payload, yar, filterKey)
@@ -44,19 +44,18 @@ async function go(noticeId, payload, yar, page = 1) {
 
   // When the page comes from the request via the controller then it will be a string. For consistency we want it as a
   // number
-  const selectedPageNumber = Number(page)
 
   const savedFilters = _savedFilters(yar, filterKey)
 
-  return _replayView(noticeId, payload, error, selectedPageNumber, savedFilters)
+  return _replayView(noticeId, payload, error, page, savedFilters)
 }
 
-async function _replayView(noticeId, payload, error, selectedPageNumber, savedFilters) {
-  const { notice, notifications, totalNumber } = await FetchNoticeService.go(noticeId, selectedPageNumber, savedFilters)
+async function _replayView(noticeId, payload, error, page, savedFilters) {
+  const { notice, notifications, totalNumber } = await FetchNoticeService.go(noticeId, page, savedFilters)
 
   const pagination = PaginatorPresenter.go(
     totalNumber,
-    selectedPageNumber,
+    page,
     `/system/notices/${notice.id}`,
     notifications.length,
     'notifications'

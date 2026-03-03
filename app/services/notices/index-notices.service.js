@@ -15,24 +15,16 @@ const { processSavedFilters } = require('../../lib/submit-page.lib.js')
  *
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {number|string} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} The view data for the notices page
  */
-async function go(yar, auth, page = 1) {
+async function go(yar, auth, page) {
   const filters = _filters(yar)
 
-  const selectedPageNumber = Number(page)
+  const { results: notices, total: totalNumber } = await FetchNoticesService.go(filters, page)
 
-  const { results: notices, total: totalNumber } = await FetchNoticesService.go(filters, selectedPageNumber)
-
-  const pagination = PaginatorPresenter.go(
-    totalNumber,
-    selectedPageNumber,
-    `/system/notices`,
-    notices.length,
-    'notices'
-  )
+  const pagination = PaginatorPresenter.go(totalNumber, page, `/system/notices`, notices.length, 'notices')
 
   const pageData = NoticesIndexPresenter.go(notices, auth)
 

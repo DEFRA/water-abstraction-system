@@ -78,7 +78,7 @@ describe('Billing Accounts - Fetch View Billing Account service', () => {
     })
 
     it('returns the matching billingAccount with related address, company, and bills with a bill run status of "sent"', async () => {
-      const result = await FetchViewBillingAccountService.go(billingAccountId, 1)
+      const result = await FetchViewBillingAccountService.go(billingAccountId)
 
       expect(result).to.equal({
         billingAccount: {
@@ -145,7 +145,7 @@ describe('Billing Accounts - Fetch View Billing Account service', () => {
             }
           }
         ],
-        pagination: { total: 1 }
+        totalNumber: 1
       })
     })
   })

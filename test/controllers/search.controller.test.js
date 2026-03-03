@@ -69,7 +69,7 @@ describe('Search controller', () => {
             getOptions.url = '/search?page=1'
             Sinon.stub(ViewSearchService, 'go').resolves({
               pageTitle: 'Search results for "searchthis"',
-              pagination: { numberOfPages: 2, showingMessage: 'Showing all 2 matches' },
+              pagination: { currentPageNumber: 1, numberOfPages: 2, showingMessage: 'Showing all 2 matches' },
               query: 'searchthis',
               showResults: true,
               noResults: false,

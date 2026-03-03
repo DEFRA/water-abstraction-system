@@ -137,4 +137,37 @@ describe('Billing Accounts - Setup - Existing Account presenter', () => {
       })
     })
   })
+
+  describe('"backLink" property', () => {
+    describe('when check page has not been visited', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          searchInput: 'Company'
+        }
+      })
+
+      it('returns the correct back link', () => {
+        const result = ExistingAccountPresenter.go(session, companies)
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account`)
+      })
+    })
+
+    describe('when check page has been visited', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          checkPageVisited: true,
+          searchInput: 'Company'
+        }
+      })
+
+      it('returns the correct back link', () => {
+        const result = ExistingAccountPresenter.go(session, [])
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+      })
+    })
+  })
 })

@@ -22,7 +22,7 @@ describe('Search - Search presenter', () => {
     query = 'searchthis'
     resultType = null
 
-    page = 1
+    page = '1'
 
     allSearchMatches = {
       results: [
@@ -92,8 +92,8 @@ describe('Search - Search presenter', () => {
             id: 'user-1',
             lastLogin: new Date('2001-01-01T00:00:00Z'),
             username: 'TESTSEARCH01@example.gov.uk',
-            $role: () => {
-              return 'None'
+            $permissions: () => {
+              return { label: 'None' }
             }
           },
           type: 'user'
@@ -164,8 +164,8 @@ describe('Search - Search presenter', () => {
             id: 'user-2',
             lastLogin: new Date('2001-01-01T00:00:00Z'),
             username: 'TESTSEARCH02@example.gov.uk',
-            $role: () => {
-              return 'None'
+            $permissions: () => {
+              return { label: 'None' }
             }
           },
           type: 'user'

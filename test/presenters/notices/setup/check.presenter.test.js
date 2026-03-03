@@ -24,7 +24,7 @@ describe('Notices - Setup - Check presenter', () => {
   let testRecipients
 
   beforeEach(() => {
-    page = 1
+    page = '1'
 
     session = {
       id: generateUUID(),

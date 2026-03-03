@@ -16,30 +16,22 @@ const { processSavedFilters } = require('../../lib/submit-page.lib.js')
  * Orchestrates fetching and presenting the data needed for the /bill-runs page
  *
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
- * @param {number|string} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} The view data for the bill runs page
  */
-async function go(yar, page = 1) {
+async function go(yar, page) {
   const filters = _filters(yar)
-
-  const selectedPageNumber = Number(page)
 
   // We expect the FetchBillRunsService to take the longest to complete. But running them together means we are only
   // waiting as long as it takes FetchBillRunsService to complete rather than their combined time
   const [busyResult, { results: billRuns, total: totalNumber }, regions] = await Promise.all([
     CheckBusyBillRunsService.go(),
-    FetchBillRunsService.go(filters, selectedPageNumber),
+    FetchBillRunsService.go(filters, page),
     FetchRegionsService.go()
   ])
 
-  const pagination = PaginatorPresenter.go(
-    totalNumber,
-    selectedPageNumber,
-    '/system/bill-runs',
-    billRuns.length,
-    'bill runs'
-  )
+  const pagination = PaginatorPresenter.go(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
 
   const pageData = IndexBillRunsPresenter.go(billRuns, busyResult, filters, regions)
 

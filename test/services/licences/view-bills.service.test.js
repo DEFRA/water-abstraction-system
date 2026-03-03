@@ -45,7 +45,7 @@ describe('Licences - View Bills service', () => {
 
     Sinon.stub(FetchBillsService, 'go').returns({
       bills: [],
-      pagination: { total: 1 }
+      totalNumber: 1
     })
   })
 
@@ -67,7 +67,7 @@ describe('Licences - View Bills service', () => {
           bills: [],
           pageTitle: 'Bills',
           pageTitleCaption: `Licence ${licenceRef}`,
-          pagination: { numberOfPages: 1, showingMessage: 'Showing all 1 bills' },
+          pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 1 bills' },
           roles: ['billing']
         })
       })

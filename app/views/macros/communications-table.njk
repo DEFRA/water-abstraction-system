@@ -2,7 +2,7 @@
 
 {% from "macros/notification-status-tag.njk" import statusTag %}
 
-{% macro communicationsTable(notifications) %}
+{% macro communicationsTable(notifications, pagination) %}
   {% set tableRows = [] %}
   {% for notification in notifications %}
     {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
