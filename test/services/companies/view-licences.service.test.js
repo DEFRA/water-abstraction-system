@@ -65,7 +65,7 @@ describe('Companies - View Licences service', () => {
               href: `/system/licence-versions/${licences[0].licenceVersions[0].id}`
             },
             startDate: '1 January 2022',
-            status: 'current'
+            status: null
           }
         ],
         pageTitle: 'Licences',

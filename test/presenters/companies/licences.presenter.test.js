@@ -12,6 +12,7 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
 // Thing under test
 const LicencesPresenter = require('../../../app/presenters/companies/licences.presenter.js')
+const { today } = require('../../../app/lib/general.lib.js')
 
 describe('Companies - Licences presenter', () => {
   let company
@@ -42,7 +43,7 @@ describe('Companies - Licences presenter', () => {
               href: `/system/licence-versions/${licences[0].licenceVersions[0].id}`
             },
             startDate: '1 January 2022',
-            status: 'current'
+            status: null
           }
         ],
         pageTitle: 'Licences',
@@ -56,19 +57,53 @@ describe('Companies - Licences presenter', () => {
           it('returns the "status" as "current"', () => {
             const result = LicencesPresenter.go(company, licences)
 
-            expect(result.licenceVersions[0].status).to.equal('current')
+            expect(result.licenceVersions[0].status).to.equal(null)
           })
         })
 
         describe('has an "end date"', () => {
-          beforeEach(() => {
-            licences[0].revokedDate = new Date('2022-01-01')
+          describe('and the date is today', () => {
+            beforeEach(() => {
+              licences[0].revokedDate = today()
+            })
+
+            it('returns the "status" based on the reason', () => {
+              const result = LicencesPresenter.go(company, licences)
+
+              expect(result.licenceVersions[0].status).to.equal('revoked')
+            })
           })
 
-          it('returns the "status" based on the reason', () => {
-            const result = LicencesPresenter.go(company, licences)
+          describe('and the date is after today', () => {
+            beforeEach(() => {
+              const date = today()
 
-            expect(result.licenceVersions[0].status).to.equal('revoked')
+              date.setDate(date.getDate() + 30)
+
+              licences[0].revokedDate = date
+            })
+
+            it('returns the "status" as null', () => {
+              const result = LicencesPresenter.go(company, licences)
+
+              expect(result.licenceVersions[0].status).to.be.null()
+            })
+          })
+
+          describe('and the date is before today', () => {
+            beforeEach(() => {
+              const date = today()
+
+              date.setDate(date.getDate() - 30)
+
+              licences[0].revokedDate = date
+            })
+
+            it('returns the "status" based on the reason', () => {
+              const result = LicencesPresenter.go(company, licences)
+
+              expect(result.licenceVersions[0].status).to.equal('revoked')
+            })
           })
         })
       })
