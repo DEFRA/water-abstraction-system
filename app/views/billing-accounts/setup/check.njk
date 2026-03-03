@@ -37,7 +37,26 @@
             }
           ]
         }
-      } if existingAccount
+      } if existingAccount,
+      {
+        classes: "govuk-summary-list__row--no-border" if searchIndividualInput,
+        key: { text: "Account type" },
+        value: { text: accountType | capitalize },
+        actions: {
+          items: [
+            {
+              href: links.accountType,
+              text: "Change",
+              visuallyHiddenText: "account type selected"
+            }
+          ]
+        }
+      } if accountType,
+      {
+        classes: "govuk-summary-list__row--no-actions",
+        key: { text: "Individual search term" },
+        value: { text: searchIndividualInput }
+      } if searchIndividualInput
     ]
   }) }}
 

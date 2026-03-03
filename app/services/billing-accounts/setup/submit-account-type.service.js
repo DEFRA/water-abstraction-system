@@ -41,6 +41,10 @@ async function go(sessionId, payload) {
 }
 
 function _redirectUrl(session) {
+  if (session.checkPageVisited) {
+    return `/system/billing-accounts/setup/${session.id}/check`
+  }
+
   if (session.accountType === 'individual') {
     return `/system/billing-accounts/setup/${session.id}/existing-address`
   }
@@ -49,9 +53,17 @@ function _redirectUrl(session) {
 }
 
 async function _save(session, payload) {
-  if (session.accountType && session.accountType !== payload.accountType) {
+  const accountTypeExists = !!session.accountType
+  const sameAccountType = session.accountType === payload.accountType
+  const sameSearchInput = (session.searchIndividualInput ?? null) === (payload.searchIndividualInput ?? null)
+
+  session.accountType = payload.accountType
+  session.searchIndividualInput = payload.searchIndividualInput ?? null
+
+  if (accountTypeExists && (!sameAccountType || !sameSearchInput)) {
     session.addressJourney = null
     session.addressSelected = null
+    session.checkPageVisited = false
     session.fao = null
     session.contactSelected = null
     session.contactName = null
@@ -59,13 +71,11 @@ async function _save(session, payload) {
     if (payload.accountType === 'individual') {
       session.companiesHouseId = null
       session.companySearch = null
+      session.searchIndividualInput = payload.searchIndividualInput
     } else {
       session.searchIndividualInput = null
     }
   }
-
-  session.accountType = payload.accountType
-  session.searchIndividualInput = payload.searchIndividualInput ?? null
 
   return session.$update()
 }

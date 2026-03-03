@@ -18,10 +18,12 @@ function go(session, companyContacts) {
 
   return {
     accountSelected: session.accountSelected === 'customer' ? billingAccount.company.name : 'Another billing account',
+    accountType: session.accountType ?? '',
     existingAccount: _existingAccount(session, companyContacts),
     links: _links(session),
     pageTitle: 'Check billing account details',
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
+    searchIndividualInput: session.searchIndividualInput ?? '',
     searchInput: session.searchInput ?? ''
   }
 }
@@ -41,6 +43,7 @@ function _existingAccount(session, companyContacts) {
 function _links(session) {
   return {
     accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
+    accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
     existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
   }
 }
