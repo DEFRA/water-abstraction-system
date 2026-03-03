@@ -242,6 +242,73 @@ describe('Users - Fetch Users service', () => {
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
         })
+
+        describe('as well as "Type"', () => {
+          describe('set as "External"', () => {
+            beforeEach(() => {
+              filters.type = 'water_vml'
+            })
+
+            it('returns the matching users', async () => {
+              const { results } = await FetchUsersService.go(filters, pageNumber)
+
+              // Assert the results _only _contain our created external user
+              expect(results).contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+            })
+
+            it('excludes those that do not match', async () => {
+              const { results } = await FetchUsersService.go(filters, pageNumber)
+
+              // Assert the results do not contain our seeded users
+              const skipAssertions = [externalBasicAccessUser.username]
+
+              for (let i = 0; i < seededUsersLength; i++) {
+                const userData = UsersFixture.user(i)
+
+                if (!skipAssertions.includes(userData.username)) {
+                  expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+                }
+              }
+
+              // Assert the results do not contain the other two we created
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+            })
+          })
+
+          describe('set as "Internal"', () => {
+            beforeEach(() => {
+              filters.type = 'water_admin'
+            })
+
+            it('returns the matching users', async () => {
+              const { results } = await FetchUsersService.go(filters, pageNumber)
+
+              // Assert the results _only _contain our seeded external user
+              expect(results).contains(UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess()))
+            })
+
+            it('excludes those that do not match', async () => {
+              const { results } = await FetchUsersService.go(filters, pageNumber)
+
+              // Assert the results do not contain our other seeded users
+              const skipAssertions = ['basic.access@wrls.gov.uk']
+
+              for (let i = 0; i < seededUsersLength; i++) {
+                const userData = UsersFixture.user(i)
+
+                if (!skipAssertions.includes(userData.username)) {
+                  expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
+                }
+              }
+
+              // Assert the results do not contain the created external users
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+            })
+          })
+        })
       })
 
       // An internal user has "[Group]" permissions if they are linked to that group and have no `ar_*` user roles. We
