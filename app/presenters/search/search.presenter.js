@@ -234,7 +234,7 @@ function _user(user) {
 
   return {
     col2Title: 'Role',
-    col2Value: model.$role(),
+    col2Value: model.$permissions().label,
     col3Title: 'Last signed in',
     col3Value: formatLongDate(lastLogin),
     exact,
