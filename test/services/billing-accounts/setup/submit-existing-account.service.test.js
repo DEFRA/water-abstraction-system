@@ -100,6 +100,40 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
       })
     })
 
+    describe('and the user has returned to the page from the check page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          checkPageVisited: true,
+          existingAccount: payload.existingAccount
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitExistingAccountService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            checkPageVisited: true,
+            existingAccount: payload.existingAccount
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitExistingAccountService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+        })
+      })
+    })
+
     describe('and the user had previously completed the "new" journey', () => {
       beforeEach(async () => {
         sessionData = _newAccountSessionData(session)
@@ -259,6 +293,7 @@ function _commonExpectedValues() {
     accountSelected: 'another',
     addressSelected: null,
     addressJourney: null,
+    checkPageVisited: false,
     contactName: null,
     contactSelected: null,
     fao: null,

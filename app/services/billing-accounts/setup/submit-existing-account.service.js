@@ -29,7 +29,7 @@ async function go(sessionId, payload) {
     await _save(session, payload)
 
     return {
-      redirectUrl: _redirectUrl(session)
+      redirectUrl: _redirectUrl(session, payload)
     }
   }
 
@@ -43,7 +43,11 @@ async function go(sessionId, payload) {
   }
 }
 
-function _redirectUrl(session) {
+function _redirectUrl(session, payload) {
+  if (session.checkPageVisited && session.existingAccount === payload.existingAccount) {
+    return `/system/billing-accounts/setup/${session.id}/check`
+  }
+
   if (session.existingAccount === 'new') {
     return `/system/billing-accounts/setup/${session.id}/account-type`
   }
@@ -55,6 +59,7 @@ async function _save(session, payload) {
   if (session.existingAccount && session.existingAccount !== payload.existingAccount) {
     session.addressJourney = null
     session.addressSelected = null
+    session.checkPageVisited = false
     session.fao = null
     session.contactSelected = null
     session.contactName = null
