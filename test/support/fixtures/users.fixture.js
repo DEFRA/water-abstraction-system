@@ -180,6 +180,7 @@ function transformToFetchUsersResult(user) {
     groups = [],
     lastLogin,
     licenceEntity = null,
+    licenceEntityId = null,
     password,
     roles = [],
     userId,
@@ -197,7 +198,8 @@ function transformToFetchUsersResult(user) {
       })
     }),
     lastLogin,
-    licenceEntity,
+    licenceEntity: _transformLicenceEntity(licenceEntity),
+    licenceEntityId,
     roles: roles.map((role) => {
       return RoleModel.fromJson({
         id: role.id,
@@ -309,6 +311,24 @@ function _roles(userId) {
   }
 
   return roles
+}
+
+function _transformLicenceEntity(licenceEntity) {
+  if (!licenceEntity) {
+    return null
+  }
+
+  const { licenceEntityRoles } = licenceEntity
+
+  return LicenceEntityModel.fromJson({
+    id: licenceEntity.id,
+    licenceEntityRoles: licenceEntityRoles.map((licenceEntityRole) => {
+      return LicenceEntityRoleModel.fromJson({
+        id: licenceEntityRole.id,
+        role: licenceEntityRole.role
+      })
+    })
+  })
 }
 
 module.exports = {
