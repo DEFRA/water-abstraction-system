@@ -91,6 +91,41 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       })
     })
 
+    describe('and the user has returned to the page after visiting the check page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          accountType: 'company',
+          checkPageVisited: true,
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitAccountTypeService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            accountType: 'company',
+            checkPageVisited: true,
+            searchIndividualInput: null
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitAccountTypeService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+        })
+      })
+    })
+
     describe('and the user had previously completed the "individual" journey', () => {
       beforeEach(async () => {
         sessionData = _individualSessionData(session)
@@ -184,6 +219,42 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       })
     })
 
+    describe('and the user has returned to the page from the check page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          accountType: 'individual',
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          checkPageVisited: true,
+          searchIndividualInput: 'John Doe'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitAccountTypeService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            accountType: 'individual',
+            checkPageVisited: true,
+            searchIndividualInput: 'John Doe'
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitAccountTypeService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+        })
+      })
+    })
+
     describe('and the user had previously completed the "company" journey', () => {
       beforeEach(async () => {
         sessionData = _companySessionData(session)
@@ -203,6 +274,44 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
             companiesHouseId: null,
             companySearch: null,
             searchIndividualInput: 'John Doe'
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitAccountTypeService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
+        })
+      })
+    })
+
+    describe('and the user has returned to the page, chosen "individual" but changed the search term', () => {
+      beforeEach(async () => {
+        payload = { accountType: 'individual', searchIndividualInput: 'Jane Doe' }
+        sessionData = {
+          ..._commonSessionData(session),
+          accountType: 'individual',
+          searchIndividualInput: 'John Doe'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitAccountTypeService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            ..._commonExpectedValues(),
+            accountType: 'individual',
+            companiesHouseId: null,
+            companySearch: null,
+            searchIndividualInput: 'Jane Doe'
           },
           { skip: ['billingAccount'] }
         )
@@ -268,6 +377,7 @@ function _commonExpectedValues() {
     accountSelected: 'another',
     addressJourney: null,
     addressSelected: null,
+    checkPageVisited: false,
     contactName: null,
     contactSelected: null,
     existingAccount: 'new',

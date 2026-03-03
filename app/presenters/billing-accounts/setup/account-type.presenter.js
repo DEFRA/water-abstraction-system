@@ -5,6 +5,8 @@
  * @module AccountTypePresenter
  */
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for the `/billing-accounts/setup/{billingAccountId}/account-type` page
  *
@@ -18,7 +20,7 @@ function go(session) {
   return {
     accountType: session.accountType ?? null,
     backLink: {
-      href: `/system/billing-accounts/setup/${session.id}/existing-account`,
+      href: checkUrl(session, `/system/billing-accounts/setup/${session.id}/existing-account`),
       text: 'Back'
     },
     pageTitle: 'Select the account type',

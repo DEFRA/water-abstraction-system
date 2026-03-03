@@ -36,13 +36,16 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
       expect(result).to.equal({
         accountSelected: 'Another billing account',
+        accountType: '',
         existingAccount: '',
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
+          accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
           existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
         },
         pageTitle: 'Check billing account details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+        searchIndividualInput: '',
         searchInput: ''
       })
     })
@@ -148,6 +151,66 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         )
 
         expect(result.existingAccount).to.equal('Ferns Surfacing Limited')
+      })
+    })
+  })
+
+  describe('the "accountType" property', () => {
+    describe('when called with the "accountType" set to "company"', () => {
+      it('returns "company"', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            accountType: 'company'
+          },
+          companyAddresses
+        )
+
+        expect(result.accountType).to.equal('company')
+      })
+    })
+
+    describe('when called with the "accountType" set to "individual"', () => {
+      it('returns "individual"', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            accountType: 'individual'
+          },
+          companyAddresses
+        )
+
+        expect(result.accountType).to.equal('individual')
+      })
+    })
+  })
+
+  describe('the "searchIndividualInput" property', () => {
+    describe('when called with the "searchIndividualInput" set', () => {
+      it('returns the saved search input', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            searchIndividualInput: 'Customer name'
+          },
+          companyAddresses
+        )
+
+        expect(result.searchIndividualInput).to.equal('Customer name')
+      })
+    })
+
+    describe('when called with the "searchIndividualInput" set to null', () => {
+      it('returns an empty string', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            searchIndividualInput: null
+          },
+          companyAddresses
+        )
+
+        expect(result.searchIndividualInput).to.equal('')
       })
     })
   })
