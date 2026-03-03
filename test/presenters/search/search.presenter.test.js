@@ -275,7 +275,7 @@ describe('Search - Search presenter', () => {
           type: 'Return reference'
         },
         {
-          col2Title: 'Role',
+          col2Title: 'Permissions',
           col2Value: 'None',
           col3Title: 'Last signed in',
           col3Value: '1 January 2001',
@@ -341,7 +341,7 @@ describe('Search - Search presenter', () => {
           type: 'Return reference'
         },
         {
-          col2Title: 'Role',
+          col2Title: 'Permissions',
           col2Value: 'None',
           col3Title: 'Last signed in',
           col3Value: '1 January 2001',
