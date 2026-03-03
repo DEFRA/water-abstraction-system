@@ -198,6 +198,7 @@ describe('Users - Submit Index Users service', () => {
                   href: '/system/users?page=1'
                 }
               },
+              currentPageNumber: 2,
               numberOfPages: 3,
               showingMessage: 'Showing 1 of 70 users'
             }
@@ -248,7 +249,7 @@ describe('Users - Submit Index Users service', () => {
                 type: 'Internal'
               }
             ],
-            pagination: { numberOfPages: 1, showingMessage: 'Showing all 1 users' }
+            pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 1 users' }
           })
         })
       })

@@ -17,20 +17,20 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @param {string} companyId - the UUID of the company
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {number} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(companyId, auth, page) {
   const company = await FetchCompanyService.go(companyId)
 
-  const { licences, pagination } = await FetchLicencesService.go(companyId, page)
+  const { licences, totalNumber } = await FetchLicencesService.go(companyId, page)
 
   const pageData = LicencesPresenter.go(company, licences)
 
-  const paginationData = PaginatorPresenter.go(
-    pagination.total,
-    Number(page),
+  const pagination = PaginatorPresenter.go(
+    totalNumber,
+    page,
     `/system/companies/${companyId}/licences`,
     licences.length,
     'licences'
@@ -39,7 +39,7 @@ async function go(companyId, auth, page) {
   return {
     ...pageData,
     activeSecondaryNav: 'licences',
-    pagination: paginationData,
+    pagination,
     roles: userRoles(auth)
   }
 }

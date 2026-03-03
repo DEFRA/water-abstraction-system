@@ -20,7 +20,7 @@ const FetchNotificationsService = require('../../../app/services/company-contact
 const ViewCompanyContactService = require('../../../app/services/company-contacts/view-company-contact.service.js')
 
 describe('Company Contacts - View Company Contact Service', () => {
-  const page = 1
+  const page = '1'
 
   let auth
   let company
@@ -76,6 +76,7 @@ describe('Company Contacts - View Company Contact Service', () => {
         pageTitle: 'Contact details for Rachael Tyrell',
         pageTitleCaption: 'Tyrell Corporation',
         pagination: {
+          currentPageNumber: 1,
           numberOfPages: 0,
           showingMessage: 'Showing all 0 communications'
         },

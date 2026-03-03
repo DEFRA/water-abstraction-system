@@ -18,7 +18,7 @@ const { readFlashNotification } = require('../../lib/general.lib.js')
  *
  * @param {string} companyId - the UUID of the company
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {number} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<object>} The data formatted for the view template
@@ -26,13 +26,13 @@ const { readFlashNotification } = require('../../lib/general.lib.js')
 async function go(companyId, auth, page, yar) {
   const company = await FetchCompanyService.go(companyId)
 
-  const { companyContacts, pagination } = await FetchContactsService.go(companyId, page)
+  const { companyContacts, totalNumber } = await FetchContactsService.go(companyId, page)
 
   const pageData = ContactsPresenter.go(company, companyContacts)
 
-  const paginationData = PaginatorPresenter.go(
-    pagination.total,
-    Number(page),
+  const pagination = PaginatorPresenter.go(
+    totalNumber,
+    page,
     `/system/companies/${companyId}/contacts`,
     companyContacts.length,
     'contacts'
@@ -43,7 +43,7 @@ async function go(companyId, auth, page, yar) {
   return {
     ...pageData,
     activeSecondaryNav: 'contacts',
-    pagination: paginationData,
+    pagination,
     roles: userRoles(auth),
     notification
   }

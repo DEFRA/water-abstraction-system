@@ -53,7 +53,7 @@ describe('Search - Find All Search Matches service', () => {
 
   describe('when called', () => {
     beforeEach(() => {
-      page = 1
+      page = '1'
       query = '12345678'
       resultType = null
       userScopes = ['billing']

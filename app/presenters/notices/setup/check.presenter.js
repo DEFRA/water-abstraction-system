@@ -20,7 +20,7 @@ const NOTIFICATION_TYPES = {
  * Formats data for the `/notices/setup/check` page
  *
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
- * @param {number|string} page - The currently selected page
+ * @param {string} page - The currently selected page
  * @param {object} session - The session instance
  *
  * @returns {object} - The data formatted for the view template

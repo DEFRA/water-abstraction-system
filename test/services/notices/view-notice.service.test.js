@@ -94,7 +94,7 @@ describe('Notices - View Notice service', () => {
 
   describe('when called', () => {
     beforeEach(() => {
-      page = 1
+      page = '1'
 
       // For the purposes of this tests the filter doesn't matter
       yarStub = { get: Sinon.stub().returns(_noticeFilters()) }
@@ -151,6 +151,7 @@ describe('Notices - View Notice service', () => {
         sentDate: '21 February 2025',
         status: 'error',
         pagination: {
+          currentPageNumber: 1,
           numberOfPages: 1,
           showingMessage: 'Showing all 2 notifications'
         },
@@ -207,7 +208,7 @@ describe('Notices - View Notice service', () => {
 
   describe('when the page number is not provided', () => {
     beforeEach(() => {
-      page = null
+      page = undefined
 
       // NOTE: We up the total number to force the paginator to calculate that there is more than one page.
       fetchResults.totalNumber = 150

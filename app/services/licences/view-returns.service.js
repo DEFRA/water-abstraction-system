@@ -17,7 +17,7 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @param {string} licenceId - The UUID of the licence
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {number|string} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence summary template.
  */
@@ -26,13 +26,13 @@ async function go(licenceId, auth, page) {
 
   const hasRequirements = await DetermineLicenceHasReturnVersionsService.go(licenceId)
 
-  const { returns, pagination } = await FetchReturnsService.go(licenceId, page)
+  const { returns, totalNumber } = await FetchReturnsService.go(licenceId, page)
 
   const pageData = ReturnsPresenter.go(returns, hasRequirements, licence)
 
-  const paginationData = PaginatorPresenter.go(
-    pagination.total,
-    Number(page),
+  const pagination = PaginatorPresenter.go(
+    totalNumber,
+    page,
     `/system/licences/${licenceId}/returns`,
     returns.length,
     'returns'
@@ -41,7 +41,7 @@ async function go(licenceId, auth, page) {
   return {
     ...pageData,
     activeSecondaryNav: 'returns',
-    pagination: paginationData,
+    pagination,
     roles: userRoles(auth)
   }
 }

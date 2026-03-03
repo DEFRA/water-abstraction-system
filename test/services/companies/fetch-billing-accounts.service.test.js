@@ -72,9 +72,7 @@ describe('Companies - Fetch Billing Accounts service', () => {
           id: billingAccount.id
         }
       ],
-      pagination: {
-        total: 1
-      }
+      totalNumber: 1
     })
   })
 })

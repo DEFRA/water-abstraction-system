@@ -14,7 +14,7 @@ async function viewCompanyContact(request, h) {
     params: { id },
     auth,
     yar,
-    query: { page = 1 }
+    query: { page }
   } = request
 
   const pageData = await ViewCompanyContactService.go(id, auth, yar, page)
