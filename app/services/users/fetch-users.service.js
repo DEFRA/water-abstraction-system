@@ -26,16 +26,16 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * - **Type** - The application the user belongs to i.e. internal or external
  *
  * @param {object} filters - an object containing the different filters to apply to the query
- * @param {number} page - The current page for the pagination service
+ * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<module:UserModel[]>} an array of users that match the selected 'page in the data
  */
-async function go(filters, page) {
+async function go(filters, page = '1') {
   const query = _fetchQuery()
 
   _applyFilters(query, filters)
 
-  query.orderBy('users.username', 'asc').page(page - 1, DatabaseConfig.defaultPageSize)
+  query.orderBy('users.username', 'asc').page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 
   return query
 }
