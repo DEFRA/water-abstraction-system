@@ -7,6 +7,7 @@
 
 const { formatLicenceVersions } = require('../licence-versions.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
+const { today } = require('../../lib/general.lib.js')
 
 /**
  * Formats data for the '/companies/{id}/licences' page
@@ -59,7 +60,7 @@ function _licenceVersions(licences) {
           href: `/system/licence-versions/${id}`
         },
         startDate: formatLongDate(startDate),
-        status: licenceEndDetails?.reason ?? 'current'
+        status: _status(licenceEndDetails)
       }
 
       versions.push(versionDetails)
@@ -67,6 +68,14 @@ function _licenceVersions(licences) {
   }
 
   return versions
+}
+
+function _status(licenceEndDetails) {
+  if (licenceEndDetails && licenceEndDetails.date <= today()) {
+    return licenceEndDetails.reason
+  }
+
+  return null
 }
 
 module.exports = {
