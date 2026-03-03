@@ -22,8 +22,7 @@ const FetchUsersService = require('../../../app/services/users/fetch-users.servi
 // unlike other fetch tests we don't create any test records and assert they are in our results as we already have
 // sufficient data to work with.
 describe('Users - Fetch Users service', () => {
-  // We refer to this in all our tests. Pulling it in here means we only do it once
-  const userSeedData = UserHelper.data
+  const seededUsersLength = UserHelper.data.length
 
   let filters
   let pageNumber
@@ -52,11 +51,13 @@ describe('Users - Fetch Users service', () => {
 
       // Assert the total is equal to or greater than our seeded count (other tests may create records) so we don't
       // assert exactly
-      expect(total).to.be.at.least(userSeedData.length)
+      expect(total).to.be.at.least(seededUsersLength)
 
       // Assert the results contain all our seeded users
-      for (let i = 0; i < userSeedData.length; i++) {
-        expect(results).contains(_expectedResult(i))
+      for (let i = 0; i < seededUsersLength; i++) {
+        const userData = UsersFixture.user(i)
+
+        expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
       }
     })
   })
@@ -76,9 +77,11 @@ describe('Users - Fetch Users service', () => {
         const { results } = await FetchUsersService.go(filters, pageNumber)
 
         // Assert the results contain only users with 'lee' in their username
-        for (let i = 0; i < userSeedData.length; i++) {
-          if (userSeedData[i].username.toUpperCase().includes(filters.email)) {
-            expect(results).contains(_expectedResult(i))
+        for (let i = 0; i < seededUsersLength; i++) {
+          const userData = UsersFixture.user(i)
+
+          if (userData.username.toUpperCase().includes(filters.email)) {
+            expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
           }
         }
       })
@@ -87,9 +90,13 @@ describe('Users - Fetch Users service', () => {
         const { results } = await FetchUsersService.go(filters, pageNumber)
 
         // Assert the results do not contain any users with 'lee' on their username
-        for (let i = 0; i < userSeedData.length; i++) {
-          if (!userSeedData[i].username.toUpperCase().includes(filters.email)) {
-            expect(results).not.contains(_expectedResult(i))
+        const skipAssertions = ['jon.lee@example.co.uk']
+
+        for (let i = 0; i < seededUsersLength; i++) {
+          const userData = UsersFixture.user(i)
+
+          if (!skipAssertions.includes(userData.username)) {
+            expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
           }
         }
       })
@@ -116,9 +123,13 @@ describe('Users - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results do not contain our other seeded users
-          for (let i = 0; i < userSeedData.length; i++) {
-            if (userSeedData[i].username !== 'basic.access@wrls.gov.uk') {
-              expect(results).not.contains(_expectedResult(i))
+          const skipAssertions = ['basic.access@wrls.gov.uk']
+
+          for (let i = 0; i < seededUsersLength; i++) {
+            const userData = UsersFixture.user(i)
+
+            if (!skipAssertions.includes(userData.username)) {
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -142,9 +153,13 @@ describe('Users - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results do not contain our other seeded users
-          for (let i = 0; i < userSeedData.length; i++) {
-            if (userSeedData[i].username !== 'billing.data@wrls.gov.uk') {
-              expect(results).not.contains(_expectedResult(i))
+          const skipAssertions = ['billing.data@wrls.gov.uk']
+
+          for (let i = 0; i < seededUsersLength; i++) {
+            const userData = UsersFixture.user(i)
+
+            if (!skipAssertions.includes(userData.username)) {
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -168,9 +183,13 @@ describe('Users - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results do not contain our other seeded users
-          for (let i = 0; i < userSeedData.length; i++) {
-            if (userSeedData[i].username !== 'national.permitting.service@wrls.gov.uk') {
-              expect(results).not.contains(_expectedResult(i))
+          const skipAssertions = ['national.permitting.service@wrls.gov.uk']
+
+          for (let i = 0; i < seededUsersLength; i++) {
+            const userData = UsersFixture.user(i)
+
+            if (!skipAssertions.includes(userData.username)) {
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -194,9 +213,13 @@ describe('Users - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results do not contain our other seeded users
-          for (let i = 0; i < userSeedData.length; i++) {
-            if (userSeedData[i].username !== 'digitise.approver@wrls.gov.uk') {
-              expect(results).not.contains(_expectedResult(i))
+          const skipAssertions = ['digitise.approver@wrls.gov.uk']
+
+          for (let i = 0; i < seededUsersLength; i++) {
+            const userData = UsersFixture.user(i)
+
+            if (!skipAssertions.includes(userData.username)) {
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -220,9 +243,13 @@ describe('Users - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results do not contain our other seeded users
-          for (let i = 0; i < userSeedData.length; i++) {
-            if (userSeedData[i].username !== 'digitise.editor@wrls.gov.uk') {
-              expect(results).not.contains(_expectedResult(i))
+          const skipAssertions = ['digitise.editor@wrls.gov.uk']
+
+          for (let i = 0; i < seededUsersLength; i++) {
+            const userData = UsersFixture.user(i)
+
+            if (!skipAssertions.includes(userData.username)) {
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -241,11 +268,11 @@ describe('Users - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results contain our seeded users where enabled is true and lastLogin is null
-          for (let i = 0; i < userSeedData.length; i++) {
-            const userData = userSeedData[i]
+          for (let i = 0; i < seededUsersLength.length; i++) {
+            const userData = UsersFixture.user(i)
 
             if (userData.enabled && !userData.lastLogin) {
-              expect(results).contains(_expectedResult(i))
+              expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -255,11 +282,11 @@ describe('Users - Fetch Users service', () => {
 
           // Assert the results do not contain our seeded users where enabled is false, or enabled is true but lastLogin
           // is NOT null
-          for (let i = 0; i < userSeedData.length; i++) {
-            const userData = userSeedData[i]
+          for (let i = 0; i < seededUsersLength.length; i++) {
+            const userData = UsersFixture.user(i)
 
             if (!userData.enabled || userData.lastLogin) {
-              expect(results).not.contains(_expectedResult(i))
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -274,9 +301,11 @@ describe('Users - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results contain our seeded users where enabled is false
-          for (let i = 0; i < userSeedData.length; i++) {
-            if (!userSeedData[i].enabled) {
-              expect(results).contains(_expectedResult(i))
+          for (let i = 0; i < seededUsersLength; i++) {
+            const userData = UsersFixture.user(i)
+
+            if (!userData.enabled) {
+              expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -285,9 +314,11 @@ describe('Users - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results do not contain our seeded users where enabled is true
-          for (let i = 0; i < userSeedData.length; i++) {
-            if (userSeedData[i].enabled) {
-              expect(results).not.contains(_expectedResult(i))
+          for (let i = 0; i < seededUsersLength; i++) {
+            const userData = UsersFixture.user(i)
+
+            if (userData.enabled) {
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -302,11 +333,11 @@ describe('Users - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results contain our seeded users where enabled is true and lastLogin is NOT null
-          for (let i = 0; i < userSeedData.length; i++) {
-            const userData = userSeedData[i]
+          for (let i = 0; i < seededUsersLength; i++) {
+            const userData = UsersFixture.user(i)
 
             if (userData.enabled && userData.lastLogin) {
-              expect(results).contains(_expectedResult(i))
+              expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -316,11 +347,11 @@ describe('Users - Fetch Users service', () => {
 
           // Assert the results do not contain our seeded users where enabled is false, or enabled is true but lastLogin
           // is null
-          for (let i = 0; i < userSeedData.length; i++) {
-            const userData = userSeedData[i]
+          for (let i = 0; i < seededUsersLength; i++) {
+            const userData = UsersFixture.user(i)
 
             if (!userData.enabled || !userData.lastLogin) {
-              expect(results).not.contains(_expectedResult(i))
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -335,11 +366,11 @@ describe('Users - Fetch Users service', () => {
           const { results } = await FetchUsersService.go(filters, pageNumber)
 
           // Assert the results contain our seeded users where enabled is true and password is 'VOID'
-          for (let i = 0; i < userSeedData.length; i++) {
-            const userData = userSeedData[i]
+          for (let i = 0; i < seededUsersLength; i++) {
+            const userData = UsersFixture.user(i)
 
             if (userData.enabled && userData.password === 'VOID') {
-              expect(results).contains(_expectedResult(i))
+              expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -349,11 +380,11 @@ describe('Users - Fetch Users service', () => {
 
           // Assert the results do not contain our seeded users where enabled is false, or enabled is true but password
           // is not 'VOID'
-          for (let i = 0; i < userSeedData.length; i++) {
-            const userData = userSeedData[i]
+          for (let i = 0; i < seededUsersLength; i++) {
+            const userData = UsersFixture.user(i)
 
             if (!userData.enabled || userData.password !== 'VOID') {
-              expect(results).not.contains(_expectedResult(i))
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
         })
@@ -369,9 +400,11 @@ describe('Users - Fetch Users service', () => {
         const { results } = await FetchUsersService.go(filters, pageNumber)
 
         // Assert the results contain our seeded external users
-        for (let i = 0; i < userSeedData.length; i++) {
-          if (userSeedData[i].application === 'water_vml') {
-            expect(results).contains(_expectedResult(i))
+        for (let i = 0; i < seededUsersLength; i++) {
+          const userData = UsersFixture.user(i)
+
+          if (userData.application === 'water_vml') {
+            expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
           }
         }
       })
@@ -380,9 +413,11 @@ describe('Users - Fetch Users service', () => {
         const { results } = await FetchUsersService.go(filters, pageNumber)
 
         // Assert the results do not contain our seeded internal users
-        for (let i = 0; i < userSeedData.length; i++) {
-          if (userSeedData[i].application !== 'water_vml') {
-            expect(results).not.contains(_expectedResult(i))
+        for (let i = 0; i < seededUsersLength; i++) {
+          const userData = UsersFixture.user(i)
+
+          if (userData.application !== 'water_vml') {
+            expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
           }
         }
       })
@@ -404,10 +439,6 @@ describe('Users - Fetch Users service', () => {
     })
   })
 })
-
-function _expectedResult(seedIndex) {
-  return UsersFixture.transformToFetchUsersResult(UsersFixture.user(seedIndex))
-}
 
 function _filters() {
   return {
