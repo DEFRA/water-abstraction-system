@@ -520,78 +520,91 @@ const userPermissions = Object.freeze({
   admin: {
     application: 'water_vml',
     groups: [],
+    key: 'admin',
     label: 'Admin',
     roles: ['admin']
   },
   basic: {
     application: 'both',
     groups: [],
+    key: 'basic',
     label: 'Basic access',
     roles: []
   },
   billing_and_data: {
     application: 'water_admin',
     groups: ['billing_and_data'],
+    key: 'billing_and_data',
     label: 'Billing and Data',
     roles: []
   },
   environment_officer: {
     application: 'water_admin',
     groups: ['environment_officer'],
+    key: 'environment_officer',
     label: 'Environment Officer',
     roles: []
   },
   none: {
     application: 'water_vml',
     groups: [],
+    key: 'none',
     label: 'None',
     roles: []
   },
   nps: {
     application: 'water_admin',
     groups: ['nps'],
+    key: 'nps',
     label: 'National Permitting Service',
     roles: []
   },
   nps_ar_approver: {
     application: 'water_admin',
     groups: ['nps'],
+    key: 'nps_ar_approver',
     label: 'National Permitting Service and Digitise! approver',
     roles: ['ar_approver']
   },
   nps_ar_user: {
     application: 'water_admin',
     groups: ['nps'],
+    key: 'nps_ar_user',
     label: 'National Permitting Service and Digitise! editor',
     roles: ['ar_user']
   },
   primary_user: {
     application: 'water_vml',
     groups: [],
+    key: 'primary_user',
     label: 'Primary user',
     roles: ['primary_user']
   },
   psc: {
     application: 'water_admin',
     groups: ['psc'],
+    key: 'psc',
     label: 'Permitting and Support Centre',
     roles: []
   },
   returns_user: {
     application: 'water_vml',
     groups: [],
+    key: 'returns_user',
     label: 'Returns user',
     roles: ['user_returns']
   },
   super: {
     application: 'water_admin',
     groups: ['super'],
+    key: 'super',
     label: 'Super user',
     roles: []
   },
   wirs: {
     application: 'water_admin',
     groups: ['wirs'],
+    key: 'wirs',
     label: 'Waste and Industry Regulatory Service',
     roles: []
   }
