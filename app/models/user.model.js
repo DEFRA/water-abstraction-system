@@ -234,26 +234,11 @@ class UserModel extends BaseModel {
    * For external users it returns NULL
    */
   $permissions() {
-    if (!this.$internal()) {
-      return null
+    if (this.$internal()) {
+      return this._internalPermissions()
     }
 
-    if (!this.groups || !this.roles) {
-      return null
-    }
-
-    const group = this.groups[0]?.group || 'basic'
-    const digitiseRoles = this.roles.filter((role) => {
-      return role.role.startsWith('ar_')
-    })
-
-    if (digitiseRoles.length === 0) {
-      return userPermissions[group]
-    }
-
-    const digitisePermission = `${group}_${digitiseRoles[0].role}`
-
-    return userPermissions[digitisePermission]
+    return null
   }
 
   /**
@@ -366,6 +351,25 @@ class UserModel extends BaseModel {
     }
 
     return 'enabled'
+  }
+
+  _internalPermissions() {
+    if (!this.groups || !this.roles) {
+      return null
+    }
+
+    const group = this.groups[0]?.group || 'basic'
+    const digitiseRoles = this.roles.filter((role) => {
+      return role.role.startsWith('ar_')
+    })
+
+    if (digitiseRoles.length === 0) {
+      return userPermissions[group]
+    }
+
+    const digitisePermission = `${group}_${digitiseRoles[0].role}`
+
+    return userPermissions[digitisePermission]
   }
 }
 
