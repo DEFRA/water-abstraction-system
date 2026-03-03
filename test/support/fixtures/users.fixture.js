@@ -2,12 +2,15 @@
 
 const GroupHelper = require('../helpers/group.helper.js')
 const GroupModel = require('../../../app/models/group.model.js')
+const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
+const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.model.js')
 const RoleHelper = require('../helpers/role.helper.js')
 const RoleModel = require('../../../app/models/role.model.js')
 const UserHelper = require('../helpers/user.helper.js')
 const UserModel = require('../../../app/models/user.model.js')
 const UserGroupHelper = require('../helpers/user-group.helper.js')
 const UserRoleHelper = require('../helpers/user-role.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
  * Populates a `UserModel` instance as the 'admin-internal@wrls.gov.uk' user for testing purposes
@@ -66,19 +69,37 @@ function environmentOfficer() {
 /**
  * Populates a `UserModel` instance as the 'external@example.co.uk' user for testing purposes
  *
+ * @param {string|null} [role=null] - If set, the fixture will generate a `LicenceEntity` with a `LicenceEntityRole`
+ * record for the specified role and assign it to the returned user. If not set, no `LicenceEntity` will be generated
+ *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function external() {
-  return user(7)
+function external(role = null) {
+  const userData = user(7)
+
+  if (role) {
+    userData.licenceEntity = _licenceEntityAndRole(userData.username, role)
+  }
+
+  return userData
 }
 
 /**
  * Populates a `UserModel` instance as the 'jon.lee@example.co.uk' user for testing purposes
  *
+ * @param {string|null} [role=null] - If set, the fixture will generate a `LicenceEntity` with a `LicenceEntityRole`
+ * record for the specified role and assign it to the returned user. If not set, no `LicenceEntity` will be generated
+ *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function jonLee() {
-  return user(8)
+function jonLee(role = null) {
+  const userData = user(8)
+
+  if (role) {
+    userData.licenceEntity = _licenceEntityAndRole(userData.username, role)
+  }
+
+  return userData
 }
 
 /**
@@ -102,10 +123,19 @@ function permittingSupportCentre() {
 /**
  * Populates a `UserModel` instance as the 'rachel.stevens@example.co.uk' user for testing purposes
  *
+ * @param {string|null} [role=null] - If set, the fixture will generate a `LicenceEntity` with a `LicenceEntityRole`
+ * record for the specified role and assign it to the returned user. If not set, no `LicenceEntity` will be generated
+ *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function rachelStevens() {
-  return user(9)
+function rachelStevens(role = null) {
+  const userData = user(9)
+
+  if (role) {
+    userData.licenceEntity = _licenceEntityAndRole(userData.username, role)
+  }
+
+  return userData
 }
 
 /**
@@ -120,10 +150,19 @@ function superUser() {
 /**
  * Populates a `UserModel` instance as the 'tina.barrett@example.co.uk' user for testing purposes
  *
+ * @param {string|null} [role=null] - If set, the fixture will generate a `LicenceEntity` with a `LicenceEntityRole`
+ * record for the specified role and assign it to the returned user. If not set, no `LicenceEntity` will be generated
+ *
  * @returns {module:UserModel} the populated `UserModel` instance
  */
-function tinaBarrett() {
-  return user(13)
+function tinaBarrett(role = null) {
+  const userData = user(13)
+
+  if (role) {
+    userData.licenceEntity = _licenceEntityAndRole(userData.username, role)
+  }
+
+  return userData
 }
 
 /**
@@ -208,6 +247,50 @@ function _groups(userId) {
 
     return GroupModel.fromJson(match)
   })
+}
+
+function _licenceEntityAndRole(username, role) {
+  const entity = LicenceEntityModel.fromJson({
+    id: generateUUID(),
+    licenceEntityRoles: [],
+    name: username,
+    type: 'individual'
+  })
+
+  if (role === 'none') {
+    return entity
+  }
+
+  let entityRole = LicenceEntityRoleModel.fromJson({
+    id: generateUUID(),
+    licenceEntityId: entity.id,
+    role: 'user'
+  })
+  entity.licenceEntityRoles.push(entityRole)
+
+  if (role === 'user') {
+    return entity
+  }
+
+  entityRole = LicenceEntityRoleModel.fromJson({
+    id: generateUUID(),
+    licenceEntityId: entity.id,
+    role: 'user_returns'
+  })
+  entity.licenceEntityRoles.push(entityRole)
+
+  if (role === 'user_returns') {
+    return entity
+  }
+
+  entityRole = LicenceEntityRoleModel.fromJson({
+    id: generateUUID(),
+    licenceEntityId: entity.id,
+    role: 'primary_user'
+  })
+  entity.licenceEntityRoles.push(entityRole)
+
+  return entity
 }
 
 function _roles(userId) {
