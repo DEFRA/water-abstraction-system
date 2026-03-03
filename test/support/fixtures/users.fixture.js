@@ -134,13 +134,23 @@ function tinaBarrett() {
  * @returns {module:UserModel} The transformed user fixture object
  */
 function transformToFetchUsersResult(user) {
-  const { application, enabled, id, userId, groups, lastLogin, password, roles, username } = user
+  const {
+    application,
+    enabled,
+    id,
+    groups = [],
+    lastLogin,
+    licenceEntity = null,
+    password,
+    roles = [],
+    userId,
+    username
+  } = user
 
   return UserModel.fromJson({
     application,
     enabled,
     id,
-    userId,
     groups: groups.map((group) => {
       return GroupModel.fromJson({
         group: group.group,
@@ -148,13 +158,15 @@ function transformToFetchUsersResult(user) {
       })
     }),
     lastLogin,
-    statusPassword: password === 'VOID' ? 'VOID' : null,
+    licenceEntity,
     roles: roles.map((role) => {
       return RoleModel.fromJson({
         id: role.id,
         role: role.role
       })
     }),
+    statusPassword: password === 'VOID' ? 'VOID' : null,
+    userId,
     username
   })
 }

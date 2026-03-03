@@ -137,17 +137,15 @@ class UserModel extends BaseModel {
           .modifyGraph('roles', (rolesBuilder) => {
             rolesBuilder.select(['roles.id', 'roles.role'])
           })
-      },
-      // role modifier fetches all licence entity roles for the user from which their role can be determined
-      role(query) {
-        query.withGraphFetched('licenceEntity').modifyGraph('licenceEntity', (licenceEntityBuilder) => {
-          licenceEntityBuilder
-            .select(['id'])
-            .withGraphFetched('licenceEntityRoles')
-            .modifyGraph('licenceEntityRoles', (licenceEntityRolesBuilder) => {
-              licenceEntityRolesBuilder.select(['id', 'role'])
-            })
-        })
+          .withGraphFetched('licenceEntity')
+          .modifyGraph('licenceEntity', (licenceEntityBuilder) => {
+            licenceEntityBuilder
+              .select(['id'])
+              .withGraphFetched('licenceEntityRoles')
+              .modifyGraph('licenceEntityRoles', (licenceEntityRolesBuilder) => {
+                licenceEntityRolesBuilder.select(['id', 'role'])
+              })
+          })
       },
       // status modifier ensures all the properties we need to determine the user's status are selected. For the
       // purposes of determining the user's status, we only need to know if their password is 'VOID'. If its not, we
@@ -190,9 +188,14 @@ class UserModel extends BaseModel {
   }
 
   /**
-   * Returns details of the user's permissions for internal users (always null for external).
+   * Returns details of the user's permissions
    *
    * > We recommend adding the `permissions` modifier to your query if you need to determine a user's permissions
+   *
+   * This instance function uses this knowledge to determine what "permission" a user has, which is a higher level
+   * classification determined from the user's groups and roles.
+   *
+   * ## Internal users
    *
    * When you add or edit an internal user, you select from a list of permissions. They are:
    *
@@ -219,46 +222,12 @@ class UserModel extends BaseModel {
    * roles. A user with one of the Digitise permissions is assigned to the group `nps` _and_ a specific role, either
    * `ar_user` or `ar_approver`.
    *
-   * This instance function uses this knowledge to determine what "permission" a user has
+   * ## External users
    *
-   * @returns {object|null} For internal users an object containing the groups, roles and label for the 'permission'.
-   * For external users it returns NULL
-   */
-  $permissions() {
-    if (!this.$internal()) {
-      return null
-    }
-
-    if (!this.groups || !this.roles) {
-      return null
-    }
-
-    const group = this.groups[0]?.group || 'basic'
-    const digitiseRoles = this.roles.filter((role) => {
-      return role.role.startsWith('ar_')
-    })
-
-    if (digitiseRoles.length === 0) {
-      return userPermissions[group]
-    }
-
-    const digitisePermission = `${group}_${digitiseRoles[0].role}`
-
-    return userPermissions[digitisePermission]
-  }
-
-  /**
-   * Returns the user's role
+   * They are not assigned to the same groups and roles as internal users. Instead, their permissions are determined by
+   * the role of the `LicenceEntityRole` record linked to their `LicenceEntity` record.
    *
-   * > We recommend adding the `role` modifier to your query if you need to determine a user's role
-   *
-   * Role differs from permissions in that it is a higher level classification of user, relative to a licence (for the
-   * most part).
-   *
-   * In the main they are applicable to external users, though there are a great many internal users who also have
-   * roles.
-   *
-   * ## The external user journey
+   * ### The external user journey
    *
    * When someone requests to create an account, the legacy service will send them an email with a link to verify their
    * email address. It will also create a user record but will leave `licence_entity_id` null.
@@ -266,8 +235,9 @@ class UserModel extends BaseModel {
    * Once they verify their email address and set their password, they can login. At this point the service will create
    * a `LicenceEntity` and link it to the user by setting `licence_entity_id`.
    *
-   * They can do nothing though until they request access to a licence. When they do that a `LicenceEntityRole` record
-   * will be created, linked to the `LicenceEntity` record. Its `role` field will be set to `primary_user`.
+   * They can do nothing though until they request access to a licence. When they do that three `LicenceEntityRole`
+   * records will be created, linked to the `LicenceEntity` record. The `role` field will be set to `primary_user`,
+   * `user_returns`, and `user` in each.
    *
    * The request process involves sending a letter with a code to the licence holder's address. Once the user returns
    * to the service and enters that code, they can begin to administer the licence. This includes adding other users.
@@ -277,16 +247,11 @@ class UserModel extends BaseModel {
    * `LicenceEntityRole` will be created set to `user_returns`.
    *
    * If the primary users subsequently removes the submit returns permission, the `user_returns` `LicenceEntityRole`
-   * will be deleted. If they remove the user entirely, all `LicenceEntityRole` records for that user will be deleted
+   * will be deleted. If they remove the user entirely, all `LicenceEntityRole` records for that user will be deleted.
    *
-   * ## Internal users
+   * ### Determining the role
    *
-   * We don't yet understand how some internal users can also be linked to `primary_user`, `user_returns` or `user`
-   * roles. Also, a large number of them will have a `LicenceEntityRole` with the role `admin`.
-   *
-   * ## Determining the role
-   *
-   * This all means determining the 'role' for a user is a bit of a minefield!
+   * This all means determining the 'role' for an external user is a bit of a minefield!
    *
    * Because a user can have multiple roles, we rank them by precedence
    *
@@ -297,32 +262,20 @@ class UserModel extends BaseModel {
    *
    * If a user has no roles, we default to 'None'.
    *
-   * @returns {string} The user's role
+   * ### Internal users anomaly
+   *
+   * We don't yet understand how some internal users can also be linked to `primary_user`, `user_returns` or `user`
+   * roles. Also, a large number of them will have a `LicenceEntityRole` with the role `admin`.
+   *
+   * @returns {object|null} For internal users an object containing the groups, roles and label for the 'permission'.
+   * For external users it returns NULL
    */
-  $role() {
-    const entityRoles = this.licenceEntity?.licenceEntityRoles || []
-
-    const roles = entityRoles.map((entityRole) => {
-      return entityRole.role
-    })
-
-    if (roles.includes('admin')) {
-      return 'Admin'
+  $permissions() {
+    if (this.$internal()) {
+      return this._internalPermissions()
     }
 
-    if (roles.includes('primary_user')) {
-      return 'Primary user'
-    }
-
-    if (roles.includes('user_returns')) {
-      return 'Returns agent'
-    }
-
-    if (roles.includes('user')) {
-      return 'Agent'
-    }
-
-    return 'None'
+    return this._externalPermissions()
   }
 
   /**
@@ -357,6 +310,55 @@ class UserModel extends BaseModel {
     }
 
     return 'enabled'
+  }
+
+  _externalPermissions() {
+    if (!this.licenceEntity?.licenceEntityRoles) {
+      return null
+    }
+
+    const entityRoles = this.licenceEntity?.licenceEntityRoles || []
+
+    const roles = entityRoles.map((entityRole) => {
+      return entityRole.role
+    })
+
+    if (roles.includes('admin')) {
+      return userPermissions.admin
+    }
+
+    if (roles.includes('primary_user')) {
+      return userPermissions.primary_user
+    }
+
+    if (roles.includes('user_returns')) {
+      return userPermissions.returns_user
+    }
+
+    if (roles.includes('user')) {
+      return userPermissions.basic
+    }
+
+    return userPermissions.none
+  }
+
+  _internalPermissions() {
+    if (!this.groups || !this.roles) {
+      return null
+    }
+
+    const group = this.groups[0]?.group || 'basic'
+    const digitiseRoles = this.roles.filter((role) => {
+      return role.role.startsWith('ar_')
+    })
+
+    if (digitiseRoles.length === 0) {
+      return userPermissions[group]
+    }
+
+    const digitisePermission = `${group}_${digitiseRoles[0].role}`
+
+    return userPermissions[digitisePermission]
   }
 }
 
