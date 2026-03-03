@@ -303,13 +303,26 @@ function _applyStatusFilter(query, status) {
   // The remaining filters relate to enabled users
   query.where('users.enabled', true)
 
+  // Locked takes precedence over 'awaiting' and 'enabled'.
   if (status === 'locked') {
     query.where('users.password', 'VOID')
-  } else if (status === 'awaiting') {
-    query.whereNull('users.lastLogin')
-  } else {
-    query.whereNotNull('users.lastLogin')
+
+    return
   }
+
+  // If the user has selected either 'Enabled' or 'Awaiting' as the status filter, it is possible that a record where
+  // the password is 'VOID' would meet the criteria depending on whether `lastLogin` is populated. We don't want
+  // 'locked' records appearing in the results for these other statuses as that will be confusing. So, we add this
+  // clause to ensure records that would display with a status of 'locked' are excluded from the results.
+  query.whereNot('users.password', 'VOID')
+
+  if (status === 'awaiting') {
+    query.whereNull('users.lastLogin')
+
+    return
+  }
+
+  query.whereNotNull('users.lastLogin')
 }
 
 function _fetchQuery() {

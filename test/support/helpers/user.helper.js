@@ -22,7 +22,8 @@ const DEFAULT_INDEX = 4
  * If no `data` is provided, default values will be used. These are
  *
  * - `username` - [random UUID]@wrls.gov.uk
- * - `password` - P@55word (note that this is salted and hashed before being persisted)
+ * - `password` - P@55word (note that this is salted and hashed before being persisted unless set to `VOID` to allow
+ * testing of 'locked' users)
  * - `resetRequired` - 0
  * - `badLogins` - 0
  * - `application` - water_admin
@@ -34,8 +35,10 @@ const DEFAULT_INDEX = 4
 function add(data = {}) {
   const insertData = defaults(data)
 
-  // Overwrite the current password with the hashed version we want to persist
-  insertData.password = UserModel.generateHashedPassword(insertData.password)
+  // Overwrite the current password with the hashed version we want to persist unless it's set to 'VOID'
+  if (insertData.password !== 'VOID') {
+    insertData.password = UserModel.generateHashedPassword(insertData.password)
+  }
 
   return UserModel.query()
     .insert({ ...insertData })

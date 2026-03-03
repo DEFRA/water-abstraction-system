@@ -42,10 +42,15 @@ describe('Users - Fetch Users service', () => {
     licenceEntities = []
 
     // Basic access external user
+    // NOTE: We set the password to 'VOID' to test this user is NOT returned when we filter by 'awaiting' status, but IS
+    // returned when we filter by 'locked' status. We spotted that 'locked' users who had never managed to login were
+    // appearing in the results for status 'Awaiting'.
     let licenceEntity = await LicenceEntityHelper.add()
     externalBasicAccessUser = await UserHelper.add({
       application: 'water_vml',
       licenceEntityId: licenceEntity.id,
+      lastLogin: null,
+      password: 'VOID',
       username: licenceEntity.name
     })
 
@@ -60,10 +65,15 @@ describe('Users - Fetch Users service', () => {
     externalBasicAccessUser.licenceEntity = licenceEntity
 
     // Returns user external user
+    // NOTE: We set the password to 'VOID' to test this user IS returned when we filter by 'disabled' status, but NOT
+    // returned when we filter by 'locked' status. This is to ensure that the disabled status takes priority over the
+    // locked status
     licenceEntity = await LicenceEntityHelper.add()
     externalReturnsUser = await UserHelper.add({
       application: 'water_vml',
+      enabled: false,
       licenceEntityId: licenceEntity.id,
+      password: 'VOID',
       username: licenceEntity.name
     })
 
@@ -129,7 +139,7 @@ describe('Users - Fetch Users service', () => {
       Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
     })
 
-    it.only('returns all users ordered by their username (email) ascending', async () => {
+    it('returns all users ordered by their username (email) ascending', async () => {
       const { results, total } = await FetchUsersService.go(filters, pageNumber)
 
       // Assert the total is equal to or greater than our seeded count plus created users. Other tests may create
@@ -502,14 +512,12 @@ describe('Users - Fetch Users service', () => {
           for (let i = 0; i < seededUsersLength.length; i++) {
             const userData = UsersFixture.user(i)
 
-            if (userData.enabled && !userData.lastLogin) {
+            if (userData.enabled && userData.password !== 'VOID' && !userData.lastLogin) {
               expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
 
-          // Assert the results contain the ones we created
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-          expect(results).contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          // Assert the results contain the one we created that is 'awaiting' (enabled, not locked, and no lastLogin)
           expect(results).contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
         })
 
@@ -525,6 +533,11 @@ describe('Users - Fetch Users service', () => {
               expect(results).not.contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
+
+          // Assert the results do not contain the created users we either disabled or set as locked, even though they
+          // have no lastLogin
+          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
         })
       })
 
@@ -544,6 +557,9 @@ describe('Users - Fetch Users service', () => {
               expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
+
+          // Assert the results contain the one we created that is 'disabled'
+          expect(results).contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
         })
 
         it('excludes those that do not match', async () => {
@@ -558,9 +574,8 @@ describe('Users - Fetch Users service', () => {
             }
           }
 
-          // Assert the results do not contain those we created
+          // Assert the results do not contain the created users we that are not 'disabled'
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
         })
       })
@@ -577,7 +592,7 @@ describe('Users - Fetch Users service', () => {
           for (let i = 0; i < seededUsersLength; i++) {
             const userData = UsersFixture.user(i)
 
-            if (userData.enabled && userData.lastLogin) {
+            if (userData.enabled && userData.password !== 'VOID' && userData.lastLogin) {
               expect(results).contains(UsersFixture.transformToFetchUsersResult(userData))
             }
           }
@@ -596,7 +611,7 @@ describe('Users - Fetch Users service', () => {
             }
           }
 
-          // Assert the results do not contain those we created
+          // Assert the results do not contain those we created as they are either disabled, locked or awaiting
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
@@ -634,8 +649,7 @@ describe('Users - Fetch Users service', () => {
             }
           }
 
-          // Assert the results do not contain those we created
-          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
+          // Assert the results do not contain those we created which are not 'locked'
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
         })
