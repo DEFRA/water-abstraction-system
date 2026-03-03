@@ -27,15 +27,15 @@ function go(session, companyContacts) {
 }
 
 function _existingAccount(session, companyContacts) {
+  if (session.existingAccount === 'new') {
+    return 'New billing account'
+  }
+
   if (!session.existingAccount) {
     return ''
   }
 
-  if (!!session.existingAccount && session.existingAccount !== 'new') {
-    return companyContacts.company.name
-  }
-
-  return session.billingAccount.company.name
+  return companyContacts.company.name
 }
 
 function _links(session) {

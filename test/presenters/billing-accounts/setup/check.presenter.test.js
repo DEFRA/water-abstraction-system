@@ -14,7 +14,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/billing-accounts/setup/check.presenter.js')
 
-describe.only('Billing Accounts - Setup - Check Presenter', () => {
+describe('Billing Accounts - Setup - Check Presenter', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
   const companyAddresses = {
     company: billingAccount.company,
@@ -36,7 +36,7 @@ describe.only('Billing Accounts - Setup - Check Presenter', () => {
 
       expect(result).to.equal({
         accountSelected: 'Another billing account',
-        existingAccount: 'Ferns Surfacing Limited',
+        existingAccount: '',
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
@@ -109,8 +109,8 @@ describe.only('Billing Accounts - Setup - Check Presenter', () => {
   })
 
   describe('the "existingAccount" property', () => {
-    describe('when called with the "existingAccount" set', () => {
-      it('returns the saved search input', () => {
+    describe('when called with the "existingAccount" set to new', () => {
+      it('returns "New billing account"', () => {
         const result = CheckPresenter.go(
           {
             ...session,
@@ -119,16 +119,30 @@ describe.only('Billing Accounts - Setup - Check Presenter', () => {
           companyAddresses
         )
 
-        expect(result.existingAccount).to.equal('new')
+        expect(result.existingAccount).to.equal('New billing account')
       })
     })
 
     describe('when called with the "existingAccount" set to null', () => {
-      it('returns the name of the existing billing account', () => {
+      it('returns an empty string', () => {
         const result = CheckPresenter.go(
           {
             ...session,
             existingAccount: null
+          },
+          companyAddresses
+        )
+
+        expect(result.existingAccount).to.equal('')
+      })
+    })
+
+    describe('when called with the "existingAccount" set to an existing comapny id', () => {
+      it('returns the name of that company', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            existingAccount: billingAccount.company.id
           },
           companyAddresses
         )
