@@ -5,23 +5,22 @@
  * @module FetchLicencesService
  */
 
+const DatabaseConfig = require('../../../config/database.config.js')
 const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
-
-const databaseConfig = require('../../../config/database.config.js')
 
 /**
  * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
  *
  * @param {string} companyId - The company id for the company
- * @param {number} page - The current page for the pagination service
+ * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<object>} the licences for the company and the pagination object
  */
-async function go(companyId, page) {
-  const { results, total } = await _fetch(companyId, page)
+async function go(companyId, page = '1') {
+  const { results: licences, total: totalNumber } = await _fetch(companyId, page)
 
-  return { licences: results, pagination: { total } }
+  return { licences, totalNumber }
 }
 
 async function _fetch(companyId, page) {
@@ -42,7 +41,7 @@ async function _fetch(companyId, page) {
         .orderBy([{ column: 'startDate', order: 'desc' }])
     })
     .orderBy('licenceRef', 'asc')
-    .page(page - 1, databaseConfig.defaultPageSize)
+    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
 module.exports = {

@@ -16,22 +16,20 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @param {string} licenceId - The UUID of the licence
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {number|string} [page=1] - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} an object representing the `pageData` needed by the licence communication template.
  */
-async function go(licenceId, auth, page = 1) {
-  const selectedPageNumber = Number(page)
-
+async function go(licenceId, auth, page) {
   const licence = await FetchLicenceService.go(licenceId)
 
-  const { notifications, totalNumber } = await FetchCommunicationsService.go(licence.licenceRef, selectedPageNumber)
+  const { notifications, totalNumber } = await FetchCommunicationsService.go(licence.licenceRef, page)
 
   const pageData = CommunicationsPresenter.go(notifications, licence)
 
   const pagination = PaginatorPresenter.go(
     totalNumber,
-    selectedPageNumber,
+    page,
     `/system/licences/${licenceId}/communications`,
     notifications.length,
     'communications'

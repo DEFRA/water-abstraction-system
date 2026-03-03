@@ -302,7 +302,7 @@ function _usersPageData(error = false) {
         type: 'Internal'
       }
     ],
-    pagination: { numberOfPages: 1, showingMessage: 'Showing all 1 users' }
+    pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 1 users' }
   }
 
   if (error) {

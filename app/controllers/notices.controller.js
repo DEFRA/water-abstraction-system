@@ -56,7 +56,7 @@ async function submitView(request, h) {
 async function view(request, h) {
   const {
     params: { id },
-    query: { page = 1 },
+    query: { page },
     yar
   } = request
 

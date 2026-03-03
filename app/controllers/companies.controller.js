@@ -13,7 +13,7 @@ async function viewBillingAccounts(request, h) {
   const {
     params: { id },
     auth,
-    query: { page = 1 }
+    query: { page }
   } = request
 
   const pageData = await ViewBillingAccountsService.go(id, auth, page)
@@ -25,7 +25,7 @@ async function viewContact(request, h) {
   const {
     params: { id },
     auth,
-    query: { page = 1 },
+    query: { page },
     yar
   } = request
 
@@ -38,7 +38,7 @@ async function viewLicences(request, h) {
   const {
     params: { id },
     auth,
-    query: { page = 1 }
+    query: { page }
   } = request
 
   const pageData = await ViewLicencesService.go(id, auth, page)

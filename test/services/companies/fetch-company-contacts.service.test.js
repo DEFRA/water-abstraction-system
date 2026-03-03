@@ -67,7 +67,7 @@ describe('Companies - Fetch Company Contacts service', () => {
             }
           }
         ],
-        pagination: { total: 1 }
+        totalNumber: 1
       })
     })
   })

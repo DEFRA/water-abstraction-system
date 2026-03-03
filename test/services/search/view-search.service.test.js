@@ -36,7 +36,7 @@ describe('Search - View Search service', () => {
   }
 
   beforeEach(() => {
-    page = 1
+    page = '1'
 
     Sinon.stub(FindAllSearchMatchesService, 'go').resolves({
       results: [
@@ -114,6 +114,7 @@ describe('Search - View Search service', () => {
         noResults: false,
         pageTitle: 'Search results for "12345678"',
         pagination: {
+          currentPageNumber: 1,
           numberOfPages: 1,
           showingMessage: 'Showing all 2 matches'
         },
@@ -291,6 +292,7 @@ describe('Search - View Search service', () => {
         noResults: false,
         pageTitle: 'Search results for "12345678"',
         pagination: {
+          currentPageNumber: 1,
           numberOfPages: 1,
           showingMessage: 'Showing all 2 matches'
         },

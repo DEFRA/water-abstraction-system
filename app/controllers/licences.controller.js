@@ -78,7 +78,7 @@ async function viewBills(request, h) {
   const {
     params: { id },
     auth,
-    query: { page = 1 }
+    query: { page }
   } = request
 
   const pageData = await ViewBillsService.go(id, auth, page)
@@ -90,7 +90,7 @@ async function viewCommunications(request, h) {
   const {
     params: { id },
     auth,
-    query: { page = 1 }
+    query: { page }
   } = request
 
   const pageData = await ViewCommunicationsService.go(id, auth, page)
@@ -164,7 +164,7 @@ async function viewReturns(request, h) {
   const {
     params: { id },
     auth,
-    query: { page = 1 }
+    query: { page }
   } = request
 
   const pageData = await ViewReturnsService.go(id, auth, page)

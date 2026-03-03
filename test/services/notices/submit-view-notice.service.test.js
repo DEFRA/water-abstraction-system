@@ -259,6 +259,7 @@ describe('Notices - Submit View Notice service', () => {
                   href: '/system/notices/a40dcb94-cb01-4fce-9a46-94b49eca2057?page=2'
                 }
               },
+              currentPageNumber: 1,
               numberOfPages: 3,
               showingMessage: 'Showing 2 of 70 notifications'
             },
@@ -325,6 +326,7 @@ describe('Notices - Submit View Notice service', () => {
             pageTitle: 'Warning alert',
             pageTitleCaption: `Notice ${notice.referenceCode}`,
             pagination: {
+              currentPageNumber: 1,
               numberOfPages: 1,
               showingMessage: 'Showing all 2 notifications'
             },

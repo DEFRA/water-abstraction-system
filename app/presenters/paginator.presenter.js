@@ -103,7 +103,7 @@ const COMPLEX_END_PAGINATOR = 'end'
  * `<- Previous 1 ... 38 [39] 40 41 42 Next ->`
  *
  * @param {number} numberOfRecords - the total number of records or results of the thing being paginated
- * @param {number} selectedPageNumber - the page of results selected for viewing
+ * @param {string} page - the page of results selected for viewing
  * @param {string} path - the URL path the paginator should use, for example, `'/system/bill-runs'`
  * @param {number} numberOfShownItems - The number of items currently being shown (e.g. items on the current page).
  * @param {string} message - A label appended to the end of the 'Showing x of y' string (e.g. "returns", "results").
@@ -112,120 +112,116 @@ const COMPLEX_END_PAGINATOR = 'end'
  * @returns {object} if no pagination is needed just the `numberOfPages` is returned else a `component:` property is
  * also included that can be directly passed to the `govukPagination()` in the view.
  */
-function go(numberOfRecords, selectedPageNumber, path, numberOfShownItems, message, queryArgs = {}) {
+function go(numberOfRecords, page, path, numberOfShownItems, message, queryArgs = {}) {
   const numberOfPages = Math.ceil(numberOfRecords / DatabaseConfig.defaultPageSize)
   const showingMessage = _showingXofY(numberOfRecords, numberOfShownItems, message)
 
+  const currentPageNumber = page ? Number(page) : 1
+
   if (numberOfPages < 2) {
-    return { numberOfPages, showingMessage }
+    return { currentPageNumber, numberOfPages, showingMessage }
   }
 
   const queryString = _queryString(queryArgs)
 
-  const component = _component(selectedPageNumber, numberOfPages, path, queryString)
+  const component = _component(currentPageNumber, numberOfPages, path, queryString)
 
-  return { component, numberOfPages, showingMessage }
+  return { component, currentPageNumber, numberOfPages, showingMessage }
 }
 
-function _component(selectedPageNumber, numberOfPages, path, queryString) {
-  const items = _items(selectedPageNumber, numberOfPages, path, queryString)
+function _component(currentPageNumber, numberOfPages, path, queryString) {
+  const items = _items(currentPageNumber, numberOfPages, path, queryString)
 
   const component = { items }
 
-  if (selectedPageNumber !== 1) {
-    component.previous = { href: `${path}?page=${selectedPageNumber - 1}${queryString}` }
+  if (currentPageNumber !== 1) {
+    component.previous = { href: `${path}?page=${currentPageNumber - 1}${queryString}` }
   }
 
-  if (selectedPageNumber !== numberOfPages) {
-    component.next = { href: `${path}?page=${selectedPageNumber + 1}${queryString}` }
+  if (currentPageNumber !== numberOfPages) {
+    component.next = { href: `${path}?page=${currentPageNumber + 1}${queryString}` }
   }
 
   return component
 }
 
-function _complexPaginatorEnd(selectedPageNumber, numberOfPages, path, queryString) {
-  const items = []
-
-  items.push(_item(1, selectedPageNumber, path, queryString))
-  items.push({ ellipsis: true })
-  items.push(_item(numberOfPages - 4, selectedPageNumber, path, queryString))
-  items.push(_item(numberOfPages - 3, selectedPageNumber, path, queryString))
-  items.push(_item(numberOfPages - 2, selectedPageNumber, path, queryString))
-  items.push(_item(numberOfPages - 1, selectedPageNumber, path, queryString))
-  items.push(_item(numberOfPages, selectedPageNumber, path, queryString))
-
-  return items
+function _complexPaginatorEnd(currentPageNumber, numberOfPages, path, queryString) {
+  return [
+    _item(1, currentPageNumber, path, queryString),
+    { ellipsis: true },
+    _item(numberOfPages - 4, currentPageNumber, path, queryString),
+    _item(numberOfPages - 3, currentPageNumber, path, queryString),
+    _item(numberOfPages - 2, currentPageNumber, path, queryString),
+    _item(numberOfPages - 1, currentPageNumber, path, queryString),
+    _item(numberOfPages, currentPageNumber, path, queryString)
+  ]
 }
 
-function _complexPaginatorMiddle(selectedPageNumber, numberOfPages, path, queryString) {
-  const items = []
-
-  items.push(_item(1, selectedPageNumber, path, queryString))
-  items.push({ ellipsis: true })
-  items.push(_item(selectedPageNumber - 1, selectedPageNumber, path, queryString))
-  items.push(_item(selectedPageNumber, selectedPageNumber, path, queryString))
-  items.push(_item(selectedPageNumber + 1, selectedPageNumber, path, queryString))
-  items.push({ ellipsis: true })
-  items.push(_item(numberOfPages, selectedPageNumber, path, queryString))
-
-  return items
+function _complexPaginatorMiddle(currentPageNumber, numberOfPages, path, queryString) {
+  return [
+    _item(1, currentPageNumber, path, queryString),
+    { ellipsis: true },
+    _item(currentPageNumber - 1, currentPageNumber, path, queryString),
+    _item(currentPageNumber, currentPageNumber, path, queryString),
+    _item(currentPageNumber + 1, currentPageNumber, path, queryString),
+    { ellipsis: true },
+    _item(numberOfPages, currentPageNumber, path, queryString)
+  ]
 }
 
-function _complexPaginatorStart(selectedPageNumber, numberOfPages, path, queryString) {
-  const items = []
-
-  items.push(_item(1, selectedPageNumber, path, queryString))
-  items.push(_item(2, selectedPageNumber, path, queryString))
-  items.push(_item(3, selectedPageNumber, path, queryString))
-  items.push(_item(4, selectedPageNumber, path, queryString))
-  items.push(_item(5, selectedPageNumber, path, queryString))
-  items.push({ ellipsis: true })
-  items.push(_item(numberOfPages, selectedPageNumber, path, queryString))
-
-  return items
+function _complexPaginatorStart(currentPageNumber, numberOfPages, path, queryString) {
+  return [
+    _item(1, currentPageNumber, path, queryString),
+    _item(2, currentPageNumber, path, queryString),
+    _item(3, currentPageNumber, path, queryString),
+    _item(4, currentPageNumber, path, queryString),
+    _item(5, currentPageNumber, path, queryString),
+    { ellipsis: true },
+    _item(numberOfPages, currentPageNumber, path, queryString)
+  ]
 }
 
-function _item(pageNumber, selectedPageNumber, path, queryString) {
+function _item(pageNumber, currentPageNumber, path, queryString) {
   return {
     number: pageNumber,
     visuallyHiddenText: `Page ${pageNumber}`,
     href: `${path}?page=${pageNumber}${queryString}`,
-    current: pageNumber === selectedPageNumber
+    current: pageNumber === currentPageNumber
   }
 }
 
-function _items(selectedPageNumber, numberOfPages, path, queryString) {
-  const paginatorType = _paginatorType(selectedPageNumber, numberOfPages)
+function _items(currentPageNumber, numberOfPages, path, queryString) {
+  const paginatorType = _paginatorType(currentPageNumber, numberOfPages)
 
   let items
 
   switch (paginatorType) {
     case COMPLEX_START_PAGINATOR:
-      items = _complexPaginatorStart(selectedPageNumber, numberOfPages, path, queryString)
+      items = _complexPaginatorStart(currentPageNumber, numberOfPages, path, queryString)
       break
     case COMPLEX_MIDDLE_PAGINATOR:
-      items = _complexPaginatorMiddle(selectedPageNumber, numberOfPages, path, queryString)
+      items = _complexPaginatorMiddle(currentPageNumber, numberOfPages, path, queryString)
       break
     case COMPLEX_END_PAGINATOR:
-      items = _complexPaginatorEnd(selectedPageNumber, numberOfPages, path, queryString)
+      items = _complexPaginatorEnd(currentPageNumber, numberOfPages, path, queryString)
       break
     default:
-      items = _simplePaginator(selectedPageNumber, numberOfPages, path, queryString)
+      items = _simplePaginator(currentPageNumber, numberOfPages, path, queryString)
   }
 
   return items
 }
 
-function _paginatorType(selectedPageNumber, numberOfPages) {
+function _paginatorType(currentPageNumber, numberOfPages) {
   if (numberOfPages <= 7) {
     return SIMPLE_PAGINATOR
   }
 
-  if (selectedPageNumber <= 4) {
+  if (currentPageNumber <= 4) {
     return COMPLEX_START_PAGINATOR
   }
 
-  if (selectedPageNumber >= numberOfPages - 3) {
+  if (currentPageNumber >= numberOfPages - 3) {
     return COMPLEX_END_PAGINATOR
   }
 
@@ -239,11 +235,11 @@ function _queryString(queryArgs) {
   return queryString ? `&${queryString}` : ''
 }
 
-function _simplePaginator(selectedPageNumber, numberOfPages, path, queryString) {
+function _simplePaginator(currentPageNumber, numberOfPages, path, queryString) {
   const items = []
 
   for (let i = 1; i <= numberOfPages; i++) {
-    items.push(_item(i, selectedPageNumber, path, queryString))
+    items.push(_item(i, currentPageNumber, path, queryString))
   }
 
   return items

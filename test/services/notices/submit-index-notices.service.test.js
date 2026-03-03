@@ -301,6 +301,7 @@ describe('Notices - Submit Index Notices service', () => {
                   href: '/system/notices?page=1'
                 }
               },
+              currentPageNumber: 2,
               numberOfPages: 3,
               showingMessage: 'Showing 1 of 70 notices'
             }
@@ -361,6 +362,7 @@ describe('Notices - Submit Index Notices service', () => {
             pageSubHeading: 'View a notice',
             pageTitle: 'Notices',
             pagination: {
+              currentPageNumber: 1,
               numberOfPages: 1,
               showingMessage: 'Showing all 1 notices'
             }
