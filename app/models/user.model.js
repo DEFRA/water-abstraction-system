@@ -238,7 +238,7 @@ class UserModel extends BaseModel {
       return this._internalPermissions()
     }
 
-    return null
+    return this._externalPermissions()
   }
 
   /**
@@ -351,6 +351,36 @@ class UserModel extends BaseModel {
     }
 
     return 'enabled'
+  }
+
+  _externalPermissions() {
+    if (!this.licenceEntity?.licenceEntityRoles) {
+      return null
+    }
+
+    const entityRoles = this.licenceEntity?.licenceEntityRoles || []
+
+    const roles = entityRoles.map((entityRole) => {
+      return entityRole.role
+    })
+
+    if (roles.includes('admin')) {
+      return userPermissions.admin
+    }
+
+    if (roles.includes('primary_user')) {
+      return userPermissions.primary_user
+    }
+
+    if (roles.includes('user_returns')) {
+      return userPermissions.returns_user
+    }
+
+    if (roles.includes('user')) {
+      return userPermissions.basic
+    }
+
+    return userPermissions.none
   }
 
   _internalPermissions() {
