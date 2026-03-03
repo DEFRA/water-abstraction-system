@@ -1,31 +1,31 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
 {% macro statusTag(status, inline=false) %}
-  {# Default the text to the status as that covers most tags #}
-  {% set text = status %}
+  {% if status %}
+    {# Default the text to the status as that covers most tags #}
+    {% set text = status %}
 
-  {% if status === 'current' %}
-    {% set colour = 'govuk-tag--green' %}
-  {% elif status === 'expired' %}
-    {% set colour = 'govuk-tag--grey' %}
-  {% elif status === 'lapsed' %}
-    {% set colour = 'govuk-tag--grey' %}
-  {% elif status === 'revoked' %}
-    {% set colour = 'govuk-tag--grey' %}
-  {% else %}
-    {% set colour = 'govuk-tag--blue' %}
-  {% endif %}
+    {% if status === 'current' %}
+      {% set colour = 'govuk-tag--green' %}
+      {% elif status === 'expired' %}
+      {% set colour = 'govuk-tag--grey' %}
+      {% elif status === 'lapsed' %}
+      {% set colour = 'govuk-tag--grey' %}
+      {% elif status === 'revoked' %}
+      {% set colour = 'govuk-tag--grey' %}
+    {% else %}
+      {% set colour = 'govuk-tag--blue' %}
+    {% endif %}
 
-  {% if inline %}
-    {% set fontSize = "" %}
-  {% else %}
-    {% set fontSize = "govuk-!-font-size-27" %}
-  {% endif %}
+    {% if inline %}
+      {% set fontSize = "" %}
+    {% else %}
+      {% set fontSize = "govuk-!-font-size-27" %}
+    {% endif %}
 
-  {{
-    govukTag({
+    {{ govukTag({
       text: text,
       classes: colour + ' ' + fontSize
-    })
-  }}
+    }) }}
+  {% endif %}
 {% endmacro %}
