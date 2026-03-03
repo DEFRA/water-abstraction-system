@@ -137,6 +137,15 @@ class UserModel extends BaseModel {
           .modifyGraph('roles', (rolesBuilder) => {
             rolesBuilder.select(['roles.id', 'roles.role'])
           })
+          .withGraphFetched('licenceEntity')
+          .modifyGraph('licenceEntity', (licenceEntityBuilder) => {
+            licenceEntityBuilder
+              .select(['id'])
+              .withGraphFetched('licenceEntityRoles')
+              .modifyGraph('licenceEntityRoles', (licenceEntityRolesBuilder) => {
+                licenceEntityRolesBuilder.select(['id', 'role'])
+              })
+          })
       },
       // role modifier fetches all licence entity roles for the user from which their role can be determined
       role(query) {
