@@ -517,47 +517,80 @@ const twoPartTariffReviewIssues = {
 }
 
 const userPermissions = Object.freeze({
+  admin: {
+    application: 'water_vml',
+    groups: [],
+    label: 'Admin',
+    roles: ['admin']
+  },
   basic: {
+    application: 'both',
     groups: [],
     label: 'Basic access',
     roles: []
   },
   billing_and_data: {
+    application: 'water_admin',
     groups: ['billing_and_data'],
     label: 'Billing and Data',
     roles: []
   },
   environment_officer: {
+    application: 'water_admin',
     groups: ['environment_officer'],
     label: 'Environment Officer',
     roles: []
   },
+  none: {
+    application: 'water_vml',
+    groups: [],
+    label: 'None',
+    roles: []
+  },
   nps: {
+    application: 'water_admin',
     groups: ['nps'],
     label: 'National Permitting Service',
     roles: []
   },
   nps_ar_approver: {
+    application: 'water_admin',
     groups: ['nps'],
     label: 'National Permitting Service and Digitise! approver',
     roles: ['ar_approver']
   },
   nps_ar_user: {
+    application: 'water_admin',
     groups: ['nps'],
     label: 'National Permitting Service and Digitise! editor',
     roles: ['ar_user']
   },
+  primary_user: {
+    application: 'water_vml',
+    groups: [],
+    label: 'Primary user',
+    roles: ['primary_user']
+  },
   psc: {
+    application: 'water_admin',
     groups: ['psc'],
     label: 'Permitting and Support Centre',
     roles: []
   },
+  returns_user: {
+    application: 'water_vml',
+    groups: [],
+    label: 'Returns user',
+    roles: ['user_returns']
+  },
   super: {
+    application: 'water_admin',
     groups: ['super'],
     label: 'Super user',
     roles: []
   },
   wirs: {
+    application: 'water_admin',
     groups: ['wirs'],
     label: 'Waste and Industry Regulatory Service',
     roles: []
