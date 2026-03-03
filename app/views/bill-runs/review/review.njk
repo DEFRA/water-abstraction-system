@@ -313,17 +313,19 @@
     open: filter.openFilter
   }) }}
 
-  {# Generate the row data for the table #}
-  {% set tableRows = [] %}
-    {% if preparedLicences.length > 0 %}
-      {% for licence in preparedLicences %}
-        {% set statusTag %}
-          {{ reviewStatusTag(licence.status) }}
-        {% endset %}
+  {# Results #}
+  {% if preparedLicences.length === 0 %}
+    <p>No licences found.</p>
+  {% else %}
+    {% set tableRows = [] %}
+    {% for licence in preparedLicences %}
+      {% set statusTag %}
+        {{ reviewStatusTag(licence.status) }}
+      {% endset %}
 
-        {% set action %}
-          <a class="govuk-link" href="/system/bill-runs/review/licence/{{ licence.id }}">{{ licence.licenceRef }}<span class="govuk-visually-hidden">View licence matching for licence {{ licence.licenceRef }} </a>
-        {% endset %}
+      {% set action %}
+        <a class="govuk-link" href="/system/bill-runs/review/licence/{{ licence.id }}">{{ licence.licenceRef }}<span class="govuk-visually-hidden">View licence matching for licence {{ licence.licenceRef }} </a>
+      {% endset %}
 
       {% set tableRow = [
         {
@@ -350,44 +352,31 @@
           }
       ] %}
       {% set tableRows = (tableRows.push(tableRow), tableRows) %}
-      {% endfor %}
+    {% endfor %}
+
+    {# Sets the caption to be used in the table below #}
+    {% if totalNumberOfLicences > numberOfLicencesDisplayed %}
+      {% set caption = "Showing " + numberOfLicencesDisplayed + " of " + totalNumberOfLicences + " licences" %}
+    {% else %}
+      {% set caption = "Showing all " + totalNumberOfLicences + " licences" %}
     {% endif %}
 
-  {# Sets the caption to be used in the table below #}
-  {% if totalNumberOfLicences > numberOfLicencesDisplayed %}
-    {% set caption = "Showing " + numberOfLicencesDisplayed + " of " + totalNumberOfLicences + " licences" %}
-  {% else %}
-    {% set caption = "Showing all " + totalNumberOfLicences + " licences" %}
-  {% endif %}
+    {# Table displaying details of the licences in the bill run. These results take into account any filter that is set #}
+    {{ govukTable({
+      attributes: { 'data-test': 'licences'},
+      caption: caption,
+      captionClasses: "govuk-table__caption--s govuk-!-margin-bottom-2",
+      firstCellIsHeader: false,
+      head: [
+        { text: 'Licence' },
+        { text: 'Licence holder' },
+        { text: 'Issue' },
+        { text: 'Progress', classes: "govuk-!-text-align-centre" },
+        { text: 'Status', classes: "govuk-!-text-align-right" }
+      ],
+      rows: tableRows
+    }) }}
 
-  {# Table displaying details of the licences in the bill run. These results take into account any filter that is set #}
-  {{ govukTable({
-    caption: caption,
-    captionClasses: "govuk-table__caption--s govuk-!-margin-bottom-2",
-    firstCellIsHeader: false,
-    head: [
-      {
-        text: 'Licence'
-      },
-      {
-        text: 'Licence holder'
-      },
-      {
-        text: 'Issue'
-      },
-      {
-        text: 'Progress',
-        classes: "govuk-!-text-align-centre"
-      },
-      {
-        text: 'Status',
-        classes: "govuk-!-text-align-right"
-      }
-    ],
-    rows: tableRows
-  }) }}
-
-  {% if pagination.numberOfPages > 1  %}
-    {{ govukPagination(pagination.component) }}
+    {{ govukPagination(pagination.component) if pagination.numberOfPages > 1 }}
   {% endif %}
 {% endblock %}
