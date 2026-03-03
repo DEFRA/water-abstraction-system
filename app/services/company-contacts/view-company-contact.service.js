@@ -20,11 +20,11 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  * @param {string} id - the UUID of the company contact
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
- * @param {number|string} [page=1] - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(id, auth, yar, page = 1) {
+async function go(id, auth, yar, page) {
   const companyContact = await FetchCompanyContactService.go(id)
 
   const company = await FetchCompanyService.go(companyContact.companyId)
@@ -37,7 +37,7 @@ async function go(id, auth, yar, page = 1) {
 
   const pagination = PaginatorPresenter.go(
     totalNumber,
-    Number(page),
+    page,
     `/system/company-contacts/${companyContact.id}`,
     notifications.length,
     'communications'

@@ -8,17 +8,17 @@
 const { ref } = require('objection')
 
 const NotificationModel = require('../../models/notification.model.js')
-const databaseConfig = require('../../../config/database.config.js')
+const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
  * Fetches data needed for the view '/system/company-contacts/{id}' page
  *
  * @param {string} email - The email of the company contact id
- * @param {number} page - The current page for the pagination service
+ * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<object>} the data needed to populate the view company contacts communications
  */
-async function go(email, page) {
+async function go(email, page = '1') {
   const { results: notifications, total: totalNumber } = await _fetch(email, page)
 
   return { notifications, totalNumber }
@@ -57,7 +57,7 @@ async function _fetch(email, page) {
         ref('metadata:options.sendingAlertType').castText().as('sendingAlertType')
       ])
     })
-    .page(page - 1, databaseConfig.defaultPageSize)
+    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
 module.exports = {

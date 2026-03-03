@@ -321,6 +321,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
                   href: '/system/bill-runs?page=1'
                 }
               },
+              currentPageNumber: 2,
               numberOfPages: 3,
               showingMessage: 'Showing 2 of 70 bill runs'
             },
@@ -467,6 +468,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
             pageSubHeading: 'View a bill run',
             pageTitle: 'Bill runs',
             pagination: {
+              currentPageNumber: 1,
               numberOfPages: 1,
               showingMessage: 'Showing all 2 bill runs'
             },

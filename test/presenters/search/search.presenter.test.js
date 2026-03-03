@@ -22,7 +22,7 @@ describe('Search - Search presenter', () => {
     query = 'searchthis'
     resultType = null
 
-    page = 1
+    page = '1'
 
     allSearchMatches = {
       results: [

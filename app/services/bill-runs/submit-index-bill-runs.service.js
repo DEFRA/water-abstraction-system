@@ -21,12 +21,12 @@ const { clearFilters, handleOneOptionSelected } = require('../../lib/submit-page
  *
  * @param {object} payload - The `request.payload` containing the filter data.
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
- * @param {number|string} page - The current page for the pagination service
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} If no errors an empty object signifying the request can be redirected to the index page
  * else the data needed to re-render the page
  */
-async function go(payload, yar, page = 1) {
+async function go(payload, yar, page) {
   const filterCleared = clearFilters(payload, yar, 'billRunsFilter')
 
   if (filterCleared) {
@@ -54,22 +54,15 @@ async function go(payload, yar, page = 1) {
 async function _replayView(payload, error, page, regions, savedFilters) {
   // When the page comes from the request via the controller then it will be a string. For consistency we want it as a
   // number
-  const selectedPageNumber = Number(page)
 
   // We expect the FetchBillRunsService to take the longest to complete. But running them together means we are only
   // waiting as long as it takes FetchBillRunsService to complete rather than their combined time
   const [busyResult, { results: billRuns, total: totalNumber }] = await Promise.all([
     CheckBusyBillRunsService.go(),
-    FetchBillRunsService.go(savedFilters, selectedPageNumber)
+    FetchBillRunsService.go(savedFilters, page)
   ])
 
-  const pagination = PaginatorPresenter.go(
-    totalNumber,
-    selectedPageNumber,
-    '/system/bill-runs',
-    billRuns.length,
-    'bill runs'
-  )
+  const pagination = PaginatorPresenter.go(totalNumber, page, '/system/bill-runs', billRuns.length, 'bill runs')
 
   const filters = { ...savedFilters, ...payload }
 

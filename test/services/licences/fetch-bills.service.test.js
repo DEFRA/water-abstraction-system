@@ -61,7 +61,7 @@ describe('Licences - Fetch Bills service', () => {
       })
 
       it('returns results', async () => {
-        const result = await FetchBillService.go(licence.id, 1)
+        const result = await FetchBillService.go(licence.id)
 
         expect(result).to.equal({
           bills: [
@@ -84,9 +84,7 @@ describe('Licences - Fetch Bills service', () => {
               netAmount: 12345
             }
           ],
-          pagination: {
-            total: 1
-          }
+          totalNumber: 1
         })
       })
     })
@@ -110,13 +108,11 @@ describe('Licences - Fetch Bills service', () => {
       })
 
       it('returns no results', async () => {
-        const result = await FetchBillService.go(licence.id, 1)
+        const result = await FetchBillService.go(licence.id)
 
         expect(result).to.equal({
           bills: [],
-          pagination: {
-            total: 0
-          }
+          totalNumber: 0
         })
       })
     })
@@ -129,13 +125,11 @@ describe('Licences - Fetch Bills service', () => {
     })
 
     it('returns no results', async () => {
-      const result = await FetchBillService.go(licence.id, 1)
+      const result = await FetchBillService.go(licence.id)
 
       expect(result).to.equal({
         bills: [],
-        pagination: {
-          total: 0
-        }
+        totalNumber: 0
       })
     })
   })

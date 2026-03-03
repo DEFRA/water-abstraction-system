@@ -49,7 +49,11 @@ describe('Paginator Presenter', () => {
       it('returns just the number of pages calculated (no pagination component returned)', () => {
         const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
-        expect(result).equal({ numberOfPages: 1, showingMessage: 'Showing all 1 notices' })
+        expect(result).equal({
+          currentPageNumber: 1,
+          numberOfPages: 1,
+          showingMessage: 'Showing all 1 notices'
+        })
       })
 
       it('returns the "Showing all X <message>" message', () => {
@@ -76,6 +80,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 2,
               showingMessage: 'Showing 50 of 75 notices',
               component: {
@@ -98,6 +103,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 2,
               showingMessage: 'Showing 50 of 75 notices',
               component: {
@@ -126,6 +132,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 3,
               showingMessage: 'Showing 50 of 125 notices',
               component: {
@@ -149,6 +156,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 3,
               showingMessage: 'Showing 50 of 125 notices',
               component: {
@@ -173,6 +181,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 3,
               showingMessage: 'Showing 50 of 125 notices',
               component: {
@@ -202,6 +211,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 4,
               showingMessage: 'Showing 50 of 175 notices',
               component: {
@@ -226,6 +236,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 4,
               showingMessage: 'Showing 50 of 175 notices',
               component: {
@@ -251,6 +262,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 4,
               showingMessage: 'Showing 50 of 175 notices',
               component: {
@@ -281,6 +293,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 5,
               showingMessage: 'Showing 50 of 225 notices',
               component: {
@@ -306,6 +319,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 5,
               showingMessage: 'Showing 50 of 225 notices',
               component: {
@@ -332,6 +346,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 5,
               showingMessage: 'Showing 50 of 225 notices',
               component: {
@@ -363,6 +378,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 6,
               showingMessage: 'Showing 50 of 275 notices',
               component: {
@@ -389,6 +405,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 6,
               showingMessage: 'Showing 50 of 275 notices',
               component: {
@@ -416,6 +433,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 6,
               showingMessage: 'Showing 50 of 275 notices',
               component: {
@@ -448,6 +466,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 7,
               showingMessage: 'Showing 50 of 325 notices',
               component: {
@@ -475,6 +494,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 7,
               showingMessage: 'Showing 50 of 325 notices',
               component: {
@@ -503,6 +523,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 7,
               showingMessage: 'Showing 50 of 325 notices',
               component: {
@@ -536,6 +557,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 8,
               showingMessage: 'Showing 50 of 375 notices',
               component: {
@@ -563,6 +585,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 8,
               showingMessage: 'Showing 50 of 375 notices',
               component: {
@@ -591,6 +614,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 8,
               showingMessage: 'Showing 50 of 375 notices',
               component: {
@@ -619,6 +643,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 8,
               showingMessage: 'Showing 50 of 375 notices',
               component: {
@@ -652,6 +677,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 9,
               showingMessage: 'Showing 50 of 425 notices',
               component: {
@@ -679,6 +705,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 9,
               showingMessage: 'Showing 50 of 425 notices',
               component: {
@@ -707,6 +734,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 9,
               showingMessage: 'Showing 50 of 425 notices',
               component: {
@@ -735,6 +763,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 9,
               showingMessage: 'Showing 50 of 425 notices',
               component: {
@@ -763,6 +792,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 9,
               showingMessage: 'Showing 50 of 425 notices',
               component: {
@@ -796,6 +826,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 100,
               showingMessage: 'Showing 50 of 4975 notices',
               component: {
@@ -823,6 +854,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 100,
               showingMessage: 'Showing 50 of 4975 notices',
               component: {
@@ -851,6 +883,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 100,
               showingMessage: 'Showing 50 of 4975 notices',
               component: {
@@ -879,6 +912,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 100,
               showingMessage: 'Showing 50 of 4975 notices',
               component: {
@@ -908,6 +942,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 100,
               showingMessage: 'Showing 3 of 4975 notices',
               component: {
@@ -972,6 +1007,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 2,
               showingMessage: 'Showing 50 of 75 notices',
               component: {
@@ -1006,6 +1042,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 2,
               showingMessage: 'Showing 50 of 75 notices',
               component: {
@@ -1046,6 +1083,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 3,
               showingMessage: 'Showing 50 of 125 notices',
               component: {
@@ -1086,6 +1124,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 3,
               showingMessage: 'Showing 50 of 125 notices',
               component: {
@@ -1129,6 +1168,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 3,
               showingMessage: 'Showing 50 of 125 notices',
               component: {
@@ -1175,6 +1215,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 4,
               showingMessage: 'Showing 50 of 175 notices',
               component: {
@@ -1221,6 +1262,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 4,
               showingMessage: 'Showing 50 of 175 notices',
               component: {
@@ -1270,6 +1312,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 4,
               showingMessage: 'Showing 50 of 175 notices',
               component: {
@@ -1322,6 +1365,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 5,
               showingMessage: 'Showing 50 of 225 notices',
               component: {
@@ -1374,6 +1418,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 5,
               showingMessage: 'Showing 50 of 225 notices',
               component: {
@@ -1429,6 +1474,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 5,
               showingMessage: 'Showing 50 of 225 notices',
               component: {
@@ -1487,6 +1533,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 6,
               showingMessage: 'Showing 50 of 275 notices',
               component: {
@@ -1545,6 +1592,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 6,
               showingMessage: 'Showing 50 of 275 notices',
               component: {
@@ -1606,6 +1654,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 6,
               showingMessage: 'Showing 50 of 275 notices',
               component: {
@@ -1670,6 +1719,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 7,
               showingMessage: 'Showing 50 of 325 notices',
               component: {
@@ -1734,6 +1784,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 7,
               showingMessage: 'Showing 50 of 325 notices',
               component: {
@@ -1801,6 +1852,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 7,
               showingMessage: 'Showing 50 of 325 notices',
               component: {
@@ -1871,6 +1923,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 8,
               showingMessage: 'Showing 50 of 375 notices',
               component: {
@@ -1930,6 +1983,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 8,
               showingMessage: 'Showing 50 of 375 notices',
               component: {
@@ -1992,6 +2046,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 8,
               showingMessage: 'Showing 50 of 375 notices',
               component: {
@@ -2054,6 +2109,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 8,
               showingMessage: 'Showing 50 of 375 notices',
               component: {
@@ -2119,6 +2175,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 9,
               showingMessage: 'Showing 50 of 425 notices',
               component: {
@@ -2178,6 +2235,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 9,
               showingMessage: 'Showing 50 of 425 notices',
               component: {
@@ -2240,6 +2298,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 9,
               showingMessage: 'Showing 50 of 425 notices',
               component: {
@@ -2297,6 +2356,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 9,
               showingMessage: 'Showing 50 of 425 notices',
               component: {
@@ -2359,6 +2419,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 9,
               showingMessage: 'Showing 50 of 425 notices',
               component: {
@@ -2424,6 +2485,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 100,
               showingMessage: 'Showing 50 of 4975 notices',
               component: {
@@ -2483,6 +2545,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 100,
               showingMessage: 'Showing 50 of 4975 notices',
               component: {
@@ -2545,6 +2608,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 100,
               showingMessage: 'Showing 50 of 4975 notices',
               component: {
@@ -2602,6 +2666,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 100,
               showingMessage: 'Showing 50 of 4975 notices',
               component: {
@@ -2664,6 +2729,7 @@ describe('Paginator Presenter', () => {
             const result = PaginatorPresenter.go(numberOfRecords, selectedPage, path, currentAmount, message, queryArgs)
 
             expect(result).equal({
+              currentPageNumber: selectedPage,
               numberOfPages: 100,
               showingMessage: 'Showing 50 of 4975 notices',
               component: {

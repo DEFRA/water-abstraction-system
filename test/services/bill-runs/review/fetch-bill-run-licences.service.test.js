@@ -498,7 +498,7 @@ describe('Bill Runs Review - Fetch Bill Run Licences service', () => {
 
       describe('and the second page is selected', () => {
         beforeEach(async () => {
-          page = 2
+          page = '2'
         })
 
         it('returns details of the bill run and the second page of licences in it', async () => {
@@ -532,7 +532,7 @@ describe('Bill Runs Review - Fetch Bill Run Licences service', () => {
 
       describe('and an invalid selection of a third page is selected', () => {
         beforeEach(async () => {
-          page = 3
+          page = '3'
         })
 
         it('returns details of the bill run and the correct `licences.total` but no licences', async () => {

@@ -35,9 +35,9 @@ describe('Companies - View Contacts service', () => {
 
     Sinon.stub(FetchCompanyService, 'go').returns(company)
 
-    Sinon.stub(FetchCompanyContactsService, 'go').returns({ companyContacts, pagination: { total: 1 } })
+    Sinon.stub(FetchCompanyContactsService, 'go').returns({ companyContacts, totalNumber: 1 })
 
-    page = 1
+    page = '1'
 
     Sinon.stub(FeatureFlagsConfig, 'enableCustomerManage').value(true)
 
@@ -81,6 +81,7 @@ describe('Companies - View Contacts service', () => {
         pageTitle: 'Contacts',
         pageTitleCaption: 'Tyrell Corporation',
         pagination: {
+          currentPageNumber: 1,
           numberOfPages: 1,
           showingMessage: 'Showing all 1 contacts'
         },

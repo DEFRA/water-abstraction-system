@@ -77,7 +77,7 @@ describe('Index Bill Runs service', () => {
         notification: null,
         pageSubHeading: 'View a bill run',
         pageTitle: 'Bill runs',
-        pagination: { numberOfPages: 1, showingMessage: 'Showing all 2 bill runs' },
+        pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 2 bill runs' },
         regionItems: [
           {
             checked: false,
@@ -183,7 +183,7 @@ describe('Index Bill Runs service', () => {
 
     describe('and a page other than "page 1" with bill runs is selected', () => {
       beforeEach(() => {
-        page = 2
+        page = '2'
 
         Sinon.stub(FetchBillRunsService, 'go').resolves({
           results: _fetchedBillRuns(),
@@ -205,7 +205,7 @@ describe('Index Bill Runs service', () => {
 
     describe('and a page without bill runs is selected', () => {
       beforeEach(() => {
-        page = 3
+        page = '2'
 
         Sinon.stub(FetchBillRunsService, 'go').resolves({
           results: [],

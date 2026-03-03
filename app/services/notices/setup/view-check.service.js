@@ -16,20 +16,20 @@ const { readFlashNotification } = require('../../../lib/general.lib.js')
  *
  * @param {string} sessionId - The UUID for returns notices session record
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
- * @param {number|string} [page=1] - The currently selected page (if paginated)
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} The view data for the review page
  */
-async function go(sessionId, yar, page = 1) {
+async function go(sessionId, yar, page) {
   const session = await SessionModel.query().findById(sessionId)
 
   const recipients = await FetchRecipientsService.go(session, false)
 
   await _initialiseSelectedRecipients(recipients, session)
 
-  const pagination = PaginatorPresenter.go(recipients.length, Number(page), `/system/notices/setup/${sessionId}/check`)
+  const pagination = PaginatorPresenter.go(recipients.length, page, `/system/notices/setup/${sessionId}/check`)
 
-  const pageData = CheckPresenter.go(recipients, page, session)
+  const pageData = CheckPresenter.go(recipients, pagination.currentPageNumber, session)
 
   const notification = readFlashNotification(yar)
 
@@ -37,7 +37,7 @@ async function go(sessionId, yar, page = 1) {
     ...pageData,
     activeNavBar: 'notices',
     notification,
-    page,
+    page: pagination.currentPageNumber,
     pagination
   }
 }
