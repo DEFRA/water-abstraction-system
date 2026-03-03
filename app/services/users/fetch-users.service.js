@@ -16,25 +16,26 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * We can filter the results by
  *
  * - **Email** - A case-insensitive `LIKE` search on the username so partial values can be used
- * - **Permissions** - Only applies to internal users so if set, we automatically exclude external users. Then
- * _Basic access_ is a user not linked to any groups. A _Digitise!_ user is linked to the 'nps' group and has either the
- * `ar_approver` or `ar_user` role. All other permissions the user is linked to the specified group. This includes users
- * linked to 'nps' but that have no user roles.
+ * - **Permissions** - What permission type the user has. For internal users this is inferred from which group, and in
+ * some cases role, they are linked to. For external users this is inferred from the `LicenceEntityRoles` they have
+ * across all licences. The roles have a hierarchy so if they are the 'primary_user' on any licence then they are
+ * classed as 'primary_user' even if they also have licences where they are just a 'user'. If they have no
+ * `LicenceEntityRoles` then they are classed as having the permission 'none'.
  * - **Status** - Where the user is disabled, enabled (has logged in), awaiting (enabled but has not yet logged in), or
  * locked (password has been set to 'VOID' to prevent login)
  * - **Type** - The application the user belongs to i.e. internal or external
  *
  * @param {object} filters - an object containing the different filters to apply to the query
- * @param {string} [page=1] - The current page for the pagination service
+ * @param {number} page - The current page for the pagination service
  *
  * @returns {Promise<module:UserModel[]>} an array of users that match the selected 'page in the data
  */
-async function go(filters, page = '1') {
+async function go(filters, page) {
   const query = _fetchQuery()
 
   _applyFilters(query, filters)
 
-  query.orderBy('users.username', 'asc').page(Number(page) - 1, DatabaseConfig.defaultPageSize)
+  query.orderBy('users.username', 'asc').page(page - 1, DatabaseConfig.defaultPageSize)
 
   return query
 }
@@ -51,7 +52,7 @@ function _applyFilters(query, filters) {
   }
 
   if (permissions) {
-    _applyPermissionsFilter(query, permissions)
+    _applyPermissionsFilter(query, permissions, type)
   }
 
   if (status) {
@@ -59,20 +60,39 @@ function _applyFilters(query, filters) {
   }
 }
 
-function _applyPermissionsFilter(query, permissions) {
+function _applyPermissionsFilter(query, permissions, type) {
   const permissionDetails = userPermissions[permissions]
 
-  // Permissions only apply to internal users, so we can focus on those only
-  query.where('users.application', 'water_admin')
-
-  if (['billing_and_data', 'environment_officer', 'psc', 'super', 'wirs'].includes(permissions)) {
-    _applyStandardPermissionFilter(query, permissionDetails.groups)
+  if (permissions === 'basic') {
+    _applyBasicPermissionFilter(query, type)
 
     return
   }
 
-  if (permissions === 'basic') {
-    _applyBasicPermissionFilter(query)
+  // From this point onwards, the selected permission will be specific to either internal or external users so we can
+  // filter by the relevant application first before applying the permission filter
+  query.where('users.application', permissionDetails.application)
+
+  if (permissions === 'none') {
+    _applyNonePermissionFilter(query)
+
+    return
+  }
+
+  if (permissions === 'returns_user') {
+    _applyReturnsUserPermissionFilter(query)
+
+    return
+  }
+
+  if (permissions === 'primary_user') {
+    _applyPrimaryUserPermissionFilter(query)
+
+    return
+  }
+
+  if (['billing_and_data', 'environment_officer', 'psc', 'super', 'wirs'].includes(permissions)) {
+    _applyStandardPermissionFilter(query, permissionDetails.groups)
 
     return
   }
@@ -87,12 +107,65 @@ function _applyPermissionsFilter(query, permissions) {
 }
 
 /**
- * The basic permission is that the user is not linked to _any_ groups
+ * For internal users the 'basic' permission is that the user is not linked to _any_ groups.
+ *
+ * For external users, the 'basic' permission is that the user only has a single `LicenceEntityRoles` record with a role
+ * of 'user'. If they have any other roles than they don't just have basic access.
+ *
+ * If the user has also selected the 'type' filter (internal or external) we take advantage of that to only apply the
+ * relevant condition. If they haven't then we need to apply both conditions but with an OR between them to capture
+ * both.
  *
  * @private
  */
-function _applyBasicPermissionFilter(query) {
-  query.whereRaw(`NOT EXISTS (SELECT 1 FROM public.user_groups ug WHERE ug.user_id = users.user_id)`)
+function _applyBasicPermissionFilter(query, type) {
+  const internalCondition = `(
+    users.application = 'water_admin'
+    AND NOT EXISTS (
+      SELECT
+        1
+      FROM
+        public.user_groups ug
+      WHERE
+        ug.user_id = users.user_id
+      )
+  )`
+
+  const externalCondition = `(
+    users.application = 'water_vml'
+    AND EXISTS (
+      SELECT
+        1
+      FROM
+        public.licence_entity_roles ler
+      WHERE
+        ler.licence_entity_id = users.licence_entity_id
+        AND ler."role" = 'user'
+    )
+    AND NOT EXISTS (
+      SELECT
+        1
+      FROM
+        public.licence_entity_roles ler
+      WHERE
+        ler.licence_entity_id = users.licence_entity_id
+        AND ler."role" != 'user'
+    )
+  )`
+
+  if (type === 'water_admin') {
+    query.whereRaw(internalCondition)
+
+    return
+  }
+
+  if (type === 'water_vml') {
+    query.whereRaw(externalCondition)
+
+    return
+  }
+
+  query.whereRaw(`(${internalCondition} OR ${externalCondition})`)
 }
 
 /**
@@ -121,6 +194,24 @@ function _applyDigitisePermissionFilter(query, permissionDetails) {
 }
 
 /**
+ * The none permission is that the user is external and has no LicenceEntityRoles. Essentially, they have been unlinked
+ * from all licences so have no 'roles'.
+ *
+ * @private
+ */
+function _applyNonePermissionFilter(query) {
+  query.whereRaw(`
+  NOT EXISTS (
+    SELECT
+      1
+    FROM
+      public.licence_entity_roles ler
+    WHERE
+      ler.licence_entity_id = users.licence_entity_id
+  )`)
+}
+
+/**
  * The nps permission is that the user is linked to the 'nps' group but does NOT have either the `ar_approver` or
  * `ar_user` role.
  *
@@ -140,6 +231,54 @@ function _applyNpsPermissionFilter(query, groups) {
 )
   `
   )
+}
+
+/**
+ * The primary_user permission is that the user is external and has a LicenceEntityRole with a role of 'primary_user'.
+ * The way the external users are setup means this user will also have 'user_returns' and 'user' LicenceEntityRole
+ * records. But as long as they have one 'primary_user' LicenceEntityRole we determine them to be a primary user.
+ *
+ * @private
+ */
+function _applyPrimaryUserPermissionFilter(query) {
+  query.whereRaw(`
+  EXISTS (
+    SELECT
+      1
+    FROM
+      public.licence_entity_roles ler
+    WHERE
+      ler.licence_entity_id = users.licence_entity_id
+      AND ler."role" = 'primary_user'
+  )`)
+}
+
+/**
+ * The returns_user permission is that the user is external and has a LicenceEntityRole with a role of 'user_returns'.
+ * But they don't have a LicenceEntityRole with the role of 'primary_user'.
+ *
+ * @private
+ */
+function _applyReturnsUserPermissionFilter(query) {
+  query.whereRaw(`
+  EXISTS (
+    SELECT
+      1
+    FROM
+      public.licence_entity_roles ler
+    WHERE
+      ler.licence_entity_id = users.licence_entity_id
+      AND ler."role" = 'user_returns'
+  )
+  AND NOT EXISTS (
+    SELECT
+      1
+    FROM
+      public.licence_entity_roles ler
+    WHERE
+      ler.licence_entity_id = users.licence_entity_id
+      AND ler."role" = 'primary_user'
+  )`)
 }
 
 function _applyStandardPermissionFilter(query, groups) {
@@ -174,7 +313,10 @@ function _applyStatusFilter(query, status) {
 }
 
 function _fetchQuery() {
-  return UserModel.query().select(['id', 'userId', 'username']).modify('status').modify('permissions')
+  return UserModel.query()
+    .select(['id', 'licenceEntityId', 'userId', 'username'])
+    .modify('status')
+    .modify('permissions')
 }
 
 module.exports = {
