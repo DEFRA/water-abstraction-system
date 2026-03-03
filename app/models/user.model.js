@@ -199,9 +199,14 @@ class UserModel extends BaseModel {
   }
 
   /**
-   * Returns details of the user's permissions for internal users (always null for external).
+   * Returns details of the user's permissions
    *
    * > We recommend adding the `permissions` modifier to your query if you need to determine a user's permissions
+   *
+   * This instance function uses this knowledge to determine what "permission" a user has, which is a higher level
+   * classification determined from the user's groups and roles.
+   *
+   * ## Internal users
    *
    * When you add or edit an internal user, you select from a list of permissions. They are:
    *
@@ -228,7 +233,50 @@ class UserModel extends BaseModel {
    * roles. A user with one of the Digitise permissions is assigned to the group `nps` _and_ a specific role, either
    * `ar_user` or `ar_approver`.
    *
-   * This instance function uses this knowledge to determine what "permission" a user has
+   * ## External users
+   *
+   * They are not assigned to the same groups and roles as internal users. Instead, their permissions are determined by
+   * the role of the `LicenceEntityRole` record linked to their `LicenceEntity` record.
+   *
+   * ### The external user journey
+   *
+   * When someone requests to create an account, the legacy service will send them an email with a link to verify their
+   * email address. It will also create a user record but will leave `licence_entity_id` null.
+   *
+   * Once they verify their email address and set their password, they can login. At this point the service will create
+   * a `LicenceEntity` and link it to the user by setting `licence_entity_id`.
+   *
+   * They can do nothing though until they request access to a licence. When they do that three `LicenceEntityRole`
+   * records will be created, linked to the `LicenceEntity` record. The `role` field will be set to `primary_user`,
+   * `user_returns`, and `user` in each.
+   *
+   * The request process involves sending a letter with a code to the licence holder's address. Once the user returns
+   * to the service and enters that code, they can begin to administer the licence. This includes adding other users.
+   *
+   * Users added by the primary user will automatically have a `LicenceEntity` record added, plus a `LicenceEntityRole`
+   * record set to `user`. If the primary user selects to allow them to submit returns, an _additional_
+   * `LicenceEntityRole` will be created set to `user_returns`.
+   *
+   * If the primary users subsequently removes the submit returns permission, the `user_returns` `LicenceEntityRole`
+   * will be deleted. If they remove the user entirely, all `LicenceEntityRole` records for that user will be deleted.
+   *
+   * ### Determining the role
+   *
+   * This all means determining the 'role' for an external user is a bit of a minefield!
+   *
+   * Because a user can have multiple roles, we rank them by precedence
+   *
+   * - **Admin** (admin)
+   * - **Primary user** (primary_user)
+   * - **Returns agent** (user_returns)
+   * - **Agent** (user)
+   *
+   * If a user has no roles, we default to 'None'.
+   *
+   * ### Internal users anomaly
+   *
+   * We don't yet understand how some internal users can also be linked to `primary_user`, `user_returns` or `user`
+   * roles. Also, a large number of them will have a `LicenceEntityRole` with the role `admin`.
    *
    * @returns {object|null} For internal users an object containing the groups, roles and label for the 'permission'.
    * For external users it returns NULL
