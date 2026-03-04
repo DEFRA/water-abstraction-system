@@ -5,6 +5,8 @@
  * @module ExistingAddressPresenter
  */
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for the `/billing-accounts/setup/{sessionId}/existing-address` page
  *
@@ -18,7 +20,7 @@ function go(session, companyAddresses) {
 
   return {
     backLink: {
-      href: _backLink(session),
+      href: checkUrl(session, _backLink(session)),
       text: 'Back'
     },
     items: _radioOptions(session.addressSelected, companyAddresses.addresses),

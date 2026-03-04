@@ -109,6 +109,18 @@ describe('Billing Accounts - Setup - Existing Address Presenter', () => {
         expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/account`)
       })
     })
+
+    describe('when "checkPageVisited" is true', () => {
+      beforeEach(() => {
+        session.checkPageVisited = true
+      })
+
+      it('returns the link for the "check" page', () => {
+        const result = ExistingAddressPresenter.go(session, companyAddresses)
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+      })
+    })
   })
 
   describe('the "pageTitle" property', () => {

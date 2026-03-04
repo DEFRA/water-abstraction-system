@@ -106,6 +106,40 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
     })
 
+    describe('and the user has returned to the page from the check page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          addressSelected: companyAddresses.addresses[0].id,
+          billingAccount,
+          checkPageVisited: true
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitExistingAddressService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            addressSelected: payload.addressSelected,
+            checkPageVisited: true
+          },
+          { skip: ['accountSelected', 'billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitExistingAddressService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+        })
+      })
+    })
+
     describe('and the user selects an existing address after already having set up a new address', () => {
       beforeEach(async () => {
         sessionData = _newAddressSessionData(session)
@@ -208,6 +242,42 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
       })
     })
 
+    describe('and the user has returned to the page from the check page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          addressJourney: _newAddressSessionData(session).addressJourney,
+          addressSelected: 'new',
+          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          checkPageVisited: true
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitExistingAddressService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            addressJourney: sessionData.addressJourney,
+            addressSelected: 'new',
+            checkPageVisited: true
+          },
+          { skip: ['accountSelected', 'addressJourney', 'billingAccount', 'existingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitExistingAddressService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+        })
+      })
+    })
+
     describe('when the user selects a new address after already having chosen an existing address', () => {
       beforeEach(async () => {
         sessionData = _commonSessionData(session.billingAccount)
@@ -289,6 +359,7 @@ function _commonExpectedValues(session) {
     accountSelected: session.billingAccount.company.id,
     addressJourney: null,
     billingAccount: session.billingAccount,
+    checkPageVisited: false,
     contactName: null,
     contactSelected: null,
     fao: null
