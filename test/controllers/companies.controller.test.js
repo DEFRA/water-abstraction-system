@@ -15,6 +15,7 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 // Things we need to stub
 const ViewBillingAccountsService = require('../../app/services/companies/view-billing-accounts.service.js')
 const ViewContactsService = require('../../app/services/companies/view-contacts.service.js')
+const ViewCompanyService = require('../../app/services/companies/view-company.service.js')
 const ViewLicencesService = require('../../app/services/companies/view-licences.service.js')
 
 // For running our service
@@ -40,6 +41,30 @@ describe('Companies controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  describe('/companies/{id}', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: `/companies/${generateUUID()}`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
+
+        Sinon.stub(ViewCompanyService, 'go').returns({ pageTitle: 'Company' })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Company')
+      })
+    })
   })
 
   describe('/companies/{id}/billing-accounts', () => {
