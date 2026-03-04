@@ -62,10 +62,13 @@ async function remove(request, h) {
 }
 
 async function reviewBillRun(request, h) {
-  const { billRunId } = request.params
-  const { page } = request.query
+  const {
+    params: { billRunId },
+    query: { page },
+    yar
+  } = request
 
-  const pageData = await ReviewBillRunService.go(billRunId, page, request.yar)
+  const pageData = await ReviewBillRunService.go(billRunId, yar, page)
 
   return h.view('bill-runs/review/review.njk', pageData)
 }

@@ -13,13 +13,13 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/review/rev
  * Orchestrates fetching and presenting the data needed for the review bill run page
  *
  * @param {string} id - The UUID for the bill run to review
- * @param {string} page - the page number of licences to be viewed
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ * @param {string} page - The current page for the pagination service
  *
  * @returns {Promise<object>} An object representing the `pageData` needed by the review bill run template. It contains
  * details of the bill run and the licences linked to it as well as any data that has been used to filter the results.
  */
-async function go(id, page, yar) {
+async function go(id, yar, page) {
   const { filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress } = _getFilters(id, yar)
 
   const { billRun, licences } = await FetchBillRunLicencesService.go(
