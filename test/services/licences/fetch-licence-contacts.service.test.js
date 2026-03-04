@@ -81,7 +81,7 @@ describe('Licences - Fetch Licence Contacts service', () => {
           licenceEntityRoles: [
             {
               licenceEntity: {
-                name: 'grace.hopper@example.com'
+                name: licenceEntity.name
               },
               role: 'primary_user'
             }

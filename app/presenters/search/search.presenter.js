@@ -233,7 +233,7 @@ function _user(user) {
   const { id, lastLogin, username } = model
 
   return {
-    col2Title: 'Role',
+    col2Title: 'Permissions',
     col2Value: model.$permissions().label,
     col3Title: 'Last signed in',
     col3Value: formatLongDate(lastLogin),
