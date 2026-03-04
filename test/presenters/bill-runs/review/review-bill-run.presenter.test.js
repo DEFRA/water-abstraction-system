@@ -26,10 +26,10 @@ describe('Bill Runs - Review - Review Bill Run presenter', () => {
 
     describe('and no filter has been applied', () => {
       beforeEach(() => {
-        filterIssues = undefined
-        filterLicenceHolderNumber = undefined
-        filterLicenceStatus = undefined
-        filterProgress = undefined
+        filterIssues = null
+        filterLicenceHolderNumber = null
+        filterLicenceStatus = null
+        filterProgress = null
       })
 
       it('correctly presents the data', () => {
@@ -49,10 +49,10 @@ describe('Bill Runs - Review - Review Bill Run presenter', () => {
           chargeScheme: 'Current',
           dateCreated: '17 January 2024',
           filter: {
-            issues: undefined,
-            licenceHolderNumber: undefined,
-            licenceStatus: undefined,
-            inProgress: undefined,
+            issues: null,
+            licenceHolderNumber: null,
+            licenceStatus: null,
+            inProgress: null,
             openFilter: false
           },
           financialYear: '2022 to 2023',

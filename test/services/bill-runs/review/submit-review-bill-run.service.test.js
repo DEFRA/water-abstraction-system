@@ -55,10 +55,10 @@ describe('Bill Runs - Review - Submit Review Bill Run Service', () => {
 
         expect(setArgs[0]).to.equal(`review-${billRunId}`)
         expect(setArgs[1]).to.equal({
-          filterIssues: undefined,
-          filterLicenceHolderNumber: undefined,
-          filterLicenceStatus: undefined,
-          filterProgress: undefined
+          filterIssues: null,
+          filterLicenceHolderNumber: null,
+          filterLicenceStatus: null,
+          filterProgress: null
         })
       })
     })

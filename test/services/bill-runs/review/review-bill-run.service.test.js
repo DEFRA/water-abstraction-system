@@ -88,10 +88,10 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
         chargeScheme: 'Current',
         dateCreated: '10 April 2025',
         filter: {
-          inProgress: undefined,
-          issues: undefined,
-          licenceHolderNumber: undefined,
-          licenceStatus: undefined,
+          inProgress: null,
+          issues: null,
+          licenceHolderNumber: null,
+          licenceStatus: null,
           openFilter: false
         },
         financialYear: '2023 to 2024',
@@ -208,9 +208,9 @@ function _fetchedBillRun() {
 
 function _filters() {
   return {
-    filterIssues: undefined,
-    filterLicenceHolderNumber: undefined,
-    filterLicenceStatus: undefined,
-    filterProgress: undefined
+    filterIssues: null,
+    filterLicenceHolderNumber: null,
+    filterLicenceStatus: null,
+    filterProgress: null
   }
 }

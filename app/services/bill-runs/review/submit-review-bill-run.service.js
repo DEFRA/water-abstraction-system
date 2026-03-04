@@ -18,19 +18,21 @@ async function go(billRunId, payload, yar) {
   const filterKey = `review-${billRunId}`
 
   const filterCleared = clearFilters(payload, yar, filterKey)
-  const filterIssues = payload?.filterIssues
-  const filterLicenceHolderNumber = payload?.filterLicenceHolderNumber
-  const filterLicenceStatus = payload?.filterLicenceStatus
-  const filterProgress = payload?.filterProgress
 
-  if (!filterCleared) {
-    yar.set(filterKey, {
-      filterIssues,
-      filterLicenceHolderNumber,
-      filterLicenceStatus,
-      filterProgress
-    })
+  if (filterCleared) {
+    return
   }
+
+  _save(payload, yar, filterKey)
+}
+
+function _save(payload, yar, filterKey) {
+  yar.set(filterKey, {
+    filterIssues: payload.filterIssues ?? null,
+    filterLicenceHolderNumber: payload.filterLicenceHolderNumber ?? null,
+    filterLicenceStatus: payload.filterLicenceStatus ?? null,
+    filterProgress: payload.filterProgress ?? null
+  })
 }
 
 module.exports = {

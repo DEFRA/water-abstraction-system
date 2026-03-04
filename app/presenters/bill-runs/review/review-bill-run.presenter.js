@@ -40,7 +40,7 @@ function go(billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStatu
   }
 
   // this opens the filter on the page if any filter data has been received so the user can see the applied filters
-  filter.openFilter = (filterIssues || filterLicenceHolderNumber || filterLicenceStatus || filterProgress) !== undefined
+  filter.openFilter = (filterIssues || filterLicenceHolderNumber || filterLicenceStatus || filterProgress) !== null
 
   return { ...preparedBillRun, preparedLicences, filter }
 }

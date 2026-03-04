@@ -55,10 +55,10 @@ async function go(id, yar, page) {
 
 function _getFilters(id, yar) {
   const filters = yar.get(`review-${id}`)
-  const filterIssues = filters?.filterIssues
-  const filterLicenceHolderNumber = filters?.filterLicenceHolderNumber
-  const filterLicenceStatus = filters?.filterLicenceStatus
-  const filterProgress = filters?.filterProgress
+  const filterIssues = filters?.filterIssues || null
+  const filterLicenceHolderNumber = filters?.filterLicenceHolderNumber || null
+  const filterLicenceStatus = filters?.filterLicenceStatus || null
+  const filterProgress = filters?.filterProgress || null
 
   return { filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress }
 }
