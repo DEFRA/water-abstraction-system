@@ -354,17 +354,10 @@
       {% set tableRows = (tableRows.push(tableRow), tableRows) %}
     {% endfor %}
 
-    {# Sets the caption to be used in the table below #}
-    {% if totalNumberOfLicences > numberOfLicencesDisplayed %}
-      {% set caption = "Showing " + numberOfLicencesDisplayed + " of " + totalNumberOfLicences + " licences" %}
-    {% else %}
-      {% set caption = "Showing all " + totalNumberOfLicences + " licences" %}
-    {% endif %}
-
     {# Table displaying details of the licences in the bill run. These results take into account any filter that is set #}
     {{ govukTable({
       attributes: { 'data-test': 'licences'},
-      caption: caption,
+      caption: pagination.showingMessage,
       captionClasses: "govuk-table__caption--s govuk-!-margin-bottom-2",
       firstCellIsHeader: false,
       head: [

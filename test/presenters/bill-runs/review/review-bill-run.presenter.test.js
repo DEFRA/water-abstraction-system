@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/review/review-bill-run.presenter.js')
 
-describe('Bill Runs Review - Review Bill Run presenter', () => {
+describe('Bill Runs - Review - Review Bill Run presenter', () => {
   describe('when there is data to be presented for review', () => {
     let filterIssues
     let filterLicenceHolderNumber
@@ -56,7 +56,6 @@ describe('Bill Runs Review - Review Bill Run presenter', () => {
             openFilter: false
           },
           financialYear: '2022 to 2023',
-          numberOfLicencesDisplayed: 3,
           numberOfLicencesToReview: 1,
           preparedLicences: [
             {
@@ -87,8 +86,7 @@ describe('Bill Runs Review - Review Bill Run presenter', () => {
           region: 'Southern (Test Replica)',
           reviewMessage:
             'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
-          status: 'review',
-          totalNumberOfLicences: 3
+          status: 'review'
         })
       })
 

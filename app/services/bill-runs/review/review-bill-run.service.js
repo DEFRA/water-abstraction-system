@@ -42,7 +42,13 @@ async function go(id, page, yar) {
     licences.results
   )
 
-  const pagination = PaginatorPresenter.go(licences.total, page, `/system/bill-runs/review/${id}`)
+  const pagination = PaginatorPresenter.go(
+    licences.total,
+    page,
+    `/system/bill-runs/review/${id}`,
+    licences.results.length,
+    'licences'
+  )
 
   return { activeNavBar: 'bill-runs', bannerMessage, ...pageData, pageTitle: 'Review licences', pagination }
 }

@@ -28,7 +28,7 @@ const { formatBillRunType, formatChargeScheme, generateBillRunTitle } = require(
 function go(billRun, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, licences) {
   const preparedLicences = _prepareLicences(licences)
 
-  const preparedBillRun = _prepareBillRun(billRun, preparedLicences)
+  const preparedBillRun = _prepareBillRun(billRun)
 
   const issues = filterIssues ? _prepareIssues(filterIssues) : filterIssues
 
@@ -54,7 +54,7 @@ function _issue(issues) {
   return issues
 }
 
-function _prepareBillRun(billRun, preparedLicences) {
+function _prepareBillRun(billRun) {
   const {
     batchType,
     createdAt,
@@ -74,12 +74,10 @@ function _prepareBillRun(billRun, preparedLicences) {
     chargeScheme: formatChargeScheme(scheme),
     dateCreated: formatLongDate(createdAt),
     financialYear: formatFinancialYear(toFinancialYearEnding),
-    numberOfLicencesDisplayed: preparedLicences.length,
     numberOfLicencesToReview: reviewLicences[0].numberOfLicencesToReview,
     region: titleCase(region.displayName),
     reviewMessage: _reviewMessage(reviewLicences[0].numberOfLicencesToReview),
-    status,
-    totalNumberOfLicences: reviewLicences[0].totalNumberOfLicences
+    status
   }
 }
 

@@ -70,9 +70,7 @@ describe('Bill Runs Review controller', () => {
           financialYear: '2021 to 2022',
           billRunType: 'two-part tariff',
           billRunTitle: 'Southern (Test Replica) two-part tariff',
-          numberOfLicencesDisplayed: 2,
           numberOfLicencesToReview: 1,
-          totalNumberOfLicences: 2,
           preparedLicences: [
             {
               licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
@@ -94,6 +92,11 @@ describe('Bill Runs Review controller', () => {
             licenceHolder: undefined,
             licenceStatus: undefined,
             openFilter: false
+          },
+          pagination: {
+            currentPageNumber: 1,
+            numberOfPages: 1,
+            showingMessage: 'Showing all 2 licences'
           }
         })
       })
