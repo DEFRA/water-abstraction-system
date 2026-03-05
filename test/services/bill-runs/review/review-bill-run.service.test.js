@@ -117,8 +117,8 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
           }
         ],
         numberOfLicencesToReview: 1,
-        pageSubHeading: `${fetchData.billRun.region.displayName} two-part tariff`,
         pageTitle: 'Review licences',
+        pageTitleCaption: `${fetchData.billRun.region.displayName} two-part tariff`,
         region: fetchData.billRun.region.displayName,
         reviewMessage:
           'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',

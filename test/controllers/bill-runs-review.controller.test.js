@@ -96,8 +96,8 @@ describe('Bill Runs Review controller', () => {
             }
           ],
           numberOfLicencesToReview: 1,
-          pageSubHeading: 'Southern (Test Replica) two-part tariff',
           pageTitle: 'Review licences',
+          pageTitleCaption: 'Southern (Test Replica) two-part tariff',
           region: 'Southern (Test replica)',
           reviewMessage:
             'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
