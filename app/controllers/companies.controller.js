@@ -6,6 +6,7 @@
  */
 
 const ViewBillingAccountsService = require('../services/companies/view-billing-accounts.service.js')
+const ViewCompanyService = require('../services/companies/view-company.service.js')
 const ViewContactsService = require('../services/companies/view-contacts.service.js')
 const ViewLicencesService = require('../services/companies/view-licences.service.js')
 
@@ -19,6 +20,15 @@ async function viewBillingAccounts(request, h) {
   const pageData = await ViewBillingAccountsService.go(id, auth, page)
 
   return h.view(`companies/billing-accounts.njk`, pageData)
+}
+
+async function viewCompany(request, h) {
+  const {
+    params: { id }
+  } = request
+  const pageData = await ViewCompanyService.go(id)
+
+  return h.view(`companies/company.njk`, pageData)
 }
 
 async function viewContact(request, h) {
@@ -48,6 +58,7 @@ async function viewLicences(request, h) {
 
 module.exports = {
   viewBillingAccounts,
+  viewCompany,
   viewContact,
   viewLicences
 }
