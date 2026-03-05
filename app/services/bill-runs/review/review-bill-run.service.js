@@ -42,7 +42,6 @@ async function go(id, yar, page) {
     activeNavBar: 'bill-runs',
     bannerMessage,
     filters,
-    pageTitle: 'Review licences',
     ...pageData,
     pagination
   }

@@ -73,7 +73,6 @@ describe('Bill Runs Review controller', () => {
             progress: [],
             openFilter: false
           },
-          pageTitle: 'Review licences',
           billRunId: '8cf82f30-24b8-4647-9707-726c5950b723',
           billRunTitle: 'Southern (Test Replica) two-part tariff',
           billRunType: 'two-part tariff',
@@ -97,6 +96,7 @@ describe('Bill Runs Review controller', () => {
             }
           ],
           numberOfLicencesToReview: 1,
+          pageTitle: 'Review licences',
           region: 'Southern (Test replica)',
           reviewMessage:
             'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',

@@ -40,6 +40,7 @@ function go(billRun, licences) {
     financialYear: formatFinancialYear(toFinancialYearEnding),
     licences: formattedLicences,
     numberOfLicencesToReview: reviewLicences[0].numberOfLicencesToReview,
+    pageTitle: 'Review licences',
     region: titleCase(region.displayName),
     reviewMessage: _reviewMessage(reviewLicences[0].numberOfLicencesToReview),
     status

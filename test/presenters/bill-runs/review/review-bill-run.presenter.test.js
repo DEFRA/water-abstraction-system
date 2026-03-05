@@ -112,6 +112,7 @@ describe('Bill Runs - Review - Review Bill Run presenter', () => {
         }
       ],
       numberOfLicencesToReview: 1,
+      pageTitle: 'Review licences',
       region: billRun.region.displayName,
       reviewMessage:
         'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
