@@ -64,13 +64,22 @@ describe('Bill Runs Review controller', () => {
     describe('GET', () => {
       beforeEach(() => {
         Sinon.stub(ReviewBillRunService, 'go').resolves({
-          region: 'Southern (Test replica)',
-          status: 'review',
-          dateCreated: '6 November 2023',
-          financialYear: '2021 to 2022',
-          billRunType: 'two-part tariff',
+          activeNavBar: 'bill-runs',
+          bannerMessage: null,
+          filters: {
+            issues: [],
+            licenceHolderNumber: null,
+            licenceStatus: null,
+            progress: [],
+            openFilter: false
+          },
+          pageTitle: 'Review licences',
+          billRunId: '8cf82f30-24b8-4647-9707-726c5950b723',
           billRunTitle: 'Southern (Test Replica) two-part tariff',
-          numberOfLicencesToReview: 1,
+          billRunType: 'two-part tariff',
+          chargeScheme: 'Current',
+          dateCreated: '10 April 2025',
+          financialYear: '2024 to 2025',
           preparedLicences: [
             {
               licenceId: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
@@ -87,12 +96,11 @@ describe('Bill Runs Review controller', () => {
               issue: 'Multiple Issues'
             }
           ],
-          filter: {
-            issues: undefined,
-            licenceHolder: undefined,
-            licenceStatus: undefined,
-            openFilter: false
-          },
+          numberOfLicencesToReview: 1,
+          region: 'Southern (Test replica)',
+          reviewMessage:
+            'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
+          status: 'review',
           pagination: {
             currentPageNumber: 1,
             numberOfPages: 1,

@@ -8,6 +8,7 @@
 const FetchBillRunLicencesService = require('./fetch-bill-run-licences.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 const ReviewBillRunPresenter = require('../../../presenters/bill-runs/review/review-bill-run.presenter.js')
+const { processSavedFilters } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the review bill run page
@@ -20,27 +21,14 @@ const ReviewBillRunPresenter = require('../../../presenters/bill-runs/review/rev
  * details of the bill run and the licences linked to it as well as any data that has been used to filter the results.
  */
 async function go(id, yar, page) {
-  const { filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress } = _getFilters(id, yar)
+  const filterKey = `review-${id}`
+  const filters = _filters(yar, filterKey)
 
-  const { billRun, licences } = await FetchBillRunLicencesService.go(
-    id,
-    filterIssues,
-    filterLicenceHolderNumber,
-    filterLicenceStatus,
-    filterProgress,
-    page
-  )
+  const { billRun, licences } = await FetchBillRunLicencesService.go(id, filters, page)
 
   const [bannerMessage] = yar.flash('banner')
 
-  const pageData = ReviewBillRunPresenter.go(
-    billRun,
-    filterIssues,
-    filterLicenceHolderNumber,
-    filterLicenceStatus,
-    filterProgress,
-    licences.results
-  )
+  const pageData = ReviewBillRunPresenter.go(billRun, licences.results)
 
   const pagination = PaginatorPresenter.go(
     licences.total,
@@ -50,17 +38,26 @@ async function go(id, yar, page) {
     'licences'
   )
 
-  return { activeNavBar: 'bill-runs', bannerMessage, ...pageData, pageTitle: 'Review licences', pagination }
+  return {
+    activeNavBar: 'bill-runs',
+    bannerMessage,
+    filters,
+    pageTitle: 'Review licences',
+    ...pageData,
+    pagination
+  }
 }
 
-function _getFilters(id, yar) {
-  const filters = yar.get(`review-${id}`)
-  const filterIssues = filters?.filterIssues || null
-  const filterLicenceHolderNumber = filters?.filterLicenceHolderNumber || null
-  const filterLicenceStatus = filters?.filterLicenceStatus || null
-  const filterProgress = filters?.filterProgress || null
+function _filters(yar, filterKey) {
+  const savedFilters = processSavedFilters(yar, filterKey)
 
-  return { filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress }
+  return {
+    issues: [],
+    licenceHolderNumber: null,
+    licenceStatus: null,
+    progress: [],
+    ...savedFilters
+  }
 }
 
 module.exports = {

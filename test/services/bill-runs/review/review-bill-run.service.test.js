@@ -20,9 +20,9 @@ const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/
 // Thing under test
 const ReviewBillRunService = require('../../../../app/services/bill-runs/review/review-bill-run.service.js')
 
-describe('Bill Runs - Review - Review Bill Run Service', () => {
-  const billRunId = generateUUID()
+const billRunId = generateUUID()
 
+describe('Bill Runs - Review - Review Bill Run Service', () => {
   let bannerMessage
   let fetchData
   let page
@@ -45,19 +45,19 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
           results: [
             {
               id: generateUUID(),
-              licenceId: generateUUID(),
-              licenceRef: generateLicenceRef(),
-              licenceHolder: 'ACME Water PLC',
               issues: 'Aggregate',
+              licenceId: generateUUID(),
+              licenceHolder: 'ACME Water PLC',
+              licenceRef: generateLicenceRef(),
               progress: true,
               status: 'review'
             },
             {
               id: generateUUID(),
-              licenceId: generateUUID(),
-              licenceRef: generateLicenceRef(),
-              licenceHolder: 'SCEP Holdings Ltd',
               issues: '',
+              licenceId: generateUUID(),
+              licenceHolder: 'SCEP Holdings Ltd',
+              licenceRef: generateLicenceRef(),
               progress: false,
               status: 'ready'
             }
@@ -82,27 +82,21 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
       expect(result).to.equal({
         activeNavBar: 'bill-runs',
         bannerMessage,
+        filters: {
+          issues: [],
+          licenceHolderNumber: null,
+          licenceStatus: null,
+          progress: [],
+          openFilter: false
+        },
+        pageTitle: 'Review licences',
         billRunId: fetchData.billRun.id,
         billRunTitle: `${fetchData.billRun.region.displayName} two-part tariff`,
         billRunType: 'Two-part tariff',
         chargeScheme: 'Current',
         dateCreated: '10 April 2025',
-        filter: {
-          inProgress: null,
-          issues: null,
-          licenceHolderNumber: null,
-          licenceStatus: null,
-          openFilter: false
-        },
-        financialYear: '2023 to 2024',
-        numberOfLicencesToReview: 1,
-        pageTitle: 'Review licences',
-        pagination: {
-          currentPageNumber: 1,
-          numberOfPages: 1,
-          showingMessage: 'Showing all 2 licences'
-        },
-        preparedLicences: [
+        financialYear: '2024 to 2025',
+        licences: [
           {
             id: fetchData.licences.results[0].id,
             issue: 'Aggregate',
@@ -120,10 +114,16 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
             status: 'ready'
           }
         ],
+        numberOfLicencesToReview: 1,
         region: fetchData.billRun.region.displayName,
         reviewMessage:
           'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
-        status: 'review'
+        status: 'review',
+        pagination: {
+          currentPageNumber: 1,
+          numberOfPages: 1,
+          showingMessage: 'Showing all 2 licences'
+        }
       })
     })
   })
@@ -149,7 +149,7 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await ReviewBillRunService.go(billRunId, yarStub, page)
 
-        expect(result.filter.openFilter).to.be.false()
+        expect(result.filters.openFilter).to.be.false()
       })
     })
 
@@ -161,7 +161,7 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
       it('returns blank filters and that the controls should be closed', async () => {
         const result = await ReviewBillRunService.go(billRunId, yarStub, page)
 
-        expect(result.filter.openFilter).to.be.false()
+        expect(result.filters.openFilter).to.be.false()
       })
     })
 
@@ -169,14 +169,14 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
       beforeEach(() => {
         const filters = _filters()
 
-        filters.filterLicenceHolderNumber = 'carol shaw'
+        filters.licenceHolderNumber = 'carol shaw'
         yarStub.get = Sinon.stub().returns(filters)
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
         const result = await ReviewBillRunService.go(billRunId, yarStub, page)
 
-        expect(result.filter.openFilter).to.be.true()
+        expect(result.filters.openFilter).to.be.true()
       })
     })
   })
@@ -186,13 +186,13 @@ function _fetchedBillRun() {
   const { id: regionId, displayName } = RegionHelper.select()
 
   return {
-    id: generateUUID(),
+    id: billRunId,
     batchType: 'two_part_tariff',
     createdAt: new Date('2025-04-10T16:19:14.012Z'),
     scheme: 'sroc',
     status: 'review',
     summer: false,
-    toFinancialYearEnding: 2024,
+    toFinancialYearEnding: 2025,
     region: {
       id: regionId,
       displayName
@@ -208,9 +208,9 @@ function _fetchedBillRun() {
 
 function _filters() {
   return {
-    filterIssues: null,
-    filterLicenceHolderNumber: null,
-    filterLicenceStatus: null,
-    filterProgress: null
+    issues: null,
+    licenceHolderNumber: null,
+    licenceStatus: null,
+    progress: null
   }
 }

@@ -55,10 +55,10 @@ describe('Bill Runs - Review - Submit Review Bill Run Service', () => {
 
         expect(setArgs[0]).to.equal(`review-${billRunId}`)
         expect(setArgs[1]).to.equal({
-          filterIssues: null,
-          filterLicenceHolderNumber: null,
-          filterLicenceStatus: null,
-          filterProgress: null
+          issues: [],
+          licenceHolderNumber: null,
+          licenceStatus: null,
+          progress: []
         })
       })
     })
@@ -66,10 +66,10 @@ describe('Bill Runs - Review - Submit Review Bill Run Service', () => {
     describe('with a valid payload', () => {
       beforeEach(() => {
         payload = {
-          filterIssues: ['abs-outside-period', 'aggregate-factor'],
-          filterLicenceHolderNumber: 'A Licence Holder Ltd',
-          filterLicenceStatus: 'review',
-          filterProgress: true
+          issues: ['abs-outside-period', 'aggregate-factor'],
+          licenceHolderNumber: 'A Licence Holder Ltd',
+          licenceStatus: 'review',
+          progress: ['inProgress']
         }
       })
 
@@ -80,10 +80,10 @@ describe('Bill Runs - Review - Submit Review Bill Run Service', () => {
 
         expect(setArgs[0]).to.equal(`review-${billRunId}`)
         expect(setArgs[1]).to.equal({
-          filterIssues: ['abs-outside-period', 'aggregate-factor'],
-          filterLicenceHolderNumber: 'A Licence Holder Ltd',
-          filterLicenceStatus: 'review',
-          filterProgress: true
+          issues: ['abs-outside-period', 'aggregate-factor'],
+          licenceHolderNumber: 'A Licence Holder Ltd',
+          licenceStatus: 'review',
+          progress: ['inProgress']
         })
       })
     })
