@@ -1,12 +1,10 @@
 {% extends 'layout.njk' %}
 
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
@@ -15,85 +13,66 @@
 {% from "macros/bill-run-status-tag.njk" import statusTag as billRunStatusTag %}
 {% from "macros/review-status-tag.njk" import statusTag as reviewStatusTag %}
 
-{% block breadcrumbs %}
-  {# Back link #}
-  {{ govukBackLink(backLink) }}
-{% endblock %}
+{% block pageContent %}
+  <p class="govuk-body">
+    {{ billRunStatusTag(status) }}
+  </p>
 
-{% block content %}
-  {# Licence removed notification #}
-  {% if notification %}
-    {{ govukNotificationBanner(notification) }}
-  {% endif %}
-
-  {# Main heading #}
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <span class="govuk-caption-l">{{ pageSubHeading }}</span>
-      <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">{{ pageTitle }}</h1>
-
-      <p class="govuk-body">
-        {{ billRunStatusTag(status) }}
-      </p>
-
-      {# Bill run meta-data #}
-      {{ govukSummaryList({
-          classes: 'govuk-summary-list--no-border',
-          rows: [
-            {
-              key: {
-                text: 'Date created',
-                classes: "meta-data__label"
-              },
-              value: {
-                html: '<span data-test="meta-data-created">' + dateCreated + '</span>',
-                classes: "meta-data__value"
-              }
-            },
-            {
-              key: {
-                text: 'Region',
-                classes: "meta-data__label"
-              },
-              value: {
-                html: '<span data-test="meta-data-region">' + region + '</span>',
-                classes: "meta-data__value"
-              }
-            },
-            {
-              key: {
-                text: 'Bill run type',
-                classes: "meta-data__label"
-              },
-              value: {
-                html: '<span data-test="meta-data-type">' + billRunType | capitalize + '</span>',
-                classes: "meta-data__value"
-              }
-            },
-            {
-              key: {
-                text: 'Charge scheme',
-                classes: "meta-data__label"
-              },
-              value: {
-                html: '<span data-test="meta-data-scheme">' + chargeScheme + '</span>',
-                classes: "meta-data__value"
-              }
-            },
-            {
-              key: {
-                text: 'Financial year',
-                classes: "meta-data__label"
-              },
-              value: {
-                html: '<span data-test="meta-data-year">' + financialYear + '</span>',
-                classes: "meta-data__value"
-              }
-            }
-          ]
-        }) }}
-    </div>
-  </div>
+  {{ govukSummaryList({
+    classes: 'govuk-summary-list--no-border',
+    rows: [
+      {
+        key: {
+          text: 'Date created',
+          classes: "meta-data__label"
+        },
+        value: {
+          html: '<span data-test="meta-data-created">' + dateCreated + '</span>',
+          classes: "meta-data__value"
+        }
+      },
+      {
+        key: {
+          text: 'Region',
+          classes: "meta-data__label"
+        },
+        value: {
+          html: '<span data-test="meta-data-region">' + region + '</span>',
+          classes: "meta-data__value"
+        }
+      },
+      {
+        key: {
+          text: 'Bill run type',
+          classes: "meta-data__label"
+        },
+        value: {
+          html: '<span data-test="meta-data-type">' + billRunType | capitalize + '</span>',
+          classes: "meta-data__value"
+        }
+      },
+      {
+        key: {
+          text: 'Charge scheme',
+          classes: "meta-data__label"
+        },
+        value: {
+          html: '<span data-test="meta-data-scheme">' + chargeScheme + '</span>',
+          classes: "meta-data__value"
+        }
+      },
+      {
+        key: {
+          text: 'Financial year',
+          classes: "meta-data__label"
+        },
+        value: {
+          html: '<span data-test="meta-data-year">' + financialYear + '</span>',
+          classes: "meta-data__value"
+        }
+      }
+    ]
+  }) }}
 
   {# Message either telling the user they have issues to deal with or that they can generate bills #}
   <section class="govuk-!-margin-bottom-9">
