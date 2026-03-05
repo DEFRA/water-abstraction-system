@@ -35,7 +35,7 @@ function _address(existingAddress) {
     return ['New']
   }
 
-  const addressParts = [
+  const addressLines = [
     existingAddress.address1,
     existingAddress.address2,
     existingAddress.address3,
@@ -43,15 +43,7 @@ function _address(existingAddress) {
     existingAddress.address5,
     existingAddress.address6,
     existingAddress.postcode
-  ]
-
-  const addressLines = addressParts
-    .filter((part) => {
-      return part && part.trim().length > 0
-    })
-    .map((part) => {
-      return part.trim()
-    })
+  ].filter(Boolean)
 
   return addressLines
 }

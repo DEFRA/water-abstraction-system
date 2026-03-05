@@ -40,7 +40,7 @@ async function _fetchExistingAddress(session) {
     return []
   }
 
-  return await AddressModel.query()
+  return AddressModel.query()
     .select(['addresses.id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'postcode'])
     .findById(session.addressSelected)
 }

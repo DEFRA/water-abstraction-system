@@ -67,16 +67,9 @@ function _radioOptions(addressSelected, companyAddresses) {
       address.address5,
       address.address6,
       address.postcode
-    ]
+    ].filter(Boolean)
 
-    const text = addressParts
-      .filter((part) => {
-        return part && part.trim().length > 0
-      })
-      .map((part) => {
-        return part.trim()
-      })
-      .join(', ')
+    const text = addressParts.join(', ')
 
     items.push({
       id: address.id,
