@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
+const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -16,9 +17,12 @@ const CheckPresenter = require('../../../../app/presenters/billing-accounts/setu
 
 describe('Billing Accounts - Setup - Check Presenter', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
-  const companyAddresses = {
+  const address = billingAccount.billingAccountAddresses[0].address
+  const exampleContacts = CustomersFixture.companyContacts()
+  const contact = exampleContacts[0].contact
+  const companyContacts = {
     company: billingAccount.company,
-    addresses: [billingAccount.billingAccountAddresses[0].address]
+    contacts: [contact]
   }
 
   let session
@@ -32,15 +36,17 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CheckPresenter.go(session, companyAddresses)
+      const result = CheckPresenter.go(session, companyContacts, [])
 
       expect(result).to.equal({
         accountSelected: 'Another billing account',
         accountType: '',
+        addressSelected: ['New'],
         existingAccount: '',
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
+          addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
           existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
         },
         pageTitle: 'Check billing account details',
@@ -59,7 +65,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             accountSelected: 'customer'
           },
-          companyAddresses
+          companyContacts,
+          address
         )
 
         expect(result.accountSelected).to.equal(session.billingAccount.company.name)
@@ -73,7 +80,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             accountSelected: 'another'
           },
-          companyAddresses
+          companyContacts,
+          address
         )
 
         expect(result.accountSelected).to.equal('Another billing account')
@@ -89,7 +97,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             searchInput: 'Customer name'
           },
-          companyAddresses
+          companyContacts,
+          address
         )
 
         expect(result.searchInput).to.equal('Customer name')
@@ -103,7 +112,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             searchInput: null
           },
-          companyAddresses
+          companyContacts,
+          address
         )
 
         expect(result.searchInput).to.equal('')
@@ -119,7 +129,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             existingAccount: 'new'
           },
-          companyAddresses
+          companyContacts,
+          address
         )
 
         expect(result.existingAccount).to.equal('New billing account')
@@ -133,7 +144,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             existingAccount: null
           },
-          companyAddresses
+          companyContacts,
+          address
         )
 
         expect(result.existingAccount).to.equal('')
@@ -147,7 +159,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             existingAccount: billingAccount.company.id
           },
-          companyAddresses
+          companyContacts,
+          address
         )
 
         expect(result.existingAccount).to.equal('Ferns Surfacing Limited')
@@ -163,7 +176,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             accountType: 'company'
           },
-          companyAddresses
+          companyContacts,
+          address
         )
 
         expect(result.accountType).to.equal('company')
@@ -177,7 +191,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             accountType: 'individual'
           },
-          companyAddresses
+          companyContacts,
+          address
         )
 
         expect(result.accountType).to.equal('individual')
@@ -193,7 +208,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             searchIndividualInput: 'Customer name'
           },
-          companyAddresses
+          companyContacts,
+          address
         )
 
         expect(result.searchIndividualInput).to.equal('Customer name')
@@ -207,10 +223,43 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             ...session,
             searchIndividualInput: null
           },
-          companyAddresses
+          companyContacts,
+          address
         )
 
         expect(result.searchIndividualInput).to.equal('')
+      })
+    })
+  })
+
+  describe('the "addressSelected" property', () => {
+    describe('when called with a address selected', () => {
+      it('returns an array of address lines', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            addressSelected: generateUUID()
+          },
+          companyContacts,
+          address
+        )
+
+        expect(result.addressSelected).to.equal(['Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'ME15 0NE'])
+      })
+    })
+
+    describe('when called with the "addressSelected" set to "new"', () => {
+      it('returns an array with the string "New"', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            addressSelected: 'new'
+          },
+          companyContacts,
+          []
+        )
+
+        expect(result.addressSelected).to.equal(['New'])
       })
     })
   })

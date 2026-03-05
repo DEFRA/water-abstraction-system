@@ -3,6 +3,8 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
 {% block pageContent %}
   {{ govukSummaryList({
     rows: [
@@ -56,7 +58,20 @@
         classes: "govuk-summary-list__row--no-actions",
         key: { text: "Individual search term" },
         value: { text: searchIndividualInput }
-      } if searchIndividualInput
+      } if searchIndividualInput,
+      {
+        key: { text: "Existing address" },
+        value: { html: newLineArrayItems(addressSelected) },
+        actions: {
+          items: [
+            {
+              href: links.addressSelected,
+              text: "Change",
+              visuallyHiddenText: "address selected"
+            }
+          ]
+        }
+      } if addressSelected
     ]
   }) }}
 
