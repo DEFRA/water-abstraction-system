@@ -33,13 +33,13 @@ function go(billRun, licences) {
 
   return {
     billRunId,
-    billRunTitle: generateBillRunTitle(region.displayName, batchType, scheme, summer),
     billRunType: formatBillRunType(batchType, scheme, summer),
     chargeScheme: formatChargeScheme(scheme),
     dateCreated: formatLongDate(createdAt),
     financialYear: formatFinancialYear(toFinancialYearEnding),
     licences: formattedLicences,
     numberOfLicencesToReview: reviewLicences[0].numberOfLicencesToReview,
+    pageSubHeading: generateBillRunTitle(region.displayName, batchType, scheme, summer),
     pageTitle: 'Review licences',
     region: titleCase(region.displayName),
     reviewMessage: _reviewMessage(reviewLicences[0].numberOfLicencesToReview),

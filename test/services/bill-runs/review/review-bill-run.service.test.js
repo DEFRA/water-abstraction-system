@@ -90,7 +90,6 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
           openFilter: false
         },
         billRunId: fetchData.billRun.id,
-        billRunTitle: `${fetchData.billRun.region.displayName} two-part tariff`,
         billRunType: 'Two-part tariff',
         chargeScheme: 'Current',
         dateCreated: '10 April 2025',
@@ -114,6 +113,7 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
           }
         ],
         numberOfLicencesToReview: 1,
+        pageSubHeading: `${fetchData.billRun.region.displayName} two-part tariff`,
         pageTitle: 'Review licences',
         region: fetchData.billRun.region.displayName,
         reviewMessage:

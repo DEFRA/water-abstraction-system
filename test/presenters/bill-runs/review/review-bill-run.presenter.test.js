@@ -80,7 +80,6 @@ describe('Bill Runs - Review - Review Bill Run presenter', () => {
 
     expect(result).to.equal({
       billRunId: billRun.id,
-      billRunTitle: `${billRun.region.displayName} two-part tariff`,
       billRunType: 'Two-part tariff',
       chargeScheme: 'Current',
       dateCreated: '10 April 2025',
@@ -112,6 +111,7 @@ describe('Bill Runs - Review - Review Bill Run presenter', () => {
         }
       ],
       numberOfLicencesToReview: 1,
+      pageSubHeading: `${billRun.region.displayName} two-part tariff`,
       pageTitle: 'Review licences',
       region: billRun.region.displayName,
       reviewMessage:

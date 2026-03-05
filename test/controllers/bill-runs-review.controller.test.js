@@ -74,7 +74,6 @@ describe('Bill Runs Review controller', () => {
             openFilter: false
           },
           billRunId: '8cf82f30-24b8-4647-9707-726c5950b723',
-          billRunTitle: 'Southern (Test Replica) two-part tariff',
           billRunType: 'two-part tariff',
           chargeScheme: 'Current',
           dateCreated: '10 April 2025',
@@ -96,6 +95,7 @@ describe('Bill Runs Review controller', () => {
             }
           ],
           numberOfLicencesToReview: 1,
+          pageSubHeading: 'Southern (Test Replica) two-part tariff',
           pageTitle: 'Review licences',
           region: 'Southern (Test replica)',
           reviewMessage:
