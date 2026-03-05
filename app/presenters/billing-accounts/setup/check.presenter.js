@@ -20,9 +20,10 @@ function go(session, companyContacts, existingAddress) {
   return {
     accountSelected: session.accountSelected === 'customer' ? billingAccount.company.name : 'Another billing account',
     accountType: session.accountType ?? '',
-    addressSelected: _address(existingAddress),
+    addressSelected: _existingAddress(existingAddress),
     existingAccount: _existingAccount(session, companyContacts),
     links: _links(session),
+    newAddress: _newAddress(session),
     pageTitle: 'Check billing account details',
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
     searchIndividualInput: session.searchIndividualInput ?? '',
@@ -30,7 +31,7 @@ function go(session, companyContacts, existingAddress) {
   }
 }
 
-function _address(existingAddress) {
+function _existingAddress(existingAddress) {
   if (existingAddress.length === 0) {
     return ['New']
   }
@@ -65,8 +66,24 @@ function _links(session) {
     accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
     accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
     addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
-    existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
+    existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`,
+    newAddress: `/system/address/${session.id}/postcode`
   }
+}
+
+function _newAddress(session) {
+  const { address } = session.addressJourney
+
+  const addressLines = [
+    address.addressLine1,
+    address.addressLine2,
+    address.addressLine3,
+    address.addressLine4,
+    address.country,
+    address.postcode
+  ].filter(Boolean)
+
+  return addressLines
 }
 
 module.exports = {

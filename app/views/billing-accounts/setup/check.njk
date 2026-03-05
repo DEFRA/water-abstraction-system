@@ -71,7 +71,21 @@
             }
           ]
         }
-      } if addressSelected
+      } if addressSelected,
+      ,
+      {
+        key: { text: "New address" },
+        value: { html: newLineArrayItems(newAddress) },
+        actions: {
+          items: [
+            {
+              href: links.newAddress,
+              text: "Change",
+              visuallyHiddenText: "new address selected"
+            }
+          ]
+        }
+      } if newAddress
     ]
   }) }}
 
