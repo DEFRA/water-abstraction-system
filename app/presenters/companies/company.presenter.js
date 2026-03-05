@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the '/companies/{id}' page
+ * Formats data for the '/companies/{id}/{role}' page
  * @module CompanyPresenter
  */
 
 /**
- * Formats data for the '/companies/{id}' page
+ * Formats data for the '/companies/{id}/{role}' page
  *
  * @param {module:CompanyModel} companyDetails - The company details
  * @param {string} role - the role in sentence case
