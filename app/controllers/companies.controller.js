@@ -24,9 +24,9 @@ async function viewBillingAccounts(request, h) {
 
 async function viewCompany(request, h) {
   const {
-    params: { id }
+    params: { id, role }
   } = request
-  const pageData = await ViewCompanyService.go(id)
+  const pageData = await ViewCompanyService.go(id, role)
 
   return h.view(`companies/company.njk`, pageData)
 }
