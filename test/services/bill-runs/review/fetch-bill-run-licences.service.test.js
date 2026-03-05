@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -13,579 +13,357 @@ const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const DatabaseConfig = require('../../../../config/database.config.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const ReviewLicenceHelper = require('../../../support/helpers/review-licence.helper.js')
+const { generateRandomInteger, today } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js')
 
-describe('Bill Runs Review - Fetch Bill Run Licences service', () => {
-  let filterIssues
-  let filterLicenceHolderNumber
-  let filterLicenceStatus
-  let filterProgress
+describe('Bill Runs - Review - Fetch Bill Run Licences service', () => {
+  const todaysDate = today()
+
+  let filters
   let page
+  let region
+  let billRun
   let testLicenceReady
   let testLicenceReview
   let testLicenceNoIssues
+
+  before(async () => {
+    region = RegionHelper.select()
+
+    billRun = await BillRunHelper.add({
+      batchType: 'two_part_tariff',
+      createdAt: todaysDate,
+      regionId: region.id,
+      status: 'review',
+      toFinancialYearEnding: todaysDate.getFullYear()
+    })
+
+    testLicenceReady = await ReviewLicenceHelper.add({
+      billRunId: billRun.id,
+      licenceHolder: 'Ready Licence Holder Ltd',
+      licenceRef: `01/${generateRandomInteger(100, 9999)}`,
+      status: 'ready',
+      progress: true,
+      issues: 'Returns received late'
+    })
+
+    testLicenceReview = await ReviewLicenceHelper.add({
+      billRunId: billRun.id,
+      licenceHolder: 'Review Licence Holder Ltd',
+      licenceRef: `02/${generateRandomInteger(100, 9999)}`,
+      status: 'review',
+      issues: 'Over abstraction, Returns received but not processed'
+    })
+
+    testLicenceNoIssues = await ReviewLicenceHelper.add({
+      billRunId: billRun.id,
+      licenceHolder: 'No issues Licence Holder Ltd',
+      licenceRef: `03/${generateRandomInteger(100, 9999)}`,
+      status: 'ready',
+      issues: ''
+    })
+  })
+
+  beforeEach(() => {
+    // NOTE: _filters() generates an empty filters object as used by the services that call FetchBillRunLicencesService when no filter
+    // has been applied by the user
+    filters = _filters()
+  })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when there is a valid bill run', () => {
-    let billRun
-    let region
+  after(async () => {
+    await testLicenceNoIssues.$query().delete()
+    await testLicenceReview.$query().delete()
+    await testLicenceReady.$query().delete()
+    await billRun.$query().delete()
+  })
 
-    beforeEach(async () => {
-      region = RegionHelper.select()
-      billRun = await BillRunHelper.add({ regionId: region.id, batchType: 'two_part_tariff' })
-
-      testLicenceReady = await ReviewLicenceHelper.add({
-        billRunId: billRun.id,
-        licenceHolder: 'Ready Licence Holder Ltd',
-        status: 'ready',
-        progress: true,
-        issues: 'Returns received late'
-      })
-
-      testLicenceReview = await ReviewLicenceHelper.add({
-        billRunId: billRun.id,
-        licenceRef: '02/200',
-        licenceHolder: 'Review Licence Holder Ltd',
-        status: 'review',
-        issues: 'Over abstraction, Returns received but not processed'
-      })
+  describe('when no filter is applied', () => {
+    beforeEach(() => {
+      // NOTE: We set the default page size to 1000 to ensure we get all records and avoid failed tests when run as
+      // part of the full suite, and the risk our test record is returned in the second page of results.
+      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
     })
 
-    describe('and there are licences in the bill run that fit on a single page', () => {
-      beforeEach(async () => {
-        // no filters are being applied so these are undefined
-        filterIssues = undefined
-        filterLicenceHolderNumber = undefined
-        filterLicenceStatus = undefined
-        filterProgress = undefined
+    it('returns details of the bill run and the licences in it', async () => {
+      const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-        page = undefined
-        // Set the default page size to 2 so all 2 records fit on a single page
-        Sinon.replace(DatabaseConfig, 'defaultPageSize', 2)
+      expect(result).to.equal({
+        billRun: {
+          id: billRun.id,
+          batchType: 'two_part_tariff',
+          createdAt: todaysDate,
+          scheme: 'sroc',
+          status: 'review',
+          summer: false,
+          toFinancialYearEnding: todaysDate.getFullYear(),
+          region: {
+            id: region.id,
+            displayName: region.displayName
+          },
+          reviewLicences: [
+            {
+              totalNumberOfLicences: 3,
+              numberOfLicencesToReview: 1
+            }
+          ]
+        },
+        licences: {
+          results: [
+            {
+              id: testLicenceReview.id,
+              licenceId: testLicenceReview.licenceId,
+              licenceRef: testLicenceReview.licenceRef,
+              licenceHolder: 'Review Licence Holder Ltd',
+              issues: 'Over abstraction, Returns received but not processed',
+              progress: false,
+              status: 'review'
+            },
+            {
+              id: testLicenceReady.id,
+              licenceId: testLicenceReady.licenceId,
+              licenceRef: testLicenceReady.licenceRef,
+              licenceHolder: 'Ready Licence Holder Ltd',
+              issues: 'Returns received late',
+              progress: true,
+              status: 'ready'
+            },
+            {
+              id: testLicenceNoIssues.id,
+              licenceId: testLicenceNoIssues.licenceId,
+              licenceRef: testLicenceNoIssues.licenceRef,
+              licenceHolder: 'No issues Licence Holder Ltd',
+              issues: '',
+              progress: false,
+              status: 'ready'
+            }
+          ],
+          total: 3
+        }
       })
+    })
+  })
 
-      it('returns details of the bill run and the licences in it', async () => {
-        const result = await FetchBillRunLicencesService.go(
-          billRun.id,
-          filterIssues,
-          filterLicenceHolderNumber,
-          filterLicenceStatus,
-          filterProgress,
-          page
-        )
+  describe('when a filter is applied', () => {
+    beforeEach(() => {
+      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1000)
+    })
 
-        expect(result.billRun.id).to.equal(billRun.id)
-        expect(result.billRun.batchType).to.equal(billRun.batchType)
-        expect(result.billRun.createdAt).to.equal(billRun.createdAt)
-        expect(result.billRun.scheme).to.equal(billRun.scheme)
-        expect(result.billRun.status).to.equal(billRun.status)
-        expect(result.billRun.summer).to.equal(billRun.summer)
-        expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-        expect(result.billRun.region.displayName).to.equal(region.displayName)
-        expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
-        expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
+    describe('and "Issues" has been set', () => {
+      describe('to the "no-issues" issue', () => {
+        beforeEach(() => {
+          filters.issues.push('no-issues')
+        })
 
-        expect(result.licences.total).to.equal(2)
-        expect(result.licences.results).to.have.length(2)
-        expect(result.licences.results[0].licenceId).to.equal(testLicenceReview.licenceId)
-        expect(result.licences.results[0].licenceHolder).to.equal('Review Licence Holder Ltd')
-        expect(result.licences.results[0].licenceRef).to.equal(testLicenceReview.licenceRef)
-        expect(result.licences.results[0].issues).to.equal('Over abstraction, Returns received but not processed')
-        expect(result.licences.results[0].status).to.equal('review')
-        expect(result.licences.results[1].licenceId).to.equal(testLicenceReady.licenceId)
-        expect(result.licences.results[1].licenceHolder).to.equal('Ready Licence Holder Ltd')
-        expect(result.licences.results[1].licenceRef).to.equal(testLicenceReady.licenceRef)
-        expect(result.licences.results[1].issues).to.equal('Returns received late')
-        expect(result.licences.results[1].status).to.equal('ready')
-      })
+        it('returns the matching licences', async () => {
+          const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-      it('orders the licence by "review status" first', async () => {
-        const result = await FetchBillRunLicencesService.go(
-          billRun.id,
-          filterIssues,
-          filterLicenceHolderNumber,
-          filterLicenceStatus,
-          filterProgress,
-          page
-        )
-
-        expect(result.licences.results[0].status).to.equal('review')
-        expect(result.licences.results[1].status).to.equal('ready')
-      })
-
-      describe('after its been ordered by the licence status', () => {
-        beforeEach(async () => {
-          await ReviewLicenceHelper.add({
-            billRunId: billRun.id,
-            licenceRef: '01/100',
-            licenceHolder: 'Review Licence Holder Ltd',
-            status: 'review',
-            issues: 'Over abstraction, Returns received but not processed'
+          expect(result.licences).equals({
+            results: [
+              {
+                id: testLicenceNoIssues.id,
+                licenceId: testLicenceNoIssues.licenceId,
+                licenceRef: testLicenceNoIssues.licenceRef,
+                licenceHolder: 'No issues Licence Holder Ltd',
+                issues: '',
+                progress: false,
+                status: 'ready'
+              }
+            ],
+            total: 1
           })
         })
-
-        it('orders the licences by licence ref', async () => {
-          const result = await FetchBillRunLicencesService.go(
-            billRun.id,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterProgress,
-            filterLicenceStatus,
-            page
-          )
-
-          expect(result.licences.results[0].licenceRef).to.equal('01/100')
-          expect(result.licences.results[1].licenceRef).to.equal('02/200')
-        })
       })
 
-      describe('and a filter has been applied to the licence holder', () => {
+      describe('with a single issue', () => {
         beforeEach(() => {
-          filterIssues = undefined
-          filterLicenceHolderNumber = 'ready licence'
-          filterLicenceStatus = undefined
-          filterProgress = undefined
+          filters.issues.push('returns-late')
         })
 
-        it('returns details of the bill run and the licences that match the filter', async () => {
-          const result = await FetchBillRunLicencesService.go(
-            billRun.id,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            page
-          )
+        it('returns the matching licences', async () => {
+          const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-          expect(result.billRun.id).to.equal(billRun.id)
-          expect(result.billRun.batchType).to.equal(billRun.batchType)
-          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
-          expect(result.billRun.scheme).to.equal(billRun.scheme)
-          expect(result.billRun.status).to.equal(billRun.status)
-          expect(result.billRun.summer).to.equal(billRun.summer)
-          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-          expect(result.billRun.region.displayName).to.equal(region.displayName)
-          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
-          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
-
-          expect(result.licences.total).to.equal(1)
-          expect(result.licences.results).to.have.length(1)
-          expect(result.licences.results[0].licenceId).to.equal(testLicenceReady.licenceId)
-          expect(result.licences.results[0].licenceHolder).to.equal('Ready Licence Holder Ltd')
-          expect(result.licences.results[0].licenceRef).to.equal(testLicenceReady.licenceRef)
-          expect(result.licences.results[0].issues).to.equal('Returns received late')
-          expect(result.licences.results[0].status).to.equal('ready')
-        })
-      })
-
-      describe('and a filter has been applied to the licence number', () => {
-        beforeEach(() => {
-          filterIssues = undefined
-          filterLicenceHolderNumber = '02/200'
-          filterLicenceStatus = undefined
-          filterProgress = undefined
-        })
-
-        it('returns details of the bill run and the licences that match the filter', async () => {
-          const result = await FetchBillRunLicencesService.go(
-            billRun.id,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            page
-          )
-
-          expect(result.billRun.id).to.equal(billRun.id)
-          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
-          expect(result.billRun.status).to.equal(billRun.status)
-          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-          expect(result.billRun.batchType).to.equal(billRun.batchType)
-          expect(result.billRun.region.displayName).to.equal(region.displayName)
-          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
-          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
-
-          expect(result.licences.total).to.equal(1)
-          expect(result.licences.results).to.have.length(1)
-          expect(result.licences.results[0].licenceId).to.equal(testLicenceReview.licenceId)
-          expect(result.licences.results[0].licenceHolder).to.equal('Review Licence Holder Ltd')
-          expect(result.licences.results[0].licenceRef).to.equal('02/200')
-          expect(result.licences.results[0].issues).to.equal('Over abstraction, Returns received but not processed')
-          expect(result.licences.results[0].status).to.equal('review')
-        })
-      })
-
-      describe('and a filter has been applied to the licence status', () => {
-        beforeEach(() => {
-          filterIssues = undefined
-          filterLicenceHolderNumber = undefined
-          filterLicenceStatus = 'review'
-          filterProgress = undefined
-        })
-
-        it('returns details of the bill run and the licences that match the filter', async () => {
-          const result = await FetchBillRunLicencesService.go(
-            billRun.id,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            page
-          )
-
-          expect(result.billRun.id).to.equal(billRun.id)
-          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
-          expect(result.billRun.status).to.equal(billRun.status)
-          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-          expect(result.billRun.batchType).to.equal(billRun.batchType)
-          expect(result.billRun.region.displayName).to.equal(region.displayName)
-          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
-          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
-
-          expect(result.licences.total).to.equal(1)
-          expect(result.licences.results).to.have.length(1)
-          expect(result.licences.results[0].licenceId).to.equal(testLicenceReview.licenceId)
-          expect(result.licences.results[0].licenceHolder).to.equal('Review Licence Holder Ltd')
-          expect(result.licences.results[0].licenceRef).to.equal(testLicenceReview.licenceRef)
-          expect(result.licences.results[0].issues).to.equal('Over abstraction, Returns received but not processed')
-          expect(result.licences.results[0].status).to.equal('review')
-        })
-      })
-
-      describe('and a filter has been applied to the licence progress', () => {
-        beforeEach(() => {
-          filterIssues = undefined
-          filterLicenceHolderNumber = undefined
-          filterLicenceStatus = undefined
-          filterProgress = true
-        })
-
-        it('returns details of the bill run and the licences that match the filter', async () => {
-          const result = await FetchBillRunLicencesService.go(
-            billRun.id,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            page
-          )
-
-          expect(result.billRun.id).to.equal(billRun.id)
-          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
-          expect(result.billRun.status).to.equal(billRun.status)
-          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-          expect(result.billRun.batchType).to.equal(billRun.batchType)
-          expect(result.billRun.region.displayName).to.equal(region.displayName)
-          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
-          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
-
-          expect(result.licences.total).to.equal(1)
-          expect(result.licences.results).to.have.length(1)
-          expect(result.licences.results[0].licenceId).to.equal(testLicenceReady.licenceId)
-          expect(result.licences.results[0].licenceHolder).to.equal('Ready Licence Holder Ltd')
-          expect(result.licences.results[0].licenceRef).to.equal(testLicenceReady.licenceRef)
-          expect(result.licences.results[0].issues).to.equal('Returns received late')
-          expect(result.licences.results[0].status).to.equal('ready')
-        })
-      })
-
-      describe('and a single filter has been applied to the licence issues', () => {
-        beforeEach(() => {
-          filterIssues = 'over-abstraction'
-          filterLicenceHolderNumber = undefined
-          filterLicenceStatus = undefined
-          filterProgress = undefined
-        })
-
-        it('returns details of the bill run and the licences that match the filter', async () => {
-          const result = await FetchBillRunLicencesService.go(
-            billRun.id,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            page
-          )
-
-          expect(result.billRun.id).to.equal(billRun.id)
-          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
-          expect(result.billRun.status).to.equal(billRun.status)
-          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-          expect(result.billRun.batchType).to.equal(billRun.batchType)
-          expect(result.billRun.region.displayName).to.equal(region.displayName)
-          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
-          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
-
-          expect(result.licences.total).to.equal(1)
-          expect(result.licences.results).to.have.length(1)
-          expect(result.licences.results[0].licenceId).to.equal(testLicenceReview.licenceId)
-          expect(result.licences.results[0].licenceHolder).to.equal('Review Licence Holder Ltd')
-          expect(result.licences.results[0].licenceRef).to.equal(testLicenceReview.licenceRef)
-          expect(result.licences.results[0].issues).to.equal('Over abstraction, Returns received but not processed')
-          expect(result.licences.results[0].status).to.equal('review')
-        })
-      })
-
-      describe('and a "no issues" filter has been applied to the licence issues', () => {
-        beforeEach(async () => {
-          testLicenceNoIssues = await ReviewLicenceHelper.add({
-            billRunId: billRun.id,
-            licenceRef: '03/200',
-            licenceHolder: 'No issues Licence Holder Ltd',
-            status: 'ready',
-            issues: ''
+          expect(result.licences).equals({
+            results: [
+              {
+                id: testLicenceReady.id,
+                licenceId: testLicenceReady.licenceId,
+                licenceRef: testLicenceReady.licenceRef,
+                licenceHolder: 'Ready Licence Holder Ltd',
+                issues: 'Returns received late',
+                progress: true,
+                status: 'ready'
+              }
+            ],
+            total: 1
           })
-
-          filterIssues = 'no-issues'
-          filterLicenceHolderNumber = undefined
-          filterLicenceStatus = undefined
-          filterProgress = undefined
-        })
-
-        it('returns details of the bill run and the licences that match the filter', async () => {
-          const result = await FetchBillRunLicencesService.go(
-            billRun.id,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            page
-          )
-
-          expect(result.billRun.id).to.equal(billRun.id)
-          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
-          expect(result.billRun.status).to.equal(billRun.status)
-          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-          expect(result.billRun.batchType).to.equal(billRun.batchType)
-          expect(result.billRun.region.displayName).to.equal(region.displayName)
-          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(3)
-          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
-
-          expect(result.licences.total).to.equal(1)
-          expect(result.licences.results).to.have.length(1)
-          expect(result.licences.results[0].licenceId).to.equal(testLicenceNoIssues.licenceId)
-          expect(result.licences.results[0].licenceHolder).to.equal('No issues Licence Holder Ltd')
-          expect(result.licences.results[0].licenceRef).to.equal(testLicenceNoIssues.licenceRef)
-          expect(result.licences.results[0].issues).to.equal('')
-          expect(result.licences.results[0].status).to.equal('ready')
         })
       })
 
-      describe('and multiple filters have been applied to the licence issues', () => {
+      describe('with multiple issues', () => {
         beforeEach(() => {
-          filterIssues = ['abs-outside-period', 'returns-received-not-processed', 'returns-late']
-          filterLicenceHolderNumber = undefined
-          filterLicenceStatus = undefined
-          filterProgress = undefined
+          filters.issues.push('over-abstraction', 'returns-late')
         })
 
-        it('returns details of the bill run and the licences that match the filter', async () => {
-          const result = await FetchBillRunLicencesService.go(
-            billRun.id,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            page
-          )
+        it('returns the matching licences', async () => {
+          const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-          expect(result.billRun.id).to.equal(billRun.id)
-          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
-          expect(result.billRun.status).to.equal(billRun.status)
-          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-          expect(result.billRun.batchType).to.equal(billRun.batchType)
-          expect(result.billRun.region.displayName).to.equal(region.displayName)
-          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
-          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
-
-          expect(result.licences.total).to.equal(2)
-          expect(result.licences.results).to.have.length(2)
-          expect(result.licences.results[0].licenceId).to.equal(testLicenceReview.licenceId)
-          expect(result.licences.results[0].licenceHolder).to.equal('Review Licence Holder Ltd')
-          expect(result.licences.results[0].licenceRef).to.equal(testLicenceReview.licenceRef)
-          expect(result.licences.results[0].issues).to.equal('Over abstraction, Returns received but not processed')
-          expect(result.licences.results[0].status).to.equal('review')
-          expect(result.licences.results[1].licenceId).to.equal(testLicenceReady.licenceId)
-          expect(result.licences.results[1].licenceHolder).to.equal('Ready Licence Holder Ltd')
-          expect(result.licences.results[1].licenceRef).to.equal(testLicenceReady.licenceRef)
-          expect(result.licences.results[1].issues).to.equal('Returns received late')
-          expect(result.licences.results[1].status).to.equal('ready')
-        })
-      })
-
-      describe('and filters have been applied that will return no results', () => {
-        beforeEach(() => {
-          filterIssues = undefined
-          filterLicenceHolderNumber = 'ready licence'
-          filterLicenceStatus = 'review'
-          filterProgress = undefined
-        })
-
-        it('returns details of the bill run and no licences', async () => {
-          const result = await FetchBillRunLicencesService.go(
-            billRun.id,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            page
-          )
-
-          expect(result.billRun.id).to.equal(billRun.id)
-          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
-          expect(result.billRun.status).to.equal(billRun.status)
-          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-          expect(result.billRun.batchType).to.equal(billRun.batchType)
-          expect(result.billRun.region.displayName).to.equal(region.displayName)
-          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
-          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
-
-          expect(result.licences.results).to.have.length(0)
+          expect(result.licences).equals({
+            results: [
+              {
+                id: testLicenceReview.id,
+                licenceId: testLicenceReview.licenceId,
+                licenceRef: testLicenceReview.licenceRef,
+                licenceHolder: 'Review Licence Holder Ltd',
+                issues: 'Over abstraction, Returns received but not processed',
+                progress: false,
+                status: 'review'
+              },
+              {
+                id: testLicenceReady.id,
+                licenceId: testLicenceReady.licenceId,
+                licenceRef: testLicenceReady.licenceRef,
+                licenceHolder: 'Ready Licence Holder Ltd',
+                issues: 'Returns received late',
+                progress: true,
+                status: 'ready'
+              }
+            ],
+            total: 2
+          })
         })
       })
     })
 
-    describe('and there are licences in the bill run that fit on two pages', () => {
-      beforeEach(async () => {
-        // no filters are being applied so these are undefined
-        filterIssues = undefined
-        filterLicenceHolderNumber = undefined
-        filterLicenceStatus = undefined
-        filterProgress = undefined
-
-        // Set the default page size to 1 so the 2 records fit on 2 pages
-        Sinon.replace(DatabaseConfig, 'defaultPageSize', 1)
-      })
-
-      describe('and the first page is selected', () => {
-        beforeEach(async () => {
-          page = undefined
+    describe('and "licenceHolderNumber" has been set', () => {
+      describe('with part of a licence number', () => {
+        beforeEach(() => {
+          filters.licenceHolderNumber = '02/'
         })
 
-        it('returns details of the bill run and the first page of licences in it', async () => {
-          const result = await FetchBillRunLicencesService.go(
-            billRun.id,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            page
-          )
+        it('returns the matching licences', async () => {
+          const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-          expect(result.billRun.id).to.equal(billRun.id)
-          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
-          expect(result.billRun.status).to.equal(billRun.status)
-          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-          expect(result.billRun.batchType).to.equal(billRun.batchType)
-          expect(result.billRun.region.displayName).to.equal(region.displayName)
-          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
-          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
-
-          expect(result.licences.total).to.equal(2)
-          expect(result.licences.results).to.have.length(1)
-          expect(result.licences.results[0].licenceId).to.equal(testLicenceReview.licenceId)
-          expect(result.licences.results[0].licenceHolder).to.equal('Review Licence Holder Ltd')
-          expect(result.licences.results[0].licenceRef).to.equal(testLicenceReview.licenceRef)
-          expect(result.licences.results[0].issues).to.equal('Over abstraction, Returns received but not processed')
-          expect(result.licences.results[0].status).to.equal('review')
+          expect(result.licences).equals({
+            results: [
+              {
+                id: testLicenceReview.id,
+                licenceId: testLicenceReview.licenceId,
+                licenceRef: testLicenceReview.licenceRef,
+                licenceHolder: 'Review Licence Holder Ltd',
+                issues: 'Over abstraction, Returns received but not processed',
+                progress: false,
+                status: 'review'
+              }
+            ],
+            total: 1
+          })
         })
       })
 
-      describe('and the second page is selected', () => {
-        beforeEach(async () => {
-          page = '2'
+      describe('with part of a licence holder name', () => {
+        beforeEach(() => {
+          filters.licenceHolderNumber = 'ready'
         })
 
-        it('returns details of the bill run and the second page of licences in it', async () => {
-          const result = await FetchBillRunLicencesService.go(
-            billRun.id,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            page
-          )
+        it('returns the matching licences', async () => {
+          const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-          expect(result.billRun.id).to.equal(billRun.id)
-          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
-          expect(result.billRun.status).to.equal(billRun.status)
-          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-          expect(result.billRun.batchType).to.equal(billRun.batchType)
-          expect(result.billRun.region.displayName).to.equal(region.displayName)
-          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
-          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
-
-          expect(result.licences.total).to.equal(2)
-          expect(result.licences.results).to.have.length(1)
-          expect(result.licences.results[0].licenceId).to.equal(testLicenceReady.licenceId)
-          expect(result.licences.results[0].licenceHolder).to.equal('Ready Licence Holder Ltd')
-          expect(result.licences.results[0].licenceRef).to.equal(testLicenceReady.licenceRef)
-          expect(result.licences.results[0].issues).to.equal('Returns received late')
-          expect(result.licences.results[0].status).to.equal('ready')
+          expect(result.licences).equals({
+            results: [
+              {
+                id: testLicenceReady.id,
+                licenceId: testLicenceReady.licenceId,
+                licenceRef: testLicenceReady.licenceRef,
+                licenceHolder: 'Ready Licence Holder Ltd',
+                issues: 'Returns received late',
+                progress: true,
+                status: 'ready'
+              }
+            ],
+            total: 1
+          })
         })
       })
+    })
 
-      describe('and an invalid selection of a third page is selected', () => {
-        beforeEach(async () => {
-          page = '3'
+    describe('and "licenceStatus" has been set', () => {
+      beforeEach(() => {
+        filters.licenceStatus = 'review'
+      })
+
+      it('returns the matching licences', async () => {
+        const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
+
+        expect(result.licences).equals({
+          results: [
+            {
+              id: testLicenceReview.id,
+              licenceId: testLicenceReview.licenceId,
+              licenceRef: testLicenceReview.licenceRef,
+              licenceHolder: 'Review Licence Holder Ltd',
+              issues: 'Over abstraction, Returns received but not processed',
+              progress: false,
+              status: 'review'
+            }
+          ],
+          total: 1
         })
+      })
+    })
 
-        it('returns details of the bill run and the correct `licences.total` but no licences', async () => {
-          const result = await FetchBillRunLicencesService.go(
-            billRun.id,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            page
-          )
+    describe('and "progress" has been set', () => {
+      beforeEach(() => {
+        filters.progress.push('inProgress')
+      })
 
-          expect(result.billRun.id).to.equal(billRun.id)
-          expect(result.billRun.createdAt).to.equal(billRun.createdAt)
-          expect(result.billRun.status).to.equal(billRun.status)
-          expect(result.billRun.toFinancialYearEnding).to.equal(billRun.toFinancialYearEnding)
-          expect(result.billRun.batchType).to.equal(billRun.batchType)
-          expect(result.billRun.region.displayName).to.equal(region.displayName)
-          expect(result.billRun.reviewLicences[0].totalNumberOfLicences).to.equal(2)
-          expect(result.billRun.reviewLicences[0].numberOfLicencesToReview).to.equal(1)
+      it('returns the matching licences', async () => {
+        const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-          expect(result.licences.total).to.equal(2)
-          expect(result.licences.results).to.have.length(0)
+        expect(result.licences).equals({
+          results: [
+            {
+              id: testLicenceReady.id,
+              licenceId: testLicenceReady.licenceId,
+              licenceRef: testLicenceReady.licenceRef,
+              licenceHolder: 'Ready Licence Holder Ltd',
+              issues: 'Returns received late',
+              progress: true,
+              status: 'ready'
+            }
+          ],
+          total: 1
         })
       })
     })
   })
 
-  describe('when there is an invalid bill run id passed to the service', () => {
-    let invalidBillRunId
-
+  describe('when the results are paginated', () => {
     beforeEach(() => {
-      filterIssues = undefined
-      filterLicenceHolderNumber = undefined
-      filterLicenceStatus = undefined
-      invalidBillRunId = '56db85ed-767f-4c83-8174-5ad9c80fd00d'
-      page = undefined
-      filterProgress = undefined
+      page = '2'
+
+      // NOTE: We know we create 3 records so we set the value to 2 to ensure the results are paginated
+      Sinon.stub(DatabaseConfig, 'defaultPageSize').value(2)
     })
 
-    it('returns no results', async () => {
-      const result = await FetchBillRunLicencesService.go(
-        invalidBillRunId,
-        filterIssues,
-        filterLicenceHolderNumber,
-        filterLicenceStatus,
-        filterProgress,
-        page
-      )
+    it('can return the selected page of licences', async () => {
+      const result = await FetchBillRunLicencesService.go(billRun.id, filters, page)
 
-      expect(result.billRun).to.be.undefined()
-      expect(result.licences.total).to.equal(0)
-      expect(result.licences.results).to.have.length(0)
+      expect(result.licences.results).not.to.be.empty()
     })
   })
 })
+
+function _filters() {
+  return {
+    issues: [],
+    licenceHolderNumber: null,
+    licenceStatus: null,
+    progress: []
+  }
+}

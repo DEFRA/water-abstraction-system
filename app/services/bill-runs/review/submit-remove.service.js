@@ -10,6 +10,7 @@ const FetchRemoveReviewLicenceModel = require('./fetch-remove-review-licence.ser
 const UnassignLicencesToBillRunService = require('../unassign-licences-to-bill-run.service.js')
 const ProcessBillRunPostRemove = require('./process-bill-run-post-remove.service.js')
 const RemoveReviewLicenceService = require('./remove-review-licence.service.js')
+const { flashNotification } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates removing a review licence from a two-part tariff bill run whilst it is at the review stage
@@ -39,7 +40,7 @@ async function go(reviewLicenceId, yar) {
     // NOTE: The banner message is only set if licences remain in the bill run. This is because if there are no longer
     // any licences remaining in the bill run the user is redirected to the "Bill runs" page instead of "Review
     // licences". As the banner isn't displayed on the "Bill runs" page the message would remain in the cookie.
-    yar.flash('banner', `Licence ${reviewLicence.licenceRef} removed from the bill run.`)
+    flashNotification(yar, 'Licence removed', `Licence ${reviewLicence.licenceRef} removed from the bill run.`)
   }
 
   return {
