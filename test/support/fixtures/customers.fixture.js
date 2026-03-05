@@ -71,6 +71,28 @@ function companies() {
 }
 
 /**
+ * A representation from the company address table
+ *
+ * @returns {module:CompanyAddressModel} A company address
+ */
+function companyAddress() {
+  return {
+    id: generateUUID(),
+    address: {
+      id: generateUUID(),
+      address1: 'The Tyrell Spire',
+      address2: 'Floor 667 (Above the Smog)',
+      address3: 'Southbank Industrial Sector',
+      address4: 'Lambeth Precinct',
+      address5: 'Greater London',
+      address6: 'United Kingdom',
+      country: 'UK',
+      postcode: 'SE1 7TY'
+    }
+  }
+}
+
+/**
  * A representation from the company contact table
  *
  * @returns {module:CompanyContactModel} A company contact
@@ -164,6 +186,7 @@ module.exports = {
   billingAccounts,
   company,
   companies,
+  companyAddress,
   companyContact,
   companyContacts,
   contact,

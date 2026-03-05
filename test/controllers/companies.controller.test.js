@@ -43,26 +43,28 @@ describe('Companies controller', () => {
     Sinon.restore()
   })
 
-  describe('/companies/{id}', () => {
+  describe('/companies/{id}/{role}', () => {
     describe('GET', () => {
+      const role = 'licence-holder'
+
       beforeEach(() => {
         options = {
           method: 'GET',
-          url: `/companies/${generateUUID()}`,
+          url: `/companies/${generateUUID()}/${role}`,
           auth: {
             strategy: 'session',
             credentials: { scope: [] }
           }
         }
 
-        Sinon.stub(ViewCompanyService, 'go').returns({ pageTitle: 'Company' })
+        Sinon.stub(ViewCompanyService, 'go').returns({ pageTitle: 'Licence holder' })
       })
 
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Company')
+        expect(response.payload).to.contain('Licence holder')
       })
     })
   })
