@@ -257,8 +257,8 @@ class UserModel extends BaseModel {
    *
    * - **Admin** (admin)
    * - **Primary user** (primary_user)
-   * - **Returns agent** (user_returns)
-   * - **Agent** (user)
+   * - **Returns user** (user_returns)
+   * - **Basic access** (user)
    *
    * If a user has no roles, we default to 'None'.
    *
