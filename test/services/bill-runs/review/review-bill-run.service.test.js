@@ -89,6 +89,7 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
           progress: [],
           openFilter: false
         },
+        backLink: { href: '/system/bill-runs', text: 'Go back to bill runs' },
         billRunId: fetchData.billRun.id,
         billRunType: 'Two-part tariff',
         chargeScheme: 'Current',

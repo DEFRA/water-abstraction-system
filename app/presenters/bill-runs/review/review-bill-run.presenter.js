@@ -32,6 +32,7 @@ function go(billRun, licences) {
   } = billRun
 
   return {
+    backLink: { href: '/system/bill-runs', text: 'Go back to bill runs' },
     billRunId,
     billRunType: formatBillRunType(batchType, scheme, summer),
     chargeScheme: formatChargeScheme(scheme),

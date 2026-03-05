@@ -73,6 +73,7 @@ describe('Bill Runs Review controller', () => {
             progress: [],
             openFilter: false
           },
+          backLink: { href: '/system/bill-runs', text: 'Go back to bill runs' },
           billRunId: '8cf82f30-24b8-4647-9707-726c5950b723',
           billRunType: 'two-part tariff',
           chargeScheme: 'Current',

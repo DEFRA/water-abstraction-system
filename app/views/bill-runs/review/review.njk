@@ -16,10 +16,7 @@
 
 {% block breadcrumbs %}
   {# Back link #}
-  {{ govukBackLink({
-      text: 'Go back to bill runs',
-      href: '/system/bill-runs'
-  }) }}
+  {{ govukBackLink(backLink) }}
 {% endblock %}
 
 {% block content %}

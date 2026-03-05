@@ -79,6 +79,7 @@ describe('Bill Runs - Review - Review Bill Run presenter', () => {
     const result = ReviewBillRunPresenter.go(billRun, licences)
 
     expect(result).to.equal({
+      backLink: { href: '/system/bill-runs', text: 'Go back to bill runs' },
       billRunId: billRun.id,
       billRunType: 'Two-part tariff',
       chargeScheme: 'Current',
