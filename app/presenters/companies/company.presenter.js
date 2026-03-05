@@ -35,9 +35,17 @@ function go(companyDetails, role) {
 }
 
 function _formatCompanyAddress(companyAddress) {
-  const { id: _, ...addressLines } = companyAddress.address
+  const { address } = companyAddress
 
-  return Object.values(addressLines)
+  return [
+    address.address1,
+    address.address2,
+    address.address3,
+    address.address4,
+    address.address5,
+    address.postcode,
+    address.country
+  ].filter(Boolean)
 }
 
 module.exports = {

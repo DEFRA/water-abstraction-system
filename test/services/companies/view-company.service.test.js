@@ -58,9 +58,8 @@ describe('Companies - Company Service', () => {
               'Southbank Industrial Sector',
               'Lambeth Precinct',
               'Greater London',
-              'United Kingdom',
-              'UK',
-              'SE1 7TY'
+              'SE1 7TY',
+              'UK'
             ],
             name: 'Tyrell Corporation'
           },
@@ -102,9 +101,8 @@ describe('Companies - Company Service', () => {
               'Southbank Industrial Sector',
               'Lambeth Precinct',
               'Greater London',
-              'United Kingdom',
-              'UK',
-              'SE1 7TY'
+              'SE1 7TY',
+              'UK'
             ],
             name: 'Tyrell Corporation'
           },

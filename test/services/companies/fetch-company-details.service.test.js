@@ -32,7 +32,8 @@ describe('Companies - Fetch Company details service', () => {
       companyAddress = await CompanyAddressHelper.add({
         addressId: address.id,
         companyId: company.id,
-        licenceRoleId: LicenceRoleHelper.select('licenceHolder').id
+        licenceRoleId: LicenceRoleHelper.select('licenceHolder').id,
+        startDate: new Date('2010-02-03')
       })
 
       // We add an earlier company address to ensure we are sorting by the start date

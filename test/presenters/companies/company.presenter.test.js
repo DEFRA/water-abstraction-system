@@ -41,9 +41,8 @@ describe('Companies - Company Presenter', () => {
             'Southbank Industrial Sector',
             'Lambeth Precinct',
             'Greater London',
-            'United Kingdom',
-            'UK',
-            'SE1 7TY'
+            'SE1 7TY',
+            'UK'
           ],
           name: 'Tyrell Corporation'
         },
