@@ -77,7 +77,7 @@ describe('Companies - Fetch Company details service', () => {
       })
     })
 
-    describe('and the company address does not a corresponding role', () => {
+    describe('and the company address does not have a corresponding role', () => {
       it('returns the matching company with no company addresses', async () => {
         const result = await FetchCompanyDetailsService.go(company.id, 'billing')
 
