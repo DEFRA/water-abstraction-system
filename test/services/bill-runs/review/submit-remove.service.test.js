@@ -72,15 +72,18 @@ describe('Bill Runs - Review - Submit Remove service', () => {
           expect(createLicenceSupplementaryYearStub.called).to.be.true()
         })
 
-        it('does add a flash message', async () => {
+        it('sets a notification', async () => {
           await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
 
           expect(yarStub.flash.called).to.be.true()
 
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('banner')
-          expect(bannerMessage).to.equal('Licence 1/11/11/*11/1111 removed from the bill run.')
+          expect(flashType).to.equal('notification')
+          expect(bannerMessage).to.equal({
+            titleText: 'Licence removed',
+            text: 'Licence 1/11/11/*11/1111 removed from the bill run.'
+          })
         })
 
         it('returns the bill run ID and a flag to indicate the bill run is not empty', async () => {
@@ -160,15 +163,18 @@ describe('Bill Runs - Review - Submit Remove service', () => {
           expect(createLicenceSupplementaryYearStub.called).to.be.false()
         })
 
-        it('does add a flash message', async () => {
+        it('sets a notification', async () => {
           await SubmitRemoveService.go(removeReviewLicence.id, yarStub)
 
           expect(yarStub.flash.called).to.be.true()
 
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
-          expect(flashType).to.equal('banner')
-          expect(bannerMessage).to.equal('Licence 1/11/11/*11/1111 removed from the bill run.')
+          expect(flashType).to.equal('notification')
+          expect(bannerMessage).to.equal({
+            titleText: 'Licence removed',
+            text: 'Licence 1/11/11/*11/1111 removed from the bill run.'
+          })
         })
 
         it('returns the bill run ID and a flag to indicate the bill run is not empty', async () => {

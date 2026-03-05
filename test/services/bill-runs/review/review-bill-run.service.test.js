@@ -23,7 +23,7 @@ const ReviewBillRunService = require('../../../../app/services/bill-runs/review/
 const billRunId = generateUUID()
 
 describe('Bill Runs - Review - Review Bill Run Service', () => {
-  let bannerMessage
+  let notification
   let fetchData
   let page
   let yarStub
@@ -68,10 +68,13 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
 
       Sinon.stub(FetchBillRunLicencesService, 'go').resolves(fetchData)
 
-      bannerMessage = `Licence ${generateLicenceRef()} removed from the bill run.`
+      notification = {
+        text: 'Licence 1/11/11/*11/1111 removed from the bill run.',
+        titleText: 'Licence removed'
+      }
 
       yarStub = {
-        flash: Sinon.stub().returns([bannerMessage]),
+        flash: Sinon.stub().returns([notification]),
         get: Sinon.stub().returns(null)
       }
     })
@@ -81,7 +84,6 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
 
       expect(result).to.equal({
         activeNavBar: 'bill-runs',
-        bannerMessage,
         filters: {
           issues: [],
           licenceHolderNumber: null,
@@ -89,6 +91,7 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
           progress: [],
           openFilter: false
         },
+        notification,
         backLink: { href: '/system/bill-runs', text: 'Go back to bill runs' },
         billRunId: fetchData.billRun.id,
         billRunType: 'Two-part tariff',

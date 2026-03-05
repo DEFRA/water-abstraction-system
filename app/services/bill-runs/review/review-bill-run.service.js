@@ -8,6 +8,7 @@
 const FetchBillRunLicencesService = require('./fetch-bill-run-licences.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 const ReviewBillRunPresenter = require('../../../presenters/bill-runs/review/review-bill-run.presenter.js')
+const { readFlashNotification } = require('../../../lib/general.lib.js')
 const { processSavedFilters } = require('../../../lib/submit-page.lib.js')
 
 /**
@@ -26,7 +27,7 @@ async function go(id, yar, page) {
 
   const { billRun, licences } = await FetchBillRunLicencesService.go(id, filters, page)
 
-  const [bannerMessage] = yar.flash('banner')
+  const notification = readFlashNotification(yar)
 
   const pageData = ReviewBillRunPresenter.go(billRun, licences.results)
 
@@ -40,8 +41,8 @@ async function go(id, yar, page) {
 
   return {
     activeNavBar: 'bill-runs',
-    bannerMessage,
     filters,
+    notification,
     ...pageData,
     pagination
   }
