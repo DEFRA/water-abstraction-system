@@ -5,6 +5,13 @@ const CompaniesController = require('../controllers/companies.controller.js')
 const routes = [
   {
     method: 'GET',
+    path: '/companies/{id}',
+    options: {
+      handler: CompaniesController.viewCompany
+    }
+  },
+  {
+    method: 'GET',
     path: '/companies/{id}/billing-accounts',
     options: {
       handler: CompaniesController.viewBillingAccounts,

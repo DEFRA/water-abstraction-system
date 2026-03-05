@@ -13,7 +13,7 @@ const LicenceEntityModel = require('../../../app/models/licence-entity.model.js'
  * If no `data` is provided, default values will be used. These are
  *
  * - `id` - [random UUID]
- * - `name` - grace.hopper@example.com
+ * - `name` - [random UUID]@example.co.uk
  * - `type` - individual
  *
  * @param {object} [data] - Any data you want to use instead of the defaults used here or in the database
@@ -41,7 +41,7 @@ async function add(data = {}) {
 function defaults(data = {}) {
   const defaults = {
     id: generateUUID(),
-    name: 'grace.hopper@example.com',
+    name: generateName(),
     type: 'individual'
   }
 
@@ -51,7 +51,17 @@ function defaults(data = {}) {
   }
 }
 
+/**
+ * Generates a random name
+ *
+ * @returns {string} a random name in the format [random UUID]@example.co.uk
+ */
+function generateName() {
+  return `${generateUUID()}@example.co.uk`
+}
+
 module.exports = {
   add,
-  defaults
+  defaults,
+  generateName
 }

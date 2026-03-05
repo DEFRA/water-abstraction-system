@@ -122,10 +122,28 @@
             value: "nps_ar_user"
           },
           {
+            attributes: { 'data-test': 'permission-none' },
+            checked: filters.permissions === 'none',
+            text: "None",
+            value: "none"
+          },
+          {
             attributes: { 'data-test': 'permission-psc' },
             checked: filters.permissions === 'psc',
             text: "Permitting and Support Centre",
             value: "psc"
+          },
+          {
+            attributes: { 'data-test': 'permission-primary-user' },
+            checked: filters.permissions === 'primary_user',
+            text: "Primary user",
+            value: "primary_user"
+          },
+          {
+            attributes: { 'data-test': 'permission-returns-user' },
+            checked: filters.permissions === 'returns_user',
+            text: "Returns user",
+            value: "returns_user"
           },
           {
             attributes: { 'data-test': 'permission-super' },
