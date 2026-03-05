@@ -505,6 +505,7 @@ const twoPartTariffReviewIssues = {
   'abs-outside-period': 'Abstraction outside period',
   'aggregate-factor': 'Aggregate',
   'checking-query': 'Checking query',
+  'multiple-issues': 'Multiple issues',
   'no-returns-received': 'No returns received',
   'over-abstraction': 'Over abstraction',
   'overlap-of-charge-dates': 'Overlap of charge dates',
@@ -512,8 +513,7 @@ const twoPartTariffReviewIssues = {
   'returns-late': 'Returns received late',
   'return-split-over-refs': 'Return split over charge references',
   'some-returns-not-received': 'Some returns not received',
-  'unable-to-match-return': 'Unable to match return',
-  'multiple-issues': 'Multiple issues'
+  'unable-to-match-return': 'Unable to match return'
 }
 
 const userPermissions = Object.freeze({

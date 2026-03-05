@@ -5,7 +5,7 @@
  * @module SubmitReviewBillRunService
  */
 
-const { clearFilters } = require('../../../lib/submit-page.lib.js')
+const { clearFilters, handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
  * Updates the session cookie with the filter data needed for the two-part tariff review bill run page
@@ -18,19 +18,24 @@ async function go(billRunId, payload, yar) {
   const filterKey = `review-${billRunId}`
 
   const filterCleared = clearFilters(payload, yar, filterKey)
-  const filterIssues = payload?.filterIssues
-  const filterLicenceHolderNumber = payload?.filterLicenceHolderNumber
-  const filterLicenceStatus = payload?.filterLicenceStatus
-  const filterProgress = payload?.filterProgress
 
-  if (!filterCleared) {
-    yar.set(filterKey, {
-      filterIssues,
-      filterLicenceHolderNumber,
-      filterLicenceStatus,
-      filterProgress
-    })
+  if (filterCleared) {
+    return
   }
+
+  handleOneOptionSelected(payload, 'issues')
+  handleOneOptionSelected(payload, 'progress')
+
+  _save(payload, yar, filterKey)
+}
+
+function _save(payload, yar, filterKey) {
+  yar.set(filterKey, {
+    issues: payload.issues,
+    licenceHolderNumber: payload.licenceHolderNumber ?? null,
+    licenceStatus: payload.licenceStatus ?? null,
+    progress: payload.progress
+  })
 }
 
 module.exports = {

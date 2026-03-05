@@ -7,220 +7,177 @@ const Code = require('@hapi/code')
 const { beforeEach, describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const RegionHelper = require('../../../support/helpers/region.helper.js')
+const { generateRandomInteger, generateUUID } = require('../../../../app/lib/general.lib.js')
+
 // Thing under test
 const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/review/review-bill-run.presenter.js')
 
-describe('Bill Runs Review - Review Bill Run presenter', () => {
-  describe('when there is data to be presented for review', () => {
-    let filterIssues
-    let filterLicenceHolderNumber
-    let filterLicenceStatus
-    let filterProgress
-    let testBillRun
-    let testLicences
+describe('Bill Runs - Review - Review Bill Run presenter', () => {
+  let billRun
+  let licences
 
-    beforeEach(() => {
-      testBillRun = _testBillRun()
-      testLicences = _testLicences()
+  beforeEach(() => {
+    const { id: regionId, displayName } = RegionHelper.select()
+
+    billRun = {
+      id: generateUUID(),
+      batchType: 'two_part_tariff',
+      createdAt: new Date('2025-04-10T16:19:14.012Z'),
+      scheme: 'sroc',
+      status: 'review',
+      summer: false,
+      toFinancialYearEnding: 2025,
+      region: {
+        id: regionId,
+        displayName
+      },
+      reviewLicences: [
+        {
+          totalNumberOfLicences: 3,
+          numberOfLicencesToReview: 1
+        }
+      ]
+    }
+
+    licences = [
+      // Licence with multiple issues
+      {
+        id: generateUUID(),
+        issues: 'Abstraction outside period, Over abstraction, Overlap of charge dates',
+        licenceId: generateUUID(),
+        licenceHolder: 'Farmer Palmer',
+        licenceRef: `02/${generateRandomInteger(100, 999)}`,
+        progress: false,
+        status: 'review'
+      },
+      // Licence with no issues
+      {
+        id: generateUUID(),
+        issues: '',
+        licenceId: generateUUID(),
+        licenceHolder: 'Big Farm Ltd',
+        licenceRef: `01/${generateRandomInteger(100, 999)}`,
+        progress: false,
+        status: 'ready'
+      },
+      // Licence with a single issue
+      {
+        id: generateUUID(),
+        issues: 'Abstraction outside period',
+        licenceId: generateUUID(),
+        licenceHolder: 'Bob Bobbles',
+        licenceRef: `03/${generateRandomInteger(100, 999)}`,
+        progress: true,
+        status: 'ready'
+      }
+    ]
+  })
+
+  it('correctly presents the data', () => {
+    const result = ReviewBillRunPresenter.go(billRun, licences)
+
+    expect(result).to.equal({
+      backLink: { href: '/system/bill-runs', text: 'Go back to bill runs' },
+      billRunId: billRun.id,
+      billRunType: 'Two-part tariff',
+      chargeScheme: 'Current',
+      dateCreated: '10 April 2025',
+      financialYear: '2024 to 2025',
+      licences: [
+        {
+          id: licences[0].id,
+          issue: 'Multiple Issues',
+          licenceHolder: 'Farmer Palmer',
+          licenceRef: licences[0].licenceRef,
+          progress: '',
+          status: 'review'
+        },
+        {
+          id: licences[1].id,
+          issue: '',
+          licenceHolder: 'Big Farm Ltd',
+          licenceRef: licences[1].licenceRef,
+          progress: '',
+          status: 'ready'
+        },
+        {
+          id: licences[2].id,
+          issue: 'Abstraction outside period',
+          licenceHolder: 'Bob Bobbles',
+          licenceRef: licences[2].licenceRef,
+          progress: '✓',
+          status: 'ready'
+        }
+      ],
+      numberOfLicencesToReview: 1,
+      pageTitle: 'Review licences',
+      pageTitleCaption: `${billRun.region.displayName} two-part tariff`,
+      region: billRun.region.displayName,
+      reviewMessage:
+        'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
+      status: 'review'
+    })
+  })
+
+  describe('the "licences" property', () => {
+    describe('the "issues" property', () => {
+      it('returns "Multiple Issues" when there are multiple issues', () => {
+        const result = ReviewBillRunPresenter.go(billRun, licences)
+
+        expect(result.licences[0].issue).to.equal('Multiple Issues')
+      })
+
+      it('returns the issue when there is a single issue', () => {
+        const result = ReviewBillRunPresenter.go(billRun, licences)
+
+        expect(result.licences[2].issue).to.equal('Abstraction outside period')
+      })
+
+      it('returns an empty string when there are no issues', () => {
+        const result = ReviewBillRunPresenter.go(billRun, licences)
+
+        expect(result.licences[1].issue).to.equal('')
+      })
+    })
+  })
+
+  describe('the "reviewMessage" property', () => {
+    describe('when there is 1 licence to review', () => {
+      it('returns the correct message with the number of licences to review', () => {
+        const result = ReviewBillRunPresenter.go(billRun, licences)
+
+        expect(result.reviewMessage).to.equal(
+          'You need to review 1 licence with returns data issues. You can then continue and send the bill run.'
+        )
+      })
     })
 
-    describe('and no filter has been applied', () => {
+    describe('when there are multiple licences to review', () => {
       beforeEach(() => {
-        filterIssues = undefined
-        filterLicenceHolderNumber = undefined
-        filterLicenceStatus = undefined
-        filterProgress = undefined
+        billRun.reviewLicences[0].numberOfLicencesToReview = 3
       })
 
-      it('correctly presents the data', () => {
-        const result = ReviewBillRunPresenter.go(
-          testBillRun,
-          filterIssues,
-          filterLicenceHolderNumber,
-          filterLicenceStatus,
-          filterProgress,
-          testLicences
+      it('returns the correct message with the number of licences to review', () => {
+        const result = ReviewBillRunPresenter.go(billRun, licences)
+
+        expect(result.reviewMessage).to.equal(
+          'You need to review 3 licences with returns data issues. You can then continue and send the bill run.'
         )
-
-        expect(result).to.equal({
-          billRunId: 'b21bd372-cd04-405d-824e-5180d854121c',
-          billRunTitle: 'Southern (Test Replica) two-part tariff',
-          billRunType: 'Two-part tariff',
-          chargeScheme: 'Current',
-          dateCreated: '17 January 2024',
-          filter: {
-            issues: undefined,
-            licenceHolderNumber: undefined,
-            licenceStatus: undefined,
-            inProgress: undefined,
-            openFilter: false
-          },
-          financialYear: '2022 to 2023',
-          numberOfLicencesDisplayed: 3,
-          numberOfLicencesToReview: 1,
-          preparedLicences: [
-            {
-              id: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
-              licenceRef: '1/11/11/*11/1111',
-              licenceHolder: 'Big Farm Ltd',
-              status: 'ready',
-              progress: '',
-              issue: ''
-            },
-            {
-              id: '395bdc01-605b-44f5-9d90-5836cc013799',
-              licenceRef: '2/22/22/*S2/2222',
-              licenceHolder: 'Bob Bobbles',
-              status: 'ready',
-              progress: '✓',
-              issue: 'Abstraction outside period'
-            },
-            {
-              id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
-              licenceRef: '3/33/33/*3/3333',
-              licenceHolder: 'Farmer Palmer',
-              status: 'review',
-              progress: '',
-              issue: 'Multiple Issues'
-            }
-          ],
-          region: 'Southern (Test Replica)',
-          reviewMessage:
-            'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
-          status: 'review',
-          totalNumberOfLicences: 3
-        })
-      })
-
-      describe('and there are no licences in "review" status', () => {
-        beforeEach(() => {
-          testBillRun.reviewLicences[0].numberOfLicencesToReview = 0
-        })
-
-        it('correctly presents the data', () => {
-          const result = ReviewBillRunPresenter.go(
-            testBillRun,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            testLicences
-          )
-
-          expect(result.reviewMessage).to.equal(
-            'You have resolved all returns data issues. Continue to generate bills.'
-          )
-        })
-      })
-
-      describe('and there are 2 licences in "review" status', () => {
-        beforeEach(() => {
-          testBillRun.reviewLicences[0].numberOfLicencesToReview = 2
-        })
-
-        it('correctly presents the data', () => {
-          const result = ReviewBillRunPresenter.go(
-            testBillRun,
-            filterIssues,
-            filterLicenceHolderNumber,
-            filterLicenceStatus,
-            filterProgress,
-            testLicences
-          )
-
-          expect(result.reviewMessage).to.equal(
-            'You need to review 2 licences with returns data issues. You can then continue and send the bill run.'
-          )
-        })
       })
     })
 
-    describe('and filters have been applied', () => {
+    describe('when there are no licences to review', () => {
       beforeEach(() => {
-        filterIssues = ['abs-outside-period', 'over-abstraction']
-        filterLicenceHolderNumber = 'bob'
-        filterLicenceStatus = 'ready'
-        filterProgress = true
+        billRun.reviewLicences[0].numberOfLicencesToReview = 0
       })
 
-      it('correctly presents the data', () => {
-        const result = ReviewBillRunPresenter.go(
-          testBillRun,
-          filterIssues,
-          filterLicenceHolderNumber,
-          filterLicenceStatus,
-          filterProgress,
-          testLicences
-        )
+      it('returns the correct message', () => {
+        const result = ReviewBillRunPresenter.go(billRun, licences)
 
-        expect(result.filter.openFilter).to.equal(true)
-        expect(result.filter.licenceHolderNumber).to.equal(filterLicenceHolderNumber)
-        expect(result.filter.licenceStatus).to.equal(filterLicenceStatus)
-        expect(result.filter.inProgress).to.equal(filterProgress)
-        expect(result.filter.issues).to.equal({
-          absOutsidePeriod: true,
-          aggregateFactor: false,
-          checkingQuery: false,
-          multipleIssues: false,
-          noIssues: false,
-          noReturnsReceived: false,
-          overAbstraction: true,
-          overlapOfChargeDates: false,
-          returnsReceivedNotProcessed: false,
-          returnsLate: false,
-          returnSplitOverRefs: false,
-          someReturnsNotReceived: false,
-          unableToMatchReturn: false
-        })
+        expect(result.reviewMessage).to.equal('You have resolved all returns data issues. Continue to generate bills.')
       })
     })
   })
 })
-
-function _testBillRun() {
-  return {
-    id: 'b21bd372-cd04-405d-824e-5180d854121c',
-    batchType: 'two_part_tariff',
-    createdAt: new Date('2024-01-17'),
-    scheme: 'sroc',
-    status: 'review',
-    summer: false,
-    toFinancialYearEnding: 2023,
-    region: {
-      displayName: 'Southern (Test replica)'
-    },
-    reviewLicences: [{ totalNumberOfLicences: 3, numberOfLicencesToReview: 1 }]
-  }
-}
-
-function _testLicences() {
-  return [
-    // Licence with no issues
-    {
-      id: 'cc4bbb18-0d6a-4254-ac2c-7409de814d7e',
-      licenceRef: '1/11/11/*11/1111',
-      licenceHolder: 'Big Farm Ltd',
-      issues: '',
-      progress: false,
-      status: 'ready'
-    },
-    // Licence with a single issue
-    {
-      id: '395bdc01-605b-44f5-9d90-5836cc013799',
-      licenceRef: '2/22/22/*S2/2222',
-      licenceHolder: 'Bob Bobbles',
-      issues: 'Abstraction outside period',
-      progress: true,
-      status: 'ready'
-    },
-    // Licence with multiple issues
-    {
-      id: 'fdae33da-9195-4b97-976a-9791bc4f6b66',
-      licenceRef: '3/33/33/*3/3333',
-      licenceHolder: 'Farmer Palmer',
-      issues: 'Abstraction outside period, Over abstraction, Overlap of charge dates',
-      progress: false,
-      status: 'review'
-    }
-  ]
-}
