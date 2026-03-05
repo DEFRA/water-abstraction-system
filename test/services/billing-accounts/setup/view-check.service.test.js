@@ -33,10 +33,12 @@ describe('Billing Accounts - Setup - View Check Service', () => {
       expect(result).to.equal({
         accountSelected: 'Another billing account',
         accountType: '',
+        addressSelected: ['New'],
         existingAccount: '',
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
+          addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
           existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
         },
         pageTitle: 'Check billing account details',

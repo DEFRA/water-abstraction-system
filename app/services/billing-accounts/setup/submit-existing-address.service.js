@@ -53,6 +53,10 @@ async function _fetchCompanyAddresses(session) {
 }
 
 function _redirectUrl(session) {
+  if (session.checkPageVisited) {
+    return `/system/billing-accounts/setup/${session.id}/check`
+  }
+
   if (session.addressSelected === 'new') {
     return `/system/address/${session.id}/postcode`
   }
@@ -63,6 +67,7 @@ function _redirectUrl(session) {
 async function _save(session, payload) {
   if (session.addressSelected && session.addressSelected !== payload.addressSelected) {
     session.addressJourney = null
+    session.checkPageVisited = false
     session.contactName = null
     session.contactSelected = null
     session.fao = null
