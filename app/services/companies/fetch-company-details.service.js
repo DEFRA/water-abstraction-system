@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches the company details for the view '/companies/{id}/' page
+ * Fetches the company details for the view '/companies/{id}/{role}' page
  * @module FetchCompanyDetailsService
  */
 
@@ -9,7 +9,7 @@ const CompanyModel = require('../../models/company.model.js')
 const CompanyAddressModel = require('../../models/company-address.model.js')
 
 /**
- * Fetches the company details for the view '/companies/{id}/' page
+ * Fetches the company details for the view '/companies/{id}/{role}' page
  *
  * @param {string} companyId - The UUID for the company to fetch
  * @param {string} role - the licence role e.g 'licenceHolder'

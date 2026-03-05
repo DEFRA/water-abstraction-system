@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the '/companies/{id}' page
+ * Orchestrates fetching and presenting the data for the '/companies/{id}/{role}' page
  *
  * @module ViewCompanyService
  */
@@ -21,7 +21,7 @@ const CompanyPresenter = require('../../presenters/companies/company.presenter.j
 const FetchCompanyDetailsService = require('./fetch-company-details.service.js')
 
 /**
- * Orchestrates fetching and presenting the data for the '/companies/{id}' page
+ * Orchestrates fetching and presenting the data for the '/companies/{id}/{role}' page
  *
  * @param {string} companyId - the UUID of the company
  * @param {string} role - the licence role in kebab case e.g 'licence-holder'
