@@ -9,19 +9,22 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const DatabaseConfig = require('../../../../config/database.config.js')
+const RegionHelper = require('../../../support/helpers/region.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
+const DatabaseConfig = require('../../../../config/database.config.js')
 const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js')
-// TODO: Stop stubbing the presenter
-const ReviewBillRunPresenter = require('../../../../app/presenters/bill-runs/review/review-bill-run.presenter.js')
 
 // Thing under test
 const ReviewBillRunService = require('../../../../app/services/bill-runs/review/review-bill-run.service.js')
 
-describe('Bill Runs Review - Review Bill Run Service', () => {
-  const billRunId = '2c80bd22-a005-4cf4-a2a2-73812a9861de'
+const billRunId = generateUUID()
 
+describe('Bill Runs - Review - Review Bill Run Service', () => {
+  let notification
+  let fetchData
   let page
   let yarStub
 
@@ -34,269 +37,184 @@ describe('Bill Runs Review - Review Bill Run Service', () => {
     Sinon.restore()
   })
 
-  describe('when there is only one page of results', () => {
+  describe('when called', () => {
     beforeEach(() => {
-      page = undefined
+      fetchData = {
+        billRun: _fetchedBillRun(),
+        licences: {
+          results: [
+            {
+              id: generateUUID(),
+              issues: 'Aggregate',
+              licenceId: generateUUID(),
+              licenceHolder: 'ACME Water PLC',
+              licenceRef: generateLicenceRef(),
+              progress: true,
+              status: 'review'
+            },
+            {
+              id: generateUUID(),
+              issues: '',
+              licenceId: generateUUID(),
+              licenceHolder: 'SCEP Holdings Ltd',
+              licenceRef: generateLicenceRef(),
+              progress: false,
+              status: 'ready'
+            }
+          ],
+          total: 2
+        }
+      }
 
-      Sinon.stub(FetchBillRunLicencesService, 'go').resolves({
-        billRun: 'bill data',
-        licences: { results: 'licence data', total: 25 }
-      })
+      Sinon.stub(FetchBillRunLicencesService, 'go').resolves(fetchData)
+
+      notification = {
+        text: 'Licence 1/11/11/*11/1111 removed from the bill run.',
+        titleText: 'Licence removed'
+      }
+
+      yarStub = {
+        flash: Sinon.stub().returns([notification]),
+        get: Sinon.stub().returns(null)
+      }
     })
 
-    describe('and the service is called without a filter applied', () => {
-      const bannerMessage = undefined
-      const presenterStubData = {
-        preparedBillRun: 'bill run data',
-        preparedLicences: 'licence data',
-        filter: {
-          issues: undefined,
-          licenceHolder: undefined,
-          licenceStatus: undefined,
+    it('returns the page data for the view', async () => {
+      const result = await ReviewBillRunService.go(billRunId, yarStub, page)
+
+      expect(result).to.equal({
+        activeNavBar: 'bill-runs',
+        filters: {
+          issues: [],
+          licenceHolderNumber: null,
+          licenceStatus: null,
+          progress: [],
           openFilter: false
-        }
-      }
-
-      beforeEach(() => {
-        Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
-
-        yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(undefined) }
-      })
-
-      it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
-        const result = await ReviewBillRunService.go(billRunId, page, yarStub)
-
-        expect(result.bannerMessage).to.equal(bannerMessage)
-        expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
-        expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
-        expect(result.filter).to.equal(presenterStubData.filter)
-        expect(result.pageTitle).to.equal('Review licences')
-        expect(result.pagination.numberOfPages).to.equal(1)
-        expect(result.pagination.component).not.to.exist()
-
-        expect(FetchBillRunLicencesService.go.called).to.be.true()
-        expect(ReviewBillRunPresenter.go.called).to.be.true()
-      })
-    })
-
-    describe('and the service is called with a filter applied', () => {
-      const bannerMessage = undefined
-      const presenterStubData = {
-        preparedBillRun: 'bill run data',
-        preparedLicences: 'licence data',
-        filter: {
-          issues: {
-            absOutsidePeriod: true,
-            aggregateFactor: true,
-            checkingQuery: false,
-            noReturnsReceived: false,
-            overAbstraction: false,
-            overlapOfChargeDates: false,
-            returnsReceivedNotProcessed: false,
-            returnsLate: false,
-            returnSplitOverRefs: false,
-            someReturnsNotReceived: false,
-            unableToMatchReturn: false
+        },
+        notification,
+        backLink: { href: '/system/bill-runs', text: 'Go back to bill runs' },
+        billRunId: fetchData.billRun.id,
+        billRunType: 'Two-part tariff',
+        chargeScheme: 'Current',
+        dateCreated: '10 April 2025',
+        financialYear: '2024 to 2025',
+        licences: [
+          {
+            id: fetchData.licences.results[0].id,
+            issue: 'Aggregate',
+            licenceHolder: 'ACME Water PLC',
+            licenceRef: fetchData.licences.results[0].licenceRef,
+            progress: '✓',
+            status: 'review'
           },
-          licenceHolder: 'A Licence Holder Ltd',
-          licenceStatus: 'review',
-          openFilter: true
+          {
+            id: fetchData.licences.results[1].id,
+            issue: '',
+            licenceHolder: 'SCEP Holdings Ltd',
+            licenceRef: fetchData.licences.results[1].licenceRef,
+            progress: '',
+            status: 'ready'
+          }
+        ],
+        numberOfLicencesToReview: 1,
+        pageTitle: 'Review licences',
+        pageTitleCaption: `${fetchData.billRun.region.displayName} two-part tariff`,
+        region: fetchData.billRun.region.displayName,
+        reviewMessage:
+          'You need to review 1 licence with returns data issues. You can then continue and send the bill run.',
+        status: 'review',
+        pagination: {
+          currentPageNumber: 1,
+          numberOfPages: 1,
+          showingMessage: 'Showing all 2 licences'
         }
-      }
-      const yarGetStubData = {
-        filterIssues: ['abs-outside-period', 'aggregate-factor'],
-        filterLicenceHolderNumber: 'A Licence Holder Ltd',
-        filterLicenceStatus: 'review'
-      }
-
-      beforeEach(() => {
-        Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
-
-        yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(yarGetStubData) }
-      })
-
-      it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
-        const result = await ReviewBillRunService.go(billRunId, page, yarStub)
-
-        expect(result.bannerMessage).to.equal(bannerMessage)
-        expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
-        expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
-        expect(result.filter).to.equal(presenterStubData.filter)
-        expect(result.pageTitle).to.equal('Review licences')
-        expect(result.pagination.numberOfPages).to.equal(1)
-        expect(result.pagination.component).not.to.exist()
-
-        expect(FetchBillRunLicencesService.go.called).to.be.true()
-        expect(ReviewBillRunPresenter.go.called).to.be.true()
-      })
-    })
-
-    describe('and the service is called with a banner displayed', () => {
-      const bannerMessage = 'Licence 01/123/ABC removed from the bill run.'
-      const presenterStubData = {
-        preparedBillRun: 'bill run data',
-        preparedLicences: 'licence data',
-        filter: {
-          issues: {
-            absOutsidePeriod: true,
-            aggregateFactor: true,
-            checkingQuery: false,
-            noReturnsReceived: false,
-            overAbstraction: false,
-            overlapOfChargeDates: false,
-            returnsReceivedNotProcessed: false,
-            returnsLate: false,
-            returnSplitOverRefs: false,
-            someReturnsNotReceived: false,
-            unableToMatchReturn: false
-          },
-          licenceHolder: 'A Licence Holder Ltd',
-          licenceStatus: 'review',
-          openFilter: true
-        }
-      }
-      const yarGetStubData = {
-        filterIssues: ['abs-outside-period', 'aggregate-factor'],
-        filterLicenceHolderNumber: 'A Licence Holder Ltd',
-        filterLicenceStatus: 'review'
-      }
-
-      beforeEach(() => {
-        Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
-
-        yarStub = {
-          flash: Sinon.stub().returns(['Licence 01/123/ABC removed from the bill run.']),
-          get: Sinon.stub().returns(yarGetStubData)
-        }
-      })
-
-      it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
-        const result = await ReviewBillRunService.go(billRunId, page, yarStub)
-
-        expect(result.bannerMessage).to.equal(bannerMessage)
-        expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
-        expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
-        expect(result.filter).to.equal(presenterStubData.filter)
-        expect(result.pageTitle).to.equal('Review licences')
-        expect(result.pagination.numberOfPages).to.equal(1)
-        expect(result.pagination.component).not.to.exist()
-
-        expect(FetchBillRunLicencesService.go.called).to.be.true()
-        expect(ReviewBillRunPresenter.go.called).to.be.true()
       })
     })
   })
 
-  describe('when there are multiple pages of results', () => {
-    const bannerMessage = undefined
-    const presenterStubData = {
-      preparedBillRun: 'bill run data',
-      preparedLicences: 'licence data',
-      filter: {
-        issues: undefined,
-        licenceHolder: undefined,
-        licenceStatus: undefined,
-        openFilter: false
-      }
-    }
-
+  describe('when the filters are assessed', () => {
     beforeEach(() => {
-      Sinon.stub(FetchBillRunLicencesService, 'go').resolves({
-        billRun: 'bill data',
-        licences: { results: 'licence data', total: 70 }
-      })
-      Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
-
-      yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(undefined) }
-    })
-
-    describe('and no page is selected', () => {
-      beforeEach(() => {
-        page = undefined
-      })
-
-      it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
-        const result = await ReviewBillRunService.go(billRunId, page, yarStub)
-
-        expect(result.bannerMessage).to.equal(bannerMessage)
-        expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
-        expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
-        expect(result.filter).to.equal(presenterStubData.filter)
-        expect(result.pageTitle).to.equal('Review licences')
-        expect(result.pagination.numberOfPages).to.equal(3)
-        expect(result.pagination.component).to.exist()
-
-        expect(FetchBillRunLicencesService.go.called).to.be.true()
-        expect(ReviewBillRunPresenter.go.called).to.be.true()
-      })
-    })
-
-    describe('and a page other than page 1 is selected', () => {
-      beforeEach(() => {
-        page = '2'
-      })
-
-      it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
-        const result = await ReviewBillRunService.go(billRunId, page, yarStub)
-
-        expect(result.bannerMessage).to.equal(bannerMessage)
-        expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
-        expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
-        expect(result.filter).to.equal(presenterStubData.filter)
-        expect(result.pageTitle).to.equal('Review licences')
-        expect(result.pagination.numberOfPages).to.equal(3)
-        expect(result.pagination.component).to.exist()
-
-        expect(FetchBillRunLicencesService.go.called).to.be.true()
-        expect(ReviewBillRunPresenter.go.called).to.be.true()
-      })
-    })
-  })
-
-  describe('when there are no pages of results after a filter is applied', () => {
-    const bannerMessage = undefined
-    const presenterStubData = {
-      preparedBillRun: 'bill run data',
-      preparedLicences: 'licence data',
-      filter: {
-        issues: undefined,
-        licenceHolder: 'Unknown Licence Holder',
-        licenceStatus: undefined,
-        openFilter: true
+      // For the purposes of these tests the results don't matter
+      fetchData = {
+        billRun: _fetchedBillRun(),
+        licences: { results: [], total: 0 }
       }
-    }
-    const yarGetStubData = {
-      filterIssues: undefined,
-      filterLicenceHolderNumber: 'Unknown Licence Holder',
-      filterLicenceStatus: undefined
-    }
 
-    beforeEach(() => {
-      page = undefined
+      Sinon.stub(FetchBillRunLicencesService, 'go').resolves(fetchData)
 
-      Sinon.stub(FetchBillRunLicencesService, 'go').resolves({
-        billRun: 'bill data',
-        licences: { results: 'licence data', total: 0 }
-      })
-
-      Sinon.stub(ReviewBillRunPresenter, 'go').returns(presenterStubData)
-
-      yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(yarGetStubData) }
+      yarStub = { flash: Sinon.stub().returns([]) }
     })
 
-    it('will fetch the data for the review page and return it once formatted by the presenter', async () => {
-      const result = await ReviewBillRunService.go(billRunId, page, yarStub)
+    describe('and none were ever set or they were cleared', () => {
+      beforeEach(() => {
+        yarStub.get = Sinon.stub().returns(null)
+      })
 
-      expect(result.bannerMessage).to.equal(bannerMessage)
-      expect(result.preparedBillRun).to.equal(presenterStubData.preparedBillRun)
-      expect(result.preparedLicences).to.equal(presenterStubData.preparedLicences)
-      expect(result.filter).to.equal(presenterStubData.filter)
-      expect(result.pageTitle).to.equal('Review licences')
-      expect(result.pagination.numberOfPages).to.equal(0)
-      expect(result.pagination.component).not.to.exist()
+      it('returns blank filters and that the controls should be closed', async () => {
+        const result = await ReviewBillRunService.go(billRunId, yarStub, page)
 
-      expect(FetchBillRunLicencesService.go.called).to.be.true()
-      expect(ReviewBillRunPresenter.go.called).to.be.true()
+        expect(result.filters.openFilter).to.be.false()
+      })
+    })
+
+    describe('and the filters were submitted empty', () => {
+      beforeEach(() => {
+        yarStub.get = Sinon.stub().returns(_filters())
+      })
+
+      it('returns blank filters and that the controls should be closed', async () => {
+        const result = await ReviewBillRunService.go(billRunId, yarStub, page)
+
+        expect(result.filters.openFilter).to.be.false()
+      })
+    })
+
+    describe('when a filter was applied', () => {
+      beforeEach(() => {
+        const filters = _filters()
+
+        filters.licenceHolderNumber = 'carol shaw'
+        yarStub.get = Sinon.stub().returns(filters)
+      })
+
+      it('returns the saved filters and that the controls should be open', async () => {
+        const result = await ReviewBillRunService.go(billRunId, yarStub, page)
+
+        expect(result.filters.openFilter).to.be.true()
+      })
     })
   })
 })
+
+function _fetchedBillRun() {
+  const { id: regionId, displayName } = RegionHelper.select()
+
+  return {
+    id: billRunId,
+    batchType: 'two_part_tariff',
+    createdAt: new Date('2025-04-10T16:19:14.012Z'),
+    scheme: 'sroc',
+    status: 'review',
+    summer: false,
+    toFinancialYearEnding: 2025,
+    region: {
+      id: regionId,
+      displayName
+    },
+    reviewLicences: [
+      {
+        totalNumberOfLicences: 2,
+        numberOfLicencesToReview: 1
+      }
+    ]
+  }
+}
+
+function _filters() {
+  return {
+    issues: null,
+    licenceHolderNumber: null,
+    licenceStatus: null,
+    progress: null
+  }
+}
