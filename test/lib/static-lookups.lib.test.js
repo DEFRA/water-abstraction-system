@@ -73,7 +73,7 @@ describe('Static Lookups', () => {
       })
     })
 
-    describe('#Roles Manual Immutability Check', () => {
+    describe('immutability check', () => {
       const result = StaticLookups.roles
 
       it('throws TypeError when mutating "abstraction-alerts"', () => {
