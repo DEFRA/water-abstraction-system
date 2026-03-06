@@ -5,8 +5,6 @@
  * @module FetchHistoryService
  */
 
-const { raw } = require('objection')
-
 const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
 
@@ -37,14 +35,8 @@ async function _fetch(companyId, page) {
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
       licenceVersionsBuilder
-        .select([
-          'endDate',
-          'id',
-          'startDate',
-          raw(
-            '(SELECT true FROM public.licence_versions lv2 WHERE lv2.licence_id = licence_versions.licence_id AND lv2.issue = licence_versions.issue AND lv2."increment" = (licence_versions."increment" - 1))'
-          ).as('administrative')
-        ])
+        .select(['endDate', 'id', 'startDate'])
+        .modify('changeType')
         .whereExists(
           LicenceVersionModel.relatedQuery('licenceVersionHolder').where('licenceVersionHolder.companyId', companyId)
         )

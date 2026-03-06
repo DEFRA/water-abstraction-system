@@ -36,7 +36,7 @@ function _licenceVersionEntries(licenceVersions) {
         text: 'View',
         link: `/system/licence-versions/${licenceVersion.id}`
       },
-      changeType: licenceVersion.administrative ? 'no licence issued' : 'licence issued',
+      changeType: licenceVersion.$changeType(),
       endDate: formatLongDate(licenceVersion.endDate),
       reason: licenceVersion.$reason(),
       startDate: formatLongDate(licenceVersion.startDate)

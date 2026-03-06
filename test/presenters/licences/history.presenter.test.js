@@ -62,28 +62,4 @@ describe('Licences - History presenter', () => {
       })
     })
   })
-
-  describe('the "licenceVersions" property', () => {
-    describe('the "changeType" property', () => {
-      describe('when the licence version is not administrative', () => {
-        it('returns "licence issued"', () => {
-          const result = HistoryPresenter.go(licenceHistory, licence)
-
-          expect(result.licenceVersions[0].changeType).to.equal('licence issued')
-        })
-      })
-
-      describe('when the licence version is administrative', () => {
-        beforeEach(() => {
-          licenceHistory[0].administrative = true
-        })
-
-        it('returns "no licence issued"', () => {
-          const result = HistoryPresenter.go(licenceHistory, licence)
-
-          expect(result.licenceVersions[0].changeType).to.equal('no licence issued')
-        })
-      })
-    })
-  })
 })
