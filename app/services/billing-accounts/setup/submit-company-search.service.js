@@ -28,7 +28,7 @@ async function go(sessionId, payload) {
     await _save(session, payload)
 
     return {
-      redirectUrl: `/system/billing-accounts/setup/${session.id}/select-company`
+      redirectUrl: _redirectURL(session)
     }
   }
 
@@ -40,7 +40,25 @@ async function go(sessionId, payload) {
   }
 }
 
+function _redirectURL(session) {
+  if (session.checkPageVisited) {
+    return `/system/billing-accounts/setup/${session.id}/check`
+  }
+
+  return `/system/billing-accounts/setup/${session.id}/select-company`
+}
+
 async function _save(session, payload) {
+  if (session.checkPageVisited && session.companySearch !== payload.companySearch) {
+    session.addressJourney = null
+    session.addressSelected = null
+    session.checkPageVisited = false
+    session.companiesHouseId = false
+    session.fao = null
+    session.contactSelected = null
+    session.contactName = null
+  }
+
   session.companySearch = payload.companySearch
 
   return session.$update()

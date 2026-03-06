@@ -60,6 +60,19 @@
         value: { text: searchIndividualInput }
       } if searchIndividualInput,
       {
+        key: { text: "Company search term" },
+        value: { text: companySearch },
+        actions: {
+          items: [
+            {
+              href: links.companySearch,
+              text: "Change",
+              visuallyHiddenText: "company search term"
+            }
+          ]
+        }
+      } if companySearch,
+      {
         key: { text: "Existing address" },
         value: { html: newLineArrayItems(addressSelected) },
         actions: {

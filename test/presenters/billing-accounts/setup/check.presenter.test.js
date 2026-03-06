@@ -42,11 +42,13 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         accountSelected: 'Another billing account',
         accountType: '',
         addressSelected: ['New'],
+        companySearch: '',
         existingAccount: '',
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
           addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
+          companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
           existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
         },
         pageTitle: 'Check billing account details',
