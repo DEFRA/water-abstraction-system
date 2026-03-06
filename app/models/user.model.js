@@ -143,7 +143,17 @@ class UserModel extends BaseModel {
               .select(['id'])
               .withGraphFetched('licenceEntityRoles')
               .modifyGraph('licenceEntityRoles', (licenceEntityRolesBuilder) => {
-                licenceEntityRolesBuilder.select(['id', 'role'])
+                // NOTE: A role must be linked to a licence for it to be considered. However, this being the crm schema
+                // it has its own 'licence' records represented by `LicenceDocumentHeaders`, which are linked to roles
+                // `companyEntityId`.
+                licenceEntityRolesBuilder
+                  .select(['licenceEntityRoles.id', 'licenceEntityRoles.role'])
+                  .innerJoin(
+                    'licenceDocumentHeaders',
+                    'licenceDocumentHeaders.companyEntityId',
+                    'licenceEntityRoles.companyEntityId'
+                  )
+                  .innerJoin('licences', 'licences.licenceRef', 'licenceDocumentHeaders.licenceRef')
               })
           })
       },
@@ -257,8 +267,8 @@ class UserModel extends BaseModel {
    *
    * - **Admin** (admin)
    * - **Primary user** (primary_user)
-   * - **Returns agent** (user_returns)
-   * - **Agent** (user)
+   * - **Returns user** (user_returns)
+   * - **Basic access** (user)
    *
    * If a user has no roles, we default to 'None'.
    *
@@ -313,10 +323,6 @@ class UserModel extends BaseModel {
   }
 
   _externalPermissions() {
-    if (!this.licenceEntity?.licenceEntityRoles) {
-      return null
-    }
-
     const entityRoles = this.licenceEntity?.licenceEntityRoles || []
 
     const roles = entityRoles.map((entityRole) => {

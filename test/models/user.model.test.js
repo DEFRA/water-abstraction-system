@@ -14,9 +14,11 @@ const CompanyContactHelper = require('../support/helpers/company-contact.helper.
 const CompanyContactModel = require('../../app/models/company-contact.model.js')
 const GroupHelper = require('../support/helpers/group.helper.js')
 const GroupModel = require('../../app/models/group.model.js')
+const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
 const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
 const LicenceEntityModel = require('../../app/models/licence-entity.model.js')
 const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
+const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
 const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
 const ReturnVersionHelper = require('../support/helpers/return-version.helper.js')
@@ -28,6 +30,7 @@ const UserGroupModel = require('../../app/models/user-group.model.js')
 const UserHelper = require('../support/helpers/user.helper.js')
 const UserRoleHelper = require('../support/helpers/user-role.helper.js')
 const UserRoleModel = require('../../app/models/user-role.model.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
 const { userPermissions } = require('../../app/lib/static-lookups.lib.js')
 
 // Thing under test
@@ -43,6 +46,8 @@ describe('User model', () => {
   let testChargeVersionNotes
   let testCreatedCompanyContacts
   let testGroup
+  let testLicence
+  let testLicenceDocumentHeader
   let testLicenceEntity
   let testRecord
   let testRole
@@ -81,6 +86,14 @@ describe('User model', () => {
   })
 
   afterEach(async () => {
+    if (testLicence) {
+      await testLicence.$query().delete()
+    }
+
+    if (testLicenceDocumentHeader) {
+      await testLicenceDocumentHeader.$query().delete()
+    }
+
     if (testLicenceEntity) {
       await testLicenceEntity.$query().delete()
     }
@@ -465,145 +478,467 @@ describe('User model', () => {
     })
 
     describe('when the user is "external"', () => {
-      describe('but the instance has not been populated properly', () => {
+      describe('but has yet to be linked to a licence so has no licence entity record', () => {
         beforeEach(async () => {
           testUser = await UserHelper.add({ application: 'water_vml' })
 
           permissionRecord = await UserModel.query().findById(testUser.id)
         })
 
-        describe('because "licenceEntity" (and its "licenceEntityRoles") is not present (it was not fetched)', () => {
-          it('returns null', async () => {
-            const result = permissionRecord.$permissions()
+        it('returns "None" permissions', async () => {
+          const result = permissionRecord.$permissions()
 
-            expect(result).to.be.null()
-          })
+          expect(result).to.equal(userPermissions.none)
         })
       })
 
-      describe('and the instance has been populated properly', () => {
-        describe('but is not linked to a licence entity', () => {
-          beforeEach(async () => {
-            testUser = await UserHelper.add({ application: 'water_vml' })
+      describe('and has been linked to a licence at some point so has a licence entity record', () => {
+        beforeEach(async () => {
+          testLicenceEntity = await LicenceEntityHelper.add()
 
-            permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
-          })
-
-          it('returns null', async () => {
-            const result = permissionRecord.$permissions()
-
-            expect(result).to.be.null()
-          })
+          // NOTE: The entity ID is held against the user, not the other way round!! This is why we have to create the
+          // licence entity first
+          testUser = await UserHelper.add({ application: 'water_vml', licenceEntityId: testLicenceEntity.id })
         })
 
-        describe('and is linked to a licence entity', () => {
+        describe('which is linked to the licence document header (the crm schema licence record)', () => {
           beforeEach(async () => {
-            testLicenceEntity = await LicenceEntityHelper.add()
-
-            // NOTE: The entity ID is held against the user, not the other way round!! This is why we have to create the
-            // licence entity first
-            testUser = await UserHelper.add({ application: 'water_vml', licenceEntityId: testLicenceEntity.id })
+            testLicenceDocumentHeader = await LicenceDocumentHeaderHelper.add({ companyEntityId: generateUUID() })
           })
 
-          describe('but has no licence entity roles', () => {
+          describe('and the licence itself still exists (has not been deleted)', () => {
             beforeEach(async () => {
-              permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+              testLicence = await LicenceHelper.add({ licenceRef: testLicenceDocumentHeader.licenceRef })
             })
 
-            it('returns "None" permissions', async () => {
-              const result = permissionRecord.$permissions()
+            describe('but it is not linked to any licence entity roles', () => {
+              beforeEach(async () => {
+                permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+              })
 
-              expect(result).to.equal(userPermissions.none)
+              it('returns "None" permissions', async () => {
+                const result = permissionRecord.$permissions()
+
+                expect(result).to.equal(userPermissions.none)
+              })
+            })
+
+            describe('and it is linked to a "admin" licence entity role', () => {
+              describe('which is linked to the licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: testLicenceDocumentHeader.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'admin'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "Admin" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.admin)
+                })
+              })
+
+              describe('which is no longer linked to the licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: generateUUID(),
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'admin'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
+              })
+            })
+
+            describe('and it is linked to a "primary_user" licence entity role', () => {
+              describe('which is linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: testLicenceDocumentHeader.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'primary_user'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "Primary user" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.primary_user)
+                })
+              })
+
+              describe('which is no longer linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: generateUUID(),
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'primary_user'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
+              })
+            })
+
+            describe('and it is linked to a "user_returns" licence entity role', () => {
+              describe('which is linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: testLicenceDocumentHeader.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'user_returns'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "Returns user" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.returns_user)
+                })
+              })
+
+              describe('which is no longer linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: generateUUID(),
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'user_returns'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
+              })
+            })
+
+            describe('and it is linked to a "user" licence entity role', () => {
+              describe('which is linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: testLicenceDocumentHeader.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'user'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "Basic access" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.basic)
+                })
+              })
+
+              describe('which is no longer linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: generateUUID(),
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'user'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
+              })
+            })
+
+            describe('and it is linked to multiple licence entity roles', () => {
+              describe('which are linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: testLicenceDocumentHeader.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'primary_user'
+                  })
+
+                  otherLicenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: licenceEntityRole.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'user'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns the highest role by order of precedence', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.primary_user)
+                })
+              })
+
+              describe('which are no longer linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: generateUUID(),
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'primary_user'
+                  })
+
+                  otherLicenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: licenceEntityRole.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'user'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
+              })
             })
           })
 
-          describe('which is linked to a "admin" licence entity role', () => {
-            beforeEach(async () => {
-              licenceEntityRole = await LicenceEntityRoleHelper.add({
-                licenceEntityId: testLicenceEntity.id,
-                role: 'admin'
+          describe('but the licence itself does not exist (it has been deleted)', () => {
+            describe('and it is not linked to any licence entity roles', () => {
+              beforeEach(async () => {
+                permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
               })
 
-              permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+              it('returns "None" permissions', async () => {
+                const result = permissionRecord.$permissions()
+
+                expect(result).to.equal(userPermissions.none)
+              })
             })
 
-            it('returns "Admin" permissions', async () => {
-              const result = permissionRecord.$permissions()
+            describe('and it is linked to a "admin" licence entity role', () => {
+              describe('which is linked to the licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: testLicenceDocumentHeader.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'admin'
+                  })
 
-              expect(result).to.equal(userPermissions.admin)
-            })
-          })
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
 
-          describe('which is linked to a "primary_user" licence entity role', () => {
-            beforeEach(async () => {
-              licenceEntityRole = await LicenceEntityRoleHelper.add({
-                licenceEntityId: testLicenceEntity.id,
-                role: 'primary_user'
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
               })
 
-              permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+              describe('which is no longer linked to the licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: generateUUID(),
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'admin'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
+              })
             })
 
-            it('returns "Primary user" permissions', async () => {
-              const result = permissionRecord.$permissions()
+            describe('and it is linked to a "primary_user" licence entity role', () => {
+              describe('which is linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: testLicenceDocumentHeader.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'primary_user'
+                  })
 
-              expect(result).to.equal(userPermissions.primary_user)
-            })
-          })
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
 
-          describe('which is linked to a "user_returns" licence entity role', () => {
-            beforeEach(async () => {
-              licenceEntityRole = await LicenceEntityRoleHelper.add({
-                licenceEntityId: testLicenceEntity.id,
-                role: 'user_returns'
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
               })
 
-              permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+              describe('which is no longer linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: generateUUID(),
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'primary_user'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
+              })
             })
 
-            it('returns "Returns user" permissions', async () => {
-              const result = permissionRecord.$permissions()
+            describe('and it is linked to a "user_returns" licence entity role', () => {
+              describe('which is linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: testLicenceDocumentHeader.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'user_returns'
+                  })
 
-              expect(result).to.equal(userPermissions.returns_user)
-            })
-          })
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
 
-          describe('which is linked to a "user" licence entity role', () => {
-            beforeEach(async () => {
-              licenceEntityRole = await LicenceEntityRoleHelper.add({
-                licenceEntityId: testLicenceEntity.id,
-                role: 'user'
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
               })
 
-              permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+              describe('which is no longer linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: generateUUID(),
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'user_returns'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
+              })
             })
 
-            it('returns "Basic access" permissions', async () => {
-              const result = permissionRecord.$permissions()
+            describe('and it is linked to a "user" licence entity role', () => {
+              describe('which is linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: testLicenceDocumentHeader.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'user'
+                  })
 
-              expect(result).to.equal(userPermissions.basic)
-            })
-          })
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
 
-          describe('which is linked to multiple licence entity roles', () => {
-            beforeEach(async () => {
-              licenceEntityRole = await LicenceEntityRoleHelper.add({
-                licenceEntityId: testLicenceEntity.id,
-                role: 'primary_user'
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
               })
 
-              otherLicenceEntityRole = await LicenceEntityRoleHelper.add({
-                licenceEntityId: testLicenceEntity.id,
-                role: 'user'
-              })
+              describe('which is no longer linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: generateUUID(),
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'user'
+                  })
 
-              permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
+              })
             })
 
-            it('returns the highest role by order of precedence', async () => {
-              const result = permissionRecord.$permissions()
+            describe('and it is linked to multiple licence entity roles', () => {
+              describe('which are linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: testLicenceDocumentHeader.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'primary_user'
+                  })
 
-              expect(result).to.equal(userPermissions.primary_user)
+                  otherLicenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: licenceEntityRole.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'user'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
+              })
+
+              describe('which are no longer linked to a licence document header', () => {
+                beforeEach(async () => {
+                  licenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: generateUUID(),
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'primary_user'
+                  })
+
+                  otherLicenceEntityRole = await LicenceEntityRoleHelper.add({
+                    companyEntityId: licenceEntityRole.companyEntityId,
+                    licenceEntityId: testLicenceEntity.id,
+                    role: 'user'
+                  })
+
+                  permissionRecord = await UserModel.query().modify('permissions').findById(testUser.id)
+                })
+
+                it('returns "None" permissions', async () => {
+                  const result = permissionRecord.$permissions()
+
+                  expect(result).to.equal(userPermissions.none)
+                })
+              })
             })
           })
         })
