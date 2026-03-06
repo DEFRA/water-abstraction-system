@@ -68,7 +68,7 @@ describe('Companies - Fetch History service', () => {
   })
 
   beforeEach(() => {
-    pageNumber = 1
+    pageNumber = '1'
 
     // NOTE: We set the default page size to 1000 to ensure we get all records and avoid failed tests when run as
     // part of the full suite, and the risk our test record is returned in the second page of results.
@@ -103,6 +103,7 @@ describe('Companies - Fetch History service', () => {
             licenceRef: licence.licenceRef,
             licenceVersions: [
               {
+                administrative: null,
                 endDate: null,
                 id: licenceVersion.id,
                 startDate: new Date('2022-01-01')
