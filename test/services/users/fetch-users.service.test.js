@@ -12,8 +12,10 @@ const { expect } = Code
 const DatabaseConfig = require('../../../config/database.config.js')
 
 // Test helpers
+const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
 const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
@@ -28,6 +30,8 @@ describe('Users - Fetch Users service', () => {
   let externalPrimaryUser
   let externalReturnsUser
   let filters
+  let licence
+  let licenceDocumentHeader
   let licenceEntities
   let pageNumber
 
@@ -37,7 +41,11 @@ describe('Users - Fetch Users service', () => {
     // returns user. But to create a `LicenceEntityRole` record we need a `LicenceEntity`, and a `LicenceDocument`.
     // This isn't what we consider 'general seed data'. So, we create specific instances for these tests.
 
-    const companyEntityId = generateUUID()
+    licence = await LicenceHelper.add()
+    licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+      companyEntityId: generateUUID(),
+      licenceRef: licence.licenceRef
+    })
 
     licenceEntities = []
 
@@ -55,7 +63,7 @@ describe('Users - Fetch Users service', () => {
     })
 
     let licenceEntityRole = await LicenceEntityRoleHelper.add({
-      companyEntityId,
+      companyEntityId: licenceDocumentHeader.companyEntityId,
       licenceEntityId: externalBasicAccessUser.licenceEntityId,
       role: 'user'
     })
@@ -78,7 +86,7 @@ describe('Users - Fetch Users service', () => {
     })
 
     licenceEntityRole = await LicenceEntityRoleHelper.add({
-      companyEntityId,
+      companyEntityId: licenceDocumentHeader.companyEntityId,
       licenceEntityId: externalReturnsUser.licenceEntityId,
       role: 'user_returns'
     })
@@ -96,7 +104,7 @@ describe('Users - Fetch Users service', () => {
     })
 
     licenceEntityRole = await LicenceEntityRoleHelper.add({
-      companyEntityId,
+      companyEntityId: licenceDocumentHeader.companyEntityId,
       licenceEntityId: externalPrimaryUser.licenceEntityId,
       role: 'primary_user'
     })
@@ -130,6 +138,9 @@ describe('Users - Fetch Users service', () => {
     await externalBasicAccessUser.$query().delete()
     await externalReturnsUser.$query().delete()
     await externalPrimaryUser.$query().delete()
+
+    await licenceDocumentHeader.$query().delete()
+    await licence.$query().delete()
   })
 
   describe('when no filter is applied', () => {
