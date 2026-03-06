@@ -7,7 +7,7 @@
  */
 
 const FetchCompanyService = require('./fetch-company.service.js')
-const FetchLicencesService = require('./fetch-licences.service.js')
+const FetchHistoryService = require('./fetch-history.service.js')
 const HistoryPresenter = require('../../presenters/companies/history.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
@@ -24,7 +24,7 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
 async function go(companyId, auth, page) {
   const company = await FetchCompanyService.go(companyId)
 
-  const { licences, totalNumber } = await FetchLicencesService.go(companyId, page)
+  const { licences, totalNumber } = await FetchHistoryService.go(companyId, page)
 
   const pageData = HistoryPresenter.go(company, licences)
 
