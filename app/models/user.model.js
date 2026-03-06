@@ -143,7 +143,17 @@ class UserModel extends BaseModel {
               .select(['id'])
               .withGraphFetched('licenceEntityRoles')
               .modifyGraph('licenceEntityRoles', (licenceEntityRolesBuilder) => {
-                licenceEntityRolesBuilder.select(['id', 'role'])
+                // NOTE: A role must be linked to a licence for it to be considered. However, this being the crm schema
+                // it has its own 'licence' records represented by `LicenceDocumentHeaders`, which are linked to roles
+                // `companyEntityId`.
+                licenceEntityRolesBuilder
+                  .select(['licenceEntityRoles.id', 'licenceEntityRoles.role'])
+                  .innerJoin(
+                    'licenceDocumentHeaders',
+                    'licenceDocumentHeaders.companyEntityId',
+                    'licenceEntityRoles.companyEntityId'
+                  )
+                  .whereNull('licenceDocumentHeaders.deletedAt')
               })
           })
       },
