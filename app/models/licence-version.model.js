@@ -5,7 +5,7 @@
  * @module LicenceVersionModel
  */
 
-const { Model } = require('objection')
+const { Model, raw } = require('objection')
 
 const BaseModel = require('./base.model.js')
 
@@ -78,6 +78,20 @@ class LicenceVersionModel extends BaseModel {
    */
   static get modifiers() {
     return {
+      // changeType modifier is used to determine whether the licence version was 'administrative', i.e. was just an
+      // increment (typically to correct something), or was a new issue of the licence (something has changed).
+      // It adds a calculated field named `administrative` to the select statement of the query that uses it. It will
+      // be `true` if the licence version is an increment, else NULL, which indicates it is an issue.
+      //
+      // It does this by checking if there is a previous licence version for the same licence and with the same issue
+      // number, and an increment one less than it.
+      changeType(query) {
+        query.select([
+          raw(
+            '(SELECT true FROM public.licence_versions lv2 WHERE lv2.licence_id = licence_versions.licence_id AND lv2.issue = licence_versions.issue AND lv2."increment" = (licence_versions."increment" - 1))'
+          ).as('administrative')
+        ])
+      },
       // history modifier fetches all the related records needed to determine history properties, for example, created
       // at, created by, and notes from the record and its NALD mod logs (where they exist)
       history(query) {
@@ -89,6 +103,42 @@ class LicenceVersionModel extends BaseModel {
           })
       }
     }
+  }
+
+  /**
+   * Determine the change type for the licence version: whether a licence was issued or not
+   *
+   * > We recommend adding the `changeType` modifier to your query to support this determination
+   *
+   * The first licence version for a licence is always determined as an 'issue', i.e. a new licence document was issued
+   * (but the reference stays the same). And by document, we mean a literally: we are not referring to
+   * `LicenceDocumentHeader` or its ilk!
+   *
+   * After that a change might be made that does not result in a new document. Typically, when an error is spotted that
+   * needs to be corrected. This will add a new licence version with the same issue number, but 'increment' will
+   * increase by one.
+   *
+   * If a change needs to be made to the licence, for example, a purpose or point is added, this _will_ result in a new
+   * licence document. A new licence version will be added, and 'issue' will increase by one and increment will reset to
+   * 1 or 100.
+   *
+   * Because 'issue' and 'increment' are terms only used by the core water team, the descriptions 'no licence issued'
+   * and 'licence issued' were agreed to define the change type.
+   *
+   * Assuming you have used the modifier `changeType` when fetching the licence version, this function will use the
+   * field `administrative` added to the query to determine which description to return.
+   *
+   * - issue - 'licence issued'
+   * - increment - 'no licence issued'
+   *
+   * @returns {string} the change type for the licence version
+   */
+  $changeType() {
+    if (this.administrative) {
+      return 'no licence issued'
+    }
+
+    return 'licence issued'
   }
 
   /**
