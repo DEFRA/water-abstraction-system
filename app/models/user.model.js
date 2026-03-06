@@ -313,10 +313,6 @@ class UserModel extends BaseModel {
   }
 
   _externalPermissions() {
-    if (!this.licenceEntity?.licenceEntityRoles) {
-      return null
-    }
-
     const entityRoles = this.licenceEntity?.licenceEntityRoles || []
 
     const roles = entityRoles.map((entityRole) => {

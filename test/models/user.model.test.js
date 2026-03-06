@@ -472,10 +472,10 @@ describe('User model', () => {
           permissionRecord = await UserModel.query().findById(testUser.id)
         })
 
-        it('returns null', async () => {
+        it('returns "None" permissions', async () => {
           const result = permissionRecord.$permissions()
 
-          expect(result).to.be.null()
+          expect(result).to.equal(userPermissions.none)
         })
       })
 
