@@ -14,7 +14,7 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const CompanyPresenter = require('../../../app/presenters/companies/company.presenter.js')
 
 describe('Companies - Company Presenter', () => {
-  const role = 'Licence holder'
+  const role = 'licence-holder'
 
   let companyDetails
 
