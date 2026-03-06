@@ -5,9 +5,7 @@
  * @module HistoryPresenter
  */
 
-const { formatLicenceVersions } = require('../licence-versions.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
-const { today } = require('../../lib/general.lib.js')
 
 /**
  * Formats data for the '/companies/{id}/history' page
@@ -24,7 +22,7 @@ function go(company, licences) {
       text: 'Back to search'
     },
     pageTitleCaption: company.name,
-    pageTitle: 'Licences',
+    pageTitle: 'History',
     licenceVersions: _licenceVersions(licences)
   }
 }
@@ -41,17 +39,14 @@ function _licenceVersions(licences) {
   const versions = []
 
   for (const licence of licences) {
-    const licenceEndDetails = licence.$ends()
-
     const { licenceVersions } = licence
 
-    const formattedLicenceVersions = formatLicenceVersions(licenceVersions)
-
-    for (const licenceVersion of formattedLicenceVersions) {
+    for (const licenceVersion of licenceVersions) {
       const { endDate, id, startDate } = licenceVersion
 
       const versionDetails = {
-        count: formattedLicenceVersions.length,
+        changeType: licenceVersion.$changeType(),
+        count: licenceVersions.length,
         endDate: formatLongDate(endDate),
         licenceId: licence.id,
         licenceRef: licence.licenceRef,
@@ -59,8 +54,7 @@ function _licenceVersions(licences) {
           hiddenText: _hiddenText(endDate),
           href: `/system/licence-versions/${id}`
         },
-        startDate: formatLongDate(startDate),
-        status: _status(licenceEndDetails)
+        startDate: formatLongDate(startDate)
       }
 
       versions.push(versionDetails)
@@ -68,14 +62,6 @@ function _licenceVersions(licences) {
   }
 
   return versions
-}
-
-function _status(licenceEndDetails) {
-  if (licenceEndDetails && licenceEndDetails.date <= today()) {
-    return licenceEndDetails.reason
-  }
-
-  return null
 }
 
 module.exports = {

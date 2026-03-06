@@ -9,7 +9,6 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const { today } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const HistoryPresenter = require('../../../app/presenters/companies/history.presenter.js')
@@ -34,6 +33,7 @@ describe('Companies - History presenter', () => {
         },
         licenceVersions: [
           {
+            changeType: 'licence issued',
             count: 1,
             endDate: null,
             licenceId: licences[0].id,
@@ -42,95 +42,34 @@ describe('Companies - History presenter', () => {
               hiddenText: 'current licence version',
               href: `/system/licence-versions/${licences[0].licenceVersions[0].id}`
             },
-            startDate: '1 January 2022',
-            status: null
+            startDate: '1 January 2022'
           }
         ],
-        pageTitle: 'Licences',
+        pageTitle: 'History',
         pageTitleCaption: 'Tyrell Corporation'
       })
     })
 
     describe('the "licenceVersions" property', () => {
-      describe('when the licence', () => {
-        describe('does not have any end date details', () => {
-          it('returns the "status" as "current"', () => {
-            const result = HistoryPresenter.go(company, licences)
-
-            expect(result.licenceVersions[0].status).to.equal(null)
-          })
-        })
-
-        describe('has an "end date"', () => {
-          describe('and the date is today', () => {
-            beforeEach(() => {
-              licences[0].revokedDate = today()
-            })
-
-            it('returns the "status" based on the reason', () => {
+      describe('the "link" property', () => {
+        describe('the "hiddenText" property', () => {
+          describe('when the licence version does not have an end date', () => {
+            it('returns "current licence version"', () => {
               const result = HistoryPresenter.go(company, licences)
 
-              expect(result.licenceVersions[0].status).to.equal('revoked')
+              expect(result.licenceVersions[0].link.hiddenText).to.equal('current licence version')
             })
           })
 
-          describe('and the date is after today', () => {
+          describe('when the licence version has an end date', () => {
             beforeEach(() => {
-              const date = today()
-
-              date.setDate(date.getDate() + 30)
-
-              licences[0].revokedDate = date
+              licences[0].licenceVersions[0].endDate = new Date('2022-01-01')
             })
 
-            it('returns the "status" as null', () => {
+            it('returns "current licence version ending on X"', () => {
               const result = HistoryPresenter.go(company, licences)
 
-              expect(result.licenceVersions[0].status).to.be.null()
-            })
-          })
-
-          describe('and the date is before today', () => {
-            beforeEach(() => {
-              const date = today()
-
-              date.setDate(date.getDate() - 30)
-
-              licences[0].revokedDate = date
-            })
-
-            it('returns the "status" based on the reason', () => {
-              const result = HistoryPresenter.go(company, licences)
-
-              expect(result.licenceVersions[0].status).to.equal('revoked')
-            })
-          })
-        })
-      })
-
-      describe('when the licence version', () => {
-        describe('does not have an end date', () => {
-          it('returns "current licence version"', () => {
-            const result = HistoryPresenter.go(company, licences)
-
-            expect(result.licenceVersions[0].link).to.equal({
-              hiddenText: 'current licence version',
-              href: `/system/licence-versions/${licences[0].licenceVersions[0].id}`
-            })
-          })
-        })
-
-        describe('has an end date', () => {
-          beforeEach(() => {
-            licences[0].licenceVersions[0].endDate = new Date('2022-01-01')
-          })
-
-          it('returns "current licence version ending on X"', () => {
-            const result = HistoryPresenter.go(company, licences)
-
-            expect(result.licenceVersions[0].link).to.equal({
-              hiddenText: 'licence version ending on 1 January 2022',
-              href: `/system/licence-versions/${licences[0].licenceVersions[0].id}`
+              expect(result.licenceVersions[0].link.hiddenText).to.equal('licence version ending on 1 January 2022')
             })
           })
         })
