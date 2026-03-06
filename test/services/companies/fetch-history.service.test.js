@@ -19,9 +19,9 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const DatabaseConfig = require('../../../config/database.config.js')
 
 // Thing under test
-const FetchLicencesService = require('../../../app/services/companies/fetch-licences.service.js')
+const FetchHistoryService = require('../../../app/services/companies/fetch-history.service.js')
 
-describe('Companies - Fetch Licences service', () => {
+describe('Companies - Fetch History service', () => {
   let company
   let licence
   let licenceVersion
@@ -92,7 +92,7 @@ describe('Companies - Fetch Licences service', () => {
 
   describe('when called', () => {
     it('returns licences linked to the company where it is the licence holder', async () => {
-      const result = await FetchLicencesService.go(company.id, pageNumber)
+      const result = await FetchHistoryService.go(company.id, pageNumber)
 
       expect(result).to.equal({
         licences: [

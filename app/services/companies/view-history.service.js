@@ -1,19 +1,19 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the '/companies/{id}/licences' page
+ * Orchestrates fetching and presenting the data for the '/companies/{id}/history' page
  *
- * @module ViewLicencesService
+ * @module ViewHistoryService
  */
 
 const FetchCompanyService = require('./fetch-company.service.js')
 const FetchLicencesService = require('./fetch-licences.service.js')
-const LicencesPresenter = require('../../presenters/companies/licences.presenter.js')
+const HistoryPresenter = require('../../presenters/companies/history.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
 const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data for the '/companies/{id}/licences' page
+ * Orchestrates fetching and presenting the data for the '/companies/{id}/history' page
  *
  * @param {string} companyId - the UUID of the company
  * @param {object} auth - The auth object taken from `request.auth` containing user details
@@ -26,19 +26,19 @@ async function go(companyId, auth, page) {
 
   const { licences, totalNumber } = await FetchLicencesService.go(companyId, page)
 
-  const pageData = LicencesPresenter.go(company, licences)
+  const pageData = HistoryPresenter.go(company, licences)
 
   const pagination = PaginatorPresenter.go(
     totalNumber,
     page,
-    `/system/companies/${companyId}/licences`,
+    `/system/companies/${companyId}/history`,
     licences.length,
     'licences'
   )
 
   return {
     ...pageData,
-    activeSecondaryNav: 'licences',
+    activeSecondaryNav: 'history',
     pagination,
     roles: userRoles(auth)
   }

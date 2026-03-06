@@ -16,7 +16,7 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 const ViewBillingAccountsService = require('../../app/services/companies/view-billing-accounts.service.js')
 const ViewContactsService = require('../../app/services/companies/view-contacts.service.js')
 const ViewCompanyService = require('../../app/services/companies/view-company.service.js')
-const ViewLicencesService = require('../../app/services/companies/view-licences.service.js')
+const ViewHistoryService = require('../../app/services/companies/view-history.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -141,26 +141,26 @@ describe('Companies controller', () => {
     })
   })
 
-  describe('/companies/{id}/licences', () => {
+  describe('/companies/{id}/history', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
           method: 'GET',
-          url: `/companies/${generateUUID()}/licences`,
+          url: `/companies/${generateUUID()}/history`,
           auth: {
             strategy: 'session',
             credentials: { scope: [] }
           }
         }
 
-        Sinon.stub(ViewLicencesService, 'go').returns({ pageTitle: 'Licences', roles: [] })
+        Sinon.stub(ViewHistoryService, 'go').returns({ pageTitle: 'History', roles: [] })
       })
 
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Licences')
+        expect(response.payload).to.contain('History')
       })
     })
   })

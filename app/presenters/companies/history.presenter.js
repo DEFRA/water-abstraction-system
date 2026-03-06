@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats data for the '/companies/{id}/licences' page
- * @module LicencesPresenter
+ * Formats data for the '/companies/{id}/history' page
+ * @module HistoryPresenter
  */
 
 const { formatLicenceVersions } = require('../licence-versions.presenter.js')
@@ -10,7 +10,7 @@ const { formatLongDate } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
 /**
- * Formats data for the '/companies/{id}/licences' page
+ * Formats data for the '/companies/{id}/history' page
  *
  * @param {module:CompanyModel} company - The company from the companies table
  * @param {object} licences - the licences for the customer

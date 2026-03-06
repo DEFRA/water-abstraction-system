@@ -13,12 +13,12 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
 // Things we need to stub
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
-const FetchLicencesService = require('../../../app/services/companies/fetch-licences.service.js')
+const FetchHistoryService = require('../../../app/services/companies/fetch-history.service.js')
 
 // Thing under test
-const ViewLicencesService = require('../../../app/services/companies/view-licences.service.js')
+const ViewHistoryService = require('../../../app/services/companies/view-history.service.js')
 
-describe('Companies - View Licences service', () => {
+describe('Companies - View History service', () => {
   let auth
   let company
   let licences
@@ -32,7 +32,7 @@ describe('Companies - View Licences service', () => {
     licences = CustomersFixtures.licences()
 
     Sinon.stub(FetchCompanyService, 'go').returns(company)
-    Sinon.stub(FetchLicencesService, 'go').returns({
+    Sinon.stub(FetchHistoryService, 'go').returns({
       licences,
       totalNumber: 1
     })
@@ -46,7 +46,7 @@ describe('Companies - View Licences service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicencesService.go(company.id, auth, page)
+      const result = await ViewHistoryService.go(company.id, auth, page)
 
       expect(result).to.equal({
         activeSecondaryNav: 'licences',

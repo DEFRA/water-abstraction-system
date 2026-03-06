@@ -12,9 +12,9 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const { today } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const LicencesPresenter = require('../../../app/presenters/companies/licences.presenter.js')
+const HistoryPresenter = require('../../../app/presenters/companies/history.presenter.js')
 
-describe('Companies - Licences presenter', () => {
+describe('Companies - History presenter', () => {
   let company
   let licences
 
@@ -25,7 +25,7 @@ describe('Companies - Licences presenter', () => {
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = LicencesPresenter.go(company, licences)
+      const result = HistoryPresenter.go(company, licences)
 
       expect(result).to.equal({
         backLink: {
@@ -55,7 +55,7 @@ describe('Companies - Licences presenter', () => {
       describe('when the licence', () => {
         describe('does not have any end date details', () => {
           it('returns the "status" as "current"', () => {
-            const result = LicencesPresenter.go(company, licences)
+            const result = HistoryPresenter.go(company, licences)
 
             expect(result.licenceVersions[0].status).to.equal(null)
           })
@@ -68,7 +68,7 @@ describe('Companies - Licences presenter', () => {
             })
 
             it('returns the "status" based on the reason', () => {
-              const result = LicencesPresenter.go(company, licences)
+              const result = HistoryPresenter.go(company, licences)
 
               expect(result.licenceVersions[0].status).to.equal('revoked')
             })
@@ -84,7 +84,7 @@ describe('Companies - Licences presenter', () => {
             })
 
             it('returns the "status" as null', () => {
-              const result = LicencesPresenter.go(company, licences)
+              const result = HistoryPresenter.go(company, licences)
 
               expect(result.licenceVersions[0].status).to.be.null()
             })
@@ -100,7 +100,7 @@ describe('Companies - Licences presenter', () => {
             })
 
             it('returns the "status" based on the reason', () => {
-              const result = LicencesPresenter.go(company, licences)
+              const result = HistoryPresenter.go(company, licences)
 
               expect(result.licenceVersions[0].status).to.equal('revoked')
             })
@@ -111,7 +111,7 @@ describe('Companies - Licences presenter', () => {
       describe('when the licence version', () => {
         describe('does not have an end date', () => {
           it('returns "current licence version"', () => {
-            const result = LicencesPresenter.go(company, licences)
+            const result = HistoryPresenter.go(company, licences)
 
             expect(result.licenceVersions[0].link).to.equal({
               hiddenText: 'current licence version',
@@ -126,7 +126,7 @@ describe('Companies - Licences presenter', () => {
           })
 
           it('returns "current licence version ending on X"', () => {
-            const result = LicencesPresenter.go(company, licences)
+            const result = HistoryPresenter.go(company, licences)
 
             expect(result.licenceVersions[0].link).to.equal({
               hiddenText: 'licence version ending on 1 January 2022',

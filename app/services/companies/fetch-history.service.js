@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
- * @module FetchLicencesService
+ * Fetches the licences and their versions, related to a company, data needed for the view '/companies/{id}/history'
+ * @module FetchHistoryService
  */
 
 const DatabaseConfig = require('../../../config/database.config.js')
@@ -10,7 +10,7 @@ const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
 
 /**
- * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
+ * Fetches the licences and their versions, related to a company, data needed for the view '/companies/{id}/history'
  *
  * @param {string} companyId - The company id for the company
  * @param {string} [page=1] - The current page for the pagination service
