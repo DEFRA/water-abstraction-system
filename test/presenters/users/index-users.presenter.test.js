@@ -122,19 +122,19 @@ describe('Users - Index Users presenter', () => {
           })
         })
 
-        describe('and has not been linked to a licence yet (or data is corrupted)', () => {
+        describe('and has not been linked to a licence yet, has been unlinked, or the licence has been deleted', () => {
           beforeEach(() => {
             users[1].licenceEntity = null
             users[2].licenceEntity = null
             users[4].licenceEntity = null
           })
 
-          it('returns an empty string', () => {
+          it('returns their permissions', () => {
             const result = IndexUsersPresenter.go(users, auth)
 
-            expect(result.users[1].permissions).to.equal('')
-            expect(result.users[2].permissions).to.equal('')
-            expect(result.users[4].permissions).to.equal('')
+            expect(result.users[1].permissions).to.equal('None')
+            expect(result.users[2].permissions).to.equal('None')
+            expect(result.users[4].permissions).to.equal('None')
           })
         })
       })
