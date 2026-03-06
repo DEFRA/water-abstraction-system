@@ -56,4 +56,98 @@ describe('Static Lookups', () => {
       })
     })
   })
+
+  describe('#Roles', () => {
+    it('should return the frozen object', () => {
+      const result = StaticLookups.roles
+
+      expect(result).equal({
+        'abstraction-alerts': { name: 'abstractionAlerts', label: 'Abstraction alerts' },
+        'additional-contact': { name: 'additionalContact', label: 'Additional contact' },
+        'basic-user': { name: 'basicUser', label: 'Basic user' },
+        billing: { name: 'billing', label: 'Billing' },
+        'licence-holder': { name: 'licenceHolder', label: 'Licence holder' },
+        'primary-user': { name: 'primaryUser', label: 'Primary user' },
+        'returns-to': { name: 'returnsTo', label: 'Returns to' },
+        'returns-user': { name: 'returnsUser', label: 'Returns user' }
+      })
+    })
+
+    describe('#Roles Manual Immutability Check', () => {
+      const result = StaticLookups.roles
+
+      it('throws TypeError when mutating "abstraction-alerts"', () => {
+        expect(() => {
+          result['abstraction-alerts'].name = 'mutated'
+        }).to.throw(TypeError)
+
+        expect(Object.isFrozen(result['abstraction-alerts'])).to.be.true()
+      })
+
+      it('throws TypeError when mutating "additional-contact"', () => {
+        expect(() => {
+          result['additional-contact'].name = 'mutated'
+        }).to.throw(TypeError)
+
+        expect(Object.isFrozen(result['additional-contact'])).to.be.true()
+      })
+
+      it('throws TypeError when mutating "basic-user"', () => {
+        expect(() => {
+          result['basic-user'].name = 'mutated'
+        }).to.throw(TypeError)
+
+        expect(Object.isFrozen(result['basic-user'])).to.be.true()
+      })
+
+      it('throws TypeError when mutating "billing"', () => {
+        expect(() => {
+          result['billing'].name = 'mutated'
+        }).to.throw(TypeError)
+
+        expect(Object.isFrozen(result['billing'])).to.be.true()
+      })
+
+      it('throws TypeError when mutating "licence-holder"', () => {
+        expect(() => {
+          result['licence-holder'].name = 'mutated'
+        }).to.throw(TypeError)
+        expect(Object.isFrozen(result['licence-holder'])).to.be.true()
+      })
+
+      it('throws TypeError when mutating "primary-user"', () => {
+        expect(() => {
+          result['primary-user'].name = 'mutated'
+        }).to.throw(TypeError)
+
+        expect(Object.isFrozen(result['primary-user'])).to.be.true()
+      })
+
+      it('throws TypeError when mutating "returns-to"', () => {
+        expect(() => {
+          result['returns-to'].name = 'mutated'
+        }).to.throw(TypeError)
+
+        expect(Object.isFrozen(result['returns-to'])).to.be.true()
+      })
+
+      it('throws TypeError when mutating "returns-user"', () => {
+        expect(() => {
+          result['returns-user'].name = 'mutated'
+        }).to.throw(TypeError)
+
+        expect(Object.isFrozen(result['returns-user'])).to.be.true()
+      })
+    })
+
+    describe('when trying to mutate the top-level object', () => {
+      it('throws a TypeError when adding a new role', () => {
+        const result = StaticLookups.roles
+
+        expect(() => {
+          result['new-role'] = { name: 'test' }
+        }).to.throw(TypeError)
+      })
+    })
+  })
 })

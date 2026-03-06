@@ -5,11 +5,13 @@
  * @module CompanyPresenter
  */
 
+const { roles } = require('../../lib/static-lookups.lib.js')
+
 /**
  * Formats data for the '/companies/{id}/{role}' page
  *
  * @param {module:CompanyModel} companyDetails - The company details
- * @param {string} role - the role in sentence case
+ * @param {string} role - the role
  *
  * @returns {object} The data formatted for the view template
  */
@@ -25,7 +27,7 @@ function go(companyDetails, role) {
       href: `/system/companies/${companyId}/contacts`,
       text: 'Go back to contacts'
     },
-    pageTitle: role,
+    pageTitle: roles[role].label,
     pageTitleCaption: companyName,
     details: {
       name: companyName,

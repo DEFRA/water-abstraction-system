@@ -14,7 +14,7 @@ const CompanyAddressModel = require('../../models/company-address.model.js')
  * @param {string} companyId - The UUID for the company to fetch
  * @param {string} role - the licence role e.g 'licenceHolder'
  *
- * @returns {Promise<object>} the data needed to populate the view companies page
+ * @returns {Promise<module:CompanyModel>} the data needed to populate the view companies page
  */
 async function go(companyId, role) {
   return _fetch(companyId, role)
