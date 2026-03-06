@@ -153,7 +153,7 @@ class UserModel extends BaseModel {
                     'licenceDocumentHeaders.companyEntityId',
                     'licenceEntityRoles.companyEntityId'
                   )
-                  .whereNull('licenceDocumentHeaders.deletedAt')
+                  .innerJoin('licences', 'licences.licenceRef', 'licenceDocumentHeaders.licenceRef')
               })
           })
       },
