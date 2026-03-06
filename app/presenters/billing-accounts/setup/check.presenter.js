@@ -21,6 +21,7 @@ function go(session, companyContacts, existingAddress) {
     accountSelected: session.accountSelected === 'customer' ? billingAccount.company.name : 'Another billing account',
     accountType: session.accountType ?? '',
     addressSelected: _address(existingAddress),
+    companySearch: session.companySearch ?? '',
     existingAccount: _existingAccount(session, companyContacts),
     links: _links(session),
     pageTitle: 'Check billing account details',
@@ -65,6 +66,7 @@ function _links(session) {
     accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
     accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
     addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
+    companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
     existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
   }
 }

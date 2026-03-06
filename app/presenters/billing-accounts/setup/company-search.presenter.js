@@ -5,6 +5,8 @@
  * @module CompanySearchPresenter
  */
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for the '/billing-accounts/setup/{sessionId}/company-search' page
  *
@@ -17,7 +19,7 @@ function go(session) {
 
   return {
     backLink: {
-      href: `/system/billing-accounts/setup/${session.id}/account-type`,
+      href: checkUrl(session, `/system/billing-accounts/setup/${session.id}/account-type`),
       text: 'Back'
     },
     companySearch: session.companySearch ?? null,
