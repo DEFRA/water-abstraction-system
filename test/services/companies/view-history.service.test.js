@@ -49,13 +49,14 @@ describe('Companies - View History service', () => {
       const result = await ViewHistoryService.go(company.id, auth, page)
 
       expect(result).to.equal({
-        activeSecondaryNav: 'licences',
+        activeSecondaryNav: 'history',
         backLink: {
           href: '/',
           text: 'Back to search'
         },
         licenceVersions: [
           {
+            changeType: 'licence issued',
             count: 1,
             endDate: null,
             licenceId: licences[0].id,
@@ -64,11 +65,10 @@ describe('Companies - View History service', () => {
               hiddenText: 'current licence version',
               href: `/system/licence-versions/${licences[0].licenceVersions[0].id}`
             },
-            startDate: '1 January 2022',
-            status: null
+            startDate: '1 January 2022'
           }
         ],
-        pageTitle: 'Licences',
+        pageTitle: 'History',
         pageTitleCaption: 'Tyrell Corporation',
         pagination: {
           currentPageNumber: 1,
