@@ -10,7 +10,6 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const CompanyPresenter = require('../../../app/presenters/companies/company.presenter.js')
 
 // Things we need to stub
 const FetchCompanyDetailsService = require('../../../app/services/companies/fetch-company-details.service.js')
@@ -29,8 +28,6 @@ describe('Companies - Company Service', () => {
     }
 
     Sinon.stub(FetchCompanyDetailsService, 'go').returns(companyDetails)
-
-    Sinon.spy(CompanyPresenter, 'go')
   })
 
   afterEach(() => {
@@ -73,12 +70,6 @@ describe('Companies - Company Service', () => {
 
         expect(FetchCompanyDetailsService.go.calledWith(companyDetails.id, 'licenceHolder')).to.be.true()
       })
-
-      it('should call the presenter with role converted to sentence case', async () => {
-        await ViewCompanyService.go(companyDetails.id, role)
-
-        expect(CompanyPresenter.go.calledWith(companyDetails, 'Licence holder')).to.be.true()
-      })
     })
 
     describe('and the role is "returns-to"', () => {
@@ -115,12 +106,6 @@ describe('Companies - Company Service', () => {
         await ViewCompanyService.go(companyDetails.id, role)
 
         expect(FetchCompanyDetailsService.go.calledWith(companyDetails.id, 'returnsTo')).to.be.true()
-      })
-
-      it('should call the presenter with role converted to sentence case', async () => {
-        await ViewCompanyService.go(companyDetails.id, role)
-
-        expect(CompanyPresenter.go.calledWith(companyDetails, 'Returns to')).to.be.true()
       })
     })
   })

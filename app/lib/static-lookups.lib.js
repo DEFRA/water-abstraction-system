@@ -440,6 +440,53 @@ const returnRequirementReasons = {
 }
 
 /**
+ * An object containing static lookup data for roles.
+ *
+ * Some of these roles correspond to the 'licence-roles' table; however, the system includes additional
+ * application-level roles.
+ *
+ * Each role is deeply frozen to prevent mutation of labels or names at runtime.
+ *
+ * We use kebab-case for keys to allow direct mapping from route parameters and query strings, maintaining consistency
+ * with our URL argument standards.
+ *
+ */
+const roles = Object.freeze({
+  'abstraction-alerts': Object.freeze({
+    name: 'abstractionAlerts',
+    label: 'Abstraction alerts'
+  }),
+  'additional-contact': Object.freeze({
+    name: 'additionalContact',
+    label: 'Additional contact'
+  }),
+  'basic-user': Object.freeze({
+    name: 'basicUser',
+    label: 'Basic user'
+  }),
+  billing: Object.freeze({
+    name: 'billing',
+    label: 'Billing'
+  }),
+  'licence-holder': Object.freeze({
+    name: 'licenceHolder',
+    label: 'Licence holder'
+  }),
+  'primary-user': Object.freeze({
+    name: 'primaryUser',
+    label: 'Primary user'
+  }),
+  'returns-to': Object.freeze({
+    name: 'returnsTo',
+    label: 'Returns to'
+  }),
+  'returns-user': Object.freeze({
+    name: 'returnsUser',
+    label: 'Returns user'
+  })
+})
+
+/**
  * Conversion multipliers to normalise flow units to litres per day (L/d) and level units to metres (m)
  */
 const unitConversion = {
@@ -630,6 +677,7 @@ module.exports = {
   returnRequirementFrequencies,
   returnRequirementReasons,
   returnUnits,
+  roles,
   sources,
   thresholdUnits,
   twoPartTariffReviewIssues,
