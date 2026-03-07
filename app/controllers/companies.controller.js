@@ -8,7 +8,7 @@
 const ViewBillingAccountsService = require('../services/companies/view-billing-accounts.service.js')
 const ViewCompanyService = require('../services/companies/view-company.service.js')
 const ViewContactsService = require('../services/companies/view-contacts.service.js')
-const ViewLicencesService = require('../services/companies/view-licences.service.js')
+const ViewHistoryService = require('../services/companies/view-history.service.js')
 
 async function viewBillingAccounts(request, h) {
   const {
@@ -44,6 +44,18 @@ async function viewContact(request, h) {
   return h.view(`companies/contact.njk`, pageData)
 }
 
+async function viewHistory(request, h) {
+  const {
+    params: { id },
+    auth,
+    query: { page }
+  } = request
+
+  const pageData = await ViewHistoryService.go(id, auth, page)
+
+  return h.view(`companies/history.njk`, pageData)
+}
+
 async function viewLicences(request, h) {
   const {
     params: { id },
@@ -51,14 +63,15 @@ async function viewLicences(request, h) {
     query: { page }
   } = request
 
-  const pageData = await ViewLicencesService.go(id, auth, page)
+  const pageData = await ViewHistoryService.go(id, auth, page)
 
-  return h.view(`companies/licences.njk`, pageData)
+  return h.view(`companies/history.njk`, pageData)
 }
 
 module.exports = {
   viewBillingAccounts,
   viewCompany,
   viewContact,
+  viewHistory,
   viewLicences
 }

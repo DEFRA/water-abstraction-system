@@ -164,4 +164,28 @@ describe('Companies controller', () => {
       })
     })
   })
+
+  describe('/companies/{id}/licences', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: `/companies/${generateUUID()}/licences`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
+
+        Sinon.stub(ViewHistoryService, 'go').returns({ pageTitle: 'Licences', roles: [] })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Licences')
+      })
+    })
+  })
 })
