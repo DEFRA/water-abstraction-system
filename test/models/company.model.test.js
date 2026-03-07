@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -94,6 +94,34 @@ describe('Company model', () => {
 
       testLicenceVersionHolders.push(licenceVersionHolder)
     }
+  })
+
+  after(async () => {
+    for (const testLicenceVersionHolder of testLicenceVersionHolders) {
+      await testLicenceVersionHolder.$query().delete()
+    }
+
+    for (const testLicenceDocumentRole of testLicenceDocumentRoles) {
+      await testLicenceDocumentRole.$query().delete()
+    }
+
+    for (const testCompanyContact of testCompanyContacts) {
+      await testCompanyContact.$query().delete()
+    }
+
+    for (const testCompanyAddress of testCompanyAddresses) {
+      await testCompanyAddress.$query().delete()
+    }
+
+    for (const testBillingAccount of testBillingAccounts) {
+      await testBillingAccount.$query().delete()
+    }
+
+    for (const testBillingAccountAddress of testBillingAccountAddresses) {
+      await testBillingAccountAddress.$query().delete()
+    }
+
+    await testRecord.$query().delete()
   })
 
   describe('Basic query', () => {
