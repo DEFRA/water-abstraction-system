@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate } = require('../base.presenter.js')
+const { linkToLicenceVersion } = require('../licence-version.presenter.js')
 
 /**
  * Formats data for the '/companies/{id}/history' page
@@ -27,14 +28,6 @@ function go(company, licences) {
   }
 }
 
-function _hiddenText(endDate) {
-  if (!endDate) {
-    return 'current licence version'
-  }
-
-  return `licence version ending on ${formatLongDate(endDate)}`
-}
-
 function _licenceVersions(licences) {
   const versions = []
 
@@ -42,7 +35,7 @@ function _licenceVersions(licences) {
     const { licenceVersions } = licence
 
     for (const licenceVersion of licenceVersions) {
-      const { endDate, id, startDate } = licenceVersion
+      const { endDate, startDate } = licenceVersion
 
       const versionDetails = {
         changeType: licenceVersion.$changeType(),
@@ -50,10 +43,7 @@ function _licenceVersions(licences) {
         endDate: formatLongDate(endDate),
         licenceId: licence.id,
         licenceRef: licence.licenceRef,
-        link: {
-          hiddenText: _hiddenText(endDate),
-          href: `/system/licence-versions/${id}`
-        },
+        link: linkToLicenceVersion(licenceVersion),
         startDate: formatLongDate(startDate)
       }
 

@@ -49,31 +49,5 @@ describe('Companies - History presenter', () => {
         pageTitleCaption: 'Tyrell Corporation'
       })
     })
-
-    describe('the "licenceVersions" property', () => {
-      describe('the "link" property', () => {
-        describe('the "hiddenText" property', () => {
-          describe('when the licence version does not have an end date', () => {
-            it('returns "current licence version"', () => {
-              const result = HistoryPresenter.go(company, licences)
-
-              expect(result.licenceVersions[0].link.hiddenText).to.equal('current licence version')
-            })
-          })
-
-          describe('when the licence version has an end date', () => {
-            beforeEach(() => {
-              licences[0].licenceVersions[0].endDate = new Date('2022-01-01')
-            })
-
-            it('returns "current licence version ending on X"', () => {
-              const result = HistoryPresenter.go(company, licences)
-
-              expect(result.licenceVersions[0].link.hiddenText).to.equal('licence version ending on 1 January 2022')
-            })
-          })
-        })
-      })
-    })
   })
 })
