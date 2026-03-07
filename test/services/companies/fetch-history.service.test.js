@@ -19,9 +19,9 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 const DatabaseConfig = require('../../../config/database.config.js')
 
 // Thing under test
-const FetchLicencesService = require('../../../app/services/companies/fetch-licences.service.js')
+const FetchHistoryService = require('../../../app/services/companies/fetch-history.service.js')
 
-describe('Companies - Fetch Licences service', () => {
+describe('Companies - Fetch History service', () => {
   let company
   let licence
   let licenceVersion
@@ -68,7 +68,7 @@ describe('Companies - Fetch Licences service', () => {
   })
 
   beforeEach(() => {
-    pageNumber = 1
+    pageNumber = '1'
 
     // NOTE: We set the default page size to 1000 to ensure we get all records and avoid failed tests when run as
     // part of the full suite, and the risk our test record is returned in the second page of results.
@@ -92,7 +92,7 @@ describe('Companies - Fetch Licences service', () => {
 
   describe('when called', () => {
     it('returns licences linked to the company where it is the licence holder', async () => {
-      const result = await FetchLicencesService.go(company.id, pageNumber)
+      const result = await FetchHistoryService.go(company.id, pageNumber)
 
       expect(result).to.equal({
         licences: [
@@ -103,6 +103,7 @@ describe('Companies - Fetch Licences service', () => {
             licenceRef: licence.licenceRef,
             licenceVersions: [
               {
+                administrative: null,
                 endDate: null,
                 id: licenceVersion.id,
                 startDate: new Date('2022-01-01')

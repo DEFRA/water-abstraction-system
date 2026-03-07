@@ -1,16 +1,17 @@
 'use strict'
 
 /**
- * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
- * @module FetchLicencesService
+ * Fetches the licences and their versions, related to a company, data needed for the view '/companies/{id}/history'
+ * @module FetchHistoryService
  */
 
-const DatabaseConfig = require('../../../config/database.config.js')
 const LicenceModel = require('../../models/licence.model.js')
 const LicenceVersionModel = require('../../models/licence-version.model.js')
 
+const DatabaseConfig = require('../../../config/database.config.js')
+
 /**
- * Fetches the licences, related to a company, data needed for the view '/companies/{id}/licences'
+ * Fetches the licences and their versions, related to a company, data needed for the view '/companies/{id}/history'
  *
  * @param {string} companyId - The company id for the company
  * @param {string} [page=1] - The current page for the pagination service
@@ -35,10 +36,15 @@ async function _fetch(companyId, page) {
     .modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
       licenceVersionsBuilder
         .select(['endDate', 'id', 'startDate'])
+        .modify('changeType')
         .whereExists(
           LicenceVersionModel.relatedQuery('licenceVersionHolder').where('licenceVersionHolder.companyId', companyId)
         )
-        .orderBy([{ column: 'startDate', order: 'desc' }])
+        .orderBy([
+          { column: 'startDate', order: 'desc' },
+          { column: 'issue', order: 'desc' },
+          { column: 'increment', order: 'desc' }
+        ])
     })
     .orderBy('licenceRef', 'asc')
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)

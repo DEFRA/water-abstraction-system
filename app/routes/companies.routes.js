@@ -31,6 +31,13 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/companies/{id}/history',
+    options: {
+      handler: CompaniesController.viewHistory
+    }
+  },
+  {
+    method: 'GET',
     path: '/companies/{id}/licences',
     options: {
       handler: CompaniesController.viewLicences

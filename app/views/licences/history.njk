@@ -31,11 +31,10 @@
           html: licenceVersionChangeTypeTag(licenceVersion.changeType, true)
         },
         {
-          html: '<a href="'+ licenceVersion.action.link +'" class="govuk-link">' + licenceVersion.action.text + '</a>',
+          html: '<a href="' + licenceVersion.link.href + '" class="govuk-link">View <span class="govuk-visually-hidden">' + licenceVersion.link.hiddenText + '</span></a>',
           attributes: { 'data-test': 'action-' + rowIndex }
         }
       ] %}
-
 
       {% set tableRows = (tableRows.push(dataRow), tableRows) %}
     {% endfor %}
