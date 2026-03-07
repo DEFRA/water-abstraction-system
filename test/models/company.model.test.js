@@ -19,6 +19,8 @@ const CompanyContactModel = require('../../app/models/company-contact.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
 const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
+const LicenceVersionHolderHelper = require('../support/helpers/licence-version-holder.helper.js')
+const LicenceVersionHolderModel = require('../../app/models/licence-version-holder.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
 
@@ -31,6 +33,7 @@ describe('Company model', () => {
   let testCompanyAddresses
   let testCompanyContacts
   let testLicenceDocumentRoles
+  let testLicenceVersionHolders
   let testRegion
   let testRecord
 
@@ -82,6 +85,14 @@ describe('Company model', () => {
       const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ companyId })
 
       testLicenceDocumentRoles.push(licenceDocumentRole)
+    }
+
+    // Link licence version holders
+    testLicenceVersionHolders = []
+    for (let i = 0; i < 2; i++) {
+      const licenceVersionHolder = await LicenceVersionHolderHelper.add({ companyId })
+
+      testLicenceVersionHolders.push(licenceVersionHolder)
     }
   })
 
@@ -192,6 +203,26 @@ describe('Company model', () => {
         expect(result.licenceDocumentRoles[0]).to.be.an.instanceOf(LicenceDocumentRoleModel)
         expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[0])
         expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[1])
+      })
+    })
+
+    describe('when linking to licence version holders', () => {
+      it('can successfully run a related query', async () => {
+        const query = await CompanyModel.query().innerJoinRelated('licenceVersionHolders')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence version holders', async () => {
+        const result = await CompanyModel.query().findById(testRecord.id).withGraphFetched('licenceVersionHolders')
+
+        expect(result).to.be.instanceOf(CompanyModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceVersionHolders).to.be.an.array()
+        expect(result.licenceVersionHolders[0]).to.be.an.instanceOf(LicenceVersionHolderModel)
+        expect(result.licenceVersionHolders).to.include(testLicenceVersionHolders[0])
+        expect(result.licenceVersionHolders).to.include(testLicenceVersionHolders[1])
       })
     })
 
