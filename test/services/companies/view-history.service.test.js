@@ -52,7 +52,7 @@ describe('Companies - View History service', () => {
         activeSecondaryNav: 'history',
         backLink: {
           href: '/',
-          text: 'Back to search'
+          text: 'Go back to search'
         },
         licenceVersions: [
           {
