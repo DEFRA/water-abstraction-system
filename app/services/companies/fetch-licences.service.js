@@ -18,9 +18,49 @@ const DatabaseConfig = require('../../../config/database.config.js')
  * @returns {Promise<object>} the licences for the company and the pagination object
  */
 async function go(companyId, page = '1') {
-  const { results: licences, total: totalNumber } = await _fetch(companyId, page)
+  const { results, total: totalNumber } = await _fetch(companyId, page)
+
+  const licenceIds = results.map((licence) => {
+    return licence.id
+  })
+
+  const licences = await _fetchDetail(licenceIds)
 
   return { licences, totalNumber }
+}
+
+/**
+ * We need to grab the company Id and derived name off the licence version holder for the latest licence version linked
+ * to each licence fetched.
+ *
+ * For reasons explained in `_fetchDetail()`, we rely on a lateral join to get the data, but it has a big impact on
+ * performance if applied at _this_ level.
+ *
+ * We compared paging through the 427 licences for one of our largest licence holders, and these were the times in ms
+ * to fetch each page.
+ *
+ * |Time as one query|Time as two queries|
+ * |-----------------|-------------------|
+ * |             1408|                218|
+ * |             1383|                166|
+ * |             1467|                223|
+ * |             1623|                151|
+ * |             1698|                217|
+ *
+ * As you can see it makes a massive difference. So we fetch the licence data in two stages, first just the licence IDs,
+ * and then the details for those licences.
+ *
+ * @private
+ */
+async function _fetch(companyId, page) {
+  return LicenceModel.query()
+    .select(['licences.id'])
+    .whereExists(
+      LicenceModel.relatedQuery('licenceVersions')
+        .innerJoinRelated('licenceVersionHolder')
+        .where('licenceVersionHolder.companyId', companyId)
+    )
+    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
 /**
@@ -50,7 +90,7 @@ async function go(companyId, page = '1') {
  *
  * @private
  */
-async function _fetch(companyId, page) {
+async function _fetchDetail(licenceIds) {
   return LicenceModel.query()
     .select([
       'licences.expiredDate',
@@ -62,6 +102,7 @@ async function _fetch(companyId, page) {
       'latest_holder.company_id AS currentLicenceHolderId',
       'latest_holder.derived_name AS currentLicenceHolder'
     ])
+    .whereIn('id', licenceIds)
     .joinRaw(
       `LEFT JOIN LATERAL (
       SELECT
@@ -79,12 +120,7 @@ async function _fetch(companyId, page) {
       LIMIT 1
     ) AS latest_holder ON true`
     )
-    .whereExists(
-      LicenceModel.relatedQuery('licenceVersions')
-        .innerJoinRelated('licenceVersionHolder')
-        .where('licenceVersionHolder.companyId', companyId)
-    )
-    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
+    .orderBy('licenceRef', 'asc')
 }
 
 module.exports = {
