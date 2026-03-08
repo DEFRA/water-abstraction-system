@@ -1,0 +1,68 @@
+{% extends 'layout-companies.njk' %}
+
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/licence-status-tag.njk" import statusTag %}
+
+{% set tableRows = [] %}
+
+{% for licence in licences %}
+  {% set rowIndex = loop.index0 %}
+
+  {% set tableRow = [
+    {
+      attributes: { 'data-test': 'licence-ref-' + rowIndex },
+      html: '<a href="/system/licences/' + licence.id + '/summary">' + licence.licenceRef + '</a>'
+    },
+    {
+      attributes: { 'data-test': 'status-' + rowIndex },
+      html: statusTag(licence.status, true)
+    },
+    {
+      attributes: { 'data-test': 'start-date-' + rowIndex },
+      text: licence.startDate
+    }
+  ] %}
+
+  {% if licence.currentLicenceHolder.id %}
+    {% set licenceHolderCell = {
+      attributes: { 'data-test': 'licence-holder-' + rowIndex },
+      html: '<a href="/system/companies/' + licence.currentLicenceHolder.id + '/licences">' + licence.currentLicenceHolder.name + '</a>'
+    } %}
+  {% else %}
+    {% set licenceHolderCell = {
+      attributes: { 'data-test': 'licence-holder-' + rowIndex },
+      text: licence.currentLicenceHolder.name
+    } %}
+  {% endif %}
+  {% set tableRow = (tableRow.push(licenceHolderCell), tableRow) %}
+
+  {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+{% endfor %}
+
+
+{% block pageContent %}
+  {{ govukTable({
+    caption: pagination.showingMessage,
+    head: [
+      {
+        text: "Licence"
+      },
+      {
+        text: "Status"
+      },
+      {
+        text: "Start date"
+      },
+      {
+        text: "Current licence holder"
+      }
+    ],
+    rows: tableRows
+  }) }}
+
+  {% if pagination.numberOfPages > 1  %}
+    {{ govukPagination(pagination.component) }}
+  {% endif %}
+{% endblock %}
