@@ -17,6 +17,7 @@ const ViewBillingAccountsService = require('../../app/services/companies/view-bi
 const ViewContactsService = require('../../app/services/companies/view-contacts.service.js')
 const ViewCompanyService = require('../../app/services/companies/view-company.service.js')
 const ViewHistoryService = require('../../app/services/companies/view-history.service.js')
+const ViewLicencesService = require('../../app/services/companies/view-licences.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -177,7 +178,7 @@ describe('Companies controller', () => {
           }
         }
 
-        Sinon.stub(ViewHistoryService, 'go').returns({ pageTitle: 'Licences', roles: [] })
+        Sinon.stub(ViewLicencesService, 'go').returns({ pageTitle: 'Licences', roles: [] })
       })
 
       it('returns the page successfully', async () => {
