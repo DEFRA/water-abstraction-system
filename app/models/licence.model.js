@@ -165,6 +165,8 @@ class LicenceModel extends BaseModel {
   static get modifiers() {
     return {
       // currentVersion modifier fetches only the current licence version record for this licence
+      // NOTE: will only work when fetching a single licence. The `limit()` clause means when fetching multiple licences
+      // only the licence version for the first licence is fetched.
       currentVersion(query) {
         query.withGraphFetched('licenceVersions').modifyGraph('licenceVersions', (builder) => {
           builder
