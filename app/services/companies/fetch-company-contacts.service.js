@@ -49,7 +49,7 @@ async function _fetch(companyId) {
      basic_users AS (
       SELECT
         u.id::UUID as id,
-        le.name AS name,
+        u.username AS name,
         'basic-user' AS contact_type
       FROM public.licence_document_roles ldr
         INNER JOIN public.licence_documents ld
@@ -86,7 +86,7 @@ async function _fetch(companyId) {
      primary_users AS (
       SELECT
         u.id::UUID as id,
-        le.name AS name,
+        u.username AS name,
         'primary-user' AS contact_type
       FROM public.licence_document_roles ldr
         INNER JOIN public.licence_documents ld
@@ -120,7 +120,7 @@ async function _fetch(companyId) {
      returns_users AS (
       SELECT
         u.id::UUID as id,
-        le.name AS name,
+        u.username AS name,
         'returns-user' AS contact_type
       FROM public.licence_document_roles ldr
         INNER JOIN public.licence_documents ld

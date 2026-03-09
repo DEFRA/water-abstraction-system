@@ -49,12 +49,32 @@ describe.only('Companies - Fetch Company Contacts service', () => {
             name: companyContacts.basicUser.record.username
           },
           {
+            contact_type: 'billing',
+            id: companyContacts.billing.record.id,
+            name: companyContacts.billing.record.accountNumber
+          },
+          {
             contact_type: 'licence-holder',
             id: companyContacts.company.record.id,
             name: 'Ankh-Morpork'
+          },
+          {
+            contact_type: 'primary-user',
+            id: companyContacts.primaryUser.record.id,
+            name: companyContacts.primaryUser.record.username
+          },
+          // {
+          //   contact_type: 'returns-to',
+          //   id: companyContacts.returnsTo.record.id,
+          //   name: companyContacts.returnsTo.record.name
+          // },
+          {
+            contact_type: 'returns-user',
+            id: companyContacts.returnsUser.record.id,
+            name: companyContacts.returnsUser.record.username
           }
         ],
-        totalNumber: 4
+        totalNumber: 7
       })
     })
   })
