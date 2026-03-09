@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
@@ -24,7 +25,13 @@ describe('Companies - Contacts presenter', () => {
   beforeEach(() => {
     company = CustomersFixtures.company()
 
-    companyContacts = CustomersFixtures.companyContacts()
+    companyContacts = [
+      {
+        id: generateUUID(),
+        contact_type: 'additional-contact',
+        name: 'Rachael Tyrell'
+      }
+    ]
 
     Sinon.stub(FeatureFlagsConfig, 'enableCustomerManage').value(true)
   })
@@ -45,9 +52,8 @@ describe('Companies - Contacts presenter', () => {
         companyContacts: [
           {
             action: `/system/company-contacts/${companyContacts[0].id}`,
-            communicationType: 'Additional Contact',
-            name: 'Rachael Tyrell',
-            email: 'rachael.tyrell@tyrellcorp.com'
+            communicationType: 'Additional contact',
+            name: 'Rachael Tyrell'
           }
         ],
         links: {
@@ -56,6 +62,200 @@ describe('Companies - Contacts presenter', () => {
         },
         pageTitle: 'Contacts',
         pageTitleCaption: 'Tyrell Corporation'
+      })
+    })
+
+    describe('and the is a company contact with the type', () => {
+      describe('"abstraction-alerts"', () => {
+        beforeEach(() => {
+          companyContacts = [
+            {
+              id: generateUUID(),
+              contact_type: 'abstraction-alerts',
+              name: 'Rachael Tyrell'
+            }
+          ]
+        })
+
+        it('returns the correct company contact', () => {
+          const result = ContactsPresenter.go(company, companyContacts)
+
+          expect(result.companyContacts).to.equal([
+            {
+              action: `/system/company-contacts/${companyContacts[0].id}`,
+              communicationType: 'Abstraction alerts',
+              name: 'Rachael Tyrell'
+            }
+          ])
+        })
+      })
+
+      describe('"additional-contact"', () => {
+        beforeEach(() => {
+          companyContacts = [
+            {
+              id: generateUUID(),
+              contact_type: 'additional-contact',
+              name: 'Rachael Tyrell'
+            }
+          ]
+        })
+
+        it('returns the correct company contact', () => {
+          const result = ContactsPresenter.go(company, companyContacts)
+
+          expect(result.companyContacts).to.equal([
+            {
+              action: `/system/company-contacts/${companyContacts[0].id}`,
+              communicationType: 'Additional contact',
+              name: 'Rachael Tyrell'
+            }
+          ])
+        })
+      })
+
+      describe('"billing"', () => {
+        beforeEach(() => {
+          companyContacts = [
+            {
+              id: generateUUID(),
+              contact_type: 'billing',
+              name: 'Rachael Tyrell'
+            }
+          ]
+        })
+
+        it('returns the correct company contact', () => {
+          const result = ContactsPresenter.go(company, companyContacts)
+
+          expect(result.companyContacts).to.equal([
+            {
+              action: `/system/billing-accounts/${companyContacts[0].id}?company-id=${company.id}`,
+              communicationType: 'Billing',
+              name: 'Rachael Tyrell'
+            }
+          ])
+        })
+      })
+
+      describe('"basic-user"', () => {
+        beforeEach(() => {
+          companyContacts = [
+            {
+              id: generateUUID(),
+              contact_type: 'basic-user',
+              name: 'user@test.com'
+            }
+          ]
+        })
+
+        it('returns the correct company contact', () => {
+          const result = ContactsPresenter.go(company, companyContacts)
+
+          expect(result.companyContacts).to.equal([
+            {
+              action: `/system/users/${companyContacts[0].id}`,
+              communicationType: 'Basic user',
+              name: 'user@test.com'
+            }
+          ])
+        })
+      })
+
+      describe('"primary-user"', () => {
+        beforeEach(() => {
+          companyContacts = [
+            {
+              id: generateUUID(),
+              contact_type: 'primary-user',
+              name: 'user@test.com'
+            }
+          ]
+        })
+
+        it('returns the correct company contact', () => {
+          const result = ContactsPresenter.go(company, companyContacts)
+
+          expect(result.companyContacts).to.equal([
+            {
+              action: `/system/users/${companyContacts[0].id}`,
+              communicationType: 'Primary user',
+              name: 'user@test.com'
+            }
+          ])
+        })
+      })
+
+      describe('"returns-user"', () => {
+        beforeEach(() => {
+          companyContacts = [
+            {
+              id: generateUUID(),
+              contact_type: 'returns-user',
+              name: 'user@test.com'
+            }
+          ]
+        })
+
+        it('returns the correct company contact', () => {
+          const result = ContactsPresenter.go(company, companyContacts)
+
+          expect(result.companyContacts).to.equal([
+            {
+              action: `/system/users/${companyContacts[0].id}`,
+              communicationType: 'Returns user',
+              name: 'user@test.com'
+            }
+          ])
+        })
+      })
+
+      describe('"licence-holder"', () => {
+        beforeEach(() => {
+          companyContacts = [
+            {
+              id: generateUUID(),
+              contact_type: 'licence-holder',
+              name: 'Rachael Tyrell'
+            }
+          ]
+        })
+
+        it('returns the correct company contact', () => {
+          const result = ContactsPresenter.go(company, companyContacts)
+
+          expect(result.companyContacts).to.equal([
+            {
+              action: `/system/companies/${companyContacts[0].id}/licence-holder`,
+              communicationType: 'Licence holder',
+              name: 'Rachael Tyrell'
+            }
+          ])
+        })
+      })
+
+      describe('"returns-to"', () => {
+        beforeEach(() => {
+          companyContacts = [
+            {
+              id: generateUUID(),
+              contact_type: 'returns-to',
+              name: 'Rachael Tyrell'
+            }
+          ]
+        })
+
+        it('returns the correct company contact', () => {
+          const result = ContactsPresenter.go(company, companyContacts)
+
+          expect(result.companyContacts).to.equal([
+            {
+              action: `/system/companies/${companyContacts[0].id}/returns-to`,
+              communicationType: 'Returns to',
+              name: 'Rachael Tyrell'
+            }
+          ])
+        })
       })
     })
   })

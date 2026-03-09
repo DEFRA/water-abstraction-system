@@ -26,12 +26,12 @@ const { readFlashNotification } = require('../../lib/general.lib.js')
 async function go(companyId, auth, page, yar) {
   const company = await FetchCompanyService.go(companyId)
 
-  const { companyContacts, totalNumber } = await FetchContactsService.go(companyId, page)
+  const companyContacts = await FetchContactsService.go(companyId)
 
   const pageData = ContactsPresenter.go(company, companyContacts)
 
   const pagination = PaginatorPresenter.go(
-    totalNumber,
+    1,
     page,
     `/system/companies/${companyId}/contacts`,
     companyContacts.length,

@@ -11,20 +11,12 @@
 
   {% set tableRow = [
     {
-      text: companyContact.name,
-      attributes: { 'data-test': 'contact-name-' + rowIndex }
+      html: '<a href="' + companyContact.action + '">' + companyContact.name + '</a>',
+      attributes: { 'data-test': 'contact-action-' + rowIndex }
     },
     {
       text: companyContact.communicationType,
       attributes: { 'data-test': 'contact-communication-type-' + rowIndex }
-    },
-    {
-      text: companyContact.email,
-      attributes: { 'data-test': 'contact-email-' + rowIndex }
-    },
-    {
-      html: '<a href="' + companyContact.action + '"> View </a>',
-      attributes: { 'data-test': 'contact-action-' + rowIndex }
     }
   ] %}
 
@@ -62,12 +54,6 @@
         },
         {
           text: "Communication type"
-        },
-        {
-          text: "Email"
-        },
-        {
-          text: "Action"
         }
       ],
       rows: tableRows

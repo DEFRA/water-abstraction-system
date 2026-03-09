@@ -18,6 +18,7 @@ const FetchCompanyService = require('../../../app/services/companies/fetch-compa
 
 // Thing under test
 const ViewContactsService = require('../../../app/services/companies/view-contacts.service.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 describe('Companies - View Contacts service', () => {
   let auth
@@ -31,11 +32,17 @@ describe('Companies - View Contacts service', () => {
 
     company = CustomersFixtures.company()
 
-    companyContacts = CustomersFixtures.companyContacts()
+    companyContacts = [
+      {
+        id: generateUUID(),
+        contact_type: 'additional-contact',
+        name: 'Rachael Tyrell'
+      }
+    ]
 
     Sinon.stub(FetchCompanyService, 'go').returns(company)
 
-    Sinon.stub(FetchCompanyContactsService, 'go').returns({ companyContacts, totalNumber: 1 })
+    Sinon.stub(FetchCompanyContactsService, 'go').returns(companyContacts)
 
     page = '1'
 
@@ -65,9 +72,8 @@ describe('Companies - View Contacts service', () => {
         companyContacts: [
           {
             action: `/system/company-contacts/${companyContacts[0].id}`,
-            communicationType: 'Additional Contact',
-            name: 'Rachael Tyrell',
-            email: 'rachael.tyrell@tyrellcorp.com'
+            communicationType: 'Additional contact',
+            name: 'Rachael Tyrell'
           }
         ],
         links: {

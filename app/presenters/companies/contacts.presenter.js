@@ -6,13 +6,13 @@
  */
 
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-const { formatCompanyContact } = require('../customer.presenter.js')
+const { roles } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the '/companies/{id}/contacts' page
  *
  * @param {module:CompanyModel} company - The company
- * @param {module:CompanyContactModel} companyContacts - the company contacts for the customer
+ * @param {object[]} companyContacts - the company contacts for the customer
  *
  * @returns {object} The data formatted for the view template
  */
@@ -31,15 +31,41 @@ function go(company, companyContacts) {
 
 function _companyContacts(companyContacts, company) {
   return companyContacts.map((companyContact) => {
-    const contact = formatCompanyContact(companyContact)
-
     return {
-      action: FeatureFlagsConfig.enableCustomerManage
-        ? `/system/company-contacts/${companyContact.id}`
-        : `/customer/${company.id}/contacts/${companyContact.contact.id}`,
-      ...contact
+      action: _companyContactLinks(company, companyContact),
+      name: companyContact.name,
+      communicationType: roles[companyContact.contact_type].label
     }
   })
+}
+
+/**
+ * The ids returned from the query are unique to the contact type.
+ *
+ * We use the type to determine the correct link for the contact.
+ *
+ * @private
+ */
+function _companyContactLinks(company, companyContact) {
+  const billingTypes = ['billing']
+  const companyContactTypes = ['abstraction-alerts', 'additional-contact']
+  const userTypes = ['basic-user', 'primary-user', 'returns-user']
+
+  if (billingTypes.includes(companyContact.contact_type)) {
+    return `/system/billing-accounts/${companyContact.id}?company-id=${company.id}`
+  }
+
+  if (companyContactTypes.includes(companyContact.contact_type)) {
+    return FeatureFlagsConfig.enableCustomerManage
+      ? `/system/company-contacts/${companyContact.id}`
+      : `/customer/${company.id}/contacts/${companyContact.contact.id}`
+  }
+
+  if (userTypes.includes(companyContact.contact_type)) {
+    return `/system/users/${companyContact.id}`
+  }
+
+  return `/system/companies/${companyContact.id}/${companyContact.contact_type}`
 }
 
 /**
