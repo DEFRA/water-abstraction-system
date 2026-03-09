@@ -29,7 +29,7 @@ describe.only('Companies - Fetch Company Contacts service', () => {
 
   describe('when there are company contacts', () => {
     it('returns the matching company contacts', async () => {
-      const result = await FetchCompanyContactsService.go(company.id)
+      const result = await FetchCompanyContactsService.go(company.record.id)
 
       expect(result).to.equal({
         companyContacts: [
@@ -44,12 +44,17 @@ describe.only('Companies - Fetch Company Contacts service', () => {
             name: 'Two flower'
           },
           {
+            contact_type: 'basic-user',
+            id: companyContacts.basicUser.record.id,
+            name: companyContacts.basicUser.record.username
+          },
+          {
             contact_type: 'licence-holder',
-            id: companyContacts.company.id,
+            id: companyContacts.company.record.id,
             name: 'Ankh-Morpork'
           }
         ],
-        totalNumber: 3
+        totalNumber: 4
       })
     })
   })

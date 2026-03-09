@@ -48,7 +48,7 @@ async function _fetch(companyId) {
     ),
      basic_users AS (
       SELECT
-        ler.id::UUID as id,
+        u.id::UUID as id,
         le.name AS name,
         'basic-user' AS contact_type
       FROM public.licence_document_roles ldr
@@ -63,6 +63,8 @@ async function _fetch(companyId) {
             AND  ler.role = 'user'
         INNER JOIN public.licence_entities le
             ON le.id = ler.licence_entity_id
+        INNER JOIN public.users u
+            ON u.licence_entity_id = le.id
       WHERE ldr.company_id = ?
     ),
      billing_accounts AS (
@@ -117,7 +119,7 @@ async function _fetch(companyId) {
     ),
      returns_users AS (
       SELECT
-        ler.id::UUID as id,
+        u.id::UUID as id,
         le.name AS name,
         'returns-user' AS contact_type
       FROM public.licence_document_roles ldr
@@ -132,6 +134,8 @@ async function _fetch(companyId) {
             AND  ler.role = 'user_returns'
         INNER JOIN public.licence_entities le
             ON le.id = ler.licence_entity_id
+        INNER JOIN public.users u
+            ON u.licence_entity_id = le.id
       WHERE ldr.company_id = ?
     )
     SELECT * FROM abstraction_alerts
