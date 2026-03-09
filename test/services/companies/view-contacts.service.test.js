@@ -42,7 +42,10 @@ describe('Companies - View Contacts service', () => {
 
     Sinon.stub(FetchCompanyService, 'go').returns(company)
 
-    Sinon.stub(FetchCompanyContactsService, 'go').returns(companyContacts)
+    Sinon.stub(FetchCompanyContactsService, 'go').returns({
+      companyContacts,
+      totalNumber: companyContacts.length
+    })
 
     page = '1'
 

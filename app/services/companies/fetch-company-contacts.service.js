@@ -12,12 +12,12 @@ const { db } = require('../../../db/db.js')
  *
  * @param {string} companyId - The company id for the company
  *
- * @returns {Promise<object[]>} the company contacts for the company
+ * @returns {Promise<object>} the company contacts for the company
  */
 async function go(companyId) {
   const { rows: companyContacts } = await _fetch(companyId)
 
-  return companyContacts
+  return { companyContacts, totalNumber: companyContacts.length }
 }
 
 async function _fetch(companyId) {
