@@ -5,6 +5,8 @@
  * @module SelectCompanyPresenter
  */
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for the '/billing-accounts/setup/{sessionId}/select-company' page
  *
@@ -18,7 +20,7 @@ function go(session, companies) {
 
   return {
     backLink: {
-      href: `/system/billing-accounts/setup/${session.id}/company-search`,
+      href: checkUrl(session, `/system/billing-accounts/setup/${session.id}/company-search`),
       text: 'Back'
     },
     companies: _radioOptions(companies, session.companiesHouseId),

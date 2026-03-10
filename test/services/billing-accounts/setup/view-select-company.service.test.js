@@ -41,6 +41,7 @@ describe('Billing Accounts - Setup - View Select Company Service', () => {
 
   afterEach(async () => {
     await session.$query().delete()
+    Sinon.restore()
   })
 
   describe('when called', () => {

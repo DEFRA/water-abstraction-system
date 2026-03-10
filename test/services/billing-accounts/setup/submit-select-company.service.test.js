@@ -17,10 +17,12 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SubmitSelectCompanyService = require('../../../../app/services/billing-accounts/setup/submit-select-company.service.js')
 
 describe('Billing Accounts - Setup - Submit Select Company Service', () => {
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+  const companiesHouseId = '12345678'
   const companies = [
     {
       address: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
-      companiesHouseId: '12345678',
+      companiesHouseId,
       title: 'ENVIRONMENT AGENCY'
     }
   ]
@@ -30,9 +32,8 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
   let sessionData
 
   beforeEach(async () => {
-    payload = { companiesHouseId: '12345678' }
     sessionData = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+      billingAccount
     }
 
     session = await SessionHelper.add({ data: sessionData })
@@ -42,7 +43,13 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     await session.$query().delete()
   })
 
-  describe('when called', () => {
+  describe('when the user picks a company', () => {
+    beforeEach(async () => {
+      payload = {
+        companiesHouseId
+      }
+    })
+
     it('saves the submitted value', async () => {
       await SubmitSelectCompanyService.go(session.id, payload)
 
@@ -56,6 +63,113 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
 
       expect(result).to.equal({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
+      })
+    })
+
+    describe('and the user has returned to the page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          companiesHouseId,
+          billingAccount
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitSelectCompanyService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            companiesHouseId: payload.companiesHouseId
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitSelectCompanyService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
+        })
+      })
+    })
+
+    describe('and the user has returned to the page from the check page and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          companiesHouseId,
+          billingAccount,
+          checkPageVisited: true
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitSelectCompanyService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            companiesHouseId: payload.companiesHouseId,
+            checkPageVisited: true
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitSelectCompanyService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+        })
+      })
+    })
+
+    describe('and the user selects a different company', () => {
+      beforeEach(async () => {
+        sessionData = {
+          billingAccount,
+          addressSelected: 'another',
+          contactName: 'Contact Name',
+          contactSelected: 'new',
+          fao: 'yes'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitSelectCompanyService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            addressJourney: null,
+            addressSelected: null,
+            checkPageVisited: false,
+            companiesHouseId: payload.companiesHouseId,
+            contactName: null,
+            contactSelected: null,
+            fao: null
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitSelectCompanyService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
+        })
       })
     })
   })

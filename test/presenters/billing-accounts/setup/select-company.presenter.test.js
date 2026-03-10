@@ -15,6 +15,7 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const SelectCompanyPresenter = require('../../../../app/presenters/billing-accounts/setup/select-company.presenter.js')
 
 describe('Billing Accounts - Setup - Select Company Presenter', () => {
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
   const companies = [
     {
       address: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
@@ -27,7 +28,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
 
   beforeEach(() => {
     session = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+      billingAccount,
       id: generateUUID()
     }
   })
@@ -57,11 +58,39 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
     })
   })
 
+  describe('the "backLink.href" property', () => {
+    describe('when there "checkPageVisited" is "true"', () => {
+      beforeEach(() => {
+        session.checkPageVisited = true
+        session.existingAccount = generateUUID()
+      })
+
+      it('returns the link for the "check" page', () => {
+        const result = SelectCompanyPresenter.go(session, companies)
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+      })
+    })
+
+    describe('when there "checkPageVisited" is "false"', () => {
+      beforeEach(() => {
+        session.checkPageVisited = false
+        session.accountType = 'company'
+      })
+
+      it('returns the link for the "account" page', () => {
+        const result = SelectCompanyPresenter.go(session, companies)
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/company-search`)
+      })
+    })
+  })
+
   describe('"companiesHouseId" property', () => {
     describe('when there is a companiesHouseId in the session', () => {
       beforeEach(() => {
         session = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          billingAccount,
           companiesHouseId: '12345678'
         }
       })
@@ -76,14 +105,54 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
     describe('when there is no companiesHouseId in the session', () => {
       beforeEach(() => {
         session = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+          billingAccount
         }
       })
 
       it('returns null', () => {
-        const result = SelectCompanyPresenter.go(session, [])
+        const result = SelectCompanyPresenter.go(session, companies)
 
         expect(result.companiesHouseId).to.equal(null)
+      })
+    })
+  })
+
+  describe('"companies" property', () => {
+    describe('when there are companies found', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount
+        }
+      })
+
+      it('returns an array of radio options', () => {
+        const result = SelectCompanyPresenter.go(session, companies)
+
+        expect(result.companies).to.equal([
+          {
+            id: companies[0].companiesHouseId,
+            hint: {
+              text: companies[0].address
+            },
+            text: companies[0].title,
+            value: companies[0].companiesHouseId,
+            checked: false
+          }
+        ])
+      })
+    })
+
+    describe('when there are no companies found', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount
+        }
+      })
+
+      it('returns an empty array', () => {
+        const result = SelectCompanyPresenter.go(session, [])
+
+        expect(result.companies).to.equal([])
       })
     })
   })

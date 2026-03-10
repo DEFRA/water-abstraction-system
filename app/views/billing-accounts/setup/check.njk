@@ -73,6 +73,19 @@
         }
       } if companySearch,
       {
+        key: { text: "Company name" },
+        value: { text: companiesHouseName },
+        actions: {
+          items: [
+            {
+              href: links.companiesHouseName,
+              text: "Change",
+              visuallyHiddenText: "company name"
+            }
+          ]
+        }
+      } if companiesHouseName,
+      {
         key: { text: "Existing address" },
         value: { html: newLineArrayItems(addressSelected) },
         actions: {
