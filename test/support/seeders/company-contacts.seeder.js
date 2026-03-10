@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * @module CompantContactsSeeder
+ * @module CompanyContactsSeeder
  */
 
 const BillingAccountHelper = require('../helpers/billing-account.helper.js')
