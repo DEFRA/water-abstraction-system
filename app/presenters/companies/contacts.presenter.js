@@ -33,8 +33,8 @@ function _companyContacts(companyContacts, company) {
   return companyContacts.map((companyContact) => {
     return {
       action: _companyContactLinks(company, companyContact),
-      name: companyContact.name,
-      communicationType: roles[companyContact.contact_type].label
+      name: companyContact.contactName,
+      communicationType: roles[companyContact.contactType].label
     }
   })
 }
@@ -51,21 +51,21 @@ function _companyContactLinks(company, companyContact) {
   const companyContactTypes = ['abstraction-alerts', 'additional-contact']
   const userTypes = ['basic-user', 'primary-user', 'returns-user']
 
-  if (billingTypes.includes(companyContact.contact_type)) {
+  if (billingTypes.includes(companyContact.contactType)) {
     return `/system/billing-accounts/${companyContact.id}?company-id=${company.id}`
   }
 
-  if (companyContactTypes.includes(companyContact.contact_type)) {
+  if (companyContactTypes.includes(companyContact.contactType)) {
     return FeatureFlagsConfig.enableCustomerManage
       ? `/system/company-contacts/${companyContact.id}`
       : `/customer/${company.id}/contacts/${companyContact.contact.id}`
   }
 
-  if (userTypes.includes(companyContact.contact_type)) {
+  if (userTypes.includes(companyContact.contactType)) {
     return `/system/users/${companyContact.id}`
   }
 
-  return `/system/companies/${companyContact.id}/${companyContact.contact_type}`
+  return `/system/companies/${companyContact.id}/${companyContact.contactType}`
 }
 
 /**

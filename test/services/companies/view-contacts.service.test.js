@@ -35,8 +35,8 @@ describe('Companies - View Contacts service', () => {
     companyContacts = [
       {
         id: generateUUID(),
-        contact_type: 'additional-contact',
-        name: 'Rachael Tyrell'
+        contactType: 'additional-contact',
+        contactName: 'Rachael Tyrell'
       }
     ]
 

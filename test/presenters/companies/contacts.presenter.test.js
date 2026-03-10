@@ -28,8 +28,8 @@ describe('Companies - Contacts presenter', () => {
     companyContacts = [
       {
         id: generateUUID(),
-        contact_type: 'additional-contact',
-        name: 'Rachael Tyrell'
+        contactType: 'additional-contact',
+        contactName: 'Rachael Tyrell'
       }
     ]
 
@@ -71,8 +71,8 @@ describe('Companies - Contacts presenter', () => {
           companyContacts = [
             {
               id: generateUUID(),
-              contact_type: 'abstraction-alerts',
-              name: 'Rachael Tyrell'
+              contactType: 'abstraction-alerts',
+              contactName: 'Rachael Tyrell'
             }
           ]
         })
@@ -95,8 +95,8 @@ describe('Companies - Contacts presenter', () => {
           companyContacts = [
             {
               id: generateUUID(),
-              contact_type: 'additional-contact',
-              name: 'Rachael Tyrell'
+              contactType: 'additional-contact',
+              contactName: 'Rachael Tyrell'
             }
           ]
         })
@@ -119,8 +119,8 @@ describe('Companies - Contacts presenter', () => {
           companyContacts = [
             {
               id: generateUUID(),
-              contact_type: 'billing',
-              name: 'Rachael Tyrell'
+              contactType: 'billing',
+              contactName: 'Rachael Tyrell'
             }
           ]
         })
@@ -143,8 +143,8 @@ describe('Companies - Contacts presenter', () => {
           companyContacts = [
             {
               id: generateUUID(),
-              contact_type: 'basic-user',
-              name: 'user@test.com'
+              contactType: 'basic-user',
+              contactName: 'user@test.com'
             }
           ]
         })
@@ -167,8 +167,8 @@ describe('Companies - Contacts presenter', () => {
           companyContacts = [
             {
               id: generateUUID(),
-              contact_type: 'primary-user',
-              name: 'user@test.com'
+              contactType: 'primary-user',
+              contactName: 'user@test.com'
             }
           ]
         })
@@ -191,8 +191,8 @@ describe('Companies - Contacts presenter', () => {
           companyContacts = [
             {
               id: generateUUID(),
-              contact_type: 'returns-user',
-              name: 'user@test.com'
+              contactType: 'returns-user',
+              contactName: 'user@test.com'
             }
           ]
         })
@@ -215,8 +215,8 @@ describe('Companies - Contacts presenter', () => {
           companyContacts = [
             {
               id: generateUUID(),
-              contact_type: 'licence-holder',
-              name: 'Rachael Tyrell'
+              contactType: 'licence-holder',
+              contactName: 'Rachael Tyrell'
             }
           ]
         })
@@ -239,8 +239,8 @@ describe('Companies - Contacts presenter', () => {
           companyContacts = [
             {
               id: generateUUID(),
-              contact_type: 'returns-to',
-              name: 'Rachael Tyrell'
+              contactType: 'returns-to',
+              contactName: 'Rachael Tyrell'
             }
           ]
         })

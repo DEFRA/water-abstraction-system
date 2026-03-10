@@ -13,7 +13,7 @@ const CompantContactsSeeder = require('../../support/seeders/company-contacts.se
 // Thing under test
 const FetchCompanyContactsService = require('../../../app/services/companies/fetch-company-contacts.service.js')
 
-describe.only('Companies - Fetch Company Contacts service', () => {
+describe('Companies - Fetch Company Contacts service', () => {
   let company
   let companyContacts
 
@@ -34,47 +34,47 @@ describe.only('Companies - Fetch Company Contacts service', () => {
       expect(result).to.equal({
         companyContacts: [
           {
-            contact_type: 'abstraction-alerts',
-            id: companyContacts.abstractionAlerts.record.id,
-            name: 'Granny Weatherwax'
-          },
-          {
-            contact_type: 'additional-contact',
-            id: companyContacts.additionalContact.record.id,
-            name: 'Two flower'
-          },
-          {
-            contact_type: 'basic-user',
-            id: companyContacts.basicUser.record.id,
-            name: companyContacts.basicUser.record.username
-          },
-          {
-            contact_type: 'billing',
-            id: companyContacts.billing.record.id,
-            name: companyContacts.billing.record.accountNumber
-          },
-          {
-            contact_type: 'licence-holder',
-            id: companyContacts.company.record.id,
-            name: 'Ankh-Morpork'
-          },
-          {
-            contact_type: 'primary-user',
+            contactType: 'primary-user',
             id: companyContacts.primaryUser.record.id,
-            name: companyContacts.primaryUser.record.username
+            contactName: 'Albus Dumbledore'
           },
-          // {
-          //   contact_type: 'returns-to',
-          //   id: companyContacts.returnsTo.record.id,
-          //   name: companyContacts.returnsTo.record.name
-          // },
           {
-            contact_type: 'returns-user',
+            contactType: 'abstraction-alerts',
+            id: companyContacts.abstractionAlerts.record.id,
+            contactName: 'Gilderoy Lockhart'
+          },
+          {
+            contactType: 'licence-holder',
+            id: companyContacts.company.record.id,
+            contactName: 'Hogwarts'
+          },
+          {
+            contactType: 'returns-to',
+            id: companyContacts.company.record.id,
+            contactName: 'Hogwarts'
+          },
+          {
+            contactType: 'additional-contact',
+            id: companyContacts.additionalContact.record.id,
+            contactName: 'Horace Slughorn'
+          },
+          {
+            contactType: 'basic-user',
+            id: companyContacts.basicUser.record.id,
+            contactName: 'Minerva McGonagall'
+          },
+          {
+            contactType: 'returns-user',
             id: companyContacts.returnsUser.record.id,
-            name: companyContacts.returnsUser.record.username
+            contactName: 'Severus Snape'
+          },
+          {
+            contactType: 'billing',
+            id: companyContacts.billing.record.id,
+            contactName: companyContacts.billing.record.accountNumber
           }
         ],
-        totalNumber: 7
+        totalNumber: 8
       })
     })
   })

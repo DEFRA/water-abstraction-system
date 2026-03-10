@@ -9,13 +9,14 @@ const CompanyContactHelper = require('../../support/helpers/company-contact.help
 const CompanyHelper = require('../helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
 const LicenceDocumentHeaderHelper = require('../helpers/licence-document-header.helper.js')
-const LicenceDocumentHelper = require('../helpers/licence-document.helper.js')
 const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
 const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
+const LicenceHelper = require('../helpers/licence.helper.js')
 const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
+const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
+const LicenceVersionHolderHelper = require('../helpers/licence-version-holder.helper.js')
 const UserModel = require('../helpers/user.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
  * Seed the company contacts
@@ -28,13 +29,13 @@ async function seed() {
   const company = await _company()
   const companyId = company.record.id
 
-  const abstractionAlerts = await _additionalContact(companyId, 'Granny Weatherwax', true)
-  const additionalContact = await _additionalContact(companyId, 'Two flower')
-  const basicUser = await _user(companyId, 'user')
+  const abstractionAlerts = await _additionalContact(companyId, 'Gilderoy Lockhart', true)
+  const additionalContact = await _additionalContact(companyId, 'Horace Slughorn')
+  const basicUser = await _licenceEntity(companyId, 'user', 'Minerva McGonagall')
   const billing = await _billing(companyId)
-  const primaryUser = await _user(companyId, 'primary_user')
-  // const returnsTo = await _returnsTo(company)
-  const returnsUser = await _user(companyId, 'user_returns')
+  const primaryUser = await _licenceEntity(companyId, 'primary_user', 'Albus Dumbledore')
+  const returnsTo = await _returnsTo(company.record)
+  const returnsUser = await _licenceEntity(companyId, 'user_returns', 'Severus Snape')
 
   return {
     abstractionAlerts,
@@ -43,7 +44,7 @@ async function seed() {
     billing,
     company,
     primaryUser,
-    // returnsTo,
+    returnsTo,
     returnsUser,
     clean: async () => {
       await abstractionAlerts.clean()
@@ -52,7 +53,7 @@ async function seed() {
       await billing.clean()
       await company.clean()
       await primaryUser.clean()
-      // await returnsTo.clean()
+      await returnsTo.clean()
       await returnsUser.clean()
     }
   }
@@ -69,6 +70,7 @@ async function _additionalContact(companyId, name, abstractionAlerts = false) {
   const licenceRole = LicenceRoleHelper.select('additionalContact')
 
   const contact = await ContactHelper.add({
+    contactType: 'department',
     department: name
   })
 
@@ -110,7 +112,7 @@ async function _billing(companyId) {
  */
 async function _company() {
   const company = await CompanyHelper.add({
-    name: 'Ankh-Morpork'
+    name: 'Hogwarts'
   })
 
   return {
@@ -124,16 +126,19 @@ async function _company() {
 async function _returnsTo(company) {
   const licenceRole = await LicenceRoleHelper.select('returnsTo')
 
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+
   const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
     companyId: company.id,
-    licenceRoleId: licenceRole.id
+    licenceRoleId: licenceRole.id,
+    endDate: null,
+    // The start date needs to be in the future
+    startDate: tomorrow
   })
 
   return {
-    record: {
-      id: company.id,
-      name: company.name
-    },
+    record: company,
     clean: async () => {
       await licenceDocumentRole.$query().delete()
     }
@@ -147,44 +152,58 @@ async function _returnsTo(company) {
  *
  * @private
  */
-async function _user(companyId, role) {
-  const licenceRole = await LicenceRoleHelper.select()
-
-  const licenceDocument = await LicenceDocumentHelper.add()
-
-  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
-    companyId,
-    licenceRoleId: licenceRole.id,
-    licenceDocumentId: licenceDocument.id
-  })
-
-  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-    licenceRef: licenceDocument.licenceRef,
-    companyEntityId: generateUUID()
-  })
+async function _licenceEntity(companyId, role, name) {
+  const licence = await _licence(companyId)
 
   const licenceEntityRole = await LicenceEntityRoleHelper.add({
-    companyEntityId: licenceDocumentHeader.companyEntityId,
     role
   })
 
   const licenceEntity = await LicenceEntityHelper.add({
-    id: licenceEntityRole.licenceEntityId
+    id: licenceEntityRole.licenceEntityId,
+    name
+  })
+
+  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+    companyEntityId: licenceEntityRole.companyEntityId,
+    licenceRef: licence.record.licenceRef
   })
 
   const user = await UserModel.add({
-    licenceEntityId: licenceEntity.id
+    licenceEntityId: licenceEntity.id,
+    username: name
   })
 
   return {
     record: user,
     clean: async () => {
-      await licenceDocument.$query().delete()
+      await licence.clean()
       await licenceDocumentHeader.$query().delete()
-      await licenceDocumentRole.$query().delete()
       await licenceEntity.$query().delete()
       await licenceEntityRole.$query().delete()
       await user.$query().delete()
+    }
+  }
+}
+
+async function _licence(companyId) {
+  const licence = await LicenceHelper.add()
+
+  const licenceVersion = await LicenceVersionHelper.add({
+    licenceId: licence.id
+  })
+
+  const licenceVersionHolder = await LicenceVersionHolderHelper.add({
+    licenceVersionId: licenceVersion.id,
+    companyId
+  })
+
+  return {
+    record: licence,
+    clean: async () => {
+      await licence.$query().delete()
+      await licenceVersion.$query().delete()
+      await licenceVersionHolder.$query().delete()
     }
   }
 }
