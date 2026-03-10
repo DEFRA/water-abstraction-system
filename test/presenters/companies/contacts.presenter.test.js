@@ -65,7 +65,7 @@ describe('Companies - Contacts presenter', () => {
       })
     })
 
-    describe('and the is a company contact with the type', () => {
+    describe('and there is a company contact with the type', () => {
       describe('"abstraction-alerts"', () => {
         beforeEach(() => {
           companyContacts = [

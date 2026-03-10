@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
@@ -18,7 +19,6 @@ const FetchCompanyService = require('../../../app/services/companies/fetch-compa
 
 // Thing under test
 const ViewContactsService = require('../../../app/services/companies/view-contacts.service.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 describe('Companies - View Contacts service', () => {
   let auth
