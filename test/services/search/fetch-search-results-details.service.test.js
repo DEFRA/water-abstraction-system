@@ -79,8 +79,8 @@ describe('Search - Fetch Search Results Details service', () => {
 
     userSpy = Sinon.stub().resolves([])
     Sinon.stub(UserModel, 'query').returns({
-      findByIds: Sinon.stub().returnsThis(),
-      modify: userSpy,
+      findByIds: userSpy,
+      modify: Sinon.stub().returnsThis(),
       select: Sinon.stub().returnsThis()
     })
   })
