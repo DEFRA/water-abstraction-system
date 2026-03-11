@@ -32,30 +32,19 @@ async function seed() {
 
   const licenceDocumentHeader = await _licenceDocumentHeader(company, companyEntity)
 
-  const companyContacts = await _companyContacts(company.record, licenceDocumentHeader.record)
+  const companyId = company.record.id
+
+  const companyEntityId = companyEntity.record.id
+
+  const abstractionAlerts = await _additionalContact(companyId, 'Gilderoy Lockhart', true)
+  const additionalContact = await _additionalContact(companyId, 'Horace Slughorn')
+  const returnsTo = await _returnsTo(company.record)
+  const billing = await _billing(companyId)
+  const basicUser = await _licenceEntity(companyId, companyEntityId, 'user', 'Minerva McGonagall')
+  const primaryUser = await _licenceEntity(companyId, companyEntityId, 'primary_user', 'Albus Dumbledore')
+  const returnsUser = await _licenceEntity(companyId, companyEntityId, 'user_returns', 'Severus Snape')
 
   // const additionalCompany = await _company('Wand & Willow')
-
-  return {
-    ...companyContacts,
-    company,
-    clean: async () => {
-      await company.clean()
-      await companyContacts.clean()
-      await companyEntity.clean()
-      await licenceDocumentHeader.clean()
-    }
-  }
-}
-
-async function _companyContacts(company, licenceDocumentHeader) {
-  const abstractionAlerts = await _additionalContact(company.id, 'Gilderoy Lockhart', true)
-  const additionalContact = await _additionalContact(company.id, 'Horace Slughorn')
-  const returnsTo = await _returnsTo(company)
-  const billing = await _billing(company.id)
-  const basicUser = await _licenceEntity(company.id, licenceDocumentHeader, 'user', 'Minerva McGonagall')
-  const primaryUser = await _licenceEntity(company.id, licenceDocumentHeader, 'primary_user', 'Albus Dumbledore')
-  const returnsUser = await _licenceEntity(company.id, licenceDocumentHeader, 'user_returns', 'Severus Snape')
 
   return {
     abstractionAlerts,
@@ -71,6 +60,9 @@ async function _companyContacts(company, licenceDocumentHeader) {
       await additionalContact.clean()
       await basicUser.clean()
       await billing.clean()
+      await company.clean()
+      await companyEntity.clean()
+      await licenceDocumentHeader.clean()
       await primaryUser.clean()
       await returnsTo.clean()
       await returnsUser.clean()
@@ -177,10 +169,10 @@ async function _licenceDocumentHeader(company, companyEntity) {
  *
  * @private
  */
-async function _licenceEntity(companyId, licenceDocumentHeader, role, name) {
+async function _licenceEntity(companyId, companyEntityId, role, name) {
   const licenceEntityRole = await LicenceEntityRoleHelper.add({
     role,
-    companyEntityId: licenceDocumentHeader.companyEntityId
+    companyEntityId
   })
 
   const licenceEntity = await LicenceEntityHelper.add({
