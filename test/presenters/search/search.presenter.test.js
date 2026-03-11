@@ -280,7 +280,7 @@ describe('Search - Search presenter', () => {
           col3Title: 'Last signed in',
           col3Value: '1 January 2001',
           exact: true,
-          link: '/user/user-1/status',
+          link: '/system/users/external/user-1',
           reference: 'TESTSEARCH01@example.gov.uk',
           statusTag: null,
           type: 'User'
@@ -346,7 +346,7 @@ describe('Search - Search presenter', () => {
           col3Title: 'Last signed in',
           col3Value: '1 January 2001',
           exact: false,
-          link: '/user/user-2/status',
+          link: '/system/users/external/user-2',
           reference: 'TESTSEARCH02@example.gov.uk',
           statusTag: null,
           type: 'User'
