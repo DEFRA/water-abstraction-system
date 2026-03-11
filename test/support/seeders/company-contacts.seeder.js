@@ -219,15 +219,10 @@ async function _licenceCompanyEntity(company) {
 async function _returnsTo(company) {
   const licenceRole = await LicenceRoleHelper.select('returnsTo')
 
-  const tomorrow = new Date()
-  tomorrow.setDate(tomorrow.getDate() + 1)
-
   const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
     companyId: company.id,
     licenceRoleId: licenceRole.id,
-    endDate: null,
-    // The start date needs to be in the future
-    startDate: tomorrow
+    endDate: null
   })
 
   return {
