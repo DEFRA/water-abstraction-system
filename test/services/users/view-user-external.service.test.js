@@ -12,16 +12,16 @@ const { expect } = Code
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
-const FetchExternalUserService = require('../../../app/services/users/fetch-external-user.service.js')
+const FetchUserExternalService = require('../../../app/services/users/fetch-user-external.service.js')
 
 // Thing under test
-const ViewExternalUserService = require('../../../app/services/users/view-external-user.service.js')
+const ViewUserExternalService = require('../../../app/services/users/view-user-external.service.js')
 
-describe('Users - View External User service', () => {
+describe('Users - View User External service', () => {
   const user = UsersFixture.external()
 
   beforeEach(() => {
-    Sinon.stub(FetchExternalUserService, 'go').resolves(user)
+    Sinon.stub(FetchUserExternalService, 'go').resolves(user)
   })
 
   afterEach(() => {
@@ -30,7 +30,7 @@ describe('Users - View External User service', () => {
 
   describe('when called', () => {
     it('returns page data for the external user view', async () => {
-      const result = await ViewExternalUserService.go(user.id)
+      const result = await ViewUserExternalService.go(user.id)
 
       expect(result).to.equal({
         backLink: {

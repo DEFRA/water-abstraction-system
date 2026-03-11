@@ -9,7 +9,8 @@ const IndexUsersService = require('../services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../services/users/submit-profile-details.service.js')
 const ViewProfileDetailsService = require('../services/users/view-profile-details.service.js')
-const ViewUserService = require('../services/users/view-user.service.js')
+const ViewUserExternalService = require('../services/users/view-user-external.service.js')
+const ViewUserInternalService = require('../services/users/view-user-internal.service.js')
 
 async function index(request, h) {
   const {
@@ -61,18 +62,24 @@ async function viewProfileDetails(request, h) {
   return h.view('users/profile-details.njk', pageData)
 }
 
-async function viewUser(request, h) {
+async function viewUserExternal(request, h) {
   const {
-    params: { userId }
+    params: { id }
   } = request
 
-  const { pageData, userIsInternal } = await ViewUserService.go(userId)
+  const pageData = await ViewUserExternalService.go(id)
 
-  if (userIsInternal) {
-    return h.view('users/view-internal.njk', pageData)
-  }
+  return h.view('users/view-user-external.njk', pageData)
+}
 
-  return h.view('users/view-external.njk', pageData)
+async function viewUserInternal(request, h) {
+  const {
+    params: { id }
+  } = request
+
+  const pageData = await ViewUserInternalService.go(id)
+
+  return h.view('users/view-user-internal.njk', pageData)
 }
 
 module.exports = {
@@ -80,5 +87,6 @@ module.exports = {
   submitIndex,
   submitProfileDetails,
   viewProfileDetails,
-  viewUser
+  viewUserExternal,
+  viewUserInternal
 }

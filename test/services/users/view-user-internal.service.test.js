@@ -12,16 +12,16 @@ const { expect } = Code
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
-const FetchInternalUserService = require('../../../app/services/users/fetch-internal-user.service.js')
+const FetchUserInternalService = require('../../../app/services/users/fetch-user-internal.service.js')
 
 // Thing under test
-const ViewInternalUserService = require('../../../app/services/users/view-internal-user.service.js')
+const ViewUserInternalService = require('../../../app/services/users/view-user-internal.service.js')
 
-describe('Users - View Internal User service', () => {
+describe('Users - View User Internal service', () => {
   const user = UsersFixture.basicAccess()
 
   beforeEach(() => {
-    Sinon.stub(FetchInternalUserService, 'go').resolves(user)
+    Sinon.stub(FetchUserInternalService, 'go').resolves(user)
   })
 
   afterEach(() => {
@@ -30,7 +30,7 @@ describe('Users - View Internal User service', () => {
 
   describe('when called', () => {
     it('returns page data for the internal user view', async () => {
-      const result = await ViewInternalUserService.go(user.id)
+      const result = await ViewUserInternalService.go(user.id)
 
       expect(result).to.equal({
         backLink: {
