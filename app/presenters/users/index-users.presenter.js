@@ -23,6 +23,16 @@ function go(users, auth) {
   }
 }
 
+function _link(user) {
+  const { id } = user
+
+  if (user.$internal()) {
+    return `/system/users/internal/${id}`
+  }
+
+  return `/system/users/external/${id}`
+}
+
 function _links(scope) {
   const links = {}
 
@@ -38,11 +48,11 @@ function _links(scope) {
 
 function _userRowData(users) {
   return users.map((user) => {
-    const { userId, username: email } = user
+    const { username: email } = user
 
     return {
       email,
-      link: `/user/${userId}/status`,
+      link: _link(user),
       permissions: user.$permissions()?.label || '',
       status: user.$status(),
       type: user.$internal() ? 'Internal' : 'External'

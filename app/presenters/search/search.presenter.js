@@ -238,7 +238,7 @@ function _user(user) {
     col3Title: 'Last signed in',
     col3Value: formatLongDate(lastLogin),
     exact,
-    link: `/user/${id}/status`,
+    link: `/system/users/external/${id}`,
     reference: username,
     statusTag: null,
     type: 'User'

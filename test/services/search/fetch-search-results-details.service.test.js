@@ -28,7 +28,6 @@ describe('Search - Fetch Search Results Details service', () => {
   let monitoringStationSpy
   let returnLogSpy
   let userSpy
-  let userWhereInSpy
 
   beforeEach(() => {
     idsByType = {
@@ -79,13 +78,10 @@ describe('Search - Fetch Search Results Details service', () => {
     })
 
     userSpy = Sinon.stub().resolves([])
-
-    userWhereInSpy = Sinon.stub().returnsThis()
-
     Sinon.stub(UserModel, 'query').returns({
-      select: Sinon.stub().returnsThis(),
-      whereIn: userWhereInSpy,
-      modify: userSpy
+      findByIds: Sinon.stub().returnsThis(),
+      modify: userSpy,
+      select: Sinon.stub().returnsThis()
     })
   })
 
@@ -238,7 +234,6 @@ describe('Search - Fetch Search Results Details service', () => {
       expect(monitoringStationSpy.called).to.be.false()
       expect(returnLogSpy.called).to.be.false()
       expect(userSpy.calledOnce).to.be.true()
-      expect(userWhereInSpy.firstCall.args).to.equal(['userId', [11, 12]])
     })
   })
 })

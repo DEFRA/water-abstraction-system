@@ -9,6 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
+const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { generateUUID } = require('../../app/lib/general.lib.js')
 const { postRequestOptions } = require('../support/general.js')
@@ -36,6 +37,8 @@ describe('Users controller', () => {
   })
 
   beforeEach(async () => {
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
+
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
     Sinon.stub(server.logger, 'error')
