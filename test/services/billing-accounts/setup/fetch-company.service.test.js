@@ -11,7 +11,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const LookupCompanysHouseIdRequest = require('../../../../app/requests/companies-house/lookup-companys-house-id.request.js')
+const LookupCompanysHouseIdRequest = require('../../../../app/requests/companies-house/lookup-companies-house-id.request.js')
 
 // Thing under test
 const FetchCompanyService = require('../../../../app/services/billing-accounts/setup/fetch-company.service.js')

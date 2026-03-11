@@ -1,18 +1,18 @@
 'use strict'
 
 /**
- * Fetches the data from companys house for the provided companies house id
+ * Fetches the data from Companies House for the provided Companies House ID
  * @module FetchCompanyService
  */
 
-const LookupCompanysHouseIdRequest = require('../../../requests/companies-house/lookup-companys-house-id.request.js')
+const LookupCompanysHouseIdRequest = require('../../../requests/companies-house/lookup-companies-house-id.request.js')
 
 /**
- * Fetches the data from companys house for the provided companies house id
+ * Fetches the data from Companies House for the provided Companies House ID
  *
- * @param {string} companiesHouseId - The companys house id to lookup
+ * @param {string} companiesHouseId - The Companies House id to lookup
  *
- * @returns {Promise<object[]>} an object containing the matching companies needed to populate the view
+ * @returns {Promise<object>} an object containing the matching company's ID number and name
  */
 async function go(companiesHouseId) {
   if (!companiesHouseId) {

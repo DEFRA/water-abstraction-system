@@ -14,7 +14,7 @@ const { expect } = Code
 const CompaniesHouseRequest = require('../../../app/requests/companies-house.request.js')
 
 // Thing under test
-const LookupCompanysHouseIdRequest = require('../../../app/requests/companies-house/lookup-companys-house-id.request.js')
+const LookupCompanysHouseIdRequest = require('../../../app/requests/companies-house/lookup-companies-house-id.request.js')
 
 describe('Companies House - Lookup companys house id request', () => {
   const companysHouseId = '12345678'
