@@ -17,7 +17,6 @@ const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js'
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const LicenceVersionHolderHelper = require('../helpers/licence-version-holder.helper.js')
 const UserModel = require('../helpers/user.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
  * Seed the company contacts
@@ -29,7 +28,9 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 async function seed() {
   const company = await _company('Hogwarts')
 
-  const licenceDocumentHeader = await _licenceDocumentHeader(company)
+  const companyEntity = await _licenceCompanyEntity(company)
+
+  const licenceDocumentHeader = await _licenceDocumentHeader(company, companyEntity)
 
   const companyContacts = await _companyContacts(company.record, licenceDocumentHeader.record)
 
@@ -39,8 +40,9 @@ async function seed() {
     ...companyContacts,
     company,
     clean: async () => {
-      await companyContacts.clean()
       await company.clean()
+      await companyContacts.clean()
+      await companyEntity.clean()
       await licenceDocumentHeader.clean()
     }
   }
@@ -49,11 +51,11 @@ async function seed() {
 async function _companyContacts(company, licenceDocumentHeader) {
   const abstractionAlerts = await _additionalContact(company.id, 'Gilderoy Lockhart', true)
   const additionalContact = await _additionalContact(company.id, 'Horace Slughorn')
-  const basicUser = await _licenceEntity(company.id, 'user', 'Minerva McGonagall', licenceDocumentHeader)
-  const billing = await _billing(company.id)
-  const primaryUser = await _licenceEntity(company.id, 'primary_user', 'Albus Dumbledore', licenceDocumentHeader)
   const returnsTo = await _returnsTo(company)
-  const returnsUser = await _licenceEntity(company.id, 'user_returns', 'Severus Snape', licenceDocumentHeader)
+  const billing = await _billing(company.id)
+  const basicUser = await _licenceEntity(company.id, licenceDocumentHeader, 'user', 'Minerva McGonagall')
+  const primaryUser = await _licenceEntity(company.id, licenceDocumentHeader, 'primary_user', 'Albus Dumbledore')
+  const returnsUser = await _licenceEntity(company.id, licenceDocumentHeader, 'user_returns', 'Severus Snape')
 
   return {
     abstractionAlerts,
@@ -140,6 +142,88 @@ async function _company(name) {
   }
 }
 
+async function _licenceDocumentHeader(company, companyEntity) {
+  const licence = await LicenceHelper.add()
+
+  const licenceVersion = await LicenceVersionHelper.add({
+    licenceId: licence.id
+  })
+
+  const licenceVersionHolder = await LicenceVersionHolderHelper.add({
+    licenceVersionId: licenceVersion.id,
+    companyId: company.record.id
+  })
+
+  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+    companyEntityId: companyEntity.record.id,
+    licenceRef: licence.licenceRef
+  })
+
+  return {
+    record: licenceDocumentHeader,
+    clean: async () => {
+      await licence.$query().delete()
+      await licenceVersion.$query().delete()
+      await licenceVersionHolder.$query().delete()
+      await licenceDocumentHeader.$query().delete()
+    }
+  }
+}
+
+/**
+ * The primary user, returns user and basic user have identical queries.
+ *
+ * The only thing to determine a difference is the role of the user.
+ *
+ * @private
+ */
+async function _licenceEntity(companyId, licenceDocumentHeader, role, name) {
+  const licenceEntityRole = await LicenceEntityRoleHelper.add({
+    role,
+    companyEntityId: licenceDocumentHeader.companyEntityId
+  })
+
+  const licenceEntity = await LicenceEntityHelper.add({
+    id: licenceEntityRole.licenceEntityId,
+    name,
+    type: 'individual'
+  })
+
+  const user = await UserModel.add({
+    licenceEntityId: licenceEntity.id,
+    username: name
+  })
+
+  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
+    companyId,
+    licenceRoleId: licenceEntityRole.id
+  })
+
+  return {
+    record: user,
+    clean: async () => {
+      await licenceEntity.$query().delete()
+      await licenceEntityRole.$query().delete()
+      await user.$query().delete()
+      await licenceDocumentRole.$query().delete()
+    }
+  }
+}
+
+async function _licenceCompanyEntity(company) {
+  const licenceEntity = await LicenceEntityHelper.add({
+    name: company.record.name,
+    type: 'company'
+  })
+
+  return {
+    record: licenceEntity,
+    clean: async () => {
+      await licenceEntity.$query().delete()
+    }
+  }
+}
+
 async function _returnsTo(company) {
   const licenceRole = await LicenceRoleHelper.select('returnsTo')
 
@@ -158,67 +242,6 @@ async function _returnsTo(company) {
     record: company,
     clean: async () => {
       await licenceDocumentRole.$query().delete()
-    }
-  }
-}
-
-/**
- * The primary user, returns user and basic user have identical queries.
- *
- * The only thing to determine a difference is the role of the user.
- *
- * @private
- */
-async function _licenceEntity(companyId, role, name, licenceDocumentHeader) {
-  const licenceEntityRole = await LicenceEntityRoleHelper.add({
-    role,
-    companyEntityId: licenceDocumentHeader.companyEntityId
-  })
-
-  const licenceEntity = await LicenceEntityHelper.add({
-    id: licenceEntityRole.licenceEntityId,
-    name
-  })
-
-  const user = await UserModel.add({
-    licenceEntityId: licenceEntity.id,
-    username: name
-  })
-
-  return {
-    record: user,
-    clean: async () => {
-      await licenceEntity.$query().delete()
-      await licenceEntityRole.$query().delete()
-      await user.$query().delete()
-    }
-  }
-}
-
-async function _licenceDocumentHeader(company) {
-  const licence = await LicenceHelper.add()
-
-  const licenceVersion = await LicenceVersionHelper.add({
-    licenceId: licence.id
-  })
-
-  const licenceVersionHolder = await LicenceVersionHolderHelper.add({
-    licenceVersionId: licenceVersion.id,
-    companyId: company.record.id
-  })
-
-  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-    companyEntityId: generateUUID(),
-    licenceRef: licence.licenceRef
-  })
-
-  return {
-    record: licenceDocumentHeader,
-    clean: async () => {
-      await licence.$query().delete()
-      await licenceVersion.$query().delete()
-      await licenceVersionHolder.$query().delete()
-      await licenceDocumentHeader.$query().delete()
     }
   }
 }
