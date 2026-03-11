@@ -75,7 +75,7 @@ describe('Companies - View Contacts service', () => {
         companyContacts: [
           {
             action: `/system/company-contacts/${companyContacts[0].id}`,
-            communicationType: 'Additional contact',
+            type: 'Additional contact',
             name: 'Rachael Tyrell'
           }
         ],

@@ -34,7 +34,7 @@ function _companyContacts(companyContacts, company) {
     return {
       action: _companyContactLinks(company, companyContact),
       name: companyContact.contactName,
-      contactType: roles[companyContact.contactType].label
+      type: roles[companyContact.contactType].label
     }
   })
 }
