@@ -49,7 +49,7 @@ describe('Billing Accounts - Setup - Fetch Companies service', () => {
       expect(result).to.equal([
         {
           address: matches[0].address_snippet,
-          companiesHouseId: matches[0].company_number,
+          number: matches[0].company_number,
           title: matches[0].title
         }
       ])

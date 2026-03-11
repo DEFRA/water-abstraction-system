@@ -53,7 +53,7 @@ async function _save(session, payload) {
     session.addressJourney = null
     session.addressSelected = null
     session.checkPageVisited = false
-    session.companiesHouseId = false
+    session.companiesHouseNumber = false
     session.fao = null
     session.contactSelected = null
     session.contactName = null
