@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches an internal user for display on the /users/{userId} page
- * @module FetchInternalUserService
+ * Fetches an internal user for display on the `/users/internal/{id}` page
+ * @module FetchUserInternalService
  */
 
 const UserModel = require('../../models/user.model.js')
 
 /**
- * Fetches an internal user for display on the /users/{userId} page
+ * Fetches an internal user for display on the `/users/internal/{id}` page
  *
  * @param {number} userId - The ID of the requested user
  *
