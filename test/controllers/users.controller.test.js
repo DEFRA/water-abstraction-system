@@ -33,12 +33,12 @@ describe('Users controller', () => {
 
   // Create server before running the tests
   before(async () => {
-    Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
-
     server = await init()
   })
 
   beforeEach(async () => {
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
+
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
     Sinon.stub(server.logger, 'error')
