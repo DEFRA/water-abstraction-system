@@ -12,6 +12,7 @@ const { expect } = Code
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Things to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchUsersService = require('../../../app/services/users/fetch-users.service.js')
 
 // Thing under test
@@ -24,6 +25,8 @@ describe('Users - Submit Index Users service', () => {
   let yarStub
 
   beforeEach(async () => {
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
+
     auth = {
       credentials: { scope: ['manage_accounts'] }
     }
@@ -163,7 +166,7 @@ describe('Users - Submit Index Users service', () => {
             users: [
               {
                 email: results[0].username,
-                link: `/user/${results[0].userId}/status`,
+                link: `/system/internal-users/${results[0].id}`,
                 permissions: 'Basic access',
                 status: 'enabled',
                 type: 'Internal'
@@ -243,7 +246,7 @@ describe('Users - Submit Index Users service', () => {
             users: [
               {
                 email: results[0].username,
-                link: `/user/${results[0].userId}/status`,
+                link: `/system/internal-users/${results[0].id}`,
                 permissions: 'Basic access',
                 status: 'enabled',
                 type: 'Internal'

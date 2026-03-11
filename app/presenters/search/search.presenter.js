@@ -9,6 +9,8 @@ const ContactModel = require('../../models/contact.model.js')
 const { formatLongDate, formatReturnLogStatus } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
+const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Formats data for the `/search` page
  *
@@ -230,7 +232,7 @@ function _returnLog(returnLog) {
 
 function _user(user) {
   const { exact, model } = user
-  const { id, lastLogin, username } = model
+  const { lastLogin, username } = model
 
   return {
     col2Title: 'Permissions',
@@ -238,11 +240,21 @@ function _user(user) {
     col3Title: 'Last signed in',
     col3Value: formatLongDate(lastLogin),
     exact,
-    link: `/user/${id}/status`,
+    link: _userLink(model),
     reference: username,
-    statusTag: null,
+    statusTag: model.$status(),
     type: 'User'
   }
+}
+
+function _userLink(user) {
+  const { id, userId } = user
+
+  if (featureFlagsConfig.enableUsersView) {
+    return `/system/external-users/${id}`
+  }
+
+  return `/user/${userId}/status`
 }
 
 module.exports = {

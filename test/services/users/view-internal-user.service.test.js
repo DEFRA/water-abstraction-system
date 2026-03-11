@@ -5,13 +5,14 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchInternalUserService = require('../../../app/services/users/fetch-internal-user.service.js')
 
 // Thing under test
@@ -21,6 +22,7 @@ describe('Users - View Internal User service', () => {
   const user = UsersFixture.basicAccess()
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
     Sinon.stub(FetchInternalUserService, 'go').resolves(user)
   })
 
@@ -33,15 +35,17 @@ describe('Users - View Internal User service', () => {
       const result = await ViewInternalUserService.go(user.id)
 
       expect(result).to.equal({
+        activeNavBar: 'users',
         backLink: {
-          href: '/',
-          text: 'Go back to search'
+          href: '/system/users',
+          text: 'Go back to users'
         },
         id: user.id,
-        lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+        lastSignedIn: '6 October 2022 at 10:00:00',
         pageTitle: 'User basic.access@wrls.gov.uk',
         pageTitleCaption: 'Internal',
         permissions: 'Basic access',
+        roles: [],
         status: 'enabled'
       })
     })

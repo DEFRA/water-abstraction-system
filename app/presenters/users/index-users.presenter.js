@@ -5,6 +5,8 @@
  * @module IndexUsersPresenter
  */
 
+const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Formats data for the `/users` page
  *
@@ -36,13 +38,22 @@ function _links(scope) {
   return links
 }
 
+function _userLink(user) {
+  const { id, userId } = user
+  const internalOrExternal = user.$internal() ? 'internal' : 'external'
+
+  if (featureFlagsConfig.enableUsersView) {
+    return `/system/${internalOrExternal}-users/${id}`
+  }
+
+  return `/user/${userId}/status`
+}
+
 function _userRowData(users) {
   return users.map((user) => {
-    const { userId, username: email } = user
-
     return {
-      email,
-      link: `/user/${userId}/status`,
+      email: user.username,
+      link: _userLink(user),
       permissions: user.$permissions()?.label || '',
       status: user.$status(),
       type: user.$internal() ? 'Internal' : 'External'

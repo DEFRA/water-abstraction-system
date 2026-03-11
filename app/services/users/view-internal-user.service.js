@@ -1,15 +1,17 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting internal user data for `/users/{userId}` page
+ * Orchestrates fetching and presenting internal user data for `/internal-users/{userId}` page
  * @module ViewInternalUserService
  */
 
 const FetchInternalUserService = require('./fetch-internal-user.service.js')
 const InternalUserPresenter = require('../../presenters/users/internal-user.presenter.js')
 
+const featureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
- * Orchestrates fetching and presenting internal user data for `/users/{userId}` page
+ * Orchestrates fetching and presenting internal user data for `/internal-users/{userId}` page
  *
  * This page may display either an external or internal user - this service handles the internal users.
  *
@@ -19,10 +21,11 @@ const InternalUserPresenter = require('../../presenters/users/internal-user.pres
  */
 async function go(userId) {
   const internalUser = await FetchInternalUserService.go(userId)
-  const formattedData = InternalUserPresenter.go(internalUser)
+  const pageData = InternalUserPresenter.go(internalUser)
 
   return {
-    ...formattedData
+    activeNavBar: featureFlagsConfig.enableUsersView ? 'users' : 'search',
+    ...pageData
   }
 }
 

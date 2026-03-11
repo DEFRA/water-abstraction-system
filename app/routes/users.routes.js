@@ -5,6 +5,44 @@ const UsersController = require('../controllers/users.controller.js')
 const routes = [
   {
     method: 'GET',
+    path: '/external-users/{userId}',
+    options: {
+      handler: UsersController.viewExternalUser
+    }
+  },
+  {
+    method: 'POST',
+    path: '/external-users/{userId}',
+    options: {
+      handler: UsersController.submitViewExternalUser
+    }
+  },
+  {
+    method: 'GET',
+    path: '/internal-users/{userId}',
+    options: {
+      handler: UsersController.viewInternalUser,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/internal-users/{userId}',
+    options: {
+      handler: UsersController.submitViewInternalUser,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/users',
     options: {
       handler: UsersController.index,
@@ -49,13 +87,6 @@ const routes = [
           scope: ['hof_notifications', 'renewal_notifications']
         }
       }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/users/{userId}',
-    options: {
-      handler: UsersController.viewUser
     }
   }
 ]

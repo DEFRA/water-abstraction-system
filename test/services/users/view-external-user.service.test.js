@@ -19,6 +19,9 @@ const ViewExternalUserService = require('../../../app/services/users/view-extern
 
 describe('Users - View External User service', () => {
   const user = UsersFixture.external()
+  const auth = {
+    credentials: { scope: ['manage_accounts'] }
+  }
 
   beforeEach(() => {
     Sinon.stub(FetchExternalUserService, 'go').resolves(user)
@@ -30,7 +33,7 @@ describe('Users - View External User service', () => {
 
   describe('when called', () => {
     it('returns page data for the external user view', async () => {
-      const result = await ViewExternalUserService.go(user.id)
+      const result = await ViewExternalUserService.go(user.id, auth)
 
       expect(result).to.equal({
         backLink: {
@@ -42,6 +45,7 @@ describe('Users - View External User service', () => {
         lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
         pageTitle: 'User external@example.co.uk',
         pageTitleCaption: 'External',
+        showEditButton: true,
         status: 'enabled'
       })
     })

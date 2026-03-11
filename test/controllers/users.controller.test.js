@@ -13,11 +13,13 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const FetchLegacyUserIdService = require('../../app/services/users/fetch-legacy-user-id.service.js')
 const IndexUsersService = require('../../app/services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
 const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
-const ViewUserService = require('../../app/services/users/view-user.service.js')
+const ViewExternalUserService = require('../../app/services/users/view-external-user.service.js')
+const ViewInternalUserService = require('../../app/services/users/view-internal-user.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -43,6 +45,98 @@ describe('Users controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  describe('/external-users/{userId}', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions(`/external-users/external-user-1`, { scope: [], user: { id: 1000 } })
+        Sinon.stub(ViewExternalUserService, 'go').resolves({
+          backLink: {
+            href: '/',
+            text: 'Go back to search'
+          },
+          companies: [],
+          id: 'external-user-1',
+          lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+          pageTitle: 'User external@example.co.uk',
+          pageTitleCaption: 'External',
+          status: 'enabled'
+        })
+      })
+
+      it('returns the external user page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('External')
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        postOptions = postRequestOptions('/external-users/external-user-1', {})
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(FetchLegacyUserIdService, 'go').returns({ userId: 456 })
+        })
+
+        it('redirects to the legacy user page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/user/456/status`)
+        })
+      })
+    })
+  })
+
+  describe('/internal-users/{userId}', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions(`/internal-users/internal-user-1`, { scope: ['manage_accounts'], user: { id: 1000 } })
+        Sinon.stub(ViewInternalUserService, 'go').resolves({
+          backLink: {
+            href: '/',
+            text: 'Go back to search'
+          },
+          id: 'internal-user-1',
+          lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+          pageTitle: 'User basic.access@wrls.gov.uk',
+          pageTitleCaption: 'Internal',
+          permissions: 'Basic access',
+          status: 'enabled'
+        })
+      })
+
+      it('returns the internal user page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Internal')
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        postOptions = postRequestOptions('/internal-users/internal-user-1', {}, ['manage_accounts'])
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(FetchLegacyUserIdService, 'go').returns({ userId: 123 })
+        })
+
+        it('redirects to the legacy user page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/user/123/status`)
+        })
+      })
+    })
   })
 
   describe('/users', () => {
@@ -200,66 +294,6 @@ describe('Users controller', () => {
             expect(response.statusCode).to.equal(HTTP_STATUS_OK)
             expect(response.payload).to.contain('There is a problem')
           })
-        })
-      })
-    })
-  })
-
-  describe('/users/{userId}', () => {
-    describe('GET', () => {
-      describe('when the user is an internal user', () => {
-        beforeEach(async () => {
-          options = _getOptions(`/users/123`, { scope: ['billing'], user: { id: 1000 } })
-          Sinon.stub(ViewUserService, 'go').resolves({
-            pageData: {
-              backLink: {
-                href: '/',
-                text: 'Go back to search'
-              },
-              id: 100010,
-              lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
-              pageTitle: 'User basic.access@wrls.gov.uk',
-              pageTitleCaption: 'Internal',
-              permissions: 'Basic access',
-              status: 'enabled'
-            },
-            userIsInternal: true
-          })
-        })
-
-        it('returns the internal user page successfully', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Internal')
-        })
-      })
-
-      describe('when the user is an external user', () => {
-        beforeEach(async () => {
-          options = _getOptions(`/users/456`, { scope: ['billing'], user: { id: 1000 } })
-          Sinon.stub(ViewUserService, 'go').resolves({
-            pageData: {
-              backLink: {
-                href: '/',
-                text: 'Go back to search'
-              },
-              companies: [],
-              id: 100007,
-              lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
-              pageTitle: 'User external@example.co.uk',
-              pageTitleCaption: 'External',
-              status: 'enabled'
-            },
-            userIsInternal: false
-          })
-        })
-
-        it('returns the external user page successfully', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('External')
         })
       })
     })
