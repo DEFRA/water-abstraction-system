@@ -11,12 +11,12 @@ const InternalUserPresenter = require('../../presenters/users/internal-user.pres
 /**
  * Orchestrates fetching and presenting internal user data for `/users/internal/{id}` page
  *
- * @param {number} userId - The user's ID
+ * @param {number} id - The user's ID
  *
  * @returns {Promise<object>} The view data for the internal user page
  */
-async function go(userId) {
-  const internalUser = await FetchUserInternalService.go(userId)
+async function go(id) {
+  const internalUser = await FetchUserInternalService.go(id)
   const formattedData = InternalUserPresenter.go(internalUser)
 
   return {

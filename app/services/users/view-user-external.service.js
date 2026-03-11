@@ -11,12 +11,12 @@ const ExternalUserPresenter = require('../../presenters/users/external-user.pres
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}` page
  *
- * @param {number} userId - The user's ID
+ * @param {number} id - The user's ID
  *
  * @returns {Promise<object>} The view data for the external user page
  */
-async function go(userId) {
-  const externalUser = await FetchUserExternalService.go(userId)
+async function go(id) {
+  const externalUser = await FetchUserExternalService.go(id)
   const formattedData = ExternalUserPresenter.go(externalUser)
 
   return {
