@@ -14,10 +14,10 @@ const { expect } = Code
 const CompaniesHouseRequest = require('../../../app/requests/companies-house.request.js')
 
 // Thing under test
-const LookupCompanysHouseIdRequest = require('../../../app/requests/companies-house/lookup-companies-house-number.request.js')
+const LookupCompaniesHouseNumberRequest = require('../../../app/requests/companies-house/lookup-companies-house-number.request.js')
 
-describe('Companies House - Lookup companys house id request', () => {
-  const companysHouseId = '12345678'
+describe('Companies House - Lookup Companies House Number request', () => {
+  const companiesHouseNumber = '12345678'
 
   afterEach(() => {
     Sinon.restore()
@@ -38,21 +38,21 @@ describe('Companies House - Lookup companys house id request', () => {
     })
 
     it('hits the correct endpoint', async () => {
-      await LookupCompanysHouseIdRequest.send(companysHouseId)
+      await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
       const requestArgs = CompaniesHouseRequest.get.firstCall.args
 
-      expect(requestArgs[0]).to.equal(`company/${companysHouseId}`)
+      expect(requestArgs[0]).to.equal(`company/${companiesHouseNumber}`)
     })
 
     it('returns a "true" success status', async () => {
-      const result = await LookupCompanysHouseIdRequest.send(companysHouseId)
+      const result = await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
       expect(result.succeeded).to.be.true()
     })
 
     it('returns the matching company', async () => {
-      const result = await LookupCompanysHouseIdRequest.send(companysHouseId)
+      const result = await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
       expect(result.response.body).to.equal({
         company_number: 12345678,
@@ -74,13 +74,13 @@ describe('Companies House - Lookup companys house id request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await LookupCompanysHouseIdRequest.send(companysHouseId)
+        const result = await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns an error in the "response"', async () => {
-        const result = await LookupCompanysHouseIdRequest.send(companysHouseId)
+        const result = await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
         expect(result.response.body).to.equal({
           message: 'Resource not found for company profile 12345678'
@@ -98,13 +98,13 @@ describe('Companies House - Lookup companys house id request', () => {
       })
 
       it('returns a "false" success status', async () => {
-        const result = await LookupCompanysHouseIdRequest.send(companysHouseId)
+        const result = await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
         expect(result.succeeded).to.be.false()
       })
 
       it('returns the error in the "response"', async () => {
-        const result = await LookupCompanysHouseIdRequest.send(companysHouseId)
+        const result = await LookupCompaniesHouseNumberRequest.send(companiesHouseNumber)
 
         expect(result.response.statusCode).not.to.exist()
         expect(result.response.body).not.to.exist()

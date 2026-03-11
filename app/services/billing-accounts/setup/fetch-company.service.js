@@ -10,7 +10,7 @@ const LookupCompanysHouseNumberRequest = require('../../../requests/companies-ho
 /**
  * Fetches the data from Companies House for the provided Companies House Number
  *
- * @param {string} companiesHouseNumber - The Companies House id to lookup
+ * @param {string} companiesHouseNumber - The Companies House Number to lookup
  *
  * @returns {Promise<object>} an object containing the matching companies house number and name
  */
