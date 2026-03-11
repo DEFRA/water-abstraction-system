@@ -22,7 +22,7 @@ describe('Billing Accounts - Setup - View Select Company Service', () => {
   const companies = [
     {
       address: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
-      companiesHouseId: '12345678',
+      number: '12345678',
       title: 'ENVIRONMENT AGENCY'
     }
   ]
@@ -56,13 +56,13 @@ describe('Billing Accounts - Setup - View Select Company Service', () => {
         companies: [
           {
             checked: false,
-            id: companies[0].companiesHouseId,
+            id: companies[0].number,
             hint: { text: companies[0].address },
             text: companies[0].title,
-            value: companies[0].companiesHouseId
+            value: companies[0].number
           }
         ],
-        companiesHouseId: null,
+        companiesHouseNumber: null,
         pageTitle: 'Select the registered company details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })

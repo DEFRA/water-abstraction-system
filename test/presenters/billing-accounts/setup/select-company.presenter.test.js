@@ -19,7 +19,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
   const companies = [
     {
       address: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
-      companiesHouseId: '12345678',
+      number: '12345678',
       title: 'ENVIRONMENT AGENCY'
     }
   ]
@@ -45,13 +45,13 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
         companies: [
           {
             checked: false,
-            id: companies[0].companiesHouseId,
+            id: companies[0].number,
             hint: { text: companies[0].address },
             text: companies[0].title,
-            value: companies[0].companiesHouseId
+            value: companies[0].number
           }
         ],
-        companiesHouseId: null,
+        companiesHouseNumber: null,
         pageTitle: 'Select the registered company details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
       })
@@ -86,23 +86,23 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
     })
   })
 
-  describe('"companiesHouseId" property', () => {
-    describe('when there is a companiesHouseId in the session', () => {
+  describe('"companiesHouseNumber" property', () => {
+    describe('when there is a companiesHouseNumber in the session', () => {
       beforeEach(() => {
         session = {
           billingAccount,
-          companiesHouseId: '12345678'
+          companiesHouseNumber: '12345678'
         }
       })
 
       it('returns the correct value', () => {
         const result = SelectCompanyPresenter.go(session, companies)
 
-        expect(result.companiesHouseId).to.equal(session.companiesHouseId)
+        expect(result.companiesHouseNumber).to.equal(session.companiesHouseNumber)
       })
     })
 
-    describe('when there is no companiesHouseId in the session', () => {
+    describe('when there is no companiesHouseNumber in the session', () => {
       beforeEach(() => {
         session = {
           billingAccount
@@ -112,7 +112,7 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
       it('returns null', () => {
         const result = SelectCompanyPresenter.go(session, companies)
 
-        expect(result.companiesHouseId).to.equal(null)
+        expect(result.companiesHouseNumber).to.equal(null)
       })
     })
   })
@@ -130,12 +130,12 @@ describe('Billing Accounts - Setup - Select Company Presenter', () => {
 
         expect(result.companies).to.equal([
           {
-            id: companies[0].companiesHouseId,
+            id: companies[0].number,
             hint: {
               text: companies[0].address
             },
             text: companies[0].title,
-            value: companies[0].companiesHouseId,
+            value: companies[0].number,
             checked: false
           }
         ])

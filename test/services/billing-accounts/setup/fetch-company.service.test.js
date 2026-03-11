@@ -11,7 +11,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const LookupCompanysHouseIdRequest = require('../../../../app/requests/companies-house/lookup-companies-house-id.request.js')
+const LookupCompanysHouseNumberRequest = require('../../../../app/requests/companies-house/lookup-companies-house-number.request.js')
 
 // Thing under test
 const FetchCompanyService = require('../../../../app/services/billing-accounts/setup/fetch-company.service.js')
@@ -21,15 +21,15 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
     company_number: 340116,
     company_name: 'ENVIRONMENT AGENCY'
   }
-  const companiesHouseId = body.company_number
+  const companiesHouseNumber = body.company_number
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when called with a "companiesHouseId" that has a reponse', () => {
+  describe('when called with a "companiesHouseNumber" that has a reponse', () => {
     beforeEach(async () => {
-      Sinon.stub(LookupCompanysHouseIdRequest, 'send').resolves({
+      Sinon.stub(LookupCompanysHouseNumberRequest, 'send').resolves({
         succeeded: true,
         response: {
           statusCode: HTTP_STATUS_OK,
@@ -39,10 +39,10 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
     })
 
     it('returns the matching company', async () => {
-      const result = await FetchCompanyService.go(companiesHouseId)
+      const result = await FetchCompanyService.go(companiesHouseNumber)
 
       expect(result).to.equal({
-        companiesHouseId: body.company_number,
+        companiesHouseNumber: body.company_number,
         title: body.company_name
       })
     })
@@ -50,7 +50,7 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
 
   describe('when called with a "companySearch" that has no responses', () => {
     beforeEach(async () => {
-      Sinon.stub(LookupCompanysHouseIdRequest, 'send').resolves({
+      Sinon.stub(LookupCompanysHouseNumberRequest, 'send').resolves({
         succeeded: false,
         response: {
           statusCode: HTTP_STATUS_NOT_FOUND,
@@ -62,7 +62,7 @@ describe('Billing Accounts - Setup - Fetch Company service', () => {
     })
 
     it('returns an empty array', async () => {
-      const result = await FetchCompanyService.go(companiesHouseId)
+      const result = await FetchCompanyService.go(companiesHouseNumber)
 
       expect(result).to.equal(null)
     })

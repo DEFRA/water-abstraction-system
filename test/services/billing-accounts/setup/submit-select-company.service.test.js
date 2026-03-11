@@ -18,11 +18,11 @@ const SubmitSelectCompanyService = require('../../../../app/services/billing-acc
 
 describe('Billing Accounts - Setup - Submit Select Company Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
-  const companiesHouseId = '12345678'
+  const companiesHouseNumber = '12345678'
   const companies = [
     {
       address: 'HORIZON HOUSE, DEANERY ROAD, BRISTOL, BS1 5AH',
-      companiesHouseId,
+      number: companiesHouseNumber,
       title: 'ENVIRONMENT AGENCY'
     }
   ]
@@ -46,7 +46,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
   describe('when the user picks a company', () => {
     beforeEach(async () => {
       payload = {
-        companiesHouseId
+        companiesHouseNumber
       }
     })
 
@@ -55,7 +55,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
 
       const refreshedSession = await session.$query()
 
-      expect(refreshedSession.companiesHouseId).to.equal(payload.companiesHouseId)
+      expect(refreshedSession.companiesHouseNumber).to.equal(payload.companiesHouseNumber)
     })
 
     it('continues the journey', async () => {
@@ -69,7 +69,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     describe('and the user has returned to the page and made the same choice', () => {
       beforeEach(async () => {
         sessionData = {
-          companiesHouseId,
+          companiesHouseNumber,
           billingAccount
         }
 
@@ -83,7 +83,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            companiesHouseId: payload.companiesHouseId
+            companiesHouseNumber: payload.companiesHouseNumber
           },
           { skip: ['billingAccount'] }
         )
@@ -101,7 +101,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     describe('and the user has returned to the page from the check page and made the same choice', () => {
       beforeEach(async () => {
         sessionData = {
-          companiesHouseId,
+          companiesHouseNumber,
           billingAccount,
           checkPageVisited: true
         }
@@ -116,7 +116,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
-            companiesHouseId: payload.companiesHouseId,
+            companiesHouseNumber: payload.companiesHouseNumber,
             checkPageVisited: true
           },
           { skip: ['billingAccount'] }
@@ -155,7 +155,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
             addressJourney: null,
             addressSelected: null,
             checkPageVisited: false,
-            companiesHouseId: payload.companiesHouseId,
+            companiesHouseNumber: payload.companiesHouseNumber,
             contactName: null,
             contactSelected: null,
             fao: null
@@ -186,11 +186,11 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
       expect(result.error).to.equal({
         errorList: [
           {
-            href: '#companiesHouseId',
+            href: '#companiesHouseNumber',
             text: 'Select a company from the list'
           }
         ],
-        companiesHouseId: { text: 'Select a company from the list' }
+        companiesHouseNumber: { text: 'Select a company from the list' }
       })
     })
   })

@@ -24,7 +24,7 @@ async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
   const existingAddress = await _fetchExistingAddress(session)
   const companyContacts = await _fetchCompanyContacts(session)
-  const companysHouseResult = await FetchCompanyService.go(session.companiesHouseId)
+  const companysHouseResult = await FetchCompanyService.go(session.companiesHouseNumber)
 
   await markCheckPageVisited(session)
 

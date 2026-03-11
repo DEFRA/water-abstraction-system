@@ -271,7 +271,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           {
             ..._commonExpectedValues(),
             accountType: 'individual',
-            companiesHouseId: null,
+            companiesHouseNumber: null,
             companySearch: null,
             searchIndividualInput: 'John Doe'
           },
@@ -309,7 +309,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           {
             ..._commonExpectedValues(),
             accountType: 'individual',
-            companiesHouseId: null,
+            companiesHouseNumber: null,
             companySearch: null,
             searchIndividualInput: 'Jane Doe'
           },
@@ -414,7 +414,7 @@ function _companySessionData(session) {
   return {
     ..._commonSessionData(session),
     accountType: 'company',
-    companiesHouseId: '12345678',
+    companiesHouseNumber: '12345678',
     companySearch: 'Company Name'
   }
 }

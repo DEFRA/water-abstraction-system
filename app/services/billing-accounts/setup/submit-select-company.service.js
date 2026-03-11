@@ -51,7 +51,7 @@ function _redirectUrl(session) {
 }
 
 async function _save(session, payload) {
-  if (session.companiesHouseId !== payload.companiesHouseId) {
+  if (session.companiesHouseNumber !== payload.companiesHouseNumber) {
     session.addressJourney = null
     session.addressSelected = null
     session.checkPageVisited = false
@@ -60,13 +60,13 @@ async function _save(session, payload) {
     session.contactName = null
   }
 
-  session.companiesHouseId = payload.companiesHouseId
+  session.companiesHouseNumber = payload.companiesHouseNumber
 
   return session.$update()
 }
 
 function _submissionData(session, payload, companies) {
-  session.companiesHouseId = payload.companiesHouseId
+  session.companiesHouseNumber = payload.companiesHouseNumber
 
   return SelectCompanyPresenter.go(session, companies)
 }

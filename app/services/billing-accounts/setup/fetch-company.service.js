@@ -1,25 +1,25 @@
 'use strict'
 
 /**
- * Fetches the data from Companies House for the provided Companies House ID
+ * Fetches the data from Companies House for the provided Companies House Number
  * @module FetchCompanyService
  */
 
-const LookupCompanysHouseIdRequest = require('../../../requests/companies-house/lookup-companies-house-id.request.js')
+const LookupCompanysHouseNumberRequest = require('../../../requests/companies-house/lookup-companies-house-number.request.js')
 
 /**
- * Fetches the data from Companies House for the provided Companies House ID
+ * Fetches the data from Companies House for the provided Companies House Number
  *
- * @param {string} companiesHouseId - The Companies House id to lookup
+ * @param {string} companiesHouseNumber - The Companies House id to lookup
  *
- * @returns {Promise<object>} an object containing the matching company's ID number and name
+ * @returns {Promise<object>} an object containing the matching companies house number and name
  */
-async function go(companiesHouseId) {
-  if (!companiesHouseId) {
+async function go(companiesHouseNumber) {
+  if (!companiesHouseNumber) {
     return null
   }
 
-  const result = await LookupCompanysHouseIdRequest.send(companiesHouseId)
+  const result = await LookupCompanysHouseNumberRequest.send(companiesHouseNumber)
 
   if (!result.succeeded) {
     return null
@@ -28,7 +28,7 @@ async function go(companiesHouseId) {
   const { body } = result.response
 
   return {
-    companiesHouseId: body.company_number,
+    companiesHouseNumber: body.company_number,
     title: body.company_name
   }
 }

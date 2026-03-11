@@ -19,7 +19,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
   const address = billingAccount.billingAccountAddresses[0].address
   const companysHouseResult = {
-    companiesHouseId: '12345678',
+    companiesHouseNumber: '12345678',
     title: 'ENVIRONMENT AGENCY'
   }
   const exampleContacts = CustomersFixture.companyContacts()
