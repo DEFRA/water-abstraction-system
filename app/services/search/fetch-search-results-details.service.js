@@ -122,7 +122,7 @@ async function _returnLog(ids) {
 }
 
 async function _user(ids) {
-  return UserModel.query().select(['id', 'lastLogin', 'username']).findByIds(ids).modify('permissions')
+  return UserModel.query().select(['id', 'lastLogin', 'username']).modify('permissions').modify('status').findByIds(ids)
 }
 
 module.exports = {
