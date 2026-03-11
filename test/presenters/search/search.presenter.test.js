@@ -94,6 +94,9 @@ describe('Search - Search presenter', () => {
             username: 'TESTSEARCH01@example.gov.uk',
             $permissions: () => {
               return { label: 'None' }
+            },
+            $status: () => {
+              return 'enabled'
             }
           },
           type: 'user'
@@ -166,6 +169,9 @@ describe('Search - Search presenter', () => {
             username: 'TESTSEARCH02@example.gov.uk',
             $permissions: () => {
               return { label: 'None' }
+            },
+            $status: () => {
+              return 'enabled'
             }
           },
           type: 'user'
@@ -282,7 +288,7 @@ describe('Search - Search presenter', () => {
           exact: true,
           link: '/system/users/external/user-1',
           reference: 'TESTSEARCH01@example.gov.uk',
-          statusTag: null,
+          statusTag: 'enabled',
           type: 'User'
         },
         {
@@ -348,7 +354,7 @@ describe('Search - Search presenter', () => {
           exact: false,
           link: '/system/users/external/user-2',
           reference: 'TESTSEARCH02@example.gov.uk',
-          statusTag: null,
+          statusTag: 'enabled',
           type: 'User'
         }
       ],
@@ -652,6 +658,28 @@ describe('Search - Search presenter', () => {
         const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
 
         expect(result.results[2].statusTag).to.not.exist()
+      })
+    })
+  })
+
+  describe('the licence holder property "col2Value" for users', () => {
+    describe('when a user has a last login date', () => {
+      it('returns the formatted last login date', () => {
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+
+        expect(result.results[5].col3Value).to.equal('1 January 2001')
+      })
+    })
+
+    describe('when a user has no last login date', () => {
+      beforeEach(() => {
+        allSearchMatches.results[5].model.lastLogin = null
+      })
+
+      it('returns "Never"', () => {
+        const result = SearchPresenter.go(userScopes, query, resultType, page, allSearchMatches)
+
+        expect(result.results[5].col3Value).to.equal('Never')
       })
     })
   })
