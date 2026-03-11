@@ -17,7 +17,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
 // Thing under test
 const FetchCompanyContactsService = require('../../../app/services/companies/fetch-company-contacts.service.js')
 
-describe('Companies - Fetch Company Contacts service', () => {
+describe.only('Companies - Fetch Company Contacts service', () => {
   let company
   let companyContacts
   let page

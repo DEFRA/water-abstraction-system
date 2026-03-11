@@ -262,3 +262,30 @@ function _query(paginationAndOrderBy = '') {
 module.exports = {
   go
 }
+
+//water schema
+//
+// C1 - company - Tyrell Corporation
+// L1 - licence - 01/123
+// LV1 - licenceVersion - L1
+// LVH1 - licenceVersionHolder - LV1 - C1
+// C2 - company - Wallace Corporation
+// L2 - licence - 02/321
+// LV2 - licenceVersion - L2
+// LVH2 - licenceVersionHolder - LV2 - C2
+// crm_v2 schema
+//
+// LE1 - licenceEntity - individual - primary.user@example.co.uk
+// LE2 - licenceEntity - individual - returns.user@example.co.uk
+// LE3 - licenceEntity - individual - basic.user@example.co.uk
+// LE4 - licenceEntity - individual - other.user@example.co.uk
+// LE5 - licenceEntity - company - Tyrell Corporation
+// LE6 - licenceEntity - company - Wallace Corporation
+// LDH1 - licenceDocumentHeader - LE5 - 01/123
+// LDH2 - licenceDocumentHeader - LE6 - 02/321
+// licenceDocumentRole - LE5 - LE1 - primary_user
+// licenceDocumentRole - LE5 - LE2 - user_returns
+// licenceDocumentRole - LE5 - LE2 - user
+// licenceDocumentRole - LE5 - LE3 - user
+// licenceDocumentRole - LE6 - LE1 - user
+// licenceDocumentRole - LE6 - LE4 - primary_user
