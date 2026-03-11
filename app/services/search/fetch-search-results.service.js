@@ -30,7 +30,7 @@ const ID_FIELD_FOR_TABLE = {
   licence: 'row_uu_id',
   monitoringStation: 'row_uu_id',
   returnLog: 'row_uu_id',
-  user: 'row_int_id'
+  user: 'row_uu_id'
 }
 
 const LICENCE_HOLDER_SQL = `
@@ -95,8 +95,8 @@ const RETURN_LOG_SQL = `
 const USER_SQL = `
   SELECT
     'user' AS row_type,
-    CAST (NULL AS UUID) AS row_uu_id,
-    user_id AS row_int_id,
+    id AS row_uu_id,
+    CAST (NULL AS INT) AS row_int_id,
     username ILIKE ? AS exact,
     6 AS table_order,
     username AS row_order,
