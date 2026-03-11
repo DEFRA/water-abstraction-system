@@ -7,13 +7,12 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
+{% from "macros/licence-status-tag.njk" import statusTag as licenceStatusTag %}
 {% from "macros/return-status-tag.njk" import statusTag as returnStatusTag %}
 {% from "macros/user-status-tag.njk" import statusTag as userStatusTag %}
 
-{% macro licenceStatusTag(text) %}{{ govukTag({ text: text, classes: 'govuk-tag--grey' }) }}{% endmacro %}
-
 {% macro statusTag(type, text) %}
-  {{ licenceStatusTag(text) if type == 'Licence' }}
+  {{ licenceStatusTag(text, true) if type == 'Licence' }}
   {{ returnStatusTag(text, true) if type == 'Return reference' }}
   {{ userStatusTag(text, true) if type == 'User' }}
 {% endmacro %}
