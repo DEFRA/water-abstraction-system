@@ -5,12 +5,15 @@
  * @module UsersController
  */
 
+const FetchLegacyIdService = require('../services/users/fetch-legacy-id.service.js')
 const IndexUsersService = require('../services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../services/users/submit-profile-details.service.js')
 const ViewProfileDetailsService = require('../services/users/view-profile-details.service.js')
 const ViewUserExternalService = require('../services/users/view-user-external.service.js')
 const ViewUserInternalService = require('../services/users/view-user-internal.service.js')
+
+const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
 
 async function index(request, h) {
   const {
@@ -67,6 +70,10 @@ async function viewUserExternal(request, h) {
     params: { id }
   } = request
 
+  if (!FeatureFlagsConfig.enableUsersManagement) {
+    return _redirectToLegacy(id, h)
+  }
+
   const pageData = await ViewUserExternalService.go(id)
 
   return h.view('users/view-user-external.njk', pageData)
@@ -77,9 +84,19 @@ async function viewUserInternal(request, h) {
     params: { id }
   } = request
 
+  if (!FeatureFlagsConfig.enableUsersManagement) {
+    return _redirectToLegacy(id, h)
+  }
+
   const pageData = await ViewUserInternalService.go(id)
 
   return h.view('users/view-user-internal.njk', pageData)
+}
+
+async function _redirectToLegacy(id, h) {
+  const userId = await FetchLegacyIdService.go(id)
+
+  return h.redirect(`/user/${userId}/status`)
 }
 
 module.exports = {

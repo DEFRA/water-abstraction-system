@@ -9,6 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
+const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { generateUUID } = require('../../app/lib/general.lib.js')
 const { postRequestOptions } = require('../support/general.js')
@@ -32,6 +33,8 @@ describe('Users controller', () => {
 
   // Create server before running the tests
   before(async () => {
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
+
     server = await init()
   })
 
