@@ -14,10 +14,11 @@ const { formatLongDateTime, formatLongDate } = require('../base.presenter.js')
  *
  * @param {module:UserModel} user - The user, including their related companies and the licence document headers that
  * are attached to those companies
+ * @param {string[]} viewingUserScope - The 'scope' taken off the `request.auth` object passed to the `ViewUserInternalService`
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user) {
+function go(user, viewingUserScope) {
   return {
     backLink: {
       href: '/',
@@ -28,6 +29,7 @@ function go(user) {
     lastSignedIn: _lastSignedIn(user),
     pageTitle: `User ${user.username}`,
     pageTitleCaption: 'External',
+    showEditButton: viewingUserScope.includes('manage_accounts'),
     status: user.$status()
   }
 }
