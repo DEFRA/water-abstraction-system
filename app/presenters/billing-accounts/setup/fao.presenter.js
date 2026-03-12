@@ -5,6 +5,8 @@
  * @module FAOPresenter
  */
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for the `/billing-accounts/setup/{sessionId}/fao` page
  *
@@ -15,7 +17,7 @@
 function go(session) {
   return {
     backLink: {
-      href: _backLink(session),
+      href: checkUrl(session, _backLink(session)),
       text: 'Back'
     },
     fao: session.fao ?? null,

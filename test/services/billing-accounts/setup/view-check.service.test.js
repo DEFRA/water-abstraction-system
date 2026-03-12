@@ -21,7 +21,8 @@ describe('Billing Accounts - Setup - View Check Service', () => {
 
   beforeEach(async () => {
     sessionData = {
-      billingAccount
+      billingAccount,
+      fao: 'no'
     }
 
     session = await SessionHelper.add({ data: sessionData })
@@ -38,13 +39,15 @@ describe('Billing Accounts - Setup - View Check Service', () => {
         companiesHouseName: '',
         companySearch: '',
         existingAccount: '',
+        fao: 'no',
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
           addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
           companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
           companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
-          existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
+          existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`,
+          fao: `/system/billing-accounts/setup/${session.id}/fao`
         },
         pageTitle: 'Check billing account details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
