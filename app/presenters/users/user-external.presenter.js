@@ -1,8 +1,8 @@
 'use strict'
 
 /**
- * Formats data for external users on the `/users/{userId}` page
- * @module ExternalUserPresenter
+ * Formats data for external users on the `/users/external/{id}` page
+ * @module UserExternalPresenter
  */
 
 const ContactModel = require('../../models/contact.model.js')
@@ -10,7 +10,7 @@ const ContactModel = require('../../models/contact.model.js')
 const { formatLongDateTime, formatLongDate } = require('../base.presenter.js')
 
 /**
- * Formats data for external users on the `/users/{userId}` page
+ * Formats data for external users on the `/users/external/{id}` page
  *
  * @param {module:UserModel} user - The user, including their related companies and the licence document headers that
  * are attached to those companies

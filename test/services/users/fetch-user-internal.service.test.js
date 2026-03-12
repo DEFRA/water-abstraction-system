@@ -21,13 +21,37 @@ describe('Users - Fetch User Internal service', () => {
 
   describe('when called', () => {
     beforeEach(() => {
-      user = UsersFixture.adminInternal()
+      user = UsersFixture.digitiseApprover()
+
+      UsersFixture.transformToFetchUserInternalResult(user)
     })
 
     it('returns the requested user', async () => {
       const result = await FetchUserInternalService.go(user.id)
 
-      expect(result.username).to.equal(user.username)
+      expect(result).to.equal({
+        id: user.id,
+        username: user.username,
+        enabled: true,
+        lastLogin: user.lastLogin,
+        statusPassword: null,
+        application: 'water_admin',
+        licenceEntity: null,
+        groups: [
+          {
+            group: user.groups[0].group,
+            id: user.groups[0].id,
+            roles: user.groups[0].roles
+          }
+        ],
+        roles: [
+          {
+            id: user.roles[0].id,
+            role: user.roles[0].role,
+            description: user.roles[0].description
+          }
+        ]
+      })
     })
   })
 })
