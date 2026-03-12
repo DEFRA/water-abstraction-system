@@ -16,6 +16,7 @@ const SubmitFAOService = require('../../../../app/services/billing-accounts/setu
 
 describe('Billing Accounts - Setup - Submit FAO Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+
   let payload
   let session
   let sessionData
