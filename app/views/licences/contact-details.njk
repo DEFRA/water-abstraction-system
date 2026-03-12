@@ -15,17 +15,17 @@
 
   {% set tableRows = [] %}
 
-  {% for licenceContact in licenceContacts %}
+  {% for contact in contacts %}
     {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
     {% set rowIndex = loop.index0 %}
 
     {% set transactionRow = [
       {
-        text: licenceContact.name,
+        text: contact.name,
         attributes: { 'data-test': 'licence-contact-name-' + rowIndex }
       },
       {
-        text: licenceContact.contactType,
+        text: contact.contactType,
         attributes: { 'data-test': 'licence-contact-type-' + rowIndex }
       }
     ] %}
@@ -38,11 +38,11 @@
     caption: pagination.showingMessage,
     captionClasses: "govuk-table__caption--m",
     firstCellIsHeader: false,
-    head: tableHeaders if licenceContacts.length > 0,
-    rows: tableRows if licenceContacts.length > 0
+    head: tableHeaders if contacts.length > 0,
+    rows: tableRows if contacts.length > 0
   }) }}
 
-  {% if licenceContacts.length === 0 %}
+  {% if contacts.length === 0 %}
     <p>No licence contacts found.</p>
   {% endif %}
 

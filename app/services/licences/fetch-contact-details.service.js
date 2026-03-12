@@ -20,12 +20,12 @@ const { db } = require('../../../db/db.js')
 async function go(licenceId, roles, page = '1') {
   const authorisedForBilling = roles.includes('billing')
 
-  const [{ rows: licenceContacts }, { rows: totalNumber }] = await Promise.all([
+  const [{ rows: contacts }, { rows: totalNumber }] = await Promise.all([
     await _fetch(authorisedForBilling, licenceId, page),
     await _fetchCount(authorisedForBilling, licenceId)
   ])
 
-  return { licenceContacts, totalNumber: totalNumber.length }
+  return { contacts, totalNumber: totalNumber.length }
 }
 
 async function _fetchCount(authorisedForBilling, licenceId) {

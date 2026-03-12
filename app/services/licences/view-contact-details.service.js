@@ -24,15 +24,15 @@ async function go(licenceId, auth, page) {
   const licence = await FetchLicenceService.go(licenceId)
   const roles = userRoles(auth)
 
-  const { licenceContacts, totalNumber } = await FetchContactDetailsService.go(licenceId, roles, page)
+  const { contacts, totalNumber } = await FetchContactDetailsService.go(licenceId, roles, page)
 
-  const pageData = ContactDetailsPresenter.go(licenceContacts, licence)
+  const pageData = ContactDetailsPresenter.go(contacts, licence)
 
   const pagination = PaginatorPresenter.go(
     totalNumber,
     page,
     `/system/licences/${licenceId}/contact-details`,
-    licenceContacts.length,
+    contacts.length,
     'contacts'
   )
 

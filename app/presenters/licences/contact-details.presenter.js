@@ -11,12 +11,12 @@ const { roles } = require('../../lib/static-lookups.lib.js')
 /**
  * Formats data for the `/licences/{id}/contact-details` view contact details page
  *
- * @param {object[]} licenceContacts - The results from `FetchContactsService` to be formatted for the view
+ * @param {object[]} contacts - The results from `FetchContactsService` to be formatted for the view
  * @param {object} licence - The id and licence ref of the licence
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licenceContacts, licence) {
+function go(contacts, licence) {
   const { licenceRef } = licence
 
   return {
@@ -24,15 +24,15 @@ function go(licenceContacts, licence) {
       text: 'Go back to search',
       href: '/'
     },
-    licenceContacts: _licenceContacts(licenceContacts),
+    contacts: _contacts(contacts),
     pageTitle: 'Contact details',
     pageTitleCaption: `Licence ${licenceRef}`,
-    customerContactLink: _customerContactLink(licenceContacts)
+    customerContactLink: _customerContactLink(contacts)
   }
 }
 
-function _customerContactLink(licenceContacts) {
-  const companyId = _findCompanyId(licenceContacts)
+function _customerContactLink(contacts) {
+  const companyId = _findCompanyId(contacts)
 
   if (!companyId) {
     return null
@@ -43,8 +43,8 @@ function _customerContactLink(licenceContacts) {
     : `/customer/${companyId}/#contacts`
 }
 
-function _findCompanyId(licenceContacts) {
-  const customerContact = licenceContacts.find((contact) => {
+function _findCompanyId(contacts) {
+  const customerContact = contacts.find((contact) => {
     return contact.contactType === 'licence-holder'
   })
 
@@ -55,11 +55,11 @@ function _findCompanyId(licenceContacts) {
   return null
 }
 
-function _licenceContacts(licenceContacts) {
-  return licenceContacts.map((licenceContact) => {
+function _contacts(contacts) {
+  return contacts.map((contact) => {
     return {
-      contactType: roles[licenceContact.contactType].label,
-      name: licenceContact.contactName
+      contactType: roles[contact.contactType].label,
+      name: contact.contactName
     }
   })
 }
