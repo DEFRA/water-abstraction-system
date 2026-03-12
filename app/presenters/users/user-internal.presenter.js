@@ -51,7 +51,7 @@ function _lastSignedIn(user) {
     return 'Never signed in'
   }
 
-  return `Last signed in ${formatLongDateTime(lastLogin)}`
+  return formatLongDateTime(lastLogin)
 }
 
 module.exports = {

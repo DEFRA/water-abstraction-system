@@ -40,7 +40,7 @@ describe('Users - View User Internal service', () => {
           text: 'Go back to users'
         },
         id: user.id,
-        lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+        lastSignedIn: '6 October 2022 at 10:00:00',
         pageTitle: 'User basic.access@wrls.gov.uk',
         pageTitleCaption: 'Internal',
         permissions: 'Basic access',

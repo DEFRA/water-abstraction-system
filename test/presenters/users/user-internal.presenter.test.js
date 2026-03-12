@@ -39,7 +39,7 @@ describe('Users - User Internal Presenter', () => {
         text: 'Go back to users'
       },
       id: user.id,
-      lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+      lastSignedIn: '6 October 2022 at 10:00:00',
       pageTitle: 'User basic.access@wrls.gov.uk',
       pageTitleCaption: 'Internal',
       permissions: 'Basic access',
@@ -48,9 +48,16 @@ describe('Users - User Internal Presenter', () => {
   })
 
   describe('the "lastSignedIn" property', () => {
+    describe('when the lastLogin is not "null"', () => {
+      it('returns the date and time of the last login', () => {
+        const result = UserInternalPresenter.go(user)
+
+        expect(result.lastSignedIn).to.equal('6 October 2022 at 10:00:00')
+      })
+    })
+
     describe('when the lastLogin is "null"', () => {
       beforeEach(() => {
-        user = UsersFixture.basicAccess()
         user.lastLogin = null
       })
 
