@@ -35,6 +35,7 @@ describe('Users - View User Internal service', () => {
       const result = await ViewUserInternalService.go(user.id)
 
       expect(result).to.equal({
+        activeNavBar: 'users',
         backLink: {
           href: '/system/users',
           text: 'Go back to users'

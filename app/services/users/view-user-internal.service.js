@@ -8,6 +8,8 @@
 const FetchUserInternalService = require('./fetch-user-internal.service.js')
 const UserInternalPresenter = require('../../presenters/users/user-internal.presenter.js')
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Orchestrates fetching and presenting internal user data for `/users/internal/{id}` page
  *
@@ -20,6 +22,7 @@ async function go(id) {
   const pageData = UserInternalPresenter.go(internalUser)
 
   return {
+    activeNavBar: FeatureFlagsConfig.enableUsersView ? 'users' : 'search',
     ...pageData
   }
 }
