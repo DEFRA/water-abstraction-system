@@ -24,7 +24,7 @@ async function go(licenceId, auth, page) {
   const licence = await FetchLicenceService.go(licenceId)
   const roles = userRoles(auth)
 
-  const { licenceContacts, totalNumber } = await FetchContactDetailsService.go(licenceId, page)
+  const { licenceContacts, totalNumber } = await FetchContactDetailsService.go(licenceId, roles, page)
 
   const pageData = ContactDetailsPresenter.go(licenceContacts, licence)
 

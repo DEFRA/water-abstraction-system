@@ -12,35 +12,38 @@ const { db } = require('../../../db/db.js')
  * Fetches all contact details for a licence which is needed for the view '/licences/{id}/contact-details` page
  *
  * @param {string} licenceId - The UUID of the licence to fetch
+ * @param {string[]} roles - An array of user roles used to determine which contact details can be shown
  * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<object[]>} the contacts for the licence
  */
-async function go(licenceId, page = '1') {
+async function go(licenceId, roles, page = '1') {
+  const authorisedForBilling = roles.includes('billing')
+
   const [{ rows: licenceContacts }, { rows: totalNumber }] = await Promise.all([
-    await _fetch(licenceId, page),
-    await _fetchCount(licenceId)
+    await _fetch(authorisedForBilling, licenceId, page),
+    await _fetchCount(authorisedForBilling, licenceId)
   ])
 
   return { licenceContacts, totalNumber: totalNumber.length }
 }
 
-async function _fetchCount(licenceId) {
-  const params = [licenceId]
+async function _fetchCount(authorisedForBilling, licenceId) {
+  const params = [licenceId, authorisedForBilling]
 
   const query = _query()
 
   return db.raw(query, params)
 }
 
-async function _fetch(licenceId, page) {
+async function _fetch(authorisedForBilling, licenceId, page) {
   const pageSize = DatabaseConfig.defaultPageSize
   const currentPage = Number(page)
 
   // Calculate offset: Page 1 skips 0, Page 2 skips 25, etc.
   const offset = (currentPage - 1) * pageSize
 
-  const params = [licenceId, pageSize, offset]
+  const params = [licenceId, authorisedForBilling, pageSize, offset]
 
   const paginationAndOrderBy = `
   ORDER BY
@@ -177,6 +180,7 @@ function _query(paginationAndOrderBy = '') {
         public.billing_accounts ba
       INNER JOIN latest_charge_version lcv
         ON lcv.billing_account_id = ba.id
+      WHERE TRUE = ?
     ),
     abstraction_alerts AS (
       SELECT
