@@ -17,10 +17,10 @@ const UserInternalPresenter = require('../../presenters/users/user-internal.pres
  */
 async function go(id) {
   const internalUser = await FetchUserInternalService.go(id)
-  const formattedData = UserInternalPresenter.go(internalUser)
+  const pageData = UserInternalPresenter.go(internalUser)
 
   return {
-    ...formattedData
+    ...pageData
   }
 }
 
