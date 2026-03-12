@@ -10,7 +10,7 @@ const IndexUsersService = require('../services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../services/users/submit-profile-details.service.js')
 const ViewProfileDetailsService = require('../services/users/view-profile-details.service.js')
-const ViewUserExternalService = require('../services/users/view-user-external.service.js')
+const ViewUserExternalService = require('../services/users/external/view-user.service.js')
 const ViewUserInternalService = require('../services/users/view-user-internal.service.js')
 
 const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
@@ -77,7 +77,7 @@ async function viewUserExternal(request, h) {
 
   const pageData = await ViewUserExternalService.go(id, auth)
 
-  return h.view('users/view-user-external.njk', pageData)
+  return h.view('users/external/view-user.njk', pageData)
 }
 
 async function viewUserInternal(request, h) {
