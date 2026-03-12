@@ -18,11 +18,11 @@ const UserVerificationHelper = require('../../support/helpers/user-verification.
 const UserVerificationDocumentHelper = require('../../support/helpers/user-verification-document.helper.js')
 
 // Thing under test
-const FetchExternalUserService = require('../../../app/services/users/fetch-external-user.service.js')
+const FetchUserExternalService = require('../../../app/services/users/fetch-user-external.service.js')
 
 // NOTE: The users are seeded as part of setting up the test database, along with with their groups and roles. So, we
 // only create the related records.
-describe('Users - Fetch External User service', () => {
+describe('Users - Fetch User External service', () => {
   let companyEntity
   let licence1
   let licenceDocumentHeader1
@@ -120,7 +120,7 @@ describe('Users - Fetch External User service', () => {
     })
 
     it('returns the requested user', async () => {
-      const result = await FetchExternalUserService.go(user.id)
+      const result = await FetchUserExternalService.go(user.id)
       expect(result).to.equal({
         enabled: user.enabled,
         id: user.id,

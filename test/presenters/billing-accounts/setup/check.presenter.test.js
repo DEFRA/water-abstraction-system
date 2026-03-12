@@ -18,6 +18,10 @@ const CheckPresenter = require('../../../../app/presenters/billing-accounts/setu
 describe('Billing Accounts - Setup - Check Presenter', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
   const address = billingAccount.billingAccountAddresses[0].address
+  const companysHouseResult = {
+    companiesHouseNumber: '12345678',
+    title: 'ENVIRONMENT AGENCY'
+  }
   const exampleContacts = CustomersFixture.companyContacts()
   const contact = exampleContacts[0].contact
   const companyContacts = {
@@ -29,27 +33,32 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
 
   beforeEach(() => {
     session = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-      id: generateUUID()
+      billingAccount,
+      id: generateUUID(),
+      fao: 'no'
     }
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CheckPresenter.go(session, companyContacts, [])
+      const result = CheckPresenter.go(session, companyContacts, [], null)
 
       expect(result).to.equal({
         accountSelected: 'Another billing account',
         accountType: '',
         addressSelected: ['New'],
+        companiesHouseName: '',
         companySearch: '',
         existingAccount: '',
+        fao: 'no',
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
           addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
+          companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
           companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
-          existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
+          existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`,
+          fao: `/system/billing-accounts/setup/${session.id}/fao`
         },
         pageTitle: 'Check billing account details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
@@ -68,7 +77,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             accountSelected: 'customer'
           },
           companyContacts,
-          address
+          address,
+          companysHouseResult
         )
 
         expect(result.accountSelected).to.equal(session.billingAccount.company.name)
@@ -83,7 +93,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             accountSelected: 'another'
           },
           companyContacts,
-          address
+          address,
+          companysHouseResult
         )
 
         expect(result.accountSelected).to.equal('Another billing account')
@@ -100,7 +111,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             searchInput: 'Customer name'
           },
           companyContacts,
-          address
+          address,
+          companysHouseResult
         )
 
         expect(result.searchInput).to.equal('Customer name')
@@ -115,7 +127,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             searchInput: null
           },
           companyContacts,
-          address
+          address,
+          companysHouseResult
         )
 
         expect(result.searchInput).to.equal('')
@@ -132,7 +145,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             existingAccount: 'new'
           },
           companyContacts,
-          address
+          address,
+          companysHouseResult
         )
 
         expect(result.existingAccount).to.equal('New billing account')
@@ -147,7 +161,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             existingAccount: null
           },
           companyContacts,
-          address
+          address,
+          companysHouseResult
         )
 
         expect(result.existingAccount).to.equal('')
@@ -162,7 +177,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             existingAccount: billingAccount.company.id
           },
           companyContacts,
-          address
+          address,
+          companysHouseResult
         )
 
         expect(result.existingAccount).to.equal('Ferns Surfacing Limited')
@@ -179,7 +195,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             accountType: 'company'
           },
           companyContacts,
-          address
+          address,
+          companysHouseResult
         )
 
         expect(result.accountType).to.equal('company')
@@ -194,7 +211,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             accountType: 'individual'
           },
           companyContacts,
-          address
+          address,
+          companysHouseResult
         )
 
         expect(result.accountType).to.equal('individual')
@@ -211,7 +229,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             searchIndividualInput: 'Customer name'
           },
           companyContacts,
-          address
+          address,
+          companysHouseResult
         )
 
         expect(result.searchIndividualInput).to.equal('Customer name')
@@ -226,7 +245,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             searchIndividualInput: null
           },
           companyContacts,
-          address
+          address,
+          companysHouseResult
         )
 
         expect(result.searchIndividualInput).to.equal('')
@@ -243,7 +263,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             addressSelected: generateUUID()
           },
           companyContacts,
-          address
+          address,
+          companysHouseResult
         )
 
         expect(result.addressSelected).to.equal(['Tutsham Farm', 'West Farleigh', 'Maidstone', 'Kent', 'ME15 0NE'])
@@ -258,10 +279,111 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
             addressSelected: 'new'
           },
           companyContacts,
-          []
+          [],
+          companysHouseResult
         )
 
         expect(result.addressSelected).to.equal(['New'])
+      })
+    })
+  })
+
+  describe('the "companySearch" property', () => {
+    describe('when a company has been searched for', () => {
+      it('returns the term used in the search', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            companySearch: 'Company name'
+          },
+          companyContacts,
+          address,
+          companysHouseResult
+        )
+
+        expect(result.companySearch).to.equal('Company name')
+      })
+    })
+
+    describe('when a company has not been searched for', () => {
+      it('returns an empty string', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            companySearch: null
+          },
+          companyContacts,
+          [],
+          companysHouseResult
+        )
+
+        expect(result.companySearch).to.equal('')
+      })
+    })
+  })
+
+  describe('the "companiesHouseName" property', () => {
+    describe('when a company has been selected', () => {
+      it('returns the name of the company', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session
+          },
+          companyContacts,
+          address,
+          companysHouseResult
+        )
+
+        expect(result.companiesHouseName).to.equal(companysHouseResult.title)
+      })
+    })
+
+    describe('when a company has not been searched for', () => {
+      it('returns an empty string', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session
+          },
+          companyContacts,
+          [],
+          null
+        )
+
+        expect(result.companiesHouseName).to.equal('')
+      })
+    })
+  })
+
+  describe('the "fao" property', () => {
+    describe('when "yes" was selected', () => {
+      it('returns "yes"', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            fao: 'yes'
+          },
+          companyContacts,
+          address,
+          companysHouseResult
+        )
+
+        expect(result.fao).to.equal('yes')
+      })
+    })
+
+    describe('when "no" was selected', () => {
+      it('returns "no"', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            fao: 'no'
+          },
+          companyContacts,
+          [],
+          null
+        )
+
+        expect(result.fao).to.equal('no')
       })
     })
   })

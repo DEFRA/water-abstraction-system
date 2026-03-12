@@ -302,7 +302,7 @@ function _anotherExpectedValues(session) {
   return {
     ..._commonExpectedValues(session),
     accountType: null,
-    companiesHouseId: null,
+    companiesHouseNumber: null,
     companySearch: null,
     existingAccount: null,
     searchIndividualInput: null
@@ -314,7 +314,7 @@ function _anotherSessionData(session) {
     ..._commonSessionData(session),
     accountSelected: 'another',
     accountType: 'company',
-    companiesHouseId: '12345678',
+    companiesHouseNumber: '12345678',
     companySearch: 'Company Name',
     existingAccount: 'new',
     searchIndividualInput: 'Contact Name',

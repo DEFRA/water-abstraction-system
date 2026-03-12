@@ -41,7 +41,7 @@ async function go(sessionId, payload) {
 }
 
 function _redirectUrl(session) {
-  if (session.fao === 'yes') {
+  if (!session.checkPageVisited && session.fao === 'yes') {
     return `/system/billing-accounts/setup/${session.id}/contact`
   }
 
@@ -52,6 +52,7 @@ async function _save(session, payload) {
   if (session.fao && payload.fao !== session.fao) {
     session.contactName = null
     session.contactSelected = null
+    session.checkPageVisited = false
   }
 
   session.fao = payload.fao

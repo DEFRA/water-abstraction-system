@@ -69,7 +69,7 @@ async function _save(session, payload) {
     session.contactName = null
 
     if (payload.accountType === 'individual') {
-      session.companiesHouseId = null
+      session.companiesHouseNumber = null
       session.companySearch = null
       session.searchIndividualInput = payload.searchIndividualInput
     } else {
