@@ -8,21 +8,21 @@ const { describe, it, before, after, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
-const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const UserModel = require('../../../app/models/user.model.js')
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
-const UserVerificationHelper = require('../../support/helpers/user-verification.helper.js')
-const UserVerificationDocumentHelper = require('../../support/helpers/user-verification-document.helper.js')
+const LicenceDocumentHeaderHelper = require('../../../support/helpers/licence-document-header.helper.js')
+const LicenceEntityHelper = require('../../../support/helpers/licence-entity.helper.js')
+const LicenceEntityRoleHelper = require('../../../support/helpers/licence-entity-role.helper.js')
+const LicenceHelper = require('../../../support/helpers/licence.helper.js')
+const UserModel = require('../../../../app/models/user.model.js')
+const UsersFixture = require('../../../support/fixtures/users.fixture.js')
+const UserVerificationHelper = require('../../../support/helpers/user-verification.helper.js')
+const UserVerificationDocumentHelper = require('../../../support/helpers/user-verification-document.helper.js')
 
 // Thing under test
-const FetchUserExternalService = require('../../../app/services/users/fetch-user-external.service.js')
+const FetchUserService = require('../../../../app/services/users/external/fetch-user.service.js')
 
 // NOTE: The users are seeded as part of setting up the test database, along with with their groups and roles. So, we
 // only create the related records.
-describe('Users - Fetch User External service', () => {
+describe('Users - External - Fetch User service', () => {
   let companyEntity
   let licence1
   let licenceDocumentHeader1
@@ -120,7 +120,7 @@ describe('Users - Fetch User External service', () => {
     })
 
     it('returns the requested user', async () => {
-      const result = await FetchUserExternalService.go(user.id)
+      const result = await FetchUserService.go(user.id)
       expect(result).to.equal({
         enabled: user.enabled,
         id: user.id,

@@ -2,10 +2,10 @@
 
 /**
  * Fetches an external user for display on the `/users/external/{id}` page
- * @module FetchUserExternalService
+ * @module FetchUserService
  */
 
-const UserModel = require('../../models/user.model.js')
+const UserModel = require('../../../models/user.model.js')
 
 /**
  * Fetches an external user for display on the `/users/external/{id}` page
