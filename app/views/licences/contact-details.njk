@@ -1,5 +1,6 @@
 {% extends 'layout-licences.njk' %}
 
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% block subPageContent %}
@@ -12,7 +13,7 @@
     { text: 'Contact type' }
   ] %}
 
-  {% set licenceContactsTableRows = [] %}
+  {% set tableRows = [] %}
 
   {% for licenceContact in licenceContacts %}
     {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
@@ -24,24 +25,28 @@
         attributes: { 'data-test': 'licence-contact-name-' + rowIndex }
       },
       {
-        text: licenceContact.communicationType,
+        text: licenceContact.contactType,
         attributes: { 'data-test': 'licence-contact-type-' + rowIndex }
       }
     ] %}
 
-    {% set licenceContactsTableRows = (licenceContactsTableRows.push(transactionRow), licenceContactsTableRows) %}
+    {% set tableRows = (tableRows.push(transactionRow), tableRows) %}
   {% endfor %}
 
   {{ govukTable({
     attributes: { 'data-test': 'licence-contacts-table' },
-    caption: "Licence contacts",
+    caption: pagination.showingMessage,
     captionClasses: "govuk-table__caption--m",
     firstCellIsHeader: false,
     head: tableHeaders if licenceContacts.length > 0,
-    rows: licenceContactsTableRows if licenceContacts.length > 0
+    rows: tableRows if licenceContacts.length > 0
   }) }}
 
   {% if licenceContacts.length === 0 %}
     <p>No licence contacts found.</p>
+  {% endif %}
+
+  {% if pagination.numberOfPages > 1  %}
+    {{ govukPagination(pagination.component) }}
   {% endif %}
 {% endblock %}
