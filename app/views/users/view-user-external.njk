@@ -33,9 +33,11 @@
     {% endif %}
   {% endfor %}
 
-  <form method="post">
-    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  {% if showEditButton %}
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    {{ govukButton({ text: "Edit", preventDoubleClick: true }) }}
-  </form>
+      {{ govukButton({ text: "Edit", preventDoubleClick: true }) }}
+    </form>
+  {% endif %}
 {% endblock %}
