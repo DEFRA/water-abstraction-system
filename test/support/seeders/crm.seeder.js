@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * @module CompanyContactsSeeder
+ * @module CRMSeeder
  */
 
 const BillingAccountHelper = require('../helpers/billing-account.helper.js')
@@ -19,18 +19,20 @@ const LicenceVersionHolderHelper = require('../helpers/licence-version-holder.he
 const UserModel = require('../helpers/user.helper.js')
 
 /**
- * Seed the company contacts
+ * Seed CRM data
  *
- * To clean all the company contacts from the database, call the '.clean()' method
+ * To clean all the contacts from the database, call the '.clean()' method
  *
- * @returns {object}  all the company contacts
+ * @returns {object} - all the contacts
  */
 async function seed() {
   const company = await _company('Hogwarts')
 
   const companyEntity = await _licenceCompanyEntity(company)
 
-  const licenceDocumentHeader = await _licenceDocumentHeader(company, companyEntity)
+  const licence = await _licence(company)
+
+  const licenceDocumentHeader = await _licenceDocumentHeader(company, companyEntity, licence)
 
   const companyId = company.record.id
   const companyEntityId = companyEntity.record.id
@@ -43,7 +45,8 @@ async function seed() {
   const returnsTo = await _returnsTo(company.record)
   const returnsUser = await _licenceEntity(companyId, companyEntityId, 'user_returns', 'Severus Snape')
 
-  // const additionalCompany = await _company('Wand & Willow')
+  // TODO: add another licence the same company - in the header ?
+  // Another external 'user' - linked by the - add a new licence document header - with new company entity (needa new compnay entitiy - use that id in the document header)
 
   return {
     abstractionAlerts,
@@ -51,6 +54,7 @@ async function seed() {
     basicUser,
     billing,
     company,
+    licence,
     primaryUser,
     returnsTo,
     returnsUser,
@@ -61,6 +65,7 @@ async function seed() {
       await billing.clean()
       await company.clean()
       await companyEntity.clean()
+      await licence.clean()
       await licenceDocumentHeader.clean()
       await primaryUser.clean()
       await returnsTo.clean()
@@ -91,7 +96,7 @@ async function _additionalContact(companyId, name, abstractionAlerts = false) {
     companyId
   })
 
-  // Add additional contact - not related to the same company
+  // TODO: move this to do this outside - as it's use the other company - pass in the contact id
   const additionalCompanyContact = await CompanyContactHelper.add({ contactId: contact.id })
 
   return {
@@ -133,7 +138,7 @@ async function _company(name) {
   }
 }
 
-async function _licenceDocumentHeader(company, companyEntity) {
+async function _licence(company) {
   const licence = await LicenceHelper.add()
 
   const licenceVersion = await LicenceVersionHelper.add({
@@ -145,18 +150,26 @@ async function _licenceDocumentHeader(company, companyEntity) {
     companyId: company.record.id
   })
 
+  return {
+    record: licence,
+    clean: async () => {
+      await licence.$query().delete()
+      await licenceVersion.$query().delete()
+      await licenceVersionHolder.$query().delete()
+    }
+  }
+}
+
+async function _licenceDocumentHeader(company, companyEntity, licence) {
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     companyEntityId: companyEntity.record.id,
-    licenceRef: licence.licenceRef
+    licenceRef: licence.record.licenceRef
   })
 
   return {
     record: licenceDocumentHeader,
     clean: async () => {
-      await licence.$query().delete()
       await licenceDocumentHeader.$query().delete()
-      await licenceVersion.$query().delete()
-      await licenceVersionHolder.$query().delete()
     }
   }
 }
@@ -169,31 +182,35 @@ async function _licenceDocumentHeader(company, companyEntity) {
  * @private
  */
 async function _licenceEntity(companyId, companyEntityId, role, name) {
-  const licenceEntityRole = await LicenceEntityRoleHelper.add({
-    role,
-    companyEntityId
-  })
-
   const licenceEntity = await LicenceEntityHelper.add({
-    id: licenceEntityRole.licenceEntityId,
     name,
     type: 'individual'
   })
+
+  // Create the role in the licence entity
+  const licenceEntityRole = await LicenceEntityRoleHelper.add({
+    role,
+    companyEntityId,
+    licenceEntityId: licenceEntity.id
+  })
+
+  // TODO: Make all the roles their own functions
+  if (role === 'user_returns') {
+    await LicenceEntityRoleHelper.add({
+      role: 'user',
+      companyEntityId,
+      licenceEntityId: licenceEntity.id
+    })
+  }
 
   const user = await UserModel.add({
     licenceEntityId: licenceEntity.id,
     username: name
   })
 
-  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
-    companyId,
-    licenceRoleId: licenceEntityRole.id
-  })
-
   return {
     record: user,
     clean: async () => {
-      await licenceDocumentRole.$query().delete()
       await licenceEntity.$query().delete()
       await licenceEntityRole.$query().delete()
       await user.$query().delete()

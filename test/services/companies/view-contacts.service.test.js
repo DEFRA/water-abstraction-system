@@ -14,7 +14,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-const FetchCompanyContactsService = require('../../../app/services/companies/fetch-company-contacts.service.js')
+const FetchCompanyContactsService = require('../../../app/services/companies/fetch-company-crm-data.service.js')
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
 
 // Thing under test
@@ -23,7 +23,7 @@ const ViewContactsService = require('../../../app/services/companies/view-contac
 describe('Companies - View Contacts service', () => {
   let auth
   let company
-  let companyContacts
+  let contacts
   let page
   let yarStub
 
@@ -32,7 +32,7 @@ describe('Companies - View Contacts service', () => {
 
     company = CustomersFixtures.company()
 
-    companyContacts = [
+    contacts = [
       {
         id: generateUUID(),
         contactType: 'additional-contact',
@@ -43,8 +43,8 @@ describe('Companies - View Contacts service', () => {
     Sinon.stub(FetchCompanyService, 'go').returns(company)
 
     Sinon.stub(FetchCompanyContactsService, 'go').returns({
-      companyContacts,
-      totalNumber: companyContacts.length
+      contacts,
+      totalNumber: contacts.length
     })
 
     page = '1'
@@ -72,9 +72,9 @@ describe('Companies - View Contacts service', () => {
           href: '/',
           text: 'Back to search'
         },
-        companyContacts: [
+        contacts: [
           {
-            action: `/system/company-contacts/${companyContacts[0].id}`,
+            action: `/system/company-contacts/${contacts[0].id}`,
             type: 'Additional contact',
             name: 'Rachael Tyrell'
           }

@@ -9,79 +9,79 @@ const { describe, it, after, afterEach, before, beforeEach } = (exports.lab = La
 const { expect } = Code
 
 // Test helpers
-const CompanyContactsSeeder = require('../../support/seeders/company-contacts.seeder.js')
+const CRMSeeder = require('../../support/seeders/crm.seeder.js')
 
 // Things we need to stub
 const DatabaseConfig = require('../../../config/database.config.js')
 
 // Thing under test
-const FetchCompanyContactsService = require('../../../app/services/companies/fetch-company-contacts.service.js')
+const FetchCompanyCRMDataService = require('../../../app/services/companies/fetch-company-crm-data.service.js')
 
-describe('Companies - Fetch Company Contacts service', () => {
+describe('Companies - Fetch company crm data service', () => {
   let company
-  let companyContacts
+  let crmData
   let page
 
   before(async () => {
     page = undefined
-    companyContacts = await CompanyContactsSeeder.seed()
+    crmData = await CRMSeeder.seed()
 
-    company = companyContacts.company
+    company = crmData.company
   })
 
   after(async () => {
-    await companyContacts.clean()
+    await crmData.clean()
   })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when there are company contacts', () => {
-    it('returns the matching company contacts', async () => {
-      const result = await FetchCompanyContactsService.go(company.record.id, page)
+  describe('when there are contacts', () => {
+    it('returns the matching contacts', async () => {
+      const result = await FetchCompanyCRMDataService.go(company.record.id, page)
 
       expect(result).to.equal({
-        companyContacts: [
+        contacts: [
           {
             contactType: 'primary-user',
-            id: companyContacts.primaryUser.record.id,
+            id: crmData.primaryUser.record.id,
             contactName: 'Albus Dumbledore'
           },
           {
             contactType: 'abstraction-alerts',
-            id: companyContacts.abstractionAlerts.record.id,
+            id: crmData.abstractionAlerts.record.id,
             contactName: 'Gilderoy Lockhart'
           },
           {
             contactType: 'licence-holder',
-            id: companyContacts.company.record.id,
+            id: crmData.company.record.id,
             contactName: 'Hogwarts'
           },
           {
             contactType: 'returns-to',
-            id: companyContacts.company.record.id,
+            id: crmData.company.record.id,
             contactName: 'Hogwarts'
           },
           {
             contactType: 'additional-contact',
-            id: companyContacts.additionalContact.record.id,
+            id: crmData.additionalContact.record.id,
             contactName: 'Horace Slughorn'
           },
           {
             contactType: 'basic-user',
-            id: companyContacts.basicUser.record.id,
+            id: crmData.basicUser.record.id,
             contactName: 'Minerva McGonagall'
           },
           {
             contactType: 'returns-user',
-            id: companyContacts.returnsUser.record.id,
+            id: crmData.returnsUser.record.id,
             contactName: 'Severus Snape'
           },
           {
             contactType: 'billing',
-            id: companyContacts.billing.record.id,
-            contactName: companyContacts.billing.record.accountNumber
+            id: crmData.billing.record.id,
+            contactName: crmData.billing.record.accountNumber
           }
         ],
         totalNumber: 8
@@ -96,14 +96,14 @@ describe('Companies - Fetch Company Contacts service', () => {
           page = undefined
         })
 
-        it('returns the matching company contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchCompanyContactsService.go(company.record.id, page)
+        it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
+          const result = await FetchCompanyCRMDataService.go(company.record.id, page)
 
           expect(result).to.equal({
-            companyContacts: [
+            contacts: [
               {
                 contactType: 'primary-user',
-                id: companyContacts.primaryUser.record.id,
+                id: crmData.primaryUser.record.id,
                 contactName: 'Albus Dumbledore'
               }
             ],
@@ -119,14 +119,14 @@ describe('Companies - Fetch Company Contacts service', () => {
           page = 1
         })
 
-        it('returns the matching company contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchCompanyContactsService.go(company.record.id, page)
+        it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
+          const result = await FetchCompanyCRMDataService.go(company.record.id, page)
 
           expect(result).to.equal({
-            companyContacts: [
+            contacts: [
               {
                 contactType: 'primary-user',
-                id: companyContacts.primaryUser.record.id,
+                id: crmData.primaryUser.record.id,
                 contactName: 'Albus Dumbledore'
               }
             ],
@@ -142,14 +142,14 @@ describe('Companies - Fetch Company Contacts service', () => {
           page = 2
         })
 
-        it('returns the matching company contacts for the page (the second page) with the total number', async () => {
-          const result = await FetchCompanyContactsService.go(company.record.id, page)
+        it('returns the matching contacts for the page (the second page) with the total number', async () => {
+          const result = await FetchCompanyCRMDataService.go(company.record.id, page)
 
           expect(result).to.equal({
-            companyContacts: [
+            contacts: [
               {
                 contactType: 'abstraction-alerts',
-                id: companyContacts.abstractionAlerts.record.id,
+                id: crmData.abstractionAlerts.record.id,
                 contactName: 'Gilderoy Lockhart'
               }
             ],

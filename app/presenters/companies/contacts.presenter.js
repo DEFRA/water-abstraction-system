@@ -12,11 +12,11 @@ const { roles } = require('../../lib/static-lookups.lib.js')
  * Formats data for the '/companies/{id}/contacts' page
  *
  * @param {module:CompanyModel} company - The company
- * @param {object[]} companyContacts - the company contacts for the customer
+ * @param {object[]} contacts - the contacts for the company
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, companyContacts) {
+function go(company, contacts) {
   return {
     backLink: {
       href: '/',
@@ -25,16 +25,16 @@ function go(company, companyContacts) {
     links: _links(company),
     pageTitle: 'Contacts',
     pageTitleCaption: company.name,
-    companyContacts: _companyContacts(companyContacts, company)
+    contacts: _contacts(contacts, company)
   }
 }
 
-function _companyContacts(companyContacts, company) {
-  return companyContacts.map((companyContact) => {
+function _contacts(contacts, company) {
+  return contacts.map((contact) => {
     return {
-      action: _companyContactLinks(company, companyContact),
-      name: companyContact.contactName,
-      type: roles[companyContact.contactType].label
+      action: _contactLinks(company, contact),
+      name: contact.contactName,
+      type: roles[contact.contactType].label
     }
   })
 }
@@ -46,26 +46,26 @@ function _companyContacts(companyContacts, company) {
  *
  * @private
  */
-function _companyContactLinks(company, companyContact) {
+function _contactLinks(company, contact) {
   const billingTypes = ['billing']
   const companyContactTypes = ['abstraction-alerts', 'additional-contact']
   const userTypes = ['basic-user', 'primary-user', 'returns-user']
 
-  if (billingTypes.includes(companyContact.contactType)) {
-    return `/system/billing-accounts/${companyContact.id}?company-id=${company.id}`
+  if (billingTypes.includes(contact.contactType)) {
+    return `/system/billing-accounts/${contact.id}?company-id=${company.id}`
   }
 
-  if (companyContactTypes.includes(companyContact.contactType)) {
+  if (companyContactTypes.includes(contact.contactType)) {
     return FeatureFlagsConfig.enableCustomerManage
-      ? `/system/company-contacts/${companyContact.id}`
-      : `/customer/${company.id}/contacts/${companyContact.contact.id}`
+      ? `/system/company-contacts/${contact.id}`
+      : `/customer/${company.id}/contacts/${contact.contact.id}`
   }
 
-  if (userTypes.includes(companyContact.contactType)) {
-    return `/system/users/${companyContact.id}`
+  if (userTypes.includes(contact.contactType)) {
+    return `/system/users/external/${contact.id}`
   }
 
-  return `/system/companies/${companyContact.id}/${companyContact.contactType}`
+  return `/system/companies/${contact.id}/${contact.contactType}`
 }
 
 /**

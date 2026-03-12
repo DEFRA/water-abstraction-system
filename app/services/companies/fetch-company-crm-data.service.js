@@ -2,7 +2,7 @@
 
 /**
  * Fetches the company contacts data needed for the view '/companies/{id}/contacts'
- * @module FetchCompanyContactsService
+ * @module FetchCompanyCRMDataService
  */
 
 const DatabaseConfig = require('../../../config/database.config.js')
@@ -14,15 +14,15 @@ const { db } = require('../../../db/db.js')
  * @param {string} companyId - The company id for the company
  * @param {string} [page=1] - The current page for the pagination service
  *
- * @returns {Promise<object>} the company contacts for the company
+ * @returns {Promise<object>} the contacts for the company
  */
 async function go(companyId, page = '1') {
-  const [{ rows: companyContacts }, { rows: totalNumber }] = await Promise.all([
+  const [{ rows: contacts }, { rows: totalNumber }] = await Promise.all([
     await _fetch(companyId, page),
     await _fetchCount(companyId)
   ])
 
-  return { companyContacts, totalNumber: totalNumber.length }
+  return { contacts, totalNumber: totalNumber.length }
 }
 
 async function _fetchCount(companyId) {
