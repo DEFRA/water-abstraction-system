@@ -44,6 +44,7 @@ describe('Users - View User Internal service', () => {
         pageTitle: 'User basic.access@wrls.gov.uk',
         pageTitleCaption: 'Internal',
         permissions: 'Basic access',
+        roles: [],
         status: 'enabled'
       })
     })

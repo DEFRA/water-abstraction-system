@@ -43,6 +43,7 @@ describe('Users - User Internal Presenter', () => {
       pageTitle: 'User basic.access@wrls.gov.uk',
       pageTitleCaption: 'Internal',
       permissions: 'Basic access',
+      roles: [],
       status: 'enabled'
     })
   })
@@ -65,6 +66,74 @@ describe('Users - User Internal Presenter', () => {
         const result = UserInternalPresenter.go(user)
 
         expect(result.lastSignedIn).to.equal('Never signed in')
+      })
+    })
+  })
+
+  describe('the "roles" property', () => {
+    describe('when the user has no group or user roles', () => {
+      it('returns an empty array', () => {
+        const result = UserInternalPresenter.go(user)
+
+        expect(result.roles).to.equal([])
+      })
+    })
+
+    describe('when the user has only a group', () => {
+      beforeEach(() => {
+        user = UsersFixture.environmentOfficer()
+
+        UsersFixture.transformToFetchUserInternalResult(user)
+      })
+
+      it('returns the "roles" for the group in sentence case, sorted by name', () => {
+        const result = UserInternalPresenter.go(user)
+
+        expect(result.roles).to.equal([
+          {
+            description: 'Send HoF notifications',
+            name: 'HOF notifications'
+          },
+          {
+            description: 'Manage linkages between gauging stations and licences',
+            name: 'Manage gauging station licence links'
+          }
+        ])
+      })
+    })
+
+    describe('when the user has a group and user roles', () => {
+      beforeEach(() => {
+        user = UsersFixture.digitiseApprover()
+
+        UsersFixture.transformToFetchUserInternalResult(user)
+      })
+
+      it('returns all "roles" in sentence case, sorted by name', () => {
+        const result = UserInternalPresenter.go(user)
+
+        expect(result.roles).to.equal([
+          {
+            description: 'Approve licence data in Digitise! tool',
+            name: 'AR approver'
+          },
+          {
+            description: 'Manage linkages between gauging stations and licences',
+            name: 'Manage gauging station licence links'
+          },
+          {
+            description: 'Send renewal notifications',
+            name: 'Renewal notifications'
+          },
+          {
+            description: 'Remove licences registered to a company',
+            name: 'Unlink licences'
+          },
+          {
+            description: 'View charge information',
+            name: 'View charge versions'
+          }
+        ])
       })
     })
   })
