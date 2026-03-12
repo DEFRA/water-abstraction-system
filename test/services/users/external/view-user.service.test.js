@@ -9,22 +9,22 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
+const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
-const FetchUserExternalService = require('../../../app/services/users/fetch-user-external.service.js')
+const FetchUserService = require('../../../../app/services/users/external/fetch-user.service.js')
 
 // Thing under test
-const ViewUserExternalService = require('../../../app/services/users/view-user-external.service.js')
+const ViewUserService = require('../../../../app/services/users/external/view-user.service.js')
 
-describe('Users - View User External service', () => {
+describe('Users - External - View User service', () => {
   const auth = {
     credentials: { scope: ['manage_accounts'] }
   }
   const user = UsersFixture.external()
 
   beforeEach(() => {
-    Sinon.stub(FetchUserExternalService, 'go').resolves(user)
+    Sinon.stub(FetchUserService, 'go').resolves(user)
   })
 
   afterEach(() => {
@@ -33,7 +33,7 @@ describe('Users - View User External service', () => {
 
   describe('when called', () => {
     it('returns page data for the external user view', async () => {
-      const result = await ViewUserExternalService.go(user.id, auth)
+      const result = await ViewUserService.go(user.id, auth)
 
       expect(result).to.equal({
         backLink: {
