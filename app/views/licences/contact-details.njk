@@ -21,11 +21,11 @@
 
     {% set transactionRow = [
       {
-        text: contact.name,
+        html: '<a href="' + contact.link + '">' + contact.name + '</a>',
         attributes: { 'data-test': 'licence-contact-name-' + rowIndex }
       },
       {
-        text: contact.contactType,
+        text: contact.type,
         attributes: { 'data-test': 'licence-contact-type-' + rowIndex }
       }
     ] %}

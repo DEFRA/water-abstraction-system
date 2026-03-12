@@ -17,18 +17,57 @@ const { roles } = require('../../lib/static-lookups.lib.js')
  * @returns {object} The data formatted for the view template
  */
 function go(contacts, licence) {
-  const { licenceRef } = licence
+  const { id: licenceId, licenceRef } = licence
 
   return {
     backLink: {
       text: 'Go back to search',
       href: '/'
     },
-    contacts: _contacts(contacts),
+    contacts: _contacts(contacts, licenceId),
     pageTitle: 'Contact details',
     pageTitleCaption: `Licence ${licenceRef}`,
     customerContactLink: _customerContactLink(contacts)
   }
+}
+
+/**
+ * The ids returned from the query are unique to the contact type.
+ *
+ * We use the type to determine the correct link for the contact.
+ *
+ * @private
+ */
+function _contactLink(contact, licenceId) {
+  const billingTypes = ['billing']
+  const companyContactTypes = ['abstraction-alerts', 'additional-contact']
+  const userTypes = ['basic-user', 'primary-user', 'returns-user']
+
+  if (billingTypes.includes(contact.contactType)) {
+    return `/system/billing-accounts/${contact.id}?licence-id=${licenceId}`
+  }
+
+  if (companyContactTypes.includes(contact.contactType)) {
+    return FeatureFlagsConfig.enableCustomerManage
+      ? `/system/company-contacts/${contact.id}`
+      : `/customer/${licenceId}/contacts/${contact.id}`
+  }
+
+  if (userTypes.includes(contact.contactType)) {
+    return `/system/users/external/${contact.id}`
+  }
+
+  return `/system/companies/${contact.id}/${contact.contactType}`
+}
+
+function _contacts(contacts, licenceId) {
+  return contacts.map((contact) => {
+    return {
+      link: _contactLink(contact, licenceId),
+      name: contact.contactName,
+      type: roles[contact.contactType].label
+    }
+  })
 }
 
 function _customerContactLink(contacts) {
@@ -53,15 +92,6 @@ function _findCompanyId(contacts) {
   }
 
   return null
-}
-
-function _contacts(contacts) {
-  return contacts.map((contact) => {
-    return {
-      contactType: roles[contact.contactType].label,
-      name: contact.contactName
-    }
-  })
 }
 
 module.exports = {
