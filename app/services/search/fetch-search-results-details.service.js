@@ -39,7 +39,7 @@ async function go(idsByType) {
 
 async function _billingAccount(ids) {
   return BillingAccountModel.query()
-    .select('accountNumber', 'createdAt', 'id')
+    .select(['accountNumber', 'createdAt', 'id'])
     .withGraphFetched('company')
     .modifyGraph('company', (builder) => {
       builder.select('name')
@@ -68,7 +68,7 @@ async function _findByType(type, ids) {
 
 async function _licence(ids) {
   return LicenceModel.query()
-    .select('expiredDate', 'id', 'lapsedDate', 'licenceRef', 'revokedDate')
+    .select(['expiredDate', 'id', 'lapsedDate', 'licenceRef', 'revokedDate'])
     .withGraphFetched('licenceDocumentHeader')
     .modifyGraph('licenceDocumentHeader', (builder) => {
       builder.select('metadata')
@@ -114,15 +114,15 @@ async function _licenceHolder(ids) {
 }
 
 async function _monitoringStation(ids) {
-  return MonitoringStationModel.query().select('gridReference', 'id', 'label', 'riverName').findByIds(ids)
+  return MonitoringStationModel.query().select(['gridReference', 'id', 'label', 'riverName']).findByIds(ids)
 }
 
 async function _returnLog(ids) {
-  return ReturnLogModel.query().select('endDate', 'id', 'licenceRef', 'returnId', 'returnReference').findByIds(ids)
+  return ReturnLogModel.query().select(['endDate', 'id', 'licenceRef', 'returnId', 'returnReference']).findByIds(ids)
 }
 
 async function _user(ids) {
-  return UserModel.query().select('userId as id', 'lastLogin', 'username').whereIn('userId', ids).modify('permissions')
+  return UserModel.query().select(['id', 'lastLogin', 'username']).modify('permissions').modify('status').findByIds(ids)
 }
 
 module.exports = {
