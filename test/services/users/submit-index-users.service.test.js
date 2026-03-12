@@ -163,7 +163,7 @@ describe('Users - Submit Index Users service', () => {
             users: [
               {
                 email: results[0].username,
-                link: `/user/${results[0].userId}/status`,
+                link: `/system/users/internal/${results[0].id}`,
                 permissions: 'Basic access',
                 status: 'enabled',
                 type: 'Internal'
@@ -243,7 +243,7 @@ describe('Users - Submit Index Users service', () => {
             users: [
               {
                 email: results[0].username,
-                link: `/user/${results[0].userId}/status`,
+                link: `/system/users/internal/${results[0].id}`,
                 permissions: 'Basic access',
                 status: 'enabled',
                 type: 'Internal'

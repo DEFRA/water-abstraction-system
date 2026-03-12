@@ -9,7 +9,9 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Test helpers
+const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
+const { generateUUID } = require('../../app/lib/general.lib.js')
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
@@ -17,12 +19,14 @@ const IndexUsersService = require('../../app/services/users/index-users.service.
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
 const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
-const ViewUserService = require('../../app/services/users/view-user.service.js')
+const ViewUserExternalService = require('../../app/services/users/view-user-external.service.js')
+const ViewUserInternalService = require('../../app/services/users/view-user-internal.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
 
 describe('Users controller', () => {
+  let id
   let options
   let postOptions
   let server
@@ -33,6 +37,8 @@ describe('Users controller', () => {
   })
 
   beforeEach(async () => {
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
+
     // We silence any calls to server.logger.error made in the plugin to try and keep the test output as clean as
     // possible
     Sinon.stub(server.logger, 'error')
@@ -205,62 +211,60 @@ describe('Users controller', () => {
     })
   })
 
-  describe('/users/{userId}', () => {
+  describe('/users/external/{id}', () => {
     describe('GET', () => {
-      describe('when the user is an internal user', () => {
-        beforeEach(async () => {
-          options = _getOptions(`/users/123`, { scope: ['billing'], user: { id: 1000 } })
-          Sinon.stub(ViewUserService, 'go').resolves({
-            pageData: {
-              backLink: {
-                href: '/',
-                text: 'Go back to search'
-              },
-              id: 100010,
-              lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
-              pageTitle: 'User basic.access@wrls.gov.uk',
-              pageTitleCaption: 'Internal',
-              permissions: 'Basic access',
-              status: 'enabled'
-            },
-            userIsInternal: true
-          })
-        })
+      beforeEach(async () => {
+        id = generateUUID()
+        options = _getOptions(`/users/external/${id}`, { scope: [], user: { id } })
 
-        it('returns the internal user page successfully', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Internal')
+        Sinon.stub(ViewUserExternalService, 'go').resolves({
+          backLink: {
+            href: '/',
+            text: 'Go back to search'
+          },
+          companies: [],
+          id,
+          lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+          pageTitle: 'User external@example.co.uk',
+          pageTitleCaption: 'External',
+          status: 'enabled'
         })
       })
 
-      describe('when the user is an external user', () => {
-        beforeEach(async () => {
-          options = _getOptions(`/users/456`, { scope: ['billing'], user: { id: 1000 } })
-          Sinon.stub(ViewUserService, 'go').resolves({
-            pageData: {
-              backLink: {
-                href: '/',
-                text: 'Go back to search'
-              },
-              companies: [],
-              id: 100007,
-              lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
-              pageTitle: 'User external@example.co.uk',
-              pageTitleCaption: 'External',
-              status: 'enabled'
-            },
-            userIsInternal: false
-          })
-        })
+      it('returns the external user page successfully', async () => {
+        const response = await server.inject(options)
 
-        it('returns the external user page successfully', async () => {
-          const response = await server.inject(options)
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('External')
+      })
+    })
+  })
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('External')
+  describe('/users/internal/{id}', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        id = generateUUID()
+        options = _getOptions(`/users/internal/${id}`, { scope: ['manage_accounts'], user: { id } })
+
+        Sinon.stub(ViewUserInternalService, 'go').resolves({
+          backLink: {
+            href: '/',
+            text: 'Go back to search'
+          },
+          id,
+          lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+          pageTitle: 'User basic.access@wrls.gov.uk',
+          pageTitleCaption: 'Internal',
+          permissions: 'Basic access',
+          status: 'enabled'
         })
+      })
+
+      it('returns the internal user page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Internal')
       })
     })
   })

@@ -12,16 +12,19 @@ const { expect } = Code
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
-const FetchInternalUserService = require('../../../app/services/users/fetch-internal-user.service.js')
+const FetchUserExternalService = require('../../../app/services/users/fetch-user-external.service.js')
 
 // Thing under test
-const ViewInternalUserService = require('../../../app/services/users/view-internal-user.service.js')
+const ViewUserExternalService = require('../../../app/services/users/view-user-external.service.js')
 
-describe('Users - View Internal User service', () => {
-  const user = UsersFixture.basicAccess()
+describe('Users - View User External service', () => {
+  const auth = {
+    credentials: { scope: ['manage_accounts'] }
+  }
+  const user = UsersFixture.external()
 
   beforeEach(() => {
-    Sinon.stub(FetchInternalUserService, 'go').resolves(user)
+    Sinon.stub(FetchUserExternalService, 'go').resolves(user)
   })
 
   afterEach(() => {
@@ -29,19 +32,20 @@ describe('Users - View Internal User service', () => {
   })
 
   describe('when called', () => {
-    it('returns page data for the internal user view', async () => {
-      const result = await ViewInternalUserService.go(user.id)
+    it('returns page data for the external user view', async () => {
+      const result = await ViewUserExternalService.go(user.id, auth)
 
       expect(result).to.equal({
         backLink: {
           href: '/',
           text: 'Go back to search'
         },
+        companies: [],
         id: user.id,
         lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
-        pageTitle: 'User basic.access@wrls.gov.uk',
-        pageTitleCaption: 'Internal',
-        permissions: 'Basic access',
+        pageTitle: 'User external@example.co.uk',
+        pageTitleCaption: 'External',
+        showEditButton: true,
         status: 'enabled'
       })
     })

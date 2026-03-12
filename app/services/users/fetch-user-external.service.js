@@ -1,22 +1,22 @@
 'use strict'
 
 /**
- * Fetches an external user for display on the /users/{userId} page
- * @module FetchExternalUserService
+ * Fetches an external user for display on the `/users/external/{id}` page
+ * @module FetchUserExternalService
  */
 
 const UserModel = require('../../models/user.model.js')
 
 /**
- * Fetches an external user for display on the /users/{userId} page
+ * Fetches an external user for display on the `/users/external/{id}` page
  *
  * This includes their related companies and the licence document headers that are attached to those companies.
  *
- * @param {number} userId - The ID of the requested user
+ * @param {number} id - The ID of the requested user
  *
  * @returns {Promise<module:UserModel>} the requested user
  */
-async function go(userId) {
+async function go(id) {
   const user = await UserModel.query()
     .select(['id', 'username'])
     .modify('status')
@@ -65,7 +65,7 @@ async function go(userId) {
             })
         })
     })
-    .findById(userId)
+    .findById(id)
 
   return user
 }
