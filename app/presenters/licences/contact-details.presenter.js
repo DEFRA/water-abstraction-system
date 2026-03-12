@@ -6,6 +6,7 @@
  */
 
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+const { roles } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the `/licences/{id}/contact-details` view contact details page
@@ -44,11 +45,11 @@ function _customerContactLink(licenceContacts) {
 
 function _findCompanyId(licenceContacts) {
   const customerContact = licenceContacts.find((contact) => {
-    return contact.communicationType === 'Licence Holder'
+    return contact.contactType === 'licence-holder'
   })
 
   if (customerContact) {
-    return customerContact.companyId
+    return customerContact.id
   }
 
   return null
@@ -57,18 +58,8 @@ function _findCompanyId(licenceContacts) {
 function _licenceContacts(licenceContacts) {
   return licenceContacts.map((licenceContact) => {
     return {
-      address: {
-        address1: licenceContact.address1,
-        address2: licenceContact.address2,
-        address3: licenceContact.address3,
-        address4: licenceContact.address4,
-        address5: licenceContact.address5,
-        address6: licenceContact.address6,
-        country: licenceContact.country,
-        postcode: licenceContact.postcode
-      },
-      communicationType: licenceContact.communicationType,
-      name: licenceContact.companyName
+      contactType: roles[licenceContact.contactType].label,
+      name: licenceContact.contactName
     }
   })
 }
