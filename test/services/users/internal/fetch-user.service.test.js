@@ -8,15 +8,15 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
+const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Thing under test
-const FetchUserInternalService = require('../../../app/services/users/fetch-user-internal.service.js')
+const FetchUserService = require('../../../../app/services/users/internal/fetch-user.service.js')
 
 // NOTE: The users are seeded as part of setting up the test database, along with with their groups and roles. So,
 // unlike other fetch tests we don't create any test records and assert they are in our results as we already have
 // sufficient data to work with.
-describe('Users - Fetch User Internal service', () => {
+describe('Users - Internal - Fetch User service', () => {
   let user
 
   describe('when called', () => {
@@ -27,7 +27,7 @@ describe('Users - Fetch User Internal service', () => {
     })
 
     it('returns the requested user', async () => {
-      const result = await FetchUserInternalService.go(user.id)
+      const result = await FetchUserService.go(user.id)
 
       expect(result).to.equal({
         id: user.id,

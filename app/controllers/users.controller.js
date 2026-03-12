@@ -11,7 +11,7 @@ const SubmitIndexUsersService = require('../services/users/submit-index-users.se
 const SubmitProfileDetailsService = require('../services/users/submit-profile-details.service.js')
 const ViewProfileDetailsService = require('../services/users/view-profile-details.service.js')
 const ViewUserExternalService = require('../services/users/external/view-user.service.js')
-const ViewUserInternalService = require('../services/users/view-user-internal.service.js')
+const ViewUserInternalService = require('../services/users/internal/view-user.service.js')
 
 const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
 
@@ -91,7 +91,7 @@ async function viewUserInternal(request, h) {
 
   const pageData = await ViewUserInternalService.go(id)
 
-  return h.view('users/view-user-internal.njk', pageData)
+  return h.view('users/internal/view-user.njk', pageData)
 }
 
 async function _redirectToLegacy(id, h) {

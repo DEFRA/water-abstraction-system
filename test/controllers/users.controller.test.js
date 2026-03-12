@@ -20,7 +20,7 @@ const SubmitIndexUsersService = require('../../app/services/users/submit-index-u
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
 const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
 const ViewUserExternalService = require('../../app/services/users/external/view-user.service.js')
-const ViewUserInternalService = require('../../app/services/users/view-user-internal.service.js')
+const ViewUserInternalService = require('../../app/services/users/internal/view-user.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
