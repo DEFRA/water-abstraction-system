@@ -2,6 +2,7 @@
 
 const GroupHelper = require('../helpers/group.helper.js')
 const GroupModel = require('../../../app/models/group.model.js')
+const GroupRoleHelper = require('../helpers/group-role.helper.js')
 const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
 const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.model.js')
 const RoleHelper = require('../helpers/role.helper.js')
@@ -163,6 +164,46 @@ function tinaBarrett(role = null) {
   }
 
   return userData
+}
+
+/**
+ * Transforms a user fixture object previously generated to the `FetchUserInternalService` result format
+ *
+ * The fixture object will have the groups and user roles relevant to it already populated. But the fetch result also
+ * includes all roles for the given group.
+ *
+ * We use this function to identify the relevant roles for the user's group, extract them from our seed data and assign
+ * them to the user object passed in.
+ *
+ * @param {object} user - The user fixture object to transform to `FetchUserInternalService` result format
+ */
+function transformToFetchUserInternalResult(user) {
+  const groupRoles = GroupRoleHelper.data.filter((groupRole) => {
+    return groupRole.groupId === user.groups[0].id
+  })
+
+  const seededRoles = RoleHelper.data
+
+  // From those determine which roles should be attached to the user. Be aware, these are distinct from 'user roles'
+  // which is why we have picked the Digitise Approver for this test, as it has both group and user roles.
+  const roles = groupRoles.map((groupRole) => {
+    const matchingRole = seededRoles.find((seededRole) => {
+      return seededRole.id === groupRole.roleId
+    })
+
+    return {
+      description: matchingRole.description,
+      id: matchingRole.id,
+      role: matchingRole.role
+    }
+  })
+
+  // Sort the roles to into alphabetical order
+  roles.sort((a, b) => {
+    return a.role.localeCompare(b.role)
+  })
+
+  user.groups[0].roles = roles
 }
 
 /**
@@ -345,6 +386,7 @@ module.exports = {
   rachelStevens,
   superUser,
   tinaBarrett,
+  transformToFetchUserInternalResult,
   transformToFetchUsersResult,
   user,
   wasteIndustryRegulatoryServices

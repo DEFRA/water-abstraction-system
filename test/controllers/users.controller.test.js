@@ -215,7 +215,7 @@ describe('Users controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         id = generateUUID()
-        options = _getOptions(`/users/external/${id}`, { scope: ['billing'], user: { id } })
+        options = _getOptions(`/users/external/${id}`, { scope: [], user: { id } })
 
         Sinon.stub(ViewUserExternalService, 'go').resolves({
           backLink: {
@@ -244,7 +244,7 @@ describe('Users controller', () => {
     describe('GET', () => {
       beforeEach(async () => {
         id = generateUUID()
-        options = _getOptions(`/users/internal/${id}`, { scope: ['billing'], user: { id } })
+        options = _getOptions(`/users/internal/${id}`, { scope: ['manage_accounts'], user: { id } })
 
         Sinon.stub(ViewUserInternalService, 'go').resolves({
           backLink: {
