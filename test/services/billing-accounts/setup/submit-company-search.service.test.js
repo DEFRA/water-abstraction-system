@@ -146,7 +146,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
           addressJourney: null,
           addressSelected: null,
           checkPageVisited: false,
-          companiesHouseId: false,
+          companiesHouseNumber: false,
           companySearch: payload.companySearch,
           contactSelected: null,
           contactName: null,

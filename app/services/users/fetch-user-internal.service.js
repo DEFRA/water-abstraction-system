@@ -1,0 +1,23 @@
+'use strict'
+
+/**
+ * Fetches an internal user for display on the `/users/internal/{id}` page
+ * @module FetchUserInternalService
+ */
+
+const UserModel = require('../../models/user.model.js')
+
+/**
+ * Fetches an internal user for display on the `/users/internal/{id}` page
+ *
+ * @param {number} id - The ID of the requested user
+ *
+ * @returns {Promise<module:UserModel>} the requested user
+ */
+async function go(id) {
+  return UserModel.query().select(['id', 'username']).modify('status').modify('permissions').findById(id)
+}
+
+module.exports = {
+  go
+}

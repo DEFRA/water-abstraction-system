@@ -11,10 +11,11 @@
  * @param {module:SessionModel} session - The billing account setup session instance
  * @param {object} companyContacts - The company and its contacts
  * @param {object} existingAddress - The existing address of company
+ * @param {object} companysHouseResult - The companys house details
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session, companyContacts, existingAddress) {
+function go(session, companyContacts, existingAddress, companysHouseResult) {
   const { billingAccount } = session
 
   return {
@@ -22,6 +23,7 @@ function go(session, companyContacts, existingAddress) {
     accountType: session.accountType ?? '',
     addressSelected: _address(existingAddress),
     companySearch: session.companySearch ?? '',
+    companiesHouseName: companysHouseResult ? companysHouseResult.title : '',
     existingAccount: _existingAccount(session, companyContacts),
     links: _links(session),
     pageTitle: 'Check billing account details',
@@ -66,6 +68,7 @@ function _links(session) {
     accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
     accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
     addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
+    companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
     companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
     existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
   }

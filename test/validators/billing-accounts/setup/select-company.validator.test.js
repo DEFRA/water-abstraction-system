@@ -14,7 +14,7 @@ describe('Billing Accounts - Setup - Select Company Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { companiesHouseId: '12345678' }
+    payload = { companiesHouseNumber: '12345678' }
   })
 
   describe('when called with valid data', () => {

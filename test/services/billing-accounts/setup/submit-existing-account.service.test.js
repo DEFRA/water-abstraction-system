@@ -306,7 +306,7 @@ function _newAccountExpectedValues() {
     ..._commonExpectedValues(),
     accountType: null,
     addressSelected: null,
-    companiesHouseId: null,
+    companiesHouseNumber: null,
     companySearch: null,
     existingAccount: null,
     searchIndividualInput: null
@@ -317,7 +317,7 @@ function _newAccountSessionData(session) {
   return {
     ..._commonSessionData(session),
     accountType: 'company',
-    companiesHouseId: '12345678',
+    companiesHouseNumber: '12345678',
     companySearch: 'Company Name',
     existingAccount: 'new',
     searchIndividualInput: 'Contact Name'

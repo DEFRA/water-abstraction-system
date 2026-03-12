@@ -5,6 +5,8 @@
  * @module SelectCompanyPresenter
  */
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for the '/billing-accounts/setup/{sessionId}/select-company' page
  *
@@ -18,28 +20,28 @@ function go(session, companies) {
 
   return {
     backLink: {
-      href: `/system/billing-accounts/setup/${session.id}/company-search`,
+      href: checkUrl(session, `/system/billing-accounts/setup/${session.id}/company-search`),
       text: 'Back'
     },
-    companies: _radioOptions(companies, session.companiesHouseId),
-    companiesHouseId: session.companiesHouseId ?? null,
+    companies: _radioOptions(companies, session.companiesHouseNumber),
+    companiesHouseNumber: session.companiesHouseNumber ?? null,
     pageTitle: 'Select the registered company details',
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`
   }
 }
 
-function _radioOptions(companies, companiesHouseId) {
+function _radioOptions(companies, companiesHouseNumber) {
   const items = []
 
   for (const company of companies) {
     items.push({
-      id: company.companiesHouseId,
+      id: company.number,
       hint: {
         text: company.address
       },
       text: company.title,
-      value: company.companiesHouseId,
-      checked: company.companiesHouseId === companiesHouseId
+      value: company.number,
+      checked: company.number === companiesHouseNumber
     })
   }
 

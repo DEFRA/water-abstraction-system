@@ -29,7 +29,7 @@ async function go(sessionId, payload) {
     await _save(session, payload)
 
     return {
-      redirectUrl: `/system/billing-accounts/setup/${session.id}/existing-address`
+      redirectUrl: _redirectUrl(session)
     }
   }
 
@@ -42,14 +42,31 @@ async function go(sessionId, payload) {
   }
 }
 
+function _redirectUrl(session) {
+  if (session.checkPageVisited) {
+    return `/system/billing-accounts/setup/${session.id}/check`
+  }
+
+  return `/system/billing-accounts/setup/${session.id}/existing-address`
+}
+
 async function _save(session, payload) {
-  session.companiesHouseId = payload.companiesHouseId
+  if (session.companiesHouseNumber !== payload.companiesHouseNumber) {
+    session.addressJourney = null
+    session.addressSelected = null
+    session.checkPageVisited = false
+    session.fao = null
+    session.contactSelected = null
+    session.contactName = null
+  }
+
+  session.companiesHouseNumber = payload.companiesHouseNumber
 
   return session.$update()
 }
 
 function _submissionData(session, payload, companies) {
-  session.companiesHouseId = payload.companiesHouseId
+  session.companiesHouseNumber = payload.companiesHouseNumber
 
   return SelectCompanyPresenter.go(session, companies)
 }

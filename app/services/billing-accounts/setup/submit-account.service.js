@@ -75,7 +75,7 @@ async function _save(session, payload) {
       session.addressSelected = null
     } else {
       session.accountType = null
-      session.companiesHouseId = null
+      session.companiesHouseNumber = null
       session.companySearch = null
       session.existingAccount = null
       session.searchIndividualInput = null
