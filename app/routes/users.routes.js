@@ -38,7 +38,12 @@ const routes = [
     method: 'GET',
     path: '/users/internal/{id}',
     options: {
-      handler: UsersController.viewUserInternal
+      handler: UsersController.viewUserInternal,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
     }
   },
   {

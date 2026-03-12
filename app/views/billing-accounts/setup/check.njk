@@ -97,7 +97,20 @@
             }
           ]
         }
-      } if addressSelected
+      } if addressSelected,
+      {
+        key: { text: "FAO" },
+        value: { text: fao },
+        actions: {
+          items: [
+            {
+              href: links.fao,
+              text: "Change",
+              visuallyHiddenText: "fao"
+            }
+          ]
+        }
+      } if fao
     ]
   }) }}
 

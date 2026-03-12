@@ -67,6 +67,7 @@ async function viewProfileDetails(request, h) {
 
 async function viewUserExternal(request, h) {
   const {
+    auth,
     params: { id }
   } = request
 
@@ -74,7 +75,7 @@ async function viewUserExternal(request, h) {
     return _redirectToLegacy(id, h)
   }
 
-  const pageData = await ViewUserExternalService.go(id)
+  const pageData = await ViewUserExternalService.go(id, auth)
 
   return h.view('users/view-user-external.njk', pageData)
 }

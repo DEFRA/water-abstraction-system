@@ -34,7 +34,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   beforeEach(() => {
     session = {
       billingAccount,
-      id: generateUUID()
+      id: generateUUID(),
+      fao: 'no'
     }
   })
 
@@ -49,13 +50,15 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         companiesHouseName: '',
         companySearch: '',
         existingAccount: '',
+        fao: 'no',
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
           addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
           companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
           companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
-          existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
+          existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`,
+          fao: `/system/billing-accounts/setup/${session.id}/fao`
         },
         pageTitle: 'Check billing account details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
@@ -347,6 +350,40 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         )
 
         expect(result.companiesHouseName).to.equal('')
+      })
+    })
+  })
+
+  describe('the "fao" property', () => {
+    describe('when "yes" was selected', () => {
+      it('returns "yes"', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            fao: 'yes'
+          },
+          companyContacts,
+          address,
+          companysHouseResult
+        )
+
+        expect(result.fao).to.equal('yes')
+      })
+    })
+
+    describe('when "no" was selected', () => {
+      it('returns "no"', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            fao: 'no'
+          },
+          companyContacts,
+          [],
+          null
+        )
+
+        expect(result.fao).to.equal('no')
       })
     })
   })
