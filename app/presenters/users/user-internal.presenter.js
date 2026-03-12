@@ -7,6 +7,8 @@
 
 const { formatLongDateTime } = require('../base.presenter.js')
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Formats data for internal users on the `/users/internal/{id}` page
  *
@@ -18,16 +20,27 @@ function go(user) {
   const { id, username } = user
 
   return {
-    backLink: {
-      href: '/',
-      text: 'Go back to search'
-    },
+    backLink: _backLink(),
     id,
     lastSignedIn: _lastSignedIn(user),
     pageTitle: `User ${username}`,
     pageTitleCaption: 'Internal',
     permissions: user.$permissions().label,
     status: user.$status()
+  }
+}
+
+function _backLink() {
+  if (FeatureFlagsConfig.enableUsersView) {
+    return {
+      href: '/system/users',
+      text: 'Go back to users'
+    }
+  }
+
+  return {
+    href: '/',
+    text: 'Go back to search'
   }
 }
 

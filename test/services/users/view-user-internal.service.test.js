@@ -12,6 +12,7 @@ const { expect } = Code
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchUserInternalService = require('../../../app/services/users/fetch-user-internal.service.js')
 
 // Thing under test
@@ -21,6 +22,7 @@ describe('Users - View User Internal service', () => {
   const user = UsersFixture.basicAccess()
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
     Sinon.stub(FetchUserInternalService, 'go').resolves(user)
   })
 
@@ -34,8 +36,8 @@ describe('Users - View User Internal service', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: '/',
-          text: 'Go back to search'
+          href: '/system/users',
+          text: 'Go back to users'
         },
         id: user.id,
         lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',

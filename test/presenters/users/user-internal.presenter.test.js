@@ -3,12 +3,16 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
+
+// Things to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const UserInternalPresenter = require('../../../app/presenters/users/user-internal.presenter.js')
@@ -17,7 +21,13 @@ describe('Users - User Internal Presenter', () => {
   let user
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
+
     user = UsersFixture.basicAccess()
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   it('correctly presents the data', () => {
@@ -25,8 +35,8 @@ describe('Users - User Internal Presenter', () => {
 
     expect(result).to.equal({
       backLink: {
-        href: '/',
-        text: 'Go back to search'
+        href: '/system/users',
+        text: 'Go back to users'
       },
       id: user.id,
       lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
