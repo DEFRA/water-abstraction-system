@@ -6,7 +6,7 @@
  */
 
 const FetchUserExternalService = require('./fetch-user-external.service.js')
-const ExternalUserPresenter = require('../../presenters/users/external-user.presenter.js')
+const UserExternalPresenter = require('../../presenters/users/user-external.presenter.js')
 
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}` page
@@ -17,7 +17,7 @@ const ExternalUserPresenter = require('../../presenters/users/external-user.pres
  */
 async function go(id) {
   const externalUser = await FetchUserExternalService.go(id)
-  const formattedData = ExternalUserPresenter.go(externalUser)
+  const formattedData = UserExternalPresenter.go(externalUser)
 
   return {
     ...formattedData

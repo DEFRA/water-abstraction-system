@@ -11,9 +11,9 @@ const { expect } = Code
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Thing under test
-const InternalUserPresenter = require('../../../app/presenters/users/internal-user.presenter.js')
+const UserInternalPresenter = require('../../../app/presenters/users/user-internal.presenter.js')
 
-describe('Users - Internal User Presenter', () => {
+describe('Users - User Internal Presenter', () => {
   let user
 
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe('Users - Internal User Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = InternalUserPresenter.go(user)
+    const result = UserInternalPresenter.go(user)
 
     expect(result).to.equal({
       backLink: {
@@ -45,7 +45,7 @@ describe('Users - Internal User Presenter', () => {
       })
 
       it('returns "Never signed in"', () => {
-        const result = InternalUserPresenter.go(user)
+        const result = UserInternalPresenter.go(user)
 
         expect(result.lastSignedIn).to.equal('Never signed in')
       })

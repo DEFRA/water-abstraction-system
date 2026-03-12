@@ -11,9 +11,9 @@ const { expect } = Code
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Thing under test
-const ExternalUserPresenter = require('../../../app/presenters/users/external-user.presenter.js')
+const UserExternalPresenter = require('../../../app/presenters/users/user-external.presenter.js')
 
-describe('Users - External User Presenter', () => {
+describe('Users - User External Presenter', () => {
   let user
 
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe('Users - External User Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ExternalUserPresenter.go(user)
+    const result = UserExternalPresenter.go(user)
 
     expect(result).to.equal({
       backLink: {
@@ -40,7 +40,7 @@ describe('Users - External User Presenter', () => {
   describe('the "lastSignedIn" property', () => {
     describe('when the lastLogin is set', () => {
       it('returns the last signed in date and time', () => {
-        const result = ExternalUserPresenter.go(user)
+        const result = UserExternalPresenter.go(user)
 
         expect(result.lastSignedIn).to.equal('Last signed in 6 October 2022 at 10:00:00')
       })
@@ -52,7 +52,7 @@ describe('Users - External User Presenter', () => {
       })
 
       it('returns "Never signed in"', () => {
-        const result = ExternalUserPresenter.go(user)
+        const result = UserExternalPresenter.go(user)
 
         expect(result.lastSignedIn).to.equal('Never signed in')
       })
@@ -62,7 +62,7 @@ describe('Users - External User Presenter', () => {
   describe('the "companies" property', () => {
     describe('when the user has no associated licence entity', () => {
       it('returns an empty companies array', () => {
-        const result = ExternalUserPresenter.go(user)
+        const result = UserExternalPresenter.go(user)
 
         expect(result.companies).to.equal([])
       })
@@ -75,7 +75,7 @@ describe('Users - External User Presenter', () => {
         })
 
         it('returns an empty companies array', () => {
-          const result = ExternalUserPresenter.go(user)
+          const result = UserExternalPresenter.go(user)
 
           expect(result.companies).to.equal([])
         })
@@ -115,7 +115,7 @@ describe('Users - External User Presenter', () => {
         })
 
         it('returns the most significant role name for each company', () => {
-          const result = ExternalUserPresenter.go(user)
+          const result = UserExternalPresenter.go(user)
 
           expect(result.companies).to.equal([
             {
@@ -158,7 +158,7 @@ describe('Users - External User Presenter', () => {
         })
 
         it('returns "Unknown role"', () => {
-          const result = ExternalUserPresenter.go(user)
+          const result = UserExternalPresenter.go(user)
 
           expect(result.companies).to.equal([
             {
@@ -197,7 +197,7 @@ describe('Users - External User Presenter', () => {
         })
 
         it('returns "No role"', () => {
-          const result = ExternalUserPresenter.go(user)
+          const result = UserExternalPresenter.go(user)
 
           expect(result.companies[0].mostSignificantRoleName).to.equal('No role')
         })
@@ -220,7 +220,7 @@ describe('Users - External User Presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = ExternalUserPresenter.go(user)
+        const result = UserExternalPresenter.go(user)
 
         expect(result.companies[0].showLicences).to.be.false()
       })
@@ -252,7 +252,7 @@ describe('Users - External User Presenter', () => {
       })
 
       it('returns "true"', () => {
-        const result = ExternalUserPresenter.go(user)
+        const result = UserExternalPresenter.go(user)
 
         expect(result.companies[0].showLicences).to.be.true()
       })
@@ -274,7 +274,7 @@ describe('Users - External User Presenter', () => {
       })
 
       it('returns an empty array', () => {
-        const result = ExternalUserPresenter.go(user)
+        const result = UserExternalPresenter.go(user)
 
         expect(result.companies[0].licences).to.be.an.array()
         expect(result.companies[0].licences).to.be.empty()
@@ -307,7 +307,7 @@ describe('Users - External User Presenter', () => {
       })
 
       it('returns an array of associated licences', () => {
-        const result = ExternalUserPresenter.go(user)
+        const result = UserExternalPresenter.go(user)
 
         expect(result.companies[0].licences).to.equal([
           {
@@ -336,7 +336,7 @@ describe('Users - External User Presenter', () => {
       })
 
       it('returns an empty array', () => {
-        const result = ExternalUserPresenter.go(user)
+        const result = UserExternalPresenter.go(user)
 
         expect(result.companies[0].verifications).to.be.an.array()
         expect(result.companies[0].verifications).to.be.empty()
@@ -398,7 +398,7 @@ describe('Users - External User Presenter', () => {
       })
 
       it('returns an array of associated verifications', () => {
-        const result = ExternalUserPresenter.go(user)
+        const result = UserExternalPresenter.go(user)
         expect(result.companies[0].verifications).to.equal([
           {
             sent: '6 October 2022',

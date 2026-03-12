@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Formats data for internal users on the `/users/{userId}` page
- * @module InternalUserPresenter
+ * Formats data for internal users on the `/users/internal/{id}` page
+ * @module UserInternalPresenter
  */
 
 const { formatLongDateTime } = require('../base.presenter.js')
 
 /**
- * Formats data for internal users on the `/users/{userId}` page
+ * Formats data for internal users on the `/users/internal/{id}` page
  *
  * @param {module:UserModel} user - The user instance
  *
