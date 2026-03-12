@@ -33,15 +33,14 @@ async function seed() {
   const licenceDocumentHeader = await _licenceDocumentHeader(company, companyEntity)
 
   const companyId = company.record.id
-
   const companyEntityId = companyEntity.record.id
 
   const abstractionAlerts = await _additionalContact(companyId, 'Gilderoy Lockhart', true)
   const additionalContact = await _additionalContact(companyId, 'Horace Slughorn')
-  const returnsTo = await _returnsTo(company.record)
-  const billing = await _billing(companyId)
   const basicUser = await _licenceEntity(companyId, companyEntityId, 'user', 'Minerva McGonagall')
+  const billing = await _billing(companyId)
   const primaryUser = await _licenceEntity(companyId, companyEntityId, 'primary_user', 'Albus Dumbledore')
+  const returnsTo = await _returnsTo(company.record)
   const returnsUser = await _licenceEntity(companyId, companyEntityId, 'user_returns', 'Severus Snape')
 
   // const additionalCompany = await _company('Wand & Willow')
@@ -98,9 +97,9 @@ async function _additionalContact(companyId, name, abstractionAlerts = false) {
   return {
     record: companyContact,
     clean: async () => {
+      await additionalCompanyContact.$query().delete()
       await companyContact.$query().delete()
       await contact.$query().delete()
-      await additionalCompanyContact.$query().delete()
     }
   }
 }
@@ -155,9 +154,9 @@ async function _licenceDocumentHeader(company, companyEntity) {
     record: licenceDocumentHeader,
     clean: async () => {
       await licence.$query().delete()
+      await licenceDocumentHeader.$query().delete()
       await licenceVersion.$query().delete()
       await licenceVersionHolder.$query().delete()
-      await licenceDocumentHeader.$query().delete()
     }
   }
 }
@@ -194,10 +193,10 @@ async function _licenceEntity(companyId, companyEntityId, role, name) {
   return {
     record: user,
     clean: async () => {
+      await licenceDocumentRole.$query().delete()
       await licenceEntity.$query().delete()
       await licenceEntityRole.$query().delete()
       await user.$query().delete()
-      await licenceDocumentRole.$query().delete()
     }
   }
 }
