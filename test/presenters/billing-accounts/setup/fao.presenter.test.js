@@ -62,5 +62,16 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
         expect(result.backLink.href).to.equal(`/system/address/${session.id}/select`)
       })
     })
+
+    describe('when "checkPageVisited" is true', () => {
+      it('returns the link for the "existing-address" page', () => {
+        const result = FAOPresenter.go({
+          ...session,
+          checkPageVisited: true
+        })
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+      })
+    })
   })
 })

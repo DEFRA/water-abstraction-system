@@ -15,13 +15,14 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SubmitFAOService = require('../../../../app/services/billing-accounts/setup/submit-fao.service.js')
 
 describe('Billing Accounts - Setup - Submit FAO Service', () => {
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
   let payload
   let session
   let sessionData
 
   beforeEach(async () => {
     sessionData = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+      billingAccount
     }
 
     session = await SessionHelper.add({ data: sessionData })
@@ -60,7 +61,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     describe('and the user has returned to the page and made the same choice', () => {
       beforeEach(async () => {
         sessionData = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          billingAccount,
           fao: 'yes'
         }
 
@@ -117,7 +118,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     describe('and the user has returned to the page and made the same choice', () => {
       beforeEach(async () => {
         sessionData = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          billingAccount,
           fao: 'no'
         }
 
@@ -147,7 +148,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     describe('and the user had previously completed the "yes" journey', () => {
       beforeEach(async () => {
         sessionData = {
-          billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
+          billingAccount,
           contactName: 'Customer Name',
           contactSelected: 'new',
           fao: 'yes'
@@ -163,8 +164,41 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
 
         expect(refreshedSession.data).to.equal(
           {
+            checkPageVisited: false,
             contactName: null,
             contactSelected: null,
+            fao: 'no'
+          },
+          { skip: ['billingAccount'] }
+        )
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitFAOService.go(session.id, payload)
+
+        expect(result.redirectUrl).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+      })
+    })
+
+    describe('and the user had previously been to the check page', () => {
+      beforeEach(async () => {
+        sessionData = {
+          billingAccount,
+          checkPageVisited: true,
+          fao: 'no'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitFAOService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.data).to.equal(
+          {
+            checkPageVisited: true,
             fao: 'no'
           },
           { skip: ['billingAccount'] }

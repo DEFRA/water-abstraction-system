@@ -25,6 +25,7 @@ function go(session, companyContacts, existingAddress, companysHouseResult) {
     companySearch: session.companySearch ?? '',
     companiesHouseName: companysHouseResult ? companysHouseResult.title : '',
     existingAccount: _existingAccount(session, companyContacts),
+    fao: session.fao,
     links: _links(session),
     pageTitle: 'Check billing account details',
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
@@ -70,7 +71,8 @@ function _links(session) {
     addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
     companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
     companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
-    existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
+    existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`,
+    fao: `/system/billing-accounts/setup/${session.id}/fao`
   }
 }
 
