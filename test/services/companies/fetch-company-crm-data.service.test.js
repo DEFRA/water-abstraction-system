@@ -74,6 +74,11 @@ describe('Companies - Fetch company crm data service', () => {
             contactName: 'Minerva McGonagall'
           },
           {
+            contactName: 'Rubeus Hagrid',
+            contactType: 'basic-user',
+            id: crmData.additionalBasicUser.record.id
+          },
+          {
             contactType: 'returns-user',
             id: crmData.returnsUser.record.id,
             contactName: 'Severus Snape'
@@ -84,7 +89,7 @@ describe('Companies - Fetch company crm data service', () => {
             contactName: crmData.billing.record.accountNumber
           }
         ],
-        totalNumber: 8
+        totalNumber: 9
       })
     })
 
@@ -107,7 +112,7 @@ describe('Companies - Fetch company crm data service', () => {
                 contactName: 'Albus Dumbledore'
               }
             ],
-            totalNumber: 8
+            totalNumber: 9
           })
         })
       })
@@ -130,7 +135,7 @@ describe('Companies - Fetch company crm data service', () => {
                 contactName: 'Albus Dumbledore'
               }
             ],
-            totalNumber: 8
+            totalNumber: 9
           })
         })
       })
@@ -153,7 +158,7 @@ describe('Companies - Fetch company crm data service', () => {
                 contactName: 'Gilderoy Lockhart'
               }
             ],
-            totalNumber: 8
+            totalNumber: 9
           })
         })
       })

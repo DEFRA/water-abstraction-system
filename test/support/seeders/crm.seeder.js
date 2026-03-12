@@ -30,26 +30,42 @@ async function seed() {
 
   const companyEntity = await _licenceCompanyEntity(company)
 
-  const licence = await _licence(company)
-
-  const licenceDocumentHeader = await _licenceDocumentHeader(company, companyEntity, licence)
-
   const companyId = company.record.id
   const companyEntityId = companyEntity.record.id
 
+  const licence = await _licence(company)
+
+  const licenceDocumentHeader = await _licenceDocumentHeader(company, companyEntityId, licence.record.licenceRef)
+
   const abstractionAlerts = await _additionalContact(companyId, 'Gilderoy Lockhart', true)
   const additionalContact = await _additionalContact(companyId, 'Horace Slughorn')
-  const basicUser = await _licenceEntity(companyId, companyEntityId, 'user', 'Minerva McGonagall')
+  const basicUser = await _basicUser(companyId, companyEntityId, 'Minerva McGonagall')
   const billing = await _billing(companyId)
-  const primaryUser = await _licenceEntity(companyId, companyEntityId, 'primary_user', 'Albus Dumbledore')
+  const primaryUser = await _primaryUser(companyId, companyEntityId, 'Albus Dumbledore')
   const returnsTo = await _returnsTo(company.record)
-  const returnsUser = await _licenceEntity(companyId, companyEntityId, 'user_returns', 'Severus Snape')
+  const returnsUser = await _returnsUser(companyId, companyEntityId, 'Severus Snape')
 
-  // TODO: add another licence the same company - in the header ?
-  // Another external 'user' - linked by the - add a new licence document header - with new company entity (needa new compnay entitiy - use that id in the document header)
+  // Additional contacts
+  const additionalCompanyContact = await _additionalCompanyContact(additionalContact)
+
+  // Additional licence for the company with a contact
+  const additionalCompanyEntity = await _licenceCompanyEntity(company)
+
+  const additionalCompanyEntityId = additionalCompanyEntity.record.id
+
+  const additionalLicence = await _licence(company)
+
+  const additionalLicenceDocumentHeader = await _licenceDocumentHeader(
+    company,
+    additionalCompanyEntityId,
+    additionalLicence.record.licenceRef
+  )
+
+  const additionalBasicUser = await _basicUser(companyId, additionalCompanyEntityId, 'Rubeus Hagrid')
 
   return {
     abstractionAlerts,
+    additionalBasicUser,
     additionalContact,
     basicUser,
     billing,
@@ -60,7 +76,12 @@ async function seed() {
     returnsUser,
     clean: async () => {
       await abstractionAlerts.clean()
+      await additionalBasicUser.clean()
+      await additionalCompanyContact.clean()
+      await additionalCompanyEntity.clean()
       await additionalContact.clean()
+      await additionalLicence.clean()
+      await additionalLicenceDocumentHeader.clean()
       await basicUser.clean()
       await billing.clean()
       await company.clean()
@@ -96,15 +117,54 @@ async function _additionalContact(companyId, name, abstractionAlerts = false) {
     companyId
   })
 
-  // TODO: move this to do this outside - as it's use the other company - pass in the contact id
-  const additionalCompanyContact = await CompanyContactHelper.add({ contactId: contact.id })
-
   return {
     record: companyContact,
     clean: async () => {
-      await additionalCompanyContact.$query().delete()
       await companyContact.$query().delete()
       await contact.$query().delete()
+    }
+  }
+}
+
+/**
+ * This simulates a contact being linked to multiple companies through company contacts
+ *
+ * @private
+ */
+async function _additionalCompanyContact(additionalContact) {
+  const additionalCompanyContact = await CompanyContactHelper.add({ contactId: additionalContact.record.contactId })
+
+  return {
+    record: additionalCompanyContact,
+    clean: async () => {
+      await additionalCompanyContact.$query().delete()
+    }
+  }
+}
+
+async function _basicUser(companyId, companyEntityId, name) {
+  const licenceEntity = await LicenceEntityHelper.add({
+    name,
+    type: 'individual'
+  })
+
+  const licenceEntityRole = await LicenceEntityRoleHelper.add({
+    role: 'user',
+    companyEntityId,
+    licenceEntityId: licenceEntity.id
+  })
+
+  const user = await UserModel.add({
+    licenceEntityId: licenceEntity.id,
+    username: name
+  })
+
+  return {
+    record: user,
+    clean: async () => {
+      await licenceEntity.$query().delete()
+      await licenceEntityRole.$query().delete()
+      await user.$query().delete()
     }
   }
 }
@@ -160,60 +220,16 @@ async function _licence(company) {
   }
 }
 
-async function _licenceDocumentHeader(company, companyEntity, licence) {
+async function _licenceDocumentHeader(company, companyEntityId, licenceRef) {
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-    companyEntityId: companyEntity.record.id,
-    licenceRef: licence.record.licenceRef
+    companyEntityId,
+    licenceRef
   })
 
   return {
     record: licenceDocumentHeader,
     clean: async () => {
       await licenceDocumentHeader.$query().delete()
-    }
-  }
-}
-
-/**
- * The primary user, returns user and basic user have identical queries.
- *
- * The only thing to determine a difference is the role of the user.
- *
- * @private
- */
-async function _licenceEntity(companyId, companyEntityId, role, name) {
-  const licenceEntity = await LicenceEntityHelper.add({
-    name,
-    type: 'individual'
-  })
-
-  // Create the role in the licence entity
-  const licenceEntityRole = await LicenceEntityRoleHelper.add({
-    role,
-    companyEntityId,
-    licenceEntityId: licenceEntity.id
-  })
-
-  // TODO: Make all the roles their own functions
-  if (role === 'user_returns') {
-    await LicenceEntityRoleHelper.add({
-      role: 'user',
-      companyEntityId,
-      licenceEntityId: licenceEntity.id
-    })
-  }
-
-  const user = await UserModel.add({
-    licenceEntityId: licenceEntity.id,
-    username: name
-  })
-
-  return {
-    record: user,
-    clean: async () => {
-      await licenceEntity.$query().delete()
-      await licenceEntityRole.$query().delete()
-      await user.$query().delete()
     }
   }
 }
@@ -232,6 +248,33 @@ async function _licenceCompanyEntity(company) {
   }
 }
 
+async function _primaryUser(companyId, companyEntityId, name) {
+  const licenceEntity = await LicenceEntityHelper.add({
+    name,
+    type: 'individual'
+  })
+
+  const licenceEntityRole = await LicenceEntityRoleHelper.add({
+    role: 'primary_user',
+    companyEntityId,
+    licenceEntityId: licenceEntity.id
+  })
+
+  const user = await UserModel.add({
+    licenceEntityId: licenceEntity.id,
+    username: name
+  })
+
+  return {
+    record: user,
+    clean: async () => {
+      await licenceEntity.$query().delete()
+      await licenceEntityRole.$query().delete()
+      await user.$query().delete()
+    }
+  }
+}
+
 async function _returnsTo(company) {
   const licenceRole = await LicenceRoleHelper.select('returnsTo')
 
@@ -245,6 +288,39 @@ async function _returnsTo(company) {
     record: company,
     clean: async () => {
       await licenceDocumentRole.$query().delete()
+    }
+  }
+}
+
+async function _returnsUser(companyId, companyEntityId, name) {
+  const licenceEntity = await LicenceEntityHelper.add({
+    name,
+    type: 'individual'
+  })
+
+  const licenceEntityRole = await LicenceEntityRoleHelper.add({
+    role: 'user_returns',
+    companyEntityId,
+    licenceEntityId: licenceEntity.id
+  })
+
+  await LicenceEntityRoleHelper.add({
+    role: 'user',
+    companyEntityId,
+    licenceEntityId: licenceEntity.id
+  })
+
+  const user = await UserModel.add({
+    licenceEntityId: licenceEntity.id,
+    username: name
+  })
+
+  return {
+    record: user,
+    clean: async () => {
+      await licenceEntity.$query().delete()
+      await licenceEntityRole.$query().delete()
+      await user.$query().delete()
     }
   }
 }
