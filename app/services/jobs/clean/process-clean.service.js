@@ -8,6 +8,7 @@
 const CleanEmptyBillRunsService = require('./clean-empty-bill-runs.service.js')
 const CleanEmptyVoidReturnLogsService = require('./clean-empty-void-return-logs.service.js')
 const CleanExpiredSessionsService = require('./clean-expired-sessions.service.js')
+const CleanIncompleteCompanyContactsService = require('./clean-incomplete-company-contacts.service.js')
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../lib/general.lib.js')
 
 /**
@@ -24,12 +25,14 @@ async function go() {
     const emptyBillRunsCount = await CleanEmptyBillRunsService.go()
     const emptyVoidReturnLogsCount = await CleanEmptyVoidReturnLogsService.go()
     const expiredSessionsCount = await CleanExpiredSessionsService.go()
+    const incompleteCompanyContactsCount = await CleanIncompleteCompanyContactsService.go()
 
     calculateAndLogTimeTaken(startTime, 'Clean job complete', {
       counts: {
         emptyBillRuns: emptyBillRunsCount,
         emptyVoidReturnLogs: emptyVoidReturnLogsCount,
-        expiredSessions: expiredSessionsCount
+        expiredSessions: expiredSessionsCount,
+        incompleteCompanyContacts: incompleteCompanyContactsCount
       }
     })
   } catch (error) {
