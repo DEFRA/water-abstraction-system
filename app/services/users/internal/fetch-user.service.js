@@ -2,10 +2,10 @@
 
 /**
  * Fetches an internal user for display on the `/users/internal/{id}` page
- * @module FetchUserInternalService
+ * @module FetchUserService
  */
 
-const UserModel = require('../../models/user.model.js')
+const UserModel = require('../../../models/user.model.js')
 
 /**
  * Fetches an internal user for display on the `/users/internal/{id}` page
