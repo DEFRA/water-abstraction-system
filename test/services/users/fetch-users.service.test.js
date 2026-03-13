@@ -127,7 +127,7 @@ describe('Users - Fetch Users service', () => {
       username: licenceEntity.name
     })
 
-    licenceEntityRole = await LicenceEntityRoleHelper.add({
+    await LicenceEntityRoleHelper.add({
       companyEntityId: generateUUID(),
       licenceEntityId: externalNoneUser.licenceEntityId,
       role: 'primary_user'
