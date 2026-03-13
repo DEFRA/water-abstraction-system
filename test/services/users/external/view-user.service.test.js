@@ -23,6 +23,8 @@ describe('Users - External - View User service', () => {
   }
   const user = UsersFixture.external()
 
+  let back
+
   beforeEach(() => {
     Sinon.stub(FetchUserService, 'go').resolves(user)
   })
@@ -36,6 +38,7 @@ describe('Users - External - View User service', () => {
       const result = await ViewUserService.go(user.id, auth)
 
       expect(result).to.equal({
+        activeNavBar: 'users',
         backLink: {
           href: '/system/users',
           text: 'Go back to users'
@@ -47,6 +50,28 @@ describe('Users - External - View User service', () => {
         pageTitleCaption: 'External',
         showEditButton: true,
         status: 'enabled'
+      })
+    })
+
+    describe('the "activeNavBar" property', () => {
+      describe('when the "back" query parameter is "undefined"', () => {
+        it('defaults to ""users" and returns "users"', async () => {
+          const result = await ViewUserService.go(user.id, auth, back)
+
+          expect(result.activeNavBar).to.equal('users')
+        })
+      })
+
+      describe('when the "back" query parameter is not "users" (for example "search")', () => {
+        beforeEach(() => {
+          back = 'search'
+        })
+
+        it('returns "search"', async () => {
+          const result = await ViewUserService.go(user.id, auth, back)
+
+          expect(result.activeNavBar).to.equal('search')
+        })
       })
     })
   })

@@ -23,6 +23,7 @@ async function go(id, auth, back = 'users') {
   const formattedData = UserPresenter.go(externalUser, auth.credentials.scope, back)
 
   return {
+    activeNavBar: back === 'users' ? 'users' : 'search',
     ...formattedData
   }
 }
