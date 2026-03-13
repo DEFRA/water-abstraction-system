@@ -37,8 +37,8 @@ describe('Users - External - View User service', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: '/',
-          text: 'Go back to search'
+          href: '/system/users',
+          text: 'Go back to users'
         },
         companies: [],
         id: user.id,

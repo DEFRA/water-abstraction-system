@@ -6,7 +6,6 @@
  */
 
 const ContactModel = require('../../../models/contact.model.js')
-
 const { formatLongDateTime, formatLongDate } = require('../../base.presenter.js')
 
 /**
@@ -15,15 +14,13 @@ const { formatLongDateTime, formatLongDate } = require('../../base.presenter.js'
  * @param {module:UserModel} user - The user, including their related companies and the licence document headers that
  * are attached to those companies
  * @param {string[]} viewingUserScope - The 'scope' taken off the `request.auth` object passed to the `ViewUserInternalService`
+ * @param {string} back - The 'back' query parameter, used to indicate what back link should be shown on the page
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user, viewingUserScope) {
+function go(user, viewingUserScope, back) {
   return {
-    backLink: {
-      href: '/',
-      text: 'Go back to search'
-    },
+    backLink: _backLink(back),
     companies: _companies(user),
     id: user.id,
     lastSignedIn: _lastSignedIn(user),
@@ -31,6 +28,20 @@ function go(user, viewingUserScope) {
     pageTitleCaption: 'External',
     showEditButton: viewingUserScope.includes('manage_accounts'),
     status: user.$status()
+  }
+}
+
+function _backLink(back) {
+  if (back === 'users') {
+    return {
+      href: '/system/users',
+      text: 'Go back to users'
+    }
+  }
+
+  return {
+    href: '/',
+    text: 'Go back to search'
   }
 }
 
