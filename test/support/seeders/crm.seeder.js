@@ -21,53 +21,85 @@ const UserModel = require('../helpers/user.helper.js')
 /**
  * Seed CRM data
  *
+ * The crm data has multiple sources of contacts.
+ *
+ * We need to get contacts for a company from multiple sources. Theses can be grouped into two categories. External
+ * users and those directly related to the company.
+ *
+ * Directly related to the company:
+ * > Contacts directly related to the company are pretty straight forwards,
+ * you can use the company id and return the record.
+ *
+ * These contacts are:
+ * - abstraction-alerts - An additional contact marked to receive abstraction alerts
+ * - licence-holder - The company that holds the licence
+ * - returns-to - A company to handle the returns
+ * - additional-contact - An additional contact for the licence
+ * - billing - The billing accounts related to the company
+ *
+ * External users:
+ * > External contacts are a little more complicated, they are not directly linked to the company. We need to get to the
+ * licence, we do this from the licence version holder. Once we have the licence, we need to join the licence to the
+ * licence document header using the licence ref. Then we need to return the external contacts from the licence entities.
+ *
+ * These contacts are:
+ * - primary-user - An external user who a licence is registered to
+ * - basic-user - A user with basic access to the system
+ * - returns-user - A user with returns access to the system
+ *
  * To clean all the contacts from the database, call the '.clean()' method
  *
  * @returns {object} - all the contacts
  */
 async function seed() {
+  // Setup company - The company will be the licence holder
   const company = await _company('Hogwarts')
-
-  const companyEntity = await _licenceCompanyEntity(company.record.name)
-
   const companyId = company.record.id
+
+  // Licence entity users are linked through the 'companyEntityId'
+  const companyEntity = await _licenceCompanyEntity(company.record.name)
   const companyEntityId = companyEntity.record.id
 
+  // Set up a licence linked to the company
   const licence = await _licence(company)
-
   const licenceDocumentHeader = await _licenceDocumentHeader(companyEntityId, licence.record.licenceRef)
 
+  // Set up external users - linked to the company by the licence
+  const basicUser = await _basicUser(companyEntityId, 'Minerva McGonagall')
+  const primaryUser = await _primaryUser(companyEntityId, 'Albus Dumbledore')
+  const returnsUser = await _returnsUser(companyEntityId, 'Severus Snape')
+
+  // Set up additional contacts - linked to the company via the company contacts
   const abstractionAlerts = await _additionalContact(companyId, 'Gilderoy Lockhart', true)
   const additionalContact = await _additionalContact(companyId, 'Horace Slughorn')
-  const basicUser = await _basicUser(companyId, companyEntityId, 'Minerva McGonagall')
+
+  // Set up billing accounts
   const billing = await _billing(companyId)
-  const primaryUser = await _primaryUser(companyId, companyEntityId, 'Albus Dumbledore')
+
+  // Set up returns to - a contact linked through the licence document role to the company.
   const returnsTo = await _returnsTo(company.record)
-  const returnsUser = await _returnsUser(companyId, companyEntityId, 'Severus Snape')
 
-  // Other contacts
+  // Other contacts - To ensure the 'FetchCompanyCRMDataService' returns all licences related to a company, we need to
+  // add another contact; this contact is linked to the company.
   const otherCompanyContact = await _additionalCompanyContact(additionalContact)
-
-  // Additional licence for the company with a contact
   const otherCompanyEntity = await _licenceCompanyEntity('The Leaky Cauldron')
-
-  const otherCompanyEntityId = otherCompanyEntity.record.id
-
   const otherLicence = await _licence(company)
+  const otherLicenceDocumentHeader = await _licenceDocumentHeader(
+    otherCompanyEntity.record.id,
+    otherLicence.record.licenceRef
+  )
+  const additionalBasicUser = await _basicUser(otherCompanyEntity.record.id, 'Rubeus Hagrid')
 
-  const otherLicenceDocumentHeader = await _licenceDocumentHeader(otherCompanyEntityId, otherLicence.record.licenceRef)
-
-  const additionalBasicUser = await _basicUser(companyId, otherCompanyEntityId, 'Rubeus Hagrid')
-
-  // seedOtherCompany
-  // this can use Leaky Cauldron company
-  // - key is the three licences - two found to seed - 1 not
-  // Create another company
-  // Another licence / document header covers naldType contact
-  // Created another basic user
-  // 2 Another licence / document header covers naldType contact - reuse company entity ?
-  // Licence entity - role / user
-  // returns to user
+  // Extra contact - Is set up is similar to the 'other' contact, but the company is different. The query should not
+  // return the  as the company is different. This contact is not linked to the company.
+  const extraCompany = await _company("Weasleys' Wizard Wheezes")
+  const extraCompanyEntity = await _licenceCompanyEntity(extraCompany.record.name)
+  const extraLicence = await _licence(extraCompany)
+  const extraLicenceDocumentHeader = await _licenceDocumentHeader(
+    extraCompanyEntity.record.id,
+    extraLicence.record.licenceRef
+  )
+  const extraBasicUser = await _basicUser(extraCompanyEntity.record.id, 'Draco Malfoy')
 
   return {
     abstractionAlerts,
@@ -83,17 +115,22 @@ async function seed() {
     clean: async () => {
       await abstractionAlerts.clean()
       await additionalBasicUser.clean()
-      await otherCompanyContact.clean()
-      await otherCompanyEntity.clean()
       await additionalContact.clean()
-      await otherLicence.clean()
-      await otherLicenceDocumentHeader.clean()
       await basicUser.clean()
       await billing.clean()
       await company.clean()
       await companyEntity.clean()
+      await extraBasicUser.clean()
+      await extraCompany.clean()
+      await extraCompanyEntity.clean()
+      await extraLicence.clean()
+      await extraLicenceDocumentHeader.clean()
       await licence.clean()
       await licenceDocumentHeader.clean()
+      await otherCompanyContact.clean()
+      await otherCompanyEntity.clean()
+      await otherLicence.clean()
+      await otherLicenceDocumentHeader.clean()
       await primaryUser.clean()
       await returnsTo.clean()
       await returnsUser.clean()
@@ -132,11 +169,6 @@ async function _additionalContact(companyId, name, abstractionAlerts = false) {
   }
 }
 
-/**
- * This simulates a contact being linked to multiple companies through company contacts
- *
- * @private
- */
 async function _additionalCompanyContact(additionalContact) {
   const additionalCompanyContact = await CompanyContactHelper.add({ contactId: additionalContact.record.contactId })
 
@@ -148,7 +180,7 @@ async function _additionalCompanyContact(additionalContact) {
   }
 }
 
-async function _basicUser(companyId, companyEntityId, name) {
+async function _basicUser(companyEntityId, name) {
   const licenceEntity = await LicenceEntityHelper.add({
     name,
     type: 'individual'
@@ -186,11 +218,6 @@ async function _billing(companyId) {
   }
 }
 
-/**
- * The company will always be the licence holder
- *
- * @private
- */
 async function _company(name) {
   const company = await CompanyHelper.add({
     name
@@ -254,7 +281,7 @@ async function _licenceCompanyEntity(name) {
   }
 }
 
-async function _primaryUser(companyId, companyEntityId, name) {
+async function _primaryUser(companyEntityId, name) {
   const licenceEntity = await LicenceEntityHelper.add({
     name,
     type: 'individual'
@@ -298,7 +325,7 @@ async function _returnsTo(company) {
   }
 }
 
-async function _returnsUser(companyId, companyEntityId, name) {
+async function _returnsUser(companyEntityId, name) {
   const licenceEntity = await LicenceEntityHelper.add({
     name,
     type: 'individual'
