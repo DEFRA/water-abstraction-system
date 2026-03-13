@@ -9,12 +9,10 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchCompanyContactsService = require('../../../app/services/licences/fetch-company-contacts.service.js')
 const FetchContactDetailsService = require('../../../app/services/licences/fetch-contact-details.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
@@ -64,8 +62,6 @@ describe('Licences - View Contact Details service', () => {
       }
     ])
 
-    Sinon.stub(FetchCompanyContactsService, 'go').returns(CustomersFixtures.companyContacts())
-
     Sinon.stub(FeatureFlagsConfig, 'enableCustomerView').value(true)
   })
 
@@ -83,13 +79,6 @@ describe('Licences - View Contact Details service', () => {
           href: '/',
           text: 'Go back to search'
         },
-        companyContacts: [
-          {
-            communicationType: 'Additional Contact',
-            email: 'rachael.tyrell@tyrellcorp.com',
-            name: 'Rachael Tyrell'
-          }
-        ],
         customerContactLink: `/system/companies/${companyId}/contacts`,
         licenceContacts: [
           {
