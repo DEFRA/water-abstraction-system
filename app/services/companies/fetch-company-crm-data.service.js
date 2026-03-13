@@ -12,35 +12,38 @@ const { db } = require('../../../db/db.js')
  * Fetches the company contacts data needed for the view '/companies/{id}/contacts'
  *
  * @param {string} companyId - The company id for the company
+ * @param {string[]} roles - roles
  * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<object>} the contacts for the company
  */
-async function go(companyId, page = '1') {
+async function go(companyId, roles, page = '1') {
+  const authorisedForBilling = roles.includes('billing')
+
   const [{ rows: contacts }, { rows: totalNumber }] = await Promise.all([
-    await _fetch(companyId, page),
-    await _fetchCount(companyId)
+    await _fetch(companyId, authorisedForBilling, page),
+    await _fetchCount(companyId, authorisedForBilling)
   ])
 
   return { contacts, totalNumber: totalNumber.length }
 }
 
-async function _fetchCount(companyId) {
-  const params = [companyId]
+async function _fetchCount(companyId, billingRole) {
+  const params = [companyId, billingRole]
 
   const query = _query()
 
   return db.raw(query, params)
 }
 
-async function _fetch(companyId, page) {
+async function _fetch(companyId, billingRole, page) {
   const pageSize = DatabaseConfig.defaultPageSize
   const currentPage = Number(page)
 
   // Calculate offset: Page 1 skips 0, Page 2 skips 25, etc.
   const offset = (currentPage - 1) * pageSize
 
-  const params = [companyId, pageSize, offset]
+  const params = [companyId, billingRole, pageSize, offset]
 
   const paginationAndOrderBy = `
   ORDER BY
@@ -165,6 +168,7 @@ function _query(paginationAndOrderBy = '') {
       public.billing_accounts ba
     INNER JOIN company c
       ON c.company_id = ba.company_id
+    WHERE TRUE = ?
   ),
   abstraction_alerts AS (
     SELECT
@@ -263,7 +267,7 @@ module.exports = {
   go
 }
 
-//water schema
+// water schema
 //
 // C1 - company - Tyrell Corporation
 // L1 - licence - 01/123

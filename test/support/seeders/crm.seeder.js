@@ -28,7 +28,7 @@ const UserModel = require('../helpers/user.helper.js')
 async function seed() {
   const company = await _company('Hogwarts')
 
-  const companyEntity = await _licenceCompanyEntity(company)
+  const companyEntity = await _licenceCompanyEntity(company.record.name)
 
   const companyId = company.record.id
   const companyEntityId = companyEntity.record.id
@@ -49,7 +49,7 @@ async function seed() {
   const additionalCompanyContact = await _additionalCompanyContact(additionalContact)
 
   // Additional licence for the company with a contact
-  const additionalCompanyEntity = await _licenceCompanyEntity(company)
+  const additionalCompanyEntity = await _licenceCompanyEntity('The Leaky Cauldron')
 
   const additionalCompanyEntityId = additionalCompanyEntity.record.id
 
@@ -234,9 +234,9 @@ async function _licenceDocumentHeader(company, companyEntityId, licenceRef) {
   }
 }
 
-async function _licenceCompanyEntity(company) {
+async function _licenceCompanyEntity(name) {
   const licenceEntity = await LicenceEntityHelper.add({
-    name: company.record.name,
+    name,
     type: 'company'
   })
 

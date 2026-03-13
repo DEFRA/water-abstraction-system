@@ -26,7 +26,9 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
 async function go(companyId, auth, page, yar) {
   const company = await FetchCompanyService.go(companyId)
 
-  const { contacts, totalNumber } = await FetchCompanyCRMDataService.go(companyId, page)
+  const roles = userRoles(auth)
+
+  const { contacts, totalNumber } = await FetchCompanyCRMDataService.go(companyId, roles, page)
 
   const pageData = ContactsPresenter.go(company, contacts)
 
@@ -44,7 +46,7 @@ async function go(companyId, auth, page, yar) {
     ...pageData,
     activeSecondaryNav: 'contacts',
     pagination,
-    roles: userRoles(auth),
+    roles,
     notification
   }
 }

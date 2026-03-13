@@ -21,10 +21,13 @@ describe('Companies - Fetch company crm data service', () => {
   let company
   let crmData
   let page
+  let roles
 
   before(async () => {
     page = undefined
     crmData = await CRMSeeder.seed()
+
+    roles = ['billing']
 
     company = crmData.company
   })
@@ -39,7 +42,7 @@ describe('Companies - Fetch company crm data service', () => {
 
   describe('when there are contacts', () => {
     it('returns the matching contacts', async () => {
-      const result = await FetchCompanyCRMDataService.go(company.record.id, page)
+      const result = await FetchCompanyCRMDataService.go(company.record.id, roles, page)
 
       expect(result).to.equal({
         contacts: [
@@ -102,7 +105,7 @@ describe('Companies - Fetch company crm data service', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchCompanyCRMDataService.go(company.record.id, page)
+          const result = await FetchCompanyCRMDataService.go(company.record.id, roles, page)
 
           expect(result).to.equal({
             contacts: [
@@ -125,7 +128,7 @@ describe('Companies - Fetch company crm data service', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchCompanyCRMDataService.go(company.record.id, page)
+          const result = await FetchCompanyCRMDataService.go(company.record.id, roles, page)
 
           expect(result).to.equal({
             contacts: [
@@ -148,7 +151,7 @@ describe('Companies - Fetch company crm data service', () => {
         })
 
         it('returns the matching contacts for the page (the second page) with the total number', async () => {
-          const result = await FetchCompanyCRMDataService.go(company.record.id, page)
+          const result = await FetchCompanyCRMDataService.go(company.record.id, roles, page)
 
           expect(result).to.equal({
             contacts: [
