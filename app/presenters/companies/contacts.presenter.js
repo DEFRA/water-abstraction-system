@@ -58,7 +58,7 @@ function _contactLinks(company, contact) {
   if (companyContactTypes.includes(contact.contactType)) {
     return FeatureFlagsConfig.enableCustomerManage
       ? `/system/company-contacts/${contact.id}`
-      : `/customer/${company.id}/contacts/${contact.contact.id}`
+      : `/customer/${company.id}/contacts/${contact.id}`
   }
 
   if (userTypes.includes(contact.contactType)) {

@@ -35,7 +35,7 @@ async function seed() {
 
   const licence = await _licence(company)
 
-  const licenceDocumentHeader = await _licenceDocumentHeader(company, companyEntityId, licence.record.licenceRef)
+  const licenceDocumentHeader = await _licenceDocumentHeader(companyEntityId, licence.record.licenceRef)
 
   const abstractionAlerts = await _additionalContact(companyId, 'Gilderoy Lockhart', true)
   const additionalContact = await _additionalContact(companyId, 'Horace Slughorn')
@@ -45,23 +45,29 @@ async function seed() {
   const returnsTo = await _returnsTo(company.record)
   const returnsUser = await _returnsUser(companyId, companyEntityId, 'Severus Snape')
 
-  // Additional contacts
-  const additionalCompanyContact = await _additionalCompanyContact(additionalContact)
+  // Other contacts
+  const otherCompanyContact = await _additionalCompanyContact(additionalContact)
 
   // Additional licence for the company with a contact
-  const additionalCompanyEntity = await _licenceCompanyEntity('The Leaky Cauldron')
+  const otherCompanyEntity = await _licenceCompanyEntity('The Leaky Cauldron')
 
-  const additionalCompanyEntityId = additionalCompanyEntity.record.id
+  const otherCompanyEntityId = otherCompanyEntity.record.id
 
-  const additionalLicence = await _licence(company)
+  const otherLicence = await _licence(company)
 
-  const additionalLicenceDocumentHeader = await _licenceDocumentHeader(
-    company,
-    additionalCompanyEntityId,
-    additionalLicence.record.licenceRef
-  )
+  const otherLicenceDocumentHeader = await _licenceDocumentHeader(otherCompanyEntityId, otherLicence.record.licenceRef)
 
-  const additionalBasicUser = await _basicUser(companyId, additionalCompanyEntityId, 'Rubeus Hagrid')
+  const additionalBasicUser = await _basicUser(companyId, otherCompanyEntityId, 'Rubeus Hagrid')
+
+  // seedOtherCompany
+  // this can use Leaky Cauldron company
+  // - key is the three licences - two found to seed - 1 not
+  // Create another company
+  // Another licence / document header covers naldType contact
+  // Created another basic user
+  // 2 Another licence / document header covers naldType contact - reuse company entity ?
+  // Licence entity - role / user
+  // returns to user
 
   return {
     abstractionAlerts,
@@ -77,11 +83,11 @@ async function seed() {
     clean: async () => {
       await abstractionAlerts.clean()
       await additionalBasicUser.clean()
-      await additionalCompanyContact.clean()
-      await additionalCompanyEntity.clean()
+      await otherCompanyContact.clean()
+      await otherCompanyEntity.clean()
       await additionalContact.clean()
-      await additionalLicence.clean()
-      await additionalLicenceDocumentHeader.clean()
+      await otherLicence.clean()
+      await otherLicenceDocumentHeader.clean()
       await basicUser.clean()
       await billing.clean()
       await company.clean()
@@ -220,7 +226,7 @@ async function _licence(company) {
   }
 }
 
-async function _licenceDocumentHeader(company, companyEntityId, licenceRef) {
+async function _licenceDocumentHeader(companyEntityId, licenceRef) {
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     companyEntityId,
     licenceRef
