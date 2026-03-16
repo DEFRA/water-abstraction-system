@@ -38,6 +38,7 @@ describe('Users - External - User Presenter', () => {
       pageTitle: 'User external@example.co.uk',
       pageTitleCaption: 'External',
       permissions: 'None',
+      roles: [],
       showEditButton: true,
       status: 'enabled'
     })
@@ -235,6 +236,58 @@ describe('Users - External - User Presenter', () => {
 
           expect(result.companies[0].mostSignificantRoleName).to.equal('No role')
         })
+      })
+    })
+  })
+
+  describe('the "roles" property', () => {
+    describe('when the user is determined to have "Basic access" permissions', () => {
+      beforeEach(() => {
+        user = UsersFixture.external('none')
+      })
+
+      it('returns an empty array', () => {
+        const result = UserPresenter.go(user, viewingUserScope, back)
+
+        expect(result.roles).to.be.empty()
+      })
+    })
+
+    describe('when the user is determined to have "Returns user" permissions', () => {
+      beforeEach(() => {
+        user = UsersFixture.external('user_returns')
+      })
+
+      it('returns the correct roles for a "Returns user"', () => {
+        const result = UserPresenter.go(user, viewingUserScope, back)
+
+        expect(result.roles).to.equal([
+          {
+            description: 'Submit returns for the linked licences',
+            name: 'Returns user'
+          }
+        ])
+      })
+    })
+
+    describe('when the user is determined to have "Primary user" permissions', () => {
+      beforeEach(() => {
+        user = UsersFixture.external('primary_user')
+      })
+
+      it('returns the correct roles for a "Primary user"', () => {
+        const result = UserPresenter.go(user, viewingUserScope, back)
+
+        expect(result.roles).to.equal([
+          {
+            description: 'Create and manage other external user accounts for the linked licences',
+            name: 'Primary user'
+          },
+          {
+            description: 'Submit returns for the linked licences',
+            name: 'Returns user'
+          }
+        ])
       })
     })
   })

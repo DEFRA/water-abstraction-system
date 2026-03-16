@@ -3,6 +3,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% from "macros/user-status-tag.njk" import statusTag %}
 
@@ -30,6 +31,45 @@
 
       {{ govukButton({ text: "Edit", preventDoubleClick: true }) }}
     </form>
+  {% endif %}
+
+  {% if roles.length === 0 %}
+    <p data-test='no-roles-msg'>{{ permissions }} grants no additional roles.</p>
+  {% else %}
+    {% set tableRows = [] %}
+
+    {% for role in roles %}
+      {% set rowIndex = loop.index0 %}
+      {% set tableRow = []%}
+
+      {% set row = [
+        {
+          attributes: { 'data-test': 'role-name-' + rowIndex },
+          text: role.name
+        },
+        {
+          attributes: { 'data-test': 'role-description-' + rowIndex },
+          text: role.description
+        }
+      ] %}
+
+      {% set tableRows = (tableRows.push(row), tableRows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      attributes: { 'data-test': 'roles-table' },
+      caption: "Roles",
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: "Name"
+        },
+        {
+          text: "Description"
+        }
+      ],
+      rows: tableRows
+    }) }}
   {% endif %}
 
   {% for company in companies %}

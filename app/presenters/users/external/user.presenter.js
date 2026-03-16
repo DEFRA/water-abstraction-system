@@ -8,6 +8,17 @@
 const ContactModel = require('../../../models/contact.model.js')
 const { formatLongDateTime, formatLongDate } = require('../../base.presenter.js')
 
+const EXTERNAL_ROLES = {
+  primary_user: {
+    description: 'Create and manage other external user accounts for the linked licences',
+    name: 'Primary user'
+  },
+  returns_user: {
+    description: 'Submit returns for the linked licences',
+    name: 'Returns user'
+  }
+}
+
 /**
  * Formats data for external users on the `/users/external/{id}` page
  *
@@ -19,6 +30,8 @@ const { formatLongDateTime, formatLongDate } = require('../../base.presenter.js'
  * @returns {object} The data formatted for the view template
  */
 function go(user, viewingUserScope, back) {
+  const permissions = user.$permissions()
+
   return {
     backLink: _backLink(back),
     companies: _companies(user),
@@ -26,7 +39,8 @@ function go(user, viewingUserScope, back) {
     lastSignedIn: _lastSignedIn(user),
     pageTitle: `User ${user.username}`,
     pageTitleCaption: 'External',
-    permissions: user.$permissions().label,
+    permissions: permissions.label,
+    roles: _roles(permissions),
     showEditButton: viewingUserScope.includes('manage_accounts'),
     status: user.$status()
   }
@@ -44,6 +58,25 @@ function _backLink(back) {
     href: '/',
     text: 'Go back to search'
   }
+}
+
+function _roles(permissions) {
+  const roles = []
+
+  if (permissions.key === 'primary_user') {
+    roles.push(EXTERNAL_ROLES.primary_user)
+    roles.push(EXTERNAL_ROLES.returns_user)
+
+    return roles
+  }
+
+  if (permissions.key === 'returns_user') {
+    roles.push(EXTERNAL_ROLES.returns_user)
+
+    return roles
+  }
+
+  return roles
 }
 
 function _companies(user) {

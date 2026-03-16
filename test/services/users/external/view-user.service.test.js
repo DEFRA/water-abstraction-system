@@ -49,6 +49,7 @@ describe('Users - External - View User service', () => {
         pageTitle: 'User external@example.co.uk',
         pageTitleCaption: 'External',
         permissions: 'None',
+        roles: [],
         showEditButton: true,
         status: 'enabled'
       })
