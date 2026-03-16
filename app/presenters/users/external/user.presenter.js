@@ -2,12 +2,12 @@
 
 /**
  * Formats data for external users on the `/users/external/{id}` page
- * @module UserExternalPresenter
+ * @module UserPresenter
  */
 
-const ContactModel = require('../../models/contact.model.js')
+const ContactModel = require('../../../models/contact.model.js')
 
-const { formatLongDateTime, formatLongDate } = require('../base.presenter.js')
+const { formatLongDateTime, formatLongDate } = require('../../base.presenter.js')
 
 /**
  * Formats data for external users on the `/users/external/{id}` page

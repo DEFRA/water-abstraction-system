@@ -8,12 +8,12 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const UsersFixture = require('../../support/fixtures/users.fixture.js')
+const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Thing under test
-const UserExternalPresenter = require('../../../app/presenters/users/user-external.presenter.js')
+const UserPresenter = require('../../../../app/presenters/users/external/user.presenter.js')
 
-describe('Users - User External Presenter', () => {
+describe('Users - External - User Presenter', () => {
   let user
   let viewingUserScope
 
@@ -23,7 +23,7 @@ describe('Users - User External Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = UserExternalPresenter.go(user, viewingUserScope)
+    const result = UserPresenter.go(user, viewingUserScope)
 
     expect(result).to.equal({
       backLink: {
@@ -43,7 +43,7 @@ describe('Users - User External Presenter', () => {
   describe('the "lastSignedIn" property', () => {
     describe('when the lastLogin is set', () => {
       it('returns the last signed in date and time', () => {
-        const result = UserExternalPresenter.go(user, viewingUserScope)
+        const result = UserPresenter.go(user, viewingUserScope)
 
         expect(result.lastSignedIn).to.equal('Last signed in 6 October 2022 at 10:00:00')
       })
@@ -55,7 +55,7 @@ describe('Users - User External Presenter', () => {
       })
 
       it('returns "Never signed in"', () => {
-        const result = UserExternalPresenter.go(user, viewingUserScope)
+        const result = UserPresenter.go(user, viewingUserScope)
 
         expect(result.lastSignedIn).to.equal('Never signed in')
       })
@@ -65,7 +65,7 @@ describe('Users - User External Presenter', () => {
   describe('the "companies" property', () => {
     describe('when the user has no associated licence entity', () => {
       it('returns an empty companies array', () => {
-        const result = UserExternalPresenter.go(user, viewingUserScope)
+        const result = UserPresenter.go(user, viewingUserScope)
 
         expect(result.companies).to.equal([])
       })
@@ -78,7 +78,7 @@ describe('Users - User External Presenter', () => {
         })
 
         it('returns an empty companies array', () => {
-          const result = UserExternalPresenter.go(user, viewingUserScope)
+          const result = UserPresenter.go(user, viewingUserScope)
 
           expect(result.companies).to.equal([])
         })
@@ -118,7 +118,7 @@ describe('Users - User External Presenter', () => {
         })
 
         it('returns the most significant role name for each company', () => {
-          const result = UserExternalPresenter.go(user, viewingUserScope)
+          const result = UserPresenter.go(user, viewingUserScope)
 
           expect(result.companies).to.equal([
             {
@@ -161,7 +161,7 @@ describe('Users - User External Presenter', () => {
         })
 
         it('returns "Unknown role"', () => {
-          const result = UserExternalPresenter.go(user, viewingUserScope)
+          const result = UserPresenter.go(user, viewingUserScope)
 
           expect(result.companies).to.equal([
             {
@@ -200,7 +200,7 @@ describe('Users - User External Presenter', () => {
         })
 
         it('returns "No role"', () => {
-          const result = UserExternalPresenter.go(user, viewingUserScope)
+          const result = UserPresenter.go(user, viewingUserScope)
 
           expect(result.companies[0].mostSignificantRoleName).to.equal('No role')
         })
@@ -223,7 +223,7 @@ describe('Users - User External Presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = UserExternalPresenter.go(user, viewingUserScope)
+        const result = UserPresenter.go(user, viewingUserScope)
 
         expect(result.companies[0].showLicences).to.be.false()
       })
@@ -255,7 +255,7 @@ describe('Users - User External Presenter', () => {
       })
 
       it('returns "true"', () => {
-        const result = UserExternalPresenter.go(user, viewingUserScope)
+        const result = UserPresenter.go(user, viewingUserScope)
 
         expect(result.companies[0].showLicences).to.be.true()
       })
@@ -277,7 +277,7 @@ describe('Users - User External Presenter', () => {
       })
 
       it('returns an empty array', () => {
-        const result = UserExternalPresenter.go(user, viewingUserScope)
+        const result = UserPresenter.go(user, viewingUserScope)
 
         expect(result.companies[0].licences).to.be.an.array()
         expect(result.companies[0].licences).to.be.empty()
@@ -310,7 +310,7 @@ describe('Users - User External Presenter', () => {
       })
 
       it('returns an array of associated licences', () => {
-        const result = UserExternalPresenter.go(user, viewingUserScope)
+        const result = UserPresenter.go(user, viewingUserScope)
 
         expect(result.companies[0].licences).to.equal([
           {
@@ -339,7 +339,7 @@ describe('Users - User External Presenter', () => {
       })
 
       it('returns an empty array', () => {
-        const result = UserExternalPresenter.go(user, viewingUserScope)
+        const result = UserPresenter.go(user, viewingUserScope)
 
         expect(result.companies[0].verifications).to.be.an.array()
         expect(result.companies[0].verifications).to.be.empty()
@@ -401,7 +401,7 @@ describe('Users - User External Presenter', () => {
       })
 
       it('returns an array of associated verifications', () => {
-        const result = UserExternalPresenter.go(user, viewingUserScope)
+        const result = UserPresenter.go(user, viewingUserScope)
         expect(result.companies[0].verifications).to.equal([
           {
             sent: '6 October 2022',
@@ -433,7 +433,7 @@ describe('Users - User External Presenter', () => {
   describe('the "showEditButton" property', () => {
     describe('when the viewing user has "manage_accounts" in their scope', () => {
       it('returns "true"', () => {
-        const result = UserExternalPresenter.go(user, viewingUserScope)
+        const result = UserPresenter.go(user, viewingUserScope)
 
         expect(result.showEditButton).to.be.true()
       })
@@ -445,7 +445,7 @@ describe('Users - User External Presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = UserExternalPresenter.go(user, viewingUserScope)
+        const result = UserPresenter.go(user, viewingUserScope)
 
         expect(result.showEditButton).to.be.false()
       })

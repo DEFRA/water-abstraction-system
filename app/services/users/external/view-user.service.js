@@ -2,11 +2,11 @@
 
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}` page
- * @module ViewUserExternalService
+ * @module ViewUserService
  */
 
-const FetchUserExternalService = require('./fetch-user-external.service.js')
-const UserExternalPresenter = require('../../presenters/users/user-external.presenter.js')
+const FetchUserService = require('./fetch-user.service.js')
+const UserPresenter = require('../../../presenters/users/external/user.presenter.js')
 
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}` page
@@ -17,9 +17,9 @@ const UserExternalPresenter = require('../../presenters/users/user-external.pres
  * @returns {Promise<object>} The view data for the external user page
  */
 async function go(id, auth) {
-  const externalUser = await FetchUserExternalService.go(id)
+  const externalUser = await FetchUserService.go(id)
 
-  const formattedData = UserExternalPresenter.go(externalUser, auth.credentials.scope)
+  const formattedData = UserPresenter.go(externalUser, auth.credentials.scope)
 
   return {
     ...formattedData
