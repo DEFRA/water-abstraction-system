@@ -34,9 +34,10 @@ describe('Users - External - User Presenter', () => {
       },
       companies: [],
       id: user.id,
-      lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+      lastSignedIn: '6 October 2022 at 10:00:00',
       pageTitle: 'User external@example.co.uk',
       pageTitleCaption: 'External',
+      permissions: 'None',
       showEditButton: true,
       status: 'enabled'
     })
@@ -75,7 +76,7 @@ describe('Users - External - User Presenter', () => {
       it('returns the last signed in date and time', () => {
         const result = UserPresenter.go(user, viewingUserScope, back)
 
-        expect(result.lastSignedIn).to.equal('Last signed in 6 October 2022 at 10:00:00')
+        expect(result.lastSignedIn).to.equal('6 October 2022 at 10:00:00')
       })
     })
 

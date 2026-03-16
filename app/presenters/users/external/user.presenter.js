@@ -26,6 +26,7 @@ function go(user, viewingUserScope, back) {
     lastSignedIn: _lastSignedIn(user),
     pageTitle: `User ${user.username}`,
     pageTitleCaption: 'External',
+    permissions: user.$permissions().label,
     showEditButton: viewingUserScope.includes('manage_accounts'),
     status: user.$status()
   }
@@ -93,7 +94,7 @@ function _lastSignedIn(user) {
     return 'Never signed in'
   }
 
-  return `Last signed in ${formatLongDateTime(lastLogin)}`
+  return formatLongDateTime(lastLogin)
 }
 
 function _licenceHolderName(licenceDocumentHeaderMetadata) {

@@ -1,11 +1,36 @@
 {% extends 'layout.njk' %}
+
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% from "macros/user-status-tag.njk" import statusTag %}
 
 {% block pageContent %}
-  <p>{{ statusTag(status) }} {{ lastSignedIn }}</p>
+  <p>{{ statusTag(status) }}</p>
+
+  {{ govukSummaryList({
+    classes: 'govuk-summary-list--no-border',
+    attributes: { 'data-test': 'meta-data' },
+    rows: [
+      {
+        key: { text: "Highest permissions", classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-permissions">' + permissions + '</span>', classes: "meta-data__value" }
+      },
+      {
+        key: { text: "Last sign in", classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-last-sign-in">' + lastSignedIn + '</span>', classes: "meta-data__value" }
+      }
+    ]
+  }) }}
+
+  {% if showEditButton %}
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+      {{ govukButton({ text: "Edit", preventDoubleClick: true }) }}
+    </form>
+  {% endif %}
 
   {% for company in companies %}
     <h2 class="govuk-heading-l govuk-!-margin-bottom-0">{{ company.companyName }}</h2>
@@ -32,12 +57,4 @@
       }) }}
     {% endif %}
   {% endfor %}
-
-  {% if showEditButton %}
-    <form method="post">
-      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
-
-      {{ govukButton({ text: "Edit", preventDoubleClick: true }) }}
-    </form>
-  {% endif %}
 {% endblock %}

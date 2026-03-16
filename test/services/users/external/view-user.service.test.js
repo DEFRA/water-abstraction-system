@@ -45,9 +45,10 @@ describe('Users - External - View User service', () => {
         },
         companies: [],
         id: user.id,
-        lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+        lastSignedIn: '6 October 2022 at 10:00:00',
         pageTitle: 'User external@example.co.uk',
         pageTitleCaption: 'External',
+        permissions: 'None',
         showEditButton: true,
         status: 'enabled'
       })
