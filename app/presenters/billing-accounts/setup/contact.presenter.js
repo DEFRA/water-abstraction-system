@@ -5,6 +5,8 @@
  * @module ContactPresenter
  */
 
+const { checkUrl } = require('../../../lib/check-page.lib.js')
+
 /**
  * Formats data for the `/billing-accounts/setup/{billingAccountId}/contact` page
  *
@@ -18,7 +20,7 @@ function go(session, companyContacts) {
 
   return {
     backLink: {
-      href: `/system/billing-accounts/setup/${session.id}/fao`,
+      href: checkUrl(session, `/system/billing-accounts/setup/${session.id}/fao`),
       text: 'Back'
     },
     contactSelected: session.contactSelected ?? null,
