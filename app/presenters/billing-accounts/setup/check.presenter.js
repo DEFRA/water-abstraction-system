@@ -24,6 +24,7 @@ function go(session, companyContacts, existingAddress, companysHouseResult) {
     addressSelected: _address(existingAddress),
     companySearch: session.companySearch ?? '',
     companiesHouseName: companysHouseResult ? companysHouseResult.title : '',
+    contactName: session.contactName ?? '',
     contactSelected: _contactSelected(session, companyContacts),
     existingAccount: _existingAccount(session, companyContacts),
     fao: session.fao,
@@ -90,6 +91,7 @@ function _links(session) {
     addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
     companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
     companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
+    contactName: `/system/billing-accounts/setup/${session.id}/contact-name`,
     contactSelected: `/system/billing-accounts/setup/${session.id}/contact`,
     existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`,
     fao: `/system/billing-accounts/setup/${session.id}/fao`

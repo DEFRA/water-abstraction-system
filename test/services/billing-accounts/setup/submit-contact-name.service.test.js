@@ -15,14 +15,15 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SubmitContactNameService = require('../../../../app/services/billing-accounts/setup/submit-contact-name.service.js')
 
 describe('Billing Accounts - Setup - Contact Name Service', () => {
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+
   let payload
   let session
   let sessionData
 
   beforeEach(async () => {
-    payload = { placeholder: 'change me' }
     sessionData = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+      billingAccount
     }
 
     session = await SessionHelper.add({ data: sessionData })
@@ -52,6 +53,95 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
 
       expect(result).to.equal({
         redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+      })
+    })
+
+    describe('and the user has returned to the page and entered the same name', () => {
+      beforeEach(async () => {
+        sessionData = {
+          billingAccount,
+          contactName: 'Contact Name'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitContactNameService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.contactName).to.equal(payload.contactName)
+      })
+
+      it('continues the journey', async () => {
+        const result = await SubmitContactNameService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+        })
+      })
+    })
+
+    describe('and the user has returned to the page from the check and entered the same name', () => {
+      beforeEach(async () => {
+        sessionData = {
+          billingAccount,
+          checkPageVisited: true,
+          contactName: 'Contact Name'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitContactNameService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.contactName).to.equal(payload.contactName)
+        expect(refreshedSession.checkPageVisited).to.equal(true)
+      })
+
+      it('returns to the check page', async () => {
+        const result = await SubmitContactNameService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+        })
+      })
+    })
+
+    describe('and the user has returned to the page from the check and changes the contact name', () => {
+      beforeEach(async () => {
+        payload = {
+          contactName: 'New Name'
+        }
+
+        sessionData = {
+          billingAccount,
+          checkPageVisited: true,
+          contactName: 'Contact Name'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitContactNameService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.contactName).to.equal(payload.contactName)
+        expect(refreshedSession.checkPageVisited).to.equal(false)
+      })
+
+      it('returns to the check page', async () => {
+        const result = await SubmitContactNameService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+        })
       })
     })
   })
