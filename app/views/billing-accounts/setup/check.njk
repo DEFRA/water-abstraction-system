@@ -110,7 +110,20 @@
             }
           ]
         }
-      } if fao
+      } if fao,
+      {
+        key: { text: "Contact selected" },
+        value: { text: contactSelected },
+        actions: {
+          items: [
+            {
+              href: links.contactSelected,
+              text: "Change",
+              visuallyHiddenText: "contact selected"
+            }
+          ]
+        }
+      } if contactSelected
     ]
   }) }}
 
