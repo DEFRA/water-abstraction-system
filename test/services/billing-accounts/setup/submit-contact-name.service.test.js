@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 // Thing under test
 const SubmitContactNameService = require('../../../../app/services/billing-accounts/setup/submit-contact-name.service.js')
 
-describe.only('Billing Accounts - Setup - Contact Name Service', () => {
+describe('Billing Accounts - Setup - Contact Name Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
 
   let payload
