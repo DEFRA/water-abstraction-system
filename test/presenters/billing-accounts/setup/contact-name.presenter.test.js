@@ -14,11 +14,13 @@ const BillingAccountsFixture = require('../../../support/fixtures/billing-accoun
 const ContactNamePresenter = require('../../../../app/presenters/billing-accounts/setup/contact-name.presenter.js')
 
 describe('Billing Accounts - Setup - Contact Name Presenter', () => {
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+
   let session
 
   beforeEach(() => {
     session = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+      billingAccount
     }
   })
 
@@ -56,6 +58,39 @@ describe('Billing Accounts - Setup - Contact Name Presenter', () => {
         const result = ContactNamePresenter.go(session)
 
         expect(result.contactName).to.equal(session.contactName)
+      })
+    })
+  })
+
+  describe('"backLink" property', () => {
+    describe('when check page has not been visited', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount,
+          contactName: 'Contact Name'
+        }
+      })
+
+      it('returns the correct back link', () => {
+        const result = ContactNamePresenter.go(session)
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/contact`)
+      })
+    })
+
+    describe('when check page has been visited', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount,
+          checkPageVisited: true,
+          contactName: 'Contact Name'
+        }
+      })
+
+      it('returns the correct back link', () => {
+        const result = ContactNamePresenter.go(session)
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
       })
     })
   })

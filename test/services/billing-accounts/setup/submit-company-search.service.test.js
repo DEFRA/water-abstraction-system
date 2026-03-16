@@ -100,6 +100,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
       const refreshedSession = await session.$query()
 
       expect(refreshedSession.companySearch).to.equal(payload.companySearch)
+      expect(refreshedSession.checkPageVisited).to.equal(true)
     })
 
     it('continues the journey', async () => {

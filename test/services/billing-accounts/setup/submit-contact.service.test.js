@@ -112,6 +112,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         const refreshedSession = await session.$query()
 
         expect(refreshedSession.contactSelected).to.equal(payload.contactSelected)
+        expect(refreshedSession.checkPageVisited).to.equal(true)
       })
 
       it('returns to the check page', async () => {
