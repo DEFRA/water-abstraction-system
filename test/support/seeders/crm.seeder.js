@@ -65,75 +65,72 @@ async function seed() {
   const licenceDocumentHeader = await _licenceDocumentHeader(companyEntityId, licence.record.licenceRef)
 
   // Set up external users - linked to the company by the licence
-  const basicUser = await _basicUser(companyEntityId, 'minerva.mchonagall@hogwarts.com')
-  const primaryUser = await _primaryUser(companyEntityId, 'albus.dumbledore@hogwarts.com')
-  const returnsUser = await _returnsUser(companyEntityId, 'severus.snape@hogwarts.com')
+  const basicUser = await _basicUser(companyEntityId, 'Minerva McGonagall')
+  const primaryUser = await _primaryUser(companyEntityId, 'Albus Dumbledore')
+  const returnsUser = await _returnsUser(companyEntityId, 'Severus Snape')
 
   // Set up additional contacts - linked to the company via the company contacts
-  const abstractionAlerts = await _abstractionAlertsContact(companyId)
+  const abstractionAlerts = await _additionalContact(companyId, 'Gilderoy Lockhart', true)
   const additionalContact = await _additionalContact(companyId, 'Horace Slughorn')
 
   // Set up billing accounts
   const billing = await _billing(companyId)
 
   // Set up returns to - a contact linked through the licence document role to the company.
-  const returnsTo = await _returnsTo(company)
-  const otherReturnsTo = await _returnsTo(company, new Date('2020-01-01'))
+  const returnsTo = await _returnsTo(company.record)
 
-  // Extra contacts - ensures the 'FetchCompanyCRMDataService' returns all licences related to a company; we need to
-  // add an extra contact; this contact is linked to the company.
-  const extraCompanyEntity = await _licenceCompanyEntity('The Leaky Cauldron')
-  const extraLicence = await _licence(company)
-  const extraLicenceDocumentHeader = await _licenceDocumentHeader(
-    extraCompanyEntity.record.id,
-    extraLicence.record.licenceRef
-  )
-  const extraBasicUser = await _basicUser(extraCompanyEntity.record.id, 'Rubeus Hagrid')
-
-  // Other contacts - are set up is similar to the 'extra' contact, but the company is different. The query should not
-  // return this as the company is different. This contact is not linked to the company.
-  const otherCompany = await _company("Weasleys' Wizard Wheezes")
-  const otherCompanyEntity = await _licenceCompanyEntity(otherCompany.record.name)
-  const otherLicence = await _licence(otherCompany)
+  // Other contacts - To ensure the 'FetchCompanyCRMDataService' returns all licences related to a company, we need to
+  // add another contact; this contact is linked to the company.
+  const otherCompanyContact = await _additionalCompanyContact(additionalContact)
+  const otherCompanyEntity = await _licenceCompanyEntity('The Leaky Cauldron')
+  const otherLicence = await _licence(company)
   const otherLicenceDocumentHeader = await _licenceDocumentHeader(
     otherCompanyEntity.record.id,
     otherLicence.record.licenceRef
   )
-  const otherBasicUser = await _basicUser(otherCompanyEntity.record.id, 'Draco Malfoy')
-  const otherCompanyContact = await _additionalCompanyContact(otherCompany, additionalContact)
+  const additionalBasicUser = await _basicUser(otherCompanyEntity.record.id, 'Rubeus Hagrid')
+
+  // Extra contact - Is set up is similar to the 'other' contact, but the company is different. The query should not
+  // return the  as the company is different. This contact is not linked to the company.
+  const extraCompany = await _company("Weasleys' Wizard Wheezes")
+  const extraCompanyEntity = await _licenceCompanyEntity(extraCompany.record.name)
+  const extraLicence = await _licence(extraCompany)
+  const extraLicenceDocumentHeader = await _licenceDocumentHeader(
+    extraCompanyEntity.record.id,
+    extraLicence.record.licenceRef
+  )
+  const extraBasicUser = await _basicUser(extraCompanyEntity.record.id, 'Draco Malfoy')
 
   return {
     abstractionAlerts,
+    additionalBasicUser,
     additionalContact,
     basicUser,
     billing,
     company,
-    extraBasicUser,
     licence,
     primaryUser,
     returnsTo,
     returnsUser,
     clean: async () => {
       await abstractionAlerts.clean()
+      await additionalBasicUser.clean()
       await additionalContact.clean()
       await basicUser.clean()
       await billing.clean()
       await company.clean()
       await companyEntity.clean()
       await extraBasicUser.clean()
-      await extraBasicUser.clean()
+      await extraCompany.clean()
       await extraCompanyEntity.clean()
       await extraLicence.clean()
       await extraLicenceDocumentHeader.clean()
       await licence.clean()
       await licenceDocumentHeader.clean()
-      await otherBasicUser.clean()
-      await otherCompany.clean()
       await otherCompanyContact.clean()
       await otherCompanyEntity.clean()
       await otherLicence.clean()
       await otherLicenceDocumentHeader.clean()
-      await otherReturnsTo.clean()
       await primaryUser.clean()
       await returnsTo.clean()
       await returnsUser.clean()
@@ -141,34 +138,14 @@ async function seed() {
   }
 }
 
-async function _abstractionAlertsContact(companyId) {
-  const licenceRole = LicenceRoleHelper.select('additionalContact')
-
-  const contact = await ContactHelper.add({
-    contactType: 'person',
-    department: null,
-    firstName: 'Gilderoy',
-    lastName: 'Lockhart',
-    salutation: 'Prof'
-  })
-
-  const companyContact = await CompanyContactHelper.add({
-    contactId: contact.id,
-    licenceRoleId: licenceRole.id,
-    abstractionAlerts: true,
-    companyId
-  })
-
-  return {
-    record: companyContact,
-    clean: async () => {
-      await companyContact.$query().delete()
-      await contact.$query().delete()
-    }
-  }
-}
-
-async function _additionalContact(companyId, name) {
+/**
+ * An additional contact is added in the system logic.
+ *
+ * An abstraction alerts contact is an additional contact marked for abstraction alerts.
+ *
+ * @private
+ */
+async function _additionalContact(companyId, name, abstractionAlerts = false) {
   const licenceRole = LicenceRoleHelper.select('additionalContact')
 
   const contact = await ContactHelper.add({
@@ -179,7 +156,7 @@ async function _additionalContact(companyId, name) {
   const companyContact = await CompanyContactHelper.add({
     contactId: contact.id,
     licenceRoleId: licenceRole.id,
-    abstractionAlerts: false,
+    abstractionAlerts,
     companyId
   })
 
@@ -192,18 +169,8 @@ async function _additionalContact(companyId, name) {
   }
 }
 
-/**
- * An additional company contact using the contact id from the original company.
- *
- * This highlights the same contact can be associated with multiple companies.
- *
- * @private
- */
-async function _additionalCompanyContact(company, additionalContact) {
-  const additionalCompanyContact = await CompanyContactHelper.add({
-    company: company.record.contactId,
-    contactId: additionalContact.record.contactId
-  })
+async function _additionalCompanyContact(additionalContact) {
+  const additionalCompanyContact = await CompanyContactHelper.add({ contactId: additionalContact.record.contactId })
 
   return {
     record: additionalCompanyContact,
@@ -341,13 +308,13 @@ async function _primaryUser(companyEntityId, name) {
   }
 }
 
-async function _returnsTo(company, endDate = null) {
+async function _returnsTo(company) {
   const licenceRole = await LicenceRoleHelper.select('returnsTo')
 
   const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
-    companyId: company.record.id,
+    companyId: company.id,
     licenceRoleId: licenceRole.id,
-    endDate
+    endDate: null
   })
 
   return {
