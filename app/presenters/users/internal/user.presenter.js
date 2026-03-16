@@ -2,12 +2,12 @@
 
 /**
  * Formats data for internal users on the `/users/internal/{id}` page
- * @module UserInternalPresenter
+ * @module UserPresenter
  */
 
-const { formatLongDateTime, sentenceCase } = require('../base.presenter.js')
+const { formatLongDateTime, sentenceCase } = require('../../base.presenter.js')
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 /**
  * Formats data for internal users on the `/users/internal/{id}` page
