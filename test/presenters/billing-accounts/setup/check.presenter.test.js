@@ -26,7 +26,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   const contact = exampleContacts[0].contact
   const companyContacts = {
     company: billingAccount.company,
-    contacts: [contact]
+    contacts: []
   }
 
   let session
@@ -49,6 +49,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         addressSelected: ['New'],
         companiesHouseName: '',
         companySearch: '',
+        contactSelected: '',
         existingAccount: '',
         fao: 'no',
         links: {
@@ -57,6 +58,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
           companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
           companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
+          contactSelected: `/system/billing-accounts/setup/${session.id}/contact`,
           existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`,
           fao: `/system/billing-accounts/setup/${session.id}/fao`
         },
@@ -384,6 +386,44 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         )
 
         expect(result.fao).to.equal('no')
+      })
+    })
+  })
+
+  describe('the "contactSelected" property', () => {
+    beforeEach(() => {
+      companyContacts.contacts.push(contact)
+    })
+
+    describe('when "new" was selected', () => {
+      it('returns string for display', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            contactSelected: 'new'
+          },
+          companyContacts,
+          address,
+          companysHouseResult
+        )
+
+        expect(result.contactSelected).to.equal('New contact')
+      })
+    })
+
+    describe('when an existing contact was selected', () => {
+      it('returns the contact name', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            contactSelected: contact.id
+          },
+          companyContacts,
+          [],
+          null
+        )
+
+        expect(result.contactSelected).to.equal(contact.$name())
       })
     })
   })

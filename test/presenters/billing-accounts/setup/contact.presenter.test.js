@@ -108,4 +108,37 @@ describe('Billing Accounts - Setup - Contact Presenter', () => {
       })
     })
   })
+
+  describe('"backLink" property', () => {
+    describe('when check page has not been visited', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount,
+          contactSelected: contact.id
+        }
+      })
+
+      it('returns the correct back link', () => {
+        const result = ContactPresenter.go(session, companyContacts)
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/fao`)
+      })
+    })
+
+    describe('when check page has been visited', () => {
+      beforeEach(() => {
+        session = {
+          billingAccount,
+          checkPageVisited: true,
+          contactSelected: contact.id
+        }
+      })
+
+      it('returns the correct back link', () => {
+        const result = ContactPresenter.go(session, companyContacts)
+
+        expect(result.backLink.href).to.equal(`/system/billing-accounts/setup/${session.id}/check`)
+      })
+    })
+  })
 })

@@ -94,6 +94,34 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         })
       })
     })
+
+    describe('and the user has returned to the page from the check and made the same choice', () => {
+      beforeEach(async () => {
+        sessionData = {
+          billingAccount,
+          checkPageVisited: true,
+          contactSelected: 'new'
+        }
+
+        session = await SessionHelper.add({ data: sessionData })
+      })
+
+      it('saves the submitted value', async () => {
+        await SubmitContactService.go(session.id, payload)
+
+        const refreshedSession = await session.$query()
+
+        expect(refreshedSession.contactSelected).to.equal(payload.contactSelected)
+      })
+
+      it('returns to the check page', async () => {
+        const result = await SubmitContactService.go(session.id, payload)
+
+        expect(result).to.equal({
+          redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+        })
+      })
+    })
   })
 
   describe('when the user picks an existing contact', () => {
