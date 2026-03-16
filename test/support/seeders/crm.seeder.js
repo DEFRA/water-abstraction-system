@@ -78,7 +78,7 @@ async function seed() {
 
   // Set up returns to - a contact linked through the licence document role to the company.
   const returnsTo = await _returnsTo(company)
-  const otherReturnsTo = await _returnsTo(company, new Date('2020-01-01'))
+  // const otherReturnsTo = await _returnsTo(company, new Date('2020-01-01'))
 
   // Extra contacts - ensures the 'FetchCompanyCRMDataService' returns all licences related to a company; we need to
   // add an extra contact; this contact is linked to the company.
@@ -133,7 +133,7 @@ async function seed() {
       await otherCompanyEntity.clean()
       await otherLicence.clean()
       await otherLicenceDocumentHeader.clean()
-      await otherReturnsTo.clean()
+      // await otherReturnsTo.clean()
       await primaryUser.clean()
       await returnsTo.clean()
       await returnsUser.clean()
