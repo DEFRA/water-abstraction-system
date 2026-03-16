@@ -49,7 +49,7 @@ describe('Companies - Fetch company crm data service', () => {
           {
             contactType: 'primary-user',
             id: crmData.primaryUser.record.id,
-            contactName: 'Albus Dumbledore'
+            contactName: 'albus.dumbledore@hogwarts.com'
           },
           {
             contactType: 'abstraction-alerts',
@@ -112,7 +112,7 @@ describe('Companies - Fetch company crm data service', () => {
               {
                 contactType: 'primary-user',
                 id: crmData.primaryUser.record.id,
-                contactName: 'Albus Dumbledore'
+                contactName: 'albus.dumbledore@hogwarts.com'
               }
             ],
             totalNumber: 9
@@ -135,7 +135,7 @@ describe('Companies - Fetch company crm data service', () => {
               {
                 contactType: 'primary-user',
                 id: crmData.primaryUser.record.id,
-                contactName: 'Albus Dumbledore'
+                contactName: 'albus.dumbledore@hogwarts.com'
               }
             ],
             totalNumber: 9

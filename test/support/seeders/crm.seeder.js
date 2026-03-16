@@ -66,7 +66,7 @@ async function seed() {
 
   // Set up external users - linked to the company by the licence
   const basicUser = await _basicUser(companyEntityId, 'Minerva McGonagall')
-  const primaryUser = await _primaryUser(companyEntityId, 'Albus Dumbledore')
+  const primaryUser = await _primaryUser(companyEntityId, 'albus.dumbledore@hogwarts.com')
   const returnsUser = await _returnsUser(companyEntityId, 'Severus Snape')
 
   // Set up additional contacts - linked to the company via the company contacts
