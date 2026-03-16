@@ -67,7 +67,7 @@ function _contactSelected(session, companyContacts) {
   const contact = contacts.find((contact) => {
     return contact.id === session.contactSelected
   })
-console.log(session, companyContacts)
+
   return contact.$name()
 }
 
