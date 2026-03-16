@@ -41,11 +41,11 @@ async function go(sessionId, payload) {
 }
 
 async function _save(session, payload) {
-  session.contactName = payload.contactName
-
   if (session.checkPageVisited && session.contactName !== payload.contactName) {
     session.checkPageVisited = false
   }
+
+  session.contactName = payload.contactName
 
   return session.$update()
 }
