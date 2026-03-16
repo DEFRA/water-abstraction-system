@@ -64,11 +64,11 @@ function _contactSelected(session, companyContacts) {
     return ''
   }
 
-  const contact = contacts.find((contact) => {
+  const selectedContact = contacts.find((contact) => {
     return contact.id === session.contactSelected
   })
 
-  return contact.$name()
+  return selectedContact.$name()
 }
 
 function _existingAccount(session, companyContacts) {
