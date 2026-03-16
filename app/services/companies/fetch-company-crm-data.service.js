@@ -47,7 +47,7 @@ async function _fetch(companyId, billingRole, page) {
 
   const paginationAndOrderBy = `
   ORDER BY
-    LOWER(r."contactName") ASC,
+    r."contactName" ASC,
     r."contactType" ASC
   LIMIT ? OFFSET ?
   `
