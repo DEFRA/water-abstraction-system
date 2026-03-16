@@ -77,7 +77,8 @@ async function seed() {
   const billing = await _billing(companyId)
 
   // Set up returns to - a contact linked through the licence document role to the company.
-  const returnsTo = await _returnsTo(company.record)
+  const returnsTo = await _returnsTo(company)
+  const otherReturnsTo = await _returnsTo(company, new Date('2020-01-01'))
 
   // Extra contacts - ensures the 'FetchCompanyCRMDataService' returns all licences related to a company; we need to
   // add an extra contact; this contact is linked to the company.
@@ -99,7 +100,6 @@ async function seed() {
     otherLicence.record.licenceRef
   )
   const otherBasicUser = await _basicUser(otherCompanyEntity.record.id, 'Draco Malfoy')
-  const otherReturnsTo = await _returnsTo(company.record, new Date('2020-01-01'))
   const otherCompanyContact = await _additionalCompanyContact(otherCompany, additionalContact)
 
   return {
@@ -345,7 +345,7 @@ async function _returnsTo(company, endDate = null) {
   const licenceRole = await LicenceRoleHelper.select('returnsTo')
 
   const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
-    companyId: company.id,
+    companyId: company.record.id,
     licenceRoleId: licenceRole.id,
     endDate
   })
