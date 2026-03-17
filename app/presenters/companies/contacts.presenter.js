@@ -6,6 +6,7 @@
  */
 
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+const { contactLink } = require('../crm.presenter.js')
 const { roles } = require('../../lib/static-lookups.lib.js')
 
 /**
@@ -32,40 +33,11 @@ function go(company, contacts) {
 function _contacts(contacts, company) {
   return contacts.map((contact) => {
     return {
-      action: _contactLinks(company, contact),
+      link: contactLink(contact, `company-id=${company.id}`),
       name: contact.contactName,
       type: roles[contact.contactType].label
     }
   })
-}
-
-/**
- * The ids returned from the query are unique to the contact type.
- *
- * We use the type to determine the correct link for the contact.
- *
- * @private
- */
-function _contactLinks(company, contact) {
-  const billingTypes = ['billing']
-  const companyContactTypes = ['abstraction-alerts', 'additional-contact']
-  const userTypes = ['basic-user', 'primary-user', 'returns-user']
-
-  if (billingTypes.includes(contact.contactType)) {
-    return `/system/billing-accounts/${contact.id}?company-id=${company.id}`
-  }
-
-  if (companyContactTypes.includes(contact.contactType)) {
-    return FeatureFlagsConfig.enableCustomerManage
-      ? `/system/company-contacts/${contact.id}`
-      : `/customer/${company.id}/contacts/${contact.id}`
-  }
-
-  if (userTypes.includes(contact.contactType)) {
-    return `/system/users/external/${contact.id}`
-  }
-
-  return `/system/companies/${contact.id}/${contact.contactType}`
 }
 
 /**

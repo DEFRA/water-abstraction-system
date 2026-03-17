@@ -63,12 +63,12 @@ describe('Licences - Contact Details presenter', () => {
         customerContactLink: `/system/companies/${companyId}/contacts`,
         contacts: [
           {
-            action: `/system/company-contacts/${contacts[0].id}`,
+            link: `/system/company-contacts/${contacts[0].id}`,
             name: 'Rachael Tyrell',
             type: 'Additional contact'
           },
           {
-            action: `/system/companies/${companyId}/licence-holder`,
+            link: `/system/companies/${companyId}/licence-holder`,
             name: 'Eldon Tyrell',
             type: 'Licence holder'
           }
@@ -117,7 +117,7 @@ describe('Licences - Contact Details presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              action: `/system/company-contacts/${contacts[0].id}`,
+              link: `/system/company-contacts/${contacts[0].id}`,
               type: 'Abstraction alerts',
               name: 'Rachael Tyrell'
             }
@@ -141,7 +141,7 @@ describe('Licences - Contact Details presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              action: `/system/company-contacts/${contacts[0].id}`,
+              link: `/system/company-contacts/${contacts[0].id}`,
               type: 'Additional contact',
               name: 'Rachael Tyrell'
             }
@@ -165,7 +165,7 @@ describe('Licences - Contact Details presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              action: `/system/billing-accounts/${contacts[0].id}?licence-id=${licence.id}`,
+              link: `/system/billing-accounts/${contacts[0].id}?licence-id=${licence.id}`,
               type: 'Billing',
               name: 'Rachael Tyrell'
             }
@@ -189,7 +189,7 @@ describe('Licences - Contact Details presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              action: `/system/users/external/${contacts[0].id}`,
+              link: `/system/users/external/${contacts[0].id}`,
               type: 'Basic user',
               name: 'user@test.com'
             }
@@ -213,7 +213,7 @@ describe('Licences - Contact Details presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              action: `/system/users/external/${contacts[0].id}`,
+              link: `/system/users/external/${contacts[0].id}`,
               type: 'Primary user',
               name: 'user@test.com'
             }
@@ -237,7 +237,7 @@ describe('Licences - Contact Details presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              action: `/system/users/external/${contacts[0].id}`,
+              link: `/system/users/external/${contacts[0].id}`,
               type: 'Returns user',
               name: 'user@test.com'
             }
@@ -261,7 +261,7 @@ describe('Licences - Contact Details presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              action: `/system/companies/${contacts[0].id}/licence-holder`,
+              link: `/system/companies/${contacts[0].id}/licence-holder`,
               type: 'Licence holder',
               name: 'Rachael Tyrell'
             }
@@ -285,7 +285,7 @@ describe('Licences - Contact Details presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              action: `/system/companies/${contacts[0].id}/returns-to`,
+              link: `/system/companies/${contacts[0].id}/returns-to`,
               type: 'Returns to',
               name: 'Rachael Tyrell'
             }

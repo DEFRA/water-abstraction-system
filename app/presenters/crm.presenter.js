@@ -85,6 +85,33 @@ function contactDetails(contacts) {
 }
 
 /**
+ * Create the contact link for a CRM contact
+ *
+ * @param {object} contact - the contact from the crm data
+ * @param {string} billingQueryArgs - the query args for billing accounts
+ * @returns {object} The formatted contact details
+ */
+function contactLink(contact, billingQueryArgs) {
+  const billingTypes = ['billing']
+  const companyContactTypes = ['abstraction-alerts', 'additional-contact']
+  const userTypes = ['basic-user', 'primary-user', 'returns-user']
+
+  if (billingTypes.includes(contact.contactType)) {
+    return `/system/billing-accounts/${contact.id}?${billingQueryArgs}`
+  }
+
+  if (companyContactTypes.includes(contact.contactType)) {
+    return `/system/company-contacts/${contact.id}`
+  }
+
+  if (userTypes.includes(contact.contactType)) {
+    return `/system/users/external/${contact.id}`
+  }
+
+  return `/system/companies/${contact.id}/${contact.contactType}`
+}
+
+/**
  * Filters a list of contacts based on their role and returns their details.
  *
  * ```javascript
@@ -108,8 +135,9 @@ function filteredContactDetailsByRole(contacts) {
 }
 
 module.exports = {
-  contactDetails,
   contactAddress,
+  contactDetails,
+  contactLink,
   contactName,
   filteredContactDetailsByRole
 }

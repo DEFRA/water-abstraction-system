@@ -9,6 +9,8 @@ const { expect } = Code
 
 // Thing under test
 const CRMPresenter = require('../../app/presenters/crm.presenter.js')
+const { generateUUID } = require('../../app/lib/general.lib.js')
+const ContactsPresenter = require('../../app/presenters/companies/contacts.presenter.js')
 
 describe('CRM presenter', () => {
   let contact
@@ -126,6 +128,141 @@ describe('CRM presenter', () => {
           const result = CRMPresenter.contactName(contact)
 
           expect(result).to.equal('ACME Ltd')
+        })
+      })
+    })
+  })
+
+  describe('#contactLink()', () => {
+    const companyId = generateUUID
+    const billingQueryArgs = `company-id=${companyId}`
+
+    describe('when there is a company contact with the type', () => {
+      describe('"abstraction-alerts"', () => {
+        beforeEach(() => {
+          contact = {
+            id: generateUUID(),
+            contactType: 'abstraction-alerts',
+            contactName: 'Rachael Tyrell'
+          }
+        })
+
+        it('returns the correct contact', () => {
+          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+
+          expect(result).to.equal(`/system/company-contacts/${contact.id}`)
+        })
+      })
+
+      describe('"additional-contact"', () => {
+        beforeEach(() => {
+          contact = {
+            id: generateUUID(),
+            contactType: 'additional-contact',
+            contactName: 'Rachael Tyrell'
+          }
+        })
+
+        it('returns the correct contact', () => {
+          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+
+          expect(result).to.equal(`/system/company-contacts/${contact.id}`)
+        })
+      })
+
+      describe('"billing"', () => {
+        beforeEach(() => {
+          contact = {
+            id: generateUUID(),
+            contactType: 'billing',
+            contactName: 'Rachael Tyrell'
+          }
+        })
+
+        it('returns the correct contact', () => {
+          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+
+          expect(result).to.equal(`/system/billing-accounts/${contact.id}?company-id=${companyId}`)
+        })
+      })
+
+      describe('"basic-user"', () => {
+        beforeEach(() => {
+          contact = {
+            id: generateUUID(),
+            contactType: 'basic-user',
+            contactName: 'user@test.com'
+          }
+        })
+
+        it('returns the correct contact', () => {
+          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+
+          expect(result).to.equal(`/system/users/external/${contact.id}`)
+        })
+      })
+
+      describe('"primary-user"', () => {
+        beforeEach(() => {
+          contact = {
+            id: generateUUID(),
+            contactType: 'primary-user',
+            contactName: 'user@test.com'
+          }
+        })
+
+        it('returns the correct contact', () => {
+          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+
+          expect(result).to.equal(`/system/users/external/${contact.id}`)
+        })
+      })
+
+      describe('"returns-user"', () => {
+        beforeEach(() => {
+          contact = {
+            id: generateUUID(),
+            contactType: 'returns-user',
+            contactName: 'user@test.com'
+          }
+        })
+
+        it('returns the correct contact', () => {
+          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+
+          expect(result).to.equal(`/system/users/external/${contact.id}`)
+        })
+      })
+
+      describe('"licence-holder"', () => {
+        beforeEach(() => {
+          contact = {
+            id: generateUUID(),
+            contactType: 'licence-holder',
+            contactName: 'Rachael Tyrell'
+          }
+        })
+
+        it('returns the correct contact', () => {
+          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+
+          expect(result).to.equal(`/system/companies/${contact.id}/licence-holder`)
+        })
+      })
+
+      describe('"returns-to"', () => {
+        beforeEach(() => {
+          contact = {
+            id: generateUUID(),
+            contactType: 'returns-to',
+            contactName: 'Rachael Tyrell'
+          }
+        })
+
+        it('returns the correct contact', () => {
+          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+
+          expect(result).to.equal(`/system/companies/${contact.id}/returns-to`)
         })
       })
     })
