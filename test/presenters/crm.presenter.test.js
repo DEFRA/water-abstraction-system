@@ -137,7 +137,9 @@ describe('CRM presenter', () => {
     const companyId = generateUUID
     const billingQueryArgs = `company-id=${companyId}`
 
-    describe('when there is a company contact with the type', () => {
+    describe('When there is a contact with the type', () => {
+      let contact
+
       describe('"abstraction-alerts"', () => {
         beforeEach(() => {
           contact = {
@@ -148,9 +150,13 @@ describe('CRM presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+          const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-          expect(result).to.equal(`/system/company-contacts/${contact.id}`)
+          expect(result).to.equal({
+            link: `/system/company-contacts/${contact.id}`,
+            type: 'Abstraction alerts',
+            name: 'Rachael Tyrell'
+          })
         })
       })
 
@@ -164,9 +170,13 @@ describe('CRM presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+          const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-          expect(result).to.equal(`/system/company-contacts/${contact.id}`)
+          expect(result).to.equal({
+            link: `/system/company-contacts/${contact.id}`,
+            type: 'Additional contact',
+            name: 'Rachael Tyrell'
+          })
         })
       })
 
@@ -180,9 +190,13 @@ describe('CRM presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+          const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-          expect(result).to.equal(`/system/billing-accounts/${contact.id}?company-id=${companyId}`)
+          expect(result).to.equal({
+            link: `/system/billing-accounts/${contact.id}?company-id=${companyId}`,
+            type: 'Billing',
+            name: 'Rachael Tyrell'
+          })
         })
       })
 
@@ -196,9 +210,13 @@ describe('CRM presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+          const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-          expect(result).to.equal(`/system/users/external/${contact.id}`)
+          expect(result).to.equal({
+            link: `/system/users/external/${contact.id}`,
+            type: 'Basic user',
+            name: 'user@test.com'
+          })
         })
       })
 
@@ -212,9 +230,13 @@ describe('CRM presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+          const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-          expect(result).to.equal(`/system/users/external/${contact.id}`)
+          expect(result).to.equal({
+            link: `/system/users/external/${contact.id}`,
+            type: 'Primary user',
+            name: 'user@test.com'
+          })
         })
       })
 
@@ -228,9 +250,13 @@ describe('CRM presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+          const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-          expect(result).to.equal(`/system/users/external/${contact.id}`)
+          expect(result).to.equal({
+            link: `/system/users/external/${contact.id}`,
+            type: 'Returns user',
+            name: 'user@test.com'
+          })
         })
       })
 
@@ -244,9 +270,13 @@ describe('CRM presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+          const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-          expect(result).to.equal(`/system/companies/${contact.id}/licence-holder`)
+          expect(result).to.equal({
+            link: `/system/companies/${contact.id}/licence-holder`,
+            type: 'Licence holder',
+            name: 'Rachael Tyrell'
+          })
         })
       })
 
@@ -260,9 +290,13 @@ describe('CRM presenter', () => {
         })
 
         it('returns the correct contact', () => {
-          const result = CRMPresenter.contactLink(contact, billingQueryArgs)
+          const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-          expect(result).to.equal(`/system/companies/${contact.id}/returns-to`)
+          expect(result).to.equal({
+            link: `/system/companies/${contact.id}/returns-to`,
+            type: 'Returns to',
+            name: 'Rachael Tyrell'
+          })
         })
       })
     })

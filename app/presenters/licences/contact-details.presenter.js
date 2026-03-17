@@ -6,8 +6,7 @@
  */
 
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-const { contactLink } = require('../crm.presenter.js')
-const { roles } = require('../../lib/static-lookups.lib.js')
+const { formatContact } = require('../crm.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/contact-details` view contact details page
@@ -34,11 +33,7 @@ function go(contacts, licence) {
 
 function _contacts(contacts, licenceId) {
   return contacts.map((contact) => {
-    return {
-      link: contactLink(contact, `licence-id=${licenceId}`),
-      name: contact.contactName,
-      type: roles[contact.contactType].label
-    }
+    return formatContact(contact, `licence-id=${licenceId}`)
   })
 }
 

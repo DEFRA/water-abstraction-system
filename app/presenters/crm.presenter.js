@@ -1,5 +1,7 @@
 'use strict'
 
+const { roles } = require('../lib/static-lookups.lib.js')
+
 const CONTACT_ADDRESS_FIELDS = [
   'addressLine1',
   'addressLine2',
@@ -84,14 +86,7 @@ function contactDetails(contacts) {
   })
 }
 
-/**
- * Create the contact link for a CRM contact
- *
- * @param {object} contact - the contact from the crm data
- * @param {string} billingQueryArgs - the query args for billing accounts
- * @returns {object} The formatted contact details
- */
-function contactLink(contact, billingQueryArgs) {
+function _contactLink(contact, billingQueryArgs) {
   const billingTypes = ['billing']
   const companyContactTypes = ['abstraction-alerts', 'additional-contact']
   const userTypes = ['basic-user', 'primary-user', 'returns-user']
@@ -134,10 +129,27 @@ function filteredContactDetailsByRole(contacts) {
   return contactDetails(filteredContactDetails)
 }
 
+/**
+ * Format the contact for the contacts table
+ *
+ * @param {object} contact - the contact from the crm data
+ * @param {string} billingQueryArgs - the query args for billing accounts
+ *
+ *
+ * @returns {object} The formatted contact
+ */
+function formatContact(contact, billingQueryArgs) {
+  return {
+    link: _contactLink(contact, billingQueryArgs),
+    name: contact.contactName,
+    type: roles[contact.contactType].label
+  }
+}
+
 module.exports = {
   contactAddress,
   contactDetails,
-  contactLink,
   contactName,
-  filteredContactDetailsByRole
+  filteredContactDetailsByRole,
+  formatContact
 }
