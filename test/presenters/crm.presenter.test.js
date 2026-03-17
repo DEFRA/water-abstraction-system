@@ -7,10 +7,11 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateUUID } = require('../../app/lib/general.lib.js')
+
 // Thing under test
 const CRMPresenter = require('../../app/presenters/crm.presenter.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
-const ContactsPresenter = require('../../app/presenters/companies/contacts.presenter.js')
 
 describe('CRM presenter', () => {
   let contact

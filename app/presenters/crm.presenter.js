@@ -135,7 +135,6 @@ function filteredContactDetailsByRole(contacts) {
  * @param {object} contact - the contact from the crm data
  * @param {string} billingQueryArgs - the query args for billing accounts
  *
- *
  * @returns {object} The formatted contact
  */
 function formatContact(contact, billingQueryArgs) {
