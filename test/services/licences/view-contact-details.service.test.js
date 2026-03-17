@@ -80,7 +80,7 @@ describe('Licences - View Contact Details service', () => {
         customerContactLink: `/system/companies/${companyId}/contacts`,
         contacts: [
           {
-            action: `/system/companies/${companyId}/licence-holder`,
+            link: `/system/companies/${companyId}/licence-holder`,
             name: 'Eldon Tyrell',
             type: 'Licence holder'
           }
