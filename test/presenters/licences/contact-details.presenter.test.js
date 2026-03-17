@@ -33,17 +33,14 @@ describe('Licences - Contact Details presenter', () => {
 
     contacts = [
       {
-        communicationType: 'Licence Holder',
-        companyId,
-        companyName: 'Acme ltd',
-        address1: '34 Eastgate',
-        address2: null,
-        address3: null,
-        address4: null,
-        address5: null,
-        address6: null,
-        postcode: 'CF71 7DG',
-        country: 'United Kingdom'
+        id: generateUUID(),
+        contactType: 'additional-contact',
+        contactName: 'Rachael Tyrell'
+      },
+      {
+        id: companyId,
+        contactType: 'licence-holder',
+        contactName: 'Eldon Tyrell'
       }
     ]
 
@@ -64,20 +61,16 @@ describe('Licences - Contact Details presenter', () => {
           text: 'Go back to search'
         },
         customerContactLink: `/system/companies/${companyId}/contacts`,
-        licenceContacts: [
+        contacts: [
           {
-            address: {
-              address1: '34 Eastgate',
-              address2: null,
-              address3: null,
-              address4: null,
-              address5: null,
-              address6: null,
-              country: 'United Kingdom',
-              postcode: 'CF71 7DG'
-            },
-            communicationType: 'Licence Holder',
-            name: 'Acme ltd'
+            link: `/system/company-contacts/${contacts[0].id}`,
+            name: 'Rachael Tyrell',
+            type: 'Additional contact'
+          },
+          {
+            link: `/system/companies/${companyId}/licence-holder`,
+            name: 'Eldon Tyrell',
+            type: 'Licence holder'
           }
         ],
         pageTitle: 'Contact details',
@@ -96,13 +89,207 @@ describe('Licences - Contact Details presenter', () => {
 
       describe('when the the licence does not have a "licence Holder" licence contact', () => {
         beforeEach(() => {
-          contacts[0].communicationType = 'Returns'
+          contacts.pop()
         })
 
         it('returns null', () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
           expect(result.customerContactLink).to.be.null()
+        })
+      })
+    })
+
+    describe('and there is a contact with the type', () => {
+      describe('"abstraction-alerts"', () => {
+        beforeEach(() => {
+          contacts = [
+            {
+              id: generateUUID(),
+              contactType: 'abstraction-alerts',
+              contactName: 'Rachael Tyrell'
+            }
+          ]
+        })
+
+        it('returns the correct contact', () => {
+          const result = ContactDetailsPresenter.go(contacts, licence)
+
+          expect(result.contacts).to.equal([
+            {
+              link: `/system/company-contacts/${contacts[0].id}`,
+              type: 'Abstraction alerts',
+              name: 'Rachael Tyrell'
+            }
+          ])
+        })
+      })
+
+      describe('"additional-contact"', () => {
+        beforeEach(() => {
+          contacts = [
+            {
+              id: generateUUID(),
+              contactType: 'additional-contact',
+              contactName: 'Rachael Tyrell'
+            }
+          ]
+        })
+
+        it('returns the correct contact', () => {
+          const result = ContactDetailsPresenter.go(contacts, licence)
+
+          expect(result.contacts).to.equal([
+            {
+              link: `/system/company-contacts/${contacts[0].id}`,
+              type: 'Additional contact',
+              name: 'Rachael Tyrell'
+            }
+          ])
+        })
+      })
+
+      describe('"billing"', () => {
+        beforeEach(() => {
+          contacts = [
+            {
+              id: generateUUID(),
+              contactType: 'billing',
+              contactName: 'Rachael Tyrell'
+            }
+          ]
+        })
+
+        it('returns the correct contact', () => {
+          const result = ContactDetailsPresenter.go(contacts, licence)
+
+          expect(result.contacts).to.equal([
+            {
+              link: `/system/billing-accounts/${contacts[0].id}?licence-id=${licence.id}`,
+              type: 'Billing',
+              name: 'Rachael Tyrell'
+            }
+          ])
+        })
+      })
+
+      describe('"basic-user"', () => {
+        beforeEach(() => {
+          contacts = [
+            {
+              id: generateUUID(),
+              contactType: 'basic-user',
+              contactName: 'user@test.com'
+            }
+          ]
+        })
+
+        it('returns the correct contact', () => {
+          const result = ContactDetailsPresenter.go(contacts, licence)
+
+          expect(result.contacts).to.equal([
+            {
+              link: `/system/users/external/${contacts[0].id}`,
+              type: 'Basic user',
+              name: 'user@test.com'
+            }
+          ])
+        })
+      })
+
+      describe('"primary-user"', () => {
+        beforeEach(() => {
+          contacts = [
+            {
+              id: generateUUID(),
+              contactType: 'primary-user',
+              contactName: 'user@test.com'
+            }
+          ]
+        })
+
+        it('returns the correct contact', () => {
+          const result = ContactDetailsPresenter.go(contacts, licence)
+
+          expect(result.contacts).to.equal([
+            {
+              link: `/system/users/external/${contacts[0].id}`,
+              type: 'Primary user',
+              name: 'user@test.com'
+            }
+          ])
+        })
+      })
+
+      describe('"returns-user"', () => {
+        beforeEach(() => {
+          contacts = [
+            {
+              id: generateUUID(),
+              contactType: 'returns-user',
+              contactName: 'user@test.com'
+            }
+          ]
+        })
+
+        it('returns the correct contact', () => {
+          const result = ContactDetailsPresenter.go(contacts, licence)
+
+          expect(result.contacts).to.equal([
+            {
+              link: `/system/users/external/${contacts[0].id}`,
+              type: 'Returns user',
+              name: 'user@test.com'
+            }
+          ])
+        })
+      })
+
+      describe('"licence-holder"', () => {
+        beforeEach(() => {
+          contacts = [
+            {
+              id: generateUUID(),
+              contactType: 'licence-holder',
+              contactName: 'Rachael Tyrell'
+            }
+          ]
+        })
+
+        it('returns the correct contact', () => {
+          const result = ContactDetailsPresenter.go(contacts, licence)
+
+          expect(result.contacts).to.equal([
+            {
+              link: `/system/companies/${contacts[0].id}/licence-holder`,
+              type: 'Licence holder',
+              name: 'Rachael Tyrell'
+            }
+          ])
+        })
+      })
+
+      describe('"returns-to"', () => {
+        beforeEach(() => {
+          contacts = [
+            {
+              id: generateUUID(),
+              contactType: 'returns-to',
+              contactName: 'Rachael Tyrell'
+            }
+          ]
+        })
+
+        it('returns the correct contact', () => {
+          const result = ContactDetailsPresenter.go(contacts, licence)
+
+          expect(result.contacts).to.equal([
+            {
+              link: `/system/companies/${contacts[0].id}/returns-to`,
+              type: 'Returns to',
+              name: 'Rachael Tyrell'
+            }
+          ])
         })
       })
     })

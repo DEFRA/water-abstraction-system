@@ -9,17 +9,15 @@ const { describe, it, after, afterEach, before, beforeEach } = (exports.lab = La
 const { expect } = Code
 
 // Test helpers
+const DatabaseConfig = require('../../../config/database.config.js')
 const CRMSeeder = require('../../support/seeders/crm.seeder.js')
 
-// Things we need to stub
-const DatabaseConfig = require('../../../config/database.config.js')
-
 // Thing under test
-const FetchCompanyCRMDataService = require('../../../app/services/companies/fetch-company-crm-data.service.js')
+const FetchLicenceCRMDataService = require('../../../app/services/licences/fetch-licence-crm-data.service.js')
 
-describe('Companies - Fetch Company CRM Data service', () => {
-  let company
+describe('Licences - Fetch Licence CRM data service', () => {
   let crmData
+  let licence
   let page
   let roles
 
@@ -30,7 +28,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
 
     roles = ['billing']
 
-    company = crmData.company
+    licence = crmData.licence.record
   })
 
   after(async () => {
@@ -41,9 +39,9 @@ describe('Companies - Fetch Company CRM Data service', () => {
     Sinon.restore()
   })
 
-  describe('when there are contacts', () => {
-    it('returns the matching contacts', async () => {
-      const result = await FetchCompanyCRMDataService.go(company.record.id, roles, page)
+  describe('when the licence has contact details', () => {
+    it('returns the matching licence contacts', async () => {
+      const result = await FetchLicenceCRMDataService.go(licence.id, roles)
 
       expect(result).to.equal({
         contacts: [
@@ -78,11 +76,6 @@ describe('Companies - Fetch Company CRM Data service', () => {
             contactName: 'Prof Gilderoy Lockhart'
           },
           {
-            contactName: 'rubeus.hagrid@hogwarts.com',
-            contactType: 'basic-user',
-            id: crmData.extraBasicUser.record.id
-          },
-          {
             contactType: 'returns-user',
             id: crmData.returnsUser.record.id,
             contactName: 'severus.snape@hogwarts.com'
@@ -93,7 +86,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
             contactName: crmData.billing.record.accountNumber
           }
         ],
-        totalNumber: 9
+        totalNumber: 8
       })
     })
 
@@ -108,7 +101,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchCompanyCRMDataService.go(company.record.id, roles, page)
+          const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
 
           expect(result).to.equal({
             contacts: [
@@ -118,7 +111,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
                 contactName: 'albus.dumbledore@hogwarts.com'
               }
             ],
-            totalNumber: 9
+            totalNumber: 8
           })
         })
       })
@@ -129,7 +122,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchCompanyCRMDataService.go(company.record.id, roles, page)
+          const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
 
           expect(result).to.equal({
             contacts: [
@@ -139,7 +132,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
                 contactName: 'albus.dumbledore@hogwarts.com'
               }
             ],
-            totalNumber: 9
+            totalNumber: 8
           })
         })
       })
@@ -150,7 +143,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
         })
 
         it('returns the matching contacts for the page (the second page) with the total number', async () => {
-          const result = await FetchCompanyCRMDataService.go(company.record.id, roles, page)
+          const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
 
           expect(result).to.equal({
             contacts: [
@@ -160,7 +153,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
                 contactName: 'Hogwarts'
               }
             ],
-            totalNumber: 9
+            totalNumber: 8
           })
         })
       })

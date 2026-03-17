@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches the company contacts data needed for the view '/companies/{id}/contacts'
+ * Fetches the contacts data needed for the view '/companies/{id}/contacts'
  * @module FetchCompanyCRMDataService
  */
 
@@ -10,7 +10,7 @@ const { db } = require('../../../db/db.js')
 const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
- * Fetches the company contacts data needed for the view '/companies/{id}/contacts'
+ * Fetches the contacts data needed for the view '/companies/{id}/contacts'
  *
  * @param {string} companyId - The company id for the company
  * @param {string[]} roles - roles

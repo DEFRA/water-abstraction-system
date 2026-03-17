@@ -5,10 +5,12 @@
  */
 
 const BillingAccountHelper = require('../helpers/billing-account.helper.js')
+const ChargeVersionHelper = require('../helpers/charge-version.helper.js')
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const CompanyHelper = require('../helpers/company.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
 const LicenceDocumentHeaderHelper = require('../helpers/licence-document-header.helper.js')
+const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
 const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
 const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
@@ -17,6 +19,7 @@ const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js'
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const LicenceVersionHolderHelper = require('../helpers/licence-version-holder.helper.js')
 const UserModel = require('../helpers/user.helper.js')
+const { generateLicenceRef } = require('../helpers/licence.helper.js')
 
 /**
  * Seed CRM data
@@ -74,11 +77,11 @@ async function seed() {
   const additionalContact = await _additionalContact(companyId, 'Horace Slughorn')
 
   // Set up billing accounts
-  const billing = await _billing(companyId)
+  const billing = await _billing(companyId, licence)
 
   // Set up returns to - a contact linked through the licence document role to the company.
-  const returnsTo = await _returnsTo(company)
-  const otherReturnsTo = await _returnsTo(company, new Date('2020-01-01'))
+  const returnsTo = await _returnsTo(company, licence.record.licenceRef)
+  const otherReturnsTo = await _returnsTo(company, generateLicenceRef(), new Date('2020-01-01'))
 
   // Extra contacts - ensures the 'FetchCompanyCRMDataService' returns all licences related to a company; we need to
   // add an extra contact; this contact is linked to the company.
@@ -240,13 +243,20 @@ async function _basicUser(companyEntityId, name) {
   }
 }
 
-async function _billing(companyId) {
+async function _billing(companyId, licence) {
   const billingAccount = await BillingAccountHelper.add({ companyId })
+
+  const chargeVersion = await ChargeVersionHelper.add({
+    companyId,
+    licenceId: licence.record.id,
+    billingAccountId: billingAccount.id
+  })
 
   return {
     record: billingAccount,
     clean: async () => {
       await billingAccount.$query().delete()
+      await chargeVersion.$query().delete()
     }
   }
 }
@@ -273,7 +283,8 @@ async function _licence(company) {
 
   const licenceVersionHolder = await LicenceVersionHolderHelper.add({
     licenceVersionId: licenceVersion.id,
-    companyId: company.record.id
+    companyId: company.record.id,
+    derivedName: company.record.name
   })
 
   return {
@@ -341,7 +352,7 @@ async function _primaryUser(companyEntityId, name) {
   }
 }
 
-async function _returnsTo(company, endDate = null) {
+async function _returnsTo(company, licenceRef, endDate = null) {
   const licenceRole = await LicenceRoleHelper.select('returnsTo')
 
   const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
@@ -350,9 +361,15 @@ async function _returnsTo(company, endDate = null) {
     endDate
   })
 
+  const licenceDocument = await LicenceDocumentHelper.add({
+    id: licenceDocumentRole.licenceDocumentId,
+    licenceRef
+  })
+
   return {
     record: company,
     clean: async () => {
+      await licenceDocument.$query().delete()
       await licenceDocumentRole.$query().delete()
     }
   }
