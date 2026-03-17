@@ -13,9 +13,9 @@ const DatabaseConfig = require('../../../config/database.config.js')
 const CRMSeeder = require('../../support/seeders/crm.seeder.js')
 
 // Thing under test
-const FetchContactDetailsService = require('../../../app/services/licences/fetch-contact-details.service.js')
+const FetchLicenceCRMDataService = require('../../../app/services/licences/fetch-licence-crm-data.service.js')
 
-describe.only('Licences - Fetch Contact Details service', () => {
+describe('Licences - Fetch Licence CRM data service', () => {
   let crmData
   let licence
   let page
@@ -41,7 +41,7 @@ describe.only('Licences - Fetch Contact Details service', () => {
 
   describe('when the licence has contact details', () => {
     it('returns the matching licence contacts', async () => {
-      const result = await FetchContactDetailsService.go(licence.id, roles)
+      const result = await FetchLicenceCRMDataService.go(licence.id, roles)
 
       expect(result).to.equal({
         contacts: [
@@ -76,11 +76,6 @@ describe.only('Licences - Fetch Contact Details service', () => {
             contactName: 'Prof Gilderoy Lockhart'
           },
           {
-            contactName: 'rubeus.hagrid@hogwarts.com',
-            contactType: 'basic-user',
-            id: crmData.extraBasicUser.record.id
-          },
-          {
             contactType: 'returns-user',
             id: crmData.returnsUser.record.id,
             contactName: 'severus.snape@hogwarts.com'
@@ -91,7 +86,7 @@ describe.only('Licences - Fetch Contact Details service', () => {
             contactName: crmData.billing.record.accountNumber
           }
         ],
-        totalNumber: 9
+        totalNumber: 8
       })
     })
 
@@ -106,7 +101,7 @@ describe.only('Licences - Fetch Contact Details service', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchContactDetailsService.go(licence.id, roles, page)
+          const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
 
           expect(result).to.equal({
             contacts: [
@@ -116,7 +111,7 @@ describe.only('Licences - Fetch Contact Details service', () => {
                 contactName: 'albus.dumbledore@hogwarts.com'
               }
             ],
-            totalNumber: 9
+            totalNumber: 8
           })
         })
       })
@@ -127,7 +122,7 @@ describe.only('Licences - Fetch Contact Details service', () => {
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
-          const result = await FetchContactDetailsService.go(licence.id, roles, page)
+          const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
 
           expect(result).to.equal({
             contacts: [
@@ -137,7 +132,7 @@ describe.only('Licences - Fetch Contact Details service', () => {
                 contactName: 'albus.dumbledore@hogwarts.com'
               }
             ],
-            totalNumber: 9
+            totalNumber: 8
           })
         })
       })
@@ -148,7 +143,7 @@ describe.only('Licences - Fetch Contact Details service', () => {
         })
 
         it('returns the matching contacts for the page (the second page) with the total number', async () => {
-          const result = await FetchContactDetailsService.go(licence.id, roles, page)
+          const result = await FetchLicenceCRMDataService.go(licence.id, roles, page)
 
           expect(result).to.equal({
             contacts: [
@@ -158,7 +153,7 @@ describe.only('Licences - Fetch Contact Details service', () => {
                 contactName: 'Hogwarts'
               }
             ],
-            totalNumber: 9
+            totalNumber: 8
           })
         })
       })

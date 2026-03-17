@@ -13,9 +13,9 @@ const { generateLicenceRef } = require('../../support/helpers/licence.helper.js'
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchContactDetailsService = require('../../../app/services/licences/fetch-contact-details.service.js')
-const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+const FetchLicenceCRMDataService = require('../../../app/services/licences/fetch-licence-crm-data.service.js')
+const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
 // Thing under test
 const ViewContactDetailsService = require('../../../app/services/licences/view-contact-details.service.js')
@@ -55,7 +55,7 @@ describe('Licences - View Contact Details service', () => {
       licenceRef
     })
 
-    Sinon.stub(FetchContactDetailsService, 'go').returns({
+    Sinon.stub(FetchLicenceCRMDataService, 'go').returns({
       contacts,
       totalNumber: contacts.length
     })

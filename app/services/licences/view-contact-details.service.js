@@ -5,11 +5,11 @@
  * @module ViewContactDetailsService
  */
 
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 const ContactDetailsPresenter = require('../../presenters/licences/contact-details.presenter.js')
-const FetchContactDetailsService = require('./fetch-contact-details.service.js')
+const FetchLicenceCRMDataService = require('./fetch-licence-crm-data.service.js')
 const FetchLicenceService = require('./fetch-licence.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data needed for the licence contact details page
@@ -24,7 +24,7 @@ async function go(licenceId, auth, page) {
   const licence = await FetchLicenceService.go(licenceId)
   const roles = userRoles(auth)
 
-  const { contacts, totalNumber } = await FetchContactDetailsService.go(licenceId, roles, page)
+  const { contacts, totalNumber } = await FetchLicenceCRMDataService.go(licenceId, roles, page)
 
   const pageData = ContactDetailsPresenter.go(contacts, licence)
 
