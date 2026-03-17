@@ -26,7 +26,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   const contact = exampleContacts[0].contact
   const companyContacts = {
     company: billingAccount.company,
-    contacts: [contact]
+    contacts: []
   }
 
   let session
@@ -49,6 +49,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         addressSelected: ['New'],
         companiesHouseName: '',
         companySearch: '',
+        contactName: '',
+        contactSelected: '',
         existingAccount: '',
         fao: 'no',
         links: {
@@ -57,6 +59,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
           companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
           companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
+          contactName: `/system/billing-accounts/setup/${session.id}/contact-name`,
+          contactSelected: `/system/billing-accounts/setup/${session.id}/contact`,
           existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`,
           fao: `/system/billing-accounts/setup/${session.id}/fao`
         },
@@ -384,6 +388,83 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         )
 
         expect(result.fao).to.equal('no')
+      })
+    })
+  })
+
+  describe('the "contactSelected" property', () => {
+    beforeEach(() => {
+      companyContacts.contacts.push(contact)
+    })
+
+    describe('when "new" was selected', () => {
+      it('returns string for display', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            contactSelected: 'new'
+          },
+          companyContacts,
+          address,
+          companysHouseResult
+        )
+
+        expect(result.contactSelected).to.equal('New contact')
+      })
+    })
+
+    describe('when an existing contact was selected', () => {
+      it('returns the contact name', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            contactSelected: contact.id
+          },
+          companyContacts,
+          address,
+          companysHouseResult
+        )
+
+        expect(result.contactSelected).to.equal(contact.$name())
+      })
+    })
+  })
+
+  describe('the "contactName" property', () => {
+    beforeEach(() => {
+      companyContacts.contacts.push(contact)
+    })
+
+    describe('when a value is provided', () => {
+      it('returns it for display', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            contactSelected: contact.id,
+            contactName: 'Jon Snow'
+          },
+          companyContacts,
+          address,
+          companysHouseResult
+        )
+
+        expect(result.contactName).to.equal('Jon Snow')
+      })
+    })
+
+    describe('when there was no contact name entered', () => {
+      it('returns the contact name', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            contactSelected: contact.id
+          },
+          companyContacts,
+          address,
+          companysHouseResult
+        )
+
+        expect(result.contactName).to.equal('')
       })
     })
   })

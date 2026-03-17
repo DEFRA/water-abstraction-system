@@ -6,25 +6,17 @@
 
 {% set tableRows = [] %}
 
-{% for companyContact in companyContacts %}
+{% for contact in contacts %}
   {% set rowIndex = loop.index0 %}
 
   {% set tableRow = [
     {
-      text: companyContact.name,
-      attributes: { 'data-test': 'contact-name-' + rowIndex }
-    },
-    {
-      text: companyContact.communicationType,
-      attributes: { 'data-test': 'contact-communication-type-' + rowIndex }
-    },
-    {
-      text: companyContact.email,
-      attributes: { 'data-test': 'contact-email-' + rowIndex }
-    },
-    {
-      html: '<a href="' + companyContact.action + '"> View </a>',
+      html: '<a href="' + contact.action + '">' + contact.name + '</a>',
       attributes: { 'data-test': 'contact-action-' + rowIndex }
+    },
+    {
+      text: contact.type,
+      attributes: { 'data-test': 'contact-type-' + rowIndex }
     }
   ] %}
 
@@ -61,13 +53,7 @@
           text: "Name"
         },
         {
-          text: "Communication type"
-        },
-        {
-          text: "Email"
-        },
-        {
-          text: "Action"
+          text: "Contact type"
         }
       ],
       rows: tableRows

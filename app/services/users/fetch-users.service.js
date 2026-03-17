@@ -138,6 +138,9 @@ function _applyBasicPermissionFilter(query, type) {
         1
       FROM
         public.licence_entity_roles ler
+      INNER JOIN
+        public.licence_document_headers ldh
+        ON ldh.company_entity_id = ler.company_entity_id
       WHERE
         ler.licence_entity_id = users.licence_entity_id
         AND ler."role" = 'user'
@@ -147,6 +150,9 @@ function _applyBasicPermissionFilter(query, type) {
         1
       FROM
         public.licence_entity_roles ler
+      INNER JOIN
+        public.licence_document_headers ldh
+        ON ldh.company_entity_id = ler.company_entity_id
       WHERE
         ler.licence_entity_id = users.licence_entity_id
         AND ler."role" != 'user'
@@ -206,6 +212,9 @@ function _applyNonePermissionFilter(query) {
       1
     FROM
       public.licence_entity_roles ler
+    INNER JOIN
+      public.licence_document_headers ldh
+      ON ldh.company_entity_id = ler.company_entity_id
     WHERE
       ler.licence_entity_id = users.licence_entity_id
   )`)
@@ -247,6 +256,9 @@ function _applyPrimaryUserPermissionFilter(query) {
       1
     FROM
       public.licence_entity_roles ler
+    INNER JOIN
+      public.licence_document_headers ldh
+      ON ldh.company_entity_id = ler.company_entity_id
     WHERE
       ler.licence_entity_id = users.licence_entity_id
       AND ler."role" = 'primary_user'
@@ -266,6 +278,9 @@ function _applyReturnsUserPermissionFilter(query) {
       1
     FROM
       public.licence_entity_roles ler
+    INNER JOIN
+      public.licence_document_headers ldh
+      ON ldh.company_entity_id = ler.company_entity_id
     WHERE
       ler.licence_entity_id = users.licence_entity_id
       AND ler."role" = 'user_returns'
@@ -275,6 +290,9 @@ function _applyReturnsUserPermissionFilter(query) {
       1
     FROM
       public.licence_entity_roles ler
+    INNER JOIN
+      public.licence_document_headers ldh
+      ON ldh.company_entity_id = ler.company_entity_id
     WHERE
       ler.licence_entity_id = users.licence_entity_id
       AND ler."role" = 'primary_user'

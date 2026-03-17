@@ -38,6 +38,8 @@ describe('Billing Accounts - Setup - View Check Service', () => {
         addressSelected: ['New'],
         companiesHouseName: '',
         companySearch: '',
+        contactSelected: '',
+        contactName: '',
         existingAccount: '',
         fao: 'no',
         links: {
@@ -46,6 +48,8 @@ describe('Billing Accounts - Setup - View Check Service', () => {
           addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
           companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
           companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
+          contactSelected: `/system/billing-accounts/setup/${session.id}/contact`,
+          contactName: `/system/billing-accounts/setup/${session.id}/contact-name`,
           existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`,
           fao: `/system/billing-accounts/setup/${session.id}/fao`
         },
