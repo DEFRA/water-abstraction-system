@@ -97,10 +97,12 @@ describe('Companies - Fetch Company CRM Data service', () => {
     })
 
     describe('when paginating', () => {
+      beforeEach(() => {
+        Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1)
+      })
+
       describe('and the page is not set', () => {
         beforeEach(() => {
-          Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1)
-
           page = undefined
         })
 
@@ -122,9 +124,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
 
       describe('and the page is set to 1', () => {
         beforeEach(() => {
-          Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1)
-
-          page = 1
+          page = '1'
         })
 
         it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
@@ -145,9 +145,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
 
       describe('and the page is set to greater than 1', () => {
         beforeEach(() => {
-          Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1)
-
-          page = 2
+          page = '2'
         })
 
         it('returns the matching contacts for the page (the second page) with the total number', async () => {
