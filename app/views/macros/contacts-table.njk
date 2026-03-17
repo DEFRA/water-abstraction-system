@@ -8,12 +8,12 @@
 
     {% set tableRow = [
       {
-        html: '<a href="' + contact.link + '">' + contact.name + '</a>',
-        attributes: { 'data-test': 'contact-name-' + rowIndex }
+        attributes: { 'data-test': 'contact-name-' + rowIndex },
+        html: '<a href="' + contact.link + '">' + contact.name + '</a>'
       },
       {
-        text: contact.type,
-        attributes: { 'data-test': 'contact-type-' + rowIndex }
+        attributes: { 'data-test': 'contact-type-' + rowIndex },
+        text: contact.type
       }
     ] %}
 

@@ -134,7 +134,7 @@ describe('CRM presenter', () => {
     })
   })
 
-  describe('#contactLink()', () => {
+  describe('#formatContact()', () => {
     const companyId = generateUUID()
 
     const billingQueryArgs = {
