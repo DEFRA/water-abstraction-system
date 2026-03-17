@@ -5,6 +5,7 @@
  * @module ViewUserService
  */
 
+const FetchOutstandingVerificationsService = require('./fetch-outstanding-verifications.service.js')
 const FetchUserService = require('./fetch-user.service.js')
 const UserPresenter = require('../../../presenters/users/external/user.presenter.js')
 
@@ -20,7 +21,13 @@ const UserPresenter = require('../../../presenters/users/external/user.presenter
 async function go(id, auth, back = 'users') {
   const externalUser = await FetchUserService.go(id)
 
-  const formattedData = UserPresenter.go(externalUser, auth.credentials.scope, back)
+  let outstandingVerifications = []
+
+  if (externalUser.licenceEntity) {
+    outstandingVerifications = await FetchOutstandingVerificationsService.go(externalUser.licenceEntity.id)
+  }
+
+  const formattedData = UserPresenter.go(externalUser, outstandingVerifications, auth.credentials.scope, back)
 
   return {
     activeNavBar: back === 'users' ? 'users' : 'search',

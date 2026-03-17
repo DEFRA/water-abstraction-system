@@ -24,12 +24,14 @@ const EXTERNAL_ROLES = {
  *
  * @param {module:UserModel} user - The user, including their related companies and the licence document headers that
  * are attached to those companies
+ * @param {object[]} outstandingVerifications - The outstanding verifications for the user, including details of
+ * the licences they relate to
  * @param {string[]} viewingUserScope - The 'scope' taken off the `request.auth` object passed to the `ViewUserInternalService`
  * @param {string} back - The 'back' query parameter, used to indicate what back link should be shown on the page
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user, viewingUserScope, back) {
+function go(user, outstandingVerifications, viewingUserScope, back) {
   const permissions = user.$permissions()
 
   return {
@@ -37,6 +39,7 @@ function go(user, viewingUserScope, back) {
     companies: _companies(user),
     id: user.id,
     lastSignedIn: _lastSignedIn(user),
+    outstandingVerifications: _outstandingVerifications(outstandingVerifications),
     pageTitle: `User ${user.username}`,
     pageTitleCaption: 'External',
     permissions: permissions.label,
@@ -219,6 +222,25 @@ function _normalisedCompanyVerifications(userVerifications = []) {
   }, {})
 
   return companies
+}
+
+function _outstandingVerifications(outstandingVerifications) {
+  return outstandingVerifications.map((verification) => {
+    const { verificationCode: code, createdAt, licenceHolder, licenceId, licenceRef } = verification
+
+    const count = outstandingVerifications.filter((verification) => {
+      return verification.verificationCode === code
+    }).length
+
+    return {
+      code,
+      count,
+      createdOn: formatLongDate(createdAt),
+      licenceHolder,
+      licenceRef,
+      link: `/system/licences/${licenceId}/summary`
+    }
+  })
 }
 
 module.exports = {

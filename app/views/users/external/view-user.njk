@@ -36,7 +36,7 @@
   {% if roles.length === 0 %}
     <p data-test='no-roles-msg'>{{ permissions }} grants no additional roles.</p>
   {% else %}
-    {% set tableRows = [] %}
+    {% set rows = [] %}
 
     {% for role in roles %}
       {% set rowIndex = loop.index0 %}
@@ -53,7 +53,7 @@
         }
       ] %}
 
-      {% set tableRows = (tableRows.push(row), tableRows) %}
+      {% set rows = (rows.push(row), rows) %}
     {% endfor %}
 
     {{ govukTable({
@@ -68,7 +68,83 @@
           text: "Description"
         }
       ],
-      rows: tableRows
+      rows: rows
+    }) }}
+  {% endif %}
+
+  {% if outstandingVerifications.length > 0 %}
+    {% set rows = [] %}
+
+    {% for outstandingVerification in outstandingVerifications %}
+      {% set rowIndex = loop.index0 %}
+
+      {% if rowIndex > 0 %}
+        {% set lastCode = outstandingVerifications[rowIndex - 1].code %}
+      {% else %}
+        {% set lastCode = null %}
+      {% endif %}
+
+      {% set row = []%}
+
+      {% if lastCode !== outstandingVerification.code %}
+        {% set codeCell =
+          {
+            attributes: { 'data-test': 'outstanding-verifications-code-' + rowIndex },
+            html: '<span class="govuk-!-font-weight-bold">' + outstandingVerification.code + '</span>',
+            rowspan: outstandingVerification.count
+          } %}
+
+        {% set row = (row.push(codeCell), row) %}
+
+        {% set createdOnCell =
+          {
+            attributes: { 'data-test': 'outstanding-verifications-created-at' + rowIndex },
+            rowspan: outstandingVerification.count,
+            text: outstandingVerification.createdOn
+          } %}
+        {% set row = (row.push(createdOnCell), row) %}
+      {% endif %}
+
+      {% set verificationLicenceLink %}
+        <a class="govuk-link" href="{{ outstandingVerification.link }}">{{ outstandingVerification.licenceRef }}</a>
+      {% endset %}
+
+      {% set licenceRefCell =
+        {
+          attributes: { 'data-test': 'outstanding-verifications-licence-ref' + rowIndex },
+          html: verificationLicenceLink
+        } %}
+      {% set row = (row.push(licenceRefCell), row) %}
+
+      {% set licenceHolderCell =
+        {
+          attributes: { 'data-test': 'outstanding-verifications-licence-holder' + rowIndex },
+          text: outstandingVerification.licenceHolder
+        } %}
+      {% set row = (row.push(licenceHolderCell), row) %}
+
+      {% set rows = (rows.push(row), rows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      attributes: { 'data-test': 'roles-table' },
+      caption: "Outstanding verifications",
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: "Code"
+        },
+        {
+          text: "Created on"
+        },
+        {
+          text: "Licence number"
+        },
+        {
+          text: "Licence holder"
+        }
+      ],
+      rows: rows
     }) }}
   {% endif %}
 
