@@ -6,7 +6,7 @@
  */
 
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-const { roles } = require('../../lib/static-lookups.lib.js')
+const { formatContact } = require('../crm.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/contact-details` view contact details page
@@ -31,42 +31,11 @@ function go(contacts, licence) {
   }
 }
 
-/**
- * The ids returned from the query are unique to the contact type.
- *
- * We use the type to determine the correct link for the contact.
- *
- * @private
- */
-function _contactLink(contact, licenceId) {
-  const billingTypes = ['billing']
-  const companyContactTypes = ['abstraction-alerts', 'additional-contact']
-  const userTypes = ['basic-user', 'primary-user', 'returns-user']
-
-  if (billingTypes.includes(contact.contactType)) {
-    return `/system/billing-accounts/${contact.id}?licence-id=${licenceId}`
-  }
-
-  if (companyContactTypes.includes(contact.contactType)) {
-    return FeatureFlagsConfig.enableCustomerManage
-      ? `/system/company-contacts/${contact.id}`
-      : `/customer/${licenceId}/contacts/${contact.id}`
-  }
-
-  if (userTypes.includes(contact.contactType)) {
-    return `/system/users/external/${contact.id}`
-  }
-
-  return `/system/companies/${contact.id}/${contact.contactType}`
-}
-
 function _contacts(contacts, licenceId) {
   return contacts.map((contact) => {
-    return {
-      link: _contactLink(contact, licenceId),
-      name: contact.contactName,
-      type: roles[contact.contactType].label
-    }
+    return formatContact(contact, {
+      'licence-id': licenceId
+    })
   })
 }
 

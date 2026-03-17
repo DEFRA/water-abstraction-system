@@ -1,52 +1,22 @@
 {% extends 'layout-licences.njk' %}
 
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
-{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/contacts-table.njk" import contactsTable %}
 
 {% block subPageContent %}
   {% if customerContactLink %}
     <p class="govuk-body"><a class="govuk-link" href={{ customerContactLink }}>Go to customer contacts</a></p>
   {% endif %}
 
-  {% set tableHeaders = [
-    { text: 'Name' },
-    { text: 'Contact type' }
-  ] %}
-
-  {% set tableRows = [] %}
-
-  {% for contact in contacts %}
-    {# Set an easier to use index. Also means we can refer to it inside our elementDetail loop #}
-    {% set rowIndex = loop.index0 %}
-
-    {% set transactionRow = [
-      {
-        html: '<a href="' + contact.link + '">' + contact.name + '</a>',
-        attributes: { 'data-test': 'licence-contact-name-' + rowIndex }
-      },
-      {
-        text: contact.type,
-        attributes: { 'data-test': 'licence-contact-type-' + rowIndex }
-      }
-    ] %}
-
-    {% set tableRows = (tableRows.push(transactionRow), tableRows) %}
-  {% endfor %}
-
-  {{ govukTable({
-    attributes: { 'data-test': 'licence-contacts-table' },
-    caption: pagination.showingMessage,
-    captionClasses: "govuk-table__caption--m",
-    firstCellIsHeader: false,
-    head: tableHeaders if contacts.length > 0,
-    rows: tableRows if contacts.length > 0
-  }) }}
-
   {% if contacts.length === 0 %}
     <p>No licence contacts found.</p>
+
+  {% else %}
+    {{ contactsTable(contacts, pagination) }}
   {% endif %}
 
-  {% if pagination.numberOfPages > 1  %}
+  {% if pagination.numberOfPages > 1 %}
     {{ govukPagination(pagination.component) }}
   {% endif %}
 {% endblock %}

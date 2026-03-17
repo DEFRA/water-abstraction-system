@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Fetches all contact details for a licence which is needed for the view '/licences/{id}/contact-details` page
- * @module FetchContactDetailsService
+ * Fetches the contacts for a licence for the view '/licences/{id}/contact-details' page
+ * @module FetchLicenceCRMDataService
  */
 
 const DatabaseConfig = require('../../../config/database.config.js')
 const { db } = require('../../../db/db.js')
 
 /**
- * Fetches all contact details for a licence which is needed for the view '/licences/{id}/contact-details` page
+ * Fetches the contacts for a licence for the view '/licences/{id}/contact-details' page
  *
  * @param {string} licenceId - The UUID of the licence to fetch
  * @param {string[]} roles - An array of user roles used to determine which contact details can be shown
