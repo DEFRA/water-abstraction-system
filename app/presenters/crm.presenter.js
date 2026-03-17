@@ -92,7 +92,9 @@ function _contactLink(contact, billingQueryArgs) {
   const userTypes = ['basic-user', 'primary-user', 'returns-user']
 
   if (billingTypes.includes(contact.contactType)) {
-    return `/system/billing-accounts/${contact.id}?${billingQueryArgs}`
+    const queryString = new URLSearchParams(billingQueryArgs).toString()
+
+    return `/system/billing-accounts/${contact.id}?${queryString}`
   }
 
   if (companyContactTypes.includes(contact.contactType)) {
@@ -133,7 +135,7 @@ function filteredContactDetailsByRole(contacts) {
  * Format the contact for the contacts table
  *
  * @param {object} contact - the contact from the crm data
- * @param {string} billingQueryArgs - the query args for billing accounts
+ * @param {object} billingQueryArgs - the query args for billing accounts
  *
  * @returns {object} The formatted contact
  */

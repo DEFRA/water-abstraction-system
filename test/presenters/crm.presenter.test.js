@@ -135,8 +135,11 @@ describe('CRM presenter', () => {
   })
 
   describe('#contactLink()', () => {
-    const companyId = generateUUID
-    const billingQueryArgs = `company-id=${companyId}`
+    const companyId = generateUUID()
+
+    const billingQueryArgs = {
+      'company-id': companyId
+    }
 
     describe('When there is a contact with the type', () => {
       let contact

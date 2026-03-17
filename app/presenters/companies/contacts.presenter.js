@@ -31,7 +31,9 @@ function go(company, contacts) {
 
 function _contacts(contacts, company) {
   return contacts.map((contact) => {
-    return formatContact(contact, `company-id=${company.id}`)
+    return formatContact(contact, {
+      'company-id': company.id
+    })
   })
 }
 
