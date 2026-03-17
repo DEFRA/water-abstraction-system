@@ -3,73 +3,165 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, after, before } = (exports.lab = Lab.script())
+const { describe, it, after, afterEach, before, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const AddressHelper = require('../../support/helpers/address.helper.js')
-const CompanyHelper = require('../../support/helpers/company.helper.js')
-const LicenceDocumentHelper = require('../../support/helpers/licence-document.helper.js')
-const LicenceDocumentRolesHelper = require('../../support/helpers/licence-document-role.helper.js')
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
+const DatabaseConfig = require('../../../config/database.config.js')
+const CRMSeeder = require('../../support/seeders/crm.seeder.js')
 
 // Thing under test
 const FetchContactDetailsService = require('../../../app/services/licences/fetch-contact-details.service.js')
 
-describe('Licences - Fetch Contact Details service', () => {
-  let address
-  let company
+describe.only('Licences - Fetch Contact Details service', () => {
+  let crmData
   let licence
-  let licenceDocument
-  let licenceDocumentRole
+  let page
+  let roles
 
   before(async () => {
-    licence = await LicenceHelper.add()
+    page = undefined
 
-    company = await CompanyHelper.add()
+    crmData = await CRMSeeder.seed()
 
-    licenceDocument = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
-    const licenceRole = await LicenceRoleHelper.select()
-    address = await AddressHelper.add()
+    roles = ['billing']
 
-    licenceDocumentRole = await LicenceDocumentRolesHelper.add({
-      endDate: null,
-      licenceDocumentId: licenceDocument.id,
-      addressId: address.id,
-      licenceRoleId: licenceRole.id,
-      companyId: company.id
-    })
+    licence = crmData.licence.record
   })
 
   after(async () => {
-    await address.$query().delete()
-    await company.$query().delete()
-    await licence.$query().delete()
-    await licenceDocument.$query().delete()
-    await licenceDocumentRole.$query().delete()
+    await crmData.clean()
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when the licence has contact details', () => {
     it('returns the matching licence contacts', async () => {
-      const results = await FetchContactDetailsService.go(licence.id)
+      const result = await FetchContactDetailsService.go(licence.id, roles)
 
-      expect(results).to.equal([
-        {
-          communicationType: 'Licence Holder',
-          companyId: company.id,
-          companyName: 'Example Trading Ltd',
-          address1: 'ENVIRONMENT AGENCY',
-          address2: 'HORIZON HOUSE',
-          address3: 'DEANERY ROAD',
-          address4: 'BRISTOL',
-          address5: null,
-          address6: null,
-          postcode: 'BS1 5AH',
-          country: 'United Kingdom'
-        }
-      ])
+      expect(result).to.equal({
+        contacts: [
+          {
+            contactType: 'primary-user',
+            id: crmData.primaryUser.record.id,
+            contactName: 'albus.dumbledore@hogwarts.com'
+          },
+          {
+            contactType: 'licence-holder',
+            id: crmData.company.record.id,
+            contactName: 'Hogwarts'
+          },
+          {
+            contactType: 'returns-to',
+            id: crmData.company.record.id,
+            contactName: 'Hogwarts'
+          },
+          {
+            contactType: 'additional-contact',
+            id: crmData.additionalContact.record.id,
+            contactName: 'Horace Slughorn'
+          },
+          {
+            contactType: 'basic-user',
+            id: crmData.basicUser.record.id,
+            contactName: 'minerva.mchonagall@hogwarts.com'
+          },
+          {
+            contactType: 'abstraction-alerts',
+            id: crmData.abstractionAlerts.record.id,
+            contactName: 'Prof Gilderoy Lockhart'
+          },
+          {
+            contactName: 'rubeus.hagrid@hogwarts.com',
+            contactType: 'basic-user',
+            id: crmData.extraBasicUser.record.id
+          },
+          {
+            contactType: 'returns-user',
+            id: crmData.returnsUser.record.id,
+            contactName: 'severus.snape@hogwarts.com'
+          },
+          {
+            contactType: 'billing',
+            id: crmData.billing.record.id,
+            contactName: crmData.billing.record.accountNumber
+          }
+        ],
+        totalNumber: 9
+      })
+    })
+
+    describe('when paginating', () => {
+      beforeEach(() => {
+        Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1)
+      })
+
+      describe('and the page is not set', () => {
+        beforeEach(() => {
+          page = undefined
+        })
+
+        it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
+          const result = await FetchContactDetailsService.go(licence.id, roles, page)
+
+          expect(result).to.equal({
+            contacts: [
+              {
+                contactType: 'primary-user',
+                id: crmData.primaryUser.record.id,
+                contactName: 'albus.dumbledore@hogwarts.com'
+              }
+            ],
+            totalNumber: 9
+          })
+        })
+      })
+
+      describe('and the page is set to 1', () => {
+        beforeEach(() => {
+          page = '1'
+        })
+
+        it('returns the matching contacts for the page (defaulted to 1) with the total number', async () => {
+          const result = await FetchContactDetailsService.go(licence.id, roles, page)
+
+          expect(result).to.equal({
+            contacts: [
+              {
+                contactType: 'primary-user',
+                id: crmData.primaryUser.record.id,
+                contactName: 'albus.dumbledore@hogwarts.com'
+              }
+            ],
+            totalNumber: 9
+          })
+        })
+      })
+
+      describe('and the page is set to greater than 1', () => {
+        beforeEach(() => {
+          page = '2'
+        })
+
+        it('returns the matching contacts for the page (the second page) with the total number', async () => {
+          const result = await FetchContactDetailsService.go(licence.id, roles, page)
+
+          expect(result).to.equal({
+            contacts: [
+              {
+                contactType: 'licence-holder',
+                id: crmData.company.record.id,
+                contactName: 'Hogwarts'
+              }
+            ],
+            totalNumber: 9
+          })
+        })
+      })
     })
   })
 })
