@@ -77,7 +77,7 @@ describe('Companies - Fetch Company CRM Data service', () => {
             contactName: 'Prof Gilderoy Lockhart'
           },
           {
-            contactName: 'Rubeus Hagrid',
+            contactName: 'rubeus.hagrid@hogwarts.com',
             contactType: 'basic-user',
             id: crmData.extraBasicUser.record.id
           },
