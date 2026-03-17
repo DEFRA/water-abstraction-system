@@ -63,7 +63,7 @@ function _contactLink(contact, licenceId) {
 function _contacts(contacts, licenceId) {
   return contacts.map((contact) => {
     return {
-      link: _contactLink(contact, licenceId),
+      action: _contactLink(contact, licenceId),
       name: contact.contactName,
       type: roles[contact.contactType].label
     }
