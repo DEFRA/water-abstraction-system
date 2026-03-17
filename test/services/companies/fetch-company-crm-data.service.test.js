@@ -17,7 +17,7 @@ const DatabaseConfig = require('../../../config/database.config.js')
 // Thing under test
 const FetchCompanyCRMDataService = require('../../../app/services/companies/fetch-company-crm-data.service.js')
 
-describe('Companies - Fetch company crm data service', () => {
+describe('Companies - Fetch Company CRM Data service', () => {
   let company
   let crmData
   let page

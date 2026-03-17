@@ -5,8 +5,9 @@
  * @module FetchCompanyCRMDataService
  */
 
-const DatabaseConfig = require('../../../config/database.config.js')
 const { db } = require('../../../db/db.js')
+
+const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
  * Fetches the company contacts data needed for the view '/companies/{id}/contacts'

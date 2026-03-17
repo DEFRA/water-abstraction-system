@@ -88,9 +88,9 @@ async function seed() {
     extraCompanyEntity.record.id,
     extraLicence.record.licenceRef
   )
-  const extraBasicUser = await _basicUser(extraCompanyEntity.record.id, 'Rubeus Hagrid')
+  const extraBasicUser = await _basicUser(extraCompanyEntity.record.id, 'rubeus.hagrid@hogwarts.com')
 
-  // Other contacts - are set up is similar to the 'extra' contact, but the company is different. The query should not
+  // Other contacts - are set up similarly to the 'extra' contact, but the company is different. The query should not
   // return this as the company is different. This contact is not linked to the company.
   const otherCompany = await _company("Weasleys' Wizard Wheezes")
   const otherCompanyEntity = await _licenceCompanyEntity(otherCompany.record.name)
