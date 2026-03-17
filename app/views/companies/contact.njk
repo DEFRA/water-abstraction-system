@@ -2,26 +2,8 @@
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/pagination/macro.njk" import govukPagination %}
-{% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% set tableRows = [] %}
-
-{% for contact in contacts %}
-  {% set rowIndex = loop.index0 %}
-
-  {% set tableRow = [
-    {
-      html: '<a href="' + contact.action + '">' + contact.name + '</a>',
-      attributes: { 'data-test': 'contact-action-' + rowIndex }
-    },
-    {
-      text: contact.type,
-      attributes: { 'data-test': 'contact-type-' + rowIndex }
-    }
-  ] %}
-
-  {% set tableRows = (tableRows.push(tableRow), tableRows) %}
-{% endfor %}
+{% from "macros/contacts-table.njk" import contactsTable %}
 
 {% block pageContent %}
   {% if 'hof_notifications' in roles %}
@@ -46,18 +28,7 @@
   {% if companyContacts.length === 0 %}
     <p> No contacts for this customer. </p>
   {% else %}
-    {{ govukTable({
-      caption: pagination.showingMessage,
-      head: [
-        {
-          text: "Name"
-        },
-        {
-          text: "Contact type"
-        }
-      ],
-      rows: tableRows
-    }) }}
+    {{ contactsTable(contacts, pagination) }}
 
     {% if pagination.numberOfPages > 1  %}
       {{ govukPagination(pagination.component) }}
