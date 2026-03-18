@@ -56,7 +56,7 @@ describe('Companies - View Billing Accounts service', () => {
         activeSecondaryNav: 'billing-accounts',
         backLink: {
           href: '/',
-          text: 'Back to search'
+          text: 'Go back to search'
         },
         billingAccounts: [
           {
