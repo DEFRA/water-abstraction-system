@@ -20,7 +20,6 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  *
  * @param {string} id - The id of the company contact
  * @param {string} email - the contact email (may have been used to send notifications)
- * @returns {Promise<object>} the data needed to populate the view company contacts communications
  */
 async function go(id, email) {
   const notification = await _notification(email)
