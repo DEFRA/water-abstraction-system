@@ -71,6 +71,7 @@ describe('Company Contacts - Create Company Contact service', () => {
           },
           contactId: newCompanyContact.contact.id,
           default: false,
+          deletedAt: null,
           id: result,
           licenceRoleId: licenceRole.id,
           startDate: new Date('2021-01-01'),

@@ -86,6 +86,7 @@ describe('Company Contacts - Update Company Contact service', () => {
           createdAt: seedDate,
           createdBy: null,
           default: false,
+          deletedAt: null,
           licenceRoleId: licenceRole.id,
           startDate: new Date('2022-04-01'),
           updatedAt: today,
