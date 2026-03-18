@@ -20,7 +20,7 @@ function go(company, contacts) {
   return {
     backLink: {
       href: '/',
-      text: 'Back to search'
+      text: 'Go back to search'
     },
     links: _links(company),
     pageTitle: 'Contacts',
