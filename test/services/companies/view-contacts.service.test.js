@@ -70,7 +70,7 @@ describe('Companies - View Contacts service', () => {
         activeSecondaryNav: 'contacts',
         backLink: {
           href: '/',
-          text: 'Back to search'
+          text: 'Go back to search'
         },
         contacts: [
           {

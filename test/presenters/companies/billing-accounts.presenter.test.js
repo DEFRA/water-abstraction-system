@@ -33,7 +33,7 @@ describe('Companies - Billing Accounts presenter', () => {
       expect(result).to.equal({
         backLink: {
           href: '/',
-          text: 'Back to search'
+          text: 'Go back to search'
         },
         billingAccounts: [
           {

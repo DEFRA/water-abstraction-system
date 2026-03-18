@@ -32,7 +32,7 @@ async function viewCompany(request, h) {
   return h.view(`companies/company.njk`, pageData)
 }
 
-async function viewContact(request, h) {
+async function viewContacts(request, h) {
   const {
     params: { id },
     auth,
@@ -42,7 +42,7 @@ async function viewContact(request, h) {
 
   const pageData = await ViewContactsService.go(id, auth, page, yar)
 
-  return h.view(`companies/contact.njk`, pageData)
+  return h.view(`companies/contacts.njk`, pageData)
 }
 
 async function viewHistory(request, h) {
@@ -72,7 +72,7 @@ async function viewLicences(request, h) {
 module.exports = {
   viewBillingAccounts,
   viewCompany,
-  viewContact,
+  viewContacts,
   viewHistory,
   viewLicences
 }
