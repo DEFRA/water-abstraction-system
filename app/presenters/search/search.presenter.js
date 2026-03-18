@@ -238,7 +238,7 @@ function _user(user) {
     col3Title: 'Last signed in',
     col3Value: lastLogin ? formatLongDate(lastLogin) : 'Never',
     exact,
-    link: `/system/users/external/${id}`,
+    link: `/system/users/external/${id}?back=search`,
     reference: username,
     statusTag: model.$status(),
     type: 'User'
