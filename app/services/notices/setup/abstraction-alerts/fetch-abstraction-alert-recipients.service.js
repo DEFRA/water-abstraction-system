@@ -94,6 +94,7 @@ function _query() {
         OR ldr.end_date >= CURRENT_DATE
       )
       AND cct.abstraction_alerts = true
+      AND cct.deleted_at IS NULL
   ),
 
   primary_users AS (
