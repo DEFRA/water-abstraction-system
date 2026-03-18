@@ -8,63 +8,71 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const LicenceModel = require('../../../../app/models/licence.model.js')
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
-const { today } = require('../../../../app/lib/general.lib.js')
-const { yesterday } = require('../../../support/general.js')
+const { generateUUID, today } = require('../../../../app/lib/general.lib.js')
+const { tomorrow, yesterday } = require('../../../support/general.js')
 
 // Thing under test
 const UserPresenter = require('../../../../app/presenters/users/external/user.presenter.js')
 
 describe('Users - External - User Presenter', () => {
   let back
+  let licences
   let outstandingVerifications
   let user
   let viewingUserScope
 
   beforeEach(() => {
     back = 'users'
-    outstandingVerifications = [
-      {
-        id: 'a48c91d0-df6a-4ff0-9855-7df20cb01250',
-        verificationCode: 'c7SgB',
-        createdAt: today(),
-        licenceId: '2d7a06f9-7756-447b-952f-befa678d0b69',
-        licenceRef: 'FE/TC/H/US/ER/01',
-        licenceHolder: 'Current Holder'
-      },
-      {
-        id: 'a48c91d0-df6a-4ff0-9855-7df20cb01250',
-        verificationCode: 'c7SgB',
-        createdAt: today(),
-        licenceId: 'ce397035-ef6d-4ef6-8ccf-ea3a17bb107f',
-        licenceRef: 'FE/TC/H/US/ER/03',
-        licenceHolder: 'Current Holder'
-      },
-      {
-        id: 'd546ad70-8b60-45b6-a1df-9ece1e3bfb9e',
-        verificationCode: 'Qz4aK',
-        createdAt: yesterday(),
-        licenceId: 'f21bd12e-f266-41b5-a8be-49c6fe9b3b7f',
-        licenceRef: 'FE/TC/H/US/ER/04',
-        licenceHolder: 'Current Holder'
-      }
+    licences = [
+      _licence('FE/TC/H/US/ER/01', today(), 'user'),
+      _licence('FE/TC/H/US/ER/02', tomorrow(), 'user_returns'),
+      _licence('FE/TC/H/US/ER/03', null, 'primary_user')
     ]
+    outstandingVerifications = _outstandingVerifications()
     user = UsersFixture.external()
     viewingUserScope = ['manage_accounts']
   })
 
   it('correctly presents the data', () => {
-    const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
+    const result = UserPresenter.go(user, outstandingVerifications, licences, viewingUserScope, back)
 
     expect(result).to.equal({
       backLink: {
         href: '/system/users',
         text: 'Go back to users'
       },
-      companies: [],
+      displayLicenceEndedMessage: true,
       id: user.id,
       lastSignedIn: '6 October 2022 at 10:00:00',
+      licences: [
+        {
+          currentLicenceHolder: licences[0].licenceVersions[0].licenceVersionHolder.derivedName,
+          id: licences[0].id,
+          licenceLink: `/system/licences/${licences[0].id}/summary`,
+          licenceRef: licences[0].licenceRef,
+          permissions: 'Basic access',
+          status: 'expired'
+        },
+        {
+          currentLicenceHolder: licences[1].licenceVersions[0].licenceVersionHolder.derivedName,
+          id: licences[1].id,
+          licenceLink: `/system/licences/${licences[1].id}/summary`,
+          licenceRef: licences[1].licenceRef,
+          permissions: 'Returns user',
+          status: null
+        },
+        {
+          currentLicenceHolder: licences[2].licenceVersions[0].licenceVersionHolder.derivedName,
+          id: licences[2].id,
+          licenceLink: `/system/licences/${licences[2].id}/summary`,
+          licenceRef: licences[2].licenceRef,
+          permissions: 'Primary user',
+          status: null
+        }
+      ],
       outstandingVerifications: [
         {
           code: outstandingVerifications[0].verificationCode,
@@ -103,7 +111,7 @@ describe('Users - External - User Presenter', () => {
   describe('the "backLink" property', () => {
     describe('when the "back" query parameter is set to "users"', () => {
       it('returns a link to the users page', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
+        const result = UserPresenter.go(user, outstandingVerifications, licences, viewingUserScope, back)
 
         expect(result.backLink).to.equal({
           href: '/system/users',
@@ -118,7 +126,7 @@ describe('Users - External - User Presenter', () => {
       })
 
       it('returns a link to the search page', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
+        const result = UserPresenter.go(user, outstandingVerifications, licences, viewingUserScope, back)
 
         expect(result.backLink).to.equal({
           href: '/',
@@ -128,10 +136,34 @@ describe('Users - External - User Presenter', () => {
     })
   })
 
+  describe('the "displayLicenceEndedMessage" property', () => {
+    describe('when at least one licence has a status of "expired", "revoked" or "lapsed"', () => {
+      it('returns "true"', () => {
+        const result = UserPresenter.go(user, outstandingVerifications, licences, viewingUserScope, back)
+
+        expect(result.displayLicenceEndedMessage).to.be.true()
+      })
+    })
+
+    describe('when no licences have a status of "expired", "revoked" or "lapsed"', () => {
+      beforeEach(() => {
+        for (const licence of licences) {
+          licence.expiredDate = null
+        }
+      })
+
+      it('returns "false"', () => {
+        const result = UserPresenter.go(user, outstandingVerifications, licences, viewingUserScope, back)
+
+        expect(result.displayLicenceEndedMessage).to.be.false()
+      })
+    })
+  })
+
   describe('the "lastSignedIn" property', () => {
     describe('when the lastLogin is set', () => {
       it('returns the last signed in date and time', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
+        const result = UserPresenter.go(user, outstandingVerifications, licences, viewingUserScope, back)
 
         expect(result.lastSignedIn).to.equal('6 October 2022 at 10:00:00')
       })
@@ -143,155 +175,9 @@ describe('Users - External - User Presenter', () => {
       })
 
       it('returns "Never signed in"', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
+        const result = UserPresenter.go(user, outstandingVerifications, licences, viewingUserScope, back)
 
         expect(result.lastSignedIn).to.equal('Never signed in')
-      })
-    })
-  })
-
-  describe('the "companies" property', () => {
-    describe('when the user has no associated licence entity', () => {
-      it('returns an empty companies array', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
-
-        expect(result.companies).to.equal([])
-      })
-    })
-
-    describe('when the user has an associated licence entity', () => {
-      describe('when the licence entity has no licence entity roles', () => {
-        beforeEach(() => {
-          user.licenceEntity = { licenceEntityRoles: [] }
-        })
-
-        it('returns an empty companies array', () => {
-          const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
-
-          expect(result.companies).to.equal([])
-        })
-      })
-
-      describe('when the licence entity has licence entity roles', () => {
-        beforeEach(() => {
-          user.licenceEntity = {
-            licenceEntityRoles: [
-              {
-                companyEntity: { licenceDocumentHeaders: [], id: 'company-1', name: 'Company 1' },
-                role: 'user'
-              },
-              {
-                companyEntity: { licenceDocumentHeaders: [], id: 'company-1', name: 'Company 1' },
-                role: 'user_returns'
-              },
-              {
-                companyEntity: { licenceDocumentHeaders: [], id: 'company-1', name: 'Company 1' },
-                role: 'primary_user'
-              },
-              {
-                companyEntity: { licenceDocumentHeaders: [], id: 'company-2', name: 'Company 2' },
-                role: 'user'
-              },
-              {
-                companyEntity: { licenceDocumentHeaders: [], id: 'company-2', name: 'Company 2' },
-                role: 'user_returns'
-              },
-              {
-                companyEntity: { licenceDocumentHeaders: [], id: 'company-3', name: 'Company 3' },
-                role: 'user'
-              }
-            ],
-            userVerifications: []
-          }
-        })
-
-        it('returns the most significant role name for each company', () => {
-          const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
-
-          expect(result.companies).to.equal([
-            {
-              companyName: 'Company 1',
-              licences: [],
-              mostSignificantRoleName: 'Primary user',
-              showLicences: false,
-              verifications: []
-            },
-            {
-              companyName: 'Company 2',
-              licences: [],
-              mostSignificantRoleName: 'Returns user',
-              showLicences: false,
-              verifications: []
-            },
-            {
-              companyName: 'Company 3',
-              licences: [],
-              mostSignificantRoleName: 'Agent',
-              showLicences: false,
-              verifications: []
-            }
-          ])
-        })
-      })
-
-      describe('when the licence entity does not have any of the specified roles', () => {
-        beforeEach(() => {
-          user.licenceEntity = {
-            licenceEntityRoles: [
-              {
-                companyEntity: { licenceDocumentHeaders: [], id: 'company-1', name: 'Company 1' },
-                companyEntityId: 'company-1',
-                role: 'UNKNOWN_ROLE'
-              }
-            ],
-            userVerifications: []
-          }
-        })
-
-        it('returns "Unknown role"', () => {
-          const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
-
-          expect(result.companies).to.equal([
-            {
-              companyName: 'Company 1',
-              licences: [],
-              mostSignificantRoleName: 'Unknown role',
-              showLicences: false,
-              verifications: []
-            }
-          ])
-        })
-      })
-
-      describe('when the licence entity does not have any roles at all', () => {
-        beforeEach(() => {
-          user.licenceEntity = {
-            licenceEntityRoles: [],
-            userVerifications: [
-              {
-                companyEntity: { id: 'company-1', name: 'Company 1' },
-                createdAt: '2022-10-06T10:00:00Z',
-                verificationCode: 'Abc123',
-                licenceDocumentHeaders: [
-                  {
-                    id: 'licence-document-header-1',
-                    licenceRef: 'LIC-001',
-                    metadata: {
-                      contacts: [{ role: 'Licence holder', name: 'John Doe' }]
-                    },
-                    licence: { id: 'licence-1' }
-                  }
-                ]
-              }
-            ]
-          }
-        })
-
-        it('returns "No role"', () => {
-          const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
-
-          expect(result.companies[0].mostSignificantRoleName).to.equal('No role')
-        })
       })
     })
   })
@@ -303,7 +189,7 @@ describe('Users - External - User Presenter', () => {
       })
 
       it('returns an empty array', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
+        const result = UserPresenter.go(user, outstandingVerifications, licences, viewingUserScope, back)
 
         expect(result.roles).to.be.empty()
       })
@@ -315,7 +201,7 @@ describe('Users - External - User Presenter', () => {
       })
 
       it('returns the correct roles for a "Returns user"', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
+        const result = UserPresenter.go(user, outstandingVerifications, licences, viewingUserScope, back)
 
         expect(result.roles).to.equal([
           {
@@ -332,7 +218,7 @@ describe('Users - External - User Presenter', () => {
       })
 
       it('returns the correct roles for a "Primary user"', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
+        const result = UserPresenter.go(user, outstandingVerifications, licences, viewingUserScope, back)
 
         expect(result.roles).to.equal([
           {
@@ -348,232 +234,10 @@ describe('Users - External - User Presenter', () => {
     })
   })
 
-  describe('the "showLicences" property of a company', () => {
-    describe('when the company does not have any associated licences', () => {
-      beforeEach(() => {
-        user.licenceEntity = {
-          licenceEntityRoles: [
-            {
-              companyEntity: { licenceDocumentHeaders: [], id: 'company-1', name: 'Company 1' },
-              role: 'user'
-            }
-          ],
-          userVerifications: []
-        }
-      })
-
-      it('returns "false"', () => {
-        const result = UserPresenter.go(user, viewingUserScope, back)
-
-        expect(result.companies[0].showLicences).to.be.false()
-      })
-    })
-
-    describe('when the company has associated licences', () => {
-      beforeEach(() => {
-        user.licenceEntity = {
-          licenceEntityRoles: [
-            {
-              companyEntity: {
-                id: 'company-1',
-                licenceDocumentHeaders: [
-                  {
-                    id: 'licence-document-header-1',
-                    licenceRef: 'LIC-001',
-                    metadata: {
-                      contacts: [{ role: 'Licence holder', name: 'John Doe' }]
-                    },
-                    licence: { id: 'licence-1' }
-                  }
-                ]
-              },
-              role: 'user'
-            }
-          ],
-          userVerifications: []
-        }
-      })
-
-      it('returns "true"', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
-
-        expect(result.companies[0].showLicences).to.be.true()
-      })
-    })
-  })
-
-  describe('the "licences" property of a company', () => {
-    describe('when the company does not have any associated licences', () => {
-      beforeEach(() => {
-        user.licenceEntity = {
-          licenceEntityRoles: [
-            {
-              companyEntity: { licenceDocumentHeaders: [], id: 'company-1', name: 'Company 1' },
-              role: 'user'
-            }
-          ],
-          userVerifications: []
-        }
-      })
-
-      it('returns an empty array', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
-
-        expect(result.companies[0].licences).to.be.an.array()
-        expect(result.companies[0].licences).to.be.empty()
-      })
-    })
-
-    describe('when the company has associated licences', () => {
-      beforeEach(() => {
-        user.licenceEntity = {
-          licenceEntityRoles: [
-            {
-              companyEntity: {
-                id: 'company-1',
-                licenceDocumentHeaders: [
-                  {
-                    id: 'licence-document-header-1',
-                    licenceRef: 'LIC-001',
-                    metadata: {
-                      contacts: [{ role: 'Licence holder', name: 'John Doe' }]
-                    },
-                    licence: { id: 'licence-1' }
-                  }
-                ]
-              },
-              role: 'user'
-            }
-          ],
-          userVerifications: []
-        }
-      })
-
-      it('returns an array of associated licences', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
-
-        expect(result.companies[0].licences).to.equal([
-          {
-            licenceLink: '/system/licences/licence-1/summary',
-            licenceRef: 'LIC-001',
-            licenceHolderName: 'John Doe'
-          }
-        ])
-      })
-    })
-  })
-
-  describe('the "verifications" property of a company', () => {
-    describe('when the company does not have any associated verifications', () => {
-      beforeEach(() => {
-        user.licenceEntity = {
-          licenceEntityRoles: [
-            {
-              companyEntity: { licenceDocumentHeaders: [], id: 'company-1', name: 'Company 1' },
-              companyEntityId: 'company-1',
-              role: 'user'
-            }
-          ],
-          userVerifications: []
-        }
-      })
-
-      it('returns an empty array', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
-
-        expect(result.companies[0].verifications).to.be.an.array()
-        expect(result.companies[0].verifications).to.be.empty()
-      })
-    })
-
-    describe('when the company has associated verifications', () => {
-      beforeEach(() => {
-        user.licenceEntity = {
-          licenceEntityRoles: [],
-          userVerifications: [
-            {
-              companyEntity: { id: 'company-1', name: 'Company 1' },
-              createdAt: '2022-10-06T10:00:00Z',
-              verificationCode: 'Abc123',
-              licenceDocumentHeaders: [
-                {
-                  id: 'licence-document-header-1',
-                  licenceRef: 'LIC-001',
-                  metadata: {
-                    contacts: [{ role: 'Licence holder', name: 'John Doe' }]
-                  },
-                  licence: { id: 'licence-1' }
-                }
-              ]
-            },
-            {
-              companyEntity: { id: 'company-2', name: 'Company 2' },
-              createdAt: '2022-10-06T10:00:00Z',
-              verificationCode: 'Def456',
-              licenceDocumentHeaders: [
-                {
-                  id: 'licence-document-header-2',
-                  licenceRef: 'LIC-002',
-                  metadata: {
-                    contacts: [{ role: 'Licence holder', name: 'Jane Doe' }]
-                  },
-                  licence: { id: 'licence-2' }
-                }
-              ]
-            },
-            {
-              companyEntity: { id: 'company-1', name: 'Company 1' },
-              createdAt: '2023-10-06T10:00:00Z',
-              verificationCode: 'Ghi789',
-              licenceDocumentHeaders: [
-                {
-                  id: 'licence-document-header-3',
-                  licenceRef: 'LIC-003',
-                  metadata: {
-                    contacts: [{ role: 'Licence holder', name: 'Jennie Doe' }]
-                  },
-                  licence: { id: 'licence-3' }
-                }
-              ]
-            }
-          ]
-        }
-      })
-
-      it('returns an array of associated verifications', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
-        expect(result.companies[0].verifications).to.equal([
-          {
-            sent: '6 October 2022',
-            verificationCode: 'Abc123',
-            licences: [
-              {
-                licenceLink: '/system/licences/licence-1/summary',
-                licenceRef: 'LIC-001',
-                licenceHolderName: 'John Doe'
-              }
-            ]
-          },
-          {
-            sent: '6 October 2023',
-            verificationCode: 'Ghi789',
-            licences: [
-              {
-                licenceLink: '/system/licences/licence-3/summary',
-                licenceRef: 'LIC-003',
-                licenceHolderName: 'Jennie Doe'
-              }
-            ]
-          }
-        ])
-      })
-    })
-  })
-
   describe('the "showEditButton" property', () => {
     describe('when the viewing user has "manage_accounts" in their scope', () => {
       it('returns "true"', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
+        const result = UserPresenter.go(user, outstandingVerifications, licences, viewingUserScope, back)
 
         expect(result.showEditButton).to.be.true()
       })
@@ -585,10 +249,82 @@ describe('Users - External - User Presenter', () => {
       })
 
       it('returns "false"', () => {
-        const result = UserPresenter.go(user, outstandingVerifications, viewingUserScope, back)
+        const result = UserPresenter.go(user, outstandingVerifications, licences, viewingUserScope, back)
 
         expect(result.showEditButton).to.be.false()
       })
     })
   })
 })
+
+function _licence(licenceRef, expiredDate, role) {
+  const licenceVersionId = generateUUID()
+  const licenceDocumentHeaderId = generateUUID()
+
+  const licence = LicenceModel.fromJson({
+    expiredDate,
+    id: generateUUID(),
+    lapsedDate: null,
+    licenceRef,
+    revokedDate: null
+  })
+
+  licence.licenceVersions = [
+    {
+      id: licenceVersionId,
+      licenceId: licence.id,
+      licenceVersionHolder: {
+        derivedName: 'Current Holder',
+        id: generateUUID(),
+        licenceVersionId
+      }
+    }
+  ]
+
+  licence.licenceDocumentHeader = {
+    id: licenceDocumentHeaderId,
+    licenceEntityRoles: _licenceEntityRoles(role),
+    licenceRef: licence.licenceRef
+  }
+
+  return licence
+}
+
+function _licenceEntityRoles(role) {
+  const licenceEntityRoles = [{ id: generateUUID(), role }]
+
+  if (role === 'user_returns') {
+    licenceEntityRoles.push({ id: generateUUID(), role })
+  }
+
+  return licenceEntityRoles
+}
+
+function _outstandingVerifications() {
+  return [
+    {
+      id: generateUUID(),
+      verificationCode: 'c7SgB',
+      createdAt: today(),
+      licenceId: generateUUID(),
+      licenceRef: 'FE/TC/H/US/ER/01',
+      licenceHolder: 'Current Holder'
+    },
+    {
+      id: generateUUID(),
+      verificationCode: 'c7SgB',
+      createdAt: today(),
+      licenceId: generateUUID(),
+      licenceRef: 'FE/TC/H/US/ER/03',
+      licenceHolder: 'Current Holder'
+    },
+    {
+      id: generateUUID(),
+      verificationCode: 'Qz4aK',
+      createdAt: yesterday(),
+      licenceId: generateUUID(),
+      licenceRef: 'FE/TC/H/US/ER/04',
+      licenceHolder: 'Current Holder'
+    }
+  ]
+}

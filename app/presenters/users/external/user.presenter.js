@@ -5,8 +5,8 @@
  * @module UserPresenter
  */
 
-const ContactModel = require('../../../models/contact.model.js')
 const { formatLongDateTime, formatLongDate } = require('../../base.presenter.js')
+const { today } = require('../../../lib/general.lib.js')
 
 const EXTERNAL_ROLES = {
   primary_user: {
@@ -26,19 +26,26 @@ const EXTERNAL_ROLES = {
  * are attached to those companies
  * @param {object[]} outstandingVerifications - The outstanding verifications for the user, including details of
  * the licences they relate to
+ * @param {module:LicenceModel[]} licences - The licences linked to the user, including their related roles and current licence
  * @param {string[]} viewingUserScope - The 'scope' taken off the `request.auth` object passed to the `ViewUserInternalService`
  * @param {string} back - The 'back' query parameter, used to indicate what back link should be shown on the page
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user, outstandingVerifications, viewingUserScope, back) {
+function go(user, outstandingVerifications, licences, viewingUserScope, back) {
   const permissions = user.$permissions()
+
+  const formattedLicences = _userLicences(licences)
+  const displayLicenceEndedMessage = formattedLicences.some((formattedLicence) => {
+    return formattedLicence.status
+  })
 
   return {
     backLink: _backLink(back),
-    companies: _companies(user),
+    displayLicenceEndedMessage,
     id: user.id,
     lastSignedIn: _lastSignedIn(user),
+    licences: formattedLicences,
     outstandingVerifications: _outstandingVerifications(outstandingVerifications),
     pageTitle: `User ${user.username}`,
     pageTitleCaption: 'External',
@@ -63,6 +70,52 @@ function _backLink(back) {
   }
 }
 
+function _userLicences(licences) {
+  return licences.map((licence) => {
+    const { id, licenceRef, licenceVersions } = licence
+    const licenceEndDetails = licence.$ends()
+
+    return {
+      currentLicenceHolder: licenceVersions[0].licenceVersionHolder.derivedName,
+      id,
+      licenceLink: `/system/licences/${id}/summary`,
+      licenceRef,
+      permissions: _licencePermissions(licence),
+      status: _status(licenceEndDetails)
+    }
+  })
+}
+
+function _licencePermissions(licence) {
+  const { licenceEntityRoles } = licence.licenceDocumentHeader
+
+  let role = licenceEntityRoles.some((licenceEntityRole) => {
+    return licenceEntityRole.role === 'primary_user'
+  })
+
+  if (role) {
+    return 'Primary user'
+  }
+
+  role = licenceEntityRoles.some((licenceEntityRole) => {
+    return licenceEntityRole.role === 'user_returns'
+  })
+
+  if (role) {
+    return 'Returns user'
+  }
+
+  return 'Basic access'
+}
+
+function _status(licenceEndDetails) {
+  if (licenceEndDetails && licenceEndDetails.date <= today()) {
+    return licenceEndDetails.reason
+  }
+
+  return null
+}
+
 function _roles(permissions) {
   const roles = []
 
@@ -82,47 +135,6 @@ function _roles(permissions) {
   return roles
 }
 
-function _companies(user) {
-  const { licenceEntity } = user
-
-  if (!licenceEntity) {
-    return []
-  }
-
-  const { licenceEntityRoles, userVerifications } = licenceEntity
-
-  // A user can have multiple roles for a company, so we normalise the list by company
-  const normalisedCompanyRoles = _normalisedCompanyRoles(licenceEntityRoles)
-
-  // A user can potentially have multiple verifications for a company, so we normalise the list by company
-  const normalisedCompanyVerifications = _normalisedCompanyVerifications(userVerifications)
-
-  // We need to include all companies, whether the user has roles, verifications or both for that company, so we need a
-  // combined list of company IDs from both the roles and the verifications
-  const companyIds = [
-    ...new Set([...Object.keys(normalisedCompanyRoles), ...Object.keys(normalisedCompanyVerifications)])
-  ]
-
-  return companyIds.map((companyId) => {
-    return _company(companyId, normalisedCompanyRoles, normalisedCompanyVerifications)
-  })
-}
-
-function _company(companyId, normalisedCompanyRoles, normalisedCompanyVerifications) {
-  const { companyEntity } = normalisedCompanyRoles[companyId] || normalisedCompanyVerifications[companyId]
-  const { roles } = normalisedCompanyRoles[companyId] || { roles: [] }
-  const { verifications } = normalisedCompanyVerifications[companyId] || { verifications: [] }
-  const licences = _licences(companyEntity.licenceDocumentHeaders)
-
-  return {
-    companyName: companyEntity.name,
-    licences,
-    mostSignificantRoleName: _mostSignificantRoleName(roles),
-    showLicences: licences.length > 0,
-    verifications
-  }
-}
-
 function _lastSignedIn(user) {
   const { lastLogin } = user
 
@@ -131,97 +143,6 @@ function _lastSignedIn(user) {
   }
 
   return formatLongDateTime(lastLogin)
-}
-
-function _licenceHolderName(licenceDocumentHeaderMetadata) {
-  // LicenceDocumentHeader metadata has the licence holder contact details, but only for licences that are currently
-  // active - for expired licences, the contact details are removed from the base metadata, but are still held in
-  // the `contacts` array.
-  // So we need to find the contact with role 'Licence holder' to get the details we need
-  const licenceHolder =
-    licenceDocumentHeaderMetadata.contacts?.find((contact) => {
-      return contact.role === 'Licence holder'
-    }) ?? {}
-
-  const { forename: firstName, initials, name: lastName, salutation } = licenceHolder
-
-  return ContactModel.fromJson({ firstName, initials, lastName, salutation }).$name()
-}
-
-function _licences(licenceDocumentHeaders = []) {
-  return licenceDocumentHeaders.map(({ licence: { id }, licenceRef, metadata }) => {
-    return {
-      licenceLink: `/system/licences/${id}/summary`,
-      licenceRef,
-      licenceHolderName: _licenceHolderName(metadata)
-    }
-  })
-}
-
-function _mostSignificantRoleName(roles = []) {
-  if (roles.length === 0) {
-    return 'No role'
-  }
-
-  if (roles.includes('primary_user')) {
-    return 'Primary user'
-  }
-
-  if (roles.includes('user_returns')) {
-    return 'Returns user'
-  }
-
-  if (roles.includes('user')) {
-    return 'Agent'
-  }
-
-  return 'Unknown role'
-}
-
-/**
- * Normalises company roles into an object keyed by company entity ID.
- *
- * Company roles are returned as just a list of company and role. But we want to know the roles for each company, so
- * this function groups them by company, providing an array of companies each with an array of roles.
- *
- * @private
- */
-function _normalisedCompanyRoles(licenceEntityRoles = []) {
-  const companies = licenceEntityRoles
-    .filter(({ companyEntity }) => {
-      return companyEntity
-    })
-    .reduce((normalisedCompanies, licenceEntityRole) => {
-      const { companyEntity, role } = licenceEntityRole
-      const company = normalisedCompanies[companyEntity.id] || { companyEntity, roles: [] }
-      company.roles.push(role)
-      normalisedCompanies[companyEntity.id] = company
-      return normalisedCompanies
-    }, {})
-
-  return companies
-}
-
-/**
- * Normalises company verifications into an object keyed by company entity ID.
- *
- * Company verifications are returned as just a list of company and verification. But we want to know the verifications
- * for each company, groups them by company, providing an array of companies each with an array of verifications.
- *
- * @private
- */
-function _normalisedCompanyVerifications(userVerifications = []) {
-  const companies = userVerifications.reduce((normalisedCompanies, userVerification) => {
-    const { companyEntity, createdAt, verificationCode } = userVerification
-    const sent = formatLongDate(createdAt)
-    const licences = _licences(userVerification.licenceDocumentHeaders)
-    const company = normalisedCompanies[companyEntity.id] || { companyEntity, verifications: [] }
-    company.verifications.push({ licences, sent, verificationCode })
-    normalisedCompanies[companyEntity.id] = company
-    return normalisedCompanies
-  }, {})
-
-  return companies
 }
 
 function _outstandingVerifications(outstandingVerifications) {
