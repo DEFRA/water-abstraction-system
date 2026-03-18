@@ -68,14 +68,15 @@ async function viewProfileDetails(request, h) {
 async function viewUserExternal(request, h) {
   const {
     auth,
-    params: { id }
+    params: { id },
+    query: { back }
   } = request
 
   if (!FeatureFlagsConfig.enableUsersManagement) {
     return _redirectToLegacy(id, h)
   }
 
-  const pageData = await ViewUserExternalService.go(id, auth)
+  const pageData = await ViewUserExternalService.go(id, auth, back)
 
   return h.view('users/external/view-user.njk', pageData)
 }

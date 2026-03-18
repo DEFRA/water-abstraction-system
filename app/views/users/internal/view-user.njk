@@ -30,6 +30,8 @@
     {{ govukButton({ text: "Edit", preventDoubleClick: true }) }}
   </form>
 
+  <h3 class="govuk-heading-m">Roles</h3>
+
   {% if roles.length === 0 %}
     <p data-test='no-roles-msg'>{{ permissions }} grants no additional roles.</p>
   {% else %}
@@ -55,7 +57,6 @@
 
     {{ govukTable({
       attributes: { 'data-test': 'roles-table' },
-      caption: "Roles",
       firstCellIsHeader: false,
       head: [
         {
