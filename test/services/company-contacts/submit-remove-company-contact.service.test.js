@@ -12,7 +12,7 @@ const { expect } = Code
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 
 // Things we need to stub
-const CompanyContactModel = require('../../../app/models/company-contact.model.js')
+const DeleteCompanyContactService = require('../../../app/services/company-contacts/delete-company-contact.service.js')
 const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
 
 // Thing under test
@@ -27,9 +27,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
 
     Sinon.stub(FetchCompanyContactService, 'go').resolves(companyContact)
 
-    Sinon.stub(CompanyContactModel, 'query').returns({
-      deleteById: Sinon.stub().returnsThis()
-    })
+    Sinon.stub(DeleteCompanyContactService, 'go').resolves()
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -58,6 +56,14 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
         text: 'Rachael Tyrell was removed from this company.',
         titleText: 'Contact removed'
       })
+    })
+
+    it('calls the delete company contact service with the id and contact email', async () => {
+      await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+
+      expect(
+        DeleteCompanyContactService.go.calledWithExactly(companyContact.id, 'rachael.Tyrell@tyrellcorp.com')
+      ).to.be.true()
     })
   })
 })

@@ -6,6 +6,7 @@
  */
 
 const NotificationModel = require('../../../models/notification.model.js')
+const { ignoreMessageRef } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Fetches data needed to determine if an email address has been used to send notifications.
@@ -26,20 +27,7 @@ async function _fetch(email) {
   return NotificationModel.query()
     .select(['id'])
     .where('recipient', email)
-    .whereNotIn('messageRef', [
-      'email_change_email_in_use_email',
-      'email_change_verification_code_email',
-      'existing_user_verification_email',
-      'expiry_notification_email',
-      'fake!',
-      'new_internal_user_email',
-      'new_user_verification_email',
-      'password_locked_email',
-      'password_reset_email',
-      'security_code_letter',
-      'share_existing_user',
-      'share_new_user'
-    ])
+    .whereNotIn('messageRef', ignoreMessageRef)
     .limit(1)
     .first()
 }
