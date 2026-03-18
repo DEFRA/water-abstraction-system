@@ -12,6 +12,7 @@ const { expect } = Code
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
+const FetchLicencesService = require('../../../../app/services/users/external/fetch-licences.service.js')
 const FetchOutstandingVerificationsService = require('../../../../app/services/users/external/fetch-outstanding-verifications.service.js')
 const FetchUserService = require('../../../../app/services/users/external/fetch-user.service.js')
 
@@ -28,6 +29,7 @@ describe('Users - External - View User service', () => {
 
   beforeEach(() => {
     Sinon.stub(FetchUserService, 'go').resolves(user)
+    Sinon.stub(FetchLicencesService, 'go').resolves([])
     Sinon.stub(FetchOutstandingVerificationsService, 'go').resolves([])
   })
 
@@ -45,9 +47,10 @@ describe('Users - External - View User service', () => {
           href: '/system/users',
           text: 'Go back to users'
         },
-        companies: [],
+        displayLicenceEndedMessage: false,
         id: user.id,
         lastSignedIn: '6 October 2022 at 10:00:00',
+        licences: [],
         outstandingVerifications: [],
         pageTitle: 'User external@example.co.uk',
         pageTitleCaption: 'External',
