@@ -114,6 +114,7 @@ function _query(paginationAndOrderBy = '') {
       ON c.company_id = cc.company_id
     WHERE
       lr."name" = 'additionalContact'
+      AND cc.deleted_at IS NULL
   ),
   external_users AS (
     SELECT DISTINCT ON (ler.id)

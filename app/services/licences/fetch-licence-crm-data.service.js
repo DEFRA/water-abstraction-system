@@ -148,6 +148,7 @@ function _query(paginationAndOrderBy = '') {
         ON lh.id = cc.company_id
       WHERE
         lr."name" = 'additionalContact'
+        AND cc.deleted_at IS NULL
     ),
     returns_to AS (
       SELECT

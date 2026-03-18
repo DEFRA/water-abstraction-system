@@ -75,6 +75,7 @@ async function seed() {
   // Set up additional contacts - linked to the company via the company contacts
   const abstractionAlerts = await _abstractionAlertsContact(companyId)
   const additionalContact = await _additionalContact(companyId, 'Horace Slughorn')
+  const otherAdditionalContactDeleted = await _additionalContactDeleted(companyId, 'Quirinus Quirrell')
 
   // Set up billing accounts
   const billing = await _billing(companyId, licence)
@@ -130,6 +131,7 @@ async function seed() {
       await extraLicenceDocumentHeader.clean()
       await licence.clean()
       await licenceDocumentHeader.clean()
+      await otherAdditionalContactDeleted.clean()
       await otherBasicUser.clean()
       await otherCompany.clean()
       await otherCompanyContact.clean()
@@ -270,6 +272,38 @@ async function _company(name) {
     record: company,
     clean: async () => {
       await company.$query().delete()
+    }
+  }
+}
+
+/**
+ * A company contact can be 'deleted' this is done by setting the company contact's 'deletedAt' field to a timestamp.
+ *
+ * The default is null
+ *
+ * @private
+ */
+async function _additionalContactDeleted(companyId, name) {
+  const licenceRole = LicenceRoleHelper.select('additionalContact')
+
+  const contact = await ContactHelper.add({
+    contactType: 'department',
+    department: name
+  })
+
+  const companyContact = await CompanyContactHelper.add({
+    contactId: contact.id,
+    licenceRoleId: licenceRole.id,
+    abstractionAlerts: false,
+    companyId,
+    deletedAt: new Date('2021-01-01')
+  })
+
+  return {
+    record: companyContact,
+    clean: async () => {
+      await companyContact.$query().delete()
+      await contact.$query().delete()
     }
   }
 }

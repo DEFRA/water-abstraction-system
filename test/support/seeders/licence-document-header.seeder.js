@@ -103,6 +103,29 @@ async function _addAdditionalContactEndDatePassed(contact, licenceDocumentId) {
   })
 }
 
+async function _addAdditionalContactDeleted(contact, licenceDocumentId, abstractionAlerts = true) {
+  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
+    licenceDocumentId,
+    endDate: null
+  })
+
+  const licenceRole = await LicenceRoleHelper.select('additionalContact')
+
+  const companyContact = await CompanyContactHelper.add({
+    companyId: licenceDocumentRole.companyId,
+    licenceRoleId: licenceRole.id,
+    abstractionAlerts,
+    deleted_at: new Date('2020-01-01')
+  })
+
+  await ContactHelper.add({
+    id: companyContact.contactId,
+    ...contact
+  })
+
+  return licenceDocumentRole
+}
+
 async function _addLicenceEntity(licenceDocumentHeader, entityRole) {
   const licenceEntity = await LicenceEntityHelper.add({
     name: entityRole.email
@@ -192,6 +215,15 @@ async function _multipleAdditionalContact() {
   await _addAdditionalContact(additionalContactOne, licenceDocument.id)
 
   await _addAdditionalContact(additionalContactTwo, licenceDocument.id)
+
+  await _addAdditionalContactDeleted(
+    {
+      firstName: 'Brian',
+      lastName: 'Fantana',
+      email: 'brian.fantana@news.com'
+    },
+    licenceDocument.id
+  )
 
   return licenceDocument
 }
