@@ -7,8 +7,8 @@
 
 const CompanyContactModel = require('../../models/company-contact.model.js')
 const NotificationModel = require('../../models/notification.model.js')
-const { ignoreMessageRef } = require('../../lib/static-lookups.lib.js')
 const { timestampForPostgres } = require('../../lib/general.lib.js')
+const { ignoreMessageRef } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Deletes the company contact
