@@ -7,11 +7,11 @@
  */
 
 const ContactsPresenter = require('../../presenters/companies/contacts.presenter.js')
+const FetchCompanyCRMDataService = require('./fetch-company-crm-data.service.js')
 const FetchCompanyService = require('./fetch-company.service.js')
-const FetchContactsService = require('./fetch-company-contacts.service.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
-const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 const { readFlashNotification } = require('../../lib/general.lib.js')
+const { userRoles } = require('../../presenters/licences/base-licences.presenter.js')
 
 /**
  * Orchestrates fetching and presenting the data for the '/companies/{id}/contacts' page
@@ -26,15 +26,17 @@ const { readFlashNotification } = require('../../lib/general.lib.js')
 async function go(companyId, auth, page, yar) {
   const company = await FetchCompanyService.go(companyId)
 
-  const { companyContacts, totalNumber } = await FetchContactsService.go(companyId, page)
+  const roles = userRoles(auth)
 
-  const pageData = ContactsPresenter.go(company, companyContacts)
+  const { contacts, totalNumber } = await FetchCompanyCRMDataService.go(companyId, roles, page)
+
+  const pageData = ContactsPresenter.go(company, contacts)
 
   const pagination = PaginatorPresenter.go(
     totalNumber,
     page,
     `/system/companies/${companyId}/contacts`,
-    companyContacts.length,
+    contacts.length,
     'contacts'
   )
 
@@ -44,7 +46,7 @@ async function go(companyId, auth, page, yar) {
     ...pageData,
     activeSecondaryNav: 'contacts',
     pagination,
-    roles: userRoles(auth),
+    roles,
     notification
   }
 }

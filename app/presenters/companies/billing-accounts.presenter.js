@@ -17,7 +17,7 @@ function go(company, billingAccounts) {
   return {
     backLink: {
       href: '/',
-      text: 'Back to search'
+      text: 'Go back to search'
     },
     billingAccounts: _billingAccounts(billingAccounts),
     pageTitle: 'Billing accounts',

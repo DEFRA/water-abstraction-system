@@ -12,6 +12,8 @@ const { expect } = Code
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
+const FetchLicencesService = require('../../../../app/services/users/external/fetch-licences.service.js')
+const FetchOutstandingVerificationsService = require('../../../../app/services/users/external/fetch-outstanding-verifications.service.js')
 const FetchUserService = require('../../../../app/services/users/external/fetch-user.service.js')
 
 // Thing under test
@@ -23,8 +25,12 @@ describe('Users - External - View User service', () => {
   }
   const user = UsersFixture.external()
 
+  let back
+
   beforeEach(() => {
     Sinon.stub(FetchUserService, 'go').resolves(user)
+    Sinon.stub(FetchLicencesService, 'go').resolves([])
+    Sinon.stub(FetchOutstandingVerificationsService, 'go').resolves([])
   })
 
   afterEach(() => {
@@ -36,17 +42,44 @@ describe('Users - External - View User service', () => {
       const result = await ViewUserService.go(user.id, auth)
 
       expect(result).to.equal({
+        activeNavBar: 'users',
         backLink: {
-          href: '/',
-          text: 'Go back to search'
+          href: '/system/users',
+          text: 'Go back to users'
         },
-        companies: [],
+        displayLicenceEndedMessage: false,
         id: user.id,
-        lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+        lastSignedIn: '6 October 2022 at 10:00:00',
+        licences: [],
+        outstandingVerifications: [],
         pageTitle: 'User external@example.co.uk',
         pageTitleCaption: 'External',
+        permissions: 'None',
+        roles: [],
         showEditButton: true,
         status: 'enabled'
+      })
+    })
+
+    describe('the "activeNavBar" property', () => {
+      describe('when the "back" query parameter is "undefined"', () => {
+        it('defaults to ""users" and returns "users"', async () => {
+          const result = await ViewUserService.go(user.id, auth, back)
+
+          expect(result.activeNavBar).to.equal('users')
+        })
+      })
+
+      describe('when the "back" query parameter is not "users" (for example "search")', () => {
+        beforeEach(() => {
+          back = 'search'
+        })
+
+        it('returns "search"', async () => {
+          const result = await ViewUserService.go(user.id, auth, back)
+
+          expect(result.activeNavBar).to.equal('search')
+        })
       })
     })
   })

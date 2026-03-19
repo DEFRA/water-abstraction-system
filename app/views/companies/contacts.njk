@@ -1,0 +1,37 @@
+{% extends 'layout-companies.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+
+{% from "macros/contacts-table.njk" import contactsTable %}
+
+{% block pageContent %}
+  {% if 'hof_notifications' in roles %}
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Set up a new contact",
+        href: links.createContact,
+        preventDoubleClick: true
+      }) }}
+
+      {% if links.removeContact %}
+        {{ govukButton({
+          text: "Remove a contact",
+          classes: "govuk-button--secondary",
+          href: links.removeContact,
+          preventDoubleClick: true
+        }) }}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if companyContacts.length === 0 %}
+    <p> No contacts for this customer. </p>
+  {% else %}
+    {{ contactsTable(contacts, pagination) }}
+
+    {% if pagination.numberOfPages > 1  %}
+      {{ govukPagination(pagination.component) }}
+    {% endif %}
+  {% endif %}
+{% endblock %}

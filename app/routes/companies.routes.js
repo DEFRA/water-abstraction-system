@@ -26,7 +26,7 @@ const routes = [
     method: 'GET',
     path: '/companies/{id}/contacts',
     options: {
-      handler: CompaniesController.viewContact
+      handler: CompaniesController.viewContacts
     }
   },
   {

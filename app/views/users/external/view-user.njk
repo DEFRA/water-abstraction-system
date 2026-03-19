@@ -1,37 +1,30 @@
 {% extends 'layout.njk' %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/details/macro.njk" import govukDetails %}
 
-{% from "macros/user-status-tag.njk" import statusTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/licence-status-tag.njk" import statusTag as licenceStatusTag %}
+{% from "macros/user-status-tag.njk" import statusTag as userStatusTag %}
 
 {% block pageContent %}
-  <p>{{ statusTag(status) }} {{ lastSignedIn }}</p>
+  <p>{{ userStatusTag(status) }}</p>
 
-  {% for company in companies %}
-    <h2 class="govuk-heading-l govuk-!-margin-bottom-0">{{ company.companyName }}</h2>
-    <p>{{ company.mostSignificantRoleName }}</p>
-    {% if company.verifications %}
-      {% for verification in company.verifications %}
-        <p>Security code <span class="govuk-!-font-weight-bold">{{ verification.verificationCode}}</span> sent {{ verification.sent }}</p>
-        {% for licence in verification.licences %}
-          <p><a href="{{ licence.licenceLink }}">{{ licence.licenceRef }}</a> {{ licence.licenceHolderName }}</p>
-        {% endfor %}
-      {% endfor %}
-    {% endif %}
-    {% if company.showLicences %}
-      <h3 class="govuk-heading-m govuk-!-margin-bottom-0">{{ company.licences.length }} licences</h3>
-      {% set licenceContent %}
-        {% for licence in company.licences %}
-          <p><a href="{{ licence.licenceLink }}">{{ licence.licenceRef }}</a> {{ licence.licenceHolderName }}</p>
-        {% endfor %}
-      {% endset %}
-      {{ govukDetails({
-        classes: "govuk-!-margin-bottom-2",
-        html: licenceContent,
-        summaryText: "View licences"
-      }) }}
-    {% endif %}
-  {% endfor %}
+  {{ govukSummaryList({
+    classes: 'govuk-summary-list--no-border',
+    attributes: { 'data-test': 'meta-data' },
+    rows: [
+      {
+        key: { text: "Highest permissions", classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-permissions">' + permissions + '</span>', classes: "meta-data__value" }
+      },
+      {
+        key: { text: "Last sign in", classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-last-sign-in">' + lastSignedIn + '</span>', classes: "meta-data__value" }
+      }
+    ]
+  }) }}
 
   {% if showEditButton %}
     <form method="post">
@@ -39,5 +32,187 @@
 
       {{ govukButton({ text: "Edit", preventDoubleClick: true }) }}
     </form>
+  {% endif %}
+
+  <h3 class="govuk-heading-m">Roles</h3>
+
+  {% if roles.length === 0 %}
+    <p data-test='no-roles-msg'>{{ permissions }} grants no additional roles.</p>
+  {% else %}
+    {% set rows = [] %}
+
+    {% for role in roles %}
+      {% set rowIndex = loop.index0 %}
+      {% set tableRow = []%}
+
+      {% set row = [
+        {
+          attributes: { 'data-test': 'role-name-' + rowIndex },
+          text: role.name
+        },
+        {
+          attributes: { 'data-test': 'role-description-' + rowIndex },
+          text: role.description
+        }
+      ] %}
+
+      {% set rows = (rows.push(row), rows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      attributes: { 'data-test': 'roles-table' },
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: "Name"
+        },
+        {
+          text: "Description"
+        }
+      ],
+      rows: rows
+    }) }}
+  {% endif %}
+
+  <h3 class="govuk-heading-m">Outstanding verifications</h3>
+
+  {% if outstandingVerifications.length === 0 %}
+    <p data-test='no-licences-msg'>No outstanding verifications.</p>
+  {% else %}
+    {% set rows = [] %}
+
+    {% for outstandingVerification in outstandingVerifications %}
+      {% set rowIndex = loop.index0 %}
+
+      {% if rowIndex > 0 %}
+        {% set lastCode = outstandingVerifications[rowIndex - 1].code %}
+      {% else %}
+        {% set lastCode = null %}
+      {% endif %}
+
+      {% set row = []%}
+
+      {% if lastCode !== outstandingVerification.code %}
+        {% set codeCell =
+          {
+            attributes: { 'data-test': 'outstanding-verifications-code-' + rowIndex },
+            html: '<span class="govuk-!-font-weight-bold">' + outstandingVerification.code + '</span>',
+            rowspan: outstandingVerification.count
+          } %}
+
+        {% set row = (row.push(codeCell), row) %}
+
+        {% set createdOnCell =
+          {
+            attributes: { 'data-test': 'outstanding-verifications-created-at' + rowIndex },
+            rowspan: outstandingVerification.count,
+            text: outstandingVerification.createdOn
+          } %}
+        {% set row = (row.push(createdOnCell), row) %}
+      {% endif %}
+
+      {% set verificationLicenceLink %}
+        <a class="govuk-link" href="{{ outstandingVerification.link }}">{{ outstandingVerification.licenceRef }}</a>
+      {% endset %}
+
+      {% set licenceRefCell =
+        {
+          attributes: { 'data-test': 'outstanding-verifications-licence-ref' + rowIndex },
+          html: verificationLicenceLink
+        } %}
+      {% set row = (row.push(licenceRefCell), row) %}
+
+      {% set licenceHolderCell =
+        {
+          attributes: { 'data-test': 'outstanding-verifications-licence-holder' + rowIndex },
+          text: outstandingVerification.licenceHolder
+        } %}
+      {% set row = (row.push(licenceHolderCell), row) %}
+
+      {% set rows = (rows.push(row), rows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      attributes: { 'data-test': 'outstanding-verifications-table' },
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: "Code"
+        },
+        {
+          text: "Created on"
+        },
+        {
+          text: "Licence number"
+        },
+        {
+          text: "Licence holder"
+        }
+      ],
+      rows: rows
+    }) }}
+  {% endif %}
+
+  <h3 class="govuk-heading-m">Licences</h3>
+  {% if licences.length === 0 %}
+    <p data-test='no-licences-msg'>No licences found.</p>
+  {% else %}
+    {% set rows = [] %}
+
+    {% for licence in licences %}
+      {% set rowIndex = loop.index0 %}
+      {% set tableRow = []%}
+
+      {% set licenceLink %}
+        <a class="govuk-link" href="{{ licence.link }}">{{ licence.licenceRef }}</a>
+      {% endset %}
+
+      {% set row = [
+        {
+          attributes: { 'data-test': 'licence-name-' + rowIndex },
+          html: licenceLink
+        },
+        {
+          attributes: { 'data-test': 'licence-status-' + rowIndex },
+          html: licenceStatusTag(licence.status, true)
+        },
+        {
+          attributes: { 'data-test': 'licence-current-licence-holder-' + rowIndex },
+          text: licence.currentLicenceHolder
+        },
+        {
+          attributes: { 'data-test': 'licence-permissions-' + rowIndex },
+          text: licence.permissions
+        }
+      ] %}
+
+      {% set rows = (rows.push(row), rows) %}
+    {% endfor %}
+
+    {% if displayLicenceEndedMessage %}
+      {{ govukInsetText({
+        text: 'Licences that have ended will not be visible to the user.'
+      }) }}
+    {% endif %}
+
+    {{ govukTable({
+      attributes: { 'data-test': 'licences-table' },
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: "Licence"
+        },
+        {
+          text: "Status"
+        },
+        {
+          text: "Current licence holder"
+        },
+        {
+          text: "Permissions"
+        }
+      ],
+      rows: rows
+    }) }}
   {% endif %}
 {% endblock %}
