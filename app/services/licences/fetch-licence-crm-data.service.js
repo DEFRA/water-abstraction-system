@@ -68,25 +68,19 @@ function _query(paginationAndOrderBy = '') {
       WHERE l.id = ?
     ),
     latest_charge_version AS (
-      SELECT
+      SELECT DISTINCT ON (cv.licence_id)
         cv.licence_id,
         cv.billing_account_id
       FROM
         public.charge_versions cv
       INNER JOIN licence l
         ON l.licence_id = cv.licence_id
-      INNER JOIN (
-        SELECT
-          licence_id,
-          MAX(version_number) AS max_version
-        FROM
-          public.charge_versions
-        GROUP BY
-          licence_id
-      ) latest
-        ON cv.licence_id = latest.licence_id
-        AND cv.version_number = latest.max_version
-      WHERE cv.billing_account_id IS NOT NULL
+      WHERE
+        cv.status <> 'superseded'
+      ORDER BY
+        cv.licence_id,
+        cv.start_date DESC,
+        cv.end_date DESC NULLS FIRST
     ),
     external_users AS (
       SELECT DISTINCT ON (ler.id)
