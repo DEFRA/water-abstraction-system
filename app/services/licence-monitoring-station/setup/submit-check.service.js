@@ -15,14 +15,15 @@ const { flowUnits } = require('../../../lib/static-lookups.lib.js')
  * Orchestrates submitting the data for `/licence-monitoring-station/setup/{sessionId}/check`
  *
  * @param {string} sessionId - The UUID of the current session
+ * @param {string} userId - The ID of the current user
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<string>} The monitoring station id used to redirect back to the monitoring station page
  */
-async function go(sessionId, yar) {
+async function go(sessionId, userId, yar) {
   const session = await SessionModel.query().findById(sessionId)
 
-  await _createTag(session)
+  await _createTag(session, userId)
 
   await session.$query().delete()
 
@@ -31,12 +32,13 @@ async function go(sessionId, yar) {
   return session.monitoringStationId
 }
 
-async function _createTag(session) {
+async function _createTag(session, userId) {
   return LicenceMonitoringStationModel.query().insert({
     abstractionPeriodStartDay: session.abstractionPeriodStartDay,
     abstractionPeriodStartMonth: session.abstractionPeriodStartMonth,
     abstractionPeriodEndDay: session.abstractionPeriodEndDay,
     abstractionPeriodEndMonth: session.abstractionPeriodEndMonth,
+    createdBy: userId,
     licenceId: session.licenceId,
     licenceVersionPurposeConditionId: session.conditionId === 'no_condition' ? null : session.conditionId,
     measureType: _determineMeasureType(session.unit),
