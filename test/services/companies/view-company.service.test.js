@@ -55,6 +55,7 @@ describe('Companies - Company Service', () => {
               'Southbank Industrial Sector',
               'Lambeth Precinct',
               'Greater London',
+              'United Kingdom',
               'SE1 7TY',
               'UK'
             ],
@@ -92,6 +93,7 @@ describe('Companies - Company Service', () => {
               'Southbank Industrial Sector',
               'Lambeth Precinct',
               'Greater London',
+              'United Kingdom',
               'SE1 7TY',
               'UK'
             ],
