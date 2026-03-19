@@ -51,7 +51,8 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
           cancel: `/system/company-contacts/setup/${session.id}/cancel`,
           email: `/system/company-contacts/setup/${session.id}/contact-email`,
-          name: `/system/company-contacts/setup/${session.id}/contact-name`
+          name: `/system/company-contacts/setup/${session.id}/contact-name`,
+          restoreContact: null
         },
         name,
         pageTitle: 'Check contact',
@@ -120,6 +121,43 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               expect(result.warning).to.equal({
                 text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
                 iconFallbackText: 'Warning'
+              })
+            })
+          })
+
+          describe('and the company contact can be restored', () => {
+            beforeEach(() => {
+              companyContacts = [
+                {
+                  ...companyContact,
+                  deletedAt: new Date()
+                }
+              ]
+            })
+
+            describe('in the same case', () => {
+              it('returns a warning', () => {
+                const result = CheckPresenter.go(session, companyContacts, singleNotification)
+
+                expect(result.warning).to.equal({
+                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
+                  iconFallbackText: 'Warning'
+                })
+              })
+            })
+
+            describe('in a different case (TYRELL CORPORATION)', () => {
+              beforeEach(() => {
+                session.name = companyContact.contact.department.toUpperCase()
+              })
+
+              it('still returns a warning', () => {
+                const result = CheckPresenter.go(session, companyContacts, singleNotification)
+
+                expect(result.warning).to.equal({
+                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
+                  iconFallbackText: 'Warning'
+                })
               })
             })
           })
@@ -194,6 +232,46 @@ describe('Company Contacts - Setup - Check Presenter', () => {
               })
             })
           })
+
+          describe('and the company contact can be restored', () => {
+            beforeEach(() => {
+              session.companyContact = companyContact
+
+              companyContacts = [
+                {
+                  ...companyContact,
+                  id: generateUUID(),
+                  deletedAt: new Date()
+                }
+              ]
+            })
+
+            describe('in the same case', () => {
+              it('returns a warning', () => {
+                const result = CheckPresenter.go(session, companyContacts, singleNotification)
+
+                expect(result.warning).to.equal({
+                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
+                  iconFallbackText: 'Warning'
+                })
+              })
+            })
+
+            describe('in a different case (TYRELL CORPORATION)', () => {
+              beforeEach(() => {
+                session.name = companyContact.contact.department.toUpperCase()
+              })
+
+              it('still returns a warning', () => {
+                const result = CheckPresenter.go(session, companyContacts, singleNotification)
+
+                expect(result.warning).to.equal({
+                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
+                  iconFallbackText: 'Warning'
+                })
+              })
+            })
+          })
         })
 
         describe('and a contact with a matching name and email does not exist', () => {
@@ -223,6 +301,25 @@ describe('Company Contacts - Setup - Check Presenter', () => {
 
             expect(result.warning).to.be.null()
           })
+        })
+      })
+    })
+
+    describe('the "links" property', () => {
+      describe('when the company contact can be restored', () => {
+        beforeEach(() => {
+          companyContacts = [
+            {
+              ...companyContact,
+              deletedAt: new Date()
+            }
+          ]
+        })
+
+        it('returns link to the restore contact page', () => {
+          const result = CheckPresenter.go(session, companyContacts, singleNotification)
+
+          expect(result.links.restoreContact).to.equal(`/system/company-contacts/setup/${session.id}/restore`)
         })
       })
     })

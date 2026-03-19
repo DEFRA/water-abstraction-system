@@ -25,6 +25,7 @@ function go(session, savedCompanyContacts, sentNotification) {
   return {
     abstractionAlerts: titleCase(abstractionAlerts),
     email,
+    emailInUse: _emailInUse(sentNotification, companyContact),
     name,
     pageTitle: 'Check contact',
     pageTitleCaption: company.name,
@@ -32,10 +33,10 @@ function go(session, savedCompanyContacts, sentNotification) {
       abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
       cancel: `/system/company-contacts/setup/${session.id}/cancel`,
       email: `/system/company-contacts/setup/${session.id}/contact-email`,
-      name: `/system/company-contacts/setup/${session.id}/contact-name`
+      name: `/system/company-contacts/setup/${session.id}/contact-name`,
+      restoreContact: matchingContact?.deletedAt ? `/system/company-contacts/setup/${session.id}/restore` : null
     },
-    warning: _warning(matchingContact),
-    emailInUse: _emailInUse(sentNotification, companyContact)
+    warning: _warning(matchingContact)
   }
 }
 
@@ -68,7 +69,7 @@ function _matchingContact(email, name, savedCompanyContacts) {
   const lowerEmail = email?.toLowerCase()
   const lowerName = name.toLowerCase()
 
-  return savedCompanyContacts.some((savedCompanyContact) => {
+  return savedCompanyContacts.find((savedCompanyContact) => {
     return (
       savedCompanyContact.contact.email?.toLowerCase() === lowerEmail &&
       savedCompanyContact.contact.$name().toLowerCase() === lowerName
@@ -84,6 +85,13 @@ function _matchingContact(email, name, savedCompanyContacts) {
  */
 function _warning(matchingContact) {
   if (matchingContact) {
+    if (matchingContact.deletedAt) {
+      return {
+        text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
+        iconFallbackText: 'Warning'
+      }
+    }
+
     return {
       text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
       iconFallbackText: 'Warning'

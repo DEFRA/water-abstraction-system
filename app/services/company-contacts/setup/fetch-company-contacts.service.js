@@ -26,9 +26,9 @@ async function _fetch(companyId, companyContact) {
   const excluded = companyContact ? [companyContact.id] : []
 
   return CompanyContactModel.query()
-    .select(['companyContacts.id'])
-    .where('companyContacts.companyId', companyId)
-    .whereNotIn('companyContacts.id', excluded)
+    .select(['id', 'deletedAt'])
+    .where('companyId', companyId)
+    .whereNotIn('id', excluded)
     .withGraphFetched('contact')
     .modifyGraph('contact', (contactBuilder) => {
       contactBuilder.select([
