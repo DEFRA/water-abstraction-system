@@ -8,7 +8,7 @@
 
 const CheckPresenter = require('../../../presenters/company-contacts/setup/check.presenter.js')
 const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
-const FetchNotificationService = require('./fetch-notification.service.js')
+const FetchNotificationService = require('../fetch-notification.service.js')
 const SessionModel = require('../../../models/session.model.js')
 const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
 const { readFlashNotification } = require('../../../lib/general.lib.js')
