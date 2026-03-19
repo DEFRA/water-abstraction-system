@@ -8,16 +8,16 @@ const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = La
 const { expect } = Code
 
 // Test helpers
-const EventHelper = require('../../../support/helpers/event.helper.js')
-const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
-const NotificationHelper = require('../../../support/helpers/notification.helper.js')
-const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const EventHelper = require('../../support/helpers/event.helper.js')
+const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
+const NotificationHelper = require('../../support/helpers/notification.helper.js')
+const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
-const FetchNotificationService = require('../../../../app/services/company-contacts/setup/fetch-notification.service.js')
+const FetchNotificationService = require('../../../app/services/company-contacts/fetch-notification.service.js')
 
-describe('Company Contacts - Setup - Fetch Notification service', () => {
+describe('Company Contacts - Fetch Notification service', () => {
   let email
   let notice
   let notification

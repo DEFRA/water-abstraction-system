@@ -5,8 +5,8 @@
  * @module FetchNotificationService
  */
 
-const NotificationModel = require('../../../models/notification.model.js')
-const { ignoreMessageRef } = require('../../../lib/static-lookups.lib.js')
+const NotificationModel = require('../../models/notification.model.js')
+const { ignoreMessageRef } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Fetches data needed to determine if an email address has been used to send notifications.

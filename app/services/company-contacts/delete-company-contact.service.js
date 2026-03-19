@@ -6,7 +6,7 @@
  */
 
 const CompanyContactModel = require('../../models/company-contact.model.js')
-const FetchNotificationService = require('../company-contacts/setup/fetch-notification.service.js')
+const FetchNotificationService = require('./fetch-notification.service.js')
 const { timestampForPostgres } = require('../../lib/general.lib.js')
 
 /**
