@@ -45,6 +45,7 @@ function _formatCompanyAddress(companyAddress) {
     address.address3,
     address.address4,
     address.address5,
+    address.address6,
     address.postcode,
     address.country
   ].filter(Boolean)
