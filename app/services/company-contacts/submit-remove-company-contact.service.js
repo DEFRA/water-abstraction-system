@@ -8,6 +8,7 @@
 
 const DeleteCompanyContactService = require('./delete-company-contact.service.js')
 const FetchCompanyContactService = require('./fetch-company-contact.service.js')
+const FetchNotificationService = require('./fetch-notification.service.js')
 const { flashNotification } = require('../../lib/general.lib.js')
 
 /**
@@ -21,7 +22,11 @@ const { flashNotification } = require('../../lib/general.lib.js')
 async function go(id, yar) {
   const companyContact = await FetchCompanyContactService.go(id)
 
-  await DeleteCompanyContactService.go(id, companyContact.contact.email)
+  const notification = await FetchNotificationService.go(companyContact.contact.email)
+
+  const notified = !!notification
+
+  await DeleteCompanyContactService.go(id, notified)
 
   flashNotification(yar, 'Contact removed', `${companyContact.contact.$name()} was removed from this company.`)
 

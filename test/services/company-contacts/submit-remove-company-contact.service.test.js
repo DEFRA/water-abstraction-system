@@ -14,20 +14,24 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 // Things we need to stub
 const DeleteCompanyContactService = require('../../../app/services/company-contacts/delete-company-contact.service.js')
 const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
+const FetchNotificationService = require('../../../app/services/company-contacts/fetch-notification.service.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const SubmitRemoveCompanyContactService = require('../../../app/services/company-contacts/submit-remove-company-contact.service.js')
 
 describe('Company Contacts - Submit Remove Company Contact Service', () => {
   let companyContact
+  let notification
   let yarStub
 
   beforeEach(async () => {
     companyContact = CustomersFixtures.companyContact()
 
-    Sinon.stub(FetchCompanyContactService, 'go').resolves(companyContact)
+    notification = { id: generateUUID() }
 
     Sinon.stub(DeleteCompanyContactService, 'go').resolves()
+    Sinon.stub(FetchCompanyContactService, 'go').resolves(companyContact)
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -37,33 +41,52 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
   })
 
   describe('when called', () => {
-    it('returns page data for the view', async () => {
-      const result = await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+    describe('and there are notifications', () => {
+      beforeEach(async () => {
+        notification = { id: generateUUID() }
+        Sinon.stub(FetchNotificationService, 'go').resolves(notification)
+      })
 
-      expect(result).to.equal({
-        companyId: companyContact.companyId
+      it('returns page data for the view', async () => {
+        const result = await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+
+        expect(result).to.equal({
+          companyId: companyContact.companyId
+        })
+      })
+
+      it('sets a flash message', async () => {
+        await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+
+        // Check we add the flash message
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('notification')
+        expect(bannerMessage).to.equal({
+          text: 'Rachael Tyrell was removed from this company.',
+          titleText: 'Contact removed'
+        })
+      })
+
+      it('calls the delete company contact service with the id and true', async () => {
+        await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+
+        expect(DeleteCompanyContactService.go.calledWithExactly(companyContact.id, true)).to.be.true()
       })
     })
 
-    it('sets a flash message', async () => {
-      await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+    describe('when there are no notifications', () => {
+      beforeEach(async () => {
+        notification = undefined
 
-      // Check we add the flash message
-      const [flashType, bannerMessage] = yarStub.flash.args[0]
-
-      expect(flashType).to.equal('notification')
-      expect(bannerMessage).to.equal({
-        text: 'Rachael Tyrell was removed from this company.',
-        titleText: 'Contact removed'
+        Sinon.stub(FetchNotificationService, 'go').resolves(notification)
       })
-    })
 
-    it('calls the delete company contact service with the id and contact email', async () => {
-      await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+      it('calls the delete company contact service with the id and false', async () => {
+        await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
 
-      expect(
-        DeleteCompanyContactService.go.calledWithExactly(companyContact.id, 'rachael.Tyrell@tyrellcorp.com')
-      ).to.be.true()
+        expect(DeleteCompanyContactService.go.calledWithExactly(companyContact.id, false)).to.be.true()
+      })
     })
   })
 })

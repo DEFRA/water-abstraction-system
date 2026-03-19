@@ -6,24 +6,21 @@
  */
 
 const CompanyContactModel = require('../../models/company-contact.model.js')
-const FetchNotificationService = require('./fetch-notification.service.js')
 const { timestampForPostgres } = require('../../lib/general.lib.js')
 
 /**
  * Deletes the company contact
  *
- * A company contact can be deleted if it has no associated notifications to the provided email.
+ * A company contact can be deleted if it has not been notified.
  *
- * If there are notifications associated with the provided email, the company contact will not be deleted, it will be
- * 'soft-deleted' (marked as 'deletedAt' in the database).
+ * If a company contact has been notified, the company contact will not be deleted, it will be
+ * 'soft-deleted'.
  *
  * @param {string} id - The id of the company contact
- * @param {string} email - the contact email (may have been used to send notifications)
+ * @param {object} notified - true if the company contacts have been notified
  */
-async function go(id, email) {
-  const notification = await FetchNotificationService.go(email)
-
-  if (notification) {
+async function go(id, notified) {
+  if (notified) {
     await CompanyContactModel.query().update({ deletedAt: timestampForPostgres() }).where('id', id)
   } else {
     await CompanyContactModel.query().deleteById(id)
