@@ -5,6 +5,7 @@
  */
 
 const BillingAccountHelper = require('../helpers/billing-account.helper.js')
+const ChangeReasonHelper = require('../helpers/change-reason.helper.js')
 const ChargeVersionHelper = require('../helpers/charge-version.helper.js')
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const CompanyHelper = require('../helpers/company.helper.js')
@@ -105,6 +106,7 @@ async function seed() {
   )
   const otherBasicUser = await _basicUser(otherCompanyEntity.record.id, 'Draco Malfoy')
   const otherCompanyContact = await _additionalCompanyContact(otherCompany, additionalContact)
+  const otherBilling = await _otherBillingNaldGap(otherCompany.record.id, otherLicence)
 
   return {
     abstractionAlerts,
@@ -114,6 +116,11 @@ async function seed() {
     company,
     extraBasicUser,
     licence,
+    otherBasicUser,
+    otherBilling,
+    otherCompany,
+    otherCompanyContact,
+    otherLicence,
     primaryUser,
     returnsTo,
     returnsUser,
@@ -133,6 +140,7 @@ async function seed() {
       await licenceDocumentHeader.clean()
       await otherAdditionalContactDeleted.clean()
       await otherBasicUser.clean()
+      await otherBilling.clean()
       await otherCompany.clean()
       await otherCompanyContact.clean()
       await otherCompanyEntity.clean()
@@ -142,6 +150,39 @@ async function seed() {
       await primaryUser.clean()
       await returnsTo.clean()
       await returnsUser.clean()
+    }
+  }
+}
+
+async function _otherBillingNaldGap(companyId, licence) {
+  const billingAccount = await BillingAccountHelper.add({ companyId })
+
+  const chargeVersion = await ChargeVersionHelper.add({
+    companyId,
+    licenceId: licence.record.id,
+    billingAccountId: billingAccount.id
+  })
+
+  const changeReason = ChangeReasonHelper.data.find((reason) => {
+    return reason.description === 'NALD gap'
+  })
+
+  const naldGapChargeVersion = await ChargeVersionHelper.add({
+    companyId,
+    licenceId: licence.record.id,
+    billingAccountId: null,
+    startDate: new Date('2020-01-01'),
+    endDate: new Date('2022-03-31'),
+    changeReasonId: changeReason.id,
+    versionNumber: chargeVersion.versionNumber + 1
+  })
+
+  return {
+    record: billingAccount,
+    clean: async () => {
+      await billingAccount.$query().delete()
+      await chargeVersion.$query().delete()
+      await naldGapChargeVersion.$query().delete()
     }
   }
 }
