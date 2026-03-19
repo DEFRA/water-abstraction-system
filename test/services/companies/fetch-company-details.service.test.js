@@ -23,36 +23,36 @@ describe('Companies - Fetch Company details service', () => {
   let companyAddress
   let earlierCompanyAddress
 
+  before(async () => {
+    company = await CompanyHelper.add()
+
+    address = await AddressHelper.add()
+
+    companyAddress = await CompanyAddressHelper.add({
+      addressId: address.id,
+      companyId: company.id,
+      licenceRoleId: LicenceRoleHelper.select('licenceHolder').id,
+      startDate: new Date('2010-02-03')
+    })
+
+    // We add an earlier company address to ensure we are sorting by the start date
+    earlierAddress = await AddressHelper.add()
+    earlierCompanyAddress = await CompanyAddressHelper.add({
+      addressId: earlierAddress.id,
+      companyId: company.id,
+      licenceRoleId: LicenceRoleHelper.select('licenceHolder').id,
+      startDate: new Date('2000-01-01')
+    })
+  })
+
+  after(async () => {
+    await address.$query().delete()
+    await company.$query().delete()
+    await companyAddress.$query().delete()
+    await earlierCompanyAddress.$query().delete()
+  })
+
   describe('when there is a company', () => {
-    before(async () => {
-      company = await CompanyHelper.add()
-
-      address = await AddressHelper.add()
-
-      companyAddress = await CompanyAddressHelper.add({
-        addressId: address.id,
-        companyId: company.id,
-        licenceRoleId: LicenceRoleHelper.select('licenceHolder').id,
-        startDate: new Date('2010-02-03')
-      })
-
-      // We add an earlier company address to ensure we are sorting by the start date
-      earlierAddress = await AddressHelper.add()
-      earlierCompanyAddress = await CompanyAddressHelper.add({
-        addressId: earlierAddress.id,
-        companyId: company.id,
-        licenceRoleId: LicenceRoleHelper.select('licenceHolder').id,
-        startDate: new Date('2000-01-01')
-      })
-    })
-
-    after(async () => {
-      await address.$query().delete()
-      await company.$query().delete()
-      await companyAddress.$query().delete()
-      await earlierCompanyAddress.$query().delete()
-    })
-
     it('returns the matching company', async () => {
       const result = await FetchCompanyDetailsService.go(company.id, 'licenceHolder')
 
