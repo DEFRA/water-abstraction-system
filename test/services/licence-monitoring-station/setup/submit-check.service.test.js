@@ -56,6 +56,19 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       expect(result.monitoringStationId).to.exist()
     })
 
+    it('persists the abstraction period', async () => {
+      await SubmitCheckService.go(session.id, yarStub)
+
+      const result = await LicenceMonitoringStationModel.query()
+        .where('monitoringStationId', sessionData.monitoringStationId)
+        .first()
+
+      expect(result.abstractionPeriodStartDay).to.equal(sessionData.abstractionPeriodStartDay)
+      expect(result.abstractionPeriodStartMonth).to.equal(sessionData.abstractionPeriodStartMonth)
+      expect(result.abstractionPeriodEndDay).to.equal(sessionData.abstractionPeriodEndDay)
+      expect(result.abstractionPeriodEndMonth).to.equal(sessionData.abstractionPeriodEndMonth)
+    })
+
     it('deletes the session', async () => {
       await SubmitCheckService.go(session.id, yarStub)
 
@@ -187,33 +200,17 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
         expect(result.licenceVersionPurposeConditionId).to.equal(session.conditionId)
       })
-
-      it('does not persist abstraction period', async () => {
-        await SubmitCheckService.go(session.id, yarStub)
-
-        const result = await LicenceMonitoringStationModel.query()
-          .where('monitoringStationId', sessionData.monitoringStationId)
-          .first()
-
-        expect(result.abstractionPeriodStartDay).to.not.exist()
-        expect(result.abstractionPeriodStartMonth).to.not.exist()
-        expect(result.abstractionPeriodEndDay).to.not.exist()
-        expect(result.abstractionPeriodEndMonth).to.not.exist()
-      })
     })
 
     describe('and "conditionId" is "no_condition"', () => {
-      it('persists the abstraction period', async () => {
+      it('sets the licence version purpose condition id to NULL', async () => {
         await SubmitCheckService.go(session.id, yarStub)
 
         const result = await LicenceMonitoringStationModel.query()
           .where('monitoringStationId', sessionData.monitoringStationId)
           .first()
 
-        expect(result.abstractionPeriodStartDay).to.equal(sessionData.abstractionPeriodStartDay)
-        expect(result.abstractionPeriodStartMonth).to.equal(sessionData.abstractionPeriodStartMonth)
-        expect(result.abstractionPeriodEndDay).to.equal(sessionData.abstractionPeriodEndDay)
-        expect(result.abstractionPeriodEndMonth).to.equal(sessionData.abstractionPeriodEndMonth)
+        expect(result.licenceVersionPurposeConditionId).to.be.null()
       })
     })
   })
