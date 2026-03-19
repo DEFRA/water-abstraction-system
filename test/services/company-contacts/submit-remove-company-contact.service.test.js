@@ -25,10 +25,8 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
   let notification
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     companyContact = CustomersFixtures.companyContact()
-
-    notification = { id: generateUUID() }
 
     Sinon.stub(DeleteCompanyContactService, 'go').resolves()
     Sinon.stub(FetchCompanyContactService, 'go').resolves(companyContact)
@@ -42,7 +40,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
 
   describe('when called', () => {
     describe('and there are notifications', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         notification = { id: generateUUID() }
         Sinon.stub(FetchNotificationService, 'go').resolves(notification)
       })
@@ -75,11 +73,31 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
       })
     })
 
-    describe('when there are no notifications', () => {
-      beforeEach(async () => {
+    describe('and there are no notifications', () => {
+      beforeEach(() => {
         notification = undefined
-
         Sinon.stub(FetchNotificationService, 'go').resolves(notification)
+      })
+
+      it('returns page data for the view', async () => {
+        const result = await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+
+        expect(result).to.equal({
+          companyId: companyContact.companyId
+        })
+      })
+
+      it('sets a flash message', async () => {
+        await SubmitRemoveCompanyContactService.go(companyContact.id, yarStub)
+
+        // Check we add the flash message
+        const [flashType, bannerMessage] = yarStub.flash.args[0]
+
+        expect(flashType).to.equal('notification')
+        expect(bannerMessage).to.equal({
+          text: 'Rachael Tyrell was removed from this company.',
+          titleText: 'Contact removed'
+        })
       })
 
       it('calls the delete company contact service with the id and false', async () => {
