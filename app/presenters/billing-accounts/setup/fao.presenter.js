@@ -17,17 +17,13 @@ const { checkUrl } = require('../../../lib/check-page.lib.js')
 function go(session) {
   return {
     backLink: {
-      href: checkUrl(session, _backLink(session)),
+      href: checkUrl(session, `/system/billing-accounts/setup/${session.id}/existing-address`),
       text: 'Back'
     },
     fao: session.fao ?? null,
     pageTitle: 'Do you need to add an FAO?',
     pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`
   }
-}
-
-function _backLink(session) {
-  return session?.addressJourney?.backUrl ?? `/system/billing-accounts/setup/${session.id}/existing-address`
 }
 
 module.exports = {
