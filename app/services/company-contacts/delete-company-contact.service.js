@@ -6,9 +6,8 @@
  */
 
 const CompanyContactModel = require('../../models/company-contact.model.js')
-const NotificationModel = require('../../models/notification.model.js')
+const FetchNotificationService = require('../company-contacts/setup/fetch-notification.service.js')
 const { timestampForPostgres } = require('../../lib/general.lib.js')
-const { ignoreMessageRef } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Deletes the company contact
@@ -22,22 +21,13 @@ const { ignoreMessageRef } = require('../../lib/static-lookups.lib.js')
  * @param {string} email - the contact email (may have been used to send notifications)
  */
 async function go(id, email) {
-  const notification = await _notification(email)
+  const notification = await FetchNotificationService.go(email)
 
   if (notification) {
     await CompanyContactModel.query().update({ deletedAt: timestampForPostgres() }).where('id', id)
   } else {
     await CompanyContactModel.query().deleteById(id)
   }
-}
-
-async function _notification(email) {
-  return NotificationModel.query()
-    .select(['id'])
-    .where('recipient', email)
-    .whereNotIn('messageRef', ignoreMessageRef)
-    .limit(1)
-    .first()
 }
 
 module.exports = {
