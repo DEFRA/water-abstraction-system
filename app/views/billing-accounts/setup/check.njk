@@ -60,6 +60,32 @@
         value: { text: searchIndividualInput }
       } if searchIndividualInput,
       {
+        key: { text: "Company search term" },
+        value: { text: companySearch },
+        actions: {
+          items: [
+            {
+              href: links.companySearch,
+              text: "Change",
+              visuallyHiddenText: "company search term"
+            }
+          ]
+        }
+      } if companySearch,
+      {
+        key: { text: "Company name" },
+        value: { text: companiesHouseName },
+        actions: {
+          items: [
+            {
+              href: links.companiesHouseName,
+              text: "Change",
+              visuallyHiddenText: "company name"
+            }
+          ]
+        }
+      } if companiesHouseName,
+      {
         key: { text: "Existing address" },
         value: { html: newLineArrayItems(addressSelected) },
         actions: {
@@ -72,20 +98,59 @@
           ]
         }
       } if addressSelected,
-      ,
       {
         key: { text: "New address" },
-        value: { html: newLineArrayItems(newAddress) },
+        value: { html: newLineArrayItems(address) },
         actions: {
           items: [
             {
-              href: links.newAddress,
+              href: links.address,
               text: "Change",
-              visuallyHiddenText: "new address selected"
+              visuallyHiddenText: "address lookup"
             }
           ]
         }
-      } if newAddress
+      } if address,
+      {
+        key: { text: "FAO" },
+        value: { text: fao },
+        actions: {
+          items: [
+            {
+              href: links.fao,
+              text: "Change",
+              visuallyHiddenText: "fao"
+            }
+          ]
+        }
+      } if fao,
+      {
+        key: { text: "Contact selected" },
+        value: { text: contactSelected },
+        actions: {
+          items: [
+            {
+              href: links.contactSelected,
+              text: "Change",
+              visuallyHiddenText: "contact selected"
+            }
+          ]
+        }
+      } if contactSelected
+      ,
+      {
+        key: { text: "Contact Name" },
+        value: { text: contactName },
+        actions: {
+          items: [
+            {
+              href: links.contactName,
+              text: "Change",
+              visuallyHiddenText: "contact name"
+            }
+          ]
+        }
+      } if contactName
     ]
   }) }}
 

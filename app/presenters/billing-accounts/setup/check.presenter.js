@@ -11,24 +11,49 @@
  * @param {module:SessionModel} session - The billing account setup session instance
  * @param {object} companyContacts - The company and its contacts
  * @param {object} existingAddress - The existing address of company
+ * @param {object} companysHouseResult - The companys house details
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session, companyContacts, existingAddress) {
+function go(session, companyContacts, existingAddress, companysHouseResult) {
   const { billingAccount } = session
 
   return {
     accountSelected: session.accountSelected === 'customer' ? billingAccount.company.name : 'Another billing account',
     accountType: session.accountType ?? '',
+    address: _address(session),
     addressSelected: _existingAddress(existingAddress),
+    companySearch: session.companySearch ?? '',
+    companiesHouseName: companysHouseResult ? companysHouseResult.title : '',
+    contactName: session.contactName ?? '',
+    contactSelected: _contactSelected(session, companyContacts),
     existingAccount: _existingAccount(session, companyContacts),
+    fao: session.fao,
     links: _links(session),
-    newAddress: _newAddress(session),
     pageTitle: 'Check billing account details',
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
     searchIndividualInput: session.searchIndividualInput ?? '',
     searchInput: session.searchInput ?? ''
   }
+}
+
+function _address(session) {
+  if (!session.addressJourney) {
+    return ''
+  }
+
+  const { address } = session.addressJourney
+
+  const addressLines = [
+    address.addressLine1,
+    address.addressLine2,
+    address.addressLine3,
+    address.addressLine4,
+    address.postcode,
+    address.country
+  ].filter(Boolean)
+
+  return addressLines
 }
 
 function _existingAddress(existingAddress) {
@@ -49,6 +74,24 @@ function _existingAddress(existingAddress) {
   return addressLines
 }
 
+function _contactSelected(session, companyContacts) {
+  const { contacts } = companyContacts
+
+  if (session.contactSelected === 'new') {
+    return 'New contact'
+  }
+
+  if (!companyContacts?.contacts?.length) {
+    return ''
+  }
+
+  const selectedContact = contacts.find((contact) => {
+    return contact.id === session.contactSelected
+  })
+
+  return selectedContact.$name()
+}
+
 function _existingAccount(session, companyContacts) {
   if (session.existingAccount === 'new') {
     return 'New billing account'
@@ -63,27 +106,17 @@ function _existingAccount(session, companyContacts) {
 
 function _links(session) {
   return {
+    address: `/system/address/${session.id}/postcode`,
     accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
     accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
     addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
+    companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
+    companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
+    contactName: `/system/billing-accounts/setup/${session.id}/contact-name`,
+    contactSelected: `/system/billing-accounts/setup/${session.id}/contact`,
     existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`,
-    newAddress: `/system/address/${session.id}/postcode`
+    fao: `/system/billing-accounts/setup/${session.id}/fao`
   }
-}
-
-function _newAddress(session) {
-  const { address } = session.addressJourney
-
-  const addressLines = [
-    address.addressLine1,
-    address.addressLine2,
-    address.addressLine3,
-    address.addressLine4,
-    address.country,
-    address.postcode
-  ].filter(Boolean)
-
-  return addressLines
 }
 
 module.exports = {

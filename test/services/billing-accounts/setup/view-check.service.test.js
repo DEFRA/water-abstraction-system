@@ -15,12 +15,14 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const ViewCheckService = require('../../../../app/services/billing-accounts/setup/view-check.service.js')
 
 describe('Billing Accounts - Setup - View Check Service', () => {
+  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
   let session
   let sessionData
 
   beforeEach(async () => {
     sessionData = {
-      billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+      billingAccount,
+      fao: 'no'
     }
 
     session = await SessionHelper.add({ data: sessionData })
@@ -33,13 +35,25 @@ describe('Billing Accounts - Setup - View Check Service', () => {
       expect(result).to.equal({
         accountSelected: 'Another billing account',
         accountType: '',
+        address: '',
         addressSelected: ['New'],
+        companiesHouseName: '',
+        companySearch: '',
+        contactSelected: '',
+        contactName: '',
         existingAccount: '',
+        fao: 'no',
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
+          address: `/system/address/${session.id}/postcode`,
           addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
-          existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`
+          companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
+          companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
+          contactSelected: `/system/billing-accounts/setup/${session.id}/contact`,
+          contactName: `/system/billing-accounts/setup/${session.id}/contact-name`,
+          existingAccount: `/system/billing-accounts/setup/${session.id}/existing-account`,
+          fao: `/system/billing-accounts/setup/${session.id}/fao`
         },
         pageTitle: 'Check billing account details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
