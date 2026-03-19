@@ -9,14 +9,14 @@
 
     {% if companies.length > 0 %}
       {{ govukRadios({
-        id: "companiesHouseId",
+        id: "companiesHouseNumber",
         items: companies,
         label: {
           isPageHeading: false,
           text: "Select a company"
         },
-        name: "companiesHouseId",
-        errorMessage: error.companiesHouseId
+        name: "companiesHouseNumber",
+        errorMessage: error.companiesHouseNumber
       }) }}
 
       {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}

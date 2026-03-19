@@ -6,32 +6,41 @@
  */
 
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+const { formatContact } = require('../crm.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/contact-details` view contact details page
  *
- * @param {object[]} licenceContacts - The results from `FetchContactsService` to be formatted for the view
+ * @param {object[]} contacts - The results from `FetchContactsService` to be formatted for the view
  * @param {object} licence - The id and licence ref of the licence
  *
  * @returns {object} The data formatted for the view template
  */
-function go(licenceContacts, licence) {
-  const { licenceRef } = licence
+function go(contacts, licence) {
+  const { id: licenceId, licenceRef } = licence
 
   return {
     backLink: {
       text: 'Go back to search',
       href: '/'
     },
-    licenceContacts: _licenceContacts(licenceContacts),
+    contacts: _contacts(contacts, licenceId),
     pageTitle: 'Contact details',
     pageTitleCaption: `Licence ${licenceRef}`,
-    customerContactLink: _customerContactLink(licenceContacts)
+    customerContactLink: _customerContactLink(contacts)
   }
 }
 
-function _customerContactLink(licenceContacts) {
-  const companyId = _findCompanyId(licenceContacts)
+function _contacts(contacts, licenceId) {
+  return contacts.map((contact) => {
+    return formatContact(contact, {
+      'licence-id': licenceId
+    })
+  })
+}
+
+function _customerContactLink(contacts) {
+  const companyId = _findCompanyId(contacts)
 
   if (!companyId) {
     return null
@@ -42,35 +51,16 @@ function _customerContactLink(licenceContacts) {
     : `/customer/${companyId}/#contacts`
 }
 
-function _findCompanyId(licenceContacts) {
-  const customerContact = licenceContacts.find((contact) => {
-    return contact.communicationType === 'Licence Holder'
+function _findCompanyId(contacts) {
+  const customerContact = contacts.find((contact) => {
+    return contact.contactType === 'licence-holder'
   })
 
   if (customerContact) {
-    return customerContact.companyId
+    return customerContact.id
   }
 
   return null
-}
-
-function _licenceContacts(licenceContacts) {
-  return licenceContacts.map((licenceContact) => {
-    return {
-      address: {
-        address1: licenceContact.address1,
-        address2: licenceContact.address2,
-        address3: licenceContact.address3,
-        address4: licenceContact.address4,
-        address5: licenceContact.address5,
-        address6: licenceContact.address6,
-        country: licenceContact.country,
-        postcode: licenceContact.postcode
-      },
-      communicationType: licenceContact.communicationType,
-      name: licenceContact.companyName
-    }
-  })
 }
 
 module.exports = {

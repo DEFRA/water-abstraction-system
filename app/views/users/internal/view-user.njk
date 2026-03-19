@@ -1,0 +1,72 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% from "macros/user-status-tag.njk" import statusTag %}
+
+{% block pageContent %}
+  <p>{{ statusTag(status) }}</p>
+
+  {{ govukSummaryList({
+    classes: 'govuk-summary-list--no-border',
+    attributes: { 'data-test': 'meta-data' },
+    rows: [
+      {
+        key: { text: "Permissions", classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-permissions">' + permissions + '</span>', classes: "meta-data__value" }
+      },
+      {
+        key: { text: "Last sign in", classes: "meta-data__label" },
+        value: { html: '<span data-test="meta-data-last-sign-in">' + lastSignedIn + '</span>', classes: "meta-data__value" }
+      }
+    ]
+  }) }}
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukButton({ text: "Edit", preventDoubleClick: true }) }}
+  </form>
+
+  <h3 class="govuk-heading-m">Roles</h3>
+
+  {% if roles.length === 0 %}
+    <p data-test='no-roles-msg'>{{ permissions }} grants no additional roles.</p>
+  {% else %}
+    {% set tableRows = [] %}
+
+    {% for role in roles %}
+      {% set rowIndex = loop.index0 %}
+      {% set tableRow = []%}
+
+      {% set row = [
+        {
+          attributes: { 'data-test': 'role-name-' + rowIndex },
+          text: role.name
+        },
+        {
+          attributes: { 'data-test': 'role-description-' + rowIndex },
+          text: role.description
+        }
+      ] %}
+
+      {% set tableRows = (tableRows.push(row), tableRows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      attributes: { 'data-test': 'roles-table' },
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: "Name"
+        },
+        {
+          text: "Description"
+        }
+      ],
+      rows: tableRows
+    }) }}
+  {% endif %}
+{% endblock %}

@@ -45,35 +45,35 @@ describe('Users - Index Users presenter', () => {
       users: [
         {
           email: users[0].username,
-          link: `/user/${users[0].userId}/status`,
+          link: `/system/users/internal/${users[0].id}`,
           permissions: 'Basic access',
           status: 'enabled',
           type: 'Internal'
         },
         {
           email: users[1].username,
-          link: `/user/${users[1].userId}/status`,
+          link: `/system/users/external/${users[1].id}`,
           permissions: 'Returns user',
           status: 'disabled',
           type: 'External'
         },
         {
           email: users[2].username,
-          link: `/user/${users[2].userId}/status`,
+          link: `/system/users/external/${users[2].id}`,
           permissions: 'None',
           status: 'awaiting',
           type: 'External'
         },
         {
           email: users[3].username,
-          link: `/user/${users[3].userId}/status`,
+          link: `/system/users/internal/${users[3].id}`,
           permissions: 'Super user',
           status: 'enabled',
           type: 'Internal'
         },
         {
           email: users[4].username,
-          link: `/user/${users[4].userId}/status`,
+          link: `/system/users/external/${users[4].id}`,
           permissions: 'Basic access',
           status: 'locked',
           type: 'External'
@@ -122,19 +122,19 @@ describe('Users - Index Users presenter', () => {
           })
         })
 
-        describe('and has not been linked to a licence yet (or data is corrupted)', () => {
+        describe('and has not been linked to a licence yet, has been unlinked, or the licence has been deleted', () => {
           beforeEach(() => {
             users[1].licenceEntity = null
             users[2].licenceEntity = null
             users[4].licenceEntity = null
           })
 
-          it('returns an empty string', () => {
+          it('returns their permissions', () => {
             const result = IndexUsersPresenter.go(users, auth)
 
-            expect(result.users[1].permissions).to.equal('')
-            expect(result.users[2].permissions).to.equal('')
-            expect(result.users[4].permissions).to.equal('')
+            expect(result.users[1].permissions).to.equal('None')
+            expect(result.users[2].permissions).to.equal('None')
+            expect(result.users[4].permissions).to.equal('None')
           })
         })
       })

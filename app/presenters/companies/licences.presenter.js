@@ -5,7 +5,6 @@
  * @module LicencesPresenter
  */
 
-const { formatLicenceVersions } = require('../licence-versions.presenter.js')
 const { formatLongDate } = require('../base.presenter.js')
 const { today } = require('../../lib/general.lib.js')
 
@@ -21,53 +20,46 @@ function go(company, licences) {
   return {
     backLink: {
       href: '/',
-      text: 'Back to search'
+      text: 'Go back to search'
     },
     pageTitleCaption: company.name,
     pageTitle: 'Licences',
-    licenceVersions: _licenceVersions(licences)
+    licences: _licences(company.id, licences)
   }
 }
 
-function _hiddenText(endDate) {
-  if (!endDate) {
-    return 'current licence version'
-  }
+/**
+ * As a hint to the user, when the current licence holder is the company selected, we don't display a link. Not only is
+ * it pointless (you are already on the page!) it gives a UI nod to the fact that the licence is currently held by the
+ * company.
+ *
+ * When the current licence holder is a different company, we provide a link to it, not only to be helpful, but to give
+ * a visual clue that the licence is currently held by a different company.
+ *
+ * @private
+ */
+function _currentLicenceHolder(companyId, licence) {
+  const { currentLicenceHolder, currentLicenceHolderId } = licence
 
-  return `licence version ending on ${formatLongDate(endDate)}`
+  return {
+    id: currentLicenceHolderId === companyId ? null : currentLicenceHolderId,
+    name: currentLicenceHolder
+  }
 }
 
-function _licenceVersions(licences) {
-  const versions = []
-
-  for (const licence of licences) {
+function _licences(companyId, licences) {
+  return licences.map((licence) => {
+    const { id, licenceRef, startDate } = licence
     const licenceEndDetails = licence.$ends()
 
-    const { licenceVersions } = licence
-
-    const formattedLicenceVersions = formatLicenceVersions(licenceVersions)
-
-    for (const licenceVersion of formattedLicenceVersions) {
-      const { endDate, id, startDate } = licenceVersion
-
-      const versionDetails = {
-        count: formattedLicenceVersions.length,
-        endDate: formatLongDate(endDate),
-        licenceId: licence.id,
-        licenceRef: licence.licenceRef,
-        link: {
-          hiddenText: _hiddenText(endDate),
-          href: `/system/licence-versions/${id}`
-        },
-        startDate: formatLongDate(startDate),
-        status: _status(licenceEndDetails)
-      }
-
-      versions.push(versionDetails)
+    return {
+      currentLicenceHolder: _currentLicenceHolder(companyId, licence),
+      id,
+      licenceRef,
+      startDate: formatLongDate(startDate),
+      status: _status(licenceEndDetails)
     }
-  }
-
-  return versions
+  })
 }
 
 function _status(licenceEndDetails) {

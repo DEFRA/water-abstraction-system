@@ -7,66 +7,36 @@
 
 {% set tableRows = [] %}
 
-{% for licenceVersion in licenceVersions %}
+{% for licence in licences %}
   {% set rowIndex = loop.index0 %}
 
-  {% if rowIndex > 0 %}
-    {% set lastLicenceId = licenceVersions[rowIndex - 1].licenceId %}
-  {% else %}
-    {% set lastLicenceId = null %}
-  {% endif %}
-
-  {% set tableRow = [] %}
-
-  {% if lastLicenceId !== licenceVersion.licenceId %}
-    {% set licenceCell =
-      {
-        attributes: { 'data-test': 'licence-ref-' + rowIndex },
-        text: licenceVersion.licenceRef,
-        rowspan: licenceVersion.count
-      } %}
-
-    {% set tableRow = (tableRow.push(licenceCell), tableRow) %}
-
-    {% set licenceStatusTag %}
-      {{ statusTag(licenceVersion.status, true) }}
-    {% endset %}
-
-    {% set statusCell =
-      {
-        attributes: { 'data-test': 'end-date-' + rowIndex },
-        html: licenceStatusTag,
-        rowspan: licenceVersion.count
-      } %}
-
-    {% set tableRow = (tableRow.push(statusCell), tableRow) %}
-  {% endif %}
-
-  {% set startDateCell =
+  {% set tableRow = [
+    {
+      attributes: { 'data-test': 'licence-ref-' + rowIndex },
+      html: '<a href="/system/licences/' + licence.id + '/summary">' + licence.licenceRef + '</a>'
+    },
+    {
+      attributes: { 'data-test': 'status-' + rowIndex },
+      html: statusTag(licence.status, true)
+    },
     {
       attributes: { 'data-test': 'start-date-' + rowIndex },
-      text: licenceVersion.startDate
+      text: licence.startDate
+    }
+  ] %}
+
+  {% if licence.currentLicenceHolder.id %}
+    {% set licenceHolderCell = {
+      attributes: { 'data-test': 'licence-holder-' + rowIndex },
+      html: '<a href="/system/companies/' + licence.currentLicenceHolder.id + '/licences">' + licence.currentLicenceHolder.name + '</a>'
     } %}
-  {% set tableRow = (tableRow.push(startDateCell), tableRow) %}
-
-  {% set endDateCell =
-    {
-      attributes: { 'data-test': 'end-date-' + rowIndex },
-      text: licenceVersion.endDate
+  {% else %}
+    {% set licenceHolderCell = {
+      attributes: { 'data-test': 'licence-holder-' + rowIndex },
+      text: licence.currentLicenceHolder.name
     } %}
-
-  {% set tableRow = (tableRow.push(endDateCell), tableRow) %}
-
-  {% set viewLink %}
-    <a class="govuk-link" href="{{ licenceVersion.link.href }}">View <span class="govuk-visually-hidden">{{ licenceVersion.link.hiddenText }}</span></a>
-  {% endset %}
-
-  {% set actionCell =
-    {
-      attributes: { 'data-test': 'action-' + rowIndex },
-      html: viewLink
-    } %}
-  {% set tableRow = (tableRow.push(actionCell), tableRow) %}
+  {% endif %}
+  {% set tableRow = (tableRow.push(licenceHolderCell), tableRow) %}
 
   {% set tableRows = (tableRows.push(tableRow), tableRows) %}
 {% endfor %}
@@ -86,10 +56,7 @@
         text: "Start date"
       },
       {
-        text: "End date"
-      },
-      {
-        text: "Action"
+        text: "Current licence holder"
       }
     ],
     rows: tableRows

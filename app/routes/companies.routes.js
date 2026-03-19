@@ -5,7 +5,7 @@ const CompaniesController = require('../controllers/companies.controller.js')
 const routes = [
   {
     method: 'GET',
-    path: '/companies/{id}',
+    path: '/companies/{id}/{role}',
     options: {
       handler: CompaniesController.viewCompany
     }
@@ -26,7 +26,14 @@ const routes = [
     method: 'GET',
     path: '/companies/{id}/contacts',
     options: {
-      handler: CompaniesController.viewContact
+      handler: CompaniesController.viewContacts
+    }
+  },
+  {
+    method: 'GET',
+    path: '/companies/{id}/history',
+    options: {
+      handler: CompaniesController.viewHistory
     }
   },
   {

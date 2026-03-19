@@ -17,7 +17,7 @@ const { userRoles } = require('../../presenters/licences/base-licences.presenter
  *
  * @param {string} companyId - the UUID of the company
  * @param {object} auth - The auth object taken from `request.auth` containing user details
- * @param {string} page - The current page for the pagination service
+ * @param {number} page - The current page for the pagination service
  *
  * @returns {Promise<object>} The data formatted for the view template
  */

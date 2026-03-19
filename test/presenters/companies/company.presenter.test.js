@@ -14,22 +14,39 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const CompanyPresenter = require('../../../app/presenters/companies/company.presenter.js')
 
 describe('Companies - Company Presenter', () => {
-  let company
+  const role = 'licence-holder'
+
+  let companyDetails
 
   beforeEach(() => {
-    company = CustomersFixtures.company()
+    companyDetails = {
+      ...CustomersFixtures.company(),
+      companyAddresses: [CustomersFixtures.companyAddress()]
+    }
   })
 
   describe('when called', () => {
     it('returns page data for the view', () => {
-      const result = CompanyPresenter.go(company)
+      const result = CompanyPresenter.go(companyDetails, role)
 
       expect(result).to.equal({
         backLink: {
-          href: '/',
-          text: 'Back to search'
+          href: `/system/companies/${companyDetails.id}/contacts`,
+          text: 'Go back to contacts'
         },
-        pageTitle: 'Company',
+        details: {
+          address: [
+            'The Tyrell Spire',
+            'Floor 667 (Above the Smog)',
+            'Southbank Industrial Sector',
+            'Lambeth Precinct',
+            'Greater London',
+            'SE1 7TY',
+            'UK'
+          ],
+          name: 'Tyrell Corporation'
+        },
+        pageTitle: 'Licence holder',
         pageTitleCaption: 'Tyrell Corporation'
       })
     })

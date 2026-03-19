@@ -1,0 +1,33 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% macro contactsTable(contacts, pagination) %}
+  {% set tableRows = [] %}
+
+  {% for contact in contacts %}
+    {% set rowIndex = loop.index0 %}
+
+    {% set tableRow = [
+      {
+        attributes: { 'data-test': 'contact-name-' + rowIndex },
+        html: '<a href="' + contact.link + '">' + contact.name + '</a>'
+      },
+      {
+        attributes: { 'data-test': 'contact-type-' + rowIndex },
+        text: contact.type
+      }
+    ] %}
+
+    {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+  {% endfor %}
+
+  {{ govukTable({
+    attributes: { 'data-test': 'contacts-table' },
+    caption: pagination.showingMessage,
+    firstCellIsHeader: false,
+    head: [
+      { text: 'Name' },
+      { text: 'Contact type' }
+    ],
+    rows: tableRows
+  }) }}
+{% endmacro %}

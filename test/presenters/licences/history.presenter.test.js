@@ -47,42 +47,18 @@ describe('Licences - History presenter', () => {
         },
         licenceVersions: [
           {
-            action: {
-              link: `/system/licence-versions/${licenceHistory[0].id}`,
-              text: 'View'
-            },
             changeType: 'licence issued',
             endDate: '5 June 2022',
+            link: {
+              hiddenText: 'licence version ending on 5 June 2022',
+              href: `/system/licence-versions/${licenceHistory[0].id}`
+            },
             reason: 'Licence Holder Name/Address Change',
             startDate: '1 April 2022'
           }
         ],
         pageTitle: 'History',
         pageTitleCaption: `Licence ${licence.licenceRef}`
-      })
-    })
-  })
-
-  describe('the "licenceVersions" property', () => {
-    describe('the "changeType" property', () => {
-      describe('when the licence version is not administrative', () => {
-        it('returns "licence issued"', () => {
-          const result = HistoryPresenter.go(licenceHistory, licence)
-
-          expect(result.licenceVersions[0].changeType).to.equal('licence issued')
-        })
-      })
-
-      describe('when the licence version is administrative', () => {
-        beforeEach(() => {
-          licenceHistory[0].administrative = true
-        })
-
-        it('returns "no licence issued"', () => {
-          const result = HistoryPresenter.go(licenceHistory, licence)
-
-          expect(result.licenceVersions[0].changeType).to.equal('no licence issued')
-        })
       })
     })
   })

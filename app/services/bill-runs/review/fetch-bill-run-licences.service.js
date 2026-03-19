@@ -12,64 +12,52 @@ const { twoPartTariffReviewIssues } = require('../../../lib/static-lookups.lib.j
 const DatabaseConfig = require('../../../../config/database.config.js')
 
 /**
- * Takes the bill run ID and fetches all the data needed to review the bill run
+ * Fetches bill run and licences data for two-part-tariff billing review
  *
- * Fetches specifically the bill run data, a list of the licences in the bill run with the licence holder and licence
- * ref.
+ * Specifically, the bill run data and a list of the licences in the bill run with their licence holder and licence ref.
+ *
+ * The licences can be filtered on the the review page to allow users to process them. The filters are
+ *
+ * - **issues** - An array of issues or `['noIssues`]`, which means return only those without an issue
+ * - **licenceHolderNumber** - The licence holder or licence number, or part there of
+ * - **licenceStatus** - The status of the licence; 'Review' or 'Ready'
+ * - **progress** - An array, though it will either be empty or contain 'inProgress'. If it contains 'inProgress' only
+ * return those licences marked as 'in progress'.
  *
  * @param {string} id - The UUID for the bill run
- * @param {{Object[]}} filterIssues - An array of issues to filter the results by. This will only contain data when
- * there is a POST request, which only occurs when a filter is applied to the results. NOTE: if there is only a single
- * issue this will be a string, not an array
- * @param {string} filterLicenceHolderNumber - The licence holder or licence number to filter the results by. This will
- * only contain data when there is a POST request, which only occurs when a filter is applied to the results.
- * @param {string} filterLicenceStatus - The status of the licence to filter the results by. This also only contains
- * data when there is a POST request.
- * @param {string} filterProgress - The progress of the licence to filter the results by. This also only contains data
- * when there is a POST request.
- * @param {string} [page=1] - the page number of licences to be viewed
+ * @param {object} filters - an object containing the different filters to apply to the query
+ * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<object>} An object containing the billRun data and an array of licences for the bill run that match
  * the selected page in the data. Also included is any data that has been used to filter the results
  */
-async function go(id, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress, page = '1') {
+async function go(id, filters, page = '1') {
   const billRun = await _fetchBillRun(id)
-  const licences = await _fetchBillRunLicences(
-    id,
-    filterIssues,
-    filterLicenceHolderNumber,
-    filterLicenceStatus,
-    filterProgress,
-    page
-  )
+  const licences = await _fetchBillRunLicences(id, filters, page)
 
   return { billRun, licences }
 }
 
-function _applyFilters(
-  reviewLicenceQuery,
-  filterIssues,
-  filterLicenceHolderNumber,
-  filterLicenceStatus,
-  filterProgress
-) {
-  if (filterIssues) {
-    _filterIssues(filterIssues, reviewLicenceQuery)
+function _applyFilters(reviewLicenceQuery, filters) {
+  const { issues, licenceHolderNumber, licenceStatus, progress } = filters
+
+  if (issues.length > 0) {
+    _filterIssues(issues, reviewLicenceQuery)
   }
 
-  if (filterLicenceHolderNumber) {
+  if (licenceHolderNumber) {
     reviewLicenceQuery.where((builder) => {
       builder
-        .whereILike('licenceHolder', `%${filterLicenceHolderNumber}%`)
-        .orWhereILike('licenceRef', `%${filterLicenceHolderNumber}%`)
+        .whereILike('licenceHolder', `%${licenceHolderNumber}%`)
+        .orWhereILike('licenceRef', `%${licenceHolderNumber}%`)
     })
   }
 
-  if (filterLicenceStatus) {
-    reviewLicenceQuery.where('status', filterLicenceStatus)
+  if (licenceStatus) {
+    reviewLicenceQuery.where('status', licenceStatus)
   }
 
-  if (filterProgress) {
+  if (progress.includes('inProgress')) {
     reviewLicenceQuery.where('progress', 'true')
   }
 }
@@ -91,42 +79,32 @@ async function _fetchBillRun(id) {
     })
 }
 
-async function _fetchBillRunLicences(
-  id,
-  filterIssues,
-  filterLicenceHolderNumber,
-  filterLicenceStatus,
-  filterProgress,
-  page
-) {
+async function _fetchBillRunLicences(id, filters, page) {
   const reviewLicenceQuery = ReviewLicenceModel.query()
     .select('id', 'licenceId', 'licenceRef', 'licenceHolder', 'issues', 'progress', 'status')
     .where('billRunId', id)
+
+  _applyFilters(reviewLicenceQuery, filters)
+
+  reviewLicenceQuery
     .orderBy([
       { column: 'status', order: 'desc' },
       { column: 'licenceRef', order: 'asc' }
     ])
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 
-  _applyFilters(reviewLicenceQuery, filterIssues, filterLicenceHolderNumber, filterLicenceStatus, filterProgress)
-
   return reviewLicenceQuery
 }
 
-function _filterIssues(filterIssues, reviewLicenceQuery) {
-  // When only one issue is selected in the filter, a string is returned; otherwise, an array is returned.
-  // The "no issues" filter can only be selected exclusively, so it will always be a string.
-  if (typeof filterIssues === 'string') {
-    filterIssues === 'no-issues'
-      ? _handleNoIssues(reviewLicenceQuery)
-      : _handleSingleIssue(filterIssues, reviewLicenceQuery)
-  } else {
-    _handleMultipleIssues(filterIssues, reviewLicenceQuery)
-  }
-}
+function _filterIssues(issues, reviewLicenceQuery) {
+  if (issues.includes('no-issues')) {
+    // To search for no issues, check if the issues column is empty
+    reviewLicenceQuery.where('issues', '')
 
-function _handleMultipleIssues(filterIssues, reviewLicenceQuery) {
-  const lookupIssues = filterIssues.map((filterIssue) => {
+    return
+  }
+
+  const lookupIssues = issues.map((filterIssue) => {
     return twoPartTariffReviewIssues[filterIssue]
   })
 
@@ -137,17 +115,6 @@ function _handleMultipleIssues(filterIssues, reviewLicenceQuery) {
       builder.orWhereLike('issues', `%${lookupIssues[i]}%`)
     }
   })
-}
-
-function _handleNoIssues(reviewLicenceQuery) {
-  // To search for no issues, check if the issues column is empty
-  reviewLicenceQuery.where('issues', '')
-}
-
-function _handleSingleIssue(filterIssues, reviewLicenceQuery) {
-  const lookupIssue = twoPartTariffReviewIssues[filterIssues]
-
-  reviewLicenceQuery.whereLike('issues', `%${lookupIssue}%`)
 }
 
 module.exports = {

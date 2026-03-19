@@ -16,6 +16,7 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 const ViewBillingAccountsService = require('../../app/services/companies/view-billing-accounts.service.js')
 const ViewContactsService = require('../../app/services/companies/view-contacts.service.js')
 const ViewCompanyService = require('../../app/services/companies/view-company.service.js')
+const ViewHistoryService = require('../../app/services/companies/view-history.service.js')
 const ViewLicencesService = require('../../app/services/companies/view-licences.service.js')
 
 // For running our service
@@ -43,26 +44,28 @@ describe('Companies controller', () => {
     Sinon.restore()
   })
 
-  describe('/companies/{id}', () => {
+  describe('/companies/{id}/{role}', () => {
     describe('GET', () => {
+      const role = 'licence-holder'
+
       beforeEach(() => {
         options = {
           method: 'GET',
-          url: `/companies/${generateUUID()}`,
+          url: `/companies/${generateUUID()}/${role}`,
           auth: {
             strategy: 'session',
             credentials: { scope: [] }
           }
         }
 
-        Sinon.stub(ViewCompanyService, 'go').returns({ pageTitle: 'Company' })
+        Sinon.stub(ViewCompanyService, 'go').returns({ pageTitle: 'Licence holder' })
       })
 
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Company')
+        expect(response.payload).to.contain('Licence holder')
       })
     })
   })
@@ -135,6 +138,30 @@ describe('Companies controller', () => {
 
         expect(response.statusCode).to.equal(HTTP_STATUS_OK)
         expect(response.payload).to.contain('Contacts')
+      })
+    })
+  })
+
+  describe('/companies/{id}/history', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: `/companies/${generateUUID()}/history`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
+
+        Sinon.stub(ViewHistoryService, 'go').returns({ pageTitle: 'History', roles: [] })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('History')
       })
     })
   })

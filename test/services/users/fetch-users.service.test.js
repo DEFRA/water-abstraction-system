@@ -12,8 +12,10 @@ const { expect } = Code
 const DatabaseConfig = require('../../../config/database.config.js')
 
 // Test helpers
+const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
 const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
+const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
@@ -25,9 +27,12 @@ describe('Users - Fetch Users service', () => {
   const seededUsersLength = UserHelper.data.length
 
   let externalBasicAccessUser
+  let externalNoneUser
   let externalPrimaryUser
   let externalReturnsUser
   let filters
+  let licence
+  let licenceDocumentHeader
   let licenceEntities
   let pageNumber
 
@@ -37,7 +42,11 @@ describe('Users - Fetch Users service', () => {
     // returns user. But to create a `LicenceEntityRole` record we need a `LicenceEntity`, and a `LicenceDocument`.
     // This isn't what we consider 'general seed data'. So, we create specific instances for these tests.
 
-    const companyEntityId = generateUUID()
+    licence = await LicenceHelper.add()
+    licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+      companyEntityId: generateUUID(),
+      licenceRef: licence.licenceRef
+    })
 
     licenceEntities = []
 
@@ -55,7 +64,7 @@ describe('Users - Fetch Users service', () => {
     })
 
     let licenceEntityRole = await LicenceEntityRoleHelper.add({
-      companyEntityId,
+      companyEntityId: licenceDocumentHeader.companyEntityId,
       licenceEntityId: externalBasicAccessUser.licenceEntityId,
       role: 'user'
     })
@@ -78,7 +87,7 @@ describe('Users - Fetch Users service', () => {
     })
 
     licenceEntityRole = await LicenceEntityRoleHelper.add({
-      companyEntityId,
+      companyEntityId: licenceDocumentHeader.companyEntityId,
       licenceEntityId: externalReturnsUser.licenceEntityId,
       role: 'user_returns'
     })
@@ -96,7 +105,7 @@ describe('Users - Fetch Users service', () => {
     })
 
     licenceEntityRole = await LicenceEntityRoleHelper.add({
-      companyEntityId,
+      companyEntityId: licenceDocumentHeader.companyEntityId,
       licenceEntityId: externalPrimaryUser.licenceEntityId,
       role: 'primary_user'
     })
@@ -104,6 +113,32 @@ describe('Users - Fetch Users service', () => {
     licenceEntity.licenceEntityRoles = [licenceEntityRole]
     licenceEntities.push(licenceEntity)
     externalPrimaryUser.licenceEntity = licenceEntity
+
+    // None user
+    // This user highlights a scenario we have to deal with. Where someone was a primary user for a licence but was then
+    // unlinked. The service leaves the `primary_user` licence entity role in place, and simply sets to NULL the
+    // company_entity_id in the licence document header. Licence entity roles that no longer link to a licence document
+    // header should be ignored when it comes to determining a user's permissions, and therefore what permission
+    // filter they should match to.
+    licenceEntity = await LicenceEntityHelper.add()
+    externalNoneUser = await UserHelper.add({
+      application: 'water_vml',
+      licenceEntityId: licenceEntity.id,
+      username: licenceEntity.name
+    })
+
+    await LicenceEntityRoleHelper.add({
+      companyEntityId: generateUUID(),
+      licenceEntityId: externalNoneUser.licenceEntityId,
+      role: 'primary_user'
+    })
+
+    // Though the licence entity and licence entity role are linked in the DB, we know the query won't return them
+    // because it is ignoring those that are not linked to a licence document header. So, we don't set them in our test
+    // object either.
+    licenceEntity.licenceEntityRoles = []
+    licenceEntities.push(licenceEntity)
+    externalNoneUser.licenceEntity = licenceEntity
   })
 
   beforeEach(() => {
@@ -130,6 +165,9 @@ describe('Users - Fetch Users service', () => {
     await externalBasicAccessUser.$query().delete()
     await externalReturnsUser.$query().delete()
     await externalPrimaryUser.$query().delete()
+    await externalNoneUser.$query().delete()
+    await licenceDocumentHeader.$query().delete()
+    await licence.$query().delete()
   })
 
   describe('when no filter is applied', () => {
@@ -157,6 +195,7 @@ describe('Users - Fetch Users service', () => {
       expect(results).contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
       expect(results).contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
       expect(results).contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+      expect(results).contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
     })
   })
 
@@ -202,6 +241,7 @@ describe('Users - Fetch Users service', () => {
         expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
         expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
         expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+        expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
       })
     })
 
@@ -241,6 +281,7 @@ describe('Users - Fetch Users service', () => {
           // Assert the results do not contain the other two we created
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
 
         describe('as well as "Type"', () => {
@@ -273,6 +314,7 @@ describe('Users - Fetch Users service', () => {
               // Assert the results do not contain the other two we created
               expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
               expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
             })
           })
 
@@ -306,6 +348,7 @@ describe('Users - Fetch Users service', () => {
               expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
               expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
               expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+              expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
             })
           })
         })
@@ -343,6 +386,7 @@ describe('Users - Fetch Users service', () => {
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -378,6 +422,7 @@ describe('Users - Fetch Users service', () => {
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -413,6 +458,7 @@ describe('Users - Fetch Users service', () => {
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -448,6 +494,7 @@ describe('Users - Fetch Users service', () => {
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -526,6 +573,7 @@ describe('Users - Fetch Users service', () => {
           // Assert the results do not contain the others we created
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
+          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -560,6 +608,7 @@ describe('Users - Fetch Users service', () => {
           // Assert the results do not contain the others we created
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
     })
@@ -584,8 +633,9 @@ describe('Users - Fetch Users service', () => {
             }
           }
 
-          // Assert the results contain the one we created that is 'awaiting' (enabled, not locked, and no lastLogin)
+          // Assert the results contain the ones we created that are 'awaiting' (enabled, not locked, and no lastLogin)
           expect(results).contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
 
         it('excludes those that do not match', async () => {
@@ -601,8 +651,7 @@ describe('Users - Fetch Users service', () => {
             }
           }
 
-          // Assert the results do not contain the created users we either disabled or set as locked, even though they
-          // have no lastLogin
+          // Assert the results do not contain the created users we disabled, locked or have a login.
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
         })
@@ -644,6 +693,7 @@ describe('Users - Fetch Users service', () => {
           // Assert the results do not contain the created users we that are not 'disabled'
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -682,6 +732,7 @@ describe('Users - Fetch Users service', () => {
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
 
@@ -719,6 +770,7 @@ describe('Users - Fetch Users service', () => {
           // Assert the results do not contain those we created which are not 'locked'
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
           expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+          expect(results).not.contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
         })
       })
     })
@@ -744,6 +796,7 @@ describe('Users - Fetch Users service', () => {
         expect(results).contains(UsersFixture.transformToFetchUsersResult(externalBasicAccessUser))
         expect(results).contains(UsersFixture.transformToFetchUsersResult(externalReturnsUser))
         expect(results).contains(UsersFixture.transformToFetchUsersResult(externalPrimaryUser))
+        expect(results).contains(UsersFixture.transformToFetchUsersResult(externalNoneUser))
       })
 
       it('excludes those that do not match', async () => {

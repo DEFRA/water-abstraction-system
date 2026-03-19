@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -26,11 +26,35 @@ const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 describe('Licence Version model', () => {
   let licenceVersionId
   let testRecord
+  let firstIssueLicenceVersion
+  let secondIncrementLicenceVersion
 
   beforeEach(async () => {
-    testRecord = await LicenceVersionHelper.add()
+    firstIssueLicenceVersion = await LicenceVersionHelper.add({
+      endDate: new Date('2002-03-31'),
+      startDate: new Date('2000-04-01')
+    })
+
+    secondIncrementLicenceVersion = await LicenceVersionHelper.add({
+      endDate: new Date('2022-03-31'),
+      issue: firstIssueLicenceVersion.issue,
+      increment: firstIssueLicenceVersion.increment + 1,
+      licenceId: firstIssueLicenceVersion.licenceId,
+      startDate: new Date('2002-04-01')
+    })
+
+    testRecord = await LicenceVersionHelper.add({
+      issue: firstIssueLicenceVersion.issue + 1,
+      increment: firstIssueLicenceVersion.increment,
+      startDate: new Date('2022-04-01')
+    })
 
     licenceVersionId = testRecord.id
+  })
+
+  afterEach(async () => {
+    await secondIncrementLicenceVersion.$query().delete()
+    await firstIssueLicenceVersion.$query().delete()
   })
 
   describe('Basic query', () => {
@@ -161,6 +185,50 @@ describe('Licence Version model', () => {
 
         expect(result.purposes[0]).to.be.an.instanceOf(PurposeModel)
         expect(result.purposes).to.equal([purpose], { skip: ['createdAt', 'updatedAt'] })
+      })
+    })
+  })
+
+  describe('$changeType', () => {
+    let changeTypeRecord
+
+    describe('when the licence version is the first', () => {
+      beforeEach(async () => {
+        changeTypeRecord = await LicenceVersionModel.query().modify('changeType').findById(firstIssueLicenceVersion.id)
+      })
+
+      it('returns "licence issued"', () => {
+        const result = changeTypeRecord.$changeType()
+
+        expect(result).to.equal('licence issued')
+      })
+    })
+
+    describe('when the licence version is not the first', () => {
+      describe('and was an "increment"', () => {
+        beforeEach(async () => {
+          changeTypeRecord = await LicenceVersionModel.query()
+            .modify('changeType')
+            .findById(secondIncrementLicenceVersion.id)
+        })
+
+        it('returns "no licence issued"', () => {
+          const result = changeTypeRecord.$changeType()
+
+          expect(result).to.equal('no licence issued')
+        })
+      })
+
+      describe('and was an "issue"', () => {
+        beforeEach(async () => {
+          changeTypeRecord = await LicenceVersionModel.query().modify('changeType').findById(testRecord.id)
+        })
+
+        it('returns "licence issued"', () => {
+          const result = changeTypeRecord.$changeType()
+
+          expect(result).to.equal('licence issued')
+        })
       })
     })
   })

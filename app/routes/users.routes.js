@@ -29,6 +29,25 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/users/external/{id}',
+    options: {
+      handler: UsersController.viewUserExternal
+    }
+  },
+  {
+    method: 'GET',
+    path: '/users/internal/{id}',
+    options: {
+      handler: UsersController.viewUserInternal,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/users/me/profile-details',
     options: {
       handler: UsersController.viewProfileDetails,
@@ -49,13 +68,6 @@ const routes = [
           scope: ['hof_notifications', 'renewal_notifications']
         }
       }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/users/{userId}',
-    options: {
-      handler: UsersController.viewUser
     }
   }
 ]

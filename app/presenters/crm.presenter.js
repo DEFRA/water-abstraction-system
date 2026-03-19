@@ -1,5 +1,7 @@
 'use strict'
 
+const { roles } = require('../lib/static-lookups.lib.js')
+
 const CONTACT_ADDRESS_FIELDS = [
   'addressLine1',
   'addressLine2',
@@ -84,6 +86,28 @@ function contactDetails(contacts) {
   })
 }
 
+function _contactLink(contact, billingQueryArgs) {
+  const billingTypes = ['billing']
+  const companyContactTypes = ['abstraction-alerts', 'additional-contact']
+  const userTypes = ['basic-user', 'primary-user', 'returns-user']
+
+  if (billingTypes.includes(contact.contactType)) {
+    const queryString = new URLSearchParams(billingQueryArgs).toString()
+
+    return `/system/billing-accounts/${contact.id}?${queryString}`
+  }
+
+  if (companyContactTypes.includes(contact.contactType)) {
+    return `/system/company-contacts/${contact.id}`
+  }
+
+  if (userTypes.includes(contact.contactType)) {
+    return `/system/users/external/${contact.id}`
+  }
+
+  return `/system/companies/${contact.id}/${contact.contactType}`
+}
+
 /**
  * Filters a list of contacts based on their role and returns their details.
  *
@@ -107,9 +131,26 @@ function filteredContactDetailsByRole(contacts) {
   return contactDetails(filteredContactDetails)
 }
 
+/**
+ * Format the contact for the contacts table
+ *
+ * @param {object} contact - the contact from the crm data
+ * @param {object} [billingQueryArgs] - the query args for billing accounts
+ *
+ * @returns {object} The formatted contact
+ */
+function formatContact(contact, billingQueryArgs) {
+  return {
+    link: _contactLink(contact, billingQueryArgs),
+    name: contact.contactName,
+    type: roles[contact.contactType].label
+  }
+}
+
 module.exports = {
-  contactDetails,
   contactAddress,
+  contactDetails,
   contactName,
-  filteredContactDetailsByRole
+  filteredContactDetailsByRole,
+  formatContact
 }

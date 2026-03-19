@@ -28,7 +28,7 @@ function go(licenceVersionData, auth, conditions) {
   return {
     backLink: {
       href: `/system/licences/${licence.id}/history`,
-      text: 'Go back to history'
+      text: 'Go back to licence history'
     },
     changeType: licenceVersion.administrative ? 'no licence issued' : 'licence issued',
     conditionTypes: formatConditionTypes(conditions),

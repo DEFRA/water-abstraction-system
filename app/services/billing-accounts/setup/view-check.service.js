@@ -8,6 +8,7 @@
 
 const AddressModel = require('../../../models/address.model.js')
 const CheckPresenter = require('../../../presenters/billing-accounts/setup/check.presenter.js')
+const FetchCompanyService = require('./fetch-company.service.js')
 const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
 const SessionModel = require('../../../models/session.model.js')
 const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
@@ -23,11 +24,12 @@ async function go(sessionId) {
   const session = await SessionModel.query().findById(sessionId)
   const existingAddress = await _fetchExistingAddress(session)
   const companyContacts = await _fetchCompanyContacts(session)
+  const companysHouseResult = await FetchCompanyService.go(session.companiesHouseNumber)
 
   await markCheckPageVisited(session)
   await _updateAddressJourneyBackLink(session)
 
-  const pageData = CheckPresenter.go(session, companyContacts, existingAddress)
+  const pageData = CheckPresenter.go(session, companyContacts, existingAddress, companysHouseResult)
 
   return {
     ...pageData

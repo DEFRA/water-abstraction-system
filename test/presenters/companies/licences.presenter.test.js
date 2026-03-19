@@ -9,7 +9,10 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
-const { today } = require('../../../app/lib/general.lib.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { yesterday } = require('../../support/general.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
 const LicencesPresenter = require('../../../app/presenters/companies/licences.presenter.js')
@@ -20,7 +23,18 @@ describe('Companies - Licences presenter', () => {
 
   beforeEach(() => {
     company = CustomersFixtures.company()
-    licences = CustomersFixtures.licences()
+    licences = [
+      LicenceModel.fromJson({
+        expiredDate: null,
+        id: generateUUID(),
+        lapsedDate: null,
+        licenceRef: generateLicenceRef(),
+        revokedDate: null,
+        startDate: new Date('2022-01-01'),
+        currentLicenceHolderId: company.id,
+        currentLicenceHolder: company.name
+      })
+    ]
   })
 
   describe('when called', () => {
@@ -30,18 +44,16 @@ describe('Companies - Licences presenter', () => {
       expect(result).to.equal({
         backLink: {
           href: '/',
-          text: 'Back to search'
+          text: 'Go back to search'
         },
-        licenceVersions: [
+        licences: [
           {
-            count: 1,
-            endDate: null,
-            licenceId: licences[0].id,
-            licenceRef: licences[0].licenceRef,
-            link: {
-              hiddenText: 'current licence version',
-              href: `/system/licence-versions/${licences[0].licenceVersions[0].id}`
+            currentLicenceHolder: {
+              id: null,
+              name: company.name
             },
+            id: licences[0].id,
+            licenceRef: licences[0].licenceRef,
             startDate: '1 January 2022',
             status: null
           }
@@ -50,89 +62,68 @@ describe('Companies - Licences presenter', () => {
         pageTitleCaption: 'Tyrell Corporation'
       })
     })
+  })
 
-    describe('the "licenceVersions" property', () => {
-      describe('when the licence', () => {
-        describe('does not have any end date details', () => {
-          it('returns the "status" as "current"', () => {
-            const result = LicencesPresenter.go(company, licences)
+  describe('the "licences" property', () => {
+    describe('the "currentLicenceHolder" property', () => {
+      describe('when the current licence holder for the licence is the selected company', () => {
+        it('returns the selected company name and a null id', () => {
+          const result = LicencesPresenter.go(company, licences)
 
-            expect(result.licenceVersions[0].status).to.equal(null)
-          })
-        })
-
-        describe('has an "end date"', () => {
-          describe('and the date is today', () => {
-            beforeEach(() => {
-              licences[0].revokedDate = today()
-            })
-
-            it('returns the "status" based on the reason', () => {
-              const result = LicencesPresenter.go(company, licences)
-
-              expect(result.licenceVersions[0].status).to.equal('revoked')
-            })
-          })
-
-          describe('and the date is after today', () => {
-            beforeEach(() => {
-              const date = today()
-
-              date.setDate(date.getDate() + 30)
-
-              licences[0].revokedDate = date
-            })
-
-            it('returns the "status" as null', () => {
-              const result = LicencesPresenter.go(company, licences)
-
-              expect(result.licenceVersions[0].status).to.be.null()
-            })
-          })
-
-          describe('and the date is before today', () => {
-            beforeEach(() => {
-              const date = today()
-
-              date.setDate(date.getDate() - 30)
-
-              licences[0].revokedDate = date
-            })
-
-            it('returns the "status" based on the reason', () => {
-              const result = LicencesPresenter.go(company, licences)
-
-              expect(result.licenceVersions[0].status).to.equal('revoked')
-            })
+          expect(result.licences[0].currentLicenceHolder).to.equal({
+            id: null,
+            name: company.name
           })
         })
       })
 
-      describe('when the licence version', () => {
-        describe('does not have an end date', () => {
-          it('returns "current licence version"', () => {
-            const result = LicencesPresenter.go(company, licences)
-
-            expect(result.licenceVersions[0].link).to.equal({
-              hiddenText: 'current licence version',
-              href: `/system/licence-versions/${licences[0].licenceVersions[0].id}`
-            })
-          })
+      describe('when the current licence holder for the licence is a different company', () => {
+        beforeEach(() => {
+          licences[0].currentLicenceHolderId = generateUUID()
+          licences[0].currentLicenceHolder = 'Wallace Corporation'
         })
 
-        describe('has an end date', () => {
-          beforeEach(() => {
-            licences[0].licenceVersions[0].endDate = new Date('2022-01-01')
-          })
+        it('returns the current licence holder name and id for the licence', () => {
+          const result = LicencesPresenter.go(company, licences)
 
-          it('returns "current licence version ending on X"', () => {
-            const result = LicencesPresenter.go(company, licences)
-
-            expect(result.licenceVersions[0].link).to.equal({
-              hiddenText: 'licence version ending on 1 January 2022',
-              href: `/system/licence-versions/${licences[0].licenceVersions[0].id}`
-            })
+          expect(result.licences[0].currentLicenceHolder).to.equal({
+            id: licences[0].currentLicenceHolderId,
+            name: 'Wallace Corporation'
           })
+        })
+      })
+    })
+
+    describe('the "status" property', () => {
+      describe('when the licence does not have an end date', () => {
+        it('returns null', () => {
+          const result = LicencesPresenter.go(company, licences)
+
+          expect(result.licences[0].status).to.equal(null)
+        })
+      })
+
+      describe('when the licence has an end date in the past', () => {
+        beforeEach(() => {
+          licences[0].expiredDate = yesterday()
+        })
+
+        it('returns the reason for the licence end', () => {
+          const result = LicencesPresenter.go(company, licences)
+
+          expect(result.licences[0].status).to.equal('expired')
+        })
+      })
+
+      describe('when the licence has an end date in the future', () => {
+        beforeEach(() => {
+          licences[0].expiredDate = new Date('2049-01-01')
+        })
+
+        it('returns null', () => {
+          const result = LicencesPresenter.go(company, licences)
+
+          expect(result.licences[0].status).to.equal(null)
         })
       })
     })

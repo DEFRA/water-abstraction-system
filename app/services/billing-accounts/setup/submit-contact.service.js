@@ -42,7 +42,7 @@ async function go(sessionId, payload) {
 }
 
 function _redirectUrl(session) {
-  if (session.contactSelected === 'new') {
+  if (!session.checkPageVisited && session.contactSelected === 'new') {
     return `/system/billing-accounts/setup/${session.id}/contact-name`
   }
 
@@ -50,6 +50,10 @@ function _redirectUrl(session) {
 }
 
 async function _save(session, payload) {
+  if (session.checkPageVisited && session.contactSelected !== payload.contactSelected) {
+    session.checkPageVisited = false
+  }
+
   if (payload.contactSelected !== 'new') {
     session.contactName = null
   }

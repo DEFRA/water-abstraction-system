@@ -10,10 +10,13 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+const LicenceModel = require('../../../app/models/licence.model.js')
 
 // Things we need to stub
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
 const FetchLicencesService = require('../../../app/services/companies/fetch-licences.service.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
 const ViewLicencesService = require('../../../app/services/companies/view-licences.service.js')
@@ -29,13 +32,22 @@ describe('Companies - View Licences service', () => {
 
     company = CustomersFixtures.company()
 
-    licences = CustomersFixtures.licences()
-
     Sinon.stub(FetchCompanyService, 'go').returns(company)
-    Sinon.stub(FetchLicencesService, 'go').returns({
-      licences,
-      totalNumber: 1
-    })
+
+    licences = licences = [
+      LicenceModel.fromJson({
+        expiredDate: null,
+        id: generateUUID(),
+        lapsedDate: null,
+        licenceRef: generateLicenceRef(),
+        revokedDate: null,
+        startDate: new Date('2022-01-01'),
+        currentLicenceHolderId: company.id,
+        currentLicenceHolder: company.name
+      })
+    ]
+
+    Sinon.stub(FetchLicencesService, 'go').returns({ licences, totalNumber: 1 })
 
     page = '1'
   })
@@ -52,18 +64,16 @@ describe('Companies - View Licences service', () => {
         activeSecondaryNav: 'licences',
         backLink: {
           href: '/',
-          text: 'Back to search'
+          text: 'Go back to search'
         },
-        licenceVersions: [
+        licences: [
           {
-            count: 1,
-            endDate: null,
-            licenceId: licences[0].id,
-            licenceRef: licences[0].licenceRef,
-            link: {
-              hiddenText: 'current licence version',
-              href: `/system/licence-versions/${licences[0].licenceVersions[0].id}`
+            currentLicenceHolder: {
+              id: null,
+              name: company.name
             },
+            id: licences[0].id,
+            licenceRef: licences[0].licenceRef,
             startDate: '1 January 2022',
             status: null
           }

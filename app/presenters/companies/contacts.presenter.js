@@ -6,39 +6,34 @@
  */
 
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-const { formatCompanyContact } = require('../customer.presenter.js')
+const { formatContact } = require('../crm.presenter.js')
 
 /**
  * Formats data for the '/companies/{id}/contacts' page
  *
  * @param {module:CompanyModel} company - The company
- * @param {module:CompanyContactModel} companyContacts - the company contacts for the customer
+ * @param {object[]} contacts - the contacts for the company
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, companyContacts) {
+function go(company, contacts) {
   return {
     backLink: {
       href: '/',
-      text: 'Back to search'
+      text: 'Go back to search'
     },
     links: _links(company),
     pageTitle: 'Contacts',
     pageTitleCaption: company.name,
-    companyContacts: _companyContacts(companyContacts, company)
+    contacts: _contacts(contacts, company)
   }
 }
 
-function _companyContacts(companyContacts, company) {
-  return companyContacts.map((companyContact) => {
-    const contact = formatCompanyContact(companyContact)
-
-    return {
-      action: FeatureFlagsConfig.enableCustomerManage
-        ? `/system/company-contacts/${companyContact.id}`
-        : `/customer/${company.id}/contacts/${companyContact.contact.id}`,
-      ...contact
-    }
+function _contacts(contacts, company) {
+  return contacts.map((contact) => {
+    return formatContact(contact, {
+      'company-id': company.id
+    })
   })
 }
 

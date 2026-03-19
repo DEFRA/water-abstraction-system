@@ -70,12 +70,12 @@ describe('Licences - View History service', () => {
         },
         licenceVersions: [
           {
-            action: {
-              link: `/system/licence-versions/${licenceHistory[0].id}`,
-              text: 'View'
-            },
             changeType: 'licence issued',
             endDate: '5 June 2022',
+            link: {
+              hiddenText: 'licence version ending on 5 June 2022',
+              href: `/system/licence-versions/${licenceHistory[0].id}`
+            },
             reason: null,
             startDate: '1 April 2022'
           }

@@ -236,11 +236,11 @@ function _user(user) {
     col2Title: 'Permissions',
     col2Value: model.$permissions().label,
     col3Title: 'Last signed in',
-    col3Value: formatLongDate(lastLogin),
+    col3Value: lastLogin ? formatLongDate(lastLogin) : 'Never',
     exact,
-    link: `/user/${id}/status`,
+    link: `/system/users/external/${id}?back=search`,
     reference: username,
-    statusTag: null,
+    statusTag: model.$status(),
     type: 'User'
   }
 }

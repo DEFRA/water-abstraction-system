@@ -6,6 +6,7 @@
  */
 
 const { formatLongDate } = require('../base.presenter.js')
+const { linkToLicenceVersion } = require('../licence-version.presenter.js')
 
 /**
  * Formats data for the `/licences/{id}/history` view history page
@@ -32,12 +33,9 @@ function go(licenceHistory, licence) {
 function _licenceVersionEntries(licenceVersions) {
   return licenceVersions.map((licenceVersion) => {
     return {
-      action: {
-        text: 'View',
-        link: `/system/licence-versions/${licenceVersion.id}`
-      },
-      changeType: licenceVersion.administrative ? 'no licence issued' : 'licence issued',
+      changeType: licenceVersion.$changeType(),
       endDate: formatLongDate(licenceVersion.endDate),
+      link: linkToLicenceVersion(licenceVersion),
       reason: licenceVersion.$reason(),
       startDate: formatLongDate(licenceVersion.startDate)
     }
