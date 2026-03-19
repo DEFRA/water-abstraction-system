@@ -5,6 +5,7 @@
  */
 
 const BillingAccountHelper = require('../helpers/billing-account.helper.js')
+const ChangeReasonHelper = require('../helpers/change-reason.helper.js')
 const ChargeVersionHelper = require('../helpers/charge-version.helper.js')
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const CompanyHelper = require('../helpers/company.helper.js')
@@ -105,6 +106,7 @@ async function seed() {
   )
   const otherBasicUser = await _basicUser(otherCompanyEntity.record.id, 'Draco Malfoy')
   const otherCompanyContact = await _additionalCompanyContact(otherCompany, additionalContact)
+  const otherBilling = await _otherBillingNaldGap(otherCompany.record.id, otherLicence)
 
   return {
     abstractionAlerts,
@@ -114,6 +116,11 @@ async function seed() {
     company,
     extraBasicUser,
     licence,
+    otherBasicUser,
+    otherBilling,
+    otherCompany,
+    otherCompanyContact,
+    otherLicence,
     primaryUser,
     returnsTo,
     returnsUser,
@@ -133,6 +140,7 @@ async function seed() {
       await licenceDocumentHeader.clean()
       await otherAdditionalContactDeleted.clean()
       await otherBasicUser.clean()
+      await otherBilling.clean()
       await otherCompany.clean()
       await otherCompanyContact.clean()
       await otherCompanyEntity.clean()
@@ -158,34 +166,10 @@ async function _abstractionAlertsContact(companyId) {
   })
 
   const companyContact = await CompanyContactHelper.add({
-    contactId: contact.id,
-    licenceRoleId: licenceRole.id,
     abstractionAlerts: true,
-    companyId
-  })
-
-  return {
-    record: companyContact,
-    clean: async () => {
-      await companyContact.$query().delete()
-      await contact.$query().delete()
-    }
-  }
-}
-
-async function _additionalContact(companyId, name) {
-  const licenceRole = LicenceRoleHelper.select('additionalContact')
-
-  const contact = await ContactHelper.add({
-    contactType: 'department',
-    department: name
-  })
-
-  const companyContact = await CompanyContactHelper.add({
+    companyId,
     contactId: contact.id,
-    licenceRoleId: licenceRole.id,
-    abstractionAlerts: false,
-    companyId
+    licenceRoleId: licenceRole.id
   })
 
   return {
@@ -218,6 +202,62 @@ async function _additionalCompanyContact(company, additionalContact) {
   }
 }
 
+async function _additionalContact(companyId, name) {
+  const licenceRole = LicenceRoleHelper.select('additionalContact')
+
+  const contact = await ContactHelper.add({
+    contactType: 'department',
+    department: name
+  })
+
+  const companyContact = await CompanyContactHelper.add({
+    abstractionAlerts: false,
+    companyId,
+    contactId: contact.id,
+    licenceRoleId: licenceRole.id
+  })
+
+  return {
+    record: companyContact,
+    clean: async () => {
+      await companyContact.$query().delete()
+      await contact.$query().delete()
+    }
+  }
+}
+
+/**
+ * A company contact can be 'deleted' this is done by setting the company contact's 'deletedAt' field to a timestamp.
+ *
+ * The default is null
+ *
+ * @private
+ */
+async function _additionalContactDeleted(companyId, name) {
+  const licenceRole = LicenceRoleHelper.select('additionalContact')
+
+  const contact = await ContactHelper.add({
+    contactType: 'department',
+    department: name
+  })
+
+  const companyContact = await CompanyContactHelper.add({
+    abstractionAlerts: false,
+    companyId,
+    contactId: contact.id,
+    deletedAt: new Date('2021-01-01'),
+    licenceRoleId: licenceRole.id
+  })
+
+  return {
+    record: companyContact,
+    clean: async () => {
+      await companyContact.$query().delete()
+      await contact.$query().delete()
+    }
+  }
+}
+
 async function _basicUser(companyEntityId, name) {
   const licenceEntity = await LicenceEntityHelper.add({
     name,
@@ -225,9 +265,9 @@ async function _basicUser(companyEntityId, name) {
   })
 
   const licenceEntityRole = await LicenceEntityRoleHelper.add({
-    role: 'user',
     companyEntityId,
-    licenceEntityId: licenceEntity.id
+    licenceEntityId: licenceEntity.id,
+    role: 'user'
   })
 
   const user = await UserModel.add({
@@ -250,8 +290,8 @@ async function _billing(companyId, licence) {
 
   const chargeVersion = await ChargeVersionHelper.add({
     companyId,
-    licenceId: licence.record.id,
-    billingAccountId: billingAccount.id
+    billingAccountId: billingAccount.id,
+    licenceId: licence.record.id
   })
 
   return {
@@ -276,38 +316,6 @@ async function _company(name) {
   }
 }
 
-/**
- * A company contact can be 'deleted' this is done by setting the company contact's 'deletedAt' field to a timestamp.
- *
- * The default is null
- *
- * @private
- */
-async function _additionalContactDeleted(companyId, name) {
-  const licenceRole = LicenceRoleHelper.select('additionalContact')
-
-  const contact = await ContactHelper.add({
-    contactType: 'department',
-    department: name
-  })
-
-  const companyContact = await CompanyContactHelper.add({
-    contactId: contact.id,
-    licenceRoleId: licenceRole.id,
-    abstractionAlerts: false,
-    companyId,
-    deletedAt: new Date('2021-01-01')
-  })
-
-  return {
-    record: companyContact,
-    clean: async () => {
-      await companyContact.$query().delete()
-      await contact.$query().delete()
-    }
-  }
-}
-
 async function _licence(company) {
   const licence = await LicenceHelper.add()
 
@@ -316,9 +324,9 @@ async function _licence(company) {
   })
 
   const licenceVersionHolder = await LicenceVersionHolderHelper.add({
-    licenceVersionId: licenceVersion.id,
     companyId: company.record.id,
-    derivedName: company.record.name
+    derivedName: company.record.name,
+    licenceVersionId: licenceVersion.id
   })
 
   return {
@@ -327,20 +335,6 @@ async function _licence(company) {
       await licence.$query().delete()
       await licenceVersion.$query().delete()
       await licenceVersionHolder.$query().delete()
-    }
-  }
-}
-
-async function _licenceDocumentHeader(companyEntityId, licenceRef) {
-  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-    companyEntityId,
-    licenceRef
-  })
-
-  return {
-    record: licenceDocumentHeader,
-    clean: async () => {
-      await licenceDocumentHeader.$query().delete()
     }
   }
 }
@@ -359,6 +353,53 @@ async function _licenceCompanyEntity(name) {
   }
 }
 
+async function _licenceDocumentHeader(companyEntityId, licenceRef) {
+  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+    companyEntityId,
+    licenceRef
+  })
+
+  return {
+    record: licenceDocumentHeader,
+    clean: async () => {
+      await licenceDocumentHeader.$query().delete()
+    }
+  }
+}
+
+async function _otherBillingNaldGap(companyId, licence) {
+  const billingAccount = await BillingAccountHelper.add({ companyId })
+
+  const chargeVersion = await ChargeVersionHelper.add({
+    billingAccountId: billingAccount.id,
+    companyId,
+    licenceId: licence.record.id
+  })
+
+  const changeReason = ChangeReasonHelper.data.find((reason) => {
+    return reason.description === 'NALD gap'
+  })
+
+  const naldGapChargeVersion = await ChargeVersionHelper.add({
+    billingAccountId: null,
+    companyId,
+    changeReasonId: changeReason.id,
+    endDate: new Date('2022-03-31'),
+    licenceId: licence.record.id,
+    startDate: new Date('2020-01-01'),
+    versionNumber: chargeVersion.versionNumber + 1
+  })
+
+  return {
+    record: billingAccount,
+    clean: async () => {
+      await billingAccount.$query().delete()
+      await chargeVersion.$query().delete()
+      await naldGapChargeVersion.$query().delete()
+    }
+  }
+}
+
 async function _primaryUser(companyEntityId, name) {
   const licenceEntity = await LicenceEntityHelper.add({
     name,
@@ -366,9 +407,9 @@ async function _primaryUser(companyEntityId, name) {
   })
 
   const licenceEntityRole = await LicenceEntityRoleHelper.add({
-    role: 'primary_user',
     companyEntityId,
-    licenceEntityId: licenceEntity.id
+    licenceEntityId: licenceEntity.id,
+    role: 'primary_user'
   })
 
   const user = await UserModel.add({
@@ -391,8 +432,8 @@ async function _returnsTo(company, licenceRef, endDate = null) {
 
   const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
     companyId: company.record.id,
-    licenceRoleId: licenceRole.id,
-    endDate
+    endDate,
+    licenceRoleId: licenceRole.id
   })
 
   const licenceDocument = await LicenceDocumentHelper.add({
@@ -416,15 +457,15 @@ async function _returnsUser(companyEntityId, name) {
   })
 
   const licenceEntityRole = await LicenceEntityRoleHelper.add({
-    role: 'user_returns',
     companyEntityId,
-    licenceEntityId: licenceEntity.id
+    licenceEntityId: licenceEntity.id,
+    role: 'user_returns'
   })
 
   await LicenceEntityRoleHelper.add({
-    role: 'user',
     companyEntityId,
-    licenceEntityId: licenceEntity.id
+    licenceEntityId: licenceEntity.id,
+    role: 'user'
   })
 
   const user = await UserModel.add({
