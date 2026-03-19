@@ -90,6 +90,33 @@ describe('Licences - Fetch Licence CRM data service', () => {
       })
     })
 
+    describe('and the licence has a "NALD GAP" charge version in its history', () => {
+      it('returns the matching licence contacts including the billing contact (even with a NALD GAP charge version)', async () => {
+        const result = await FetchLicenceCRMDataService.go(crmData.otherLicence.record.id, roles)
+
+        expect(result).to.equal({
+          contacts: [
+            {
+              id: crmData.otherBasicUser.record.id,
+              contactName: 'Draco Malfoy',
+              contactType: 'basic-user'
+            },
+            {
+              id: crmData.otherBilling.record.id,
+              contactName: crmData.otherBilling.record.accountNumber,
+              contactType: 'billing'
+            },
+            {
+              id: crmData.otherCompany.record.id,
+              contactName: "Weasleys' Wizard Wheezes",
+              contactType: 'licence-holder'
+            }
+          ],
+          totalNumber: 3
+        })
+      })
+    })
+
     describe('when paginating', () => {
       beforeEach(() => {
         Sinon.stub(DatabaseConfig, 'defaultPageSize').value(1)

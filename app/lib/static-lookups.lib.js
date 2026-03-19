@@ -232,6 +232,24 @@ const countries = [
 
 const engineTriggers = { both: 'both', current: 'current', old: 'old', neither: 'neither' }
 
+/**
+ * When checking notifications are sent to an email we want to ignore these message ref types
+ */
+const ignoreMessageRef = [
+  'email_change_email_in_use_email',
+  'email_change_verification_code_email',
+  'existing_user_verification_email',
+  'expiry_notification_email',
+  'fake!',
+  'new_internal_user_email',
+  'new_user_verification_email',
+  'password_locked_email',
+  'password_reset_email',
+  'security_code_letter',
+  'share_existing_user',
+  'share_new_user'
+]
+
 const naldAreaCodes = {
   ARCA: 'Central',
   AREA: 'Eastern',
@@ -665,6 +683,7 @@ module.exports = {
   countries,
   engineTriggers,
   flowUnits,
+  ignoreMessageRef,
   naldAreaCodes,
   naldRegions,
   NoticeJourney,
