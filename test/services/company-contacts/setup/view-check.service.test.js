@@ -14,7 +14,7 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things we need to stub
 const FetchCompanyContactsService = require('../../../../app/services/company-contacts/setup/fetch-company-contacts.service.js')
-const FetchNotificationService = require('../../../../app/services/company-contacts/setup/fetch-notification.service.js')
+const FetchNotificationService = require('../../../../app/services/company-contacts/fetch-notification.service.js')
 
 // Thing under test
 const ViewCheckService = require('../../../../app/services/company-contacts/setup/view-check.service.js')
