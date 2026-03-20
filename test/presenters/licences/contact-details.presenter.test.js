@@ -60,7 +60,6 @@ describe('Licences - Contact Details presenter', () => {
           href: '/',
           text: 'Go back to search'
         },
-        customerContactLink: `/system/companies/${companyId}/contacts`,
         contacts: [
           {
             link: `/system/company-contacts/${contacts[0].id}`,
@@ -73,17 +72,18 @@ describe('Licences - Contact Details presenter', () => {
             type: 'Licence holder'
           }
         ],
+        licenceHolderContactsLink: `/system/companies/${companyId}/contacts`,
         pageTitle: 'Contact details',
         pageTitleCaption: `Licence ${licence.licenceRef}`
       })
     })
 
-    describe('the "customerContactLink" property', () => {
+    describe('the "licenceHolderContactsLink" property', () => {
       describe('when the the licence has a "licence Holder" licence contact', () => {
-        it('returns the link to customer contacts', () => {
+        it('returns the link to licence holder contacts', () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
-          expect(result.customerContactLink).to.equal(`/system/companies/${companyId}/contacts`)
+          expect(result.licenceHolderContactsLink).to.equal(`/system/companies/${companyId}/contacts`)
         })
       })
 
@@ -95,7 +95,7 @@ describe('Licences - Contact Details presenter', () => {
         it('returns null', () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
-          expect(result.customerContactLink).to.be.null()
+          expect(result.licenceHolderContactsLink).to.be.null()
         })
       })
     })
