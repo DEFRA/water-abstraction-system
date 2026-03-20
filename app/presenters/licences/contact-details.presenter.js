@@ -5,7 +5,6 @@
  * @module ContactDetailsPresenter
  */
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatContact } = require('../crm.presenter.js')
 
 /**
@@ -58,9 +57,7 @@ function _licenceHolderContactsLink(contacts) {
     return null
   }
 
-  return FeatureFlagsConfig.enableCustomerView
-    ? `/system/companies/${companyId}/contacts`
-    : `/customer/${companyId}/#contacts`
+  return `/system/companies/${companyId}/contacts`
 }
 
 module.exports = {
