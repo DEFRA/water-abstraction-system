@@ -25,9 +25,9 @@ function go(contacts, licence) {
       href: '/'
     },
     contacts: _contacts(contacts, licenceId),
+    licenceHolderContactsLink: _licenceHolderContactsLink(contacts),
     pageTitle: 'Contact details',
-    pageTitleCaption: `Licence ${licenceRef}`,
-    customerContactLink: _customerContactLink(contacts)
+    pageTitleCaption: `Licence ${licenceRef}`
   }
 }
 
@@ -39,7 +39,19 @@ function _contacts(contacts, licenceId) {
   })
 }
 
-function _customerContactLink(contacts) {
+function _findCompanyId(contacts) {
+  const licenceHolderContact = contacts.find((contact) => {
+    return contact.contactType === 'licence-holder'
+  })
+
+  if (licenceHolderContact) {
+    return licenceHolderContact.id
+  }
+
+  return null
+}
+
+function _licenceHolderContactsLink(contacts) {
   const companyId = _findCompanyId(contacts)
 
   if (!companyId) {
@@ -49,18 +61,6 @@ function _customerContactLink(contacts) {
   return FeatureFlagsConfig.enableCustomerView
     ? `/system/companies/${companyId}/contacts`
     : `/customer/${companyId}/#contacts`
-}
-
-function _findCompanyId(contacts) {
-  const customerContact = contacts.find((contact) => {
-    return contact.contactType === 'licence-holder'
-  })
-
-  if (customerContact) {
-    return customerContact.id
-  }
-
-  return null
 }
 
 module.exports = {
