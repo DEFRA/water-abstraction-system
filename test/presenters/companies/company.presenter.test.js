@@ -63,7 +63,7 @@ describe('Companies - Company Presenter', () => {
             endDate: null,
             startDate: '1 April 2021'
           },
-            {
+          {
             address: [
               'The Tyrell Plaza',
               'Floor 667 (Above the Smog)',
@@ -76,7 +76,7 @@ describe('Companies - Company Presenter', () => {
             ],
             endDate: formatLongDate(tomorrow()),
             startDate: '1 April 2022'
-          },
+          }
         ],
         pageTitle: 'Licence holder',
         pageTitleCaption: 'Tyrell Corporation'

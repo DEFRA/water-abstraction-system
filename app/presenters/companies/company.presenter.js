@@ -46,11 +46,13 @@ function _address(companyAddress) {
 }
 
 function _companyAddresses(companyAddresses) {
-  return companyAddresses.map((companyAddress) => ({
-    address: _address(companyAddress),
-    startDate: formatLongDate(companyAddress.startDate),
-    endDate: companyAddress.endDate ? formatLongDate(companyAddress.endDate) : null
-  }))
+  return companyAddresses.map((companyAddress) => {
+    return {
+      address: _address(companyAddress),
+      startDate: formatLongDate(companyAddress.startDate),
+      endDate: companyAddress.endDate ? formatLongDate(companyAddress.endDate) : null
+    }
+  })
 }
 
 module.exports = {

@@ -27,7 +27,7 @@ describe('Companies - View Company Service', () => {
       companyAddresses: []
     }
 
-    let companyAddress = CustomersFixtures.companyAddress()
+    const companyAddress = CustomersFixtures.companyAddress()
 
     companyAddress.startDate = new Date('2021-04-01')
     companyAddress.address.country = null

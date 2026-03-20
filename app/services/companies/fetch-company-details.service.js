@@ -29,7 +29,10 @@ async function go(companyId, role) {
         .where((builder) => {
           builder.whereNull('companyAddresses.endDate').orWhere('companyAddresses.endDate', '>=', today())
         })
-        .orderBy([{ column: 'endDate', order: 'desc', nulls: 'first' }, { column: 'startDate', order: 'desc' }])
+        .orderBy([
+          { column: 'endDate', order: 'desc', nulls: 'first' },
+          { column: 'startDate', order: 'desc' }
+        ])
         .withGraphFetched('address')
         .modifyGraph('address', (addressBuilder) => {
           addressBuilder.select([
