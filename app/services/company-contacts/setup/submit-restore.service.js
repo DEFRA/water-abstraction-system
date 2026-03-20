@@ -28,7 +28,7 @@ async function go(sessionId, yar, auth) {
 
   flashNotification(yar, 'Contact restored', `${session.name} was restored.`)
 
-  // await SessionModel.query().delete().where('id', sessionId)
+  await SessionModel.query().delete().where('id', sessionId)
 
   return {
     redirectUrl: `/system/companies/${company.id}/contacts`

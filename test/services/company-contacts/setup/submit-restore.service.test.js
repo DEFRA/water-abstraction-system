@@ -11,6 +11,7 @@ const { expect } = Code
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModel = require('../../../../app/models/session.model.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -82,6 +83,14 @@ describe('Company Contacts - Setup - Restore Service', () => {
 
       expect(flashType).to.equal('notification')
       expect(bannerMessage).to.equal({ titleText: 'Contact restored', text: `${session.name} was restored.` })
+    })
+
+    it('clears the session', async () => {
+      await SubmitRestoreService.go(session.id, yarStub, auth)
+
+      const deletedSession = await SessionModel.query().findById(session.id)
+
+      expect(deletedSession).to.be.undefined()
     })
 
     describe('the "abstractionAlerts" property', () => {
