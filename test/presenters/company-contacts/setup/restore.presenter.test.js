@@ -8,30 +8,25 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const ViewCancelService = require('../../../../app/services/company-contacts/setup/view-cancel.service.js')
+const RestorePresenter = require('../../../../app/presenters/company-contacts/setup/restore.presenter.js')
 
-describe('Company Contacts - Setup - Cancel Service', () => {
+describe('Company Contacts - Setup - Restore Presenter', () => {
   let company
   let session
-  let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     company = CustomersFixtures.company()
 
-    sessionData = { company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' }
-
-    session = await SessionHelper.add({
-      data: sessionData
-    })
+    session = { id: generateUUID(), company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' }
   })
 
   describe('when called', () => {
-    it('returns page data for the view', async () => {
-      const result = await ViewCancelService.go(session.id)
+    it('returns page data for the view', () => {
+      const result = RestorePresenter.go(session)
 
       expect(result).to.equal({
         abstractionAlerts: 'Yes',
@@ -41,7 +36,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
         },
         email: 'eric@test.com',
         name: 'Eric',
-        pageTitle: 'You are about to cancel this contact',
+        pageTitle: 'You are about to restore this contact',
         pageTitleCaption: 'Tyrell Corporation'
       })
     })

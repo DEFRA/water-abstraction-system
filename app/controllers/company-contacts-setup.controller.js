@@ -7,11 +7,13 @@ const SubmitCancelService = require('../services/company-contacts/setup/submit-c
 const SubmitCheckService = require('../services/company-contacts/setup/submit-check.service.js')
 const SubmitContactEmailService = require('../services/company-contacts/setup/submit-contact-email.service.js')
 const SubmitContactNameService = require('../services/company-contacts/setup/submit-contact-name.service.js')
+const SubmitRestoreService = require('../services/company-contacts/setup/submit-restore.service.js')
 const ViewAbstractionAlertsService = require('../services/company-contacts/setup/view-abstraction-alerts.service.js')
 const ViewCancelService = require('../services/company-contacts/setup/view-cancel.service.js')
 const ViewCheckService = require('../services/company-contacts/setup/view-check.service.js')
 const ViewContactEmailService = require('../services/company-contacts/setup/view-contact-email.service.js')
 const ViewContactNameService = require('../services/company-contacts/setup/view-contact-name.service.js')
+const ViewRestoreService = require('../services/company-contacts/setup/view-restore.service.js')
 
 /**
  * Controller for /company-contacts/setup endpoints
@@ -75,6 +77,14 @@ async function viewContactName(request, h) {
   const pageData = await ViewContactNameService.go(sessionId)
 
   return h.view(`company-contacts/setup/contact-name.njk`, pageData)
+}
+
+async function viewRestore(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewRestoreService.go(sessionId)
+
+  return h.view(`company-contacts/setup/restore.njk`, pageData)
 }
 
 async function submitAbstractionAlerts(request, h) {
@@ -147,6 +157,18 @@ async function submitContactName(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
+async function submitRestore(request, h) {
+  const {
+    auth,
+    params: { sessionId },
+    yar
+  } = request
+
+  const pageData = await SubmitRestoreService.go(sessionId, yar, auth)
+
+  return h.redirect(pageData.redirectUrl)
+}
+
 module.exports = {
   setup,
   setupEdit,
@@ -155,9 +177,11 @@ module.exports = {
   viewCheck,
   viewContactEmail,
   viewContactName,
+  viewRestore,
   submitAbstractionAlerts,
   submitCancel,
   submitCheck,
   submitContactEmail,
-  submitContactName
+  submitContactName,
+  submitRestore
 }

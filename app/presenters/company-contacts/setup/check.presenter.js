@@ -36,6 +36,7 @@ function go(session, savedCompanyContacts, sentNotification) {
       name: `/system/company-contacts/setup/${session.id}/contact-name`,
       restoreContact: matchingContact?.deletedAt ? `/system/company-contacts/setup/${session.id}/restore` : null
     },
+    matchingContact,
     warning: _warning(matchingContact)
   }
 }
