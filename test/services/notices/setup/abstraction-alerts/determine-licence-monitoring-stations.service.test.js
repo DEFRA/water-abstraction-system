@@ -50,10 +50,10 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         licenceVersionPurposeCondition: null
       },
       {
-        abstractionPeriodEndDay: null,
-        abstractionPeriodEndMonth: null,
-        abstractionPeriodStartDay: null,
-        abstractionPeriodStartMonth: null,
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 3,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 1,
         id: '0cfcfcb0-989e-481f-9cc1-10a69d82ff3f',
         measureType: 'level',
         restrictionType: 'reduce',
@@ -66,20 +66,14 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         },
         licenceVersionPurposeCondition: {
           id: '3f01d2d9-d23b-4697-b215-2ee3836feabb',
-          licenceVersionPurpose: {
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 3,
-            abstractionPeriodStartMonth: 1,
-            abstractionPeriodStartDay: 1
-          },
           notes: 'I have a bad feeling about this'
         }
       },
       {
-        abstractionPeriodEndDay: null,
-        abstractionPeriodEndMonth: null,
-        abstractionPeriodStartDay: null,
-        abstractionPeriodStartMonth: null,
+        abstractionPeriodEndDay: 31,
+        abstractionPeriodEndMonth: 3,
+        abstractionPeriodStartDay: 1,
+        abstractionPeriodStartMonth: 1,
         id: '0cfcfcb0-989e-481f-9cc1-10a69d8434',
         measureType: 'level',
         restrictionType: 'reduce',
@@ -92,12 +86,6 @@ describe('Notices Setup - Abstraction Alerts - Determine Licence Monitoring Stat
         },
         licenceVersionPurposeCondition: {
           id: '3f01d2d9-d23b-4697-b215-2ee3836feabb',
-          licenceVersionPurpose: {
-            abstractionPeriodEndDay: 31,
-            abstractionPeriodEndMonth: 3,
-            abstractionPeriodStartMonth: 1,
-            abstractionPeriodStartDay: 1
-          },
           notes: '"                   "             "                    "'
         }
       }
