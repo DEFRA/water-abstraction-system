@@ -14,16 +14,18 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const AbstractionPeriodService = require('../../app/services/licence-monitoring-station/setup/abstraction-period.service.js')
+const CheckService = require('../../app/services/licence-monitoring-station/setup/check.service.js')
 const FullConditionService = require('../../app/services/licence-monitoring-station/setup/full-condition.service.js')
 const InitiateSessionService = require('../../app/services/licence-monitoring-station/setup/initiate-session.service.js')
 const LicenceNumberService = require('../../app/services/licence-monitoring-station/setup/licence-number.service.js')
-const SubmitLicenceNumberService = require('../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js')
 const StopOrReduceService = require('../../app/services/licence-monitoring-station/setup/stop-or-reduce.service.js')
-const ThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/threshold-and-unit.service.js')
 const SubmitAbstractionPeriodService = require('../../app/services/licence-monitoring-station/setup/submit-abstraction-period.service.js')
+const SubmitCheckService = require('../../app/services/licence-monitoring-station/setup/submit-check.service.js')
 const SubmitFullConditionService = require('../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js')
+const SubmitLicenceNumberService = require('../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js')
 const SubmitStopOrReduceService = require('../../app/services/licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
 const SubmitThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
+const ThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/threshold-and-unit.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -155,6 +157,44 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           expect(response.payload).to.contain('There is a problem')
           expect(response.payload).to.contain('Enter a real start date')
           expect(response.payload).to.contain('Enter a real end date')
+        })
+      })
+    })
+  })
+
+  describe('licence-monitoring-station/setup/{sessionId}/check', () => {
+    const path = 'check'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(CheckService, 'go').resolves({
+            pageTitle: 'Check the restriction details'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Check the restriction details')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        const monitoringStationId = 'bdd4aab4-0910-4641-b626-9db943d79df6'
+
+        beforeEach(() => {
+          Sinon.stub(SubmitCheckService, 'go').resolves(monitoringStationId)
+        })
+
+        it('redirects to the "monitoring stations" page', async () => {
+          const response = await server.inject(_postOptions(path, {}))
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/monitoring-stations/${monitoringStationId}`)
         })
       })
     })
