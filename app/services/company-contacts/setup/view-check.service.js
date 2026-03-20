@@ -45,7 +45,7 @@ async function go(sessionId, yar) {
 async function _save(session, matchingContact) {
   if (matchingContact) {
     session.matchingContact = matchingContact
-    return session.$update()
+    await session.$update()
   }
 }
 
