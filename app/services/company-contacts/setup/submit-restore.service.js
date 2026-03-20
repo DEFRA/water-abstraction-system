@@ -24,7 +24,7 @@ async function go(sessionId, yar, auth) {
 
   const { company } = session
 
-  await _updateCompanyContact(session, auth, yar)
+  await _updateCompanyContact(session, auth)
 
   flashNotification(yar, 'Contact restored', `${session.name} was restored.`)
 
