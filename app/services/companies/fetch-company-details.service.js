@@ -6,7 +6,6 @@
  */
 
 const CompanyModel = require('../../models/company.model.js')
-const { today } = require('../../lib/general.lib.js')
 
 /**
  * Fetches the company details for the view '/companies/{id}/{role}' page
@@ -26,9 +25,6 @@ async function go(companyId, role) {
         .select(['companyAddresses.endDate', 'companyAddresses.id', 'companyAddresses.startDate'])
         .innerJoinRelated('licenceRole')
         .where('licenceRole.name', role)
-        .where((builder) => {
-          builder.whereNull('companyAddresses.endDate').orWhere('companyAddresses.endDate', '>=', today())
-        })
         .orderBy([
           { column: 'endDate', order: 'desc', nulls: 'first' },
           { column: 'startDate', order: 'desc' }
