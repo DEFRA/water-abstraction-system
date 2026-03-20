@@ -41,6 +41,7 @@ describe('Companies - Company Presenter', () => {
             'Southbank Industrial Sector',
             'Lambeth Precinct',
             'Greater London',
+            'United Kingdom',
             'SE1 7TY',
             'UK'
           ],
