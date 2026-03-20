@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for the `` page
+ * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/check' page
  *
  * @module SubmitRestoreService
  */
 
 const SessionModel = require('../../../models/session.model.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
 const UpdateCompanyContactService = require('./update-company-contact.service.js')
+const { flashNotification } = require('../../../lib/general.lib.js')
 
 /**
- * Orchestrates validating the data for the `` page
+ * Orchestrates validating the data for the '/company-contacts/setup/{sessionId}/check' page
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
@@ -22,11 +22,11 @@ const UpdateCompanyContactService = require('./update-company-contact.service.js
 async function go(sessionId, yar, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
-  const { company } = session
-
   await _updateCompanyContact(session, auth)
 
-  flashNotification(yar, 'Contact restored', `${session.name} was restored.`)
+  const { company, name } = session
+
+  flashNotification(yar, 'Contact restored', `${name} was restored.`)
 
   await SessionModel.query().delete().where('id', sessionId)
 
