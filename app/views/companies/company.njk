@@ -31,19 +31,23 @@
 {% block pageContent %}
   <h3 class="govuk-heading-m">Addresses</h3>
 
-  {{ govukTable({
-    caption: pagination.showingMessage,
-    head: [
-      {
-        text: "Start date"
-      },
-      {
-        text: "End date"
-      },
-      {
-        text: "Address"
-      }
-    ],
-    rows: tableRows
-  }) }}
+  {% if companyAddresses.length === 0 %}
+    <p>No addresses found.</p>
+  {% else %}
+    {{ govukTable({
+      caption: pagination.showingMessage,
+      head: [
+        {
+          text: "Start date"
+        },
+        {
+          text: "End date"
+        },
+        {
+          text: "Address"
+        }
+      ],
+      rows: tableRows
+    }) }}
+  {% endif %}
 {% endblock %}
