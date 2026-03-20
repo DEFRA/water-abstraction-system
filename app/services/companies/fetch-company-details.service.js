@@ -6,7 +6,7 @@
  */
 
 const CompanyModel = require('../../models/company.model.js')
-const CompanyAddressModel = require('../../models/company-address.model.js')
+const { today } = require('../../lib/general.lib.js')
 
 /**
  * Fetches the company details for the view '/companies/{id}/{role}' page
@@ -14,20 +14,22 @@ const CompanyAddressModel = require('../../models/company-address.model.js')
  * @param {string} companyId - The UUID for the company to fetch
  * @param {string} role - the licence role e.g 'licenceHolder'
  *
- * @returns {Promise<module:CompanyModel>} the data needed to populate the view companies page
+ * @returns {Promise<module:CompanyModel>} the data needed to populate the view company page
  */
 async function go(companyId, role) {
-  return _fetch(companyId, role)
-}
-
-async function _fetch(companyId, role) {
   return CompanyModel.query()
     .findById(companyId)
     .select(['id', 'name'])
     .withGraphFetched('companyAddresses')
     .modifyGraph('companyAddresses', (companyAddressesBuilder) => {
       companyAddressesBuilder
-        .select(['id'])
+        .select(['companyAddresses.endDate', 'companyAddresses.id', 'companyAddresses.startDate'])
+        .innerJoinRelated('licenceRole')
+        .where('licenceRole.name', role)
+        .where((builder) => {
+          builder.whereNull('companyAddresses.endDate').orWhere('companyAddresses.endDate', '>=', today())
+        })
+        .orderBy([{ column: 'endDate', order: 'desc', nulls: 'first' }, { column: 'startDate', order: 'desc' }])
         .withGraphFetched('address')
         .modifyGraph('address', (addressBuilder) => {
           addressBuilder.select([
@@ -42,10 +44,6 @@ async function _fetch(companyId, role) {
             'postcode'
           ])
         })
-        .limit(1)
-        .first()
-        .orderBy('startDate', 'desc')
-        .whereExists(CompanyAddressModel.relatedQuery('licenceRole').where('name', role))
     })
 }
 
