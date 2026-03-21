@@ -20,7 +20,7 @@ function go(company, companyContact) {
     additionalContact: companyContact.licenceRole.name === 'additionalContact',
     backLink: {
       href: `/system/companies/${company.id}/contacts`,
-      text: 'Go back to contacts'
+      text: 'Go back to licence holder contacts'
     },
     contact: {
       abstractionAlerts: companyContact.abstractionAlerts ? 'Yes' : 'No',

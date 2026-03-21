@@ -31,7 +31,7 @@ describe('Company Contacts - Contact Details presenter', () => {
         additionalContact: true,
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
-          text: 'Go back to contacts'
+          text: 'Go back to licence holder contacts'
         },
         contact: {
           abstractionAlerts: 'No',

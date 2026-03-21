@@ -60,7 +60,7 @@ describe('Company Contacts - View Communications Service', () => {
         },
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
-          text: 'Go back to contacts'
+          text: 'Go back to licence holder contacts'
         },
         notifications: [],
         pageTitle: 'Communications for Rachael Tyrell',

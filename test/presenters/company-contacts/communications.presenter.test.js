@@ -52,7 +52,7 @@ describe('Company Contacts - Communications presenter', () => {
       expect(result).to.equal({
         backLink: {
           href: `/system/companies/${company.id}/contacts`,
-          text: 'Go back to contacts'
+          text: 'Go back to licence holder contacts'
         },
         pageTitle: 'Communications for Rachael Tyrell',
         pageTitleCaption: 'Tyrell Corporation',
