@@ -14,9 +14,9 @@ const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js'
 const UserHelper = require('../../support/helpers/user.helper.js')
 
 // Thing under test
-const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
+const FetchCompanyContactDetailsService = require('../../../app/services/company-contacts/fetch-company-contact-details.service.js')
 
-describe('Company Contacts - Fetch Company Contact service', () => {
+describe('Company Contacts - Fetch Company Contact Details service', () => {
   let additionalCompanyContact
   let companyContact
   let contact
@@ -57,7 +57,7 @@ describe('Company Contacts - Fetch Company Contact service', () => {
         })
 
         it('returns the matching company contact with "abstractionAlertsCount" as 0', async () => {
-          const result = await FetchCompanyContactService.go(companyContact.id)
+          const result = await FetchCompanyContactDetailsService.go(companyContact.id)
 
           expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 0))
         })
@@ -75,7 +75,7 @@ describe('Company Contacts - Fetch Company Contact service', () => {
         })
 
         it('returns the matching company contact with "abstractionAlertsCount" as 1', async () => {
-          const result = await FetchCompanyContactService.go(companyContact.id)
+          const result = await FetchCompanyContactDetailsService.go(companyContact.id)
 
           expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 1))
         })
@@ -103,7 +103,7 @@ describe('Company Contacts - Fetch Company Contact service', () => {
           })
 
           it('returns the matching company contact with "abstractionAlertsCount" as 0', async () => {
-            const result = await FetchCompanyContactService.go(companyContact.id)
+            const result = await FetchCompanyContactDetailsService.go(companyContact.id)
 
             expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 0))
           })
@@ -119,7 +119,7 @@ describe('Company Contacts - Fetch Company Contact service', () => {
           })
 
           it('returns the matching company contact with "abstractionAlertsCount" as 1', async () => {
-            const result = await FetchCompanyContactService.go(companyContact.id)
+            const result = await FetchCompanyContactDetailsService.go(companyContact.id)
 
             expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 1))
           })

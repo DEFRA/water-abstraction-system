@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches the company contact data needed for the view '/company-contacts/{id}' pages
- * @module FetchCompanyContactService
+ * Fetches the company contact data needed for the view '/company-contacts/{id}/contact-details' page
+ * @module FetchCompanyContactDetailsService
  */
 
 const CompanyContactModel = require('../../models/company-contact.model.js')
 
 /**
- * Fetches the company contact data needed for the view '/company-contacts/{id}' pages
+ * Fetches the company contact data needed for the view '/company-contacts/{id}/contact-details' page
  *
  * @param {string} companyContactId - The company contact id
  *
