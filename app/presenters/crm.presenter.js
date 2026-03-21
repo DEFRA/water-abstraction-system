@@ -98,7 +98,7 @@ function _contactLink(contact, billingQueryArgs) {
   }
 
   if (companyContactTypes.includes(contact.contactType)) {
-    return `/system/company-contacts/${contact.id}`
+    return `/system/company-contacts/${contact.id}/contact-details`
   }
 
   if (userTypes.includes(contact.contactType)) {

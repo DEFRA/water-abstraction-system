@@ -26,7 +26,7 @@ async function go(sessionId, yar, auth) {
   if (session.companyContact) {
     await _updateCompanyContact(session, auth, yar)
 
-    return { redirectUrl: `/system/company-contacts/${session.companyContact.id}` }
+    return { redirectUrl: `/system/company-contacts/${session.companyContact.id}/contact-details` }
   }
 
   await _createCompanyContact(session, auth, yar)

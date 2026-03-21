@@ -24,7 +24,7 @@ async function go(sessionId) {
 
   if (companyContact) {
     return {
-      redirectUrl: `/system/company-contacts/${companyContact.id}`
+      redirectUrl: `/system/company-contacts/${companyContact.id}/contact-details`
     }
   }
 
