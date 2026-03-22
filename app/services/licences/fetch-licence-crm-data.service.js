@@ -102,7 +102,8 @@ function _query(paginationAndOrderBy = '') {
       SELECT
         lvh.company_id AS id,
         lvh.derived_name AS "contactName",
-        'licence-holder' AS "contactType"
+        'licence-holder' AS "contactType",
+        lvh.address_id AS "addressId"
       FROM
         public.licence_versions lv
       INNER JOIN public.licence_version_holders lvh
@@ -148,7 +149,8 @@ function _query(paginationAndOrderBy = '') {
       SELECT
         cmp.id AS id,
         cmp."name" AS "contactName",
-        'returns-to' AS "contactType"
+        'returns-to' AS "contactType",
+        ldr.address_id AS "addressId"
       FROM
         public.licence_document_roles ldr
       INNER JOIN public.licence_documents ld
@@ -170,7 +172,8 @@ function _query(paginationAndOrderBy = '') {
       SELECT
         ba.id AS id,
         ba.account_number AS "contactName",
-        'billing' AS "contactType"
+        'billing' AS "contactType",
+        null::UUID AS "addressId"
       FROM
         public.billing_accounts ba
       INNER JOIN latest_charge_version lcv
@@ -181,7 +184,8 @@ function _query(paginationAndOrderBy = '') {
       SELECT
         acc.id,
         acc.contact_name AS "contactName",
-        'abstraction-alerts' AS "contactType"
+        'abstraction-alerts' AS "contactType",
+        null::UUID AS "addressId"
       FROM
         all_company_contacts acc
       WHERE
@@ -191,7 +195,8 @@ function _query(paginationAndOrderBy = '') {
       SELECT
         acc.id,
         acc.contact_name AS "contactName",
-        'additional-contact' AS "contactType"
+        'additional-contact' AS "contactType",
+        null::UUID AS "addressId"
       FROM
         all_company_contacts acc
       WHERE
@@ -201,7 +206,8 @@ function _query(paginationAndOrderBy = '') {
       SELECT
         eu.id,
         eu.contact_name AS "contactName",
-        'primary-user' AS "contactType"
+        'primary-user' AS "contactType",
+        null::UUID AS "addressId"
       FROM
         external_users eu
       WHERE
@@ -211,7 +217,8 @@ function _query(paginationAndOrderBy = '') {
       SELECT
         eu.id,
         eu.contact_name AS "contactName",
-        'returns-user' AS "contactType"
+        'returns-user' AS "contactType",
+        null::UUID AS "addressId"
       FROM
         external_users eu
       WHERE
@@ -230,7 +237,8 @@ function _query(paginationAndOrderBy = '') {
       SELECT
         eu.id,
         eu.contact_name AS "contactName",
-        'basic-user' AS "contactType"
+        'basic-user' AS "contactType",
+        null::UUID AS "addressId"
       FROM
         external_users eu
       WHERE
