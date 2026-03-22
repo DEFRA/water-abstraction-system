@@ -20,31 +20,31 @@ const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const LicenceVersionHolderModel = require('../../app/models/licence-version-holder.model.js')
 
 describe('Licence Version Holder model', () => {
-  let testAddress
-  let testCompany
+  let address
+  let company
+  let licenceVersion
   let testRecord
-  let testLicenceVersion
 
   before(async () => {
-    testAddress = await AddressHelper.add()
-    testCompany = await CompanyHelper.add()
-    testLicenceVersion = await LicenceVersionHelper.add()
-    testAddress = await AddressHelper.add()
+    address = await AddressHelper.add()
+    company = await CompanyHelper.add()
+    licenceVersion = await LicenceVersionHelper.add()
+    address = await AddressHelper.add()
 
     testRecord = await LicenceVersionHolderHelper.add({
-      addressId: testAddress.id,
+      addressId: address.id,
       addressLine1: '12 GRIMMAULD PLACE',
       addressLine2: 'ISLINGTON',
       addressLine3: null,
       addressLine4: null,
-      companyId: testCompany.id,
+      companyId: company.id,
       country: 'UNITED KINGDOM',
       county: 'GREATER LONDON',
       derivedName: 'ORDER OF THE PHOENIX',
       forename: null,
       holderType: 'organisation',
       initials: null,
-      licenceVersionId: testLicenceVersion.id,
+      licenceVersionId: licenceVersion.id,
       postcode: 'N1 9LX',
       name: 'ORDER OF THE PHOENIX',
       salutation: null,
@@ -53,9 +53,9 @@ describe('Licence Version Holder model', () => {
   })
 
   after(async () => {
-    await testAddress.$query().delete()
-    await testCompany.$query().delete()
-    await testLicenceVersion.$query().delete()
+    await address.$query().delete()
+    await company.$query().delete()
+    await licenceVersion.$query().delete()
     await testRecord.$query().delete()
   })
 
@@ -83,7 +83,7 @@ describe('Licence Version Holder model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.address).to.be.an.instanceOf(AddressModel)
-        expect(result.address).to.equal(testAddress)
+        expect(result.address).to.equal(address)
       })
     })
 
@@ -101,7 +101,7 @@ describe('Licence Version Holder model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.company).to.be.an.instanceOf(CompanyModel)
-        expect(result.company).to.equal(testCompany)
+        expect(result.company).to.equal(company)
       })
     })
 
@@ -121,7 +121,7 @@ describe('Licence Version Holder model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.licenceVersion).to.be.an.instanceOf(LicenceVersionModel)
-        expect(result.licenceVersion).to.equal(testLicenceVersion)
+        expect(result.licenceVersion).to.equal(licenceVersion)
       })
     })
   })
