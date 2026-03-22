@@ -8,6 +8,8 @@ const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const AddressModel = require('../../app/models/address.model.js')
+const AddressHelper = require('../support/helpers/address.helper.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
 const CompanyModel = require('../../app/models/company.model.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
@@ -28,6 +30,7 @@ const { generateRandomInteger } = require('../../app/lib/general.lib.js')
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 
 describe('Licence Version model', () => {
+  let address
   let company
   let licence
   let licenceVersionHolder
@@ -41,10 +44,12 @@ describe('Licence Version model', () => {
   let secondIncrementModLogs
 
   before(async () => {
+    address = await AddressHelper.add()
     company = await CompanyHelper.add()
     licence = await LicenceHelper.add()
 
     firstIssueLicenceVersion = await LicenceVersionHelper.add({
+      addressId: address.id,
       companyId: company.id,
       endDate: new Date('2002-03-31'),
       licenceId: licence.id,
@@ -52,6 +57,7 @@ describe('Licence Version model', () => {
     })
 
     secondIncrementLicenceVersion = await LicenceVersionHelper.add({
+      addressId: address.id,
       companyId: company.id,
       endDate: new Date('2022-03-31'),
       increment: firstIssueLicenceVersion.increment + 1,
@@ -61,6 +67,7 @@ describe('Licence Version model', () => {
     })
 
     testRecord = await LicenceVersionHelper.add({
+      addressId: address.id,
       companyId: company.id,
       increment: firstIssueLicenceVersion.increment,
       issue: firstIssueLicenceVersion.issue + 1,
@@ -135,6 +142,7 @@ describe('Licence Version model', () => {
     await firstIssueLicenceVersion.$query().delete()
     await licence.$query().delete()
     await company.$query().delete()
+    await address.$query().delete()
   })
 
   describe('Basic query', () => {
@@ -147,7 +155,25 @@ describe('Licence Version model', () => {
   })
 
   describe('Relationships', () => {
-    describe('when linking to company holder', () => {
+    describe('when linking to address', () => {
+      it('can successfully run a related query', async () => {
+        const query = await LicenceVersionModel.query().innerJoinRelated('address')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the address', async () => {
+        const result = await LicenceVersionModel.query().findById(testRecord.id).withGraphFetched('address')
+
+        expect(result).to.be.instanceOf(LicenceVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.address).to.be.an.instanceOf(AddressModel)
+        expect(result.address).to.equal(address)
+      })
+    })
+
+    describe('when linking to company', () => {
       it('can successfully run a related query', async () => {
         const query = await LicenceVersionModel.query().innerJoinRelated('company')
 

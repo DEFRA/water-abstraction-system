@@ -15,6 +15,8 @@ const CompanyAddressHelper = require('../support/helpers/company-address.helper.
 const CompanyAddressModel = require('../../app/models/company-address.model.js')
 const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
 const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
+const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
+const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 
 // Thing under test
 const AddressModel = require('../../app/models/address.model.js')
@@ -23,6 +25,7 @@ describe('Address model', () => {
   let billingAccountAddresses
   let companyAddresses
   let licenceDocumentRoles
+  let licenceVersions
   let testRecord
 
   before(async () => {
@@ -33,6 +36,7 @@ describe('Address model', () => {
     billingAccountAddresses = []
     companyAddresses = []
     licenceDocumentRoles = []
+    licenceVersions = []
 
     for (let i = 0; i < 2; i++) {
       // Link billing account addresses
@@ -53,10 +57,19 @@ describe('Address model', () => {
       const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ addressId })
 
       licenceDocumentRoles.push(licenceDocumentRole)
+
+      // Link licence versions
+      const licenceVersion = await LicenceVersionHelper.add({ addressId })
+
+      licenceVersions.push(licenceVersion)
     }
   })
 
   after(async () => {
+    for (const licenceVersion of licenceVersions) {
+      await licenceVersion.$query().delete()
+    }
+
     for (const licenceDocumentRole of licenceDocumentRoles) {
       await licenceDocumentRole.$query().delete()
     }
@@ -139,6 +152,26 @@ describe('Address model', () => {
         expect(result.licenceDocumentRoles[0]).to.be.an.instanceOf(LicenceDocumentRoleModel)
         expect(result.licenceDocumentRoles).to.include(licenceDocumentRoles[0])
         expect(result.licenceDocumentRoles).to.include(licenceDocumentRoles[1])
+      })
+    })
+
+    describe('when linking to licence versions', () => {
+      it('can successfully run a related query', async () => {
+        const query = await AddressModel.query().innerJoinRelated('licenceVersions')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence versions', async () => {
+        const result = await AddressModel.query().findById(testRecord.id).withGraphFetched('licenceVersions')
+
+        expect(result).to.be.instanceOf(AddressModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceVersions).to.be.an.array()
+        expect(result.licenceVersions[0]).to.be.an.instanceOf(LicenceVersionModel)
+        expect(result.licenceVersions).to.include(licenceVersions[0])
+        expect(result.licenceVersions).to.include(licenceVersions[1])
       })
     })
   })
