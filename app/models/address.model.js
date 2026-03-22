@@ -40,6 +40,14 @@ class AddressModel extends BaseModel {
           to: 'licenceDocumentRoles.addressId'
         }
       },
+      licenceVersionHolders: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-version-holder.model',
+        join: {
+          from: 'addresses.id',
+          to: 'licenceVersionHolders.addressId'
+        }
+      },
       licenceVersions: {
         relation: Model.HasManyRelation,
         modelClass: 'licence-version.model',
