@@ -98,32 +98,32 @@ describe('Company model', () => {
   })
 
   after(async () => {
-    for (const testLicenceVersion of licenceVersions) {
-      await testLicenceVersion.$query().delete()
+    for (const licenceVersion of licenceVersions) {
+      await licenceVersion.$query().delete()
     }
 
-    for (const testLicenceVersionHolder of licenceVersionHolders) {
-      await testLicenceVersionHolder.$query().delete()
+    for (const licenceVersionHolder of licenceVersionHolders) {
+      await licenceVersionHolder.$query().delete()
     }
 
-    for (const testLicenceDocumentRole of licenceDocumentRoles) {
-      await testLicenceDocumentRole.$query().delete()
+    for (const licenceDocumentRole of licenceDocumentRoles) {
+      await licenceDocumentRole.$query().delete()
     }
 
-    for (const testCompanyContact of companyContacts) {
-      await testCompanyContact.$query().delete()
+    for (const companyContact of companyContacts) {
+      await companyContact.$query().delete()
     }
 
-    for (const testCompanyAddress of companyAddresses) {
-      await testCompanyAddress.$query().delete()
+    for (const companyAddress of companyAddresses) {
+      await companyAddress.$query().delete()
     }
 
-    for (const testBillingAccount of billingAccounts) {
-      await testBillingAccount.$query().delete()
+    for (const billingAccount of billingAccounts) {
+      await billingAccount.$query().delete()
     }
 
-    for (const testBillingAccountAddress of billingAccountAddresses) {
-      await testBillingAccountAddress.$query().delete()
+    for (const billingAccountAddress of billingAccountAddresses) {
+      await billingAccountAddress.$query().delete()
     }
 
     await testRecord.$query().delete()
