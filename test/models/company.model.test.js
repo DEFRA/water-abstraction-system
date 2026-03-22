@@ -28,96 +28,88 @@ const RegionModel = require('../../app/models/region.model.js')
 const CompanyModel = require('../../app/models/company.model.js')
 
 describe('Company model', () => {
-  let testBillingAccountAddresses
-  let testBillingAccounts
-  let testCompanyAddresses
-  let testCompanyContacts
-  let testLicenceDocumentRoles
-  let testLicenceVersionHolders
-  let testRegion
+  let billingAccountAddresses
+  let billingAccounts
+  let companyAddresses
+  let companyContacts
+  let licenceDocumentRoles
+  let licenceVersionHolders
+  let region
   let testRecord
 
   before(async () => {
-    testRegion = RegionHelper.select()
+    region = RegionHelper.select()
 
     // Test record
-    testRecord = await CompanyHelper.add({ regionId: testRegion.id })
+    testRecord = await CompanyHelper.add({ regionId: region.id })
     const { id: companyId } = testRecord
 
-    // Link billing account addresses
-    testBillingAccountAddresses = []
+    billingAccountAddresses = []
+    billingAccounts = []
+    companyAddresses = []
+    companyContacts = []
+    licenceDocumentRoles = []
+    licenceVersionHolders = []
+
     for (let i = 0; i < 2; i++) {
+      // Link billing account addresses
+
       // NOTE: A constraint in the billing_account_addresses table means you cannot have 2 records with the same
       // billingAccountId and start date
       const startDate = i === 0 ? new Date(2023, 8, 4) : new Date(2023, 8, 3)
       const billingAccountAddress = await BillingAccountAddressHelper.add({ startDate, companyId })
 
-      testBillingAccountAddresses.push(billingAccountAddress)
-    }
+      billingAccountAddresses.push(billingAccountAddress)
 
-    // Link billing accounts
-    testBillingAccounts = []
-    for (let i = 0; i < 2; i++) {
+      // Link billing accounts
       const billingAccount = await BillingAccountHelper.add({ companyId })
 
-      testBillingAccounts.push(billingAccount)
-    }
+      billingAccounts.push(billingAccount)
 
-    // Link company addresses
-    testCompanyAddresses = []
-    for (let i = 0; i < 2; i++) {
+      // Link company addresses
       const companyAddress = await CompanyAddressHelper.add({ companyId })
 
-      testCompanyAddresses.push(companyAddress)
-    }
+      companyAddresses.push(companyAddress)
 
-    // Link company contacts
-    testCompanyContacts = []
-    for (let i = 0; i < 2; i++) {
+      // Link company contacts
       const companyContact = await CompanyContactHelper.add({ companyId })
 
-      testCompanyContacts.push(companyContact)
-    }
+      companyContacts.push(companyContact)
 
-    // Link licence document roles
-    testLicenceDocumentRoles = []
-    for (let i = 0; i < 2; i++) {
+      // Link licence document roles
       const licenceDocumentRole = await LicenceDocumentRoleHelper.add({ companyId })
 
-      testLicenceDocumentRoles.push(licenceDocumentRole)
-    }
+      licenceDocumentRoles.push(licenceDocumentRole)
 
-    // Link licence version holders
-    testLicenceVersionHolders = []
-    for (let i = 0; i < 2; i++) {
+      // Link licence version holders
       const licenceVersionHolder = await LicenceVersionHolderHelper.add({ companyId })
 
-      testLicenceVersionHolders.push(licenceVersionHolder)
+      licenceVersionHolders.push(licenceVersionHolder)
     }
   })
 
   after(async () => {
-    for (const testLicenceVersionHolder of testLicenceVersionHolders) {
+    for (const testLicenceVersionHolder of licenceVersionHolders) {
       await testLicenceVersionHolder.$query().delete()
     }
 
-    for (const testLicenceDocumentRole of testLicenceDocumentRoles) {
+    for (const testLicenceDocumentRole of licenceDocumentRoles) {
       await testLicenceDocumentRole.$query().delete()
     }
 
-    for (const testCompanyContact of testCompanyContacts) {
+    for (const testCompanyContact of companyContacts) {
       await testCompanyContact.$query().delete()
     }
 
-    for (const testCompanyAddress of testCompanyAddresses) {
+    for (const testCompanyAddress of companyAddresses) {
       await testCompanyAddress.$query().delete()
     }
 
-    for (const testBillingAccount of testBillingAccounts) {
+    for (const testBillingAccount of billingAccounts) {
       await testBillingAccount.$query().delete()
     }
 
-    for (const testBillingAccountAddress of testBillingAccountAddresses) {
+    for (const testBillingAccountAddress of billingAccountAddresses) {
       await testBillingAccountAddress.$query().delete()
     }
 
@@ -149,8 +141,8 @@ describe('Company model', () => {
 
         expect(result.billingAccountAddresses).to.be.an.array()
         expect(result.billingAccountAddresses[0]).to.be.an.instanceOf(BillingAccountAddressModel)
-        expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[0])
-        expect(result.billingAccountAddresses).to.include(testBillingAccountAddresses[1])
+        expect(result.billingAccountAddresses).to.include(billingAccountAddresses[0])
+        expect(result.billingAccountAddresses).to.include(billingAccountAddresses[1])
       })
     })
 
@@ -169,8 +161,8 @@ describe('Company model', () => {
 
         expect(result.billingAccounts).to.be.an.array()
         expect(result.billingAccounts[0]).to.be.an.instanceOf(BillingAccountModel)
-        expect(result.billingAccounts).to.include(testBillingAccounts[0])
-        expect(result.billingAccounts).to.include(testBillingAccounts[1])
+        expect(result.billingAccounts).to.include(billingAccounts[0])
+        expect(result.billingAccounts).to.include(billingAccounts[1])
       })
     })
 
@@ -189,8 +181,8 @@ describe('Company model', () => {
 
         expect(result.companyAddresses).to.be.an.array()
         expect(result.companyAddresses[0]).to.be.an.instanceOf(CompanyAddressModel)
-        expect(result.companyAddresses).to.include(testCompanyAddresses[0])
-        expect(result.companyAddresses).to.include(testCompanyAddresses[1])
+        expect(result.companyAddresses).to.include(companyAddresses[0])
+        expect(result.companyAddresses).to.include(companyAddresses[1])
       })
     })
 
@@ -209,8 +201,8 @@ describe('Company model', () => {
 
         expect(result.companyContacts).to.be.an.array()
         expect(result.companyContacts[0]).to.be.an.instanceOf(CompanyContactModel)
-        expect(result.companyContacts).to.include(testCompanyContacts[0])
-        expect(result.companyContacts).to.include(testCompanyContacts[1])
+        expect(result.companyContacts).to.include(companyContacts[0])
+        expect(result.companyContacts).to.include(companyContacts[1])
       })
     })
 
@@ -229,8 +221,8 @@ describe('Company model', () => {
 
         expect(result.licenceDocumentRoles).to.be.an.array()
         expect(result.licenceDocumentRoles[0]).to.be.an.instanceOf(LicenceDocumentRoleModel)
-        expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[0])
-        expect(result.licenceDocumentRoles).to.include(testLicenceDocumentRoles[1])
+        expect(result.licenceDocumentRoles).to.include(licenceDocumentRoles[0])
+        expect(result.licenceDocumentRoles).to.include(licenceDocumentRoles[1])
       })
     })
 
@@ -249,8 +241,8 @@ describe('Company model', () => {
 
         expect(result.licenceVersionHolders).to.be.an.array()
         expect(result.licenceVersionHolders[0]).to.be.an.instanceOf(LicenceVersionHolderModel)
-        expect(result.licenceVersionHolders).to.include(testLicenceVersionHolders[0])
-        expect(result.licenceVersionHolders).to.include(testLicenceVersionHolders[1])
+        expect(result.licenceVersionHolders).to.include(licenceVersionHolders[0])
+        expect(result.licenceVersionHolders).to.include(licenceVersionHolders[1])
       })
     })
 
@@ -268,7 +260,7 @@ describe('Company model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.region).to.be.an.instanceOf(RegionModel)
-        expect(result.region).to.equal(testRegion, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.region).to.equal(region, { skip: ['createdAt', 'updatedAt'] })
       })
     })
   })
