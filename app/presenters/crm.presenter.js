@@ -129,10 +129,9 @@ function _contactLink(contact, billingQueryArgs) {
   const billingTypes = ['billing']
   const companyContactTypes = ['abstraction-alerts', 'additional-contact']
   const userTypes = ['basic-user', 'primary-user', 'returns-user']
+  const queryString = new URLSearchParams(billingQueryArgs).toString()
 
   if (billingTypes.includes(contact.contactType)) {
-    const queryString = new URLSearchParams(billingQueryArgs).toString()
-
     return `/system/billing-accounts/${contact.id}?${queryString}`
   }
 
@@ -142,6 +141,10 @@ function _contactLink(contact, billingQueryArgs) {
 
   if (userTypes.includes(contact.contactType)) {
     return `/system/users/external/${contact.id}`
+  }
+
+  if (contact.addressId) {
+    return `/system/companies/${contact.id}/address/${contact.addressId}/${contact.contactType}?${queryString}`
   }
 
   return `/system/companies/${contact.id}/${contact.contactType}`

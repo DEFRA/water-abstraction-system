@@ -135,6 +135,10 @@ describe('CRM presenter', () => {
   })
 
   describe('#formatContact()', () => {
+    const billingQueryId = generateUUID()
+
+    let billingQueryArgs
+
     describe('When there is a contact with the type', () => {
       let contact
 
@@ -179,13 +183,11 @@ describe('CRM presenter', () => {
       })
 
       describe('"billing"', () => {
-        const companyId = generateUUID()
-
-        const billingQueryArgs = {
-          'company-id': companyId
-        }
-
         beforeEach(() => {
+          billingQueryArgs = {
+            'company-id': billingQueryId
+          }
+
           contact = {
             id: generateUUID(),
             contactType: 'billing',
@@ -197,7 +199,7 @@ describe('CRM presenter', () => {
           const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
           expect(result).to.equal({
-            link: `/system/billing-accounts/${contact.id}?company-id=${companyId}`,
+            link: `/system/billing-accounts/${contact.id}?company-id=${billingQueryId}`,
             type: 'Billing',
             name: 'Rachael Tyrell'
           })
@@ -266,6 +268,10 @@ describe('CRM presenter', () => {
 
       describe('"licence-holder"', () => {
         beforeEach(() => {
+          billingQueryArgs = {
+            'licence-id': billingQueryId
+          }
+
           contact = {
             id: generateUUID(),
             contactType: 'licence-holder',
@@ -273,19 +279,41 @@ describe('CRM presenter', () => {
           }
         })
 
-        it('returns the correct contact', () => {
-          const result = CRMPresenter.formatContact(contact)
+        describe('and it does not have an "addressId" property', () => {
+          it('returns the correct contact', () => {
+            const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-          expect(result).to.equal({
-            link: `/system/companies/${contact.id}/licence-holder`,
-            type: 'Licence holder',
-            name: 'Rachael Tyrell'
+            expect(result).to.equal({
+              link: `/system/companies/${contact.id}/licence-holder`,
+              type: 'Licence holder',
+              name: 'Rachael Tyrell'
+            })
+          })
+        })
+
+        describe('and it does have an "addressId" property', () => {
+          beforeEach(() => {
+            contact.addressId = generateUUID()
+          })
+
+          it('returns the correct contact', () => {
+            const result = CRMPresenter.formatContact(contact, billingQueryArgs)
+
+            expect(result).to.equal({
+              link: `/system/companies/${contact.id}/address/${contact.addressId}/licence-holder?licence-id=${billingQueryId}`,
+              type: 'Licence holder',
+              name: 'Rachael Tyrell'
+            })
           })
         })
       })
 
       describe('"returns-to"', () => {
         beforeEach(() => {
+          billingQueryArgs = {
+            'licence-id': billingQueryId
+          }
+
           contact = {
             id: generateUUID(),
             contactType: 'returns-to',
@@ -293,13 +321,31 @@ describe('CRM presenter', () => {
           }
         })
 
-        it('returns the correct contact', () => {
-          const result = CRMPresenter.formatContact(contact)
+        describe('and it does not have an "addressId" property', () => {
+          it('returns the correct contact', () => {
+            const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-          expect(result).to.equal({
-            link: `/system/companies/${contact.id}/returns-to`,
-            type: 'Returns to',
-            name: 'Rachael Tyrell'
+            expect(result).to.equal({
+              link: `/system/companies/${contact.id}/returns-to`,
+              type: 'Returns to',
+              name: 'Rachael Tyrell'
+            })
+          })
+        })
+
+        describe('and it does have an "addressId" property', () => {
+          beforeEach(() => {
+            contact.addressId = generateUUID()
+          })
+
+          it('returns the correct contact', () => {
+            const result = CRMPresenter.formatContact(contact, billingQueryArgs)
+
+            expect(result).to.equal({
+              link: `/system/companies/${contact.id}/address/${contact.addressId}/returns-to?licence-id=${billingQueryId}`,
+              type: 'Returns to',
+              name: 'Rachael Tyrell'
+            })
           })
         })
       })
