@@ -21,6 +21,8 @@ const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-r
 const LicenceDocumentRoleModel = require('../../app/models/licence-document-role.model.js')
 const LicenceVersionHolderHelper = require('../support/helpers/licence-version-holder.helper.js')
 const LicenceVersionHolderModel = require('../../app/models/licence-version-holder.model.js')
+const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
+const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 const RegionHelper = require('../support/helpers/region.helper.js')
 const RegionModel = require('../../app/models/region.model.js')
 
@@ -34,6 +36,7 @@ describe('Company model', () => {
   let companyContacts
   let licenceDocumentRoles
   let licenceVersionHolders
+  let licenceVersions
   let region
   let testRecord
 
@@ -50,6 +53,7 @@ describe('Company model', () => {
     companyContacts = []
     licenceDocumentRoles = []
     licenceVersionHolders = []
+    licenceVersions = []
 
     for (let i = 0; i < 2; i++) {
       // Link billing account addresses
@@ -85,10 +89,19 @@ describe('Company model', () => {
       const licenceVersionHolder = await LicenceVersionHolderHelper.add({ companyId })
 
       licenceVersionHolders.push(licenceVersionHolder)
+
+      // Link licence versions
+      const licenceVersion = await LicenceVersionHelper.add({ companyId })
+
+      licenceVersions.push(licenceVersion)
     }
   })
 
   after(async () => {
+    for (const testLicenceVersion of licenceVersions) {
+      await testLicenceVersion.$query().delete()
+    }
+
     for (const testLicenceVersionHolder of licenceVersionHolders) {
       await testLicenceVersionHolder.$query().delete()
     }
@@ -243,6 +256,26 @@ describe('Company model', () => {
         expect(result.licenceVersionHolders[0]).to.be.an.instanceOf(LicenceVersionHolderModel)
         expect(result.licenceVersionHolders).to.include(licenceVersionHolders[0])
         expect(result.licenceVersionHolders).to.include(licenceVersionHolders[1])
+      })
+    })
+
+    describe('when linking to licence versions', () => {
+      it('can successfully run a related query', async () => {
+        const query = await CompanyModel.query().innerJoinRelated('licenceVersions')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence versions', async () => {
+        const result = await CompanyModel.query().findById(testRecord.id).withGraphFetched('licenceVersions')
+
+        expect(result).to.be.instanceOf(CompanyModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceVersions).to.be.an.array()
+        expect(result.licenceVersions[0]).to.be.an.instanceOf(LicenceVersionModel)
+        expect(result.licenceVersions).to.include(licenceVersions[0])
+        expect(result.licenceVersions).to.include(licenceVersions[1])
       })
     })
 

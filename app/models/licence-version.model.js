@@ -16,6 +16,14 @@ class LicenceVersionModel extends BaseModel {
 
   static get relationMappings() {
     return {
+      company: {
+        relation: Model.BelongsToOneRelation,
+        modelClass: 'company.model',
+        join: {
+          from: 'licenceVersions.companyId',
+          to: 'companies.id'
+        }
+      },
       licence: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'licence.model',
