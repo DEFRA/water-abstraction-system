@@ -4,57 +4,129 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateRandomInteger } = require('../../app/lib/general.lib.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 const LicenceVersionHolderHelper = require('../support/helpers/licence-version-holder.helper.js')
 const LicenceVersionHolderModel = require('../../app/models/licence-version-holder.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
+const LicenceVersionPurposeModel = require('../../app/models/licence-version-purpose.model.js')
 const LicenceVersionPurposesHelper = require('../support/helpers/licence-version-purpose.helper.js')
 const ModLogHelper = require('../support/helpers/mod-log.helper.js')
 const ModLogModel = require('../../app/models/mod-log.model.js')
 const PurposeHelper = require('../support/helpers/purpose.helper.js')
 const PurposeModel = require('../../app/models/purpose.model.js')
+const RegionHelper = require('../support/helpers/region.helper.js')
+const { generateRandomInteger } = require('../../app/lib/general.lib.js')
 
 // Thing under test
 const LicenceVersionModel = require('../../app/models/licence-version.model.js')
 
 describe('Licence Version model', () => {
+  let licence
+  let licenceVersionHolder
+  let licenceVersionPurpose
+  let purpose
   let licenceVersionId
   let testRecord
+  let testRecordModLogs
   let firstIssueLicenceVersion
   let secondIncrementLicenceVersion
+  let secondIncrementModLogs
 
-  beforeEach(async () => {
+  before(async () => {
+    licence = await LicenceHelper.add()
+
     firstIssueLicenceVersion = await LicenceVersionHelper.add({
       endDate: new Date('2002-03-31'),
+      licenceId: licence.id,
       startDate: new Date('2000-04-01')
     })
 
     secondIncrementLicenceVersion = await LicenceVersionHelper.add({
       endDate: new Date('2022-03-31'),
-      issue: firstIssueLicenceVersion.issue,
       increment: firstIssueLicenceVersion.increment + 1,
+      issue: firstIssueLicenceVersion.issue,
       licenceId: firstIssueLicenceVersion.licenceId,
       startDate: new Date('2002-04-01')
     })
 
     testRecord = await LicenceVersionHelper.add({
-      issue: firstIssueLicenceVersion.issue + 1,
       increment: firstIssueLicenceVersion.increment,
+      issue: firstIssueLicenceVersion.issue + 1,
+      licenceId: firstIssueLicenceVersion.licenceId,
       startDate: new Date('2022-04-01')
     })
 
-    licenceVersionId = testRecord.id
+    licenceVersionHolder = await LicenceVersionHolderHelper.add({ licenceVersionId: testRecord.id })
+
+    const region = RegionHelper.select()
+    const firstNaldId = generateRandomInteger(100, 99998)
+
+    secondIncrementModLogs = [
+      await ModLogHelper.add({
+        externalId: `${region.naldRegionId}:${firstNaldId}`,
+        licenceVersionId: secondIncrementLicenceVersion.id,
+        naldDate: new Date('2002-04-01'),
+        note: null,
+        reasonDescription: null,
+        userId: 'INCREMENT'
+      }),
+      await ModLogHelper.add({
+        externalId: `${region.naldRegionId}:${firstNaldId + 1}`,
+        licenceVersionId: secondIncrementLicenceVersion.id,
+        naldDate: new Date('2002-04-02'),
+        note: null,
+        reasonDescription: 'New licence',
+        userId: 'INCREMENT'
+      })
+    ]
+
+    testRecordModLogs = [
+      await ModLogHelper.add({
+        externalId: `${region.naldRegionId}:${firstNaldId + 2}`,
+        licenceVersionId: testRecord.id,
+        naldDate: new Date('2022-03-30'),
+        note: null,
+        reasonDescription: 'New licence',
+        userId: 'FIRST'
+      }),
+      await ModLogHelper.add({
+        externalId: `${region.naldRegionId}:${firstNaldId + 3}`,
+        licenceVersionId: testRecord.id,
+        naldDate: new Date('2022-03-31'),
+        note: 'Transfer per app 12-DEF',
+        reasonDescription: 'Transferred',
+        userId: 'SECOND'
+      })
+    ]
+
+    purpose = PurposeHelper.select()
+
+    licenceVersionPurpose = await LicenceVersionPurposesHelper.add({
+      licenceVersionId: testRecord.id,
+      purposeId: purpose.id
+    })
   })
 
-  afterEach(async () => {
+  after(async () => {
+    for (const modLog of testRecordModLogs) {
+      await modLog.$query().delete()
+    }
+
+    for (const modLog of secondIncrementModLogs) {
+      await modLog.$query().delete()
+    }
+
+    await licenceVersionPurpose.$query().delete()
+    await licenceVersionHolder.$query().delete()
+    await testRecord.$query().delete()
     await secondIncrementLicenceVersion.$query().delete()
     await firstIssueLicenceVersion.$query().delete()
+    await licence.$query().delete()
   })
 
   describe('Basic query', () => {
@@ -68,16 +140,6 @@ describe('Licence Version model', () => {
 
   describe('Relationships', () => {
     describe('when linking to licence', () => {
-      let testLicence
-
-      beforeEach(async () => {
-        testLicence = await LicenceHelper.add()
-
-        const { id: licenceId } = testLicence
-
-        testRecord = await LicenceVersionHelper.add({ licenceId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceVersionModel.query().innerJoinRelated('licence')
 
@@ -91,19 +153,11 @@ describe('Licence Version model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.licence).to.be.an.instanceOf(LicenceModel)
-        expect(result.licence).to.equal(testLicence)
+        expect(result.licence).to.equal(licence)
       })
     })
 
     describe('when linking to licence version holder', () => {
-      let testLicenceVersionHolder
-
-      beforeEach(async () => {
-        testRecord = await LicenceVersionHelper.add()
-
-        testLicenceVersionHolder = await LicenceVersionHolderHelper.add({ licenceVersionId: testRecord.id })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceVersionModel.query().innerJoinRelated('licenceVersionHolder')
 
@@ -119,24 +173,11 @@ describe('Licence Version model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.licenceVersionHolder).to.be.an.instanceOf(LicenceVersionHolderModel)
-        expect(result.licenceVersionHolder).to.equal(testLicenceVersionHolder)
+        expect(result.licenceVersionHolder).to.equal(licenceVersionHolder)
       })
     })
 
     describe('when linking to mod logs', () => {
-      let testModLogs
-
-      beforeEach(async () => {
-        testRecord = await LicenceVersionHelper.add()
-
-        testModLogs = []
-        for (let i = 0; i < 2; i++) {
-          const modLog = await ModLogHelper.add({ licenceVersionId: testRecord.id })
-
-          testModLogs.push(modLog)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceVersionModel.query().innerJoinRelated('modLogs')
 
@@ -151,26 +192,33 @@ describe('Licence Version model', () => {
 
         expect(result.modLogs).to.be.an.array()
         expect(result.modLogs[0]).to.be.an.instanceOf(ModLogModel)
-        expect(result.modLogs).to.include(testModLogs[0])
-        expect(result.modLogs).to.include(testModLogs[1])
+        expect(result.modLogs).to.include(testRecordModLogs[0])
+        expect(result.modLogs).to.include(testRecordModLogs[1])
+      })
+    })
+
+    describe('when linking to licence version purposes', () => {
+      it('can successfully run a related query', async () => {
+        const query = await LicenceVersionModel.query().innerJoinRelated('licenceVersionPurposes')
+
+        expect(query).to.exist()
+      })
+
+      it('can eager load the licence version purposes', async () => {
+        const result = await LicenceVersionModel.query()
+          .findById(testRecord.id)
+          .withGraphFetched('licenceVersionPurposes')
+
+        expect(result).to.be.instanceOf(LicenceVersionModel)
+        expect(result.id).to.equal(testRecord.id)
+
+        expect(result.licenceVersionPurposes).to.be.an.array()
+        expect(result.licenceVersionPurposes[0]).to.be.an.instanceOf(LicenceVersionPurposeModel)
+        expect(result.licenceVersionPurposes).to.include(licenceVersionPurpose)
       })
     })
 
     describe('when linking through licence version purposes to purposes', () => {
-      let purpose
-
-      beforeEach(async () => {
-        testRecord = await LicenceVersionHelper.add()
-        purpose = PurposeHelper.select()
-
-        const { id } = testRecord
-
-        await LicenceVersionPurposesHelper.add({
-          licenceVersionId: id,
-          purposeId: purpose.id
-        })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceVersionModel.query().innerJoinRelated('purposes')
 
@@ -234,53 +282,43 @@ describe('Licence Version model', () => {
   })
 
   describe('$createdAt', () => {
+    let createdAtRecord
+
     describe('when the licence version has no mod log history', () => {
       beforeEach(async () => {
-        testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+        createdAtRecord = await LicenceVersionModel.query().findById(firstIssueLicenceVersion.id).modify('history')
       })
 
       it('returns the licence version "created at" time stamp', () => {
-        const result = testRecord.$createdAt()
+        const result = createdAtRecord.$createdAt()
 
-        expect(result).to.equal(testRecord.createdAt)
+        expect(result).to.equal(firstIssueLicenceVersion.createdAt)
       })
     })
 
     describe('when the licence version has mod log history', () => {
       beforeEach(async () => {
-        const regionCode = generateRandomInteger(1, 9)
-        const firstNaldId = generateRandomInteger(100, 99998)
-
-        await ModLogHelper.add({
-          externalId: `${regionCode}:${firstNaldId}`,
-          naldDate: new Date('2012-06-01'),
-          licenceVersionId
-        })
-        await ModLogHelper.add({
-          externalId: `${regionCode}:${firstNaldId + 1}`,
-          naldDate: new Date('2012-06-02'),
-          licenceVersionId
-        })
-
-        testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+        createdAtRecord = await LicenceVersionModel.query().findById(testRecord.id).modify('history')
       })
 
       it('returns the first mod log NALD date', () => {
-        const result = testRecord.$createdAt()
+        const result = createdAtRecord.$createdAt()
 
-        expect(result).to.equal(new Date('2012-06-01'))
+        expect(result).to.equal(testRecordModLogs[0].naldDate)
       })
     })
   })
 
   describe('$createdBy', () => {
+    let createdByRecord
+
     describe('when the licence version has no mod log history', () => {
       beforeEach(async () => {
-        testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+        createdByRecord = await LicenceVersionModel.query().findById(firstIssueLicenceVersion.id).modify('history')
       })
 
       it('returns the null', () => {
-        const result = testRecord.$createdBy()
+        const result = createdByRecord.$createdBy()
 
         expect(result).to.be.null()
       })
@@ -288,31 +326,27 @@ describe('Licence Version model', () => {
 
     describe('when the licence version has mod log history', () => {
       beforeEach(async () => {
-        const regionCode = generateRandomInteger(1, 9)
-        const firstNaldId = generateRandomInteger(100, 99998)
-
-        await ModLogHelper.add({ externalId: `${regionCode}:${firstNaldId}`, licenceVersionId, userId: 'FIRST' })
-        await ModLogHelper.add({ externalId: `${regionCode}:${firstNaldId + 1}`, licenceVersionId, userId: 'SECOND' })
-
-        testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+        createdByRecord = await LicenceVersionModel.query().findById(testRecord.id).modify('history')
       })
 
       it('returns the first mod log NALD user ID', () => {
-        const result = testRecord.$createdBy()
+        const result = createdByRecord.$createdBy()
 
-        expect(result).to.equal('FIRST')
+        expect(result).to.equal(testRecordModLogs[0].userId)
       })
     })
   })
 
   describe('$notes', () => {
+    let notesRecord
+
     describe('when the licence version has no mod log history', () => {
       beforeEach(async () => {
-        testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+        notesRecord = await LicenceVersionModel.query().findById(firstIssueLicenceVersion.id).modify('history')
       })
 
       it('returns an empty array', () => {
-        const result = testRecord.$notes()
+        const result = notesRecord.$notes()
 
         expect(result).to.be.an.array()
         expect(result).to.be.empty()
@@ -322,25 +356,11 @@ describe('Licence Version model', () => {
     describe('when the licence version has mod log history', () => {
       describe('but none of the mod log history has notes', () => {
         beforeEach(async () => {
-          const regionCode = generateRandomInteger(1, 9)
-          const firstNaldId = generateRandomInteger(100, 99998)
-
-          await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId}`,
-            note: null,
-            licenceVersionId
-          })
-          await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId + 1}`,
-            note: null,
-            licenceVersionId
-          })
-
-          testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+          notesRecord = await LicenceVersionModel.query().findById(secondIncrementLicenceVersion.id).modify('history')
         })
 
         it('returns an empty array', () => {
-          const result = testRecord.$notes()
+          const result = notesRecord.$notes()
 
           expect(result).to.be.an.array()
           expect(result).to.be.empty()
@@ -349,40 +369,28 @@ describe('Licence Version model', () => {
 
       describe('and some of the mod log history has notes', () => {
         beforeEach(async () => {
-          const regionCode = generateRandomInteger(1, 9)
-          const firstNaldId = generateRandomInteger(100, 99998)
-
-          await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId}`,
-            note: null,
-            licenceVersionId
-          })
-          await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId + 1}`,
-            note: 'Transfer per app 12-DEF',
-            licenceVersionId
-          })
-
-          testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+          notesRecord = await LicenceVersionModel.query().findById(testRecord.id).modify('history')
         })
 
         it('returns an array containing just the notes from the mod logs with them', () => {
-          const result = testRecord.$notes()
+          const result = notesRecord.$notes()
 
-          expect(result).to.equal(['Transfer per app 12-DEF'])
+          expect(result).to.equal([testRecordModLogs[1].note])
         })
       })
     })
   })
 
   describe('$reason', () => {
+    let reasonRecord
+
     describe('when the licence version has no mod log history', () => {
       beforeEach(async () => {
-        testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+        reasonRecord = await LicenceVersionModel.query().findById(firstIssueLicenceVersion.id).modify('history')
       })
 
       it('returns the null', () => {
-        const result = testRecord.$reason()
+        const result = reasonRecord.$reason()
 
         expect(result).to.be.null()
       })
@@ -405,7 +413,7 @@ describe('Licence Version model', () => {
             licenceVersionId
           })
 
-          testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+          reasonRecord = await LicenceVersionModel.query().findById(secondIncrementLicenceVersion.id).modify('history')
         })
 
         it('returns null', () => {
@@ -417,25 +425,11 @@ describe('Licence Version model', () => {
 
       describe('and the mod log history has a reason description recorded in the first entry', () => {
         beforeEach(async () => {
-          const regionCode = generateRandomInteger(1, 9)
-          const firstNaldId = generateRandomInteger(100, 99998)
-
-          await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId}`,
-            reasonDescription: 'New licence',
-            licenceVersionId
-          })
-          await ModLogHelper.add({
-            externalId: `${regionCode}:${firstNaldId + 1}`,
-            reasonDescription: 'Transferred',
-            licenceVersionId
-          })
-
-          testRecord = await LicenceVersionModel.query().findById(licenceVersionId).modify('history')
+          reasonRecord = await LicenceVersionModel.query().findById(testRecord.id).modify('history')
         })
 
         it('returns the NALD reason description', () => {
-          const result = testRecord.$reason()
+          const result = reasonRecord.$reason()
 
           expect(result).to.equal('New licence')
         })
