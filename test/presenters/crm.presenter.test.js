@@ -151,7 +151,7 @@ describe('CRM presenter', () => {
           const result = CRMPresenter.formatContact(contact)
 
           expect(result).to.equal({
-            link: `/system/company-contacts/${contact.id}`,
+            link: `/system/company-contacts/${contact.id}/contact-details`,
             type: 'Abstraction alerts',
             name: 'Rachael Tyrell'
           })
@@ -171,7 +171,7 @@ describe('CRM presenter', () => {
           const result = CRMPresenter.formatContact(contact)
 
           expect(result).to.equal({
-            link: `/system/company-contacts/${contact.id}`,
+            link: `/system/company-contacts/${contact.id}/contact-details`,
             type: 'Additional contact',
             name: 'Rachael Tyrell'
           })

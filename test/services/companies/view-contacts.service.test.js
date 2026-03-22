@@ -74,7 +74,7 @@ describe('Companies - View Contacts service', () => {
         },
         contacts: [
           {
-            link: `/system/company-contacts/${contacts[0].id}`,
+            link: `/system/company-contacts/${contacts[0].id}/contact-details`,
             type: 'Additional contact',
             name: 'Rachael Tyrell'
           }

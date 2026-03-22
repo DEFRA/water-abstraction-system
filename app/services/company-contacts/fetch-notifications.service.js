@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches data needed for the view '/system/company-contacts/{id}' page
+ * Fetches data needed for the view '/system/company-contacts/{id}/communications' page
  * @module FetchNotificationsService
  */
 
@@ -12,7 +12,7 @@ const NotificationModel = require('../../models/notification.model.js')
 const { ignoreMessageRef } = require('../../lib/static-lookups.lib.js')
 
 /**
- * Fetches data needed for the view '/system/company-contacts/{id}' page
+ * Fetches data needed for the view '/system/company-contacts/{id}/communications' page
  *
  * @param {string} email - The email of the company contact id
  * @param {string} [page=1] - The current page for the pagination service
