@@ -442,7 +442,7 @@ async function _returnsTo(company, licenceRef, endDate = null) {
   })
 
   return {
-    record: company,
+    record: licenceDocumentRole,
     clean: async () => {
       await licenceDocument.$query().delete()
       await licenceDocumentRole.$query().delete()
