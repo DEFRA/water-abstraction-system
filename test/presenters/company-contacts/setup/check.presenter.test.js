@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const { yesterday } = require('../../../support/general.js')
 
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/company-contacts/setup/check.presenter.js')
@@ -17,11 +18,11 @@ const CheckPresenter = require('../../../../app/presenters/company-contacts/setu
 describe('Company Contacts - Setup - Check Presenter', () => {
   let company
   let companyContact
-  let companyContacts
   let email
   let name
+  let savedCompanyContacts
   let session
-  let singleNotification
+  let sentNotification
 
   beforeEach(() => {
     company = CustomersFixtures.company()
@@ -29,299 +30,203 @@ describe('Company Contacts - Setup - Check Presenter', () => {
 
     companyContact.contact.contactType = 'department'
 
-    companyContacts = []
+    savedCompanyContacts = []
 
     name = companyContact.contact.department
     email = companyContact.contact.email
 
-    singleNotification = undefined
+    sentNotification = undefined
 
     session = { id: generateUUID(), company, abstractionAlerts: 'yes', name, email }
   })
 
   describe('when called', () => {
-    describe('when editing a company contact', () => {
-      beforeEach(() => {
-        session.companyContact = companyContact
+    it('returns page data for the view', () => {
+      const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+      expect(result).to.equal({
+        abstractionAlerts: 'Yes',
+        email,
+        emailInUse: null,
+        links: {
+          abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
+          cancel: `/system/company-contacts/setup/${session.id}/cancel`,
+          email: `/system/company-contacts/setup/${session.id}/contact-email`,
+          name: `/system/company-contacts/setup/${session.id}/contact-name`,
+          restoreContact: null
+        },
+        matchingContact: undefined,
+        name,
+        pageTitle: 'Check contact',
+        pageTitleCaption: 'Tyrell Corporation',
+        warning: null
       })
+    })
 
-      it('returns page data for the view', () => {
-        const result = CheckPresenter.go(session, companyContacts, singleNotification)
-
-        expect(result).to.equal({
-          abstractionAlerts: 'Yes',
-          email,
-          emailInUse: null,
-          links: {
-            abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
-            cancel: `/system/company-contacts/setup/${session.id}/cancel`,
-            email: `/system/company-contacts/setup/${session.id}/contact-email`,
-            name: `/system/company-contacts/setup/${session.id}/contact-name`,
-            restoreContact: null
-          },
-          matchingContact: undefined,
-          name,
-          pageTitle: 'Check contact',
-          pageTitleCaption: 'Tyrell Corporation',
-          warning: null
-        })
-      })
-
-      describe('when the email has not been used for notifications', () => {
-        describe('the "emailInUse" property', () => {
+    describe('the "emailInUse" property', () => {
+      describe('when creating a new contact', () => {
+        describe('and the email has not been used for notifications', () => {
           it('returns null', () => {
-            const result = CheckPresenter.go(session, companyContacts, singleNotification)
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
             expect(result.emailInUse).to.be.null()
           })
         })
 
-        describe('when the email has been used for notifications', () => {
+        describe('and the email has been used for notifications', () => {
           beforeEach(() => {
-            singleNotification = {
-              id: generateUUID()
-            }
+            sentNotification = { id: generateUUID() }
           })
 
-          describe('the "emailInUse" property', () => {
-            it('returns "email address cannot be changed" message', () => {
-              const result = CheckPresenter.go(session, companyContacts, singleNotification)
+          it('still returns null', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-              expect(result.emailInUse).to.equal(
-                'Notifications have been sent to this contact, so the email address cannot be changed.'
-              )
-            })
+            expect(result.emailInUse).to.be.null()
           })
         })
       })
 
-      describe('when editing an existing company contact', () => {
-        describe('and a contact with a matching name and email exists', () => {
-          describe('and its a different contact to the one being edited', () => {
-            beforeEach(() => {
-              session.companyContact = companyContact
+      describe('when editing an existing contact', () => {
+        beforeEach(() => {
+          session.companyContact = companyContact
+        })
 
-              companyContacts = [
-                {
-                  ...companyContact,
-                  id: generateUUID()
-                }
-              ]
-            })
+        describe('and the email has not been used for notifications', () => {
+          it('returns null', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-            describe('the "warning" property', () => {
-              describe('in the same case', () => {
-                it('returns a warning', () => {
-                  const result = CheckPresenter.go(session, companyContacts, singleNotification)
-
-                  expect(result.warning).to.equal({
-                    text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
-                    iconFallbackText: 'Warning'
-                  })
-                })
-              })
-
-              describe('in a different case (TYRELL CORPORATION)', () => {
-                beforeEach(() => {
-                  session.name = companyContact.contact.department.toUpperCase()
-                })
-
-                it('still returns a warning', () => {
-                  const result = CheckPresenter.go(session, companyContacts, singleNotification)
-
-                  expect(result.warning).to.equal({
-                    text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
-                    iconFallbackText: 'Warning'
-                  })
-                })
-              })
-            })
-          })
-
-          describe('and the company contact can be restored', () => {
-            beforeEach(() => {
-              session.companyContact = companyContact
-
-              companyContacts = [
-                {
-                  ...companyContact,
-                  id: generateUUID(),
-                  deletedAt: new Date()
-                }
-              ]
-            })
-
-            describe('the "warning" property', () => {
-              describe('in the same case', () => {
-                it('returns a warning', () => {
-                  const result = CheckPresenter.go(session, companyContacts, singleNotification)
-
-                  expect(result.warning).to.equal({
-                    text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
-                    iconFallbackText: 'Warning'
-                  })
-                })
-              })
-
-              describe('in a different case (TYRELL CORPORATION)', () => {
-                beforeEach(() => {
-                  session.name = companyContact.contact.department.toUpperCase()
-                })
-
-                it('still returns a warning', () => {
-                  const result = CheckPresenter.go(session, companyContacts, singleNotification)
-
-                  expect(result.warning).to.equal({
-                    text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
-                    iconFallbackText: 'Warning'
-                  })
-                })
-              })
-            })
+            expect(result.emailInUse).to.be.null()
           })
         })
 
-        describe('and a contact with a matching name and email does not exist', () => {
+        describe('and the email has been used for notifications', () => {
           beforeEach(() => {
-            session.name = 'Eric'
-            session.email = 'Eric@test.com'
+            sentNotification = { id: generateUUID() }
           })
 
-          it('returns no warning', () => {
-            const result = CheckPresenter.go(session, companyContacts, singleNotification)
+          it('returns "email address cannot be changed" message', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-            expect(result.warning).to.be.null()
-          })
-        })
-
-        describe('and a contact with a matching name and no email (email is null)', () => {
-          beforeEach(() => {
-            session.name = 'Eric'
-            // The session will have been initialised with a company contact email, which can be null
-            session.email = null
-
-            companyContact.contact.email = null
-          })
-
-          it('returns no warning', () => {
-            const result = CheckPresenter.go(session, companyContacts, singleNotification)
-
-            expect(result.warning).to.be.null()
+            expect(result.emailInUse).to.equal(
+              'Notifications have been sent to this contact, so the email address cannot be changed.'
+            )
           })
         })
       })
     })
 
-    describe('when creating a new company contact', () => {
-      it('returns page data for the view', () => {
-        const result = CheckPresenter.go(session, companyContacts, singleNotification)
+    describe('the "matchingContact" property', () => {
+      describe('when a contact with a matching name and email does not exist', () => {
+        it('returns undefined', () => {
+          const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-        expect(result).to.equal({
-          abstractionAlerts: 'Yes',
-          email,
-          emailInUse: null,
-          links: {
-            abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
-            cancel: `/system/company-contacts/setup/${session.id}/cancel`,
-            email: `/system/company-contacts/setup/${session.id}/contact-email`,
-            name: `/system/company-contacts/setup/${session.id}/contact-name`,
-            restoreContact: null
-          },
-          matchingContact: undefined,
-          name,
-          pageTitle: 'Check contact',
-          pageTitleCaption: 'Tyrell Corporation',
-          warning: null
+          expect(result.matchingContact).to.be.undefined()
         })
       })
 
-      describe('and a contact with a matching name and email exists', () => {
-        beforeEach(() => {
-          companyContacts = [companyContact]
-        })
-
-        describe('and the company contact can be restored', () => {
-          describe('the "links" property', () => {
-            beforeEach(() => {
-              companyContacts = [
-                {
-                  ...companyContact,
-                  deletedAt: new Date()
-                }
-              ]
-            })
-
-            it('returns link to the restore contact page', () => {
-              const result = CheckPresenter.go(session, companyContacts, singleNotification)
-
-              expect(result.links.restoreContact).to.equal(`/system/company-contacts/setup/${session.id}/restore`)
-            })
+      describe('when a contact with a matching name and email exists', () => {
+        describe('in the same letter case', () => {
+          beforeEach(() => {
+            savedCompanyContacts = [{ ...companyContact }]
           })
 
-          describe('the "matchingContact" property', () => {
-            it('returns the matching contact', () => {
-              const result = CheckPresenter.go(session, companyContacts, singleNotification)
+          it('returns the matching contact', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-              expect(result.matchingContact).to.equal(companyContact)
-            })
+            expect(result.matchingContact).to.equal(savedCompanyContacts[0])
           })
         })
 
-        describe('the "warning" property', () => {
-          describe('in the same case', () => {
-            it('returns a warning', () => {
-              const result = CheckPresenter.go(session, companyContacts, singleNotification)
+        describe('in a different letter case', () => {
+          beforeEach(() => {
+            const matchingCompanyContact = { ...companyContact }
 
-              expect(result.warning).to.equal({
-                text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
-                iconFallbackText: 'Warning'
-              })
-            })
+            matchingCompanyContact.contact.department.toUpperCase()
+
+            savedCompanyContacts = [matchingCompanyContact]
           })
 
-          describe('in a different case (TYRELL CORPORATION)', () => {
-            beforeEach(() => {
-              session.name = companyContact.contact.department.toUpperCase()
-            })
+          it('returns the matching contact', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-            it('still returns a warning', () => {
-              const result = CheckPresenter.go(session, companyContacts, singleNotification)
-
-              expect(result.warning).to.equal({
-                text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
-                iconFallbackText: 'Warning'
-              })
-            })
+            expect(result.matchingContact).to.equal(savedCompanyContacts[0])
           })
+        })
+      })
+    })
 
-          describe('and the company contact can be restored', () => {
+    describe('the "warning" property', () => {
+      describe('when creating a new contact', () => {
+        describe('and a contact with a matching name and email does not exist', () => {
+          it('returns null', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+            expect(result.warning).to.be.null()
+          })
+        })
+
+        describe('and a contact with a matching name and email exists', () => {
+          describe('in the same letter case', () => {
             beforeEach(() => {
-              companyContacts = [
-                {
-                  ...companyContact,
-                  deletedAt: new Date()
-                }
-              ]
+              savedCompanyContacts = [{ ...companyContact }]
             })
 
-            describe('in the same case', () => {
-              it('returns a warning', () => {
-                const result = CheckPresenter.go(session, companyContacts, singleNotification)
+            describe('and the contact is not deleted', () => {
+              it('returns "contact already exists" message', () => {
+                const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
                 expect(result.warning).to.equal({
-                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
+                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
                   iconFallbackText: 'Warning'
                 })
               })
             })
 
-            describe('in a different case (TYRELL CORPORATION)', () => {
+            describe('and the contact is deleted', () => {
               beforeEach(() => {
-                session.name = companyContact.contact.department.toUpperCase()
+                savedCompanyContacts[0].deletedAt = yesterday()
               })
 
-              it('still returns a warning', () => {
-                const result = CheckPresenter.go(session, companyContacts, singleNotification)
+              it('returns "deleted contact already exists" message', () => {
+                const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+                expect(result.warning).to.equal({
+                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
+                  iconFallbackText: 'Warning'
+                })
+              })
+            })
+          })
+
+          describe('in a different letter case', () => {
+            beforeEach(() => {
+              const matchingCompanyContact = { ...companyContact }
+
+              // NOTE: In this test we change the department. In the next we change the email. It ensures we cover all
+              // scenarios
+              matchingCompanyContact.contact.department.toUpperCase()
+
+              savedCompanyContacts = [matchingCompanyContact]
+            })
+
+            describe('and the contact is not deleted', () => {
+              it('returns "contact already exists" message', () => {
+                const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+                expect(result.warning).to.equal({
+                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
+                  iconFallbackText: 'Warning'
+                })
+              })
+            })
+
+            describe('and the contact is deleted', () => {
+              beforeEach(() => {
+                savedCompanyContacts[0].deletedAt = yesterday()
+              })
+
+              it('returns "deleted contact already exists" message', () => {
+                const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
                 expect(result.warning).to.equal({
                   text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
@@ -333,34 +238,88 @@ describe('Company Contacts - Setup - Check Presenter', () => {
         })
       })
 
-      describe('and a contact with a matching name and email does not exist', () => {
+      describe('when editing an existing contact', () => {
         beforeEach(() => {
-          session.name = 'Eric'
-          session.email = 'Eric@test.com'
+          session.companyContact = companyContact
         })
 
-        describe('the "warning" property', () => {
-          it('returns no warning', () => {
-            const result = CheckPresenter.go(session, companyContacts, singleNotification)
+        describe('and a contact with a matching name and email does not exist', () => {
+          it('returns null', () => {
+            const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
             expect(result.warning).to.be.null()
           })
         })
-      })
 
-      describe('and a contact with a matching name and no email (email is null)', () => {
-        beforeEach(() => {
-          session.name = 'Eric'
-          session.email = 'Eric@test.com'
+        describe('and a contact with a matching name and email exists', () => {
+          describe('in the same letter case', () => {
+            beforeEach(() => {
+              savedCompanyContacts = [{ ...companyContact }]
+            })
 
-          companyContact.contact.email = null
-        })
+            describe('and the contact is not deleted', () => {
+              it('returns "contact already exists" message', () => {
+                const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
 
-        describe('the "warning" property', () => {
-          it('returns no warning', () => {
-            const result = CheckPresenter.go(session, companyContacts, singleNotification)
+                expect(result.warning).to.equal({
+                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
+                  iconFallbackText: 'Warning'
+                })
+              })
+            })
 
-            expect(result.warning).to.be.null()
+            describe('and the contact is deleted', () => {
+              beforeEach(() => {
+                savedCompanyContacts[0].deletedAt = yesterday()
+              })
+
+              it('returns "deleted contact already exists" message', () => {
+                const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+                expect(result.warning).to.equal({
+                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
+                  iconFallbackText: 'Warning'
+                })
+              })
+            })
+          })
+
+          describe('in a different letter case', () => {
+            beforeEach(() => {
+              const matchingCompanyContact = { ...companyContact }
+
+              // NOTE: In this test we change the email. In the previous we change the department. It ensures we cover
+              // all scenarios
+              matchingCompanyContact.contact.email.toUpperCase()
+
+              savedCompanyContacts = [matchingCompanyContact]
+            })
+
+            describe('and the contact is not deleted', () => {
+              it('returns "contact already exists" message', () => {
+                const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+                expect(result.warning).to.equal({
+                  text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
+                  iconFallbackText: 'Warning'
+                })
+              })
+            })
+
+            describe('and the contact is deleted', () => {
+              beforeEach(() => {
+                savedCompanyContacts[0].deletedAt = yesterday()
+              })
+
+              it('returns "deleted contact already exists" message', () => {
+                const result = CheckPresenter.go(session, savedCompanyContacts, sentNotification)
+
+                expect(result.warning).to.equal({
+                  text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
+                  iconFallbackText: 'Warning'
+                })
+              })
+            })
           })
         })
       })
