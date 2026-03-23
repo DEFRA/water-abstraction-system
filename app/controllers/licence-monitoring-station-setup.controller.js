@@ -81,7 +81,9 @@ async function submitCheck(request, h) {
     yar
   } = request
 
-  const monitoringStationId = await SubmitCheckService.go(sessionId, yar)
+  const { userId } = request.auth.credentials.user
+
+  const monitoringStationId = await SubmitCheckService.go(sessionId, userId, yar)
 
   return h.redirect(`/system/monitoring-stations/${monitoringStationId}`)
 }

@@ -195,33 +195,10 @@ describe('Monitoring Stations - View presenter', () => {
 
   describe('the "restrictions" property', () => {
     describe('the "abstractionPeriod" property', () => {
-      describe('when the licence monitoring station record is not linked to a licence condition', () => {
-        it('returns the abstraction period set when the licence was tagged formatted for display', () => {
-          const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
+      it('returns the abstraction period set when the licence was tagged formatted for display', () => {
+        const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
 
-          expect(result.restrictions[0].abstractionPeriod).to.equal('1 April to 31 August')
-        })
-      })
-
-      describe('when the licence monitoring station record is linked to a licence condition', () => {
-        beforeEach(() => {
-          licenceMonitoringStations[0].licenceVersionPurposeCondition = {
-            id: '1af72066-8340-4fb5-a06b-29c1301a6ac4',
-            licenceVersionPurpose: {
-              id: '0df7030f-435f-4d32-aaa8-de36bb34e9e6',
-              abstractionPeriodEndDay: '31',
-              abstractionPeriodEndMonth: '12',
-              abstractionPeriodStartDay: '01',
-              abstractionPeriodStartMonth: '09'
-            }
-          }
-        })
-
-        it("returns the abstraction period from the condition's licence purpose formatted for display", () => {
-          const result = ViewPresenter.go(monitoringStation, licenceMonitoringStations, auth)
-
-          expect(result.restrictions[0].abstractionPeriod).to.equal('1 September to 31 December')
-        })
+        expect(result.restrictions[0].abstractionPeriod).to.equal('1 April to 31 August')
       })
     })
   })
