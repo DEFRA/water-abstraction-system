@@ -85,21 +85,21 @@ function _matchingContact(email, name, savedCompanyContacts) {
  * exists (when creating a company contact).
  */
 function _warning(matchingContact) {
-  if (matchingContact) {
-    if (matchingContact.deletedAt) {
-      return {
-        text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
-        iconFallbackText: 'Warning'
-      }
-    }
+  if (!matchingContact) {
+    return null
+  }
 
+  if (matchingContact.deletedAt) {
     return {
-      text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
+      text: 'A deleted contact with this name and email already exists. Change the name or email, or restore the existing contact.',
       iconFallbackText: 'Warning'
     }
   }
 
-  return null
+  return {
+    text: 'A contact with this name and email already exists. Change the name or email, or cancel.',
+    iconFallbackText: 'Warning'
+  }
 }
 
 module.exports = {
