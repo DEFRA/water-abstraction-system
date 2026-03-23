@@ -54,6 +54,42 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/users/internal/{id}',
+    options: {
+      handler: UsersController.submitViewUserInternal,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/users/internal/{id}/edit',
+    options: {
+      handler: UsersController.viewEditUserInternal,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/users/internal/{id}/edit',
+    options: {
+      handler: UsersController.submitEditUserInternal,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
     method: 'GET',
     path: '/users/me/profile-details',
     options: {

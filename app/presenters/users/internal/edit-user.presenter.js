@@ -1,50 +1,40 @@
 'use strict'
 
 /**
- * Formats data for internal users on the `/users/internal/{id}` page
- * @module UserPresenter
+ * Formats data for users on the `/users/internal/{userId}/edit` page
+ * @module EditUserPresenter
  */
 
 const { formatLongDateTime, sentenceCase } = require('../../base.presenter.js')
 
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
-
 /**
- * Formats data for internal users on the `/users/internal/{id}` page
+ * Formats data for users on the `/users/internal/{userId}/edit` page
  *
  * @param {module:UserModel} user - The user instance
- * @param {boolean} canEdit - Whether the current user can edit the user being viewed, used to determine whether to show
- * the edit button on the page
+ * @param {object} allPermissionsDetails - All possible permissions details for internal users
+ * @param {string} permissions - The key of the user's current permissions
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user, canEdit) {
+function go(user, allPermissionsDetails, permissions) {
   const { id, username } = user
 
   return {
-    backLink: _backLink(),
+    cancelLink: _cancelLink(id),
     id,
     lastSignedIn: _lastSignedIn(user),
     pageTitle: `User ${username}`,
     pageTitleCaption: 'Internal',
-    permissions: user.$permissions().label,
-    roles: _roles(user),
-    showEditButton: canEdit,
+    permissionOptions: _permissionOptions(allPermissionsDetails, permissions),
+    permissions,
     status: user.$status()
   }
 }
 
-function _backLink() {
-  if (FeatureFlagsConfig.enableUsersView) {
-    return {
-      href: '/system/users',
-      text: 'Go back to users'
-    }
-  }
-
+function _cancelLink(id) {
   return {
-    href: '/',
-    text: 'Go back to search'
+    href: `/system/users/internal/${id}`,
+    text: 'Cancel'
   }
 }
 
@@ -73,10 +63,26 @@ function _lastSignedIn(user) {
   return formatLongDateTime(lastLogin)
 }
 
-function _roles(user) {
+function _permissionOptions(allPermissionsDetails, permissions) {
+  return Object.entries(allPermissionsDetails)
+    .filter(([_key, { application }]) => {
+      return application === 'water_admin' || application === 'both'
+    })
+    .map(([key, { groups, label, roles }]) => {
+      const rolesHint = _rolesHint({ groups, roles })
+      return {
+        checked: key === permissions,
+        hint: { text: rolesHint },
+        text: label,
+        value: key
+      }
+    })
+}
+
+function _roles(groupsAndRoles) {
   const roles = []
 
-  for (const group of user.groups) {
+  for (const group of groupsAndRoles.groups) {
     for (const role of group.roles) {
       const { description, role: name } = role
 
@@ -84,7 +90,7 @@ function _roles(user) {
     }
   }
 
-  for (const role of user.roles) {
+  for (const role of groupsAndRoles.roles) {
     const { description, role: name } = role
 
     roles.push({ description, name: _convertToSentenceCase(name) })
@@ -95,6 +101,22 @@ function _roles(user) {
   })
 
   return roles
+}
+
+function _rolesHint(groupsAndRoles) {
+  const roles = _roles(groupsAndRoles)
+
+  if (roles.length === 0) {
+    return 'Grants no additional roles'
+  }
+
+  const roleList = roles
+    .map((role) => {
+      return role.name
+    })
+    .join(', ')
+
+  return `Grants: ${roleList}`
 }
 
 module.exports = {
