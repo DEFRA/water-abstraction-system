@@ -259,7 +259,7 @@ describe('Notifications - View Notification presenter', () => {
         const result = ViewNotificationPresenter.go(notification, null, null, companyContactId)
 
         expect(result.backLink).to.be.equal({
-          href: `/system/company-contacts/${companyContactId}`,
+          href: `/system/company-contacts/${companyContactId}/communications`,
           text: 'Go back to company contact'
         })
       })

@@ -156,7 +156,7 @@ describe('Notifications - View Notification service', () => {
           address: [],
           alertDetails: null,
           backLink: {
-            href: `/system/company-contacts/${companyContactId}`,
+            href: `/system/company-contacts/${companyContactId}/communications`,
             text: 'Go back to company contact'
           },
           contents: notification.plaintext,

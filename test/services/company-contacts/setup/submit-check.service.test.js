@@ -141,7 +141,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       const result = await SubmitCheckService.go(session.id, yarStub, auth)
 
       expect(result).to.equal({
-        redirectUrl: `/system/company-contacts/${companyContact.id}`
+        redirectUrl: `/system/company-contacts/${companyContact.id}/contact-details`
       })
     })
 

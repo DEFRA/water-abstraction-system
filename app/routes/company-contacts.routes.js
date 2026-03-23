@@ -5,9 +5,16 @@ const CompanyContactsController = require('../controllers/company-contacts.contr
 const routes = [
   {
     method: 'GET',
-    path: '/company-contacts/{id}',
+    path: '/company-contacts/{id}/communications',
     options: {
-      handler: CompanyContactsController.viewCompanyContact
+      handler: CompanyContactsController.viewCommunications
+    }
+  },
+  {
+    method: 'GET',
+    path: '/company-contacts/{id}/contact-details',
+    options: {
+      handler: CompanyContactsController.viewContactDetails
     }
   },
   {

@@ -4,162 +4,53 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
+const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const CompanyContactHelper = require('../../support/helpers/company-contact.helper.js')
 const ContactHelper = require('../../support/helpers/contact.helper.js')
-const LicenceRoleHelper = require('../../support/helpers/licence-role.helper.js')
-const UserHelper = require('../../support/helpers/user.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchCompanyContactService = require('../../../app/services/company-contacts/fetch-company-contact.service.js')
 
 describe('Company Contacts - Fetch Company Contact service', () => {
-  let additionalCompanyContact
+  const companyId = generateUUID()
+
   let companyContact
   let contact
-  let licenceRole
-  let user
 
   before(async () => {
     contact = await ContactHelper.add()
-
-    user = UserHelper.select()
-
-    licenceRole = LicenceRoleHelper.select('additionalContact')
-  })
-
-  afterEach(async () => {
-    await companyContact.$query().delete()
-
-    if (additionalCompanyContact) {
-      await additionalCompanyContact.$query().delete()
-    }
+    companyContact = await CompanyContactHelper.add({ companyId, contactId: contact.id })
   })
 
   after(async () => {
+    await companyContact.$query().delete()
     await contact.$query().delete()
   })
 
   describe('when there is a company contact', () => {
-    describe('and it is the only "additional contact" for the company', () => {
-      describe('and it is not marked for "abstractionAlerts"', () => {
-        beforeEach(async () => {
-          companyContact = await CompanyContactHelper.add({
-            abstractionAlerts: false,
-            contactId: contact.id,
-            createdBy: user.id,
-            licenceRoleId: licenceRole.id,
-            updatedBy: user.id
-          })
-        })
+    it('returns the company contact and associated contact record', async () => {
+      const result = await FetchCompanyContactService.go(companyContact.id)
 
-        it('returns the matching company contact with "abstractionAlertsCount" as 0', async () => {
-          const result = await FetchCompanyContactService.go(companyContact.id)
-
-          expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 0))
-        })
-      })
-
-      describe('and it is marked for "abstractionAlerts"', () => {
-        beforeEach(async () => {
-          companyContact = await CompanyContactHelper.add({
-            abstractionAlerts: true,
-            contactId: contact.id,
-            createdBy: user.id,
-            licenceRoleId: licenceRole.id,
-            updatedBy: user.id
-          })
-        })
-
-        it('returns the matching company contact with "abstractionAlertsCount" as 1', async () => {
-          const result = await FetchCompanyContactService.go(companyContact.id)
-
-          expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 1))
-        })
-      })
-    })
-
-    describe('and there are other "additional contacts" for the company', () => {
-      describe('when it is not marked for "abstractionAlerts"', () => {
-        beforeEach(async () => {
-          companyContact = await CompanyContactHelper.add({
-            contactId: contact.id,
-            createdBy: user.id,
-            updatedBy: user.id,
-            licenceRoleId: licenceRole.id
-          })
-        })
-
-        describe('and nor are the other contacts', () => {
-          beforeEach(async () => {
-            additionalCompanyContact = await CompanyContactHelper.add({
-              abstractionAlerts: false,
-              companyId: companyContact.companyId,
-              contactId: contact.id
-            })
-          })
-
-          it('returns the matching company contact with "abstractionAlertsCount" as 0', async () => {
-            const result = await FetchCompanyContactService.go(companyContact.id)
-
-            expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 0))
-          })
-        })
-
-        describe('but the other contacts are', () => {
-          beforeEach(async () => {
-            additionalCompanyContact = await CompanyContactHelper.add({
-              abstractionAlerts: true,
-              companyId: companyContact.companyId,
-              contactId: contact.id
-            })
-          })
-
-          it('returns the matching company contact with "abstractionAlertsCount" as 1', async () => {
-            const result = await FetchCompanyContactService.go(companyContact.id)
-
-            expect(result).to.equal(_transformToFetchResult(companyContact, contact, user, licenceRole, 1))
-          })
-        })
+      expect(result).to.equal({
+        companyId,
+        id: companyContact.id,
+        contact: {
+          contactType: 'person',
+          department: null,
+          email: null,
+          firstName: 'Amara',
+          id: contact.id,
+          initials: null,
+          lastName: 'Gupta',
+          middleInitials: null,
+          salutation: null,
+          suffix: null
+        }
       })
     })
   })
 })
-
-function _transformToFetchResult(companyContact, contact, user, licenceRole, abstractionAlertsCount = 0) {
-  return {
-    id: companyContact.id,
-    abstractionAlerts: companyContact.abstractionAlerts,
-    abstractionAlertsCount,
-    companyId: companyContact.companyId,
-    contact: {
-      id: contact.id,
-      salutation: null,
-      firstName: 'Amara',
-      middleInitials: null,
-      lastName: 'Gupta',
-      initials: null,
-      contactType: 'person',
-      suffix: null,
-      department: null,
-      email: null
-    },
-    createdAt: companyContact.createdAt,
-    createdByUser: {
-      id: user.id,
-      username: user.username
-    },
-    licenceRole: {
-      id: licenceRole.id,
-      name: licenceRole.name
-    },
-    updatedAt: companyContact.updatedAt,
-    updatedByUser: {
-      id: user.id,
-      username: user.username
-    }
-  }
-}

@@ -77,7 +77,6 @@ describe('Licences - View Contact Details service', () => {
           href: '/',
           text: 'Go back to search'
         },
-        customerContactLink: `/system/companies/${companyId}/contacts`,
         contacts: [
           {
             link: `/system/companies/${companyId}/licence-holder`,
@@ -85,6 +84,7 @@ describe('Licences - View Contact Details service', () => {
             type: 'Licence holder'
           }
         ],
+        licenceHolderContactsLink: `/system/companies/${companyId}/contacts`,
         pageTitle: 'Contact details',
         pageTitleCaption: `Licence ${licenceRef}`,
         pagination: {

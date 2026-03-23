@@ -1,0 +1,48 @@
+{% extends 'layout-company-contacts.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% block pageContent %}
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: { text: "Name" },
+        value: { text: contact.name }
+      },
+      {
+        key: { text: "Email address" },
+        value: { text: contact.email }
+      },
+      {
+        key: { text: "Water abstraction alerts" },
+        value: { text: contact.abstractionAlerts }
+      },
+      {
+        key: { text: "Created" },
+        value: { text: contact.created }
+      },
+      {
+        key: { text: "Last updated" },
+        value: { text: contact.lastUpdated }
+      }
+    ]
+  }) }}
+
+  {% if 'hof_notifications' in roles and additionalContact%}
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Edit contact",
+        preventDoubleClick: true,
+        href: editContactLink
+      }) }}
+
+      {{ govukButton({
+        text: "Remove contact",
+        classes: "govuk-button--secondary",
+        href: removeContactLink,
+        preventDoubleClick: true
+      }) }}
+    </div>
+  {% endif %}
+{% endblock %}

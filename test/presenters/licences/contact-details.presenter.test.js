@@ -60,10 +60,9 @@ describe('Licences - Contact Details presenter', () => {
           href: '/',
           text: 'Go back to search'
         },
-        customerContactLink: `/system/companies/${companyId}/contacts`,
         contacts: [
           {
-            link: `/system/company-contacts/${contacts[0].id}`,
+            link: `/system/company-contacts/${contacts[0].id}/contact-details`,
             name: 'Rachael Tyrell',
             type: 'Additional contact'
           },
@@ -73,17 +72,18 @@ describe('Licences - Contact Details presenter', () => {
             type: 'Licence holder'
           }
         ],
+        licenceHolderContactsLink: `/system/companies/${companyId}/contacts`,
         pageTitle: 'Contact details',
         pageTitleCaption: `Licence ${licence.licenceRef}`
       })
     })
 
-    describe('the "customerContactLink" property', () => {
+    describe('the "licenceHolderContactsLink" property', () => {
       describe('when the the licence has a "licence Holder" licence contact', () => {
-        it('returns the link to customer contacts', () => {
+        it('returns the link to licence holder contacts', () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
-          expect(result.customerContactLink).to.equal(`/system/companies/${companyId}/contacts`)
+          expect(result.licenceHolderContactsLink).to.equal(`/system/companies/${companyId}/contacts`)
         })
       })
 
@@ -95,7 +95,7 @@ describe('Licences - Contact Details presenter', () => {
         it('returns null', () => {
           const result = ContactDetailsPresenter.go(contacts, licence)
 
-          expect(result.customerContactLink).to.be.null()
+          expect(result.licenceHolderContactsLink).to.be.null()
         })
       })
     })
@@ -117,7 +117,7 @@ describe('Licences - Contact Details presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              link: `/system/company-contacts/${contacts[0].id}`,
+              link: `/system/company-contacts/${contacts[0].id}/contact-details`,
               type: 'Abstraction alerts',
               name: 'Rachael Tyrell'
             }
@@ -141,7 +141,7 @@ describe('Licences - Contact Details presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              link: `/system/company-contacts/${contacts[0].id}`,
+              link: `/system/company-contacts/${contacts[0].id}/contact-details`,
               type: 'Additional contact',
               name: 'Rachael Tyrell'
             }

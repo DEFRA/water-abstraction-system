@@ -15,6 +15,7 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
+const FetchLegacyIdService = require('../../app/services/users/fetch-legacy-id.service.js')
 const IndexUsersService = require('../../app/services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
@@ -156,6 +157,84 @@ describe('Users controller', () => {
     })
   })
 
+  describe('/users/external/{id}', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        id = generateUUID()
+        options = _getOptions(`/users/external/${id}`, { scope: [], user: { id } })
+
+        Sinon.stub(ViewUserExternalService, 'go').resolves({
+          backLink: {
+            href: '/',
+            text: 'Go back to search'
+          },
+          companies: [],
+          id,
+          lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+          pageTitle: 'User external@example.co.uk',
+          pageTitleCaption: 'External',
+          status: 'enabled'
+        })
+      })
+
+      it('returns the external user page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('External')
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        id = generateUUID()
+        postOptions = postRequestOptions(`/users/external/${id}`, {})
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(FetchLegacyIdService, 'go').returns(456)
+        })
+
+        it('redirects to the legacy user page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/user/456/status`)
+        })
+      })
+    })
+  })
+
+  describe('/users/internal/{id}', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        id = generateUUID()
+        options = _getOptions(`/users/internal/${id}`, { scope: ['manage_accounts'], user: { id } })
+
+        Sinon.stub(ViewUserInternalService, 'go').resolves({
+          backLink: {
+            href: '/',
+            text: 'Go back to search'
+          },
+          id,
+          lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
+          pageTitle: 'User basic.access@wrls.gov.uk',
+          pageTitleCaption: 'Internal',
+          permissions: 'Basic access',
+          status: 'enabled'
+        })
+      })
+
+      it('returns the internal user page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Internal')
+      })
+    })
+  })
+
   describe('/users/me/profile-details', () => {
     describe('GET', () => {
       beforeEach(async () => {
@@ -207,64 +286,6 @@ describe('Users controller', () => {
             expect(response.payload).to.contain('There is a problem')
           })
         })
-      })
-    })
-  })
-
-  describe('/users/external/{id}', () => {
-    describe('GET', () => {
-      beforeEach(async () => {
-        id = generateUUID()
-        options = _getOptions(`/users/external/${id}`, { scope: [], user: { id } })
-
-        Sinon.stub(ViewUserExternalService, 'go').resolves({
-          backLink: {
-            href: '/',
-            text: 'Go back to search'
-          },
-          companies: [],
-          id,
-          lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
-          pageTitle: 'User external@example.co.uk',
-          pageTitleCaption: 'External',
-          status: 'enabled'
-        })
-      })
-
-      it('returns the external user page successfully', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('External')
-      })
-    })
-  })
-
-  describe('/users/internal/{id}', () => {
-    describe('GET', () => {
-      beforeEach(async () => {
-        id = generateUUID()
-        options = _getOptions(`/users/internal/${id}`, { scope: ['manage_accounts'], user: { id } })
-
-        Sinon.stub(ViewUserInternalService, 'go').resolves({
-          backLink: {
-            href: '/',
-            text: 'Go back to search'
-          },
-          id,
-          lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
-          pageTitle: 'User basic.access@wrls.gov.uk',
-          pageTitleCaption: 'Internal',
-          permissions: 'Basic access',
-          status: 'enabled'
-        })
-      })
-
-      it('returns the internal user page successfully', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Internal')
       })
     })
   })

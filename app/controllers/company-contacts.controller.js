@@ -5,21 +5,32 @@
  * @module CompanyContactsController
  */
 
-const ViewCompanyContactService = require('../services/company-contacts/view-company-contact.service.js')
+const ViewCommunicationsService = require('../services/company-contacts/view-communications.service.js')
+const ViewContactDetailsService = require('../services/company-contacts/view-contact-details.service.js')
 const ViewRemoveCompanyContactService = require('../services/company-contacts/view-remove-company-contact.service.js')
 const SubmitRemoveCompanyContactService = require('../services/company-contacts/submit-remove-company-contact.service.js')
 
-async function viewCompanyContact(request, h) {
+async function viewCommunications(request, h) {
   const {
     params: { id },
-    auth,
-    yar,
     query: { page }
   } = request
 
-  const pageData = await ViewCompanyContactService.go(id, auth, yar, page)
+  const pageData = await ViewCommunicationsService.go(id, page)
 
-  return h.view(`company-contacts/view-company-contact.njk`, pageData)
+  return h.view(`company-contacts/communications.njk`, pageData)
+}
+
+async function viewContactDetails(request, h) {
+  const {
+    params: { id },
+    auth,
+    yar
+  } = request
+
+  const pageData = await ViewContactDetailsService.go(id, auth, yar)
+
+  return h.view(`company-contacts/contact-details.njk`, pageData)
 }
 
 async function viewRemoveCompanyContact(request, h) {
@@ -42,7 +53,8 @@ async function submitRemoveCompanyContact(request, h) {
 }
 
 module.exports = {
-  viewCompanyContact,
+  viewCommunications,
+  viewContactDetails,
   viewRemoveCompanyContact,
   submitRemoveCompanyContact
 }

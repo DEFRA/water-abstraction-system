@@ -12,6 +12,13 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/companies/{id}/address/{addressId}/{role}',
+    options: {
+      handler: CompaniesController.viewCompanyWithAddress
+    }
+  },
+  {
+    method: 'GET',
     path: '/companies/{id}/billing-accounts',
     options: {
       handler: CompaniesController.viewBillingAccounts,

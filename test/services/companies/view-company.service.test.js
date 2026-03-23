@@ -17,15 +17,21 @@ const FetchCompanyDetailsService = require('../../../app/services/companies/fetc
 // Thing under test
 const ViewCompanyService = require('../../../app/services/companies/view-company.service.js')
 
-describe('Companies - Company Service', () => {
+describe('Companies - View Company Service', () => {
   let companyDetails
   let role
 
   beforeEach(async () => {
     companyDetails = {
       ...CustomersFixtures.company(),
-      companyAddresses: [CustomersFixtures.companyAddress()]
+      companyAddresses: []
     }
+
+    const companyAddress = CustomersFixtures.companyAddress()
+
+    companyAddress.startDate = new Date('2021-04-01')
+    companyAddress.address.country = null
+    companyDetails.companyAddresses.push({ ...companyAddress })
 
     Sinon.stub(FetchCompanyDetailsService, 'go').returns(companyDetails)
   })
@@ -48,25 +54,27 @@ describe('Companies - Company Service', () => {
             href: `/system/companies/${companyDetails.id}/contacts`,
             text: 'Go back to contacts'
           },
-          details: {
-            address: [
-              'The Tyrell Spire',
-              'Floor 667 (Above the Smog)',
-              'Southbank Industrial Sector',
-              'Lambeth Precinct',
-              'Greater London',
-              'United Kingdom',
-              'SE1 7TY',
-              'UK'
-            ],
-            name: 'Tyrell Corporation'
-          },
+          companyAddresses: [
+            {
+              address: [
+                'The Tyrell Spire',
+                'Floor 667 (Above the Smog)',
+                'Southbank Industrial Sector',
+                'Lambeth Precinct',
+                'Greater London',
+                'United Kingdom',
+                'SE1 7TY'
+              ],
+              endDate: null,
+              startDate: '1 April 2021'
+            }
+          ],
           pageTitle: 'Licence holder',
           pageTitleCaption: 'Tyrell Corporation'
         })
       })
 
-      it('should call the fetch with role converted to camel case', async () => {
+      it('calls the fetch service with role converted to camelCase', async () => {
         await ViewCompanyService.go(companyDetails.id, role)
 
         expect(FetchCompanyDetailsService.go.calledWith(companyDetails.id, 'licenceHolder')).to.be.true()
@@ -86,25 +94,27 @@ describe('Companies - Company Service', () => {
             href: `/system/companies/${companyDetails.id}/contacts`,
             text: 'Go back to contacts'
           },
-          details: {
-            address: [
-              'The Tyrell Spire',
-              'Floor 667 (Above the Smog)',
-              'Southbank Industrial Sector',
-              'Lambeth Precinct',
-              'Greater London',
-              'United Kingdom',
-              'SE1 7TY',
-              'UK'
-            ],
-            name: 'Tyrell Corporation'
-          },
+          companyAddresses: [
+            {
+              address: [
+                'The Tyrell Spire',
+                'Floor 667 (Above the Smog)',
+                'Southbank Industrial Sector',
+                'Lambeth Precinct',
+                'Greater London',
+                'United Kingdom',
+                'SE1 7TY'
+              ],
+              endDate: null,
+              startDate: '1 April 2021'
+            }
+          ],
           pageTitle: 'Returns to',
           pageTitleCaption: 'Tyrell Corporation'
         })
       })
 
-      it('should call the fetch with role converted to camel case', async () => {
+      it('calls the fetch service with role converted to camelCase', async () => {
         await ViewCompanyService.go(companyDetails.id, role)
 
         expect(FetchCompanyDetailsService.go.calledWith(companyDetails.id, 'returnsTo')).to.be.true()

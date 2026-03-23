@@ -46,41 +46,49 @@ describe('Licences - Fetch Licence CRM data service', () => {
       expect(result).to.equal({
         contacts: [
           {
+            addressId: null,
             contactType: 'primary-user',
             id: crmData.primaryUser.record.id,
             contactName: 'albus.dumbledore@hogwarts.com'
           },
           {
+            addressId: null,
             contactType: 'licence-holder',
             id: crmData.company.record.id,
             contactName: 'Hogwarts'
           },
           {
+            addressId: crmData.returnsTo.record.addressId,
             contactType: 'returns-to',
             id: crmData.company.record.id,
             contactName: 'Hogwarts'
           },
           {
+            addressId: null,
             contactType: 'additional-contact',
             id: crmData.additionalContact.record.id,
             contactName: 'Horace Slughorn'
           },
           {
+            addressId: null,
             contactType: 'basic-user',
             id: crmData.basicUser.record.id,
             contactName: 'minerva.mchonagall@hogwarts.com'
           },
           {
+            addressId: null,
             contactType: 'abstraction-alerts',
             id: crmData.abstractionAlerts.record.id,
             contactName: 'Prof Gilderoy Lockhart'
           },
           {
+            addressId: null,
             contactType: 'returns-user',
             id: crmData.returnsUser.record.id,
             contactName: 'severus.snape@hogwarts.com'
           },
           {
+            addressId: null,
             contactType: 'billing',
             id: crmData.billing.record.id,
             contactName: crmData.billing.record.accountNumber
@@ -97,16 +105,19 @@ describe('Licences - Fetch Licence CRM data service', () => {
         expect(result).to.equal({
           contacts: [
             {
+              addressId: null,
               id: crmData.otherBasicUser.record.id,
               contactName: 'Draco Malfoy',
               contactType: 'basic-user'
             },
             {
+              addressId: null,
               id: crmData.otherBilling.record.id,
               contactName: crmData.otherBilling.record.accountNumber,
               contactType: 'billing'
             },
             {
+              addressId: null,
               id: crmData.otherCompany.record.id,
               contactName: "Weasleys' Wizard Wheezes",
               contactType: 'licence-holder'
@@ -133,6 +144,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
           expect(result).to.equal({
             contacts: [
               {
+                addressId: null,
                 contactType: 'primary-user',
                 id: crmData.primaryUser.record.id,
                 contactName: 'albus.dumbledore@hogwarts.com'
@@ -154,6 +166,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
           expect(result).to.equal({
             contacts: [
               {
+                addressId: null,
                 contactType: 'primary-user',
                 id: crmData.primaryUser.record.id,
                 contactName: 'albus.dumbledore@hogwarts.com'
@@ -175,6 +188,7 @@ describe('Licences - Fetch Licence CRM data service', () => {
           expect(result).to.equal({
             contacts: [
               {
+                addressId: null,
                 contactType: 'licence-holder',
                 id: crmData.company.record.id,
                 contactName: 'Hogwarts'

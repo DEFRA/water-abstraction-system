@@ -1,28 +1,26 @@
 'use strict'
 
 /**
- * Formats data for the '/company-contacts/{id}' page
- * @module ViewCompanyContactPresenter
+ * Formats data for the '/company-contacts/{id}/contact-details' page
+ * @module ContactDetailsPresenter
  */
 
-const NotificationsTablePresenter = require('../notifications/notifications-table.presenter.js')
 const { formatEmail, formatLongDate } = require('../base.presenter.js')
 
 /**
- * Formats data for the '/company-contacts/{id}' page
+ * Formats data for the '/company-contacts/{id}/contact-details' page
  *
  * @param {module:CompanyModel} company - The customer from the companies table
  * @param {module:CompanyContactModel} companyContact - The customer contact from the company contacts table
- * @param {module:NotificationModel[]} notifications - All notifications linked to the company contact email address
  *
  * @returns {object} The data formatted for the view template
  */
-function go(company, companyContact, notifications) {
+function go(company, companyContact) {
   return {
     additionalContact: companyContact.licenceRole.name === 'additionalContact',
     backLink: {
       href: `/system/companies/${company.id}/contacts`,
-      text: 'Go back to contacts'
+      text: 'Go back to licence holder contacts'
     },
     contact: {
       abstractionAlerts: companyContact.abstractionAlerts ? 'Yes' : 'No',
@@ -32,7 +30,6 @@ function go(company, companyContact, notifications) {
       name: companyContact.contact.$name()
     },
     editContactLink: `/system/company-contacts/setup/${companyContact.id}/edit`,
-    notifications: NotificationsTablePresenter.go(notifications, null, null, companyContact.id),
     pageTitle: `Contact details for ${companyContact.contact.$name()}`,
     pageTitleCaption: company.name,
     removeContactLink: `/system/company-contacts/${companyContact.id}/remove`
