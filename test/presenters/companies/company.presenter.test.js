@@ -47,7 +47,7 @@ describe('Companies - Company Presenter', () => {
       expect(result).to.equal({
         backLink: {
           href: `/system/companies/${companyDetails.id}/contacts`,
-          text: 'Go back to contacts'
+          text: 'Go back to licence holder contacts'
         },
         companyAddresses: [
           {
