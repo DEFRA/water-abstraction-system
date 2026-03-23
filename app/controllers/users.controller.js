@@ -63,6 +63,12 @@ async function submitUserExternal(request, h) {
   return _redirectToLegacy(id, h)
 }
 
+async function submitUserInternal(request, h) {
+  const { id } = request.params
+
+  return _redirectToLegacy(id, h)
+}
+
 async function viewProfileDetails(request, h) {
   const { userId } = request.auth.credentials.user
 
@@ -112,6 +118,7 @@ module.exports = {
   submitIndex,
   submitProfileDetails,
   submitUserExternal,
+  submitUserInternal,
   viewProfileDetails,
   viewUserExternal,
   viewUserInternal
