@@ -84,7 +84,7 @@ describe('Company Contacts - Setup - Check Presenter', () => {
           })
 
           describe('the "emailInUse" property', () => {
-            it('returns null', () => {
+            it('returns "email address cannot be changed" message', () => {
               const result = CheckPresenter.go(session, companyContacts, singleNotification)
 
               expect(result.emailInUse).to.equal(
