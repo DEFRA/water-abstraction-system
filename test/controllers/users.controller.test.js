@@ -233,6 +233,26 @@ describe('Users controller', () => {
         expect(response.payload).to.contain('Internal')
       })
     })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        id = generateUUID()
+        postOptions = postRequestOptions(`/users/internal/${id}`, {})
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(FetchLegacyIdService, 'go').returns(456)
+        })
+
+        it('redirects to the legacy user page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/user/456/status`)
+        })
+      })
+    })
   })
 
   describe('/users/me/profile-details', () => {
