@@ -14,16 +14,18 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const AbstractionPeriodService = require('../../app/services/licence-monitoring-station/setup/abstraction-period.service.js')
+const CheckService = require('../../app/services/licence-monitoring-station/setup/check.service.js')
 const FullConditionService = require('../../app/services/licence-monitoring-station/setup/full-condition.service.js')
 const InitiateSessionService = require('../../app/services/licence-monitoring-station/setup/initiate-session.service.js')
 const LicenceNumberService = require('../../app/services/licence-monitoring-station/setup/licence-number.service.js')
-const SubmitLicenceNumberService = require('../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js')
 const StopOrReduceService = require('../../app/services/licence-monitoring-station/setup/stop-or-reduce.service.js')
-const ThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/threshold-and-unit.service.js')
 const SubmitAbstractionPeriodService = require('../../app/services/licence-monitoring-station/setup/submit-abstraction-period.service.js')
+const SubmitCheckService = require('../../app/services/licence-monitoring-station/setup/submit-check.service.js')
 const SubmitFullConditionService = require('../../app/services/licence-monitoring-station/setup/submit-full-condition.service.js')
+const SubmitLicenceNumberService = require('../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js')
 const SubmitStopOrReduceService = require('../../app/services/licence-monitoring-station/setup/submit-stop-or-reduce.service.js')
 const SubmitThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
+const ThresholdAndUnitService = require('../../app/services/licence-monitoring-station/setup/threshold-and-unit.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -78,16 +80,16 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
     })
   })
 
-  describe('licence-monitoring-station/setup/{sessionId}/threshold-and-unit', () => {
-    const path = 'threshold-and-unit'
+  describe('licence-monitoring-station/setup/{sessionId}/abstraction-period', () => {
+    const path = 'abstraction-period'
 
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ThresholdAndUnitService, 'go').resolves({
-            sessionId,
+          Sinon.stub(AbstractionPeriodService, 'go').resolves({
+            backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
             monitoringStationLabel: 'Station Label',
-            pageTitle: 'What is the licence hands-off flow or level threshold?'
+            pageTitle: 'Enter an abstraction period for licence 01/234'
           })
         })
 
@@ -95,31 +97,151 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           const response = await server.inject(_getOptions(path))
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('What is the licence hands-off flow or level threshold?')
+          expect(response.payload).to.contain('Enter an abstraction period for licence 01/234')
         })
       })
     })
 
     describe('POST', () => {
       describe('when the request succeeds', () => {
-        describe('and the page has not been visited previously', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitAbstractionPeriodService, 'go').resolves({})
+        })
+
+        it('redirects to the "check" page', async () => {
+          const response = await server.inject(_postOptions(path, {}))
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/licence-monitoring-station/setup/${sessionId}/check`)
+        })
+      })
+
+      describe('and the validation fails', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitAbstractionPeriodService, 'go').resolves({
+            error: {
+              errorList: [
+                {
+                  href: '#abstraction-period-start',
+                  text: 'Enter a real start date'
+                },
+                {
+                  href: '#abstraction-period-end',
+                  text: 'Enter a real end date'
+                }
+              ],
+              'abstraction-period-start': {
+                text: 'Enter a real start date'
+              },
+              'abstraction-period-end': {
+                text: 'Enter a real end date'
+              }
+            },
+            abstractionPeriodStartDay: 'INVALID',
+            abstractionPeriodEndDay: 'INVALID',
+            abstractionPeriodStartMonth: 'INVALID',
+            abstractionPeriodEndMonth: 'INVALID',
+            backLink: {
+              href: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
+              text: 'Back'
+            },
+            monitoringStationLabel: 'Station Label',
+            pageTitle: 'Enter an abstraction period for licence 01/234'
+          })
+        })
+
+        it('returns the page successfully with the error summary banner', async () => {
+          const response = await server.inject(_postOptions(path, {}))
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('There is a problem')
+          expect(response.payload).to.contain('Enter a real start date')
+          expect(response.payload).to.contain('Enter a real end date')
+        })
+      })
+    })
+  })
+
+  describe('licence-monitoring-station/setup/{sessionId}/check', () => {
+    const path = 'check'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(CheckService, 'go').resolves({
+            pageTitle: 'Check the restriction details'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Check the restriction details')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        const monitoringStationId = 'bdd4aab4-0910-4641-b626-9db943d79df6'
+
+        beforeEach(() => {
+          Sinon.stub(SubmitCheckService, 'go').resolves(monitoringStationId)
+        })
+
+        it('redirects to the "monitoring stations" page', async () => {
+          const response = await server.inject(_postOptions(path, {}))
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/monitoring-stations/${monitoringStationId}`)
+        })
+      })
+    })
+  })
+
+  describe('licence-monitoring-station/setup/{sessionId}/full-condition', () => {
+    const path = 'full-condition'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(FullConditionService, 'go').resolves({
+            backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
+            monitoringStationLabel: 'Station Label',
+            pageTitle: 'Select the full condition for licence 01/234'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Select the full condition for licence 01/234')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the user selects an option requiring abstraction period entry', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitThresholdAndUnitService, 'go').resolves({})
+            Sinon.stub(SubmitFullConditionService, 'go').resolves({ abstractionPeriod: true })
           })
 
-          it('redirects to the "stop-or-reduce" page', async () => {
+          it('redirects to the "abstraction-period" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
             expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
-              `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`
+              `/system/licence-monitoring-station/setup/${sessionId}/abstraction-period`
             )
           })
         })
 
-        describe('and the page has been visited previously', () => {
+        describe('and the user selects an option not requiring abstraction period entry', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitThresholdAndUnitService, 'go').resolves({ checkPageVisited: true })
+            Sinon.stub(SubmitFullConditionService, 'go').resolves({ abstractionPeriod: false })
           })
 
           it('redirects to the "check" page', async () => {
@@ -132,22 +254,93 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitThresholdAndUnitService, 'go').resolves({
-              error: {
-                errorList: [{ href: '#threshold', text: 'Enter a threshold' }],
-                threshold: { message: 'Enter a threshold' }
-              },
+            Sinon.stub(FullConditionService, 'go').resolves({
+              error: { text: 'Select a condition' },
+              backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
               monitoringStationLabel: 'Station Label',
-              pageTitle: 'What is the licence hands-off flow or level threshold?',
-              sessionId
+              pageTitle: 'Select the full condition for licence 01/234'
             })
           })
 
           it('returns the page successfully with the error summary banner', async () => {
-            const response = await server.inject(_postOptions(path))
+            const response = await server.inject(_postOptions(path, {}))
 
             expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Enter a threshold')
+            expect(response.payload).to.contain('Select a condition')
+            expect(response.payload).to.contain('There is a problem')
+          })
+        })
+      })
+    })
+  })
+
+  describe('licence-monitoring-station/setup/{sessionId}/licence-number', () => {
+    const path = 'licence-number'
+
+    describe('GET', () => {
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(LicenceNumberService, 'go').resolves({
+            backLink: `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`,
+            monitoringStationLabel: 'Station Label',
+            pageTitle: 'Enter the licence number this threshold applies to'
+          })
+        })
+
+        it('returns the page successfully', async () => {
+          const response = await server.inject(_getOptions(path))
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Enter the licence number this threshold applies to')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      describe('when the request succeeds', () => {
+        describe('and the page has not been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitLicenceNumberService, 'go').resolves({})
+          })
+
+          it('redirects to the "licence-number" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+            expect(response.headers.location).to.equal(
+              `/system/licence-monitoring-station/setup/${sessionId}/full-condition`
+            )
+          })
+        })
+
+        describe('and the page has been visited previously', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitLicenceNumberService, 'go').resolves({ checkPageVisited: true })
+          })
+
+          it('redirects to the "check" page', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+            expect(response.headers.location).to.equal(`/system/licence-monitoring-station/setup/${sessionId}/check`)
+          })
+        })
+
+        describe('and the validation fails', () => {
+          beforeEach(() => {
+            Sinon.stub(SubmitLicenceNumberService, 'go').resolves({
+              error: { text: 'Enter a valid licence number' },
+              backLink: `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`,
+              monitoringStationLabel: 'Station Label',
+              pageTitle: 'Enter the licence number this threshold applies to'
+            })
+          })
+
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path, {}))
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('Enter a valid licence number')
             expect(response.payload).to.contain('There is a problem')
           })
         })
@@ -238,16 +431,16 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
     })
   })
 
-  describe('licence-monitoring-station/setup/{sessionId}/licence-number', () => {
-    const path = 'licence-number'
+  describe('licence-monitoring-station/setup/{sessionId}/threshold-and-unit', () => {
+    const path = 'threshold-and-unit'
 
     describe('GET', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(LicenceNumberService, 'go').resolves({
-            backLink: `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`,
+          Sinon.stub(ThresholdAndUnitService, 'go').resolves({
+            sessionId,
             monitoringStationLabel: 'Station Label',
-            pageTitle: 'Enter the licence number this threshold applies to'
+            pageTitle: 'What is the licence hands-off flow or level threshold?'
           })
         })
 
@@ -255,7 +448,7 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
           const response = await server.inject(_getOptions(path))
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Enter the licence number this threshold applies to')
+          expect(response.payload).to.contain('What is the licence hands-off flow or level threshold?')
         })
       })
     })
@@ -264,22 +457,22 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
       describe('when the request succeeds', () => {
         describe('and the page has not been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitLicenceNumberService, 'go').resolves({})
+            Sinon.stub(SubmitThresholdAndUnitService, 'go').resolves({})
           })
 
-          it('redirects to the "licence-number" page', async () => {
+          it('redirects to the "stop-or-reduce" page', async () => {
             const response = await server.inject(_postOptions(path, {}))
 
             expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
             expect(response.headers.location).to.equal(
-              `/system/licence-monitoring-station/setup/${sessionId}/full-condition`
+              `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`
             )
           })
         })
 
         describe('and the page has been visited previously', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitLicenceNumberService, 'go').resolves({ checkPageVisited: true })
+            Sinon.stub(SubmitThresholdAndUnitService, 'go').resolves({ checkPageVisited: true })
           })
 
           it('redirects to the "check" page', async () => {
@@ -292,177 +485,24 @@ describe('Licence Monitoring Station - Setup - Controller', () => {
 
         describe('and the validation fails', () => {
           beforeEach(() => {
-            Sinon.stub(SubmitLicenceNumberService, 'go').resolves({
-              error: { text: 'Enter a valid licence number' },
-              backLink: `/system/licence-monitoring-station/setup/${sessionId}/stop-or-reduce`,
-              monitoringStationLabel: 'Station Label',
-              pageTitle: 'Enter the licence number this threshold applies to'
-            })
-          })
-
-          it('returns the page successfully with the error summary banner', async () => {
-            const response = await server.inject(_postOptions(path, {}))
-
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Enter a valid licence number')
-            expect(response.payload).to.contain('There is a problem')
-          })
-        })
-      })
-    })
-  })
-
-  describe('licence-monitoring-station/setup/{sessionId}/full-condition', () => {
-    const path = 'full-condition'
-
-    describe('GET', () => {
-      describe('when the request succeeds', () => {
-        beforeEach(() => {
-          Sinon.stub(FullConditionService, 'go').resolves({
-            backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
-            monitoringStationLabel: 'Station Label',
-            pageTitle: 'Select the full condition for licence 01/234'
-          })
-        })
-
-        it('returns the page successfully', async () => {
-          const response = await server.inject(_getOptions(path))
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Select the full condition for licence 01/234')
-        })
-      })
-    })
-
-    describe('POST', () => {
-      describe('when the request succeeds', () => {
-        describe('and the user selects an option requiring abstraction period entry', () => {
-          beforeEach(() => {
-            Sinon.stub(SubmitFullConditionService, 'go').resolves({ abstractionPeriod: true })
-          })
-
-          it('redirects to the "abstraction-period" page', async () => {
-            const response = await server.inject(_postOptions(path, {}))
-
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(
-              `/system/licence-monitoring-station/setup/${sessionId}/abstraction-period`
-            )
-          })
-        })
-
-        describe('and the user selects an option not requiring abstraction period entry', () => {
-          beforeEach(() => {
-            Sinon.stub(SubmitFullConditionService, 'go').resolves({ abstractionPeriod: false })
-          })
-
-          it('redirects to the "check" page', async () => {
-            const response = await server.inject(_postOptions(path, {}))
-
-            expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-            expect(response.headers.location).to.equal(`/system/licence-monitoring-station/setup/${sessionId}/check`)
-          })
-        })
-
-        describe('and the validation fails', () => {
-          beforeEach(() => {
-            Sinon.stub(FullConditionService, 'go').resolves({
-              error: { text: 'Select a condition' },
-              backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
-              monitoringStationLabel: 'Station Label',
-              pageTitle: 'Select the full condition for licence 01/234'
-            })
-          })
-
-          it('returns the page successfully with the error summary banner', async () => {
-            const response = await server.inject(_postOptions(path, {}))
-
-            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-            expect(response.payload).to.contain('Select a condition')
-            expect(response.payload).to.contain('There is a problem')
-          })
-        })
-      })
-    })
-  })
-
-  describe('licence-monitoring-station/setup/{sessionId}/abstraction-period', () => {
-    const path = 'abstraction-period'
-
-    describe('GET', () => {
-      describe('when the request succeeds', () => {
-        beforeEach(() => {
-          Sinon.stub(AbstractionPeriodService, 'go').resolves({
-            backLink: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
-            monitoringStationLabel: 'Station Label',
-            pageTitle: 'Enter an abstraction period for licence 01/234'
-          })
-        })
-
-        it('returns the page successfully', async () => {
-          const response = await server.inject(_getOptions(path))
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Enter an abstraction period for licence 01/234')
-        })
-      })
-    })
-
-    describe('POST', () => {
-      describe('when the request succeeds', () => {
-        beforeEach(() => {
-          Sinon.stub(SubmitAbstractionPeriodService, 'go').resolves({})
-        })
-
-        it('redirects to the "check" page', async () => {
-          const response = await server.inject(_postOptions(path, {}))
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/licence-monitoring-station/setup/${sessionId}/check`)
-        })
-      })
-
-      describe('and the validation fails', () => {
-        beforeEach(() => {
-          Sinon.stub(SubmitAbstractionPeriodService, 'go').resolves({
-            error: {
-              errorList: [
-                {
-                  href: '#abstraction-period-start',
-                  text: 'Enter a real start date'
-                },
-                {
-                  href: '#abstraction-period-end',
-                  text: 'Enter a real end date'
-                }
-              ],
-              'abstraction-period-start': {
-                text: 'Enter a real start date'
+            Sinon.stub(SubmitThresholdAndUnitService, 'go').resolves({
+              error: {
+                errorList: [{ href: '#threshold', text: 'Enter a threshold' }],
+                threshold: { message: 'Enter a threshold' }
               },
-              'abstraction-period-end': {
-                text: 'Enter a real end date'
-              }
-            },
-            abstractionPeriodStartDay: 'INVALID',
-            abstractionPeriodEndDay: 'INVALID',
-            abstractionPeriodStartMonth: 'INVALID',
-            abstractionPeriodEndMonth: 'INVALID',
-            backLink: {
-              href: `/system/licence-monitoring-station/setup/${sessionId}/licence-number`,
-              text: 'Back'
-            },
-            monitoringStationLabel: 'Station Label',
-            pageTitle: 'Enter an abstraction period for licence 01/234'
+              monitoringStationLabel: 'Station Label',
+              pageTitle: 'What is the licence hands-off flow or level threshold?',
+              sessionId
+            })
           })
-        })
 
-        it('returns the page successfully with the error summary banner', async () => {
-          const response = await server.inject(_postOptions(path, {}))
+          it('returns the page successfully with the error summary banner', async () => {
+            const response = await server.inject(_postOptions(path))
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('There is a problem')
-          expect(response.payload).to.contain('Enter a real start date')
-          expect(response.payload).to.contain('Enter a real end date')
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('Enter a threshold')
+            expect(response.payload).to.contain('There is a problem')
+          })
         })
       })
     })
