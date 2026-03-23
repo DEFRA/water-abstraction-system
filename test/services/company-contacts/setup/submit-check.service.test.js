@@ -11,6 +11,7 @@ const { expect } = Code
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModel = require('../../../../app/models/session.model.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
@@ -48,6 +49,14 @@ describe('Company Contacts - Setup - Check Service', () => {
       sessionData = _createSessionData(company)
 
       session = await SessionHelper.add({ data: sessionData })
+    })
+
+    it('clears the session', async () => {
+      await SubmitCheckService.go(session.id, yarStub, auth)
+
+      const deletedSession = await SessionModel.query().findById(session.id)
+
+      expect(deletedSession).to.be.undefined()
     })
 
     it('returns the redirect URL', async () => {

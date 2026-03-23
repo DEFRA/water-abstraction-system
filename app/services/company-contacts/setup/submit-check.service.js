@@ -23,15 +23,19 @@ const { flashNotification } = require('../../../lib/general.lib.js')
 async function go(sessionId, yar, auth) {
   const session = await SessionModel.query().findById(sessionId)
 
-  if (session.companyContact) {
-    await _updateCompanyContact(session, auth, yar)
+  const sessionData = session
 
-    return { redirectUrl: `/system/company-contacts/${session.companyContact.id}/contact-details` }
+  await SessionModel.query().delete().where('id', sessionId)
+
+  if (sessionData.companyContact) {
+    await _updateCompanyContact(sessionData, auth, yar)
+
+    return { redirectUrl: `/system/company-contacts/${sessionData.companyContact.id}/contact-details` }
   }
 
-  await _createCompanyContact(session, auth, yar)
+  await _createCompanyContact(sessionData, auth, yar)
 
-  return { redirectUrl: `/system/companies/${session.company.id}/contacts` }
+  return { redirectUrl: `/system/companies/${sessionData.company.id}/contacts` }
 }
 
 function _abstractionAlerts(session) {
