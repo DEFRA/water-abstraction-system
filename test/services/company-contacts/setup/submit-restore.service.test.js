@@ -20,7 +20,7 @@ const UpdateCompanyContactService = require('../../../../app/services/company-co
 // Thing under test
 const SubmitRestoreService = require('../../../../app/services/company-contacts/setup/submit-restore.service.js')
 
-describe('Company Contacts - Setup - Restore Service', () => {
+describe('Company Contacts - Setup - Submit Restore Service', () => {
   let auth
   let company
   let companyContact
@@ -94,7 +94,7 @@ describe('Company Contacts - Setup - Restore Service', () => {
     })
 
     describe('the "abstractionAlerts" property', () => {
-      describe('is "yes"', () => {
+      describe('when set to "yes"', () => {
         it('persists the "abstractionAlerts" as "true"', async () => {
           await SubmitRestoreService.go(session.id, yarStub, auth)
 
@@ -104,7 +104,7 @@ describe('Company Contacts - Setup - Restore Service', () => {
         })
       })
 
-      describe(' is "no"', () => {
+      describe('when set to "no"', () => {
         beforeEach(async () => {
           session = await SessionHelper.add({ data: { ...sessionData, abstractionAlerts: 'no' } })
         })
@@ -120,7 +120,7 @@ describe('Company Contacts - Setup - Restore Service', () => {
     })
 
     describe('the "email" property', () => {
-      describe('when email is in multi cases', () => {
+      describe('when email is in uppercase', () => {
         beforeEach(async () => {
           session = await SessionHelper.add({ data: { ...sessionData, email: 'ERICE@TEST.COM' } })
         })
