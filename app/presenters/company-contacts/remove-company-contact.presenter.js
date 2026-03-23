@@ -18,7 +18,7 @@ const { formatEmail } = require('../base.presenter.js')
 function go(company, companyContact) {
   return {
     backLink: {
-      href: `/system/company-contacts/${companyContact.id}`,
+      href: `/system/company-contacts/${companyContact.id}/contact-details`,
       text: 'Go back to contact details'
     },
     contact: {

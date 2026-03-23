@@ -51,7 +51,7 @@ describe('Companies - Contacts presenter', () => {
         },
         contacts: [
           {
-            link: `/system/company-contacts/${contacts[0].id}`,
+            link: `/system/company-contacts/${contacts[0].id}/contact-details`,
             type: 'Additional contact',
             name: 'Rachael Tyrell'
           }
@@ -82,7 +82,7 @@ describe('Companies - Contacts presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              link: `/system/company-contacts/${contacts[0].id}`,
+              link: `/system/company-contacts/${contacts[0].id}/contact-details`,
               type: 'Abstraction alerts',
               name: 'Rachael Tyrell'
             }
@@ -106,7 +106,7 @@ describe('Companies - Contacts presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              link: `/system/company-contacts/${contacts[0].id}`,
+              link: `/system/company-contacts/${contacts[0].id}/contact-details`,
               type: 'Additional contact',
               name: 'Rachael Tyrell'
             }

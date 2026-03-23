@@ -62,7 +62,7 @@ describe('Licences - Contact Details presenter', () => {
         },
         contacts: [
           {
-            link: `/system/company-contacts/${contacts[0].id}`,
+            link: `/system/company-contacts/${contacts[0].id}/contact-details`,
             name: 'Rachael Tyrell',
             type: 'Additional contact'
           },
@@ -117,7 +117,7 @@ describe('Licences - Contact Details presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              link: `/system/company-contacts/${contacts[0].id}`,
+              link: `/system/company-contacts/${contacts[0].id}/contact-details`,
               type: 'Abstraction alerts',
               name: 'Rachael Tyrell'
             }
@@ -141,7 +141,7 @@ describe('Licences - Contact Details presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              link: `/system/company-contacts/${contacts[0].id}`,
+              link: `/system/company-contacts/${contacts[0].id}/contact-details`,
               type: 'Additional contact',
               name: 'Rachael Tyrell'
             }

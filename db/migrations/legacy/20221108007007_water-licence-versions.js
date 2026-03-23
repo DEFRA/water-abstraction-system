@@ -18,6 +18,8 @@ exports.up = function (knex) {
     table.date('issue_date')
     table.string('external_id').notNullable().unique()
     table.boolean('is_test').notNullable().defaultTo(false)
+    table.uuid('company_id')
+    table.uuid('address_id')
 
     // Legacy timestamps
     // NOTE: They are not automatically set

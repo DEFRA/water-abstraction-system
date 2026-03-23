@@ -85,7 +85,7 @@ describe('Companies - Fetch Company details service', () => {
   })
 
   describe('when there is a company', () => {
-    it("returns the matching company's details and 'current' addresses for the specified role", async () => {
+    it("returns the matching company's details and _all_ addresses for the specified role", async () => {
       const result = await FetchCompanyDetailsService.go(company.id, 'licenceHolder')
 
       expect(result).to.equal({
@@ -123,6 +123,22 @@ describe('Companies - Fetch Company details service', () => {
             endDate: companyAddressEndDateInFuture.endDate,
             id: companyAddressEndDateInFuture.id,
             startDate: companyAddressEndDateInFuture.startDate
+          },
+          {
+            address: {
+              address1: addressEndDateInPast.address1,
+              address2: 'HORIZON HOUSE',
+              address3: 'DEANERY ROAD',
+              address4: 'BRISTOL',
+              address5: null,
+              address6: null,
+              country: 'United Kingdom',
+              id: addressEndDateInPast.id,
+              postcode: 'BS1 5AH'
+            },
+            endDate: companyAddressEndDateInPast.endDate,
+            id: companyAddressEndDateInPast.id,
+            startDate: companyAddressEndDateInPast.startDate
           }
         ]
       })

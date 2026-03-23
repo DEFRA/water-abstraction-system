@@ -27,9 +27,10 @@ exports.up = function (knex) {
         'local_name',
         'last_changed',
         'disabled',
-        'derived_name', // New column added
-        'external_id', // New column added
-        'company_id', // New column added
+        'derived_name',
+        'external_id',
+        'company_id',
+        'address_id', // New column added
         'created_at',
         'updated_at'
       ])
@@ -64,6 +65,9 @@ exports.down = function (knex) {
           'local_name',
           'last_changed',
           'disabled',
+          'derived_name',
+          'external_id',
+          'company_id',
           'created_at',
           'updated_at'
         ])
