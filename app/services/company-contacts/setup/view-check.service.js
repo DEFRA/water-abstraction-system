@@ -34,9 +34,18 @@ async function go(sessionId, yar) {
 
   const notification = readFlashNotification(yar)
 
+  await _save(session, pageData.matchingContact)
+
   return {
     ...pageData,
     notification
+  }
+}
+
+async function _save(session, matchingContact) {
+  if (matchingContact) {
+    session.matchingContact = matchingContact
+    await session.$update()
   }
 }
 

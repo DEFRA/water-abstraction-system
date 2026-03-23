@@ -12,9 +12,9 @@ const CustomersFixtures = require('../../../support/fixtures/customers.fixture.j
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
-const ViewCancelService = require('../../../../app/services/company-contacts/setup/view-cancel.service.js')
+const ViewRestoreService = require('../../../../app/services/company-contacts/setup/view-restore.service.js')
 
-describe('Company Contacts - Setup - Cancel Service', () => {
+describe('Company Contacts - Setup - Restore Service', () => {
   let company
   let session
   let sessionData
@@ -31,7 +31,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCancelService.go(session.id)
+      const result = await ViewRestoreService.go(session.id)
 
       expect(result).to.equal({
         abstractionAlerts: 'Yes',
@@ -41,7 +41,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
         },
         email: 'eric@test.com',
         name: 'Eric',
-        pageTitle: 'You are about to cancel this contact',
+        pageTitle: 'You are about to restore this contact',
         pageTitleCaption: 'Tyrell Corporation'
       })
     })
