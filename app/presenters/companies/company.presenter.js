@@ -22,7 +22,7 @@ function go(companyDetails, role) {
   return {
     backLink: {
       href: `/system/companies/${companyId}/contacts`,
-      text: 'Go back to contacts'
+      text: 'Go back to licence holder contacts'
     },
     companyAddresses: _companyAddresses(companyAddresses),
     pageTitle: roles[role].label,

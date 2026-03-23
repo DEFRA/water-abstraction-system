@@ -52,7 +52,7 @@ describe('Companies - View Company Service', () => {
         expect(result).to.equal({
           backLink: {
             href: `/system/companies/${companyDetails.id}/contacts`,
-            text: 'Go back to contacts'
+            text: 'Go back to licence holder contacts'
           },
           companyAddresses: [
             {
@@ -92,7 +92,7 @@ describe('Companies - View Company Service', () => {
         expect(result).to.equal({
           backLink: {
             href: `/system/companies/${companyDetails.id}/contacts`,
-            text: 'Go back to contacts'
+            text: 'Go back to licence holder contacts'
           },
           companyAddresses: [
             {
