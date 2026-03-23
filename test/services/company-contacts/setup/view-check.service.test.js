@@ -35,8 +35,6 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     notification = undefined
 
-    Sinon.stub(FetchCompanyContactsService, 'go').returns(CustomersFixtures.companyContacts())
-
     Sinon.stub(FetchNotificationService, 'go').returns(notification)
 
     yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
@@ -47,37 +45,71 @@ describe('Company Contacts - Setup - Check Service', () => {
   })
 
   describe('when called', () => {
-    it('returns page data for the view', async () => {
-      const result = await ViewCheckService.go(session.id, yarStub)
+    describe('when there is no matching contact', () => {
+      beforeEach(() => {
+        Sinon.stub(FetchCompanyContactsService, 'go').resolves(CustomersFixtures.companyContacts())
+      })
 
-      expect(result).to.equal({
-        abstractionAlerts: 'Yes',
-        email: 'eric@test.com',
-        emailInUse: null,
-        links: {
-          abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
-          cancel: `/system/company-contacts/setup/${session.id}/cancel`,
-          email: `/system/company-contacts/setup/${session.id}/contact-email`,
-          name: `/system/company-contacts/setup/${session.id}/contact-name`
-        },
-        name: 'Eric',
-        notification: {
-          text: 'Notification',
-          title: 'Test'
-        },
-        pageTitle: 'Check contact',
-        pageTitleCaption: 'Tyrell Corporation',
-        warning: null
+      it('returns page data for the view', async () => {
+        const result = await ViewCheckService.go(session.id, yarStub)
+
+        expect(result).to.equal({
+          abstractionAlerts: 'Yes',
+          email: 'eric@test.com',
+          emailInUse: null,
+          links: {
+            abstractionAlerts: `/system/company-contacts/setup/${session.id}/abstraction-alerts`,
+            cancel: `/system/company-contacts/setup/${session.id}/cancel`,
+            email: `/system/company-contacts/setup/${session.id}/contact-email`,
+            name: `/system/company-contacts/setup/${session.id}/contact-name`,
+            restoreContact: null
+          },
+          matchingContact: undefined,
+          name: 'Eric',
+          notification: {
+            text: 'Notification',
+            title: 'Test'
+          },
+          pageTitle: 'Check contact',
+          pageTitleCaption: 'Tyrell Corporation',
+          warning: null
+        })
+      })
+
+      describe('marks the check page as visited', () => {
+        it('updates the session', async () => {
+          await ViewCheckService.go(session.id, yarStub)
+
+          const refreshedSession = await session.$query()
+
+          expect(refreshedSession.checkPageVisited).to.be.true()
+        })
       })
     })
 
-    describe('marks the check page as visited', () => {
+    describe('when there is a matching contact', () => {
+      let matchingContact
+
+      beforeEach(() => {
+        matchingContact = CustomersFixtures.companyContact()
+
+        // If we spread the object we loose the models modifiers
+        matchingContact.deletedAt = new Date()
+        matchingContact.contact.department = 'Eric'
+        matchingContact.contact.email = 'eric@test.com'
+        matchingContact.contact.contactType = 'department'
+
+        Sinon.stub(FetchCompanyContactsService, 'go').returns([matchingContact])
+      })
+
       it('updates the session', async () => {
         await ViewCheckService.go(session.id, yarStub)
 
         const refreshedSession = await session.$query()
 
-        expect(refreshedSession.checkPageVisited).to.be.true()
+        expect(refreshedSession.matchingContact).to.equal(matchingContact, {
+          skip: ['createdAt', 'deletedAt', 'updatedAt']
+        })
       })
     })
   })

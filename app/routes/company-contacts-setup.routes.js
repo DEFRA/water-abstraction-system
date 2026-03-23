@@ -146,6 +146,30 @@ const routes = [
         }
       }
     }
+  },
+  {
+    method: 'GET',
+    path: '/company-contacts/setup/{sessionId}/restore',
+    options: {
+      handler: CompanyContactsSetupController.viewRestore,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/company-contacts/setup/{sessionId}/restore',
+    options: {
+      handler: CompanyContactsSetupController.submitRestore,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
   }
 ]
 
