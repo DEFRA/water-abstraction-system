@@ -613,6 +613,7 @@ describe('Licence model', () => {
           expect(result).to.equal({
             id: currentLicenceVersion.id,
             issueDate: null,
+            licenceId: currentLicenceVersion.licenceId,
             startDate: currentLicenceVersion.startDate,
             status: 'superseded'
           })
@@ -649,8 +650,9 @@ describe('Licence model', () => {
 
           expect(result).to.equal({
             id: currentLicenceVersion.id,
-            startDate: currentLicenceVersion.startDate,
             issueDate: currentLicenceVersion.issueDate,
+            licenceId: currentLicenceVersion.licenceId,
+            startDate: currentLicenceVersion.startDate,
             status: 'current'
           })
         })
@@ -701,8 +703,9 @@ describe('Licence model', () => {
 
           expect(result).to.equal({
             id: currentLicenceVersion.id,
-            startDate: currentLicenceVersion.startDate,
             issueDate: currentLicenceVersion.issueDate,
+            licenceId: currentLicenceVersion.licenceId,
+            startDate: currentLicenceVersion.startDate,
             status: 'current'
           })
         })
