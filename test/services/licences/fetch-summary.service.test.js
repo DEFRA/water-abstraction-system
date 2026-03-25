@@ -68,12 +68,17 @@ describe('Licences - Fetch Summary service', () => {
 
     // Create 2 licence versions so we can test the service only gets the 'current' version
     oldLicenceVersion = await LicenceVersionHelper.add({
+      endDate: new Date('2022-04-30'),
+      increment: 0,
+      issue: 100,
       licenceId: licence.id,
       startDate: new Date('2021-10-11'),
       status: 'superseded'
     })
 
     licenceVersion = await LicenceVersionHelper.add({
+      increment: 0,
+      issue: 101,
       licenceId: licence.id,
       startDate: new Date('2022-05-01')
     })
@@ -165,6 +170,7 @@ describe('Licences - Fetch Summary service', () => {
           {
             id: licenceVersion.id,
             issueDate: null,
+            licenceId: licence.id,
             startDate: new Date('2022-05-01'),
             status: 'current',
             licenceVersionHolder: {

@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -53,13 +53,158 @@ const WorkflowModel = require('../../app/models/workflow.model.js')
 const LicenceModel = require('../../app/models/licence.model.js')
 
 describe('Licence model', () => {
+  let billLicences
+  let chargeVersions
+  let licenceAgreements
+  let licenceDocument
+  let licenceDocumentHeader
+  let licenceEndDateChanges
+  let licenceMonitoringStations
+  let licenceSupplementaryYears
+  let licenceVersions
+  let modLogs
+  let region
+  let returnLogs
+  let returnVersions
+  let reviewLicences
   let testRecord
+  let workflows
+
+  before(async () => {
+    region = RegionHelper.select()
+
+    testRecord = await LicenceHelper.add({ regionId: region.id })
+
+    billLicences = []
+    chargeVersions = []
+    licenceAgreements = []
+    licenceEndDateChanges = []
+    licenceMonitoringStations = []
+    licenceSupplementaryYears = []
+    licenceVersions = []
+    modLogs = []
+    returnLogs = []
+    returnVersions = []
+    reviewLicences = []
+    workflows = []
+
+    for (let i = 0; i < 2; i++) {
+      // Create test bill licences
+      const billLicence = await BillLicenceHelper.add({ licenceRef: testRecord.licenceRef, licenceId: testRecord.id })
+      billLicences.push(billLicence)
+
+      // Create test charge versions
+      const chargeVersion = await ChargeVersionHelper.add({
+        licenceRef: testRecord.licenceRef,
+        licenceId: testRecord.id
+      })
+      chargeVersions.push(chargeVersion)
+
+      // Create test licence agreements
+      const licenceAgreement = await LicenceAgreementHelper.add({ licenceRef: testRecord.licenceRef })
+      licenceAgreements.push(licenceAgreement)
+
+      // Create test licence end date changes
+      const dateTypes = ['expired', 'revoked']
+      const licenceEndDateChange = await LicenceEndDateChangeHelper.add({
+        licenceId: testRecord.id,
+        dateType: dateTypes[i]
+      })
+      licenceEndDateChanges.push(licenceEndDateChange)
+
+      // Create test licence monitoring stations
+      const licenceMonitoringStation = await LicenceMonitoringStationHelper.add({ licenceId: testRecord.id })
+      licenceMonitoringStations.push(licenceMonitoringStation)
+
+      // Create test licence supplementary years
+      const licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({ licenceId: testRecord.id })
+      licenceSupplementaryYears.push(licenceSupplementaryYear)
+
+      // Create test licence versions
+      const licenceVersion = await LicenceVersionHelper.add({ licenceId: testRecord.id })
+      licenceVersions.push(licenceVersion)
+
+      // Create test mod logs
+      const modLog = await ModLogHelper.add({ licenceRef: testRecord.licenceRef, licenceId: testRecord.id })
+      modLogs.push(modLog)
+
+      // Create test return logs
+      const returnLog = await ReturnLogHelper.add({ licenceRef: testRecord.licenceRef })
+      returnLogs.push(returnLog)
+
+      // Create test return versions
+      const returnVersion = await ReturnVersionHelper.add({ licenceId: testRecord.id })
+      returnVersions.push(returnVersion)
+
+      // Create test review licences
+      const reviewLicence = await ReviewLicenceHelper.add({ licenceId: testRecord.id })
+      reviewLicences.push(reviewLicence)
+
+      const workflow = await WorkflowHelper.add({ licenceId: testRecord.id })
+      workflows.push(workflow)
+    }
+
+    licenceDocument = await LicenceDocumentHelper.add({ licenceRef: testRecord.licenceRef })
+
+    licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({ licenceRef: testRecord.licenceRef })
+  })
+
+  after(async () => {
+    await licenceDocumentHeader.$query().delete()
+    await licenceDocument.$query().delete()
+
+    for (const workflow of workflows) {
+      await workflow.$query().delete()
+    }
+
+    for (const reviewLicence of reviewLicences) {
+      await reviewLicence.$query().delete()
+    }
+
+    for (const returnVersion of returnVersions) {
+      await returnVersion.$query().delete()
+    }
+
+    for (const returnLog of returnLogs) {
+      await returnLog.$query().delete()
+    }
+
+    for (const modLog of modLogs) {
+      await modLog.$query().delete()
+    }
+
+    for (const licenceVersion of licenceVersions) {
+      await licenceVersion.$query().delete()
+    }
+
+    for (const licenceSupplementaryYear of licenceSupplementaryYears) {
+      await licenceSupplementaryYear.$query().delete()
+    }
+
+    for (const licenceMonitoringStation of licenceMonitoringStations) {
+      await licenceMonitoringStation.$query().delete()
+    }
+
+    for (const licenceEndDateChange of licenceEndDateChanges) {
+      await licenceEndDateChange.$query().delete()
+    }
+
+    for (const licenceAgreement of licenceAgreements) {
+      await licenceAgreement.$query().delete()
+    }
+
+    for (const chargeVersion of chargeVersions) {
+      await chargeVersion.$query().delete()
+    }
+
+    for (const billLicence of billLicences) {
+      await billLicence.$query().delete()
+    }
+
+    await testRecord.$query().delete()
+  })
 
   describe('Basic query', () => {
-    beforeEach(async () => {
-      testRecord = await LicenceHelper.add()
-    })
-
     it('can successfully run a basic query', async () => {
       const result = await LicenceModel.query().findById(testRecord.id)
 
@@ -70,22 +215,6 @@ describe('Licence model', () => {
 
   describe('Relationships', () => {
     describe('when linking to bill licences', () => {
-      let testBillLicences
-
-      beforeEach(async () => {
-        testRecord = await LicenceHelper.add()
-
-        testBillLicences = []
-        for (let i = 0; i < 2; i++) {
-          const billLicence = await BillLicenceHelper.add({
-            licenceRef: testRecord.licenceRef,
-            licenceId: testRecord.id
-          })
-
-          testBillLicences.push(billLicence)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('billLicences')
 
@@ -100,28 +229,12 @@ describe('Licence model', () => {
 
         expect(result.billLicences).to.be.an.array()
         expect(result.billLicences[0]).to.be.an.instanceOf(BillLicenceModel)
-        expect(result.billLicences).to.include(testBillLicences[0])
-        expect(result.billLicences).to.include(testBillLicences[1])
+        expect(result.billLicences).to.include(billLicences[0])
+        expect(result.billLicences).to.include(billLicences[1])
       })
     })
 
     describe('when linking to charge versions', () => {
-      let testChargeVersions
-
-      beforeEach(async () => {
-        testRecord = await LicenceHelper.add()
-
-        testChargeVersions = []
-        for (let i = 0; i < 2; i++) {
-          const chargeVersion = await ChargeVersionHelper.add({
-            licenceRef: testRecord.licenceRef,
-            licenceId: testRecord.id
-          })
-
-          testChargeVersions.push(chargeVersion)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('chargeVersions')
 
@@ -136,25 +249,12 @@ describe('Licence model', () => {
 
         expect(result.chargeVersions).to.be.an.array()
         expect(result.chargeVersions[0]).to.be.an.instanceOf(ChargeVersionModel)
-        expect(result.chargeVersions).to.include(testChargeVersions[0])
-        expect(result.chargeVersions).to.include(testChargeVersions[1])
+        expect(result.chargeVersions).to.include(chargeVersions[0])
+        expect(result.chargeVersions).to.include(chargeVersions[1])
       })
     })
 
     describe('when linking to licence agreements', () => {
-      let testLicenceAgreements
-
-      beforeEach(async () => {
-        testRecord = await LicenceHelper.add()
-
-        testLicenceAgreements = []
-        for (let i = 0; i < 2; i++) {
-          const licenceAgreement = await LicenceAgreementHelper.add({ licenceRef: testRecord.licenceRef })
-
-          testLicenceAgreements.push(licenceAgreement)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceAgreements')
 
@@ -169,22 +269,12 @@ describe('Licence model', () => {
 
         expect(result.licenceAgreements).to.be.an.array()
         expect(result.licenceAgreements[0]).to.be.an.instanceOf(LicenceAgreementModel)
-        expect(result.licenceAgreements).to.include(testLicenceAgreements[0])
-        expect(result.licenceAgreements).to.include(testLicenceAgreements[1])
+        expect(result.licenceAgreements).to.include(licenceAgreements[0])
+        expect(result.licenceAgreements).to.include(licenceAgreements[1])
       })
     })
 
     describe('when linking to licence document', () => {
-      let testLicenceDocument
-
-      beforeEach(async () => {
-        testLicenceDocument = await LicenceDocumentHelper.add()
-
-        const { licenceRef } = testLicenceDocument
-
-        testRecord = await LicenceHelper.add({ licenceRef })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceDocument')
 
@@ -198,21 +288,11 @@ describe('Licence model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.licenceDocument).to.be.an.instanceOf(LicenceDocumentModel)
-        expect(result.licenceDocument).to.equal(testLicenceDocument)
+        expect(result.licenceDocument).to.equal(licenceDocument)
       })
     })
 
     describe('when linking to licence document header', () => {
-      let testLicenceDocumentHeader
-
-      beforeEach(async () => {
-        testLicenceDocumentHeader = await LicenceDocumentHeaderHelper.add()
-
-        const { licenceRef } = testLicenceDocumentHeader
-
-        testRecord = await LicenceHelper.add({ licenceRef })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceDocumentHeader')
 
@@ -226,28 +306,11 @@ describe('Licence model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.licenceDocumentHeader).to.be.an.instanceOf(LicenceDocumentHeaderModel)
-        expect(result.licenceDocumentHeader).to.equal(testLicenceDocumentHeader)
+        expect(result.licenceDocumentHeader).to.equal(licenceDocumentHeader)
       })
     })
 
     describe('when linking to licence end date changes', () => {
-      let testLicenceEndDateChanges
-
-      beforeEach(async () => {
-        testRecord = await LicenceHelper.add()
-
-        testLicenceEndDateChanges = []
-        for (let i = 0; i < 2; i++) {
-          const dateTypes = ['expired', 'revoked']
-          const licenceEndDateChange = await LicenceEndDateChangeHelper.add({
-            licenceId: testRecord.id,
-            dateType: dateTypes[i]
-          })
-
-          testLicenceEndDateChanges.push(licenceEndDateChange)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceEndDateChanges')
 
@@ -262,25 +325,12 @@ describe('Licence model', () => {
 
         expect(result.licenceEndDateChanges).to.be.an.array()
         expect(result.licenceEndDateChanges[0]).to.be.an.instanceOf(LicenceEndDateChangeModel)
-        expect(result.licenceEndDateChanges).to.include(testLicenceEndDateChanges[0])
-        expect(result.licenceEndDateChanges).to.include(testLicenceEndDateChanges[1])
+        expect(result.licenceEndDateChanges).to.include(licenceEndDateChanges[0])
+        expect(result.licenceEndDateChanges).to.include(licenceEndDateChanges[1])
       })
     })
 
     describe('when linking to licence monitoring stations', () => {
-      let testLicenceMonitoringStations
-
-      beforeEach(async () => {
-        testRecord = await LicenceHelper.add()
-
-        testLicenceMonitoringStations = []
-        for (let i = 0; i < 2; i++) {
-          const licenceMonitoringStation = await LicenceMonitoringStationHelper.add({ licenceId: testRecord.id })
-
-          testLicenceMonitoringStations.push(licenceMonitoringStation)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceMonitoringStations')
 
@@ -295,25 +345,12 @@ describe('Licence model', () => {
 
         expect(result.licenceMonitoringStations).to.be.an.array()
         expect(result.licenceMonitoringStations[0]).to.be.an.instanceOf(LicenceMonitoringStationModel)
-        expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[0])
-        expect(result.licenceMonitoringStations).to.include(testLicenceMonitoringStations[1])
+        expect(result.licenceMonitoringStations).to.include(licenceMonitoringStations[0])
+        expect(result.licenceMonitoringStations).to.include(licenceMonitoringStations[1])
       })
     })
 
     describe('when linking to licence supplementary years', () => {
-      let testLicenceSupplementaryYears
-
-      beforeEach(async () => {
-        testRecord = await LicenceHelper.add()
-
-        testLicenceSupplementaryYears = []
-        for (let i = 0; i < 2; i++) {
-          const licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({ licenceId: testRecord.id })
-
-          testLicenceSupplementaryYears.push(licenceSupplementaryYear)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceSupplementaryYears')
 
@@ -328,25 +365,12 @@ describe('Licence model', () => {
 
         expect(result.licenceSupplementaryYears).to.be.an.array()
         expect(result.licenceSupplementaryYears[0]).to.be.an.instanceOf(LicenceSupplementaryYearModel)
-        expect(result.licenceSupplementaryYears).to.include(testLicenceSupplementaryYears[0])
-        expect(result.licenceSupplementaryYears).to.include(testLicenceSupplementaryYears[1])
+        expect(result.licenceSupplementaryYears).to.include(licenceSupplementaryYears[0])
+        expect(result.licenceSupplementaryYears).to.include(licenceSupplementaryYears[1])
       })
     })
 
     describe('when linking to licence versions', () => {
-      let testLicenceVersions
-
-      beforeEach(async () => {
-        testRecord = await LicenceHelper.add()
-
-        testLicenceVersions = []
-        for (let i = 0; i < 2; i++) {
-          const licenceVersion = await LicenceVersionHelper.add({ licenceId: testRecord.id })
-
-          testLicenceVersions.push(licenceVersion)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('licenceVersions')
 
@@ -361,28 +385,12 @@ describe('Licence model', () => {
 
         expect(result.licenceVersions).to.be.an.array()
         expect(result.licenceVersions[0]).to.be.an.instanceOf(LicenceVersionModel)
-        expect(result.licenceVersions).to.include(testLicenceVersions[0])
-        expect(result.licenceVersions).to.include(testLicenceVersions[1])
+        expect(result.licenceVersions).to.include(licenceVersions[0])
+        expect(result.licenceVersions).to.include(licenceVersions[1])
       })
     })
 
     describe('when linking to mod logs', () => {
-      let testModLogs
-
-      beforeEach(async () => {
-        testRecord = await LicenceHelper.add()
-
-        testModLogs = []
-        for (let i = 0; i < 2; i++) {
-          const modLog = await ModLogHelper.add({
-            licenceRef: testRecord.licenceRef,
-            licenceId: testRecord.id
-          })
-
-          testModLogs.push(modLog)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('modLogs')
 
@@ -397,22 +405,12 @@ describe('Licence model', () => {
 
         expect(result.modLogs).to.be.an.array()
         expect(result.modLogs[0]).to.be.an.instanceOf(ModLogModel)
-        expect(result.modLogs).to.include(testModLogs[0])
-        expect(result.modLogs).to.include(testModLogs[1])
+        expect(result.modLogs).to.include(modLogs[0])
+        expect(result.modLogs).to.include(modLogs[1])
       })
     })
 
     describe('when linking to region', () => {
-      let testRegion
-
-      beforeEach(async () => {
-        testRegion = RegionHelper.select()
-
-        const { id: regionId } = testRegion
-
-        testRecord = await LicenceHelper.add({ regionId })
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('region')
 
@@ -426,24 +424,11 @@ describe('Licence model', () => {
         expect(result.id).to.equal(testRecord.id)
 
         expect(result.region).to.be.an.instanceOf(RegionModel)
-        expect(result.region).to.equal(testRegion, { skip: ['createdAt', 'updatedAt'] })
+        expect(result.region).to.equal(region, { skip: ['createdAt', 'updatedAt'] })
       })
     })
 
     describe('when linking to return logs', () => {
-      let testReturnLogs
-
-      beforeEach(async () => {
-        testRecord = await LicenceHelper.add()
-
-        testReturnLogs = []
-        for (let i = 0; i < 2; i++) {
-          const returnLog = await ReturnLogHelper.add({ licenceRef: testRecord.licenceRef })
-
-          testReturnLogs.push(returnLog)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('returnLogs')
 
@@ -458,25 +443,12 @@ describe('Licence model', () => {
 
         expect(result.returnLogs).to.be.an.array()
         expect(result.returnLogs[0]).to.be.an.instanceOf(ReturnLogModel)
-        expect(result.returnLogs).to.include(testReturnLogs[0])
-        expect(result.returnLogs).to.include(testReturnLogs[1])
+        expect(result.returnLogs).to.include(returnLogs[0])
+        expect(result.returnLogs).to.include(returnLogs[1])
       })
     })
 
     describe('when linking to return versions', () => {
-      let testReturnVersions
-
-      beforeEach(async () => {
-        testRecord = await LicenceHelper.add()
-
-        testReturnVersions = []
-        for (let i = 0; i < 2; i++) {
-          const returnVersion = await ReturnVersionHelper.add({ licenceId: testRecord.id })
-
-          testReturnVersions.push(returnVersion)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('returnVersions')
 
@@ -491,25 +463,12 @@ describe('Licence model', () => {
 
         expect(result.returnVersions).to.be.an.array()
         expect(result.returnVersions[0]).to.be.an.instanceOf(ReturnVersionModel)
-        expect(result.returnVersions).to.include(testReturnVersions[0])
-        expect(result.returnVersions).to.include(testReturnVersions[1])
+        expect(result.returnVersions).to.include(returnVersions[0])
+        expect(result.returnVersions).to.include(returnVersions[1])
       })
     })
 
     describe('when linking to review licences', () => {
-      let testReviewLicences
-
-      beforeEach(async () => {
-        testRecord = await LicenceHelper.add()
-
-        testReviewLicences = []
-        for (let i = 0; i < 2; i++) {
-          const reviewLicence = await ReviewLicenceHelper.add({ licenceId: testRecord.id })
-
-          testReviewLicences.push(reviewLicence)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('reviewLicences')
 
@@ -524,25 +483,12 @@ describe('Licence model', () => {
 
         expect(result.reviewLicences).to.be.an.array()
         expect(result.reviewLicences[0]).to.be.an.instanceOf(ReviewLicenceModel)
-        expect(result.reviewLicences).to.include(testReviewLicences[0])
-        expect(result.reviewLicences).to.include(testReviewLicences[1])
+        expect(result.reviewLicences).to.include(reviewLicences[0])
+        expect(result.reviewLicences).to.include(reviewLicences[1])
       })
     })
 
     describe('when linking to workflows', () => {
-      let testWorkflows
-
-      beforeEach(async () => {
-        testRecord = await LicenceHelper.add()
-
-        testWorkflows = []
-        for (let i = 0; i < 2; i++) {
-          const workflow = await WorkflowHelper.add({ licenceId: testRecord.id })
-
-          testWorkflows.push(workflow)
-        }
-      })
-
       it('can successfully run a related query', async () => {
         const query = await LicenceModel.query().innerJoinRelated('workflows')
 
@@ -557,27 +503,38 @@ describe('Licence model', () => {
 
         expect(result.workflows).to.be.an.array()
         expect(result.workflows[0]).to.be.an.instanceOf(WorkflowModel)
-        expect(result.workflows).to.include(testWorkflows[0])
-        expect(result.workflows).to.include(testWorkflows[1])
+        expect(result.workflows).to.include(workflows[0])
+        expect(result.workflows).to.include(workflows[1])
       })
     })
   })
 
   describe('$currentVersion', () => {
-    let currentLicenceVersion
-    let licence
+    let currentVersionRecord
+    let otherLicence
+    let otherLicenceVersions
 
     beforeEach(async () => {
-      licence = await LicenceHelper.add()
+      otherLicence = await LicenceHelper.add()
+    })
+
+    afterEach(async () => {
+      for (const licenceVersion of otherLicenceVersions) {
+        await licenceVersion.$query().delete()
+      }
+
+      await otherLicence.$query().delete()
     })
 
     describe('when instance does not have licence versions', () => {
       beforeEach(async () => {
-        testRecord = await LicenceModel.query().findById(licence.id).modify('currentVersion')
+        otherLicenceVersions = []
+
+        currentVersionRecord = await LicenceModel.query().findById(otherLicence.id).modify('currentVersion')
       })
 
       it('returns null', () => {
-        const result = testRecord.$currentVersion()
+        const result = currentVersionRecord.$currentVersion()
 
         expect(result).to.be.null()
       })
@@ -586,34 +543,36 @@ describe('Licence model', () => {
     describe('when instance has licence versions', () => {
       describe('and the latest licence version start date is >= today', () => {
         beforeEach(async () => {
-          currentLicenceVersion = await LicenceVersionHelper.add({
-            endDate: new Date('2999-12-31'),
-            increment: 0,
-            issue: 1,
-            licenceId: licence.id,
-            status: 'superseded'
-          })
+          otherLicenceVersions = [
+            await LicenceVersionHelper.add({
+              endDate: new Date('2999-12-31'),
+              increment: 0,
+              issue: 1,
+              licenceId: otherLicence.id,
+              startDate: new Date('2000-01-01'),
+              status: 'superseded'
+            }),
+            await LicenceVersionHelper.add({
+              endDate: null,
+              increment: 0,
+              issue: 2,
+              licenceId: otherLicence.id,
+              startDate: new Date('3000-01-01'),
+              status: 'current'
+            })
+          ]
 
-          // future licence version - marked current
-          await LicenceVersionHelper.add({
-            endDate: null,
-            increment: 0,
-            issue: 2,
-            licenceId: licence.id,
-            startDate: new Date('3000-01-01'),
-            status: 'current'
-          })
-
-          testRecord = await LicenceModel.query().findById(licence.id).modify('currentVersion')
+          currentVersionRecord = await LicenceModel.query().findById(otherLicence.id).modify('currentVersion')
         })
 
         it('returns the "current" licence version', () => {
-          const result = testRecord.$currentVersion()
+          const result = currentVersionRecord.$currentVersion()
 
           expect(result).to.equal({
-            id: currentLicenceVersion.id,
-            issueDate: null,
-            startDate: currentLicenceVersion.startDate,
+            id: otherLicenceVersions[0].id,
+            issueDate: otherLicenceVersions[0].issueDate,
+            licenceId: otherLicenceVersions[0].licenceId,
+            startDate: otherLicenceVersions[0].startDate,
             status: 'superseded'
           })
         })
@@ -621,36 +580,38 @@ describe('Licence model', () => {
 
       describe('and the latest licence version start date is <= today', () => {
         beforeEach(async () => {
-          await LicenceVersionHelper.add({
-            endDate: new Date('2021-12-31'),
-            increment: 0,
-            issue: 1,
-            issueDate: new Date('2001-01-01'),
-            licenceId: licence.id,
-            startDate: new Date('2001-01-01'),
-            status: 'superseded'
-          })
+          otherLicenceVersions = [
+            await LicenceVersionHelper.add({
+              endDate: new Date('2021-12-31'),
+              increment: 0,
+              issue: 1,
+              issueDate: new Date('2001-01-01'),
+              licenceId: otherLicence.id,
+              startDate: new Date('2001-01-01'),
+              status: 'superseded'
+            }),
+            await LicenceVersionHelper.add({
+              endDate: null,
+              increment: 0,
+              issueDate: new Date('2022-01-01'),
+              issue: 2,
+              licenceId: otherLicence.id,
+              startDate: new Date('2022-01-01'),
+              status: 'current'
+            })
+          ]
 
-          currentLicenceVersion = await LicenceVersionHelper.add({
-            endDate: null,
-            increment: 0,
-            issueDate: new Date('2022-01-01'),
-            issue: 2,
-            licenceId: licence.id,
-            startDate: new Date('2022-01-01'),
-            status: 'current'
-          })
-
-          testRecord = await LicenceModel.query().findById(licence.id).modify('currentVersion')
+          currentVersionRecord = await LicenceModel.query().findById(otherLicence.id).modify('currentVersion')
         })
 
         it('returns the "current" licence version', () => {
-          const result = testRecord.$currentVersion()
+          const result = currentVersionRecord.$currentVersion()
 
           expect(result).to.equal({
-            id: currentLicenceVersion.id,
-            startDate: currentLicenceVersion.startDate,
-            issueDate: currentLicenceVersion.issueDate,
+            id: otherLicenceVersions[1].id,
+            issueDate: otherLicenceVersions[1].issueDate,
+            licenceId: otherLicenceVersions[1].licenceId,
+            startDate: otherLicenceVersions[1].startDate,
             status: 'current'
           })
         })
@@ -658,51 +619,52 @@ describe('Licence model', () => {
 
       describe('and there are multiple licence versions with the same start date that is <= today', () => {
         beforeEach(async () => {
-          // earlier licence version - added just for completeness
-          await LicenceVersionHelper.add({
-            endDate: new Date('2022-03-31'),
-            increment: 0,
-            issue: 1,
-            licenceId: licence.id,
-            issueDate: new Date('2021-01-01'),
-            startDate: new Date('2021-01-01'),
-            status: 'superseded'
-          })
+          otherLicenceVersions = [
+            // earlier licence version - added just for completeness
+            await LicenceVersionHelper.add({
+              endDate: new Date('2022-03-31'),
+              increment: 0,
+              issue: 1,
+              licenceId: otherLicence.id,
+              issueDate: new Date('2021-01-01'),
+              startDate: new Date('2021-01-01'),
+              status: 'superseded'
+            }),
+            // Licence version that contains a mistake so was replaced but has the same start date as the current version.
+            // As it has a lower increment number it should NOT be returned
+            await LicenceVersionHelper.add({
+              endDate: new Date('2022-04-01'),
+              increment: 0,
+              issue: 2,
+              licenceId: otherLicence.id,
+              issueDate: new Date('2022-04-01'),
+              startDate: new Date('2022-04-01'),
+              status: 'superseded'
+            }),
+            // The current licence version that replaced the above. Has the same start date but a higher increment number
+            // so should be returned.
+            await LicenceVersionHelper.add({
+              endDate: null,
+              increment: 1,
+              issue: 2,
+              licenceId: otherLicence.id,
+              issueDate: new Date('2022-04-01'),
+              startDate: new Date('2022-04-01'),
+              status: 'current'
+            })
+          ]
 
-          // Licence version that contains a mistake so was replaced but has the same start date as the current version.
-          // As it has a lower increment number it should NOT be returned
-          await LicenceVersionHelper.add({
-            endDate: new Date('2022-04-01'),
-            increment: 0,
-            issue: 2,
-            licenceId: licence.id,
-            issueDate: new Date('2022-04-01'),
-            startDate: new Date('2022-04-01'),
-            status: 'superseded'
-          })
-
-          // The current licence version that replaced the above. Has the same start date but a higher increment number
-          // so should be returned.
-          currentLicenceVersion = await LicenceVersionHelper.add({
-            endDate: null,
-            increment: 1,
-            issue: 2,
-            licenceId: licence.id,
-            issueDate: new Date('2022-04-01'),
-            startDate: new Date('2022-04-01'),
-            status: 'current'
-          })
-
-          testRecord = await LicenceModel.query().findById(licence.id).modify('currentVersion')
+          currentVersionRecord = await LicenceModel.query().findById(otherLicence.id).modify('currentVersion')
         })
 
         it('returns the "current" licence version', () => {
-          const result = testRecord.$currentVersion()
+          const result = currentVersionRecord.$currentVersion()
 
           expect(result).to.equal({
-            id: currentLicenceVersion.id,
-            startDate: currentLicenceVersion.startDate,
-            issueDate: currentLicenceVersion.issueDate,
+            id: otherLicenceVersions[2].id,
+            issueDate: otherLicenceVersions[2].issueDate,
+            licenceId: otherLicenceVersions[2].licenceId,
+            startDate: otherLicenceVersions[2].startDate,
             status: 'current'
           })
         })
@@ -712,14 +674,19 @@ describe('Licence model', () => {
 
   describe('$ends', () => {
     let expiredDate
+    let endsRecord
     let lapsedDate
     let revokedDate
 
     describe('when no end dates are set', () => {
-      it('returns null', () => {
-        testRecord = LicenceModel.fromJson({})
+      beforeEach(() => {
+        endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+      })
 
-        expect(testRecord.$ends()).to.be.null()
+      it('returns null', () => {
+        const result = endsRecord.$ends()
+
+        expect(result).to.be.null()
       })
     })
 
@@ -728,48 +695,62 @@ describe('Licence model', () => {
         expiredDate = null
         lapsedDate = null
         revokedDate = null
+
+        endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
       })
 
       it('returns null', () => {
-        testRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+        const result = endsRecord.$ends()
 
-        expect(testRecord.$ends()).to.be.null()
-      })
-    })
-
-    describe('when only the revoked date is set', () => {
-      beforeEach(() => {
-        revokedDate = new Date('2023-03-07')
-      })
-
-      it('returns "revoked" as the reason and "2023-03-07" as the date', () => {
-        const result = LicenceModel.fromJson({ revokedDate }).$ends()
-
-        expect(result).to.equal({ date: new Date('2023-03-07'), priority: 1, reason: 'revoked' })
-      })
-    })
-
-    describe('when only the lapsed date is set', () => {
-      beforeEach(() => {
-        lapsedDate = new Date('2023-03-08')
-      })
-
-      it('returns "lapsed" as the reason and "2023-03-08" as the date', () => {
-        const result = LicenceModel.fromJson({ lapsedDate }).$ends()
-
-        expect(result).to.equal({ date: new Date('2023-03-08'), priority: 2, reason: 'lapsed' })
+        expect(result).to.be.null()
       })
     })
 
     describe('when only the expired date is set', () => {
       beforeEach(() => {
         expiredDate = new Date('2023-03-09')
+        lapsedDate = null
+        revokedDate = null
+
+        endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
       })
 
-      it('returns "lapsed" as the reason and "2023-03-09" as the date', () => {
-        const result = LicenceModel.fromJson({ expiredDate }).$ends()
+      it('returns "expired" as the reason and "2023-03-09" as the date', () => {
+        const result = endsRecord.$ends()
 
-        expect(result).to.equal({ date: new Date('2023-03-09'), priority: 3, reason: 'expired' })
+        expect(result).to.equal({ date: expiredDate, priority: 3, reason: 'expired' })
+      })
+    })
+
+    describe('when only the lapsed date is set', () => {
+      beforeEach(() => {
+        expiredDate = null
+        lapsedDate = new Date('2023-03-08')
+        revokedDate = null
+
+        endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+      })
+
+      it('returns "lapsed" as the reason and "2023-03-08" as the date', () => {
+        const result = endsRecord.$ends()
+
+        expect(result).to.equal({ date: lapsedDate, priority: 2, reason: 'lapsed' })
+      })
+    })
+
+    describe('when only the revoked date is set', () => {
+      beforeEach(() => {
+        expiredDate = null
+        lapsedDate = null
+        revokedDate = new Date('2023-03-07')
+
+        endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+      })
+
+      it('returns "revoked" as the reason and "2023-03-07" as the date', () => {
+        const result = endsRecord.$ends()
+
+        expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
       })
     })
 
@@ -778,43 +759,64 @@ describe('Licence model', () => {
         beforeEach(() => {
           expiredDate = new Date('2023-03-09')
           lapsedDate = new Date('2023-03-08')
+          revokedDate = null
+
+          endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
         })
 
         it('returns the one with the earliest date', () => {
-          const result = LicenceModel.fromJson({ expiredDate, lapsedDate }).$ends()
+          const result = endsRecord.$ends()
 
-          expect(result).to.equal({ date: new Date('2023-03-08'), priority: 2, reason: 'lapsed' })
+          expect(result).to.equal({ date: lapsedDate, priority: 2, reason: 'lapsed' })
         })
       })
 
       describe('that have the same date', () => {
-        beforeEach(() => {
-          expiredDate = new Date('2023-03-09')
-          lapsedDate = new Date('2023-03-09')
-          revokedDate = new Date('2023-03-09')
-        })
-
         describe('and they are "lapsed" and "expired"', () => {
-          it('returns "lapsed" as the end date', () => {
-            const result = LicenceModel.fromJson({ expiredDate, lapsedDate }).$ends()
+          beforeEach(() => {
+            expiredDate = new Date('2023-03-09')
+            lapsedDate = new Date('2023-03-09')
+            revokedDate = null
 
-            expect(result).to.equal({ date: new Date('2023-03-09'), priority: 2, reason: 'lapsed' })
+            endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+          })
+
+          it('returns "lapsed" as the end date', () => {
+            const result = endsRecord.$ends()
+
+            expect(result).to.equal({ date: lapsedDate, priority: 2, reason: 'lapsed' })
           })
         })
 
         describe('and they are "lapsed" and "revoked"', () => {
-          it('returns "revoked" as the end date', () => {
-            const result = LicenceModel.fromJson({ lapsedDate, revokedDate }).$ends()
+          beforeEach(() => {
+            expiredDate = null
+            lapsedDate = new Date('2023-03-09')
+            revokedDate = new Date('2023-03-09')
 
-            expect(result).to.equal({ date: new Date('2023-03-09'), priority: 1, reason: 'revoked' })
+            endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+          })
+
+          it('returns "revoked" as the end date', () => {
+            const result = endsRecord.$ends()
+
+            expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
           })
         })
 
         describe('and they are "expired" and "revoked"', () => {
-          it('returns "revoked" as the end date', () => {
-            const result = LicenceModel.fromJson({ expiredDate, revokedDate }).$ends()
+          beforeEach(() => {
+            expiredDate = new Date('2023-03-09')
+            lapsedDate = null
+            revokedDate = new Date('2023-03-09')
 
-            expect(result).to.equal({ date: new Date('2023-03-09'), priority: 1, reason: 'revoked' })
+            endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
+          })
+
+          it('returns "revoked" as the end date', () => {
+            const result = endsRecord.$ends()
+
+            expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
           })
         })
       })
@@ -826,12 +828,14 @@ describe('Licence model', () => {
           expiredDate = new Date('2023-03-09')
           lapsedDate = new Date('2023-03-08')
           revokedDate = new Date('2023-03-07')
+
+          endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
         })
 
         it('returns the one with the earliest date', () => {
-          const result = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate }).$ends()
+          const result = endsRecord.$ends()
 
-          expect(result).to.equal({ date: new Date('2023-03-07'), priority: 1, reason: 'revoked' })
+          expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
         })
       })
 
@@ -841,12 +845,14 @@ describe('Licence model', () => {
             expiredDate = new Date('2023-03-09')
             lapsedDate = new Date('2023-03-09')
             revokedDate = new Date('2023-03-10')
+
+            endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
           })
 
           it('returns "lapsed" as the end date', () => {
-            const result = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate }).$ends()
+            const result = endsRecord.$ends()
 
-            expect(result).to.equal({ date: new Date('2023-03-09'), priority: 2, reason: 'lapsed' })
+            expect(result).to.equal({ date: lapsedDate, priority: 2, reason: 'lapsed' })
           })
         })
 
@@ -855,12 +861,14 @@ describe('Licence model', () => {
             expiredDate = new Date('2023-03-10')
             lapsedDate = new Date('2023-03-09')
             revokedDate = new Date('2023-03-09')
+
+            endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
           })
 
           it('returns "revoked" as the end date', () => {
-            const result = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate }).$ends()
+            const result = endsRecord.$ends()
 
-            expect(result).to.equal({ date: new Date('2023-03-09'), priority: 1, reason: 'revoked' })
+            expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
           })
         })
 
@@ -869,12 +877,14 @@ describe('Licence model', () => {
             expiredDate = new Date('2023-03-09')
             lapsedDate = new Date('2023-03-10')
             revokedDate = new Date('2023-03-09')
+
+            endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
           })
 
           it('returns "revoked" as the end date', () => {
-            const result = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate }).$ends()
+            const result = endsRecord.$ends()
 
-            expect(result).to.equal({ date: new Date('2023-03-09'), priority: 1, reason: 'revoked' })
+            expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
           })
         })
       })
@@ -884,83 +894,106 @@ describe('Licence model', () => {
           expiredDate = new Date('2023-03-09')
           lapsedDate = new Date('2023-03-09')
           revokedDate = new Date('2023-03-09')
+
+          endsRecord = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate })
         })
 
         it('returns "revoked" as the end date', () => {
-          const result = LicenceModel.fromJson({ expiredDate, lapsedDate, revokedDate }).$ends()
+          const result = endsRecord.$ends()
 
-          expect(result).to.equal({ date: new Date('2023-03-09'), priority: 1, reason: 'revoked' })
+          expect(result).to.equal({ date: revokedDate, priority: 1, reason: 'revoked' })
         })
       })
     })
   })
 
   describe('$licenceHolder', () => {
+    const licenceRoles = {}
+
+    let company
+    let contact
+    let licenceDocument
+    let licenceDocumentRoles
+    let licenceHolderRecord
+    let oldCompany
+    let otherLicence
+
+    beforeEach(async () => {
+      otherLicence = await LicenceHelper.add()
+    })
+
     describe('when instance has not been set with the additional properties needed', () => {
       it('returns null', () => {
-        const result = testRecord.$licenceHolder()
+        const result = otherLicence.$licenceHolder()
 
         expect(result).to.be.null()
       })
     })
 
     describe('when the instance has been set with the additional properties needed', () => {
-      const licenceRoles = {}
-
-      let licence
-      let company
-      let contact
-      let licenceDocument
-
       beforeEach(async () => {
-        licence = await LicenceHelper.add()
-
         // Create 2 licence roles so we can test the service only gets the licence document role record that is for
         // 'licence holder'
         licenceRoles.billing = await LicenceRoleHelper.select('billing')
-        licenceRoles.holder = await LicenceRoleHelper.select()
+        licenceRoles.holder = await LicenceRoleHelper.select('licenceHolder')
 
         // Create company and contact records. We create an additional company so we can create 2 licence document role
         // records for our licence to test the one with the latest start date is used.
         company = await CompanyHelper.add({ name: 'Licence Holder Ltd' })
         contact = await ContactHelper.add({ firstName: 'Luce', lastName: 'Holder' })
-        const oldCompany = await CompanyHelper.add({ name: 'Old Licence Holder Ltd' })
+        oldCompany = await CompanyHelper.add({ name: 'Old Licence Holder Ltd' })
 
         // We have to create a licence document to link our licence record to (eventually!) the company or contact
         // record that is the 'licence holder'
-        licenceDocument = await LicenceDocumentHelper.add({ licenceRef: licence.licenceRef })
+        licenceDocument = await LicenceDocumentHelper.add({ licenceRef: otherLicence.licenceRef })
 
         // Create two licence document role records. This one is linked to the billing role so should be ignored by the
         // service
-        await LicenceDocumentRoleHelper.add({
-          licenceDocumentId: licenceDocument.id,
-          licenceRoleId: licenceRoles.billing.id
-        })
+        licenceDocumentRoles = [
+          await LicenceDocumentRoleHelper.add({
+            companyId: company.id,
+            licenceDocumentId: licenceDocument.id,
+            licenceRoleId: licenceRoles.billing.id
+          }),
+          // This one is linked to the old company record so should not be used to provide the licence holder name
+          await LicenceDocumentRoleHelper.add({
+            companyId: oldCompany.id,
+            licenceDocumentId: licenceDocument.id,
+            licenceRoleId: licenceRoles.holder.id,
+            startDate: new Date('2022-01-01')
+          })
+        ]
+      })
 
-        // This one is linked to the old company record so should not be used to provide the licence holder name
-        await LicenceDocumentRoleHelper.add({
-          licenceDocumentId: licenceDocument.id,
-          licenceRoleId: licenceRoles.holder.id,
-          company: oldCompany.id,
-          startDate: new Date('2022-01-01')
-        })
+      afterEach(async () => {
+        for (const licenceDocumentRole of licenceDocumentRoles) {
+          await licenceDocumentRole.$query().delete()
+        }
+
+        await contact.$query().delete()
+        await company.$query().delete()
+        await oldCompany.$query().delete()
+
+        await licenceDocument.$query().delete()
       })
 
       describe('and the licence holder is a company', () => {
         beforeEach(async () => {
           // Create the licence document role record that _is_ linked to the correct licence holder record
-          await LicenceDocumentRoleHelper.add({
-            licenceDocumentId: licenceDocument.id,
-            licenceRoleId: licenceRoles.holder.id,
-            companyId: company.id,
-            startDate: new Date('2022-08-01')
-          })
+          licenceDocumentRoles.push(
+            await LicenceDocumentRoleHelper.add({
+              licenceDocumentId: licenceDocument.id,
+              licenceRoleId: licenceRoles.holder.id,
+              companyId: company.id,
+              startDate: new Date('2022-08-01')
+            })
+          )
 
-          testRecord = await LicenceModel.query().findById(licence.id).modify('licenceHolder')
+          licenceHolderRecord = await LicenceModel.query().findById(otherLicence.id).modify('licenceHolder')
         })
 
         it('returns the company name as the licence holder', async () => {
-          const result = testRecord.$licenceHolder()
+          const result = licenceHolderRecord.$licenceHolder()
 
           expect(result).to.equal('Licence Holder Ltd')
         })
@@ -971,19 +1004,21 @@ describe('Licence model', () => {
           // Create the licence document role record that _is_ linked to the correct licence holder record.
           // NOTE: We create this against both the company and contact to also confirm that the contact name has
           // precedence over the company name
-          await LicenceDocumentRoleHelper.add({
-            licenceDocumentId: licenceDocument.id,
-            licenceRoleId: licenceRoles.holder.id,
-            companyId: company.id,
-            contactId: contact.id,
-            startDate: new Date('2022-08-01')
-          })
+          licenceDocumentRoles.push(
+            await LicenceDocumentRoleHelper.add({
+              licenceDocumentId: licenceDocument.id,
+              licenceRoleId: licenceRoles.holder.id,
+              companyId: company.id,
+              contactId: contact.id,
+              startDate: new Date('2022-08-01')
+            })
+          )
 
-          testRecord = await LicenceModel.query().findById(licence.id).modify('licenceHolder')
+          licenceHolderRecord = await LicenceModel.query().findById(otherLicence.id).modify('licenceHolder')
         })
 
         it('returns the contact name as the licence holder', async () => {
-          const result = testRecord.$licenceHolder()
+          const result = licenceHolderRecord.$licenceHolder()
 
           expect(result).to.equal('Luce Holder')
         })
@@ -992,6 +1027,22 @@ describe('Licence model', () => {
   })
 
   describe('$licenceName', () => {
+    let licenceNameRecord
+    let otherLicence
+    let otherLicenceDocumentHeader
+
+    beforeEach(async () => {
+      otherLicence = await LicenceHelper.add()
+    })
+
+    afterEach(async () => {
+      if (otherLicenceDocumentHeader) {
+        await otherLicenceDocumentHeader.$query().delete()
+      }
+
+      await otherLicence.$query().delete()
+    })
+
     describe('when instance has not been set with the additional properties needed', () => {
       it('returns null', () => {
         const result = testRecord.$licenceName()
@@ -1002,18 +1053,16 @@ describe('Licence model', () => {
 
     describe('when the instance has been set with the additional properties needed', () => {
       beforeEach(async () => {
-        const licence = await LicenceHelper.add()
-
-        await LicenceDocumentHeaderHelper.add({
-          licenceRef: licence.licenceRef,
+        otherLicenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+          licenceRef: otherLicence.licenceRef,
           licenceName: 'My custom licence name'
         })
 
-        testRecord = await LicenceModel.query().findById(licence.id).modify('licenceName')
+        licenceNameRecord = await LicenceModel.query().findById(otherLicence.id).modify('licenceName')
       })
 
       it('returns the licence name', async () => {
-        const result = testRecord.$licenceName()
+        const result = licenceNameRecord.$licenceName()
 
         expect(result).to.equal('My custom licence name')
       })
@@ -1021,47 +1070,70 @@ describe('Licence model', () => {
   })
 
   describe('$primaryUser', () => {
+    let primaryUserRecord
+    let otherLicence
+    let otherLicenceDocumentHeader
+    let otherLicenceEntity
+    let otherLicenceEntityRole
+    let user
+
+    beforeEach(async () => {
+      otherLicence = await LicenceHelper.add()
+    })
+
+    afterEach(async () => {
+      if (otherLicenceDocumentHeader) {
+        await otherLicenceDocumentHeader.$query().delete()
+      }
+
+      if (otherLicenceEntityRole) {
+        await otherLicenceEntityRole.$query().delete()
+      }
+
+      if (otherLicenceEntity) {
+        await otherLicenceEntity.$query().delete()
+      }
+
+      await otherLicence.$query().delete()
+    })
+
     describe('when instance has not been set with the additional properties needed', () => {
       it('returns null', () => {
-        const result = testRecord.$primaryUser()
+        const result = otherLicence.$primaryUser()
 
         expect(result).to.be.null()
       })
     })
 
     describe('when the instance has been set with the additional properties needed', () => {
-      let primaryUser
-
       beforeEach(async () => {
-        const licence = await LicenceHelper.add()
-
         const companyEntityId = generateUUID()
         const username = `${generateUUID()}@wrls.gov.uk`
 
-        const licenceEntity = await LicenceEntityHelper.add({ name: username })
+        otherLicenceEntity = await LicenceEntityHelper.add({ name: username })
 
-        primaryUser = await UserHelper.add({ application: 'water_vml', licenceEntityId: licenceEntity.id, username })
+        user = await UserHelper.add({ application: 'water_vml', licenceEntityId: otherLicenceEntity.id, username })
 
-        await LicenceEntityRoleHelper.add({
+        otherLicenceEntityRole = await LicenceEntityRoleHelper.add({
           companyEntityId,
-          licenceEntityId: licenceEntity.id,
+          licenceEntityId: otherLicenceEntity.id,
           role: 'primary_user'
         })
 
-        await LicenceDocumentHeaderHelper.add({
+        otherLicenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
           companyEntityId,
-          licenceRef: licence.licenceRef,
+          licenceRef: otherLicence.licenceRef,
           licenceName: 'My custom licence name'
         })
 
-        testRecord = await LicenceModel.query().findById(licence.id).modify('primaryUser')
+        primaryUserRecord = await LicenceModel.query().findById(otherLicence.id).modify('primaryUser')
       })
 
       it('returns the primary user', async () => {
-        const result = testRecord.$primaryUser()
+        const result = primaryUserRecord.$primaryUser()
 
         expect(result).to.be.an.instanceOf(UserModel)
-        expect(result).to.equal({ id: primaryUser.id, userId: primaryUser.userId, username: primaryUser.username })
+        expect(result).to.equal({ id: user.id, userId: user.userId, username: user.username })
       })
     })
   })

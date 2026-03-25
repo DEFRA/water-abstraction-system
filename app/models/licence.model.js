@@ -168,16 +168,17 @@ class LicenceModel extends BaseModel {
       // NOTE: will only work when fetching a single licence. The `limit()` clause means when fetching multiple licences
       // only the licence version for the first licence is fetched.
       currentVersion(query) {
-        query.withGraphFetched('licenceVersions').modifyGraph('licenceVersions', (builder) => {
-          builder
-            .select(['id', 'startDate', 'status', 'issueDate'])
+        query.withGraphFetched('licenceVersions').modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
+          licenceVersionsBuilder
+            .select(['id', 'issueDate', 'licenceId', 'startDate', 'status'])
+            .distinctOn('licenceId')
             .where('startDate', '<=', timestampForPostgres())
             .orderBy([
-              { column: 'startDate', order: 'desc' },
+              { column: 'licenceId', order: 'asc' },
               { column: 'issue', order: 'desc' },
-              { column: 'increment', order: 'desc' }
+              { column: 'increment', order: 'desc' },
+              { column: 'endDate', order: 'desc', nulls: 'first' }
             ])
-            .limit(1)
         })
       },
       // licenceHolder modifier fetches all the joined records needed to identify the licence holder
