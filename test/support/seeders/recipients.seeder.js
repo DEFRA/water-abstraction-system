@@ -46,27 +46,6 @@ async function clean(recipient) {
 }
 
 /**
- * The old way to link the licence holder
- *
- * @private
- */
-async function _oldLicenceHolder(name, licenceRef) {
-  const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
-
-  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-    companyEntityId: companyEntity.id,
-    licenceRef,
-    metadata: {
-      contacts: []
-    }
-  })
-
-  return {
-    licenceDocumentHeader
-  }
-}
-
-/**
  * Creates a "Licence holder" recipient
  *
  * This function sets up a complete licence structure with a company entity and a single licence holder contact.
@@ -77,31 +56,14 @@ async function _oldLicenceHolder(name, licenceRef) {
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
 async function licenceHolder(name, licenceRef = null) {
-  const contact = {
-    addressLine1: '4',
-    addressLine2: 'Privet Drive',
-    addressLine3: null,
-    addressLine4: null,
-    addressLine5: null,
-    addressLine6: null,
-    country: null,
-    name,
-    postcode: 'WD25 7LR'
-  }
-
   if (!licenceRef) {
     licenceRef = generateLicenceRef()
   }
 
-  const address = await AddressHelper.add({
-    address1: contact.addressLine1,
-    address2: contact.addressLine2,
-    address3: contact.addressLine3,
-    address4: contact.addressLine4,
-    address5: contact.addressLine5,
-    address6: contact.addressLine6,
-    country: contact.country,
-    postcode: contact.postcode
+  const address = _address()
+
+  const addressData = await AddressHelper.add({
+    ...address
   })
 
   const company = await CompanyHelper.add({
@@ -112,14 +74,35 @@ async function licenceHolder(name, licenceRef = null) {
     licenceRef: licenceRef || generateLicenceRef()
   })
 
-  const licenceVersion = await LicenceVersionHelper.add({
-    endDate: null,
-    licenceId: licence.id,
+  await LicenceVersionHelper.add({
+    addressId: addressData.id,
     companyId: company.id,
-    addressId: address.id
+    endDate: null,
+    licenceId: licence.id
   })
 
-  const { licenceDocumentHeader } = await _oldLicenceHolder(name, licenceRef)
+  const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
+
+  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+    companyEntityId: companyEntity.id,
+    licenceRef,
+    metadata: {
+      contacts: []
+    }
+  })
+
+  // We are transitioning from the licence document header to using the address table, this is a temporary mapping
+  const contact = {
+    addressLine1: address.address1,
+    addressLine2: address.address2,
+    addressLine3: address.address3,
+    addressLine4: address.address4,
+    addressLine5: address.address5,
+    addressLine6: address.address6,
+    country: address.country,
+    name,
+    postcode: address.postcode
+  }
 
   return {
     contact,
@@ -216,7 +199,24 @@ async function returnsAgent(licenceDocumentHeader, email) {
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
 async function returnsTo(licenceDocumentHeader, name) {
-  const contact = _licenceDocumentHeaderContact(name, 'Returns to')
+  const address = _address()
+
+  const contact = {
+    salutation: null,
+    forename: null,
+    initials: null,
+    addressLine1: address.address1,
+    addressLine2: address.address2,
+    addressLine3: address.address3,
+    addressLine4: address.address4,
+    town: address.address5,
+    county: address.address6,
+    country: address.country,
+    name,
+    postcode: address.postcode,
+    role: 'Returns to',
+    type: 'Person'
+  }
 
   const { metadata } = licenceDocumentHeader
 
@@ -293,6 +293,19 @@ function transformToSendingResult(recipient) {
   }
 }
 
+function _address() {
+  return {
+    address1: '4',
+    address2: 'Privet Drive',
+    address3: 'Little Whinging',
+    address4: 'Surrey',
+    address5: null,
+    address6: null,
+    country: null,
+    postcode: 'WD25 7LR'
+  }
+}
+
 function _contactHashId(contact) {
   const salutation = contact.salutation ?? ''
   const forename = contact.forename ?? ''
@@ -314,25 +327,6 @@ function _contactHashId(contact) {
 
 function _emailHashId(email) {
   return crypto.createHash('md5').update(email.toLowerCase()).digest('hex')
-}
-
-function _licenceDocumentHeaderContact(name, role) {
-  return {
-    addressLine1: '4',
-    addressLine2: 'Privet Drive',
-    addressLine3: null,
-    addressLine4: null,
-    country: null,
-    county: 'Surrey',
-    forename: 'Harry',
-    initials: 'J',
-    name,
-    postcode: 'WD25 7LR',
-    role,
-    salutation: null,
-    town: 'Little Whinging',
-    type: 'Person'
-  }
 }
 
 module.exports = {
