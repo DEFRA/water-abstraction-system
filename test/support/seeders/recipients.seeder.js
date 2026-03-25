@@ -6,18 +6,18 @@
 
 const crypto = require('node:crypto')
 
+const AddressHelper = require('../helpers/address.helper.js')
+const CompanyHelper = require('../helpers/company.helper.js')
 const LicenceDocumentHeaderHelper = require('../helpers/licence-document-header.helper.js')
 const LicenceDocumentHeaderModel = require('../../../app/models/licence-document-header.model.js')
 const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
 const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.model.js')
+const LicenceHelper = require('../helpers/licence.helper.js')
+const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const { generateLicenceRef } = require('../helpers/licence.helper.js')
-const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
-const CompanyHelper = require('../helpers/company.helper.js')
-const AddressHelper = require('../helpers/address.helper.js')
-const LicenceHelper = require('../helpers/licence.helper.js')
 
 /**
  * Cleans up records created by the seeder
@@ -83,14 +83,6 @@ async function licenceHolder(name, licenceRef = null) {
 
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
 
-  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-    companyEntityId: companyEntity.id,
-    licenceRef,
-    metadata: {
-      contacts: []
-    }
-  })
-
   // We are transitioning from the licence document header to using the address table, this is a temporary mapping
   const contact = {
     addressLine1: address.address1,
@@ -103,6 +95,14 @@ async function licenceHolder(name, licenceRef = null) {
     name,
     postcode: address.postcode
   }
+
+  const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
+    companyEntityId: companyEntity.id,
+    licenceRef,
+    metadata: {
+      contacts: [{ ...contact, type: 'Person', role: 'Licence holder' }]
+    }
+  })
 
   return {
     contact,
