@@ -14,6 +14,10 @@ const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.j
 const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.model.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const { generateLicenceRef } = require('../helpers/licence.helper.js')
+const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
+const CompanyHelper = require('../helpers/company.helper.js')
+const AddressHelper = require('../helpers/address.helper.js')
+const LicenceHelper = require('../helpers/licence.helper.js')
 
 /**
  * Cleans up records created by the seeder
@@ -41,17 +45,7 @@ async function clean(recipient) {
   }
 }
 
-/**
- * Creates a "Licence holder" recipient
- *
- * This function sets up a complete licence structure with a company entity and a single licence holder contact.
- *
- * @param {string} name - The name of the licence holder
- * @param {string} [licenceRef=null] - An optional licence reference to assign to the recipient
- *
- * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
- */
-async function licenceHolder(name, licenceRef = null) {
+async function oldLicenceHolder(name, licenceRef) {
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
   const contact = _licenceDocumentHeaderContact(name, 'Licence holder')
 
@@ -68,13 +62,73 @@ async function licenceHolder(name, licenceRef = null) {
   })
 
   return {
+    licenceDocumentHeader
+  }
+}
+
+/**
+ * Creates a "Licence holder" recipient
+ *
+ * This function sets up a complete licence structure with a company entity and a single licence holder contact.
+ *
+ * @param {string} name - The name of the licence holder
+ * @param {string} [licenceRef=null] - An optional licence reference to assign to the recipient
+ *
+ * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
+ */
+async function licenceHolder(name, licenceRef = null) {
+  const contact = {
+    addressLine1: '4',
+    addressLine2: 'Privet Drive',
+    addressLine3: null,
+    addressLine4: null,
+    addressLine5: null,
+    addressLine6: null,
+    country: null,
+    name,
+    postcode: 'WD25 7LR'
+  }
+
+  if (!licenceRef) {
+    licenceRef = generateLicenceRef()
+  }
+
+  const address = await AddressHelper.add({
+    address1: contact.addressLine1,
+    address2: contact.addressLine2,
+    address3: contact.addressLine3,
+    address4: contact.addressLine4,
+    address5: contact.addressLine5,
+    address6: contact.addressLine6,
+    country: contact.country,
+    postcode: contact.postcode
+  })
+
+  const company = await CompanyHelper.add({
+    name
+  })
+
+  const licence = await LicenceHelper.add({
+    licenceRef: licenceRef || generateLicenceRef()
+  })
+
+  const licenceVersion = await LicenceVersionHelper.add({
+    endDate: null,
+    licenceId: licence.id,
+    companyId: company.id,
+    addressId: address.id
+  })
+
+  const { licenceDocumentHeader } = await oldLicenceHolder(name, licenceRef)
+
+  return {
     contact,
     contactHashId: _contactHashId(contact),
     contactType: 'licence holder',
     email: null,
     licenceDocumentHeader,
     licenceEntityRole: null,
-    licenceRef: licenceDocumentHeader.licenceRef,
+    licenceRef: licence.licenceRef,
     messageType: 'Letter'
   }
 }
@@ -163,6 +217,7 @@ async function returnsAgent(licenceDocumentHeader, email) {
  */
 async function returnsTo(licenceDocumentHeader, name) {
   const contact = _licenceDocumentHeaderContact(name, 'Returns to')
+
   const { metadata } = licenceDocumentHeader
 
   metadata.contacts.push(contact)

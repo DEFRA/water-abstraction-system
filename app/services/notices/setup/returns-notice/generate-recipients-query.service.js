@@ -186,7 +186,7 @@ WITH
     CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts(contact)
     WHERE
       rl.licence_ref IS NULL
-      AND contacts.contact->>'role' IN ('Licence holder', 'Returns to')
+      AND contacts.contact->>'role' IN ('Returns to')
   ),
 
   licence_holder as (
@@ -248,13 +248,73 @@ function _licenceHolderQuery() {
     SELECT
       ('licence holder') AS contact_type,
       3 AS priority,
-      jc.*
+      jsonb_build_object(
+        'name', c.name,
+        'addressLine1', a.address_1,
+        'addressLine2', a.address_2,
+        'addressLine3', a.address_3,
+        'addressLine4', a.address_4,
+        'addressLine5', a.address_5,
+        'addressLine6', a.address_6,
+        'postcode', a.postcode,
+        'country', a.country
+      ) AS contact,
+      MD5(LOWER(CONCAT(
+        c.name,
+        a.address_1,
+        a.address_2,
+        a.address_3,
+        a.address_4,
+        a.address_5,
+        a.address_6,
+        a.postcode,
+        a.country
+      ))) AS contact_hash_id,
+      NULL::DATE AS due_date,
+      NULL::DATE AS end_date,
+      NULL::TEXT AS email,
+      l.licence_ref,
+      ('Letter') AS message_type,
+      drl.return_log_id AS return_log_id,
+      NULL::TEXT AS return_reference,
+      NULL::DATE AS start_date
     FROM
-      json_contacts jc
-    WHERE
-      jc.contact->>'role' = 'Licence holder'
+      public.licences l
+    INNER JOIN (
+      SELECT DISTINCT ON (lv.licence_id)
+        lv.licence_id,
+        lv.company_id,
+        lv.address_id
+      FROM
+        public.licence_versions lv
+      WHERE
+        lv.start_date <= CURRENT_DATE
+      ORDER BY
+        lv.licence_id ASC,
+        lv."issue" DESC,
+        lv."increment" DESC,
+        lv.end_date DESC NULLS FIRST
+    ) AS llv ON llv.licence_id = l.id
+    INNER JOIN public.companies c ON c.id = llv.company_id
+    INNER JOIN public.addresses a ON a.id = llv.address_id
+    INNER JOIN due_return_logs drl
+         ON drl.licence_ref = l.licence_ref
   `
 }
+
+// function _licenceHolderQuery() {
+//   // Old
+//   // return `
+//   //   SELECT
+//   //     ('licence holder') AS contact_type,
+//   //     3 AS priority,
+//   //     jc.*
+//   //   FROM
+//   //     json_contacts jc
+//   //   WHERE
+//   //     jc.contact->>'role' = 'Licence holder'
+//   // `
+// }
 
 function _primaryUserQuery(noticeType) {
   if (noticeType === NoticeType.INVITATIONS || noticeType === NoticeType.REMINDERS) {
