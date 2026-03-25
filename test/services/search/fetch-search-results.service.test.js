@@ -15,6 +15,7 @@ const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-docum
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
+const RegionHelper = require('../../support/helpers/region.helper.js')
 const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 const UserHelper = require('../../support/helpers/user.helper.js')
 
@@ -43,8 +44,11 @@ describe('Search - Fetch Search Results service', () => {
     let licenceRef
     let returnLog
 
+    const anglianRegion = RegionHelper.select(0)
+    const walesRegion = RegionHelper.select(7)
+
     // Add the billing accounts in non-alphabetical order to prove the ordering in the results
-    const company = await CompanyHelper.add()
+    const company = await CompanyHelper.add({ regionId: anglianRegion.id })
     billingAccounts.push(
       await BillingAccountHelper.add({ accountNumber: 'TESTSEARCH-Y97327242A', companyId: company.id })
     )
@@ -55,18 +59,22 @@ describe('Search - Fetch Search Results service', () => {
       await BillingAccountHelper.add({ accountNumber: 'TESTSEARCH-Y97327241A', companyId: company.id })
     )
 
-    // Add the Licence holders in non-alphabetical order to prove the ordering in the results
+    // Add the Licence holders in non-alphabetical order, including region, and ID to prove the ordering in the results
     licenceRef = LicenceHelper.generateLicenceRef()
-    licenceHolderSeedData = await LicenceHolderSeeder.seed(licenceRef, 'TESTSEARCH licence holder 2')
+    licenceHolderSeedData = await LicenceHolderSeeder.seed(licenceRef, 'TESTSEARCH licence holder 2', walesRegion.id)
     licenceHolders.push({ id: licenceHolderSeedData.companyId })
 
     licenceRef = LicenceHelper.generateLicenceRef()
-    licenceHolderSeedData = await LicenceHolderSeeder.seed(licenceRef, 'TESTSEARCH licence holder 11')
+    licenceHolderSeedData = await LicenceHolderSeeder.seed(licenceRef, 'TESTSEARCH licence holder 2', anglianRegion.id)
+    licenceHolders.push({ id: licenceHolderSeedData.companyId })
+
+    licenceRef = LicenceHelper.generateLicenceRef()
+    licenceHolderSeedData = await LicenceHolderSeeder.seed(licenceRef, 'TESTSEARCH licence holder 11', anglianRegion.id)
     licenceHolders.push({ id: licenceHolderSeedData.companyId })
 
     // Add the licences in non-alphabetical order to prove the ordering in the results
     licence = await LicenceHelper.add({ licenceRef: '02/01/TESTSEARCH01/05' })
-    licenceHolderSeedData = await LicenceHolderSeeder.seed(licence.licenceRef, 'Test search holder 1')
+    licenceHolderSeedData = await LicenceHolderSeeder.seed(licence.licenceRef, 'Test search holder 1', anglianRegion.id)
     licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
       licenceRef: licence.licenceRef,
       metadata: { Name: 'Test search holder 1' }
@@ -74,7 +82,7 @@ describe('Search - Fetch Search Results service', () => {
     licences.push({ licence, licenceDocumentHeader, licenceHolderSeedData })
 
     licence = await LicenceHelper.add({ licenceRef: '01/02/TESTSEARCH02/06' })
-    licenceHolderSeedData = await LicenceHolderSeeder.seed(licence.licenceRef, 'Test search holder 2')
+    licenceHolderSeedData = await LicenceHolderSeeder.seed(licence.licenceRef, 'Test search holder 2', anglianRegion.id)
     licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
       licenceRef: licence.licenceRef,
       metadata: { Name: 'Test search holder 2' }
@@ -157,6 +165,11 @@ describe('Search - Fetch Search Results service', () => {
           },
           {
             exact: false,
+            id: licenceHolders[2].id,
+            type: 'licenceHolder'
+          },
+          {
+            exact: false,
             id: licenceHolders[1].id,
             type: 'licenceHolder'
           },
@@ -226,7 +239,7 @@ describe('Search - Fetch Search Results service', () => {
             type: 'user'
           }
         ],
-        total: 16
+        total: 17
       })
     })
   })
@@ -268,7 +281,7 @@ describe('Search - Fetch Search Results service', () => {
             type: 'licence'
           }
         ],
-        total: 16
+        total: 17
       })
     })
   })
@@ -415,6 +428,11 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
+              id: licenceHolders[2].id,
+              type: 'licenceHolder'
+            },
+            {
+              exact: false,
               id: licenceHolders[1].id,
               type: 'licenceHolder'
             },
@@ -424,7 +442,7 @@ describe('Search - Fetch Search Results service', () => {
               type: 'licenceHolder'
             }
           ],
-          total: 2
+          total: 3
         })
       })
     })
@@ -441,7 +459,7 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: licenceHolders[1].id,
+              id: licenceHolders[2].id,
               type: 'licenceHolder'
             }
           ],
@@ -462,6 +480,11 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
+              id: licenceHolders[2].id,
+              type: 'licenceHolder'
+            },
+            {
+              exact: false,
               id: licenceHolders[1].id,
               type: 'licenceHolder'
             },
@@ -471,7 +494,7 @@ describe('Search - Fetch Search Results service', () => {
               type: 'licenceHolder'
             }
           ],
-          total: 2
+          total: 3
         })
       })
     })
@@ -503,7 +526,7 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: true,
-              id: licenceHolders[1].id,
+              id: licenceHolders[2].id,
               type: 'licenceHolder'
             }
           ],
