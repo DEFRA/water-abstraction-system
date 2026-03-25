@@ -441,7 +441,7 @@ function _returnsToQuery(noticeType) {
               contacts->>'country'
             )
           )
-         )) AS contact_hash_id,
+        )) AS contact_hash_id,
         a.due_date,
         a.end_date,
         (NULL) AS email,

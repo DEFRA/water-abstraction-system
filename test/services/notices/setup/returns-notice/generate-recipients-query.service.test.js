@@ -134,7 +134,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
               contacts->>'country'
             )
           )
-         )) AS contact_hash_id,
+        )) AS contact_hash_id,
         a.due_date,
         a.end_date,
         (NULL) AS email,
