@@ -60,6 +60,7 @@ async function _fetch(companyId, page) {
         .innerJoinRelated('licenceVersionHolder')
         .where('licenceVersionHolder.companyId', companyId)
     )
+    .orderBy([{ column: 'licenceRef', order: 'asc' }])
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
 
