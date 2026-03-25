@@ -27,9 +27,11 @@ const LICENCE_HOLDER_SQL = `
     c.id AS row_id,
     c."name" ILIKE ? AS exact,
     2 AS table_order,
-    LOWER(c."name") AS row_order,
+    CONCAT_WS(':', c."name", r.display_name, c.id) AS row_order,
     CAST (NULL AS DATE) AS date_order
   FROM companies c
+  INNER JOIN regions r
+    ON r.id = c.region_id
   WHERE
     c.external_id IS NOT NULL
     AND EXISTS (
