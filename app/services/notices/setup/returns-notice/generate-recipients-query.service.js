@@ -270,14 +270,14 @@ function _licenceHolderQuery() {
         a.postcode,
         a.country
       ))) AS contact_hash_id,
-      NULL::DATE AS due_date,
-      NULL::DATE AS end_date,
+      drl.due_date AS due_date,
+      drl.end_date  AS end_date,
       NULL::TEXT AS email,
       l.licence_ref,
       ('Letter') AS message_type,
       drl.return_log_id AS return_log_id,
-      NULL::TEXT AS return_reference,
-      NULL::DATE AS start_date
+      drl.return_reference AS return_reference,
+      drl.start_date AS start_date
     FROM
       public.licences l
     INNER JOIN (
@@ -299,22 +299,12 @@ function _licenceHolderQuery() {
     INNER JOIN public.addresses a ON a.id = llv.address_id
     INNER JOIN due_return_logs drl
          ON drl.licence_ref = l.licence_ref
+    LEFT JOIN registered_licences rl ON
+        rl.licence_ref = l.licence_ref
+    WHERE
+      rl.licence_ref IS NULL
   `
 }
-
-// function _licenceHolderQuery() {
-//   // Old
-//   // return `
-//   //   SELECT
-//   //     ('licence holder') AS contact_type,
-//   //     3 AS priority,
-//   //     jc.*
-//   //   FROM
-//   //     json_contacts jc
-//   //   WHERE
-//   //     jc.contact->>'role' = 'Licence holder'
-//   // `
-// }
 
 function _primaryUserQuery(noticeType) {
   if (noticeType === NoticeType.INVITATIONS || noticeType === NoticeType.REMINDERS) {

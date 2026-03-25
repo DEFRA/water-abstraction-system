@@ -45,19 +45,19 @@ async function clean(recipient) {
   }
 }
 
-async function oldLicenceHolder(name, licenceRef) {
+/**
+ * The old way to link the licence holder
+ *
+ * @private
+ */
+async function _oldLicenceHolder(name, licenceRef) {
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
-  const contact = _licenceDocumentHeaderContact(name, 'Licence holder')
-
-  if (!licenceRef) {
-    licenceRef = generateLicenceRef()
-  }
 
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     companyEntityId: companyEntity.id,
     licenceRef,
     metadata: {
-      contacts: [contact]
+      contacts: []
     }
   })
 
@@ -119,7 +119,7 @@ async function licenceHolder(name, licenceRef = null) {
     addressId: address.id
   })
 
-  const { licenceDocumentHeader } = await oldLicenceHolder(name, licenceRef)
+  const { licenceDocumentHeader } = await _oldLicenceHolder(name, licenceRef)
 
   return {
     contact,
