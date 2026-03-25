@@ -113,14 +113,43 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       md5(LOWER(le."name")) AS contact_hash_id,
   `
   const returnsToExpectedQuery = `
-    SELECT
-      ('returns to') AS contact_type,
-      4 AS priority,
-      jc.*
-    FROM
-      json_contacts jc
-    WHERE
-      jc.contact->>'role' = 'Returns to'
+      SELECT
+        ('returns to') AS contact_type,
+        4 AS priority,
+        contacts.contact AS contact,
+        (md5(
+          LOWER(
+            concat(
+              contacts->>'salutation',
+              contacts->>'forename',
+              contacts->>'initials',
+              contacts->>'name',
+              contacts->>'addressLine1',
+              contacts->>'addressLine2',
+              contacts->>'addressLine3',
+              contacts->>'addressLine4',
+              contacts->>'town',
+              contacts->>'county',
+              contacts->>'postcode',
+              contacts->>'country'
+            )
+          )
+         )) AS contact_hash_id,
+        a.due_date,
+        a.end_date,
+        (NULL) AS email,
+        a.licence_ref,
+        ('Letter') as message_type,
+        a.return_log_id,
+        a.return_reference,
+        a.start_date
+      FROM ldh_all a
+        LEFT JOIN registered_licences rl
+          ON rl.licence_ref = a.licence_ref
+          CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts(contact)
+      WHERE
+        rl.licence_ref IS NULL
+        AND contacts.contact->>'role' IN ('Returns to')
   `
 
   let download

@@ -148,47 +148,6 @@ WITH
     SELECT DISTINCT licence_ref FROM primary_user
   ),
 
-  -- Again, for performance, it is better to extract out all the contacts from the JSONB field once, and then use this
-  -- CTE for the licence holder and returns to contact types.
-  json_contacts AS (
-    SELECT
-      contacts.contact AS contact,
-      (md5(
-        LOWER(
-          concat(
-            contacts->>'salutation',
-            contacts->>'forename',
-            contacts->>'initials',
-            contacts->>'name',
-            contacts->>'addressLine1',
-            contacts->>'addressLine2',
-            contacts->>'addressLine3',
-            contacts->>'addressLine4',
-            contacts->>'town',
-            contacts->>'county',
-            contacts->>'postcode',
-            contacts->>'country'
-          )
-        )
-      )) AS contact_hash_id,
-      a.due_date,
-      a.end_date,
-      (NULL) AS email,
-      a.licence_ref,
-      ('Letter') as message_type,
-      a.return_log_id,
-      a.return_reference,
-      a.start_date
-    FROM
-      ldh_all a
-    LEFT JOIN registered_licences rl ON
-      rl.licence_ref = a.licence_ref
-    CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts(contact)
-    WHERE
-      rl.licence_ref IS NULL
-      AND contacts.contact->>'role' IN ('Returns to')
-  ),
-
   licence_holder as (
     ${licenceHolderQuery}
   ),
@@ -461,16 +420,47 @@ function _returnsAgentQuery(noticeType) {
 function _returnsToQuery(noticeType) {
   if (noticeType !== NoticeType.ALTERNATE_INVITATION) {
     return `
-    SELECT
-      ('returns to') AS contact_type,
-      4 AS priority,
-      jc.*
-    FROM
-      json_contacts jc
-    WHERE
-      jc.contact->>'role' = 'Returns to'
+      SELECT
+        ('returns to') AS contact_type,
+        4 AS priority,
+        contacts.contact AS contact,
+        (md5(
+          LOWER(
+            concat(
+              contacts->>'salutation',
+              contacts->>'forename',
+              contacts->>'initials',
+              contacts->>'name',
+              contacts->>'addressLine1',
+              contacts->>'addressLine2',
+              contacts->>'addressLine3',
+              contacts->>'addressLine4',
+              contacts->>'town',
+              contacts->>'county',
+              contacts->>'postcode',
+              contacts->>'country'
+            )
+          )
+         )) AS contact_hash_id,
+        a.due_date,
+        a.end_date,
+        (NULL) AS email,
+        a.licence_ref,
+        ('Letter') as message_type,
+        a.return_log_id,
+        a.return_reference,
+        a.start_date
+      FROM ldh_all a
+        LEFT JOIN registered_licences rl
+          ON rl.licence_ref = a.licence_ref
+          CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts(contact)
+      WHERE
+        rl.licence_ref IS NULL
+        AND contacts.contact->>'role' IN ('Returns to')
     `
   }
+
+  //
 
   return _noRecipientsQuery()
 }
