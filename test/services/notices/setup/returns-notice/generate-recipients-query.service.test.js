@@ -116,41 +116,56 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       SELECT
         ('returns to') AS contact_type,
         4 AS priority,
-        contacts.contact AS contact,
-        (md5(
-          LOWER(
-            concat(
-              contacts->>'salutation',
-              contacts->>'forename',
-              contacts->>'initials',
-              contacts->>'name',
-              contacts->>'addressLine1',
-              contacts->>'addressLine2',
-              contacts->>'addressLine3',
-              contacts->>'addressLine4',
-              contacts->>'town',
-              contacts->>'county',
-              contacts->>'postcode',
-              contacts->>'country'
-            )
-          )
-        )) AS contact_hash_id,
-        a.due_date,
-        a.end_date,
-        (NULL) AS email,
-        a.licence_ref,
-        ('Letter') as message_type,
-        a.return_log_id,
-        a.return_reference,
-        a.start_date
-      FROM ldh_all a
+        jsonb_build_object(
+        'name', c.name,
+        'addressLine1', a.address_1,
+        'addressLine2', a.address_2,
+        'addressLine3', a.address_3,
+        'addressLine4', a.address_4,
+        'addressLine5', a.address_5,
+        'addressLine6', a.address_6,
+        'postcode', a.postcode,
+        'country', a.country
+        ) AS contact,
+        MD5(LOWER(CONCAT(
+        c.name,
+        a.address_1,
+        a.address_2,
+        a.address_3,
+        a.address_4,
+        a.address_5,
+        a.address_6,
+        a.postcode,
+        a.country
+        ))) AS contact_hash_id,
+        drl.due_date AS due_date,
+        drl.end_date  AS end_date,
+        NULL::TEXT AS email,
+        ld.licence_ref,
+        ('Letter') AS message_type,
+        drl.return_log_id AS return_log_id,
+        drl.return_reference AS return_reference,
+        drl.start_date AS start_date
+      FROM public.licence_document_roles ldr
+        INNER JOIN public.licence_roles lr
+          ON lr.id = ldr.licence_role_id
+        INNER JOIN public.companies c
+          ON c.id = ldr.company_id
+        INNER JOIN public.licence_documents ld
+          ON ld.id = ldr.licence_document_id
+        INNER JOIN public.addresses a
+          ON a.id = ldr.address_id
+        INNER JOIN due_return_logs drl
+          ON drl.licence_ref = ld.licence_ref
         LEFT JOIN registered_licences rl
-          ON rl.licence_ref = a.licence_ref
-          CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts(contact)
-      WHERE
-        rl.licence_ref IS NULL
-        AND contacts.contact->>'role' = 'Returns to'
-  `
+          ON rl.licence_ref = ld.licence_ref
+      WHERE  lr."name" = 'returnsTo'
+      AND (
+      ldr.end_date IS NULL
+      OR ldr.end_date >= CURRENT_DATE
+      )
+      AND rl.licence_ref IS NULL
+    `
 
   let download
   let noticeType
