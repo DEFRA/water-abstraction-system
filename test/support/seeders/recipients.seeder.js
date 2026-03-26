@@ -10,11 +10,14 @@ const AddressHelper = require('../helpers/address.helper.js')
 const CompanyHelper = require('../helpers/company.helper.js')
 const LicenceDocumentHeaderHelper = require('../helpers/licence-document-header.helper.js')
 const LicenceDocumentHeaderModel = require('../../../app/models/licence-document-header.model.js')
+const LicenceDocumentHelper = require('../helpers/licence-document.helper.js')
+const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
 const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
 const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.model.js')
 const LicenceHelper = require('../helpers/licence.helper.js')
+const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const { generateLicenceRef } = require('../helpers/licence.helper.js')
@@ -106,6 +109,7 @@ async function licenceHolder(name, licenceRef = null) {
 
   return {
     contact,
+    company,
     contactHashId: _contactHashId(contact),
     contactType: 'licence holder',
     email: null,
@@ -196,33 +200,53 @@ async function returnsAgent(licenceDocumentHeader, email) {
  * @param {object} licenceDocumentHeader - The licence document header holding licence holder details
  * @param {string} name - The name for the "Returns to" contact
  *
+ * @param company
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function returnsTo(licenceDocumentHeader, name) {
+async function returnsTo(licenceDocumentHeader, name, company = null) {
   const address = _address()
 
+  const addressData = await AddressHelper.add({
+    ...address
+  })
+
+  let localComp
+
+  if (!company) {
+    localComp = await CompanyHelper.add({
+      name
+    })
+  } else {
+    localComp = company
+  }
+
+  const { licenceRef } = licenceDocumentHeader
+
+  const licenceRole = LicenceRoleHelper.select('returnsTo')
+
+  const licenceDocument = await LicenceDocumentHelper.add({
+    licenceRef
+  })
+
+  await LicenceDocumentRoleHelper.add({
+    licenceRoleId: licenceRole.id,
+    licenceDocumentId: licenceDocument.id,
+    companyId: localComp.id,
+    addressId: addressData.id,
+    endDate: null
+  })
+
   const contact = {
-    salutation: null,
-    forename: null,
-    initials: null,
     addressLine1: address.address1,
     addressLine2: address.address2,
     addressLine3: address.address3,
     addressLine4: address.address4,
-    town: address.address5,
-    county: address.address6,
+    addressLine5: address.address5,
+    addressLine6: address.address6,
     country: address.country,
     name,
-    postcode: address.postcode,
-    role: 'Returns to',
-    type: 'Person'
+    postcode: address.postcode
   }
-
-  const { metadata } = licenceDocumentHeader
-
-  metadata.contacts.push(contact)
-
-  await licenceDocumentHeader.$query().patch({ metadata })
 
   return {
     contact,
