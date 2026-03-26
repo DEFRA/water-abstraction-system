@@ -43,12 +43,61 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
     SELECT
       ('licence holder') AS contact_type,
       3 AS priority,
-      jc.*
+      jsonb_build_object(
+        'name', c.name,
+        'addressLine1', a.address_1,
+        'addressLine2', a.address_2,
+        'addressLine3', a.address_3,
+        'addressLine4', a.address_4,
+        'addressLine5', a.address_5,
+        'addressLine6', a.address_6,
+        'postcode', a.postcode,
+        'country', a.country
+      ) AS contact,
+      MD5(LOWER(CONCAT(
+        c.name,
+        a.address_1,
+        a.address_2,
+        a.address_3,
+        a.address_4,
+        a.address_5,
+        a.address_6,
+        a.postcode,
+        a.country
+      ))) AS contact_hash_id,
+      drl.due_date AS due_date,
+      drl.end_date  AS end_date,
+      NULL::TEXT AS email,
+      l.licence_ref,
+      ('Letter') AS message_type,
+      drl.return_log_id AS return_log_id,
+      drl.return_reference AS return_reference,
+      drl.start_date AS start_date
     FROM
-      json_contacts jc
-    WHERE
-      jc.contact->>'role' = 'Licence holder'
+      public.licences l
+    INNER JOIN (
+      SELECT DISTINCT ON (lv.licence_id)
+        lv.licence_id,
+        lv.company_id,
+        lv.address_id
+      FROM
+        public.licence_versions lv
+      WHERE
+        lv.start_date <= CURRENT_DATE
+      ORDER BY
+        lv.licence_id ASC,
+        lv."issue" DESC,
+        lv."increment" DESC,
+        lv.end_date DESC NULLS FIRST
+    ) AS llv ON llv.licence_id = l.id
+    INNER JOIN public.companies c ON c.id = llv.company_id
+    INNER JOIN public.addresses a ON a.id = llv.address_id
+    INNER JOIN due_return_logs drl
+      ON drl.licence_ref = l.licence_ref
+    LEFT JOIN registered_licences rl
+      ON rl.licence_ref = l.licence_ref
   `
+
   const primaryUserExpectedQuery = `
     SELECT
       ('primary user') AS contact_type,
@@ -64,14 +113,43 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       md5(LOWER(le."name")) AS contact_hash_id,
   `
   const returnsToExpectedQuery = `
-    SELECT
-      ('returns to') AS contact_type,
-      4 AS priority,
-      jc.*
-    FROM
-      json_contacts jc
-    WHERE
-      jc.contact->>'role' = 'Returns to'
+      SELECT
+        ('returns to') AS contact_type,
+        4 AS priority,
+        contacts.contact AS contact,
+        (md5(
+          LOWER(
+            concat(
+              contacts->>'salutation',
+              contacts->>'forename',
+              contacts->>'initials',
+              contacts->>'name',
+              contacts->>'addressLine1',
+              contacts->>'addressLine2',
+              contacts->>'addressLine3',
+              contacts->>'addressLine4',
+              contacts->>'town',
+              contacts->>'county',
+              contacts->>'postcode',
+              contacts->>'country'
+            )
+          )
+        )) AS contact_hash_id,
+        a.due_date,
+        a.end_date,
+        (NULL) AS email,
+        a.licence_ref,
+        ('Letter') as message_type,
+        a.return_log_id,
+        a.return_reference,
+        a.start_date
+      FROM ldh_all a
+        LEFT JOIN registered_licences rl
+          ON rl.licence_ref = a.licence_ref
+          CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts(contact)
+      WHERE
+        rl.licence_ref IS NULL
+        AND contacts.contact->>'role' = 'Returns to'
   `
 
   let download
