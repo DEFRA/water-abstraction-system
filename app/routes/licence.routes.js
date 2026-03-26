@@ -29,11 +29,6 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/licences/{id}/licence-contacts',
-    handler: LicencesController.viewLicenceContacts
-  },
-  {
-    method: 'GET',
     path: '/licences/{id}/contact-details',
     handler: LicencesController.viewContactDetails
   },
