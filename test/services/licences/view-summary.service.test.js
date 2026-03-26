@@ -72,7 +72,6 @@ describe('Licences - View Summary service', () => {
           endDate: null,
           issueDate: null,
           licenceHolder: '',
-          licenceId: licence.id,
           licenceRef: licence.licenceRef,
           monitoringStations: [
             {
