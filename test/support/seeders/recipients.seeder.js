@@ -201,23 +201,24 @@ async function returnsAgent(licenceDocumentHeader, email) {
  * @param {string} name - The name for the "Returns to" contact
  *
  * @param company
+ * @param existingCompany
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function returnsTo(licenceDocumentHeader, name, company = null) {
+async function returnsTo(licenceDocumentHeader, name, existingCompany = null) {
   const address = _address()
 
   const addressData = await AddressHelper.add({
     ...address
   })
 
-  let localComp
+  let company
 
-  if (!company) {
-    localComp = await CompanyHelper.add({
+  if (!existingCompany) {
+    company = await CompanyHelper.add({
       name
     })
   } else {
-    localComp = company
+    company = existingCompany
   }
 
   const { licenceRef } = licenceDocumentHeader
@@ -231,7 +232,7 @@ async function returnsTo(licenceDocumentHeader, name, company = null) {
   await LicenceDocumentRoleHelper.add({
     licenceRoleId: licenceRole.id,
     licenceDocumentId: licenceDocument.id,
-    companyId: localComp.id,
+    companyId: company.id,
     addressId: addressData.id,
     endDate: null
   })
