@@ -37,7 +37,6 @@ describe('Licences - Summary Presenter', () => {
       endDate: null,
       issueDate: null,
       licenceHolder: 'ORDER OF THE PHOENIX',
-      licenceId: summary.id,
       monitoringStations: [
         {
           id: summary.licenceMonitoringStations[0].monitoringStation.id,
