@@ -460,8 +460,6 @@ function _returnsToQuery(noticeType) {
     `
   }
 
-  //
-
   return _noRecipientsQuery()
 }
 

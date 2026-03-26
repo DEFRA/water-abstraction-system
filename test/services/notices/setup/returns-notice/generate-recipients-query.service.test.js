@@ -149,7 +149,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           CROSS JOIN LATERAL jsonb_array_elements(a.metadata->'contacts') AS contacts(contact)
       WHERE
         rl.licence_ref IS NULL
-        AND contacts.contact->>'role' IN ('Returns to')
+        AND contacts.contact->>'role' = 'Returns to'
   `
 
   let download
