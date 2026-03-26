@@ -23,7 +23,6 @@ const ViewCommunicationsService = require('../../app/services/licences/view-comm
 const ViewConditionsService = require('../../app/services/licences/view-conditions.service.js')
 const ViewContactDetailsService = require('../../app/services/licences/view-contact-details.service.js')
 const ViewHistoryService = require('../../app/services/licences/view-history.service.js')
-const ViewLicenceContactsService = require('../../app/services/licences/view-licence-contacts.service.js')
 const ViewMarkForSupplementaryBillingService = require('../../app/services/licences/supplementary/view-mark-for-supplementary-billing.service.js')
 const ViewMarkedForSupplementaryBillingService = require('../../app/services/licences/supplementary/view-marked-for-supplementary-billing.service.js')
 const ViewPointsService = require('../../app/services/licences/view-points.service.js')
@@ -192,34 +191,6 @@ describe('Licences controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('History')
-        })
-      })
-    })
-  })
-
-  describe('/licences/{id}/licence-contacts', () => {
-    describe('GET', () => {
-      beforeEach(async () => {
-        options = {
-          method: 'GET',
-          url: '/licences/7861814c-ca19-43f2-be11-3c612f0d744b/licence-contacts',
-          auth: {
-            strategy: 'session',
-            credentials: { scope: [] }
-          }
-        }
-      })
-
-      describe('when a request is valid and has contacts', () => {
-        beforeEach(async () => {
-          Sinon.stub(ViewLicenceContactsService, 'go').resolves(_viewLicenceContacts())
-        })
-
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Licence contacts')
         })
       })
     })
@@ -727,27 +698,6 @@ function _viewHistory() {
     ...commonLicenceData,
     entries: [{}],
     pageTitle: 'History'
-  }
-}
-
-function _viewLicenceContacts() {
-  const commonLicenceData = _commonData()
-
-  commonLicenceData.pageTitle = null
-
-  return {
-    ...commonLicenceData,
-    activeSecondaryNav: 'search',
-    licenceContacts: [
-      {
-        address: {
-          contactAddress: ['Address Line 1', 'Address Line 2', 'Address Line 3']
-        },
-        name: 'jimbo',
-        role: 'Licence holder'
-      }
-    ],
-    pageTitle: 'Licence contacts'
   }
 }
 
