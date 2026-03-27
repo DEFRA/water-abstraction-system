@@ -35,9 +35,8 @@ const LICENCE_HOLDER_SQL = `
   WHERE
     c.external_id IS NOT NULL
     AND EXISTS (
-      SELECT 1 FROM licence_document_roles ldr
-      INNER JOIN licence_roles lr ON lr.id = ldr.licence_role_id
-      WHERE lr."name" = 'licenceHolder' AND ldr.company_id = c.id
+      SELECT 1 FROM licence_versions lv
+      WHERE lv.company_id = c.id
     )
     AND c."name" ILIKE ?
 `
@@ -184,9 +183,8 @@ function _licenceHolderSql(resultTypes, searchSqls, countSqls, exactQuery, parti
       WHERE
         c.external_id IS NOT NULL
         AND EXISTS (
-          SELECT 1 FROM licence_document_roles ldr
-          INNER JOIN licence_roles lr ON lr.id = ldr.licence_role_id
-          WHERE lr."name" = 'licenceHolder' AND ldr.company_id = c.id
+          SELECT 1 FROM licence_versions lv
+          WHERE lv.company_id = c.id
         )
         AND c."name" ILIKE ?)
     `)
