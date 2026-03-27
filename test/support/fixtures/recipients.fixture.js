@@ -53,9 +53,8 @@ function additionalEmailRecipient(licenceRef = null, email = null) {
 function additionalPostalRecipient(licenceRef = null, contact = null) {
   const recipientLicenceRef = licenceRef ?? generateLicenceRef()
 
-  // NOTE: We take what our helper function would generate for a contact and modify it to match
-  // what would be set after completing the address lookup journey, when the additional recipient is added to the
-  // session
+  // NOTE: We take what our helper function would generate for a contact and modify it to match would be set after
+  // completing the address lookup journey, when the additional recipient is added to the session
   if (!contact) {
     contact = _contact('4', 'Additional')
 
