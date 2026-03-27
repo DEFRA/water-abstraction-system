@@ -60,7 +60,20 @@ class LicenceVersionHolderModel extends BaseModel {
    * @returns {string[]} just the address lines for the licence version holder
    */
   $address() {
-    const contact = _contact(this)
+    const thisContact = _contact(this)
+
+    // Contacts using the legacy contact model need to be converted to the updated format
+    const contact = {
+      name: thisContact.derivedName ?? '',
+      address1: thisContact.addressLine1 ?? '',
+      address2: thisContact.addressLine2 ?? '',
+      address3: thisContact.addressLine3 ?? '',
+      address4: thisContact.addressLine4 ?? '',
+      address5: thisContact.town ?? '',
+      address6: thisContact.county ?? '',
+      postcode: thisContact.postcode ?? '',
+      country: thisContact.country ?? ''
+    }
 
     const address = NotifyAddressPresenter.go(contact)
 

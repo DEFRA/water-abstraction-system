@@ -79,10 +79,10 @@ describe('Notices - Setup - Process Add Recipient service', () => {
             {
               contact: {
                 name: sessionData.contactName,
-                addressLine1: sessionData.addressJourney.address.addressLine1,
-                addressLine2: sessionData.addressJourney.address.addressLine2,
-                addressLine3: sessionData.addressJourney.address.addressLine3,
-                addressLine4: sessionData.addressJourney.address.addressLine4,
+                address1: sessionData.addressJourney.address.addressLine1,
+                address2: sessionData.addressJourney.address.addressLine2,
+                address3: sessionData.addressJourney.address.addressLine3,
+                address4: sessionData.addressJourney.address.addressLine4,
                 postcode: sessionData.addressJourney.address.postcode
               },
               contact_hash_id: contactHashId,
@@ -104,10 +104,10 @@ describe('Notices - Setup - Process Add Recipient service', () => {
             {
               contact: {
                 name: 'Fake Other',
-                addressLine1: '2 Fake Farm',
-                addressLine2: '2 Fake street',
-                addressLine3: 'Fake Village',
-                addressLine4: 'Fake City',
+                address1: '2 Fake Farm',
+                address2: '2 Fake street',
+                address3: 'Fake Village',
+                address4: 'Fake City',
                 postcode: 'SW2A 2AA'
               },
               contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
@@ -136,10 +136,10 @@ describe('Notices - Setup - Process Add Recipient service', () => {
             {
               contact: {
                 name: 'Fake Other',
-                addressLine1: '2 Fake Farm',
-                addressLine2: '2 Fake street',
-                addressLine3: 'Fake Village',
-                addressLine4: 'Fake City',
+                address1: '2 Fake Farm',
+                address2: '2 Fake street',
+                address3: 'Fake Village',
+                address4: 'Fake City',
                 postcode: 'SW2A 2AA'
               },
               contact_hash_id: '78de9d5db4c52b66818004e2b0dc4392',
@@ -151,10 +151,10 @@ describe('Notices - Setup - Process Add Recipient service', () => {
             {
               contact: {
                 name: session.contactName,
-                addressLine1: session.addressJourney.address.addressLine1,
-                addressLine2: session.addressJourney.address.addressLine2,
-                addressLine3: session.addressJourney.address.addressLine3,
-                addressLine4: session.addressJourney.address.addressLine4,
+                address1: session.addressJourney.address.addressLine1,
+                address2: session.addressJourney.address.addressLine2,
+                address3: session.addressJourney.address.addressLine3,
+                address4: session.addressJourney.address.addressLine4,
                 postcode: session.addressJourney.address.postcode
               },
               contact_hash_id: contactHashId,
@@ -209,8 +209,8 @@ describe('Notices - Setup - Process Add Recipient service', () => {
             {
               contact: {
                 name: sessionData.contactName,
-                addressLine1: sessionData.addressJourney.address.addressLine1,
-                addressLine4: sessionData.addressJourney.address.addressLine4,
+                address1: sessionData.addressJourney.address.addressLine1,
+                address4: sessionData.addressJourney.address.addressLine4,
                 country: sessionData.addressJourney.address.country
               },
               contact_hash_id: contactHashId,

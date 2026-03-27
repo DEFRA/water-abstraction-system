@@ -53,28 +53,17 @@ function additionalEmailRecipient(licenceRef = null, email = null) {
 function additionalPostalRecipient(licenceRef = null, contact = null) {
   const recipientLicenceRef = licenceRef ?? generateLicenceRef()
 
-  // NOTE: We take what our helper function would generate for a licence document header contact and modify it to match
-  // what would be set after completing the address lookup journey, when the additional recipient is added to the
-  // session
+  // NOTE: We take what our helper function would generate for a contact and modify it to match would be set after
+  // completing the address lookup journey, when the additional recipient is added to the session
   if (!contact) {
-    contact = _licenceDocumentHeaderContact('Additional', 'Not applicable')
+    contact = _contact('4', 'Additional')
 
-    contact.addressLine3 = contact.town
-    contact.addressLine4 = contact.county
     contact.country = 'United Kingdom'
-
-    delete contact.role
-    delete contact.salutation
-    delete contact.forename
-    delete contact.initials
-    delete contact.type
-    delete contact.town
-    delete contact.county
   }
 
   const recipient = {
     contact,
-    contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
+    contact_hash_id: _contactHashId(contact),
     contact_type: 'single use',
     due_date_status: 'all nulls',
     email: null,
@@ -119,11 +108,11 @@ function alertNoticeAdditionalContact() {
  * @returns {object} The abstraction alert licence holder recipient fixture
  */
 function alertNoticeLicenceHolder() {
-  const contact = _licenceDocumentHeaderContact('Alertholder', 'Licence holder')
+  const contact = _contact('Alertholder', 'Licence holder')
 
   return {
     contact,
-    contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
+    contact_hash_id: _contactHashId(contact),
     contact_type: 'licence holder',
     email: null,
     licence_refs: [generateLicenceRef()],
@@ -163,11 +152,11 @@ function alertNoticePrimaryUser() {
  * @returns {object} The returns notice licence holder recipient fixture
  */
 function returnsNoticeLicenceHolder(download = false) {
-  const contact = _licenceDocumentHeaderContact('Returnsholder', 'Licence holder')
+  const contact = _contact('4', 'Returnsholder')
 
   const recipient = {
     contact,
-    contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
+    contact_hash_id: _contactHashId(contact),
     contact_type: 'licence holder',
     due_date: new Date('2025-04-28'),
     due_date_status: 'all nulls',
@@ -271,11 +260,11 @@ function returnsNoticeReturnsAgent(download = false) {
  * @returns {object} The returns notice returns to recipient fixture
  */
 function returnsNoticeReturnsTo(download = false) {
-  const contact = _licenceDocumentHeaderContact('Returnsto', 'Returns to')
+  const contact = _contact('4', 'Returnsto')
 
   const recipient = {
     contact,
-    contact_hash_id: _licenceDocumentHeaderContactHashId(contact),
+    contact_hash_id: _contactHashId(contact),
     contact_type: 'returns to',
     due_date: new Date('2025-04-28'),
     due_date_status: 'all nulls',
@@ -340,7 +329,7 @@ function _addAdditionalContact() {
 
 function _addLicenceHolder() {
   return {
-    contact: _contact('1', 'Potter', 'Licence holder'),
+    contact: _contact('1', 'Harry Potter'),
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed61214',
     contact_type: 'licence holder',
     email: null,
@@ -377,7 +366,7 @@ function _addReturnsAgent() {
 function _addReturnTo() {
   // NOTE: By removing the postcode from this one contact, we know we'll get a recipient that when passed to the
   // presenters will result in the address being flagged as INVALID. This allows us to write tests for this scenario.
-  const contact = _contact('2', 'Weasley', 'Returns to')
+  const contact = _contact('2', 'Ronald Weasley')
 
   contact.postcode = null
 
@@ -394,7 +383,7 @@ function _addReturnTo() {
 
 function _addLicenceHolderWithMultipleLicences() {
   return {
-    contact: _contact('3', 'Potter', 'Licence holder'),
+    contact: _contact('3', 'James Potter'),
     contact_hash_id: '22f6457b6be9fd63d8a9a8dd2ed09878075',
     contact_type: 'licence holder',
     email: null,
@@ -414,22 +403,16 @@ function _addLicenceHolderWithMultipleLicences() {
  * @returns {string} - a unique address
  * @private
  */
-function _contact(line1, name, role) {
+function _contact(line1, name) {
   return {
-    addressLine1: `${line1}`,
-    addressLine2: 'Privet Drive',
-    addressLine3: null,
-    addressLine4: null,
-    country: null,
-    county: 'Surrey',
-    forename: 'Harry',
-    initials: 'H J',
+    address1: `${line1}`,
+    address2: 'Privet Drive',
+    address3: null,
+    address4: null,
+    address5: 'Little Whinging',
+    address6: 'Surrey',
     name,
-    postcode: 'WD25 7LR',
-    role,
-    salutation: 'Mr',
-    town: 'Little Whinging',
-    type: 'Person'
+    postcode: 'WD25 7LR'
   }
 }
 
@@ -437,40 +420,18 @@ function _emailContactHashId(email) {
   return crypto.createHash('md5').update(email).digest('hex')
 }
 
-function _licenceDocumentHeaderContact(name, role) {
-  return {
-    addressLine1: '4',
-    addressLine2: 'Privet Drive',
-    addressLine3: null,
-    addressLine4: null,
-    country: null,
-    county: 'Surrey',
-    forename: 'Harry',
-    initials: 'J',
-    name,
-    postcode: 'WD25 7LR',
-    role,
-    salutation: null,
-    town: 'Little Whinging',
-    type: 'Person'
-  }
-}
-
-function _licenceDocumentHeaderContactHashId(contact) {
-  const salutation = contact.salutation ?? ''
-  const forename = contact.forename ?? ''
-  const initials = contact.initials ?? ''
+function _contactHashId(contact) {
   const name = contact.name
-  const addressLine1 = contact.addressLine1
-  const addressLine2 = contact.addressLine2 ?? ''
-  const addressLine3 = contact.addressLine3 ?? ''
-  const addressLine4 = contact.addressLine4 ?? ''
-  const town = contact.town ?? ''
-  const county = contact.county ?? ''
+  const address1 = contact.address1
+  const address2 = contact.address2 ?? ''
+  const address3 = contact.address3 ?? ''
+  const address4 = contact.address4 ?? ''
+  const address5 = contact.address5 ?? ''
+  const address6 = contact.address6 ?? ''
   const postcode = contact.postcode ?? ''
   const country = contact.country ?? ''
 
-  const _combinedString = `${salutation}${forename}${initials}${name}${addressLine1}${addressLine2}${addressLine3}${addressLine4}${town}${county}${postcode}${country}`
+  const _combinedString = `${name}${address1}${address2}${address3}${address4}${address5}${address6}${postcode}${country}`
 
   return crypto.createHash('md5').update(_combinedString.toLowerCase()).digest('hex')
 }

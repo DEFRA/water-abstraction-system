@@ -34,7 +34,7 @@ describe('Notices - Setup - Prepare Paper Return presenter', () => {
       messageRef: 'paper return',
       messageType: 'letter',
       personalisation: {
-        address_line_1: 'Mr H J Potter',
+        address_line_1: 'Harry Potter',
         address_line_2: '1',
         address_line_3: 'Privet Drive',
         address_line_4: 'Little Whinging',
@@ -69,7 +69,7 @@ describe('Notices - Setup - Prepare Paper Return presenter', () => {
 
       expect(result).to.equal({
         address: {
-          address_line_1: 'Mr H J Potter',
+          address_line_1: 'Harry Potter',
           address_line_2: '1',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
