@@ -99,13 +99,13 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
         messageRef: 'returns invitation',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'J Returnsholder',
+          address_line_1: 'Returnsholder',
           address_line_2: '4',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
-          name: 'J Returnsholder',
+          name: 'Returnsholder',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(dynamicLetterDueDate)
@@ -122,13 +122,13 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
         messageRef: 'returns invitation',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'J Returnsto',
+          address_line_1: 'Returnsto',
           address_line_2: '4',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
-          name: 'J Returnsto',
+          name: 'Returnsto',
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(dynamicLetterDueDate)
@@ -312,7 +312,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
         const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
         expect(result[2].personalisation).to.equal({
-          address_line_1: 'J Returnsholder',
+          address_line_1: 'Returnsholder',
           address_line_2: '4',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
@@ -321,7 +321,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           periodEndDate: '31 March 2025',
           periodStartDate: '1 January 2025',
           returnDueDate: formatLongDate(recipients[2].notificationDueDate),
-          name: 'J Returnsholder'
+          name: 'Returnsholder'
         })
       })
     })

@@ -31,7 +31,7 @@ describe('Notices - Base presenter', () => {
         beforeEach(() => {
           address = RecipientsFixture.returnsNoticeLicenceHolder().contact
 
-          address.addressLine3 = 'The Cupboard Under the Stairs'
+          address.address3 = 'The Cupboard Under the Stairs'
         })
 
         it('returns a fixed array of 7 strings with all the address lines', () => {
@@ -39,7 +39,7 @@ describe('Notices - Base presenter', () => {
 
           expect(result.length).to.equal(7)
           expect(result).to.equal([
-            'J Returnsholder',
+            'Returnsholder',
             '4',
             'Privet Drive',
             'The Cupboard Under the Stairs',
@@ -54,14 +54,14 @@ describe('Notices - Base presenter', () => {
         beforeEach(() => {
           address = RecipientsFixture.returnsNoticeLicenceHolder().contact
 
-          delete address.county
+          delete address.address6
         })
 
         it('returns a fixed array of 7 strings with some of the address lines, and missing strings at the end of the array', () => {
           const result = BasePresenter.addressToCSV(address)
 
           expect(result.length).to.equal(7)
-          expect(result).to.equal(['J Returnsholder', '4', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', ''])
+          expect(result).to.equal(['Returnsholder', '4', 'Privet Drive', 'Little Whinging', 'WD25 7LR', '', ''])
         })
       })
 
@@ -69,12 +69,12 @@ describe('Notices - Base presenter', () => {
         beforeEach(() => {
           address = RecipientsFixture.returnsNoticeLicenceHolder().contact
 
-          address.addressLine1 = null
-          address.addressLine2 = null
-          address.addressLine3 = null
-          address.addressLine4 = null
-          address.town = null
-          address.county = null
+          address.address1 = null
+          address.address2 = null
+          address.address3 = null
+          address.address4 = null
+          address.address5 = null
+          address.address6 = null
           address.postcode = null
         })
 
@@ -83,7 +83,7 @@ describe('Notices - Base presenter', () => {
 
           expect(result.length).to.equal(7)
           expect(result).to.equal([
-            'J Returnsholder',
+            'Returnsholder',
             'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
             '',
             '',

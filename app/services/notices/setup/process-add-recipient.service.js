@@ -27,10 +27,10 @@ async function go(sessionId, yar) {
   const additionalRecipient = {
     contact: {
       name: session.contactName,
-      addressLine1: address.addressLine1,
-      addressLine2: address.addressLine2,
-      addressLine3: address.addressLine3,
-      addressLine4: address.addressLine4,
+      address1: address.addressLine1,
+      address2: address.addressLine2,
+      address3: address.addressLine3,
+      address4: address.addressLine4,
       country: address.country,
       postcode: address.postcode
     },

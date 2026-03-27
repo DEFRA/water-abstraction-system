@@ -87,7 +87,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
         messageRef: 'paper return',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'J Returnsholder',
+          address_line_1: 'Returnsholder',
           address_line_2: '4',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
@@ -118,7 +118,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
         messageRef: 'paper return',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'J Returnsto',
+          address_line_1: 'Returnsto',
           address_line_2: '4',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
@@ -149,7 +149,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
         messageRef: 'paper return',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'J Returnsholder',
+          address_line_1: 'Returnsholder',
           address_line_2: '4',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
@@ -180,7 +180,7 @@ describe('Notices - Setup - Paper Return Notifications presenter', () => {
         messageRef: 'paper return',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'J Returnsto',
+          address_line_1: 'Returnsto',
           address_line_2: '4',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
