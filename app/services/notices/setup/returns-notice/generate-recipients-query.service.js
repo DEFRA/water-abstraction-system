@@ -137,7 +137,7 @@ WITH
     ${primaryUserQuery}
   ),
 
-  returns_agent as (
+  returns_user as (
     ${returnsUserQuery}
   ),
 
@@ -159,7 +159,7 @@ WITH
   all_contacts AS (
     SELECT * FROM primary_user
     UNION ALL
-    SELECT * FROM returns_agent
+    SELECT * FROM returns_user
     UNION ALL
     SELECT * FROM licence_holder
     UNION ALL

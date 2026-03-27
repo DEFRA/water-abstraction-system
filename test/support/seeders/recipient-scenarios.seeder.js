@@ -221,7 +221,7 @@ async function primaryUserOnly(returnLogs) {
  * Voila! You have a registered licence with a primary user.
  *
  * Next, it creates another licence entity record with the returns user's email address. This is then linked to the
- * same licence document header via a second licence entity role, where the role is set as `returns_agent`.
+ * same licence document header via a second licence entity role, where the role is set as `returns_user`.
  *
  * The aggregated data is assigned to the recipient objects to make testing easier.
  *
@@ -337,7 +337,7 @@ async function primaryUserWithMultipleLicences(returnLogs) {
  * Voila! You have a registered licence with a primary user.
  *
  * Next, it creates another licence entity record with the same email address. This is then linked to the
- * same licence document header via a second licence entity role, where the role is set as `returns_agent`.
+ * same licence document header via a second licence entity role, where the role is set as `returns_user`.
  *
  * The aggregated data is assigned to the recipient objects to make testing easier.
  *
