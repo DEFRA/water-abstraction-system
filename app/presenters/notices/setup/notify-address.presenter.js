@@ -109,13 +109,13 @@ function go(contact) {
 function _address(name, addressParts) {
   const fullContact = [name, ...addressParts]
 
-  const addresss = {}
+  const addressLines = {}
 
   for (const [index, value] of fullContact.entries()) {
-    addresss[`address_line_${index + 1}`] = value
+    addressLines[`address_line_${index + 1}`] = value
   }
 
-  return addresss
+  return addressLines
 }
 
 /**
