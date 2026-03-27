@@ -89,10 +89,10 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
           messageRef: 'returns invitation alternate',
           pdf: null,
           personalisation: {
-            name: 'J Returnsholder',
+            name: 'Returnsholder',
             periodEndDate: '31 March 2025',
             returnDueDate: formatLongDate(dueDate),
-            address_line_1: 'J Returnsholder',
+            address_line_1: 'Returnsholder',
             address_line_2: '4',
             address_line_3: 'Privet Drive',
             address_line_4: 'Little Whinging',

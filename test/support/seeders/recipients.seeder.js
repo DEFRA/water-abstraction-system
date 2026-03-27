@@ -86,17 +86,9 @@ async function licenceHolder(name, licenceRef = null) {
 
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
 
-  // We are transitioning from the licence document header to using the address table, this is a temporary mapping
   const contact = {
-    addressLine1: address.address1,
-    addressLine2: address.address2,
-    addressLine3: address.address3,
-    addressLine4: address.address4,
-    addressLine5: address.address5,
-    addressLine6: address.address6,
-    country: address.country,
-    name,
-    postcode: address.postcode
+    ...address,
+    name
   }
 
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
@@ -238,15 +230,8 @@ async function returnsTo(licenceDocumentHeader, name, existingCompany = null) {
   })
 
   const contact = {
-    addressLine1: address.address1,
-    addressLine2: address.address2,
-    addressLine3: address.address3,
-    addressLine4: address.address4,
-    addressLine5: address.address5,
-    addressLine6: address.address6,
-    country: address.country,
-    name,
-    postcode: address.postcode
+    ...address,
+    name
   }
 
   return {
@@ -332,20 +317,17 @@ function _address() {
 }
 
 function _contactHashId(contact) {
-  const salutation = contact.salutation ?? ''
-  const forename = contact.forename ?? ''
-  const initials = contact.initials ?? ''
   const name = contact.name
-  const addressLine1 = contact.addressLine1
-  const addressLine2 = contact.addressLine2 ?? ''
-  const addressLine3 = contact.addressLine3 ?? ''
-  const addressLine4 = contact.addressLine4 ?? ''
-  const town = contact.town ?? ''
-  const county = contact.county ?? ''
+  const address1 = contact.address1
+  const address2 = contact.address2 ?? ''
+  const address3 = contact.address3 ?? ''
+  const address4 = contact.address4 ?? ''
+  const address5 = contact.address5 ?? ''
+  const address6 = contact.address6 ?? ''
   const postcode = contact.postcode ?? ''
   const country = contact.country ?? ''
 
-  const _combinedString = `${salutation}${forename}${initials}${name}${addressLine1}${addressLine2}${addressLine3}${addressLine4}${town}${county}${postcode}${country}`
+  const _combinedString = `${name}${address1}${address2}${address3}${address4}${address5}${address6}${postcode}${country}`
 
   return crypto.createHash('md5').update(_combinedString.toLowerCase()).digest('hex')
 }
