@@ -141,9 +141,8 @@ WITH
     ${returnsUserQuery}
   ),
 
-  -- Which licences are registered (have a primary user). This CTE is used in the next CTE json_contacts to filter out
-  -- licence document header records linked to licences that are registered. We only care about extracting the JSON
-  -- contacts for unregistered licences, in order to get the address information.
+  -- Which licences are registered (have a primary user). This CTE is used in the next CTE to filter out
+  -- records linked to licences that are registered.
   registered_licences AS (
     SELECT DISTINCT licence_ref FROM primary_user
   ),
