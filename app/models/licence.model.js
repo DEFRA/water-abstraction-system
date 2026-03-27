@@ -416,7 +416,7 @@ class LicenceModel extends BaseModel {
    * array of `licenceEntityRoles`.
    *
    * > We understand that `licenceEntityRoles` can be associated with the same `company_entity_id`. A common example
-   * of this is having a 'Primary user' and a 'Returns agent' (known as `user_agent` in the database)
+   * of this is having a 'Primary user' and a 'Returns user' (known as `user_agent` in the database)
    *
    * @returns {(module:UserModel|null)} the primary user if the licence has one and the additional properties needed to
    * to determine it have been set, else `null`

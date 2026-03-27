@@ -206,7 +206,7 @@ async function primaryUserOnly(returnLogs) {
 }
 
 /**
- * Seeds test data where one or more return logs is linked to both a 'primary user' and 'returns agent' recipient
+ * Seeds test data where one or more return logs is linked to both a 'primary user' and 'returns user' recipient
  *
  * > This will only work if the return logs passed in share the _same_ licence reference
  *
@@ -220,7 +220,7 @@ async function primaryUserOnly(returnLogs) {
  *
  * Voila! You have a registered licence with a primary user.
  *
- * Next, it creates another licence entity record with the returns agent's email address. This is then linked to the
+ * Next, it creates another licence entity record with the returns user's email address. This is then linked to the
  * same licence document header via a second licence entity role, where the role is set as `returns_agent`.
  *
  * The aggregated data is assigned to the recipient objects to make testing easier.
@@ -229,12 +229,12 @@ async function primaryUserOnly(returnLogs) {
  * the recipients
  *
  * @returns {Promise<object[]>} The recipients generated for the scenario. In this case both the primary user and
- * returns agent recipients, plus the licence holder
+ * returns user recipients, plus the licence holder
  */
 async function primaryUserWithDifferentReturnsAgent(returnLogs) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
-  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder('Primaryandreturnsagent', licenceRefs[0])
+  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder('Primaryandreturnsuser', licenceRefs[0])
 
   licenceHolderRecipient.licenceRefs = licenceRefs
   licenceHolderRecipient.returnLogIds = returnLogIds
@@ -249,16 +249,16 @@ async function primaryUserWithDifferentReturnsAgent(returnLogs) {
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
 
-  const returnsAgentRecipient = await RecipientsSeeder.returnsAgent(
+  const returnsUserRecipient = await RecipientsSeeder.returnsUser(
     licenceHolderRecipient.licenceDocumentHeader,
-    'returnsagent@pura.com'
+    'returnsuser@pura.com'
   )
 
-  returnsAgentRecipient.licenceRefs = licenceRefs
-  returnsAgentRecipient.returnLogIds = returnLogIds
-  returnsAgentRecipient.returnLogs = returnLogs
+  returnsUserRecipient.licenceRefs = licenceRefs
+  returnsUserRecipient.returnLogIds = returnLogIds
+  returnsUserRecipient.returnLogs = returnLogs
 
-  return [licenceHolderRecipient, primaryUserRecipient, returnsAgentRecipient]
+  return [licenceHolderRecipient, primaryUserRecipient, returnsUserRecipient]
 }
 
 /**
@@ -322,7 +322,7 @@ async function primaryUserWithMultipleLicences(returnLogs) {
 }
 
 /**
- * Seeds test data where one or more return logs is linked to the same 'primary user' and 'returns agent' recipient
+ * Seeds test data where one or more return logs is linked to the same 'primary user' and 'returns user' recipient
  *
  * > This will only work if the return logs passed in share the _same_ licence reference
  *
@@ -345,12 +345,12 @@ async function primaryUserWithMultipleLicences(returnLogs) {
  * the recipient
  *
  * @returns {Promise<object[]>} The recipients generated for the scenario. In this case both the primary user and
- * returns agent recipients, though the query should only fetch the primary user
+ * returns user recipients, though the query should only fetch the primary user
  */
 async function primaryUserWithSameReturnsAgent(returnLogs) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
-  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder('Sameprimaryuserreturnsagent', licenceRefs[0])
+  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder('Sameprimaryuserreturnsuser', licenceRefs[0])
 
   licenceHolderRecipient.licenceRefs = licenceRefs
   licenceHolderRecipient.returnLogIds = returnLogIds
@@ -365,16 +365,16 @@ async function primaryUserWithSameReturnsAgent(returnLogs) {
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
 
-  const returnsAgentRecipient = await RecipientsSeeder.returnsAgent(
+  const returnsUserRecipient = await RecipientsSeeder.returnsUser(
     licenceHolderRecipient.licenceDocumentHeader,
     'same@pura.com'
   )
 
-  returnsAgentRecipient.licenceRefs = licenceRefs
-  returnsAgentRecipient.returnLogIds = returnLogIds
-  returnsAgentRecipient.returnLogs = returnLogs
+  returnsUserRecipient.licenceRefs = licenceRefs
+  returnsUserRecipient.returnLogIds = returnLogIds
+  returnsUserRecipient.returnLogs = returnLogs
 
-  return [licenceHolderRecipient, primaryUserRecipient, returnsAgentRecipient]
+  return [licenceHolderRecipient, primaryUserRecipient, returnsUserRecipient]
 }
 
 /**

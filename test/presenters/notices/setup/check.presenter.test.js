@@ -85,9 +85,9 @@ describe('Notices - Setup - Check presenter', () => {
         },
         {
           contact: ['returns.agent@important.com'],
-          licences: testRecipients.returnsAgent.licence_refs,
-          method: 'Email - returns agent',
-          previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.returnsAgent.contact_hash_id}`
+          licences: testRecipients.returnsUser.licence_refs,
+          method: 'Email - returns user',
+          previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.returnsUser.contact_hash_id}`
         }
       ],
       tableCaption: 'Showing all 5 recipients',

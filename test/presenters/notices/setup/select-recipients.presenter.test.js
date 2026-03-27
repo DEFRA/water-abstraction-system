@@ -28,7 +28,7 @@ describe('Notices - Setup - Select Recipients presenter', () => {
 
     selectedRecipients = [
       recipients.primaryUser.contact_hash_id,
-      recipients.returnsAgent.contact_hash_id,
+      recipients.returnsUser.contact_hash_id,
       recipients.licenceHolder.contact_hash_id,
       recipients.returnsTo.contact_hash_id,
       recipients.licenceHolderWithMultipleLicences.contact_hash_id
@@ -60,8 +60,8 @@ describe('Notices - Setup - Select Recipients presenter', () => {
         },
         {
           checked: true,
-          contact: [recipients.returnsAgent.email],
-          contact_hash_id: recipients.returnsAgent.contact_hash_id
+          contact: [recipients.returnsUser.email],
+          contact_hash_id: recipients.returnsUser.contact_hash_id
         },
         {
           checked: true,
@@ -140,8 +140,8 @@ describe('Notices - Setup - Select Recipients presenter', () => {
           },
           {
             checked: false,
-            contact: [recipients.returnsAgent.email],
-            contact_hash_id: recipients.returnsAgent.contact_hash_id
+            contact: [recipients.returnsUser.email],
+            contact_hash_id: recipients.returnsUser.contact_hash_id
           }
         ])
       })

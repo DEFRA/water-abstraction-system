@@ -16,8 +16,8 @@ const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
  * The function creates a complex CTE (Common Table Expression) query that:
  *
  * - Uses the provided 'due return log' query as a base
- * - Identifies primary users, returns agents, licence holders, and returns-to contacts
- * - Prioritizes contacts (primary user > returns agent > licence holder > returns to)
+ * - Identifies primary users, returns users, licence holders, and returns-to contacts
+ * - Prioritizes contacts (primary user > returns user > licence holder > returns to)
  * - Selects the best contact for each unique contact hash ID
  * - Applies aggregation and result formatting based on download parameter
  *
@@ -59,7 +59,7 @@ const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
  * more contacts with the role 'Returns to', which is extracted as well. Because they do not have an email, these
  * recipients will be sent letters.
  * - **Registered licences** have been linked to an external email. That initial email will be linked as the 'primary
- * user'. These licences may also have designated other email accounts as 'returns agents', which will be extracted as
+ * user'. These licences may also have designated other email accounts as 'returns users', which will be extracted as
  * well. Because these licences have email addresses, notifications will be sent as emails.
  *
  * Where a notice type considers all contact types, we prioritise the 'email' based contacts over the 'letter' based
@@ -104,7 +104,7 @@ const { NoticeType } = require('../../../../lib/static-lookups.lib.js')
  */
 function go(noticeType, dueReturnLogsQuery, download) {
   const primaryUserQuery = _primaryUserQuery(noticeType)
-  const returnsAgentQuery = _returnsAgentQuery(noticeType)
+  const returnsUserQuery = _returnsUserQuery(noticeType)
   const licenceHolderQuery = _licenceHolderQuery()
   const returnsToQuery = _returnsToQuery(noticeType)
 
@@ -138,7 +138,7 @@ WITH
   ),
 
   returns_agent as (
-    ${returnsAgentQuery}
+    ${returnsUserQuery}
   ),
 
   -- Which licences are registered (have a primary user). This CTE is used in the next CTE json_contacts to filter out
@@ -389,11 +389,11 @@ function _noRecipientsQuery() {
   `
 }
 
-function _returnsAgentQuery(noticeType) {
+function _returnsUserQuery(noticeType) {
   if (noticeType === NoticeType.INVITATIONS || noticeType === NoticeType.REMINDERS) {
     return `
     SELECT
-      ('returns agent') AS contact_type,
+      ('returns user') AS contact_type,
       2 AS priority,
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,

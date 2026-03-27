@@ -153,24 +153,24 @@ async function primaryUser(licenceDocumentHeader, email) {
 }
 
 /**
- * Creates a "Returns agent" recipient for an existing licence holder
+ * Creates a "Returns user" recipient for an existing licence holder
  *
  * This function accepts a previously created licence holder record and links it to a new licence entity role record
  * flagged with the role `primary_user`. To this it links an licence entity record setup as an individual with the the
  * 'registered' user's email name.
  *
- * This is because to have a "Returns agent", the licence must first be 'registered', which means it has a "Primary
+ * This is because to have a "Returns user", the licence must first be 'registered', which means it has a "Primary
  * user".
  *
- * Then we create a second licence entity and licence entity role for the "returns agent" and voila, we have a returns
+ * Then we create a second licence entity and licence entity role for the "returns user" and voila, we have a returns
  * agent recipient.
  *
  * @param {object} licenceDocumentHeader - The licence document header holding licence holder details
- * @param {string} email - The email address of the returns agent
+ * @param {string} email - The email address of the returns user
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function returnsAgent(licenceDocumentHeader, email) {
+async function returnsUser(licenceDocumentHeader, email) {
   const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
   const licenceEntityRole = await LicenceEntityRoleHelper.add({
     companyEntityId: licenceDocumentHeader.companyEntityId,
@@ -181,7 +181,7 @@ async function returnsAgent(licenceDocumentHeader, email) {
   return {
     contact: null,
     contactHashId: _emailHashId(email),
-    contactType: 'returns agent',
+    contactType: 'returns user',
     email,
     licenceDocumentHeader,
     licenceEntityRole,
@@ -358,7 +358,7 @@ module.exports = {
   clean,
   licenceHolder,
   primaryUser,
-  returnsAgent,
+  returnsUser,
   returnsTo,
   transformToDownloadingResult,
   transformToSendingResult

@@ -24,7 +24,7 @@ describe('Notices - Setup - Create Notice service', () => {
   beforeEach(() => {
     const fixtureData = RecipientsFixture.recipients()
 
-    recipients = [fixtureData.primaryUser, fixtureData.returnsAgent]
+    recipients = [fixtureData.primaryUser, fixtureData.returnsUser]
 
     session = {
       returnsPeriod: 'quarterFour',

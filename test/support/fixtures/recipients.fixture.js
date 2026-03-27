@@ -225,14 +225,14 @@ function returnsNoticePrimaryUser(download = false) {
 }
 
 /**
- * Creates a fixture for a returns notice returns agent recipient
+ * Creates a fixture for a returns notice returns user recipient
  *
- * This fixture generates a recipient object representing a returns agent for a returns notice with predefined
+ * This fixture generates a recipient object representing a returns user for a returns notice with predefined
  * email and associated licence references.
  *
  * @param {boolean} [download=false] - Flag indicating if the fixture should represent the download format
  *
- * @returns {object} The returns notice returns agent recipient fixture
+ * @returns {object} The returns notice returns user recipient fixture
  */
 function returnsNoticeReturnsAgent(download = false) {
   const email = 'returns.agent@returns-notice.com'
@@ -240,7 +240,7 @@ function returnsNoticeReturnsAgent(download = false) {
   const recipient = {
     contact: null,
     contact_hash_id: _emailContactHashId(email),
-    contact_type: 'returns agent',
+    contact_type: 'returns user',
     due_date: new Date('2025-04-28'),
     due_date_status: 'all nulls',
     end_date: new Date('2025-03-31'),
@@ -313,13 +313,13 @@ function alertsRecipients() {
 /**
  * Create recipients test data
  *
- * @returns {object} - Returns recipients for primaryUser, returnsAgent, licenceHolder, returnsTo and
+ * @returns {object} - Returns recipients for primaryUser, returnsUser, licenceHolder, returnsTo and
  * licenceHolderWithMultipleLicences
  */
 function recipients() {
   return {
     primaryUser: _addPrimaryUser(),
-    returnsAgent: _addReturnsAgent(),
+    returnsUser: _addReturnsAgent(),
     licenceHolder: _addLicenceHolder(),
     returnsTo: _addReturnTo(),
     licenceHolderWithMultipleLicences: _addLicenceHolderWithMultipleLicences()
@@ -367,7 +367,7 @@ function _addReturnsAgent() {
     licence_refs: [generateLicenceRef()],
     contact: null,
     contact_hash_id: '2e6918568dfbc1d78e2fbe279aaee990',
-    contact_type: 'returns agent',
+    contact_type: 'returns user',
     email: 'returns.agent@important.com',
     return_log_ids: [generateUUID()],
     message_type: 'Email'
