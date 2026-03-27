@@ -28,8 +28,8 @@ async function _fetch(returnVersionId) {
     .select(['createdAt', 'id', 'multipleUpload', 'notes', 'reason', 'quarterlyReturns', 'startDate', 'status'])
     .modify('history')
     .withGraphFetched('licence')
-    .modifyGraph('licence', (builder) => {
-      builder.select(['id', 'licenceRef']).modify('licenceHolder')
+    .modifyGraph('licence', (licenceBuilder) => {
+      licenceBuilder.select(['id', 'licenceRef'])
     })
     .withGraphFetched('returnRequirements')
     .modifyGraph('returnRequirements', (returnRequirementsBuilder) => {
@@ -67,8 +67,8 @@ async function _fetch(returnVersionId) {
           returnRequirementPurposesBuilder
             .select(['alias', 'id'])
             .withGraphFetched('purpose')
-            .modifyGraph('purpose', (builder) => {
-              builder.select(['description', 'id'])
+            .modifyGraph('purpose', (purposeBuilder) => {
+              purposeBuilder.select(['description', 'id'])
             })
         })
     })

@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches Licence and associated recordsfor the start of the return version setup process
+ * Fetches the licence and associated records required for the start of the return version setup process
  * @module FetchLicenceService
  */
 
@@ -20,6 +20,8 @@ async function go(licenceId) {
     LicenceModel.query()
       .findById(licenceId)
       .select(['id', 'expiredDate', 'lapsedDate', 'licenceRef', 'revokedDate', 'startDate', 'waterUndertaker'])
+      // See licence.model.js `static get modifiers` if you are unsure about what this is doing
+      .modify('licenceHolder')
       .withGraphFetched('licenceVersions')
       .modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
         licenceVersionsBuilder.select(['id', 'startDate']).where('status', 'current').orderBy('startDate', 'desc')
@@ -41,8 +43,6 @@ async function go(licenceId) {
             modLogsBuilder.select(['id', 'reasonDescription']).orderBy('externalId', 'asc')
           })
       })
-      // See licence.model.js `static get modifiers` if you are unsure about what this is doing
-      .modify('licenceHolder')
   )
 }
 
