@@ -25,7 +25,7 @@ const SubmitAuthorisedService = require('../../app/services/bill-runs/review/sub
 const SubmitEditService = require('../../app/services/bill-runs/review/submit-edit.service.js')
 const SubmitFactorsService = require('../../app/services/bill-runs/review/submit-factors.service.js')
 const SubmitRemoveService = require('../../app/services/bill-runs/review/submit-remove.service.js')
-const SubmitReviewBillRunService = require('../../app/services/bill-runs/review/submit-review-bill-run.service.js')
+const SubmitReviewService = require('../../app/services/bill-runs/review/submit-review.service.js')
 const ViewReviewService = require('../../app/services/bill-runs/review/view-review.service.js')
 
 // For running our service
@@ -145,7 +145,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(async () => {
         options = _postRequestOptions(path)
 
-        Sinon.stub(SubmitReviewBillRunService, 'go').resolves()
+        Sinon.stub(SubmitReviewService, 'go').resolves()
       })
 
       describe('when a request is valid', () => {

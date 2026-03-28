@@ -17,7 +17,7 @@ const SubmitAuthorisedService = require('../services/bill-runs/review/submit-aut
 const SubmitEditService = require('..//services/bill-runs/review/submit-edit.service.js')
 const SubmitFactorsService = require('../services/bill-runs/review/submit-factors.service.js')
 const SubmitRemoveService = require('../services/bill-runs/review/submit-remove.service.js')
-const SubmitReviewBillRunService = require('../services/bill-runs/review/submit-review-bill-run.service.js')
+const SubmitReviewService = require('../services/bill-runs/review/submit-review.service.js')
 const SubmitReviewLicenceService = require('../services/bill-runs/review/submit-review-licence.service.js')
 const ViewReviewService = require('../services/bill-runs/review/view-review.service.js')
 
@@ -134,7 +134,7 @@ async function submitRemove(request, h) {
 async function submitReview(request, h) {
   const { billRunId } = request.params
 
-  await SubmitReviewBillRunService.go(billRunId, request.payload, request.yar)
+  await SubmitReviewService.go(billRunId, request.payload, request.yar)
 
   return h.redirect(`/system/bill-runs/review/${billRunId}`)
 }
