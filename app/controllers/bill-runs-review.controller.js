@@ -12,7 +12,6 @@ const PreviewService = require('../services/bill-runs/review/preview.service.js'
 const RemoveService = require('../services/bill-runs/review/remove.service.js')
 const ReviewChargeElementService = require('../services/bill-runs/review/review-charge-element.service.js')
 const ReviewChargeReferenceService = require('../services/bill-runs/review/review-charge-reference.service.js')
-const ReviewBillRunService = require('../services/bill-runs/review/review-bill-run.service.js')
 const ReviewLicenceService = require('../services/bill-runs/review/review-licence.service.js')
 const SubmitAuthorisedService = require('../services/bill-runs/review/submit-authorised.service.js')
 const SubmitEditService = require('..//services/bill-runs/review/submit-edit.service.js')
@@ -20,6 +19,7 @@ const SubmitFactorsService = require('../services/bill-runs/review/submit-factor
 const SubmitRemoveService = require('../services/bill-runs/review/submit-remove.service.js')
 const SubmitReviewBillRunService = require('../services/bill-runs/review/submit-review-bill-run.service.js')
 const SubmitReviewLicenceService = require('../services/bill-runs/review/submit-review-licence.service.js')
+const ViewReviewService = require('../services/bill-runs/review/view-review.service.js')
 
 async function authorised(request, h) {
   const { reviewChargeReferenceId } = request.params
@@ -59,18 +59,6 @@ async function remove(request, h) {
   const pageData = await RemoveService.go(reviewLicenceId)
 
   return h.view('bill-runs/review/remove.njk', pageData)
-}
-
-async function viewReview(request, h) {
-  const {
-    params: { billRunId },
-    query: { page },
-    yar
-  } = request
-
-  const pageData = await ReviewBillRunService.go(billRunId, yar, page)
-
-  return h.view('bill-runs/review/review.njk', pageData)
 }
 
 async function reviewChargeElement(request, h) {
@@ -157,6 +145,18 @@ async function submitReviewLicence(request, h) {
   await SubmitReviewLicenceService.go(reviewLicenceId, request.yar, request.payload)
 
   return h.redirect(`/system/bill-runs/review/licence/${reviewLicenceId}`)
+}
+
+async function viewReview(request, h) {
+  const {
+    params: { billRunId },
+    query: { page },
+    yar
+  } = request
+
+  const pageData = await ViewReviewService.go(billRunId, yar, page)
+
+  return h.view('bill-runs/review/review.njk', pageData)
 }
 
 module.exports = {

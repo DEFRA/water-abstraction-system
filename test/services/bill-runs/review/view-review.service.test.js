@@ -18,11 +18,11 @@ const DatabaseConfig = require('../../../../config/database.config.js')
 const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js')
 
 // Thing under test
-const ReviewBillRunService = require('../../../../app/services/bill-runs/review/review-bill-run.service.js')
+const ViewReviewService = require('../../../../app/services/bill-runs/review/view-review.service.js')
 
 const billRunId = generateUUID()
 
-describe('Bill Runs - Review - Review Bill Run Service', () => {
+describe('Bill Runs - Review - View Review Service', () => {
   let notification
   let fetchData
   let page
@@ -80,7 +80,7 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
     })
 
     it('returns the page data for the view', async () => {
-      const result = await ReviewBillRunService.go(billRunId, yarStub, page)
+      const result = await ViewReviewService.go(billRunId, yarStub, page)
 
       expect(result).to.equal({
         activeNavBar: 'bill-runs',
@@ -151,7 +151,7 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await ReviewBillRunService.go(billRunId, yarStub, page)
+        const result = await ViewReviewService.go(billRunId, yarStub, page)
 
         expect(result.filters.openFilter).to.be.false()
       })
@@ -163,7 +163,7 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
-        const result = await ReviewBillRunService.go(billRunId, yarStub, page)
+        const result = await ViewReviewService.go(billRunId, yarStub, page)
 
         expect(result.filters.openFilter).to.be.false()
       })
@@ -178,7 +178,7 @@ describe('Bill Runs - Review - Review Bill Run Service', () => {
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
-        const result = await ReviewBillRunService.go(billRunId, yarStub, page)
+        const result = await ViewReviewService.go(billRunId, yarStub, page)
 
         expect(result.filters.openFilter).to.be.true()
       })
