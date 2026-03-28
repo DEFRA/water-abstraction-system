@@ -17,7 +17,6 @@ const AuthorisedService = require('../../app/services/bill-runs/review/authorise
 const EditService = require('../../app/services/bill-runs/review/edit.service.js')
 const FactorsService = require('../../app/services/bill-runs/review/factors.service.js')
 const PreviewService = require('../../app/services/bill-runs/review/preview.service.js')
-const RemoveService = require('../../app/services/bill-runs/review/remove.service.js')
 const ReviewChargeElementService = require('../../app/services/bill-runs/review/review-charge-element.service.js')
 const ReviewChargeReferenceService = require('../../app/services/bill-runs/review/review-charge-reference.service.js')
 const ReviewLicenceService = require('../../app/services/bill-runs/review/review-licence.service.js')
@@ -26,6 +25,7 @@ const SubmitEditService = require('../../app/services/bill-runs/review/submit-ed
 const SubmitFactorsService = require('../../app/services/bill-runs/review/submit-factors.service.js')
 const SubmitRemoveService = require('../../app/services/bill-runs/review/submit-remove.service.js')
 const SubmitReviewService = require('../../app/services/bill-runs/review/submit-review.service.js')
+const ViewRemoveService = require('../../app/services/bill-runs/review/view-remove.service.js')
 const ViewReviewService = require('../../app/services/bill-runs/review/view-review.service.js')
 
 // For running our service
@@ -650,7 +650,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(() => {
         options = _getRequestOptions(path)
 
-        Sinon.stub(RemoveService, 'go').resolves({
+        Sinon.stub(ViewRemoveService, 'go').resolves({
           billRunNumber: 12345,
           billRunStatus: 'review',
           dateCreated: '3 May 2024',

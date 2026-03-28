@@ -15,9 +15,9 @@ const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-revie
 const FetchRemoveReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-remove-review-licence.service.js')
 
 // Thing under test
-const RemoveService = require('../../../../app/services/bill-runs/review/remove.service.js')
+const ViewRemoveService = require('../../../../app/services/bill-runs/review/view-remove.service.js')
 
-describe('Bill Runs Review - Remove service', () => {
+describe('Bill Runs - Review - View Remove service', () => {
   let removeReviewLicence
 
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe('Bill Runs Review - Remove service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await RemoveService.go(removeReviewLicence.id)
+      const result = await ViewRemoveService.go(removeReviewLicence.id)
 
       expect(result).to.equal({
         activeNavBar: 'bill-runs',

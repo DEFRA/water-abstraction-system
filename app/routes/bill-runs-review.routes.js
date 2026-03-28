@@ -163,7 +163,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/licence/{reviewLicenceId}/remove',
     options: {
-      handler: BillRunsReviewController.remove,
+      handler: BillRunsReviewController.viewRemove,
       auth: {
         access: {
           scope: ['billing']
