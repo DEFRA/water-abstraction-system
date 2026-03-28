@@ -7,7 +7,7 @@
 
 const FetchBillRunLicencesService = require('./fetch-bill-run-licences.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
-const ReviewBillRunPresenter = require('../../../presenters/bill-runs/review/review-bill-run.presenter.js')
+const ReviewPresenter = require('../../../presenters/bill-runs/review/review.presenter.js')
 const { readFlashNotification } = require('../../../lib/general.lib.js')
 const { processSavedFilters } = require('../../../lib/submit-page.lib.js')
 
@@ -28,7 +28,7 @@ async function go(id, yar, page) {
 
   const notification = readFlashNotification(yar)
 
-  const pageData = ReviewBillRunPresenter.go(billRun, licences.results)
+  const pageData = ReviewPresenter.go(billRun, licences.results)
 
   const pagination = PaginatorPresenter.go(
     licences.total,
