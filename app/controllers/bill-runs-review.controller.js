@@ -6,7 +6,6 @@
  */
 
 const FactorsService = require('../services/bill-runs/review/factors.service.js')
-const EditService = require('../services/bill-runs/review/edit.service.js')
 const PreviewService = require('../services/bill-runs/review/preview.service.js')
 const ReviewChargeElementService = require('../services/bill-runs/review/review-charge-element.service.js')
 const ReviewChargeReferenceService = require('../services/bill-runs/review/review-charge-reference.service.js')
@@ -17,17 +16,10 @@ const SubmitRemoveService = require('../services/bill-runs/review/submit-remove.
 const SubmitReviewService = require('../services/bill-runs/review/submit-review.service.js')
 const SubmitReviewLicenceService = require('../services/bill-runs/review/submit-review-licence.service.js')
 const ViewAuthorisedService = require('../services/bill-runs/review/view-authorised.service.js')
+const ViewEditService = require('../services/bill-runs/review/view-edit.service.js')
 const ViewRemoveService = require('../services/bill-runs/review/view-remove.service.js')
 const ViewReviewService = require('../services/bill-runs/review/view-review.service.js')
 const ViewReviewLicenceService = require('../services/bill-runs/review/view-review-licence.service.js')
-
-async function edit(request, h) {
-  const { elementIndex, reviewChargeElementId } = request.params
-
-  const pageData = await EditService.go(reviewChargeElementId, elementIndex)
-
-  return h.view('bill-runs/review/edit.njk', pageData)
-}
 
 async function factors(request, h) {
   const { reviewChargeReferenceId } = request.params
@@ -131,6 +123,14 @@ async function viewAuthorised(request, h) {
   return h.view('bill-runs/review/authorised.njk', pageData)
 }
 
+async function viewEdit(request, h) {
+  const { elementIndex, reviewChargeElementId } = request.params
+
+  const pageData = await ViewEditService.go(reviewChargeElementId, elementIndex)
+
+  return h.view('bill-runs/review/edit.njk', pageData)
+}
+
 async function viewRemove(request, h) {
   const { reviewLicenceId } = request.params
 
@@ -160,7 +160,6 @@ async function viewReviewLicence(request, h) {
 }
 
 module.exports = {
-  edit,
   factors,
   preview,
   reviewChargeElement,
@@ -172,6 +171,7 @@ module.exports = {
   submitReview,
   submitReviewLicence,
   viewAuthorised,
+  viewEdit,
   viewRemove,
   viewReview,
   viewReviewLicence
