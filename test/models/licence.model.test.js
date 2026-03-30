@@ -13,7 +13,6 @@ const BillLicenceModel = require('../../app/models/bill-licence.model.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
-const ContactHelper = require('../support/helpers/contact.helper.js')
 const { generateUUID } = require('../../app/lib/general.lib.js')
 const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
 const LicenceAgreementModel = require('../../app/models/licence-agreement.model.js')
@@ -22,14 +21,12 @@ const LicenceDocumentHelper = require('../support/helpers/licence-document.helpe
 const LicenceDocumentModel = require('../../app/models/licence-document.model.js')
 const LicenceDocumentHeaderHelper = require('../support/helpers/licence-document-header.helper.js')
 const LicenceDocumentHeaderModel = require('../../app/models/licence-document-header.model.js')
-const LicenceDocumentRoleHelper = require('../support/helpers/licence-document-role.helper.js')
 const LicenceEndDateChangeHelper = require('../support/helpers/licence-end-date-change.helper.js')
 const LicenceEndDateChangeModel = require('../../app/models/licence-end-date-change.model.js')
 const LicenceEntityHelper = require('../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../support/helpers/licence-entity-role.helper.js')
 const LicenceMonitoringStationHelper = require('../support/helpers/licence-monitoring-station.helper.js')
 const LicenceMonitoringStationModel = require('../../app/models/licence-monitoring-station.model.js')
-const LicenceRoleHelper = require('../support/helpers/licence-role.helper.js')
 const LicenceSupplementaryYearHelper = require('../support/helpers/licence-supplementary-year.helper.js')
 const LicenceSupplementaryYearModel = require('../../app/models/licence-supplementary-year.model.js')
 const LicenceVersionHelper = require('../support/helpers/licence-version.helper.js')
@@ -908,18 +905,24 @@ describe('Licence model', () => {
   })
 
   describe('$licenceHolder', () => {
-    const licenceRoles = {}
-
     let company
-    let contact
-    let licenceDocument
-    let licenceDocumentRoles
     let licenceHolderRecord
     let oldCompany
     let otherLicence
+    let otherLicenceVersions
 
     beforeEach(async () => {
+      otherLicenceVersions = []
+
       otherLicence = await LicenceHelper.add()
+    })
+
+    afterEach(async () => {
+      for (const licenceVersion of otherLicenceVersions) {
+        await licenceVersion.$query().delete()
+      }
+
+      await otherLicence.$query().delete()
     })
 
     describe('when instance has not been set with the additional properties needed', () => {
@@ -932,96 +935,46 @@ describe('Licence model', () => {
 
     describe('when the instance has been set with the additional properties needed', () => {
       beforeEach(async () => {
-        // Create 2 licence roles so we can test the service only gets the licence document role record that is for
-        // 'licence holder'
-        licenceRoles.billing = await LicenceRoleHelper.select('billing')
-        licenceRoles.holder = await LicenceRoleHelper.select('licenceHolder')
+        // Create two licence versions linked to different companies to confirm we get the 'licence holder' (essentially
+        // company) linked to the current licence version.
+        company = await CompanyHelper.add({ name: 'Current licence holder' })
+        oldCompany = await CompanyHelper.add({ name: 'Old licence holder' })
 
-        // Create company and contact records. We create an additional company so we can create 2 licence document role
-        // records for our licence to test the one with the latest start date is used.
-        company = await CompanyHelper.add({ name: 'Licence Holder Ltd' })
-        contact = await ContactHelper.add({ firstName: 'Luce', lastName: 'Holder' })
-        oldCompany = await CompanyHelper.add({ name: 'Old Licence Holder Ltd' })
-
-        // We have to create a licence document to link our licence record to (eventually!) the company or contact
-        // record that is the 'licence holder'
-        licenceDocument = await LicenceDocumentHelper.add({ licenceRef: otherLicence.licenceRef })
-
-        // Create two licence document role records. This one is linked to the billing role so should be ignored by the
-        // service
-        licenceDocumentRoles = [
-          await LicenceDocumentRoleHelper.add({
-            companyId: company.id,
-            licenceDocumentId: licenceDocument.id,
-            licenceRoleId: licenceRoles.billing.id
-          }),
-          // This one is linked to the old company record so should not be used to provide the licence holder name
-          await LicenceDocumentRoleHelper.add({
+        otherLicenceVersions = [
+          await LicenceVersionHelper.add({
             companyId: oldCompany.id,
-            licenceDocumentId: licenceDocument.id,
-            licenceRoleId: licenceRoles.holder.id,
-            startDate: new Date('2022-01-01')
+            endDate: new Date('2021-12-31'),
+            increment: 0,
+            issue: 1,
+            issueDate: new Date('2001-01-01'),
+            licenceId: otherLicence.id,
+            startDate: new Date('2001-01-01'),
+            status: 'superseded'
+          }),
+          await LicenceVersionHelper.add({
+            companyId: company.id,
+            endDate: null,
+            increment: 0,
+            issueDate: new Date('2022-01-01'),
+            issue: 2,
+            licenceId: otherLicence.id,
+            startDate: new Date('2022-01-01'),
+            status: 'current'
           })
         ]
+
+        licenceHolderRecord = await LicenceModel.query().findById(otherLicence.id).modify('licenceHolder')
       })
 
       afterEach(async () => {
-        for (const licenceDocumentRole of licenceDocumentRoles) {
-          await licenceDocumentRole.$query().delete()
-        }
-
-        await contact.$query().delete()
         await company.$query().delete()
         await oldCompany.$query().delete()
-
-        await licenceDocument.$query().delete()
       })
 
-      describe('and the licence holder is a company', () => {
-        beforeEach(async () => {
-          // Create the licence document role record that _is_ linked to the correct licence holder record
-          licenceDocumentRoles.push(
-            await LicenceDocumentRoleHelper.add({
-              licenceDocumentId: licenceDocument.id,
-              licenceRoleId: licenceRoles.holder.id,
-              companyId: company.id,
-              startDate: new Date('2022-08-01')
-            })
-          )
+      it('returns the company name as the licence holder', async () => {
+        const result = licenceHolderRecord.$licenceHolder()
 
-          licenceHolderRecord = await LicenceModel.query().findById(otherLicence.id).modify('licenceHolder')
-        })
-
-        it('returns the company name as the licence holder', async () => {
-          const result = licenceHolderRecord.$licenceHolder()
-
-          expect(result).to.equal('Licence Holder Ltd')
-        })
-      })
-
-      describe('and the licence holder is a contact', () => {
-        beforeEach(async () => {
-          // Create the licence document role record that _is_ linked to the correct licence holder record.
-          // NOTE: We create this against both the company and contact to also confirm that the contact name has
-          // precedence over the company name
-          licenceDocumentRoles.push(
-            await LicenceDocumentRoleHelper.add({
-              licenceDocumentId: licenceDocument.id,
-              licenceRoleId: licenceRoles.holder.id,
-              companyId: company.id,
-              contactId: contact.id,
-              startDate: new Date('2022-08-01')
-            })
-          )
-
-          licenceHolderRecord = await LicenceModel.query().findById(otherLicence.id).modify('licenceHolder')
-        })
-
-        it('returns the contact name as the licence holder', async () => {
-          const result = licenceHolderRecord.$licenceHolder()
-
-          expect(result).to.equal('Luce Holder')
-        })
+        expect(result).to.equal('Current licence holder')
       })
     })
   })

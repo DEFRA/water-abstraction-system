@@ -45,26 +45,40 @@ async function go(billRun, billingPeriod) {
     .where('chargeVersions.scheme', 'sroc')
     .where('chargeVersions.startDate', '<=', billingPeriod.endDate)
     .where('chargeVersions.status', 'current')
-    .where((builder) => {
-      builder.whereNull('chargeVersions.endDate').orWhere('chargeVersions.endDate', '>=', billingPeriod.startDate)
+    .where((chargeVersionEndDateBuilder) => {
+      chargeVersionEndDateBuilder
+        .whereNull('chargeVersions.endDate')
+        .orWhere('chargeVersions.endDate', '>=', billingPeriod.startDate)
     })
-    .where((builder) => {
-      builder.whereNull('licence.expiredDate').orWhere('licence.expiredDate', '>=', billingPeriod.startDate)
+    .where((licenceExpiredDateBuilder) => {
+      licenceExpiredDateBuilder
+        .whereNull('licence.expiredDate')
+        .orWhere('licence.expiredDate', '>=', billingPeriod.startDate)
     })
-    .where((builder) => {
-      builder.whereNull('licence.lapsedDate').orWhere('licence.lapsedDate', '>=', billingPeriod.startDate)
+    .where((licenceLapsedDateBuilder) => {
+      licenceLapsedDateBuilder
+        .whereNull('licence.lapsedDate')
+        .orWhere('licence.lapsedDate', '>=', billingPeriod.startDate)
     })
-    .where((builder) => {
-      builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', billingPeriod.startDate)
+    .where((licenceRevokedDateBuilder) => {
+      licenceRevokedDateBuilder
+        .whereNull('licence.revokedDate')
+        .orWhere('licence.revokedDate', '>=', billingPeriod.startDate)
     })
-    .where((builder) => {
-      builder.whereNull('licence.expiredDate').orWhereColumn('licence.expiredDate', '>=', 'chargeVersions.startDate')
+    .where((expiredGreaterThanStartDateBuilder) => {
+      expiredGreaterThanStartDateBuilder
+        .whereNull('licence.expiredDate')
+        .orWhereColumn('licence.expiredDate', '>=', 'chargeVersions.startDate')
     })
-    .where((builder) => {
-      builder.whereNull('licence.lapsedDate').orWhereColumn('licence.lapsedDate', '>=', 'chargeVersions.startDate')
+    .where((lapsedGreaterThanStartDateBuilder) => {
+      lapsedGreaterThanStartDateBuilder
+        .whereNull('licence.lapsedDate')
+        .orWhereColumn('licence.lapsedDate', '>=', 'chargeVersions.startDate')
     })
-    .where((builder) => {
-      builder.whereNull('licence.revokedDate').orWhereColumn('licence.revokedDate', '>=', 'chargeVersions.startDate')
+    .where((revokedGreaterThanStartDateBuilder) => {
+      revokedGreaterThanStartDateBuilder
+        .whereNull('licence.revokedDate')
+        .orWhereColumn('licence.revokedDate', '>=', 'chargeVersions.startDate')
     })
     .whereNotExists(
       Workflow.query()
@@ -81,7 +95,7 @@ async function go(billRun, billingPeriod) {
         // rather than have to remember that quirk we stick with whereJsonPath() which works in all cases.
         .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
     )
-    .where((builder) => {
+    .where((supplementaryBuilder) => {
       // NOTE: Ordinarily we'd assign the query to a variable, then use `supplementary` to add the `where` clause to it.
       // But because the query is already very complex, breaking it apart to allow us to add this `where` clause in the
       // middle doesn't seem worth it, when we can just use a little SQL magic!
@@ -89,7 +103,7 @@ async function go(billRun, billingPeriod) {
       // If `supplementary` is false (we're getting the charge versions for an annual 2PT) we basically tack on a
       // `where TRUE` clause to the query, i.e. the clause does nothing.
       if (supplementary) {
-        builder.whereExists(
+        supplementaryBuilder.whereExists(
           LicenceSupplementaryYearModel.query()
             .select(1)
             .whereColumn('licenceSupplementaryYears.licenceId', 'chargeVersions.licenceId')
@@ -97,23 +111,23 @@ async function go(billRun, billingPeriod) {
             .where('licenceSupplementaryYears.billRunId', billRunId)
         )
       } else {
-        builder.whereRaw('1=1')
+        supplementaryBuilder.whereRaw('1=1')
       }
     })
     .orderBy('chargeVersions.licenceRef', 'asc')
     .withGraphFetched('changeReason')
-    .modifyGraph('changeReason', (builder) => {
-      builder.select(['description'])
+    .modifyGraph('changeReason', (changeReasonBuilder) => {
+      changeReasonBuilder.select(['description'])
     })
     .withGraphFetched('licence')
-    .modifyGraph('licence', (builder) => {
-      builder
+    .modifyGraph('licence', (licenceBuilder) => {
+      licenceBuilder
         .select(['id', 'licenceRef', 'startDate', 'expiredDate', 'lapsedDate', 'revokedDate'])
         .modify('licenceHolder')
     })
     .withGraphFetched('chargeReferences')
-    .modifyGraph('chargeReferences', (builder) => {
-      builder
+    .modifyGraph('chargeReferences', (chargeReferencesBuilder) => {
+      chargeReferencesBuilder
         .select([
           'id',
           'volume',
@@ -126,29 +140,29 @@ async function go(billRun, billingPeriod) {
           ref('chargeReferences.adjustments:charge').castText().as('charge')
         ])
         .whereJsonPath('chargeReferences.adjustments', '$.s127', '=', true)
-    })
-    .withGraphFetched('chargeReferences.chargeCategory')
-    .modifyGraph('chargeReferences.chargeCategory', (builder) => {
-      builder.select(['reference', 'shortDescription', 'subsistenceCharge'])
-    })
-    .withGraphFetched('chargeReferences.chargeElements')
-    .modifyGraph('chargeReferences.chargeElements', (builder) => {
-      builder
-        .select([
-          'id',
-          'description',
-          'abstractionPeriodStartDay',
-          'abstractionPeriodStartMonth',
-          'abstractionPeriodEndDay',
-          'abstractionPeriodEndMonth',
-          'authorisedAnnualQuantity'
-        ])
-        .where('section127Agreement', true)
-        .orderBy('authorisedAnnualQuantity', 'desc')
-    })
-    .withGraphFetched('chargeReferences.chargeElements.purpose')
-    .modifyGraph('chargeReferences.chargeElements.purpose', (builder) => {
-      builder.select(['id', 'legacyId', 'description'])
+        .withGraphFetched('chargeCategory')
+        .modifyGraph('chargeCategory', (chargeCategoryBuilder) => {
+          chargeCategoryBuilder.select(['reference', 'shortDescription', 'subsistenceCharge'])
+        })
+        .withGraphFetched('chargeElements')
+        .modifyGraph('chargeElements', (chargeElementsBuilder) => {
+          chargeElementsBuilder
+            .select([
+              'id',
+              'description',
+              'abstractionPeriodStartDay',
+              'abstractionPeriodStartMonth',
+              'abstractionPeriodEndDay',
+              'abstractionPeriodEndMonth',
+              'authorisedAnnualQuantity'
+            ])
+            .where('section127Agreement', true)
+            .orderBy('authorisedAnnualQuantity', 'desc')
+            .withGraphFetched('purpose')
+            .modifyGraph('purpose', (purposeBuilder) => {
+              purposeBuilder.select(['id', 'legacyId', 'description'])
+            })
+        })
     })
 
   return chargeVersions

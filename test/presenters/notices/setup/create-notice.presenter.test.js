@@ -27,7 +27,7 @@ describe('Notices - Setup - Create Notice presenter', () => {
 
       recipients = [
         fixtureData.primaryUser,
-        fixtureData.returnsAgent,
+        fixtureData.returnsUser,
         fixtureData.licenceHolder,
         fixtureData.returnsTo,
         fixtureData.licenceHolderWithMultipleLicences

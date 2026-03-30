@@ -184,36 +184,10 @@ class LicenceModel extends BaseModel {
       // licenceHolder modifier fetches all the joined records needed to identify the licence holder
       licenceHolder(query) {
         query
-          .withGraphFetched('licenceDocument')
-          .modifyGraph('licenceDocument', (builder) => {
-            builder.select(['id'])
-          })
-          .withGraphFetched('licenceDocument.licenceDocumentRoles')
-          .modifyGraph('licenceDocument.licenceDocumentRoles', (builder) => {
-            builder
-              .select(['licenceDocumentRoles.id'])
-              .innerJoinRelated('licenceRole')
-              .where('licenceRole.name', 'licenceHolder')
-              .orderBy('licenceDocumentRoles.startDate', 'desc')
-          })
-          .withGraphFetched('licenceDocument.licenceDocumentRoles.company')
-          .modifyGraph('licenceDocument.licenceDocumentRoles.company', (builder) => {
-            builder.select(['id', 'name', 'type'])
-          })
-          .withGraphFetched('licenceDocument.licenceDocumentRoles.contact')
-          .modifyGraph('licenceDocument.licenceDocumentRoles.contact', (builder) => {
-            builder.select([
-              'id',
-              'contactType',
-              'dataSource',
-              'department',
-              'firstName',
-              'initials',
-              'lastName',
-              'middleInitials',
-              'salutation',
-              'suffix'
-            ])
+          .modify('currentVersion')
+          .withGraphFetched('licenceVersions.company')
+          .modifyGraph('licenceVersions.company', (companyBuilder) => {
+            companyBuilder.select(['id', 'name', 'type'])
           })
       },
       // When an external user registers themselves as the 'primary user' for a licence (see $primaryUser()) they
@@ -362,16 +336,10 @@ class LicenceModel extends BaseModel {
     // Extract the company and contact from the last licenceDocumentRole created. It is assumed that the
     // `licenceHolder` modifier has been used to get the additional records needed for this. It also ensures in the case
     // that there is more than one that they are ordered by their start date (DESC)
-    const latestLicenceDocumentRole = this?.licenceDocument?.licenceDocumentRoles[0]
+    const company = this?.licenceVersions?.[0].company
 
-    if (!latestLicenceDocumentRole) {
+    if (!company) {
       return null
-    }
-
-    const { company, contact } = latestLicenceDocumentRole
-
-    if (contact) {
-      return contact.$name()
     }
 
     return company.name
@@ -416,7 +384,7 @@ class LicenceModel extends BaseModel {
    * array of `licenceEntityRoles`.
    *
    * > We understand that `licenceEntityRoles` can be associated with the same `company_entity_id`. A common example
-   * of this is having a 'Primary user' and a 'Returns agent' (known as `user_agent` in the database)
+   * of this is having a 'Primary user' and a 'Returns user' (known as `user_agent` in the database)
    *
    * @returns {(module:UserModel|null)} the primary user if the licence has one and the additional properties needed to
    * to determine it have been set, else `null`
