@@ -46,7 +46,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
       expect(result).to.equal({
         accountSelected: 'Another billing account',
         accountType: '',
-        address: '',
+        address: [],
         addressSelected: ['New'],
         companiesHouseName: '',
         companySearch: '',
@@ -558,7 +558,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
           null
         )
 
-        expect(result.address).to.equal('')
+        expect(result.address).to.equal([])
       })
     })
   })
