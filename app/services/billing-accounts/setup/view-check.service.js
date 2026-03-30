@@ -27,6 +27,7 @@ async function go(sessionId) {
   const companysHouseResult = await FetchCompanyService.go(session.companiesHouseNumber)
 
   await markCheckPageVisited(session)
+  await _updateAddressJourneyBackLink(session)
 
   const pageData = CheckPresenter.go(session, companyContacts, existingAddress, companysHouseResult)
 
@@ -54,6 +55,14 @@ async function _fetchCompanyContacts(session) {
   const companyContacts = await FetchCompanyContactsService.go(companyId)
 
   return companyContacts
+}
+
+async function _updateAddressJourneyBackLink(session) {
+  if (session.addressJourney) {
+    session.addressJourney.backLink = `/system/billing-accounts/setup/${session.id}/check`
+
+    await session.$update()
+  }
 }
 
 module.exports = {

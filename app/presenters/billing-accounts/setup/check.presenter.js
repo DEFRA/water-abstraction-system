@@ -21,7 +21,8 @@ function go(session, companyContacts, existingAddress, companysHouseResult) {
   return {
     accountSelected: session.accountSelected === 'customer' ? billingAccount.company.name : 'Another billing account',
     accountType: session.accountType ?? '',
-    addressSelected: _address(existingAddress),
+    address: _address(session),
+    addressSelected: _existingAddress(existingAddress),
     companySearch: session.companySearch ?? '',
     companiesHouseName: companysHouseResult ? companysHouseResult.title : '',
     contactName: session.contactName ?? '',
@@ -36,7 +37,26 @@ function go(session, companyContacts, existingAddress, companysHouseResult) {
   }
 }
 
-function _address(existingAddress) {
+function _address(session) {
+  if (!session.addressJourney) {
+    return []
+  }
+
+  const { address } = session.addressJourney
+
+  const addressLines = [
+    address.addressLine1,
+    address.addressLine2,
+    address.addressLine3,
+    address.addressLine4,
+    address.postcode,
+    address.country
+  ].filter(Boolean)
+
+  return addressLines
+}
+
+function _existingAddress(existingAddress) {
   if (existingAddress.length === 0) {
     return ['New']
   }
@@ -86,6 +106,7 @@ function _existingAccount(session, companyContacts) {
 
 function _links(session) {
   return {
+    address: `/system/address/${session.id}/postcode`,
     accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
     accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
     addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,

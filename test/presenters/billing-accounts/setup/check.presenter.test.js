@@ -46,6 +46,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
       expect(result).to.equal({
         accountSelected: 'Another billing account',
         accountType: '',
+        address: [],
         addressSelected: ['New'],
         companiesHouseName: '',
         companySearch: '',
@@ -56,6 +57,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
+          address: `/system/address/${session.id}/postcode`,
           addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
           companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
           companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
@@ -465,6 +467,98 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         )
 
         expect(result.contactName).to.equal('')
+      })
+    })
+  })
+
+  describe('the "address" property', () => {
+    describe('when there is an address lookup value provided', () => {
+      it('returns an array of address lines', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            addressJourney: {
+              address: {
+                uprn: 12345678,
+                postcode: 'BS1 5AH',
+                addressLine1: 'ENVIRONMENT AGENCY',
+                addressLine2: 'HORIZON HOUSE',
+                addressLine3: null,
+                addressLine4: 'BRISTOL'
+              }
+            }
+          },
+          [],
+          [],
+          null
+        )
+
+        expect(result.address).to.equal(['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'BRISTOL', 'BS1 5AH'])
+      })
+    })
+
+    describe('when there is a manual entry provided', () => {
+      it('returns an array of address lines', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            addressJourney: {
+              address: {
+                postcode: 'BS1 5AH',
+                addressLine1: 'ENVIRONMENT AGENCY',
+                addressLine2: 'HORIZON HOUSE',
+                addressLine3: null,
+                addressLine4: 'BRISTOL'
+              }
+            }
+          },
+          [],
+          [],
+          null
+        )
+
+        expect(result.address).to.equal(['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'BRISTOL', 'BS1 5AH'])
+      })
+    })
+
+    describe('when there is an international entry provided', () => {
+      it('returns an array of address lines', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            addressJourney: {
+              address: {
+                country: 'ENGLAND',
+                postcode: 'BS1 5AH',
+                addressLine1: 'ENVIRONMENT AGENCY',
+                addressLine2: 'HORIZON HOUSE',
+                addressLine3: null,
+                addressLine4: 'BRISTOL'
+              }
+            }
+          },
+          [],
+          [],
+          null
+        )
+
+        expect(result.address).to.equal(['ENVIRONMENT AGENCY', 'HORIZON HOUSE', 'BRISTOL', 'BS1 5AH', 'ENGLAND'])
+      })
+    })
+
+    describe('when there is no addressJourney provided', () => {
+      it('returns an array of address lines', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            addressJourney: null
+          },
+          [],
+          [],
+          null
+        )
+
+        expect(result.address).to.equal([])
       })
     })
   })

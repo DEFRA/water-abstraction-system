@@ -99,6 +99,19 @@
         }
       } if addressSelected,
       {
+        key: { text: "New address" },
+        value: { html: newLineArrayItems(address) },
+        actions: {
+          items: [
+            {
+              href: links.address,
+              text: "Change",
+              visuallyHiddenText: "address lookup"
+            }
+          ]
+        }
+      } if address.length > 0,
+      {
         key: { text: "FAO" },
         value: { text: fao },
         actions: {
@@ -123,8 +136,7 @@
             }
           ]
         }
-      } if contactSelected
-      ,
+      } if contactSelected,
       {
         key: { text: "Contact Name" },
         value: { text: contactName },

@@ -35,6 +35,7 @@ describe('Billing Accounts - Setup - View Check Service', () => {
       expect(result).to.equal({
         accountSelected: 'Another billing account',
         accountType: '',
+        address: [],
         addressSelected: ['New'],
         companiesHouseName: '',
         companySearch: '',
@@ -45,6 +46,7 @@ describe('Billing Accounts - Setup - View Check Service', () => {
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
+          address: `/system/address/${session.id}/postcode`,
           addressSelected: `/system/billing-accounts/setup/${session.id}/existing-address`,
           companiesHouseName: `/system/billing-accounts/setup/${session.id}/select-company`,
           companySearch: `/system/billing-accounts/setup/${session.id}/company-search`,
