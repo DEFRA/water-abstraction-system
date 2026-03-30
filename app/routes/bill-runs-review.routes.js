@@ -139,7 +139,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/licence/{reviewLicenceId}',
     options: {
-      handler: BillRunsReviewController.reviewLicence,
+      handler: BillRunsReviewController.viewReviewLicence,
       auth: {
         access: {
           scope: ['billing']

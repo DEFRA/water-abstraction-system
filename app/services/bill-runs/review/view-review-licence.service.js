@@ -1,21 +1,20 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the two-part tariff review licence page
- * @module ReviewLicenceService
+ * Orchestrates page data for the '/bill-runs/review/licence/{reviewLicenceId}' page
+ * @module ViewReviewLicenceService
  */
 
 const FetchReviewLicenceService = require('./fetch-review-licence.service.js')
 const ReviewLicencePresenter = require('../../../presenters/bill-runs/review/review-licence.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the two-part tariff review licence page
+ * Orchestrates page data for the '/bill-runs/review/licence/{reviewLicenceId}' page
  *
  * @param {string} reviewLicenceId - The UUID of the licence that is being reviewed
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<object>} the 'pageData' needed for the review licence page. It contains the licence, bill run,
- * matched and unmatched returns and the licence charge data
+ * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(reviewLicenceId, yar) {
   const reviewLicence = await FetchReviewLicenceService.go(reviewLicenceId)

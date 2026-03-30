@@ -19,7 +19,6 @@ const FactorsService = require('../../app/services/bill-runs/review/factors.serv
 const PreviewService = require('../../app/services/bill-runs/review/preview.service.js')
 const ReviewChargeElementService = require('../../app/services/bill-runs/review/review-charge-element.service.js')
 const ReviewChargeReferenceService = require('../../app/services/bill-runs/review/review-charge-reference.service.js')
-const ReviewLicenceService = require('../../app/services/bill-runs/review/review-licence.service.js')
 const SubmitAuthorisedService = require('../../app/services/bill-runs/review/submit-authorised.service.js')
 const SubmitEditService = require('../../app/services/bill-runs/review/submit-edit.service.js')
 const SubmitFactorsService = require('../../app/services/bill-runs/review/submit-factors.service.js')
@@ -27,6 +26,7 @@ const SubmitRemoveService = require('../../app/services/bill-runs/review/submit-
 const SubmitReviewService = require('../../app/services/bill-runs/review/submit-review.service.js')
 const ViewRemoveService = require('../../app/services/bill-runs/review/view-remove.service.js')
 const ViewReviewService = require('../../app/services/bill-runs/review/view-review.service.js')
+const ViewReviewLicenceService = require('../../app/services/bill-runs/review/view-review-licence.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -541,7 +541,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(async () => {
         options = _getRequestOptions(path)
 
-        Sinon.stub(ReviewLicenceService, 'go').resolves({
+        Sinon.stub(ViewReviewLicenceService, 'go').resolves({
           billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
           chargeVersions: [
             {
