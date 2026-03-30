@@ -67,7 +67,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}',
     options: {
-      handler: BillRunsReviewController.reviewChargeReference,
+      handler: BillRunsReviewController.viewReviewChargeReference,
       auth: {
         access: {
           scope: ['billing']

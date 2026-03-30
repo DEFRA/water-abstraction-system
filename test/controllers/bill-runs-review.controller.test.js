@@ -14,7 +14,6 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const PreviewService = require('../../app/services/bill-runs/review/preview.service.js')
-const ReviewChargeReferenceService = require('../../app/services/bill-runs/review/review-charge-reference.service.js')
 const SubmitAuthorisedService = require('../../app/services/bill-runs/review/submit-authorised.service.js')
 const SubmitEditService = require('../../app/services/bill-runs/review/submit-edit.service.js')
 const SubmitFactorsService = require('../../app/services/bill-runs/review/submit-factors.service.js')
@@ -26,6 +25,7 @@ const ViewEditService = require('../../app/services/bill-runs/review/view-edit.s
 const ViewRemoveService = require('../../app/services/bill-runs/review/view-remove.service.js')
 const ViewReviewService = require('../../app/services/bill-runs/review/view-review.service.js')
 const ViewReviewChargeElementService = require('../../app/services/bill-runs/review/view-review-charge-element.service.js')
+const ViewReviewChargeReferenceService = require('../../app/services/bill-runs/review/view-review-charge-reference.service.js')
 const ViewReviewLicenceService = require('../../app/services/bill-runs/review/view-review-licence.service.js')
 
 // For running our service
@@ -309,7 +309,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(async () => {
         options = _getRequestOptions(path)
 
-        Sinon.stub(ReviewChargeReferenceService, 'go').resolves({
+        Sinon.stub(ViewReviewChargeReferenceService, 'go').resolves({
           additionalCharges: '',
           adjustments: ['Aggregate factor (0.333333333)', 'Two part tariff agreement'],
           amendedAuthorisedVolume: 9.092,
