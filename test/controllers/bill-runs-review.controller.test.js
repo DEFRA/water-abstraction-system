@@ -13,20 +13,20 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const AuthorisedService = require('../../app/services/bill-runs/review/authorised.service.js')
-const EditService = require('../../app/services/bill-runs/review/edit.service.js')
-const FactorsService = require('../../app/services/bill-runs/review/factors.service.js')
 const PreviewService = require('../../app/services/bill-runs/review/preview.service.js')
-const ReviewBillRunService = require('../../app/services/bill-runs/review/review-bill-run.service.js')
-const ReviewChargeElementService = require('../../app/services/bill-runs/review/review-charge-element.service.js')
-const ReviewChargeReferenceService = require('../../app/services/bill-runs/review/review-charge-reference.service.js')
-const ReviewLicenceService = require('../../app/services/bill-runs/review/review-licence.service.js')
 const SubmitAuthorisedService = require('../../app/services/bill-runs/review/submit-authorised.service.js')
 const SubmitEditService = require('../../app/services/bill-runs/review/submit-edit.service.js')
 const SubmitFactorsService = require('../../app/services/bill-runs/review/submit-factors.service.js')
 const SubmitRemoveService = require('../../app/services/bill-runs/review/submit-remove.service.js')
-const SubmitReviewBillRunService = require('../../app/services/bill-runs/review/submit-review-bill-run.service.js')
-const RemoveService = require('../../app/services/bill-runs/review/remove.service.js')
+const SubmitReviewService = require('../../app/services/bill-runs/review/submit-review.service.js')
+const ViewAuthorisedService = require('../../app/services/bill-runs/review/view-authorised.service.js')
+const ViewFactorsService = require('../../app/services/bill-runs/review/view-factors.service.js')
+const ViewEditService = require('../../app/services/bill-runs/review/view-edit.service.js')
+const ViewRemoveService = require('../../app/services/bill-runs/review/view-remove.service.js')
+const ViewReviewChargeElementService = require('../../app/services/bill-runs/review/view-review-charge-element.service.js')
+const ViewReviewChargeReferenceService = require('../../app/services/bill-runs/review/view-review-charge-reference.service.js')
+const ViewReviewLicenceService = require('../../app/services/bill-runs/review/view-review-licence.service.js')
+const ViewReviewService = require('../../app/services/bill-runs/review/view-review.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -63,7 +63,7 @@ describe('Bill Runs Review controller', () => {
 
     describe('GET', () => {
       beforeEach(() => {
-        Sinon.stub(ReviewBillRunService, 'go').resolves({
+        Sinon.stub(ViewReviewService, 'go').resolves({
           activeNavBar: 'bill-runs',
           filters: {
             issues: [],
@@ -145,7 +145,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(async () => {
         options = _postRequestOptions(path)
 
-        Sinon.stub(SubmitReviewBillRunService, 'go').resolves()
+        Sinon.stub(SubmitReviewService, 'go').resolves()
       })
 
       describe('when a request is valid', () => {
@@ -168,7 +168,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(async () => {
         options = _getRequestOptions(path)
 
-        Sinon.stub(ReviewChargeElementService, 'go').resolves({
+        Sinon.stub(ViewReviewChargeElementService, 'go').resolves({
           authorisedVolume: 9.092,
           billableReturns: 0,
           chargeDescription: 'Spray Irrigation - Direct',
@@ -223,7 +223,7 @@ describe('Bill Runs Review controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(EditService, 'go').resolves({
+          Sinon.stub(ViewEditService, 'go').resolves({
             pageTitle: 'Set the billable returns quantity for this bill run',
             authorisedQuantity: 9.092,
             billableReturns: 0,
@@ -309,7 +309,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(async () => {
         options = _getRequestOptions(path)
 
-        Sinon.stub(ReviewChargeReferenceService, 'go').resolves({
+        Sinon.stub(ViewReviewChargeReferenceService, 'go').resolves({
           additionalCharges: '',
           adjustments: ['Aggregate factor (0.333333333)', 'Two part tariff agreement'],
           amendedAuthorisedVolume: 9.092,
@@ -351,7 +351,7 @@ describe('Bill Runs Review controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(AuthorisedService, 'go').resolves({
+          Sinon.stub(ViewAuthorisedService, 'go').resolves({
             amendedAuthorisedVolume: 9.092,
             chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
             chargePeriod: '1 April 2023 to 31 March 2024',
@@ -433,7 +433,7 @@ describe('Bill Runs Review controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(FactorsService, 'go').resolves({
+          Sinon.stub(ViewFactorsService, 'go').resolves({
             amendedAggregate: 0.333333333,
             amendedChargeAdjustment: 1,
             chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
@@ -541,7 +541,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(async () => {
         options = _getRequestOptions(path)
 
-        Sinon.stub(ReviewLicenceService, 'go').resolves({
+        Sinon.stub(ViewReviewLicenceService, 'go').resolves({
           billRunId: '97db1a27-8308-4aba-b463-8a6af2558b28',
           chargeVersions: [
             {
@@ -650,7 +650,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(() => {
         options = _getRequestOptions(path)
 
-        Sinon.stub(RemoveService, 'go').resolves({
+        Sinon.stub(ViewRemoveService, 'go').resolves({
           billRunNumber: 12345,
           billRunStatus: 'review',
           dateCreated: '3 May 2024',

@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the amend billable returns page
- * @module EditService
+ * Orchestrates page data for the '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}/edit' page
+ * @module ViewEditService
  */
 
 const EditPresenter = require('../../../presenters/bill-runs/review/edit.presenter.js')
 const FetchReviewChargeElementService = require('./fetch-review-charge-element.service.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the amend billable returns page
+ * Orchestrates page data for the '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}/edit' page
  *
  * @param {string} reviewChargeElementId - The UUID of the charge element being reviewed
  * @param {number} elementIndex - the index of the element within all charge elements for the charge reference. This
@@ -20,11 +20,11 @@ const FetchReviewChargeElementService = require('./fetch-review-charge-element.s
 async function go(reviewChargeElementId, elementIndex) {
   const reviewChargeElement = await FetchReviewChargeElementService.go(reviewChargeElementId)
 
-  const formattedData = EditPresenter.go(reviewChargeElement, elementIndex)
+  const pageData = EditPresenter.go(reviewChargeElement, elementIndex)
 
   return {
     activeNavBar: 'bill-runs',
-    ...formattedData
+    ...pageData
   }
 }
 
