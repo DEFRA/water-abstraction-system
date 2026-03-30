@@ -28,10 +28,24 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/users/internal/{id}',
+    options: {
+      handler: UsersController.submitUserInternal
+    }
+  },
+  {
     method: 'GET',
     path: '/users/external/{id}',
     options: {
       handler: UsersController.viewUserExternal
+    }
+  },
+  {
+    method: 'POST',
+    path: '/users/external/{id}',
+    options: {
+      handler: UsersController.submitUserExternal
     }
   },
   {

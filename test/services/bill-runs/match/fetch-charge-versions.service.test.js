@@ -14,16 +14,13 @@ const ChargeCategoryHelper = require('../../../support/helpers/charge-category.h
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
-const CompanyModel = require('../../../../app/models/company.model.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const LicenceDocumentModel = require('../../../../app/models/licence-document.model.js')
-const LicenceDocumentRoleModel = require('../../../../app/models/licence-document-role.model.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
 const LicenceSupplementaryYearHelper = require('../../../support/helpers/licence-supplementary-year.helper.js')
 const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
 const WorkflowHelper = require('../../../support/helpers/workflow.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchChargeVersionsService = require('../../../../app/services/bill-runs/match/fetch-charge-versions.service.js')
@@ -63,7 +60,20 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
   })
 
   afterEach(async () => {
-    await _cleanUp()
+    if (chargeElement1) await chargeElement1.$query().delete()
+    if (chargeElement2) await chargeElement2.$query().delete()
+    if (chargeReference) await chargeReference.$query().delete()
+    if (chargeVersion) await chargeVersion.$query().delete()
+    if (licence) await licence.$query().delete()
+    if (licenceSupplementaryYear) await licenceSupplementaryYear.$query().delete()
+    if (otherChargeVersion) await otherChargeVersion.$query().delete()
+    if (otherChargeReference) await otherChargeReference.$query().delete()
+    if (otherLicence) await otherLicence.$query().delete()
+    if (billRun) await billRun.$query().delete()
+
+    if (licenceHolderDetails) {
+      await licenceHolderDetails.clean()
+    }
   })
 
   describe('when there are no applicable charge versions', () => {
@@ -361,7 +371,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       })
 
       // Create a licence holder for the licence with the default name 'Licence Holder Ltd'
-      licenceHolderDetails = await LicenceHolderSeeder.seed(licence.licenceRef)
+      licenceHolderDetails = await LicenceHolderSeeder.seed(licence)
 
       // Second charge version to test ordering
       otherLicence = await LicenceHelper.add({ licenceRef: '01/130', regionId: region.id })
@@ -404,20 +414,20 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
             expiredDate: null,
             lapsedDate: null,
             revokedDate: null,
-            licenceDocument: {
-              id: licenceHolderDetails.licenceDocumentId,
-              licenceDocumentRoles: [
-                {
-                  company: {
-                    id: licenceHolderDetails.companyId,
-                    name: 'Licence Holder Ltd',
-                    type: 'organisation'
-                  },
-                  contact: null,
-                  id: licenceHolderDetails.licenceDocumentRoleId
+            licenceVersions: [
+              {
+                id: licenceHolderDetails.licenceVersion.id,
+                issueDate: licenceHolderDetails.licenceVersion.issueDate,
+                licenceId: licenceHolderDetails.licenceVersion.licenceId,
+                startDate: licenceHolderDetails.licenceVersion.startDate,
+                status: licenceHolderDetails.licenceVersion.status,
+                company: {
+                  id: licenceHolderDetails.company.id,
+                  name: licenceHolderDetails.company.name,
+                  type: licenceHolderDetails.company.type
                 }
-              ]
-            }
+              }
+            ]
           },
           chargeReferences: [
             {
@@ -514,24 +524,3 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
     })
   })
 })
-
-async function _cleanUp() {
-  if (chargeElement1) await chargeElement1.$query().delete()
-  if (chargeElement2) await chargeElement2.$query().delete()
-  if (chargeReference) await chargeReference.$query().delete()
-  if (chargeVersion) await chargeVersion.$query().delete()
-  if (licence) await licence.$query().delete()
-  if (licenceSupplementaryYear) await licenceSupplementaryYear.$query().delete()
-  if (otherChargeVersion) await otherChargeVersion.$query().delete()
-  if (otherChargeReference) await otherChargeReference.$query().delete()
-  if (otherLicence) await otherLicence.$query().delete()
-  if (billRun) await billRun.$query().delete()
-
-  if (licenceHolderDetails) {
-    const { companyId, licenceDocumentId, licenceDocumentRoleId } = licenceHolderDetails
-
-    await LicenceDocumentRoleModel.query().deleteById(licenceDocumentRoleId)
-    await LicenceDocumentModel.query().deleteById(licenceDocumentId)
-    await CompanyModel.query().deleteById(companyId)
-  }
-}

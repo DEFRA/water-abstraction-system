@@ -8,14 +8,13 @@ const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CompanyHelper = require('../../support/helpers/company.helper.js')
 const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
 const LicenceEntityHelper = require('../../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../../support/helpers/licence-entity-role.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
-const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
-const LicenceVersionHolderHelper = require('../../support/helpers/licence-version-holder.helper.js')
 const LicenceVersionPurposeConditionHelper = require('../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeConditionTypeHelper = require('../../support/helpers/licence-version-purpose-condition-type.helper.js')
 const LicenceVersionPurposeHelper = require('../../support/helpers/licence-version-purpose.helper.js')
@@ -25,6 +24,7 @@ const PointHelper = require('../../support/helpers/point.helper.js')
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 const SourceHelper = require('../../support/helpers/source.helper.js')
+const UserHelper = require('../../support/helpers/user.helper.js')
 const WorkflowHelper = require('../../support/helpers/workflow.helper.js')
 
 // Thing under test
@@ -33,14 +33,13 @@ const FetchSummaryService = require('../../../app/services/licences/fetch-summar
 const REGION_SOUTHERN_INDEX = 5
 
 describe('Licences - Fetch Summary service', () => {
+  let company
+  let companyEntity
   let licence
   let licenceDocumentHeader
-  let licenceEntity
   let licenceEntityRole
-  let licenceHolderSeed
   let licenceMonitoringStation
   let licenceVersion
-  let licenceVersionHolder
   let licenceVersionPurpose
   let licenceVersionPurposeCondition
   let licenceVersionPurposeConditionType
@@ -51,13 +50,11 @@ describe('Licences - Fetch Summary service', () => {
   let purpose
   let region
   let source
+  let user
+  let userEntity
   let workflow
 
   before(async () => {
-    licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.data.find((conditionType) => {
-      return conditionType.displayTitle === 'Aggregate condition link between licences'
-    })
-
     region = RegionHelper.select(REGION_SOUTHERN_INDEX)
 
     licence = await LicenceHelper.add({
@@ -66,20 +63,25 @@ describe('Licences - Fetch Summary service', () => {
       regionId: region.id
     })
 
+    company = await CompanyHelper.add()
+
     // Create 2 licence versions so we can test the service only gets the 'current' version
     oldLicenceVersion = await LicenceVersionHelper.add({
+      companyId: company.id,
+      endDate: new Date('2022-04-30'),
+      increment: 0,
+      issue: 100,
       licenceId: licence.id,
       startDate: new Date('2021-10-11'),
       status: 'superseded'
     })
 
     licenceVersion = await LicenceVersionHelper.add({
+      companyId: company.id,
+      increment: 0,
+      issue: 101,
       licenceId: licence.id,
       startDate: new Date('2022-05-01')
-    })
-
-    licenceVersionHolder = await LicenceVersionHolderHelper.add({
-      licenceVersionId: licenceVersion.id
     })
 
     purpose = PurposeHelper.select()
@@ -97,24 +99,30 @@ describe('Licences - Fetch Summary service', () => {
       pointId: point.id
     })
 
+    licenceVersionPurposeConditionType = LicenceVersionPurposeConditionTypeHelper.data.find((conditionType) => {
+      return conditionType.displayTitle === 'Aggregate condition link between licences'
+    })
+
     licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
       licenceVersionPurposeId: licenceVersionPurpose.id,
       licenceVersionPurposeConditionTypeId: licenceVersionPurposeConditionType.id
     })
 
-    licenceHolderSeed = await LicenceHolderSeeder.seed(licence.licenceRef)
+    companyEntity = await LicenceEntityHelper.add({ name: company.name, type: 'company' })
 
     licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-      companyEntityId: licenceHolderSeed.companyId,
-      licenceName: 'Licence Holder Ltd',
+      companyEntityId: companyEntity.id,
+      licenceName: 'Licency McLicenceFace',
       licenceRef: licence.licenceRef
     })
 
-    licenceEntity = await LicenceEntityHelper.add()
+    userEntity = await LicenceEntityHelper.add({ name: licence.licenceRef, type: 'individual' })
+    user = await UserHelper.add({ application: 'water_vml', licenceEntityId: userEntity.id, username: userEntity.name })
 
     licenceEntityRole = await LicenceEntityRoleHelper.add({
-      companyEntityId: licenceHolderSeed.companyId,
-      licenceEntity: licenceEntity.id
+      companyEntityId: companyEntity.id,
+      licenceEntityId: userEntity.id,
+      role: 'primary_user'
     })
 
     monitoringStation = await MonitoringStationHelper.add()
@@ -132,20 +140,28 @@ describe('Licences - Fetch Summary service', () => {
   })
 
   after(async () => {
-    await licence.$query().delete()
-    await licenceDocumentHeader.$query().delete()
-    await licenceEntity.$query().delete()
-    await licenceEntityRole.$query().delete()
+    // await licenceEntity.$query().delete()
+    // await licenceEntityRole.$query().delete()
+    await workflow.$query().delete()
+
     await licenceMonitoringStation.$query().delete()
-    await licenceVersion.$query().delete()
-    await licenceVersionHolder.$query().delete()
-    await licenceVersionPurpose.$query().delete()
+    await monitoringStation.$query().delete()
+
+    await user.$query().delete()
+    await userEntity.$query().delete()
+    await licenceDocumentHeader.$query().delete()
+    await companyEntity.$query().delete()
+
     await licenceVersionPurposeCondition.$query().delete()
     await licenceVersionPurposePoint.$query().delete()
-    await monitoringStation.$query().delete()
-    await oldLicenceVersion.$query().delete()
     await point.$query().delete()
-    await workflow.$query().delete()
+    await licenceVersionPurpose.$query().delete()
+
+    await licenceVersion.$query().delete()
+    await oldLicenceVersion.$query().delete()
+
+    await company.$query().delete()
+    await licence.$query().delete()
   })
 
   describe('when called', () => {
@@ -157,6 +173,23 @@ describe('Licences - Fetch Summary service', () => {
         expiredDate: null,
         issueDate: null,
         startDate: new Date('2022-01-01'),
+        licenceDocumentHeader: {
+          id: licenceDocumentHeader.id,
+          licenceName: licenceDocumentHeader.licenceName,
+          licenceEntityRoles: [
+            {
+              id: licenceEntityRole.id,
+              licenceEntity: {
+                id: userEntity.id,
+                user: {
+                  id: user.id,
+                  userId: user.userId,
+                  username: user.username
+                }
+              }
+            }
+          ]
+        },
         region: {
           id: region.id,
           displayName: region.displayName
@@ -165,11 +198,13 @@ describe('Licences - Fetch Summary service', () => {
           {
             id: licenceVersion.id,
             issueDate: null,
+            licenceId: licence.id,
             startDate: new Date('2022-05-01'),
             status: 'current',
-            licenceVersionHolder: {
-              derivedName: null,
-              id: licenceVersionHolder.id
+            company: {
+              id: company.id,
+              name: 'Example Trading Ltd',
+              type: 'organisation'
             },
             licenceVersionPurposes: [
               {
@@ -219,16 +254,6 @@ describe('Licences - Fetch Summary service', () => {
             }
           }
         ],
-        licenceDocumentHeader: {
-          id: licenceDocumentHeader.id,
-          licenceName: 'Licence Holder Ltd',
-          licenceEntityRoles: [
-            {
-              id: licenceEntityRole.id,
-              licenceEntity: null
-            }
-          ]
-        },
         workflows: [
           {
             id: workflow.id,

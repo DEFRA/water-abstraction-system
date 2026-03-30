@@ -54,8 +54,7 @@ describe('Return Versions - Fetch Return Version service', () => {
           user: { id: seededUser.id, userId: seededUser.userId, username: seededUser.username },
           licence: {
             id: seededLicence.id,
-            licenceRef: seededLicence.licenceRef,
-            licenceDocument: null
+            licenceRef: seededLicence.licenceRef
           },
           modLogs: [
             {

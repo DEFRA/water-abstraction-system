@@ -57,7 +57,8 @@ describe('Company Contacts - Setup - Fetch Company Contacts service', () => {
             suffix: null,
             department: null,
             email: null
-          }
+          },
+          deletedAt: null
         }
       ])
     })
@@ -87,7 +88,8 @@ describe('Company Contacts - Setup - Fetch Company Contacts service', () => {
               suffix: null,
               department: null,
               email: null
-            }
+            },
+            deletedAt: null
           }
         ])
       })

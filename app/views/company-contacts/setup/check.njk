@@ -79,6 +79,14 @@
         }) }}
       {% endif %}
 
+      {% if links.restoreContact %}
+        {{ govukButton({
+          text: "Restore",
+          preventDoubleClick: true,
+          href: links.restoreContact
+        }) }}
+      {% endif %}
+
       {{ govukButton({
         text: "Cancel",
         classes: "govuk-button--secondary",

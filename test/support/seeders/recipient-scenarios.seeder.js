@@ -150,7 +150,8 @@ async function licenceHolderWithSameReturnsTo(returnLogs) {
 
   const returnsToRecipient = await RecipientsSeeder.returnsTo(
     licenceHolderRecipient.licenceDocumentHeader,
-    'Samelicenceholderreturnsto'
+    'Samelicenceholderreturnsto',
+    licenceHolderRecipient.company
   )
 
   returnsToRecipient.licenceRefs = licenceRefs

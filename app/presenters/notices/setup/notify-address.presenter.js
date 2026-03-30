@@ -7,7 +7,6 @@
 
 const { postcodeValidator } = require('postcode-validator')
 
-const { contactName } = require('../../../presenters/crm.presenter.js')
 const { invalidStartCharacters } = require('../../../validators/helpers/notify-address-line.validator.js')
 
 const MAX_ADDRESS_LINES = 6 // The Notify max is actually 7 but we reserve address line 1 for the contact name
@@ -46,7 +45,7 @@ const CROWN_DEPENDENCIES = ['guernsey', 'isle of man', 'jersey']
  * - Many non-UK addresses have the postcode field populated, but country needs to be the last line as per Notify
  * - We have lots of addresses where neither postcode nor country are populated
  * - We have some addresses with an address line that starts with special characters
- * - There are some addresses where `addressLine1` is a duplicate of the contact name, which results in duplicated lines
+ * - There are some addresses where `address1` is a duplicate of the contact name, which results in duplicated lines
  * - Most addresses have one or more empty address fields
  * - Lots of addresses have their address information in the wrong fields, for example, county is in country
  *
@@ -81,7 +80,7 @@ const CROWN_DEPENDENCIES = ['guernsey', 'isle of man', 'jersey']
  */
 function go(contact) {
   // Contact name will always be address_line_1 in any result we return
-  const name = contactName(contact)
+  const name = contact.name
 
   let addressParts = _invalidAddressParts(contact)
 
@@ -120,9 +119,9 @@ function _address(name, addressParts) {
 }
 
 /**
- * Checks if the contact name is the same as the addressLine1
+ * Checks if the contact name is the same as the address1
  *
- * If yes, it returns null, else returns addressLine1. This is for contacts where a user has entered the same value for
+ * If yes, it returns null, else returns address1. This is for contacts where a user has entered the same value for
  * the contact name and address line 1. It results in a letter with the following address.
  *
  * ```text
@@ -138,15 +137,15 @@ function _address(name, addressParts) {
  *
  * @private
  */
-function _addressLine1(name, addressLine1) {
+function _address1(name, address1) {
   const parsedName = name.toLowerCase().trim()
-  const parsedAddressLine1 = addressLine1 ? addressLine1.toLowerCase().trim() : ''
+  const parsedAddress1 = address1 ? address1.toLowerCase().trim() : ''
 
-  if (parsedName === parsedAddressLine1) {
+  if (parsedName === parsedAddress1) {
     return null
   }
 
-  return addressLine1
+  return address1
 }
 
 /**
@@ -198,15 +197,15 @@ function _condense(addressParts) {
  * @private
  */
 function _defaultAddressParts(name, contact) {
-  const addressLine1 = _addressLine1(name, contact.addressLine1)
+  const address1 = _address1(name, contact.address1)
 
   return [
-    addressLine1,
-    contact.addressLine2,
-    contact.addressLine3,
-    contact.addressLine4,
-    contact.town,
-    contact.county,
+    address1,
+    contact.address2,
+    contact.address3,
+    contact.address4,
+    contact.address5,
+    contact.address6,
     contact.postcode
   ].filter(Boolean)
 }
@@ -289,12 +288,12 @@ function _invalidAddressParts(contact) {
 
   return [
     message,
-    contact.addressLine1,
-    contact.addressLine2,
-    contact.addressLine3,
-    contact.addressLine4,
-    contact.town,
-    contact.county,
+    contact.address1,
+    contact.address2,
+    contact.address3,
+    contact.address4,
+    contact.address5,
+    contact.address6,
     contact.postcode,
     contact.country
   ].filter(Boolean)
@@ -302,12 +301,12 @@ function _invalidAddressParts(contact) {
 
 function _specialCharacters(contact) {
   const lines = [
-    contact.addressLine1,
-    contact.addressLine2,
-    contact.addressLine3,
-    contact.addressLine4,
-    contact.town,
-    contact.county,
+    contact.address1,
+    contact.address2,
+    contact.address3,
+    contact.address4,
+    contact.address5,
+    contact.address6,
     contact.postcode,
     contact.country
   ]

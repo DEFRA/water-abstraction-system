@@ -97,7 +97,7 @@ function _backLink(notification, licence, returnLogId, companyContactId) {
   }
 
   if (companyContactId) {
-    return { href: `/system/company-contacts/${companyContactId}`, text: 'Go back to company contact' }
+    return { href: `/system/company-contacts/${companyContactId}/communications`, text: 'Go back to company contact' }
   }
 
   const { event } = notification

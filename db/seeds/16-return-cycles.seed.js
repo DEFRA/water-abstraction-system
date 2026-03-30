@@ -25,7 +25,10 @@ async function seed() {
       allYearReturnCycle.dueDate = new Date('2020-10-16')
     }
 
-    await _upsert(allYearReturnCycle)
+    if (allYearReturnCycle.startDate <= new Date()) {
+      await _upsert(allYearReturnCycle)
+    }
+
     await _upsert(summerReturnCycle)
 
     year++

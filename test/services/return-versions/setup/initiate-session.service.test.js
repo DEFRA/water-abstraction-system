@@ -159,7 +159,14 @@ function _licence() {
     licenceVersions: [
       {
         id: 'a2e39067-3076-4106-b83a-fb48b6307c50',
-        startDate: new Date('2022-05-01')
+        issueDate: null,
+        startDate: new Date('2022-05-01'),
+        status: 'current',
+        company: {
+          id: '9d4284a2-1915-492c-9891-77e2dce430cb',
+          type: 'organisation',
+          name: 'Licence Holder Ltd'
+        }
       }
     ],
     returnVersions: [
@@ -174,20 +181,6 @@ function _licence() {
           }
         ]
       }
-    ],
-    licenceDocument: {
-      id: '57a815e5-83a0-46a5-b60e-231edd098501',
-      licenceDocumentRoles: [
-        {
-          id: '5e975fad-dc76-4f7b-8fe0-01887553c6fd',
-          contact: null,
-          company: {
-            id: 'af8ad37b-248b-4aa4-a85c-a6c892f0f15e',
-            name: 'Licence Holder Ltd',
-            type: 'organisation'
-          }
-        }
-      ]
-    }
+    ]
   })
 }

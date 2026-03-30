@@ -1,0 +1,20 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% block pageContent %}
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: { text: "Name" },
+        value: { text: details.name }
+      },
+      {
+        key: { text: "Address" },
+        value: { text: newLineArrayItems(details.address) }
+      }
+    ]
+  }) }}
+{% endblock %}

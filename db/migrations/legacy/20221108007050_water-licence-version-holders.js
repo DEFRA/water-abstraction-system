@@ -30,6 +30,7 @@ exports.up = function (knex) {
     table.text('derived_name')
     table.text('external_id')
     table.uuid('company_id')
+    table.uuid('address_id')
 
     // Timestamps
     table.timestamp('created_at', { useTz: false }).notNullable().defaultTo(knex.fn.now())

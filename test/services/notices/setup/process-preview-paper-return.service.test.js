@@ -92,7 +92,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
 
       expect(actualCallArgs).to.equal({
         address: {
-          address_line_1: 'Mr H J Potter',
+          address_line_1: 'Harry Potter',
           address_line_2: '1',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',

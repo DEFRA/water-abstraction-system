@@ -65,13 +65,13 @@ describe('Notices - Setup - Select Recipients presenter', () => {
         },
         {
           checked: true,
-          contact: ['Mr H J Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
+          contact: ['Harry Potter', '1', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
           contact_hash_id: recipients.licenceHolder.contact_hash_id
         },
         {
           checked: true,
           contact: [
-            'Mr H J Weasley',
+            'Ronald Weasley',
             'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
             '2',
             'Privet Drive',
@@ -82,7 +82,7 @@ describe('Notices - Setup - Select Recipients presenter', () => {
         },
         {
           checked: true,
-          contact: ['Mr H J Potter', '3', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
+          contact: ['James Potter', '3', 'Privet Drive', 'Little Whinging', 'Surrey', 'WD25 7LR'],
           contact_hash_id: recipients.licenceHolderWithMultipleLicences.contact_hash_id
         }
       ],

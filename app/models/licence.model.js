@@ -168,51 +168,26 @@ class LicenceModel extends BaseModel {
       // NOTE: will only work when fetching a single licence. The `limit()` clause means when fetching multiple licences
       // only the licence version for the first licence is fetched.
       currentVersion(query) {
-        query.withGraphFetched('licenceVersions').modifyGraph('licenceVersions', (builder) => {
-          builder
-            .select(['id', 'startDate', 'status', 'issueDate'])
+        query.withGraphFetched('licenceVersions').modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
+          licenceVersionsBuilder
+            .select(['id', 'issueDate', 'licenceId', 'startDate', 'status'])
+            .distinctOn('licenceId')
             .where('startDate', '<=', timestampForPostgres())
             .orderBy([
-              { column: 'startDate', order: 'desc' },
+              { column: 'licenceId', order: 'asc' },
               { column: 'issue', order: 'desc' },
-              { column: 'increment', order: 'desc' }
+              { column: 'increment', order: 'desc' },
+              { column: 'endDate', order: 'desc', nulls: 'first' }
             ])
-            .limit(1)
         })
       },
       // licenceHolder modifier fetches all the joined records needed to identify the licence holder
       licenceHolder(query) {
         query
-          .withGraphFetched('licenceDocument')
-          .modifyGraph('licenceDocument', (builder) => {
-            builder.select(['id'])
-          })
-          .withGraphFetched('licenceDocument.licenceDocumentRoles')
-          .modifyGraph('licenceDocument.licenceDocumentRoles', (builder) => {
-            builder
-              .select(['licenceDocumentRoles.id'])
-              .innerJoinRelated('licenceRole')
-              .where('licenceRole.name', 'licenceHolder')
-              .orderBy('licenceDocumentRoles.startDate', 'desc')
-          })
-          .withGraphFetched('licenceDocument.licenceDocumentRoles.company')
-          .modifyGraph('licenceDocument.licenceDocumentRoles.company', (builder) => {
-            builder.select(['id', 'name', 'type'])
-          })
-          .withGraphFetched('licenceDocument.licenceDocumentRoles.contact')
-          .modifyGraph('licenceDocument.licenceDocumentRoles.contact', (builder) => {
-            builder.select([
-              'id',
-              'contactType',
-              'dataSource',
-              'department',
-              'firstName',
-              'initials',
-              'lastName',
-              'middleInitials',
-              'salutation',
-              'suffix'
-            ])
+          .modify('currentVersion')
+          .withGraphFetched('licenceVersions.company')
+          .modifyGraph('licenceVersions.company', (companyBuilder) => {
+            companyBuilder.select(['id', 'name', 'type'])
           })
       },
       // When an external user registers themselves as the 'primary user' for a licence (see $primaryUser()) they
@@ -361,16 +336,10 @@ class LicenceModel extends BaseModel {
     // Extract the company and contact from the last licenceDocumentRole created. It is assumed that the
     // `licenceHolder` modifier has been used to get the additional records needed for this. It also ensures in the case
     // that there is more than one that they are ordered by their start date (DESC)
-    const latestLicenceDocumentRole = this?.licenceDocument?.licenceDocumentRoles[0]
+    const company = this?.licenceVersions?.[0].company
 
-    if (!latestLicenceDocumentRole) {
+    if (!company) {
       return null
-    }
-
-    const { company, contact } = latestLicenceDocumentRole
-
-    if (contact) {
-      return contact.$name()
     }
 
     return company.name

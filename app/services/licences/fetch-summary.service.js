@@ -27,6 +27,7 @@ async function _fetch(licenceId) {
     .modify('licenceName')
     .modify('primaryUser')
     .modify('currentVersion')
+    .modify('licenceHolder')
     .withGraphFetched('region')
     .modifyGraph('region', (regionBuilder) => {
       regionBuilder.select(['id', 'displayName'])
@@ -34,10 +35,7 @@ async function _fetch(licenceId) {
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
       licenceVersionsBuilder
-        .withGraphFetched('licenceVersionHolder')
-        .modifyGraph('licenceVersionHolder', (licenceVersionHolderBuilder) => {
-          licenceVersionHolderBuilder.select(['derivedName', 'id'])
-        })
+        .select(['id', 'licenceId'])
         .withGraphFetched('licenceVersionPurposes')
         .modifyGraph('licenceVersionPurposes', (licenceVersionPurposesBuilder) => {
           licenceVersionPurposesBuilder

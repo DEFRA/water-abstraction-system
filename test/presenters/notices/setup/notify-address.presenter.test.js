@@ -18,22 +18,16 @@ describe('Notices - Setup - Notify Address presenter', () => {
     // tests
     contact = {
       // Name
-      type: 'Person',
-      salutation: 'Mr',
-      initials: 'J H',
-      forename: 'John',
-      name: 'Watson',
+      name: 'Mr J H Watson',
       // Address
-      addressLine1: 'Sherlock Holmes Consulting Detective',
-      addressLine2: '221b Baker Street',
-      addressLine3: 'Regents Park',
-      addressLine4: 'Westminster',
-      town: 'London',
-      county: 'Central London',
+      address1: 'Sherlock Holmes Consulting Detective',
+      address2: '221b Baker Street',
+      address3: 'Regents Park',
+      address4: 'Westminster',
+      address5: 'London',
+      address6: 'Central London',
       postcode: 'NW1 6XE',
-      country: 'England',
-      // Role
-      role: 'Licence holder'
+      country: 'England'
     }
   })
 
@@ -61,9 +55,9 @@ describe('Notices - Setup - Notify Address presenter', () => {
 
   describe('when some address fields are not populated', () => {
     beforeEach(() => {
-      contact.addressLine3 = null
-      contact.addressLine4 = null
-      contact.county = null
+      contact.address3 = null
+      contact.address4 = null
+      contact.address6 = null
     })
 
     it('excludes them from the result', () => {
@@ -82,7 +76,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
   describe('when "addressLine1" is not populated', () => {
     // NOTE: This test was to ensure that _addressLine1() can handle addressLine1 not being populated.
     beforeEach(() => {
-      contact.addressLine1 = null
+      contact.address1 = null
     })
 
     it('excludes it from the result', () => {
@@ -102,10 +96,6 @@ describe('Notices - Setup - Notify Address presenter', () => {
 
   describe('when the derived name and "addressLine1" are the same', () => {
     beforeEach(() => {
-      contact.type = 'Organisation'
-      contact.salutation = null
-      contact.initials = null
-      contact.forename = null
       contact.name = 'Sherlock Holmes Consulting Detective'
     })
 
@@ -188,22 +178,16 @@ describe('Notices - Setup - Notify Address presenter', () => {
     beforeEach(() => {
       contact = {
         // Name
-        type: 'Person',
-        salutation: 'Professor',
-        initials: 'J H',
-        forename: 'James',
-        name: 'Moriarty',
+        name: 'Professor J H Moriarty',
         // Address
-        addressLine1: 'Mathematical Computer Consulting',
-        addressLine2: 'Gasthaus Zwirgi',
-        addressLine3: 'Rychenbach Falls',
-        addressLine4: 'Scheideggstrasse 451',
-        town: 'Meiringen',
-        county: null,
+        address1: 'Mathematical Computer Consulting',
+        address2: 'Gasthaus Zwirgi',
+        address3: 'Rychenbach Falls',
+        address4: 'Scheideggstrasse 451',
+        address5: 'Meiringen',
+        address6: null,
         postcode: '3860 Schattenhalb',
-        country: 'Switzerland',
-        // Role
-        role: 'Licence holder'
+        country: 'Switzerland'
       }
     })
 
@@ -337,7 +321,7 @@ describe('Notices - Setup - Notify Address presenter', () => {
 
     describe('because the address contains a line that starts with a special character', () => {
       beforeEach(() => {
-        contact.addressLine2 = '(Admin) 221b Baker Street'
+        contact.address2 = '(Admin) 221b Baker Street'
       })
 
       it('returns all populated address parts plus an "INVALID" message', () => {

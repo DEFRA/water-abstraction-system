@@ -1,39 +1,23 @@
 'use strict'
 
 /**
- * Fetches the company contact data needed for the view '/company-contacts/{id}' pages
+ * Fetches the company contact needed for the view '/company-contacts/{id}communications' page
  * @module FetchCompanyContactService
  */
 
 const CompanyContactModel = require('../../models/company-contact.model.js')
 
 /**
- * Fetches the company contact data needed for the view '/company-contacts/{id}' pages
+ * Fetches just the company contact name needed for the view '/company-contacts/{id}communications' page
  *
  * @param {string} companyContactId - The company contact id
  *
- * @returns {Promise<CompanyContactModel>} the company contact
+ * @returns {Promise<module:CompanyContactModel>} the company contact and associated contact record
  */
 async function go(companyContactId) {
-  return _fetch(companyContactId)
-}
-
-async function _fetch(companyContactId) {
   return CompanyContactModel.query()
-    .select([
-      'companyContacts.id',
-      'companyContacts.abstractionAlerts',
-      'companyContacts.companyId',
-      'companyContacts.createdAt',
-      'companyContacts.updatedAt',
-      CompanyContactModel.query()
-        .alias('subCompanyContacts')
-        .count('subCompanyContacts.id')
-        .whereColumn('subCompanyContacts.company_id', 'companyContacts.companyId')
-        .where('subCompanyContacts.abstraction_alerts', true)
-        .as('abstractionAlertsCount')
-    ])
-    .where('companyContacts.id', companyContactId)
+    .select(['companyId', 'id'])
+    .findById(companyContactId)
     .withGraphFetched('contact')
     .modifyGraph('contact', (contactBuilder) => {
       contactBuilder.select([
@@ -49,19 +33,6 @@ async function _fetch(companyContactId) {
         'email'
       ])
     })
-    .withGraphFetched('createdByUser')
-    .modifyGraph('createdByUser', (createdByUserBuilder) => {
-      createdByUserBuilder.select(['id', 'username'])
-    })
-    .withGraphFetched('licenceRole')
-    .modifyGraph('licenceRole', (licenceRoleBuilder) => {
-      licenceRoleBuilder.select(['id', 'name'])
-    })
-    .withGraphFetched('updatedByUser')
-    .modifyGraph('updatedByUser', (updatedByUserBuilder) => {
-      updatedByUserBuilder.select(['id', 'username'])
-    })
-    .first()
 }
 
 module.exports = {

@@ -12,7 +12,7 @@ const { expect } = Code
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../support/helpers/licence-version.helper.js')
 const LicenceVersionHolderHelper = require('../../support/helpers/licence-version-holder.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateRandomInteger, generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const databaseConfig = require('../../../config/database.config.js')
@@ -21,6 +21,9 @@ const databaseConfig = require('../../../config/database.config.js')
 const FetchLicencesService = require('../../../app/services/companies/fetch-licences.service.js')
 
 describe('Companies - Fetch Licences service', () => {
+  let anotherLicence
+  let anotherLicenceVersion
+  let anotherLicenceVersionHolder
   let companyId
   let licence
   let licenceVersion
@@ -36,7 +39,9 @@ describe('Companies - Fetch Licences service', () => {
     companyId = generateUUID()
 
     // This is the licence and details we expect to retrieve
-    licence = await LicenceHelper.add()
+    licence = await LicenceHelper.add({
+      licenceRef: `02/${generateRandomInteger(10, 99)}/${generateRandomInteger(100, 999)}`
+    })
     licenceVersion = await LicenceVersionHelper.add({
       increment: 0,
       issue: 2,
@@ -61,6 +66,23 @@ describe('Companies - Fetch Licences service', () => {
       companyId: generateUUID(),
       derivedName: 'Omni Consumer Products',
       licenceVersionId: olderLicenceVersion.id
+    })
+
+    // This is another licence for the same company and details we expect to retrieve. This should appear first
+    // in the results to confirm it is ordering them correctly
+    anotherLicence = await LicenceHelper.add({
+      licenceRef: `01/${generateRandomInteger(10, 99)}/${generateRandomInteger(100, 999)}`
+    })
+    anotherLicenceVersion = await LicenceVersionHelper.add({
+      increment: 0,
+      issue: 1,
+      licenceId: anotherLicence.id,
+      startDate: new Date('2025-04-01')
+    })
+    anotherLicenceVersionHolder = await LicenceVersionHolderHelper.add({
+      companyId,
+      derivedName: 'Kanemitsu Corporation',
+      licenceVersionId: anotherLicenceVersion.id
     })
 
     // This is a different licence linked to a different company. This confirms we are only getting licences for the
@@ -96,6 +118,10 @@ describe('Companies - Fetch Licences service', () => {
     await otherLicenceVersion.$query().delete()
     await otherLicence.$query().delete()
 
+    await anotherLicenceVersionHolder.$query().delete()
+    await anotherLicenceVersion.$query().delete()
+    await anotherLicence.$query().delete()
+
     await olderLicenceVersionHolder.$query().delete()
     await olderLicenceVersion.$query().delete()
 
@@ -112,6 +138,16 @@ describe('Companies - Fetch Licences service', () => {
         licences: [
           {
             expiredDate: null,
+            id: anotherLicence.id,
+            lapsedDate: null,
+            licenceRef: anotherLicence.licenceRef,
+            revokedDate: null,
+            startDate: new Date('2022-01-01'),
+            currentLicenceHolderId: anotherLicenceVersionHolder.companyId,
+            currentLicenceHolder: anotherLicenceVersionHolder.derivedName
+          },
+          {
+            expiredDate: null,
             id: licence.id,
             lapsedDate: null,
             licenceRef: licence.licenceRef,
@@ -121,7 +157,7 @@ describe('Companies - Fetch Licences service', () => {
             currentLicenceHolder: licenceVersionHolder.derivedName
           }
         ],
-        totalNumber: 1
+        totalNumber: 2
       })
     })
   })
