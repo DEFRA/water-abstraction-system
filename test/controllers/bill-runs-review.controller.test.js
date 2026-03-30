@@ -23,10 +23,10 @@ const ViewAuthorisedService = require('../../app/services/bill-runs/review/view-
 const ViewFactorsService = require('../../app/services/bill-runs/review/view-factors.service.js')
 const ViewEditService = require('../../app/services/bill-runs/review/view-edit.service.js')
 const ViewRemoveService = require('../../app/services/bill-runs/review/view-remove.service.js')
-const ViewReviewService = require('../../app/services/bill-runs/review/view-review.service.js')
 const ViewReviewChargeElementService = require('../../app/services/bill-runs/review/view-review-charge-element.service.js')
 const ViewReviewChargeReferenceService = require('../../app/services/bill-runs/review/view-review-charge-reference.service.js')
 const ViewReviewLicenceService = require('../../app/services/bill-runs/review/view-review-licence.service.js')
+const ViewReviewService = require('../../app/services/bill-runs/review/view-review.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')

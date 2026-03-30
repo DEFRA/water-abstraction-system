@@ -16,10 +16,10 @@ const ViewAuthorisedService = require('../services/bill-runs/review/view-authori
 const ViewEditService = require('../services/bill-runs/review/view-edit.service.js')
 const ViewFactorsService = require('../services/bill-runs/review/view-factors.service.js')
 const ViewRemoveService = require('../services/bill-runs/review/view-remove.service.js')
-const ViewReviewService = require('../services/bill-runs/review/view-review.service.js')
 const ViewReviewChargeElementService = require('../services/bill-runs/review/view-review-charge-element.service.js')
 const ViewReviewChargeReferenceService = require('../services/bill-runs/review/view-review-charge-reference.service.js')
 const ViewReviewLicenceService = require('../services/bill-runs/review/view-review-licence.service.js')
+const ViewReviewService = require('../services/bill-runs/review/view-review.service.js')
 
 async function preview(request, h) {
   const { reviewChargeReferenceId } = request.params
