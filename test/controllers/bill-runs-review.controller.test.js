@@ -14,7 +14,6 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const PreviewService = require('../../app/services/bill-runs/review/preview.service.js')
-const ReviewChargeElementService = require('../../app/services/bill-runs/review/review-charge-element.service.js')
 const ReviewChargeReferenceService = require('../../app/services/bill-runs/review/review-charge-reference.service.js')
 const SubmitAuthorisedService = require('../../app/services/bill-runs/review/submit-authorised.service.js')
 const SubmitEditService = require('../../app/services/bill-runs/review/submit-edit.service.js')
@@ -26,6 +25,7 @@ const ViewFactorsService = require('../../app/services/bill-runs/review/view-fac
 const ViewEditService = require('../../app/services/bill-runs/review/view-edit.service.js')
 const ViewRemoveService = require('../../app/services/bill-runs/review/view-remove.service.js')
 const ViewReviewService = require('../../app/services/bill-runs/review/view-review.service.js')
+const ViewReviewChargeElementService = require('../../app/services/bill-runs/review/view-review-charge-element.service.js')
 const ViewReviewLicenceService = require('../../app/services/bill-runs/review/view-review-licence.service.js')
 
 // For running our service
@@ -168,7 +168,7 @@ describe('Bill Runs Review controller', () => {
       beforeEach(async () => {
         options = _getRequestOptions(path)
 
-        Sinon.stub(ReviewChargeElementService, 'go').resolves({
+        Sinon.stub(ViewReviewChargeElementService, 'go').resolves({
           authorisedVolume: 9.092,
           billableReturns: 0,
           chargeDescription: 'Spray Irrigation - Direct',

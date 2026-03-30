@@ -31,7 +31,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}',
     options: {
-      handler: BillRunsReviewController.reviewChargeElement,
+      handler: BillRunsReviewController.viewReviewChargeElement,
       auth: {
         access: {
           scope: ['billing']

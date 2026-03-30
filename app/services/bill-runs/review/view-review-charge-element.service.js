@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the review charge element page
- * @module ReviewChargeElementService
+ * Orchestrates page data for the '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}' page
+ * @module ViewReviewChargeElementService
  */
 
 const FetchReviewChargeElementService = require('./fetch-review-charge-element.service.js')
 const ReviewChargeElementPresenter = require('../../../presenters/bill-runs/review/review-charge-element.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the review charge element page
+ * Orchestrates page data for the '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}' page
  *
  * @param {string} reviewChargeElementId - The UUID of the charge element being reviewed
  * @param {number} elementIndex - the index of the element within all charge elements for the charge reference. This

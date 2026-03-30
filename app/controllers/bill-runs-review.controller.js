@@ -6,7 +6,6 @@
  */
 
 const PreviewService = require('../services/bill-runs/review/preview.service.js')
-const ReviewChargeElementService = require('../services/bill-runs/review/review-charge-element.service.js')
 const ReviewChargeReferenceService = require('../services/bill-runs/review/review-charge-reference.service.js')
 const SubmitAuthorisedService = require('../services/bill-runs/review/submit-authorised.service.js')
 const SubmitEditService = require('..//services/bill-runs/review/submit-edit.service.js')
@@ -19,6 +18,7 @@ const ViewEditService = require('../services/bill-runs/review/view-edit.service.
 const ViewFactorsService = require('../services/bill-runs/review/view-factors.service.js')
 const ViewRemoveService = require('../services/bill-runs/review/view-remove.service.js')
 const ViewReviewService = require('../services/bill-runs/review/view-review.service.js')
+const ViewReviewChargeElementService = require('../services/bill-runs/review/view-review-charge-element.service.js')
 const ViewReviewLicenceService = require('../services/bill-runs/review/view-review-licence.service.js')
 
 async function preview(request, h) {
@@ -27,14 +27,6 @@ async function preview(request, h) {
   await PreviewService.go(reviewChargeReferenceId, request.yar)
 
   return h.redirect(`/system/bill-runs/review/charge-reference/${reviewChargeReferenceId}`)
-}
-
-async function reviewChargeElement(request, h) {
-  const { elementIndex, reviewChargeElementId } = request.params
-
-  const pageData = await ReviewChargeElementService.go(reviewChargeElementId, elementIndex, request.yar)
-
-  return h.view('bill-runs/review/review-charge-element.njk', pageData)
 }
 
 async function reviewChargeReference(request, h) {
@@ -151,6 +143,14 @@ async function viewReview(request, h) {
   return h.view('bill-runs/review/review.njk', pageData)
 }
 
+async function viewReviewChargeElement(request, h) {
+  const { elementIndex, reviewChargeElementId } = request.params
+
+  const pageData = await ViewReviewChargeElementService.go(reviewChargeElementId, elementIndex, request.yar)
+
+  return h.view('bill-runs/review/review-charge-element.njk', pageData)
+}
+
 async function viewReviewLicence(request, h) {
   const { reviewLicenceId } = request.params
 
@@ -161,7 +161,6 @@ async function viewReviewLicence(request, h) {
 
 module.exports = {
   preview,
-  reviewChargeElement,
   reviewChargeReference,
   submitAuthorised,
   submitEdit,
@@ -174,5 +173,6 @@ module.exports = {
   viewFactors,
   viewRemove,
   viewReview,
+  viewReviewChargeElement,
   viewReviewLicence
 }
