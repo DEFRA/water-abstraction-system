@@ -40,12 +40,12 @@ async function go(reviewChargeReferenceId, yar, payload) {
   }
 
   const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
-  const formattedData = FactorsPresenter.go(reviewChargeReference)
+  const pageData = FactorsPresenter.go(reviewChargeReference)
 
   return {
     activeNavBar: 'bill-runs',
     error: validationResult,
-    ...formattedData
+    ...pageData
   }
 }
 

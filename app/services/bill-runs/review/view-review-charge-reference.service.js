@@ -23,13 +23,13 @@ async function go(reviewChargeReferenceId, yar) {
   const [bannerMessage] = yar.flash('banner')
   const [chargeMessage] = yar.flash('charge')
 
-  const formattedData = ReviewChargeReferencePresenter.go(reviewChargeReference)
+  const pagedata = ReviewChargeReferencePresenter.go(reviewChargeReference)
 
   return {
     activeNavBar: 'bill-runs',
     bannerMessage,
     chargeMessage,
-    ...formattedData
+    ...pagedata
   }
 }
 

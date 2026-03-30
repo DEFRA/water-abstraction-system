@@ -20,12 +20,12 @@ async function go(reviewLicenceId, yar) {
   const reviewLicence = await FetchReviewLicenceService.go(reviewLicenceId)
 
   const [bannerMessage] = yar.flash('banner')
-  const formattedData = ReviewLicencePresenter.go(reviewLicence)
+  const pageData = ReviewLicencePresenter.go(reviewLicence)
 
   return {
     activeNavBar: 'bill-runs',
     bannerMessage,
-    ...formattedData
+    ...pageData
   }
 }
 

@@ -18,11 +18,11 @@ const RemovePresenter = require('../../../presenters/bill-runs/review/remove.pre
 async function go(reviewLicenceId) {
   const reviewLicence = await FetchRemoveReviewLicenceService.go(reviewLicenceId)
 
-  const formattedData = RemovePresenter.go(reviewLicence)
+  const pageData = RemovePresenter.go(reviewLicence)
 
   return {
     activeNavBar: 'bill-runs',
-    ...formattedData
+    ...pageData
   }
 }
 

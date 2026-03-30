@@ -20,11 +20,11 @@ const FetchReviewChargeElementService = require('./fetch-review-charge-element.s
 async function go(reviewChargeElementId, elementIndex) {
   const reviewChargeElement = await FetchReviewChargeElementService.go(reviewChargeElementId)
 
-  const formattedData = EditPresenter.go(reviewChargeElement, elementIndex)
+  const pageData = EditPresenter.go(reviewChargeElement, elementIndex)
 
   return {
     activeNavBar: 'bill-runs',
-    ...formattedData
+    ...pageData
   }
 }
 
