@@ -28,7 +28,7 @@ async function go(sessionId, payload) {
     await _save(session, payload)
 
     return {
-      redirectUrl: _redirectURL(session)
+      redirectUrl: _redirectUrl(session)
     }
   }
 
@@ -40,7 +40,7 @@ async function go(sessionId, payload) {
   }
 }
 
-function _redirectURL(session) {
+function _redirectUrl(session) {
   if (session.checkPageVisited) {
     return `/system/billing-accounts/setup/${session.id}/check`
   }

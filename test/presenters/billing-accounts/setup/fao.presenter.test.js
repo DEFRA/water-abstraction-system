@@ -41,7 +41,7 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
   })
 
   describe('the "backLink.href" property', () => {
-    describe('when no "addressJourney" exists in the session', () => {
+    describe('when no "checkPageVisited" is not set', () => {
       it('returns the link for the "existing-address" page', () => {
         const result = FAOPresenter.go(session)
 
@@ -49,22 +49,8 @@ describe('Billing Accounts - Setup - FAO Presenter', () => {
       })
     })
 
-    describe('when "addressJourney" exists and it has a "backUrl" in the session', () => {
-      beforeEach(() => {
-        session.addressJourney = {
-          backUrl: `/system/address/${session.id}/select`
-        }
-      })
-
-      it('returns that link', () => {
-        const result = FAOPresenter.go(session)
-
-        expect(result.backLink.href).to.equal(`/system/address/${session.id}/select`)
-      })
-    })
-
     describe('when "checkPageVisited" is true', () => {
-      it('returns the link for the "existing-address" page', () => {
+      it('returns the link for the "check" page', () => {
         const result = FAOPresenter.go({
           ...session,
           checkPageVisited: true
