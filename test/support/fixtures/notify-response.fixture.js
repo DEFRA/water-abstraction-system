@@ -28,8 +28,8 @@ function successfulResponse(referenceCode) {
           reference: referenceCode,
           scheduled_for: null,
           template: {
-            id: NOTIFY_TEMPLATES.invitations.standard.email['returns agent'],
-            uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${NOTIFY_TEMPLATES.invitations.standard.email['returns agent']}`,
+            id: NOTIFY_TEMPLATES.invitations.standard.email['returns user'],
+            uri: `https://api.notifications.service.gov.uk/services/2232718f-fc58-4413-9e41-135496648da7/templates/${NOTIFY_TEMPLATES.invitations.standard.email['returns user']}`,
             version: 40
           },
           uri: 'https://api.notifications.service.gov.uk/v2/notifications/9a0a0ba0-9dc7-4322-9a68-cb370220d0c9'

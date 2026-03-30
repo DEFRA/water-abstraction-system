@@ -17,7 +17,7 @@ const NOTIFY_TEMPLATES = Object.freeze({
     adhoc: {
       email: {
         'primary user': '7bb89469-1dbc-458a-9526-fad8ab71285f',
-        'returns agent': 'cbc4efe2-f3b5-4642-8f6d-3532df73ee94',
+        'returns user': 'cbc4efe2-f3b5-4642-8f6d-3532df73ee94',
         'single use': '7bb89469-1dbc-458a-9526-fad8ab71285f'
       },
       letter: {
@@ -29,7 +29,7 @@ const NOTIFY_TEMPLATES = Object.freeze({
     standard: {
       email: {
         'primary user': '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f',
-        'returns agent': '41c45bd4-8225-4d7e-a175-b48b613b5510',
+        'returns user': '41c45bd4-8225-4d7e-a175-b48b613b5510',
         'single use': '2fa7fc83-4df1-4f52-bccf-ff0faeb12b6f'
       },
       letter: {
@@ -43,7 +43,7 @@ const NOTIFY_TEMPLATES = Object.freeze({
     adhoc: {
       email: {
         'primary user': '87dceeb3-aa2b-4ff5-aff9-97755a71532b',
-        'returns agent': 'c8076bbd-7d93-4743-81b3-755a5c5f1d50',
+        'returns user': 'c8076bbd-7d93-4743-81b3-755a5c5f1d50',
         'single use': '87dceeb3-aa2b-4ff5-aff9-97755a71532b'
       },
       letter: {
@@ -55,7 +55,7 @@ const NOTIFY_TEMPLATES = Object.freeze({
     standard: {
       email: {
         'primary user': 'f1144bc7-8bdc-4e82-87cb-1a6c69445836',
-        'returns agent': '038e1807-d1b5-4f09-a5a6-d7eee9030a7a',
+        'returns user': '038e1807-d1b5-4f09-a5a6-d7eee9030a7a',
         'single use': 'f1144bc7-8bdc-4e82-87cb-1a6c69445836'
       },
       letter: {

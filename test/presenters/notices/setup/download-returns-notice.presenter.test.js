@@ -79,7 +79,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
     })
 
-    describe('and the recipient is a "returns agent"', () => {
+    describe('and the recipient is a "returns user"', () => {
       beforeEach(() => {
         recipient = RecipientsFixture.returnsNoticeReturnsAgent(true)
       })
@@ -157,7 +157,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
     })
 
-    describe('and the recipient is a "returns agent"', () => {
+    describe('and the recipient is a "returns user"', () => {
       beforeEach(() => {
         recipient = RecipientsFixture.returnsNoticeReturnsAgent(true)
       })
@@ -235,7 +235,7 @@ describe('Notices - Setup - Download Returns Notice presenter', () => {
       })
     })
 
-    describe('and the recipient is a "returns agent"', () => {
+    describe('and the recipient is a "returns user"', () => {
       beforeEach(() => {
         recipient = RecipientsFixture.returnsNoticeReturnsAgent(true)
       })
