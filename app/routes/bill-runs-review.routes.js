@@ -103,7 +103,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/factors',
     options: {
-      handler: BillRunsReviewController.factors,
+      handler: BillRunsReviewController.viewFactors,
       auth: {
         access: {
           scope: ['billing']

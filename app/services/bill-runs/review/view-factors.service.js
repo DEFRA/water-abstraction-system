@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the review charge reference factors page
- * @module FactorsService
+ * Orchestrates page data for the '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/factors' page
+ * @module ViewFactorsService
  */
 
 const FactorsPresenter = require('../../../presenters/bill-runs/review/factors.presenter.js')
 const FetchReviewChargeReferenceService = require('./fetch-review-charge-reference.service.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the review charge reference factors page
+ * Orchestrates page data for the '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/factors' page
  *
  * @param {string} reviewChargeReferenceId - The UUID of the review charge reference whose factors are being amended
  *

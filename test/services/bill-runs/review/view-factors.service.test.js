@@ -15,9 +15,9 @@ const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-revie
 const FetchReviewChargeReferenceService = require('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
 
 // Thing under test
-const FactorsService = require('../../../../app/services/bill-runs/review/factors.service.js')
+const ViewFactorsService = require('../../../../app/services/bill-runs/review/view-factors.service.js')
 
-describe('Bill Runs Review - Factors Service', () => {
+describe('Bill Runs - Review - View Factors Service', () => {
   let reviewChargeReference
 
   beforeEach(() => {
@@ -32,7 +32,7 @@ describe('Bill Runs Review - Factors Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await FactorsService.go(reviewChargeReference.id)
+      const result = await ViewFactorsService.go(reviewChargeReference.id)
 
       expect(result).to.equal({
         activeNavBar: 'bill-runs',

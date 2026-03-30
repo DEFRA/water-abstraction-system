@@ -5,7 +5,6 @@
  * @module BillRunsReviewController
  */
 
-const FactorsService = require('../services/bill-runs/review/factors.service.js')
 const PreviewService = require('../services/bill-runs/review/preview.service.js')
 const ReviewChargeElementService = require('../services/bill-runs/review/review-charge-element.service.js')
 const ReviewChargeReferenceService = require('../services/bill-runs/review/review-charge-reference.service.js')
@@ -17,17 +16,10 @@ const SubmitReviewService = require('../services/bill-runs/review/submit-review.
 const SubmitReviewLicenceService = require('../services/bill-runs/review/submit-review-licence.service.js')
 const ViewAuthorisedService = require('../services/bill-runs/review/view-authorised.service.js')
 const ViewEditService = require('../services/bill-runs/review/view-edit.service.js')
+const ViewFactorsService = require('../services/bill-runs/review/view-factors.service.js')
 const ViewRemoveService = require('../services/bill-runs/review/view-remove.service.js')
 const ViewReviewService = require('../services/bill-runs/review/view-review.service.js')
 const ViewReviewLicenceService = require('../services/bill-runs/review/view-review-licence.service.js')
-
-async function factors(request, h) {
-  const { reviewChargeReferenceId } = request.params
-
-  const pageData = await FactorsService.go(reviewChargeReferenceId)
-
-  return h.view('bill-runs/review/factors.njk', pageData)
-}
 
 async function preview(request, h) {
   const { reviewChargeReferenceId } = request.params
@@ -131,6 +123,14 @@ async function viewEdit(request, h) {
   return h.view('bill-runs/review/edit.njk', pageData)
 }
 
+async function viewFactors(request, h) {
+  const { reviewChargeReferenceId } = request.params
+
+  const pageData = await ViewFactorsService.go(reviewChargeReferenceId)
+
+  return h.view('bill-runs/review/factors.njk', pageData)
+}
+
 async function viewRemove(request, h) {
   const { reviewLicenceId } = request.params
 
@@ -160,7 +160,6 @@ async function viewReviewLicence(request, h) {
 }
 
 module.exports = {
-  factors,
   preview,
   reviewChargeElement,
   reviewChargeReference,
@@ -172,6 +171,7 @@ module.exports = {
   submitReviewLicence,
   viewAuthorised,
   viewEdit,
+  viewFactors,
   viewRemove,
   viewReview,
   viewReviewLicence
