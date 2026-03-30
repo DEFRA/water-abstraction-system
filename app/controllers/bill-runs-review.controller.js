@@ -5,7 +5,6 @@
  * @module BillRunsReviewController
  */
 
-const AuthorisedService = require('../services/bill-runs/review/authorised.service.js')
 const FactorsService = require('../services/bill-runs/review/factors.service.js')
 const EditService = require('../services/bill-runs/review/edit.service.js')
 const PreviewService = require('../services/bill-runs/review/preview.service.js')
@@ -17,17 +16,10 @@ const SubmitFactorsService = require('../services/bill-runs/review/submit-factor
 const SubmitRemoveService = require('../services/bill-runs/review/submit-remove.service.js')
 const SubmitReviewService = require('../services/bill-runs/review/submit-review.service.js')
 const SubmitReviewLicenceService = require('../services/bill-runs/review/submit-review-licence.service.js')
+const ViewAuthorisedService = require('../services/bill-runs/review/view-authorised.service.js')
 const ViewRemoveService = require('../services/bill-runs/review/view-remove.service.js')
 const ViewReviewService = require('../services/bill-runs/review/view-review.service.js')
 const ViewReviewLicenceService = require('../services/bill-runs/review/view-review-licence.service.js')
-
-async function authorised(request, h) {
-  const { reviewChargeReferenceId } = request.params
-
-  const pageData = await AuthorisedService.go(reviewChargeReferenceId)
-
-  return h.view('bill-runs/review/authorised.njk', pageData)
-}
 
 async function edit(request, h) {
   const { elementIndex, reviewChargeElementId } = request.params
@@ -131,6 +123,14 @@ async function submitReviewLicence(request, h) {
   return h.redirect(`/system/bill-runs/review/licence/${reviewLicenceId}`)
 }
 
+async function viewAuthorised(request, h) {
+  const { reviewChargeReferenceId } = request.params
+
+  const pageData = await ViewAuthorisedService.go(reviewChargeReferenceId)
+
+  return h.view('bill-runs/review/authorised.njk', pageData)
+}
+
 async function viewRemove(request, h) {
   const { reviewLicenceId } = request.params
 
@@ -160,7 +160,6 @@ async function viewReviewLicence(request, h) {
 }
 
 module.exports = {
-  authorised,
   edit,
   factors,
   preview,
@@ -172,6 +171,7 @@ module.exports = {
   submitRemove,
   submitReview,
   submitReviewLicence,
+  viewAuthorised,
   viewRemove,
   viewReview,
   viewReviewLicence

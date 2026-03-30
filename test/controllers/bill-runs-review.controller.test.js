@@ -13,7 +13,6 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const AuthorisedService = require('../../app/services/bill-runs/review/authorised.service.js')
 const EditService = require('../../app/services/bill-runs/review/edit.service.js')
 const FactorsService = require('../../app/services/bill-runs/review/factors.service.js')
 const PreviewService = require('../../app/services/bill-runs/review/preview.service.js')
@@ -24,6 +23,7 @@ const SubmitEditService = require('../../app/services/bill-runs/review/submit-ed
 const SubmitFactorsService = require('../../app/services/bill-runs/review/submit-factors.service.js')
 const SubmitRemoveService = require('../../app/services/bill-runs/review/submit-remove.service.js')
 const SubmitReviewService = require('../../app/services/bill-runs/review/submit-review.service.js')
+const ViewAuthorisedService = require('../../app/services/bill-runs/review/view-authorised.service.js')
 const ViewRemoveService = require('../../app/services/bill-runs/review/view-remove.service.js')
 const ViewReviewService = require('../../app/services/bill-runs/review/view-review.service.js')
 const ViewReviewLicenceService = require('../../app/services/bill-runs/review/view-review-licence.service.js')
@@ -351,7 +351,7 @@ describe('Bill Runs Review controller', () => {
 
       describe('when a request is valid', () => {
         beforeEach(async () => {
-          Sinon.stub(AuthorisedService, 'go').resolves({
+          Sinon.stub(ViewAuthorisedService, 'go').resolves({
             amendedAuthorisedVolume: 9.092,
             chargeDescription: 'High loss, non-tidal, restricted water, up to and including 15 ML/yr, Tier 1 model',
             chargePeriod: '1 April 2023 to 31 March 2024',

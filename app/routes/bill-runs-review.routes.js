@@ -79,7 +79,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/authorised',
     options: {
-      handler: BillRunsReviewController.authorised,
+      handler: BillRunsReviewController.viewAuthorised,
       auth: {
         access: {
           scope: ['billing']
