@@ -5,13 +5,12 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach, before } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const BillingAccountHelper = require('../../support/helpers/billing-account.helper.js')
 const CompanyHelper = require('../../support/helpers/company.helper.js')
-const LicenceDocumentHeaderHelper = require('../../support/helpers/licence-document-header.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const LicenceHolderSeeder = require('../../support/seeders/licence-holder.seeder.js')
 const MonitoringStationHelper = require('../../support/helpers/monitoring-station.helper.js')
@@ -39,10 +38,7 @@ describe('Search - Fetch Search Results service', () => {
 
   before(async () => {
     let licence
-    let licenceDocumentHeader
     let licenceHolderSeedData
-    let licenceRef
-    let returnLog
 
     const anglianRegion = RegionHelper.select(0)
     const walesRegion = RegionHelper.select(7)
@@ -59,83 +55,112 @@ describe('Search - Fetch Search Results service', () => {
       await BillingAccountHelper.add({ accountNumber: 'TESTSEARCH-Y97327241A', companyId: company.id })
     )
 
-    // Add the Licence holders in non-alphabetical order, including region, and ID to prove the ordering in the results
-    licenceRef = LicenceHelper.generateLicenceRef()
-    licenceHolderSeedData = await LicenceHolderSeeder.seed(licenceRef, 'TESTSEARCH licence holder 2', walesRegion.id)
-    licenceHolders.push({ id: licenceHolderSeedData.companyId })
+    // Add the Licences and licence holders in non-alphabetical order, including region, and ID to prove the ordering in
+    // the results
+    // licenceRef = LicenceHelper.generateLicenceRef()
+    licence = await LicenceHelper.add()
+    licences.push(licence)
+    licenceHolderSeedData = await LicenceHolderSeeder.seed(licence, 'TESTSEARCH licence holder 2', walesRegion.id)
+    licenceHolders.push(licenceHolderSeedData)
 
-    licenceRef = LicenceHelper.generateLicenceRef()
-    licenceHolderSeedData = await LicenceHolderSeeder.seed(licenceRef, 'TESTSEARCH licence holder 2', anglianRegion.id)
-    licenceHolders.push({ id: licenceHolderSeedData.companyId })
+    licence = await LicenceHelper.add()
+    licences.push(licence)
+    licenceHolderSeedData = await LicenceHolderSeeder.seed(licence, 'TESTSEARCH licence holder 2', anglianRegion.id)
+    licenceHolders.push(licenceHolderSeedData)
 
-    licenceRef = LicenceHelper.generateLicenceRef()
-    licenceHolderSeedData = await LicenceHolderSeeder.seed(licenceRef, 'TESTSEARCH licence holder 11', anglianRegion.id)
-    licenceHolders.push({ id: licenceHolderSeedData.companyId })
+    licence = await LicenceHelper.add()
+    licences.push(licence)
+    licenceHolderSeedData = await LicenceHolderSeeder.seed(licence, 'TESTSEARCH licence holder 11', anglianRegion.id)
+    licenceHolders.push(licenceHolderSeedData)
 
     // Add the licences in non-alphabetical order to prove the ordering in the results
     licence = await LicenceHelper.add({ licenceRef: '02/01/TESTSEARCH01/05' })
-    licenceHolderSeedData = await LicenceHolderSeeder.seed(licence.licenceRef, 'Test search holder 1', anglianRegion.id)
-    licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-      licenceRef: licence.licenceRef,
-      metadata: { Name: 'Test search holder 1' }
-    })
-    licences.push({ licence, licenceDocumentHeader, licenceHolderSeedData })
+    licences.push(licence)
+    licenceHolderSeedData = await LicenceHolderSeeder.seed(licence, 'Test search holder 1', anglianRegion.id)
+    licenceHolders.push(licenceHolderSeedData)
 
     licence = await LicenceHelper.add({ licenceRef: '01/02/TESTSEARCH02/06' })
-    licenceHolderSeedData = await LicenceHolderSeeder.seed(licence.licenceRef, 'Test search holder 2', anglianRegion.id)
-    licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
-      licenceRef: licence.licenceRef,
-      metadata: { Name: 'Test search holder 2' }
-    })
-    licences.push({ licence, licenceDocumentHeader, licenceHolderSeedData })
+    licences.push(licence)
+    licenceHolderSeedData = await LicenceHolderSeeder.seed(licence, 'Test search holder 2', anglianRegion.id)
+    licenceHolders.push(licenceHolderSeedData)
 
     // Add the monitoring stations in non-alphabetical order to prove the ordering in the results
     monitoringStations.push(await MonitoringStationHelper.add({ label: 'Somewhere TESTSEARCH Station 02' }))
     monitoringStations.push(await MonitoringStationHelper.add({ label: 'Somewhere TESTSEARCH Station 03' }))
     monitoringStations.push(await MonitoringStationHelper.add({ label: 'Somewhere TESTSEARCH Station 01' }))
 
-    const licence1 = await LicenceHelper.add({ licenceRef: 'SEARCH-TEST-1' })
-    const licence2 = await LicenceHelper.add({ licenceRef: 'SEARCH-TEST-2' })
-    const licence3 = await LicenceHelper.add({ licenceRef: 'SEARCH-TEST-3' })
-
     // Add the return logs in non-alphabetical and non-date order to prove the ordering in the results
-    returnLog = await ReturnLogHelper.add({
-      dueDate: new Date('2021-01-01'),
-      endDate: new Date('2020-01-01'),
-      licenceRef: licence1.licenceRef,
-      returnReference: 'TESTSEARCH8801100010'
-    })
-    returnLogs.push({ returnLog, licence: licence1 })
+    returnLogs.push(
+      await ReturnLogHelper.add({
+        dueDate: new Date('2021-04-28'),
+        endDate: new Date('2021-03-31'),
+        licenceRef: licences[0].licenceRef,
+        returnReference: 'TESTSEARCH8801100010',
+        startDate: new Date('2020-04-01')
+      })
+    )
 
-    returnLog = await ReturnLogHelper.add({
-      dueDate: new Date('2021-01-01'),
-      endDate: new Date('2020-01-01'),
-      licenceRef: licence2.licenceRef,
-      returnReference: 'TESTSEARCH8801100010'
-    })
-    returnLogs.push({ returnLog, licence: licence2 })
+    returnLogs.push(
+      await ReturnLogHelper.add({
+        dueDate: new Date('2022-04-28'),
+        endDate: new Date('2022-03-31'),
+        licenceRef: licences[0].licenceRef,
+        returnReference: 'TESTSEARCH8801100010',
+        startDate: new Date('2021-04-01')
+      })
+    )
 
-    returnLog = await ReturnLogHelper.add({
-      dueDate: new Date('2021-01-01'),
-      endDate: new Date('2020-01-01'),
-      licenceRef: licence3.licenceRef,
-      returnReference: 'TESTSEARCH6601100010'
-    })
-    returnLogs.push({ returnLog, licence: licence3 })
+    returnLogs.push(
+      await ReturnLogHelper.add({
+        dueDate: new Date('2023-04-28'),
+        endDate: new Date('2023-03-31'),
+        licenceRef: licences[0].licenceRef,
+        returnReference: 'TESTSEARCH8801100010',
+        startDate: new Date('2022-04-01')
+      })
+    )
 
-    returnLog = await ReturnLogHelper.add({
-      dueDate: new Date('2021-01-01'),
-      endDate: new Date('2020-01-02'),
-      licenceRef: licence1.licenceRef,
-      returnReference: 'TESTSEARCH8801100010'
-    })
-    returnLogs.push({ returnLog, licence: licence1 })
+    returnLogs.push(
+      await ReturnLogHelper.add({
+        dueDate: new Date('2022-04-28'),
+        endDate: new Date('2022-03-31'),
+        licenceRef: licences[1].licenceRef,
+        returnReference: 'TESTSEARCH6601100010',
+        startDate: new Date('2021-04-01')
+      })
+    )
 
     // Add the users in non-alphabetical order to prove the ordering in the results. We also have both internal and
     // external users to prove that only external users are returned
     users.push(await UserHelper.add({ username: 'TESTSEARCH02@wrls.gov.uk', application: 'water_vml' }))
     users.push(await UserHelper.add({ username: 'TESTSEARCH03@wrls.gov.uk' }))
     users.push(await UserHelper.add({ username: 'TESTSEARCH01@wrls.gov.uk', application: 'water_vml' }))
+  })
+
+  after(async () => {
+    for (const user of users) {
+      await user.$query().delete()
+    }
+
+    for (const returnLog of returnLogs) {
+      await returnLog.$query().delete()
+    }
+
+    for (const monitoringStation of monitoringStations) {
+      await monitoringStation.$query().delete()
+    }
+
+    for (const licence of licences) {
+      await licence.$query().delete()
+    }
+
+    for (const licenceHolder of licenceHolders) {
+      await licenceHolder.clean()
+    }
+
+    for (const billingAccount of billingAccounts) {
+      await billingAccount.$query().delete()
+    }
   })
 
   beforeEach(() => {
@@ -155,27 +180,27 @@ describe('Search - Fetch Search Results service', () => {
         results: [
           {
             exact: false,
-            id: licences[1].licence.id,
+            id: licences[4].id,
             type: 'licence'
           },
           {
             exact: false,
-            id: licences[0].licence.id,
+            id: licences[3].id,
             type: 'licence'
           },
           {
             exact: false,
-            id: licenceHolders[2].id,
+            id: licenceHolders[2].company.id,
             type: 'licenceHolder'
           },
           {
             exact: false,
-            id: licenceHolders[1].id,
+            id: licenceHolders[1].company.id,
             type: 'licenceHolder'
           },
           {
             exact: false,
-            id: licenceHolders[0].id,
+            id: licenceHolders[0].company.id,
             type: 'licenceHolder'
           },
           {
@@ -195,22 +220,22 @@ describe('Search - Fetch Search Results service', () => {
           },
           {
             exact: false,
-            id: returnLogs[2].returnLog.id,
+            id: returnLogs[3].id,
             type: 'returnLog'
           },
           {
             exact: false,
-            id: returnLogs[3].returnLog.id,
+            id: returnLogs[2].id,
             type: 'returnLog'
           },
           {
             exact: false,
-            id: returnLogs[0].returnLog.id,
+            id: returnLogs[1].id,
             type: 'returnLog'
           },
           {
             exact: false,
-            id: returnLogs[1].returnLog.id,
+            id: returnLogs[0].id,
             type: 'returnLog'
           },
           {
@@ -277,7 +302,7 @@ describe('Search - Fetch Search Results service', () => {
         results: [
           {
             exact: false,
-            id: licences[0].licence.id,
+            id: licences[3].id,
             type: 'licence'
           }
         ],
@@ -428,17 +453,17 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: licenceHolders[2].id,
+              id: licenceHolders[2].company.id,
               type: 'licenceHolder'
             },
             {
               exact: false,
-              id: licenceHolders[1].id,
+              id: licenceHolders[1].company.id,
               type: 'licenceHolder'
             },
             {
               exact: false,
-              id: licenceHolders[0].id,
+              id: licenceHolders[0].company.id,
               type: 'licenceHolder'
             }
           ],
@@ -459,7 +484,7 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: licenceHolders[2].id,
+              id: licenceHolders[2].company.id,
               type: 'licenceHolder'
             }
           ],
@@ -480,17 +505,17 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: licenceHolders[2].id,
+              id: licenceHolders[2].company.id,
               type: 'licenceHolder'
             },
             {
               exact: false,
-              id: licenceHolders[1].id,
+              id: licenceHolders[1].company.id,
               type: 'licenceHolder'
             },
             {
               exact: false,
-              id: licenceHolders[0].id,
+              id: licenceHolders[0].company.id,
               type: 'licenceHolder'
             }
           ],
@@ -526,7 +551,7 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: true,
-              id: licenceHolders[2].id,
+              id: licenceHolders[2].company.id,
               type: 'licenceHolder'
             }
           ],
@@ -553,12 +578,12 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: licences[1].licence.id,
+              id: licences[4].id,
               type: 'licence'
             },
             {
               exact: false,
-              id: licences[0].licence.id,
+              id: licences[3].id,
               type: 'licence'
             }
           ],
@@ -579,7 +604,7 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: licences[0].licence.id,
+              id: licences[3].id,
               type: 'licence'
             }
           ],
@@ -600,12 +625,12 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: licences[1].licence.id,
+              id: licences[4].id,
               type: 'licence'
             },
             {
               exact: false,
-              id: licences[0].licence.id,
+              id: licences[3].id,
               type: 'licence'
             }
           ],
@@ -641,7 +666,7 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: true,
-              id: licences[0].licence.id,
+              id: licences[3].id,
               type: 'licence'
             }
           ],
@@ -772,22 +797,22 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: returnLogs[2].returnLog.id,
+              id: returnLogs[3].id,
               type: 'returnLog'
             },
             {
               exact: false,
-              id: returnLogs[3].returnLog.id,
+              id: returnLogs[2].id,
               type: 'returnLog'
             },
             {
               exact: false,
-              id: returnLogs[0].returnLog.id,
+              id: returnLogs[1].id,
               type: 'returnLog'
             },
             {
               exact: false,
-              id: returnLogs[1].returnLog.id,
+              id: returnLogs[0].id,
               type: 'returnLog'
             }
           ],
@@ -808,7 +833,7 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: false,
-              id: returnLogs[2].returnLog.id,
+              id: returnLogs[3].id,
               type: 'returnLog'
             }
           ],
@@ -845,7 +870,7 @@ describe('Search - Fetch Search Results service', () => {
           results: [
             {
               exact: true,
-              id: returnLogs[2].returnLog.id,
+              id: returnLogs[3].id,
               type: 'returnLog'
             }
           ],

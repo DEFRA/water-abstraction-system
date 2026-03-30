@@ -28,7 +28,7 @@ async function go(sessionId, payload) {
     await _save(session, payload)
 
     return {
-      redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+      redirectUrl: _redirectUrl(session)
     }
   }
 
@@ -40,9 +40,27 @@ async function go(sessionId, payload) {
   }
 }
 
+function _redirectUrl(session) {
+  if (session.addressSelected === 'new') {
+    return `/system/address/${session.id}/postcode`
+  }
+
+  return `/system/billing-accounts/setup/${session.id}/check`
+}
+
 async function _save(session, payload) {
   if (session.checkPageVisited && session.contactName !== payload.contactName) {
+    session.addressJourney = null
     session.checkPageVisited = false
+  }
+
+  if (!session.addressJourney && session.addressSelected === 'new') {
+    session.addressJourney = {
+      address: {},
+      backLink: { href: `/system/billing-accounts/setup/${session.id}/contact-name`, text: 'Back' },
+      pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+      redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+    }
   }
 
   session.contactName = payload.contactName
