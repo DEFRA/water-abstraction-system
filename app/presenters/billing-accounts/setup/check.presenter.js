@@ -39,7 +39,7 @@ function go(session, companyContacts, existingAddress, companysHouseResult) {
 
 function _address(session) {
   if (!session.addressJourney) {
-    return ''
+    return []
   }
 
   const { address } = session.addressJourney

@@ -110,7 +110,7 @@
             }
           ]
         }
-      } if address,
+      } if address.length > 0,
       {
         key: { text: "FAO" },
         value: { text: fao },
@@ -136,8 +136,7 @@
             }
           ]
         }
-      } if contactSelected
-      ,
+      } if contactSelected,
       {
         key: { text: "Contact Name" },
         value: { text: contactName },
