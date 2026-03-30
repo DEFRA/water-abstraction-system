@@ -46,6 +46,7 @@
     "@smithy/node-http-handler": "^4.1.1",
     "bcryptjs": "^3.0.2",
     "big.js": "^7.0.1",
+    "blankie": "^5.0.0",
     "dotenv": "^17.2.1",
     "got": "^14.4.7",
     "govuk-frontend": "^4.7.0",
