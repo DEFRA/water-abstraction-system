@@ -46,16 +46,27 @@ function _redirectUrl(session) {
     return `/system/billing-accounts/setup/${session.id}/contact-name`
   }
 
+  if (session.addressSelected === 'new') {
+    return `/system/address/${session.id}/postcode`
+  }
+
   return `/system/billing-accounts/setup/${session.id}/check`
 }
 
 async function _save(session, payload) {
-  if (session.checkPageVisited && session.contactSelected !== payload.contactSelected) {
+  if (session.contactSelected && session.contactSelected !== payload.contactSelected) {
+    session.addressJourney = null
     session.checkPageVisited = false
+    session.contactName = null
   }
 
-  if (payload.contactSelected !== 'new') {
-    session.contactName = null
+  if (!session.addressJourney && session.addressSelected === 'new') {
+    session.addressJourney = {
+      address: {},
+      backLink: { href: `/system/billing-accounts/setup/${session.id}/contact`, text: 'Back' },
+      pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+      redirectUrl: `/system/billing-accounts/setup/${session.id}/check`
+    }
   }
 
   session.contactSelected = payload.contactSelected

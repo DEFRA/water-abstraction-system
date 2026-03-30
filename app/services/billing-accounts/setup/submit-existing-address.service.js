@@ -57,10 +57,6 @@ function _redirectUrl(session) {
     return `/system/billing-accounts/setup/${session.id}/check`
   }
 
-  if (session.addressSelected === 'new') {
-    return `/system/address/${session.id}/postcode`
-  }
-
   return `/system/billing-accounts/setup/${session.id}/fao`
 }
 
@@ -74,15 +70,6 @@ async function _save(session, payload) {
   }
 
   session.addressSelected = payload.addressSelected
-
-  if (!session.addressJourney && payload.addressSelected === 'new') {
-    session.addressJourney = {
-      address: {},
-      backLink: { href: `/system/billing-accounts/setup/${session.id}/existing-address`, text: 'Back' },
-      pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-      redirectUrl: `/system/billing-accounts/setup/${session.id}/fao`
-    }
-  }
 
   return session.$update()
 }
