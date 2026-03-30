@@ -1,29 +1,28 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the remove review licence confirmation page
- * @module RemoveService
+ * Orchestrates fetching and presenting the data for the '/bill-runs/review/licence/{reviewLicenceId}/remove' page
+ * @module ViewRemoveService
  */
 
 const FetchRemoveReviewLicenceService = require('./fetch-remove-review-licence.service.js')
 const RemovePresenter = require('../../../presenters/bill-runs/review/remove.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the remove bill run licence confirmation page
+ * Orchestrates fetching and presenting the data for the '/bill-runs/review/licence/{reviewLicenceId}/remove' page
  *
  * @param {string} reviewLicenceId - The UUID of the licence that is being removed from the bill run
  *
- * @returns {Promise<object>} an object representing the `pageData` needed by the remove licence template. It contains
- * details of the bill run & the licence reference.
+ * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(reviewLicenceId) {
   const reviewLicence = await FetchRemoveReviewLicenceService.go(reviewLicenceId)
 
-  const formattedData = RemovePresenter.go(reviewLicence)
+  const pageData = RemovePresenter.go(reviewLicence)
 
   return {
     activeNavBar: 'bill-runs',
-    ...formattedData
+    ...pageData
   }
 }
 

@@ -1,25 +1,24 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the review bill run page
- * @module ReviewBillRunService
+ * Orchestrates fetching and presenting the data for the '/bill-runs/review/{id}' page
+ * @module ViewReviewService
  */
 
 const FetchBillRunLicencesService = require('./fetch-bill-run-licences.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
-const ReviewBillRunPresenter = require('../../../presenters/bill-runs/review/review-bill-run.presenter.js')
+const ReviewPresenter = require('../../../presenters/bill-runs/review/review.presenter.js')
 const { readFlashNotification } = require('../../../lib/general.lib.js')
 const { processSavedFilters } = require('../../../lib/submit-page.lib.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the review bill run page
+ * Orchestrates fetching and presenting the data for the '/bill-runs/review/{id}' page
  *
  * @param {string} id - The UUID for the bill run to review
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {string} page - The current page for the pagination service
  *
- * @returns {Promise<object>} An object representing the `pageData` needed by the review bill run template. It contains
- * details of the bill run and the licences linked to it as well as any data that has been used to filter the results.
+ * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(id, yar, page) {
   const filterKey = `review-${id}`
@@ -29,7 +28,7 @@ async function go(id, yar, page) {
 
   const notification = readFlashNotification(yar)
 
-  const pageData = ReviewBillRunPresenter.go(billRun, licences.results)
+  const pageData = ReviewPresenter.go(billRun, licences.results)
 
   const pagination = PaginatorPresenter.go(
     licences.total,

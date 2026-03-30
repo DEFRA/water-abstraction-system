@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for the `/bill-runs/review` page
+ * Formats data for the `/bill-runs/review/{id}` page
  * @module ReviewBillRunPresenter
  */
 
@@ -9,7 +9,7 @@ const { formatFinancialYear, formatLongDate, titleCase } = require('../../base.p
 const { formatBillRunType, formatChargeScheme, generateBillRunTitle } = require('../../billing.presenter.js')
 
 /**
- * Formats data for the `/bill-runs/review` page
+ * Formats data for the `/bill-runs/review/{id}` page
  *
  * @param {module:BillRunModel} billRun - The data from the bill run
  * @param {module:LicenceModel} licences - The licences data associated with the bill run

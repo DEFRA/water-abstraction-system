@@ -15,9 +15,9 @@ const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-revie
 const FetchReviewChargeElementService = require('../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js')
 
 // Thing under test
-const EditService = require('../../../../app/services/bill-runs/review/edit.service.js')
+const ViewEditService = require('../../../../app/services/bill-runs/review/view-edit.service.js')
 
-describe('Bill Runs Review - Edit Service', () => {
+describe('Bill Runs - Review - View Edit Service', () => {
   const elementIndex = 1
 
   let reviewChargeElement
@@ -34,7 +34,7 @@ describe('Bill Runs Review - Edit Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await EditService.go(reviewChargeElement.id, elementIndex)
+      const result = await ViewEditService.go(reviewChargeElement.id, elementIndex)
 
       expect(result).to.equal({
         activeNavBar: 'bill-runs',

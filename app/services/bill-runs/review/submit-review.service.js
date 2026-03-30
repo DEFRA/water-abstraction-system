@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Updates the session cookie with the filter data needed for the two-part tariff review bill run page
- * @module SubmitReviewBillRunService
+ * Updates the session cookie with the filter data needed for the '/bill-runs/review/{id}' page
+ * @module SubmitReviewService
  */
 
 const { clearFilters, handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
- * Updates the session cookie with the filter data needed for the two-part tariff review bill run page
+ * Updates the session cookie with the filter data needed for the '/bill-runs/review/{id}' page
  *
  * @param {string} billRunId - The UUID of the bill run
  * @param {object} payload - The `request.payload` containing the filter data.

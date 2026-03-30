@@ -31,13 +31,13 @@ async function go(reviewChargeReferenceId, yar, payload) {
   }
 
   const reviewChargeReference = await FetchReviewChargeReferenceService.go(reviewChargeReferenceId)
-  const formattedData = AuthorisedPresenter.go(reviewChargeReference)
+  const pageData = AuthorisedPresenter.go(reviewChargeReference)
 
   return {
     activeNavBar: 'bill-runs',
     amendedAuthorisedVolume: payload.amendedAuthorisedVolume,
     error: validationResult,
-    ...formattedData
+    ...pageData
   }
 }
 
