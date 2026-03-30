@@ -89,7 +89,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
         recipient: recipients[1].email,
         returnLogIds: recipients[1].return_log_ids,
         status: 'pending',
-        templateId: NOTIFY_TEMPLATES.invitations.standard.email['returns agent']
+        templateId: NOTIFY_TEMPLATES.invitations.standard.email['returns user']
       },
       {
         contactType: recipients[2].contact_type,
@@ -191,7 +191,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           })
         })
 
-        describe('and the recipient is a "returns agent"', () => {
+        describe('and the recipient is a "returns user"', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 
@@ -249,7 +249,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
           })
         })
 
-        describe('and the recipient is a "returns agent"', () => {
+        describe('and the recipient is a "returns user"', () => {
           it('returns the correct "messageRef"', () => {
             const result = ReturnsNoticeNotificationsPresenter.go(session, recipients, noticeId)
 

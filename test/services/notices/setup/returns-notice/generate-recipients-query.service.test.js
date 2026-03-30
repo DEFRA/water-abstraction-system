@@ -105,9 +105,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
   `
-  const returnsAgentExpectedQuery = `
+  const returnsUserExpectedQuery = `
     SELECT
-      ('returns agent') AS contact_type,
+      ('returns user') AS contact_type,
       2 AS priority,
       NULL::jsonb AS contact,
       md5(LOWER(le."name")) AS contact_hash_id,
@@ -192,8 +192,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // Confirm it will extract primary user recipients
           expect(result).contains(primaryUserExpectedQuery)
 
-          // Confirm it will extract returns agent recipients
-          expect(result).contains(returnsAgentExpectedQuery)
+          // Confirm it will extract returns user recipients
+          expect(result).contains(returnsUserExpectedQuery)
 
           // Confirm it will extract licence holder recipients
           expect(result).contains(licenceHolderExpectedQuery)
@@ -220,8 +220,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // Confirm it will extract primary user recipients
           expect(result).contains(primaryUserExpectedQuery)
 
-          // Confirm it will extract returns agent recipients
-          expect(result).contains(returnsAgentExpectedQuery)
+          // Confirm it will extract returns user recipients
+          expect(result).contains(returnsUserExpectedQuery)
 
           // Confirm it will extract licence holder recipients
           expect(result).contains(licenceHolderExpectedQuery)
@@ -254,8 +254,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // Confirm it will extract primary user recipients
           expect(result).contains(primaryUserExpectedQuery)
 
-          // Confirm it will extract returns agent recipients
-          expect(result).contains(returnsAgentExpectedQuery)
+          // Confirm it will extract returns user recipients
+          expect(result).contains(returnsUserExpectedQuery)
 
           // Confirm it will extract licence holder recipients
           expect(result).contains(licenceHolderExpectedQuery)
@@ -282,8 +282,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // Confirm it will extract primary user recipients
           expect(result).contains(primaryUserExpectedQuery)
 
-          // Confirm it will extract returns agent recipients
-          expect(result).contains(returnsAgentExpectedQuery)
+          // Confirm it will extract returns user recipients
+          expect(result).contains(returnsUserExpectedQuery)
 
           // Confirm it will extract licence holder recipients
           expect(result).contains(licenceHolderExpectedQuery)
@@ -316,8 +316,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // Confirm it will NOT extract primary user recipients
           expect(result).not.contains(primaryUserExpectedQuery)
 
-          // Confirm it will NOT extract returns agent recipients
-          expect(result).not.contains(returnsAgentExpectedQuery)
+          // Confirm it will NOT extract returns user recipients
+          expect(result).not.contains(returnsUserExpectedQuery)
 
           // Confirm it will extract licence holder recipients
           expect(result).contains(licenceHolderExpectedQuery)
@@ -344,8 +344,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           // Confirm it will NOT extract primary user recipients
           expect(result).not.contains(primaryUserExpectedQuery)
 
-          // Confirm it will NOT extract returns agent recipients
-          expect(result).not.contains(returnsAgentExpectedQuery)
+          // Confirm it will NOT extract returns user recipients
+          expect(result).not.contains(returnsUserExpectedQuery)
 
           // Confirm it will extract licence holder recipients
           expect(result).contains(licenceHolderExpectedQuery)
@@ -374,8 +374,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         // Confirm it will NOT extract primary user recipients
         expect(result).not.contains(primaryUserExpectedQuery)
 
-        // Confirm it will NOT extract returns agent recipients
-        expect(result).not.contains(returnsAgentExpectedQuery)
+        // Confirm it will NOT extract returns user recipients
+        expect(result).not.contains(returnsUserExpectedQuery)
 
         // Confirm it will extract licence holder recipients
         expect(result).contains(licenceHolderExpectedQuery)
@@ -437,8 +437,8 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       scenario = await RecipientScenariosSeeder.primaryUserOnly([returnLog])
       scenarios.push(scenario)
 
-      // 6) Primary user and returns agent. Just like with 5), the query will return the primary user details and not
-      // the licence holder. But as a returns agent has also been added, it will be returned as well.
+      // 6) Primary user and returns user. Just like with 5), the query will return the primary user details and not
+      // the licence holder. But as a returns user has also been added, it will be returned as well.
       returnLog = await _addReturnLog(returnLogs)
       scenario = await RecipientScenariosSeeder.primaryUserWithDifferentReturnsAgent([returnLog])
       scenarios.push(scenario)
@@ -453,7 +453,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       ])
       scenarios.push(scenario)
 
-      // 8) Primary user and returns agent with the same email address - only one recipient record will be returned
+      // 8) Primary user and returns user with the same email address - only one recipient record will be returned
       returnLog = await _addReturnLog(returnLogs)
       scenario = await RecipientScenariosSeeder.primaryUserWithSameReturnsAgent([returnLog])
       scenarios.push(scenario)
@@ -535,7 +535,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           expect(rows).not.to.contain(sendingResults[1])
         })
 
-        it('(Scenario 5) returns only the primary user when the licence is registered and there are no returns agents', async () => {
+        it('(Scenario 5) returns only the primary user when the licence is registered and there are no returns users', async () => {
           const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
@@ -548,7 +548,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           expect(rows).not.to.contain(sendingResults[0])
         })
 
-        it('(Scenario 6) returns the primary user and returns agent when the licence is registered and they are different', async () => {
+        it('(Scenario 6) returns the primary user and returns user when the licence is registered and they are different', async () => {
           const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
@@ -581,7 +581,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           expect(rows).not.to.contain(sendingResults[1])
         })
 
-        it('(Scenario 8) returns only the primary user when it and the returns agent are the same for a registered licence', async () => {
+        it('(Scenario 8) returns only the primary user when it and the returns user are the same for a registered licence', async () => {
           const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
@@ -665,7 +665,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           expect(rows).not.to.contain(downloadingResults[1])
         })
 
-        it('(Scenario 5) returns only the primary user when the licence is registered and there are no returns agents', async () => {
+        it('(Scenario 5) returns only the primary user when the licence is registered and there are no returns users', async () => {
           const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
@@ -678,7 +678,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           expect(rows).not.to.contain(downloadingResults[0])
         })
 
-        it('(Scenario 6) returns the primary user and returns agent when the licence is registered and they are different', async () => {
+        it('(Scenario 6) returns the primary user and returns user when the licence is registered and they are different', async () => {
           const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
@@ -718,7 +718,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           expect(rows).not.to.contain(downloadingResults[3])
         })
 
-        it('(Scenario 8) returns only the primary user when it and the returns agent are the same for a registered licence', async () => {
+        it('(Scenario 8) returns only the primary user when it and the returns user are the same for a registered licence', async () => {
           const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
@@ -800,7 +800,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           expect(rows).not.to.contain(sendingResults[1])
         })
 
-        it('(Scenario 5) returns the licence holder, not the primary user when the licence is registered and there are no returns agents', async () => {
+        it('(Scenario 5) returns the licence holder, not the primary user when the licence is registered and there are no returns users', async () => {
           const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
@@ -812,7 +812,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           expect(rows).not.to.contain(sendingResults[1])
         })
 
-        it('(Scenario 6) returns the licence holder, not the primary user or returns agent when the licence is registered and has a different returns agent', async () => {
+        it('(Scenario 6) returns the licence holder, not the primary user or returns user when the licence is registered and has a different returns user', async () => {
           const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
@@ -845,7 +845,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           expect(rows).not.to.contain(sendingResults[3])
         })
 
-        it('(Scenario 8) returns the licence holder, not the primary user when it and the returns agent are the same for a registered licence', async () => {
+        it('(Scenario 8) returns the licence holder, not the primary user when it and the returns user are the same for a registered licence', async () => {
           const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
@@ -929,7 +929,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           expect(rows).not.to.contain(downloadingResults[1])
         })
 
-        it('(Scenario 5) returns the licence holder, not the primary user when the licence is registered and there are no returns agents', async () => {
+        it('(Scenario 5) returns the licence holder, not the primary user when the licence is registered and there are no returns users', async () => {
           const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
@@ -941,7 +941,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           expect(rows).not.to.contain(downloadingResults[1])
         })
 
-        it('(Scenario 6) returns the licence holder, not the primary user or returns agent when the licence is registered and has a different returns agent', async () => {
+        it('(Scenario 6) returns the licence holder, not the primary user or returns user when the licence is registered and has a different returns user', async () => {
           const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
@@ -983,7 +983,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           expect(rows).not.to.contain(downloadingResults[7])
         })
 
-        it('(Scenario 8) returns the licence holder, not the primary user when it and the returns agent are the same for a registered licence', async () => {
+        it('(Scenario 8) returns the licence holder, not the primary user when it and the returns user are the same for a registered licence', async () => {
           const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
           const { rows } = await db.raw(query, [returnLogIds])
@@ -1062,7 +1062,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         expect(rows).not.to.contain(sendingResults[1])
       })
 
-      it('(Scenario 5) returns the licence holder, not the primary user when the licence is registered and there are no returns agents', async () => {
+      it('(Scenario 5) returns the licence holder, not the primary user when the licence is registered and there are no returns users', async () => {
         const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
         const { rows } = await db.raw(query, [returnLogIds])
@@ -1074,7 +1074,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         expect(rows).not.to.contain(sendingResults[1])
       })
 
-      it('(Scenario 6) returns the licence holder, not the primary user or returns agent when the licence is registered and has a different returns agent', async () => {
+      it('(Scenario 6) returns the licence holder, not the primary user or returns user when the licence is registered and has a different returns user', async () => {
         const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
         const { rows } = await db.raw(query, [returnLogIds])
@@ -1107,7 +1107,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
         expect(rows).not.to.contain(sendingResults[3])
       })
 
-      it('(Scenario 8) returns the licence holder, not the primary user when it and the returns agent are the same for a registered licence', async () => {
+      it('(Scenario 8) returns the licence holder, not the primary user when it and the returns user are the same for a registered licence', async () => {
         const query = GenerateRecipientsQueryService.go(noticeType, dueReturnLogsQuery, download)
 
         const { rows } = await db.raw(query, [returnLogIds])

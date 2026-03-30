@@ -278,7 +278,7 @@ describe('Notifications - Check Notification Status service', () => {
 
         describe('and the contact type was NOT "primary user" or "single use"', () => {
           beforeEach(() => {
-            notification.contactType = 'returns agent'
+            notification.contactType = 'returns user'
           })
 
           it('does not attempt to set the due date for the linked return log records.', async () => {
