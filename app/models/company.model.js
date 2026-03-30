@@ -96,6 +96,14 @@ class CompanyModel extends BaseModel {
           to: 'licenceVersionHolders.companyId'
         }
       },
+      licenceVersions: {
+        relation: Model.HasManyRelation,
+        modelClass: 'licence-version.model',
+        join: {
+          from: 'companies.id',
+          to: 'licenceVersions.companyId'
+        }
+      },
       region: {
         relation: Model.BelongsToOneRelation,
         modelClass: 'region.model',

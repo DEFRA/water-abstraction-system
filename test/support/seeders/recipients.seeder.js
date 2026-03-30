@@ -6,12 +6,19 @@
 
 const crypto = require('node:crypto')
 
+const AddressHelper = require('../helpers/address.helper.js')
+const CompanyHelper = require('../helpers/company.helper.js')
 const LicenceDocumentHeaderHelper = require('../helpers/licence-document-header.helper.js')
 const LicenceDocumentHeaderModel = require('../../../app/models/licence-document-header.model.js')
+const LicenceDocumentHelper = require('../helpers/licence-document.helper.js')
+const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
 const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
 const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.model.js')
+const LicenceHelper = require('../helpers/licence.helper.js')
+const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
+const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const { generateLicenceRef } = require('../helpers/licence.helper.js')
 
@@ -52,29 +59,55 @@ async function clean(recipient) {
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
 async function licenceHolder(name, licenceRef = null) {
-  const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
-  const contact = _licenceDocumentHeaderContact(name, 'Licence holder')
-
   if (!licenceRef) {
     licenceRef = generateLicenceRef()
+  }
+
+  const address = _address()
+
+  const addressData = await AddressHelper.add({
+    ...address
+  })
+
+  const company = await CompanyHelper.add({
+    name
+  })
+
+  const licence = await LicenceHelper.add({
+    licenceRef: licenceRef || generateLicenceRef()
+  })
+
+  await LicenceVersionHelper.add({
+    addressId: addressData.id,
+    companyId: company.id,
+    endDate: null,
+    licenceId: licence.id
+  })
+
+  const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
+
+  const contact = {
+    ...address,
+    name
   }
 
   const licenceDocumentHeader = await LicenceDocumentHeaderHelper.add({
     companyEntityId: companyEntity.id,
     licenceRef,
     metadata: {
-      contacts: [contact]
+      contacts: [{ ...contact, type: 'Person', role: 'Licence holder' }]
     }
   })
 
   return {
     contact,
+    company,
     contactHashId: _contactHashId(contact),
     contactType: 'licence holder',
     email: null,
     licenceDocumentHeader,
     licenceEntityRole: null,
-    licenceRef: licenceDocumentHeader.licenceRef,
+    licenceRef: licence.licenceRef,
     messageType: 'Letter'
   }
 }
@@ -159,15 +192,47 @@ async function returnsAgent(licenceDocumentHeader, email) {
  * @param {object} licenceDocumentHeader - The licence document header holding licence holder details
  * @param {string} name - The name for the "Returns to" contact
  *
+ * @param company
+ * @param existingCompany
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function returnsTo(licenceDocumentHeader, name) {
-  const contact = _licenceDocumentHeaderContact(name, 'Returns to')
-  const { metadata } = licenceDocumentHeader
+async function returnsTo(licenceDocumentHeader, name, existingCompany = null) {
+  const address = _address()
 
-  metadata.contacts.push(contact)
+  const addressData = await AddressHelper.add({
+    ...address
+  })
 
-  await licenceDocumentHeader.$query().patch({ metadata })
+  let company
+
+  if (!existingCompany) {
+    company = await CompanyHelper.add({
+      name
+    })
+  } else {
+    company = existingCompany
+  }
+
+  const { licenceRef } = licenceDocumentHeader
+
+  const licenceRole = LicenceRoleHelper.select('returnsTo')
+
+  const licenceDocument = await LicenceDocumentHelper.add({
+    licenceRef
+  })
+
+  await LicenceDocumentRoleHelper.add({
+    licenceRoleId: licenceRole.id,
+    licenceDocumentId: licenceDocument.id,
+    companyId: company.id,
+    addressId: addressData.id,
+    endDate: null
+  })
+
+  const contact = {
+    ...address,
+    name
+  }
 
   return {
     contact,
@@ -238,46 +303,37 @@ function transformToSendingResult(recipient) {
   }
 }
 
+function _address() {
+  return {
+    address1: '4',
+    address2: 'Privet Drive',
+    address3: 'Little Whinging',
+    address4: 'Surrey',
+    address5: null,
+    address6: null,
+    country: null,
+    postcode: 'WD25 7LR'
+  }
+}
+
 function _contactHashId(contact) {
-  const salutation = contact.salutation ?? ''
-  const forename = contact.forename ?? ''
-  const initials = contact.initials ?? ''
   const name = contact.name
-  const addressLine1 = contact.addressLine1
-  const addressLine2 = contact.addressLine2 ?? ''
-  const addressLine3 = contact.addressLine3 ?? ''
-  const addressLine4 = contact.addressLine4 ?? ''
-  const town = contact.town ?? ''
-  const county = contact.county ?? ''
+  const address1 = contact.address1
+  const address2 = contact.address2 ?? ''
+  const address3 = contact.address3 ?? ''
+  const address4 = contact.address4 ?? ''
+  const address5 = contact.address5 ?? ''
+  const address6 = contact.address6 ?? ''
   const postcode = contact.postcode ?? ''
   const country = contact.country ?? ''
 
-  const _combinedString = `${salutation}${forename}${initials}${name}${addressLine1}${addressLine2}${addressLine3}${addressLine4}${town}${county}${postcode}${country}`
+  const _combinedString = `${name}${address1}${address2}${address3}${address4}${address5}${address6}${postcode}${country}`
 
   return crypto.createHash('md5').update(_combinedString.toLowerCase()).digest('hex')
 }
 
 function _emailHashId(email) {
   return crypto.createHash('md5').update(email.toLowerCase()).digest('hex')
-}
-
-function _licenceDocumentHeaderContact(name, role) {
-  return {
-    addressLine1: '4',
-    addressLine2: 'Privet Drive',
-    addressLine3: null,
-    addressLine4: null,
-    country: null,
-    county: 'Surrey',
-    forename: 'Harry',
-    initials: 'J',
-    name,
-    postcode: 'WD25 7LR',
-    role,
-    salutation: null,
-    town: 'Little Whinging',
-    type: 'Person'
-  }
 }
 
 module.exports = {

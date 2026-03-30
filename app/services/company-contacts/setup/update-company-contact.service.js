@@ -28,6 +28,7 @@ async function _update(companyContact) {
       abstractionAlerts: companyContact.abstractionAlerts,
       updatedBy: companyContact.updatedBy,
       updatedAt: today().toISOString(),
+      deletedAt: null,
       contact: {
         id: companyContact.contactId,
         department: companyContact.name,

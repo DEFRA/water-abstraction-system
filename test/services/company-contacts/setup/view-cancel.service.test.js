@@ -8,11 +8,11 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Thing under test
 const ViewCancelService = require('../../../../app/services/company-contacts/setup/view-cancel.service.js')
-const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 
 describe('Company Contacts - Setup - Cancel Service', () => {
   let company

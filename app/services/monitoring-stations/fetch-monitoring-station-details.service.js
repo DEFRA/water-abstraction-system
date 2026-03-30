@@ -72,18 +72,7 @@ async function _fetchLicenceMonitoringStations(monitoringStationId) {
     })
     .withGraphFetched('licenceVersionPurposeCondition')
     .modifyGraph('licenceVersionPurposeCondition', (licenceVersionPurposeConditionBuilder) => {
-      licenceVersionPurposeConditionBuilder
-        .select(['id', 'notes'])
-        .withGraphFetched('licenceVersionPurpose')
-        .modifyGraph('licenceVersionPurpose', (licenceVersionPurposeBuilder) => {
-          licenceVersionPurposeBuilder.select([
-            'id',
-            'abstractionPeriodEndDay',
-            'abstractionPeriodEndMonth',
-            'abstractionPeriodStartMonth',
-            'abstractionPeriodStartDay'
-          ])
-        })
+      licenceVersionPurposeConditionBuilder.select(['id', 'notes'])
     })
 }
 

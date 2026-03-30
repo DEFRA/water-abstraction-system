@@ -43,12 +43,61 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
     SELECT
       ('licence holder') AS contact_type,
       3 AS priority,
-      jc.*
+      jsonb_build_object(
+        'name', c.name,
+        'address1', a.address_1,
+        'address2', a.address_2,
+        'address3', a.address_3,
+        'address4', a.address_4,
+        'address5', a.address_5,
+        'address6', a.address_6,
+        'postcode', a.postcode,
+        'country', a.country
+      ) AS contact,
+      MD5(LOWER(CONCAT(
+        c.name,
+        a.address_1,
+        a.address_2,
+        a.address_3,
+        a.address_4,
+        a.address_5,
+        a.address_6,
+        a.postcode,
+        a.country
+      ))) AS contact_hash_id,
+      drl.due_date AS due_date,
+      drl.end_date  AS end_date,
+      NULL::TEXT AS email,
+      l.licence_ref,
+      ('Letter') AS message_type,
+      drl.return_log_id AS return_log_id,
+      drl.return_reference AS return_reference,
+      drl.start_date AS start_date
     FROM
-      json_contacts jc
-    WHERE
-      jc.contact->>'role' = 'Licence holder'
+      public.licences l
+    INNER JOIN (
+      SELECT DISTINCT ON (lv.licence_id)
+        lv.licence_id,
+        lv.company_id,
+        lv.address_id
+      FROM
+        public.licence_versions lv
+      WHERE
+        lv.start_date <= CURRENT_DATE
+      ORDER BY
+        lv.licence_id ASC,
+        lv."issue" DESC,
+        lv."increment" DESC,
+        lv.end_date DESC NULLS FIRST
+    ) AS llv ON llv.licence_id = l.id
+    INNER JOIN public.companies c ON c.id = llv.company_id
+    INNER JOIN public.addresses a ON a.id = llv.address_id
+    INNER JOIN due_return_logs drl
+      ON drl.licence_ref = l.licence_ref
+    LEFT JOIN registered_licences rl
+      ON rl.licence_ref = l.licence_ref
   `
+
   const primaryUserExpectedQuery = `
     SELECT
       ('primary user') AS contact_type,
@@ -64,15 +113,59 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       md5(LOWER(le."name")) AS contact_hash_id,
   `
   const returnsToExpectedQuery = `
-    SELECT
-      ('returns to') AS contact_type,
-      4 AS priority,
-      jc.*
-    FROM
-      json_contacts jc
-    WHERE
-      jc.contact->>'role' = 'Returns to'
-  `
+      SELECT
+        ('returns to') AS contact_type,
+        4 AS priority,
+        jsonb_build_object(
+        'name', c.name,
+        'address1', a.address_1,
+        'address2', a.address_2,
+        'address3', a.address_3,
+        'address4', a.address_4,
+        'address5', a.address_5,
+        'address6', a.address_6,
+        'postcode', a.postcode,
+        'country', a.country
+        ) AS contact,
+        MD5(LOWER(CONCAT(
+        c.name,
+        a.address_1,
+        a.address_2,
+        a.address_3,
+        a.address_4,
+        a.address_5,
+        a.address_6,
+        a.postcode,
+        a.country
+        ))) AS contact_hash_id,
+        drl.due_date AS due_date,
+        drl.end_date  AS end_date,
+        NULL::TEXT AS email,
+        ld.licence_ref,
+        ('Letter') AS message_type,
+        drl.return_log_id AS return_log_id,
+        drl.return_reference AS return_reference,
+        drl.start_date AS start_date
+      FROM public.licence_document_roles ldr
+        INNER JOIN public.licence_roles lr
+          ON lr.id = ldr.licence_role_id
+        INNER JOIN public.companies c
+          ON c.id = ldr.company_id
+        INNER JOIN public.licence_documents ld
+          ON ld.id = ldr.licence_document_id
+        INNER JOIN public.addresses a
+          ON a.id = ldr.address_id
+        INNER JOIN due_return_logs drl
+          ON drl.licence_ref = ld.licence_ref
+        LEFT JOIN registered_licences rl
+          ON rl.licence_ref = ld.licence_ref
+      WHERE  lr."name" = 'returnsTo'
+      AND (
+      ldr.end_date IS NULL
+      OR ldr.end_date >= CURRENT_DATE
+      )
+      AND rl.licence_ref IS NULL
+    `
 
   let download
   let noticeType

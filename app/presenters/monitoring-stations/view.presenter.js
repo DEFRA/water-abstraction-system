@@ -19,10 +19,6 @@ const { determineRestrictionHeading, formatRestrictions } = require('./base.pres
  * We solve this by using the 'rowspan' property of the first cell that holds the licence ref and link. So, no need for
  * grouping by licence here!
  *
- * The other key thing the presenter has to deal with is what abstraction period to show. Those records linked to a
- * licence condition need to display the abstraction period on the associated licence purpose. Else the user will have
- * added an abstraction period against the licence monitoring station record when they tagged it.
- *
  * @param {module:MonitoringStationModel} monitoringStation - The monitoring station
  * @param {module:LicenceMonitoringStationModel[]} licenceMonitoringStations - The 'live' licence monitoring stations
  * tagged to the monitoring station
@@ -73,14 +69,6 @@ function _createAlertButton(restrictions, auth, monitoringStationId) {
   }
 }
 
-function _licenceVersionPurpose(licenceVersionPurposeCondition) {
-  if (licenceVersionPurposeCondition?.licenceVersionPurpose) {
-    return licenceVersionPurposeCondition.licenceVersionPurpose
-  } else {
-    return {}
-  }
-}
-
 function _pageTitle(riverName, stationName) {
   if (riverName) {
     return `${riverName} at ${stationName}`
@@ -100,7 +88,6 @@ function _restrictions(licenceMonitoringStations, monitoringStationId) {
 
     return {
       ...licenceMonitoringStation,
-      ..._licenceVersionPurpose(licenceMonitoringStation.licenceVersionPurposeCondition),
       action
     }
   })

@@ -27,15 +27,16 @@ const LICENCE_HOLDER_SQL = `
     c.id AS row_id,
     c."name" ILIKE ? AS exact,
     2 AS table_order,
-    LOWER(c."name") AS row_order,
+    CONCAT_WS(':', c."name", r.display_name, c.id) AS row_order,
     CAST (NULL AS DATE) AS date_order
   FROM companies c
+  INNER JOIN regions r
+    ON r.id = c.region_id
   WHERE
     c.external_id IS NOT NULL
     AND EXISTS (
-      SELECT 1 FROM licence_document_roles ldr
-      INNER JOIN licence_roles lr ON lr.id = ldr.licence_role_id
-      WHERE lr."name" = 'licenceHolder' AND ldr.company_id = c.id
+      SELECT 1 FROM licence_versions lv
+      WHERE lv.company_id = c.id
     )
     AND c."name" ILIKE ?
 `
@@ -182,9 +183,8 @@ function _licenceHolderSql(resultTypes, searchSqls, countSqls, exactQuery, parti
       WHERE
         c.external_id IS NOT NULL
         AND EXISTS (
-          SELECT 1 FROM licence_document_roles ldr
-          INNER JOIN licence_roles lr ON lr.id = ldr.licence_role_id
-          WHERE lr."name" = 'licenceHolder' AND ldr.company_id = c.id
+          SELECT 1 FROM licence_versions lv
+          WHERE lv.company_id = c.id
         )
         AND c."name" ILIKE ?)
     `)

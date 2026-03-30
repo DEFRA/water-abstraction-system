@@ -168,14 +168,7 @@ describe('Monitoring Stations - Fetch Monitoring Station Details service', () =>
             },
             licenceVersionPurposeCondition: {
               id: licenceOne.purposeCondition.id,
-              notes: 'Pick up milk',
-              licenceVersionPurpose: {
-                id: licenceOne.purpose.id,
-                abstractionPeriodEndDay: 31,
-                abstractionPeriodEndMonth: 3,
-                abstractionPeriodStartDay: 1,
-                abstractionPeriodStartMonth: 1
-              }
+              notes: 'Pick up milk'
             }
           }
         ])

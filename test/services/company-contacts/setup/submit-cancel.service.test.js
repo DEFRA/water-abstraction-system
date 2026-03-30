@@ -57,7 +57,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
         const result = await SubmitCancelService.go(session.id)
 
         expect(result).to.equal({
-          redirectUrl: `/system/company-contacts/${sessionData.companyContact.id}`
+          redirectUrl: `/system/company-contacts/${sessionData.companyContact.id}/contact-details`
         })
       })
     })

@@ -14,127 +14,11 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 const CRMPresenter = require('../../app/presenters/crm.presenter.js')
 
 describe('CRM presenter', () => {
-  let contact
-
-  beforeEach(() => {
-    contact = {
-      // Name
-      type: 'Person',
-      salutation: 'Mr',
-      initials: 'B T',
-      forename: 'Bruce',
-      name: 'Wayne',
-      // Address
-      addressLine1: 'Wayne Manor',
-      addressLine2: null,
-      addressLine3: '',
-      addressLine4: undefined,
-      town: 'Gotham City',
-      county: 'Gotham County',
-      postcode: '10001',
-      country: 'USA',
-      // Role
-      role: 'Licence holder'
-    }
-  })
-
-  describe('#contactDetails()', () => {
-    describe('when given multiple valid contacts', () => {
-      it('correctly returns the contact details', () => {
-        const result = CRMPresenter.contactDetails([contact])
-        expect(result).to.equal([
-          {
-            address: ['Wayne Manor', 'Gotham City', 'Gotham County', '10001', 'USA'],
-            name: 'Mr B T Wayne',
-            role: 'Licence holder'
-          }
-        ])
-      })
-    })
-  })
-
-  describe('#contactAddress()', () => {
-    describe('when given an address', () => {
-      it('correctly returns the address, with only the required fields and no falsey values', () => {
-        const result = CRMPresenter.contactAddress(contact)
-
-        expect(result).to.equal(['Wayne Manor', 'Gotham City', 'Gotham County', '10001', 'USA'])
-      })
-    })
-  })
-
-  describe('#contactName()', () => {
-    describe('when the "type" is "Person"', () => {
-      describe('and they have initials', () => {
-        it('correctly formats the name to use the initials', () => {
-          const result = CRMPresenter.contactName(contact)
-
-          expect(result).to.equal('Mr B T Wayne')
-        })
-      })
-
-      describe('and they have initials and a forename', () => {
-        it('correctly formats the name to use the initials', () => {
-          const result = CRMPresenter.contactName(contact)
-
-          expect(result).to.equal('Mr B T Wayne')
-        })
-      })
-
-      describe('and they have a forename and no initials', () => {
-        beforeEach(() => {
-          contact.initials = null
-        })
-
-        it('correctly formats the name to use the forename', () => {
-          const result = CRMPresenter.contactName(contact)
-
-          expect(result).to.equal('Mr Bruce Wayne')
-        })
-      })
-
-      describe('when the "type" is "person" (lower case contact type)', () => {
-        beforeEach(() => {
-          contact.type = 'person'
-        })
-
-        it('correctly formats the "person"', () => {
-          const result = CRMPresenter.contactName(contact)
-
-          expect(result).to.equal('Mr B T Wayne')
-        })
-      })
-
-      describe('when there is no contact "type"', () => {
-        beforeEach(() => {
-          delete contact.type
-        })
-
-        it('correctly formats the name', () => {
-          const result = CRMPresenter.contactName(contact)
-
-          expect(result).to.equal('Wayne')
-        })
-      })
-    })
-
-    describe('when the "type" is not "person"', () => {
-      describe('and they have initals', () => {
-        beforeEach(() => {
-          contact.type = 'Organisation'
-          contact.name = 'ACME Ltd'
-        })
-
-        it('correctly formats the name to use the initals', () => {
-          const result = CRMPresenter.contactName(contact)
-
-          expect(result).to.equal('ACME Ltd')
-        })
-      })
-    })
-  })
-
   describe('#formatContact()', () => {
+    const billingQueryId = generateUUID()
+
+    let billingQueryArgs
+
     describe('When there is a contact with the type', () => {
       let contact
 
@@ -151,7 +35,7 @@ describe('CRM presenter', () => {
           const result = CRMPresenter.formatContact(contact)
 
           expect(result).to.equal({
-            link: `/system/company-contacts/${contact.id}`,
+            link: `/system/company-contacts/${contact.id}/contact-details`,
             type: 'Abstraction alerts',
             name: 'Rachael Tyrell'
           })
@@ -171,7 +55,7 @@ describe('CRM presenter', () => {
           const result = CRMPresenter.formatContact(contact)
 
           expect(result).to.equal({
-            link: `/system/company-contacts/${contact.id}`,
+            link: `/system/company-contacts/${contact.id}/contact-details`,
             type: 'Additional contact',
             name: 'Rachael Tyrell'
           })
@@ -179,13 +63,11 @@ describe('CRM presenter', () => {
       })
 
       describe('"billing"', () => {
-        const companyId = generateUUID()
-
-        const billingQueryArgs = {
-          'company-id': companyId
-        }
-
         beforeEach(() => {
+          billingQueryArgs = {
+            'company-id': billingQueryId
+          }
+
           contact = {
             id: generateUUID(),
             contactType: 'billing',
@@ -197,7 +79,7 @@ describe('CRM presenter', () => {
           const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
           expect(result).to.equal({
-            link: `/system/billing-accounts/${contact.id}?company-id=${companyId}`,
+            link: `/system/billing-accounts/${contact.id}?company-id=${billingQueryId}`,
             type: 'Billing',
             name: 'Rachael Tyrell'
           })
@@ -266,6 +148,10 @@ describe('CRM presenter', () => {
 
       describe('"licence-holder"', () => {
         beforeEach(() => {
+          billingQueryArgs = {
+            'licence-id': billingQueryId
+          }
+
           contact = {
             id: generateUUID(),
             contactType: 'licence-holder',
@@ -273,19 +159,41 @@ describe('CRM presenter', () => {
           }
         })
 
-        it('returns the correct contact', () => {
-          const result = CRMPresenter.formatContact(contact)
+        describe('and it does not have an "addressId" property', () => {
+          it('returns the correct contact', () => {
+            const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-          expect(result).to.equal({
-            link: `/system/companies/${contact.id}/licence-holder`,
-            type: 'Licence holder',
-            name: 'Rachael Tyrell'
+            expect(result).to.equal({
+              link: `/system/companies/${contact.id}/licence-holder`,
+              type: 'Licence holder',
+              name: 'Rachael Tyrell'
+            })
+          })
+        })
+
+        describe('and it does have an "addressId" property', () => {
+          beforeEach(() => {
+            contact.addressId = generateUUID()
+          })
+
+          it('returns the correct contact', () => {
+            const result = CRMPresenter.formatContact(contact, billingQueryArgs)
+
+            expect(result).to.equal({
+              link: `/system/companies/${contact.id}/address/${contact.addressId}/licence-holder?licence-id=${billingQueryId}`,
+              type: 'Licence holder',
+              name: 'Rachael Tyrell'
+            })
           })
         })
       })
 
       describe('"returns-to"', () => {
         beforeEach(() => {
+          billingQueryArgs = {
+            'licence-id': billingQueryId
+          }
+
           contact = {
             id: generateUUID(),
             contactType: 'returns-to',
@@ -293,38 +201,33 @@ describe('CRM presenter', () => {
           }
         })
 
-        it('returns the correct contact', () => {
-          const result = CRMPresenter.formatContact(contact)
+        describe('and it does not have an "addressId" property', () => {
+          it('returns the correct contact', () => {
+            const result = CRMPresenter.formatContact(contact, billingQueryArgs)
 
-          expect(result).to.equal({
-            link: `/system/companies/${contact.id}/returns-to`,
-            type: 'Returns to',
-            name: 'Rachael Tyrell'
+            expect(result).to.equal({
+              link: `/system/companies/${contact.id}/returns-to`,
+              type: 'Returns to',
+              name: 'Rachael Tyrell'
+            })
           })
         })
-      })
-    })
-  })
 
-  describe('#filteredContactDetailsByRole()', () => {
-    describe('when given multiple valid contacts', () => {
-      let invalidContact
-      beforeEach(() => {
-        invalidContact = {
-          ...contact,
-          role: 'Butler'
-        }
-      })
+        describe('and it does have an "addressId" property', () => {
+          beforeEach(() => {
+            contact.addressId = generateUUID()
+          })
 
-      it('correctly returns the filtered contact details', () => {
-        const result = CRMPresenter.filteredContactDetailsByRole([contact, invalidContact])
-        expect(result).to.equal([
-          {
-            address: ['Wayne Manor', 'Gotham City', 'Gotham County', '10001', 'USA'],
-            name: 'Mr B T Wayne',
-            role: 'Licence holder'
-          }
-        ])
+          it('returns the correct contact', () => {
+            const result = CRMPresenter.formatContact(contact, billingQueryArgs)
+
+            expect(result).to.equal({
+              link: `/system/companies/${contact.id}/address/${contact.addressId}/returns-to?licence-id=${billingQueryId}`,
+              type: 'Returns to',
+              name: 'Rachael Tyrell'
+            })
+          })
+        })
       })
     })
   })

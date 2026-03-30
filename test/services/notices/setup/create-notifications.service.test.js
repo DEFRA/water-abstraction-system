@@ -247,7 +247,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           messageType: 'letter',
           pdf: null,
           personalisation: {
-            address_line_1: 'J Returnsholder',
+            address_line_1: 'Returnsholder',
             address_line_2: '4',
             address_line_3: 'Privet Drive',
             address_line_4: 'Little Whinging',
@@ -286,7 +286,7 @@ describe('Notices - Setup - Create Notifications service', () => {
           messageType: 'letter',
           pdf: null,
           personalisation: {
-            address_line_1: 'J Returnsto',
+            address_line_1: 'Returnsto',
             address_line_2: '4',
             address_line_3: 'Privet Drive',
             address_line_4: 'Little Whinging',
@@ -362,13 +362,13 @@ describe('Notices - Setup - Create Notifications service', () => {
           messageType: 'letter',
           pdf: null,
           personalisation: {
-            address_line_1: 'J Returnsholder',
+            address_line_1: 'Returnsholder',
             address_line_2: '4',
             address_line_3: 'Privet Drive',
             address_line_4: 'Little Whinging',
             address_line_5: 'Surrey',
             address_line_6: 'WD25 7LR',
-            name: 'J Returnsholder',
+            name: 'Returnsholder',
             periodEndDate: null,
             periodStartDate: null,
             returnDueDate: formatLongDate(futureDueDate('letter'))
@@ -392,14 +392,14 @@ describe('Notices - Setup - Create Notifications service', () => {
           messageType: 'letter',
           pdf: null,
           personalisation: {
-            address_line_1: 'J Returnsto',
+            name: 'Returnsto',
+            periodEndDate: null,
+            address_line_1: 'Returnsto',
             address_line_2: '4',
             address_line_3: 'Privet Drive',
             address_line_4: 'Little Whinging',
             address_line_5: 'Surrey',
             address_line_6: 'WD25 7LR',
-            name: 'J Returnsto',
-            periodEndDate: null,
             periodStartDate: null,
             returnDueDate: formatLongDate(futureDueDate('letter'))
           },

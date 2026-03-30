@@ -14,7 +14,8 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
 const SubmitRemoveCompanyContactService = require('../../app/services/company-contacts/submit-remove-company-contact.service.js')
-const ViewCompanyContactService = require('../../app/services/company-contacts/view-company-contact.service.js')
+const ViewCommunicationsService = require('../../app/services/company-contacts/view-communications.service.js')
+const ViewContactDetailsService = require('../../app/services/company-contacts/view-contact-details.service.js')
 const ViewRemoveCompanyContactService = require('../../app/services/company-contacts/view-remove-company-contact.service.js')
 
 // For running our service
@@ -44,26 +45,53 @@ describe('Company Contacts controller', () => {
     Sinon.restore()
   })
 
-  describe('/company-contacts/{id}', () => {
+  describe('/company-contacts/{id}/communications', () => {
     describe('GET', () => {
       beforeEach(() => {
         options = {
           method: 'GET',
-          url: `/company-contacts/${generateUUID()}`,
+          url: `/company-contacts/${generateUUID()}/communications`,
           auth: {
             strategy: 'session',
             credentials: { scope: [] }
           }
         }
 
-        Sinon.stub(ViewCompanyContactService, 'go').returns({ pageTitle: 'Manage contact', roles: [] })
+        Sinon.stub(ViewCommunicationsService, 'go').returns({ pageTitle: 'Communications for Rachael Tyrell' })
       })
 
       it('returns the page successfully', async () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Manage contact')
+        expect(response.payload).to.contain('Communications for Rachael Tyrell')
+      })
+    })
+  })
+
+  describe('/company-contacts/{id}/contact-details', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        options = {
+          method: 'GET',
+          url: `/company-contacts/${generateUUID()}/contact-details`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: [] }
+          }
+        }
+
+        Sinon.stub(ViewContactDetailsService, 'go').returns({
+          pageTitle: 'Contact details for Rachael Tyrell',
+          roles: []
+        })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Contact details for Rachael Tyrell')
       })
     })
   })

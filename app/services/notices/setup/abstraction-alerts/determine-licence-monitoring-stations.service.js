@@ -25,17 +25,6 @@ async function go(id) {
 }
 
 function _abstractionPeriod(licenceMonitoringStation) {
-  const licenceVersionPurpose = licenceMonitoringStation?.licenceVersionPurposeCondition?.licenceVersionPurpose
-
-  if (licenceVersionPurpose) {
-    return {
-      abstractionPeriodEndDay: licenceVersionPurpose.abstractionPeriodEndDay,
-      abstractionPeriodEndMonth: licenceVersionPurpose.abstractionPeriodEndMonth,
-      abstractionPeriodStartDay: licenceVersionPurpose.abstractionPeriodStartDay,
-      abstractionPeriodStartMonth: licenceVersionPurpose.abstractionPeriodStartMonth
-    }
-  }
-
   return {
     abstractionPeriodEndDay: licenceMonitoringStation.abstractionPeriodEndDay,
     abstractionPeriodEndMonth: licenceMonitoringStation.abstractionPeriodEndMonth,

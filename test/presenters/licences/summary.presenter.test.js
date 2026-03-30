@@ -8,8 +8,8 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CompanyModel = require('../../../app/models/company.model.js')
 const LicenceModel = require('../../../app/models/licence.model.js')
-const LicenceVersionHolderModel = require('../../../app/models/licence-version-holder.model.js')
 const PointModel = require('../../../app/models/point.model.js')
 const { today, generateUUID } = require('../../../app/lib/general.lib.js')
 
@@ -37,7 +37,6 @@ describe('Licences - Summary Presenter', () => {
       endDate: null,
       issueDate: null,
       licenceHolder: 'ORDER OF THE PHOENIX',
-      licenceId: summary.id,
       monitoringStations: [
         {
           id: summary.licenceMonitoringStations[0].monitoringStation.id,
@@ -877,6 +876,11 @@ describe('Licences - Summary Presenter', () => {
 })
 
 function _summary() {
+  const company = CompanyModel.fromJson({
+    id: generateUUID(),
+    name: 'ORDER OF THE PHOENIX',
+    type: 'organisation'
+  })
   const point = PointModel.fromJson({
     id: generateUUID(),
     description: null,
@@ -885,16 +889,6 @@ function _summary() {
     ngr3: null,
     ngr4: null,
     source: { id: generateUUID(), description: 'SURFACE WATER SOURCE OF SUPPLY' }
-  })
-
-  const licenceVersionHolder = LicenceVersionHolderModel.fromJson({
-    derivedName: 'ORDER OF THE PHOENIX',
-    forename: null,
-    holderType: 'organisation',
-    id: generateUUID(),
-    initials: null,
-    name: 'ORDER OF THE PHOENIX',
-    salutation: null
   })
 
   return LicenceModel.fromJson({
@@ -910,7 +904,7 @@ function _summary() {
         id: generateUUID(),
         startDate: new Date('2022-04-01'),
         status: 'current',
-        licenceVersionHolder,
+        company,
         licenceVersionPurposes: [
           {
             id: generateUUID(),
