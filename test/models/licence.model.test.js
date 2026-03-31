@@ -923,6 +923,14 @@ describe('Licence model', () => {
       }
 
       await otherLicence.$query().delete()
+
+      if (company) {
+        await company.$query().delete()
+      }
+
+      if (oldCompany) {
+        await oldCompany.$query().delete()
+      }
     })
 
     describe('when instance has not been set with the additional properties needed', () => {
@@ -964,11 +972,6 @@ describe('Licence model', () => {
         ]
 
         licenceHolderRecord = await LicenceModel.query().findById(otherLicence.id).modify('licenceHolder')
-      })
-
-      afterEach(async () => {
-        await company.$query().delete()
-        await oldCompany.$query().delete()
       })
 
       it('returns the company name as the licence holder', async () => {
