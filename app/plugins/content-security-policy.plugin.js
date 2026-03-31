@@ -15,9 +15,15 @@ const ContentSecurityPolicyPlugin = () => {
   return {
     plugin: Blankie,
     options: {
+      baseUri: ['self'],
+      connectSrc: ['self'],
+      defaultSrc: ['none'],
       fontSrc: ['self'],
+      generateNonces: 'script',
+      imgSrc: ['self'],
       scriptSrc: ['self'],
-      generateNonces: 'script'
+      styleSrc: ['self'],
+      workerSrc: ['self']
     }
   }
 }
