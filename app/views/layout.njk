@@ -87,5 +87,7 @@
 
 {% block bodyEnd %}
   <script src="{{ assetPath }}/all.js"></script>
-  <script>window.GOVUKFrontend.initAll()</script>
+  <script nonce="{{ cspNonce }}">
+    window.GOVUKFrontend.initAll()
+  </script>
 {% endblock %}

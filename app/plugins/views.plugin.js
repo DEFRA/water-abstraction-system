@@ -113,6 +113,8 @@ function context(request) {
   return {
     // `assetPath` is referred to in layout.njk as the path to get static assets like client-side javascript
     assetPath: '/assets',
+    // Used by govuk/template.njk to add nonce attributes to its inline scripts.
+    cspNonce: request.plugins.blankie.nonces.script,
     // this is the url of where the request came from. We use it to generate back links in our pages
     referrer: request.info.referrer,
     auth: {

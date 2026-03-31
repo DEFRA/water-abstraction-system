@@ -14,7 +14,11 @@ const Blankie = require('blankie')
 const ContentSecurityPolicyPlugin = () => {
   return {
     plugin: Blankie,
-    options: {}
+    options: {
+      fontSrc: ['self'],
+      scriptSrc: ['self'],
+      generateNonces: 'script'
+    }
   }
 }
 
