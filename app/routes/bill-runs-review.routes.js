@@ -7,7 +7,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/{billRunId}',
     options: {
-      handler: BillRunsReviewController.reviewBillRun,
+      handler: BillRunsReviewController.viewReview,
       auth: {
         access: {
           scope: ['billing']
@@ -19,7 +19,7 @@ const routes = [
     method: 'POST',
     path: '/bill-runs/review/{billRunId}',
     options: {
-      handler: BillRunsReviewController.submitReviewBillRun,
+      handler: BillRunsReviewController.submitReview,
       auth: {
         access: {
           scope: ['billing']
@@ -31,7 +31,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}',
     options: {
-      handler: BillRunsReviewController.reviewChargeElement,
+      handler: BillRunsReviewController.viewReviewChargeElement,
       auth: {
         access: {
           scope: ['billing']
@@ -43,7 +43,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/charge-element/{reviewChargeElementId}/{elementIndex}/edit',
     options: {
-      handler: BillRunsReviewController.edit,
+      handler: BillRunsReviewController.viewEdit,
       auth: {
         access: {
           scope: ['billing']
@@ -67,7 +67,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}',
     options: {
-      handler: BillRunsReviewController.reviewChargeReference,
+      handler: BillRunsReviewController.viewReviewChargeReference,
       auth: {
         access: {
           scope: ['billing']
@@ -79,7 +79,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/authorised',
     options: {
-      handler: BillRunsReviewController.authorised,
+      handler: BillRunsReviewController.viewAuthorised,
       auth: {
         access: {
           scope: ['billing']
@@ -103,7 +103,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/charge-reference/{reviewChargeReferenceId}/factors',
     options: {
-      handler: BillRunsReviewController.factors,
+      handler: BillRunsReviewController.viewFactors,
       auth: {
         access: {
           scope: ['billing']
@@ -139,7 +139,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/licence/{reviewLicenceId}',
     options: {
-      handler: BillRunsReviewController.reviewLicence,
+      handler: BillRunsReviewController.viewReviewLicence,
       auth: {
         access: {
           scope: ['billing']
@@ -163,7 +163,7 @@ const routes = [
     method: 'GET',
     path: '/bill-runs/review/licence/{reviewLicenceId}/remove',
     options: {
-      handler: BillRunsReviewController.remove,
+      handler: BillRunsReviewController.viewRemove,
       auth: {
         access: {
           scope: ['billing']

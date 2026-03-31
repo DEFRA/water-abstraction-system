@@ -15,9 +15,9 @@ const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-revie
 const FetchReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-review-licence.service.js')
 
 // Thing under test
-const ReviewLicenceService = require('../../../../app/services/bill-runs/review/review-licence.service.js')
+const ViewReviewLicenceService = require('../../../../app/services/bill-runs/review/view-review-licence.service.js')
 
-describe('Bill Runs Review - Review Licence Service', () => {
+describe('Bill Runs - Review - View Review Licence Service', () => {
   let reviewLicence
 
   let yarStub
@@ -39,7 +39,7 @@ describe('Bill Runs Review - Review Licence Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ReviewLicenceService.go(reviewLicence.id, yarStub)
+        const result = await ViewReviewLicenceService.go(reviewLicence.id, yarStub)
 
         expect(result).to.equal({
           activeNavBar: 'bill-runs',
@@ -136,7 +136,7 @@ describe('Bill Runs Review - Review Licence Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ReviewLicenceService.go(reviewLicence.id, yarStub)
+        const result = await ViewReviewLicenceService.go(reviewLicence.id, yarStub)
 
         expect(result).to.equal({
           activeNavBar: 'bill-runs',

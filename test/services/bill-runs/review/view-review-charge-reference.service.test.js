@@ -15,9 +15,9 @@ const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-revie
 const FetchReviewChargeReferenceService = require('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
 
 // Thing under test
-const ReviewChargeReferenceService = require('../../../../app/services/bill-runs/review/review-charge-reference.service.js')
+const ViewReviewChargeReferenceService = require('../../../../app/services/bill-runs/review/view-review-charge-reference.service.js')
 
-describe('Bill Runs Review - Review Charge Reference Service', () => {
+describe('Bill Runs - Review - View Review Charge Reference Service', () => {
   let reviewChargeReference
   let yarStub
 
@@ -43,7 +43,7 @@ describe('Bill Runs Review - Review Charge Reference Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ReviewChargeReferenceService.go(reviewChargeReference.id, yarStub)
+        const result = await ViewReviewChargeReferenceService.go(reviewChargeReference.id, yarStub)
 
         expect(result).to.equal({
           activeNavBar: 'bill-runs',
@@ -80,7 +80,7 @@ describe('Bill Runs Review - Review Charge Reference Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ReviewChargeReferenceService.go(reviewChargeReference.id, yarStub)
+        const result = await ViewReviewChargeReferenceService.go(reviewChargeReference.id, yarStub)
 
         expect(result).to.equal({
           activeNavBar: 'bill-runs',
@@ -117,7 +117,7 @@ describe('Bill Runs Review - Review Charge Reference Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ReviewChargeReferenceService.go(reviewChargeReference.id, yarStub)
+        const result = await ViewReviewChargeReferenceService.go(reviewChargeReference.id, yarStub)
 
         expect(result).to.equal({
           activeNavBar: 'bill-runs',

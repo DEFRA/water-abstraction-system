@@ -15,9 +15,9 @@ const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-revie
 const FetchReviewChargeElementService = require('../../../../app/services/bill-runs/review/fetch-review-charge-element.service.js')
 
 // Thing under test
-const ReviewChargeElementService = require('../../../../app/services/bill-runs/review/review-charge-element.service.js')
+const ViewReviewChargeElementService = require('../../../../app/services/bill-runs/review/view-review-charge-element.service.js')
 
-describe('Bill Runs Review - Review Charge Element Service', () => {
+describe('Bill Runs - Review - View Review Charge Element Service', () => {
   const elementIndex = 1
 
   let reviewChargeElement
@@ -42,7 +42,7 @@ describe('Bill Runs Review - Review Charge Element Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ReviewChargeElementService.go(reviewChargeElement.id, elementIndex, yarStub)
+        const result = await ViewReviewChargeElementService.go(reviewChargeElement.id, elementIndex, yarStub)
 
         expect(result).to.equal({
           activeNavBar: 'bill-runs',
@@ -84,7 +84,7 @@ describe('Bill Runs Review - Review Charge Element Service', () => {
       })
 
       it('returns page data for the view', async () => {
-        const result = await ReviewChargeElementService.go(reviewChargeElement.id, elementIndex, yarStub)
+        const result = await ViewReviewChargeElementService.go(reviewChargeElement.id, elementIndex, yarStub)
 
         expect(result).to.equal({
           activeNavBar: 'bill-runs',

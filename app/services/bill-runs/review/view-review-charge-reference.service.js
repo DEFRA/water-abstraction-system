@@ -1,15 +1,15 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data needed for the review charge reference page
- * @module ReviewChargeReferenceService
+ * Orchestrates page data for the '/bill-runs/review/charge-reference/{reviewChargeReferenceId}' page
+ * @module ViewReviewChargeReferenceService
  */
 
 const FetchReviewChargeReferenceService = require('./fetch-review-charge-reference.service.js')
 const ReviewChargeReferencePresenter = require('../../../presenters/bill-runs/review/review-charge-reference.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data needed for the review charge reference page
+ * Orchestrates page data for the '/bill-runs/review/charge-reference/{reviewChargeReferenceId}' page
  *
  * @param {string} reviewChargeReferenceId - The UUID of the charge reference being reviewed
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
@@ -23,13 +23,13 @@ async function go(reviewChargeReferenceId, yar) {
   const [bannerMessage] = yar.flash('banner')
   const [chargeMessage] = yar.flash('charge')
 
-  const formattedData = ReviewChargeReferencePresenter.go(reviewChargeReference)
+  const pagedata = ReviewChargeReferencePresenter.go(reviewChargeReference)
 
   return {
     activeNavBar: 'bill-runs',
     bannerMessage,
     chargeMessage,
-    ...formattedData
+    ...pagedata
   }
 }
 

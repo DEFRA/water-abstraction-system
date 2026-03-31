@@ -12,9 +12,9 @@ const { expect } = Code
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const SubmitReviewBillRunService = require('../../../../app/services/bill-runs/review/submit-review-bill-run.service.js')
+const SubmitReviewService = require('../../../../app/services/bill-runs/review/submit-review.service.js')
 
-describe('Bill Runs - Review - Submit Review Bill Run Service', () => {
+describe('Bill Runs - Review - Submit Review Service', () => {
   const billRunId = generateUUID()
 
   let payload
@@ -37,7 +37,7 @@ describe('Bill Runs - Review - Submit Review Bill Run Service', () => {
       })
 
       it('clears the filter object from the session', async () => {
-        await SubmitReviewBillRunService.go(billRunId, payload, yarStub)
+        await SubmitReviewService.go(billRunId, payload, yarStub)
 
         expect(yarStub.clear.called).to.be.true()
       })
@@ -49,7 +49,7 @@ describe('Bill Runs - Review - Submit Review Bill Run Service', () => {
       })
 
       it('saves a default filter object in the session', async () => {
-        await SubmitReviewBillRunService.go(billRunId, payload, yarStub)
+        await SubmitReviewService.go(billRunId, payload, yarStub)
 
         const setArgs = yarStub.set.args[0]
 
@@ -74,7 +74,7 @@ describe('Bill Runs - Review - Submit Review Bill Run Service', () => {
       })
 
       it('saves the submitted filters as the "usersFilter" object in the session', async () => {
-        await SubmitReviewBillRunService.go(billRunId, payload, yarStub)
+        await SubmitReviewService.go(billRunId, payload, yarStub)
 
         const setArgs = yarStub.set.args[0]
 
