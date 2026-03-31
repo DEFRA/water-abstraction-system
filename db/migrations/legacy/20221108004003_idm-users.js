@@ -18,6 +18,7 @@ exports.up = function (knex) {
     table.timestamp('last_login')
     table.bigint('bad_logins')
     table.string('application')
+    table.string('permissions')
     table.jsonb('role')
     table.string('external_id')
     table.timestamp('reset_guid_date_created')
