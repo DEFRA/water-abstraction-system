@@ -256,8 +256,23 @@ $govuk-global-styles: true;
   @extend .govuk-\!-margin-right-3;
 }
 
+// ========== ========== ========== ========== ==========
+// Multiple volumes guidance page /system/return-logs/setup/guidance
+// ========== ========== ========== ========== ==========
+.guidance-no-left-margin {
+  margin-left: 0 !important;
+}
+
+.guidance-caption-width {
+  max-width: 360px;
+}
+
+.guidance-example-code {
+  background-color: #f3f2f1;
+  padding: 0.2em;
+  color: #900;
+}
 
 .sub-navigation-layout-main {
   padding-top: 0;
 }
-
