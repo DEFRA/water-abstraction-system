@@ -11,8 +11,8 @@
  *
  * In this application, `generateNonces: 'script'` instructs blankie to generate a unique nonce for each request and
  * include it in the `Content-Security-Policy` header as part of the `script-src` directive. During request handling,
- * blankie exposes this value at `request.plugins.blankie.nonces.script`. The views plugin then maps that value to
- * `cspNonce`.
+ * blankie exposes this value at `request.plugins.blankie.nonces.script`. The `ViewsPlugin` then adds that value to the
+ * view context as `cspNonce`.
  *
  * The `cspNonce` view variable is consumed by `govuk/template.njk`, which uses it to add `nonce` attributes to the
  * template's inline script tags. Our `layout.njk` extends that template and also applies `cspNonce` to its inline
