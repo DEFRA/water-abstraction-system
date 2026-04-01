@@ -18,8 +18,10 @@ const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
  * @param {object[]} scenarios - The scenarios created by a test suite
  */
 async function clean(scenarios) {
-  for (const recipient of scenarios) {
-    await RecipientsSeeder.clean(recipient)
+  for (const recipients of scenarios) {
+    for (const recipient of recipients) {
+      await RecipientsSeeder.clean(recipient)
+    }
   }
 }
 
