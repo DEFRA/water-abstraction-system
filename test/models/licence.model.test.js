@@ -13,7 +13,6 @@ const BillLicenceModel = require('../../app/models/bill-licence.model.js')
 const ChargeVersionHelper = require('../support/helpers/charge-version.helper.js')
 const ChargeVersionModel = require('../../app/models/charge-version.model.js')
 const CompanyHelper = require('../support/helpers/company.helper.js')
-const { generateUUID } = require('../../app/lib/general.lib.js')
 const LicenceAgreementHelper = require('../support/helpers/licence-agreement.helper.js')
 const LicenceAgreementModel = require('../../app/models/licence-agreement.model.js')
 const LicenceHelper = require('../support/helpers/licence.helper.js')
@@ -45,6 +44,8 @@ const UserHelper = require('../support/helpers/user.helper.js')
 const UserModel = require('../../app/models/user.model.js')
 const WorkflowHelper = require('../support/helpers/workflow.helper.js')
 const WorkflowModel = require('../../app/models/workflow.model.js')
+const { generateUUID, today } = require('../../app/lib/general.lib.js')
+const { tomorrow } = require('../support/general.js')
 
 // Thing under test
 const LicenceModel = require('../../app/models/licence.model.js')
@@ -906,6 +907,7 @@ describe('Licence model', () => {
 
   describe('$licenceHolder', () => {
     let company
+    let futureCompany
     let licenceHolderRecord
     let oldCompany
     let otherLicence
@@ -931,6 +933,10 @@ describe('Licence model', () => {
       if (oldCompany) {
         await oldCompany.$query().delete()
       }
+
+      if (futureCompany) {
+        await futureCompany.$query().delete()
+      }
     })
 
     describe('when instance has not been set with the additional properties needed', () => {
@@ -943,11 +949,12 @@ describe('Licence model', () => {
 
     describe('when the instance has been set with the additional properties needed', () => {
       beforeEach(async () => {
-        // Create two licence versions linked to different companies to confirm we get the 'licence holder' (essentially
-        // company) linked to the current licence version.
         company = await CompanyHelper.add({ name: 'Current licence holder' })
+        futureCompany = await CompanyHelper.add({ name: 'Future licence holder' })
         oldCompany = await CompanyHelper.add({ name: 'Old licence holder' })
 
+        // Create the first, older licence version that has been superseded by a later one. None of the tests should
+        // return the company linked to this one.
         otherLicenceVersions = [
           await LicenceVersionHelper.add({
             companyId: oldCompany.id,
@@ -958,26 +965,62 @@ describe('Licence model', () => {
             licenceId: otherLicence.id,
             startDate: new Date('2001-01-01'),
             status: 'superseded'
-          }),
-          await LicenceVersionHelper.add({
-            companyId: company.id,
-            endDate: null,
-            increment: 0,
-            issueDate: new Date('2022-01-01'),
-            issue: 2,
-            licenceId: otherLicence.id,
-            startDate: new Date('2022-01-01'),
-            status: 'current'
           })
         ]
-
-        licenceHolderRecord = await LicenceModel.query().findById(otherLicence.id).modify('licenceHolder')
       })
 
-      it('returns the company name as the licence holder', async () => {
-        const result = licenceHolderRecord.$licenceHolder()
+      describe('and the latest licence version starts in the past', () => {
+        beforeEach(async () => {
+          // Create the current licence version linked to a different company to confirm we get the 'current' licence
+          // holder (essentially company)
+          otherLicenceVersions.push(
+            await LicenceVersionHelper.add({
+              companyId: company.id,
+              endDate: null,
+              increment: 0,
+              issueDate: new Date('2022-01-01'),
+              issue: 2,
+              licenceId: otherLicence.id,
+              startDate: new Date('2022-01-01'),
+              status: 'current'
+            })
+          )
 
-        expect(result).to.equal('Current licence holder')
+          licenceHolderRecord = await LicenceModel.query().findById(otherLicence.id).modify('licenceHolder')
+        })
+
+        it('returns the company name as the licence holder', async () => {
+          const result = licenceHolderRecord.$licenceHolder()
+
+          expect(result).to.equal(company.name)
+        })
+      })
+
+      describe('and the latest licence version starts in the future', () => {
+        beforeEach(async () => {
+          // Create the latest licence version linked to a different company to confirm we get the 'current' licence
+          // holder (essentially company)
+          otherLicenceVersions.push(
+            await LicenceVersionHelper.add({
+              companyId: futureCompany.id,
+              endDate: null,
+              increment: 0,
+              issueDate: today(),
+              issue: 2,
+              licenceId: otherLicence.id,
+              startDate: tomorrow(),
+              status: 'current'
+            })
+          )
+
+          licenceHolderRecord = await LicenceModel.query().findById(otherLicence.id).modify('licenceHolder')
+        })
+
+        it('returns the company name as the licence holder', async () => {
+          const result = licenceHolderRecord.$licenceHolder()
+
+          expect(result).to.equal(oldCompany.name)
+        })
       })
     })
   })
