@@ -9,9 +9,7 @@ const crypto = require('node:crypto')
 const AddressHelper = require('../helpers/address.helper.js')
 const CompanyHelper = require('../helpers/company.helper.js')
 const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
-const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
-const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
 const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.model.js')
 const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
@@ -82,38 +80,28 @@ async function licenceHolder(licenceSeedData, licenceHolderSeedData) {
 /**
  * Creates a "Primary user" recipient for an existing licence holder
  *
- * This function accepts a previously created licence holder record and links it to a new licence entity role record
+ * This function accepts a previously created licence record and links it to a new licence entity role record
  * flagged with the role `primary_user`. To this it links an licence entity record setup as an individual with the
  * the 'registered' user's email name.
  *
  * @param {object} licenceSeedData - The licence seed data
- * @param {string} email - The email address of the primary user
+ * @param {object} primaryUserSeedData - The primary user seed data
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function primaryUser(licenceSeedData, email) {
-  const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
-
-  const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
-
-  await licenceSeedData.licenceDocumentHeader.$query().patch({
-    companyEntityId: companyEntity.id
-  })
-
-  const licenceEntityRole = await LicenceEntityRoleHelper.add({
-    companyEntityId: companyEntity.id,
-    licenceEntityId: individualEntity.id,
-    role: 'primary_user'
-  })
+async function primaryUser(licenceSeedData, primaryUserSeedData) {
+  const { name: email } = primaryUserSeedData.individualEntity
 
   return {
     contact: null,
     contactHashId: _emailHashId(email),
     contactType: 'primary user',
     email,
-    licenceEntityRole,
     licenceRef: licenceSeedData.licence.licenceRef,
-    messageType: 'Email'
+    messageType: 'Email',
+    clean: async () => {
+      await primaryUserSeedData.clean()
+    }
   }
 }
 
@@ -131,26 +119,23 @@ async function primaryUser(licenceSeedData, email) {
  * agent recipient.
  *
  * @param {object} licenceSeedData - The licence seed data
- * @param {string} email - The email address of the returns user
+ * @param {object} returnsUserSeedData - The returns user seed data
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function returnsUser(licenceSeedData, email) {
-  const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
-  const licenceEntityRole = await LicenceEntityRoleHelper.add({
-    companyEntityId: licenceSeedData.licenceDocumentHeader.companyEntityId,
-    licenceEntityId: individualEntity.id,
-    role: 'user_returns'
-  })
+async function returnsUser(licenceSeedData, returnsUserSeedData) {
+  const { name: email } = returnsUserSeedData.individualEntity
 
   return {
     contact: null,
     contactHashId: _emailHashId(email),
     contactType: 'returns user',
     email,
-    licenceEntityRole,
     licenceRef: licenceSeedData.licence.licenceRef,
-    messageType: 'Email'
+    messageType: 'Email',
+    clean: async () => {
+      await returnsUserSeedData.clean()
+    }
   }
 }
 
