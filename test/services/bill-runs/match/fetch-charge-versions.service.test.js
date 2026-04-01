@@ -62,7 +62,6 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
   })
 
   afterEach(async () => {
-    if (billRun) await billRun.$query().delete()
     if (chargeElement1) await chargeElement1.$query().delete()
     if (chargeElement2) await chargeElement2.$query().delete()
     if (chargeReference) await chargeReference.$query().delete()
@@ -70,9 +69,10 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
     if (licence) await licence.$query().delete()
     if (licenceSeedData) await licenceSeedData.clean()
     if (licenceSupplementaryYear) await licenceSupplementaryYear.$query().delete()
-    if (otherChargeReference) await otherChargeReference.$query().delete()
     if (otherChargeVersion) await otherChargeVersion.$query().delete()
+    if (otherChargeReference) await otherChargeReference.$query().delete()
     if (otherLicence) await otherLicence.clean()
+    if (billRun) await billRun.$query().delete()
 
     if (licenceHolderDetails) {
       await licenceHolderDetails.clean()
