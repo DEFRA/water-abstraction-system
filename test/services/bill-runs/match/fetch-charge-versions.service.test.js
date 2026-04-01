@@ -9,13 +9,14 @@ const { expect } = Code
 
 // Test helpers
 const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
+const CRMContactsSeeder = require('../../../support/seeders/crm-contacts.seeder.js')
 const ChangeReasonHelper = require('../../../support/helpers/change-reason.helper.js')
 const ChargeCategoryHelper = require('../../../support/helpers/charge-category.helper.js')
 const ChargeElementHelper = require('../../../support/helpers/charge-element.helper.js')
 const ChargeReferenceHelper = require('../../../support/helpers/charge-reference.helper.js')
 const ChargeVersionHelper = require('../../../support/helpers/charge-version.helper.js')
+const EmptyLicenceSeeder = require('../../../support/seeders/empty-licence.seeder.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const LicenceHolderSeeder = require('../../../support/seeders/licence-holder.seeder.js')
 const LicenceSupplementaryYearHelper = require('../../../support/helpers/licence-supplementary-year.helper.js')
 const PurposeHelper = require('../../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../../support/helpers/region.helper.js')
@@ -60,17 +61,23 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
   })
 
   afterEach(async () => {
+    if (billRun) await billRun.$query().delete()
     if (chargeElement1) await chargeElement1.$query().delete()
     if (chargeElement2) await chargeElement2.$query().delete()
     if (chargeReference) await chargeReference.$query().delete()
     if (chargeVersion) await chargeVersion.$query().delete()
-    if (licence) await licence.$query().delete()
     if (licenceSupplementaryYear) await licenceSupplementaryYear.$query().delete()
-    if (otherChargeVersion) await otherChargeVersion.$query().delete()
     if (otherChargeReference) await otherChargeReference.$query().delete()
-    if (otherLicence) await otherLicence.$query().delete()
-    if (billRun) await billRun.$query().delete()
+    if (otherChargeVersion) await otherChargeVersion.$query().delete()
+    if (otherLicence) await otherLicence.clean()
 
+    if (licence) {
+      if (typeof licence.clean === 'function') {
+        await licence.clean()
+      } else {
+        await licence.$query().delete()
+      }
+    }
     if (licenceHolderDetails) {
       await licenceHolderDetails.clean()
     }
@@ -341,15 +348,15 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
   describe('when there are applicable charge versions', () => {
     beforeEach(async () => {
-      licence = await LicenceHelper.add({ licenceRef: '01/128', regionId: region.id })
+      licence = await EmptyLicenceSeeder.seed('01/128', region.id)
 
       // NOTE: The first part of the setup creates a charge version we will test exactly matches what we expect. The
       // second part is to create another charge version with a different licence ref so we can test the order of the
       // results
       chargeVersion = await ChargeVersionHelper.add({
         changeReasonId: changeReason.id,
-        licenceId: licence.id,
-        licenceRef: licence.licenceRef
+        licenceId: licence.licence.id,
+        licenceRef: licence.licence.licenceRef
       })
 
       chargeReference = await ChargeReferenceHelper.add({
@@ -370,15 +377,14 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
         purposeId: purpose.id
       })
 
-      // Create a licence holder for the licence with the default name 'Licence Holder Ltd'
-      licenceHolderDetails = await LicenceHolderSeeder.seed(licence)
+      licenceHolderDetails = await CRMContactsSeeder.licenceHolder(licence, 'Licence Holder Ltd')
 
       // Second charge version to test ordering
-      otherLicence = await LicenceHelper.add({ licenceRef: '01/130', regionId: region.id })
+      otherLicence = await EmptyLicenceSeeder.seed('01/130', region.id)
       otherChargeVersion = await ChargeVersionHelper.add({
         changeReasonId: changeReason.id,
-        licenceId: otherLicence.id,
-        licenceRef: otherLicence.licenceRef
+        licenceId: otherLicence.licence.id,
+        licenceRef: otherLicence.licence.licenceRef
       })
       otherChargeReference = await ChargeReferenceHelper.add({
         chargeVersionId: otherChargeVersion.id,
@@ -408,8 +414,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
           endDate: null,
           status: 'current',
           licence: {
-            id: licence.id,
-            licenceRef: licence.licenceRef,
+            id: licence.licence.id,
+            licenceRef: licence.licence.licenceRef,
             startDate: new Date('2022-01-01'),
             expiredDate: null,
             lapsedDate: null,
@@ -486,8 +492,8 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
       it('returns the charge versions ordered by licence reference', async () => {
         const results = await FetchChargeVersionsService.go(billRun, billingPeriod)
 
-        expect(results[0].licence.licenceRef).to.equal(licence.licenceRef)
-        expect(results[1].licence.licenceRef).to.equal(otherLicence.licenceRef)
+        expect(results[0].licence.licenceRef).to.equal(licence.licence.licenceRef)
+        expect(results[1].licence.licenceRef).to.equal(otherLicence.licence.licenceRef)
       })
 
       it('returns the charge elements within each charge version ordered by authorised annual quantity', async () => {
@@ -508,7 +514,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
 
         licenceSupplementaryYear = await LicenceSupplementaryYearHelper.add({
           billRunId: billRun.id,
-          licenceId: licence.id,
+          licenceId: licence.licence.id,
           financialYearEnd: billingPeriod.endDate.getFullYear()
         })
       })
@@ -518,7 +524,7 @@ describe('Bill Runs - Match - Fetch Charge Versions service', () => {
           const results = await FetchChargeVersionsService.go(billRun, billingPeriod, supplementary)
 
           expect(results).to.have.length(1)
-          expect(results[0].licence.licenceRef).to.equal(licence.licenceRef)
+          expect(results[0].licence.licenceRef).to.equal(licence.licence.licenceRef)
         })
       })
     })

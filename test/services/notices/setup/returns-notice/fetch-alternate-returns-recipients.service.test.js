@@ -8,9 +8,10 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CRMContactsSeeder = require('../../../../support/seeders/crm-contacts.seeder.js')
+const EmptyLicenceSeeder = require('../../../../support/seeders/empty-licence.seeder.js')
 const RecipientsSeeder = require('../../../../support/seeders/recipients.seeder.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const FetchAlternateReturnsRecipients = require('../../../../../app/services/notices/setup/returns-notice/fetch-alternate-returns-recipients.service.js')
@@ -20,14 +21,20 @@ describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients 
 
   let licenceHolder
   let licenceRef
+  let licenceSeedData
   let returnLog
+  let licenceHolderSeedData
 
   before(async () => {
-    licenceRef = generateLicenceRef()
+    licenceSeedData = await EmptyLicenceSeeder.seed(licenceRef)
+
+    licenceRef = licenceSeedData.licence.licenceRef
 
     returnLog = await ReturnLogHelper.add({ dueDate: null, licenceRef })
 
-    licenceHolder = await RecipientsSeeder.licenceHolder('Test Licence Holder', licenceRef)
+    licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(licenceSeedData, 'Test Licence Holder')
+
+    licenceHolder = await RecipientsSeeder.licenceHolder(licenceSeedData, licenceHolderSeedData)
     licenceHolder.licenceRefs = [licenceRef]
     licenceHolder.returnLogIds = [returnLog.id]
   })
@@ -35,6 +42,8 @@ describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients 
   after(async () => {
     await returnLog.$query().delete()
 
+    await licenceSeedData.clean()
+    await licenceHolderSeedData.clean()
     await RecipientsSeeder.clean(licenceHolder)
   })
 

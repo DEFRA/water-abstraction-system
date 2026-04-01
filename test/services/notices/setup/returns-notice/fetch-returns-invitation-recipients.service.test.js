@@ -8,12 +8,13 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CRMContactsSeeder = require('../../../../support/seeders/crm-contacts.seeder.js')
+const EmptyLicenceSeeder = require('../../../../support/seeders/empty-licence.seeder.js')
 const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
 const RecipientsSeeder = require('../../../../support/seeders/recipients.seeder.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 const { futureDueDate } = require('../../../../../app/presenters/notices/base.presenter.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const FetchReturnsInvitationRecipients = require('../../../../../app/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js')
@@ -21,13 +22,17 @@ const FetchReturnsInvitationRecipients = require('../../../../../app/services/no
 describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients service', () => {
   let download
   let licenceHolder
+  let licenceHolderSeedData
   let licenceRef
+  let licenceSeedData
   let nullDueDateReturnLog
   let session
   let setDueDateReturnLog
 
   before(async () => {
-    licenceRef = generateLicenceRef()
+    licenceSeedData = await EmptyLicenceSeeder.seed(licenceRef)
+
+    licenceRef = licenceSeedData.licence.licenceRef
 
     // NOTE: GenerateRecipientsQueryService for downloads will order by return ID (it has to because of the distinct
     // clause). So, we generate two IDs, sort them, and then use them when creating the return logs to ensure our
@@ -54,7 +59,9 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
       startDate: new Date('2024-04-01')
     })
 
-    licenceHolder = await RecipientsSeeder.licenceHolder('Test Licence Holder', licenceRef)
+    licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(licenceSeedData, 'Test Licence Holder')
+
+    licenceHolder = await RecipientsSeeder.licenceHolder(licenceSeedData, licenceHolderSeedData)
     licenceHolder.licenceRefs = [licenceRef]
   })
 
@@ -62,6 +69,8 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
     await nullDueDateReturnLog.$query().delete()
     await setDueDateReturnLog.$query().delete()
 
+    await licenceSeedData.clean()
+    await licenceHolderSeedData.clean()
     await RecipientsSeeder.clean(licenceHolder)
   })
 
