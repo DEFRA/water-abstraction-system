@@ -26,9 +26,8 @@ const ReturnLogModel = require('../../../app/models/return-log.model.js')
  * @param {object} recipient - The recipient created by these seeders
  */
 async function clean(recipient) {
-  if (recipient.licenceDocumentHeader) {
-    await LicenceDocumentHeaderModel.query().deleteById(recipient.licenceDocumentHeader.id)
-    await LicenceEntityModel.query().deleteById(recipient.licenceDocumentHeader.companyEntityId)
+  if (typeof recipient.clean === 'function') {
+    await recipient.clean()
   }
 
   if (recipient.licenceEntityRole) {
@@ -73,7 +72,11 @@ async function licenceHolder(licence, licenceHolder) {
     contactType: 'licence holder',
     email: null,
     licenceRef: licence.licence.licenceRef,
-    messageType: 'Letter'
+    messageType: 'Letter',
+    clean: async () => {
+      await licence.clean()
+      await licenceHolder.clean()
+    }
   }
 }
 
@@ -160,12 +163,12 @@ async function returnsUser(licenceDocumentHeader, email) {
  * for "returns to" recipients.
  *
  * @param {object} licence - The licence
- * @param {string} name - The name for the "Returns to" contact
+ * @param {object} [licenceHolder] - The licence holder
+ * @param {string} [name] - The name for the "Returns to" contact
  *
- * @param existingCompany
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function returnsTo(licence, name, existingCompany = null) {
+async function returnsTo(licence, licenceHolder = null, name = 'Test Limited') {
   const address = _address()
 
   const addressData = await AddressHelper.add({
@@ -174,12 +177,12 @@ async function returnsTo(licence, name, existingCompany = null) {
 
   let company
 
-  if (!existingCompany) {
+  if (licenceHolder?.company) {
+    company = licenceHolder.company
+  } else {
     company = await CompanyHelper.add({
       name
     })
-  } else {
-    company = existingCompany
   }
 
   const licenceRole = LicenceRoleHelper.select('returnsTo')

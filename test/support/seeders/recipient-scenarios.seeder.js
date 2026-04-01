@@ -81,7 +81,7 @@ async function licenceHolderWithDifferentReturnsTo(returnLogs) {
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
-  const returnsToRecipient = await RecipientsSeeder.returnsTo(licence, 'Returnstoandholder')
+  const returnsToRecipient = await RecipientsSeeder.returnsTo(licence, null, 'Returnstoandholder')
 
   returnsToRecipient.licenceRefs = licenceRefs
   returnsToRecipient.returnLogIds = returnLogIds
@@ -170,12 +170,7 @@ async function licenceHolderWithSameReturnsTo(returnLogs) {
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
-  // TODO: handle
-  const returnsToRecipient = await RecipientsSeeder.returnsTo(
-    licence,
-    'Samelicenceholderreturnsto',
-    licenceHolder.company
-  )
+  const returnsToRecipient = await RecipientsSeeder.returnsTo(licence, licenceHolder, 'Samelicenceholderreturnsto')
 
   returnsToRecipient.licenceRefs = licenceRefs
   returnsToRecipient.returnLogIds = returnLogIds
