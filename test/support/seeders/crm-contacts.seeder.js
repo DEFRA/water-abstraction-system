@@ -6,6 +6,8 @@
 
 const AddressHelper = require('../helpers/address.helper.js')
 const CompanyHelper = require('../helpers/company.helper.js')
+const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
+const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 
 /**
@@ -58,6 +60,71 @@ async function licenceHolder(licenceSeedData, name, existingRegionId = null) {
   }
 }
 
+/**
+ * Adds a primary user is linked to the licence by the company entity id.
+ *
+ * We need to update the licence document header company entity id to the newly created company entity
+ *
+ * @param {object} licenceSeedData - The licence seed data
+ * @param {string} email - The email for the user
+ *
+ * @returns {Promise<object>} an object containing all records related to a primary user
+ */
+async function primaryUser(licenceSeedData, email) {
+  const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
+
+  const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
+
+  await licenceSeedData.licenceDocumentHeader.$query().patch({
+    companyEntityId: companyEntity.id
+  })
+
+  const licenceEntityRole = await LicenceEntityRoleHelper.add({
+    companyEntityId: companyEntity.id,
+    licenceEntityId: individualEntity.id,
+    role: 'primary_user'
+  })
+
+  return {
+    companyEntity,
+    individualEntity,
+    licenceEntityRole,
+    clean: async () => {
+      await companyEntity.$query().delete()
+      await individualEntity.$query().delete()
+      await licenceEntityRole.$query().delete()
+    }
+  }
+}
+
+/**
+ * Adds a returns user is linked to the licence by the company entity id.
+ *
+ * @param {object} licenceSeedData - The licence seed data
+ * @param {string} email - The email for the user
+ *
+ * @returns {Promise<object>} an object containing all records related to a primary user
+ */
+async function returnsUser(licenceSeedData, email) {
+  const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
+  const licenceEntityRole = await LicenceEntityRoleHelper.add({
+    companyEntityId: licenceSeedData.licenceDocumentHeader.companyEntityId,
+    licenceEntityId: individualEntity.id,
+    role: 'user_returns'
+  })
+
+  return {
+    individualEntity,
+    licenceEntityRole,
+    clean: async () => {
+      await individualEntity.$query().delete()
+      await licenceEntityRole.$query().delete()
+    }
+  }
+}
+
 module.exports = {
-  licenceHolder
+  licenceHolder,
+  primaryUser,
+  returnsUser
 }

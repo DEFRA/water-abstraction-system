@@ -216,7 +216,9 @@ async function primaryUserOnly(returnLogs) {
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
-  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, 'primaryuseronly@puonly.com')
+  const primaryUser = await CRMContactsSeeder.primaryUser(licence, 'primaryuseronly@puonly.com')
+
+  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
 
   primaryUserRecipient.licenceRefs = licenceRefs
   primaryUserRecipient.returnLogIds = returnLogIds
@@ -263,13 +265,17 @@ async function primaryUserWithDifferentReturnsAgent(returnLogs) {
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
-  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, 'primaryuser@pura.com')
+  const primaryUser = await CRMContactsSeeder.primaryUser(licence, 'primaryuser@pura.com')
+
+  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
 
   primaryUserRecipient.licenceRefs = licenceRefs
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
 
-  const returnsUserRecipient = await RecipientsSeeder.returnsUser(licence, 'returnsuser@pura.com')
+  const returnsUser = await CRMContactsSeeder.returnsUser(licence, 'returnsuser@pura.com')
+
+  const returnsUserRecipient = await RecipientsSeeder.returnsUser(licence, returnsUser)
 
   returnsUserRecipient.licenceRefs = licenceRefs
   returnsUserRecipient.returnLogIds = returnLogIds
@@ -314,7 +320,9 @@ async function primaryUserWithMultipleLicences(returnLogs) {
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
-  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, 'primaryuser@pumulti.com')
+  const primaryUser = await CRMContactsSeeder.primaryUser(licence, 'primaryuser@pumulti.com')
+
+  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
 
   primaryUserRecipient.licenceRefs = licenceRefs
   primaryUserRecipient.returnLogIds = returnLogIds
@@ -329,7 +337,9 @@ async function primaryUserWithMultipleLicences(returnLogs) {
   secondLicenceHolderRecipient.returnLogIds = returnLogIds
   secondLicenceHolderRecipient.returnLogs = returnLogs
 
-  const secondPrimaryUserRecipient = await RecipientsSeeder.primaryUser(secondLicence, 'primaryuser@pumulti.com')
+  const secondPrimaryUser = await CRMContactsSeeder.primaryUser(secondLicence, 'primaryuser@pumulti.com')
+
+  const secondPrimaryUserRecipient = await RecipientsSeeder.primaryUser(secondLicence, secondPrimaryUser)
 
   secondPrimaryUserRecipient.licenceRefs = licenceRefs
   secondPrimaryUserRecipient.returnLogIds = returnLogIds
@@ -376,13 +386,17 @@ async function primaryUserWithSameReturnsAgent(returnLogs) {
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
-  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, 'same@pura.com')
+  const primaryUser = await CRMContactsSeeder.primaryUser(licence, 'same@pura.com')
+
+  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
 
   primaryUserRecipient.licenceRefs = licenceRefs
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
 
-  const returnsUserRecipient = await RecipientsSeeder.returnsUser(licence, 'same@pura.com')
+  const returnsUser = await CRMContactsSeeder.returnsUser(licence, 'same@pura.com')
+
+  const returnsUserRecipient = await RecipientsSeeder.returnsUser(licence, returnsUser)
 
   returnsUserRecipient.licenceRefs = licenceRefs
   returnsUserRecipient.returnLogIds = returnLogIds
