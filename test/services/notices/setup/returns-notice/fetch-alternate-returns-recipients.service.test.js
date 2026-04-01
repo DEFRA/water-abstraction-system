@@ -20,10 +20,10 @@ describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients 
   const notificationDueDate = new Date('2025-12-24')
 
   let licenceHolder
+  let licenceHolderSeedData
   let licenceRef
   let licenceSeedData
   let returnLog
-  let licenceHolderSeedData
 
   before(async () => {
     licenceSeedData = await EmptyLicenceSeeder.seed(licenceRef)
