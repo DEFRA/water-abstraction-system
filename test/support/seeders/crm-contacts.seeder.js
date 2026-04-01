@@ -63,7 +63,7 @@ async function licenceHolder(licenceSeedData, name, existingRegionId = null) {
 /**
  * Adds a primary user
  *
- * A primary user is linked to the licence by the company entity id.
+ * A primary user is linked to the licence by the company entity id on the licence document header.
  *
  * We need to update the licence document header company entity id to the newly created company entity
  *
@@ -102,7 +102,7 @@ async function primaryUser(licenceSeedData, email) {
 /**
  * Adds a returns user
  *
- * A returns user is linked to the licence by the company entity id.
+ * A returns user is linked to the licence by the company entity id on the licence document header.
  *
  * @param {object} licenceSeedData - The licence seed data
  * @param {string} email - The email for the user
