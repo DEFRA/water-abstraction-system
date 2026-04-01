@@ -125,7 +125,7 @@ async function licenceHolderWithMultipleLicences(returnLogs) {
   const secondLicence = await EmptyLicence.seed(licenceRefs[1])
 
   // Add a licence version to link the company to the new licence
-  const licenceVersion = await LicenceVersionHelper.add({
+  await LicenceVersionHelper.add({
     addressId: licenceHolder.address.id,
     companyId: licenceHolder.company.id,
     endDate: null,
