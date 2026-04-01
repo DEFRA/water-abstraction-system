@@ -6,12 +6,8 @@
 
 const crypto = require('node:crypto')
 
-const AddressHelper = require('../helpers/address.helper.js')
-const CompanyHelper = require('../helpers/company.helper.js')
-const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
 const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
 const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.model.js')
-const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 
 /**
@@ -147,41 +143,21 @@ async function returnsUser(licenceSeedData, returnsUserSeedData) {
  * for "returns to" recipients.
  *
  * @param {object} licenceSeedData - The licence seed data
- * @param {object} [licenceHolderSeedData] - The licence holder
- * @param {string} [name] - The name for the "Returns to" contact
+ * @param {object} returnsToHolderSeedData - The returns to holder seed data
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function returnsTo(licenceSeedData, licenceHolderSeedData = null, name = 'Test Limited') {
-  const address = _address()
-
-  const addressData = await AddressHelper.add({
-    ...address
-  })
-
-  let company
-
-  if (licenceHolderSeedData?.company) {
-    company = licenceHolderSeedData.company
-  } else {
-    company = await CompanyHelper.add({
-      name
-    })
-  }
-
-  const licenceRole = LicenceRoleHelper.select('returnsTo')
-
-  await LicenceDocumentRoleHelper.add({
-    licenceRoleId: licenceRole.id,
-    licenceDocumentId: licenceSeedData.licenceDocument.id,
-    companyId: company.id,
-    addressId: addressData.id,
-    endDate: null
-  })
-
+async function returnsTo(licenceSeedData, returnsToHolderSeedData) {
   const contact = {
-    ...address,
-    name
+    address1: returnsToHolderSeedData.address.address1,
+    address2: returnsToHolderSeedData.address.address2,
+    address3: returnsToHolderSeedData.address.address3,
+    address4: returnsToHolderSeedData.address.address4,
+    address5: returnsToHolderSeedData.address.address5,
+    address6: returnsToHolderSeedData.address.address6,
+    country: returnsToHolderSeedData.address.country,
+    postcode: returnsToHolderSeedData.address.postcode,
+    name: returnsToHolderSeedData.company.name
   }
 
   return {
@@ -248,19 +224,6 @@ function transformToSendingResult(recipient) {
     licence_refs: recipient.licenceRefs,
     message_type: recipient.messageType,
     return_log_ids: recipient.returnLogIds
-  }
-}
-
-function _address() {
-  return {
-    address1: '4',
-    address2: 'Privet Drive',
-    address3: 'Little Whinging',
-    address4: 'Surrey',
-    address5: null,
-    address6: null,
-    country: null,
-    postcode: 'WD25 7LR'
   }
 }
 

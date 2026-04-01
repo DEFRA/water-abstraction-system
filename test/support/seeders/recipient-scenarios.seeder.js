@@ -62,7 +62,7 @@ async function licenceHolderOnly(returnLogs) {
  *
  * It aggregates the returns logs passed into to create a unique array of both licence references and return log IDs.
  *
- * It then creates a licence document header record using the first licence ref and populates it with both a licence
+ * It then creates a licence record using the first licence ref and populates it with both a licence
  * holder and returns to contact. The aggregated data is assigned to the recipient objects to make testing easier.
  *
  * @param {object[]} returnLogs - One or more returns logs sharing the same licence reference that will be assigned to
@@ -83,7 +83,9 @@ async function licenceHolderWithDifferentReturnsTo(returnLogs) {
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
-  const returnsToRecipient = await RecipientsSeeder.returnsTo(licence, null, 'Returnstoandholder')
+  const returnsToHolder = await CRMContactsSeeder.returnsTo(licence, licenceHolder, 'Returnstoandholder')
+
+  const returnsToRecipient = await RecipientsSeeder.returnsTo(licence, returnsToHolder)
 
   returnsToRecipient.licenceRefs = licenceRefs
   returnsToRecipient.returnLogIds = returnLogIds
@@ -172,7 +174,9 @@ async function licenceHolderWithSameReturnsTo(returnLogs) {
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
-  const returnsToRecipient = await RecipientsSeeder.returnsTo(licence, licenceHolder, 'Samelicenceholderreturnsto')
+  const returnsToHolder = await CRMContactsSeeder.returnsTo(licence, licenceHolder)
+
+  const returnsToRecipient = await RecipientsSeeder.returnsTo(licence, returnsToHolder)
 
   returnsToRecipient.licenceRefs = licenceRefs
   returnsToRecipient.returnLogIds = returnLogIds
