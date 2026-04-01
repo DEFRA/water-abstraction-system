@@ -107,7 +107,7 @@ async function primaryUser(licenceSeedData, email) {
  * @param {object} licenceSeedData - The licence seed data
  * @param {string} email - The email for the user
  *
- * @returns {Promise<object>} an object containing all records related to a primary user
+ * @returns {Promise<object>} an object containing all records related to a returns user
  */
 async function returnsUser(licenceSeedData, email) {
   const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
