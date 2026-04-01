@@ -132,7 +132,10 @@ async function returnsUser(licenceSeedData, returnsUserSeedData) {
     contactType: 'returns user',
     email,
     licenceRef: licenceSeedData.licence.licenceRef,
-    messageType: 'Email'
+    messageType: 'Email',
+    clean: async () => {
+      await returnsUserSeedData.clean()
+    }
   }
 }
 
