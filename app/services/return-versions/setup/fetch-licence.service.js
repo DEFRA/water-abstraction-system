@@ -22,10 +22,6 @@ async function go(licenceId) {
       .select(['id', 'expiredDate', 'lapsedDate', 'licenceRef', 'revokedDate', 'startDate', 'waterUndertaker'])
       // See licence.model.js `static get modifiers` if you are unsure about what this is doing
       .modify('licenceHolder')
-      .withGraphFetched('licenceVersions')
-      .modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
-        licenceVersionsBuilder.select(['id', 'startDate']).where('status', 'current').orderBy('startDate', 'desc')
-      })
       .withGraphFetched('returnVersions')
       .modifyGraph('returnVersions', (returnVersionsBuilder) => {
         returnVersionsBuilder
