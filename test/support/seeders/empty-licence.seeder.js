@@ -22,13 +22,12 @@ const { generateLicenceRef } = require('../helpers/licence.helper.js')
  */
 async function seed(existingLicenceRef = null, existingRegionId = null) {
   // Set the defaults
-  const anglianRegion = RegionHelper.select(0)
-  const regionId = existingRegionId ?? anglianRegion.id
+  const regionId = existingRegionId ?? RegionHelper.select().id
   const licenceRef = existingLicenceRef ?? generateLicenceRef()
 
   const licence = await LicenceHelper.add({
     licenceRef,
-    regionId
+    ...(regionId && { regionId })
   })
 
   const licenceDocument = await LicenceDocumentHelper.add({
