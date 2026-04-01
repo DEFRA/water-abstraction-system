@@ -8,7 +8,6 @@ const crypto = require('node:crypto')
 
 const AddressHelper = require('../helpers/address.helper.js')
 const CompanyHelper = require('../helpers/company.helper.js')
-const LicenceDocumentHeaderModel = require('../../../app/models/licence-document-header.model.js')
 const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
 const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
