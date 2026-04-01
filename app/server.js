@@ -35,7 +35,7 @@ const registerPlugins = async (server) => {
   await server.register(BearerPlugin)
   await server.register(AuthPlugin)
   await server.register(RouterPlugin)
-  await server.register(HapiPinoPlugin())
+  await server.register(HapiPinoPlugin)
   await server.register(AirbrakePlugin)
   await server.register(GlobalNotifierPlugin)
   await server.register(ChargingModuleTokenCachePlugin)
