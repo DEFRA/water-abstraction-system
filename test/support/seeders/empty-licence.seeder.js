@@ -27,7 +27,7 @@ async function seed(existingLicenceRef = null, existingRegionId = null) {
 
   const licence = await LicenceHelper.add({
     licenceRef,
-    ...(regionId && { regionId })
+    regionId
   })
 
   const licenceDocument = await LicenceDocumentHelper.add({
