@@ -46,22 +46,22 @@ async function clean(recipient) {
  *
  * This function sets up a complete licence structure with a company entity and a single licence holder contact.
  *
- * @param {object} licence - The licence
- * @param {object} [licenceHolder] - The licence holder
+ * @param {object} licenceSeedData - The licence seed data
+ * @param {object} [licenceHolderSeedData] - The licence holder
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function licenceHolder(licence, licenceHolder) {
+async function licenceHolder(licenceSeedData, licenceHolderSeedData) {
   const contact = {
-    address1: licenceHolder.address.address1,
-    address2: licenceHolder.address.address2,
-    address3: licenceHolder.address.address3,
-    address4: licenceHolder.address.address4,
-    address5: licenceHolder.address.address5,
-    address6: licenceHolder.address.address6,
-    country: licenceHolder.address.country,
-    postcode: licenceHolder.address.postcode,
-    name: licenceHolder.company.name
+    address1: licenceHolderSeedData.address.address1,
+    address2: licenceHolderSeedData.address.address2,
+    address3: licenceHolderSeedData.address.address3,
+    address4: licenceHolderSeedData.address.address4,
+    address5: licenceHolderSeedData.address.address5,
+    address6: licenceHolderSeedData.address.address6,
+    country: licenceHolderSeedData.address.country,
+    postcode: licenceHolderSeedData.address.postcode,
+    name: licenceHolderSeedData.company.name
   }
 
   return {
@@ -70,11 +70,11 @@ async function licenceHolder(licence, licenceHolder) {
     contactHashId: _contactHashId(contact),
     contactType: 'licence holder',
     email: null,
-    licenceRef: licence.licence.licenceRef,
+    licenceRef: licenceSeedData.licence.licenceRef,
     messageType: 'Letter',
     clean: async () => {
-      await licence.clean()
-      await licenceHolder.clean()
+      await licenceSeedData.clean()
+      await licenceHolderSeedData.clean()
     }
   }
 }
@@ -86,17 +86,17 @@ async function licenceHolder(licence, licenceHolder) {
  * flagged with the role `primary_user`. To this it links an licence entity record setup as an individual with the
  * the 'registered' user's email name.
  *
- * @param {object} licence - The licence
+ * @param {object} licenceSeedData - The licence seed data
  * @param {string} email - The email address of the primary user
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function primaryUser(licence, email) {
+async function primaryUser(licenceSeedData, email) {
   const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
 
   const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
 
-  await licence.licenceDocumentHeader.$query().patch({
+  await licenceSeedData.licenceDocumentHeader.$query().patch({
     companyEntityId: companyEntity.id
   })
 
@@ -112,7 +112,7 @@ async function primaryUser(licence, email) {
     contactType: 'primary user',
     email,
     licenceEntityRole,
-    licenceRef: licence.licence.licenceRef,
+    licenceRef: licenceSeedData.licence.licenceRef,
     messageType: 'Email'
   }
 }
@@ -130,15 +130,15 @@ async function primaryUser(licence, email) {
  * Then we create a second licence entity and licence entity role for the "returns user" and voila, we have a returns
  * agent recipient.
  *
- * @param {object} licenceDocumentHeader - The licence document header holding licence holder details
+ * @param {object} licenceSeedData - The licence seed data
  * @param {string} email - The email address of the returns user
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function returnsUser(licenceDocumentHeader, email) {
+async function returnsUser(licenceSeedData, email) {
   const individualEntity = await LicenceEntityHelper.add({ name: email, type: 'individual' })
   const licenceEntityRole = await LicenceEntityRoleHelper.add({
-    companyEntityId: licenceDocumentHeader.companyEntityId,
+    companyEntityId: licenceSeedData.licenceDocumentHeader.companyEntityId,
     licenceEntityId: individualEntity.id,
     role: 'user_returns'
   })
@@ -149,7 +149,7 @@ async function returnsUser(licenceDocumentHeader, email) {
     contactType: 'returns user',
     email,
     licenceEntityRole,
-    licenceRef: licenceDocumentHeader.licenceRef,
+    licenceRef: licenceSeedData.licence.licenceRef,
     messageType: 'Email'
   }
 }
@@ -161,13 +161,13 @@ async function returnsUser(licenceDocumentHeader, email) {
  * never get a licence with _only_ a 'returns to' contact, so adding to an existing `LicenceDocumentHeader` makes sense
  * for "returns to" recipients.
  *
- * @param {object} licence - The licence
- * @param {object} [licenceHolder] - The licence holder
+ * @param {object} licenceSeedData - The licence seed data
+ * @param {object} [licenceHolderSeedData] - The licence holder
  * @param {string} [name] - The name for the "Returns to" contact
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
-async function returnsTo(licence, licenceHolder = null, name = 'Test Limited') {
+async function returnsTo(licenceSeedData, licenceHolderSeedData = null, name = 'Test Limited') {
   const address = _address()
 
   const addressData = await AddressHelper.add({
@@ -176,8 +176,8 @@ async function returnsTo(licence, licenceHolder = null, name = 'Test Limited') {
 
   let company
 
-  if (licenceHolder?.company) {
-    company = licenceHolder.company
+  if (licenceHolderSeedData?.company) {
+    company = licenceHolderSeedData.company
   } else {
     company = await CompanyHelper.add({
       name
@@ -188,7 +188,7 @@ async function returnsTo(licence, licenceHolder = null, name = 'Test Limited') {
 
   await LicenceDocumentRoleHelper.add({
     licenceRoleId: licenceRole.id,
-    licenceDocumentId: licence.licenceDocument.id,
+    licenceDocumentId: licenceSeedData.licenceDocument.id,
     companyId: company.id,
     addressId: addressData.id,
     endDate: null
@@ -204,7 +204,7 @@ async function returnsTo(licence, licenceHolder = null, name = 'Test Limited') {
     contactHashId: _contactHashId(contact),
     contactType: 'returns to',
     email: null,
-    licenceRef: licence.licence.licenceRef,
+    licenceRef: licenceSeedData.licence.licenceRef,
     messageType: 'Letter'
   }
 }

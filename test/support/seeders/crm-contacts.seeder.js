@@ -13,14 +13,14 @@ const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
  *
  * A licence is linked to a company through the licence version, the licence version links the licence, company, and address.
  *
- * @param {object} licence - The licence
+ * @param {object} licenceSeedData - The licence seed data
  * @param {string} name - The company name
  * @param {string} [existingRegionId] - The id of the region to assign to the company that will be created
  *
  * @returns {Promise<object>} an object containing all records related to a licence holder
  */
-async function licenceHolder(licence, name, existingRegionId = null) {
-  const regionId = existingRegionId || licence.licence.regionId
+async function licenceHolder(licenceSeedData, name, existingRegionId = null) {
+  const regionId = existingRegionId || licenceSeedData.licence.regionId
 
   const company = await CompanyHelper.add({
     name,
@@ -43,7 +43,7 @@ async function licenceHolder(licence, name, existingRegionId = null) {
     addressId: address.id,
     companyId: company.id,
     endDate: null,
-    licenceId: licence.licence.id
+    licenceId: licenceSeedData.licence.id
   })
 
   return {

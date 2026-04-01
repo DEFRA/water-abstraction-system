@@ -267,7 +267,7 @@ async function primaryUserWithDifferentReturnsAgent(returnLogs) {
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
 
-  const returnsUserRecipient = await RecipientsSeeder.returnsUser(licence.licenceDocumentHeader, 'returnsuser@pura.com')
+  const returnsUserRecipient = await RecipientsSeeder.returnsUser(licence, 'returnsuser@pura.com')
 
   returnsUserRecipient.licenceRefs = licenceRefs
   returnsUserRecipient.returnLogIds = returnLogIds
@@ -380,7 +380,7 @@ async function primaryUserWithSameReturnsAgent(returnLogs) {
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
 
-  const returnsUserRecipient = await RecipientsSeeder.returnsUser(licence.licenceDocumentHeader, 'same@pura.com')
+  const returnsUserRecipient = await RecipientsSeeder.returnsUser(licence, 'same@pura.com')
 
   returnsUserRecipient.licenceRefs = licenceRefs
   returnsUserRecipient.returnLogIds = returnLogIds
