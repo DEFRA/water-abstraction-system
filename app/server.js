@@ -46,7 +46,7 @@ const registerPlugins = async (server) => {
   await server.register(RespTokenCachePlugin)
   await server.register(PayloadCleanerPlugin)
   await server.register(ViewsPlugin)
-  await server.register(ContentSecurityPolicyPlugin())
+  await server.register(ContentSecurityPolicyPlugin)
   await server.register(GlobalHapiServerMethodsPlugin)
   await server.register(KeepYarAlivePlugin)
 }

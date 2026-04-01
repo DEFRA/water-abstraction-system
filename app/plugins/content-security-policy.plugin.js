@@ -11,20 +11,18 @@
 
 const Blankie = require('blankie')
 
-const ContentSecurityPolicyPlugin = () => {
-  return {
-    plugin: Blankie,
-    options: {
-      baseUri: ['self'],
-      connectSrc: ['self'],
-      defaultSrc: ['none'],
-      fontSrc: ['self'],
-      generateNonces: 'script',
-      imgSrc: ['self'],
-      scriptSrc: ['self'],
-      styleSrc: ['self'],
-      workerSrc: ['self']
-    }
+const ContentSecurityPolicyPlugin = {
+  plugin: Blankie,
+  options: {
+    baseUri: ['self'],
+    connectSrc: ['self'],
+    defaultSrc: ['none'],
+    fontSrc: ['self'],
+    generateNonces: 'script',
+    imgSrc: ['self'],
+    scriptSrc: ['self'],
+    styleSrc: ['self'],
+    workerSrc: ['self']
   }
 }
 
