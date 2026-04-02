@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, after, before } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -21,10 +21,6 @@ describe('DAL - Delete session dal', () => {
   before(async () => {
     session = await SessionHelper.add()
     sessionId = session.id
-  })
-
-  after(async () => {
-    await session.$query().delete()
   })
 
   describe('when the session exists', () => {
