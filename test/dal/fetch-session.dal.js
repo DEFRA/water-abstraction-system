@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -19,12 +19,12 @@ describe('DAL - Fetch session dal', () => {
   let session
   let sessionId
 
-  beforeEach(async () => {
+  before(async () => {
     session = await SessionHelper.add()
     sessionId = session.id
   })
 
-  afterEach(async () => {
+  after(async () => {
     await session.$query().delete()
   })
 
