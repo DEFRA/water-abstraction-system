@@ -5,7 +5,7 @@
  * @module RequestNotifierPlugin
  */
 
-const { HTTP_STATUS_NOT_FOUND } = require('node:http2').constants
+const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
 
 const ErrorPagesService = require('../services/plugins/error-pages.service.js')
 
@@ -20,8 +20,8 @@ const ErrorPagesPlugin = {
           return h.continue
         }
 
-        if (statusCode === HTTP_STATUS_NOT_FOUND) {
-          return h.view('404').code(statusCode)
+        if (statusCode < HTTP_STATUS_INTERNAL_SERVER_ERROR && statusCode !== HTTP_STATUS_OK) {
+          return h.view(`${statusCode}`).code(statusCode)
         }
 
         return h.view('500').code(statusCode)
