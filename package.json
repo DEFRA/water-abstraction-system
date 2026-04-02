@@ -48,7 +48,7 @@
     "big.js": "^7.0.1",
     "blankie": "^5.0.0",
     "dotenv": "^17.2.1",
-    "got": "^14.4.7",
+    "got": "^15.0.0",
     "govuk-frontend": "^4.7.0",
     "hapi-auth-bearer-token": "^8.0.0",
     "hapi-pino": "^12.1.0",

@@ -44,6 +44,9 @@ function defaultOptions() {
     retry: {
       // The default is also 2 retries before erroring. We specify it to make this fact visible
       limit: 2,
+      // In v15.0.0, retry.enforceRetryRules defaults to true. To maintain backward compatibility and ensure our custom
+      // retry logic works as expected, we disable it.
+      enforceRetryRules: false,
       // We ensure that the only network errors Got retries are timeout and econnreset errors. Both can be a result of
       // the other side being overloaded which can happen when we are trying to send high volumes of requests, for
       // example, when creating a bill run
@@ -164,7 +167,7 @@ async function _importGot() {
   // using these for the time being. Some workarounds are provided here:
   // https://github.com/sindresorhus/got/issues/1789 We have gone the route of using await import('got'). We cannot do
   // this at the top level as Node doesn't support top level in CJS so we do it here instead.
-  const { got } = await import('got')
+  const { default: got } = await import('got')
 
   return got
 }
