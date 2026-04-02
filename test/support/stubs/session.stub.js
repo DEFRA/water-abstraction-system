@@ -1,6 +1,6 @@
 'use strict'
 
-const SessionModel = require('../../../app/models/session.model.js') // Path to your model
+const SessionModel = require('../../../app/models/session.model.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
