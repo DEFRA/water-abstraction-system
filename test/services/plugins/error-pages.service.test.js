@@ -201,7 +201,7 @@ describe('Error pages service', () => {
   })
 
   describe('when the response is a boom 410 error', () => {
-    const sessionErrorResponse = {
+    const boom410Response = {
       ...new SessionNotFoundError('Session has expired'),
       isBoom: true,
       output: { statusCode: HTTP_STATUS_GONE }
@@ -209,7 +209,7 @@ describe('Error pages service', () => {
 
     beforeEach(() => {
       request = {
-        response: sessionErrorResponse,
+        response: boom410Response,
         route: { settings: {} },
         path
       }

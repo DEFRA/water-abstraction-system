@@ -81,11 +81,6 @@ describe('Company Contacts - Setup - Check Service', () => {
           await ViewCheckService.go(session.id, yarStub)
 
           expect(session.checkPageVisited).to.be.true()
-        })
-
-        it('updates the session', async () => {
-          await ViewCheckService.go(session.id, yarStub)
-
           expect(session.$update.called).to.be.true()
         })
       })
