@@ -8,7 +8,7 @@
 
 const ContactNamePresenter = require('../../../presenters/company-contacts/setup/contact-name.presenter.js')
 const ContactNameValidator = require('../../../validators/company-contacts/setup/contact-name.validator.js')
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const { checkUrl } = require('../../../lib/check-page.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
@@ -23,7 +23,7 @@ const { flashNotification } = require('../../../lib/general.lib.js')
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId, payload, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const validationResult = _validate(payload)
 
