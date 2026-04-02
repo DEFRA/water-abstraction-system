@@ -22,8 +22,9 @@ const { HttpProxyAgent, HttpsProxyAgent } = require('hpagent')
  * @returns {Promise<Function>} A function that mimics the `request` API.
  */
 async function gotWrapper(defaults = {}) {
-  // We use the `await import` workaround to allow us to use the ESM `got`
-  const { got } = await import('got')
+  // We use the `await import` workaround to allow us to use the ESM `got`.
+  // In got v15 the client is the default export, not a named `got` export.
+  const { default: got } = await import('got')
 
   // Return a request-like function bound to `got` and the provided defaults
   return (options, callback) => {
@@ -39,11 +40,12 @@ async function requestLike(options, callback, got, defaults) {
     options = { url: options }
   }
 
+  const url = options.url || options.uri
+
   const gotOptions = {
     method: options.method || defaults.method || 'GET',
     headers: { ...defaults.headers, ...options.headers },
     body: options.body || defaults.body,
-    url: options.url || options.uri,
     agent: {
       http: new HttpProxyAgent({ proxy: defaults.proxy }),
       https: new HttpsProxyAgent({ proxy: defaults.proxy })
@@ -52,7 +54,7 @@ async function requestLike(options, callback, got, defaults) {
   }
 
   try {
-    const response = await got(gotOptions)
+    const response = await got(url, gotOptions)
 
     const returnedResponse = {
       statusCode: response.statusCode,
