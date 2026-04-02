@@ -30,6 +30,7 @@ describe('Error pages service', () => {
       statusCode: HTTP_STATUS_FORBIDDEN
     }
   }
+
   const boom404Response = {
     message: 'where has my boom gone?',
     isBoom: true,
@@ -37,6 +38,13 @@ describe('Error pages service', () => {
       statusCode: HTTP_STATUS_NOT_FOUND
     }
   }
+
+  const boom410Response = {
+    ...new SessionNotFoundError('Session has expired'),
+    isBoom: true,
+    output: { statusCode: HTTP_STATUS_GONE }
+  }
+
   const boom500Response = {
     message: 'tick, tick, tick, tick boom!',
     isBoom: true,
@@ -201,12 +209,6 @@ describe('Error pages service', () => {
   })
 
   describe('when the response is a boom 410 error', () => {
-    const boom410Response = {
-      ...new SessionNotFoundError('Session has expired'),
-      isBoom: true,
-      output: { statusCode: HTTP_STATUS_GONE }
-    }
-
     beforeEach(() => {
       request = {
         response: boom410Response,
