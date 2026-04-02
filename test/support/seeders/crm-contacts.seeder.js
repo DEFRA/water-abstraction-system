@@ -6,8 +6,10 @@
 
 const AddressHelper = require('../helpers/address.helper.js')
 const CompanyHelper = require('../helpers/company.helper.js')
+const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
 const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
+const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 
 /**
@@ -100,6 +102,63 @@ async function primaryUser(licenceSeedData, email) {
 }
 
 /**
+ * Adds a 'returnsTo'
+ *
+ * We need to handle both a 'returnsTo' linked to the same licence holder as the licence and a 'returnsTo' not related to the licence holder
+ *
+ * @param {object} licenceSeedData - The licence seed data
+ * @param {object} licenceHolderSeedData - The licence holder seed data
+ * @param {string} [name] - The company name
+ *
+ * @returns {Promise<object>} an object containing all records related to a 'returnsTo'
+ */
+async function returnsTo(licenceSeedData, licenceHolderSeedData, name) {
+  let company = licenceHolderSeedData.company
+  let address = licenceHolderSeedData.address
+
+  // If the name is provided, create a new company and address - a 'returnsTo' not related to the licence holder
+  if (name) {
+    company = await CompanyHelper.add({
+      name
+    })
+
+    address = await AddressHelper.add({
+      address1: '7',
+      address2: 'Privet Drive',
+      address3: 'Little Whinging',
+      address4: 'Surrey',
+      address5: null,
+      address6: null,
+      country: null,
+      postcode: 'WD25 7LR'
+    })
+  }
+  const licenceRole = LicenceRoleHelper.select('returnsTo')
+
+  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
+    licenceRoleId: licenceRole.id,
+    licenceDocumentId: licenceSeedData.licenceDocument.id,
+    companyId: company.id,
+    addressId: address.id,
+    endDate: null
+  })
+
+  return {
+    address,
+    company,
+    licenceDocumentRole,
+    licenceRole,
+    clean: async () => {
+      await address.$query().delete()
+      await company.$query().delete()
+      await licenceDocumentRole.$query().delete()
+      await licenceHolderSeedData.clean()
+      await licenceRole.$query().delete()
+    }
+  }
+}
+
+/**
  * Adds a returns user
  *
  * A returns user is linked to the licence by the company entity id on the licence document header.
@@ -130,5 +189,6 @@ async function returnsUser(licenceSeedData, email) {
 module.exports = {
   licenceHolder,
   primaryUser,
+  returnsTo,
   returnsUser
 }
