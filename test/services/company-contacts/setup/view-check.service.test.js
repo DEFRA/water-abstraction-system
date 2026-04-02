@@ -10,11 +10,12 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things we need to stub
 const FetchCompanyContactsService = require('../../../../app/services/company-contacts/setup/fetch-company-contacts.service.js')
 const FetchNotificationService = require('../../../../app/services/company-contacts/fetch-notification.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewCheckService = require('../../../../app/services/company-contacts/setup/view-check.service.js')
@@ -23,19 +24,18 @@ describe('Company Contacts - Setup - Check Service', () => {
   let company
   let notification
   let session
-  let sessionData
   let yarStub
 
   beforeEach(async () => {
     company = CustomersFixtures.company()
 
-    sessionData = { company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' }
-
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, { company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' })
 
     notification = undefined
 
-    Sinon.stub(FetchNotificationService, 'go').returns(notification)
+    Sinon.stub(FetchNotificationService, 'go').resolves(notification)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
   })
@@ -80,9 +80,8 @@ describe('Company Contacts - Setup - Check Service', () => {
         it('updates the session', async () => {
           await ViewCheckService.go(session.id, yarStub)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.checkPageVisited).to.be.true()
+          expect(session.checkPageVisited).to.be.true()
+          expect(session.$update.called).to.be.true()
         })
       })
     })
@@ -105,9 +104,7 @@ describe('Company Contacts - Setup - Check Service', () => {
       it('updates the session', async () => {
         await ViewCheckService.go(session.id, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.matchingContact).to.equal(matchingContact, {
+        expect(session.matchingContact).to.equal(matchingContact, {
           skip: ['createdAt', 'deletedAt', 'updatedAt']
         })
       })
