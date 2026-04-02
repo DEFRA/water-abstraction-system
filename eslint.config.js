@@ -36,6 +36,17 @@ module.exports = [
       globals: {
         ...globals.node
       },
+      // @hapi/lab v26 uses @babel/eslint-parser for coverage instrumentation. It reads the project's eslint.config.js
+      // (via ESLint.calculateConfigForFile()) and passes languageOptions.parserOptions directly to
+      // @babel/eslint-parser.parse(). Without requireConfigFile: false, @babel/eslint-parser fails with
+      // "Cannot read properties of undefined (reading 'includes')" because it can't find a babel config file.
+      parserOptions: {
+        requireConfigFile: false,
+        babelOptions: {
+          babelrc: false,
+          configFile: false
+        }
+      },
       sourceType: 'commonjs'
     },
     plugins: {
