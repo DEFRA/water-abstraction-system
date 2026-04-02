@@ -1,11 +1,13 @@
 'use strict'
 
+const SessionNotFoundError = require('../../errors/session-not-found.error.js')
+
 /**
  * Used by the `ErrorPagesPlugin` to process unhandled exceptions in the service
  * @module ErrorPagesService
  */
 
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } =
+const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_GONE, HTTP_STATUS_OK } =
   require('node:http2').constants
 
 /**
@@ -54,6 +56,10 @@ function _extractStatusCode(request) {
   const { response } = request
 
   if (response.isBoom) {
+    if (response instanceof SessionNotFoundError) {
+      return HTTP_STATUS_GONE
+    }
+
     return response.output.statusCode
   }
 
@@ -67,6 +73,8 @@ function _logError(statusCode, request) {
     global.GlobalNotifier.omg('Page not found', { path: request.path })
   } else if (statusCode === HTTP_STATUS_FORBIDDEN) {
     global.GlobalNotifier.omg('Not authorised', { path: request.path })
+  } else if (statusCode === HTTP_STATUS_GONE) {
+    global.GlobalNotifier.omg('Session not found', { path: request.path })
   } else if (response.isBoom) {
     global.GlobalNotifier.omfg(response.message, {}, response)
   }
@@ -118,6 +126,14 @@ function _stopResponse(request) {
 function _determineSafeStatusCode(statusCode) {
   // The status code will be a 2xx or 3xx so safe to return as is
   if (statusCode < HTTP_STATUS_BAD_REQUEST) {
+    return statusCode
+  }
+
+  // A 410 GONE is the status code we use when someone attempts to navigate to a setup journey page but the session no
+  // longer exists. We want to display a specific error page for this scenario, in case a user inadvertently tries to
+  // go back from a journey confirmation page. This will have triggered the error, but we don't want them thinking it
+  // means the 'thing' they just created errored.
+  if (statusCode === HTTP_STATUS_GONE) {
     return statusCode
   }
 
