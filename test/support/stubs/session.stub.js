@@ -9,7 +9,7 @@ const { generateUUID } = require('../../../app/lib/general.lib.js')
  * @param {sinon} sinon - The sinon sandbox or instance.
  * @param {object} sessionData - The raw data to populate the model with.
  *
- * @returns {SessionModel} A model instance with stubbed methods.
+ * @returns {module:SessionModel} A model instance with stubbed methods.
  */
 function build(sinon, sessionData) {
   const session = SessionModel.fromJson({
