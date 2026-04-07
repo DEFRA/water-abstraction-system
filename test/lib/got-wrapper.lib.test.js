@@ -17,11 +17,16 @@ describe('GotWrapperLib', () => {
   let request
 
   beforeEach(async () => {
+    if (!Nock.isActive()) {
+      Nock.activate()
+    }
+
     request = await gotWrapper()
   })
 
   afterEach(() => {
     Nock.cleanAll()
+    Nock.restore()
   })
 
   describe('when called with a string URL for a GET request', () => {
