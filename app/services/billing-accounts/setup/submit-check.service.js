@@ -31,13 +31,9 @@ async function go(sessionId) {
   const agentCompany = await _agentCompany(session, companyContacts, existingAccount)
   const contact = _contact(session, companyContacts)
 
-  // await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
+  const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
 
-  return {
-    address,
-    agentCompany,
-    contact
-  }
+  return result
 }
 
 async function _address(session) {

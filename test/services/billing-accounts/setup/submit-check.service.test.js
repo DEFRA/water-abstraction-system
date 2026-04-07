@@ -5,39 +5,41 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
-
-// Things to stub
 const AddressHelper = require('../../../support/helpers/address.helper.js')
 const AddressModel = require('../../../../app/models/address.model.js')
+const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
+const BillingAccountHelper = require('../../../support/helpers/billing-account.helper.js')
+const BillingAccountAddressHelper = require('../../../support/helpers/billing-account-address.helper.js')
 const ChangeAddressService = require('../../../../app/services/billing-accounts/change-address.service.js')
+const CompanyHelper = require('../../../support/helpers/company.helper.js')
 const ContactHelper = require('../../../support/helpers/contact.helper.js')
 const ContactModel = require('../../../../app/models/contact.model.js')
 const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
-const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
+const SessionHelper = require('../../../support/helpers/session.helper.js')
+
+// Things to stub
 const FetchCompanyService = require('../../../../app/services/billing-accounts/setup/fetch-company.service.js')
+const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
 const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/billing-accounts/setup/submit-check.service.js')
 
-describe('Billing Accounts - Setup - Submit Check Service', () => {
+describe.only('Billing Accounts - Setup - Submit Check Service', () => {
   let address
+  let billingAccount
+  let billingAccountAddress
+  let company
+  let companyContacts
   let contact
   let session
   let sessionData
 
-  const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
   const exampleContacts = CustomersFixture.companyContacts()
-  const companyContacts = {
-    company: billingAccount.company,
-    contacts: []
-  }
 
   const companies = [
     {
@@ -47,18 +49,27 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
     }
   ]
 
-  before(async () => {
+  beforeEach(async () => {
     address = await AddressHelper.add()
+    company = await CompanyHelper.add()
     contact = await ContactHelper.add({
       ...exampleContacts[0].contact
     })
+    billingAccount = await BillingAccountHelper.add({ companyId: company.id })
+    billingAccountAddress = await BillingAccountAddressHelper.add({
+      addressId: address.id,
+      billingAccountId: billingAccount.id,
+      companyId: company.id,
+      contactId: contact.id
+    })
 
-    companyContacts.contacts.push(contact)
-  })
-
-  beforeEach(async () => {
     sessionData = {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
+    }
+
+    companyContacts = {
+      company: billingAccount.company,
+      contacts: [contact]
     }
 
     Sinon.stub(FetchCompanyService, 'go').returns(companies)
@@ -66,6 +77,11 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
   })
 
   afterEach(async () => {
+    await address.$query().delete()
+    await company.$query().delete()
+    await contact.$query().delete()
+    await billingAccount.$query().delete()
+    await billingAccountAddress.$query().delete()
     await session.$query().delete()
     Sinon.restore()
   })
@@ -73,7 +89,7 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
   describe.only('when called', () => {
     describe('and the user has selected the existing billing account', () => {
       beforeEach(async () => {
-        sessionData.accountSelected = billingAccount.company.id
+        sessionData.accountSelected = billingAccount.id
       })
 
       describe('and selected an existing address', () => {
@@ -91,11 +107,16 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it.only('creates a new billing account address', async () => {
-            await SubmitCheckService.go(session.id)
+            const result = await SubmitCheckService.go(session.id)
 
-            const newAddress = await AddressModel.query().where('postcode', address.postcode).first()
-
-            expect(result).to.equal({})
+            expect(result.billingAccountAddress.billingAccountId).to.equal(billingAccount.id)
+            expect(result.billingAccountAddress.addressId).to.equal(address.id)
+            expect(result.billingAccountAddress.companyId).to.equal(company.id)
+            expect(result.billingAccountAddress.contactId).to.equal(address.id)
+            expect(result.address.id).to.equal(address.id)
+            expect(result.agentCompany.id).to.equal(company.id)
+            expect(result.contact.contactType).to.equal('department')
+            expect(result.contact.department).to.equal(sessionData.contactName)
           })
         })
 
