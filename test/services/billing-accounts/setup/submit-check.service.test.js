@@ -14,8 +14,10 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 
 // Things to stub
 const AddressHelper = require('../../../support/helpers/address.helper.js')
+const AddressModel = require('../../../../app/models/address.model.js')
 const ChangeAddressService = require('../../../../app/services/billing-accounts/change-address.service.js')
 const ContactHelper = require('../../../support/helpers/contact.helper.js')
+const ContactModel = require('../../../../app/models/contact.model.js')
 const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
 const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
 const FetchCompanyService = require('../../../../app/services/billing-accounts/setup/fetch-company.service.js')
@@ -89,7 +91,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
           })
 
           it.only('creates a new billing account address', async () => {
-            const result = await SubmitCheckService.go(session.id)
+            await SubmitCheckService.go(session.id)
+
+            const newAddress = await AddressModel.query().where('postcode', address.postcode).first()
 
             expect(result).to.equal({})
           })
