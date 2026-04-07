@@ -125,6 +125,11 @@ describe('Bill Runs - Setup - Year presenter', () => {
 function _financialYearsData(selectedYear) {
   return [
     {
+      text: '2025 to 2026',
+      value: 2026,
+      checked: selectedYear === '2026'
+    },
+    {
       text: '2024 to 2025',
       value: 2025,
       checked: selectedYear === '2025'
