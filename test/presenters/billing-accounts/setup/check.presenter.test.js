@@ -75,12 +75,12 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   })
 
   describe('the "accountSelected" property', () => {
-    describe('when called with the "accountSelected" set to "customer"', () => {
+    describe('when called with the "accountSelected" set to a UUID', () => {
       it('returns the name from the billing account', () => {
         const result = CheckPresenter.go(
           {
             ...session,
-            accountSelected: 'customer'
+            accountSelected: generateUUID()
           },
           companyContacts,
           address,
