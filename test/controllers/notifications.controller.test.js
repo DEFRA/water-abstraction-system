@@ -184,7 +184,7 @@ describe('Notifications controller', () => {
             Sinon.stub(ViewNotificationService, 'go').resolves({
               address: [],
               alertDetails: null,
-              backLink: { href: `/system/return-logs/${returnLogId}`, text: 'Go back to return log' },
+              backLink: { href: `/system/return-logs/${returnLogId}/details`, text: 'Go back to return log' },
               contents: notification.plaintext,
               licenceRef: licence.licenceRef,
               messageType: 'email',

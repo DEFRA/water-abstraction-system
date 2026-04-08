@@ -123,7 +123,7 @@ describe('Notifications - View Notification service', () => {
           address: [],
           alertDetails: null,
           backLink: {
-            href: `/system/return-logs/${returnLogId}`,
+            href: `/system/return-logs/${returnLogId}/communications`,
             text: 'Go back to return log'
           },
           contents: notification.plaintext,
