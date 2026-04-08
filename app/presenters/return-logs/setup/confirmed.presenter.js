@@ -32,7 +32,7 @@ function go(returnLog) {
     siteDescription,
     status,
     viewReturnsLink: `/system/licences/${licenceId}/returns`,
-    viewThisReturnLink: `/system/return-logs/${returnLogId}`
+    viewThisReturnLink: `/system/return-logs/${returnLogId}/details`
   }
 }
 

@@ -64,7 +64,7 @@ describe('Return Logs - Setup - Confirmed service', () => {
         siteDescription: 'Addington Sandpits',
         status: 'received',
         viewReturnsLink: '/system/licences/91aff99a-3204-4727-86bd-7bdf3ef24533/returns',
-        viewThisReturnLink: '/system/return-logs/e8d145d9-2da4-4d2d-b338-92cedc7cea7f'
+        viewThisReturnLink: '/system/return-logs/e8d145d9-2da4-4d2d-b338-92cedc7cea7f/details'
       })
     })
   })
