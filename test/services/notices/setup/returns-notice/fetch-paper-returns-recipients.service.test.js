@@ -8,10 +8,11 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CRMContactsSeeder = require('../../../../support/seeders/crm-contacts.seeder.js')
+const EmptyLicenceSeeder = require('../../../../support/seeders/empty-licence.seeder.js')
 const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
 const RecipientsSeeder = require('../../../../support/seeders/recipients.seeder.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const FetchPaperReturnsRecipientsService = require('../../../../../app/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js')
@@ -19,19 +20,25 @@ const FetchPaperReturnsRecipientsService = require('../../../../../app/services/
 describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients service', () => {
   let download
   let licenceHolder
+  let licenceHolderSeedData
   let licenceRef
+  let licenceSeedData
   let session
   let setDueDateReturnLog
 
   before(async () => {
-    licenceRef = generateLicenceRef()
+    licenceSeedData = await EmptyLicenceSeeder.seed(licenceRef)
+
+    licenceRef = licenceSeedData.licence.licenceRef
 
     // Create a return log with a populated `dueDate`.
     setDueDateReturnLog = await ReturnLogHelper.add({ dueDate: new Date('2025-04-28'), licenceRef })
 
     session = NoticeSessionFixture.paperReturn(licenceRef, setDueDateReturnLog)
 
-    licenceHolder = await RecipientsSeeder.licenceHolder('Test Licence Holder', licenceRef)
+    licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(licenceSeedData, 'Test Licence Holder')
+
+    licenceHolder = await RecipientsSeeder.licenceHolder(licenceSeedData, licenceHolderSeedData)
     licenceHolder.licenceRefs = [licenceRef]
     licenceHolder.returnLogIds = [setDueDateReturnLog.id]
   })
@@ -39,6 +46,8 @@ describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients serv
   after(async () => {
     await setDueDateReturnLog.$query().delete()
 
+    await licenceSeedData.clean()
+    await licenceHolderSeedData.clean()
     await RecipientsSeeder.clean(licenceHolder)
   })
 

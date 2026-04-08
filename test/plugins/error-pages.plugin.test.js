@@ -9,9 +9,16 @@ const { describe, it, before, beforeEach, afterEach, after } = (exports.lab = La
 const { expect } = Code
 
 // Test helpers
-const { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } =
-  require('node:http2').constants
+const {
+  HTTP_STATUS_BAD_REQUEST,
+  HTTP_STATUS_FORBIDDEN,
+  HTTP_STATUS_NOT_FOUND,
+  HTTP_STATUS_OK,
+  HTTP_STATUS_GONE,
+  HTTP_STATUS_INTERNAL_SERVER_ERROR
+} = require('node:http2').constants
 const Boom = require('@hapi/boom')
+const SessionNotFoundError = require('../../app/errors/session-not-found.error.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -115,6 +122,46 @@ describe('Error Pages plugin', () => {
           expect(response.statusMessage).to.equal('Forbidden')
           expect(response.payload).not.to.startWith('<!DOCTYPE html>')
           expect(response.payload).contains("can't touch this")
+        })
+      })
+    })
+
+    describe('because the request was a session not found', () => {
+      before(() => {
+        handler = (_request, _h) => {
+          throw new SessionNotFoundError('Session has expired')
+        }
+      })
+
+      describe('and the route is not configured for plain output (redirect to error page)', () => {
+        beforeEach(async () => {
+          path = '/error-pages/session/not-plain'
+          server.route({ method: 'GET', options: { auth: false }, path, handler })
+        })
+
+        it('returns our 410 error HTML page', async () => {
+          const response = await server.inject({ method: 'GET', url: path })
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_GONE)
+          expect(response.statusMessage).to.equal('Gone')
+          expect(response.payload).startsWith('<!DOCTYPE html>')
+          expect(response.payload).contains('The session no longer exists')
+        })
+      })
+
+      describe('and the route is configured for plain output (do not redirect to error page)', () => {
+        beforeEach(async () => {
+          path = '/error-pages/session/plain'
+          server.route({ method: 'GET', options: { app: { plainOutput: true }, auth: false }, path, handler })
+        })
+
+        it('returns a plain response', async () => {
+          const response = await server.inject({ method: 'GET', url: path })
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_INTERNAL_SERVER_ERROR)
+          expect(response.statusMessage).to.equal('Internal Server Error')
+          expect(response.payload).not.to.startWith('<!DOCTYPE html>')
+          expect(response.payload).contains('An internal server error occurred')
         })
       })
     })

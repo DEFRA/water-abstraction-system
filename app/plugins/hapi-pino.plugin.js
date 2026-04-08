@@ -18,34 +18,32 @@ const HapiPinoSerializersService = require('../services/plugins/hapi-pino-serial
 
 const LogConfig = require('../../config/log.config.js')
 
-const HapiPinoPlugin = () => {
-  return {
-    plugin: HapiPino,
-    options: {
-      // Include our test configuration
-      ...HapiPinoLogInTestService.go(LogConfig.logInTest),
-      // When not in the production environment we want a 'pretty' version of the JSON to make it easier to grok what
-      // has happened
-      transport:
-        process.env.NODE_ENV !== 'production' ? { target: 'pino-pretty', options: { colorize: true } } : undefined,
-      // Redact Authorization headers, see https://getpino.io/#/docs/redaction
-      redact: ['req.headers.authorization'],
-      // Adding this here means it will be passed to HapiPinoIgnoreRequestService.go() within the `options` arg when
-      // Hapi-pino uses the ignoreFunc property
-      logAssetRequests: LogConfig.logAssetRequests,
-      // We want our logs to focus on the main requests and not become full of 'noise' from requests for /assets or
-      // pings from the AWS load balancer to /status. We pass this function to hapi-pino to control what gets filtered
-      // https://github.com/pinojs/hapi-pino#optionsignorefunc-options-request--boolean
-      ignoreFunc: HapiPinoIgnoreRequestService.go,
-      // Add the request params as pathParams to the response event log. This, along with `logPathParams` and
-      // `logQueryParams` helps us see what data was sent in the request to the app in the event of an error.
-      logPathParams: true,
-      // Add the request payload as `payload:` to the response event log
-      logPayload: true,
-      // Add the request query as `queryParams:` to the response event log
-      logQueryParams: true,
-      serializers: HapiPinoSerializersService.go()
-    }
+const HapiPinoPlugin = {
+  plugin: HapiPino,
+  options: {
+    // Include our test configuration
+    ...HapiPinoLogInTestService.go(LogConfig.logInTest),
+    // When not in the production environment we want a 'pretty' version of the JSON to make it easier to grok what
+    // has happened
+    transport:
+      process.env.NODE_ENV !== 'production' ? { target: 'pino-pretty', options: { colorize: true } } : undefined,
+    // Redact Authorization headers, see https://getpino.io/#/docs/redaction
+    redact: ['req.headers.authorization'],
+    // Adding this here means it will be passed to HapiPinoIgnoreRequestService.go() within the `options` arg when
+    // Hapi-pino uses the ignoreFunc property
+    logAssetRequests: LogConfig.logAssetRequests,
+    // We want our logs to focus on the main requests and not become full of 'noise' from requests for /assets or
+    // pings from the AWS load balancer to /status. We pass this function to hapi-pino to control what gets filtered
+    // https://github.com/pinojs/hapi-pino#optionsignorefunc-options-request--boolean
+    ignoreFunc: HapiPinoIgnoreRequestService.go,
+    // Add the request params as pathParams to the response event log. This, along with `logPathParams` and
+    // `logQueryParams` helps us see what data was sent in the request to the app in the event of an error.
+    logPathParams: true,
+    // Add the request payload as `payload:` to the response event log
+    logPayload: true,
+    // Add the request query as `queryParams:` to the response event log
+    logQueryParams: true,
+    serializers: HapiPinoSerializersService.go()
   }
 }
 

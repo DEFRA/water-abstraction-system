@@ -1,7 +1,12 @@
 'use strict'
 
-const { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } =
-  require('node:http2').constants
+const {
+  HTTP_STATUS_FORBIDDEN,
+  HTTP_STATUS_INTERNAL_SERVER_ERROR,
+  HTTP_STATUS_NOT_FOUND,
+  HTTP_STATUS_OK,
+  HTTP_STATUS_GONE
+} = require('node:http2').constants
 
 // Test framework dependencies
 const Lab = require('@hapi/lab')
@@ -10,6 +15,9 @@ const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
+
+// Test helpers
+const SessionNotFoundError = require('../../../app/errors/session-not-found.error.js')
 
 // Thing under test
 const ErrorPagesService = require('../../../app/services/plugins/error-pages.service.js')
@@ -22,6 +30,7 @@ describe('Error pages service', () => {
       statusCode: HTTP_STATUS_FORBIDDEN
     }
   }
+
   const boom404Response = {
     message: 'where has my boom gone?',
     isBoom: true,
@@ -29,6 +38,13 @@ describe('Error pages service', () => {
       statusCode: HTTP_STATUS_NOT_FOUND
     }
   }
+
+  const boom410Response = {
+    ...new SessionNotFoundError('Session has expired'),
+    isBoom: true,
+    output: { statusCode: HTTP_STATUS_GONE }
+  }
+
   const boom500Response = {
     message: 'tick, tick, tick, tick boom!',
     isBoom: true,
@@ -188,6 +204,54 @@ describe('Error pages service', () => {
         const result = ErrorPagesService.go(request)
 
         expect(result.statusCode).to.equal(HTTP_STATUS_NOT_FOUND)
+      })
+    })
+  })
+
+  describe('when the response is a boom 410 error', () => {
+    beforeEach(() => {
+      request = {
+        response: boom410Response,
+        route: { settings: {} },
+        path
+      }
+    })
+
+    it('logs a message', () => {
+      ErrorPagesService.go(request)
+
+      expect(notifierStub.omg.calledWith('Session not found', { path })).to.be.true()
+    })
+
+    describe('and the route is configured to return plain output (do not redirect to error page)', () => {
+      beforeEach(() => {
+        request.route = { settings: { app: { plainOutput: true } } }
+      })
+
+      it('tells the plugin not to stop the response from continuing', () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.stopResponse).to.be.false()
+      })
+
+      it('returns the original status code', () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.statusCode).to.equal(HTTP_STATUS_GONE)
+      })
+    })
+
+    describe('and the route is not configured (redirect to error page)', () => {
+      it('tells the plugin to stop the response and redirect to an error page', () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.stopResponse).to.be.true()
+      })
+
+      it('returns a "safe" status code', () => {
+        const result = ErrorPagesService.go(request)
+
+        expect(result.statusCode).to.equal(HTTP_STATUS_GONE)
       })
     })
   })
