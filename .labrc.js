@@ -69,6 +69,10 @@ module.exports = {
     // extension to files when requiring them
     '__rewriteRelativeImportExtension',
     // Caused by @aws-sdk/client-s3 v3.887.0
-    'awslambda'
+    'awslambda',
+    // Caused by nock v14 internals using @mswjs/interceptors
+    'Symbol(client-request-interceptor)',
+    'Symbol(fetch)',
+    'Symbol(nock-interceptor)'
   ].join(',')
 }
