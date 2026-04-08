@@ -166,7 +166,7 @@ async function submitCancel(request, h) {
 
   await SubmitCancelService.go(sessionId)
 
-  return h.redirect(`/system/return-logs/${returnLogId}`)
+  return h.redirect(`/system/return-logs/${returnLogId}/details`)
 }
 
 async function submitCheck(request, h) {
