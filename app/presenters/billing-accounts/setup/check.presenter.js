@@ -81,8 +81,8 @@ function _contactSelected(session, companyContacts) {
     return 'New contact'
   }
 
-  if (!companyContacts?.contacts?.length) {
-    return ''
+  if (session.fao === 'no' || !companyContacts?.contacts?.length) {
+    return null
   }
 
   const selectedContact = contacts.find((contact) => {

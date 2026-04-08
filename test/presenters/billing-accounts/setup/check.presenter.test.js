@@ -399,12 +399,29 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
       companyContacts.contacts.push(contact)
     })
 
+    describe('when "fao" was "no', () => {
+      it('returns string for display', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            fao: 'no'
+          },
+          companyContacts,
+          address,
+          companysHouseResult
+        )
+
+        expect(result.contactSelected).to.equal(null)
+      })
+    })
+
     describe('when "new" was selected', () => {
       it('returns string for display', () => {
         const result = CheckPresenter.go(
           {
             ...session,
-            contactSelected: 'new'
+            contactSelected: 'new',
+            fao: 'yes'
           },
           companyContacts,
           address,
@@ -420,7 +437,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         const result = CheckPresenter.go(
           {
             ...session,
-            contactSelected: contact.id
+            contactSelected: contact.id,
+            fao: 'yes'
           },
           companyContacts,
           address,
