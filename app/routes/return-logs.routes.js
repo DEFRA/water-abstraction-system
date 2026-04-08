@@ -5,21 +5,28 @@ const ReturnLogsController = require('../controllers/return-logs.controller.js')
 const routes = [
   {
     method: 'GET',
-    path: '/return-logs/{returnLogId}',
+    path: '/return-logs/{id}/communications',
     options: {
-      handler: ReturnLogsController.view
-    }
-  },
-  {
-    method: 'POST',
-    path: '/return-logs/{returnLogId}',
-    options: {
-      handler: ReturnLogsController.submitView
+      handler: ReturnLogsController.viewCommunications
     }
   },
   {
     method: 'GET',
-    path: '/return-logs/{returnLogId}/download',
+    path: '/return-logs/{id}/details',
+    options: {
+      handler: ReturnLogsController.viewDetails
+    }
+  },
+  {
+    method: 'POST',
+    path: '/return-logs/{id}/details',
+    options: {
+      handler: ReturnLogsController.submitDetails
+    }
+  },
+  {
+    method: 'GET',
+    path: '/return-logs/{id}/download',
     options: {
       handler: ReturnLogsController.download
     }
