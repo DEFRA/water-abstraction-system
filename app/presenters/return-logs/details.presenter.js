@@ -197,11 +197,8 @@ function _selectedReturnSubmission(returnSubmissions) {
 }
 
 function _showUnderQuery(formattedStatus) {
-  if (['not due yet', 'void'].includes(formattedStatus)) {
-    return false
-  }
-
-  return true
+  // If the return has a status of 'not due yet' or 'void' do not show the button, else show it
+  return !['not due yet', 'void'].includes(formattedStatus)
 }
 
 function _startReading(selectedReturnSubmission) {
