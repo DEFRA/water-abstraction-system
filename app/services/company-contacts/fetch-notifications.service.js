@@ -7,9 +7,10 @@
 
 const { ref } = require('objection')
 
-const DatabaseConfig = require('../../../config/database.config.js')
 const NotificationModel = require('../../models/notification.model.js')
 const { ignoreMessageRef } = require('../../lib/static-lookups.lib.js')
+
+const DatabaseConfig = require('../../../config/database.config.js')
 
 /**
  * Fetches data needed for the view '/system/company-contacts/{id}/communications' page

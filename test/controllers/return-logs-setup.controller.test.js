@@ -211,7 +211,7 @@ describe('Return Logs - Setup - Controller', () => {
           )
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/return-logs/4ddbac0e-a176-420a-8176-4ce410327641')
+          expect(response.headers.location).to.equal('/system/return-logs/4ddbac0e-a176-420a-8176-4ce410327641/details')
         })
       })
     })

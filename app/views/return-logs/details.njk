@@ -1,4 +1,4 @@
-{% extends 'layout.njk' %}
+{% extends 'layout-return-logs.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
@@ -8,8 +8,6 @@
 
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
 {% from "macros/return-status-tag.njk" import statusTag %}
-{% from "macros/notification-status-tag.njk" import statusTag as notificationStatusTag %}
-{% from "macros/communications-table.njk" import communicationsTable %}
 
 {% block pageContent %}
   <div class="govuk-grid-row govuk-!-margin-bottom-0">
@@ -302,12 +300,5 @@
         {% endfor %}
       </div>
     </div>
-  {% endif %}
-
-  <h3 class="govuk-heading-m">Communications</h3>
-  {% if notifications.length > 0 %}
-    {{ communicationsTable(notifications) }}
-  {% else %}
-    <p>This return log has no associated communications. While some may exist, they were not recorded at the time.</p>
   {% endif %}
 {% endblock %}

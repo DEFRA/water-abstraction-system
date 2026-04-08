@@ -13,9 +13,9 @@ const ReturnLogHelper = require('../../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
 
 // Thing under test
-const SubmitViewReturnLogService = require('../../../app/services/return-logs/submit-view-return-log.service.js')
+const SubmitDetailsService = require('../../../app/services/return-logs/submit-details.service.js')
 
-describe('Submit View Return Log Service', () => {
+describe('Return Logs - Submit Details Service', () => {
   let payload
   let patchStub
   let mockReturnLog
@@ -41,7 +41,7 @@ describe('Submit View Return Log Service', () => {
       })
 
       it('updates the "underQuery" flag on the return log to true', async () => {
-        await SubmitViewReturnLogService.go(payload, mockReturnLog.id)
+        await SubmitDetailsService.go(payload, mockReturnLog.id)
 
         // Check we save the status change
         const [patchObject] = patchStub.args[0]
@@ -56,7 +56,7 @@ describe('Submit View Return Log Service', () => {
       })
 
       it('updates the "underQuery" flag on the return log to false', async () => {
-        await SubmitViewReturnLogService.go(payload, mockReturnLog.id)
+        await SubmitDetailsService.go(payload, mockReturnLog.id)
 
         // Check we save the status change
         const [patchObject] = patchStub.args[0]

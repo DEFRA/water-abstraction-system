@@ -275,7 +275,7 @@ describe('Search - Search presenter', () => {
           col3Title: 'End date',
           col3Value: null,
           exact: true,
-          link: '/system/return-logs/return-log-1',
+          link: '/system/return-logs/return-log-1/details',
           reference: '123',
           statusTag: undefined,
           type: 'Return reference'
@@ -341,7 +341,7 @@ describe('Search - Search presenter', () => {
           col3Title: 'End date',
           col3Value: null,
           exact: false,
-          link: '/system/return-logs/return-log-1',
+          link: '/system/return-logs/return-log-1/details',
           reference: '123',
           statusTag: undefined,
           type: 'Return reference'

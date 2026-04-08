@@ -1,11 +1,9 @@
 'use strict'
 
 /**
- * Formats return log data ready for presenting in the view return log page
- * @module ViewReturnLogPresenter
+ * Formats data for the '/return-logs/{id}/details' page
+ * @module DetailsPresenter
  */
-
-const NotificationsTablePresenter = require('../notifications/notifications-table.presenter.js')
 
 const {
   formatAbstractionPeriod,
@@ -22,15 +20,14 @@ const {
 const { returnRequirementFrequencies, unitNames } = require('../../lib/static-lookups.lib.js')
 
 /**
- * Formats return log data ready for presenting in the view return log page
+ * Formats data for the '/return-logs/{id}/details' page
  *
- * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {module:ReturnLogModel} returnLog - The return log and associated submission and licence data
- * @param {module:NotificationModel[]} notifications - All notifications linked to the return log
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
- * @returns {object} page data needed by the view template
+ * @returns {object} The data formatted for the view template
  */
-function go(auth, returnLog, notifications = []) {
+function go(returnLog, auth) {
   const {
     current,
     endDate,
@@ -54,7 +51,6 @@ function go(auth, returnLog, notifications = []) {
   const method = selectedReturnSubmission?.$method()
   const units = selectedReturnSubmission?.$units()
   const formattedStatus = formatReturnLogStatus(returnLog)
-  const notificationsTableData = NotificationsTablePresenter.go(notifications, null, returnLogId)
   const summaryTableData = _summaryTableData(selectedReturnSubmission, returnsFrequency)
 
   return {
@@ -70,8 +66,7 @@ function go(auth, returnLog, notifications = []) {
     method,
     nilReturn: selectedReturnSubmission ? selectedReturnSubmission.nilReturn : false,
     notification: underQuery ? { text: 'This return has been marked under query' } : null,
-    notifications: notificationsTableData,
-    pageTitle: 'Abstraction return',
+    pageTitle: 'Return details',
     pageTitleCaption: `Licence ${licence.licenceRef}`,
     purpose: formatPurposes(purposes),
     receivedDate: receivedDate ? formatLongDate(receivedDate) : null,
@@ -159,7 +154,7 @@ function _backLink(licenceId, latest, returnLogId) {
   }
 
   return {
-    href: `/system/return-logs/${returnLogId}`,
+    href: `/system/return-logs/${returnLogId}/details`,
     text: 'Go back to the latest version'
   }
 }
@@ -202,11 +197,8 @@ function _selectedReturnSubmission(returnSubmissions) {
 }
 
 function _showUnderQuery(formattedStatus) {
-  if (['not due yet', 'void'].includes(formattedStatus)) {
-    return false
-  }
-
-  return true
+  // If the return has a status of 'not due yet' or 'void' do not show the button, else show it
+  return !['not due yet', 'void'].includes(formattedStatus)
 }
 
 function _startReading(selectedReturnSubmission) {
@@ -268,7 +260,7 @@ function _versions(returnLogId, selectedReturnSubmission, versions) {
 
     return {
       createdAt: `${formatLongDate(createdAt)}`,
-      link: `/system/return-logs/${returnLogId}?version=${number}`,
+      link: `/system/return-logs/${returnLogId}/details?version=${number}`,
       notes,
       selected: id === selectedReturnSubmission.id,
       version: number,
