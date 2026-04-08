@@ -187,7 +187,7 @@ function _formatReviewReturns(reviewReturns) {
       issues: formatIssues(issues),
       purpose: formatPurposes(purposes).join(', '),
       reference: returnReference,
-      returnLink: `/system/return-logs/${returnLog.id}`,
+      returnLink: `/system/return-logs/${returnLog.id}/details`,
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
       returnStatus: formatReturnStatus(reviewReturn),
       returnTotal: formatReturnTotals(reviewReturn)
