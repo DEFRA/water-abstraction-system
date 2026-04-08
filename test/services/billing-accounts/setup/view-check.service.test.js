@@ -33,13 +33,13 @@ describe('Billing Accounts - Setup - View Check Service', () => {
       const result = await ViewCheckService.go(session.id)
 
       expect(result).to.equal({
-        accountSelected: 'Another billing account',
+        accountSelected: 'Ferns Surfacing Limited',
         accountType: '',
         address: [],
         addressSelected: ['New'],
         companiesHouseName: '',
         companySearch: '',
-        contactSelected: '',
+        contactSelected: null,
         contactName: '',
         existingAccount: '',
         fao: 'no',

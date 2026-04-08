@@ -44,14 +44,14 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
       const result = CheckPresenter.go(session, companyContacts, [], null)
 
       expect(result).to.equal({
-        accountSelected: 'Another billing account',
+        accountSelected: 'Ferns Surfacing Limited',
         accountType: '',
         address: [],
         addressSelected: ['New'],
         companiesHouseName: '',
         companySearch: '',
         contactName: '',
-        contactSelected: '',
+        contactSelected: null,
         existingAccount: '',
         fao: 'no',
         links: {
