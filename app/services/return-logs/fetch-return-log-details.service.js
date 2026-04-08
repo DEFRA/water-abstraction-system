@@ -1,0 +1,110 @@
+'use strict'
+
+/**
+ * Fetches the return log details needed for the view '/system/return-logs/{id}/return-details' page
+ * @module FetchReturnLogDetailsService
+ */
+
+const { ref } = require('objection')
+
+const ReturnLogModel = require('../../../app/models/return-log.model.js')
+const ReturnSubmissionModel = require('../../models/return-submission.model.js')
+
+/**
+ * Fetches the return log details needed for the view '/system/return-logs/{id}/return-details' page
+ *
+ * @param {string} returnLogId - The return log ID
+ * @param {number} [version=0] - Optional version number of the submission to display. Defaults to 0 which means
+ * 'current'
+ *
+ * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and associated submission (if any)
+ * and licence data
+ */
+async function go(returnLogId, version = 0) {
+  const allReturnSubmissions = await _fetchAllReturnSubmissions(returnLogId)
+
+  const selectedReturnSubmission = _returnSubmission(allReturnSubmissions, version)
+
+  const returnLog = await _fetch(returnLogId, selectedReturnSubmission)
+
+  if (selectedReturnSubmission) {
+    returnLog.returnSubmissions[0].$applyReadings()
+  }
+  returnLog.versions = allReturnSubmissions
+
+  return returnLog
+}
+
+async function _fetch(returnLogId, selectedReturnSubmission) {
+  const query = ReturnLogModel.query()
+    .findById(returnLogId)
+    .select([
+      'dueDate',
+      'endDate',
+      'id',
+      'receivedDate',
+      'returnId',
+      'returnsFrequency',
+      'returnReference',
+      'startDate',
+      'status',
+      'underQuery',
+      ref('metadata:description').castText().as('siteDescription'),
+      ref('metadata:nald.periodStartDay').as('periodStartDay'),
+      ref('metadata:nald.periodStartMonth').as('periodStartMonth'),
+      ref('metadata:nald.periodEndDay').as('periodEndDay'),
+      ref('metadata:nald.periodEndMonth').as('periodEndMonth'),
+      ref('metadata:purposes').as('purposes'),
+      ref('metadata:isCurrent').castBool().as('current'),
+      ref('metadata:isTwoPartTariff').castBool().as('twoPartTariff')
+    ])
+    .withGraphFetched('licence')
+    .modifyGraph('licence', (licenceBuilder) => {
+      licenceBuilder.select(['id', 'licenceRef'])
+    })
+
+  if (selectedReturnSubmission) {
+    query.withGraphFetched('returnSubmissions').modifyGraph('returnSubmissions', (returnSubmissionsBuilder) => {
+      returnSubmissionsBuilder
+        .findById(selectedReturnSubmission.id)
+        .select(['createdAt', 'id', 'metadata', 'nilReturn', 'userId', 'userType', 'version'])
+        .withGraphFetched('returnSubmissionLines')
+        .modifyGraph('returnSubmissionLines', (returnSubmissionLinesBuilder) => {
+          returnSubmissionLinesBuilder
+            .select(['id', 'endDate', 'startDate', 'quantity', 'userUnit'])
+            .orderBy('startDate', 'asc')
+        })
+    })
+  }
+
+  return query
+}
+
+async function _fetchAllReturnSubmissions(returnLogId) {
+  return ReturnSubmissionModel.query()
+    .select(['createdAt', 'id', 'notes', 'version', 'userId'])
+    .where('returnLogId', returnLogId)
+    .orderBy('version', 'desc')
+}
+
+function _returnSubmission(allReturnSubmissions, version) {
+  // We are dealing with a due or received return log that has no submissions yet
+  if (allReturnSubmissions.length === 0) {
+    return null
+  }
+
+  // If version is 0, it means a previous version has not been selected so we want the latest i.e. the 'current' version
+  if (version === 0) {
+    return allReturnSubmissions[0]
+  }
+
+  const selectedReturnSubmission = allReturnSubmissions.find((returnSubmission) => {
+    return returnSubmission.version === version
+  })
+
+  return selectedReturnSubmission
+}
+
+module.exports = {
+  go
+}
