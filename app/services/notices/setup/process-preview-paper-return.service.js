@@ -7,9 +7,9 @@
  */
 
 const FetchRecipientsService = require('./fetch-recipients.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const PaperReturnNotificationsPresenter = require('../../../presenters/notices/setup/paper-return-notifications.presenter.js')
 const PreparePaperReturnService = require('./prepare-paper-return.service.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for previewing a paper return
@@ -24,7 +24,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<ArrayBuffer>} - Resolves with the generated form file as an ArrayBuffer.
  */
 async function go(sessionId, contactHashId, returnLogId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   // NOTE: The notifications the presenter generates are based on the combination of recipients and selected return logs
   // that have been set during setup. We're using the same presenter to generate our preview notification, so for this

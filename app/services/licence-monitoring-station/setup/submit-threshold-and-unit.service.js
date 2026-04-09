@@ -5,7 +5,7 @@
  * @module SubmitThresholdAndUnitService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const ThresholdAndUnitPresenter = require('../../../presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js')
 const ThresholdAndUnitValidator = require('../../../validators/licence-monitoring-station/setup/threshold-and-unit.validator.js')
 
@@ -25,7 +25,7 @@ const ThresholdAndUnitValidator = require('../../../validators/licence-monitorin
  * details
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const validationResult = _validate(payload)
 

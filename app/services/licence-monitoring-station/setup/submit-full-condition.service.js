@@ -7,9 +7,9 @@
  */
 
 const FetchFullConditionService = require('../../../services/licence-monitoring-station/setup/fetch-full-condition.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const FullConditionService = require('../../../services/licence-monitoring-station/setup/full-condition.service.js')
 const FullConditionValidator = require('../../../validators/licence-monitoring-station/setup/full-condition.validator.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -23,7 +23,7 @@ async function go(sessionId, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    const session = await SessionModel.query().findById(sessionId)
+    const session = await FetchSessionDal.go(sessionId)
 
     // On the check page we want to display the exact text of the chosen condition (including the condition number) plus
     // its abstraction period. To do this we need to re-fetch the condition. We can then save the info in the session.

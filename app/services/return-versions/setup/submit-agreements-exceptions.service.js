@@ -7,9 +7,9 @@
 
 const AgreementsExceptionsPresenter = require('../../../presenters/return-versions/setup/agreements-exceptions.presenter.js')
 const AgreementsExceptionsValidator = require('../../../validators/return-versions/setup/agreements-exceptions.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const GeneralLib = require('../../../lib/general.lib.js')
-const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
@@ -30,7 +30,7 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  * the page data for the agreements exceptions page including the validation error details
  */
 async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   handleOneOptionSelected(payload, 'agreementsExceptions')
 

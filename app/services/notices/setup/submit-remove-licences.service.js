@@ -6,9 +6,9 @@
  */
 
 const FetchLicenceRefsWithDueReturnsService = require('./fetch-licence-refs-with-due-returns.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remove-licences.presenter.js')
 const RemoveLicencesValidator = require('../../../validators/notices/setup/remove-licences.validator.js')
-const SessionModel = require('../../../models/session.model.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -21,7 +21,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * including the validation error details
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const licenceRefsWithDueReturns = await _fetchLicenceRefsWithDueReturns(session)
 

@@ -6,11 +6,11 @@
  * @module SubmitNoticeTypeService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
 const NoticeTypeValidator = require('../../../validators/notices/setup/notice-type.validator.js')
-const SessionModel = require('../../../models/session.model.js')
-const { flashNotification, generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
 const { NoticeJourney, NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+const { flashNotification, generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -24,7 +24,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId, payload, yar, auth) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const validationResult = _validate(payload)
 

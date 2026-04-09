@@ -6,8 +6,8 @@
  * @module ProcessRemoveThresholdService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const GeneralLib = require('../../../lib/general.lib.js')
-const SessionModel = require('../../../models/session.model.js')
 const { formatRestrictionType, formatValueUnit } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -19,7 +19,7 @@ const { formatRestrictionType, formatValueUnit } = require('../../../presenters/
  *
  */
 async function go(sessionId, licenceMonitoringStationId, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   await _save(session, licenceMonitoringStationId)
 

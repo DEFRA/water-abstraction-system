@@ -7,8 +7,8 @@
  */
 
 const FetchFullConditionService = require('./fetch-full-condition.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const FullConditionPresenter = require('../../../presenters/licence-monitoring-station/setup/full-condition.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/licence-monitoring-station/setup/{sessionId}/full-condition`
@@ -18,7 +18,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const conditions = await FetchFullConditionService.go(session.licenceId)
 

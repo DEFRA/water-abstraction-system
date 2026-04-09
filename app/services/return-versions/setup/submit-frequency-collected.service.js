@@ -7,10 +7,10 @@
 
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const FrequencyCollectedPresenter = require('../../../presenters/return-versions/setup/frequency-collected.presenter.js')
 const FrequencyCollectedValidator = require('../../../validators/return-versions/setup/frequency-collected.validator.js')
 const GeneralLib = require('../../../lib/general.lib.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/frequency-collected` page
@@ -30,7 +30,7 @@ const SessionModel = require('../../../models/session.model.js')
  * the page data for the frequency collected page including the validation error details
  */
 async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const validationResult = _validate(payload)
 

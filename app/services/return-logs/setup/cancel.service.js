@@ -6,7 +6,7 @@
  */
 
 const CancelPresenter = require('../../../presenters/return-logs/setup/cancel.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/cancel` page
@@ -16,7 +16,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The page data needed by the view template
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const formattedData = CancelPresenter.go(session)
 

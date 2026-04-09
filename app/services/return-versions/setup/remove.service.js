@@ -6,8 +6,8 @@
  * @module RemoveService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const RemovePresenter = require('../../../presenters/return-versions/setup/remove.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for
@@ -22,7 +22,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The view data for the remove requirements page
  */
 async function go(sessionId, requirementIndex) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
   const formattedData = RemovePresenter.go(session, requirementIndex)
 
   return {

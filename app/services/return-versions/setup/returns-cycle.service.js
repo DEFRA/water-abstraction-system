@@ -5,8 +5,8 @@
  * @module ReturnsCycleService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const ReturnsCyclePresenter = require('../../../presenters/return-versions/setup/returns-cycle.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/returns-cycle` page
@@ -20,7 +20,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The view data for the returns cycle page
  */
 async function go(sessionId, requirementIndex) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const formattedData = ReturnsCyclePresenter.go(session, requirementIndex)
 

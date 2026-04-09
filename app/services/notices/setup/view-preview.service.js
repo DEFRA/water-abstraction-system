@@ -7,9 +7,9 @@
 
 const AbstractionAlertNotificationsPresenter = require('../../../presenters/notices/setup/abstraction-alert-notifications.presenter.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const PreviewPresenter = require('../../../presenters/notices/setup/preview.presenter.js')
 const ReturnsNoticeNotificationsPresenter = require('../../../presenters/notices/setup/returns-notice-notifications.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -23,7 +23,7 @@ const { NoticeType } = require('../../../lib/static-lookups.lib.js')
  * @returns {Promise<object>} The view data for the preview page
  */
 async function go(sessionId, contactHashId, licenceMonitoringStationId = null) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const recipient = await _recipient(contactHashId, session)
   const notification = _notification(recipient, session, licenceMonitoringStationId)

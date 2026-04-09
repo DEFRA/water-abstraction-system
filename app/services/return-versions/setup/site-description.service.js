@@ -5,7 +5,7 @@
  * @module SiteDescriptionService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const SiteDescriptionPresenter = require('../../../presenters/return-versions/setup/site-description.presenter.js')
 
 /**
@@ -20,7 +20,7 @@ const SiteDescriptionPresenter = require('../../../presenters/return-versions/se
  * @returns {Promise<object>} The view data for the site description page
  */
 async function go(sessionId, requirementIndex) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const formattedData = SiteDescriptionPresenter.go(session, requirementIndex)
 

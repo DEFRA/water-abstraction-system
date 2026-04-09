@@ -5,8 +5,8 @@
  * @module SubmitStartReadingService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const GeneralLib = require('../../../lib/general.lib.js')
-const SessionModel = require('../../../models/session.model.js')
 const StartReadingPresenter = require('../../../presenters/return-logs/setup/start-reading.presenter.js')
 const StartReadingValidator = require('../../../validators/return-logs/setup/start-reading.validator.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
@@ -27,7 +27,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * @returns {Promise<object>} If no errors the page data for the start reading page else the validation error details
  */
 async function go(sessionId, payload, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const error = _validate(payload, session)
 

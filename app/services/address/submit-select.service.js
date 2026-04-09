@@ -6,11 +6,11 @@
  * @module SubmitSelectService
  */
 
+const FetchSessionDal = require('../../dal/fetch-session.dal.js')
 const LookupPostcodeRequest = require('../../requests/address-facade/lookup-postcode.request.js')
 const LookupUPRNRequest = require('../../requests/address-facade/lookup-uprn.request.js')
 const SelectPresenter = require('../../presenters/address/select.presenter.js')
 const SelectValidator = require('../../validators/address/select.validator.js')
-const SessionModel = require('../../models/session.model.js')
 const { formatValidationResult } = require('../../presenters/base.presenter.js')
 
 /**
@@ -22,7 +22,7 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const error = _validate(payload)
 

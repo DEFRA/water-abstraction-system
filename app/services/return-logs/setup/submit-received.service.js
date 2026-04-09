@@ -5,11 +5,11 @@
  * @module SubmitReceivedService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const ReceivedDateValidator = require('../../../validators/return-logs/setup/received-date.validator.js')
 const ReceivedPresenter = require('../../../presenters/return-logs/setup/received.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const { flashNotification, today } = require('../../../lib/general.lib.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the data for `/return-logs/setup/{sessionId}/received` page
@@ -28,7 +28,7 @@ const { flashNotification, today } = require('../../../lib/general.lib.js')
  * @returns {Promise<object>} If no errors the page data for the received page else the validation error details
  */
 async function go(sessionId, payload, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const { startDate } = session
   const error = _validate(payload, startDate)

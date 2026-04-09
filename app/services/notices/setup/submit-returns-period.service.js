@@ -6,9 +6,9 @@
  */
 
 const DetermineReturnsPeriodService = require('./determine-returns-period.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const ReturnsPeriodPresenter = require('../../../presenters/notices/setup/returns-period.presenter.js')
 const ReturnsPeriodValidator = require('../../../validators/notices/setup/returns-periods.validator.js')
-const SessionModel = require('../../../models/session.model.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
@@ -23,7 +23,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * including the validation error details
  */
 async function go(sessionId, payload, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const validationResult = _validate(payload, session.noticeType)
 

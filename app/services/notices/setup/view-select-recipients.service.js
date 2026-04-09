@@ -7,8 +7,8 @@
  */
 
 const FetchRecipientsService = require('./fetch-recipients.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for the '/notices/setup/{sessionId}/select-recipients' page
@@ -18,7 +18,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const selectedRecipients = _selectedRecipients(session)
 

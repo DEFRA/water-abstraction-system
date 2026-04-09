@@ -5,7 +5,7 @@
  * @module SingleVolumeService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const SingleVolumePresenter = require('../../../presenters/return-logs/setup/single-volume.presenter.js')
 
 /**
@@ -19,7 +19,7 @@ const SingleVolumePresenter = require('../../../presenters/return-logs/setup/sin
  * @returns {Promise<object>} The view data for the single volume page
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const pageData = SingleVolumePresenter.go(session)
 
