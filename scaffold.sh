@@ -84,10 +84,6 @@ render_file() {
   local template="$1"
   local output_path="$2"
   local module_name="$3"
-  local relative_path="$4"
-  local rel_dir="$5"
-  local raw_name="$6"
-
 
   mkdir -p "$(dirname "$output_path")"
 
@@ -114,8 +110,6 @@ render_test_file() {
   local module_name="$3"
   local require_path="$4"
   local describe_label="$5"
-  local rel_dir="$6"
-  local raw_name="$7"
 
   mkdir -p "$(dirname "$output_path")"
 
@@ -127,9 +121,7 @@ render_test_file() {
   sed -e "s#__FETCH_SESSION_DAL_TEST_PATH__#${RELATIVE_UP_PATH}../app/dal/fetch-session.dal.js#g" \
       -e "s#__REQUIRE_PATH__#${require_path}#g" \
       -e "s#__STUBS_SESSION_PATH__#${RELATIVE_UP_PATH}support/stubs/session.stub.js#g" \
-      -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
       -e "s/__DESCRIBE_LABEL__/${describe_label}/g" \
-      -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
       -e "s/__MODULE_NAME__/${module_name}/g" \
       "$template" > "$output_path"
 
@@ -249,7 +241,7 @@ render_source_and_test() {
   generate_paths "$type" "$service_variant"
 
   # Render source file
-  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "$RELATIVE_UP_PATH" "$REL_DIR" "$RAW_NAME"
+  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME"
 
   # Render test file
   if [ -n "$TEST_TEMPLATE" ]; then
@@ -257,7 +249,7 @@ render_source_and_test() {
      DESCRIBE_LABEL="$(path_to_describe_label "$DESCRIBE_BASE") $TYPE" # Test describe block
      REQUIRE_PATH="${RELATIVE_UP_PATH}../app/${SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
 
-    render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL" "$REL_DIR" "$RAW_NAME"
+    render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL"
   fi
 }
 
