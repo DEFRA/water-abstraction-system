@@ -245,9 +245,11 @@ render_source_and_test() {
 
   # Render test file
   if [ -n "$TEST_TEMPLATE" ]; then
-     DESCRIBE_BASE="${REL_DIR:+${REL_DIR}/}${RAW_NAME}"
-     DESCRIBE_LABEL="$(path_to_describe_label "$DESCRIBE_BASE") $TYPE" # Test describe block
-     REQUIRE_PATH="${RELATIVE_UP_PATH}../app/${SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
+    DESCRIBE_BASE="${REL_DIR:+${REL_DIR}/}${RAW_NAME}"
+    DESCRIBE_LABEL="$(path_to_describe_label "$DESCRIBE_BASE") $TYPE" # Test describe block
+    REQUIRE_PATH="${RELATIVE_UP_PATH}../app/${SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
+
+    render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL"
 
     render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL"
   fi
