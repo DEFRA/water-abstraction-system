@@ -3,13 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewAbstractionAlertsService = require('../../../../app/services/company-contacts/setup/view-abstraction-alerts.service.js')
@@ -24,7 +28,13 @@ describe('Company Contacts - Setup - Abstraction Alerts Service', () => {
 
     sessionData = { company }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {

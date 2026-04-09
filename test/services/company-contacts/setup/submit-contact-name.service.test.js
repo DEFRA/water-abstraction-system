@@ -10,13 +10,17 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitContactNameService = require('../../../../app/services/company-contacts/setup/submit-contact-name.service.js')
 
 describe('Company Contacts - Setup - Contact Name Service', () => {
   let company
+  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -29,7 +33,9 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
 
     payload = { name: 'Eric' }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -42,13 +48,11 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
     it('saves the submitted value', async () => {
       await SubmitContactNameService.go(session.id, payload, yarStub)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession).to.equal({
+      expect(session).to.equal({
         ...session,
-        data: { ...session.data, name: 'Eric' },
         name: 'Eric'
       })
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
@@ -62,13 +66,13 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
     describe('when the check page has', () => {
       describe('been visited', () => {
         beforeEach(async () => {
-          session = await SessionHelper.add({
-            data: {
-              ...sessionData,
-              checkPageVisited: true,
-              name: 'Eric'
-            }
+          session = SessionModelStub.build(Sinon, {
+            ...sessionData,
+            checkPageVisited: true,
+            name: 'Eric'
           })
+
+          fetchSessionStub.resolves(session)
         })
 
         describe('and the "session" and "payload" value', () => {

@@ -7,7 +7,8 @@
  */
 
 const CreateCompanyContactService = require('./create-company-contact.service.js')
-const SessionModel = require('../../../models/session.model.js')
+const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const UpdateCompanyContactService = require('./update-company-contact.service.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
 
@@ -21,11 +22,9 @@ const { flashNotification } = require('../../../lib/general.lib.js')
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId, yar, auth) {
-  const session = await SessionModel.query().findById(sessionId)
+  const sessionData = await FetchSessionDal.go(sessionId)
 
-  const sessionData = session
-
-  await SessionModel.query().delete().where('id', sessionId)
+  await DeleteSessionDal.go(sessionId)
 
   if (sessionData.companyContact) {
     await _updateCompanyContact(sessionData, auth, yar)
