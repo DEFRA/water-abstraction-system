@@ -3,12 +3,16 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('__SESSION_HELPER_PATH__')
+const SessionModelStub = require('__STUBS_SESSION_PATH__')
+
+// Things we need to stub
+const FetchSessionDal = require('__FETCH_SESSION_DAL_TEST_PATH__')
 
 // Thing under test
 const __MODULE_NAME__ = require('__REQUIRE_PATH__')
@@ -22,16 +26,21 @@ describe('__DESCRIBE_LABEL__', () => {
     payload = { placeholder: 'change me' }
     sessionData = {}
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
       await __MODULE_NAME__.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession).to.equal(session)
+      expect(session).to.equal(session)
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {

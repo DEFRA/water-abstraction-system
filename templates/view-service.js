@@ -1,23 +1,23 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the `` page
+ * Orchestrates fetching and presenting the data for the '' page
  *
  * @module __MODULE_NAME__
  */
 
 const __PRESENTER_NAME__ = require('__PRESENTER_PATH__')
-const SessionModel = require('__SESSION_MODEL_PATH__')
+const FetchSessionDal = require('__FETCH_SESSION_DAL_PATH__')
 
 /**
- * Orchestrates fetching and presenting the data for the `` page
+ * Orchestrates fetching and presenting the data for the '' page
  *
  * @param {string} sessionId - The UUID of the current session
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const pageData = __PRESENTER_NAME__.go(session)
 
