@@ -2,7 +2,7 @@
 
 /**
  * Handles updating a return log record when the mark/resolve query button is clicked
- * @module SubmitViewReturnLogService
+ * @module SubmitDetailsService
  */
 
 const ReturnLogModel = require('../../models/return-log.model.js')

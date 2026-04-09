@@ -44,7 +44,7 @@ describe('Licences - Returns presenter', () => {
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description',
             dueDate: '28 November 2020',
-            link: '/system/return-logs/c4458436-4766-4271-b978-6af7a0e4fd95',
+            link: '/system/return-logs/c4458436-4766-4271-b978-6af7a0e4fd95/details',
             purpose: ['Spray Irrigation - Direct (SPRAY IRRIGATION)'],
             reference: '10046821',
             status: 'complete'
@@ -53,7 +53,7 @@ describe('Licences - Returns presenter', () => {
             dates: '2 January 2020 to 1 February 2020',
             description: 'empty description',
             dueDate: '28 November 2020',
-            link: '/system/return-logs/2e35c9c6-5017-46ea-8fa8-8960dc1a8ae7',
+            link: '/system/return-logs/2e35c9c6-5017-46ea-8fa8-8960dc1a8ae7/details',
             purpose: ['Spray Irrigation - Direct (SPRAY IRRIGATION)'],
             reference: '10046820',
             status: 'overdue'

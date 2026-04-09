@@ -44,7 +44,7 @@ describe('Bill Runs Review - Review Charge Element presenter', () => {
             issues: [],
             purpose: 'Spray Irrigation - Direct',
             reference: '11142960',
-            returnLink: '/system/return-logs/e0e3957d-ab75-4a49-bb04-36a332053448',
+            returnLink: '/system/return-logs/e0e3957d-ab75-4a49-bb04-36a332053448/details',
             returnPeriod: '1 November 2022 to 31 October 2023',
             returnStatus: 'completed',
             returnTotal: '0 ML / 0 ML'

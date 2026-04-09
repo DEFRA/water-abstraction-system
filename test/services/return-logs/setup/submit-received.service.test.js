@@ -153,7 +153,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
             receivedDateYear: null,
             receivedDateOption: null,
             backLink: {
-              href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3',
+              href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3/details',
               text: 'Back'
             },
             pageTitleCaption: 'Return reference 12345'

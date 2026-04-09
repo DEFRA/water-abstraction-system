@@ -66,7 +66,7 @@ function _matchedReturns(reviewReturns) {
       issues: formatIssues(issues),
       purpose: purposes[0].tertiary.description,
       reference: returnReference,
-      returnLink: `/system/return-logs/${returnLog.id}`,
+      returnLink: `/system/return-logs/${returnLog.id}/details`,
       returnPeriod: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
       returnStatus: formatReturnStatus(reviewReturn),
       returnTotal: formatReturnTotals(reviewReturn)

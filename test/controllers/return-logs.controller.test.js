@@ -14,13 +14,17 @@ const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
 const DownloadReturnLogService = require('../../app/services/return-logs/download-return-log.service.js')
-const SubmitViewReturnLogService = require('../../app/services/return-logs/submit-view-return-log.service.js')
-const ViewReturnLogService = require('../../app/services/return-logs/view-return-log.service.js')
+const SubmitDetailsService = require('../../app/services/return-logs/submit-details.service.js')
+const ViewCommunicationsService = require('../../app/services/return-logs/view-communications.service.js')
+const ViewDetailsService = require('../../app/services/return-logs/view-details.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
 
 describe('Return Logs controller', () => {
+  const returnLogId = '168026d8-f29b-4165-8726-734c6b14adec'
+  let getOptions
+  let postOptions
   let server
 
   // Create server before running the tests
@@ -41,40 +45,72 @@ describe('Return Logs controller', () => {
     Sinon.restore()
   })
 
-  describe('/system/return-logs', () => {
+  describe('/system/return-logs/{id}/communications', () => {
     describe('GET', () => {
       beforeEach(() => {
-        Sinon.stub(ViewReturnLogService, 'go').resolves({
-          pageTitle: 'Abstraction return'
+        getOptions = {
+          method: 'GET',
+          url: `/return-logs/${returnLogId}/communications`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+
+        Sinon.stub(ViewCommunicationsService, 'go').resolves({ pageTitle: 'Communications' })
+      })
+
+      it('returns the page successfully', async () => {
+        const response = await server.inject(getOptions)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Communications')
+      })
+    })
+  })
+
+  describe('/system/return-logs/{id}/details', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        getOptions = {
+          method: 'GET',
+          url: `/return-logs/${returnLogId}/details`,
+          auth: {
+            strategy: 'session',
+            credentials: { scope: ['billing'] }
+          }
+        }
+
+        Sinon.stub(ViewDetailsService, 'go').resolves({ pageTitle: 'Return details' })
+      })
+
+      describe('and no version is passed as a query parameter', () => {
+        it('passes 0 to the service and returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          const calls = ViewDetailsService.go.firstCall
+
+          expect(calls.args).to.contain(0)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Return details')
         })
       })
 
-      describe('when the request succeeds', () => {
-        it('returns the page successfully', async () => {
-          const response = await server.inject(_getOptions())
+      describe('and a version is passed as a query parameter', () => {
+        beforeEach(() => {
+          getOptions.url += '?version=1'
+        })
+
+        it('passes the version to the service and returns the page successfully', async () => {
+          const response = await server.inject(getOptions)
+
+          const calls = ViewDetailsService.go.firstCall
+
+          expect(calls.args).to.contain(1)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Abstraction return')
-        })
-
-        describe('and a version is passed as a query parameter', () => {
-          it('passes the version to the service', async () => {
-            await server.inject(_getOptions(1))
-
-            const calls = ViewReturnLogService.go.firstCall
-
-            expect(calls.args).to.contain(1)
-          })
-        })
-
-        describe('and no version is passed as a query parameter', () => {
-          it('passes 0 to the service', async () => {
-            await server.inject(_getOptions())
-
-            const calls = ViewReturnLogService.go.firstCall
-
-            expect(calls.args).to.contain(0)
-          })
+          expect(response.payload).to.contain('Return details')
         })
       })
     })
@@ -82,14 +118,16 @@ describe('Return Logs controller', () => {
     describe('POST', () => {
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitViewReturnLogService, 'go').resolves()
+          postOptions = postRequestOptions(`/return-logs/${returnLogId}/details`, null)
+
+          Sinon.stub(SubmitDetailsService, 'go').resolves()
         })
 
-        it('redirects back to the "view return log" page', async () => {
-          const response = await server.inject(_postOptions())
+        it('redirects back to the "return details" page', async () => {
+          const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal('/system/return-logs/168026d8-f29b-4165-8726-734c6b14adec')
+          expect(response.headers.location).to.equal(`/system/return-logs/${returnLogId}/details`)
         })
       })
     })
@@ -102,7 +140,7 @@ describe('Return Logs controller', () => {
       beforeEach(() => {
         getOptions = {
           method: 'GET',
-          url: `/return-logs/168026d8-f29b-4165-8726-734c6b14adec/download?version=1`,
+          url: `/return-logs/${returnLogId}/download?version=1`,
           auth: {
             strategy: 'session',
             credentials: { scope: ['billing'] }
@@ -127,32 +165,3 @@ describe('Return Logs controller', () => {
     })
   })
 })
-
-function _getOptions(version) {
-  const url = _url(version)
-
-  return {
-    method: 'GET',
-    url: `${url.pathname}${url.search}`,
-    auth: {
-      strategy: 'session',
-      credentials: { scope: ['billing'] }
-    }
-  }
-}
-
-function _postOptions(payload) {
-  const url = _url()
-
-  return postRequestOptions(url.pathname, payload)
-}
-
-function _url(version) {
-  const url = new URL('/return-logs/168026d8-f29b-4165-8726-734c6b14adec', 'http://example.com')
-
-  if (version) {
-    url.searchParams.append('version', version)
-  }
-
-  return url
-}

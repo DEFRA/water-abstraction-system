@@ -221,7 +221,7 @@ function _returnLog(returnLog) {
     col3Title: 'End date',
     col3Value: formatLongDate(endDate),
     exact,
-    link: `/system/return-logs/${id}`,
+    link: `/system/return-logs/${id}/details`,
     reference: returnReference,
     statusTag,
     type: 'Return reference'

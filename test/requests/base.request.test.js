@@ -37,6 +37,10 @@ describe('Base Request', () => {
   let notifierStub
 
   beforeEach(() => {
+    if (!Nock.isActive()) {
+      Nock.activate()
+    }
+
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -47,6 +51,7 @@ describe('Base Request', () => {
   afterEach(() => {
     Sinon.restore()
     Nock.cleanAll()
+    Nock.restore()
     delete global.GlobalNotifier
   })
 
@@ -119,7 +124,7 @@ describe('Base Request', () => {
               .delete(() => {
                 return true
               })
-              .replyWithError({ code: 'ECONNRESET' })
+              .replyWithError(_connectionResetError())
               .persist()
           })
 
@@ -167,7 +172,7 @@ describe('Base Request', () => {
               .delete(() => {
                 return true
               })
-              .replyWithError({ code: 'ECONNRESET' })
+              .replyWithError(_connectionResetError())
               .delete(() => {
                 return true
               })
@@ -399,7 +404,7 @@ describe('Base Request', () => {
               .get(() => {
                 return true
               })
-              .replyWithError({ code: 'ECONNRESET' })
+              .replyWithError(_connectionResetError())
               .persist()
           })
 
@@ -447,7 +452,7 @@ describe('Base Request', () => {
               .get(() => {
                 return true
               })
-              .replyWithError({ code: 'ECONNRESET' })
+              .replyWithError(_connectionResetError())
               .get(() => {
                 return true
               })
@@ -679,7 +684,7 @@ describe('Base Request', () => {
               .patch(() => {
                 return true
               })
-              .replyWithError({ code: 'ECONNRESET' })
+              .replyWithError(_connectionResetError())
               .persist()
           })
 
@@ -727,7 +732,7 @@ describe('Base Request', () => {
               .patch(() => {
                 return true
               })
-              .replyWithError({ code: 'ECONNRESET' })
+              .replyWithError(_connectionResetError())
               .patch(() => {
                 return true
               })
@@ -959,7 +964,7 @@ describe('Base Request', () => {
               .post(() => {
                 return true
               })
-              .replyWithError({ code: 'ECONNRESET' })
+              .replyWithError(_connectionResetError())
               .persist()
           })
 
@@ -1007,7 +1012,7 @@ describe('Base Request', () => {
               .post(() => {
                 return true
               })
-              .replyWithError({ code: 'ECONNRESET' })
+              .replyWithError(_connectionResetError())
               .post(() => {
                 return true
               })
@@ -1170,3 +1175,7 @@ describe('Base Request', () => {
     })
   })
 })
+
+function _connectionResetError() {
+  return Object.assign(new Error('Connection reset by peer'), { code: 'ECONNRESET' })
+}

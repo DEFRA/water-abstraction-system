@@ -57,6 +57,7 @@ function _financialYearsData(licenceSupplementaryYears, selectedYear) {
 
 function _tptAnnualFinancialYearsData(selectedYear) {
   return [
+    { text: '2025 to 2026', value: 2026, checked: selectedYear === '2026' },
     { text: '2024 to 2025', value: 2025, checked: selectedYear === '2025' },
     { text: '2021 to 2022', value: 2022, checked: selectedYear === '2022' },
     { text: '2020 to 2021', value: 2021, checked: selectedYear === '2021' }
