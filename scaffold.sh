@@ -96,17 +96,13 @@ render_file() {
     return
   fi
 
-  sed -e "s/__MODULE_NAME__/${module_name}/g" \
-      -e "s#{{APP_ROOT}}#${RELATIVE_UP_PATH%/}/#g" \
-      -e "s#{{NAME}}#${PASCAL_NAME}#g" \
-      -e "s#{{REL_DIR}}#${rel_dir}#g" \
-      -e "s#{{RAW_NAME}}#${raw_name}#g" \
+  sed -e "s#__BASE_PRESENTER_PATH__#${RELATIVE_UP_PATH}presenters/base.presenter.js#g" \
+      -e "s#__FETCH_SESSION_DAL_PATH__#${RELATIVE_UP_PATH}dal/fetch-session.dal.js#g" \
       -e "s#__PRESENTER_PATH__#${RELATIVE_UP_PATH}presenters/${REL_DIR}/${RAW_NAME}.presenter.js#g" \
       -e "s#__VALIDATOR_PATH__#${RELATIVE_UP_PATH}validators/${REL_DIR}/${RAW_NAME}.validator.js#g" \
-      -e "s#__FETCH_SESSION_DAL_PATH__#${RELATIVE_UP_PATH}dal/fetch-session.dal.js#g" \
-      -e "s#__BASE_PRESENTER_PATH__#${RELATIVE_UP_PATH}presenters/base.presenter.js#g" \
-      -e "s/__VALIDATOR_NAME__/${PASCAL_NAME}Validator/g" \
       -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
+      -e "s/__VALIDATOR_NAME__/${PASCAL_NAME}Validator/g" \
+      -e "s/__MODULE_NAME__/${module_name}/g" \
       "$template" > "$output_path"
 
   echo "✅ Created $output_path"
@@ -128,13 +124,13 @@ render_test_file() {
     return
   fi
 
-  sed -e "s/__MODULE_NAME__/${module_name}/g" \
-      -e "s/__DESCRIBE_LABEL__/${describe_label}/g" \
-      -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
-      -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
-      -e "s#__FETCH_SESSION_DAL_TEST_PATH__#${RELATIVE_UP_PATH}../app/dal/fetch-session.dal.js#g" \
-      -e "s#__STUBS_SESSION_PATH__#${RELATIVE_UP_PATH}support/stubs/session.stub.js#g" \
+  sed -e "s#__FETCH_SESSION_DAL_TEST_PATH__#${RELATIVE_UP_PATH}../app/dal/fetch-session.dal.js#g" \
       -e "s#__REQUIRE_PATH__#${require_path}#g" \
+      -e "s#__STUBS_SESSION_PATH__#${RELATIVE_UP_PATH}support/stubs/session.stub.js#g" \
+      -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
+      -e "s/__DESCRIBE_LABEL__/${describe_label}/g" \
+      -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
+      -e "s/__MODULE_NAME__/${module_name}/g" \
       "$template" > "$output_path"
 
   echo "✅ Created $output_path"
@@ -153,14 +149,14 @@ generate_helper_snippet() {
     local view_path="${REL_DIR}/${RAW_NAME}.njk"
 
     sed -e "s|__CONTROLLER_NAME__|${PASCAL_NAME}Controller|g" \
-        -e "s|__NAME__|${PASCAL_NAME}|g" \
-        -e "s|__SUBMIT_NAME__|Submit${PASCAL_NAME}Service|g" \
-        -e "s|__SUBMIT_SERVICE_NAME__|submit${PASCAL_NAME}Service|g" \
-        -e "s|__VIEW_SERVICE_NAME__|view${PASCAL_NAME}Service|g" \
         -e "s|__SERVICE_NAME__|View${PASCAL_NAME}Service|g" \
         -e "s|__SERVICE_PATH__|${service_path}|g" \
         -e "s|__SUBMIT_PATH__|${submit_service_path}|g" \
+        -e "s|__SUBMIT_SERVICE_NAME__|submit${PASCAL_NAME}Service|g" \
         -e "s|__VIEW_PATH__|${view_path}|g" \
+        -e "s|__VIEW_SERVICE_NAME__|view${PASCAL_NAME}Service|g" \
+        -e "s|__SUBMIT_NAME__|Submit${PASCAL_NAME}Service|g" \
+        -e "s|__NAME__|${PASCAL_NAME}|g" \
         "$snippet_template"
 
     echo ""
