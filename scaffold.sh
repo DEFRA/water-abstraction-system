@@ -84,10 +84,6 @@ render_file() {
   local template="$1"
   local output_path="$2"
   local module_name="$3"
-  local presenter_path="$4"
-  local session_model_path="$5"
-  local validator_path="$6"
-  local format_validator_path="$7"
 
   mkdir -p "$(dirname "$output_path")"
 
@@ -96,15 +92,11 @@ render_file() {
     return
   fi
 
-  sed -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
-      -e "s#__SESSION_MODEL_PATH__#${session_model_path}#g" \
-      -e "s#__VALIDATOR_PATH__#${validator_path}#g" \
-      -e "s#__FORMAT_VALIDATOR_PATH__#${format_validator_path}#g" \
-      -e "s/__CONTROLLER_NAME__/${PASCAL_NAME}Controller/g" \
-      -e "s/__NAME__/${PASCAL_NAME}/g" \
+  sed -e "s#__BASE_PRESENTER_PATH__#${RELATIVE_UP_PATH}presenters/base.presenter.js#g" \
+      -e "s#__FETCH_SESSION_DAL_PATH__#${RELATIVE_UP_PATH}dal/fetch-session.dal.js#g" \
+      -e "s#__PRESENTER_PATH__#${RELATIVE_UP_PATH}presenters/${REL_DIR}/${RAW_NAME}.presenter.js#g" \
+      -e "s#__VALIDATOR_PATH__#${RELATIVE_UP_PATH}validators/${REL_DIR}/${RAW_NAME}.validator.js#g" \
       -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
-      -e "s/__SERVICE_NAME__/${PASCAL_NAME}Service/g" \
-      -e "s/__SUBMIT_NAME__/Submit${PASCAL_NAME}Service/g" \
       -e "s/__VALIDATOR_NAME__/${PASCAL_NAME}Validator/g" \
       -e "s/__MODULE_NAME__/${module_name}/g" \
       "$template" > "$output_path"
@@ -118,8 +110,6 @@ render_test_file() {
   local module_name="$3"
   local require_path="$4"
   local describe_label="$5"
-  local presenter_path="$6"
-  local session_helper_path="$7"
 
   mkdir -p "$(dirname "$output_path")"
 
@@ -128,13 +118,11 @@ render_test_file() {
     return
   fi
 
-  sed -e "s/__MODULE_NAME__/${module_name}/g" \
+  sed -e "s#__FETCH_SESSION_DAL_TEST_PATH__#${RELATIVE_UP_PATH}../app/dal/fetch-session.dal.js#g" \
       -e "s#__REQUIRE_PATH__#${require_path}#g" \
+      -e "s#__STUBS_SESSION_PATH__#${RELATIVE_UP_PATH}support/stubs/session.stub.js#g" \
       -e "s/__DESCRIBE_LABEL__/${describe_label}/g" \
-      -e "s#__PRESENTER_PATH__#${presenter_path}#g" \
-      -e "s/__PRESENTER_NAME__/${PASCAL_NAME}Presenter/g" \
-      -e "s/__FETCH_NAME__/Fetch${PASCAL_NAME}Service/g" \
-      -e "s#__SESSION_HELPER_PATH__#${session_helper_path}#g" \
+      -e "s/__MODULE_NAME__/${module_name}/g" \
       "$template" > "$output_path"
 
   echo "✅ Created $output_path"
@@ -152,13 +140,15 @@ generate_helper_snippet() {
     local submit_service_path="../services/${REL_DIR}/submit-${RAW_NAME}.service.js"
     local view_path="${REL_DIR}/${RAW_NAME}.njk"
 
-    sed -e "s|__SERVICE_NAME__|View${PASCAL_NAME}Service|g" \
-        -e "s|__SUBMIT_NAME__|Submit${PASCAL_NAME}Service|g" \
+    sed -e "s|__CONTROLLER_NAME__|${PASCAL_NAME}Controller|g" \
+        -e "s|__SERVICE_NAME__|View${PASCAL_NAME}Service|g" \
         -e "s|__SERVICE_PATH__|${service_path}|g" \
-        -e "s|__NAME__|${PASCAL_NAME}|g" \
-        -e "s|__VIEW_PATH__|${view_path}|g" \
-        -e "s|__CONTROLLER_NAME__|${PASCAL_NAME}Controller|g" \
         -e "s|__SUBMIT_PATH__|${submit_service_path}|g" \
+        -e "s|__SUBMIT_SERVICE_NAME__|submit${PASCAL_NAME}Service|g" \
+        -e "s|__VIEW_PATH__|${view_path}|g" \
+        -e "s|__VIEW_SERVICE_NAME__|view${PASCAL_NAME}Service|g" \
+        -e "s|__SUBMIT_NAME__|Submit${PASCAL_NAME}Service|g" \
+        -e "s|__NAME__|${PASCAL_NAME}|g" \
         "$snippet_template"
 
     echo ""
@@ -242,19 +232,6 @@ generate_paths() {
 
   # Helper
   RELATIVE_UP_PATH=$(build_up_path)
-
-  DESCRIBE_BASE="${REL_DIR:+${REL_DIR}/}${RAW_NAME}"
-  DESCRIBE_LABEL="$(path_to_describe_label "$DESCRIBE_BASE") $TYPE" # Test describe block
-
-  REQUIRE_PATH="${RELATIVE_UP_PATH}../app/${SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
-  SESSION_HELPER_PATH="${RELATIVE_UP_PATH}support/helpers/session.helper.js"
-
-  # Additional paths
-  PRESENTER_PATH="${RELATIVE_UP_PATH}presenters/${REL_DIR}/${RAW_NAME}.presenter.js"
-  VALIDATOR_PATH="${RELATIVE_UP_PATH}validators/${REL_DIR}/${RAW_NAME}.validator.js"
-  SESSION_MODEL_PATH="${RELATIVE_UP_PATH}models/session.model.js"
-  FORMAT_VALIDATOR_PATH="${RELATIVE_UP_PATH}presenters/base.presenter.js"
-
 }
 
 render_source_and_test() {
@@ -264,11 +241,17 @@ render_source_and_test() {
   generate_paths "$type" "$service_variant"
 
   # Render source file
-  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME" "$PRESENTER_PATH" "$SESSION_MODEL_PATH" "$VALIDATOR_PATH" "$FORMAT_VALIDATOR_PATH"
+  render_file "$SOURCE_TEMPLATE" "$SOURCE_OUTPUT" "$MODULE_NAME"
 
   # Render test file
   if [ -n "$TEST_TEMPLATE" ]; then
-    render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL" "$PRESENTER_PATH" "$SESSION_HELPER_PATH"
+    DESCRIBE_BASE="${REL_DIR:+${REL_DIR}/}${RAW_NAME}"
+    DESCRIBE_LABEL="$(path_to_describe_label "$DESCRIBE_BASE") $TYPE" # Test describe block
+    REQUIRE_PATH="${RELATIVE_UP_PATH}../app/${SUBFOLDER}/${REL_DIR}/${SOURCE_FILE}"
+
+    render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL"
+
+    render_test_file "$TEST_TEMPLATE" "$TEST_OUTPUT" "$MODULE_NAME" "$REQUIRE_PATH" "$DESCRIBE_LABEL"
   fi
 }
 
