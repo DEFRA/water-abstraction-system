@@ -5,8 +5,8 @@
  * @module NoLicencesService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const RegionModel = require('../../../models/region.model.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Handles fetching the region name for `/bill-runs/setup/{sessionId}/no-licences` page
@@ -19,7 +19,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<string>} The display name of the region
  */
 async function go(sessionId) {
-  const { region: regionId } = await SessionModel.query().findById(sessionId)
+  const { region: regionId } = await FetchSessionDal.go(sessionId)
   const { displayName: regionName } = await RegionModel.query().findById(regionId).select('displayName')
 
   return {

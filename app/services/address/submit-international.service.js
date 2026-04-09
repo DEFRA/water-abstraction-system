@@ -8,7 +8,7 @@
 
 const InternationalPresenter = require('../../presenters/address/international.presenter.js')
 const InternationalValidator = require('../../validators/address/international.validator.js')
-const SessionModel = require('../../models/session.model.js')
+const FetchSessionDal = require('../../dal/fetch-session.dal.js')
 const { formatValidationResult } = require('../../presenters/base.presenter.js')
 
 /**
@@ -20,7 +20,7 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   _applyPayload(session, payload)
 

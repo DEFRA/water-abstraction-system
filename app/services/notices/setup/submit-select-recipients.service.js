@@ -6,12 +6,12 @@
  * @module SubmitSelectRecipientsService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const SelectRecipientsPresenter = require('../../../presenters/notices/setup/select-recipients.presenter.js')
 const SelectRecipientsValidator = require('../../../validators/notices/setup/select-recipients.validator.js')
-const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
@@ -24,7 +24,7 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId, payload, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   handleOneOptionSelected(payload, 'recipients')
 

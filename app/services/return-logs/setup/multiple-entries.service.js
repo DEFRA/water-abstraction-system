@@ -5,8 +5,8 @@
  * @module MultipleEntriesService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const MultipleEntriesPresenter = require('../../../presenters/return-logs/setup/multiple-entries.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-logs/setup/{sessionId}/multiple-entries` page
@@ -19,7 +19,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The view data for the multiple entries page
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const pageData = MultipleEntriesPresenter.go(session)
 

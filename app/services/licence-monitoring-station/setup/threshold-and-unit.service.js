@@ -6,7 +6,7 @@
  * @module ThresholdAndUnitService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const ThresholdAndUnitPresenter = require('../../../presenters/licence-monitoring-station/setup/threshold-and-unit.presenter.js')
 
 /**
@@ -21,7 +21,7 @@ const ThresholdAndUnitPresenter = require('../../../presenters/licence-monitorin
  * @returns {Promise<object>} The view data for the threshold and unit page
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const formattedData = ThresholdAndUnitPresenter.go(session)
 

@@ -5,10 +5,10 @@
  * @module SubmitReadingsService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const ReadingsPresenter = require('../../../presenters/return-logs/setup/readings.presenter.js')
 const ReadingsValidator = require('../../../validators/return-logs/setup/readings.validator.js')
-const SessionModel = require('../../../models/session.model.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -23,7 +23,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * the validation error details
  */
 async function go(sessionId, payload, yar, yearMonth) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
 

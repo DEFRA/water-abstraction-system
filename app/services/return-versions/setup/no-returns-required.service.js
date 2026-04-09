@@ -5,8 +5,8 @@
  * @module NoReturnsRequiredService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const NoReturnsRequiredPresenter = require('../../../presenters/return-versions/setup/no-returns-required.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/no-returns-required` page
@@ -19,7 +19,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The view data for the no returns required page
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const formattedData = NoReturnsRequiredPresenter.go(session)
 

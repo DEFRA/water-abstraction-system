@@ -5,7 +5,7 @@
  * @module DeleteNoteService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 
 /**
  * Deletes the note from the return version currently being setup
@@ -17,7 +17,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
 async function go(sessionId, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
   const notification = {
     title: 'Deleted',
     text: 'Note deleted'

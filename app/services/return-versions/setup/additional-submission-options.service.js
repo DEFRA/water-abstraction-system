@@ -7,7 +7,7 @@
  */
 
 const AdditionalSubmissionOptionsPresenter = require('../../../presenters/return-versions/setup/additional-submission-options.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 
 /**
  * Orchestrates fetching and presenting the data for
@@ -21,7 +21,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The view data for the points page
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const formattedData = AdditionalSubmissionOptionsPresenter.go(session)
 

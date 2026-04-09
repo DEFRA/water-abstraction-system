@@ -5,7 +5,7 @@
  * @module UnitsService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const UnitsPresenter = require('../../../presenters/return-logs/setup/units.presenter.js')
 
 /**
@@ -19,7 +19,7 @@ const UnitsPresenter = require('../../../presenters/return-logs/setup/units.pres
  * @returns {Promise<object>} The view data for the units page
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const pageData = UnitsPresenter.go(session)
 

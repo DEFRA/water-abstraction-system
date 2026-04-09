@@ -5,7 +5,7 @@
  * @module AddService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 
 /**
  * Orchestrates adding an empty object to the requirements array in the session
@@ -19,7 +19,7 @@ const SessionModel = require('../../../models/session.model.js')
  * to display and update
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   await _save(session)
 

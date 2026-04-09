@@ -6,9 +6,9 @@
  * @module SubmitPostcodeService
  */
 
+const FetchSessionDal = require('../../dal/fetch-session.dal.js')
 const PostcodePresenter = require('../../presenters/address/postcode.presenter.js')
 const PostcodeValidator = require('../../validators/address/postcode.validator.js')
-const SessionModel = require('../../models/session.model.js')
 const { formatValidationResult } = require('../../presenters/base.presenter.js')
 
 /**
@@ -20,7 +20,7 @@ const { formatValidationResult } = require('../../presenters/base.presenter.js')
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   _applyPayload(session, payload)
 
