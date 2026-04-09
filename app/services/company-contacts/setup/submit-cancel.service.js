@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates cancelling the data for the '/company-contacts / setup/{sessionId}/cancel' page
+ * Orchestrates cancelling the data for the '/company-contacts/setup/{sessionId}/cancel' page
  *
  * @module SubmitCancelService
  */
