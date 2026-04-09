@@ -8,9 +8,8 @@
 const DownloadAbstractionAlertPresenter = require('../../../presenters/notices/setup/download-abstraction-alert.presenter.js')
 const DownloadReturnsNoticePresenter = require('../../../presenters/notices/setup/download-returns-notice.presenter.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
-
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and formatting the data needed for the notices setup download link
@@ -23,7 +22,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The data for the download link (csv string, filename and type)
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const { notificationType, referenceCode } = session
 

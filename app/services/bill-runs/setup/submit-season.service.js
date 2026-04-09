@@ -5,7 +5,7 @@
  * @module SubmitSeasonService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const SeasonPresenter = require('../../../presenters/bill-runs/setup/season.presenter.js')
 const SeasonValidator = require('../../../validators/bill-runs/setup/season.validator.js')
 
@@ -29,7 +29,7 @@ const SeasonValidator = require('../../../validators/bill-runs/setup/season.vali
  * validation error details
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const validationResult = _validate(payload)
 

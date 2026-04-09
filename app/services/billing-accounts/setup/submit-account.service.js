@@ -6,9 +6,9 @@
  * @module SubmitAccountService
  */
 
-const SessionModel = require('../../../models/session.model.js')
 const AccountPresenter = require('../../../presenters/billing-accounts/setup/account.presenter.js')
 const AccountValidator = require('../../../validators/billing-accounts/setup/account.validator.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
@@ -21,7 +21,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const validationResult = _validate(payload)
 

@@ -7,10 +7,10 @@
 
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
+const GeneralLib = require('../../../lib/general.lib.js')
 const NoReturnsRequiredPresenter = require('../../../presenters/return-versions/setup/no-returns-required.presenter.js')
 const NoReturnsRequiredValidator = require('../../../validators/return-versions/setup/no-returns-required.validator.js')
-const SessionModel = require('../../../models/session.model.js')
-const GeneralLib = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/no-returns-required` page
@@ -28,7 +28,7 @@ const GeneralLib = require('../../../lib/general.lib.js')
  * @returns {Promise<object>} The page data for the no returns required page
  */
 async function go(sessionId, payload, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
   const validationResult = _validate(payload)
 
   if (!validationResult) {

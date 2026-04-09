@@ -9,8 +9,8 @@ const { formatValidationResult } = require('../../../../presenters/base.presente
 
 const ExistingPresenter = require('../../../../presenters/return-versions/setup/existing.presenter.js')
 const ExistingValidator = require('../../../../validators/return-versions/setup/existing.validator.js')
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 const GenerateFromExistingRequirementsService = require('./generate-from-existing-requirements.service.js')
-const SessionModel = require('../../../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/existing` page
@@ -29,7 +29,7 @@ const SessionModel = require('../../../../models/session.model.js')
  * validation error details
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const validationResult = _validate(payload, session)
 

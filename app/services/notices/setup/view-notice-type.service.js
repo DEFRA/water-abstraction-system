@@ -6,8 +6,8 @@
  * @module ViewNoticeTypeService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/notice-type` page
@@ -18,7 +18,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId, auth) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const pageData = NoticeTypePresenter.go(session, auth)
 

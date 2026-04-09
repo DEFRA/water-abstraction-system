@@ -6,7 +6,7 @@
  * @module SubmitCheckService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/check` page
@@ -16,7 +16,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   await _save(session)
 

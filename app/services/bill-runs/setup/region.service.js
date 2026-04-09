@@ -6,8 +6,8 @@
  */
 
 const FetchRegionsService = require('./fetch-regions.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const RegionPresenter = require('../../../presenters/bill-runs/setup/region.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/bill-runs/setup/{sessionId}/region` page
@@ -20,7 +20,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The view data for the region page
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
   const regions = await FetchRegionsService.go()
 
   const formattedData = RegionPresenter.go(session, regions)

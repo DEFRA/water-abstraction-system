@@ -7,8 +7,8 @@
 
 const CheckPresenter = require('../../../../presenters/return-versions/setup/check/check.presenter.js')
 const FetchPointsService = require('../fetch-points.service.js')
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 const ReturnRequirementsPresenter = require('../../../../presenters/return-versions/setup/check/returns-requirements.presenter.js')
-const SessionModel = require('../../../../models/session.model.js')
 const { readFlashNotification } = require('../../../../lib/general.lib.js')
 
 /**
@@ -20,7 +20,7 @@ const { readFlashNotification } = require('../../../../lib/general.lib.js')
  * @returns {Promise<object>} page data needed by the view template
  */
 async function go(sessionId, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   await _markCheckPageVisited(session)
 

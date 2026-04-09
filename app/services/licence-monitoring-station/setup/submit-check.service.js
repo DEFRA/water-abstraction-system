@@ -6,9 +6,9 @@
  * @module SubmitCheckService
  */
 
-const { flashNotification, timestampForPostgres } = require('../../../lib/general.lib.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const LicenceMonitoringStationModel = require('../../../models/licence-monitoring-station.model.js')
-const SessionModel = require('../../../models/session.model.js')
+const { flashNotification, timestampForPostgres } = require('../../../lib/general.lib.js')
 const { flowUnits } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -21,7 +21,7 @@ const { flowUnits } = require('../../../lib/static-lookups.lib.js')
  * @returns {Promise<string>} The monitoring station id used to redirect back to the monitoring station page
  */
 async function go(sessionId, userId, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   await _createTag(session, userId)
 

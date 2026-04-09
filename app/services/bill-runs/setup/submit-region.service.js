@@ -6,9 +6,9 @@
  */
 
 const FetchRegionsService = require('./fetch-regions.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const RegionPresenter = require('../../../presenters/bill-runs/setup/region.presenter.js')
 const RegionValidator = require('../../../validators/bill-runs/setup/region.validator.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Handles the user submission for the `/bill-runs/setup/{sessionId}/region` page
@@ -31,7 +31,7 @@ const SessionModel = require('../../../models/session.model.js')
  * the region page including the validation error details
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
   const regions = await FetchRegionsService.go()
 
   const validationResult = _validate(payload, regions)

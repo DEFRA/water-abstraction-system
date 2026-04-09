@@ -7,8 +7,8 @@
 
 const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
 
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 const GenerateFromAbstractionDataService = require('./generate-from-abstraction-data.service.js')
-const SessionModel = require('../../../../models/session.model.js')
 const MethodPresenter = require('../../../../presenters/return-versions/setup/method.presenter.js')
 const MethodValidator = require('../../../../validators/return-versions/setup/method.validator.js')
 
@@ -28,7 +28,7 @@ const MethodValidator = require('../../../../validators/return-versions/setup/me
  * setup page including the validation error details
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const validationResult = _validate(payload)
 

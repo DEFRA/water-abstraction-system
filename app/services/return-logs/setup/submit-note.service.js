@@ -5,9 +5,9 @@
  * @module SubmitNoteService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const NotePresenter = require('../../../presenters/return-logs/setup/note.presenter.js')
 const NoteValidator = require('../../../validators/return-logs/setup/note.validator.js')
-const SessionModel = require('../../../models/session.model.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -28,7 +28,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * validation error details
  */
 async function go(sessionId, payload, user, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
   const error = _validate(payload)
 
   if (!error) {

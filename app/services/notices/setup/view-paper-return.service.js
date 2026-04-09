@@ -6,8 +6,8 @@
  * @module ViewPaperReturnService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const PaperReturnPresenter = require('../../../presenters/notices/setup/paper-return.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for the `/notices/setup/{sessionId}/paper-return` page
@@ -17,7 +17,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const pageData = PaperReturnPresenter.go(session)
 

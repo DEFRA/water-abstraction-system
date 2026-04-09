@@ -8,8 +8,8 @@
 const CreateNoticeService = require('./create-notice.service.js')
 const CreateNotificationsService = require('./create-notifications.service.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const SendNoticeService = require('./send/send-notice.service.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates creating the notice and sending the notifications when `/notices/setup/{sessionId}/check` page submitted
@@ -22,7 +22,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<string>} - the created notice Id
  */
 async function go(sessionId, auth) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const recipients = await FetchRecipientsService.go(session)
 

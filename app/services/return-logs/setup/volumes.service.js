@@ -5,7 +5,7 @@
  * @module VolumesService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const VolumesPresenter = require('../../../presenters/return-logs/setup/volumes.presenter.js')
 
 /**
@@ -17,7 +17,7 @@ const VolumesPresenter = require('../../../presenters/return-logs/setup/volumes.
  * @returns {Promise<object>} The view data for the volumes page
  */
 async function go(sessionId, yearMonth) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const formattedData = VolumesPresenter.go(session, yearMonth)
 

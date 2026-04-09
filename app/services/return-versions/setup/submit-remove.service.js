@@ -5,7 +5,7 @@
  * @module SubmitRemoveService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 
 /**
  * Manages deleting the selected requirement in the session when remove is confirmed
@@ -18,7 +18,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
 async function go(sessionId, requirementIndex, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const notification = {
     title: 'Removed',

@@ -5,7 +5,8 @@
  * @module SubmitCancelService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -18,9 +19,9 @@ const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
  * @returns {Promise<string>} - returns the redirect url, which can contain some session data that needs to be deleted
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
-  await SessionModel.query().delete().where('id', sessionId)
+  await DeleteSessionDal.go(sessionId)
 
   if (session.journey === NoticeJourney.ALERTS) {
     return `/system/monitoring-stations/${session.monitoringStationId}`

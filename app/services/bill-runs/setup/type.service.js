@@ -5,7 +5,7 @@
  * @module TypeService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const TypePresenter = require('../../../presenters/bill-runs/setup/type.presenter.js')
 
 /**
@@ -19,7 +19,7 @@ const TypePresenter = require('../../../presenters/bill-runs/setup/type.presente
  * @returns {Promise<object>} The view data for the type page
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const pageData = TypePresenter.go(session)
 

@@ -6,7 +6,7 @@
  * @module SubmitCheckNoticeTypeService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -20,7 +20,7 @@ const { NoticeType } = require('../../../lib/static-lookups.lib.js')
  * @param {string} sessionId - The UUID of the current session
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   session.addressJourney = {
     activeNavBar: 'notices',
