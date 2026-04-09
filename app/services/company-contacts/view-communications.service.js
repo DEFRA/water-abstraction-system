@@ -3,7 +3,7 @@
 /**
  * Orchestrates fetching and presenting the data for the '/company-contacts/{id}/communications' page
  *
- * @module ViewCompanyContactService
+ * @module ViewCommunicationsService
  */
 
 const CommunicationsPresenter = require('../../presenters/company-contacts/communications.presenter.js')

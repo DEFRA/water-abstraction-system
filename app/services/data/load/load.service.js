@@ -392,9 +392,15 @@ function _helper(entityKey) {
 }
 
 async function _selector(schema, table, select, where, value) {
-  const result = await db.withSchema(schema).first(select).from(table).where(where, value)
+  try {
+    const result = await db.withSchema(schema).first(select).from(table).where(where, value)
 
-  return result[select]
+    return result[select]
+  } catch (error) {
+    global.GlobalNotifier.omg('Load service failed to apply lookup', { schema, table, select, where, value })
+
+    throw error
+  }
 }
 
 module.exports = {

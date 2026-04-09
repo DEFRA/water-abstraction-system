@@ -50,3 +50,6 @@ docs/
 
 # ignore husky config
 .husky/
+
+# ignore local copilot workspace instruction file
+.github/copilot-instructions.md

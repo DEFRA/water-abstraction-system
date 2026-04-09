@@ -60,7 +60,7 @@ describe('Notifications - View Notification service', () => {
           activeNavBar: 'search',
           address: [],
           alertDetails: null,
-          backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' },
+          backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to licence' },
           contents: notification.plaintext,
           errorDetails: null,
           messageType: 'email',
@@ -123,7 +123,7 @@ describe('Notifications - View Notification service', () => {
           address: [],
           alertDetails: null,
           backLink: {
-            href: `/system/return-logs/${returnLogId}`,
+            href: `/system/return-logs/${returnLogId}/communications`,
             text: 'Go back to return log'
           },
           contents: notification.plaintext,
