@@ -213,7 +213,7 @@ const LOAD_HELPERS = {
  *   "licences": [
  *     {
  *       "id": "f8702a6a-f61d-4b0a-9af3-9a53768ee516",
- *       "licenceRef": "AT/TEST/01",
+ *       "licenceRef": "AT/TE/ST/01/01",
  *       "regionId": "d0a4123d-1e19-480d-9dd4-f70f3387c4b9",
  *       "regions": {
  *         "historicalAreaCode": "SAAR",
