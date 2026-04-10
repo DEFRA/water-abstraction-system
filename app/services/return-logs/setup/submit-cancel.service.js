@@ -5,7 +5,7 @@
  * @module SubmitCancelService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
 
 /**
  * Manages cancelling the return submission session when cancel is confirmed
@@ -15,7 +15,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @param {string} sessionId - The UUID for the return submission setup session record
  */
 async function go(sessionId) {
-  await SessionModel.query().deleteById(sessionId)
+  await DeleteSessionDal.go(sessionId)
 }
 
 module.exports = {

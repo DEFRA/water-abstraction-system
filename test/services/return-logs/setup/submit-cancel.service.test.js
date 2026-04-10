@@ -3,12 +3,16 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
 
 // Thing under test
 const SubmitCancelService = require('../../../../app/services/return-logs/setup/submit-cancel.service.js')
@@ -17,31 +21,20 @@ describe('Return Logs Setup - Submit Cancel service', () => {
   let session
 
   beforeEach(async () => {
-    session = await SessionHelper.add({
-      data: {
-        endDate: '2005-03-31T00:00:00.000Z',
-        periodEndDay: 31,
-        periodEndMonth: 12,
-        periodStartDay: 1,
-        periodStartMonth: 1,
-        purposes: 'Evaporative Cooling',
-        receivedDate: '2025-01-31T00:00:00.000Z',
-        returnLogId: '610ac214-03c2-4b25-a89a-65bb81d1624f',
-        returnReference: '1234',
-        siteDescription: 'POINT A, TEST SITE DESCRIPTION',
-        startDate: '2004-04-01T00:00:00.000Z',
-        twoPartTariff: false
-      }
-    })
+    session = SessionModelStub.build(Sinon, {})
+
+    Sinon.stub(DeleteSessionDal, 'go').resolves()
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when a user submits the return submission to be cancelled', () => {
     it('deletes the session data', async () => {
       await SubmitCancelService.go(session.id)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession).not.to.exist()
+      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
     })
   })
 })
