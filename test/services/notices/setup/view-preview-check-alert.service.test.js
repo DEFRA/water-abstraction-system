@@ -28,7 +28,7 @@ describe('Notices - Setup - View Preview Check Alert service', () => {
   let testRecipient
   let testRecipients
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // Populate the session with abstraction alert data
     licenceMonitoringStations = AbstractionAlertSessionDataFixture.licenceMonitoringStations()
 

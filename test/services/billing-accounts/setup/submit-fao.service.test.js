@@ -27,7 +27,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       addressSelected: billingAccountAddress.id,
       billingAccount
@@ -43,7 +43,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
   })
 
   describe('when called with a "yes" value', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         fao: 'yes'
       }
@@ -67,7 +67,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount,
           fao: 'yes'
@@ -98,7 +98,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     describe('and the user has returned from the check page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount,
           checkPageVisited: true,
@@ -131,7 +131,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     describe('and the user had previously completed the "no" journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           addressJourney: _addressJourney(session),
           billingAccount,
@@ -168,7 +168,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
   })
 
   describe('when called with a "no" value', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         fao: 'no'
       }
@@ -193,7 +193,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount,
           fao: 'no'
@@ -224,7 +224,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     describe('and the user has returned from the check page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount,
           checkPageVisited: true,
@@ -257,7 +257,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     describe('and the user had previously completed the "yes" journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           addressJourney: _addressJourney(session),
           billingAccount,
@@ -297,7 +297,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
 
   describe('when the user has selected "new" for the existing address', () => {
     describe('and submits "no" for the fao', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           fao: 'no'
         }

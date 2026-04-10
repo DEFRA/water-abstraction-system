@@ -26,7 +26,7 @@ describe('Notices - Setup - View Select Recipients service', () => {
   let recipients
   let referenceCode
 
-  beforeEach(async () => {
+  beforeEach(() => {
     recipients = RecipientsFixture.recipients()
 
     referenceCode = generateNoticeReferenceCode('RINV-')

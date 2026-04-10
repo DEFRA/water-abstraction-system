@@ -22,7 +22,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }

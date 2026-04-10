@@ -26,7 +26,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       billingAccount
     }
@@ -41,7 +41,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
   })
 
   describe('when called', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         contactName: 'Contact Name'
       }
@@ -63,7 +63,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
     })
 
     describe('and the user has returned to the page and entered the same name', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount,
           contactName: 'Contact Name'
@@ -91,7 +91,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
     })
 
     describe('and the user has returned to the page from the check and entered the same name', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount,
           checkPageVisited: true,
@@ -121,7 +121,7 @@ describe('Billing Accounts - Setup - Contact Name Service', () => {
     })
 
     describe('and the user has returned to the page from the check and changes the contact name', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           contactName: 'New Name'
         }

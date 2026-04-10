@@ -24,7 +24,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     payload = {}
     sessionData = {
       label: 'LABEL'
@@ -73,7 +73,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
         })
 
         describe('and the check page has been visited', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             sessionData = { ...sessionData, checkPageVisited: true }
 
             session = SessionModelStub.build(Sinon, sessionData)
@@ -93,7 +93,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
 
       describe('and the submitted licence is already stored in the session', () => {
         describe('and the check page has been not been visited', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             sessionData = { ...sessionData, licenceRef: licence.licenceRef }
 
             session = SessionModelStub.build(Sinon, sessionData)
@@ -111,7 +111,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
         })
 
         describe('and the check page has been visited', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             sessionData = { ...sessionData, licenceRef: licence.licenceRef, checkPageVisited: true }
 
             session = SessionModelStub.build(Sinon, sessionData)

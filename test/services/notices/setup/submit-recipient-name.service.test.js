@@ -24,7 +24,7 @@ describe('Notices - Setup - Submit Recipient Name service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     referenceCode = generateNoticeReferenceCode('RINV-')
 
     payload = { name: 'Ronald Weasley' }

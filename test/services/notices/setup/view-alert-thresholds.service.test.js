@@ -23,7 +23,7 @@ describe('Notices - Setup - View Alert Thresholds service', () => {
   let sessionData
   let licenceMonitoringStations
 
-  beforeEach(async () => {
+  beforeEach(() => {
     licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
 
     sessionData = {

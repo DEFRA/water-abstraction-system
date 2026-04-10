@@ -21,7 +21,7 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       label: 'MONITORING_STATION_LABEL',
       licenceRef: 'LICENCE_REF',

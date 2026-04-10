@@ -24,7 +24,7 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
       licence: {
@@ -61,7 +61,7 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           reason: 'abstraction-below-100-cubic-metres-per-day'
         }
@@ -81,7 +81,7 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
       })
 
       describe('and the page has been visited', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           session = SessionModelStub.build(Sinon, {
             ...sessionData,
             checkPageVisited: true

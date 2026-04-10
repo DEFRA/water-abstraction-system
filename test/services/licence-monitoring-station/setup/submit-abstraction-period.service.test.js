@@ -22,7 +22,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     payload = {
       abstractionPeriodStartDay: '1',
       abstractionPeriodStartMonth: '2',

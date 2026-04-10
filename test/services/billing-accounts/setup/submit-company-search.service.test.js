@@ -26,7 +26,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       billingAccount
     }
@@ -41,7 +41,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
   })
 
   describe('when the use submits a search term', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         companySearch: 'Company Name'
       }
@@ -64,7 +64,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
   })
 
   describe('and the user has returned to the page and made the same choice', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       sessionData = {
         billingAccount,
         companySearch: 'Company Name'
@@ -92,7 +92,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
   })
 
   describe('and the user has returned to the page from the check page and made the same choice', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       sessionData = {
         billingAccount,
         checkPageVisited: true,
@@ -127,7 +127,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
   })
 
   describe('and the user has returned to the page from the check page and made a different choice', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       sessionData = {
         billingAccount,
         checkPageVisited: true,

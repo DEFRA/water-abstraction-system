@@ -35,7 +35,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       billingAccount
     }
@@ -54,7 +54,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
   })
 
   describe('when the user picks a company', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         companiesHouseNumber
       }
@@ -76,7 +76,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           companiesHouseNumber,
           billingAccount
@@ -109,7 +109,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     })
 
     describe('and the user has returned to the page from the check page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           companiesHouseNumber,
           billingAccount,
@@ -143,7 +143,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     })
 
     describe('and the user selects a different company', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount,
           addressSelected: 'another',

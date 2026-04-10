@@ -22,7 +22,7 @@ describe('Notices - Setup - View Cancel Alerts service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       ...AbstractionAlertSessionData.get(),
       alertType: 'resume'

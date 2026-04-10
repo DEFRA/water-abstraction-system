@@ -23,7 +23,7 @@ describe('Billing Accounts - Setup - View Check Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       billingAccount,
       fao: 'no'

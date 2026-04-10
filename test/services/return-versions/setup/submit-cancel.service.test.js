@@ -20,7 +20,7 @@ const SubmitCancelService = require('../../../../app/services/return-versions/se
 describe('Return Versions Setup - Submit Cancel service', () => {
   let session
 
-  beforeEach(async () => {
+  beforeEach(() => {
     session = SessionModelStub.build(Sinon, {})
 
     Sinon.stub(DeleteSessionDal, 'go').resolves()

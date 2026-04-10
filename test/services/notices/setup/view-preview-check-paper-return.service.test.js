@@ -25,7 +25,7 @@ describe('Notices - Setup - View Preview Check Paper Return service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     dueReturn = {
       siteDescription: 'Potable Water Supply - Direct',
       endDate: '2003-03-31',

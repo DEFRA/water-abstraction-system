@@ -21,7 +21,7 @@ describe('Licence Monitoring Station Setup - Abstraction Period Service', () => 
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       label: 'FRENCHAY',
       licenceRef: '01/115',

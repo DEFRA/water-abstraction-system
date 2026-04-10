@@ -23,7 +23,7 @@ describe('Notices - Setup - View Recipient Name service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     referenceCode = generateNoticeReferenceCode('RINV-')
     sessionData = { referenceCode }
 

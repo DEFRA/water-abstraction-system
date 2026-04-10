@@ -25,7 +25,7 @@ describe('Notices - Setup - View Paper Return service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     licenceRef = generateLicenceRef()
 
     dueReturn = {

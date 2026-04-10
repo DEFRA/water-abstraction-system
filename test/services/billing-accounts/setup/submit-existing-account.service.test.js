@@ -29,7 +29,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     payload = {}
     sessionData = {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
@@ -45,7 +45,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   })
 
   describe('when the user picks an existing account', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         existingAccount: companies[0].id
       }
@@ -72,7 +72,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
           existingAccount: payload.existingAccount
@@ -105,7 +105,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     describe('and the user has returned to the page from the check page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
           checkPageVisited: true,
@@ -140,7 +140,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     describe('and the user had previously completed the "new" journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = _newAccountSessionData(session)
 
         session = SessionModelStub.build(Sinon, sessionData)
@@ -172,7 +172,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   })
 
   describe('when the user picks a new account', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         existingAccount: 'new'
       }
@@ -199,7 +199,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
           existingAccount: payload.existingAccount
@@ -232,7 +232,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     describe('and the user had previously completed the existing account journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = _existingAccountSessionData(session)
 
         session = SessionModelStub.build(Sinon, sessionData)
@@ -264,7 +264,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   })
 
   describe('when validation fails', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {}
       Sinon.stub(FetchExistingCompaniesService, 'go').returns(companies)
     })

@@ -35,7 +35,7 @@ describe('Notices - Setup - View Preview service', () => {
   })
 
   describe('when previewing an abstraction alert notification', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       const fixtureData = RecipientsFixture.alertsRecipients()
 
       recipients = [fixtureData.primaryUser]
@@ -128,7 +128,7 @@ describe('Notices - Setup - View Preview service', () => {
   })
 
   describe('when previewing a returns invitation or reminder notification', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       const fixtureData = RecipientsFixture.recipients()
 
       recipients = [fixtureData.primaryUser]

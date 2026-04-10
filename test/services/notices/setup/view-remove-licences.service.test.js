@@ -25,7 +25,7 @@ describe('Notices - Setup - View Remove Licences service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     referenceCode = generateNoticeReferenceCode()
 
     sessionData = { licences, referenceCode }

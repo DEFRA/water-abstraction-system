@@ -23,7 +23,7 @@ describe('Notices - Setup - View Alert Email Address service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     auth = {
       credentials: {
         user: {

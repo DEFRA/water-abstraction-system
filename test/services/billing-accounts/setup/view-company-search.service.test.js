@@ -22,7 +22,7 @@ describe('Billing Accounts - Setup - View Company Search Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }

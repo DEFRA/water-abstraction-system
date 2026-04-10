@@ -22,7 +22,7 @@ describe('Notices - Setup - View Notice Type service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     auth = {
       credentials: { scope: ['bulk_return_notifications'] }
     }

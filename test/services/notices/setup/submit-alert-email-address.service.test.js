@@ -24,7 +24,7 @@ describe('Notices - Setup - Submit Alert Email Address service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     auth = {
       credentials: {
         user: {

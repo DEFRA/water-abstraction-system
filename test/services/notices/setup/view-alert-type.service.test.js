@@ -22,7 +22,7 @@ describe('Notices Setup - Setup - View Alert Type service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = AbstractionAlertSessionData.get()
     session = SessionModelStub.build(Sinon, sessionData)
 

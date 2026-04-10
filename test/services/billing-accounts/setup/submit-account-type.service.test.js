@@ -24,7 +24,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
@@ -39,7 +39,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
   })
 
   describe('when called with "company" selected', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = { accountType: 'company' }
     })
 
@@ -65,7 +65,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountType: 'company',
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount
@@ -99,7 +99,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user has returned to the page after visiting the check page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountType: 'company',
           checkPageVisited: true,
@@ -135,7 +135,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user had previously completed the "individual" journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = _individualSessionData(session)
 
         session = SessionModelStub.build(Sinon, sessionData)
@@ -168,7 +168,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
   })
 
   describe('when called with "individual" selected and a search term entered', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = { accountType: 'individual', searchIndividualInput: 'John Doe' }
     })
 
@@ -194,7 +194,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountType: 'individual',
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
@@ -229,7 +229,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user has returned to the page from the check page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountType: 'individual',
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
@@ -266,7 +266,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user had previously completed the "company" journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = _companySessionData(session)
 
         session = SessionModelStub.build(Sinon, sessionData)
@@ -300,7 +300,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user has returned to the page, chosen "individual" but changed the search term', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = { accountType: 'individual', searchIndividualInput: 'Jane Doe' }
         sessionData = {
           ..._commonSessionData(session),

@@ -26,7 +26,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       billingAccount
     }
@@ -41,7 +41,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
   })
 
   describe('when the user picks the "customer" option', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         accountSelected: billingAccount.company.id
       }
@@ -68,7 +68,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountSelected: billingAccount.company.id,
           billingAccount
@@ -101,7 +101,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     })
 
     describe('and the user had previously completed the "another" journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = _anotherSessionData(session)
 
         session = SessionModelStub.build(Sinon, sessionData)
@@ -132,7 +132,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
   })
 
   describe('when the user picks the "another" option', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         accountSelected: 'another',
         searchInput: 'Customer Name'
@@ -159,7 +159,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountSelected: 'another',
           billingAccount,
@@ -192,7 +192,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     })
 
     describe('and the user had previously completed the "customer" journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = _customerSessionData(session)
 
         session = SessionModelStub.build(Sinon, sessionData)
@@ -224,7 +224,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
 
   describe('when validation fails', () => {
     describe('because the user did not select an option', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
       })
 
@@ -244,7 +244,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     })
 
     describe('because the user selected "another" but did not enter a search input', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           accountSelected: 'another'
         }
@@ -266,7 +266,7 @@ describe('Billing Accounts - Setup - Submit Account Service', () => {
     })
 
     describe('because the user selected "another" but entered an invalid search input', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           accountSelected: 'another',
           searchInput: 'a'.repeat(101)
