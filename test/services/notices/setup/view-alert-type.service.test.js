@@ -10,7 +10,10 @@ const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewAlertTypeService = require('../../../../app/services/notices/setup/view-alert-type.service.js')
@@ -21,7 +24,9 @@ describe('Notices Setup - Setup - View Alert Type service', () => {
 
   beforeEach(async () => {
     sessionData = AbstractionAlertSessionData.get()
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {

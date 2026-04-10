@@ -3,13 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitAlertEmailAddressService = require('../../../../app/services/notices/setup/submit-alert-email-address.service.js')
@@ -32,7 +36,13 @@ describe('Notices - Setup - Submit Alert Email Address service', () => {
     payload = { alertEmailAddressType: 'username' }
     sessionData = AbstractionAlertSessionData.get()
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -40,9 +50,8 @@ describe('Notices - Setup - Submit Alert Email Address service', () => {
       it('saves the submitted value', async () => {
         await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.alertEmailAddress).to.equal('admin@defra.gov.uk')
+        expect(session.alertEmailAddress).to.equal('admin@defra.gov.uk')
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -60,9 +69,8 @@ describe('Notices - Setup - Submit Alert Email Address service', () => {
       it('saves the submitted value', async () => {
         await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.alertEmailAddress).to.equal('test@defra.gov.uk')
+        expect(session.alertEmailAddress).to.equal('test@defra.gov.uk')
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -78,9 +86,8 @@ describe('Notices - Setup - Submit Alert Email Address service', () => {
       it('updates the session "alertEmailAddress" property to the users username', async () => {
         await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.alertEmailAddress).to.equal(auth.credentials.user.username)
+        expect(session.alertEmailAddress).to.equal(auth.credentials.user.username)
+        expect(session.$update.called).to.be.true()
       })
     })
 
@@ -91,9 +98,8 @@ describe('Notices - Setup - Submit Alert Email Address service', () => {
       it('updates the session "alertEmailAddress" property to the payload "otherUser" value', async () => {
         await SubmitAlertEmailAddressService.go(session.id, payload, auth)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.alertEmailAddress).to.equal('test@defra.go.uk')
+        expect(session.alertEmailAddress).to.equal('test@defra.go.uk')
+        expect(session.$update.called).to.be.true()
       })
     })
 

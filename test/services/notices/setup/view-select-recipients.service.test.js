@@ -10,11 +10,12 @@ const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewSelectRecipientsService = require('../../../../app/services/notices/setup/view-select-recipients.service.js')
@@ -35,9 +36,10 @@ describe('Notices - Setup - View Select Recipients service', () => {
       selectedRecipients: [recipients.primaryUser.contact_hash_id]
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
 
     Sinon.stub(FetchRecipientsService, 'go').resolves([recipients.primaryUser])
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {

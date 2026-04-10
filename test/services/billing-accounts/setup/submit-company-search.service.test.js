@@ -3,19 +3,25 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitCompanySearchService = require('../../../../app/services/billing-accounts/setup/submit-company-search.service.js')
 
 describe('Billing Accounts - Setup - Submit Company Search Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
+
+  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -25,11 +31,13 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
       billingAccount
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
-  afterEach(async () => {
-    await session.$query().delete()
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when the use submits a search term', () => {
@@ -42,9 +50,8 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
     it('saves the submitted value', async () => {
       await SubmitCompanySearchService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.companySearch).to.equal(payload.companySearch)
+      expect(session.companySearch).to.equal(payload.companySearch)
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
@@ -63,15 +70,16 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
         companySearch: 'Company Name'
       }
 
-      session = await SessionHelper.add({ data: sessionData })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      fetchSessionStub.resolves(session)
     })
 
     it('saves the submitted value', async () => {
       await SubmitCompanySearchService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.companySearch).to.equal(payload.companySearch)
+      expect(session.companySearch).to.equal(payload.companySearch)
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
@@ -91,30 +99,30 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
         companySearch: 'Company Name'
       }
 
-      session = await SessionHelper.add({ data: sessionData })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      fetchSessionStub.resolves(session)
     })
 
     it('saves the submitted value', async () => {
       await SubmitCompanySearchService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.companySearch).to.equal(payload.companySearch)
-      expect(refreshedSession.checkPageVisited).to.equal(true)
+      expect(session.companySearch).to.equal(payload.companySearch)
+      expect(session.checkPageVisited).to.equal(true)
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
       await SubmitCompanySearchService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.data).to.equal(
+      expect(session).to.equal(
         {
           checkPageVisited: true,
           companySearch: payload.companySearch
         },
-        { skip: ['billingAccount'] }
+        { skip: ['billingAccount', 'id'] }
       )
+      expect(session.$update.called).to.be.true()
     })
   })
 
@@ -126,23 +134,22 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
         companySearch: 'Company Ltd'
       }
 
-      session = await SessionHelper.add({ data: sessionData })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      fetchSessionStub.resolves(session)
     })
 
     it('saves the submitted value', async () => {
       await SubmitCompanySearchService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.companySearch).to.equal(payload.companySearch)
+      expect(session.companySearch).to.equal(payload.companySearch)
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
       await SubmitCompanySearchService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.data).to.equal(
+      expect(session).to.equal(
         {
           addressJourney: null,
           addressSelected: null,
@@ -153,7 +160,7 @@ describe('Billing Accounts - Setup - Submit Company Search Service', () => {
           contactName: null,
           fao: null
         },
-        { skip: ['billingAccount'] }
+        { skip: ['billingAccount', 'id'] }
       )
     })
   })

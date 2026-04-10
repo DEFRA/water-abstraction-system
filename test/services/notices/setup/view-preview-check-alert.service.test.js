@@ -11,11 +11,12 @@ const { expect } = Code
 // Test helpers
 const AbstractionAlertSessionDataFixture = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewPreviewCheckAlertService = require('../../../../app/services/notices/setup/view-preview-check-alert.service.js')
@@ -42,7 +43,7 @@ describe('Notices - Setup - View Preview Check Alert service', () => {
       referenceCode: generateNoticeReferenceCode('WAA-')
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
 
     // Create the recipients data
     recipients = RecipientsFixture.recipients()
@@ -52,6 +53,7 @@ describe('Notices - Setup - View Preview Check Alert service', () => {
     testRecipient = testRecipients[0]
 
     Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves(testRecipients)
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {
