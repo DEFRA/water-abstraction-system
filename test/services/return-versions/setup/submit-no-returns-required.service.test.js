@@ -5,48 +5,52 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitNoReturnsRequiredService = require('../../../../app/services/return-versions/setup/submit-no-returns-required.service.js')
 
 describe('Return Versions Setup - Submit No Returns Required service', () => {
+  let fetchSessionStub
   let payload
   let session
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
-      data: {
-        checkPageVisited: false,
-        licence: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-          endDate: null,
-          licenceRef: '01/ABC',
-          licenceHolder: 'Turbo Kid',
-          returnVersions: [
-            {
-              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-              startDate: '2023-01-01T00:00:00.000Z',
-              reason: null,
-              modLogs: []
-            }
-          ],
-          startDate: '2022-04-01T00:00:00.000Z'
-        },
-        journey: 'no-returns-required',
-        requirements: [{}],
-        startDateOptions: 'licenceStartDate'
-      }
+      checkPageVisited: false,
+      licence: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Turbo Kid',
+        returnVersions: [
+          {
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }
+        ],
+        startDate: '2022-04-01T00:00:00.000Z'
+      },
+      journey: 'no-returns-required',
+      requirements: [{}],
+      startDateOptions: 'licenceStartDate'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -57,7 +61,7 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           reason: 'abstraction-below-100-cubic-metres-per-day'
         }
@@ -66,9 +70,8 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
       it('saves the submitted value', async () => {
         await SubmitNoReturnsRequiredService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.reason).to.equal('abstraction-below-100-cubic-metres-per-day')
+        expect(session.reason).to.equal('abstraction-below-100-cubic-metres-per-day')
+        expect(session.$update.called).to.be.true()
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
@@ -78,8 +81,13 @@ describe('Return Versions Setup - Submit No Returns Required service', () => {
       })
 
       describe('and the page has been visited', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, {
+            ...sessionData,
+            checkPageVisited: true
+          })
+
+          fetchSessionStub.resolves(session)
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {

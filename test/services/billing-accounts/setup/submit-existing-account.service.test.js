@@ -10,11 +10,13 @@ const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchExistingCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-existing-companies.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitExistingAccountService = require('../../../../app/services/billing-accounts/setup/submit-existing-account.service.js')
@@ -22,26 +24,28 @@ const SubmitExistingAccountService = require('../../../../app/services/billing-a
 describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   const companies = _companies()
 
+  let fetchSessionStub
   let payload
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     payload = {}
     sessionData = {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
-  afterEach(async () => {
-    await session.$query().delete()
+  afterEach(() => {
     Sinon.restore()
   })
 
   describe('when the user picks an existing account', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         existingAccount: companies[0].id
       }
@@ -50,14 +54,13 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     it('saves the submitted value', async () => {
       await SubmitExistingAccountService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.data).to.equal(
+      expect(session).to.equal(
         {
           existingAccount: payload.existingAccount
         },
-        { skip: ['billingAccount'] }
+        { skip: ['billingAccount', 'id'] }
       )
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
@@ -69,26 +72,27 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
           existingAccount: payload.existingAccount
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitExistingAccountService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             existingAccount: payload.existingAccount
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -101,28 +105,29 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     describe('and the user has returned to the page from the check page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
           checkPageVisited: true,
           existingAccount: payload.existingAccount
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitExistingAccountService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             checkPageVisited: true,
             existingAccount: payload.existingAccount
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -135,24 +140,25 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     describe('and the user had previously completed the "new" journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = _newAccountSessionData(session)
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value and deletes the previously saved data', async () => {
         await SubmitExistingAccountService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             ..._newAccountExpectedValues(),
             existingAccount: companies[0].id
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -166,7 +172,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   })
 
   describe('when the user picks a new account', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         existingAccount: 'new'
       }
@@ -175,14 +181,13 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     it('saves the submitted value', async () => {
       await SubmitExistingAccountService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.data).to.equal(
+      expect(session).to.equal(
         {
           existingAccount: 'new'
         },
-        { skip: ['billingAccount'] }
+        { skip: ['billingAccount', 'id'] }
       )
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
@@ -194,26 +199,27 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
           existingAccount: payload.existingAccount
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitExistingAccountService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             existingAccount: payload.existingAccount
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -226,24 +232,25 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
     })
 
     describe('and the user had previously completed the existing account journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = _existingAccountSessionData(session)
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitExistingAccountService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             ..._commonExpectedValues(),
             existingAccount: 'new'
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -257,7 +264,7 @@ describe('Billing Accounts - Setup - Submit Existing Account service', () => {
   })
 
   describe('when validation fails', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {}
       Sinon.stub(FetchExistingCompaniesService, 'go').returns(companies)
     })

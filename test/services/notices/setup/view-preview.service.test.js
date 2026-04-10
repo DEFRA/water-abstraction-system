@@ -12,12 +12,13 @@ const { expect } = Code
 const { HTTP_STATUS_OK } = require('node:http2').constants
 
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const GeneratePreviewRequest = require('../../../../app/requests/notify/generate-preview.request.js')
 
 // Thing under test
@@ -27,13 +28,14 @@ describe('Notices - Setup - View Preview service', () => {
   let licenceMonitoringStationId
   let recipients
   let session
+  let sessionData
 
   afterEach(() => {
     Sinon.restore()
   })
 
   describe('when previewing an abstraction alert notification', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       const fixtureData = RecipientsFixture.alertsRecipients()
 
       recipients = [fixtureData.primaryUser]
@@ -59,28 +61,30 @@ describe('Notices - Setup - View Preview service', () => {
         }
       ]
 
-      session = await SessionHelper.add({
-        data: {
-          alertEmailAddress: 'admin-internal@wrls.gov.uk',
-          alertEmailAddressType: 'username',
-          alertThresholds: ['flow-50-m3/s'],
-          alertType: 'stop',
-          licenceRefs: [...recipients[0].licence_refs],
-          licenceMonitoringStations,
-          journey: 'alerts',
-          monitoringStationId: generateUUID(),
-          monitoringStationName: 'DEATH STAR',
-          monitoringStationRiverName: '',
-          name: 'Water abstraction alert',
-          noticeType: 'abstractionAlerts',
-          notificationType: 'Abstraction alert',
-          referenceCode: generateNoticeReferenceCode('WAA-'),
-          relevantLicenceMonitoringStations: [...licenceMonitoringStations],
-          removedThresholds: [],
-          selectedRecipients: [recipients[0].contact_hash_id],
-          subType: 'waterAbstractionAlerts'
-        }
-      })
+      sessionData = {
+        alertEmailAddress: 'admin-internal@wrls.gov.uk',
+        alertEmailAddressType: 'username',
+        alertThresholds: ['flow-50-m3/s'],
+        alertType: 'stop',
+        licenceRefs: [...recipients[0].licence_refs],
+        licenceMonitoringStations,
+        journey: 'alerts',
+        monitoringStationId: generateUUID(),
+        monitoringStationName: 'DEATH STAR',
+        monitoringStationRiverName: '',
+        name: 'Water abstraction alert',
+        noticeType: 'abstractionAlerts',
+        notificationType: 'Abstraction alert',
+        referenceCode: generateNoticeReferenceCode('WAA-'),
+        relevantLicenceMonitoringStations: [...licenceMonitoringStations],
+        removedThresholds: [],
+        selectedRecipients: [recipients[0].contact_hash_id],
+        subType: 'waterAbstractionAlerts'
+      }
+
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
       licenceMonitoringStationId = licenceMonitoringStations[0].id
 
@@ -124,7 +128,7 @@ describe('Notices - Setup - View Preview service', () => {
   })
 
   describe('when previewing a returns invitation or reminder notification', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       const fixtureData = RecipientsFixture.recipients()
 
       recipients = [fixtureData.primaryUser]
@@ -150,31 +154,33 @@ describe('Notices - Setup - View Preview service', () => {
         }
       ]
 
-      session = await SessionHelper.add({
+      sessionData = {
         id: sessionId,
-        data: {
-          addressJourney: {
-            address: {},
-            backLink: {
-              href: `/system/notices/setup/${sessionId}/recipient-name`,
-              text: 'Back'
-            },
-            redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`,
-            activeNavBar: 'notices',
-            pageTitleCaption: `Notice ${referenceCode}`
+        addressJourney: {
+          address: {},
+          backLink: {
+            href: `/system/notices/setup/${sessionId}/recipient-name`,
+            text: 'Back'
           },
-          checkPageVisited: true,
-          dueReturns,
-          licenceRef,
-          journey: 'adhoc',
-          name: 'Returns: invitation',
-          notificationType: 'Returns invitation',
-          noticeType: 'invitations',
-          referenceCode,
-          selectedRecipients: [recipients[0].contact_hash_id],
-          subType: 'returnInvitation'
-        }
-      })
+          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`,
+          activeNavBar: 'notices',
+          pageTitleCaption: `Notice ${referenceCode}`
+        },
+        checkPageVisited: true,
+        dueReturns,
+        licenceRef,
+        journey: 'adhoc',
+        name: 'Returns: invitation',
+        notificationType: 'Returns invitation',
+        noticeType: 'invitations',
+        referenceCode,
+        selectedRecipients: [recipients[0].contact_hash_id],
+        subType: 'returnInvitation'
+      }
+
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
       licenceMonitoringStationId = null
 

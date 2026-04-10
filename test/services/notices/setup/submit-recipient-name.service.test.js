@@ -3,12 +3,16 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -20,7 +24,7 @@ describe('Notices - Setup - Submit Recipient Name service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     referenceCode = generateNoticeReferenceCode('RINV-')
 
     payload = { name: 'Ronald Weasley' }
@@ -28,31 +32,25 @@ describe('Notices - Setup - Submit Recipient Name service', () => {
       referenceCode
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     it('saves the submitted value', async () => {
       await SubmitRecipientNameService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession).to.equal({
+      expect(session).to.equal({
         ...session,
-        data: {
-          contactName: 'Ronald Weasley',
-          referenceCode
-        },
         contactName: 'Ronald Weasley'
       })
-    })
 
-    it('saves the submitted value', async () => {
-      await SubmitRecipientNameService.go(session.id, payload)
-
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.contactName).to.equal('Ronald Weasley')
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {

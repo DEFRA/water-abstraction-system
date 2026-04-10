@@ -3,13 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitFAOService = require('../../../../app/services/billing-accounts/setup/submit-fao.service.js')
@@ -18,25 +22,28 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
   const billingAccount = BillingAccountsFixture.billingAccount().billingAccount
   const billingAccountAddress = billingAccount.billingAccountAddresses[0].address
 
+  let fetchSessionStub
   let payload
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       addressSelected: billingAccountAddress.id,
       billingAccount
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
-  afterEach(async () => {
-    await session.$query().delete()
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called with a "yes" value', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         fao: 'yes'
       }
@@ -45,13 +52,11 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     it('saves the submitted value', async () => {
       await SubmitFAOService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.data).to.equal(
+      expect(session).to.equal(
         {
           fao: 'yes'
         },
-        { skip: ['addressSelected', 'billingAccount'] }
+        { skip: ['addressSelected', 'billingAccount', 'id'] }
       )
     })
 
@@ -62,26 +67,27 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount,
           fao: 'yes'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             fao: 'yes'
           },
-          { skip: ['addressSelected', 'billingAccount'] }
+          { skip: ['addressSelected', 'billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -92,28 +98,29 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     describe('and the user has returned from the check page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount,
           checkPageVisited: true,
           fao: 'yes'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             checkPageVisited: true,
             fao: 'yes'
           },
-          { skip: ['addressSelected', 'billingAccount'] }
+          { skip: ['addressSelected', 'billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -124,22 +131,22 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     describe('and the user had previously completed the "no" journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           addressJourney: _addressJourney(session),
           billingAccount,
           fao: 'no'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             addressJourney: null,
             checkPageVisited: false,
@@ -147,8 +154,9 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
             contactSelected: null,
             fao: 'yes'
           },
-          { skip: ['addressSelected', 'billingAccount'] }
+          { skip: ['addressSelected', 'billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -160,7 +168,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
   })
 
   describe('when called with a "no" value', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         fao: 'no'
       }
@@ -169,14 +177,13 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     it('saves the submitted value', async () => {
       await SubmitFAOService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.data).to.equal(
+      expect(session).to.equal(
         {
           fao: 'no'
         },
-        { skip: ['addressSelected', 'billingAccount'] }
+        { skip: ['addressSelected', 'billingAccount', 'id'] }
       )
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
@@ -186,26 +193,27 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount,
           fao: 'no'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             fao: 'no'
           },
-          { skip: ['addressSelected', 'billingAccount'] }
+          { skip: ['addressSelected', 'billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -216,28 +224,29 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     describe('and the user has returned from the check page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount,
           checkPageVisited: true,
           fao: 'no'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             checkPageVisited: true,
             fao: 'no'
           },
-          { skip: ['addressSelected', 'billingAccount'] }
+          { skip: ['addressSelected', 'billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -248,7 +257,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
     })
 
     describe('and the user had previously completed the "yes" journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           addressJourney: _addressJourney(session),
           billingAccount,
@@ -257,15 +266,15 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           fao: 'yes'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             addressJourney: null,
             checkPageVisited: false,
@@ -273,8 +282,9 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
             contactSelected: null,
             fao: 'no'
           },
-          { skip: ['addressSelected', 'billingAccount'] }
+          { skip: ['addressSelected', 'billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -287,7 +297,7 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
 
   describe('when the user has selected "new" for the existing address', () => {
     describe('and submits "no" for the fao', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           fao: 'no'
         }
@@ -297,21 +307,22 @@ describe('Billing Accounts - Setup - Submit FAO Service', () => {
           billingAccount
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitFAOService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
-            addressJourney: _addressJourney(refreshedSession),
+            addressJourney: _addressJourney(session),
             fao: 'no'
           },
-          { skip: ['addressSelected', 'billingAccount'] }
+          { skip: ['addressSelected', 'billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {

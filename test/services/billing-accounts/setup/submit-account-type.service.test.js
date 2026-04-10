@@ -3,51 +3,57 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitAccountTypeService = require('../../../../app/services/billing-accounts/setup/submit-account-type.service.js')
 
 describe('Billing Accounts - Setup - Account Type Service', () => {
+  let fetchSessionStub
   let payload
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
-  afterEach(async () => {
-    await session.$query().delete()
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called with "company" selected', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = { accountType: 'company' }
     })
 
     it('saves the submitted value', async () => {
       await SubmitAccountTypeService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.data).to.equal(
+      expect(session).to.equal(
         {
           accountType: 'company',
           searchIndividualInput: null
         },
-        { skip: ['billingAccount'] }
+        { skip: ['billingAccount', 'id'] }
       )
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
@@ -59,27 +65,28 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountType: 'company',
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             accountType: 'company',
             searchIndividualInput: null
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -92,29 +99,30 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user has returned to the page after visiting the check page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountType: 'company',
           checkPageVisited: true,
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             accountType: 'company',
             checkPageVisited: true,
             searchIndividualInput: null
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -127,25 +135,26 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user had previously completed the "individual" journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = _individualSessionData(session)
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             ..._commonExpectedValues(),
             accountType: 'company',
             searchIndividualInput: null
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -159,22 +168,21 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
   })
 
   describe('when called with "individual" selected and a search term entered', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = { accountType: 'individual', searchIndividualInput: 'John Doe' }
     })
 
     it('saves the submitted value', async () => {
       await SubmitAccountTypeService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.data).to.equal(
+      expect(session).to.equal(
         {
           accountType: 'individual',
           searchIndividualInput: 'John Doe'
         },
-        { skip: ['billingAccount'] }
+        { skip: ['billingAccount', 'id'] }
       )
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
@@ -186,28 +194,29 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountType: 'individual',
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
           searchIndividualInput: 'John Doe'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             accountType: 'individual',
             searchIndividualInput: 'John Doe'
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -220,7 +229,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user has returned to the page from the check page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountType: 'individual',
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
@@ -228,22 +237,23 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           searchIndividualInput: 'John Doe'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             accountType: 'individual',
             checkPageVisited: true,
             searchIndividualInput: 'John Doe'
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -256,18 +266,18 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user had previously completed the "company" journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = _companySessionData(session)
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             ..._commonExpectedValues(),
             accountType: 'individual',
@@ -275,8 +285,9 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
             companySearch: null,
             searchIndividualInput: 'John Doe'
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -289,7 +300,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
     })
 
     describe('and the user has returned to the page, chosen "individual" but changed the search term', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = { accountType: 'individual', searchIndividualInput: 'Jane Doe' }
         sessionData = {
           ..._commonSessionData(session),
@@ -297,15 +308,15 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           searchIndividualInput: 'John Doe'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitAccountTypeService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             ..._commonExpectedValues(),
             accountType: 'individual',
@@ -313,8 +324,9 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
             companySearch: null,
             searchIndividualInput: 'Jane Doe'
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {

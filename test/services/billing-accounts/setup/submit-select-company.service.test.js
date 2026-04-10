@@ -11,7 +11,10 @@ const { expect } = Code
 // Test helpers
 const FetchCompaniesService = require('../../../../app/services/billing-accounts/setup/fetch-companies.service.js')
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitSelectCompanyService = require('../../../../app/services/billing-accounts/setup/submit-select-company.service.js')
@@ -27,16 +30,23 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     }
   ]
 
+  let fetchSessionStub
   let payload
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       billingAccount
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   afterEach(async () => {
@@ -44,7 +54,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
   })
 
   describe('when the user picks a company', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         companiesHouseNumber
       }
@@ -53,9 +63,8 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     it('saves the submitted value', async () => {
       await SubmitSelectCompanyService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.companiesHouseNumber).to.equal(payload.companiesHouseNumber)
+      expect(session.companiesHouseNumber).to.equal(payload.companiesHouseNumber)
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
@@ -67,26 +76,27 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           companiesHouseNumber,
           billingAccount
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitSelectCompanyService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             companiesHouseNumber: payload.companiesHouseNumber
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
@@ -99,27 +109,27 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     })
 
     describe('and the user has returned to the page from the check page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           companiesHouseNumber,
           billingAccount,
           checkPageVisited: true
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitSelectCompanyService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             companiesHouseNumber: payload.companiesHouseNumber,
             checkPageVisited: true
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
       })
 
@@ -133,7 +143,7 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
     })
 
     describe('and the user selects a different company', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           billingAccount,
           addressSelected: 'another',
@@ -142,15 +152,15 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
           fao: 'yes'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitSelectCompanyService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             addressJourney: null,
             addressSelected: null,
@@ -160,8 +170,9 @@ describe('Billing Accounts - Setup - Submit Select Company Service', () => {
             contactSelected: null,
             fao: null
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
+        expect(session.$update.called).to.be.true()
       })
 
       it('continues the journey', async () => {
