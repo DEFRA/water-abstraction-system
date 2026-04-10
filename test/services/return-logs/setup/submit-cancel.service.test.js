@@ -23,7 +23,7 @@ describe('Return Logs Setup - Submit Cancel service', () => {
   beforeEach(async () => {
     session = SessionModelStub.build(Sinon, {})
 
-    Sinon.stub(DeleteSessionDal, 'go').resolves(session)
+    Sinon.stub(DeleteSessionDal, 'go').resolves()
   })
 
   afterEach(() => {
