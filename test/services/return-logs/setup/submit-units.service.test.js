@@ -5,46 +5,53 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitUnitsService = require('../../../../app/services/return-logs/setup/submit-units.service.js')
 
 describe('Return Logs Setup - Submit Units service', () => {
+  let fetchSessionStub
   let payload
   let session
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
-      data: {
-        returnReference: '12345'
-      }
+      returnReference: '12345'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
 
-    yarStub = { flash: Sinon.stub() }
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    yarStub = { flash: Sinon.stub().returns([]) }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = { units: 'litres' }
       })
 
       it('saves the submitted option', async () => {
         await SubmitUnitsService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.units).to.equal('litres')
-        expect(refreshedSession.unitSymbol).to.equal('l')
+        expect(session.units).to.equal('litres')
+        expect(session.unitSymbol).to.equal('l')
+        expect(session.$update.called).to.be.true()
       })
 
       describe('and the page has been not been visited', () => {
@@ -58,8 +65,10 @@ describe('Return Logs Setup - Submit Units service', () => {
       })
 
       describe('and the page has been visited', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, { ...sessionData, checkPageVisited: true })
+
+          fetchSessionStub.resolves(session)
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
@@ -82,7 +91,7 @@ describe('Return Logs Setup - Submit Units service', () => {
     })
 
     describe('with an invalid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
       })
 

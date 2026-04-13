@@ -5,32 +5,40 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitMeterProvidedService = require('../../../../app/services/return-logs/setup/submit-meter-provided.service.js')
 
 describe('Return Logs Setup - Submit Meter Provided service', () => {
+  let fetchSessionStub
   let payload
   let session
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
-      data: {
-        returnReference: '12345',
-        reported: 'abstractionVolumes'
-      }
+      returnReference: '12345',
+      reported: 'abstractionVolumes'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
 
-    yarStub = { flash: Sinon.stub() }
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    yarStub = { flash: Sinon.stub().returns([]) }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -42,9 +50,8 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
       it('saves the submitted option', async () => {
         await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.meterProvided).to.equal('yes')
+        expect(session.meterProvided).to.equal('yes')
+        expect(session.$update.called).to.be.true()
       })
 
       describe('and the user has selected "yes" to a meter being provided', () => {
@@ -76,7 +83,7 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
           })
 
           describe('and meter details had previously been saved to the session', () => {
-            beforeEach(async () => {
+            beforeEach(() => {
               payload = { meterProvided: 'no' }
               sessionData = {
                 data: {
@@ -89,25 +96,31 @@ describe('Return Logs Setup - Submit Meter Provided service', () => {
                 }
               }
 
-              session = await SessionHelper.add(sessionData)
+              session = SessionModelStub.build(Sinon, sessionData)
+
+              fetchSessionStub.resolves(session)
             })
 
             it('removes the previously entered meter details from the session data', async () => {
               await SubmitMeterProvidedService.go(session.id, payload, yarStub)
 
-              const refreshedSession = await session.$query()
-
-              expect(refreshedSession.meterProvided).to.equal('no')
-              expect(refreshedSession.meterMake).to.be.null()
-              expect(refreshedSession.meterSerialNumber).to.be.null()
-              expect(refreshedSession.meter10TimesDisplay).to.be.null()
+              expect(session.meterProvided).to.equal('no')
+              expect(session.meterMake).to.be.null()
+              expect(session.meterSerialNumber).to.be.null()
+              expect(session.meter10TimesDisplay).to.be.null()
+              expect(session.$update.called).to.be.true()
             })
           })
         })
 
         describe('and the page has been been visited', () => {
-          beforeEach(async () => {
-            session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+          beforeEach(() => {
+            session = SessionModelStub.build(Sinon, {
+              ...sessionData,
+              checkPageVisited: true
+            })
+
+            fetchSessionStub.resolves(session)
           })
 
           it('returns the correct details the controller needs to redirect the journey', async () => {

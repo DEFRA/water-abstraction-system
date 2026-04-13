@@ -5,16 +5,20 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitMeterDetailsService = require('../../../../app/services/return-logs/setup/submit-meter-details.service.js')
 
 describe('Return Logs Setup - Submit Meter Details service', () => {
+  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -22,20 +26,24 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
 
   beforeEach(async () => {
     sessionData = {
-      data: {
-        returnReference: '12345',
-        reported: 'meterReadings'
-      }
+      returnReference: '12345',
+      reported: 'meterReadings'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
 
-    yarStub = { flash: Sinon.stub() }
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    yarStub = { flash: Sinon.stub().returns([]) }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           meterMake: 'WATER',
           meterSerialNumber: '123',
@@ -46,11 +54,11 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       it('saves the submitted option', async () => {
         await SubmitMeterDetailsService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
+        expect(session.meterMake).to.equal('WATER')
+        expect(session.meterSerialNumber).to.equal('123')
+        expect(session.meter10TimesDisplay).to.equal('yes')
 
-        expect(refreshedSession.meterMake).to.equal('WATER')
-        expect(refreshedSession.meterSerialNumber).to.equal('123')
-        expect(refreshedSession.meter10TimesDisplay).to.equal('yes')
+        expect(session.$update.called).to.be.true()
       })
     })
 
@@ -66,8 +74,13 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
     })
 
     describe('and the page has been visited', () => {
-      beforeEach(async () => {
-        session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+      beforeEach(() => {
+        session = SessionModelStub.build(Sinon, {
+          ...sessionData,
+          checkPageVisited: true
+        })
+
+        fetchSessionStub.resolves(session)
       })
 
       it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
@@ -90,7 +103,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
     })
 
     describe('with an invalid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
       })
 
@@ -131,7 +144,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       })
 
       describe('because the user has not entered the "make"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {
             meterSerialNumber: '123',
             meter10TimesDisplay: 'yes'
@@ -149,7 +162,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       })
 
       describe('because the user has not entered the "serial number"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {
             meterMake: 'WATER',
             meter10TimesDisplay: 'yes'
@@ -167,7 +180,7 @@ describe('Return Logs Setup - Submit Meter Details service', () => {
       })
 
       describe('because the user has not selected the "times 10 display"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {
             meterMake: 'WATER',
             meterSerialNumber: '123'

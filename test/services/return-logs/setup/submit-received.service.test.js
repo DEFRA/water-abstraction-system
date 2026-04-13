@@ -5,41 +5,49 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { today } = require('../../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitReceivedService = require('../../../../app/services/return-logs/setup/submit-received.service.js')
 
 describe('Return Logs - Setup - Submit Received service', () => {
+  let fetchSessionStub
   let payload
   let session
   let sessionData
   let testDate
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
-      data: {
-        licenceId: 'cd190dc7-912a-46a5-9421-2750fb1c7ac8',
-        returnLogId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
-        returnReference: '12345',
-        startDate: '2023-04-01T00:00:00.000Z'
-      }
+      licenceId: 'cd190dc7-912a-46a5-9421-2750fb1c7ac8',
+      returnLogId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
+      returnReference: '12345',
+      startDate: '2023-04-01T00:00:00.000Z'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
 
-    yarStub = { flash: Sinon.stub() }
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    yarStub = { flash: Sinon.stub().returns([]) }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     describe('with a valid payload (todays date)', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         testDate = today()
         payload = {
           receivedDateOptions: 'today'
@@ -49,10 +57,9 @@ describe('Return Logs - Setup - Submit Received service', () => {
       it('saves the submitted option', async () => {
         await SubmitReceivedService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.receivedDateOptions).to.equal('today')
-        expect(new Date(refreshedSession.receivedDate)).to.equal(testDate)
+        expect(session.receivedDateOptions).to.equal('today')
+        expect(new Date(session.receivedDate)).to.equal(testDate)
+        expect(session.$update.called).to.be.true()
       })
 
       describe('and the page has been not been visited', () => {
@@ -66,8 +73,10 @@ describe('Return Logs - Setup - Submit Received service', () => {
       })
 
       describe('and the page has been visited', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, { ...sessionData, checkPageVisited: true })
+
+          fetchSessionStub.resolves(session)
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
@@ -90,7 +99,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
     })
 
     describe('with a valid payload (yesterdays date)', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         testDate = today()
         testDate.setDate(testDate.getDate() - 1)
         payload = {
@@ -101,15 +110,14 @@ describe('Return Logs - Setup - Submit Received service', () => {
       it('saves the submitted option', async () => {
         await SubmitReceivedService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.receivedDateOptions).to.equal('yesterday')
-        expect(new Date(refreshedSession.receivedDate)).to.equal(testDate)
+        expect(session.receivedDateOptions).to.equal('yesterday')
+        expect(new Date(session.receivedDate)).to.equal(testDate)
+        expect(session.$update.called).to.be.true()
       })
     })
 
     describe('with a valid payload (custom received date)', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           receivedDateOptions: 'customDate',
           receivedDateDay: '26',
@@ -121,13 +129,12 @@ describe('Return Logs - Setup - Submit Received service', () => {
       it('saves the submitted values', async () => {
         await SubmitReceivedService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.receivedDateOptions).to.equal('customDate')
-        expect(refreshedSession.receivedDateDay).to.equal('26')
-        expect(refreshedSession.receivedDateMonth).to.equal('11')
-        expect(refreshedSession.receivedDateYear).to.equal('2023')
-        expect(new Date(refreshedSession.receivedDate)).to.equal(new Date('2023-11-26'))
+        expect(session.receivedDateOptions).to.equal('customDate')
+        expect(session.receivedDateDay).to.equal('26')
+        expect(session.receivedDateMonth).to.equal('11')
+        expect(session.receivedDateYear).to.equal('2023')
+        expect(new Date(session.receivedDate)).to.equal(new Date('2023-11-26'))
+        expect(session.$update.called).to.be.true()
       })
 
       it('returns the correct details the controller needs to redirect the journey', async () => {
@@ -138,7 +145,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
     })
 
     describe('with an invalid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
       })
 
@@ -179,7 +186,7 @@ describe('Return Logs - Setup - Submit Received service', () => {
       })
 
       describe('because the user has selected custom received date and entered invalid data', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {
             receivedDateOptions: 'customDate',
             receivedDateDay: 'a',

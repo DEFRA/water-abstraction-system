@@ -3,18 +3,23 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionHelper = require('../../../../test/support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitAlertTypeService = require('../../../../app/services/notices/setup/submit-alert-type.service.js')
 
 describe('Notices - Setup - Submit Alert Type service', () => {
+  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -22,20 +27,23 @@ describe('Notices - Setup - Submit Alert Type service', () => {
   beforeEach(() => {
     payload = { alertType: 'stop' }
     sessionData = AbstractionAlertSessionData.get()
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     describe('when the "alertType" has not been previously set', () => {
-      beforeEach(async () => {
-        session = await SessionHelper.add({ data: sessionData })
-      })
-
       it('saves the submitted value', async () => {
         await SubmitAlertTypeService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.alertType).to.equal('stop')
+        expect(session.alertType).to.equal('stop')
+        expect(session.$update.called).to.be.true()
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {
@@ -46,54 +54,53 @@ describe('Notices - Setup - Submit Alert Type service', () => {
     })
 
     describe('when the user selects a different "alertType" to a previous selection', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData.alertType = 'resume'
         sessionData.removedThresholds = ['123']
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('sets the "alertThresholds" to an empty array', async () => {
         await SubmitAlertTypeService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.alertThresholds).to.equal([])
+        expect(session.alertThresholds).to.equal([])
+        expect(session.$update.called).to.be.true()
       })
 
       it('sets the "removedThresholds" to an empty array', async () => {
         await SubmitAlertTypeService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.removedThresholds).to.equal([])
+        expect(session.removedThresholds).to.equal([])
+        expect(session.$update.called).to.be.true()
       })
     })
 
     describe('when the user selects the same "alertType" they previously selected', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData.alertType = 'stop'
         sessionData.alertThresholds = ['100-flow']
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('does not change the existing "alertThresholds"', async () => {
         await SubmitAlertTypeService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.alertThresholds).to.equal(['100-flow'])
+        expect(session.alertThresholds).to.equal(['100-flow'])
+        expect(session.$update.called).to.be.true()
       })
     })
   })
 
   describe('when validation fails', () => {
     describe('and no option has been selected', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
-
-        session = await SessionHelper.add({ data: sessionData })
       })
 
       it('returns page data for the view, with errors', async () => {
@@ -154,7 +161,7 @@ describe('Notices - Setup - Submit Alert Type service', () => {
     })
 
     describe('and "stop" or "reduce" have been selected but no thresholds have that alert type', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = { alertType: 'stop' }
 
         sessionData.licenceMonitoringStations = [
@@ -164,7 +171,9 @@ describe('Notices - Setup - Submit Alert Type service', () => {
           }
         ]
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('returns page data for the view, with errors (and the selected alert type checked)', async () => {

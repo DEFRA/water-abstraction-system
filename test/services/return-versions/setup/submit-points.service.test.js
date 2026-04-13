@@ -10,10 +10,11 @@ const { expect } = Code
 
 // Test helpers
 const PointModel = require('../../../../app/models/point.model.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things we need to stub
 const FetchPointsService = require('../../../../app/services/return-versions/setup/fetch-points.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitPointsService = require('../../../../app/services/return-versions/setup/submit-points.service.js')
@@ -21,6 +22,7 @@ const SubmitPointsService = require('../../../../app/services/return-versions/se
 describe('Return Versions - Setup - Submit Points service', () => {
   const requirementIndex = 0
 
+  let fetchSessionStub
   let payload
   let session
   let sessionData
@@ -28,50 +30,50 @@ describe('Return Versions - Setup - Submit Points service', () => {
 
   beforeEach(async () => {
     sessionData = {
-      data: {
-        checkPageVisited: false,
-        licence: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-          endDate: null,
-          licenceRef: '01/ABC',
-          licenceHolder: 'Turbo Kid',
-          returnVersions: [
-            {
-              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-              startDate: '2023-01-01T00:00:00.000Z',
-              reason: null,
-              modLogs: []
-            }
-          ],
-          startDate: '2022-04-01T00:00:00.000Z',
-          waterUndertaker: false
-        },
-        multipleUpload: false,
-        journey: 'returns-required',
-        requirements: [{}],
-        startDateOptions: 'licenceStartDate',
-        returnVersionStartDate: '2023-01-01T00:00:00.000Z',
-        licenceVersion: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          endDate: null,
-          startDate: '2022-04-01T00:00:00.000Z',
-          copyableReturnVersions: [
-            {
-              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-              startDate: '2023-01-01T00:00:00.000Z',
-              reason: null,
-              modLogs: []
-            }
-          ]
-        },
-        reason: 'major-change'
-      }
+      checkPageVisited: false,
+      licence: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Turbo Kid',
+        returnVersions: [
+          {
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }
+        ],
+        startDate: '2022-04-01T00:00:00.000Z',
+        waterUndertaker: false
+      },
+      multipleUpload: false,
+      journey: 'returns-required',
+      requirements: [{}],
+      startDateOptions: 'licenceStartDate',
+      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
+      licenceVersion: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        endDate: null,
+        startDate: '2022-04-01T00:00:00.000Z',
+        copyableReturnVersions: [
+          {
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }
+        ]
+      },
+      reason: 'major-change'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
 
-    yarStub = { flash: Sinon.stub() }
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    yarStub = { flash: Sinon.stub().returns([]) }
   })
 
   afterEach(() => {
@@ -91,9 +93,8 @@ describe('Return Versions - Setup - Submit Points service', () => {
       it('saves the submitted value', async () => {
         await SubmitPointsService.go(session.id, requirementIndex, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.requirements[0].points).to.equal(['d03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6'])
+        expect(session.requirements[0].points).to.equal(['d03d7d7c-4e33-4b4d-ac9b-6ebac9a5e5f6'])
+        expect(session.$update.called).to.be.true()
       })
 
       describe('and the page has been not been visited', () => {
@@ -107,8 +108,13 @@ describe('Return Versions - Setup - Submit Points service', () => {
       })
 
       describe('and the page has been visited', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, {
+            ...sessionData,
+            checkPageVisited: true
+          })
+
+          fetchSessionStub.resolves(session)
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
