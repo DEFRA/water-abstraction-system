@@ -5,11 +5,14 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Things under test
 const SubmitSiteDescriptionService = require('../../../../app/services/return-versions/setup/submit-site-description.service.js')
@@ -17,41 +20,46 @@ const SubmitSiteDescriptionService = require('../../../../app/services/return-ve
 describe('Return Versions Setup - Submit Site Description service', () => {
   const requirementIndex = 0
 
+  let fetchSessionStub
   let payload
   let session
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
-      data: {
-        checkPageVisited: false,
-        licence: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-          endDate: null,
-          licenceRef: '01/ABC',
-          licenceHolder: 'Turbo Kid',
-          returnVersions: [
-            {
-              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-              startDate: '2023-01-01T00:00:00.000Z',
-              reason: null,
-              modLogs: []
-            }
-          ],
-          startDate: '2022-04-01T00:00:00.000Z'
-        },
-        journey: 'returns-required',
-        requirements: [{}],
-        startDateOptions: 'licenceStartDate',
-        reason: 'major-change'
-      }
+      checkPageVisited: false,
+      licence: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Turbo Kid',
+        returnVersions: [
+          {
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }
+        ],
+        startDate: '2022-04-01T00:00:00.000Z'
+      },
+      journey: 'returns-required',
+      requirements: [{}],
+      startDateOptions: 'licenceStartDate',
+      reason: 'major-change'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
 
-    yarStub = { flash: Sinon.stub() }
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    yarStub = { flash: Sinon.stub().returns([]) }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -65,11 +73,8 @@ describe('Return Versions Setup - Submit Site Description service', () => {
       it('saves the submitted value', async () => {
         await SubmitSiteDescriptionService.go(session.id, requirementIndex, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.requirements[0].siteDescription).to.equal(
-          'This is a valid return requirement description'
-        )
+        expect(session.requirements[0].siteDescription).to.equal('This is a valid return requirement description')
+        expect(session.$update.called).to.be.true()
       })
 
       describe('and the page has been not been visited', () => {
@@ -83,8 +88,10 @@ describe('Return Versions Setup - Submit Site Description service', () => {
       })
 
       describe('and the page has been visited', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, { ...sessionData, checkPageVisited: true })
+
+          fetchSessionStub.resolves(session)
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {

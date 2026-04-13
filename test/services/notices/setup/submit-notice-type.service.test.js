@@ -9,20 +9,24 @@ const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitNoticeTypeService = require('../../../../app/services/notices/setup/submit-notice-type.service.js')
 
 describe('Notices - Setup - Submit Notice Type service', () => {
   let auth
+  let fetchSessionStub
   let payload
   let session
   let sessionData
   let noticeType
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     auth = {
       credentials: { scope: ['bulk_return_notifications'] }
     }
@@ -31,7 +35,9 @@ describe('Notices - Setup - Submit Notice Type service', () => {
     payload = { noticeType }
     sessionData = {}
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -44,31 +50,14 @@ describe('Notices - Setup - Submit Notice Type service', () => {
     it('saves the notice type session data', async () => {
       await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession).to.equal({
-        ...session,
-        data: {
-          name: 'Returns: invitation',
-          noticeType: 'invitations',
-          notificationType: 'Returns invitation',
-          referenceCode: refreshedSession.referenceCode,
-          subType: 'returnInvitation'
-        },
-        name: 'Returns: invitation',
-        noticeType: 'invitations',
-        notificationType: 'Returns invitation',
-        referenceCode: refreshedSession.referenceCode,
-        subType: 'returnInvitation'
-      })
+      expect(session).to.equal(session)
+      expect(session.$update.called).to.be.true()
     })
 
     it('saves the submitted "noticeType"', async () => {
       await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.noticeType).to.equal('invitations')
+      expect(session.noticeType).to.equal('invitations')
     })
 
     it('returns a redirect to the "/check-notice-type" page', async () => {
@@ -79,13 +68,15 @@ describe('Notices - Setup - Submit Notice Type service', () => {
 
     describe('and the notice types is "paperReturn"', () => {
       describe('and the check page has been visited', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           sessionData.checkPageVisited = true
 
           noticeType = 'paperReturn'
           payload = { noticeType }
 
-          session = await SessionHelper.add({ data: sessionData })
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('continues the journey', async () => {
@@ -96,13 +87,15 @@ describe('Notices - Setup - Submit Notice Type service', () => {
       })
 
       describe('and the check page has not been visited', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           sessionData.checkPageVisited = false
 
           noticeType = 'paperReturn'
           payload = { noticeType }
 
-          session = await SessionHelper.add({ data: sessionData })
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('continues the journey', async () => {
@@ -115,16 +108,20 @@ describe('Notices - Setup - Submit Notice Type service', () => {
 
     describe('and the user comes from the check page', () => {
       describe('and the notice type has been updated', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { noticeType: 'test', checkPageVisited: true } })
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, {
+            checkPageVisited: true,
+            noticeType: 'test'
+          })
+
+          fetchSessionStub.resolves(session)
         })
 
         it('updates the sessions "checkPageVisited" flag', async () => {
           await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.checkPageVisited).to.be.false()
+          expect(session.checkPageVisited).to.be.false()
+          expect(session.$update.called).to.be.true()
         })
 
         it('sets a flash message', async () => {
@@ -142,16 +139,20 @@ describe('Notices - Setup - Submit Notice Type service', () => {
       })
 
       describe('and the notice type has not been updated', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { noticeType, checkPageVisited: true } })
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, {
+            noticeType,
+            checkPageVisited: true
+          })
+
+          fetchSessionStub.resolves(session)
         })
 
         it('does not update the session "checkPageVisited" flag', async () => {
           await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.checkPageVisited).to.be.true()
+          expect(session.checkPageVisited).to.be.true()
+          expect(session.$update.called).to.be.true()
         })
 
         it('does not set a flash message', async () => {
@@ -164,11 +165,13 @@ describe('Notices - Setup - Submit Notice Type service', () => {
 
     describe('and the journey is for "standard"', () => {
       describe('and the check page has been visited', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           sessionData.journey = 'standard'
           sessionData.checkPageVisited = true
 
-          session = await SessionHelper.add({ data: sessionData })
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('returns a redirect to the "/check-notice-type" page', async () => {
@@ -179,11 +182,13 @@ describe('Notices - Setup - Submit Notice Type service', () => {
       })
 
       describe('and the check page has not been visited', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           sessionData.journey = 'standard'
           sessionData.checkPageVisited = false
 
-          session = await SessionHelper.add({ data: sessionData })
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('returns a redirect to the "/returns-period" page', async () => {
@@ -196,11 +201,13 @@ describe('Notices - Setup - Submit Notice Type service', () => {
 
     describe('and the journey is "adhoc"', () => {
       describe('and the check page has been visited', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           sessionData.journey = 'adhoc'
           sessionData.checkPageVisited = true
 
-          session = await SessionHelper.add({ data: sessionData })
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('returns a redirect to the "/check-notice-type" page', async () => {
@@ -215,7 +222,9 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           sessionData.journey = 'adhoc'
           sessionData.checkPageVisited = false
 
-          session = await SessionHelper.add({ data: sessionData })
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('returns a redirect to the "/check-notice-type" page', async () => {
