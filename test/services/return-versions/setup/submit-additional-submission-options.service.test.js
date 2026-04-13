@@ -9,7 +9,10 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitAdditionalSubmissionOptionsService = require('../../../../app/services/return-versions/setup/submit-additional-submission-options.service.js')
@@ -17,22 +20,25 @@ const SubmitAdditionalSubmissionOptionsService = require('../../../../app/servic
 describe('Return Versions Setup - Submit Additional Submission Options service', () => {
   let payload
   let session
+  let sessionData
   let yarStub
 
-  beforeEach(async () => {
-    session = await SessionHelper.add({
-      data: {
-        checkPageVisited: false,
-        journey: 'returns-required',
-        licence: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          endDate: null,
-          licenceRef: '01/ABC',
-          licenceHolder: 'Turbo Kid'
-        },
-        multipleUpload: false
-      }
-    })
+  beforeEach(() => {
+    sessionData = {
+      checkPageVisited: false,
+      journey: 'returns-required',
+      licence: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Turbo Kid'
+      },
+      multipleUpload: false
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -52,9 +58,8 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       it('saves the submitted value', async () => {
         await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.noAdditionalOptions).to.be.true()
+        expect(session.noAdditionalOptions).to.be.true()
+        expect(session.$update.called).to.be.true()
       })
 
       it('sets the notification message to "Updated"', async () => {
@@ -80,9 +85,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       it('saves the submitted value', async () => {
         await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.multipleUpload).to.be.true()
+        expect(session.multipleUpload).to.be.true()
       })
 
       it('sets the notification message to "Updated"', async () => {
@@ -108,9 +111,7 @@ describe('Return Versions Setup - Submit Additional Submission Options service',
       it('saves the submitted value', async () => {
         await SubmitAdditionalSubmissionOptionsService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.quarterlyReturns).to.be.true()
+        expect(session.quarterlyReturns).to.be.true()
       })
 
       it('sets the notification message to "Updated"', async () => {

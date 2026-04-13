@@ -9,7 +9,10 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitNoteService = require('../../../../app/services/return-versions/setup/submit-note.service.js')
@@ -17,36 +20,40 @@ const SubmitNoteService = require('../../../../app/services/return-versions/setu
 describe('Return Versions Setup - Submit Note service', () => {
   const user = { username: 'carol.shaw@atari.com' }
 
+  let fetchSessionStub
   let payload
   let session
+  let sessionData
   let yarStub
 
-  beforeEach(async () => {
-    session = await SessionHelper.add({
-      data: {
-        checkPageVisited: false,
-        licence: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-          endDate: null,
-          licenceRef: '01/ABC',
-          licenceHolder: 'Turbo Kid',
-          returnVersions: [
-            {
-              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-              startDate: '2023-01-01T00:00:00.000Z',
-              reason: null,
-              modLogs: []
-            }
-          ],
-          startDate: '2022-04-01T00:00:00.000Z'
-        },
-        journey: 'returns-required',
-        requirements: [{}],
-        startDateOptions: 'licenceStartDate',
-        reason: 'major-change'
-      }
-    })
+  beforeEach(() => {
+    sessionData = {
+      checkPageVisited: false,
+      licence: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Turbo Kid',
+        returnVersions: [
+          {
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }
+        ],
+        startDate: '2022-04-01T00:00:00.000Z'
+      },
+      journey: 'returns-required',
+      requirements: [{}],
+      startDateOptions: 'licenceStartDate',
+      reason: 'major-change'
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -67,12 +74,11 @@ describe('Return Versions Setup - Submit Note service', () => {
         it('saves the submitted value', async () => {
           await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.note).to.equal({
+          expect(session.note).to.equal({
             content: 'A new note related to return requirement',
             userEmail: 'carol.shaw@atari.com'
           })
+          expect(session.$update.called).to.be.true()
         })
 
         it('returns the correct details the controller needs to redirect the journey', async () => {
@@ -92,28 +98,30 @@ describe('Return Versions Setup - Submit Note service', () => {
       })
 
       describe('that is an updated note', () => {
-        beforeEach(async () => {
-          await session.$query().patch({
-            data: {
-              checkPageVisited: false,
-              licence: {
-                id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-                currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-                endDate: null,
-                licenceRef: '01/ABC',
-                licenceHolder: 'Turbo Kid',
-                startDate: '2022-04-01T00:00:00.000Z'
-              },
-              journey: 'returns-required',
-              requirements: [{}],
-              startDateOptions: 'licenceStartDate',
-              reason: 'major-change',
-              note: {
-                content: 'A old note related to return requirement',
-                userEmail: 'carol.shaw@atari.com'
-              }
+        beforeEach(() => {
+          sessionData = {
+            checkPageVisited: false,
+            licence: {
+              id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+              currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+              endDate: null,
+              licenceRef: '01/ABC',
+              licenceHolder: 'Turbo Kid',
+              startDate: '2022-04-01T00:00:00.000Z'
+            },
+            journey: 'returns-required',
+            requirements: [{}],
+            startDateOptions: 'licenceStartDate',
+            reason: 'major-change',
+            note: {
+              content: 'A old note related to return requirement',
+              userEmail: 'carol.shaw@atari.com'
             }
-          })
+          }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
 
           payload = {
             note: 'An updated note related to return requirement'
@@ -123,12 +131,11 @@ describe('Return Versions Setup - Submit Note service', () => {
         it('saves the submitted value', async () => {
           await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.note).to.equal({
+          expect(session.note).to.equal({
             content: 'An updated note related to return requirement',
             userEmail: 'carol.shaw@atari.com'
           })
+          expect(session.$update.called).to.be.true()
         })
 
         it('returns the journey to redirect the page', async () => {
