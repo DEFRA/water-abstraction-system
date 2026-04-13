@@ -356,7 +356,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             startDateMonth: null,
             startDateYear: null,
             backLink: {
-              href: `/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up`,
+              href: '/system/licences/8b7f78ba-f3ad-4cb6-a058-78abc4d1383d/set-up',
               text: 'Back'
             },
             licenceId: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
