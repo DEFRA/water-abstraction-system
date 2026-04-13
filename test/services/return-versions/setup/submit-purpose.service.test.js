@@ -9,10 +9,11 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things we need to stub
 const FetchPurposesService = require('../../../../app/services/return-versions/setup/fetch-purposes.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitPurposeService = require('../../../../app/services/return-versions/setup/submit-purpose.service.js')
@@ -20,55 +21,56 @@ const SubmitPurposeService = require('../../../../app/services/return-versions/s
 describe('Return Versions - Setup - Submit Purpose service', () => {
   const requirementIndex = 0
 
+  let fetchSessionStub
   let payload
   let session
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
-      data: {
-        checkPageVisited: false,
-        licence: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-          endDate: null,
-          licenceRef: '01/ABC',
-          licenceHolder: 'Turbo Kid',
-          returnVersions: [
-            {
-              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-              startDate: '2023-01-01T00:00:00.000Z',
-              reason: null,
-              modLogs: []
-            }
-          ],
-          startDate: '2022-04-01T00:00:00.000Z',
-          waterUndertaker: false
-        },
-        multipleUpload: false,
-        journey: 'returns-required',
-        requirements: [{}],
-        startDateOptions: 'licenceStartDate',
-        returnVersionStartDate: '2023-01-01T00:00:00.000Z',
-        licenceVersion: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          endDate: null,
-          startDate: '2022-04-01T00:00:00.000Z',
-          copyableReturnVersions: [
-            {
-              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-              startDate: '2023-01-01T00:00:00.000Z',
-              reason: null,
-              modLogs: []
-            }
-          ]
-        },
-        reason: 'major-change'
-      }
+      checkPageVisited: false,
+      licence: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Turbo Kid',
+        returnVersions: [
+          {
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }
+        ],
+        startDate: '2022-04-01T00:00:00.000Z',
+        waterUndertaker: false
+      },
+      multipleUpload: false,
+      journey: 'returns-required',
+      requirements: [{}],
+      startDateOptions: 'licenceStartDate',
+      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
+      licenceVersion: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        endDate: null,
+        startDate: '2022-04-01T00:00:00.000Z',
+        copyableReturnVersions: [
+          {
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }
+        ]
+      },
+      reason: 'major-change'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub() }
 
@@ -84,7 +86,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           purposes: ['14794d57-1acf-4c91-8b48-4b1ec68bfd6f'],
           'alias-14794d57-1acf-4c91-8b48-4b1ec68bfd6f': 'great warm machine'
@@ -94,11 +96,10 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
       it('saves the submitted value', async () => {
         await SubmitPurposeService.go(session.id, requirementIndex, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.requirements[0].purposes).to.equal([
+        expect(session.requirements[0].purposes).to.equal([
           { alias: 'great warm machine', description: 'Heat Pump', id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f' }
         ])
+        expect(session.$update.called).to.be.true()
       })
 
       describe('and the page has been not been visited', () => {
@@ -113,7 +114,9 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
 
       describe('and the page has been visited', () => {
         beforeEach(async () => {
-          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+          session = SessionModelStub.build(Sinon, { ...sessionData, checkPageVisited: true })
+
+          fetchSessionStub.resolves(session)
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
@@ -140,7 +143,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
 
     describe('with an invalid payload', () => {
       describe('because it is empty', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {}
         })
 
@@ -180,7 +183,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
       })
 
       describe('because they entered an alias that is too long', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {
             purposes: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f',
             'alias-14794d57-1acf-4c91-8b48-4b1ec68bfd6f':

@@ -42,11 +42,11 @@ function go(payload, session) {
 function _noQuarterlyReturnsForSummerCycle(value, helpers, session) {
   const { additionalSubmissionOptions } = value
 
-  const hasSummerCycle = session.data.requirements?.some((requirement) => {
+  const hasSummerCycle = session.requirements?.some((requirement) => {
     return requirement.returnsCycle === 'summer'
   })
 
-  const checkPageVisited = session.data.checkPageVisited === true
+  const checkPageVisited = session.checkPageVisited === true
   const includesQuarterly = additionalSubmissionOptions?.includes('quarterly-returns')
 
   if (checkPageVisited && hasSummerCycle && includesQuarterly) {

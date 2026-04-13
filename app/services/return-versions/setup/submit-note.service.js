@@ -53,9 +53,7 @@ async function go(sessionId, payload, user, yar) {
 }
 
 function _notification(session, newNote) {
-  const {
-    data: { note }
-  } = session
+  const { note } = session
 
   if (!note && newNote) {
     return {
