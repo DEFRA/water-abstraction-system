@@ -24,7 +24,7 @@ describe('Return Versions Setup - Submit Remove service', () => {
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       checkPageVisited: false,
       licence: {
