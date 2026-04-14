@@ -11,9 +11,10 @@ const { expect } = Code
 // Test helpers
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const SessionHelper = require('../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../support/stubs/session.stub.js')
 
-// Things to stub
+// Things we need to stub
+const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
 const LookupPostcodeRequest = require('../../../app/requests/address-facade/lookup-postcode.request.js')
 const LookupUPRNRequest = require('../../../app/requests/address-facade/lookup-uprn.request.js')
 
@@ -37,28 +38,32 @@ describe('Address - Submit Select Service', () => {
   let lookupUPRNRequestStub
   let payload
   let session
+  let sessionData
   let sessionId
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionId = generateUUID()
 
-    session = await SessionHelper.add({
+    sessionData = {
       id: sessionId,
-      data: {
-        addressJourney: {
-          activeNavBar: 'manage',
-          address: { postcode: 'BS1 5AH' },
-          backLink: {
-            href: `/system/notices/setup/${sessionId}/contact-type`,
-            text: 'Back'
-          },
-          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-        }
+
+      addressJourney: {
+        activeNavBar: 'manage',
+        address: { postcode: 'BS1 5AH' },
+        backLink: {
+          href: `/system/notices/setup/${sessionId}/contact-type`,
+          text: 'Back'
+        },
+        redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
       }
-    })
+    }
 
     lookupPostcodeRequestStub = Sinon.stub(LookupPostcodeRequest, 'send')
     lookupUPRNRequestStub = Sinon.stub(LookupUPRNRequest, 'send')
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {
@@ -68,7 +73,7 @@ describe('Address - Submit Select Service', () => {
   describe('when called', () => {
     describe('with a valid payload', () => {
       describe('and the selected address has an "organisation"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = { addresses: '340116' }
 
           lookupUPRNRequestStub.resolves({
@@ -88,9 +93,7 @@ describe('Address - Submit Select Service', () => {
 
           expect(result).to.equal({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.addressJourney.address).to.equal({
+          expect(session.addressJourney.address).to.equal({
             uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
             addressLine2: 'HORIZON HOUSE DEANERY ROAD',
@@ -98,12 +101,13 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
-          expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
+          expect(session.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
+          expect(session.$update.called).to.be.true()
         })
       })
 
       describe('and the selected address does not have an "organisation"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {
             addresses: '340116'
           }
@@ -130,9 +134,7 @@ describe('Address - Submit Select Service', () => {
 
           expect(result).to.equal({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.addressJourney.address).to.equal({
+          expect(session.addressJourney.address).to.equal({
             uprn: 340116,
             addressLine1: 'HORIZON HOUSE DEANERY ROAD',
             addressLine2: null,
@@ -140,12 +142,13 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
-          expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
+          expect(session.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
+          expect(session.$update.called).to.be.true()
         })
       })
 
       describe('and the selected address does not have a "premises"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {
             addresses: '340116'
           }
@@ -172,9 +175,7 @@ describe('Address - Submit Select Service', () => {
 
           expect(result).to.equal({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.addressJourney.address).to.equal({
+          expect(session.addressJourney.address).to.equal({
             uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
             addressLine2: 'DEANERY ROAD',
@@ -182,12 +183,13 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
-          expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
+          expect(session.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
+          expect(session.$update.called).to.be.true()
         })
       })
 
       describe('and the selected address does not have a "premises"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {
             addresses: '340116'
           }
@@ -214,9 +216,7 @@ describe('Address - Submit Select Service', () => {
 
           expect(result).to.equal({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.addressJourney.address).to.equal({
+          expect(session.addressJourney.address).to.equal({
             uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
             addressLine2: 'HORIZON HOUSE',
@@ -224,12 +224,13 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
-          expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
+          expect(session.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
+          expect(session.$update.called).to.be.true()
         })
       })
 
       describe('and the selected address does not have a "locality"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {
             addresses: '340116'
           }
@@ -256,9 +257,7 @@ describe('Address - Submit Select Service', () => {
 
           expect(result).to.equal({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.addressJourney.address).to.equal({
+          expect(session.addressJourney.address).to.equal({
             uprn: 340116,
             addressLine1: 'ENVIRONMENT AGENCY',
             addressLine2: 'HORIZON HOUSE DEANERY ROAD',
@@ -266,7 +265,8 @@ describe('Address - Submit Select Service', () => {
             addressLine4: 'BRISTOL',
             postcode: 'BS1 5AH'
           })
-          expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
+          expect(session.addressJourney.backUrl).to.equal(`/system/address/${session.id}/select`)
+          expect(session.$update.called).to.be.true()
         })
       })
 
@@ -326,14 +326,14 @@ describe('Address - Submit Select Service', () => {
 
     describe('with an invalid payload', () => {
       describe('because the user has not selected an address', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {
             addresses: 'select'
           }
         })
 
         describe('and the postcode lookup succeeds', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             lookupPostcodeRequestStub.resolves({
               succeeded: true,
               response: {

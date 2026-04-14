@@ -3,13 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const SessionHelper = require('../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitPostcodeService = require('../../../app/services/address/submit-postcode.service.js')
@@ -17,25 +21,32 @@ const SubmitPostcodeService = require('../../../app/services/address/submit-post
 describe('Address - Submit Postcode Service', () => {
   let payload
   let session
+  let sessionData
   let sessionId
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionId = generateUUID()
 
-    session = await SessionHelper.add({
+    sessionData = {
       id: sessionId,
-      data: {
-        addressJourney: {
-          activeNavBar: 'manage',
-          address: {},
-          backLink: {
-            href: `/system/notices/setup/${sessionId}/contact-type`,
-            text: 'Back'
-          },
-          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-        }
+      addressJourney: {
+        activeNavBar: 'manage',
+        address: {},
+        backLink: {
+          href: `/system/notices/setup/${sessionId}/contact-type`,
+          text: 'Back'
+        },
+        redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
       }
-    })
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -49,9 +60,8 @@ describe('Address - Submit Postcode Service', () => {
 
         expect(result).to.equal({})
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.addressJourney.address.postcode).to.equal('SW1A 1AA')
+        expect(session.addressJourney.address.postcode).to.equal('SW1A 1AA')
+        expect(session.$update.called).to.be.true()
       })
     })
 

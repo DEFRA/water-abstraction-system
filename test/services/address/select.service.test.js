@@ -12,7 +12,10 @@ const { expect } = Code
 
 // Things to stub
 const LookupPostcodeRequest = require('../../../app/requests/address-facade/lookup-postcode.request.js')
-const SessionModel = require('../../../app/models/session.model.js')
+const SessionModelStub = require('../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SelectService = require('../../../app/services/address/select.service.js')
@@ -32,22 +35,26 @@ describe('Address - Select service', () => {
   const sessionId = 'dba48385-9fc8-454b-8ec8-3832d3b9e323'
 
   let lookupPostcodeRequestStub
+  let session
+  let sessionData
 
-  beforeEach(async () => {
-    Sinon.stub(SessionModel, 'query').returns({
-      findById: Sinon.stub().resolves({
-        id: sessionId,
-        addressJourney: {
-          activeNavBar: 'manage',
-          address: { postcode: 'BS1 5AH' },
-          backLink: {
-            href: `/system/notices/setup/${sessionId}/contact-type`,
-            text: 'Back'
-          },
-          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-        }
-      })
-    })
+  beforeEach(() => {
+    sessionData = {
+      id: sessionId,
+      addressJourney: {
+        activeNavBar: 'manage',
+        address: { postcode: 'BS1 5AH' },
+        backLink: {
+          href: `/system/notices/setup/${sessionId}/contact-type`,
+          text: 'Back'
+        },
+        redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
+      }
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     lookupPostcodeRequestStub = Sinon.stub(LookupPostcodeRequest, 'send')
   })
@@ -100,7 +107,7 @@ describe('Address - Select service', () => {
     })
 
     describe('and the postcode lookup returns no matches', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         lookupPostcodeRequestStub.resolves({
           succeeded: true,
           response: {
@@ -121,7 +128,7 @@ describe('Address - Select service', () => {
     })
 
     describe('and the postcode lookup fails', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         lookupPostcodeRequestStub.resolves({
           succeeded: false,
           response: {

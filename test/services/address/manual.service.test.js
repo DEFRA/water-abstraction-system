@@ -9,7 +9,10 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const SessionModel = require('../../../app/models/session.model.js')
+const SessionModelStub = require('../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ManualService = require('../../../app/services/address/manual.service.js')
@@ -17,21 +20,26 @@ const ManualService = require('../../../app/services/address/manual.service.js')
 describe('Address - Manual Service', () => {
   const sessionId = 'dba48385-9fc8-454b-8ec8-3832d3b9e323'
 
-  beforeEach(async () => {
-    Sinon.stub(SessionModel, 'query').returns({
-      findById: Sinon.stub().resolves({
-        id: sessionId,
-        addressJourney: {
-          activeNavBar: 'manage',
-          address: { postcode: 'SW1A 1AA' },
-          backLink: {
-            href: `/system/notices/setup/${sessionId}/contact-type`,
-            text: 'Back'
-          },
-          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-        }
-      })
-    })
+  let session
+  let sessionData
+
+  beforeEach(() => {
+    sessionData = {
+      id: sessionId,
+      addressJourney: {
+        activeNavBar: 'manage',
+        address: { postcode: 'SW1A 1AA' },
+        backLink: {
+          href: `/system/notices/setup/${sessionId}/contact-type`,
+          text: 'Back'
+        },
+        redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
+      }
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {

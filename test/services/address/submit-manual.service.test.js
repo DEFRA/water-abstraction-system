@@ -3,13 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-const SessionHelper = require('../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitManualService = require('../../../app/services/address/submit-manual.service.js')
@@ -17,30 +21,38 @@ const SubmitManualService = require('../../../app/services/address/submit-manual
 describe('Address - Submit Manual Service', () => {
   let payload
   let session
+  let sessionData
   let sessionId
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionId = generateUUID()
 
-    session = await SessionHelper.add({
+    sessionData = {
       id: sessionId,
-      data: {
-        addressJourney: {
-          activeNavBar: 'manage',
-          address: { postcode: 'SW1A 1AA' },
-          backLink: {
-            href: `/system/notices/setup/${sessionId}/contact-type`,
-            text: 'Back'
-          },
-          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-        }
+
+      addressJourney: {
+        activeNavBar: 'manage',
+        address: { postcode: 'SW1A 1AA' },
+        backLink: {
+          href: `/system/notices/setup/${sessionId}/contact-type`,
+          text: 'Back'
+        },
+        redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
       }
-    })
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           addressLine1: 'Fake Farm',
           addressLine2: '1 Fake street',
@@ -55,16 +67,15 @@ describe('Address - Submit Manual Service', () => {
 
         expect(result).to.equal({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.addressJourney.address).to.equal({
+        expect(session.addressJourney.address).to.equal({
           addressLine1: 'Fake Farm',
           addressLine2: '1 Fake street',
           addressLine3: 'Fake Village',
           addressLine4: 'Fake City',
           postcode: 'SW1A 1AA'
         })
-        expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/manual`)
+        expect(session.addressJourney.backUrl).to.equal(`/system/address/${session.id}/manual`)
+        expect(session.$update.called).to.be.true()
       })
     })
 
