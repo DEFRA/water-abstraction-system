@@ -5,8 +5,8 @@
  * @module MethodService
  */
 
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 const MethodPresenter = require('../../../../presenters/return-versions/setup/method.presenter.js')
-const SessionModel = require('../../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/method` page
@@ -19,7 +19,7 @@ const SessionModel = require('../../../../models/session.model.js')
  * @returns {Promise<object>} page data needed by the view template
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const formattedData = MethodPresenter.go(session)
 

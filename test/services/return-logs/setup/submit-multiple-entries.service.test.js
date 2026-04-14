@@ -5,43 +5,51 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitMultipleEntriesService = require('../../../../app/services/return-logs/setup/submit-multiple-entries.service.js')
 
 describe('Return Logs Setup - Submit Multiple Entries service', () => {
+  let fetchSessionStub
   let payload
   let session
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
-      data: {
-        returnReference: '12345',
-        lines: [
-          { startDate: new Date('2023-04-01').toISOString(), endDate: new Date('2023-04-30').toISOString() },
-          { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
-        ],
-        returnsFrequency: 'month',
-        reported: 'abstractionVolumes',
-        unitSymbol: 'Ml'
-      }
+      returnReference: '12345',
+      lines: [
+        { startDate: new Date('2023-04-01').toISOString(), endDate: new Date('2023-04-30').toISOString() },
+        { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
+      ],
+      returnsFrequency: 'month',
+      reported: 'abstractionVolumes',
+      unitSymbol: 'Ml'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
 
-    yarStub = { flash: Sinon.stub() }
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    yarStub = { flash: Sinon.stub().returns([]) }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = { multipleEntries: '100, 200' }
       })
 
@@ -49,12 +57,11 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
         it('saves the submitted option', async () => {
           await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.lines[0].quantity).to.equal(100)
-          expect(refreshedSession.lines[0].quantityCubicMetres).to.equal(100000)
-          expect(refreshedSession.lines[1].quantity).to.equal(200)
-          expect(refreshedSession.lines[1].quantityCubicMetres).to.equal(200000)
+          expect(session.lines[0].quantity).to.equal(100)
+          expect(session.lines[0].quantityCubicMetres).to.equal(100000)
+          expect(session.lines[1].quantity).to.equal(200)
+          expect(session.lines[1].quantityCubicMetres).to.equal(200000)
+          expect(session.$update.called).to.be.true()
         })
 
         it('sets the notification message title to "Updated" and the text to "2 monthly volumes have been updated" ', async () => {
@@ -71,29 +78,28 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
       })
 
       describe('and the user has previously selected "meterReadings" as the reported type', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           sessionData = {
-            data: {
-              returnReference: '12345',
-              lines: [
-                { startDate: new Date('2023-04-01').toISOString(), endDate: new Date('2023-04-30').toISOString() },
-                { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
-              ],
-              returnsFrequency: 'month',
-              reported: 'meterReadings'
-            }
+            returnReference: '12345',
+            lines: [
+              { startDate: new Date('2023-04-01').toISOString(), endDate: new Date('2023-04-30').toISOString() },
+              { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
+            ],
+            returnsFrequency: 'month',
+            reported: 'meterReadings'
           }
 
-          session = await SessionHelper.add(sessionData)
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('saves the submitted option', async () => {
           await SubmitMultipleEntriesService.go(session.id, payload, yarStub)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.lines[0].reading).to.equal(100)
-          expect(refreshedSession.lines[1].reading).to.equal(200)
+          expect(session.lines[0].reading).to.equal(100)
+          expect(session.lines[1].reading).to.equal(200)
+          expect(session.$update.called).to.be.true()
         })
 
         it('sets the notification message title to "Updated" and the text to "2 monthly meter readings have been updated" ', async () => {
@@ -111,7 +117,7 @@ describe('Return Logs Setup - Submit Multiple Entries service', () => {
     })
 
     describe('with an invalid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
       })
 

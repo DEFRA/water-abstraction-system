@@ -10,12 +10,13 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SessionModel = require('../../../../app/models/session.model.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const CreateCompanyContactService = require('../../../../app/services/company-contacts/setup/create-company-contact.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const UpdateCompanyContactService = require('../../../../app/services/company-contacts/setup/update-company-contact.service.js')
 
 // Thing under test
@@ -25,6 +26,7 @@ describe('Company Contacts - Setup - Check Service', () => {
   let auth
   let company
   let companyContact
+  let fetchSessionStub
   let session
   let sessionData
   let yarStub
@@ -48,7 +50,9 @@ describe('Company Contacts - Setup - Check Service', () => {
     beforeEach(async () => {
       sessionData = _createSessionData(company)
 
-      session = await SessionHelper.add({ data: sessionData })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
     })
 
     it('clears the session', async () => {
@@ -105,9 +109,9 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       describe(' is "no"', () => {
         beforeEach(async () => {
-          sessionData = _createSessionData(company)
+          session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'no' })
 
-          session = await SessionHelper.add({ data: { ...sessionData, abstractionAlerts: 'no' } })
+          fetchSessionStub.resolves(session)
         })
 
         it('persists the "abstractionAlerts" as "false"', async () => {
@@ -122,9 +126,9 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     describe('the "email" property', () => {
       beforeEach(async () => {
-        sessionData = _createSessionData(company)
+        session = SessionModelStub.build(Sinon, { ...sessionData, email: 'ERICE@TEST.COM' })
 
-        session = await SessionHelper.add({ data: { ...sessionData, email: 'ERICE@TEST.COM' } })
+        fetchSessionStub.resolves(session)
       })
 
       it('persists the "email" in lowercase', async () => {
@@ -143,7 +147,9 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       sessionData = _updateSessionData(company, companyContact)
 
-      session = await SessionHelper.add({ data: sessionData })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
     })
 
     it('returns the redirect URL', async () => {
@@ -191,9 +197,9 @@ describe('Company Contacts - Setup - Check Service', () => {
 
       describe(' is "no"', () => {
         beforeEach(async () => {
-          sessionData = _updateSessionData(company, companyContact)
+          session = SessionModelStub.build(Sinon, { ...sessionData, abstractionAlerts: 'no' })
 
-          session = await SessionHelper.add({ data: { ...sessionData, abstractionAlerts: 'no' } })
+          fetchSessionStub.resolves(session)
         })
 
         it('persists the "abstractionAlerts" as "false"', async () => {
@@ -209,9 +215,9 @@ describe('Company Contacts - Setup - Check Service', () => {
     describe('the "email" property', () => {
       describe('when email is in multi cases', () => {
         beforeEach(async () => {
-          sessionData = _updateSessionData(company, companyContact)
+          session = SessionModelStub.build(Sinon, { ...sessionData, email: 'ERICE@TEST.COM' })
 
-          session = await SessionHelper.add({ data: { ...sessionData, email: 'ERICE@TEST.COM' } })
+          fetchSessionStub.resolves(session)
         })
 
         it('persists the "email" in lowercase', async () => {

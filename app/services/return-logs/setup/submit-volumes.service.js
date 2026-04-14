@@ -5,8 +5,8 @@
  * @module SubmitVolumesService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const GeneralLib = require('../../../lib/general.lib.js')
-const SessionModel = require('../../../models/session.model.js')
 const VolumesPresenter = require('../../../presenters/return-logs/setup/volumes.presenter.js')
 const VolumesValidator = require('../../../validators/return-logs/setup/volumes.validator.js')
 const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
@@ -24,7 +24,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * the validation error details
  */
 async function go(sessionId, payload, yar, yearMonth) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const [requestedYear, requestedMonth] = _determineRequestedYearAndMonth(yearMonth)
 

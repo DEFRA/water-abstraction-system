@@ -5,41 +5,49 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitStartReadingService = require('../../../../app/services/return-logs/setup/submit-start-reading.service.js')
 
 describe('Return Logs Setup - Submit Start Reading service', () => {
+  let fetchSessionStub
   let payload
   let session
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
-      data: {
-        returnReference: '12345',
-        lines: [
-          {
-            endDate: '2019-04-30T00:00:00.000Z',
-            startDate: '2019-04-01T00:00:00.000Z'
-          },
-          {
-            endDate: '2019-05-31T00:00:00.000Z',
-            startDate: '2019-05-01T00:00:00.000Z'
-          }
-        ]
-      }
+      returnReference: '12345',
+      lines: [
+        {
+          endDate: '2019-04-30T00:00:00.000Z',
+          startDate: '2019-04-01T00:00:00.000Z'
+        },
+        {
+          endDate: '2019-05-31T00:00:00.000Z',
+          startDate: '2019-05-01T00:00:00.000Z'
+        }
+      ]
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
 
-    yarStub = { flash: Sinon.stub() }
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    yarStub = { flash: Sinon.stub().returns([]) }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -51,9 +59,8 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
       it('saves the submitted option', async () => {
         await SubmitStartReadingService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.startReading).to.equal(15600)
+        expect(session.startReading).to.equal(15600)
+        expect(session.$update.called).to.be.true()
       })
 
       describe('and the page has been not been visited', () => {
@@ -67,8 +74,10 @@ describe('Return Logs Setup - Submit Start Reading service', () => {
       })
 
       describe('and the page has been visited', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, { ...sessionData, checkPageVisited: true })
+
+          fetchSessionStub.resolves(session)
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {

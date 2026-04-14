@@ -19,7 +19,7 @@ function go(session, companyContacts, existingAddress, companysHouseResult) {
   const { billingAccount } = session
 
   return {
-    accountSelected: session.accountSelected === 'customer' ? billingAccount.company.name : 'Another billing account',
+    accountSelected: session.accountSelected !== 'another' ? billingAccount.company.name : 'Another billing account',
     accountType: session.accountType ?? '',
     address: _address(session),
     addressSelected: _existingAddress(existingAddress),
@@ -81,8 +81,8 @@ function _contactSelected(session, companyContacts) {
     return 'New contact'
   }
 
-  if (!companyContacts?.contacts?.length) {
-    return ''
+  if (session.fao === 'no' || !companyContacts?.contacts?.length) {
+    return null
   }
 
   const selectedContact = contacts.find((contact) => {

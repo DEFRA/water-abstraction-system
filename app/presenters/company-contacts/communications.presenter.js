@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Formats data for the '/company-contacts/{id}' page
- * @module ViewCompanyContactPresenter
+ * Formats data for the '/company-contacts/{id}/communications' page
+ * @module CommunicationsPresenter
  */
 
 const NotificationsTablePresenter = require('../notifications/notifications-table.presenter.js')
 
 /**
- * Formats data for the '/company-contacts/{id}' page
+ * Formats data for the '/company-contacts/{id}/communications' page
  *
  * @param {module:CompanyModel} company - The customer from the companies table
  * @param {module:CompanyContactModel} companyContact - The customer contact from the company contacts table

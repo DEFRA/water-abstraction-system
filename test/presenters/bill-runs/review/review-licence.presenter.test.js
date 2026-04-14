@@ -83,7 +83,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
             issues: [],
             purpose: 'Spray Irrigation - Direct',
             reference: '11142960',
-            returnLink: '/system/return-logs/b22626c5-db4e-450e-9897-b615d605b110',
+            returnLink: '/system/return-logs/b22626c5-db4e-450e-9897-b615d605b110/details',
             returnPeriod: '1 November 2022 to 31 October 2023',
             returnStatus: 'completed',
             returnTotal: '0 ML / 0 ML'
@@ -100,7 +100,7 @@ describe('Bill Runs Review - Review Licence presenter', () => {
             issues: [],
             purpose: 'Spray Irrigation - Storage',
             reference: '11142961',
-            returnLink: '/system/return-logs/41d6c667-16d6-4a1e-b0e2-9e9cf52d3325',
+            returnLink: '/system/return-logs/41d6c667-16d6-4a1e-b0e2-9e9cf52d3325/details',
             returnPeriod: '1 November 2022 to 31 October 2023',
             returnStatus: 'completed',
             returnTotal: '0 ML / 0 ML'

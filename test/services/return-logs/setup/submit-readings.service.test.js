@@ -5,11 +5,14 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitReadingsService = require('../../../../app/services/return-logs/setup/submit-readings.service.js')
@@ -21,33 +24,37 @@ describe('Return Logs Setup - Submit Readings service', () => {
   let yarStub
   let yearMonth
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
-      data: {
-        lines: [
-          {
-            endDate: '2023-04-30T00:00:00.000Z',
-            reading: 100,
-            startDate: '2023-04-01T00:00:00.000Z'
-          },
-          {
-            endDate: '2023-05-31T00:00:00.000Z',
-            startDate: '2023-05-01T00:00:00.000Z'
-          },
-          {
-            endDate: '2023-06-30T00:00:00.000Z',
-            reading: 300,
-            startDate: '2023-06-01T00:00:00.000Z'
-          }
-        ],
-        returnsFrequency: 'month',
-        returnReference: '1234'
-      }
+      lines: [
+        {
+          endDate: '2023-04-30T00:00:00.000Z',
+          reading: 100,
+          startDate: '2023-04-01T00:00:00.000Z'
+        },
+        {
+          endDate: '2023-05-31T00:00:00.000Z',
+          startDate: '2023-05-01T00:00:00.000Z'
+        },
+        {
+          endDate: '2023-06-30T00:00:00.000Z',
+          reading: 300,
+          startDate: '2023-06-01T00:00:00.000Z'
+        }
+      ],
+      returnsFrequency: 'month',
+      returnReference: '1234'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
 
-    yarStub = { flash: Sinon.stub() }
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    yarStub = { flash: Sinon.stub().returns([]) }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -61,9 +68,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
         it('saves the reading for May as null', async () => {
           await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.lines).to.equal([
+          expect(session.lines).to.equal([
             {
               endDate: '2023-04-30T00:00:00.000Z',
               reading: 100,
@@ -80,6 +85,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
               startDate: '2023-06-01T00:00:00.000Z'
             }
           ])
+          expect(session.$update.called).to.be.true()
         })
 
         it('sets the notification message title to "Updated" and the text to "Readings have been updated" ', async () => {
@@ -101,9 +107,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
         it('saves the reading for June as 200', async () => {
           await SubmitReadingsService.go(session.id, payload, yarStub, yearMonth)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.lines).to.equal([
+          expect(session.lines).to.equal([
             {
               endDate: '2023-04-30T00:00:00.000Z',
               reading: 100,
@@ -119,6 +123,7 @@ describe('Return Logs Setup - Submit Readings service', () => {
               startDate: '2023-06-01T00:00:00.000Z'
             }
           ])
+          expect(session.$update.called).to.be.true()
         })
 
         it('sets the notification message title to "Updated" and the text to "Readings have been updated" ', async () => {

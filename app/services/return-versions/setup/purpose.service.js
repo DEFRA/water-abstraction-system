@@ -6,8 +6,8 @@
  */
 
 const FetchPurposesService = require('./fetch-purposes.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const SelectPurposePresenter = require('../../../presenters/return-versions/setup/purpose.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/purpose` page
@@ -21,7 +21,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The view data for the purpose page
  */
 async function go(sessionId, requirementIndex) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
   const purposesData = await FetchPurposesService.go(session.licenceVersion.id)
 
   const formattedData = SelectPurposePresenter.go(session, requirementIndex, purposesData)

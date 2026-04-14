@@ -5,12 +5,12 @@
  * @module SubmitPurposeService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const FetchPurposesService = require('./fetch-purposes.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const GeneralLib = require('../../../lib/general.lib.js')
 const PurposePresenter = require('../../../presenters/return-versions/setup/purpose.presenter.js')
 const PurposeValidation = require('../../../validators/return-versions/setup/purpose.validator.js')
-const SessionModel = require('../../../models/session.model.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
 
 /**
@@ -31,7 +31,7 @@ const { handleOneOptionSelected } = require('../../../lib/submit-page.lib.js')
  * the page data for the purpose page including the validation error details
  */
 async function go(sessionId, requirementIndex, payload, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
   const licencePurposes = await FetchPurposesService.go(session.licenceVersion.id)
 
   handleOneOptionSelected(payload, 'purposes')

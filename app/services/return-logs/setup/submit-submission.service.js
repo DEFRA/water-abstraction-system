@@ -5,8 +5,9 @@
  * @module SubmitSubmissionService
  */
 
+const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const ReturnLogModel = require('../../../models/return-log.model.js')
-const SessionModel = require('../../../models/session.model.js')
 const SubmissionPresenter = require('../../../presenters/return-logs/setup/submission.presenter.js')
 const SubmissionValidator = require('../../../validators/return-logs/setup/submission.validator.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
@@ -22,7 +23,7 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  * the abstraction return page including the validation error details
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
   const error = _validate(payload)
 
   const { returnLogId } = session
@@ -51,7 +52,7 @@ async function _confirmReceipt(session) {
     .findById(session.returnLogId)
     .patch({ receivedDate: session.receivedDate, status: 'received', updatedAt: timestampForPostgres() })
 
-  await SessionModel.query().deleteById(session.id)
+  await DeleteSessionDal.go(session.id)
 }
 
 async function _redirect(journey, session) {

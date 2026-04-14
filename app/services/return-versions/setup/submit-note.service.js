@@ -7,9 +7,9 @@
 
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const NotePresenter = require('../../../presenters/return-versions/setup/note.presenter.js')
 const NoteValidator = require('../../../validators/return-versions/setup/note.validator.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates validating the data for `/return-versions/setup/{sessionId}/note` page
@@ -29,7 +29,7 @@ const SessionModel = require('../../../models/session.model.js')
  * validation error details
  */
 async function go(sessionId, payload, user, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
   const validationResult = _validate(payload)
 
   if (!validationResult) {
@@ -53,9 +53,7 @@ async function go(sessionId, payload, user, yar) {
 }
 
 function _notification(session, newNote) {
-  const {
-    data: { note }
-  } = session
+  const { note } = session
 
   if (!note && newNote) {
     return {

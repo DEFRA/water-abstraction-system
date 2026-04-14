@@ -10,6 +10,7 @@ const Sinon = require('sinon')
 const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub

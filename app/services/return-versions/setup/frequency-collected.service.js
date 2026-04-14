@@ -5,8 +5,8 @@
  * @module FrequencyCollectedService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const FrequencyCollectedPresenter = require('../../../presenters/return-versions/setup/frequency-collected.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/frequency-collected` page
@@ -20,7 +20,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The view data for the frequency collected page
  */
 async function go(sessionId, requirementIndex) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const formattedData = FrequencyCollectedPresenter.go(session, requirementIndex)
 

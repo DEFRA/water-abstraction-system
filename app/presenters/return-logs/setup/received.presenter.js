@@ -46,7 +46,7 @@ function _backLinkHref(session) {
     return `/system/return-logs/setup/${id}/check`
   }
 
-  return `/system/return-logs/${returnLogId}`
+  return `/system/return-logs/${returnLogId}/details`
 }
 
 function _yesterdaysDate() {

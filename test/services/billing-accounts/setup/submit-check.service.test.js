@@ -15,11 +15,12 @@ const BillingAccountHelper = require('../../../support/helpers/billing-account.h
 const CompanyHelper = require('../../../support/helpers/company.helper.js')
 const ContactHelper = require('../../../support/helpers/contact.helper.js')
 const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things to stub
 const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
 const FetchCompanyService = require('../../../../app/services/billing-accounts/setup/fetch-company.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const SendCustomerChangeService = require('../../../../app/services/billing-accounts/send-customer-change.service.js')
 
 // Thing under test
@@ -102,7 +103,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = 'Contact Name'
             sessionData.contactSelected = 'new'
 
-            session = await SessionHelper.add({ data: sessionData })
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            Sinon.stub(FetchSessionDal, 'go').resolves(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -127,7 +130,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = null
             sessionData.contactSelected = null
 
-            session = await SessionHelper.add({ data: sessionData })
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            Sinon.stub(FetchSessionDal, 'go').resolves(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -149,7 +154,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = null
             sessionData.contactSelected = contact.id
 
-            session = await SessionHelper.add({ data: sessionData })
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            Sinon.stub(FetchSessionDal, 'go').resolves(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -180,7 +187,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = 'Contact Name'
             sessionData.contactSelected = 'new'
 
-            session = await SessionHelper.add({ data: sessionData })
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            Sinon.stub(FetchSessionDal, 'go').resolves(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -210,7 +219,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = null
             sessionData.contactSelected = null
 
-            session = await SessionHelper.add({ data: sessionData })
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            Sinon.stub(FetchSessionDal, 'go').resolves(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -237,7 +248,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.fao = 'yes'
             sessionData.contactSelected = contact.id
 
-            session = await SessionHelper.add({ data: sessionData })
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            Sinon.stub(FetchSessionDal, 'go').resolves(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -282,7 +295,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = 'Contact Name'
             sessionData.contactSelected = 'new'
 
-            session = await SessionHelper.add({ data: sessionData })
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            Sinon.stub(FetchSessionDal, 'go').resolves(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -307,7 +322,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = null
             sessionData.contactSelected = null
 
-            session = await SessionHelper.add({ data: sessionData })
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            Sinon.stub(FetchSessionDal, 'go').resolves(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -329,7 +346,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.fao = 'yes'
             sessionData.contactSelected = contact.id
 
-            session = await SessionHelper.add({ data: sessionData })
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            Sinon.stub(FetchSessionDal, 'go').resolves(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -361,7 +380,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = 'Contact Name'
             sessionData.contactSelected = 'new'
 
-            session = await SessionHelper.add({ data: sessionData })
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            Sinon.stub(FetchSessionDal, 'go').resolves(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -392,7 +413,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.contactName = null
             sessionData.contactSelected = null
 
-            session = await SessionHelper.add({ data: sessionData })
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            Sinon.stub(FetchSessionDal, 'go').resolves(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -420,7 +443,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
             sessionData.fao = 'yes'
             sessionData.contactSelected = contact.id
 
-            session = await SessionHelper.add({ data: sessionData })
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            Sinon.stub(FetchSessionDal, 'go').resolves(session)
           })
 
           it('creates a new billing account address', async () => {
@@ -473,7 +498,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = 'Contact Name'
               sessionData.contactSelected = 'new'
 
-              session = await SessionHelper.add({ data: sessionData })
+              session = SessionModelStub.build(Sinon, sessionData)
+
+              Sinon.stub(FetchSessionDal, 'go').resolves(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -501,7 +528,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = null
               sessionData.contactSelected = null
 
-              session = await SessionHelper.add({ data: sessionData })
+              session = SessionModelStub.build(Sinon, sessionData)
+
+              Sinon.stub(FetchSessionDal, 'go').resolves(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -526,7 +555,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.fao = 'yes'
               sessionData.contactSelected = contact.id
 
-              session = await SessionHelper.add({ data: sessionData })
+              session = SessionModelStub.build(Sinon, sessionData)
+
+              Sinon.stub(FetchSessionDal, 'go').resolves(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -561,7 +592,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = 'Contact Name'
               sessionData.contactSelected = 'new'
 
-              session = await SessionHelper.add({ data: sessionData })
+              session = SessionModelStub.build(Sinon, sessionData)
+
+              Sinon.stub(FetchSessionDal, 'go').resolves(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -595,7 +628,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = null
               sessionData.contactSelected = null
 
-              session = await SessionHelper.add({ data: sessionData })
+              session = SessionModelStub.build(Sinon, sessionData)
+
+              Sinon.stub(FetchSessionDal, 'go').resolves(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -626,7 +661,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.fao = 'yes'
               sessionData.contactSelected = contact.id
 
-              session = await SessionHelper.add({ data: sessionData })
+              session = SessionModelStub.build(Sinon, sessionData)
+
+              Sinon.stub(FetchSessionDal, 'go').resolves(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -673,7 +710,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = 'Contact Name'
               sessionData.contactSelected = 'new'
 
-              session = await SessionHelper.add({ data: sessionData })
+              session = SessionModelStub.build(Sinon, sessionData)
+
+              Sinon.stub(FetchSessionDal, 'go').resolves(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -701,7 +740,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = null
               sessionData.contactSelected = null
 
-              session = await SessionHelper.add({ data: sessionData })
+              session = SessionModelStub.build(Sinon, sessionData)
+
+              Sinon.stub(FetchSessionDal, 'go').resolves(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -726,7 +767,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.fao = 'yes'
               sessionData.contactSelected = contact.id
 
-              session = await SessionHelper.add({ data: sessionData })
+              session = SessionModelStub.build(Sinon, sessionData)
+
+              Sinon.stub(FetchSessionDal, 'go').resolves(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -761,7 +804,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = 'Contact Name'
               sessionData.contactSelected = 'new'
 
-              session = await SessionHelper.add({ data: sessionData })
+              session = SessionModelStub.build(Sinon, sessionData)
+
+              Sinon.stub(FetchSessionDal, 'go').resolves(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -795,7 +840,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.contactName = null
               sessionData.contactSelected = null
 
-              session = await SessionHelper.add({ data: sessionData })
+              session = SessionModelStub.build(Sinon, sessionData)
+
+              Sinon.stub(FetchSessionDal, 'go').resolves(session)
             })
 
             it('creates a new billing account address', async () => {
@@ -826,7 +873,9 @@ describe('Billing Accounts - Setup - Submit Check Service', () => {
               sessionData.fao = 'yes'
               sessionData.contactSelected = contact.id
 
-              session = await SessionHelper.add({ data: sessionData })
+              session = SessionModelStub.build(Sinon, sessionData)
+
+              Sinon.stub(FetchSessionDal, 'go').resolves(session)
             })
 
             it('creates a new billing account address', async () => {

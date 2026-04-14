@@ -5,7 +5,7 @@
  * @module StopOrReduceService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const StopOrReducePresenter = require('../../../presenters/licence-monitoring-station/setup/stop-or-reduce.presenter.js')
 
 /**
@@ -16,7 +16,7 @@ const StopOrReducePresenter = require('../../../presenters/licence-monitoring-st
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const pageData = StopOrReducePresenter.go(session)
 

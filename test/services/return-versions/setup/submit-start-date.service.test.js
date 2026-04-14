@@ -9,7 +9,10 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Things we need to stub
 const DetermineRelevantLicenceVersionService = require('../../../../app/services/return-versions/setup/determine-relevant-licence-version.service.js')
@@ -18,36 +21,40 @@ const DetermineRelevantLicenceVersionService = require('../../../../app/services
 const SubmitStartDateService = require('../../../../app/services/return-versions/setup/submit-start-date.service.js')
 
 describe('Return Versions - Setup - Submit Start Date service', () => {
+  let fetchSessionStub
   let payload
   let relevantLicenceVersion
   let session
+  let sessionData
   let yarStub
 
-  beforeEach(async () => {
-    session = await SessionHelper.add()
-
-    session.checkPageVisited = false
-    session.licence = {
-      id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-      currentVersionStartDate: '2023-01-01',
-      endDate: null,
-      licenceRef: '01/ABC',
-      licenceHolder: 'Turbo Kid',
-      returnVersions: [
-        {
-          id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-          startDate: '2023-01-01',
-          reason: null,
-          modLogs: []
-        }
-      ],
-      startDate: '2019-04-01',
-      waterUndertaker: false
+  beforeEach(() => {
+    sessionData = {
+      checkPageVisited: false,
+      licence: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        currentVersionStartDate: '2023-01-01',
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Turbo Kid',
+        returnVersions: [
+          {
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01',
+            reason: null,
+            modLogs: []
+          }
+        ],
+        startDate: '2019-04-01',
+        waterUndertaker: false
+      },
+      journey: 'returns-required',
+      requirements: [{}]
     }
-    session.journey = 'returns-required'
-    session.requirements = [{}]
 
-    await session.$update()
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -90,25 +97,25 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('saves the submitted date details and the relevant licence version', async () => {
             await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            const refreshedSession = await session.$query()
+            expect(session.startDateOptions).to.equal('licenceStartDate')
+            expect(session.startDateDay).not.to.exist()
+            expect(session.startDateMonth).not.to.exist()
+            expect(session.startDateYear).not.to.exist()
+            expect(new Date(session.returnVersionStartDate)).to.equal(new Date('2023-01-01'))
 
-            expect(refreshedSession.startDateOptions).to.equal('licenceStartDate')
-            expect(refreshedSession.startDateDay).not.to.exist()
-            expect(refreshedSession.startDateMonth).not.to.exist()
-            expect(refreshedSession.startDateYear).not.to.exist()
-            expect(new Date(refreshedSession.returnVersionStartDate)).to.equal(new Date('2023-01-01'))
-
-            expect(refreshedSession.licenceVersion).to.equal({
+            expect(session.licenceVersion).to.equal({
               copyableReturnVersions: relevantLicenceVersion.copyableReturnVersions,
               endDate: relevantLicenceVersion.endDate,
               id: relevantLicenceVersion.id,
-              startDate: '2023-01-01T00:00:00.000Z'
+              startDate: new Date('2023-01-01')
             })
+
+            expect(session.$update.called).to.be.true()
           })
         })
 
         describe('and the user selected "another start date"', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             payload = {
               startDateOptions: 'anotherStartDate',
               startDateDay: '26',
@@ -120,37 +127,38 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('saves the submitted date details and the relevant licence version', async () => {
             await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            const refreshedSession = await session.$query()
+            expect(session.startDateOptions).to.equal('anotherStartDate')
+            expect(session.startDateDay).to.equal('26')
+            expect(session.startDateMonth).to.equal('11')
+            expect(session.startDateYear).to.equal('2023')
+            expect(new Date(session.returnVersionStartDate)).to.equal(new Date('2023-11-26'))
 
-            expect(refreshedSession.startDateOptions).to.equal('anotherStartDate')
-            expect(refreshedSession.startDateDay).to.equal('26')
-            expect(refreshedSession.startDateMonth).to.equal('11')
-            expect(refreshedSession.startDateYear).to.equal('2023')
-            expect(new Date(refreshedSession.returnVersionStartDate)).to.equal(new Date('2023-11-26'))
-
-            expect(refreshedSession.licenceVersion).to.equal({
+            expect(session.licenceVersion).to.equal({
               copyableReturnVersions: relevantLicenceVersion.copyableReturnVersions,
               endDate: relevantLicenceVersion.endDate,
               id: relevantLicenceVersion.id,
-              startDate: '2023-01-01T00:00:00.000Z'
+              startDate: new Date('2023-01-01')
             })
+
+            expect(session.$update.called).to.be.true()
           })
         })
 
         describe('and when the licence is a water company', () => {
-          beforeEach(async () => {
-            session.licence.waterUndertaker = true
+          beforeEach(() => {
+            sessionData.licence.waterUndertaker = true
 
-            await session.$update()
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            fetchSessionStub.resolves(session)
           })
 
           describe('and the selected start date is before 1 April 2025', () => {
             it('does not set the "quarterly returns" flag in the session', async () => {
               await SubmitStartDateService.go(session.id, payload, yarStub)
 
-              const refreshedSession = await session.$query()
-
-              expect(refreshedSession.quarterlyReturns).not.to.exist()
+              expect(session.quarterlyReturns).not.to.exist()
+              expect(session.$update.called).to.be.true()
             })
           })
 
@@ -167,9 +175,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
             it('sets the "quarterly returns" flag to "true" in the session', async () => {
               await SubmitStartDateService.go(session.id, payload, yarStub)
 
-              const refreshedSession = await session.$query()
-
-              expect(refreshedSession.quarterlyReturns).to.be.true()
+              expect(session.quarterlyReturns).to.be.true()
             })
           })
         })
@@ -178,29 +184,29 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('does not set the "quarterly returns" flag in the session', async () => {
             await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            const refreshedSession = await session.$query()
-
-            expect(refreshedSession.quarterlyReturns).not.to.exist()
+            expect(session.quarterlyReturns).not.to.exist()
           })
         })
       })
 
       describe('and the page has been visited previously (we are coming from the "check" page)', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           relevantLicenceVersion = {
-            copyableReturnVersions: session.licence.returnVersions,
+            copyableReturnVersions: sessionData.licence.returnVersions,
             endDate: null,
             id: 'c0e59520-3164-43ac-8f64-e1d38dfb90c4',
             startDate: new Date('2023-01-01')
           }
 
-          session.checkPageVisited = true
-          session.licenceVersion = relevantLicenceVersion
-          session.returnVersionStartDate = new Date('2023-01-01')
-          session.requirements = [{ index: 1, name: 'foo' }]
-          session.method = 'existing'
+          sessionData.checkPageVisited = true
+          sessionData.licenceVersion = relevantLicenceVersion
+          sessionData.returnVersionStartDate = new Date('2023-01-01')
+          sessionData.requirements = [{ index: 1, name: 'foo' }]
+          sessionData.method = 'existing'
 
-          await session.$update()
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         describe('and the start date is not changed (user just clicks continue)', () => {
@@ -232,13 +238,11 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('does not change the relevant licence version for the session', async () => {
             await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            const refreshedSession = await session.$query()
-
-            expect(refreshedSession.licenceVersion).to.equal({
+            expect(session.licenceVersion).to.equal({
               copyableReturnVersions: relevantLicenceVersion.copyableReturnVersions,
               endDate: relevantLicenceVersion.endDate,
               id: relevantLicenceVersion.id,
-              startDate: '2023-01-01T00:00:00.000Z'
+              startDate: new Date('2023-01-01')
             })
           })
         })
@@ -276,13 +280,11 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('does not change the relevant licence version for the session', async () => {
             await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            const refreshedSession = await session.$query()
-
-            expect(refreshedSession.licenceVersion).to.equal({
+            expect(session.licenceVersion).to.equal({
               copyableReturnVersions: relevantLicenceVersion.copyableReturnVersions,
               endDate: relevantLicenceVersion.endDate,
               id: relevantLicenceVersion.id,
-              startDate: '2023-01-01T00:00:00.000Z'
+              startDate: new Date('2023-01-01')
             })
           })
         })
@@ -323,25 +325,23 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
           it('updates the relevant licence version for the session and resets the session', async () => {
             await SubmitStartDateService.go(session.id, payload, yarStub)
 
-            const refreshedSession = await session.$query()
-
-            expect(refreshedSession.licenceVersion).to.equal({
+            expect(session.licenceVersion).to.equal({
               copyableReturnVersions: [],
-              endDate: '2022-12-31T00:00:00.000Z',
+              endDate: new Date('2022-12-31'),
               id: newRelevantLicenceVersion.id,
-              startDate: '2020-04-01T00:00:00.000Z'
+              startDate: new Date('2020-04-01')
             })
 
-            expect(refreshedSession.method).not.to.exist()
-            expect(refreshedSession.checkPageVisited).to.be.false()
-            expect(refreshedSession.requirements).to.equal([{}])
+            expect(session.method).not.to.exist()
+            expect(session.checkPageVisited).to.be.false()
+            expect(session.requirements).to.equal([{}])
           })
         })
       })
     })
 
     describe('with an invalid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
       })
 
@@ -385,7 +385,7 @@ describe('Return Versions - Setup - Submit Start Date service', () => {
       })
 
       describe('because the user has selected another start date and entered invalid data', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {
             startDateOptions: 'anotherStartDate',
             startDateDay: 'a',

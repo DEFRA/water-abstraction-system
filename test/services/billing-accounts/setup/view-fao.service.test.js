@@ -3,13 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before, after } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const FAOService = require('../../../../app/services/billing-accounts/setup/view-fao.service.js')
@@ -18,16 +22,18 @@ describe('Billing Accounts - Setup - View FAO Service', () => {
   let session
   let sessionData
 
-  before(async () => {
+  beforeEach(() => {
     sessionData = {
       billingAccount: BillingAccountsFixture.billingAccount().billingAccount
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
-  after(async () => {
-    await session.$query().delete()
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {

@@ -3,13 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewCheckService = require('../../../../app/services/billing-accounts/setup/view-check.service.js')
@@ -19,13 +23,19 @@ describe('Billing Accounts - Setup - View Check Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       billingAccount,
       fao: 'no'
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -33,13 +43,13 @@ describe('Billing Accounts - Setup - View Check Service', () => {
       const result = await ViewCheckService.go(session.id)
 
       expect(result).to.equal({
-        accountSelected: 'Another billing account',
+        accountSelected: 'Ferns Surfacing Limited',
         accountType: '',
         address: [],
         addressSelected: ['New'],
         companiesHouseName: '',
         companySearch: '',
-        contactSelected: '',
+        contactSelected: null,
         contactName: '',
         existingAccount: '',
         fao: 'no',

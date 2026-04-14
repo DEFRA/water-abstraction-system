@@ -89,11 +89,11 @@ function _alertDetails(notification) {
 
 function _backLink(notification, licence, returnLogId, companyContactId) {
   if (licence) {
-    return { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' }
+    return { href: `/system/licences/${licence.id}/communications`, text: 'Go back to licence' }
   }
 
   if (returnLogId) {
-    return { href: `/system/return-logs/${returnLogId}`, text: 'Go back to return log' }
+    return { href: `/system/return-logs/${returnLogId}/communications`, text: 'Go back to return log' }
   }
 
   if (companyContactId) {
@@ -126,7 +126,7 @@ function _paperForm(notification) {
 
   return {
     downloadLink: hasPdf ? `/system/notifications/${id}/download` : null,
-    link: `/system/return-logs/${personalisation.qr_url}`,
+    link: `/system/return-logs/${personalisation.qr_url}/details`,
     period: `${formatLongDate(startDate)} to ${formatLongDate(endDate)}`,
     purpose: personalisation.purpose,
     reference: personalisation.format_id,

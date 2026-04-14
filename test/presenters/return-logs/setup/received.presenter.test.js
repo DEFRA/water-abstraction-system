@@ -39,7 +39,7 @@ describe('Return Logs - Setup - Received presenter', () => {
         receivedDateMonth: null,
         receivedDateYear: null,
         backLink: {
-          href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3',
+          href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3/details',
           text: 'Back'
         },
         todaysDate: formatLongDate(today()),
@@ -69,7 +69,7 @@ describe('Return Logs - Setup - Received presenter', () => {
         const result = ReceivedPresenter.go(session)
 
         expect(result.backLink).to.equal({
-          href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3',
+          href: '/system/return-logs/8280a3bb-aefb-4603-b71f-a58cef9169f3/details',
           text: 'Back'
         })
       })

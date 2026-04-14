@@ -5,16 +5,17 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewSelectRecipientsService = require('../../../../app/services/notices/setup/view-select-recipients.service.js')
@@ -25,7 +26,7 @@ describe('Notices - Setup - View Select Recipients service', () => {
   let recipients
   let referenceCode
 
-  beforeEach(async () => {
+  beforeEach(() => {
     recipients = RecipientsFixture.recipients()
 
     referenceCode = generateNoticeReferenceCode('RINV-')
@@ -35,9 +36,10 @@ describe('Notices - Setup - View Select Recipients service', () => {
       selectedRecipients: [recipients.primaryUser.contact_hash_id]
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
 
     Sinon.stub(FetchRecipientsService, 'go').resolves([recipients.primaryUser])
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {

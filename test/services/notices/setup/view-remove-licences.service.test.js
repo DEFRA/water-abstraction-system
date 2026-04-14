@@ -3,13 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewRemoveLicencesService = require('../../../../app/services/notices/setup/view-remove-licences.service.js')
@@ -19,11 +23,20 @@ describe('Notices - Setup - View Remove Licences service', () => {
 
   let referenceCode
   let session
+  let sessionData
 
-  beforeEach(async () => {
-    referenceCode = generateUUID()
+  beforeEach(() => {
+    referenceCode = generateNoticeReferenceCode()
 
-    session = await SessionHelper.add({ data: { licences, referenceCode } })
+    sessionData = { licences, referenceCode }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   it('correctly presents the data', async () => {

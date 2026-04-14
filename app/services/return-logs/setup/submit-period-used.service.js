@@ -6,9 +6,9 @@
  */
 
 const AllocateSingleVolumeToLinesService = require('./allocate-single-volume-to-lines.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const PeriodUsedPresenter = require('../../../presenters/return-logs/setup/period-used.presenter.js')
 const PeriodUsedValidator = require('../../../validators/return-logs/setup/period-used.validator.js')
-const SessionModel = require('../../../models/session.model.js')
 const { determineAbstractionPeriods } = require('../../../lib/abstraction-period.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
@@ -28,7 +28,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * @returns {Promise<object>} If no errors the page data for the period-used page else the validation error details
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const error = _validate(payload, session)
 

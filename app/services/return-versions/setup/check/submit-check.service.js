@@ -5,10 +5,11 @@
  * @module SubmitCheckService
  */
 
-const GenerateReturnVersionService = require('./generate-return-version.service.js')
 const CreateReturnVersionService = require('./create-return-version.service.js')
+const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+const GenerateReturnVersionService = require('./generate-return-version.service.js')
 const ProcessLicenceReturnLogsService = require('../../../return-logs/process-licence-return-logs.service.js')
-const SessionModel = require('../../../../models/session.model.js')
 const VoidReturnLogsService = require('../../../return-logs/void-return-logs.service.js')
 const { db } = require('../../../../../db/db.js')
 
@@ -28,11 +29,11 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  * @returns {Promise<string>} The licence Id
  */
 async function go(sessionId, userId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   await _processReturnVersion(session, userId)
 
-  await SessionModel.query().deleteById(sessionId)
+  await DeleteSessionDal.go(sessionId)
 
   return session.licence.id
 }

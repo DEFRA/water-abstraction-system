@@ -5,11 +5,14 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitVolumesService = require('../../../../app/services/return-logs/setup/submit-volumes.service.js')
@@ -21,37 +24,41 @@ describe('Return Logs Setup - Submit Volumes service', () => {
   let yarStub
   let yearMonth
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
-      data: {
-        lines: [
-          {
-            endDate: '2023-04-30T00:00:00.000Z',
-            quantity: 100,
-            quantityCubicMetres: 100000,
-            startDate: '2023-04-01T00:00:00.000Z'
-          },
-          {
-            endDate: '2023-05-31T00:00:00.000Z',
-            startDate: '2023-05-01T00:00:00.000Z'
-          },
-          {
-            endDate: '2023-06-30T00:00:00.000Z',
-            quantity: 300,
-            quantityCubicMetres: 300000,
-            startDate: '2023-06-01T00:00:00.000Z'
-          }
-        ],
-        returnsFrequency: 'month',
-        returnReference: '1234',
-        units: 'megalitres',
-        unitSymbol: 'Ml'
-      }
+      lines: [
+        {
+          endDate: '2023-04-30T00:00:00.000Z',
+          quantity: 100,
+          quantityCubicMetres: 100000,
+          startDate: '2023-04-01T00:00:00.000Z'
+        },
+        {
+          endDate: '2023-05-31T00:00:00.000Z',
+          startDate: '2023-05-01T00:00:00.000Z'
+        },
+        {
+          endDate: '2023-06-30T00:00:00.000Z',
+          quantity: 300,
+          quantityCubicMetres: 300000,
+          startDate: '2023-06-01T00:00:00.000Z'
+        }
+      ],
+      returnsFrequency: 'month',
+      returnReference: '1234',
+      units: 'megalitres',
+      unitSymbol: 'Ml'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
 
-    yarStub = { flash: Sinon.stub() }
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    yarStub = { flash: Sinon.stub().returns([]) }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -65,9 +72,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
         it('saves the volume for May as null', async () => {
           await SubmitVolumesService.go(session.id, payload, yarStub, yearMonth)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.lines).to.equal([
+          expect(session.lines).to.equal([
             {
               endDate: '2023-04-30T00:00:00.000Z',
               quantity: 100,
@@ -87,6 +92,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
               startDate: '2023-06-01T00:00:00.000Z'
             }
           ])
+          expect(session.$update.called).to.be.true()
         })
 
         it('sets the notification message title to "Updated" and the text to "Volumes have been updated" ', async () => {
@@ -108,9 +114,7 @@ describe('Return Logs Setup - Submit Volumes service', () => {
         it('saves the volume for June as 200', async () => {
           await SubmitVolumesService.go(session.id, payload, yarStub, yearMonth)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.lines).to.equal([
+          expect(session.lines).to.equal([
             {
               endDate: '2023-04-30T00:00:00.000Z',
               quantity: 100,

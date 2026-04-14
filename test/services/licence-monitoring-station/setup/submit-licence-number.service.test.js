@@ -3,29 +3,40 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitLicenceNumberService = require('../../../../app/services/licence-monitoring-station/setup/submit-licence-number.service.js')
 
 describe('Licence Monitoring Station Setup - Licence Number Service', () => {
+  let fetchSessionStub
   let payload
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     payload = {}
     sessionData = {
       label: 'LABEL'
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -41,17 +52,14 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
         it('saves the submitted value', async () => {
           await SubmitLicenceNumberService.go(session.id, payload)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.licenceRef).to.equal(payload.licenceRef)
+          expect(session.licenceRef).to.equal(payload.licenceRef)
+          expect(session.$update.called).to.be.true()
         })
 
         it('saves the licence id', async () => {
           await SubmitLicenceNumberService.go(session.id, payload)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.licenceId).to.equal(licence.id)
+          expect(session.licenceId).to.equal(licence.id)
         })
 
         describe('and the check page has not been visited', () => {
@@ -65,8 +73,12 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
         })
 
         describe('and the check page has been visited', () => {
-          beforeEach(async () => {
-            session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+          beforeEach(() => {
+            sessionData = { ...sessionData, checkPageVisited: true }
+
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            fetchSessionStub.resolves(session)
           })
 
           it('still returns a false value so the controller can redirect to the check page', async () => {
@@ -81,10 +93,12 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
 
       describe('and the submitted licence is already stored in the session', () => {
         describe('and the check page has been not been visited', () => {
-          beforeEach(async () => {
-            session = await SessionHelper.add({
-              data: { ...sessionData.data, licenceRef: licence.licenceRef }
-            })
+          beforeEach(() => {
+            sessionData = { ...sessionData, licenceRef: licence.licenceRef }
+
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            fetchSessionStub.resolves(session)
           })
 
           it('returns a falsy value so the controller can redirect to the next page', async () => {
@@ -97,18 +111,18 @@ describe('Licence Monitoring Station Setup - Licence Number Service', () => {
         })
 
         describe('and the check page has been visited', () => {
-          beforeEach(async () => {
-            session = await SessionHelper.add({
-              data: { ...sessionData.data, licenceRef: licence.licenceRef, checkPageVisited: true }
-            })
+          beforeEach(() => {
+            sessionData = { ...sessionData, licenceRef: licence.licenceRef, checkPageVisited: true }
+
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            fetchSessionStub.resolves(session)
           })
 
           it('leaves the checkPageVisited flag in the session as true', async () => {
             await SubmitLicenceNumberService.go(session.id, payload)
 
-            const refreshedSession = await session.$query()
-
-            expect(refreshedSession.checkPageVisited).to.be.true()
+            expect(session.checkPageVisited).to.be.true()
           })
 
           it('returns a true value so the controller can redirect to the next page', async () => {

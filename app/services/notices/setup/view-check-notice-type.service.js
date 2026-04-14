@@ -7,7 +7,7 @@
  */
 
 const CheckNoticeTypePresenter = require('../../../presenters/notices/setup/check-notice-type.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const { readFlashNotification } = require('../../../lib/general.lib.js')
 
 /**
@@ -19,7 +19,7 @@ const { readFlashNotification } = require('../../../lib/general.lib.js')
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   await _markCheckPageVisited(session)
 

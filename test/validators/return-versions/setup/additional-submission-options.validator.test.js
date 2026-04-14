@@ -51,7 +51,7 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
 
   describe('when quarterly return submission is selected but requirements have a return cycle of summer', () => {
     before(() => {
-      session.data.requirements[0].returnsCycle = 'summer'
+      session.requirements[0].returnsCycle = 'summer'
 
       payload = {
         additionalSubmissionOptions: ['quarterly-returns']
@@ -89,40 +89,38 @@ describe('Return Versions Setup - Additional Submission Options validator', () =
 function _testSession() {
   return {
     id: 'bbfb8568-cd71-4ca1-b56b-2d50dae2b2b9',
-    data: {
-      method: 'use-existing-requirements',
-      reason: 'new-licence',
-      journey: 'returns-required',
-      licence: {
-        id: '91aff99a-3204-4727-86bd-7bdf3ef24533',
-        endDate: null,
-        startDate: '1992-08-19T00:00:00.000Z',
-        licenceRef: '01/117',
-        licenceHolder: 'Ferns Surfacing Limited',
-        returnVersions: [],
-        waterUndertaker: false,
-        currentVersionStartDate: '2019-05-13T00:00:00.000Z'
-      },
-      requirements: [
-        {
-          points: [],
-          purposes: [],
-          returnsCycle: 'winter-and-all-year',
-          siteDescription: 'POINT A, ADDINGTON SANDPITS',
-          abstractionPeriod: [],
-          frequencyReported: 'month',
-          frequencyCollected: 'month',
-          agreementsExceptions: []
-        }
-      ],
-      startDateDay: '28',
-      startDateYear: '2025',
-      multipleUpload: false,
-      startDateMonth: '12',
-      checkPageVisited: true,
-      quarterlyReturns: true,
-      startDateOptions: 'anotherStartDate',
-      returnVersionStartDate: '2025-12-28T00:00:00.000Z'
-    }
+    method: 'use-existing-requirements',
+    reason: 'new-licence',
+    journey: 'returns-required',
+    licence: {
+      id: '91aff99a-3204-4727-86bd-7bdf3ef24533',
+      endDate: null,
+      startDate: '1992-08-19T00:00:00.000Z',
+      licenceRef: '01/117',
+      licenceHolder: 'Ferns Surfacing Limited',
+      returnVersions: [],
+      waterUndertaker: false,
+      currentVersionStartDate: '2019-05-13T00:00:00.000Z'
+    },
+    requirements: [
+      {
+        points: [],
+        purposes: [],
+        returnsCycle: 'winter-and-all-year',
+        siteDescription: 'POINT A, ADDINGTON SANDPITS',
+        abstractionPeriod: [],
+        frequencyReported: 'month',
+        frequencyCollected: 'month',
+        agreementsExceptions: []
+      }
+    ],
+    startDateDay: '28',
+    startDateYear: '2025',
+    multipleUpload: false,
+    startDateMonth: '12',
+    checkPageVisited: true,
+    quarterlyReturns: true,
+    startDateOptions: 'anotherStartDate',
+    returnVersionStartDate: '2025-12-28T00:00:00.000Z'
   }
 }

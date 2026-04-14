@@ -55,7 +55,7 @@ function _returns(returns) {
       dates: `${formatLongDate(new Date(startDate))} to ${formatLongDate(new Date(endDate))}`,
       description: metadata.description === 'null' ? '' : metadata.description,
       dueDate: dueDate ? formatLongDate(new Date(dueDate)) : '',
-      link: `/system/return-logs/${returnLogId}`,
+      link: `/system/return-logs/${returnLogId}/details`,
       purpose: formatPurposes(metadata.purposes),
       reference: returnReference,
       status: formatReturnLogStatus(returnLog)

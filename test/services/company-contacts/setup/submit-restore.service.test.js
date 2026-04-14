@@ -10,11 +10,12 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
-const SessionModel = require('../../../../app/models/session.model.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
+const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const UpdateCompanyContactService = require('../../../../app/services/company-contacts/setup/update-company-contact.service.js')
 
 // Thing under test
@@ -24,6 +25,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
   let auth
   let company
   let companyContact
+  let fetchSessionStub
   let session
   let sessionData
   let yarStub
@@ -43,11 +45,14 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
       name: 'Eric'
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub() }
 
     Sinon.stub(UpdateCompanyContactService, 'go').resolves()
+    Sinon.stub(DeleteSessionDal, 'go').resolves()
   })
 
   afterEach(() => {
@@ -88,9 +93,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
     it('clears the session', async () => {
       await SubmitRestoreService.go(session.id, yarStub, auth)
 
-      const deletedSession = await SessionModel.query().findById(session.id)
-
-      expect(deletedSession).to.be.undefined()
+      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
     })
 
     describe('the "abstractionAlerts" property', () => {
@@ -106,7 +109,12 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
 
       describe('when set to "no"', () => {
         beforeEach(async () => {
-          session = await SessionHelper.add({ data: { ...sessionData, abstractionAlerts: 'no' } })
+          session = SessionModelStub.build(Sinon, {
+            ...sessionData,
+            abstractionAlerts: 'no'
+          })
+
+          fetchSessionStub.resolves(session)
         })
 
         it('persists the "abstractionAlerts" as "false"', async () => {
@@ -122,7 +130,12 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
     describe('the "email" property', () => {
       describe('when email is in uppercase', () => {
         beforeEach(async () => {
-          session = await SessionHelper.add({ data: { ...sessionData, email: 'ERICE@TEST.COM' } })
+          session = SessionModelStub.build(Sinon, {
+            ...sessionData,
+            email: 'ERICE@TEST.COM'
+          })
+
+          fetchSessionStub.resolves(session)
         })
 
         it('persists the "email" in lowercase', async () => {

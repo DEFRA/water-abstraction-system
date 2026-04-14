@@ -7,8 +7,8 @@
 
 const CheckPresenter = require('../../../presenters/notices/setup/check.presenter.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 const { readFlashNotification } = require('../../../lib/general.lib.js')
 
 /**
@@ -21,7 +21,7 @@ const { readFlashNotification } = require('../../../lib/general.lib.js')
  * @returns {Promise<object>} The view data for the review page
  */
 async function go(sessionId, yar, page) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const recipients = await FetchRecipientsService.go(session, false)
 

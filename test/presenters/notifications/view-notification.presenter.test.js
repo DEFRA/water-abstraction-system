@@ -39,7 +39,7 @@ describe('Notifications - View Notification presenter', () => {
       activeNavBar: 'search',
       address: [],
       alertDetails: null,
-      backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to communications' },
+      backLink: { href: `/system/licences/${licence.id}/communications`, text: 'Go back to licence' },
       contents: notification.plaintext,
       errorDetails: null,
       messageType: 'email',
@@ -234,19 +234,19 @@ describe('Notifications - View Notification presenter', () => {
 
         expect(result.backLink).to.be.equal({
           href: `/system/licences/${licence.id}/communications`,
-          text: 'Go back to communications'
+          text: 'Go back to licence'
         })
       })
     })
 
     describe('when a return log id is provided', () => {
-      it('returns a back link to the view licence communications page', () => {
+      it('returns a back link to the view return log communications page', () => {
         const returnLogId = generateUUID()
 
         const result = ViewNotificationPresenter.go(notification, null, returnLogId)
 
         expect(result.backLink).to.be.equal({
-          href: `/system/return-logs/${returnLogId}`,
+          href: `/system/return-logs/${returnLogId}/communications`,
           text: 'Go back to return log'
         })
       })
@@ -322,7 +322,7 @@ describe('Notifications - View Notification presenter', () => {
 
           expect(result.paperForm).to.equal({
             downloadLink: null,
-            link: `/system/return-logs/${notification.personalisation.qr_url}`,
+            link: `/system/return-logs/${notification.personalisation.qr_url}/details`,
             period: '1 April 2024 to 31 March 2025',
             purpose: 'Potable Water Supply - Direct',
             reference: notification.personalisation.format_id,
@@ -341,7 +341,7 @@ describe('Notifications - View Notification presenter', () => {
 
           expect(result.paperForm).to.equal({
             downloadLink: `/system/notifications/${notification.id}/download`,
-            link: `/system/return-logs/${notification.personalisation.qr_url}`,
+            link: `/system/return-logs/${notification.personalisation.qr_url}/details`,
             period: '1 April 2024 to 31 March 2025',
             purpose: 'Potable Water Supply - Direct',
             reference: notification.personalisation.format_id,

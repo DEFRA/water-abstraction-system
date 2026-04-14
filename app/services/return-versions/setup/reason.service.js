@@ -5,8 +5,8 @@
  * @module SelectReasonService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const SelectReasonPresenter = require('../../../presenters/return-versions/setup/reason.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the data for `/return-versions/setup/{sessionId}/reason` page
@@ -19,7 +19,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} page data needed by the view template
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const formattedData = SelectReasonPresenter.go(session)
 

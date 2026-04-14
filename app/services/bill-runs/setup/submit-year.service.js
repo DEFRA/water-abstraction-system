@@ -6,7 +6,7 @@
  */
 
 const FetchLicenceSupplementaryYearsService = require('./fetch-licence-supplementary-years.service.js')
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const YearPresenter = require('../../../presenters/bill-runs/setup/year.presenter.js')
 const YearValidator = require('../../../validators/bill-runs/setup/year.validator.js')
 
@@ -31,7 +31,7 @@ const YearValidator = require('../../../validators/bill-runs/setup/year.validato
  * the year page including the validation error details
  */
 async function go(sessionId, payload) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const validationResult = _validate(payload)
 

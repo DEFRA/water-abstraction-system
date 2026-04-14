@@ -7,7 +7,7 @@
 
 const crypto = require('node:crypto')
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
 
 /**
@@ -21,7 +21,7 @@ const { flashNotification } = require('../../../lib/general.lib.js')
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
 async function go(sessionId, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
   const { address } = session.addressJourney
 
   const additionalRecipient = {

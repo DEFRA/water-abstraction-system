@@ -5,12 +5,12 @@
  * @module SubmitMultipleEntriesService
  */
 
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const MultipleEntriesPresenter = require('../../../presenters/return-logs/setup/multiple-entries.presenter.js')
 const MultipleEntriesValidator = require('../../../validators/return-logs/setup/multiple-entries.validator.js')
-const SessionModel = require('../../../models/session.model.js')
 const SplitMultipleEntriesService = require('../../../services/return-logs/setup/split-multiple-entries.service.js')
+const { convertFromCubicMetres, convertToCubicMetres } = require('../../../lib/general.lib.js')
+const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 const { returnRequirementFrequencies } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -30,7 +30,7 @@ const { returnRequirementFrequencies } = require('../../../lib/static-lookups.li
  * including the validation error details
  */
 async function go(sessionId, payload, yar) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const measurementType = session.reported === 'abstractionVolumes' ? 'volumes' : 'meter readings'
   const frequency = returnRequirementFrequencies[session.returnsFrequency]

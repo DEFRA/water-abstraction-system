@@ -6,7 +6,8 @@
  * @module SubmitRestoreService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const UpdateCompanyContactService = require('./update-company-contact.service.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
 
@@ -20,15 +21,15 @@ const { flashNotification } = require('../../../lib/general.lib.js')
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId, yar, auth) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
+
+  await DeleteSessionDal.go(sessionId)
 
   await _updateCompanyContact(session, auth)
 
   const { company, name } = session
 
   flashNotification(yar, 'Contact restored', `${name} was restored.`)
-
-  await SessionModel.query().delete().where('id', sessionId)
 
   return {
     redirectUrl: `/system/companies/${company.id}/contacts`

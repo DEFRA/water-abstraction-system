@@ -5,8 +5,8 @@
  * @module ViewRemoveLicencesService
  */
 
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const RemoveLicencesPresenter = require('../../../presenters/notices/setup/remove-licences.presenter.js')
-const SessionModel = require('../../../models/session.model.js')
 
 /**
  * Orchestrates fetching and presenting the licences to remove for the notices setup remove licences page
@@ -16,7 +16,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The view data for the remove licences page
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const { removeLicences = [] } = session
 

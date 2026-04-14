@@ -5,7 +5,7 @@
  * @module SubmissionService
  */
 
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const SubmissionPresenter = require('../../../presenters/return-logs/setup/submission.presenter.js')
 
 /**
@@ -16,7 +16,7 @@ const SubmissionPresenter = require('../../../presenters/return-logs/setup/submi
  * @returns {Promise<object>} page data needed by the view template
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const formattedData = SubmissionPresenter.go(session)
 

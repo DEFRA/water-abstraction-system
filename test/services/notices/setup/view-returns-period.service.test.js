@@ -9,8 +9,11 @@ const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ReturnsPeriodService = require('../../../../app/services/notices/setup/view-returns-period.service.js')
@@ -19,11 +22,16 @@ describe('Notices - Setup - View Returns Period service', () => {
   let clock
   let referenceCode
   let session
+  let sessionData
 
   before(async () => {
     referenceCode = generateNoticeReferenceCode('RINV-')
 
-    session = await SessionHelper.add({ data: { referenceCode, noticeType: 'invitations' } })
+    sessionData = { referenceCode, noticeType: 'invitations' }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     const testDate = new Date('2024-12-01')
 
@@ -31,6 +39,7 @@ describe('Notices - Setup - View Returns Period service', () => {
   })
 
   after(() => {
+    Sinon.restore()
     clock.restore()
   })
 

@@ -8,7 +8,7 @@
 
 const AlertEmailAddressPresenter = require('../../../presenters/notices/setup/alert-email-address.presenter.js')
 const AlertEmailAddressValidator = require('../../../validators/notices/setup/alert-email-address.validator.js')
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
 /**
@@ -21,7 +21,7 @@ const { formatValidationResult } = require('../../../presenters/base.presenter.j
  * @returns {Promise<object>} - The data formatted for the view template
  */
 async function go(sessionId, payload, auth) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
 
   const validationResult = _validate(payload)
 

@@ -44,14 +44,14 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
       const result = CheckPresenter.go(session, companyContacts, [], null)
 
       expect(result).to.equal({
-        accountSelected: 'Another billing account',
+        accountSelected: 'Ferns Surfacing Limited',
         accountType: '',
         address: [],
         addressSelected: ['New'],
         companiesHouseName: '',
         companySearch: '',
         contactName: '',
-        contactSelected: '',
+        contactSelected: null,
         existingAccount: '',
         fao: 'no',
         links: {
@@ -75,12 +75,12 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   })
 
   describe('the "accountSelected" property', () => {
-    describe('when called with the "accountSelected" set to "customer"', () => {
+    describe('when called with the "accountSelected" set to a UUID', () => {
       it('returns the name from the billing account', () => {
         const result = CheckPresenter.go(
           {
             ...session,
-            accountSelected: 'customer'
+            accountSelected: generateUUID()
           },
           companyContacts,
           address,
@@ -399,12 +399,29 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
       companyContacts.contacts.push(contact)
     })
 
+    describe('when "fao" was "no', () => {
+      it('returns string for display', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session,
+            fao: 'no'
+          },
+          companyContacts,
+          address,
+          companysHouseResult
+        )
+
+        expect(result.contactSelected).to.equal(null)
+      })
+    })
+
     describe('when "new" was selected', () => {
       it('returns string for display', () => {
         const result = CheckPresenter.go(
           {
             ...session,
-            contactSelected: 'new'
+            contactSelected: 'new',
+            fao: 'yes'
           },
           companyContacts,
           address,
@@ -420,7 +437,8 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         const result = CheckPresenter.go(
           {
             ...session,
-            contactSelected: contact.id
+            contactSelected: contact.id,
+            fao: 'yes'
           },
           companyContacts,
           address,

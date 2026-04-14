@@ -10,7 +10,7 @@ const AddressModel = require('../../../models/address.model.js')
 const ChangeAddressService = require('../change-address.service.js')
 const FetchCompanyService = require('./fetch-company.service.js')
 const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
-const SessionModel = require('../../../models/session.model.js')
+const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 
 /**
  * Orchestrates validating the data for `/billing-accounts/setup/{sessionId}/check` page
@@ -20,7 +20,7 @@ const SessionModel = require('../../../models/session.model.js')
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId) {
-  const session = await SessionModel.query().findById(sessionId)
+  const session = await FetchSessionDal.go(sessionId)
   const { billingAccount } = session
 
   const existingAccount = !!session.existingAccount && session.existingAccount !== 'new'

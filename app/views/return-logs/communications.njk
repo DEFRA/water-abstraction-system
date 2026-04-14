@@ -1,0 +1,18 @@
+{% extends 'layout-return-logs.njk' %}
+
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+
+{% from "macros/communications-table.njk" import communicationsTable %}
+{% from "macros/notification-status-tag.njk" import statusTag as notificationStatusTag %}
+
+{% block pageContent %}
+  {% if notifications.length === 0 %}
+    <p data-test='no-notifications-msg'>This return log has no associated communications. While some may exist, they were not recorded at the time.</p>
+  {% else %}
+    {{ communicationsTable(notifications, pagination) }}
+
+    {% if pagination.numberOfPages > 1 %}
+      {{ govukPagination(pagination.component) }}
+    {% endif %}
+  {% endif %}
+{% endblock %}
