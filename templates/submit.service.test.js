@@ -22,7 +22,7 @@ describe('__DESCRIBE_LABEL__', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     payload = { placeholder: 'change me' }
     sessionData = {}
 

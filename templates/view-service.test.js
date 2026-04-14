@@ -21,7 +21,7 @@ describe('__DESCRIBE_LABEL__', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {}
 
     session = SessionModelStub.build(Sinon, sessionData)
