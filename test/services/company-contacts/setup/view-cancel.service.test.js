@@ -23,7 +23,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     company = CustomersFixtures.company()
 
     sessionData = { company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' }

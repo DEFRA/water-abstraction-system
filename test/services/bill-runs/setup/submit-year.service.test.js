@@ -9,20 +9,27 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things we need to stub
 const FetchLicenceSupplementaryYearsService = require('../../../../app/services/bill-runs/setup/fetch-licence-supplementary-years.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitYearService = require('../../../../app/services/bill-runs/setup/submit-year.service.js')
 
 describe('Bill Runs - Setup - Submit Year service', () => {
+  let fetchSessionStub
   let payload
   let session
+  let sessionData
 
-  beforeEach(async () => {
-    session = await SessionHelper.add({ data: {} })
+  beforeEach(() => {
+    sessionData = {}
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {
@@ -41,10 +48,9 @@ describe('Bill Runs - Setup - Submit Year service', () => {
         it('saves the submitted value and returns an object confirming setup is complete', async () => {
           const result = await SubmitYearService.go(session.id, payload)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.year).to.equal('2026')
+          expect(session.year).to.equal('2026')
           expect(result.setupComplete).to.be.true()
+          expect(session.$update.called).to.be.true()
         })
       })
 
@@ -58,10 +64,10 @@ describe('Bill Runs - Setup - Submit Year service', () => {
         it('saves the submitted value and returns an object confirming setup is not complete', async () => {
           const result = await SubmitYearService.go(session.id, payload)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.year).to.equal('2022')
+          expect(session.year).to.equal('2022')
           expect(result.setupComplete).to.be.false()
+
+          expect(session.$update.called).to.be.true()
         })
       })
     })
@@ -72,8 +78,12 @@ describe('Bill Runs - Setup - Submit Year service', () => {
 
         let yearsStub
 
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { region: regionId, type: 'two_part_supplementary' } })
+        beforeEach(() => {
+          sessionData = { region: regionId, type: 'two_part_supplementary' }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
           payload = {}
           yearsStub = Sinon.stub(FetchLicenceSupplementaryYearsService, 'go').resolves([{ financialYearEnd: 2024 }])
         })
