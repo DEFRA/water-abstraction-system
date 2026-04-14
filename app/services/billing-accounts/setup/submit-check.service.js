@@ -87,7 +87,7 @@ async function _agentCompany(session, companyContacts, existingAccount) {
   }
 
   return {
-    companyId,
+    ...(companyId && { companyId }),
     name: companyName,
     type: session.accountType === 'company' ? 'organisation' : 'person',
     companyNumber: session.companiesHouseNumber ?? null
