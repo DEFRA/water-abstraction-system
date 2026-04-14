@@ -9,8 +9,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 const SessionModelStub = require('../../support/stubs/session.stub.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')

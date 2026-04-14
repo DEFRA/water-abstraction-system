@@ -10,8 +10,8 @@ const { expect } = Code
 
 // Test helpers
 const { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { generateUUID } = require('../../../app/lib/general.lib.js')
 const SessionModelStub = require('../../support/stubs/session.stub.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
