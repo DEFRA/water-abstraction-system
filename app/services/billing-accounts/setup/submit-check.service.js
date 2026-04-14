@@ -31,7 +31,6 @@ async function go(sessionId) {
   const agentCompany = await _agentCompany(session, companyContacts, existingAccount)
   const contact = _contact(session, companyContacts)
 
-  console.log(address)
   const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
 
   return {

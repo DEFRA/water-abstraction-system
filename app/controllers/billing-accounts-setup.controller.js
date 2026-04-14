@@ -71,7 +71,7 @@ async function submitCheck(request, h) {
   } = request
 
   const pageData = await SubmitCheckService.go(sessionId)
-console.log(pageData.redirectUrl)
+
   return h.redirect(pageData.redirectUrl)
 }
 
