@@ -3,14 +3,18 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const SessionModelStub = require('../../support/stubs/session.stub.js')
 const { countryLookup } = require('../../../app/presenters/address/base-address.presenter.js')
-const SessionHelper = require('../../support/helpers/session.helper.js')
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitInternationalService = require('../../../app/services/address/submit-international.service.js')
@@ -18,30 +22,37 @@ const SubmitInternationalService = require('../../../app/services/address/submit
 describe('Address - Submit International Service', () => {
   let payload
   let session
+  let sessionData
   let sessionId
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionId = generateUUID()
 
-    session = await SessionHelper.add({
+    sessionData = {
       id: sessionId,
-      data: {
-        addressJourney: {
-          activeNavBar: 'manage',
-          address: {},
-          backLink: {
-            href: `/system/notices/setup/${sessionId}/contact-type`,
-            text: 'Back'
-          },
-          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-        }
+      addressJourney: {
+        activeNavBar: 'manage',
+        address: {},
+        backLink: {
+          href: `/system/notices/setup/${sessionId}/contact-type`,
+          text: 'Back'
+        },
+        redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
       }
-    })
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           addressLine1: 'Falsches Unternehmen',
           addressLine2: '1 Fake-Straße',
@@ -57,9 +68,7 @@ describe('Address - Submit International Service', () => {
 
         expect(result).to.equal({ redirect: `/system/notices/setup/${sessionId}/add-recipient` })
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.addressJourney.address).to.equal({
+        expect(session.addressJourney.address).to.equal({
           addressLine1: 'Falsches Unternehmen',
           addressLine2: '1 Fake-Straße',
           addressLine3: 'Falsches Dorf',
@@ -67,7 +76,8 @@ describe('Address - Submit International Service', () => {
           country: 'Germany',
           postcode: '80802'
         })
-        expect(refreshedSession.addressJourney.backUrl).to.equal(`/system/address/${session.id}/international`)
+        expect(session.addressJourney.backUrl).to.equal(`/system/address/${session.id}/international`)
+        expect(session.$update.called).to.be.true()
       })
     })
 
