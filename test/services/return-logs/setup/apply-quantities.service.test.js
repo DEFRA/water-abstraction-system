@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -15,7 +15,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
 
   describe('when called with meter readings', () => {
     describe('and the unit of measurement is cubic metres', () => {
-      beforeEach(() => {
+      before(() => {
         session = {
           lines: [
             {
@@ -76,7 +76,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       })
 
       describe('and the start reading is 100', () => {
-        beforeEach(() => {
+        before(() => {
           session = {
             lines: [
               {
@@ -139,7 +139,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
     })
 
     describe('and the unit of measurement is gallons', () => {
-      beforeEach(() => {
+      before(() => {
         session = {
           lines: [
             {
@@ -200,7 +200,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
       })
 
       describe('and the meter has a x10 display', () => {
-        beforeEach(() => {
+        before(() => {
           session = {
             lines: [
               {
@@ -265,7 +265,7 @@ describe('Return Logs Setup - Update Quantities service', () => {
 
   describe('when called with volumes', () => {
     describe('and the unit of measurement was previously megalitres but has changed to cubic metres', () => {
-      beforeEach(() => {
+      before(() => {
         session = {
           lines: [
             {
