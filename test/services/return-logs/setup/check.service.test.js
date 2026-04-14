@@ -8,6 +8,7 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things we need to stub
