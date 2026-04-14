@@ -68,7 +68,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         },
         pageTitle: 'Check billing account details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-        searchIndividualInput: '',
+        individualName: '',
         searchInput: ''
       })
     })
@@ -226,36 +226,36 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
     })
   })
 
-  describe('the "searchIndividualInput" property', () => {
-    describe('when called with the "searchIndividualInput" set', () => {
+  describe('the "individualName" property', () => {
+    describe('when called with the "individualName" set', () => {
       it('returns the saved search input', () => {
         const result = CheckPresenter.go(
           {
             ...session,
-            searchIndividualInput: 'Customer name'
+            individualName: 'Customer name'
           },
           companyContacts,
           address,
           companysHouseResult
         )
 
-        expect(result.searchIndividualInput).to.equal('Customer name')
+        expect(result.individualName).to.equal('Customer name')
       })
     })
 
-    describe('when called with the "searchIndividualInput" set to null', () => {
+    describe('when called with the "individualName" set to null', () => {
       it('returns an empty string', () => {
         const result = CheckPresenter.go(
           {
             ...session,
-            searchIndividualInput: null
+            individualName: null
           },
           companyContacts,
           address,
           companysHouseResult
         )
 
-        expect(result.searchIndividualInput).to.equal('')
+        expect(result.individualName).to.equal('')
       })
     })
   })

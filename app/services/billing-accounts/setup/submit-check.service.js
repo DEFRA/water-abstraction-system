@@ -26,14 +26,18 @@ async function go(sessionId) {
   const existingAccount = !!session.existingAccount && session.existingAccount !== 'new'
   const id = existingAccount ? session.existingAccount : session.billingAccount.company.id
   const companyContacts = await FetchCompanyContactsService.go(id)
-  console.log(companyContacts)
+
   const address = await _address(session)
   const agentCompany = await _agentCompany(session, companyContacts, existingAccount)
   const contact = _contact(session, companyContacts)
 
+  console.log(address)
   const result = await ChangeAddressService.go(billingAccount.id, address, agentCompany, contact)
 
-  return result
+  return {
+    redirectUrl: `/system/billing-accounts/${billingAccount.id}`,
+    ...result
+  }
 }
 
 async function _address(session) {
@@ -43,10 +47,19 @@ async function _address(session) {
     return session.addressJourney.address
   }
 
-  const existingAddress = await AddressModel.query().select(['addresses.id']).findById(session.addressSelected)
+  const address = await AddressModel.query()
+    .select(['address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'postcode'])
+    .findById(session.addressSelected)
 
   return {
-    id: existingAddress.id
+    addressId: session.addressSelected,
+    addressLine1: address.address1,
+    addressLine2: address.address2,
+    addressLine3: address.address3,
+    addressLine4: address.address4,
+    addressLine5: address.address5,
+    addressLine6: address.address6,
+    postcode: address.postcode
   }
 }
 
@@ -59,7 +72,9 @@ async function _agentCompany(session, companyContacts, existingAccount) {
   if (session.companiesHouseNumber) {
     const companysHouseResult = await FetchCompanyService.go(session.companiesHouseNumber)
 
-    companyName = companysHouseResult.name
+    companyName = companysHouseResult.title
+  } else {
+    companyName = session.individualName
   }
 
   if (!anotherAccountSelected) {
@@ -69,7 +84,7 @@ async function _agentCompany(session, companyContacts, existingAccount) {
   }
 
   return {
-    id: companyId,
+    companyId,
     name: companyName,
     type: session.accountType === 'company' ? 'organisation' : 'person',
     companyNumber: session.companiesHouseNumber ?? null
@@ -96,7 +111,7 @@ function _contact(session, companyContacts) {
 
   return {
     ...(existingContact && { id: session.contactSelected }),
-    contactType: 'department',
+    type: 'department',
     department: name
   }
 }

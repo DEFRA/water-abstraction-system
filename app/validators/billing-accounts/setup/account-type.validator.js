@@ -32,7 +32,7 @@ function go(payload) {
         'any.only': errorMessage,
         'string.empty': errorMessage
       }),
-    searchIndividualInput: Joi.alternatives().conditional('accountType', {
+    individualName: Joi.alternatives().conditional('accountType', {
       is: 'individual',
       then: Joi.string()
         .trim()

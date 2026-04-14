@@ -32,7 +32,7 @@ function go(session, companyContacts, existingAddress, companysHouseResult) {
     links: _links(session),
     pageTitle: 'Check billing account details',
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
-    searchIndividualInput: session.searchIndividualInput ?? '',
+    individualName: session.individualName ?? '',
     searchInput: session.searchInput ?? ''
   }
 }

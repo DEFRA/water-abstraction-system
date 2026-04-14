@@ -309,7 +309,7 @@ function _newAccountExpectedValues() {
     companiesHouseNumber: null,
     companySearch: null,
     existingAccount: null,
-    searchIndividualInput: null
+    individualName: null
   }
 }
 
@@ -320,7 +320,7 @@ function _newAccountSessionData(session) {
     companiesHouseNumber: '12345678',
     companySearch: 'Company Name',
     existingAccount: 'new',
-    searchIndividualInput: 'Contact Name'
+    individualName: 'Contact Name'
   }
 }
 

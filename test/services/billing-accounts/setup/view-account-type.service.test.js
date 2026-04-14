@@ -42,7 +42,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
         },
         pageTitle: 'Select the account type',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-        searchIndividualInput: null
+        individualName: null
       })
     })
   })

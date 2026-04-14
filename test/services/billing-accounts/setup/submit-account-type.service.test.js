@@ -44,7 +44,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       expect(refreshedSession.data).to.equal(
         {
           accountType: 'company',
-          searchIndividualInput: null
+          individualName: null
         },
         { skip: ['billingAccount'] }
       )
@@ -76,7 +76,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
         expect(refreshedSession.data).to.equal(
           {
             accountType: 'company',
-            searchIndividualInput: null
+            individualName: null
           },
           { skip: ['billingAccount'] }
         )
@@ -111,7 +111,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           {
             accountType: 'company',
             checkPageVisited: true,
-            searchIndividualInput: null
+            individualName: null
           },
           { skip: ['billingAccount'] }
         )
@@ -142,7 +142,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           {
             ..._commonExpectedValues(),
             accountType: 'company',
-            searchIndividualInput: null
+            individualName: null
           },
           { skip: ['billingAccount'] }
         )
@@ -160,7 +160,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
   describe('when called with "individual" selected and a search term entered', () => {
     beforeEach(async () => {
-      payload = { accountType: 'individual', searchIndividualInput: 'John Doe' }
+      payload = { accountType: 'individual', individualName: 'John Doe' }
     })
 
     it('saves the submitted value', async () => {
@@ -171,7 +171,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
       expect(refreshedSession.data).to.equal(
         {
           accountType: 'individual',
-          searchIndividualInput: 'John Doe'
+          individualName: 'John Doe'
         },
         { skip: ['billingAccount'] }
       )
@@ -190,7 +190,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
         sessionData = {
           accountType: 'individual',
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
-          searchIndividualInput: 'John Doe'
+          individualName: 'John Doe'
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -204,7 +204,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
         expect(refreshedSession.data).to.equal(
           {
             accountType: 'individual',
-            searchIndividualInput: 'John Doe'
+            individualName: 'John Doe'
           },
           { skip: ['billingAccount'] }
         )
@@ -225,7 +225,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           accountType: 'individual',
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount,
           checkPageVisited: true,
-          searchIndividualInput: 'John Doe'
+          individualName: 'John Doe'
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -240,7 +240,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
           {
             accountType: 'individual',
             checkPageVisited: true,
-            searchIndividualInput: 'John Doe'
+            individualName: 'John Doe'
           },
           { skip: ['billingAccount'] }
         )
@@ -273,7 +273,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
             accountType: 'individual',
             companiesHouseNumber: null,
             companySearch: null,
-            searchIndividualInput: 'John Doe'
+            individualName: 'John Doe'
           },
           { skip: ['billingAccount'] }
         )
@@ -290,11 +290,11 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
 
     describe('and the user has returned to the page, chosen "individual" but changed the search term', () => {
       beforeEach(async () => {
-        payload = { accountType: 'individual', searchIndividualInput: 'Jane Doe' }
+        payload = { accountType: 'individual', individualName: 'Jane Doe' }
         sessionData = {
           ..._commonSessionData(session),
           accountType: 'individual',
-          searchIndividualInput: 'John Doe'
+          individualName: 'John Doe'
         }
 
         session = await SessionHelper.add({ data: sessionData })
@@ -311,7 +311,7 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
             accountType: 'individual',
             companiesHouseNumber: null,
             companySearch: null,
-            searchIndividualInput: 'Jane Doe'
+            individualName: 'Jane Doe'
           },
           { skip: ['billingAccount'] }
         )
@@ -361,11 +361,11 @@ describe('Billing Accounts - Setup - Account Type Service', () => {
         expect(result.error).to.equal({
           errorList: [
             {
-              href: '#searchIndividualInput',
+              href: '#individualName',
               text: 'Enter the full name of the individual.'
             }
           ],
-          searchIndividualInput: { text: 'Enter the full name of the individual.' }
+          individualName: { text: 'Enter the full name of the individual.' }
         })
       })
     })
@@ -423,6 +423,6 @@ function _individualSessionData(session) {
   return {
     ..._commonSessionData(session),
     accountType: 'individual',
-    searchIndividualInput: 'John Doe'
+    individualName: 'John Doe'
   }
 }

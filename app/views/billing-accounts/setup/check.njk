@@ -41,7 +41,7 @@
         }
       } if existingAccount,
       {
-        classes: "govuk-summary-list__row--no-border" if searchIndividualInput,
+        classes: "govuk-summary-list__row--no-border" if individualName,
         key: { text: "Account type" },
         value: { text: accountType | capitalize },
         actions: {
@@ -57,8 +57,8 @@
       {
         classes: "govuk-summary-list__row--no-actions",
         key: { text: "Individual search term" },
-        value: { text: searchIndividualInput }
-      } if searchIndividualInput,
+        value: { text: individualName }
+      } if individualName,
       {
         key: { text: "Company search term" },
         value: { text: companySearch },

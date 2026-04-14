@@ -23,11 +23,11 @@ describe('Billing Accounts - Setup - Account Type Validator', () => {
       })
     })
 
-    describe('with "accountType" as "indiviudual" and a value for "searchIndividualInput"', () => {
+    describe('with "accountType" as "indiviudual" and a value for "individualName"', () => {
       it('returns with no errors', () => {
         const result = AccountTypeValidator.go({
           accountType: 'individual',
-          searchIndividualInput: 'John Doe'
+          individualName: 'John Doe'
         })
 
         expect(result.value).to.exist()
@@ -35,7 +35,7 @@ describe('Billing Accounts - Setup - Account Type Validator', () => {
       })
     })
 
-    describe('with "accountType" as "indiviudual" and no value for "searchIndividualInput"', () => {
+    describe('with "accountType" as "indiviudual" and no value for "individualName"', () => {
       it('returns with errors', () => {
         const result = AccountTypeValidator.go({
           accountType: 'individual'

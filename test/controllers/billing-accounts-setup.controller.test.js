@@ -667,7 +667,7 @@ describe('Billing Accounts Setup controller', () => {
       describe('when the user clicks "Confirm"', () => {
         beforeEach(() => {
           Sinon.stub(SubmitCheckService, 'go').resolves({
-            redirectUrl: `/system/billing-accounts/setup/${sessionId}/confirmation`
+            redirectUrl: `system/billing-accounts/${billingAccountId}`
           })
         })
 
@@ -675,7 +675,7 @@ describe('Billing Accounts Setup controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/billing-accounts/setup/${sessionId}/confirmation`)
+          expect(response.headers.location).to.equal(`system/billing-accounts/${billingAccountId}`)
         })
       })
     })

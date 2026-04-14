@@ -36,7 +36,7 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
         },
         pageTitle: 'Select the account type',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-        searchIndividualInput: null
+        individualName: null
       })
     })
   })
@@ -57,14 +57,14 @@ describe('Billing Accounts - Setup - Account Type Presenter', () => {
     describe('when called with existing "accountType" of individual with a search input', () => {
       beforeEach(() => {
         session.accountType = 'individual'
-        session.searchIndividualInput = 'John Doe'
+        session.individualName = 'John Doe'
       })
 
       it('returns page data for the view', () => {
         const result = AccountTypePresenter.go(session)
 
         expect(result.accountType).to.equal(session.accountType)
-        expect(result.searchIndividualInput).to.equal(session.searchIndividualInput)
+        expect(result.individualName).to.equal(session.individualName)
       })
     })
   })
