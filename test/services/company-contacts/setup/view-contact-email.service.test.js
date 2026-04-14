@@ -23,7 +23,7 @@ describe('Company Contacts - Setup - Contact Email Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     company = CustomersFixtures.company()
 
     sessionData = { company }

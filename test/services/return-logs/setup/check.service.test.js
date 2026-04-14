@@ -8,18 +8,27 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const CheckService = require('../../../../app/services/return-logs/setup/check.service.js')
 
 describe('Return Logs Setup - Check service', () => {
   let session
+  let sessionData
   let yarStub
 
   beforeEach(() => {
     yarStub = { flash: Sinon.stub().returns([]) }
+
+    sessionData = _sessionData()
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {
@@ -27,12 +36,6 @@ describe('Return Logs Setup - Check service', () => {
   })
 
   describe('when called for the first time', () => {
-    beforeEach(async () => {
-      const data = _sessionData()
-
-      session = await SessionHelper.add({ data })
-    })
-
     it('returns page data for the view', async () => {
       const result = await CheckService.go(session.id, yarStub)
 
@@ -109,9 +112,8 @@ describe('Return Logs Setup - Check service', () => {
     it('updates the session record to indicate user has visited the "check" page', async () => {
       await CheckService.go(session.id, yarStub)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.checkPageVisited).to.be.true()
+      expect(session.checkPageVisited).to.be.true()
+      expect(session.$update.called).to.be.true()
     })
   })
 })

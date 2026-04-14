@@ -3,28 +3,37 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ReceivedService = require('../../../../app/services/return-logs/setup/received.service.js')
 
 describe('Return Logs - Setup - Received service', () => {
   let session
+  let sessionData
 
-  before(async () => {
-    session = await SessionHelper.add({
-      data: {
-        licenceId: '736144f1-203d-46bb-9968-5137ae06a7bd',
-        returnLogId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
-        returnReference: '012345'
-      },
-      id: 'd958333a-4acd-4add-9e2b-09e14c6b72f3'
-    })
+  beforeEach(() => {
+    sessionData = {
+      licenceId: '736144f1-203d-46bb-9968-5137ae06a7bd',
+      returnLogId: '8280a3bb-aefb-4603-b71f-a58cef9169f3',
+      returnReference: '012345'
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {

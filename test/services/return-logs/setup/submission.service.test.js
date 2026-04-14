@@ -3,30 +3,41 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmissionService = require('../../../../app/services/return-logs/setup/submission.service.js')
 
 describe('Return Logs Setup - Submission service', () => {
-  let sessionId
+  let session
+  let sessionData
 
-  before(async () => {
-    const session = await SessionHelper.add({ data: { beenReceived: false, returnReference: '1234' } })
-    sessionId = session.id
+  beforeEach(() => {
+    sessionData = { beenReceived: false, returnReference: '1234' }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await SubmissionService.go(sessionId)
+      const result = await SubmissionService.go(session.id)
 
       expect(result).to.equal({
-        backLink: { href: `/system/return-logs/setup/${sessionId}/received`, text: 'Back' },
+        backLink: { href: `/system/return-logs/setup/${session.id}/received`, text: 'Back' },
         beenReceived: false,
         journey: null,
         pageTitle: 'What do you want to do with this return?',
