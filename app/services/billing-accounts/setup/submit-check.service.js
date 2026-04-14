@@ -72,7 +72,7 @@ async function _agentCompany(session, companyContacts, existingAccount) {
     const companysHouseResult = await FetchCompanyService.go(session.companiesHouseNumber)
 
     companyName = companysHouseResult.title
-  } else {
+  } else if (session.individualName) {
     companyName = session.individualName
   }
 
