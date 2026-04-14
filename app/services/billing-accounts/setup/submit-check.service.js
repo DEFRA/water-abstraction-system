@@ -64,7 +64,7 @@ async function _address(session) {
 
 async function _agentCompany(session, companyContacts, existingAccount) {
   let companyId
-  let companyName = companyContacts.company.name
+  let companyName
 
   const anotherAccountSelected = session.accountSelected === 'another'
 
@@ -74,12 +74,16 @@ async function _agentCompany(session, companyContacts, existingAccount) {
     companyName = companysHouseResult.title
   } else if (session.individualName) {
     companyName = session.individualName
+  } else {
+    companyName = companyContacts.company.name
   }
 
   if (!anotherAccountSelected) {
     companyId = session.billingAccount.company.id
   } else if (existingAccount) {
     companyId = session.existingAccount
+  } else {
+    companyId = null
   }
 
   return {
