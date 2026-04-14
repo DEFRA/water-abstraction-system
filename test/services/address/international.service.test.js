@@ -10,9 +10,10 @@ const { expect } = Code
 
 // Test helpers
 const { countryLookup } = require('../../../app/presenters/address/base-address.presenter.js')
+const SessionModelStub = require('../../support/stubs/session.stub.js')
 
 // Things we need to stub
-const SessionModel = require('../../../app/models/session.model.js')
+const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const InternationalService = require('../../../app/services/address/international.service.js')
@@ -20,21 +21,26 @@ const InternationalService = require('../../../app/services/address/internationa
 describe('Address - International Service', () => {
   const sessionId = 'dba48385-9fc8-454b-8ec8-3832d3b9e323'
 
-  beforeEach(async () => {
-    Sinon.stub(SessionModel, 'query').returns({
-      findById: Sinon.stub().resolves({
-        id: sessionId,
-        addressJourney: {
-          activeNavBar: 'manage',
-          address: {},
-          backLink: {
-            href: `/system/notices/setup/${sessionId}/contact-type`,
-            text: 'Back'
-          },
-          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
-        }
-      })
-    })
+  let session
+  let sessionData
+
+  beforeEach(() => {
+    sessionData = {
+      id: sessionId,
+      addressJourney: {
+        activeNavBar: 'manage',
+        address: {},
+        backLink: {
+          href: `/system/notices/setup/${sessionId}/contact-type`,
+          text: 'Back'
+        },
+        redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`
+      }
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {
