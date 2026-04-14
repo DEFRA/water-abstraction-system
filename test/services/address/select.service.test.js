@@ -11,11 +11,11 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things to stub
-const LookupPostcodeRequest = require('../../../app/requests/address-facade/lookup-postcode.request.js')
 const SessionModelStub = require('../../support/stubs/session.stub.js')
 
 // Things we need to stub
 const FetchSessionDal = require('../../../app/dal/fetch-session.dal.js')
+const LookupPostcodeRequest = require('../../../app/requests/address-facade/lookup-postcode.request.js')
 
 // Thing under test
 const SelectService = require('../../../app/services/address/select.service.js')

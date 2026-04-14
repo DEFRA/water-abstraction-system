@@ -10,8 +10,6 @@ const { expect } = Code
 
 // Test helpers
 const { countryLookup } = require('../../../app/presenters/address/base-address.presenter.js')
-
-// Things we need to stub
 const SessionModelStub = require('../../support/stubs/session.stub.js')
 
 // Things we need to stub
