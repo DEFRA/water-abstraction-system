@@ -3,12 +3,16 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitSingleVolumeService = require('../../../../app/services/return-logs/setup/submit-single-volume.service.js')
@@ -18,30 +22,34 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
-      data: {
-        returnReference: '12345',
-        units: 'litres'
-      }
+      returnReference: '12345',
+      units: 'litres'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = { singleVolume: 'yes', singleVolumeQuantity: '1000' }
       })
 
       it('saves the submitted option', async () => {
         await SubmitSingleVolumeService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
+        expect(session.singleVolume).to.equal('yes')
+        expect(session.singleVolumeQuantity).to.equal(1000)
 
-        expect(refreshedSession.singleVolume).to.equal('yes')
-        expect(refreshedSession.singleVolumeQuantity).to.equal(1000)
+        expect(session.$update.called).to.be.true()
       })
 
       describe('and the user has previously selected "yes" to a single volume being provided', () => {
@@ -53,7 +61,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
       })
 
       describe('and the user has previously selected "no" to a single volume being provided', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = { singleVolume: 'no' }
         })
 
@@ -66,7 +74,7 @@ describe('Return Logs Setup - Submit Single Volume service', () => {
     })
 
     describe('with an invalid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
       })
 

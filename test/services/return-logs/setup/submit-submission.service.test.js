@@ -9,32 +9,41 @@ const { expect } = Code
 const Sinon = require('sinon')
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnRequirementHelper = require('../../../support/helpers/return-requirement.helper.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitSubmissionService = require('../../../../app/services/return-logs/setup/submit-submission.service.js')
 
 describe('Return Logs - Setup - Submit Submission service', () => {
+  let fetchSessionStub
   let payload
   let returnLog
   let returnLogId
   let session
+  let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     returnLogId = generateUUID()
 
-    session = await SessionHelper.add({
-      data: {
-        beenReceived: false,
-        receivedDateOptions: 'today',
-        receivedDate: new Date('2025-02-14'),
-        returnLogId,
-        returnReference: ReturnRequirementHelper.generateReference()
-      }
-    })
+    sessionData = {
+      beenReceived: false,
+      receivedDateOptions: 'today',
+      receivedDate: new Date('2025-02-14'),
+      returnLogId,
+      returnReference: ReturnRequirementHelper.generateReference()
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    Sinon.stub(DeleteSessionDal, 'go').resolves()
   })
 
   afterEach(() => {
@@ -44,32 +53,30 @@ describe('Return Logs - Setup - Submit Submission service', () => {
   describe('when called', () => {
     describe('with a valid payload', () => {
       describe('and the user has selected "Enter and submit"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = { journey: 'enterReturn' }
         })
 
         it('saves the submitted option to the session and returns the redirect as "reported"', async () => {
           const result = await SubmitSubmissionService.go(session.id, payload)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.journey).to.equal('enterReturn')
+          expect(session.journey).to.equal('enterReturn')
           expect(result.redirect).to.equal('reported')
+          expect(session.$update.called).to.be.true()
         })
       })
 
       describe('and the user has selected "Enter a nil return"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = { journey: 'nilReturn' }
         })
 
         it('saves the submitted option to the session and returns the redirect as "check"', async () => {
           const result = await SubmitSubmissionService.go(session.id, payload)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.journey).to.equal('nilReturn')
+          expect(session.journey).to.equal('nilReturn')
           expect(result.redirect).to.equal('check')
+          expect(session.$update.called).to.be.true()
         })
       })
 
@@ -89,15 +96,13 @@ describe('Return Logs - Setup - Submit Submission service', () => {
           expect(refreshedReturnLog.status).to.equal('received')
 
           // Check the received date has been set to what was recorded in the session
-          expect(refreshedReturnLog.receivedDate).to.equal(new Date(session.data.receivedDate))
+          expect(refreshedReturnLog.receivedDate).to.equal(new Date(session.receivedDate))
 
           // Check the updated at timestamp has been set
           expect(refreshedReturnLog.updatedAt).to.be.greaterThan(returnLog.updatedAt)
 
           // Check the session got deleted
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession).not.to.exist()
+          expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
 
           // Check the redirect takes will tell the controller to redirect to the return received confirmation page
           expect(result.redirect).to.equal('confirm-received')
@@ -105,20 +110,21 @@ describe('Return Logs - Setup - Submit Submission service', () => {
       })
 
       describe('and the check page had been visited previously', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = { journey: 'enterReturn' }
 
-          session = await SessionHelper.add({
-            data: { beenReceived: false, checkPageVisited: true, returnLogId, returnReference: '1234' }
-          })
+          sessionData = { beenReceived: false, checkPageVisited: true, returnLogId, returnReference: '1234' }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('updates "checkPageVisited" to false in the session data', async () => {
           await SubmitSubmissionService.go(session.id, payload)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.checkPageVisited).to.be.false()
+          expect(session.checkPageVisited).to.be.false()
+          expect(session.$update.called).to.be.true()
         })
       })
     })

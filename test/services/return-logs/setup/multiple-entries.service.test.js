@@ -3,31 +3,42 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const MultipleEntriesService = require('../../../../app/services/return-logs/setup/multiple-entries.service.js')
 
 describe('Return Logs Setup - Multiple Entries service', () => {
   let session
+  let sessionData
 
-  before(async () => {
-    session = await SessionHelper.add({
-      data: {
-        returnReference: '012345',
-        lines: [
-          { startDate: new Date('2023-04-01').toISOString(), endDate: new Date('2023-04-30').toISOString() },
-          { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
-        ],
-        returnsFrequency: 'month',
-        reported: 'abstractionVolumes'
-      }
-    })
+  beforeEach(() => {
+    sessionData = {
+      returnReference: '012345',
+      lines: [
+        { startDate: new Date('2023-04-01').toISOString(), endDate: new Date('2023-04-30').toISOString() },
+        { startDate: new Date('2023-05-01').toISOString(), endDate: new Date('2023-05-31').toISOString() }
+      ],
+      returnsFrequency: 'month',
+      reported: 'abstractionVolumes'
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {

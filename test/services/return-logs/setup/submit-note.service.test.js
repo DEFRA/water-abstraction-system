@@ -9,7 +9,10 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitNoteService = require('../../../../app/services/return-logs/setup/submit-note.service.js')
@@ -17,12 +20,18 @@ const SubmitNoteService = require('../../../../app/services/return-logs/setup/su
 describe('Return Logs Setup - Submit Note service', () => {
   const user = { username: 'carol.shaw@atari.com' }
 
+  let fetchSessionStub
   let payload
   let session
+  let sessionData
   let yarStub
 
-  beforeEach(async () => {
-    session = await SessionHelper.add({ data: { returnReference: '1234' } })
+  beforeEach(() => {
+    sessionData = { returnReference: '1234' }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -41,12 +50,11 @@ describe('Return Logs Setup - Submit Note service', () => {
         it('saves the submitted value', async () => {
           await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.note).to.equal({
+          expect(session.note).to.equal({
             content: 'A new note related to return logs',
             userEmail: 'carol.shaw@atari.com'
           })
+          expect(session.$update.called).to.be.true()
         })
 
         it('returns the correct details the controller needs to redirect the journey', async () => {
@@ -66,15 +74,17 @@ describe('Return Logs Setup - Submit Note service', () => {
       })
 
       describe('that is an updated note', () => {
-        beforeEach(async () => {
-          await session.$query().patch({
-            data: {
-              note: {
-                content: 'A old note related to return requirement',
-                userEmail: 'carol.shaw@atari.com'
-              }
+        beforeEach(() => {
+          sessionData = {
+            note: {
+              content: 'A old note related to return requirement',
+              userEmail: 'carol.shaw@atari.com'
             }
-          })
+          }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
 
           payload = { note: 'An updated note related to return requirement' }
         })
@@ -82,9 +92,7 @@ describe('Return Logs Setup - Submit Note service', () => {
         it('saves the submitted value', async () => {
           await SubmitNoteService.go(session.id, payload, user, yarStub)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.note).to.equal({
+          expect(session.note).to.equal({
             content: 'An updated note related to return requirement',
             userEmail: 'carol.shaw@atari.com'
           })
