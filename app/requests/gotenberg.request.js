@@ -11,19 +11,6 @@ const { pause } = require('../lib/general.lib.js')
 const gotenbergConfig = require('../../config/gotenberg.config.js')
 
 /**
- * Sends a GET request to Gotenberg
- *
- * @param {string} path - The path to send the request to (do not include the starting /)
- *
- * @returns {Promise<object>} An object representing the result of the request
- */
-async function get(path) {
-  const result = await _sendRequest(path, BaseRequest.get)
-
-  return _parseResult(result)
-}
-
-/**
  * Make a http requests to Gotenberg to convert HTML into a PDF
  *
  * @param {string} path - The path to send the request to (do not include the starting /)
@@ -78,6 +65,5 @@ function _parseResult(result) {
 }
 
 module.exports = {
-  get,
   post
 }
