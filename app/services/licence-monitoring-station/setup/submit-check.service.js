@@ -6,6 +6,7 @@
  * @module SubmitCheckService
  */
 
+const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const LicenceMonitoringStationModel = require('../../../models/licence-monitoring-station.model.js')
 const { flashNotification, timestampForPostgres } = require('../../../lib/general.lib.js')
@@ -25,7 +26,7 @@ async function go(sessionId, userId, yar) {
 
   await _createTag(session, userId)
 
-  await session.$query().delete()
+  await DeleteSessionDal.go(sessionId)
 
   flashNotification(yar, 'Success', `Tag for licence ${session.licenceRef} added`)
 

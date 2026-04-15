@@ -12,14 +12,16 @@ const { expect } = Code
 const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
 const CreateNotificationsService = require('../../../../app/services/notices/setup/create-notifications.service.js')
+const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const SendNoticeService = require('../../../../app/services/notices/setup/send/send-notice.service.js')
 
 // Thing under test
@@ -36,12 +38,13 @@ describe('Notices - Setup - Submit Check service', () => {
 
   let createNoticeStub
   let createNotificationsStub
-  let referenceCode
   let recipients
+  let referenceCode
   let sendNoticeStub
   let session
+  let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     const fixtureData = RecipientsFixture.recipients()
     const sessionId = generateUUID()
     const licenceRef = generateLicenceRef()
@@ -73,31 +76,36 @@ describe('Notices - Setup - Submit Check service', () => {
     Sinon.stub(FetchRecipientsService, 'go').resolves(recipients)
 
     referenceCode = generateNoticeReferenceCode('RINV-')
-    session = await SessionHelper.add({
+
+    sessionData = {
       id: sessionId,
-      data: {
-        addressJourney: {
-          address: {},
-          backLink: {
-            href: `/system/notices/setup/${sessionId}/recipient-name`,
-            text: 'Back'
-          },
-          redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`,
-          activeNavBar: 'notices',
-          pageTitleCaption: `Notice ${referenceCode}`
+      addressJourney: {
+        address: {},
+        backLink: {
+          href: `/system/notices/setup/${sessionId}/recipient-name`,
+          text: 'Back'
         },
-        checkPageVisited: true,
-        dueReturns,
-        licenceRef,
-        journey: 'adhoc',
-        name: 'Returns: invitation',
-        notificationType: 'Returns invitation',
-        noticeType: 'invitations',
-        referenceCode,
-        selectedRecipients: [...recipients[0].contact_hash_id],
-        subType: 'returnInvitation'
-      }
-    })
+        redirectUrl: `/system/notices/setup/${sessionId}/add-recipient`,
+        activeNavBar: 'notices',
+        pageTitleCaption: `Notice ${referenceCode}`
+      },
+      checkPageVisited: true,
+      dueReturns,
+      licenceRef,
+      journey: 'adhoc',
+      name: 'Returns: invitation',
+      notificationType: 'Returns invitation',
+      noticeType: 'invitations',
+      referenceCode,
+      selectedRecipients: [...recipients[0].contact_hash_id],
+      subType: 'returnInvitation'
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    Sinon.stub(DeleteSessionDal, 'go').resolves()
 
     const notice = NoticesFixture.returnsInvitation()
 
@@ -134,9 +142,7 @@ describe('Notices - Setup - Submit Check service', () => {
     it('deletes the session record', async () => {
       await SubmitCheckService.go(session.id, auth)
 
-      const refreshedSession = session.$query()
-
-      expect(refreshedSession.id).to.be.undefined()
+      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
     })
 
     it('sends the notice', async () => {

@@ -9,11 +9,11 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
-const SessionModel = require('../../../../app/models/session.model.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
 
 // Things we need to stub
+const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
 const LegacyCreateBillRunRequest = require('../../../../app/requests/legacy/create-bill-run.request.js')
 const StartBillRunProcessService = require('../../../../app/services/bill-runs/start-bill-run-process.service.js')
 
@@ -27,11 +27,14 @@ describe('Bill Runs - Setup - Create service', () => {
   let blockingResults
   let legacyCreateBillRunRequestStub
   let session
+  let sessionData
   let startBillRunProcessServiceStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     legacyCreateBillRunRequestStub = Sinon.stub(LegacyCreateBillRunRequest, 'send')
     startBillRunProcessServiceStub = Sinon.stub(StartBillRunProcessService, 'go')
+
+    Sinon.stub(DeleteSessionDal, 'go').resolves()
   })
 
   afterEach(() => {
@@ -39,14 +42,10 @@ describe('Bill Runs - Setup - Create service', () => {
   })
 
   describe('when the "blockingResults" determines both bill runs should be triggered', () => {
-    beforeEach(async () => {
-      session = await SessionHelper.add({
-        data: { region: regionId, type: 'supplementary' }
-      })
-      // NOTE: We make these additional $afterFind() calls to trigger the hook that would have been called when the
-      // create service queries for the session. The hook elevates properties from `data` onto the session instance
-      // itself. Without this the tests fail though the service works fine.
-      session.$afterFind()
+    beforeEach(() => {
+      sessionData = { region: regionId, type: 'supplementary' }
+
+      session = SessionModelStub.build(Sinon, sessionData)
 
       blockingResults = { matches: [], toFinancialYearEnding: 2025, trigger: engineTriggers.both }
     })
@@ -63,21 +62,15 @@ describe('Bill Runs - Setup - Create service', () => {
     it('deletes the setup session', async () => {
       await CreateService.go(session, blockingResults, user)
 
-      const findSessionResults = await SessionModel.query().where('id', session.id)
-
-      expect(findSessionResults).to.be.empty()
+      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
     })
   })
 
   describe('when the "blockingResults" determines only the "current" bill run should be triggered', () => {
-    beforeEach(async () => {
-      session = await SessionHelper.add({
-        data: { region: regionId, type: 'annual' }
-      })
-      // NOTE: We make these additional $afterFind() calls to trigger the hook that would have been called when the
-      // create service queries for the session. The hook elevates properties from `data` onto the session instance
-      // itself. Without this the tests fail though the service works fine.
-      session.$afterFind()
+    beforeEach(() => {
+      sessionData = { region: regionId, type: 'annual' }
+
+      session = SessionModelStub.build(Sinon, sessionData)
 
       blockingResults = { matches: [], toFinancialYearEnding: 2025, trigger: engineTriggers.current }
     })
@@ -92,21 +85,15 @@ describe('Bill Runs - Setup - Create service', () => {
     it('deletes the setup session', async () => {
       await CreateService.go(session, blockingResults, user)
 
-      const findSessionResults = await SessionModel.query().where('id', session.id)
-
-      expect(findSessionResults).to.be.empty()
+      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
     })
   })
 
   describe('when the "blockingResults" determines only the "old" bill run should be triggered', () => {
-    beforeEach(async () => {
-      session = await SessionHelper.add({
-        data: { region: regionId, type: 'two_part_tariff', season: 'summer' }
-      })
-      // NOTE: We make these additional $afterFind() calls to trigger the hook that would have been called when the
-      // create service queries for the session. The hook elevates properties from `data` onto the session instance
-      // itself. Without this the tests fail though the service works fine.
-      session.$afterFind()
+    beforeEach(() => {
+      sessionData = { region: regionId, type: 'two_part_tariff', season: 'summer' }
+
+      session = SessionModelStub.build(Sinon, sessionData)
 
       blockingResults = { matches: [], toFinancialYearEnding: 2022, trigger: engineTriggers.old }
     })
@@ -121,9 +108,7 @@ describe('Bill Runs - Setup - Create service', () => {
     it('deletes the setup session', async () => {
       await CreateService.go(session, blockingResults, user)
 
-      const findSessionResults = await SessionModel.query().where('id', session.id)
-
-      expect(findSessionResults).to.be.empty()
+      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
     })
   })
 })
