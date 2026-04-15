@@ -13,12 +13,13 @@ const GotenbergRequest = require('../gotenberg.request.js')
 /**
  * Sends multipart/form-data to Gotenberg for generating a PDF document
  *
- * > Important - 'preferCssPageSize' tells Goetnberg to rely on our styling and to not add any default margin / padding.
+ * > Important - 'preferCssPageSize' tells Gotenberg to rely on our styling and to not add any default margin / padding.
  * > This is required in conjunction with setting 'marginTop' etc.
  *
  * @param {object} pageData - The data needed to populate and generate the PDF paper return
  *
- * @returns {Promise<object>} An object representing the result of the request, including an ArrayBuffer as the 'body'
+ * @returns {Promise<object>} An object representing the result of the request, including the response 'body' as a
+ * {@link https://nodejs.org/api/buffer.html|Buffer}
  */
 async function send(pageData) {
   const htmlContent = await _generateHtmlContent('preview-return-forms.njk', pageData)
