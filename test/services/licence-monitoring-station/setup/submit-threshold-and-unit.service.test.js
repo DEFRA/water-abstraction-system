@@ -3,45 +3,53 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitThresholdAndUnitService = require('../../../../app/services/licence-monitoring-station/setup/submit-threshold-and-unit.service.js')
 
 describe('Licence Monitoring Station Setup - Threshold and Unit service', () => {
+  let fetchSessionStub
   let payload
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
-      data: {
-        label: 'Monitoring Station Label',
-        monitoringStationId: 'e1c44f9b-51c2-4aee-a518-5509d6f05869'
-      }
+      label: 'Monitoring Station Label',
+      monitoringStationId: 'e1c44f9b-51c2-4aee-a518-5509d6f05869'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = { unit: 'Ml/d', 'threshold-Ml/d': '1000' }
       })
 
       it('saves the submitted option', async () => {
         await SubmitThresholdAndUnitService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.threshold).to.equal(1000)
-        expect(refreshedSession.unit).to.equal('Ml/d')
+        expect(session.threshold).to.equal(1000)
+        expect(session.unit).to.equal('Ml/d')
+        expect(session.$update.called).to.be.true()
       })
 
       describe('and the page has been not been visited', () => {
@@ -55,8 +63,12 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
       })
 
       describe('and the page has been visited', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { ...sessionData.data, checkPageVisited: true } })
+        beforeEach(() => {
+          sessionData = { ...sessionData.data, checkPageVisited: true }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('returns the correct details the controller needs to redirect the journey to the check page', async () => {
@@ -70,7 +82,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
     })
 
     describe('with an invalid payload', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
       })
 
@@ -118,7 +130,7 @@ describe('Licence Monitoring Station Setup - Threshold and Unit service', () => 
       })
 
       describe('because the user has not entered the "threshold"', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {
             unit: 'Ml/d'
           }

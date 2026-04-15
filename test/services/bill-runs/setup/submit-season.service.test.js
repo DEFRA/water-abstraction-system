@@ -3,12 +3,16 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitSeasonService = require('../../../../app/services/bill-runs/setup/submit-season.service.js')
@@ -16,9 +20,18 @@ const SubmitSeasonService = require('../../../../app/services/bill-runs/setup/su
 describe('Bill Runs - Setup - Submit Season service', () => {
   let payload
   let session
+  let sessionData
 
-  beforeEach(async () => {
-    session = await SessionHelper.add({ data: {} })
+  beforeEach(() => {
+    sessionData = {}
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -32,9 +45,8 @@ describe('Bill Runs - Setup - Submit Season service', () => {
       it('saves the submitted value', async () => {
         await SubmitSeasonService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.season).to.equal('summer')
+        expect(session.season).to.equal('summer')
+        expect(session.$update.called).to.be.true()
       })
 
       it('returns an empty object (no page data is needed for a redirect)', async () => {
