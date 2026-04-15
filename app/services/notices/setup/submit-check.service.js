@@ -7,6 +7,7 @@
 
 const CreateNoticeService = require('./create-notice.service.js')
 const CreateNotificationsService = require('./create-notifications.service.js')
+const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const SendNoticeService = require('./send/send-notice.service.js')
@@ -26,13 +27,11 @@ async function go(sessionId, auth) {
 
   const recipients = await FetchRecipientsService.go(session)
 
-  const sessionCopy = session
+  await DeleteSessionDal.go(sessionId)
 
-  await session.$query().delete()
+  const notice = await _notice(session, recipients, auth)
 
-  const notice = await _notice(sessionCopy, recipients, auth)
-
-  const notifications = await _notifications(sessionCopy, recipients, notice.id)
+  const notifications = await _notifications(session, recipients, notice.id)
 
   // We do not await the result of this service. Sending paper returns can take a few seconds due to the need to
   // generate the PDFs. Returns invitations and reminders can take a few minutes because there can be thousands of
