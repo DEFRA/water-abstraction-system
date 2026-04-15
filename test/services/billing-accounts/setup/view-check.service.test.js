@@ -67,7 +67,7 @@ describe('Billing Accounts - Setup - View Check Service', () => {
         },
         pageTitle: 'Check billing account details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
-        searchIndividualInput: '',
+        individualName: '',
         searchInput: ''
       })
     })

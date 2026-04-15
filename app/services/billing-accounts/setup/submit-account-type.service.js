@@ -55,10 +55,10 @@ function _redirectUrl(session) {
 async function _save(session, payload) {
   const accountTypeExists = !!session.accountType
   const sameAccountType = session.accountType === payload.accountType
-  const sameSearchInput = (session.searchIndividualInput ?? null) === (payload.searchIndividualInput ?? null)
+  const sameSearchInput = (session.individualName ?? null) === (payload.individualName ?? null)
 
   session.accountType = payload.accountType
-  session.searchIndividualInput = payload.searchIndividualInput ?? null
+  session.individualName = payload.individualName ?? null
 
   if (accountTypeExists && (!sameAccountType || !sameSearchInput)) {
     session.addressJourney = null
@@ -71,9 +71,9 @@ async function _save(session, payload) {
     if (payload.accountType === 'individual') {
       session.companiesHouseNumber = null
       session.companySearch = null
-      session.searchIndividualInput = payload.searchIndividualInput
+      session.individualName = payload.individualName
     } else {
-      session.searchIndividualInput = null
+      session.individualName = null
     }
   }
 
@@ -82,7 +82,7 @@ async function _save(session, payload) {
 
 function _submissionData(session, payload) {
   session.accountType = payload.accountType
-  session.searchIndividualInput = payload.accountType === 'individual' ? payload.searchIndividualInput : null
+  session.individualName = payload.accountType === 'individual' ? payload.individualName : null
 
   return AccountTypePresenter.go(session)
 }

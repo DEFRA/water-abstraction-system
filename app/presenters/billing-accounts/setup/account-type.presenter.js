@@ -25,7 +25,7 @@ function go(session) {
     },
     pageTitle: 'Select the account type',
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
-    searchIndividualInput: session.searchIndividualInput ?? null
+    individualName: session.individualName ?? null
   }
 }
 

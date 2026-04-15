@@ -78,7 +78,7 @@ async function _save(session, payload) {
       session.companiesHouseNumber = null
       session.companySearch = null
       session.existingAccount = null
-      session.searchIndividualInput = null
+      session.individualName = null
     }
   }
 

@@ -7,14 +7,14 @@
 {% block pageContent %}
   {% set inputHtml %}
     {{ govukInput({
-      id: "searchIndividualInput",
-      name: "searchIndividualInput",
+      id: "individualName",
+      name: "individualName",
       classes: "govuk-!-width-two-thirds",
-      errorMessage: error.searchIndividualInput,
+      errorMessage: error.individualName,
       label: {
         text: "Full name"
       },
-      value: searchIndividualInput
+      value: individualName
     }) }}
   {% endset %}
 
