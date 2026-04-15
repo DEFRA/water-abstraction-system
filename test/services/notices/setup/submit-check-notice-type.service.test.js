@@ -3,13 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitCheckNoticeTypeService = require('../../../../app/services/notices/setup/submit-check-notice-type.service.js')
@@ -29,25 +33,32 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
     }
   })
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('when called', () => {
     describe('and the notice type is not "paperReturn"', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData.name = 'Returns: invitation'
         sessionData.noticeType = 'invitations'
         sessionData.notificationType = 'Returns invitation'
         sessionData.referenceCode = `RINV-${Math.floor(1000 + Math.random() * 9000).toString()}`
         sessionData.subType = 'returnInvitation'
 
-        session = await SessionHelper.add({ id: sessionId, data: sessionData })
+        sessionData.id = sessionId
+
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        Sinon.stub(FetchSessionDal, 'go').resolves(session)
       })
 
       it('adds the "addressJourney" property to the session configured for going back to contact-type', async () => {
         await SubmitCheckNoticeTypeService.go(sessionId)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal({
+        expect(session).to.equal({
           dueReturns: [],
+          id: sessionId,
           licenceRef: '01/123',
           journey: 'adhoc',
           name: 'Returns: invitation',
@@ -70,23 +81,26 @@ describe('Notices - Setup - Submit Check Notice Type service', () => {
     })
 
     describe('and the notice type is "paperReturn"', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData.name = 'Paper returns'
         sessionData.noticeType = 'paperReturn'
         sessionData.notificationType = 'Paper returns'
         sessionData.referenceCode = `PRTF-${Math.floor(1000 + Math.random() * 9000).toString()}`
         sessionData.subType = 'paperReturnForms'
 
-        session = await SessionHelper.add({ id: sessionId, data: sessionData })
+        sessionData.id = sessionId
+
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        Sinon.stub(FetchSessionDal, 'go').resolves(session)
       })
 
       it('adds the "addressJourney" property to the session configured for going back to recipient-name', async () => {
         await SubmitCheckNoticeTypeService.go(sessionId)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal({
+        expect(session).to.equal({
           dueReturns: [],
+          id: sessionId,
           licenceRef: '01/123',
           journey: 'adhoc',
           name: 'Paper returns',

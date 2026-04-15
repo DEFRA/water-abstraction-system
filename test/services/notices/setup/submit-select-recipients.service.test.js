@@ -5,16 +5,17 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitSelectRecipientsService = require('../../../../app/services/notices/setup/submit-select-recipients.service.js')
@@ -27,14 +28,16 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     payload = { recipients: ['123'] }
 
     referenceCode = generateNoticeReferenceCode('RINV-')
 
     sessionData = { referenceCode }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     recipients = RecipientsFixture.recipients()
 
@@ -51,9 +54,8 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
     it('saves the submitted value', async () => {
       await SubmitSelectRecipientsService.go(session.id, payload, yarStub)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.selectedRecipients).to.equal(['123'])
+      expect(session.selectedRecipients).to.equal(['123'])
+      expect(session.$update.called).to.be.true()
     })
 
     it('sets a flash message', async () => {
@@ -78,7 +80,7 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
 
   describe('when validation fails', () => {
     describe('because there are no recipients', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {}
       })
 

@@ -3,24 +3,35 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewCancelService = require('../../../../app/services/notices/setup/view-cancel.service.js')
 
 describe('Notices - Setup - View Cancel service', () => {
   let session
+  let sessionData
 
-  beforeEach(async () => {
-    session = await SessionHelper.add({
-      data: { licenceRef: '01/111', referenceCode: generateNoticeReferenceCode('RINV-') }
-    })
+  beforeEach(() => {
+    sessionData = { licenceRef: '01/111', referenceCode: generateNoticeReferenceCode('RINV-') }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {

@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -26,7 +26,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     company = CustomersFixtures.company()
 
     sessionData = { company }
@@ -65,7 +65,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
 
     describe('when the check page has', () => {
       describe('been visited', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           session = SessionModelStub.build(Sinon, {
             ...sessionData,
             checkPageVisited: true,
