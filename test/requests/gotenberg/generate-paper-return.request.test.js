@@ -16,7 +16,7 @@ const GotenbergRequest = require('../../../app/requests/gotenberg.request.js')
 // Thing under test
 const GeneratePaperReturnRequest = require('../../../app/requests/gotenberg/generate-paper-return.request.js')
 
-describe('Gotenberg - Generate Paper return Request', () => {
+describe('Gotenberg - Generate Paper Return Request', () => {
   let gotenbergRequestStub
   let pageData
   let pdfBytes
