@@ -9,8 +9,11 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewCheckNoticeTypeService = require('../../../../app/services/notices/setup/view-check-notice-type.service.js')
@@ -21,11 +24,13 @@ describe('Notices - Setup - View Check Notice Type service', () => {
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     licenceRef = generateLicenceRef()
     sessionData = { licenceRef, noticeType: 'invitations' }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub().resolves() }
   })
@@ -57,9 +62,8 @@ describe('Notices - Setup - View Check Notice Type service', () => {
     it('should set the "checkPageVisited" flag', async () => {
       await ViewCheckNoticeTypeService.go(session.id, yarStub)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.checkPageVisited).to.be.true()
+      expect(session.checkPageVisited).to.be.true()
+      expect(session.$update.called).to.be.true()
     })
 
     describe('when there is a notification', () => {

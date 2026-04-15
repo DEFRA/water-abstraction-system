@@ -3,12 +3,16 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewContactTypeService = require('../../../../app/services/notices/setup/view-contact-type.service.js')
@@ -17,11 +21,17 @@ describe('Notices - Setup - View Contact Type service', () => {
   let session
   let sessionData
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('when called with no saved data', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       sessionData = { referenceCode: 'RINV-CPFRQ4' }
 
-      session = await SessionHelper.add({ data: sessionData })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
     })
 
     it('returns page data for the view', async () => {
@@ -43,14 +53,16 @@ describe('Notices - Setup - View Contact Type service', () => {
   })
 
   describe('when called with a saved name', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       sessionData = {
         contactName: 'Fake Person',
         contactType: 'post',
         referenceCode: 'RINV-CPFRQ4'
       }
 
-      session = await SessionHelper.add({ data: sessionData })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
     })
 
     it('returns page data for the view', async () => {
@@ -72,14 +84,16 @@ describe('Notices - Setup - View Contact Type service', () => {
   })
 
   describe('when called with a saved email', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       sessionData = {
         contactEmail: 'fake@person.com',
         contactType: 'email',
         referenceCode: 'RINV-CPFRQ4'
       }
 
-      session = await SessionHelper.add({ data: sessionData })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
     })
 
     it('returns page data for the view', async () => {

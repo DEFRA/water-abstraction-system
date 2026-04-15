@@ -5,24 +5,29 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, after, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, after, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitReturnsPeriodService = require('../../../../app/services/notices/setup/submit-returns-period.service.js')
 
 describe('Notices - Setup - Submit Returns Period service', () => {
   let clock
+  let fetchSessionStub
   let payload
   let referenceCode
   let session
+  let sessionData
   let yarStub
 
-  before(async () => {
+  before(() => {
     referenceCode = generateNoticeReferenceCode('RINV-')
 
     const testDate = new Date('2024-12-01')
@@ -32,36 +37,44 @@ describe('Notices - Setup - Submit Returns Period service', () => {
     yarStub = { flash: Sinon.stub() }
   })
 
+  beforeEach(() => {
+    sessionData = { referenceCode, noticeType: 'invitations' }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
   after(() => {
     clock.restore()
   })
 
+  afterEach(() => {
+    fetchSessionStub.restore()
+  })
+
   describe('when submitting as returns period ', () => {
     describe('is successful', () => {
-      beforeEach(async () => {
-        session = await SessionHelper.add({ data: { referenceCode, noticeType: 'invitations' } })
-
+      beforeEach(() => {
         payload = { returnsPeriod: 'quarterFour' }
       })
 
       it('saves the submitted value', async () => {
         await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.returnsPeriod).to.equal('quarterFour')
+        expect(session.returnsPeriod).to.equal('quarterFour')
+        expect(session.$update.called).to.be.true()
       })
 
       it('saves the determined returns period', async () => {
         await SubmitReturnsPeriodService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.determinedReturnsPeriod).to.equal({
-          dueDate: '2025-04-28T00:00:00.000Z',
-          endDate: '2025-03-31T00:00:00.000Z',
+        expect(session.determinedReturnsPeriod).to.equal({
+          // The dates would be strings and not date objects when saved to the database
+          dueDate: new Date('2025-04-28'),
+          endDate: new Date('2025-03-31'),
           name: 'quarterFour',
-          startDate: '2025-01-01T00:00:00.000Z',
+          startDate: new Date('2025-01-01'),
           summer: 'false',
           quarterly: true
         })
@@ -77,10 +90,12 @@ describe('Notices - Setup - Submit Returns Period service', () => {
     })
 
     describe('and the user comes from the check page', () => {
-      beforeEach(async () => {
-        session = await SessionHelper.add({
-          data: { referenceCode, noticeType: 'invitations', checkPageVisited: true }
-        })
+      beforeEach(() => {
+        sessionData = { referenceCode, noticeType: 'invitations', checkPageVisited: true }
+
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('sets a flash message', async () => {
@@ -98,10 +113,13 @@ describe('Notices - Setup - Submit Returns Period service', () => {
     })
 
     describe('fails validation', () => {
-      beforeEach(async () => {
-        session = await SessionHelper.add({
-          data: { referenceCode, journey: 'invitations', noticeType: 'invitations' }
-        })
+      beforeEach(() => {
+        sessionData = { referenceCode, journey: 'invitations', noticeType: 'invitations' }
+
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
+
         payload = {}
       })
 

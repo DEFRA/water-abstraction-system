@@ -26,7 +26,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     company = CustomersFixtures.company()
 
     sessionData = { company }
@@ -65,7 +65,7 @@ describe('Company Contacts - Setup - Contact Name Service', () => {
 
     describe('when the check page has', () => {
       describe('been visited', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           session = SessionModelStub.build(Sinon, {
             ...sessionData,
             checkPageVisited: true,

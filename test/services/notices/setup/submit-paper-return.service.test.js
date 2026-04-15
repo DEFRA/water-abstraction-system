@@ -9,22 +9,26 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitPaperReturnService = require('../../../../app/services/notices/setup/submit-paper-return.service.js')
 
 describe('Notices - Setup - Submit Paper Return service', () => {
   let dueReturn
+  let fetchSessionStub
   let licenceRef
   let payload
   let session
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     licenceRef = generateLicenceRef()
 
     dueReturn = {
@@ -39,7 +43,9 @@ describe('Notices - Setup - Submit Paper Return service', () => {
 
     sessionData = { licenceRef }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -52,9 +58,8 @@ describe('Notices - Setup - Submit Paper Return service', () => {
     it('saves the selected returns', async () => {
       await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.selectedReturns).to.equal([dueReturn.returnLogId])
+      expect(session.selectedReturns).to.equal([dueReturn.returnLogId])
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
@@ -64,26 +69,30 @@ describe('Notices - Setup - Submit Paper Return service', () => {
     })
 
     describe('and the payload has one item (is not an array)', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = { returns: dueReturn.returnLogId }
         sessionData = {}
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the selected returns', async () => {
         await SubmitPaperReturnService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.selectedReturns).to.equal([dueReturn.returnLogId])
+        expect(session.selectedReturns).to.equal([dueReturn.returnLogId])
       })
     })
 
     describe('from the check page', () => {
       describe('and the returns have been updated', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { checkPageVisited: true, selectedReturns: [generateUUID()] } })
+        beforeEach(() => {
+          sessionData = { checkPageVisited: true, selectedReturns: [generateUUID()] }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('sets a flash message', async () => {
@@ -101,10 +110,12 @@ describe('Notices - Setup - Submit Paper Return service', () => {
       })
 
       describe('and the returns have not been updated', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({
-            data: { checkPageVisited: true, selectedReturns: [dueReturn.returnLogId] }
-          })
+        beforeEach(() => {
+          sessionData = { checkPageVisited: true, selectedReturns: [dueReturn.returnLogId] }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('does not set a flash message', async () => {
@@ -117,12 +128,14 @@ describe('Notices - Setup - Submit Paper Return service', () => {
   })
 
   describe('when validation fails', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {}
 
       sessionData = { licenceRef, dueReturns: [dueReturn] }
 
-      session = await SessionHelper.add({ data: sessionData })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      fetchSessionStub.resolves(session)
     })
 
     it('returns page data for the view, with errors', async () => {
@@ -160,10 +173,12 @@ describe('Notices - Setup - Submit Paper Return service', () => {
     })
 
     describe('and there are already "selectedReturns"', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = { licenceRef, dueReturns: [dueReturn], selectedReturns: [dueReturn.returnLogId] }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('returns page data for the view, with errors, and no options selected', async () => {

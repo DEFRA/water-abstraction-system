@@ -10,7 +10,10 @@ const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewCheckLicenceMatchesService = require('../../../../app/services/notices/setup/view-check-licence-matches.service.js')
@@ -21,7 +24,7 @@ describe('Notices - Setup - View Check Licence Matches service', () => {
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
 
     const abstractionAlertSessionData = AbstractionAlertSessionData.get(licenceMonitoringStations)
@@ -35,7 +38,9 @@ describe('Notices - Setup - View Check Licence Matches service', () => {
       ]
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub().resolves() }
   })
