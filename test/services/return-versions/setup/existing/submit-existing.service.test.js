@@ -9,9 +9,10 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 
 // Things we need to stub
+const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 const GenerateFromExistingRequirementsService = require('../../../../../app/services/return-versions/setup/existing/generate-from-existing-requirements.service.js')
 
 // Thing under test
@@ -22,50 +23,50 @@ describe('Return Versions - Setup - Submit Existing service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
-      data: {
-        checkPageVisited: false,
-        licence: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          currentVersionStartDate: '2023-01-01T00:00:00.000Z',
-          endDate: null,
-          licenceRef: '01/ABC',
-          licenceHolder: 'Turbo Kid',
-          returnVersions: [
-            {
-              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-              startDate: '2023-01-01T00:00:00.000Z',
-              reason: null,
-              modLogs: []
-            }
-          ],
-          startDate: '2022-04-01T00:00:00.000Z',
-          waterUndertaker: false
-        },
-        multipleUpload: false,
-        journey: 'returns-required',
-        requirements: [{}],
-        startDateOptions: 'licenceStartDate',
-        returnVersionStartDate: '2023-01-01T00:00:00.000Z',
-        licenceVersion: {
-          id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
-          endDate: null,
-          startDate: '2022-04-01T00:00:00.000Z',
-          copyableReturnVersions: [
-            {
-              id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
-              startDate: '2023-01-01T00:00:00.000Z',
-              reason: null,
-              modLogs: []
-            }
-          ]
-        },
-        reason: 'major-change'
-      }
+      checkPageVisited: false,
+      licence: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        currentVersionStartDate: '2023-01-01T00:00:00.000Z',
+        endDate: null,
+        licenceRef: '01/ABC',
+        licenceHolder: 'Turbo Kid',
+        returnVersions: [
+          {
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }
+        ],
+        startDate: '2022-04-01T00:00:00.000Z',
+        waterUndertaker: false
+      },
+      multipleUpload: false,
+      journey: 'returns-required',
+      requirements: [{}],
+      startDateOptions: 'licenceStartDate',
+      returnVersionStartDate: '2023-01-01T00:00:00.000Z',
+      licenceVersion: {
+        id: '8b7f78ba-f3ad-4cb6-a058-78abc4d1383d',
+        endDate: null,
+        startDate: '2022-04-01T00:00:00.000Z',
+        copyableReturnVersions: [
+          {
+            id: '60b5d10d-1372-4fb2-b222-bfac81da69ab',
+            startDate: '2023-01-01T00:00:00.000Z',
+            reason: null,
+            modLogs: []
+          }
+        ]
+      },
+      reason: 'major-change'
     }
 
-    session = await SessionHelper.add(sessionData)
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {
@@ -95,25 +96,20 @@ describe('Return Versions - Setup - Submit Existing service', () => {
       it('saves the selected existing return requirements', async () => {
         await SubmitExistingService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.requirements).to.equal([_transformedReturnRequirement()])
+        expect(session.requirements).to.equal([_transformedReturnRequirement()])
+        expect(session.$update.called).to.be.true()
       })
 
       it('saves the return versions "multipleUpload" state', async () => {
         await SubmitExistingService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.multipleUpload).to.equal(false)
+        expect(session.multipleUpload).to.equal(false)
       })
 
       it('saves the return versions "quarterlyReturns" state', async () => {
         await SubmitExistingService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.quarterlyReturns).to.equal(false)
+        expect(session.quarterlyReturns).to.equal(false)
       })
     })
 

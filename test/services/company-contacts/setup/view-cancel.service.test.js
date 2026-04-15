@@ -5,7 +5,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -23,7 +23,7 @@ describe('Company Contacts - Setup - Cancel Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     company = CustomersFixtures.company()
 
     sessionData = { company, abstractionAlerts: 'yes', name: 'Eric', email: 'eric@test.com' }

@@ -14,12 +14,13 @@ const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
 const SessionModel = require('../../../../app/models/session.model.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const UserHelper = require('../../../support/helpers/user.helper.js')
 
 // Things we need to stub
 const CreateReturnLinesService = require('../../../../app/services/return-logs/setup/create-return-lines.service.js')
 const CreateReturnSubmissionService = require('../../../../app/services/return-logs/setup/create-return-submission.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const GenerateReturnSubmissionMetadata = require('../../../../app/services/return-logs/setup/generate-return-submission-metadata.service.js')
 
 // Thing under test
@@ -32,9 +33,10 @@ describe('Return Logs Setup - Submit Check service', () => {
   let sessionData
   let user
 
-  let generateReturnSubmissionMetadataStub
-  let createReturnSubmissionServiceStub
   let createReturnLinesServiceStub
+  let createReturnSubmissionServiceStub
+  let fetchSessionStub
+  let generateReturnSubmissionMetadataStub
 
   const mockGeneratedMetadata = {
     generated: 'metadata',
@@ -56,38 +58,36 @@ describe('Return Logs Setup - Submit Check service', () => {
     })
 
     sessionData = {
-      data: {
-        licenceId: licence.id,
-        licenceRef: licence.licenceRef,
-        purposes: ['test purpose'],
-        reported: 'abstractionVolumes',
-        returnId: returnLog.returnId,
-        returnReference: returnLog.returnReference,
-        returnLogId: returnLog.id,
-        returnSubmissionId: initialReturnSubmission.id,
-        startDate: '2023-01-01',
-        endDate: '2023-12-31',
-        receivedDate: '2024-01-01',
-        journey: 'enterReturn',
-        lines: [
-          {
-            startDate: '2023-01-01T00:00:00.000Z',
-            endDate: '2023-01-31T00:00:00.000Z',
-            quantity: 100,
-            reading: null
-          },
-          {
-            startDate: '2023-02-01T00:00:00.000Z',
-            endDate: '2023-02-28T00:00:00.000Z',
-            quantity: 200,
-            reading: null
-          }
-        ],
-        returnsFrequency: 'month',
-        units: 'cubicMetres',
-        unitSymbol: 'm³',
-        meterProvided: false
-      }
+      licenceId: licence.id,
+      licenceRef: licence.licenceRef,
+      purposes: ['test purpose'],
+      reported: 'abstractionVolumes',
+      returnId: returnLog.returnId,
+      returnReference: returnLog.returnReference,
+      returnLogId: returnLog.id,
+      returnSubmissionId: initialReturnSubmission.id,
+      startDate: '2023-01-01',
+      endDate: '2023-12-31',
+      receivedDate: '2024-01-01',
+      journey: 'enterReturn',
+      lines: [
+        {
+          startDate: '2023-01-01T00:00:00.000Z',
+          endDate: '2023-01-31T00:00:00.000Z',
+          quantity: 100,
+          reading: null
+        },
+        {
+          startDate: '2023-02-01T00:00:00.000Z',
+          endDate: '2023-02-28T00:00:00.000Z',
+          quantity: 200,
+          reading: null
+        }
+      ],
+      returnsFrequency: 'month',
+      units: 'cubicMetres',
+      unitSymbol: 'm³',
+      meterProvided: false
     }
 
     generateReturnSubmissionMetadataStub = Sinon.stub(GenerateReturnSubmissionMetadata, 'go').returns(
@@ -99,6 +99,10 @@ describe('Return Logs Setup - Submit Check service', () => {
     })
 
     createReturnLinesServiceStub = Sinon.stub(CreateReturnLinesService, 'go').resolves([])
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {
@@ -106,10 +110,6 @@ describe('Return Logs Setup - Submit Check service', () => {
   })
 
   describe('when called with valid data', () => {
-    beforeEach(async () => {
-      session = await SessionHelper.add(sessionData)
-    })
-
     it('updates the return log status to completed', async () => {
       await SubmitCheckService.go(session.id, user)
 
@@ -175,9 +175,9 @@ describe('Return Logs Setup - Submit Check service', () => {
     })
 
     describe('and it is a nil return', () => {
-      beforeEach(async () => {
-        sessionData.data.journey = 'nilReturn'
-        sessionData.data.lines = [
+      beforeEach(() => {
+        sessionData.journey = 'nilReturn'
+        sessionData.lines = [
           {
             startDate: '2023-01-01T00:00:00.000Z',
             endDate: '2023-01-31T00:00:00.000Z',
@@ -190,7 +190,9 @@ describe('Return Logs Setup - Submit Check service', () => {
           }
         ]
 
-        session = await SessionHelper.add(sessionData)
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('returns the original returnLogId', async () => {
@@ -202,8 +204,8 @@ describe('Return Logs Setup - Submit Check service', () => {
   })
 
   describe('when called with invalid data as the lines are blank', () => {
-    beforeEach(async () => {
-      sessionData.data.lines = [
+    beforeEach(() => {
+      sessionData.lines = [
         {
           startDate: '2023-01-01T00:00:00.000Z',
           endDate: '2023-01-31T00:00:00.000Z',
@@ -216,7 +218,9 @@ describe('Return Logs Setup - Submit Check service', () => {
         }
       ]
 
-      session = await SessionHelper.add(sessionData)
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      fetchSessionStub.resolves(session)
     })
 
     it('returns the page data including a validation error', async () => {
