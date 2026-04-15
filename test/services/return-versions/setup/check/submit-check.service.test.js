@@ -9,11 +9,12 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../../support/helpers/session.helper.js')
-const { generateUUID, generateRandomInteger } = require('../../../../../app/lib/general.lib.js')
+const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+const { generateUUID, generateRandomInteger } = require('../../../../../app/lib/general.lib.js')
 
 // Things we need to stub
+const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 const GenerateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/generate-return-version.service.js')
 const PersistReturnVersionService = require('../../../../../app/services/return-versions/setup/check/create-return-version.service.js')
 const ProcessLicenceReturnLogsService = require('../../../../../app/services/return-logs/process-licence-return-logs.service.js')
@@ -90,9 +91,12 @@ describe('Return Versions Setup - Submit Check service', () => {
     })
 
     describe('and the reason is NOT "succession-or-transfer-of-licence"', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData.reason = 'minor-change'
-        session = await SessionHelper.add({ data: sessionData })
+
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
         generateReturnVersionStub = Sinon.stub(GenerateReturnVersionService, 'go').resolves({
           returnVersion: {
@@ -137,9 +141,12 @@ describe('Return Versions Setup - Submit Check service', () => {
     })
 
     describe('and the reason is "succession-or-transfer-of-licence"', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData.reason = 'succession-or-transfer-of-licence'
-        session = await SessionHelper.add({ data: sessionData })
+
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
         generateReturnVersionStub = Sinon.stub(GenerateReturnVersionService, 'go').resolves({
           returnVersion: {
@@ -185,7 +192,7 @@ describe('Return Versions Setup - Submit Check service', () => {
   })
 
   describe('when the "no-returns-required" journey is used', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       sessionData = {
         checkPageVisited: false,
         licence: { ...licenceData },
@@ -198,7 +205,9 @@ describe('Return Versions Setup - Submit Check service', () => {
         startDateOptions: 'licenceStartDate'
       }
 
-      session = await SessionHelper.add({ data: sessionData })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
       generateReturnVersionStub = Sinon.stub(GenerateReturnVersionService, 'go').resolves({
         returnVersion: {
