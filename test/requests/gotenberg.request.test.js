@@ -105,7 +105,7 @@ describe('Gotenberg Request', () => {
         // still encodes the body as a Uint8Array. So, we cater for this in _parseResult() by checking the status code
         // and only casting to a buffer if it's a 200. This is what we emulate here by encoding a string as an
         // Uint8Array and then telling the BaseRequest stub to return it.
-        bodyAsUint8Array = new TextEncoder().encode('Not found')
+        bodyAsUint8Array = new TextEncoder().encode('Not Found')
 
         Sinon.stub(BaseRequest, 'post').resolves({
           succeeded: false,
@@ -113,7 +113,7 @@ describe('Gotenberg Request', () => {
             headers,
             statusCode: HTTP_STATUS_NOT_FOUND,
             statusMessage: 'Not Found',
-            body: 'Not Found'
+            body: bodyAsUint8Array
           }
         })
       })
