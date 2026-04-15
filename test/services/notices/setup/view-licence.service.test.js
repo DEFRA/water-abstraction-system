@@ -5,12 +5,15 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewLicenceService = require('../../../../app/services/notices/setup/view-licence.service.js')
@@ -18,11 +21,16 @@ const ViewLicenceService = require('../../../../app/services/notices/setup/view-
 describe('Notices - Setup - View Licence service', () => {
   let licenceRef
   let session
+  let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     licenceRef = generateLicenceRef()
 
-    session = await SessionHelper.add({ data: { licenceRef } })
+    sessionData = { licenceRef }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {

@@ -5,43 +5,47 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchLicenceRefsWithDueReturnsService = require('../../../../app/services/notices/setup/fetch-licence-refs-with-due-returns.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitRemoveLicencesService = require('../../../../app/services/notices/setup/submit-remove-licences.service.js')
 
 describe('Notices - Setup - Submit Remove Licences service', () => {
   let fetchLicenceRefsWithDueReturnsStub
+  let licenceRefWithDueReturns
   let payload
   let referenceCode
   let session
-  let licenceRefWithDueReturns
+  let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     referenceCode = generateNoticeReferenceCode('RINV-')
 
-    session = await SessionHelper.add({
-      data: {
-        returnsPeriod: 'allYear',
-        referenceCode,
-        determinedReturnsPeriod: {
-          name: 'allYear',
-          dueDate: '2024-04-28',
-          endDate: '2024-03-31',
-          summer: false,
-          startDate: '2023-04-01'
-        }
+    sessionData = {
+      returnsPeriod: 'allYear',
+      referenceCode,
+      determinedReturnsPeriod: {
+        name: 'allYear',
+        dueDate: '2024-04-28',
+        endDate: '2024-03-31',
+        summer: false,
+        startDate: '2023-04-01'
       }
-    })
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     licenceRefWithDueReturns = generateLicenceRef()
 
@@ -49,12 +53,12 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
   })
 
   afterEach(() => {
-    fetchLicenceRefsWithDueReturnsStub.restore()
+    Sinon.restore()
   })
 
   describe('when submitting licences to remove ', () => {
     describe('is successful', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = { removeLicences: licenceRefWithDueReturns }
 
         fetchLicenceRefsWithDueReturnsStub.resolves([licenceRefWithDueReturns])
@@ -63,9 +67,8 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
       it('saves the submitted value', async () => {
         await SubmitRemoveLicencesService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.removeLicences).to.equal(licenceRefWithDueReturns)
+        expect(session.removeLicences).to.equal(licenceRefWithDueReturns)
+        expect(session.$update.called).to.be.true()
       })
 
       it('returns the redirect route', async () => {
@@ -78,7 +81,7 @@ describe('Notices - Setup - Submit Remove Licences service', () => {
     })
 
     describe('fails validation', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = { removeLicences: '789' }
 
         licenceRefWithDueReturns = []

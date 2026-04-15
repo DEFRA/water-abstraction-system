@@ -3,13 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitAlertThresholdsService = require('../../../../app/services/notices/setup/submit-alert-thresholds.service.js')
@@ -20,8 +24,12 @@ describe('Notices - Setup - Submit Alert Thresholds service', () => {
   let session
   let sessionData
 
+  afterEach(() => {
+    Sinon.restore()
+  })
+
   describe('when called', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       licenceMonitoringStations = AbstractionAlertSessionData.licenceMonitoringStations()
 
       sessionData = {
@@ -33,7 +41,9 @@ describe('Notices - Setup - Submit Alert Thresholds service', () => {
         alertThresholds: [licenceMonitoringStations.one.thresholdGroup, licenceMonitoringStations.two.thresholdGroup]
       }
 
-      session = await SessionHelper.add({ data: sessionData })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
     })
 
     it('continues the journey', async () => {
@@ -53,9 +63,8 @@ describe('Notices - Setup - Submit Alert Thresholds service', () => {
         it('saves the submitted value as an array', async () => {
           await SubmitAlertThresholdsService.go(session.id, payload)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.alertThresholds).to.equal([licenceMonitoringStations.one.thresholdGroup])
+          expect(session.alertThresholds).to.equal([licenceMonitoringStations.one.thresholdGroup])
+          expect(session.$update.called).to.be.true()
         })
       })
 
@@ -63,12 +72,12 @@ describe('Notices - Setup - Submit Alert Thresholds service', () => {
         it('saves the submitted values as an array', async () => {
           await SubmitAlertThresholdsService.go(session.id, payload)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.alertThresholds).to.equal([
+          expect(session.alertThresholds).to.equal([
             licenceMonitoringStations.one.thresholdGroup,
             licenceMonitoringStations.two.thresholdGroup
           ])
+
+          expect(session.$update.called).to.be.true()
         })
       })
     })
@@ -76,7 +85,7 @@ describe('Notices - Setup - Submit Alert Thresholds service', () => {
 
   describe('when validation fails', () => {
     describe('and there are no previous "alertThresholds"', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         const abstractionAlertSessionData = AbstractionAlertSessionData.get()
 
         sessionData = {
@@ -85,9 +94,11 @@ describe('Notices - Setup - Submit Alert Thresholds service', () => {
           alertType: 'stop'
         }
 
-        payload = {}
+        session = SessionModelStub.build(Sinon, sessionData)
 
-        session = await SessionHelper.add({ data: sessionData })
+        Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+        payload = {}
       })
 
       it('returns page data for the view, with errors', async () => {
@@ -123,7 +134,7 @@ describe('Notices - Setup - Submit Alert Thresholds service', () => {
     })
 
     describe('and there are previous "alertThresholds"', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         const abstractionAlertSessionData = AbstractionAlertSessionData.get()
 
         sessionData = {
@@ -132,9 +143,11 @@ describe('Notices - Setup - Submit Alert Thresholds service', () => {
           alertType: 'stop'
         }
 
-        payload = {}
+        session = SessionModelStub.build(Sinon, sessionData)
 
-        session = await SessionHelper.add({ data: sessionData })
+        Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+        payload = {}
       })
 
       it('returns page data for the view, with errors, and all the thresholds unselected', async () => {

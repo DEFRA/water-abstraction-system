@@ -5,21 +5,32 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
-const SessionModel = require('../../../../app/models/session.model.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitCancelService = require('../../../../app/services/notices/setup/submit-cancel.service.js')
 
 describe('Notices - Setup - Submit Cancel service', () => {
+  let fetchSessionStub
   let session
+  let sessionData
 
-  beforeEach(async () => {
-    session = await SessionHelper.add({ data: { licenceRef: '01/111', referenceCode: 'RNIV-1234' } })
+  beforeEach(() => {
+    sessionData = { licenceRef: '01/111', referenceCode: 'RNIV-1234' }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    Sinon.stub(DeleteSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {
@@ -30,9 +41,7 @@ describe('Notices - Setup - Submit Cancel service', () => {
     it('clears the session', async () => {
       await SubmitCancelService.go(session.id)
 
-      const noSession = await SessionModel.query().where('id', session.id)
-
-      expect(noSession).to.equal([])
+      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
     })
 
     describe('when the journey is for a return', () => {
@@ -44,15 +53,16 @@ describe('Notices - Setup - Submit Cancel service', () => {
     })
 
     describe('when the journey is for "alerts"', () => {
-      beforeEach(async () => {
-        session = await SessionHelper.add({
-          data: {
-            alertType: 'stop',
-            journey: 'alerts',
-            monitoringStationId: '123',
-            referenceCode: 'WAA-1234'
-          }
-        })
+      beforeEach(() => {
+        sessionData = {
+          alertType: 'stop',
+          journey: 'alerts',
+          monitoringStationId: '123',
+          referenceCode: 'WAA-1234'
+        }
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('returns the redirect url', async () => {

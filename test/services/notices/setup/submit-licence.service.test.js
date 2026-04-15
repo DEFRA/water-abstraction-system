@@ -5,37 +5,47 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
 const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitLicenceService = require('../../../../app/services/notices/setup/submit-licence.service.js')
 
 describe('Notices - Setup - Submit Licence service', () => {
   let clock
+  let fetchSessionStub
   let licenceRef
   let payload
   let session
+  let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     licenceRef = generateLicenceRef()
 
-    session = await SessionHelper.add({ data: {} })
-
     clock = Sinon.useFakeTimers(new Date('2020-06-06'))
+
+    sessionData = {}
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub() }
   })
 
   afterEach(() => {
     clock.restore()
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -52,9 +62,8 @@ describe('Notices - Setup - Submit Licence service', () => {
       it('saves the submitted value', async () => {
         await SubmitLicenceService.go(session.id, payload, yarStub)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.licenceRef).to.equal(licenceRef)
+        expect(session.licenceRef).to.equal(licenceRef)
+        expect(session.$update.called).to.be.true()
       })
 
       it('returns the redirect url', async () => {
@@ -65,8 +74,12 @@ describe('Notices - Setup - Submit Licence service', () => {
 
       describe('from the check page', () => {
         describe('and the licence ref has been updated', () => {
-          beforeEach(async () => {
-            session = await SessionHelper.add({ data: { licenceRef: '01/11', checkPageVisited: true } })
+          beforeEach(() => {
+            sessionData = { licenceRef: '01/11', checkPageVisited: true }
+
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            fetchSessionStub.resolves(session)
           })
 
           it('redirects to the notice type page', async () => {
@@ -78,9 +91,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           it('updates the sessions "checkPageVisited" flag', async () => {
             await SubmitLicenceService.go(session.id, payload, yarStub)
 
-            const refreshedSession = await session.$query()
-
-            expect(refreshedSession.checkPageVisited).to.be.false()
+            expect(session.checkPageVisited).to.be.false()
           })
 
           it('sets a flash message', async () => {
@@ -98,8 +109,12 @@ describe('Notices - Setup - Submit Licence service', () => {
         })
 
         describe('and the licence ref has not been updated', () => {
-          beforeEach(async () => {
-            session = await SessionHelper.add({ data: { licenceRef, checkPageVisited: true } })
+          beforeEach(() => {
+            sessionData = { licenceRef, checkPageVisited: true }
+
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            fetchSessionStub.resolves(session)
           })
 
           it('redirects to the check notice type page', async () => {

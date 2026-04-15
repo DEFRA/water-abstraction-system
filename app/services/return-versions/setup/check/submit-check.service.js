@@ -39,25 +39,21 @@ async function go(sessionId, userId) {
 }
 
 async function _processReturnVersion(session, userId) {
-  const returnVersionData = await GenerateReturnVersionService.go(session.data, userId)
+  const returnVersionData = await GenerateReturnVersionService.go(session, userId)
 
   const newReturnVersion = await CreateReturnVersionService.go(returnVersionData)
 
   const changeDate = new Date(newReturnVersion.startDate)
   changeDate.setTime(changeDate.getTime() - ONE_DAY_IN_MILLISECONDS)
 
-  if (session.data.journey === 'no-returns-required') {
-    await VoidReturnLogsService.go(
-      session.data.licence.licenceRef,
-      newReturnVersion.startDate,
-      newReturnVersion.endDate
-    )
+  if (session.journey === 'no-returns-required') {
+    await VoidReturnLogsService.go(session.licence.licenceRef, newReturnVersion.startDate, newReturnVersion.endDate)
   }
 
   await ProcessLicenceReturnLogsService.go(newReturnVersion.licenceId, changeDate, newReturnVersion.endDate)
 
   if (newReturnVersion.reason === 'succession-or-transfer-of-licence') {
-    await _updateSucceededReturnLogs(session.data.licence.licenceRef)
+    await _updateSucceededReturnLogs(session.licence.licenceRef)
   }
 }
 
