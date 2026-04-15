@@ -8,13 +8,14 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Things we need to stub
-const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitContactService = require('../../../../app/services/billing-accounts/setup/submit-contact.service.js')
@@ -29,19 +30,21 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     contacts: [contact]
   }
 
+  let fetchSessionStub
   let payload
   let session
   let sessionData
 
-  beforeEach(async () => {})
+  beforeEach(() => {
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves()
+  })
 
-  afterEach(async () => {
-    await session.$query().delete()
+  afterEach(() => {
     Sinon.restore()
   })
 
   describe('when the user picks to set up a "new" contact with an existing address', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         contactSelected: 'new'
       }
@@ -51,21 +54,22 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         billingAccount
       }
 
-      session = await SessionHelper.add({ data: sessionData })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      fetchSessionStub.resolves(session)
     })
 
     it('saves the submitted value', async () => {
       await SubmitContactService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.data).to.equal(
+      expect(session).to.equal(
         {
           addressSelected: billingAccountAddress.id,
           contactSelected: payload.contactSelected
         },
-        { skip: ['billingAccount'] }
+        { skip: ['billingAccount', 'id'] }
       )
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
@@ -77,27 +81,27 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           addressSelected: billingAccountAddress.id,
           billingAccount,
           contactSelected: 'new'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitContactService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             addressSelected: billingAccountAddress.id,
             contactSelected: payload.contactSelected
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
       })
 
@@ -111,7 +115,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     })
 
     describe('and the user has returned to the page from the check and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           addressSelected: billingAccountAddress.id,
           billingAccount,
@@ -119,21 +123,21 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: 'new'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitContactService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             addressSelected: billingAccountAddress.id,
             checkPageVisited: true,
             contactSelected: payload.contactSelected
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
       })
 
@@ -148,7 +152,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
   })
 
   describe('when the user picks an existing contact with a new address', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       payload = {
         contactSelected: contact.id
       }
@@ -158,22 +162,23 @@ describe('Billing Accounts - Setup - Contact Service', () => {
         billingAccount
       }
 
-      session = await SessionHelper.add({ data: sessionData })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      fetchSessionStub.resolves(session)
     })
 
     it('saves the submitted value', async () => {
       await SubmitContactService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.data).to.equal(
+      expect(session).to.equal(
         {
-          addressJourney: _addressJourney(refreshedSession),
+          addressJourney: _addressJourney(session),
           addressSelected: 'new',
           contactSelected: payload.contactSelected
         },
-        { skip: ['billingAccount'] }
+        { skip: ['billingAccount', 'id'] }
       )
+      expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
@@ -185,7 +190,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     })
 
     describe('and the user has returned to the page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           contactSelected: contact.id
         }
@@ -197,21 +202,21 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: contact.id
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitContactService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             addressJourney: sessionData.addressJourney,
             addressSelected: 'new',
             contactSelected: payload.contactSelected
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
       })
 
@@ -225,7 +230,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     })
 
     describe('and the user has returned from the check page and made the same choice', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           contactSelected: contact.id
         }
@@ -238,22 +243,22 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactSelected: contact.id
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitContactService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
             addressJourney: sessionData.addressJourney,
             addressSelected: 'new',
             checkPageVisited: true,
             contactSelected: payload.contactSelected
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
       })
 
@@ -267,7 +272,7 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     })
 
     describe('and the user had previously completed the "new" journey', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         payload = {
           contactSelected: contact.id
         }
@@ -280,23 +285,23 @@ describe('Billing Accounts - Setup - Contact Service', () => {
           contactName: 'Contact Name'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('saves the submitted value', async () => {
         await SubmitContactService.go(session.id, payload)
 
-        const refreshedSession = await session.$query()
-
-        expect(refreshedSession.data).to.equal(
+        expect(session).to.equal(
           {
-            addressJourney: _addressJourney(refreshedSession),
+            addressJourney: _addressJourney(session),
             addressSelected: 'new',
             checkPageVisited: false,
             contactSelected: payload.contactSelected,
             contactName: null
           },
-          { skip: ['billingAccount'] }
+          { skip: ['billingAccount', 'id'] }
         )
       })
 
@@ -313,8 +318,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
   describe('when validation fails', () => {
     describe('because the user did not select an option', () => {
       describe('and the user had chosen the current customer', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {}
+
           sessionData = {
             accountSelected: billingAccount.company.id,
             billingAccount,
@@ -322,7 +328,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
             contactName: 'Contact Name'
           }
 
-          session = await SessionHelper.add({ data: sessionData })
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
 
           Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
         })
@@ -345,8 +353,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
       })
 
       describe('and the user had chosen another customer', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {}
+
           sessionData = {
             accountSelected: 'another',
             billingAccount,
@@ -355,7 +364,9 @@ describe('Billing Accounts - Setup - Contact Service', () => {
             existingAccount: billingAccount.company.id
           }
 
-          session = await SessionHelper.add({ data: sessionData })
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
 
           Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
         })
