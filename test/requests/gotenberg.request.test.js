@@ -23,7 +23,8 @@ describe('Gotenberg Request', () => {
   const testRoute = 'TEST_ROUTE'
 
   let formData
-  let pdfBytes
+  let bodyAsBuffer
+  let bodyAsUint8Array
 
   beforeEach(() => {
     // Set delay to a value that won't cause the tests to timeout or run needlessly slow. By default it's 2 seconds.
@@ -35,8 +36,6 @@ describe('Gotenberg Request', () => {
 
     formData = new FormData()
     formData.append('index.html', new Blob([Buffer.from('<p>Test</p>')]), 'index.html')
-
-    pdfBytes = new TextEncoder().encode('%PDF-1.4\n%âãÏÓ\n').buffer
   })
 
   afterEach(() => {
@@ -46,12 +45,19 @@ describe('Gotenberg Request', () => {
   describe('#post', () => {
     describe('when the request succeeds', () => {
       beforeEach(async () => {
+        // Got returns the body as an Uint8Array which this emulates by encoding our test PDF string as an Uint8Array.
+        // This is what we tell the BaseRequest stub to return
+        bodyAsUint8Array = new TextEncoder().encode('%PDF-1.4\n%âãÏÓ\n')
+
+        // This is what we expect the GotenbergRequest module to return after it casts the Uint8Array to a Node buffer
+        bodyAsBuffer = Buffer.from(bodyAsUint8Array)
+
         Sinon.stub(BaseRequest, 'post').resolves({
           succeeded: true,
           response: {
             headers,
             statusCode: HTTP_STATUS_OK,
-            body: pdfBytes
+            body: bodyAsUint8Array
           }
         })
       })
@@ -83,7 +89,7 @@ describe('Gotenberg Request', () => {
       it('returns the response body as an array buffer', async () => {
         const result = await GotenbergRequest.post(testRoute, formData)
 
-        expect(result.response.body).to.equal(pdfBytes)
+        expect(result.response.body).to.equal(bodyAsBuffer)
       })
 
       it('returns the status code', async () => {
@@ -95,13 +101,19 @@ describe('Gotenberg Request', () => {
 
     describe('when the request fails', () => {
       beforeEach(async () => {
+        // If Gotenberg returns a 4xx or 5xx response it will return a message as text rather than the PDF as bytes. Got
+        // still encodes the body as a Uint8Array. So, we cater for this in _parseResult() by checking the status code
+        // and only casting to a buffer if it's a 200. This is what we emulate here by encoding a string as an
+        // Uint8Array and then telling the BaseRequest stub to return it.
+        bodyAsUint8Array = new TextEncoder().encode('Not found')
+
         Sinon.stub(BaseRequest, 'post').resolves({
           succeeded: false,
           response: {
             headers,
             statusCode: HTTP_STATUS_NOT_FOUND,
             statusMessage: 'Not Found',
-            body: { statusCode: HTTP_STATUS_NOT_FOUND, error: 'Not Found', message: 'Not Found' }
+            body: 'Not Found'
           }
         })
       })
@@ -115,7 +127,7 @@ describe('Gotenberg Request', () => {
       it('returns the error response', async () => {
         const result = await GotenbergRequest.post(testRoute, formData)
 
-        expect(result.response.body.message).to.equal('Not Found')
+        expect(result.response.body).to.equal('Not Found')
       })
 
       it('returns the status code', async () => {
