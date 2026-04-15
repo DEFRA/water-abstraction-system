@@ -18,12 +18,15 @@ const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 // Thing under test
 const SubmitAlertThresholdsService = require('../../../../app/services/notices/setup/submit-alert-thresholds.service.js')
 
-describe.skip('Notices - Setup - Submit Alert Thresholds service', () => {
-  let fetchSessionStub
+describe('Notices - Setup - Submit Alert Thresholds service', () => {
   let licenceMonitoringStations
   let payload
   let session
   let sessionData
+
+  afterEach(() => {
+    Sinon.restore()
+  })
 
   describe('when called', () => {
     beforeEach(() => {
@@ -40,11 +43,7 @@ describe.skip('Notices - Setup - Submit Alert Thresholds service', () => {
 
       session = SessionModelStub.build(Sinon, sessionData)
 
-      fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
-    })
-
-    afterEach(() => {
-      Sinon.restore()
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
     })
 
     it('continues the journey', async () => {
@@ -97,7 +96,7 @@ describe.skip('Notices - Setup - Submit Alert Thresholds service', () => {
 
         session = SessionModelStub.build(Sinon, sessionData)
 
-        fetchSessionStub.resolves(session)
+        Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
         payload = {}
       })
@@ -146,7 +145,7 @@ describe.skip('Notices - Setup - Submit Alert Thresholds service', () => {
 
         session = SessionModelStub.build(Sinon, sessionData)
 
-        fetchSessionStub.resolves(session)
+        Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
         payload = {}
       })
