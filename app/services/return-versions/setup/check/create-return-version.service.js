@@ -59,7 +59,9 @@ async function _persistReturnRequirements(returnRequirements, returnVersionId, t
 
 async function _persistReturnRequirementsPoints(points, returnRequirementId, trx) {
   for (const point of points) {
-    const returnRequirementPointQuery = trx ? ReturnRequirementPointModel.query(trx) : ReturnRequirementPointModel.query()
+    const returnRequirementPointQuery = trx
+      ? ReturnRequirementPointModel.query(trx)
+      : ReturnRequirementPointModel.query()
 
     await returnRequirementPointQuery.insert({ pointId: point, returnRequirementId })
   }
