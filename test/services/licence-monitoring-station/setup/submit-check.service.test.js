@@ -5,13 +5,17 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const LicenceMonitoringStationModel = require('../../../../app/models/licence-monitoring-station.model.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/licence-monitoring-station/setup/submit-check.service.js')
@@ -19,11 +23,12 @@ const SubmitCheckService = require('../../../../app/services/licence-monitoring-
 describe('Licence Monitoring Station Setup - Submit Check Service', () => {
   const userId = 12345
 
+  let fetchSessionStub
   let session
   let sessionData
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       unit: 'Ml/d',
       label: 'LABEL',
@@ -42,9 +47,17 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       abstractionPeriodStartMonth: 1
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    Sinon.stub(DeleteSessionDal, 'go').resolves()
 
     yarStub = { flash: Sinon.stub() }
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -84,9 +97,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     it('deletes the session', async () => {
       await SubmitCheckService.go(session.id, userId, yarStub)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession).to.not.exist()
+      expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
     })
 
     it('continues the journey', async () => {
@@ -108,8 +119,12 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     })
 
     describe('and the session unit is a flow unit', () => {
-      beforeEach(async () => {
-        session = await SessionHelper.add({ data: { ...sessionData, unit: 'm3/s' } })
+      beforeEach(() => {
+        sessionData = { ...sessionData, unit: 'm3/s' }
+
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('sets "measureType" as "flow"', async () => {
@@ -124,8 +139,12 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     })
 
     describe('and the session unit is a level unit', () => {
-      beforeEach(async () => {
-        session = await SessionHelper.add({ data: { ...sessionData, unit: 'mAOD' } })
+      beforeEach(() => {
+        sessionData = { ...sessionData, unit: 'mAOD' }
+
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('sets "measureType" as "level"', async () => {
@@ -140,8 +159,12 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     })
 
     describe('and "stopOrReduce" is "stop"', () => {
-      beforeEach(async () => {
-        session = await SessionHelper.add({ data: { ...sessionData, stopOrReduce: 'stop' } })
+      beforeEach(() => {
+        sessionData = { ...sessionData, stopOrReduce: 'stop' }
+
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('sets "restrictionType" as "stop"', async () => {
@@ -157,10 +180,12 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
     describe('and "stopOrReduce" is "reduce"', () => {
       describe('and "reduceAtThreshold" is "no"', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({
-            data: { ...sessionData, stopOrReduce: 'reduce', reduceAtThreshold: 'no' }
-          })
+        beforeEach(() => {
+          sessionData = { ...sessionData, stopOrReduce: 'reduce', reduceAtThreshold: 'no' }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('sets "restrictionType" as "reduce"', async () => {
@@ -175,10 +200,12 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
       })
 
       describe('and "reduceAtThreshold" is "yes"', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({
-            data: { ...sessionData, stopOrReduce: 'reduce', reduceAtThreshold: 'yes' }
-          })
+        beforeEach(() => {
+          sessionData = { ...sessionData, stopOrReduce: 'reduce', reduceAtThreshold: 'yes' }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('sets "restrictionType" as "stop_or_reduce"', async () => {
@@ -194,13 +221,12 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
     })
 
     describe('and "conditionId" is a condition UUID', () => {
-      beforeEach(async () => {
-        session = await SessionHelper.add({
-          data: {
-            ...sessionData,
-            conditionId: generateUUID()
-          }
-        })
+      beforeEach(() => {
+        sessionData = { ...sessionData, conditionId: generateUUID() }
+
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('persists the licence version purpose condition id', async () => {
@@ -210,7 +236,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
           .where('monitoringStationId', sessionData.monitoringStationId)
           .first()
 
-        expect(result.licenceVersionPurposeConditionId).to.equal(session.conditionId)
+        expect(result.licenceVersionPurposeConditionId).to.equal(sessionData.conditionId)
       })
     })
 
