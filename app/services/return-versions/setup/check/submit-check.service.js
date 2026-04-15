@@ -10,6 +10,7 @@ const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 const GenerateReturnVersionService = require('./generate-return-version.service.js')
 const ProcessLicenceReturnLogsService = require('../../../return-logs/process-licence-return-logs.service.js')
+const ReturnVersionModel = require('../../../../models/return-version.model.js')
 const VoidReturnLogsService = require('../../../return-logs/void-return-logs.service.js')
 const { db } = require('../../../../../db/db.js')
 
@@ -31,29 +32,35 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 async function go(sessionId, userId) {
   const session = await FetchSessionDal.go(sessionId)
 
-  await _processReturnVersion(session, userId)
-
-  await DeleteSessionDal.go(sessionId)
+  await ReturnVersionModel.transaction(async (trx) => {
+    await _processReturnVersion(session, userId, trx)
+    await DeleteSessionDal.go(sessionId, trx)
+  })
 
   return session.licence.id
 }
 
-async function _processReturnVersion(session, userId) {
-  const returnVersionData = await GenerateReturnVersionService.go(session, userId)
+async function _processReturnVersion(session, userId, trx) {
+  const returnVersionData = await GenerateReturnVersionService.go(session, userId, trx)
 
-  const newReturnVersion = await CreateReturnVersionService.go(returnVersionData)
+  const newReturnVersion = await CreateReturnVersionService.go(returnVersionData, trx)
 
   const changeDate = new Date(newReturnVersion.startDate)
   changeDate.setTime(changeDate.getTime() - ONE_DAY_IN_MILLISECONDS)
 
   if (session.journey === 'no-returns-required') {
-    await VoidReturnLogsService.go(session.licence.licenceRef, newReturnVersion.startDate, newReturnVersion.endDate)
+    await VoidReturnLogsService.go(
+      session.licence.licenceRef,
+      newReturnVersion.startDate,
+      newReturnVersion.endDate,
+      trx
+    )
   }
 
-  await ProcessLicenceReturnLogsService.go(newReturnVersion.licenceId, changeDate, newReturnVersion.endDate)
+  await ProcessLicenceReturnLogsService.go(newReturnVersion.licenceId, changeDate, newReturnVersion.endDate, trx)
 
   if (newReturnVersion.reason === 'succession-or-transfer-of-licence') {
-    await _updateSucceededReturnLogs(session.licence.licenceRef)
+    await _updateSucceededReturnLogs(session.licence.licenceRef, trx)
   }
 }
 
@@ -85,7 +92,7 @@ async function _processReturnVersion(session, userId) {
  *
  * @private
  */
-async function _updateSucceededReturnLogs(licenceRef) {
+async function _updateSucceededReturnLogs(licenceRef, trx) {
   const bindings = [licenceRef]
 
   const query = `
@@ -111,7 +118,9 @@ async function _updateSucceededReturnLogs(licenceRef) {
       AND rl.start_date < latest.latest_start_date;
   `
 
-  await db.raw(query, bindings)
+  const rawQuery = db.raw(query, bindings)
+
+  await rawQuery.transacting(trx)
 }
 
 module.exports = {

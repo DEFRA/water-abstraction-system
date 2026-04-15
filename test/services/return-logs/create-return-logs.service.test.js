@@ -1946,8 +1946,8 @@ describe('Return Logs - Create Return Logs service', () => {
       Sinon.stub(GenerateReturnLogService, 'go').throws()
     })
 
-    it('handles the error', async () => {
-      await CreateReturnLogsService.go(returnRequirement, returnCycle)
+    it('logs and rethrows the error', async () => {
+      await expect(CreateReturnLogsService.go(returnRequirement, returnCycle)).to.reject()
 
       const args = notifierStub.omfg.firstCall.args
 

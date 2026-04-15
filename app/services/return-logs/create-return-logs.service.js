@@ -16,16 +16,18 @@ const { determineReturnsPeriods } = require('../../lib/return-periods.lib.js')
  * @param {module:ReturnRequirementModel} returnRequirement - the return requirement to generate return logs for
  * @param {module:ReturnCycleModel} returnCycle - the return cycle to generate return logs against
  * @param {Date} licenceEndDate - the licence end date if there is one
+ * @param {object} [trx=null] - Optional transaction object
  *
  * @returns {Promise<string[]>} an array of the generated return log ids
  */
-async function go(returnRequirement, returnCycle, licenceEndDate) {
+async function go(returnRequirement, returnCycle, licenceEndDate, trx = null) {
   try {
     const returnLogs = _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate)
 
-    return await _persistReturnLogs(returnLogs)
+    return await _persistReturnLogs(returnLogs, trx)
   } catch (error) {
     global.GlobalNotifier.omfg('Return logs creation errored', { returnRequirement, returnCycle }, error)
+    throw error
   }
 }
 
@@ -59,13 +61,18 @@ function _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate = nu
   return returnLogs.filter(Boolean)
 }
 
-async function _persistReturnLogs(returnLogs) {
+async function _persistReturnLogs(returnLogs, trx) {
   const createdIds = []
   for (const returnLog of returnLogs) {
     const timestamp = timestampForPostgres()
 
-    await db('returnLogs')
-      .withSchema('public')
+    const query = db('returnLogs').withSchema('public')
+
+    if (trx) {
+      query.transacting(trx)
+    }
+
+    await query
       .insert({ ...returnLog, createdAt: timestamp, updatedAt: timestamp })
       .onConflict('returnId')
       .ignore()

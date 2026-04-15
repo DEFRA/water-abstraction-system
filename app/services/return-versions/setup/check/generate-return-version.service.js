@@ -18,13 +18,14 @@ const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
  *
  * @param {string} sessionData - The session data required to set up a new return version for a licence
  * @param {number} userId - The id of the logged in user
+ * @param {object} [trx=null] - Optional transaction object
  *
  * @returns {Promise<object>} The new return version and requirement data for a licence
  */
-async function go(sessionData, userId) {
-  const nextVersionNumber = await _nextVersionNumber(sessionData.licence.id)
+async function go(sessionData, userId, trx = null) {
+  const nextVersionNumber = await _nextVersionNumber(sessionData.licence.id, trx)
 
-  const returnVersion = await _generateReturnVersion(nextVersionNumber, sessionData, userId)
+  const returnVersion = await _generateReturnVersion(nextVersionNumber, sessionData, userId, trx)
   const returnRequirements = await _generateReturnRequirements(sessionData)
 
   return {
@@ -47,13 +48,17 @@ async function _generateReturnRequirements(sessionData) {
   return returnRequirements
 }
 
-async function _generateReturnVersion(nextVersionNumber, sessionData, userId) {
+async function _generateReturnVersion(nextVersionNumber, sessionData, userId, trx) {
   const startDate = new Date(sessionData.returnVersionStartDate)
   let endDate = null
   let quarterlyReturns = false
 
   if (nextVersionNumber > 1) {
-    endDate = await ProcessExistingReturnVersionsService.go(sessionData.licence.id, startDate)
+    if (trx) {
+      endDate = await ProcessExistingReturnVersionsService.go(sessionData.licence.id, startDate, trx)
+    } else {
+      endDate = await ProcessExistingReturnVersionsService.go(sessionData.licence.id, startDate)
+    }
   }
 
   if (isQuarterlyReturnSubmissions(sessionData.returnVersionStartDate)) {
@@ -74,11 +79,10 @@ async function _generateReturnVersion(nextVersionNumber, sessionData, userId) {
   }
 }
 
-async function _nextVersionNumber(licenceId) {
-  const { lastVersionNumber } = await ReturnVersionModel.query()
-    .max('version as lastVersionNumber')
-    .where({ licenceId })
-    .first()
+async function _nextVersionNumber(licenceId, trx) {
+  const query = trx ? ReturnVersionModel.query(trx) : ReturnVersionModel.query()
+
+  const { lastVersionNumber } = await query.max('version as lastVersionNumber').where({ licenceId }).first()
 
   if (lastVersionNumber) {
     return lastVersionNumber + 1

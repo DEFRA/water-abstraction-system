@@ -14,9 +14,10 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  * @param {string} licenceRef - The licenceRef of the licence
  * @param {Date} startDate - The start date of no returns required return version
  * @param {Date} [endDate=null] - The optional end date of no returns required return version
+ * @param {object} [trx=null] - Optional transaction object
  */
-async function go(licenceRef, startDate, endDate = null) {
-  const query = ReturnLogModel.query()
+async function go(licenceRef, startDate, endDate = null, trx = null) {
+  const query = (trx ? ReturnLogModel.query(trx) : ReturnLogModel.query())
     .patch({ status: 'void', updatedAt: timestampForPostgres() })
     .where('licenceRef', licenceRef)
     .where('startDate', '>=', startDate)
