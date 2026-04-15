@@ -298,7 +298,7 @@ describe('Billing Accounts - Setup - Submit Existing Address Service', () => {
             ..._commonSessionData(session.billingAccount),
             addressSelected: payload.addressSelected
           },
-          { skip: ['accountSelected', 'billingAccount', 'existingAccount', 'id', 'id'] }
+          { skip: ['accountSelected', 'billingAccount', 'existingAccount', 'id'] }
         )
       })
 
