@@ -33,6 +33,10 @@ describe('Bill Runs - Setup - No Licences service', () => {
       Sinon.stub(FetchSessionDal, 'go').resolves(session)
     })
 
+    afterEach(() => {
+      Sinon.restore()
+    })
+
     it('returns page data for the view', async () => {
       const result = await NoLicencesService.go(session.id)
 
