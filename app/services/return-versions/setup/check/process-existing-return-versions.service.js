@@ -17,12 +17,12 @@ const { sameDate } = require('../../../../lib/dates.lib.js')
  *
  * @param {string} licenceId - The UUID of the licence the requirements are for
  * @param {Date} newVersionStartDate - The date that the new return version starts
- * @param {object} [trx=null] - Optional transaction object
+ * @param {object} trx - Transaction object
  *
  * @returns {Promise<Date>} The calculated `endDate` for the new return version if there is one. Null will be returned
  * if there is no `endDate`
  */
-async function go(licenceId, newVersionStartDate, trx = null) {
+async function go(licenceId, newVersionStartDate, trx) {
   const previousVersions = await _previousVersions(licenceId, trx)
   const previousVersionEndDate = _calculateEndDate(newVersionStartDate)
 
@@ -90,9 +90,7 @@ async function _endLatestVersion(previousVersions, newVersionStartDate, endDate,
     return null
   }
 
-  const query = trx ? matchedReturnVersion.$query(trx) : matchedReturnVersion.$query()
-
-  return query.patch({ endDate })
+  return matchedReturnVersion.$query(trx).patch({ endDate })
 }
 
 /**
@@ -166,9 +164,7 @@ async function _insertBetweenVersions(previousVersions, newVersionStartDate, end
 
   const newVersionEndDate = matchedReturnVersion.endDate
 
-  const query = trx ? matchedReturnVersion.$query(trx) : matchedReturnVersion.$query()
-
-  await query.patch({ endDate })
+  await matchedReturnVersion.$query(trx).patch({ endDate })
 
   return newVersionEndDate
 }
@@ -183,9 +179,7 @@ function _calculateEndDate(changeDate) {
 }
 
 function _previousVersions(licenceId, trx) {
-  const query = trx ? ReturnVersionModel.query(trx) : ReturnVersionModel.query()
-
-  return query
+  return ReturnVersionModel.query(trx)
     .select(['endDate', 'id', 'startDate'])
     .where('licenceId', licenceId)
     .where('status', 'current')
@@ -226,9 +220,7 @@ async function _replaceLatestVersion(previousVersions, newVersionStartDate, trx)
     return null
   }
 
-  const query = trx ? matchedReturnVersion.$query(trx) : matchedReturnVersion.$query()
-
-  return query.patch({ status: 'superseded' })
+  return matchedReturnVersion.$query(trx).patch({ status: 'superseded' })
 }
 
 /**
@@ -268,9 +260,7 @@ async function _replacePreviousVersion(previousVersions, newVersionStartDate, tr
 
   const newVersionEndDate = matchedReturnVersion.endDate
 
-  const query = trx ? matchedReturnVersion.$query(trx) : matchedReturnVersion.$query()
-
-  await query.patch({ status: 'superseded' })
+  await matchedReturnVersion.$query(trx).patch({ status: 'superseded' })
 
   return newVersionEndDate
 }
