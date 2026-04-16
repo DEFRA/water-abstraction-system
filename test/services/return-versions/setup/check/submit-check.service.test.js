@@ -18,7 +18,7 @@ const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 const GenerateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/generate-return-version.service.js')
 const PersistReturnVersionService = require('../../../../../app/services/return-versions/setup/check/create-return-version.service.js')
 const ProcessLicenceReturnLogsService = require('../../../../../app/services/return-logs/process-licence-return-logs.service.js')
-const VoidNoReturnRequiredLicenceReturnLogsService = require('../../../../../app/services/return-logs/void-return-logs.service.js')
+const VoidReturnLogsService = require('../../../../../app/services/return-logs/void-return-logs.service.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../../app/services/return-versions/setup/check/submit-check.service.js')
@@ -64,10 +64,7 @@ describe('Return Versions Setup - Submit Check service', () => {
     }
 
     processLicenceReturnLogsStub = Sinon.stub(ProcessLicenceReturnLogsService, 'go').resolves()
-    voidNoReturnRequiredLicenceReturnLogsStub = Sinon.stub(
-      VoidNoReturnRequiredLicenceReturnLogsService,
-      'go'
-    ).resolves()
+    voidNoReturnRequiredLicenceReturnLogsStub = Sinon.stub(VoidReturnLogsService, 'go').resolves()
   })
 
   afterEach(() => {
