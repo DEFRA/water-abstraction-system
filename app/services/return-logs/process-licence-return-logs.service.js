@@ -45,9 +45,7 @@ const { determineEarliestDate } = require('../../lib/dates.lib.js')
  * @param {object} [trx=null] - Optional transaction object
  */
 async function go(licenceId, changeDate, returnVersionEndDate = null, trx = null) {
-  const returnRequirements = trx
-    ? await FetchLicenceReturnRequirementsService.go(licenceId, changeDate, trx)
-    : await FetchLicenceReturnRequirementsService.go(licenceId, changeDate)
+  const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceId, changeDate, trx)
 
   if (returnRequirements.length === 0) {
     return
@@ -69,7 +67,7 @@ function _endDate(returnVersion) {
 }
 
 async function _fetchReturnCycles(changeDate, returnVersionEndDate, trx) {
-  const query = (trx ? ReturnCycleModel.query(trx) : ReturnCycleModel.query())
+  const query = ReturnCycleModel.query(trx)
     .select(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
     .where('endDate', '>', changeDate)
 
@@ -103,19 +101,12 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
   // Because we've processed _all_ return requirements for the cycle, we know any return logs whose ID is not in
   // `generatedReturnLogIds` have been made redundant by whatever the 'change' was
   for (const returnRequirement of requirementsToProcess) {
-    const returnIds = trx
-      ? await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate, trx)
-      : await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
+    const returnIds = await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate, trx)
 
     generatedReturnIds.push(...returnIds)
   }
 
-  if (trx) {
-    await VoidLicenceReturnLogsService.go(generatedReturnIds, licenceRef, returnCycle.id, changeDate, trx)
-    return
-  }
-
-  await VoidLicenceReturnLogsService.go(generatedReturnIds, licenceRef, returnCycle.id, changeDate)
+  await VoidLicenceReturnLogsService.go(generatedReturnIds, licenceRef, returnCycle.id, changeDate, trx)
 }
 
 module.exports = {

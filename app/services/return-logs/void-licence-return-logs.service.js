@@ -79,9 +79,7 @@ const { timestampForPostgres } = require('../../lib/general.lib.js')
  * @param {object} [trx=null] - Optional transaction object
  */
 async function go(reissuedReturnIds, licenceRef, returnCycleId, changeDate, trx = null) {
-  const query = trx ? ReturnLogModel.query(trx) : ReturnLogModel.query()
-
-  await query
+  await ReturnLogModel.query(trx)
     .patch({ status: 'void', updatedAt: timestampForPostgres() })
     .where('returnCycleId', returnCycleId)
     .where('licenceRef', licenceRef)

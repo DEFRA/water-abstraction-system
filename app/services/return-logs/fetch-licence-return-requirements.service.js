@@ -23,10 +23,7 @@ async function go(licenceId, changeDate, trx = null) {
 }
 
 async function _fetch(licenceId, changeDate, trx) {
-  const returnRequirementQuery = trx ? ReturnRequirementModel.query(trx) : ReturnRequirementModel.query()
-  const returnVersionSubQuery = trx ? ReturnVersionModel.query(trx) : ReturnVersionModel.query()
-
-  return returnRequirementQuery
+  return ReturnRequirementModel.query(trx)
     .select([
       'abstractionPeriodEndDay',
       'abstractionPeriodEndMonth',
@@ -42,7 +39,7 @@ async function _fetch(licenceId, changeDate, trx) {
       'twoPartTariff'
     ])
     .whereExists(
-      returnVersionSubQuery
+      ReturnVersionModel.query(trx)
         .innerJoinRelated('licence')
         .where('licence.id', licenceId)
         .where('returnVersions.status', 'current')
