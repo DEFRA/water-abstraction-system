@@ -11,10 +11,11 @@ const { expect } = Code
 // Test helpers
 const LicenceVersionPurposeConditionHelper = require('../../../support/helpers/licence-version-purpose-condition.helper.js')
 const LicenceVersionPurposeHelper = require('../../../support/helpers/licence-version-purpose.helper.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things to stub
 const FetchFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const FullConditionService = require('../../../../app/services/licence-monitoring-station/setup/full-condition.service.js')
 
 // Thing under test
@@ -23,13 +24,18 @@ const SubmitFullConditionService = require('../../../../app/services/licence-mon
 describe('Licence Monitoring Station Setup - Submit Full Condition Service', () => {
   let payload
   let session
+  let sessionData
 
   const pageData = {
     pageData: 'PAGE_DATA'
   }
 
   beforeEach(async () => {
-    session = await SessionHelper.add()
+    sessionData = {}
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     const licenceVersionPurpose = await LicenceVersionPurposeHelper.add()
     const licenceVersionPurposeCondition = await LicenceVersionPurposeConditionHelper.add({
@@ -64,28 +70,23 @@ describe('Licence Monitoring Station Setup - Submit Full Condition Service', () 
     it('saves the submitted value', async () => {
       await SubmitFullConditionService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.conditionId).to.equal(payload.condition)
+      expect(session.conditionId).to.equal(payload.condition)
+      expect(session.$update.called).to.be.true()
     })
 
     it('saves the abstraction period', async () => {
       await SubmitFullConditionService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.abstractionPeriodEndDay).to.equal(31)
-      expect(refreshedSession.abstractionPeriodEndMonth).to.equal(3)
-      expect(refreshedSession.abstractionPeriodStartDay).to.equal(1)
-      expect(refreshedSession.abstractionPeriodStartMonth).to.equal(1)
+      expect(session.abstractionPeriodEndDay).to.equal(31)
+      expect(session.abstractionPeriodEndMonth).to.equal(3)
+      expect(session.abstractionPeriodStartDay).to.equal(1)
+      expect(session.abstractionPeriodStartMonth).to.equal(1)
     })
 
     it('saves the condition display text', async () => {
       await SubmitFullConditionService.go(session.id, payload)
 
-      const refreshedSession = await session.$query()
-
-      expect(refreshedSession.conditionDisplayText).to.equal(
+      expect(session.conditionDisplayText).to.equal(
         'LICENCE_VERSION_CONDITION_TYPE_DISPLAY_TITLE 1: NOTES (Additional information 1: PARAM_1) (Additional information 2: PARAM_2)'
       )
     })
