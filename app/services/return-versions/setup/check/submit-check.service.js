@@ -32,10 +32,14 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 async function go(sessionId, userId) {
   const session = await FetchSessionDal.go(sessionId)
 
-  await ReturnVersionModel.transaction(async (trx) => {
-    await _processReturnVersion(session, userId, trx)
-    await DeleteSessionDal.go(sessionId, trx)
-  })
+  try {
+    await ReturnVersionModel.transaction(async (trx) => {
+      await _processReturnVersion(session, userId, trx)
+      await DeleteSessionDal.go(sessionId, trx)
+    })
+  } catch (error) {
+    global.GlobalNotifier.omfg('Failed to set up new requirements', session, error)
+  }
 
   return session.licence.id
 }
