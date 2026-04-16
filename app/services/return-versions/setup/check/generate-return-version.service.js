@@ -16,17 +16,17 @@ const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
  * Creates the data needed to populate the `return_versions`, `return_requirements`, `return_requirement_points` and
  * `return_requirement_purposes` tables.
  *
- * @param {string} sessionData - The session data required to set up a new return version for a licence
+ * @param {string} session - The session data required to set up a new return version for a licence
  * @param {number} userId - The id of the logged in user
  * @param {object} trx - Transaction object
  *
  * @returns {Promise<object>} The new return version and requirement data for a licence
  */
-async function go(sessionData, userId, trx) {
-  const nextVersionNumber = await _nextVersionNumber(sessionData.licence.id, trx)
+async function go(session, userId, trx) {
+  const nextVersionNumber = await _nextVersionNumber(session.licence.id, trx)
 
-  const returnVersion = await _generateReturnVersion(nextVersionNumber, sessionData, userId, trx)
-  const returnRequirements = await _generateReturnRequirements(sessionData, trx)
+  const returnVersion = await _generateReturnVersion(nextVersionNumber, session, userId, trx)
+  const returnRequirements = await _generateReturnRequirements(session, trx)
 
   return {
     returnRequirements,
@@ -34,42 +34,42 @@ async function go(sessionData, userId, trx) {
   }
 }
 
-async function _generateReturnRequirements(sessionData, trx) {
+async function _generateReturnRequirements(session, trx) {
   // When no returns are required a return version is created without any return requirements
-  if (sessionData.journey === 'no-returns-required') {
+  if (session.journey === 'no-returns-required') {
     return []
   }
 
   const returnRequirements = await GenerateReturnVersionRequirementsService.go(
-    sessionData.licence.id,
-    sessionData.requirements,
+    session.licence.id,
+    session.requirements,
     trx
   )
 
   return returnRequirements
 }
 
-async function _generateReturnVersion(nextVersionNumber, sessionData, userId, trx) {
-  const startDate = new Date(sessionData.returnVersionStartDate)
+async function _generateReturnVersion(nextVersionNumber, session, userId, trx) {
+  const startDate = new Date(session.returnVersionStartDate)
   let endDate = null
   let quarterlyReturns = false
 
   if (nextVersionNumber > 1) {
-    endDate = await ProcessExistingReturnVersionsService.go(sessionData.licence.id, startDate, trx)
+    endDate = await ProcessExistingReturnVersionsService.go(session.licence.id, startDate, trx)
   }
 
-  if (isQuarterlyReturnSubmissions(sessionData.returnVersionStartDate)) {
-    quarterlyReturns = sessionData.quarterlyReturns
+  if (isQuarterlyReturnSubmissions(session.returnVersionStartDate)) {
+    quarterlyReturns = session.quarterlyReturns
   }
 
   return {
     createdBy: userId,
     endDate,
-    licenceId: sessionData.licence.id,
-    multipleUpload: sessionData.multipleUpload,
-    notes: sessionData?.note?.content,
+    licenceId: session.licence.id,
+    multipleUpload: session.multipleUpload,
+    notes: session?.note?.content,
     quarterlyReturns,
-    reason: sessionData.reason,
+    reason: session.reason,
     startDate,
     status: 'current',
     version: nextVersionNumber
