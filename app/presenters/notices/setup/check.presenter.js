@@ -6,8 +6,8 @@
  */
 
 const ContactPresenter = require('./contact.presenter.js')
-const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 const DatabaseConfig = require('../../../../config/database.config.js')
+const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 
 const NOTIFICATION_TYPES = {
   [NoticeType.ABSTRACTION_ALERTS]: 'Abstraction alerts',
