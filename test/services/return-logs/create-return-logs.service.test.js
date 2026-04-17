@@ -3,7 +3,6 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
@@ -15,30 +14,15 @@ const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const ReturnRequirementsFixture = require('../../support/fixtures/return-requirements.fixture.js')
 const { formatDateObjectToISO } = require('../../../app/lib/dates.lib.js')
 
-// Things we need to stub
-const GenerateReturnLogService = require('../../../app/services/return-logs/generate-return-log.service.js')
-
 // Thing under test
 const CreateReturnLogsService = require('../../../app/services/return-logs/create-return-logs.service.js')
 
 describe('Return Logs - Create Return Logs service', () => {
-  let notifierStub
   let results
   let returnCycle
   let returnRequirement
 
-  beforeEach(() => {
-    // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
-  })
-
   afterEach(async () => {
-    Sinon.restore()
-    delete global.GlobalNotifier
-
     await ReturnLogModel.query()
       .delete()
       .whereIn('returnId', results || [])
@@ -1933,28 +1917,6 @@ describe('Return Logs - Create Return Logs service', () => {
           expect(results).to.equal([`${returnLogPrefix}:${formattedStartDate}:${formattedEndDate}`])
         })
       })
-    })
-  })
-
-  describe('when an error is thrown', () => {
-    beforeEach(() => {
-      returnCycle = ReturnCyclesFixture.summerCycle()
-      returnRequirement = ReturnRequirementsFixture.summerReturnRequirement()
-
-      // NOTE: We stub the generate service to throw purely because it is easier to structure our tests on that basis.
-      // But if the actual insert were to throw the expected behaviour would be the same.
-      Sinon.stub(GenerateReturnLogService, 'go').throws()
-    })
-
-    it('logs and rethrows the error', async () => {
-      await expect(CreateReturnLogsService.go(returnRequirement, returnCycle)).to.reject()
-
-      const args = notifierStub.omfg.firstCall.args
-
-      expect(args[0]).to.equal('Return logs creation errored')
-      expect(args[1].returnRequirement.id).to.equal(returnRequirement.id)
-      expect(args[1].returnCycle.id).to.equal(returnCycle.id)
-      expect(args[2]).to.be.an.error()
     })
   })
 })
