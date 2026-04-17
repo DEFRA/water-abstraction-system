@@ -27,6 +27,7 @@ describe('Return Versions Setup - Submit Check service', () => {
   let generateReturnVersionStub
   let licenceData
   let licenceVersionData
+  let notifierStub
   let persistReturnVersionStub
   let processLicenceReturnLogsStub
   let returnVersionData
@@ -36,6 +37,12 @@ describe('Return Versions Setup - Submit Check service', () => {
   let voidNoReturnRequiredLicenceReturnLogsStub
 
   beforeEach(() => {
+    // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+    // test we recreate the condition by setting it directly with our own stub
+    notifierStub = { omfg: Sinon.stub() }
+    global.GlobalNotifier = notifierStub
+
     userId = generateRandomInteger(5000, 9999)
 
     returnVersionData = {
@@ -69,6 +76,7 @@ describe('Return Versions Setup - Submit Check service', () => {
 
   afterEach(() => {
     Sinon.restore()
+    delete global.GlobalNotifier
   })
 
   describe('when the "return-required" journey is used', () => {
@@ -245,6 +253,26 @@ describe('Return Versions Setup - Submit Check service', () => {
       expect(voidNoReturnRequiredLicenceReturnLogsStub.called).to.be.true()
 
       expect(result).to.equal(session.licence.id)
+    })
+  })
+
+  describe('when the service errors', () => {
+    beforeEach(() => {
+      sessionData = {}
+      session = SessionModelStub.build(Sinon, sessionData)
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+      Sinon.stub(GenerateReturnVersionService, 'go').rejects()
+    })
+
+    it('logs the error and rethrows it', async () => {
+      await expect(SubmitCheckService.go(session.id, userId)).to.reject()
+
+      const args = notifierStub.omfg.firstCall.args
+
+      expect(args[0]).to.equal('Failed to set up new requirements')
+      expect(args[1]).to.equal(session)
+      expect(args[2]).to.be.an.error()
     })
   })
 })
