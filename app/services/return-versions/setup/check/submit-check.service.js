@@ -35,11 +35,12 @@ async function go(sessionId, userId) {
   try {
     await ReturnVersionModel.transaction(async (trx) => {
       await _processReturnVersion(session, userId, trx)
-      await DeleteSessionDal.go(sessionId, trx)
     })
   } catch (error) {
     global.GlobalNotifier.omfg('Failed to set up new requirements', session, error)
   }
+
+  await DeleteSessionDal.go(sessionId)
 
   return session.licence.id
 }
