@@ -7,7 +7,7 @@
 
 const ContactPresenter = require('./contact.presenter.js')
 const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
-const { defaultPageSize } = require('../../../../config/database.config.js')
+const DatabaseConfig = require('../../../../config/database.config.js')
 
 const NOTIFICATION_TYPES = {
   [NoticeType.ABSTRACTION_ALERTS]: 'Abstraction alerts',
@@ -28,7 +28,8 @@ const NOTIFICATION_TYPES = {
 function go(recipients, page, session) {
   const { noticeType, referenceCode } = session
 
-  const formattedRecipients = _recipients(noticeType, page, recipients, session.id)
+  const sortedRecipients = _recipients(noticeType, recipients, session.id)
+  const formattedRecipients = _paginateRecipients(sortedRecipients, page)
   const canSendNotice = _canSendNotice(formattedRecipients)
 
   return {
@@ -38,8 +39,8 @@ function go(recipients, page, session) {
     pageTitleCaption: `Notice ${referenceCode}`,
     readyToSend: _readyToSend(recipients, noticeType, canSendNotice),
     recipients: formattedRecipients,
-    tableCaption: _tableCaption(defaultPageSize, recipients.length),
-    warning: _warning(formattedRecipients)
+    tableCaption: _tableCaption(formattedRecipients.length, recipients.length),
+    warning: _warning(sortedRecipients)
   }
 }
 
@@ -106,9 +107,9 @@ function _links(session) {
  * @private
  */
 function _paginateRecipients(recipients, page) {
-  const pageNumber = Number(page) * defaultPageSize
+  const pageNumber = Number(page) * DatabaseConfig.defaultPageSize
 
-  return recipients.slice(pageNumber - defaultPageSize, pageNumber)
+  return recipients.slice(pageNumber - DatabaseConfig.defaultPageSize, pageNumber)
 }
 
 function _previewLink(noticeType, recipient, sessionId, contact) {
@@ -145,19 +146,17 @@ function _readyToSend(formattedRecipients, noticeType, canSendNotice) {
  * Sorts, maps, and paginates the recipients list.
  *
  * This function first maps over the recipients to transform each recipient object into a new format, then sorts the
- * resulting array of transformed recipients alphabetically by their contact's name. After sorting, it uses pagination
- * to return only the relevant subset of recipients for the given page.
+ * resulting array of transformed recipients alphabetically by their contact's name.
  *
  * The map and sort are performed before pagination, as it is necessary to have the recipients in a defined order before
  * determining which recipients should appear on the page.
  *
  * @private
  */
-function _recipients(noticeType, page, recipients, sessionId) {
+function _recipients(noticeType, recipients, sessionId) {
   const formattedRecipients = _formatRecipients(noticeType, recipients, sessionId)
-  const sortedRecipients = _sortRecipients(formattedRecipients)
 
-  return _paginateRecipients(sortedRecipients, page)
+  return _sortRecipients(formattedRecipients)
 }
 
 function _tableCaption(numberDisplayed, totalNumber) {
