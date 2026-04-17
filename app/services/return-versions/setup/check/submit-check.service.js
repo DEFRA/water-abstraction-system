@@ -38,6 +38,8 @@ async function go(sessionId, userId) {
     })
   } catch (error) {
     global.GlobalNotifier.omfg('Failed to set up new requirements', session, error)
+
+    throw error
   }
 
   await DeleteSessionDal.go(sessionId)
