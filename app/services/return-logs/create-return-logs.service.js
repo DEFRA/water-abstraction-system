@@ -21,14 +21,9 @@ const { determineReturnsPeriods } = require('../../lib/return-periods.lib.js')
  * @returns {Promise<string[]>} an array of the generated return log ids
  */
 async function go(returnRequirement, returnCycle, licenceEndDate, trx = null) {
-  try {
-    const returnLogs = _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate)
+  const returnLogs = _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate)
 
-    return await _persistReturnLogs(returnLogs, trx)
-  } catch (error) {
-    global.GlobalNotifier.omfg('Return logs creation errored', { returnRequirement, returnCycle }, error)
-    throw error
-  }
+  return await _persistReturnLogs(returnLogs, trx)
 }
 
 function _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate = null) {
