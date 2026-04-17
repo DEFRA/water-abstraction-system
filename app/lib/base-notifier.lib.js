@@ -9,6 +9,9 @@ const { Notifier } = require('@airbrake/node')
 const Pino = require('pino')
 
 const AirbrakeConfig = require('../../config/airbrake.config.js')
+const CreateEmailRequest = require('../requests/notify/create-email.request.js')
+const NotifyConfig = require('../../config/notify.config.js')
+const { NOTIFY_TEMPLATES } = require('./notify-templates.lib.js')
 
 /**
  * Based class for combined logging and Airbrake (Errbit) notification managers
@@ -107,6 +110,29 @@ class BaseNotifierLib {
       .catch((err) => {
         this._logger.error(err, `${this.constructor.name} - Airbrake errored`)
       })
+  }
+
+  /**
+   * Send an email to the team about an error
+   *
+   * When most services fail the user is able to see and get in touch with the team to resolve the issue. For jobs
+   * ran in the evening or other background processes it might not be picked up immediatly that they have failed. This
+   * function is a way to notify the team immediately that something has failed so we can be proactive in fixing it.
+   *
+   * @param {string} message - A message that indicates which service has failed
+   * @param {string} error - Any error messages that can help identify the issue
+   */
+  redAlert(message, error = null) {
+    const now = new Date().toISOString()
+    const content = `At ${now}: ${message} failed`
+
+    const options = {
+      personalisation: {
+        content: error ? content + ` with: ${error}` : content
+      }
+    }
+
+    CreateEmailRequest.send(NOTIFY_TEMPLATES.system.statusAlert, NotifyConfig.alertEmailAddress, options)
   }
 
   /**

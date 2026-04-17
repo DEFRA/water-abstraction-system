@@ -84,6 +84,9 @@ const NOTIFY_TEMPLATES = Object.freeze({
       stop: 'c2635893-0dd7-4fff-a152-774707e2175e',
       stopWarning: '7ab10c86-2c23-4376-8c72-9419e7f982bb'
     }
+  },
+  system: {
+    statusAlert: 'c34d1b16-694b-4364-8e7e-83e9dbd34a62'
   }
 })
 
