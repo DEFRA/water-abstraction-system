@@ -28,8 +28,6 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
   let returnRequirement
 
   beforeEach(() => {
-    createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go').resolves()
-
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
@@ -44,6 +42,8 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
 
   describe('when the requested return cycle exists', () => {
     beforeEach(() => {
+      createReturnLogsStub = Sinon.stub(CreateReturnLogsService, 'go').resolves()
+
       Sinon.stub(CheckReturnCycleService, 'go').resolves(ReturnCyclesFixture.winterCycle())
     })
 
@@ -108,30 +108,54 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
   })
 
   describe('when the service errors', () => {
-    beforeEach(() => {
-      Sinon.stub(CheckReturnCycleService, 'go').rejects()
+    describe('because the check return cycle service errors', () => {
+      beforeEach(() => {
+        Sinon.stub(CheckReturnCycleService, 'go').rejects()
+      })
+
+      it('records the error by calling "omfg()"', async () => {
+        await ProcessReturnLogsService.go(cycle)
+
+        const args = notifierStub.omfg.firstCall.args
+
+        expect(args[0]).to.equal('Return logs job failed')
+        expect(args[1]).to.equal({ cycle })
+        expect(args[2]).to.be.an.error()
+      })
+
+      it('notifies the team by calling "redAlert()"', async () => {
+        await ProcessReturnLogsService.go(cycle)
+
+        const args = notifierStub.redAlert.firstCall.args
+
+        expect(args[0]).to.equal('Return logs job failed')
+      })
+
+      it('does not throw an error', async () => {
+        await expect(ProcessReturnLogsService.go()).not.to.reject()
+      })
     })
+    describe('because the create return logs service errors', () => {
+      beforeEach(() => {
+        returnRequirement = ReturnRequirementsFixture.winterReturnRequirement(true)
+        Sinon.stub(FetchReturnRequirementsService, 'go').resolves([returnRequirement])
 
-    it('records the error by calling "omfg()"', async () => {
-      await ProcessReturnLogsService.go(cycle)
+        Sinon.stub(CreateReturnLogsService, 'go').rejects()
+      })
 
-      const args = notifierStub.omfg.firstCall.args
+      it('records the error by calling "omfg()"', async () => {
+        await ProcessReturnLogsService.go(cycle)
 
-      expect(args[0]).to.equal('Return logs job failed')
-      expect(args[1]).to.equal({ cycle })
-      expect(args[2]).to.be.an.error()
-    })
+        const args = notifierStub.omfg.firstCall.args
 
-    it('notifies the team by calling "redAlert()"', async () => {
-      await ProcessReturnLogsService.go(cycle)
+        expect(args[0]).to.equal('Return logs creation errored')
+        expect(args[1].returnRequirement).to.equal(returnRequirement)
+        expect(args[2]).to.be.an.error()
+      })
 
-      const args = notifierStub.redAlert.firstCall.args
-
-      expect(args[0]).to.equal('Return logs job failed')
-    })
-
-    it('does not throw an error', async () => {
-      await expect(ProcessReturnLogsService.go()).not.to.reject()
+      it('does not throw an error', async () => {
+        await expect(ProcessReturnLogsService.go()).not.to.reject()
+      })
     })
   })
 })
