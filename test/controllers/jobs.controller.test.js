@@ -16,7 +16,7 @@ const ProcessCleanService = require('../../app/services/jobs/clean/process-clean
 const ProcessCustomerFilesService = require('../../app/services/jobs/customer-files/process-customer-files.service.js')
 const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.service.js')
 const ProcessNotificationStatusService = require('../../app/services/jobs/notification-status/process-notification-status.service.js')
-const ProcessRenewalRemindersService = require('../../app/services/jobs/renewal-reminders/process-renewal-reminders.service.js')
+const ProcessRenewalInvitationsService = require('../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js')
 const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/process-return-logs.service.js')
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
 
@@ -165,15 +165,15 @@ describe('Jobs controller', () => {
     })
   })
 
-  describe('/jobs/renewal-reminders', () => {
+  describe('/jobs/renewal-invitations', () => {
     describe('POST', () => {
       beforeEach(() => {
-        options = { method: 'POST', url: '/jobs/renewal-reminders' }
+        options = { method: 'POST', url: '/jobs/renewal-invitations' }
       })
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(ProcessRenewalRemindersService, 'go').resolves()
+          Sinon.stub(ProcessRenewalInvitationsService, 'go').resolves()
         })
 
         it('returns a 204 response', async () => {
@@ -182,10 +182,10 @@ describe('Jobs controller', () => {
           expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
         })
 
-        it('calls the "ProcessRenewalRemindersService"', async () => {
+        it('calls the "ProcessRenewalInvitationsService"', async () => {
           await server.inject(options)
 
-          expect(ProcessRenewalRemindersService.go.called).to.be.true()
+          expect(ProcessRenewalInvitationsService.go.called).to.be.true()
         })
       })
     })

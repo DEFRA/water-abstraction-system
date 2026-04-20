@@ -12,7 +12,7 @@ const ProcessCleanService = require('../services/jobs/clean/process-clean.servic
 const ProcessCustomerFilesService = require('../services/jobs/customer-files/process-customer-files.service.js')
 const ProcessLicenceUpdatesService = require('../services/jobs/licence-updates/process-licence-updates.service.js')
 const ProcessNotificationStatusService = require('../services/jobs/notification-status/process-notification-status.service.js')
-const ProcessRenewalRemindersService = require('../services/jobs/renewal-reminders/process-renewal-reminders.service.js')
+const ProcessRenewalInvitationsService = require('../services/jobs/renewal-invitations/process-renewal-invitations.service.js')
 const ProcessReturnLogsService = require('../services/jobs/return-logs/process-return-logs.service.js')
 const ProcessTimeLimitedLicencesService = require('../services/jobs/time-limited/process-time-limited-licences.service.js')
 
@@ -57,8 +57,8 @@ async function notificationStatus(_request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function renewalReminders(_request, h) {
-  ProcessRenewalRemindersService.go()
+async function renewalInvitations(_request, h) {
+  ProcessRenewalInvitationsService.go()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
@@ -87,7 +87,7 @@ module.exports = {
   exportDb,
   licenceUpdates,
   notificationStatus,
-  renewalReminders,
+  renewalInvitations,
   returnLogs,
   timeLimited
 }

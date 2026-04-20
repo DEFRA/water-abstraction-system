@@ -9,9 +9,9 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const ProcessRenewalRemindersService = require('../../../../app/services/jobs/renewal-reminders/process-renewal-reminders.service.js')
+const ProcessRenewalInvitationsService = require('../../../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js')
 
-describe('Jobs - Licence Updates - Process Renewal Reminders service', () => {
+describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () => {
   let notifierStub
 
   beforeEach(() => {
@@ -28,11 +28,11 @@ describe('Jobs - Licence Updates - Process Renewal Reminders service', () => {
   })
 
   it('logs the time taken in milliseconds and seconds', async () => {
-    await ProcessRenewalRemindersService.go()
+    await ProcessRenewalInvitationsService.go()
 
     const logDataArg = notifierStub.omg.firstCall.args[1]
 
-    expect(notifierStub.omg.calledWith('Renewal reminders status job complete')).to.be.true()
+    expect(notifierStub.omg.calledWith('Renewal invitations status job complete')).to.be.true()
     expect(logDataArg.timeTakenMs).to.exist()
     expect(logDataArg.timeTakenSs).to.exist()
   })

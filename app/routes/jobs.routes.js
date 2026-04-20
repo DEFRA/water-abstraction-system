@@ -89,9 +89,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/jobs/renewal-reminders',
+    path: '/jobs/renewal-invitations',
     options: {
-      handler: JobsController.renewalReminders,
+      handler: JobsController.renewalInvitations,
       app: {
         plainOutput: true
       },
