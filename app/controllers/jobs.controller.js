@@ -57,7 +57,7 @@ async function notificationStatus(_request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function renewalReminders(request, h) {
+async function renewalReminders(_request, h) {
   ProcessRenewalRemindersService.go()
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
