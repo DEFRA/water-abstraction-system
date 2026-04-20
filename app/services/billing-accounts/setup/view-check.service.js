@@ -7,6 +7,7 @@
  */
 
 const AddressModel = require('../../../models/address.model.js')
+const ChargeVersionModel = require('../../../models/charge-version.model.js')
 const CheckPresenter = require('../../../presenters/billing-accounts/setup/check.presenter.js')
 const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
 const FetchCompanyService = require('./fetch-company.service.js')
@@ -22,18 +23,28 @@ const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
  */
 async function go(sessionId) {
   const session = await FetchSessionDal.go(sessionId)
-  const existingAddress = await _fetchExistingAddress(session)
   const companyContacts = await _fetchCompanyContacts(session)
   const companysHouseResult = await FetchCompanyService.go(session.companiesHouseNumber)
+  const existingAddress = await _fetchExistingAddress(session)
+  const impactedLicences = await _fetchImpactedLicences(session)
 
   await markCheckPageVisited(session)
   await _updateAddressJourneyBackLink(session)
 
-  const pageData = CheckPresenter.go(session, companyContacts, existingAddress, companysHouseResult)
+  const pageData = CheckPresenter.go(session, companyContacts, existingAddress, companysHouseResult, impactedLicences)
 
   return {
     ...pageData
   }
+}
+
+async function _fetchCompanyContacts(session) {
+  const newAccount = !!session.existingAccount && session.existingAccount !== 'new'
+  const companyId = newAccount ? session.existingAccount : session.billingAccount.company.id
+
+  const companyContacts = await FetchCompanyContactsService.go(companyId)
+
+  return companyContacts
 }
 
 async function _fetchExistingAddress(session) {
@@ -48,13 +59,11 @@ async function _fetchExistingAddress(session) {
     .findById(session.addressSelected)
 }
 
-async function _fetchCompanyContacts(session) {
-  const newAccount = !!session.existingAccount && session.existingAccount !== 'new'
-  const companyId = newAccount ? session.existingAccount : session.billingAccount.company.id
-
-  const companyContacts = await FetchCompanyContactsService.go(companyId)
-
-  return companyContacts
+async function _fetchImpactedLicences(session) {
+  return ChargeVersionModel.query()
+    .select(['licenceRef'])
+    .where('billingAccountId', session.billingAccount.id)
+    .where('status', 'current')
 }
 
 async function _updateAddressJourneyBackLink(session) {

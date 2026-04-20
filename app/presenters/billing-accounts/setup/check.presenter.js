@@ -12,10 +12,11 @@
  * @param {object} companyContacts - The company and its contacts
  * @param {object} existingAddress - The existing address of company
  * @param {object} companysHouseResult - The companys house details
+ * @param {[string]} impactedLicences - The list of impacted licence references
  *
  * @returns {object} The data formatted for the view template
  */
-function go(session, companyContacts, existingAddress, companysHouseResult) {
+function go(session, companyContacts, existingAddress, companysHouseResult, impactedLicences = []) {
   const { billingAccount } = session
 
   return {
@@ -29,6 +30,7 @@ function go(session, companyContacts, existingAddress, companysHouseResult) {
     contactSelected: _contactSelected(session, companyContacts),
     existingAccount: _existingAccount(session, companyContacts),
     fao: session.fao,
+    impactedLicences,
     links: _links(session),
     pageTitle: 'Check billing account details',
     pageTitleCaption: `Billing account ${billingAccount.accountNumber}`,
