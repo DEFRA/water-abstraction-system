@@ -20,19 +20,13 @@ const ProcessTimeLimitedLicencesService = require('../../../../app/services/jobs
 
 describe('Process Time Limited Licences service', () => {
   let fetchResults
-  let notifierStub
 
   beforeEach(async () => {
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when there are licences with time limited charge elements', () => {
@@ -82,9 +76,9 @@ describe('Process Time Limited Licences service', () => {
     it('logs the time taken in milliseconds and seconds', async () => {
       await ProcessTimeLimitedLicencesService.go()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Time limited job complete')).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Time limited job complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.count).to.exist()
@@ -112,9 +106,9 @@ describe('Process Time Limited Licences service', () => {
     it('logs the time taken in milliseconds and seconds', async () => {
       await ProcessTimeLimitedLicencesService.go()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Time limited job complete')).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Time limited job complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.count).to.exist()
@@ -129,7 +123,7 @@ describe('Process Time Limited Licences service', () => {
     it('handles the error', async () => {
       await ProcessTimeLimitedLicencesService.go()
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = global.GlobalNotifier.firstCall.args
 
       expect(args[0]).to.equal('Time limited job failed')
       expect(args[1]).to.be.null()

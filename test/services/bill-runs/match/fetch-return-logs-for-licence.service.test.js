@@ -19,20 +19,17 @@ const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-
 describe('Fetch Return Logs for Licence service', () => {
   const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
 
-  let notifierStub
   let returnLogRecord
 
   beforeEach(() => {
     // This depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when there are valid return logs that should be considered', () => {
@@ -249,9 +246,9 @@ describe('Fetch Return Logs for Licence service', () => {
 
       await expect(FetchReturnLogsForLicenceService.go(licenceRef, billingPeriod)).to.reject()
 
-      const logDataArg = notifierStub.omfg.args[0][1]
+      const logDataArg = global.GlobalNotifier.args[0][1]
 
-      expect(notifierStub.omfg.calledWith('Bill run process fetch return logs for licence failed')).to.be.true()
+      expect(global.GlobalNotifier.calledWith('Bill run process fetch return logs for licence failed')).to.be.true()
       expect(logDataArg).to.equal({ licenceRef, billingPeriod })
     })
   })

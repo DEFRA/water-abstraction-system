@@ -22,17 +22,15 @@ const MatchAndAllocateService = require('../../../../app/services/bill-runs/matc
 
 describe('Bill Runs - Match - Match And Allocate service', () => {
   let determineLicenceIssuesServiceStub
-  let notifierStub
+
   let licences
 
   beforeEach(() => {
-    notifierStub = { omg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(async () => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('with a given billRun and billingPeriods', () => {

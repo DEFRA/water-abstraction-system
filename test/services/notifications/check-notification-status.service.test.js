@@ -26,7 +26,7 @@ describe('Notifications - Check Notification Status service', () => {
   let notice
   let notification
   let notificationPatchStub
-  let notifierStub
+
   let returnLogPatchStub
   let returnLogWhereInStub
 
@@ -45,13 +45,11 @@ describe('Notifications - Check Notification Status service', () => {
 
     returnLogPatchStub = Sinon.stub().returnsThis()
 
-    notifierStub = { omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when the notification is a returns invitation', () => {
@@ -980,9 +978,9 @@ describe('Notifications - Check Notification Status service', () => {
     it('logs the failure', async () => {
       await CheckNotificationStatusService.go(notification)
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Check notification status failed')).to.be.true()
+      expect(global.GlobalNotifier.calledWith('Check notification status failed')).to.be.true()
       expect(errorLogArgs[1]).to.equal({
         notifyId: notification.notifyId,
         response: {
@@ -1031,9 +1029,9 @@ describe('Notifications - Check Notification Status service', () => {
     it('makes no changes and logs the failure', async () => {
       await CheckNotificationStatusService.go(notification)
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Check notification status failed')).to.be.true()
+      expect(global.GlobalNotifier.calledWith('Check notification status failed')).to.be.true()
       expect(errorLogArgs[1]).to.equal(notification)
       expect(errorLogArgs[2]).to.equal(error)
     })

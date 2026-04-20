@@ -57,17 +57,14 @@ describe('Error pages service', () => {
     statusCode: HTTP_STATUS_OK
   }
 
-  let notifierStub
   let request
 
   beforeEach(() => {
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when the response is a boom 500 error', () => {
@@ -82,7 +79,7 @@ describe('Error pages service', () => {
     it('logs an error', () => {
       ErrorPagesService.go(request)
 
-      expect(notifierStub.omfg.calledWith(boom500Response.message)).to.be.true()
+      expect(global.GlobalNotifier.calledWith(boom500Response.message)).to.be.true()
     })
 
     describe('and the route is configured for plain output (do not redirect to error page)', () => {
@@ -136,7 +133,7 @@ describe('Error pages service', () => {
     it('logs a message', () => {
       ErrorPagesService.go(request)
 
-      expect(notifierStub.omg.calledWith('Page not found', { path })).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Page not found', { path })).to.be.true()
     })
 
     describe('and the route is configured to return plain output (do not redirect to error page)', () => {
@@ -172,7 +169,7 @@ describe('Error pages service', () => {
     it('logs a message', () => {
       ErrorPagesService.go(request)
 
-      expect(notifierStub.omg.calledWith('Not authorised', { path })).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Not authorised', { path })).to.be.true()
     })
 
     describe('and the route is configured to return plain output (do not redirect to error page)', () => {
@@ -220,7 +217,7 @@ describe('Error pages service', () => {
     it('logs a message', () => {
       ErrorPagesService.go(request)
 
-      expect(notifierStub.omg.calledWith('Session not found', { path })).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Session not found', { path })).to.be.true()
     })
 
     describe('and the route is configured to return plain output (do not redirect to error page)', () => {
@@ -274,8 +271,8 @@ describe('Error pages service', () => {
     it('does not log anything', () => {
       ErrorPagesService.go(request)
 
-      expect(notifierStub.omg.called).to.be.false()
-      expect(notifierStub.omfg.called).to.be.false()
+      expect(global.GlobalNotifier.omg.called).to.be.false()
+      expect(global.GlobalNotifier.called).to.be.false()
     })
 
     describe('and the route is configured for plain output (do not redirect to error page)', () => {

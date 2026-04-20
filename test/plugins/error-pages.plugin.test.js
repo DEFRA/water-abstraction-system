@@ -25,7 +25,7 @@ const { init } = require('../../app/server.js')
 
 describe('Error Pages plugin', () => {
   let handler
-  let notifierStub
+
   let path
   let server
 
@@ -33,17 +33,14 @@ describe('Error Pages plugin', () => {
     // Create server before running the tests
     server = await init()
 
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  after(() => {
-    delete global.GlobalNotifier
-  })
+  after(() => {})
 
   describe('When the response is a Boom error', () => {
     describe('because the request was not found', () => {

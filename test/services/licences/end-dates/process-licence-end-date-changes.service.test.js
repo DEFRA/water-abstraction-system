@@ -19,7 +19,7 @@ const ProcessLicenceReturnLogsService = require('../../../../app/services/return
 // Thing under test
 const ProcessLicenceEndDateChangesService = require('../../../../app/services/licences/end-dates/process-licence-end-date-changes.service.js')
 
-describe.only('Licences - End Dates - Process Licence End Date Changes service', () => {
+describe('Licences - End Dates - Process Licence End Date Changes service', () => {
   let licenceEndDateChange
 
   let processBillingFlagsStub

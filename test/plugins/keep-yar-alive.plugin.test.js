@@ -16,7 +16,6 @@ const Hapi = require('@hapi/hapi')
 const KeepYarAlivePlugin = require('../../app/plugins/keep-yar-alive.plugin.js')
 
 describe('Keep Yar Alive plugin', () => {
-  let notifierStub
   let server
   let yarStub
 
@@ -48,13 +47,11 @@ describe('Keep Yar Alive plugin', () => {
       }
     })
 
-    notifierStub = { omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   it('registers successfully', () => {

@@ -106,23 +106,19 @@ describe('Fetch Bills To Be Reissued service', () => {
   })
 
   describe('when fetching from the db fails', () => {
-    let notifierStub
-
     beforeEach(() => {
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
+      global.GlobalNotifier.resetNotifier()
     })
 
     afterEach(() => {
       Sinon.restore()
-      delete global.GlobalNotifier
     })
 
     it('logs an error', async () => {
       // Force an error by calling the service with an invalid uuid
       await FetchBillsToBeReissuedService.go('NOT_A_UUID')
 
-      expect(notifierStub.omfg.calledWith('Could not fetch reissue bills')).to.be.true()
+      expect(global.GlobalNotifier.calledWith('Could not fetch reissue bills')).to.be.true()
     })
 
     it('returns an empty array', async () => {

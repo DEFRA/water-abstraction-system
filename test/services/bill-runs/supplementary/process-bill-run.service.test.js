@@ -34,7 +34,6 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
   let chargingModuleGenerateBillRunRequestStub
   let handleErroredBillRunStub
   let legacyRefreshBillRunRequestStub
-  let notifierStub
 
   beforeEach(async () => {
     billRunPatchStub = Sinon.stub().resolves()
@@ -48,16 +47,11 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
     chargingModuleGenerateBillRunRequestStub = Sinon.stub(ChargingModuleGenerateBillRunRequest, 'send')
     legacyRefreshBillRunRequestStub = Sinon.stub(LegacyRefreshBillRunRequest, 'send')
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when the service is called', () => {
@@ -82,7 +76,7 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
       it('logs the time taken', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        const args = notifierStub.omg.firstCall.args
+        const args = global.GlobalNotifier.omg.firstCall.args
 
         expect(args[0]).to.equal('Process bill run complete')
         expect(args[1].timeTakenMs).to.exist()
@@ -118,7 +112,7 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
       it('logs the time taken', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        const args = notifierStub.omg.firstCall.args
+        const args = global.GlobalNotifier.omg.firstCall.args
 
         expect(args[0]).to.equal('Process bill run complete')
         expect(args[1].timeTakenMs).to.exist()
@@ -148,7 +142,7 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
       it('logs the error', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = global.GlobalNotifier.firstCall.args
 
         expect(args[0]).to.equal('Bill run process errored')
         expect(args[1].billRun.id).to.equal(billRun.id)
@@ -179,7 +173,7 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
         it('logs the error', async () => {
           await ProcessBillRunService.go(billRun, billingPeriods)
 
-          const args = notifierStub.omfg.firstCall.args
+          const args = global.GlobalNotifier.firstCall.args
 
           expect(args[0]).to.equal('Bill run process errored')
           expect(args[1].billRun.id).to.equal(billRun.id)
@@ -211,7 +205,7 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
       it('logs the error', async () => {
         await ProcessBillRunService.go(billRun, billingPeriods)
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = global.GlobalNotifier.firstCall.args
 
         expect(args[0]).to.equal('Bill run process errored')
         expect(args[1].billRun.id).to.equal(billRun.id)

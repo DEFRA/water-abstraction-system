@@ -74,21 +74,17 @@ describe('Schema export service', () => {
   })
 
   describe('when an error is thrown', () => {
-    let notifierStub
-
     beforeEach(() => {
       FetchTableNamesServiceStub = Sinon.stub(FetchTableNamesService, 'go')
       SendToS3BucketServiceStub = Sinon.stub(SendToS3BucketService, 'go')
       CompressSchemaFolderServiceStub = Sinon.stub(CompressSchemaFolderService, 'go')
       DeleteFilesServiceStub = Sinon.stub(DeleteFilesService, 'go').resolves()
 
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
+      global.GlobalNotifier.resetNotifier()
     })
 
     afterEach(() => {
       Sinon.restore()
-      delete global.GlobalNotifier
     })
 
     it('catches the error', async () => {
@@ -96,7 +92,7 @@ describe('Schema export service', () => {
 
       await SchemaExportService.go('water')
 
-      expect(notifierStub.omfg.calledWith('Error: Failed to export schema water')).to.be.true()
+      expect(global.GlobalNotifier.calledWith('Error: Failed to export schema water')).to.be.true()
       expect(SendToS3BucketServiceStub.called).to.be.false()
       expect(CompressSchemaFolderServiceStub.called).to.be.false()
     })

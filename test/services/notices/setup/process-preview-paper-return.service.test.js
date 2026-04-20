@@ -26,7 +26,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
   let contactHashId
   let dueReturnLog
   let licenceRef
-  let notifierStub
+
   let recipient
   let returnLogId
   let session
@@ -68,13 +68,11 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
       }
     ])
 
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when called', () => {

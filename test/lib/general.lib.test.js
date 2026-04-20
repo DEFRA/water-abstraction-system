@@ -27,7 +27,6 @@ describe('GeneralLib', () => {
   })
 
   describe('#calculateAndLogTimeTaken', () => {
-    let notifierStub
     let startTime
 
     beforeEach(() => {
@@ -37,21 +36,18 @@ describe('GeneralLib', () => {
       // app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered. As we're not
       // creating an instance of Hapi server in this test we recreate the condition by setting it directly with our own
       // stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-      global.GlobalNotifier = notifierStub
+      global.GlobalNotifier.resetNotifier()
     })
 
-    afterEach(() => {
-      delete global.GlobalNotifier
-    })
+    afterEach(() => {})
 
     describe('when no additional data is provided', () => {
       it('logs the message and time taken in milliseconds and seconds', () => {
         GeneralLib.calculateAndLogTimeTaken(startTime, 'I am the test with no data')
 
-        const logDataArg = notifierStub.omg.args[0][1]
+        const logDataArg = global.GlobalNotifier.omg.args[0][1]
 
-        expect(notifierStub.omg.calledWith('I am the test with no data')).to.be.true()
+        expect(global.GlobalNotifier.omg.calledWith('I am the test with no data')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
         expect(logDataArg.name).not.to.exist()
@@ -62,9 +58,9 @@ describe('GeneralLib', () => {
       it('logs the message and time taken in milliseconds and seconds as well as the additional data', () => {
         GeneralLib.calculateAndLogTimeTaken(startTime, 'I am the test with data', { name: 'Foo Bar' })
 
-        const logDataArg = notifierStub.omg.args[0][1]
+        const logDataArg = global.GlobalNotifier.omg.args[0][1]
 
-        expect(notifierStub.omg.calledWith('I am the test with data')).to.be.true()
+        expect(global.GlobalNotifier.omg.calledWith('I am the test with data')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.name).to.exist()
       })

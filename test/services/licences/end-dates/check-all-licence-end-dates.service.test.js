@@ -21,7 +21,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
   const batchSize = 10
 
   let licences
-  let notifierStub
+
   let processLicenceStub
 
   beforeEach(() => {
@@ -33,16 +33,11 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
 
     Sinon.stub(FetchLicencesService, 'go').resolves(licences)
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when processing the licences', () => {
@@ -73,9 +68,9 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
     it('logs the time taken in milliseconds and seconds', async () => {
       await CheckAllLicenceEndDatesService.go()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Check all licence end dates complete')).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Check all licence end dates complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.count).to.exist()
@@ -104,7 +99,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
     it('takes less time to complete the job than doing them one at a time', { timeout: 4000 }, async () => {
       await CheckAllLicenceEndDatesService.go()
 
-      const args = notifierStub.omg.firstCall.args
+      const args = global.GlobalNotifier.omg.firstCall.args
 
       expect(args[1].timeTakenSs).to.be.lessThan(3n)
     })
@@ -118,7 +113,7 @@ describe('Licences - End Dates - Check All Licence End Dates service', () => {
     it('handles the error', async () => {
       await CheckAllLicenceEndDatesService.go()
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = global.GlobalNotifier.firstCall.args
 
       expect(args[0]).to.equal('Check all licence end dates failed')
       expect(args[1]).to.be.null()

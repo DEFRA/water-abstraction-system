@@ -34,7 +34,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
 
   let billRunPatchStub
   let processBillingPeriodStub
-  let notifierStub
+
   let unflagUnbilledStub
 
   beforeEach(async () => {
@@ -51,13 +51,11 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when called', () => {
@@ -146,7 +144,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
       it('logs the error', async () => {
         await GenerateBillRunService.go(billRun)
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = global.GlobalNotifier.firstCall.args
 
         expect(args[0]).to.equal('Generate supplementary two-part tariff bill run failed')
         expect(args[1].billRun.id).to.equal(billRun.id)
@@ -177,7 +175,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
         it('logs the error', async () => {
           await GenerateBillRunService.go(billRun)
 
-          const args = notifierStub.omfg.firstCall.args
+          const args = global.GlobalNotifier.firstCall.args
 
           expect(args[0]).to.equal('Generate supplementary two-part tariff bill run failed')
           expect(args[1].billRun.id).to.equal(billRun.id)
@@ -209,7 +207,7 @@ describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
       it('logs the error', async () => {
         await GenerateBillRunService.go(billRun)
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = global.GlobalNotifier.firstCall.args
 
         expect(args[0]).to.equal('Generate supplementary two-part tariff bill run failed')
         expect(args[1].billRun.id).to.equal(billRun.id)

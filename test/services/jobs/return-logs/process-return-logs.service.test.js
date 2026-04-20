@@ -24,7 +24,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
   const cycle = 'all-year'
 
   let createReturnLogsStub
-  let notifierStub
+
   let returnRequirement
 
   beforeEach(() => {
@@ -33,13 +33,11 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when the requested return cycle exists', () => {
@@ -56,10 +54,10 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       it('logs the time taken in milliseconds and seconds', async () => {
         await ProcessReturnLogsService.go(cycle)
 
-        const logDataArg = notifierStub.omg.firstCall.args[1]
+        const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
         expect(createReturnLogsStub.called).to.be.true()
-        expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
+        expect(global.GlobalNotifier.omg.calledWith('Return logs job complete')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
         expect(logDataArg.count).to.equal(1)
@@ -77,10 +75,10 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       it('logs the time taken in milliseconds and seconds', async () => {
         await ProcessReturnLogsService.go(cycle)
 
-        const logDataArg = notifierStub.omg.firstCall.args[1]
+        const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
         expect(createReturnLogsStub.called).to.be.true()
-        expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
+        expect(global.GlobalNotifier.omg.calledWith('Return logs job complete')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
         expect(logDataArg.count).to.equal(1)
@@ -96,9 +94,9 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
       it('still logs the time taken in milliseconds and seconds', async () => {
         await ProcessReturnLogsService.go(cycle)
 
-        const logDataArg = notifierStub.omg.firstCall.args[1]
+        const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-        expect(notifierStub.omg.calledWith('Return logs job complete')).to.be.true()
+        expect(global.GlobalNotifier.omg.calledWith('Return logs job complete')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
         expect(logDataArg.count).to.equal(0)
@@ -115,7 +113,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
     it('handles the error', async () => {
       await ProcessReturnLogsService.go(cycle)
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = global.GlobalNotifier.firstCall.args
 
       expect(args[0]).to.equal('Return logs job failed')
       expect(args[1]).to.equal({ cycle })

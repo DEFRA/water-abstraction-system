@@ -20,19 +20,13 @@ const ProcessLicenceUpdatesService = require('../../../../app/services/jobs/lice
 
 describe('Jobs - Licence Updates - Process Licence Updates service', () => {
   let fetchResults
-  let notifierStub
 
   beforeEach(async () => {
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when there are licence updates', () => {
@@ -76,9 +70,9 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     it('logs the time taken in milliseconds and seconds', async () => {
       await ProcessLicenceUpdatesService.go()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Licence updates job complete')).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Licence updates job complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.count).to.exist()
@@ -105,9 +99,9 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     it('logs the time taken in milliseconds and seconds', async () => {
       await ProcessLicenceUpdatesService.go()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Licence updates job complete')).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Licence updates job complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.count).to.exist()
@@ -122,7 +116,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     it('handles the error', async () => {
       await ProcessLicenceUpdatesService.go()
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = global.GlobalNotifier.firstCall.args
 
       expect(args[0]).to.equal('Licence updates job failed')
       expect(args[1]).to.be.null()

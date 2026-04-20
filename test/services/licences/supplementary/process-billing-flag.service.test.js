@@ -22,22 +22,16 @@ const PersistSupplementaryBillingFlagsService = require('../../../../app/service
 const ProcessBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
 
 describe('Licences - Supplementary - Process Billing Flag service', () => {
-  let notifierStub
   let payload
 
   beforeEach(() => {
     Sinon.stub(PersistSupplementaryBillingFlagsService, 'go').resolves()
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when given a valid payload', () => {
@@ -71,9 +65,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.licenceId).to.exist()
@@ -102,9 +96,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.licenceId).to.exist()
@@ -141,9 +135,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.licenceId).to.exist()
@@ -172,9 +166,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.licenceId).to.exist()
@@ -211,9 +205,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.licenceId).to.exist()
@@ -242,9 +236,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.licenceId).to.exist()
@@ -287,9 +281,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.licenceId).to.exist()
@@ -318,9 +312,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.licenceId).to.exist()
@@ -356,8 +350,8 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
-          const logDataArg = notifierStub.omg.firstCall.args[1]
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
+          expect(global.GlobalNotifier.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.licenceId).to.exist()
@@ -385,8 +379,8 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
 
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
-          const logDataArg = notifierStub.omg.firstCall.args[1]
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
+          expect(global.GlobalNotifier.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.licenceId).to.exist()
@@ -423,9 +417,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.licenceId).to.exist()
@@ -454,9 +448,9 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
         it('logs the time taken in milliseconds and seconds', async () => {
           await ProcessBillingFlagService.go(payload)
 
-          const logDataArg = notifierStub.omg.firstCall.args[1]
+          const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-          expect(notifierStub.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('Supplementary Billing Flag complete')).to.be.true()
           expect(logDataArg.timeTakenMs).to.exist()
           expect(logDataArg.timeTakenSs).to.exist()
           expect(logDataArg.licenceId).to.exist()
@@ -474,7 +468,7 @@ describe('Licences - Supplementary - Process Billing Flag service', () => {
       it('throws an error', async () => {
         await ProcessBillingFlagService.go(payload)
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = global.GlobalNotifier.firstCall.args
 
         expect(args[0]).to.equal('Supplementary Billing Flag failed')
         expect(args[1]).to.equal(payload)

@@ -23,7 +23,7 @@ const SendNoticeService = require('../../../../../app/services/notices/setup/sen
 describe('Notices - Setup - Send - Send Notice service', () => {
   let notice
   let notifications
-  let notifierStub
+
   let sendAlternateNoticeStub
   let sendMainNoticeStub
   let updateEventServiceStub
@@ -32,11 +32,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
     sendMainNoticeStub = Sinon.stub(SendMainNoticeService, 'go').resolves()
     updateEventServiceStub = Sinon.stub(UpdateNoticeService, 'go').resolves()
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
@@ -81,7 +77,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       it('logs the time taken', async () => {
         await SendNoticeService.go(notice, notifications)
 
-        const args = notifierStub.omg.firstCall.args
+        const args = global.GlobalNotifier.omg.firstCall.args
 
         expect(args[0]).to.equal('Send notice complete')
         expect(args[1].timeTakenMs).to.exist()
@@ -120,7 +116,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       it('logs the time taken', async () => {
         await SendNoticeService.go(notice, notifications)
 
-        const args = notifierStub.omg.firstCall.args
+        const args = global.GlobalNotifier.omg.firstCall.args
 
         expect(args[0]).to.equal('Send notice complete')
         expect(args[1].timeTakenMs).to.exist()
@@ -141,7 +137,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
     it('logs the error', async () => {
       await SendNoticeService.go(notice, notifications)
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = global.GlobalNotifier.firstCall.args
 
       expect(args[0]).to.equal('Send notice failed')
       expect(args[1].notice.id).to.equal(notice.id)

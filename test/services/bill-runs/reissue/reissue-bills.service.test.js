@@ -27,20 +27,14 @@ const ReissueBillsService = require('../../../../app/services/bill-runs/reissue/
 describe('Reissue Bills service', () => {
   const reissueBillRun = { regionId: generateUUID() }
 
-  let notifierStub
   let reissueBillServiceStub
 
   beforeEach(async () => {
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when the service is called', () => {

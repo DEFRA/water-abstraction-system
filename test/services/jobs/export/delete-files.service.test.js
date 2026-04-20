@@ -19,13 +19,11 @@ const DeleteFilesService = require('../../../../app/services/jobs/export/delete-
 describe('Delete Files service', () => {
   let filenameWithPath
   let folderNameWithPath
-  let notifierStub
 
   beforeEach(() => {
     folderNameWithPath = 'testFolder'
     filenameWithPath = path.join(folderNameWithPath, 'testFile')
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
 
     mockFs({
       testFolder: {
@@ -37,7 +35,6 @@ describe('Delete Files service', () => {
   afterEach(() => {
     mockFs.restore()
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('When a valid folder is specified', () => {
@@ -90,7 +87,7 @@ describe('Delete Files service', () => {
 
       await DeleteFilesService.go(noFile)
 
-      expect(notifierStub.omfg.calledWith('Delete file service errored')).to.be.true()
+      expect(global.GlobalNotifier.calledWith('Delete file service errored')).to.be.true()
     })
   })
 })

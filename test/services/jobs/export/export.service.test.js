@@ -16,17 +16,14 @@ const ExportService = require('../../../../app/services/jobs/export/export.servi
 
 describe('Export Service', () => {
   let SchemaExportServiceStub
-  let notifierStub
 
   beforeEach(async () => {
     SchemaExportServiceStub = Sinon.stub(SchemaExportService, 'go').resolves()
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   it('calls the SchemaExportService with the different schema names', async () => {
@@ -44,7 +41,7 @@ describe('Export Service', () => {
   it('logs the time taken to export the db', async () => {
     await ExportService.go()
 
-    const args = notifierStub.omg.firstCall.args
+    const args = global.GlobalNotifier.omg.firstCall.args
 
     expect(args[0]).to.equal('DB export complete')
     expect(args[1].timeTakenMs).to.exist()

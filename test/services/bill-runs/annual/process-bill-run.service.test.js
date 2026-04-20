@@ -28,7 +28,6 @@ describe('Annual Process Bill Run service', () => {
   const billingPeriod = determineCurrentFinancialYear()
 
   let billRun
-  let notifierStub
 
   beforeEach(async () => {
     const financialYearEnd = billingPeriod.startDate.getFullYear()
@@ -42,13 +41,11 @@ describe('Annual Process Bill Run service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when the service is called', () => {
@@ -125,7 +122,7 @@ describe('Annual Process Bill Run service', () => {
       it('logs the error', async () => {
         await ProcessBillRunService.go(billRun, [billingPeriod])
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = global.GlobalNotifier.firstCall.args
 
         expect(args[0]).to.equal('Bill run process errored')
         expect(args[1].billRun.id).to.equal(billRun.id)
@@ -156,7 +153,7 @@ describe('Annual Process Bill Run service', () => {
         it('logs the error', async () => {
           await ProcessBillRunService.go(billRun, [billingPeriod])
 
-          const args = notifierStub.omfg.firstCall.args
+          const args = global.GlobalNotifier.firstCall.args
 
           expect(args[0]).to.equal('Bill run process errored')
           expect(args[1].billRun.id).to.equal(billRun.id)
@@ -188,7 +185,7 @@ describe('Annual Process Bill Run service', () => {
       it('logs the error', async () => {
         await ProcessBillRunService.go(billRun, [billingPeriod])
 
-        const args = notifierStub.omfg.firstCall.args
+        const args = global.GlobalNotifier.firstCall.args
 
         expect(args[0]).to.equal('Bill run process errored')
         expect(args[1].billRun.id).to.equal(billRun.id)

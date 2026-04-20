@@ -32,7 +32,6 @@ const DeleteBillBunService = require('../../../../app/services/bill-runs/cancel/
 describe('Bill Runs - Delete Bill Run service', () => {
   let billRun
   let chargingModuleDeleteBillRunRequestStub
-  let notifierStub
 
   beforeEach(() => {
     chargingModuleDeleteBillRunRequestStub = Sinon.stub(ChargingModuleDeleteBillRunRequest, 'send')
@@ -41,13 +40,11 @@ describe('Bill Runs - Delete Bill Run service', () => {
     // app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered. As we're not
     // creating an instance of Hapi server in this test we recreate the condition by setting it directly with our
     // own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when the bill run exists', () => {
@@ -102,9 +99,9 @@ describe('Bill Runs - Delete Bill Run service', () => {
       it('logs a "complete" message, the bill run passed in, and the time taken in milliseconds and seconds', async () => {
         await DeleteBillBunService.go(billRun)
 
-        const logDataArg = notifierStub.omg.args[0][1]
+        const logDataArg = global.GlobalNotifier.omg.args[0][1]
 
-        expect(notifierStub.omg.calledWith('Delete bill run complete')).to.be.true()
+        expect(global.GlobalNotifier.omg.calledWith('Delete bill run complete')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
         expect(logDataArg.billRun).to.equal(billRun)
@@ -168,9 +165,9 @@ describe('Bill Runs - Delete Bill Run service', () => {
         it('logs the error', async () => {
           await DeleteBillBunService.go(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Delete bill run failed')).to.be.true()
+          expect(global.GlobalNotifier.calledWith('Delete bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
@@ -190,9 +187,9 @@ describe('Bill Runs - Delete Bill Run service', () => {
         it('logs the error', async () => {
           await DeleteBillBunService.go(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Delete bill run failed')).to.be.true()
+          expect(global.GlobalNotifier.calledWith('Delete bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
@@ -216,9 +213,9 @@ describe('Bill Runs - Delete Bill Run service', () => {
         it('logs the error', async () => {
           await DeleteBillBunService.go(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Delete bill run failed')).to.be.true()
+          expect(global.GlobalNotifier.calledWith('Delete bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
@@ -242,9 +239,9 @@ describe('Bill Runs - Delete Bill Run service', () => {
         it('logs the error', async () => {
           await DeleteBillBunService.go(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Delete bill run failed')).to.be.true()
+          expect(global.GlobalNotifier.calledWith('Delete bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
@@ -266,9 +263,9 @@ describe('Bill Runs - Delete Bill Run service', () => {
     it('still logs a "complete" message, the bill run passed in, and the time taken in milliseconds and seconds', async () => {
       await DeleteBillBunService.go(billRun)
 
-      const logDataArg = notifierStub.omg.args[0][1]
+      const logDataArg = global.GlobalNotifier.omg.args[0][1]
 
-      expect(notifierStub.omg.calledWith('Delete bill run complete')).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Delete bill run complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.billRun).to.equal(billRun)

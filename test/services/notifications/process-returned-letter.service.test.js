@@ -24,7 +24,7 @@ describe('Notifications - Process Returned Letter service', () => {
   const todaysDate = today()
 
   let notification
-  let notifierStub
+
   let payload
   let updateEventStub
 
@@ -39,13 +39,11 @@ describe('Notifications - Process Returned Letter service', () => {
       status: 'sent'
     })
 
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
 
     if (notification) {
       notification.$query().delete()
@@ -80,9 +78,9 @@ describe('Notifications - Process Returned Letter service', () => {
     it('logs the time taken in milliseconds and seconds, plus the payload and matching notification', async () => {
       await ProcessReturnedLetterService.go(payload)
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Returned letter complete')).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Returned letter complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.payload).to.equal(payload)
@@ -104,9 +102,9 @@ describe('Notifications - Process Returned Letter service', () => {
     it('logs the time taken in milliseconds and seconds, plus the payload and an empty notification', async () => {
       await ProcessReturnedLetterService.go(payload)
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Returned letter complete')).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Returned letter complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.payload).to.equal(payload)
@@ -131,9 +129,9 @@ describe('Notifications - Process Returned Letter service', () => {
     it('logs the error', async () => {
       await ProcessReturnedLetterService.go(payload)
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Returned letter failed')).to.be.true()
+      expect(global.GlobalNotifier.calledWith('Returned letter failed')).to.be.true()
       expect(errorLogArgs[1]).to.equal(payload)
       expect(errorLogArgs[2]).to.be.instanceOf(Error)
     })

@@ -16,7 +16,6 @@ const HandleErroredBillRunService = require('../../../app/services/bill-runs/han
 
 describe('Handle Errored Bill Run service', () => {
   let billRun
-  let notifierStub
 
   beforeEach(async () => {
     billRun = await BillRunHelper.add()
@@ -24,13 +23,11 @@ describe('Handle Errored Bill Run service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when the service is called successfully', () => {
@@ -74,9 +71,9 @@ describe('Handle Errored Bill Run service', () => {
         // in lieu of a working method of stubbing Objection
         await HandleErroredBillRunService.go(billRun.id, 'INVALID_ERROR_CODE')
 
-        const logDataArg = notifierStub.omfg.firstCall.args[1]
+        const logDataArg = global.GlobalNotifier.firstCall.args[1]
 
-        expect(notifierStub.omfg.calledWith('Failed to set error status on bill run')).to.be.true()
+        expect(global.GlobalNotifier.calledWith('Failed to set error status on bill run')).to.be.true()
         expect(logDataArg.billRunId).to.equal(billRun.id)
         expect(logDataArg.errorCode).to.equal('INVALID_ERROR_CODE')
       })

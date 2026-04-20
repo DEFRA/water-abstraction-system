@@ -23,7 +23,7 @@ const ProcessNotificationStatusService = require('../../../../app/services/jobs/
 describe('Job - Notifications - Process Notification Status service', () => {
   let noticeA
   let noticeB
-  let notifierStub
+
   let updateEventStub
 
   beforeEach(async () => {
@@ -52,16 +52,11 @@ describe('Job - Notifications - Process Notification Status service', () => {
 
     updateEventStub = Sinon.stub(UpdateNoticeService, 'go').resolves()
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when the notification status check does not error', () => {
@@ -79,9 +74,9 @@ describe('Job - Notifications - Process Notification Status service', () => {
     it('logs the time taken in milliseconds and seconds', async () => {
       await ProcessNotificationStatusService.go()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Notification status job complete')).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Notification status job complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.count).to.equal(3)
@@ -102,7 +97,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
     it('handles the error', async () => {
       await ProcessNotificationStatusService.go()
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = global.GlobalNotifier.firstCall.args
 
       expect(args[0]).to.equal('Notification status job failed')
       expect(args[1]).to.be.null()

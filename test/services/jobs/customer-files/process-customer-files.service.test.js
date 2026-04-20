@@ -26,19 +26,13 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
   let accountExportedTwice
   let accountPreviouslyProcessed
   let billRunQueryStub
-  let notifierStub
 
   beforeEach(async () => {
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when the Charging Module API response has customer files', () => {
@@ -110,9 +104,9 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     it('logs the time taken in milliseconds and seconds', async () => {
       await ProcessCustomerFilesService.go(days)
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Customer files job complete')).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Customer files job complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.count).to.equal(3)
@@ -149,9 +143,9 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     it('logs the time taken in milliseconds and seconds', async () => {
       await ProcessCustomerFilesService.go(days)
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Customer files job complete')).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Customer files job complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.count).to.equal(0)
@@ -176,7 +170,7 @@ describe('Jobs - Customer Files - Process Customer Files service', () => {
     it('handles the error', async () => {
       await ProcessCustomerFilesService.go()
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = global.GlobalNotifier.firstCall.args
 
       expect(args[0]).to.equal('Customer files job failed')
       expect(args[1]).to.be.null()

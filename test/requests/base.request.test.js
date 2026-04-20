@@ -34,8 +34,6 @@ describe('Base Request', () => {
     backoffLimit: 50
   }
 
-  let notifierStub
-
   beforeEach(() => {
     if (!Nock.isActive()) {
       Nock.activate()
@@ -44,15 +42,13 @@ describe('Base Request', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
     Nock.cleanAll()
     Nock.restore()
-    delete global.GlobalNotifier
   })
 
   describe('#delete()', () => {
@@ -87,9 +83,9 @@ describe('Base Request', () => {
         it('logs the failure', async () => {
           await BaseRequest.delete(testDomain)
 
-          const logDataArg = notifierStub.omg.args[0][1]
+          const logDataArg = global.GlobalNotifier.omg.args[0][1]
 
-          expect(notifierStub.omg.calledWith('DELETE request failed')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('DELETE request failed')).to.be.true()
           expect(logDataArg.method).to.equal('DELETE')
           expect(logDataArg.url).to.equal('http://example.com')
           expect(logDataArg.additionalOptions).to.equal({})
@@ -131,16 +127,16 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(2)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(2)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
             await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            const logDataArg = notifierStub.omfg.args[0][1]
+            const logDataArg = global.GlobalNotifier.args[0][1]
 
-            expect(notifierStub.omfg.calledWith('DELETE request errored')).to.be.true()
+            expect(global.GlobalNotifier.calledWith('DELETE request errored')).to.be.true()
             expect(logDataArg.method).to.equal('DELETE')
             expect(logDataArg.url).to.equal('http://example.com')
             expect(logDataArg.additionalOptions).to.exist()
@@ -182,8 +178,8 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(1)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(1)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           describe('the result it returns', () => {
@@ -226,16 +222,16 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(2)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(2)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
             await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            const logDataArg = notifierStub.omfg.args[0][1]
+            const logDataArg = global.GlobalNotifier.args[0][1]
 
-            expect(notifierStub.omfg.calledWith('DELETE request errored')).to.be.true()
+            expect(global.GlobalNotifier.calledWith('DELETE request errored')).to.be.true()
             expect(logDataArg.method).to.equal('DELETE')
             expect(logDataArg.url).to.equal('http://example.com')
             expect(logDataArg.additionalOptions).to.exist()
@@ -278,8 +274,8 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.delete(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(1)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(1)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           describe('the result it returns', () => {
@@ -367,9 +363,9 @@ describe('Base Request', () => {
         it('logs the failure', async () => {
           await BaseRequest.get(testDomain)
 
-          const logDataArg = notifierStub.omg.args[0][1]
+          const logDataArg = global.GlobalNotifier.omg.args[0][1]
 
-          expect(notifierStub.omg.calledWith('GET request failed')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('GET request failed')).to.be.true()
           expect(logDataArg.method).to.equal('GET')
           expect(logDataArg.url).to.equal('http://example.com')
           expect(logDataArg.additionalOptions).to.equal({})
@@ -411,16 +407,16 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(2)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(2)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
             await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            const logDataArg = notifierStub.omfg.args[0][1]
+            const logDataArg = global.GlobalNotifier.args[0][1]
 
-            expect(notifierStub.omfg.calledWith('GET request errored')).to.be.true()
+            expect(global.GlobalNotifier.calledWith('GET request errored')).to.be.true()
             expect(logDataArg.method).to.equal('GET')
             expect(logDataArg.url).to.equal('http://example.com')
             expect(logDataArg.additionalOptions).to.exist()
@@ -462,8 +458,8 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(1)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(1)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           describe('the result it returns', () => {
@@ -506,16 +502,16 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(2)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(2)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
             await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            const logDataArg = notifierStub.omfg.args[0][1]
+            const logDataArg = global.GlobalNotifier.args[0][1]
 
-            expect(notifierStub.omfg.calledWith('GET request errored')).to.be.true()
+            expect(global.GlobalNotifier.calledWith('GET request errored')).to.be.true()
             expect(logDataArg.method).to.equal('GET')
             expect(logDataArg.url).to.equal('http://example.com')
             expect(logDataArg.additionalOptions).to.exist()
@@ -558,8 +554,8 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.get(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(1)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(1)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           describe('the result it returns', () => {
@@ -647,9 +643,9 @@ describe('Base Request', () => {
         it('logs the failure', async () => {
           await BaseRequest.patch(testDomain)
 
-          const logDataArg = notifierStub.omg.args[0][1]
+          const logDataArg = global.GlobalNotifier.omg.args[0][1]
 
-          expect(notifierStub.omg.calledWith('PATCH request failed')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('PATCH request failed')).to.be.true()
           expect(logDataArg.method).to.equal('PATCH')
           expect(logDataArg.url).to.equal('http://example.com')
           expect(logDataArg.additionalOptions).to.equal({})
@@ -691,16 +687,16 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(2)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(2)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
             await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            const logDataArg = notifierStub.omfg.args[0][1]
+            const logDataArg = global.GlobalNotifier.args[0][1]
 
-            expect(notifierStub.omfg.calledWith('PATCH request errored')).to.be.true()
+            expect(global.GlobalNotifier.calledWith('PATCH request errored')).to.be.true()
             expect(logDataArg.method).to.equal('PATCH')
             expect(logDataArg.url).to.equal('http://example.com')
             expect(logDataArg.additionalOptions).to.exist()
@@ -742,8 +738,8 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(1)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(1)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           describe('the result it returns', () => {
@@ -786,16 +782,16 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(2)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(2)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
             await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            const logDataArg = notifierStub.omfg.args[0][1]
+            const logDataArg = global.GlobalNotifier.args[0][1]
 
-            expect(notifierStub.omfg.calledWith('PATCH request errored')).to.be.true()
+            expect(global.GlobalNotifier.calledWith('PATCH request errored')).to.be.true()
             expect(logDataArg.method).to.equal('PATCH')
             expect(logDataArg.url).to.equal('http://example.com')
             expect(logDataArg.additionalOptions).to.exist()
@@ -838,8 +834,8 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.patch(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(1)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(1)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           describe('the result it returns', () => {
@@ -927,9 +923,9 @@ describe('Base Request', () => {
         it('logs the failure', async () => {
           await BaseRequest.post(testDomain)
 
-          const logDataArg = notifierStub.omg.args[0][1]
+          const logDataArg = global.GlobalNotifier.omg.args[0][1]
 
-          expect(notifierStub.omg.calledWith('POST request failed')).to.be.true()
+          expect(global.GlobalNotifier.omg.calledWith('POST request failed')).to.be.true()
           expect(logDataArg.method).to.equal('POST')
           expect(logDataArg.url).to.equal('http://example.com')
           expect(logDataArg.additionalOptions).to.equal({})
@@ -971,16 +967,16 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(2)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(2)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
             await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            const logDataArg = notifierStub.omfg.args[0][1]
+            const logDataArg = global.GlobalNotifier.args[0][1]
 
-            expect(notifierStub.omfg.calledWith('POST request errored')).to.be.true()
+            expect(global.GlobalNotifier.calledWith('POST request errored')).to.be.true()
             expect(logDataArg.method).to.equal('POST')
             expect(logDataArg.url).to.equal('http://example.com')
             expect(logDataArg.additionalOptions).to.exist()
@@ -1022,8 +1018,8 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(1)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(1)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           describe('the result it returns', () => {
@@ -1066,16 +1062,16 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(2)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(2)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           it('logs and records the error', async () => {
             await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            const logDataArg = notifierStub.omfg.args[0][1]
+            const logDataArg = global.GlobalNotifier.args[0][1]
 
-            expect(notifierStub.omfg.calledWith('POST request errored')).to.be.true()
+            expect(global.GlobalNotifier.calledWith('POST request errored')).to.be.true()
             expect(logDataArg.method).to.equal('POST')
             expect(logDataArg.url).to.equal('http://example.com')
             expect(logDataArg.additionalOptions).to.exist()
@@ -1118,8 +1114,8 @@ describe('Base Request', () => {
           it('logs when a retry has happened', async () => {
             await BaseRequest.post(testDomain, { retry: shortBackoffLimitRetryOptions })
 
-            expect(notifierStub.omg.callCount).to.equal(1)
-            expect(notifierStub.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
+            expect(global.GlobalNotifier.omg.callCount).to.equal(1)
+            expect(global.GlobalNotifier.omg.alwaysCalledWith('Retrying HTTP request')).to.be.true()
           })
 
           describe('the result it returns', () => {

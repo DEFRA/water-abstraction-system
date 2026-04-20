@@ -24,7 +24,7 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
   let billRun
   let chargingModuleSendBillRunRequestStub
   let chargingModuleViewBillRunRequestStub
-  let notifierStub
+
   let unflagBilledLicencesServiceStub
 
   let billPatchStub
@@ -38,16 +38,11 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
     billPatchStub = Sinon.stub().resolves()
     billRunPatchStub = Sinon.stub().resolves()
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when the bill run exists', () => {
@@ -115,9 +110,9 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
       it('logs a "complete" message, the bill run passed in, and the time taken in milliseconds and seconds', async () => {
         await UpdateInvoiceNumbersService.go(billRun)
 
-        const logDataArg = notifierStub.omg.args[0][1]
+        const logDataArg = global.GlobalNotifier.omg.args[0][1]
 
-        expect(notifierStub.omg.calledWith('Send bill run complete')).to.be.true()
+        expect(global.GlobalNotifier.omg.calledWith('Send bill run complete')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
         expect(logDataArg.billRun).to.equal(billRun)
@@ -169,9 +164,9 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('logs the error', async () => {
           await UpdateInvoiceNumbersService.go(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Send bill run failed')).to.be.true()
+          expect(global.GlobalNotifier.calledWith('Send bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
@@ -191,9 +186,9 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('logs the error', async () => {
           await UpdateInvoiceNumbersService.go(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Send bill run failed')).to.be.true()
+          expect(global.GlobalNotifier.calledWith('Send bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(ExpandedError)
         })
@@ -214,9 +209,9 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('logs the error', async () => {
           await UpdateInvoiceNumbersService.go(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Send bill run failed')).to.be.true()
+          expect(global.GlobalNotifier.calledWith('Send bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(ExpandedError)
         })
@@ -242,9 +237,9 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('logs the error', async () => {
           await UpdateInvoiceNumbersService.go(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Send bill run failed')).to.be.true()
+          expect(global.GlobalNotifier.calledWith('Send bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })
@@ -274,9 +269,9 @@ describe('Bill Runs - Send - Update Invoice Numbers service', () => {
         it('logs the error', async () => {
           await UpdateInvoiceNumbersService.go(billRun)
 
-          const errorLogArgs = notifierStub.omfg.firstCall.args
+          const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-          expect(notifierStub.omfg.calledWith('Send bill run failed')).to.be.true()
+          expect(global.GlobalNotifier.calledWith('Send bill run failed')).to.be.true()
           expect(errorLogArgs[1]).to.equal(billRun)
           expect(errorLogArgs[2]).to.be.instanceOf(Error)
         })

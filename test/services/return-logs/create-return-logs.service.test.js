@@ -22,7 +22,6 @@ const GenerateReturnLogService = require('../../../app/services/return-logs/gene
 const CreateReturnLogsService = require('../../../app/services/return-logs/create-return-logs.service.js')
 
 describe('Return Logs - Create Return Logs service', () => {
-  let notifierStub
   let results
   let returnCycle
   let returnRequirement
@@ -31,13 +30,11 @@ describe('Return Logs - Create Return Logs service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(async () => {
     Sinon.restore()
-    delete global.GlobalNotifier
 
     await ReturnLogModel.query()
       .delete()
@@ -1949,7 +1946,7 @@ describe('Return Logs - Create Return Logs service', () => {
     it('handles the error', async () => {
       await CreateReturnLogsService.go(returnRequirement, returnCycle)
 
-      const args = notifierStub.omfg.firstCall.args
+      const args = global.GlobalNotifier.firstCall.args
 
       expect(args[0]).to.equal('Return logs creation errored')
       expect(args[1].returnRequirement.id).to.equal(returnRequirement.id)

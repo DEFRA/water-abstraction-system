@@ -25,7 +25,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
   let cancelBillRunStub
   let deleteBillRunStub
   let emptyBillRunFetchStub
-  let notifierStub
+
   let unassignBillRunStub
 
   beforeEach(async () => {
@@ -46,13 +46,11 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when no bill runs are flagged as "empty"', () => {
@@ -152,9 +150,9 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       it('logs the error with no bill run ID', async () => {
         await CleanEmptyBillRunsService.go()
 
-        const errorLogArgs = notifierStub.omfg.firstCall.args
+        const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-        expect(notifierStub.omfg.calledWith('Clean job failed')).to.be.true()
+        expect(global.GlobalNotifier.calledWith('Clean job failed')).to.be.true()
         expect(errorLogArgs[1]).to.equal({ billRunId: undefined, job: 'clean-empty-bill-runs' })
         expect(errorLogArgs[2]).to.be.instanceOf(Error)
       })
@@ -180,9 +178,9 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
       it('logs the error including the ID of the bill run that errored', async () => {
         await CleanEmptyBillRunsService.go()
 
-        const errorLogArgs = notifierStub.omfg.firstCall.args
+        const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-        expect(notifierStub.omfg.calledWith('Clean job failed')).to.be.true()
+        expect(global.GlobalNotifier.calledWith('Clean job failed')).to.be.true()
         expect(errorLogArgs[1]).to.equal({ billRunId: emptyBillRuns[0].id, job: 'clean-empty-bill-runs' })
         expect(errorLogArgs[2]).to.be.instanceOf(Error)
       })

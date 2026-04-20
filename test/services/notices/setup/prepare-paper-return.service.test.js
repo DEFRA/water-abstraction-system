@@ -25,7 +25,6 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
   let dueReturnLog
   let licenceRef
   let notification
-  let notifierStub
 
   beforeEach(async () => {
     dueReturnLog = ReturnLogFixture.dueReturn()
@@ -67,13 +66,11 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
       }
     })
 
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when called', () => {

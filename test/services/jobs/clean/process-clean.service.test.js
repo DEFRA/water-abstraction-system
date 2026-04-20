@@ -30,7 +30,6 @@ describe('Jobs - Clean - Process Clean service', () => {
   let cleanExpiredSessionsStub
   let cleanIncompleteCompanyContactsStub
   let cleanOrphanedContactsStub
-  let notifierStub
 
   beforeEach(async () => {
     // We stub these services to always runs successfully
@@ -41,16 +40,11 @@ describe('Jobs - Clean - Process Clean service', () => {
     )
     cleanOrphanedContactsStub = Sinon.stub(CleanOrphanedContactsService, 'go').resolves(orphanedContactsCount)
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when all clean tasks succeed', () => {
@@ -72,9 +66,9 @@ describe('Jobs - Clean - Process Clean service', () => {
     it('logs the time taken in milliseconds and seconds, plus the count of rows deleted', async () => {
       await ProcessCleanService.go()
 
-      const logDataArg = notifierStub.omg.firstCall.args[1]
+      const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-      expect(notifierStub.omg.calledWith('Clean job complete')).to.be.true()
+      expect(global.GlobalNotifier.omg.calledWith('Clean job complete')).to.be.true()
       expect(logDataArg.timeTakenMs).to.exist()
       expect(logDataArg.timeTakenSs).to.exist()
       expect(logDataArg.counts).to.equal({
@@ -102,9 +96,9 @@ describe('Jobs - Clean - Process Clean service', () => {
     it('logs the error', async () => {
       await ProcessCleanService.go()
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Clean job failed')).to.be.true()
+      expect(global.GlobalNotifier.calledWith('Clean job failed')).to.be.true()
       expect(errorLogArgs[1]).to.equal({})
       expect(errorLogArgs[2]).to.be.instanceOf(Error)
     })

@@ -23,19 +23,16 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
   let companyContact
   let contact
   let licenceDocumentRole
-  let notifierStub
 
   beforeEach(async () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(async () => {
     Sinon.restore()
-    delete global.GlobalNotifier
 
     await contact.$query().delete()
 
@@ -162,9 +159,9 @@ describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
     it('logs the error', async () => {
       await CleanOrphanedContactsService.go()
 
-      const errorLogArgs = notifierStub.omfg.firstCall.args
+      const errorLogArgs = global.GlobalNotifier.firstCall.args
 
-      expect(notifierStub.omfg.calledWith('Clean job failed')).to.be.true()
+      expect(global.GlobalNotifier.calledWith('Clean job failed')).to.be.true()
       expect(errorLogArgs[1]).to.equal({ job: 'clean-orphaned-contacts' })
       expect(errorLogArgs[2]).to.be.instanceOf(Error)
     })
