@@ -15,15 +15,14 @@ const LicenceVersionModel = require('../../../../models/licence-version.model.js
  *
  * @param {string} licenceId - The UUID of the licence the requirements are for
  * @param {object[]} requirements - The return requirements data from the session
- * @param {object} trx - Transaction object
  *
  * @returns {Promise<object>} The new return version requirements data for a licence
  */
-async function go(licenceId, requirements, trx) {
+async function go(licenceId, requirements) {
   const returnRequirements = []
 
   for (const requirement of requirements) {
-    const returnRequirementPurposes = await _generateReturnRequirementPurposes(licenceId, requirement.purposes, trx)
+    const returnRequirementPurposes = await _generateReturnRequirementPurposes(licenceId, requirement.purposes)
 
     const returnRequirement = {
       abstractionPeriodStartDay: requirement.abstractionPeriod.abstractionPeriodStartDay,
@@ -49,11 +48,11 @@ async function go(licenceId, requirements, trx) {
   return returnRequirements
 }
 
-async function _generateReturnRequirementPurposes(licenceId, purposes, trx) {
+async function _generateReturnRequirementPurposes(licenceId, purposes) {
   const returnRequirementPurposes = []
 
   for (const purpose of purposes) {
-    const { primaryPurposeId, secondaryPurposeId } = await LicenceVersionModel.query(trx)
+    const { primaryPurposeId, secondaryPurposeId } = await LicenceVersionModel.query()
       .select('primaryPurposeId', 'secondaryPurposeId')
       .innerJoinRelated('licenceVersionPurposes')
       .where('licenceId', licenceId)

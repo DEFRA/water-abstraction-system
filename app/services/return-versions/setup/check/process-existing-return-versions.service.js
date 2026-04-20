@@ -23,7 +23,7 @@ const { sameDate } = require('../../../../lib/dates.lib.js')
  * if there is no `endDate`
  */
 async function go(licenceId, newVersionStartDate, trx) {
-  const previousVersions = await _previousVersions(licenceId, trx)
+  const previousVersions = await _previousVersions(licenceId)
   const previousVersionEndDate = _calculateEndDate(newVersionStartDate)
 
   let result
@@ -178,8 +178,8 @@ function _calculateEndDate(changeDate) {
   return newEndDate
 }
 
-function _previousVersions(licenceId, trx) {
-  return ReturnVersionModel.query(trx)
+function _previousVersions(licenceId) {
+  return ReturnVersionModel.query()
     .select(['endDate', 'id', 'startDate'])
     .where('licenceId', licenceId)
     .where('status', 'current')

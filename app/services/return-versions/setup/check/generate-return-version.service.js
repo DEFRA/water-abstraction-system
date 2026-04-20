@@ -23,10 +23,10 @@ const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
  * @returns {Promise<object>} The new return version and requirement data for a licence
  */
 async function go(session, userId, trx) {
-  const nextVersionNumber = await _nextVersionNumber(session.licence.id, trx)
+  const nextVersionNumber = await _nextVersionNumber(session.licence.id)
 
   const returnVersion = await _generateReturnVersion(nextVersionNumber, session, userId, trx)
-  const returnRequirements = await _generateReturnRequirements(session, trx)
+  const returnRequirements = await _generateReturnRequirements(session)
 
   return {
     returnRequirements,
@@ -34,17 +34,13 @@ async function go(session, userId, trx) {
   }
 }
 
-async function _generateReturnRequirements(session, trx) {
+async function _generateReturnRequirements(session) {
   // When no returns are required a return version is created without any return requirements
   if (session.journey === 'no-returns-required') {
     return []
   }
 
-  const returnRequirements = await GenerateReturnVersionRequirementsService.go(
-    session.licence.id,
-    session.requirements,
-    trx
-  )
+  const returnRequirements = await GenerateReturnVersionRequirementsService.go(session.licence.id, session.requirements)
 
   return returnRequirements
 }
@@ -76,8 +72,8 @@ async function _generateReturnVersion(nextVersionNumber, session, userId, trx) {
   }
 }
 
-async function _nextVersionNumber(licenceId, trx) {
-  const { lastVersionNumber } = await ReturnVersionModel.query(trx)
+async function _nextVersionNumber(licenceId) {
+  const { lastVersionNumber } = await ReturnVersionModel.query()
     .max('version as lastVersionNumber')
     .where({ licenceId })
     .first()
