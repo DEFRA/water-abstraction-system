@@ -16,6 +16,7 @@ const ProcessCleanService = require('../../app/services/jobs/clean/process-clean
 const ProcessCustomerFilesService = require('../../app/services/jobs/customer-files/process-customer-files.service.js')
 const ProcessLicenceUpdatesService = require('../../app/services/jobs/licence-updates/process-licence-updates.service.js')
 const ProcessNotificationStatusService = require('../../app/services/jobs/notification-status/process-notification-status.service.js')
+const ProcessRenewalRemindersService = require('../../app/services/jobs/renewal-reminders/process-renewal-reminders.service.js')
 const ProcessReturnLogsService = require('../../app/services/jobs/return-logs/process-return-logs.service.js')
 const ProcessTimeLimitedLicencesService = require('../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
 
@@ -31,7 +32,7 @@ describe('Jobs controller', () => {
     server = await init()
   })
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // We silence any calls to server.logger.error and info to try and keep the test output as clean as possible
     Sinon.stub(server.logger, 'error')
     Sinon.stub(server.logger, 'info')
@@ -51,7 +52,7 @@ describe('Jobs controller', () => {
       })
 
       describe('when the request succeeds', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(ProcessCleanService, 'go').resolves()
         })
 
@@ -71,7 +72,7 @@ describe('Jobs controller', () => {
       })
 
       describe('when the request succeeds', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(ProcessCustomerFilesService, 'go').resolves()
         })
 
@@ -91,7 +92,7 @@ describe('Jobs controller', () => {
       })
 
       describe('when the request succeeds', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(ExportService, 'go').resolves()
         })
 
@@ -111,7 +112,7 @@ describe('Jobs controller', () => {
       })
 
       describe('when the request succeeds', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(ProcessLicenceUpdatesService, 'go').resolves()
         })
 
@@ -131,7 +132,7 @@ describe('Jobs controller', () => {
       })
 
       describe('when the request succeeds', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(ProcessNotificationStatusService, 'go').resolves()
         })
 
@@ -151,7 +152,7 @@ describe('Jobs controller', () => {
       })
 
       describe('when the request succeeds', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           Sinon.stub(ProcessTimeLimitedLicencesService, 'go').resolves()
         })
 
@@ -159,6 +160,32 @@ describe('Jobs controller', () => {
           const response = await server.inject(options)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+        })
+      })
+    })
+  })
+
+  describe('/jobs/renewal-reminders', () => {
+    describe('POST', () => {
+      beforeEach(() => {
+        options = { method: 'POST', url: '/jobs/renewal-reminders' }
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(ProcessRenewalRemindersService, 'go').resolves()
+        })
+
+        it('returns a 204 response', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_NO_CONTENT)
+        })
+
+        it('calls the "ProcessRenewalRemindersService"', async () => {
+          await server.inject(options)
+
+          expect(ProcessRenewalRemindersService.go.called).to.be.true()
         })
       })
     })
@@ -172,7 +199,7 @@ describe('Jobs controller', () => {
         })
 
         describe('when the request succeeds', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             Sinon.stub(ProcessReturnLogsService, 'go').resolves()
           })
 
@@ -192,7 +219,7 @@ describe('Jobs controller', () => {
         })
 
         describe('when the request succeeds', () => {
-          beforeEach(async () => {
+          beforeEach(() => {
             Sinon.stub(ProcessReturnLogsService, 'go').resolves()
           })
 
