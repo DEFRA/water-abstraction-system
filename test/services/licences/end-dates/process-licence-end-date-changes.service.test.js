@@ -19,25 +19,20 @@ const ProcessLicenceReturnLogsService = require('../../../../app/services/return
 // Thing under test
 const ProcessLicenceEndDateChangesService = require('../../../../app/services/licences/end-dates/process-licence-end-date-changes.service.js')
 
-describe('Licences - End Dates - Process Licence End Date Changes service', () => {
+describe.only('Licences - End Dates - Process Licence End Date Changes service', () => {
   let licenceEndDateChange
-  let notifierStub
+
   let processBillingFlagsStub
   let processReturnLogsStub
 
   beforeEach(async () => {
     licenceEndDateChange = await LicenceEndDateChangeHelper.add()
 
-    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
-    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
-    // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    global.GlobalNotifier.resetNotifier()
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
   })
 
   describe('when processing the licence end date changes', () => {
@@ -72,9 +67,9 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
       it('logs the completed licence change', async () => {
         await ProcessLicenceEndDateChangesService.go()
 
-        const logDataArg = notifierStub.omg.firstCall.args[1]
+        const logDataArg = global.GlobalNotifier.omg.firstCall.args[1]
 
-        expect(notifierStub.omg.calledWith('Process licence end date change complete')).to.be.true()
+        expect(global.GlobalNotifier.omg.calledWith('Process licence end date change complete')).to.be.true()
         expect(logDataArg).to.equal({
           id: licenceEndDateChange.id,
           licenceId: licenceEndDateChange.licenceId,
@@ -88,9 +83,9 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
       it('logs the time taken in milliseconds and seconds', async () => {
         await ProcessLicenceEndDateChangesService.go()
 
-        const logDataArg = notifierStub.omg.secondCall.args[1]
+        const logDataArg = global.GlobalNotifier.omg.secondCall.args[1]
 
-        expect(notifierStub.omg.calledWith('Process licence end date changes complete')).to.be.true()
+        expect(global.GlobalNotifier.omg.calledWith('Process licence end date changes complete')).to.be.true()
         expect(logDataArg.timeTakenMs).to.exist()
         expect(logDataArg.timeTakenSs).to.exist()
         expect(logDataArg.count).to.exist()
@@ -107,9 +102,9 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
       it('handles the error', async () => {
         await ProcessLicenceEndDateChangesService.go()
 
-        const errorLogArgs = notifierStub.omfg.firstCall.args
+        const errorLogArgs = global.GlobalNotifier.omfg.firstCall.args
 
-        expect(notifierStub.omfg.calledWith('Process licence end date change failed')).to.be.true()
+        expect(global.GlobalNotifier.omfg.calledWith('Process licence end date change failed')).to.be.true()
         expect(errorLogArgs[1]).to.equal({
           id: licenceEndDateChange.id,
           licenceId: licenceEndDateChange.licenceId,
@@ -132,9 +127,9 @@ describe('Licences - End Dates - Process Licence End Date Changes service', () =
       it('handles the error', async () => {
         await ProcessLicenceEndDateChangesService.go()
 
-        const errorLogArgs = notifierStub.omfg.firstCall.args
+        const errorLogArgs = global.GlobalNotifier.omfg.firstCall.args
 
-        expect(notifierStub.omfg.calledWith('Process licence end date changes failed')).to.be.true()
+        expect(global.GlobalNotifier.omfg.calledWith('Process licence end date changes failed')).to.be.true()
         expect(errorLogArgs[1]).to.be.null()
         expect(errorLogArgs[2]).to.be.instanceOf(Error)
       })
