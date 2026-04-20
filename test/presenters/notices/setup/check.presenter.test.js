@@ -3,24 +3,27 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
-
-// Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
+const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+
+//
+const DatabaseConfig = require('../../../../config/database.config.js')
 
 // Thing under test
 const CheckPresenter = require('../../../../app/presenters/notices/setup/check.presenter.js')
 
 describe('Notices - Setup - Check presenter', () => {
-  let session
+  let defaultPageSizeStub
   let page
   let recipients
+  let session
   let testRecipients
 
   beforeEach(() => {
@@ -36,6 +39,12 @@ describe('Notices - Setup - Check presenter', () => {
     testRecipients = RecipientsFixture.recipients()
 
     recipients = [...Object.values(testRecipients)]
+
+    defaultPageSizeStub = Sinon.stub(DatabaseConfig, 'defaultPageSize').value(25)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   it('correctly presents the data', () => {
@@ -452,19 +461,31 @@ describe('Notices - Setup - Check presenter', () => {
 
     describe('when there are multiple pages of results', () => {
       beforeEach(() => {
-        for (let i = 0; i < 25; i++) {
-          const padding = recipients[0]
-
-          padding.email = `${generateUUID()}@example.com`
-
-          recipients.push({ ...padding })
-        }
+        defaultPageSizeStub.value(1)
       })
 
       it('returns the "tableCaption" with the "Showing x of y" message', () => {
         const result = CheckPresenter.go(recipients, page, session)
 
-        expect(result.tableCaption).to.equal(`Showing 25 of ${recipients.length} recipients`)
+        expect(result.tableCaption).to.equal(`Showing 1 of 5 recipients`)
+      })
+
+      describe('and it is the last page', () => {
+        describe('and there are less recipients than the default page size', () => {
+          beforeEach(() => {
+            // There are 5 recipients, if we set the default page size to 3,
+            // we should see 2 recipients on the last page (in this case page 2)
+            page = '2'
+
+            defaultPageSizeStub.value(3)
+          })
+
+          it('returns the "tableCaption" with the "Showing x of y" message', () => {
+            const result = CheckPresenter.go(recipients, page, session)
+
+            expect(result.tableCaption).to.equal(`Showing 2 of 5 recipients`)
+          })
+        })
       })
     })
   })
@@ -494,16 +515,36 @@ describe('Notices - Setup - Check presenter', () => {
     })
 
     describe('when there are multiple recipients with an invalid addresses', () => {
-      beforeEach(() => {
-        recipients[2].contact.postcode = null
+      describe('on the same page', () => {
+        beforeEach(() => {
+          recipients[2].contact.postcode = null
+        })
+
+        it('returns a warning that lists the recipients', () => {
+          const result = CheckPresenter.go(recipients, page, session)
+
+          expect(result.warning).to.equal({
+            iconFallbackText: 'Warning',
+            text: 'Notifications will not be sent for the following recipients with invalid addresses: Harry Potter, Ronald Weasley'
+          })
+        })
       })
 
-      it('returns a warning that lists the recipients', () => {
-        const result = CheckPresenter.go(recipients, page, session)
+      describe('across multiple pages', () => {
+        beforeEach(() => {
+          recipients[2].contact.postcode = null
 
-        expect(result.warning).to.equal({
-          iconFallbackText: 'Warning',
-          text: 'Notifications will not be sent for the following recipients with invalid addresses: Harry Potter, Ronald Weasley'
+          // This proves we are checking all the recipients across pages
+          defaultPageSizeStub.value(3)
+        })
+
+        it('returns a warning that lists the recipients', () => {
+          const result = CheckPresenter.go(recipients, page, session)
+
+          expect(result.warning).to.equal({
+            iconFallbackText: 'Warning',
+            text: 'Notifications will not be sent for the following recipients with invalid addresses: Harry Potter, Ronald Weasley'
+          })
         })
       })
     })
