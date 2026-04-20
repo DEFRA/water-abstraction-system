@@ -9,10 +9,11 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things we need to stub
 const FetchLicenceSupplementaryYearsService = require('../../../../app/services/bill-runs/setup/fetch-licence-supplementary-years.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const YearService = require('../../../../app/services/bill-runs/setup/year.service.js')
@@ -21,10 +22,15 @@ describe('Bill Runs - Setup - Year service', () => {
   const regionId = 'cff057a0-f3a7-4ae6-bc2b-01183e40fd05'
 
   let session
+  let sessionData
   let yearsStub
 
-  beforeEach(async () => {
-    session = await SessionHelper.add({ data: { region: regionId, type: 'two_part_supplementary', year: 2024 } })
+  beforeEach(() => {
+    sessionData = { region: regionId, type: 'two_part_supplementary', year: 2024 }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yearsStub = Sinon.stub(FetchLicenceSupplementaryYearsService, 'go').resolves([{ financialYearEnd: 2024 }])
   })
