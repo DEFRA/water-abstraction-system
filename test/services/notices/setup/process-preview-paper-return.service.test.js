@@ -11,11 +11,12 @@ const { expect } = Code
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 const ReturnLogFixture = require('../../../support/fixtures/return-logs.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 
 // Things we need to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/generate-paper-return.request.js')
 
 // Thing under test
@@ -31,7 +32,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     dueReturnLog = ReturnLogFixture.dueReturn()
 
     licenceRef = dueReturnLog.licenceRef
@@ -46,7 +47,9 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
       dueReturns: [dueReturnLog]
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     const buffer = new TextEncoder().encode('mock file').buffer
 

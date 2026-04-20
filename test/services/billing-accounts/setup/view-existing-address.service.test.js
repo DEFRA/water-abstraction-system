@@ -10,10 +10,11 @@ const { expect } = Code
 
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things we need to stub
 const FetchCompanyAddressesService = require('../../../../app/services/billing-accounts/setup/fetch-company-addresses.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewExistingAddressService = require('../../../../app/services/billing-accounts/setup/view-existing-address.service.js')
@@ -25,33 +26,37 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
     addresses: [billingAccount.billingAccountAddresses[0].address]
   }
 
+  let fetchSessionStub
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionData = {
       billingAccount
     }
 
-    session = await SessionHelper.add({ data: sessionData })
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     Sinon.stub(FetchCompanyAddressesService, 'go').returns(companyAddresses)
   })
 
-  afterEach(async () => {
-    await session.$query().delete()
+  afterEach(() => {
     Sinon.restore()
   })
 
   describe('when called', () => {
     describe('and the user has come from the account page', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountSelected: billingAccount.company.id,
           billingAccount: BillingAccountsFixture.billingAccount().billingAccount
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('returns page data for the view', async () => {
@@ -84,14 +89,16 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
     })
 
     describe('and the user has come from the existing account page', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountSelected: 'another',
           billingAccount,
           existingAccount: billingAccount.company.id
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('returns page data for the view', async () => {
@@ -124,7 +131,7 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
     })
 
     describe('and the user has come from the account type page', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountSelected: 'another',
           accountType: 'individual',
@@ -132,7 +139,9 @@ describe('Billing Accounts - Setup - View Existing Address Service', () => {
           existingAccount: 'new'
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        fetchSessionStub.resolves(session)
       })
 
       it('returns page data for the view', async () => {
