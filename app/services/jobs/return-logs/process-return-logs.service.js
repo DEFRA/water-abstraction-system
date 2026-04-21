@@ -48,6 +48,7 @@ async function go(cycle) {
     calculateAndLogTimeTaken(startTime, 'Return logs job complete', { count: returnRequirements.length, cycle })
   } catch (error) {
     const message = 'Return logs job failed'
+
     global.GlobalNotifier.omfg(message, { cycle }, error)
     global.GlobalNotifier.redAlert(message)
   }

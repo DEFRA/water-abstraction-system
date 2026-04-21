@@ -44,7 +44,10 @@ async function go() {
 
     calculateAndLogTimeTaken(startTime, 'Licence updates job complete', { count: licenceUpdateResults.length })
   } catch (error) {
-    global.GlobalNotifier.omfg('Licence updates job failed', null, error)
+    const message = 'Licence updates job failed'
+
+    global.GlobalNotifier.omfg(message, null, error)
+    global.GlobalNotifier.redAlert(message)
   }
 }
 

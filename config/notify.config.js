@@ -10,7 +10,7 @@
 require('dotenv').config()
 
 const config = {
-  alertEmailAddress: process.env.ALERT_EMAIL_ADDRESS,
+  alertEmailAddresses: process.env.ALERT_EMAIL_ADDRESSES,
   apiKey: process.env.GOV_UK_NOTIFY_API_KEY,
   // The Notify service imposes a rate limit of 3,000 requests per minute and restricts the number of statuses returned
   // per API call to a maximum of 250. Given these constraints, our batch processing mechanism should handle the lowest

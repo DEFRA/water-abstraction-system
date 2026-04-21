@@ -26,7 +26,10 @@ async function go() {
 
     calculateAndLogTimeTaken(startTime, 'Time limited job complete', { count: timeLimitedResults.length })
   } catch (error) {
-    global.GlobalNotifier.omfg('Time limited job failed', null, error)
+    const message = 'Time limited job failed'
+
+    global.GlobalNotifier.omfg(message, null, error)
+    global.GlobalNotifier.redAlert(message)
   }
 }
 

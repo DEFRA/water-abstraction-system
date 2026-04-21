@@ -124,7 +124,7 @@ class BaseNotifierLib {
    */
   redAlert(message, error = null) {
     const now = new Date().toISOString()
-    const content = `At ${now}: ${message} failed`
+    const content = `At ${now}: ${message}`
 
     const options = {
       personalisation: {
@@ -132,7 +132,11 @@ class BaseNotifierLib {
       }
     }
 
-    CreateEmailRequest.send(NOTIFY_TEMPLATES.system.statusAlert, NotifyConfig.alertEmailAddress, options)
+    const emails = NotifyConfig.alertEmailAddresses.split(',')
+
+    for (const email of emails) {
+      CreateEmailRequest.send(NOTIFY_TEMPLATES.system.statusAlert, email, options)
+    }
   }
 
   /**
