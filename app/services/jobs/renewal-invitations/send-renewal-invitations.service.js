@@ -26,8 +26,10 @@ async function go() {
 function _expiryDate() {
   const targetDate = new Date()
 
+  const futureExpiredDate = 300
+
   // 1. Add 300 calendar days to the current system date
-  targetDate.setDate(targetDate.getDate() + 300)
+  targetDate.setDate(targetDate.getDate() + futureExpiredDate)
 
   // 2. Normalize time to midnight for clean comparison
   targetDate.setHours(0, 0, 0, 0)
