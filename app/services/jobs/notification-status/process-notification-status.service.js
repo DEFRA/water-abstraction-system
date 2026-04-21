@@ -48,7 +48,10 @@ async function go() {
 
     calculateAndLogTimeTaken(startTime, 'Notification status job complete', { count: notifications.length })
   } catch (error) {
-    global.GlobalNotifier.omfg('Notification status job failed', null, error)
+    const message = 'Notification status job failed'
+
+    global.GlobalNotifier.omfg(message, null, error)
+    global.GlobalNotifier.redAlert(message)
   }
 }
 
