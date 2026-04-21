@@ -10,25 +10,32 @@ const { expect } = Code
 
 // Test helpers
 const RegionHelper = require('../../../support/helpers/region.helper.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things we need to stub
 const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fetch-regions.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitRegionService = require('../../../../app/services/bill-runs/setup/submit-region.service.js')
 
 describe('Bill Runs - Setup - Submit Region service', () => {
+  let fetchSessionStub
   let payload
   let region
   let regions
   let session
+  let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     regions = RegionHelper.data
     region = RegionHelper.select()
 
-    session = await SessionHelper.add({ data: {} })
+    sessionData = {}
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     Sinon.stub(FetchRegionsService, 'go').resolves(regions)
   })
@@ -46,49 +53,55 @@ describe('Bill Runs - Setup - Submit Region service', () => {
       })
 
       describe('and the bill run type was not two-part tariff', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { type: 'annual' } })
+        beforeEach(() => {
+          sessionData = { type: 'annual' }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('saves the submitted region ID and its name and returns an object confirming setup is complete', async () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.region).to.equal(region.id)
-          expect(refreshedSession.regionName).to.equal(region.displayName)
+          expect(session.region).to.equal(region.id)
+          expect(session.regionName).to.equal(region.displayName)
           expect(result.setupComplete).to.be.true()
         })
       })
 
       describe('and the bill run type was two-part tariff', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { type: 'two_part_tariff' } })
+        beforeEach(() => {
+          sessionData = { type: 'two_part_tariff' }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('saves the submitted region ID and its name and returns an object confirming setup is not complete', async () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.region).to.equal(region.id)
-          expect(refreshedSession.regionName).to.equal(region.displayName)
+          expect(session.region).to.equal(region.id)
+          expect(session.regionName).to.equal(region.displayName)
           expect(result.setupComplete).to.be.false()
         })
       })
 
       describe('and the bill run type was two-part tariff supplementary', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ data: { type: 'two_part_supplementary' } })
+        beforeEach(() => {
+          sessionData = { type: 'two_part_supplementary' }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('saves the submitted region ID and its name and returns an object confirming setup is not complete', async () => {
           const result = await SubmitRegionService.go(session.id, payload)
 
-          const refreshedSession = await session.$query()
-
-          expect(refreshedSession.region).to.equal(region.id)
-          expect(refreshedSession.regionName).to.equal(region.displayName)
+          expect(session.region).to.equal(region.id)
+          expect(session.regionName).to.equal(region.displayName)
           expect(result.setupComplete).to.be.false()
         })
       })
@@ -96,10 +109,14 @@ describe('Bill Runs - Setup - Submit Region service', () => {
 
     describe('with an invalid payload', () => {
       describe('because the user has not selected anything', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           payload = {}
 
-          session = await SessionHelper.add({ data: { type: 'annual' } })
+          sessionData = { type: 'annual' }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
         })
 
         it('returns page data needed to re-render the view including the validation error', async () => {
