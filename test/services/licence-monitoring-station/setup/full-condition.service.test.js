@@ -9,10 +9,11 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things to stub
 const FetchFullConditionService = require('../../../../app/services/licence-monitoring-station/setup/fetch-full-condition.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const FullConditionService = require('../../../../app/services/licence-monitoring-station/setup/full-condition.service.js')
@@ -20,8 +21,9 @@ const FullConditionService = require('../../../../app/services/licence-monitorin
 describe('Licence Monitoring Station Setup - Full Condition Service', () => {
   let condition
   let session
+  let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     condition = {
       id: 'd5d05f06-b380-4f74-a479-9cbdb81bc279',
       notes: 'NOTES',
@@ -33,13 +35,15 @@ describe('Licence Monitoring Station Setup - Full Condition Service', () => {
 
     Sinon.stub(FetchFullConditionService, 'go').resolves([condition])
 
-    session = await SessionHelper.add({
-      data: {
-        label: 'Monitoring Station',
-        licenceId: 'LICENCE_ID',
-        licenceRef: 'LICENCE_REF'
-      }
-    })
+    sessionData = {
+      label: 'Monitoring Station',
+      licenceId: 'LICENCE_ID',
+      licenceRef: 'LICENCE_REF'
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
   afterEach(() => {

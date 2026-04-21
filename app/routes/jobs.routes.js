@@ -89,6 +89,20 @@ const routes = [
   },
   {
     method: 'POST',
+    path: '/jobs/renewal-invitations',
+    options: {
+      handler: JobsController.renewalInvitations,
+      app: {
+        plainOutput: true
+      },
+      auth: false,
+      plugins: {
+        crumb: false
+      }
+    }
+  },
+  {
+    method: 'POST',
     path: '/jobs/return-logs/{cycle}',
     options: {
       handler: JobsController.returnLogs,
