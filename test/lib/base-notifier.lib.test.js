@@ -273,60 +273,87 @@ describe('BaseNotifierLib class', () => {
   })
 
   describe('#redAlert()', () => {
-    beforeEach(async () => {
-      Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
-      Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
-      Sinon.stub(CreateEmailRequest, 'send').callsFake(createEmailRequestFake.send)
-      Sinon.stub(NotifyConfig, 'alertEmailAddresses').value('admin-internal@wrls.gov.uk')
+    describe('when create email request service suceeds', () => {
+      beforeEach(async () => {
+        Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
+        Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
+        Sinon.stub(CreateEmailRequest, 'send').callsFake(createEmailRequestFake.send)
+        Sinon.stub(NotifyConfig, 'alertEmailAddresses').value('admin-internal@wrls.gov.uk')
+      })
+
+      describe('when just a message is sent', () => {
+        it('sends a request to the create email request service with the correct parameters', async () => {
+          const testNotifier = new BaseNotifierLib()
+
+          testNotifier.redAlert(message)
+
+          const args = createEmailRequestFake.send.firstCall.args
+
+          expect(args[0]).to.equal(NOTIFY_TEMPLATES.system.statusAlert)
+          expect(args[1]).to.equal(NotifyConfig.alertEmailAddresses)
+          expect(args[2].personalisation.content).to.endWith(message)
+        })
+      })
+
+      describe('when a message is sent with an error', () => {
+        it('sends a request to the create email request service with the correct parameters', () => {
+          const testNotifier = new BaseNotifierLib()
+
+          testNotifier.redAlert(message, error)
+
+          const args = createEmailRequestFake.send.firstCall.args
+
+          expect(args[0]).to.equal(NOTIFY_TEMPLATES.system.statusAlert)
+          expect(args[1]).to.equal(NotifyConfig.alertEmailAddresses)
+          expect(args[2].personalisation.content).to.endWith(`${message} with: ${error}`)
+        })
+      })
+
+      describe('and there are multiple email addresses in the config', () => {
+        beforeEach(async () => {
+          Sinon.stub(NotifyConfig, 'alertEmailAddresses').value('admin-internal@wrls.gov.uk,admin@wrls.gov.uk')
+        })
+
+        it('sends a request to the create email request service with the correct parameters for each email', () => {
+          const testNotifier = new BaseNotifierLib()
+
+          testNotifier.redAlert(message, error)
+
+          const firstArgs = createEmailRequestFake.send.firstCall.args
+          const secondArgs = createEmailRequestFake.send.secondCall.args
+
+          expect(firstArgs[0]).to.equal(NOTIFY_TEMPLATES.system.statusAlert)
+          expect(firstArgs[1]).to.equal('admin-internal@wrls.gov.uk')
+          expect(firstArgs[2].personalisation.content).to.endWith(`${message} with: ${error}`)
+          expect(secondArgs[0]).to.equal(NOTIFY_TEMPLATES.system.statusAlert)
+          expect(secondArgs[1]).to.equal('admin@wrls.gov.uk')
+          expect(secondArgs[2].personalisation.content).to.endWith(`${message} with: ${error}`)
+        })
+      })
     })
 
-    describe('when just a message is sent', () => {
-      it('sends a request to the create email request service with the correct parameters', async () => {
+    describe('when the create email request service errors', () => {
+      beforeEach(async () => {
+        Sinon.stub(BaseNotifierLib.prototype, '_setNotifier').returns(airbrakeFake)
+        Sinon.stub(NotifyConfig, 'alertEmailAddresses').value('admin-internal@wrls.gov.uk')
+
+        pinoFake = { info: Sinon.fake(), error: Sinon.stub() }
+        Sinon.stub(BaseNotifierLib.prototype, '_setLogger').returns(pinoFake)
+        Sinon.stub(CreateEmailRequest, 'send').rejects(new Error('CreateEmailRequest errored'))
+      })
+
+      it('logs the error', async () => {
         const testNotifier = new BaseNotifierLib()
 
         testNotifier.redAlert(message)
 
-        const args = createEmailRequestFake.send.firstCall.args
+        pinoFake.error.callsFake(async () => {
+          const firstCallArgs = pinoFake.error.firstCall.args
 
-        expect(args[0]).to.equal(NOTIFY_TEMPLATES.system.statusAlert)
-        expect(args[1]).to.equal(NotifyConfig.alertEmailAddresses)
-        expect(args[2].personalisation.content).to.endWith(message)
-      })
-    })
-
-    describe('when a message is sent with an error', () => {
-      it('sends a request to the create email request service with the correct parameters', () => {
-        const testNotifier = new BaseNotifierLib()
-
-        testNotifier.redAlert(message, error)
-
-        const args = createEmailRequestFake.send.firstCall.args
-
-        expect(args[0]).to.equal(NOTIFY_TEMPLATES.system.statusAlert)
-        expect(args[1]).to.equal(NotifyConfig.alertEmailAddresses)
-        expect(args[2].personalisation.content).to.endWith(`${message} with: ${error}`)
-      })
-    })
-
-    describe('when there are multiple email addresses in the config', () => {
-      beforeEach(async () => {
-        Sinon.stub(NotifyConfig, 'alertEmailAddresses').value('admin-internal@wrls.gov.uk,admin@wrls.gov.uk')
-      })
-
-      it('sends a request to the create email request service with the correct parameters', () => {
-        const testNotifier = new BaseNotifierLib()
-
-        testNotifier.redAlert(message, error)
-
-        const firstArgs = createEmailRequestFake.send.firstCall.args
-        const secondArgs = createEmailRequestFake.send.secondCall.args
-
-        expect(firstArgs[0]).to.equal(NOTIFY_TEMPLATES.system.statusAlert)
-        expect(firstArgs[1]).to.equal('admin-internal@wrls.gov.uk')
-        expect(firstArgs[2].personalisation.content).to.endWith(`${message} with: ${error}`)
-        expect(secondArgs[0]).to.equal(NOTIFY_TEMPLATES.system.statusAlert)
-        expect(secondArgs[1]).to.equal('admin@wrls.gov.uk')
-        expect(secondArgs[2].personalisation.content).to.endWith(`${message} with: ${error}`)
+          expect(firstCallArgs[0]).to.be.an.error()
+          expect(firstCallArgs[0].message).to.equal('CreateEmailRequest errored')
+          expect(firstCallArgs[1]).to.equal('BaseNotifierLib - CreateEmailRequest errored')
+        })
       })
     })
   })

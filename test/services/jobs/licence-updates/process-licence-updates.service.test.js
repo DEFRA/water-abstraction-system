@@ -119,7 +119,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
       Sinon.stub(FetchLicenceUpdatesService, 'go').rejects()
     })
 
-    it('omfg handles the error', async () => {
+    it('records the error by calling "omfg()"', async () => {
       await ProcessLicenceUpdatesService.go()
 
       const args = notifierStub.omfg.firstCall.args
@@ -129,12 +129,16 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
       expect(args[2]).to.be.an.error()
     })
 
-    it('redAlert is called', async () => {
+    it('notifies the team by calling "redAlert()"', async () => {
       await ProcessLicenceUpdatesService.go()
 
       const args = notifierStub.redAlert.firstCall.args
 
       expect(args[0]).to.equal('Licence updates job failed')
+    })
+
+    it('does not throw an error', async () => {
+      await expect(ProcessLicenceUpdatesService.go()).not.to.reject()
     })
   })
 })

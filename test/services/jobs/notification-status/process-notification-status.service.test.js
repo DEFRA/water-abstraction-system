@@ -99,7 +99,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
       expect(updateEventStub.called).to.be.false()
     })
 
-    it('omfg handles the error', async () => {
+    it('records the error by calling "omfg()"', async () => {
       await ProcessNotificationStatusService.go()
 
       const args = notifierStub.omfg.firstCall.args
@@ -109,12 +109,16 @@ describe('Job - Notifications - Process Notification Status service', () => {
       expect(args[2]).to.be.an.error()
     })
 
-    it('redAlert is called', async () => {
+    it('notifies the team by calling "redAlert()"', async () => {
       await ProcessNotificationStatusService.go()
 
       const args = notifierStub.redAlert.firstCall.args
 
       expect(args[0]).to.equal('Notification status job failed')
+    })
+
+    it('does not throw an error', async () => {
+      await expect(ProcessNotificationStatusService.go()).not.to.reject()
     })
   })
 })
