@@ -9,6 +9,8 @@ const FetchRenewalRecipients = require('./fetch-renewal-recipients.service.js')
 
 /**
  * Orchestrates fetching, sending, and updating renewal invitations notifications
+ *
+ * @returns {Promise<object[]>} An array of renewal invitation recipients
  */
 async function go() {
   const expiryDate = _expiryDate()
