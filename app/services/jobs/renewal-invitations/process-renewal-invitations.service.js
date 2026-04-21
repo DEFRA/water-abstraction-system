@@ -1,5 +1,6 @@
 'use strict'
 
+const SendRenewalInvitations = require('./send-renewal-invitations.service.js')
 const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../../lib/general.lib.js')
 
 /**
@@ -13,6 +14,8 @@ const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../..
 async function go() {
   try {
     const startTime = currentTimeInNanoseconds()
+
+    await SendRenewalInvitations.go()
 
     calculateAndLogTimeTaken(startTime, 'Renewal invitations status job complete')
   } catch (error) {
