@@ -124,28 +124,6 @@ function _primaryUserQuery() {
     `
 }
 
-// function _processForSending() {
-//   return `
-//   -- Aggregate everything by the unique LICENCE, not just the contact hash
-//   -- This ensures 1 letter/email per licence.
-//
-//   results AS (
-//     SELECT DISTINCT ON (ac.licence_ref)
-//       ac.contact,
-//       ac.contact_hash_id,
-//       ac.contact_type,
-//       ac.email,
-//       ac.licence_ref, -- Return the single ref
-//       ac.message_type
-//     FROM
-//       all_contacts ac
-//     ORDER BY
-//       ac.licence_ref, -- Group by licence
-//       ac.priority ASC -- 1 (Primary User) comes before 2 (Licence Holder)
-//   )
-//   `
-// }
-
 function _processForSending() {
   return `
   -- PROCESS FOR SENDING NOTICES

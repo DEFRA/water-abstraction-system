@@ -49,7 +49,9 @@ async function licenceHolderOnly(returnLogs, expiredDate = null) {
 
   const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
 
-  licenceHolderRecipient.licenceRefs = expiredDate ? [licence.licence.licenceRef] : licenceRefs
+  const allLicenceRefs = expiredDate ? [licence.licence.licenceRef] : licenceRefs
+
+  licenceHolderRecipient.licenceRefs = allLicenceRefs
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
@@ -124,7 +126,6 @@ async function licenceHolderWithMultipleLicences(returnLogs, expiredDate) {
 
   const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
 
-  licenceHolderRecipient.licenceRefs = expiredDate ? [licence.licence.licenceRef] : licenceRefs
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
@@ -140,13 +141,10 @@ async function licenceHolderWithMultipleLicences(returnLogs, expiredDate) {
 
   const secondLicenceHolderRecipient = await RecipientsSeeder.licenceHolder(secondLicence, licenceHolder)
 
-  // TODO: this needs to be sorted ? see how works currently
-  licenceHolderRecipient.licenceRefs = expiredDate
-    ? [licence.licence.licenceRef, secondLicence.licence.licenceRef]
-    : licenceRefs
-  secondLicenceHolderRecipient.licenceRefs = expiredDate
-    ? [licence.licence.licenceRef, secondLicence.licence.licenceRef]
-    : licenceRefs
+  const allLicenceRefs = expiredDate ? [licence.licence.licenceRef, secondLicence.licence.licenceRef] : licenceRefs
+
+  licenceHolderRecipient.licenceRefs = allLicenceRefs
+  secondLicenceHolderRecipient.licenceRefs = allLicenceRefs
   secondLicenceHolderRecipient.returnLogIds = returnLogIds
   secondLicenceHolderRecipient.returnLogs = returnLogs
 
@@ -317,19 +315,19 @@ async function primaryUserWithDifferentReturnsAgent(returnLogs) {
  *
  * @param {object[]} returnLogs - One or more returns logs with different licence references that will be assigned to
  * the recipients
+ * @param {Date} [expiredDate] - The date the licence should expire.
  *
  * @returns {Promise<object[]>} The recipients generated for the scenario. In this case both primary user recipients
  * and both licence holders
  */
-async function primaryUserWithMultipleLicences(returnLogs) {
+async function primaryUserWithMultipleLicences(returnLogs, expiredDate) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
-  const licence = await EmptyLicence.seed(licenceRefs[0])
+  const licence = await EmptyLicence.seed(licenceRefs[0], null, expiredDate)
   const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Multipleprimary')
 
   const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
 
-  licenceHolderRecipient.licenceRefs = licenceRefs
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
@@ -337,16 +335,14 @@ async function primaryUserWithMultipleLicences(returnLogs) {
 
   const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
 
-  primaryUserRecipient.licenceRefs = licenceRefs
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
 
-  const secondLicence = await EmptyLicence.seed(licenceRefs[1])
+  const secondLicence = await EmptyLicence.seed(licenceRefs[1], null, expiredDate)
   const secondLicenceHolder = await CRMContactsSeeder.licenceHolder(secondLicence, 'Multipleprimary')
 
   const secondLicenceHolderRecipient = await RecipientsSeeder.licenceHolder(secondLicence, secondLicenceHolder)
 
-  secondLicenceHolderRecipient.licenceRefs = licenceRefs
   secondLicenceHolderRecipient.returnLogIds = returnLogIds
   secondLicenceHolderRecipient.returnLogs = returnLogs
 
@@ -354,9 +350,15 @@ async function primaryUserWithMultipleLicences(returnLogs) {
 
   const secondPrimaryUserRecipient = await RecipientsSeeder.primaryUser(secondLicence, secondPrimaryUser)
 
-  secondPrimaryUserRecipient.licenceRefs = licenceRefs
   secondPrimaryUserRecipient.returnLogIds = returnLogIds
   secondPrimaryUserRecipient.returnLogs = returnLogs
+
+  const allLicenceRefs = expiredDate ? [licence.licence.licenceRef, secondLicence.licence.licenceRef] : licenceRefs
+
+  licenceHolderRecipient.licenceRefs = allLicenceRefs
+  secondLicenceHolderRecipient.licenceRefs = allLicenceRefs
+  primaryUserRecipient.licenceRefs = allLicenceRefs
+  secondPrimaryUserRecipient.licenceRefs = allLicenceRefs
 
   return [licenceHolderRecipient, secondLicenceHolderRecipient, primaryUserRecipient, secondPrimaryUserRecipient]
 }

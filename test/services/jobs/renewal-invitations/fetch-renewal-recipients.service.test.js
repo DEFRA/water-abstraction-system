@@ -14,7 +14,7 @@ const RecipientScenariosSeeder = require('../../../support/seeders/recipient-sce
 // Thing under test
 const FetchRenewalRecipients = require('../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js')
 
-describe.only('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => {
+describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => {
   let clock
   let expiredDate
   let scenarios
@@ -44,6 +44,12 @@ describe.only('Jobs - Renewal Invitations - Fetch Renewal recipients service', (
     // return the primary user recipient.
     expiredDate = new Date('2027-02-11')
     scenario = await RecipientScenariosSeeder.primaryUserOnly([], expiredDate)
+    scenarios.push(scenario)
+
+    // 7) Same primary user, but is linked to multiple licences - only one recipient record will be returned with
+    // multiple licence refs
+    expiredDate = new Date('2027-02-12')
+    scenario = await RecipientScenariosSeeder.primaryUserWithMultipleLicences([], expiredDate)
     scenarios.push(scenario)
   })
 
@@ -87,6 +93,19 @@ describe.only('Jobs - Renewal Invitations - Fetch Renewal recipients service', (
       _formatScenario(sendingResults[1])
 
       expect(result).to.contain(sendingResults[1])
+
+      // NOTE: When a licence is registered sendingResult[0] will always reference the licence holder
+      expect(result).not.to.contain(sendingResults[0])
+    })
+
+    it('(Scenario 4) returns only the primary user when it is the same for multiple registered licences', async () => {
+      const result = await FetchRenewalRecipients.go(new Date('2027-02-12'))
+
+      const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[3])
+
+      _formatScenario(sendingResults[2])
+
+      expect(result).to.contain(sendingResults[2])
 
       // NOTE: When a licence is registered sendingResult[0] will always reference the licence holder
       expect(result).not.to.contain(sendingResults[0])
