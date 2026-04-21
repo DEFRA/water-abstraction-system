@@ -541,6 +541,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
           const { rows } = await db.raw(query, [returnLogIds])
 
           const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[4])
+
           expect(rows).to.contain(sendingResults[1])
 
           // NOTE: When a licence is registered sendingResult[0] will always reference the licence holder
