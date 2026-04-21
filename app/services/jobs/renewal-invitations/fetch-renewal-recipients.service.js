@@ -10,9 +10,20 @@ const { db } = require('../../../../db/db.js')
 /**
  * Fetches recipients for renewal invitations
  *
- * @param {Date} expiryDate - The expiry date for renewal invitations
+ * When fetching renewal invitation recipients, we are only concerned with the licence holder and/or primary user.
+ *
+ * When a licence is registered, then a primary user will exist; when this is the case, we return the primary user and
+ * not the licence holder.
+ *
+ * If the licence is not registered, then we return the licence holder.
+ *
+ * The licence expired date is calculated and provided upstream.
+ *
+ * @param {Date} expiredDate - The expired date for the licences
+ *
+ * @returns {Promise<object[]>} - An array of recipients for with an
  */
-async function go(expiryDate) {
+async function go(expiredDate) {
   const licenceHolderQuery = _licenceHolderQuery()
   const primaryUserQuery = _primaryUserQuery()
   const processQuery = _processForSending()
@@ -40,7 +51,7 @@ async function go(expiryDate) {
 
       SELECT * FROM results;
     `,
-    [expiryDate, expiryDate]
+    [expiredDate, expiredDate]
   )
 
   return rows
