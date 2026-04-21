@@ -5,9 +5,8 @@
  * @module GenerateReturnVersionService
  */
 
+const DetermineNextVersionNumberDal = require('../../../../dal/return-versions/determine-next-version-number.dal.js')
 const GenerateReturnVersionRequirementsService = require('./generate-return-version-requirements.service.js')
-const ProcessExistingReturnVersionsService = require('./process-existing-return-versions.service.js')
-const ReturnVersionModel = require('../../../../models/return-version.model.js')
 const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
 
 /**
@@ -17,15 +16,14 @@ const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
  * `return_requirement_purposes` tables.
  *
  * @param {string} session - The session data required to set up a new return version for a licence
- * @param {number} userId - The id of the logged in user
- * @param {object} trx - Transaction object
+ * @param {number} userId - The ID of the logged in user
  *
- * @returns {Promise<object>} The new return version and requirement data for a licence
+ * @returns {Promise<object>} The new return version and its return requirements data for a licence
  */
-async function go(session, userId, trx) {
-  const nextVersionNumber = await _nextVersionNumber(session.licence.id)
+async function go(session, userId) {
+  const nextVersionNumber = await DetermineNextVersionNumberDal.go(session.licence.id)
 
-  const returnVersion = await _generateReturnVersion(nextVersionNumber, session, userId, trx)
+  const returnVersion = await _generateReturnVersion(nextVersionNumber, session, userId)
   const returnRequirements = await _generateReturnRequirements(session)
 
   return {
@@ -45,22 +43,21 @@ async function _generateReturnRequirements(session) {
   return returnRequirements
 }
 
-async function _generateReturnVersion(nextVersionNumber, session, userId, trx) {
+async function _generateReturnVersion(nextVersionNumber, session, userId) {
   const startDate = new Date(session.returnVersionStartDate)
-  let endDate = null
+
   let quarterlyReturns = false
 
-  if (nextVersionNumber > 1) {
-    endDate = await ProcessExistingReturnVersionsService.go(session.licence.id, startDate, trx)
-  }
-
+  // NOTE: This is a safety check just in case someone started a journey and was able to select quarterly returns, but
+  // then went back and set the start date to something before 1st April 2025.
+  // Quarterly returns is only available for return versions with a start date on or after 1st April 2025
   if (isQuarterlyReturnSubmissions(session.returnVersionStartDate)) {
     quarterlyReturns = session.quarterlyReturns
   }
 
   return {
     createdBy: userId,
-    endDate,
+    endDate: null,
     licenceId: session.licence.id,
     multipleUpload: session.multipleUpload,
     notes: session?.note?.content,
@@ -70,19 +67,6 @@ async function _generateReturnVersion(nextVersionNumber, session, userId, trx) {
     status: 'current',
     version: nextVersionNumber
   }
-}
-
-async function _nextVersionNumber(licenceId) {
-  const { lastVersionNumber } = await ReturnVersionModel.query()
-    .max('version as lastVersionNumber')
-    .where({ licenceId })
-    .first()
-
-  if (lastVersionNumber) {
-    return lastVersionNumber + 1
-  }
-
-  return 1
 }
 
 module.exports = {
