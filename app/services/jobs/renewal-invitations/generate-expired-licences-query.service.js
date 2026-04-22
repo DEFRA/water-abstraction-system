@@ -1,16 +1,16 @@
 'use strict'
 
 /**
- * Generates the SQL query expired licences
+ * Generates the SQL query for expired licences
  * @module GenerateExpiredLicencesQueryService
  */
 
 /**
- * Generates the SQL query expired licences
+ * Generates the SQL query for expired licences
  *
- * An expired licence is one that has expired and matches the date arg provided
+ * An expired licence is one that has expired (on the provided date)
  *
- * @returns {string} SQL query for expired licences
+ * @returns {string} the SQL query for expired licences
  */
 function go() {
   return `
