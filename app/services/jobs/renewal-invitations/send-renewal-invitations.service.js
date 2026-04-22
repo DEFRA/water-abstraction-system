@@ -23,16 +23,15 @@ async function go(days) {
 }
 
 /**
- * Calculates the target expiry date for the daily renewal job.
- * @param futureExpiredDate
+ * Calculates the target expiry date
+ *
+ * @private
  */
 function _expiryDate(futureExpiredDate) {
   const targetDate = new Date()
 
-  // 1. Add 300 calendar days to the current system date
   targetDate.setDate(targetDate.getDate() + futureExpiredDate)
 
-  // 2. Normalize time to midnight for clean comparison
   targetDate.setHours(0, 0, 0, 0)
 
   return targetDate
