@@ -10,10 +10,12 @@ const FetchRenewalRecipients = require('./fetch-renewal-recipients.service.js')
 /**
  * Orchestrates fetching, sending, and updating renewal invitations notifications
  *
+ * @param {number} days - The number of ahead of today
+ *
  * @returns {Promise<object[]>} An array of renewal invitation recipients
  */
-async function go() {
-  const expiryDate = _expiryDate()
+async function go(days) {
+  const expiryDate = _expiryDate(days)
 
   const recipients = await FetchRenewalRecipients.go(expiryDate)
 
@@ -22,11 +24,10 @@ async function go() {
 
 /**
  * Calculates the target expiry date for the daily renewal job.
+ * @param futureExpiredDate
  */
-function _expiryDate() {
+function _expiryDate(futureExpiredDate) {
   const targetDate = new Date()
-
-  const futureExpiredDate = 300
 
   // 1. Add 300 calendar days to the current system date
   targetDate.setDate(targetDate.getDate() + futureExpiredDate)

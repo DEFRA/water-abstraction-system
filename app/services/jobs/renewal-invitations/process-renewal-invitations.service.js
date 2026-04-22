@@ -10,12 +10,14 @@ const { currentTimeInNanoseconds, calculateAndLogTimeTaken } = require('../../..
 
 /**
  * Orchestrates the process of fetching, sending, and updating renewal invitations notifications
+ *
+ * @param {number} days - The number of ahead of today
  */
-async function go() {
+async function go(days) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    await SendRenewalInvitations.go()
+    await SendRenewalInvitations.go(days)
 
     calculateAndLogTimeTaken(startTime, 'Renewal invitations status job complete')
   } catch (error) {

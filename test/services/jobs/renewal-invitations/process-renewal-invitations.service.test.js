@@ -15,6 +15,8 @@ const SendRenewalInvitations = require('../../../../app/services/jobs/renewal-in
 const ProcessRenewalInvitationsService = require('../../../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js')
 
 describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () => {
+  const days = 300
+
   let notifierStub
 
   beforeEach(() => {
@@ -33,13 +35,13 @@ describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () 
   })
 
   it('calls the "SendRenewalInvitations"', async () => {
-    await ProcessRenewalInvitationsService.go()
+    await ProcessRenewalInvitationsService.go(days)
 
-    expect(SendRenewalInvitations.go.calledWith()).to.be.true()
+    expect(SendRenewalInvitations.go.calledWith(days)).to.be.true()
   })
 
   it('logs the time taken in milliseconds and seconds', async () => {
-    await ProcessRenewalInvitationsService.go()
+    await ProcessRenewalInvitationsService.go(days)
 
     const logDataArg = notifierStub.omg.firstCall.args[1]
 

@@ -15,6 +15,8 @@ const FetchRenewalRecipients = require('../../../../app/services/jobs/renewal-in
 const SendRenewalInvitations = require('../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js')
 
 describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => {
+  const days = 300
+
   let clock
   let expiredDate
   let todayDate
@@ -37,7 +39,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
 
   describe('when there are renewal invitations to send', () => {
     it('returns the recipients', async () => {
-      const result = await SendRenewalInvitations.go()
+      const result = await SendRenewalInvitations.go(days)
 
       expect(result).to.equal([])
     })
@@ -46,7 +48,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
       describe('when the the day is ', () => {
         describe('"2026-04-15"', () => {
           it('call the "FetchRenewalRecipients" with an expiry date 300 days from the test date', async () => {
-            await SendRenewalInvitations.go()
+            await SendRenewalInvitations.go(days)
 
             const actualArgs = FetchRenewalRecipients.go.getCall(0).args[0]
 
@@ -64,7 +66,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
           })
 
           it('call the "FetchRenewalRecipients" with an expiry date 300 days from the test date', async () => {
-            await SendRenewalInvitations.go()
+            await SendRenewalInvitations.go(days)
 
             const actualArgs = FetchRenewalRecipients.go.getCall(0).args[0]
 
