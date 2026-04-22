@@ -45,7 +45,7 @@ const { determineEarliestDate } = require('../../lib/dates.lib.js')
  * @param {object} [trx=null] - Optional transaction object
  */
 async function go(licenceId, changeDate, returnVersionEndDate = null, trx = null) {
-  const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceId, changeDate)
+  const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceId, changeDate, trx)
 
   if (returnRequirements.length === 0) {
     return
@@ -53,7 +53,7 @@ async function go(licenceId, changeDate, returnVersionEndDate = null, trx = null
 
   const licenceRef = returnRequirements[0].returnVersion.licence.licenceRef
   const licenceEndDate = _endDate(returnRequirements[0].returnVersion)
-  const returnCycles = await _fetchReturnCycles(changeDate, returnVersionEndDate)
+  const returnCycles = await _fetchReturnCycles(changeDate, returnVersionEndDate, trx)
 
   for (const returnCycle of returnCycles) {
     await _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef, licenceEndDate, trx)
@@ -66,8 +66,8 @@ function _endDate(returnVersion) {
   return determineEarliestDate([licence.expiredDate, licence.lapsedDate, licence.revokedDate])
 }
 
-async function _fetchReturnCycles(changeDate, returnVersionEndDate) {
-  const query = ReturnCycleModel.query()
+async function _fetchReturnCycles(changeDate, returnVersionEndDate, trx) {
+  const query = ReturnCycleModel.query(trx)
     .select(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
     .where('endDate', '>', changeDate)
 
