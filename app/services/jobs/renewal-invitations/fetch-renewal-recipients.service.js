@@ -12,8 +12,6 @@ const { db } = require('../../../../db/db.js')
 /**
  * Fetches recipients for renewal invitations
  *
- * The licence expired date is calculated and provided upstream.
- *
  * @param {Date} expiredDate - The expired date for the licences
  *
  * @returns {Promise<object[]>} - An array of recipients for with an
