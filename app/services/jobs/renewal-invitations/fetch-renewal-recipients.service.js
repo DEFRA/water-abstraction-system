@@ -5,6 +5,7 @@
  * @module FetchRenewalRecipients
  */
 
+const GenerateExpiredLicencesQueryService = require('./generate-expired-licences-query.service.js')
 const GenerateRenewalRecipientsQueryService = require('./generate-renewal-recipients-query.service.js')
 const { db } = require('../../../../db/db.js')
 
@@ -18,11 +19,11 @@ const { db } = require('../../../../db/db.js')
  * @returns {Promise<object[]>} - An array of recipients for with an
  */
 async function go(expiredDate) {
-  // cte licences = revoked, expired or lapsed <= (no on expiry date) - and have as the expiry
+  const expiredLicencesQuery = GenerateExpiredLicencesQueryService.go()
 
-  const query = GenerateRenewalRecipientsQueryService.go()
+  const query = GenerateRenewalRecipientsQueryService.go(expiredLicencesQuery)
 
-  const { rows } = await db.raw(`${query}`, [expiredDate, expiredDate])
+  const { rows } = await db.raw(query, [expiredDate])
 
   return rows
 }

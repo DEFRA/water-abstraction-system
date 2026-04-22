@@ -10,12 +10,18 @@ const { expect } = Code
 
 // Test helpers
 const RecipientScenariosSeeder = require('../../../support/seeders/recipient-scenarios.seeder.js')
+const { db } = require('../../../../db/db.js')
 
 // Thing under test
 const GenerateRenewalRecipientsQueryService = require('../../../../app/services/jobs/renewal-invitations/generate-renewal-recipients-query.service.js')
-const { db } = require('../../../../db/db.js')
 
 describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => {
+  const expiredLicencesQuery = `
+    SELECT l.licence_ref
+    FROM public.licences l
+    WHERE l.expired_date = ?
+  `
+
   let clock
   let expiredDate
   let scenarios
@@ -63,9 +69,9 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
 
   describe('when there are renewal invitations to send', () => {
     it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
-      const query = GenerateRenewalRecipientsQueryService.go()
+      const query = GenerateRenewalRecipientsQueryService.go(expiredLicencesQuery)
 
-      const { rows } = await db.raw(query, [new Date('2027-02-09'), new Date('2027-02-09')])
+      const { rows } = await db.raw(query, [new Date('2027-02-09')])
 
       const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[0])
 
@@ -75,9 +81,9 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
     })
 
     it('(Scenario 2) returns the licence holder when only it is present and the same for multiple licences', async () => {
-      const query = GenerateRenewalRecipientsQueryService.go()
+      const query = GenerateRenewalRecipientsQueryService.go(expiredLicencesQuery)
 
-      const { rows } = await db.raw(query, [new Date('2027-02-10'), new Date('2027-02-10')])
+      const { rows } = await db.raw(query, [new Date('2027-02-10')])
 
       const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[1])
 
@@ -91,9 +97,9 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
     })
 
     it('(Scenario 3) returns only the primary user when the licence', async () => {
-      const query = GenerateRenewalRecipientsQueryService.go()
+      const query = GenerateRenewalRecipientsQueryService.go(expiredLicencesQuery)
 
-      const { rows } = await db.raw(query, [new Date('2027-02-11'), new Date('2027-02-11')])
+      const { rows } = await db.raw(query, [new Date('2027-02-11')])
 
       const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[2])
 
@@ -106,9 +112,9 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
     })
 
     it('(Scenario 4) returns only the primary user when it is the same for multiple registered licences', async () => {
-      const query = GenerateRenewalRecipientsQueryService.go()
+      const query = GenerateRenewalRecipientsQueryService.go(expiredLicencesQuery)
 
-      const { rows } = await db.raw(query, [new Date('2027-02-12'), new Date('2027-02-12')])
+      const { rows } = await db.raw(query, [new Date('2027-02-12')])
 
       const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[3])
 

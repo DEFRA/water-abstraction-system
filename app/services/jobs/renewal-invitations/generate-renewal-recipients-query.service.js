@@ -14,14 +14,18 @@
  * not the licence holder.
  *
  * If the licence is not registered, then we return the licence holder.
+ * @param expiredLicencesQuery
  */
-function go() {
+function go(expiredLicencesQuery) {
   const licenceHolderQuery = _licenceHolderQuery()
   const primaryUserQuery = _primaryUserQuery()
   const processQuery = _processForSending()
 
   return `
     WITH
+      expired_licences AS (
+        ${expiredLicencesQuery}
+      ),
       primary_user as (
         ${primaryUserQuery}
       ),
@@ -93,11 +97,11 @@ function _licenceHolderQuery() {
     ) AS llv ON llv.licence_id = l.id
     INNER JOIN public.companies c ON c.id = llv.company_id
     INNER JOIN public.addresses a ON a.id = llv.address_id
+    INNER JOIN expired_licences el
+               ON el.licence_ref = l.licence_ref
     LEFT JOIN registered_licences rl
       ON rl.licence_ref = l.licence_ref
-    WHERE
-      l.expired_date = ?
-    AND rl.licence_ref IS NULL
+    WHERE rl.licence_ref IS NULL
   `
 }
 
@@ -116,9 +120,8 @@ function _primaryUserQuery() {
       ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
     INNER JOIN public.licence_entities le
       ON le.id = ler.licence_entity_id
-    INNER JOIN public.licences l
-      ON l.licence_ref = ldh.licence_ref
-    WHERE l.expired_date = ?
+    INNER JOIN expired_licences el
+      ON el.licence_ref = ldh.licence_ref
     `
 }
 
