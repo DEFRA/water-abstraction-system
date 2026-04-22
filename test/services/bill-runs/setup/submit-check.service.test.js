@@ -13,8 +13,9 @@ const { engineTriggers } = require('../../../../app/lib/static-lookups.lib.js')
 
 // Things we need to stub
 const CreateService = require('../../../../app/services/bill-runs/setup/create.service.js')
+const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
 const DetermineBlockingBillRunService = require('../../../../app/services/bill-runs/setup/determine-blocking-bill-run.service.js')
-const SessionModel = require('../../../../app/models/session.model.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const SubmitCheckService = require('../../../../app/services/bill-runs/setup/submit-check.service.js')
@@ -40,9 +41,8 @@ describe('Bill Runs - Setup - Submit Check service', () => {
   beforeEach(async () => {
     session = { id: sessionId, region: region.id, regionName: region.displayName, type: 'annual' }
 
-    Sinon.stub(SessionModel, 'query').returns({
-      findById: Sinon.stub().withArgs(sessionId).resolves(session)
-    })
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+    Sinon.stub(DeleteSessionDal, 'go').resolves()
   })
 
   afterEach(() => {
@@ -64,6 +64,12 @@ describe('Bill Runs - Setup - Submit Check service', () => {
 
         expect(createStub.called).to.be.true()
         expect(result).to.equal({})
+      })
+
+      it('deletes the session data', async () => {
+        await SubmitCheckService.go(session.id, auth)
+
+        expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
       })
     })
 
