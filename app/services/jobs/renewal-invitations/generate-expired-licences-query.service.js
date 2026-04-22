@@ -25,7 +25,7 @@ function go() {
       )
       AND (
         l.revoked_date IS NULL OR l.revoked_date > l.expired_date
-      );
+      )
   `
 }
 
