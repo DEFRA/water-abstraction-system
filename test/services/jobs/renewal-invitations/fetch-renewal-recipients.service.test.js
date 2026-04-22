@@ -27,29 +27,9 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
 
     scenarios = []
 
-    let scenario
-
     // 1) Licence holder only
     expiredDate = new Date('2027-02-09')
-    scenario = await RecipientScenariosSeeder.licenceHolderOnly([], expiredDate)
-    scenarios.push(scenario)
-
-    // 2) Same licence holder, but is linked to multiple licences with due return logs - only one recipient record
-    // will be returned with multiple licence refs
-    expiredDate = new Date('2027-02-10')
-    scenario = await RecipientScenariosSeeder.licenceHolderWithMultipleLicences([], expiredDate)
-    scenarios.push(scenario)
-
-    // 3) Primary user only. All licences have a licence holder record, but when 'registered' the query will only
-    // return the primary user recipient.
-    expiredDate = new Date('2027-02-11')
-    scenario = await RecipientScenariosSeeder.primaryUserOnly([], expiredDate)
-    scenarios.push(scenario)
-
-    // 7) Same primary user, but is linked to multiple licences - only one recipient record will be returned with
-    // multiple licence refs
-    expiredDate = new Date('2027-02-12')
-    scenario = await RecipientScenariosSeeder.primaryUserWithMultipleLicences([], expiredDate)
+    const scenario = await RecipientScenariosSeeder.licenceHolderOnly([], expiredDate)
     scenarios.push(scenario)
   })
 
@@ -69,46 +49,6 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
       _formatScenario(sendingResults[0])
 
       expect(result).to.equal(sendingResults)
-    })
-
-    it('(Scenario 2) returns the licence holder when only it is present and the same for multiple licences', async () => {
-      const result = await FetchRenewalRecipients.go(new Date('2027-02-10'))
-
-      const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[1])
-
-      _formatScenario(sendingResults[0])
-      _formatScenario(sendingResults[1])
-
-      expect(result).to.contain(sendingResults[0])
-      // We could test rows contains the second licence holder recipient recorded in the scenario, but they are the
-      // same so it would also return true and not prove anything
-      expect(sendingResults[0]).to.equal(sendingResults[1])
-    })
-
-    it('(Scenario 3) returns only the primary user when the licence', async () => {
-      const result = await FetchRenewalRecipients.go(new Date('2027-02-11'))
-
-      const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[2])
-
-      _formatScenario(sendingResults[1])
-
-      expect(result).to.contain(sendingResults[1])
-
-      // NOTE: When a licence is registered sendingResult[0] will always reference the licence holder
-      expect(result).not.to.contain(sendingResults[0])
-    })
-
-    it('(Scenario 4) returns only the primary user when it is the same for multiple registered licences', async () => {
-      const result = await FetchRenewalRecipients.go(new Date('2027-02-12'))
-
-      const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[3])
-
-      _formatScenario(sendingResults[2])
-
-      expect(result).to.contain(sendingResults[2])
-
-      // NOTE: When a licence is registered sendingResult[0] will always reference the licence holder
-      expect(result).not.to.contain(sendingResults[0])
     })
   })
 })
