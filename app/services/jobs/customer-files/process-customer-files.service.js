@@ -53,7 +53,10 @@ async function go(days) {
 
     calculateAndLogTimeTaken(startTime, 'Customer files job complete', { count: billingAccounts.length })
   } catch (error) {
-    global.GlobalNotifier.omfg('Customer files job failed', null, error)
+    const message = 'Customer files job failed'
+
+    global.GlobalNotifier.omfg(message, null, error)
+    global.GlobalNotifier.redAlert(message)
   }
 }
 

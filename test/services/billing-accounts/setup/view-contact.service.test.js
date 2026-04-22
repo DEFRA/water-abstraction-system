@@ -8,13 +8,14 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Things we need to stub
-const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
-
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things we need to stub
+const FetchCompanyContactsService = require('../../../../app/services/billing-accounts/setup/fetch-company-contacts.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ViewContactService = require('../../../../app/services/billing-accounts/setup/view-contact.service.js')
@@ -31,24 +32,25 @@ describe('Billing Accounts - Setup - Contact Service', () => {
   let session
   let sessionData
 
-  beforeEach(async () => {
+  beforeEach(() => {
     Sinon.stub(FetchCompanyContactsService, 'go').resolves(companyContacts)
   })
 
-  afterEach(async () => {
-    await session.$query().delete()
+  afterEach(() => {
     Sinon.restore()
   })
 
   describe('when called', () => {
     describe('and the contact is for the existing account', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountSelected: billingAccount.company.id,
           billingAccount
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        Sinon.stub(FetchSessionDal, 'go').resolves(session)
       })
 
       it('returns page data for the view', async () => {
@@ -84,14 +86,16 @@ describe('Billing Accounts - Setup - Contact Service', () => {
     })
 
     describe('and the contact is for a new account', () => {
-      beforeEach(async () => {
+      beforeEach(() => {
         sessionData = {
           accountSelected: 'another',
           billingAccount,
           existingAccount: billingAccount.company.id
         }
 
-        session = await SessionHelper.add({ data: sessionData })
+        session = SessionModelStub.build(Sinon, sessionData)
+
+        Sinon.stub(FetchSessionDal, 'go').resolves(session)
       })
 
       it('returns page data for the view', async () => {

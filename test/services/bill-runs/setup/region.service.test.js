@@ -10,24 +10,30 @@ const { expect } = Code
 
 // Test helpers
 const RegionHelper = require('../../../support/helpers/region.helper.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things we need to stub
 const FetchRegionsService = require('../../../../app/services/bill-runs/setup/fetch-regions.service.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const RegionService = require('../../../../app/services/bill-runs/setup/region.service.js')
 
 describe('Bill Runs - Setup - Region service', () => {
   let session
+  let sessionData
   let regions
   let region
 
-  beforeEach(async () => {
+  beforeEach(() => {
     regions = RegionHelper.data
     region = RegionHelper.select()
 
-    session = await SessionHelper.add({ data: { region: region.id } })
+    sessionData = { region: region.id }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     Sinon.stub(FetchRegionsService, 'go').resolves(regions)
   })

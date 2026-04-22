@@ -26,7 +26,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub(), redAlert: Sinon.stub() }
     global.GlobalNotifier = notifierStub
   })
 
@@ -119,7 +119,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
       Sinon.stub(FetchLicenceUpdatesService, 'go').rejects()
     })
 
-    it('handles the error', async () => {
+    it('records the error by calling "omfg()"', async () => {
       await ProcessLicenceUpdatesService.go()
 
       const args = notifierStub.omfg.firstCall.args
@@ -127,6 +127,18 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
       expect(args[0]).to.equal('Licence updates job failed')
       expect(args[1]).to.be.null()
       expect(args[2]).to.be.an.error()
+    })
+
+    it('notifies the team by calling "redAlert()"', async () => {
+      await ProcessLicenceUpdatesService.go()
+
+      const args = notifierStub.redAlert.firstCall.args
+
+      expect(args[0]).to.equal('Licence updates job failed')
+    })
+
+    it('does not throw an error', async () => {
+      await expect(ProcessLicenceUpdatesService.go()).not.to.reject()
     })
   })
 })

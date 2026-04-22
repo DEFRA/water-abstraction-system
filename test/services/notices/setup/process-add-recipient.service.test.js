@@ -5,27 +5,31 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const AddressHelper = require('../../../support/helpers/address.helper.js')
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ProcessAddRecipientService = require('../../../../app/services/notices/setup/process-add-recipient.service.js')
 
 describe('Notices - Setup - Process Add Recipient service', () => {
   let contactHashId
+  let fetchSessionStub
   let licenceRef
   let session
   let sessionData
   let sessionId
   let yarStub
 
-  beforeEach(async () => {
+  beforeEach(() => {
     sessionId = generateUUID()
 
     licenceRef = generateLicenceRef()
@@ -35,6 +39,14 @@ describe('Notices - Setup - Process Add Recipient service', () => {
       licenceRef,
       selectedRecipients: []
     }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when there is an address saved in the session', () => {
@@ -61,29 +73,34 @@ describe('Notices - Setup - Process Add Recipient service', () => {
       })
 
       describe('and this is the first additional contact to be added', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ id: sessionId, data: sessionData })
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, {
+            ...sessionData,
+            id: sessionId
+          })
+
+          fetchSessionStub.resolves(session)
+
           yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
         })
 
         it('adds an `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
           await ProcessAddRecipientService.go(sessionId, yarStub)
 
-          const refreshedSession = await session.$query()
-
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
           expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
-          expect(refreshedSession.additionalRecipients).equal([
+          expect(session.additionalRecipients).equal([
             {
               contact: {
-                name: sessionData.contactName,
-                address1: sessionData.addressJourney.address.addressLine1,
-                address2: sessionData.addressJourney.address.addressLine2,
-                address3: sessionData.addressJourney.address.addressLine3,
-                address4: sessionData.addressJourney.address.addressLine4,
-                postcode: sessionData.addressJourney.address.postcode
+                address1: 'ENVIRONMENT AGENCY',
+                address2: 'HORIZON HOUSE DEANERY ROAD',
+                address3: 'VILLAGE GREEN',
+                address4: 'BRISTOL',
+                country: undefined,
+                name: 'Fake Person',
+                postcode: 'BS1 5AH'
               },
               contact_hash_id: contactHashId,
               contact_type: 'single use',
@@ -93,13 +110,13 @@ describe('Notices - Setup - Process Add Recipient service', () => {
               message_type: 'Letter'
             }
           ])
-          expect(refreshedSession.selectedRecipients).equal([contactHashId])
-          expect(refreshedSession.addressJourney.redirectUrl).equal(`/system/notices/setup/${sessionId}/add-recipient`)
+          expect(session.selectedRecipients).equal([contactHashId])
+          expect(session.addressJourney.redirectUrl).equal(`/system/notices/setup/${sessionId}/add-recipient`)
         })
       })
 
       describe('and there are existing additional contacts stored in the session', () => {
-        beforeEach(async () => {
+        beforeEach(() => {
           sessionData.additionalRecipients = [
             {
               contact: {
@@ -119,20 +136,24 @@ describe('Notices - Setup - Process Add Recipient service', () => {
           ]
           sessionData.selectedRecipients = ['78de9d5db4c52b66818004e2b0dc4392']
 
-          session = await SessionHelper.add({ id: sessionId, data: sessionData })
+          session = SessionModelStub.build(Sinon, {
+            ...sessionData,
+            id: sessionId
+          })
+
+          fetchSessionStub.resolves(session)
+
           yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
         })
 
         it('adds the recipient to `additionalRecipients` and pushes its hash ID into `selectedRecipients`', async () => {
           await ProcessAddRecipientService.go(sessionId, yarStub)
 
-          const refreshedSession = await session.$query()
-
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
           expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
-          expect(refreshedSession.additionalRecipients).equal([
+          expect(session.additionalRecipients).equal([
             {
               contact: {
                 name: 'Fake Other',
@@ -150,12 +171,13 @@ describe('Notices - Setup - Process Add Recipient service', () => {
             },
             {
               contact: {
-                name: session.contactName,
-                address1: session.addressJourney.address.addressLine1,
-                address2: session.addressJourney.address.addressLine2,
-                address3: session.addressJourney.address.addressLine3,
-                address4: session.addressJourney.address.addressLine4,
-                postcode: session.addressJourney.address.postcode
+                address1: 'ENVIRONMENT AGENCY',
+                address2: 'HORIZON HOUSE DEANERY ROAD',
+                address3: 'VILLAGE GREEN',
+                address4: 'BRISTOL',
+                country: undefined,
+                name: 'Fake Person',
+                postcode: 'BS1 5AH'
               },
               contact_hash_id: contactHashId,
               contact_type: 'single use',
@@ -165,8 +187,8 @@ describe('Notices - Setup - Process Add Recipient service', () => {
               message_type: 'Letter'
             }
           ])
-          expect(refreshedSession.selectedRecipients).equal(['78de9d5db4c52b66818004e2b0dc4392', contactHashId])
-          expect(refreshedSession.addressJourney.redirectUrl).equal(`/system/notices/setup/${sessionId}/add-recipient`)
+          expect(session.selectedRecipients).equal(['78de9d5db4c52b66818004e2b0dc4392', contactHashId])
+          expect(session.addressJourney.redirectUrl).equal(`/system/notices/setup/${sessionId}/add-recipient`)
         })
       })
     })
@@ -191,27 +213,34 @@ describe('Notices - Setup - Process Add Recipient service', () => {
       })
 
       describe('and this is the first additional contact to be added', () => {
-        beforeEach(async () => {
-          session = await SessionHelper.add({ id: sessionId, data: sessionData })
+        beforeEach(() => {
+          session = SessionModelStub.build(Sinon, {
+            ...sessionData,
+            id: sessionId
+          })
+
+          fetchSessionStub.resolves(session)
+
           yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
         })
 
         it('adds a `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
           await ProcessAddRecipientService.go(sessionId, yarStub)
 
-          const refreshedSession = await session.$query()
-
           const [flashType, bannerMessage] = yarStub.flash.args[0]
 
           expect(flashType).to.equal('notification')
           expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Additional recipient added' })
-          expect(refreshedSession.additionalRecipients).equal([
+          expect(session.additionalRecipients).equal([
             {
               contact: {
-                name: sessionData.contactName,
-                address1: sessionData.addressJourney.address.addressLine1,
-                address4: sessionData.addressJourney.address.addressLine4,
-                country: sessionData.addressJourney.address.country
+                address1: '1 Faux Ferme',
+                address2: undefined,
+                address3: undefined,
+                address4: 'Faux Ville',
+                country: 'France',
+                name: 'Fake Person',
+                postcode: undefined
               },
               contact_hash_id: contactHashId,
               contact_type: 'single use',
@@ -221,8 +250,8 @@ describe('Notices - Setup - Process Add Recipient service', () => {
               message_type: 'Letter'
             }
           ])
-          expect(refreshedSession.selectedRecipients).equal([contactHashId])
-          expect(refreshedSession.addressJourney.redirectUrl).equal(`/system/notices/setup/${sessionId}/add-recipient`)
+          expect(session.selectedRecipients).equal([contactHashId])
+          expect(session.addressJourney.redirectUrl).equal(`/system/notices/setup/${sessionId}/add-recipient`)
         })
       })
     })

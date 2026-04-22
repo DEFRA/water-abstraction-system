@@ -3,26 +3,37 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const SessionHelper = require('../../../support/helpers/session.helper.js')
+const SessionModelStub = require('../../../support/stubs/session.stub.js')
+
+// Things to stub
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const StopOrReduceService = require('../../../../app/services/licence-monitoring-station/setup/stop-or-reduce.service.js')
 
 describe('Licence Monitoring Station Setup - Stop Or Reduce service', () => {
   let session
+  let sessionData
 
-  before(async () => {
-    session = await SessionHelper.add({
-      data: {
-        monitoringStationId: 'e1c44f9b-51c2-4aee-a518-5509d6f05869',
-        label: 'Monitoring Station Label'
-      }
-    })
+  beforeEach(() => {
+    sessionData = {
+      monitoringStationId: 'e1c44f9b-51c2-4aee-a518-5509d6f05869',
+      label: 'Monitoring Station Label'
+    }
+
+    session = SessionModelStub.build(Sinon, sessionData)
+
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
