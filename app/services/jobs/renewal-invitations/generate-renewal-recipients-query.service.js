@@ -14,7 +14,10 @@
  * not the licence holder.
  *
  * If the licence is not registered, then we return the licence holder.
- * @param expiredLicencesQuery
+ *
+ * @param {string} expiredLicencesQuery - The query to return all expired licences
+ *
+ * @returns {string} a query to return all renewal recipients with expired licences
  */
 function go(expiredLicencesQuery) {
   const licenceHolderQuery = _licenceHolderQuery()

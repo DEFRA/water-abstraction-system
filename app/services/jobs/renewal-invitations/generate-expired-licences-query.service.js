@@ -8,13 +8,24 @@
 /**
  * Generates the SQL query expired licences
  *
+ * An expired licence is one that has expired and matches the date arg provided
+ *
+ * @returns {string} SQL query for expired licences
  */
 function go() {
-  // cte licences = revoked, expired or lapsed <= (no on expiry date) - and have as the expiry
   return `
-    SELECT l.licence_ref
-    FROM public.licences l
-    WHERE l.expired_date = ?
+    SELECT
+      l.licence_ref
+    FROM
+      public.licences l
+    WHERE
+      l.expired_date = ?
+      AND (
+        l.lapsed_date IS NULL OR l.lapsed_date > l.expired_date
+      )
+      AND (
+        l.revoked_date IS NULL OR l.revoked_date > l.expired_date
+      );
   `
 }
 
