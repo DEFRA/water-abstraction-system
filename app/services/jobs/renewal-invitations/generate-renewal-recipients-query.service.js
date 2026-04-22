@@ -98,7 +98,7 @@ function _licenceHolderQuery() {
     INNER JOIN public.companies c ON c.id = llv.company_id
     INNER JOIN public.addresses a ON a.id = llv.address_id
     INNER JOIN expired_licences el
-               ON el.licence_ref = l.licence_ref
+      ON el.licence_ref = l.licence_ref
     LEFT JOIN registered_licences rl
       ON rl.licence_ref = l.licence_ref
     WHERE rl.licence_ref IS NULL
