@@ -9,34 +9,34 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
-const ReturnVersionHelper = require('../../../../support/helpers/return-version.helper.js')
+const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 
 // Things we need to stub
-const GenerateReturnVersionRequirementsService = require('../../../../../app/services/return-versions/setup/check/generate-return-version-requirements.service.js')
-const ProcessExistingReturnVersionsService = require('../../../../../app/services/return-versions/setup/check/process-existing-return-versions.service.js')
+const DetermineNextVersionNumberDal = require('../../../../../app/dal/return-versions/determine-next-version-number.dal.js')
+const FetchOtherPurposeIdsDal = require('../../../../../app/dal/return-versions/fetch-other-purpose-ids.dal.js')
 
 // Thing under test
 const GenerateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/generate-return-version.service.js')
 
-describe('Return Versions Setup - Generate Return Version service', () => {
-  const userId = 12345
-
+describe('Return Versions - Setup - Generate Return Version service', () => {
   let licenceId
+  let session
   let sessionData
+  let userId
 
-  beforeEach(async () => {
-    Sinon.stub(GenerateReturnVersionRequirementsService, 'go').resolves('return requirements data')
-    Sinon.stub(ProcessExistingReturnVersionsService, 'go').resolves('2024-04-01T00:00:00.000Z')
+  beforeEach(() => {
+    licenceId = '7cf4a46b-1375-42c8-bfe7-24c1bfff765c'
+    userId = 12345
+
+    Sinon.stub(DetermineNextVersionNumberDal, 'go').resolves(1)
   })
 
   afterEach(() => {
     Sinon.restore()
   })
 
-  describe('when called with the minimum possible session data and previous return versions exist', () => {
-    beforeEach(async () => {
-      licenceId = generateUUID()
+  describe('when called to generate a "standard" return version', () => {
+    beforeEach(() => {
       sessionData = {
         checkPageVisited: true,
         journey: 'returns-required',
@@ -62,97 +62,122 @@ describe('Return Versions Setup - Generate Return Version service', () => {
         },
         method: 'use-existing-requirements',
         multipleUpload: false,
+        quarterlyReturns: false,
         reason: 'minor-change',
-        requirements: ['return requirements data'],
+        requirements: [
+          {
+            points: ['796f83bb-d50d-446f-bc47-28daff6bcb78'],
+            purposes: [
+              {
+                id: 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e',
+                alias: ''
+              }
+            ],
+            returnsCycle: 'winter-and-all-year',
+            siteDescription: 'Site Number One',
+            abstractionPeriod: {
+              abstractionPeriodEndDay: '31',
+              abstractionPeriodEndMonth: '3',
+              abstractionPeriodStartDay: '1',
+              abstractionPeriodStartMonth: '4'
+            },
+            frequencyReported: 'month',
+            frequencyCollected: 'week',
+            agreementsExceptions: ['none']
+          }
+        ],
         returnVersionStartDate: '2023-02-13',
         startDateOptions: 'licenceStartDate'
       }
 
-      await ReturnVersionHelper.add({ licenceId, version: 100 })
-      await ReturnVersionHelper.add({ licenceId, version: 102 })
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      Sinon.stub(FetchOtherPurposeIdsDal, 'go').resolves({
+        primaryPurposeId: 'c6fd4b2a-82b5-42b0-a98a-087ba52f9a4f',
+        secondaryPurposeId: '0a80d135-9bd4-40ec-90ff-f4a365ccac3f'
+      })
     })
 
-    it('generates the data required to populate a record in the "return_version" table', async () => {
-      const result = await GenerateReturnVersionService.go(sessionData, userId)
+    it('generates a "standard" return version for persisting from the session data', async () => {
+      const result = await GenerateReturnVersionService.go(session, userId)
 
-      expect(result.returnRequirements).to.equal('return requirements data')
-      expect(result.returnVersion.createdBy).to.equal(userId)
-      expect(result.returnVersion.endDate).to.equal('2024-04-01T00:00:00.000Z')
-      expect(result.returnVersion.licenceId).to.equal(licenceId)
-      expect(result.returnVersion.multipleUpload).to.be.false()
-      expect(result.returnVersion.notes).to.be.undefined()
-      expect(result.returnVersion.quarterlyReturns).to.be.false()
-      expect(result.returnVersion.reason).to.equal(sessionData.reason)
-      expect(result.returnVersion.startDate).to.equal(new Date('2023-02-13'))
-      expect(result.returnVersion.status).to.equal('current')
-
-      // Version number is 103 because this is the next version number after the previous version
-      expect(result.returnVersion.version).to.equal(103)
-      expect(ProcessExistingReturnVersionsService.go.called).to.be.true()
-    })
-
-    it('processes the existing return versions', async () => {
-      await GenerateReturnVersionService.go(sessionData, userId)
-
-      expect(ProcessExistingReturnVersionsService.go.called).to.be.true()
-    })
-  })
-
-  describe('when called with the maximum possible session data and no previous return versions exist', () => {
-    beforeEach(async () => {
-      licenceId = generateUUID()
-      sessionData = {
-        checkPageVisited: true,
-        journey: 'returns-required',
-        licence: {
-          id: licenceId,
+      expect(result).to.equal({
+        returnRequirements: [
+          {
+            abstractionPeriodStartDay: '1',
+            abstractionPeriodStartMonth: '4',
+            abstractionPeriodEndDay: '31',
+            abstractionPeriodEndMonth: '3',
+            collectionFrequency: 'week',
+            fiftySixException: false,
+            gravityFill: false,
+            points: ['796f83bb-d50d-446f-bc47-28daff6bcb78'],
+            reabstraction: false,
+            reportingFrequency: 'month',
+            returnsFrequency: 'year',
+            returnRequirementPurposes: [
+              {
+                alias: null,
+                primaryPurposeId: 'c6fd4b2a-82b5-42b0-a98a-087ba52f9a4f',
+                purposeId: 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e',
+                secondaryPurposeId: '0a80d135-9bd4-40ec-90ff-f4a365ccac3f'
+              }
+            ],
+            siteDescription: 'Site Number One',
+            summer: false,
+            twoPartTariff: false
+          }
+        ],
+        returnVersion: {
+          createdBy: 12345,
           endDate: null,
-          startDate: '1967-09-01T00:00:00.000Z',
-          licenceRef: '88/88/8888',
-          licenceHolder: 'Another licence holder',
-          returnVersions: []
-        },
-        method: 'set-up-manually',
-        multipleUpload: true,
-        note: {
-          content: 'This is a test note',
-          userEmail: 'admin-internal@wrls.gov.uk'
-        },
-        reason: 'change-to-special-agreement',
-        quarterlyReturns: true,
-        requirements: ['return requirements data'],
-        returnVersionStartDate: '2025-04-01', // date set for quarterly returns
-        startDateOptions: 'anotherStartDate'
-      }
+          licenceId: '7cf4a46b-1375-42c8-bfe7-24c1bfff765c',
+          multipleUpload: false,
+          notes: undefined,
+          quarterlyReturns: false,
+          reason: 'minor-change',
+          startDate: new Date('2023-02-13'),
+          status: 'current',
+          version: 1
+        }
+      })
     })
 
-    it('generates the data required to populate a record in the "return_version" table', async () => {
-      const result = await GenerateReturnVersionService.go(sessionData, userId)
+    describe('and the return version start date is after the 1st April 2025', () => {
+      beforeEach(() => {
+        sessionData.returnVersionStartDate = '2025-04-02'
+      })
 
-      expect(result.returnRequirements).to.equal('return requirements data')
-      expect(result.returnVersion.createdBy).to.equal(userId)
-      expect(result.returnVersion.endDate).to.be.null()
-      expect(result.returnVersion.licenceId).to.equal(licenceId)
-      expect(result.returnVersion.multipleUpload).to.be.true()
-      expect(result.returnVersion.notes).to.equal(sessionData.note.content)
-      expect(result.returnVersion.quarterlyReturns).to.be.true()
-      expect(result.returnVersion.reason).to.equal(sessionData.reason)
-      expect(result.returnVersion.startDate).to.equal(new Date('2025-04-01'))
-      expect(result.returnVersion.status).to.equal('current')
-      // Version number is 1 because no previous return versions exist
-      expect(result.returnVersion.version).to.equal(1)
-    })
+      describe('and the user has selected quarterly returns in the session', () => {
+        beforeEach(() => {
+          sessionData.quarterlyReturns = true
+          session = SessionModelStub.build(Sinon, sessionData)
+        })
 
-    it('does not process any existing return versions', async () => {
-      await GenerateReturnVersionService.go(sessionData, userId)
+        it('generates a return version with quarterly returns set to true', async () => {
+          const result = await GenerateReturnVersionService.go(session, userId)
 
-      expect(ProcessExistingReturnVersionsService.go.called).to.be.false()
+          expect(result.returnVersion.quarterlyReturns).to.be.true()
+        })
+      })
+
+      describe('and the user has not selected quarterly returns in the session', () => {
+        beforeEach(() => {
+          sessionData.quarterlyReturns = false
+          session = SessionModelStub.build(Sinon, sessionData)
+        })
+
+        it('generates a return version with quarterly returns set to false', async () => {
+          const result = await GenerateReturnVersionService.go(session, userId)
+
+          expect(result.returnVersion.quarterlyReturns).to.be.false()
+        })
+      })
     })
   })
 
-  describe('when called with session data from the "no-returns-required" journey', () => {
-    beforeEach(async () => {
-      licenceId = generateUUID()
+  describe('when called to generate a "no-returns-required" return version', () => {
+    beforeEach(() => {
       sessionData = {
         checkPageVisited: true,
         journey: 'no-returns-required',
@@ -171,21 +196,28 @@ describe('Return Versions Setup - Generate Return Version service', () => {
         returnVersionStartDate: '2023-02-13',
         startDateOptions: 'licenceStartDate'
       }
+
+      session = SessionModelStub.build(Sinon, sessionData)
     })
 
-    it('generates the data required to populate a record in the "return_version" table', async () => {
-      const result = await GenerateReturnVersionService.go(sessionData, userId)
+    it('generates a "no-returns-required" return version for persisting from the session data', async () => {
+      const result = await GenerateReturnVersionService.go(session, userId)
 
-      expect(result.returnRequirements).to.equal([])
-      expect(result.returnVersion.createdBy).to.equal(userId)
-      expect(result.returnVersion.endDate).to.be.null()
-      expect(result.returnVersion.licenceId).to.equal(licenceId)
-      expect(result.returnVersion.multipleUpload).to.be.false()
-      expect(result.returnVersion.notes).to.be.undefined()
-      expect(result.returnVersion.reason).to.equal(sessionData.reason)
-      expect(result.returnVersion.startDate).to.equal(new Date('2023-02-13'))
-      expect(result.returnVersion.status).to.equal('current')
-      expect(result.returnVersion.version).to.equal(1)
+      expect(result).to.equal({
+        returnRequirements: [],
+        returnVersion: {
+          createdBy: 12345,
+          endDate: null,
+          licenceId: '7cf4a46b-1375-42c8-bfe7-24c1bfff765c',
+          multipleUpload: false,
+          notes: undefined,
+          quarterlyReturns: false,
+          reason: 'returns-exception',
+          startDate: new Date('2023-02-13'),
+          status: 'current',
+          version: 1
+        }
+      })
     })
   })
 })

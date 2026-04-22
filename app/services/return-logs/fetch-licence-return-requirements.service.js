@@ -14,15 +14,16 @@ const { db } = require('../../../db/db.js')
  *
  * @param {string} licenceId - the UUID of the licence that the return requirements are linked to
  * @param {Date} changeDate - the date where the change occurs from and from which we need to reissue return logs from
+ * @param {object} [trx=null] - Optional transaction object
  *
  * @returns {Promise<module:ReturnRequirementModel[]>} the matching return requirements for the licence and change date
  */
-async function go(licenceId, changeDate) {
-  return _fetch(licenceId, changeDate)
+async function go(licenceId, changeDate, trx = null) {
+  return _fetch(licenceId, changeDate, trx)
 }
 
-async function _fetch(licenceId, changeDate) {
-  return ReturnRequirementModel.query()
+async function _fetch(licenceId, changeDate, trx) {
+  return ReturnRequirementModel.query(trx)
     .select([
       'abstractionPeriodEndDay',
       'abstractionPeriodEndMonth',

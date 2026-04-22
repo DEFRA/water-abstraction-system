@@ -5,7 +5,7 @@
  * @module GenerateReturnVersionRequirementsService
  */
 
-const LicenceVersionModel = require('../../../../models/licence-version.model.js')
+const FetchOtherPurposeIdsDal = require('../../../../dal/return-versions/fetch-other-purpose-ids.dal.js')
 
 /**
  * Uses the session data to generate the data sets required to create the return version requirements for a licence
@@ -52,13 +52,7 @@ async function _generateReturnRequirementPurposes(licenceId, purposes) {
   const returnRequirementPurposes = []
 
   for (const purpose of purposes) {
-    const { primaryPurposeId, secondaryPurposeId } = await LicenceVersionModel.query()
-      .select('primaryPurposeId', 'secondaryPurposeId')
-      .innerJoinRelated('licenceVersionPurposes')
-      .where('licenceId', licenceId)
-      .andWhere('status', 'current')
-      .andWhere('purposeId', purpose.id)
-      .first()
+    const { primaryPurposeId, secondaryPurposeId } = await FetchOtherPurposeIdsDal.go(licenceId, purpose.id)
 
     const returnRequirementPurpose = {
       alias: purpose.alias !== '' ? purpose.alias : null,

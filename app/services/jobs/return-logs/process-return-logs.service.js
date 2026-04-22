@@ -42,7 +42,11 @@ async function go(cycle) {
     for (const returnRequirement of returnRequirements) {
       const licenceEndDate = _endDate(returnRequirement.returnVersion)
 
-      await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
+      try {
+        await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
+      } catch (error) {
+        global.GlobalNotifier.omfg('Return logs creation errored', { returnRequirement, returnCycle }, error)
+      }
     }
 
     calculateAndLogTimeTaken(startTime, 'Return logs job complete', { count: returnRequirements.length, cycle })
