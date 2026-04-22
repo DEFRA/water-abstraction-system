@@ -15,7 +15,7 @@ const { db } = require('../../../../db/db.js')
 // Thing under test
 const GenerateExpiredLicencesQueryService = require('../../../../app/services/jobs/renewal-invitations/generate-expired-licences-query.service.js')
 
-describe('Jobs - Renewal Invitations - Generate expired licences service', () => {
+describe('Jobs - Renewal Invitations - Generate expired licences query service', () => {
   let additionalTestLicence
   let clock
   let expiredDate

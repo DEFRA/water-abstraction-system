@@ -15,7 +15,7 @@ const { db } = require('../../../../db/db.js')
 // Thing under test
 const GenerateRenewalRecipientsQueryService = require('../../../../app/services/jobs/renewal-invitations/generate-renewal-recipients-query.service.js')
 
-describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => {
+describe('Jobs - Renewal Invitations - Generate renewal recipients query service', () => {
   const expiredLicencesQuery = `
     SELECT l.licence_ref
     FROM public.licences l
