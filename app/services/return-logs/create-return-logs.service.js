@@ -23,7 +23,7 @@ const { determineReturnsPeriods } = require('../../lib/return-periods.lib.js')
 async function go(returnRequirement, returnCycle, licenceEndDate, trx = null) {
   const returnLogs = _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate)
 
-  return await _persistReturnLogs(returnLogs, trx)
+  return _persistReturnLogs(returnLogs, trx)
 }
 
 function _generateReturnLogs(returnRequirement, returnCycle, licenceEndDate = null) {
