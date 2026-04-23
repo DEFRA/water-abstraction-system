@@ -23,6 +23,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
   const recipients = [{ licenceRefs: generateLicenceRef() }]
 
   let clock
+  let createNoticeStub
   let expiredDate
   let todayDate
 
@@ -55,22 +56,15 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
 
       const args = CreateNoticeService.go.getCall(0).args
 
-      // Argument 1: Notice type
-      const config = args[0]
-      expect(config.name).to.equal('Returns: invitation')
-      expect(config.subType).to.equal('returnInvitation')
-      expect(config.referenceCode).to.startWith('RINV-')
+      expect(args[0].referenceCode).to.startWith('RINV-')
 
-      // Argument 2: The Recipients List
-      expect(args[1]).to.equal(recipients)
-
-      // Argument 3: The issuer email
       // Argument 1: Notice type
-      expect(createNoticeStub.firstCall.args[0]).to.equal({
+      expect(createNoticeStub.firstCall.args[0]).to.contain({
         name: 'Returns: invitation',
-        referenceCode: 'RINV-',
         subType: 'returnInvitation'
       })
+
+      expect(createNoticeStub.firstCall.args[0].referenceCode).to.startWith('RINV-')
 
       // Argument 2: The Recipients List
       expect(createNoticeStub.firstCall.args[1]).to.equal(recipients)

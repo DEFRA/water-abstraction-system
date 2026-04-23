@@ -51,7 +51,7 @@ async function _notice(recipients) {
     name
   }
 
-  return CreateNoticeService.go(noticeType, recipients, 'water_abstractiondigital@environment-agency.gov.uk')
+  return CreateNoticeService.go(noticeData, recipients, 'water_abstractiondigital@environment-agency.gov.uk')
 }
 
 module.exports = {
