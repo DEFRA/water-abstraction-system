@@ -358,7 +358,7 @@ const NoticeTypes = Object.freeze({
     notificationType: 'Returns reminder'
   },
   [NoticeType.RENEWAL_INVITATIONS]: {
-    name: 'Invitations: renewal',
+    name: 'Renewals: invitation',
     prefix: 'REIN-',
     subType: 'renewalInvitations',
     notificationType: 'Renewal invitations'
