@@ -5,7 +5,9 @@
  * @module ProcessExistingReturnVersionsService
  */
 
-const ReturnVersionModel = require('../../../../models/return-version.model.js')
+const FetchCurrentReturnVersionsDal = require('../../../../dal/return-versions/fetch-current-return-versions.dal.js')
+const UpdateReturnVersionEndDateDal = require('../../../../dal/return-versions/update-return-version-end-date.dal.js')
+const UpdateReturnVersionStatusDal = require('../../../../dal/return-versions/update-return-version-status.dal.js')
 const { sameDate } = require('../../../../lib/dates.lib.js')
 
 /**
@@ -23,7 +25,7 @@ const { sameDate } = require('../../../../lib/dates.lib.js')
  * if there is no `endDate`
  */
 async function go(licenceId, newVersionStartDate, trx) {
-  const previousVersions = await _previousVersions(licenceId)
+  const previousVersions = await FetchCurrentReturnVersionsDal.go(licenceId, trx)
   const previousVersionEndDate = _calculateEndDate(newVersionStartDate)
 
   let result
@@ -90,7 +92,9 @@ async function _endLatestVersion(previousVersions, newVersionStartDate, endDate,
     return null
   }
 
-  return matchedReturnVersion.$query(trx).patch({ endDate })
+  await UpdateReturnVersionEndDateDal.go(matchedReturnVersion.id, endDate, trx)
+
+  return endDate
 }
 
 /**
@@ -164,7 +168,7 @@ async function _insertBetweenVersions(previousVersions, newVersionStartDate, end
 
   const newVersionEndDate = matchedReturnVersion.endDate
 
-  await matchedReturnVersion.$query(trx).patch({ endDate })
+  await UpdateReturnVersionEndDateDal.go(matchedReturnVersion.id, endDate, trx)
 
   return newVersionEndDate
 }
@@ -176,14 +180,6 @@ function _calculateEndDate(changeDate) {
   newEndDate.setDate(newEndDate.getDate() - 1)
 
   return newEndDate
-}
-
-function _previousVersions(licenceId) {
-  return ReturnVersionModel.query()
-    .select(['endDate', 'id', 'startDate'])
-    .where('licenceId', licenceId)
-    .where('status', 'current')
-    .orderBy('startDate', 'desc')
 }
 
 /**
@@ -220,7 +216,9 @@ async function _replaceLatestVersion(previousVersions, newVersionStartDate, trx)
     return null
   }
 
-  return matchedReturnVersion.$query(trx).patch({ status: 'superseded' })
+  await UpdateReturnVersionStatusDal.go(matchedReturnVersion.id, 'superseded', trx)
+
+  return true
 }
 
 /**
@@ -260,7 +258,7 @@ async function _replacePreviousVersion(previousVersions, newVersionStartDate, tr
 
   const newVersionEndDate = matchedReturnVersion.endDate
 
-  await matchedReturnVersion.$query(trx).patch({ status: 'superseded' })
+  await UpdateReturnVersionStatusDal.go(matchedReturnVersion.id, 'superseded', trx)
 
   return newVersionEndDate
 }
