@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetch the primary and secondary purpose ids from the 'current' version for a licence
+ * Fetch the primary and secondary purpose ids from the latest matching licence version with the same purpose
  * @module FetchOtherPurposeIdsDal
  */
 
-const LicenceVersionModel = require('../../models/licence-version.model.js')
+const LicenceVersionPurposeModel = require('../../models/licence-version-purpose.model.js')
 
 /**
- * Fetch the primary and secondary purpose ids from the 'current' version for a licence
+ * Fetch the primary and secondary purpose ids from the latest matching licence version with the same purpose
  *
  * When creating a new return version, users must create at least one return requirement with at least one purpose.
  *
@@ -26,8 +26,9 @@ const LicenceVersionModel = require('../../models/licence-version.model.js')
  * But we don't store the primary and secondary purposes against the requirement, nor in the session. This means when
  * generating the return logs, we need to know what primary and secondary purposes were assigned for _this_ licence.
  *
- * We do this by fetching the first `licence_version_purpose` for the licence's 'current' version, where the purpose id
- * matches the one selected for the return requirement. From it we fetch the primary and secondary purpose IDs.
+ * We do this by fetching the first `licence_version_purpose` for the licence's latest matching version, where the
+ * purpose id matches the one selected for the return requirement. From it we fetch the primary and secondary purpose
+ * IDs.
  *
  * @param {string} licenceId - The UUID of the licence to identify the primary and secondary purpose IDs
  * @param {string} purposeId - The UUID of the purpose to identify the primary and secondary purpose IDs
@@ -35,12 +36,16 @@ const LicenceVersionModel = require('../../models/licence-version.model.js')
  * @returns {Promise<object>} An object containing the fetched primary and secondary purpose IDs
  */
 async function go(licenceId, purposeId) {
-  const { primaryPurposeId, secondaryPurposeId } = await LicenceVersionModel.query()
+  const { primaryPurposeId, secondaryPurposeId } = await LicenceVersionPurposeModel.query()
     .select('primaryPurposeId', 'secondaryPurposeId')
-    .innerJoinRelated('licenceVersionPurposes')
-    .where('licenceId', licenceId)
-    .andWhere('status', 'current')
+    .innerJoinRelated('licenceVersion')
+    .where('licenceVersion.licenceId', licenceId)
     .andWhere('purposeId', purposeId)
+    .orderBy([
+      { column: 'licenceVersion.status', order: 'asc' }, // current before superseded
+      { column: 'licenceVersion.startDate', order: 'desc' } // newer before older
+    ])
+    .limit(1)
     .first()
 
   return {

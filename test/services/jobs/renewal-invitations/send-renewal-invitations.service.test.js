@@ -19,7 +19,7 @@ const FetchRenewalRecipients = require('../../../../app/services/jobs/renewal-in
 const SendRenewalInvitations = require('../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js')
 
 describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => {
-  const days = 300
+  const days = '300'
   const recipients = [{ licenceRefs: generateLicenceRef() }]
 
   let clock
