@@ -594,7 +594,8 @@ const userPermissions = Object.freeze({
     groups: [],
     key: 'basic',
     label: 'Basic access',
-    roles: []
+    roles: [],
+    scopes: []
   },
   billing_and_data: {
     application: 'water_admin',
@@ -664,7 +665,25 @@ const userPermissions = Object.freeze({
     groups: ['super'],
     key: 'super',
     label: 'Super user',
-    roles: []
+    roles: [],
+    scopes: [
+      'returns',
+      'hof_notifications',
+      'bulk_return_notifications',
+      'manage_accounts',
+      'unlink_licences',
+      'renewal_notifications',
+      'ar_user',
+      'ar_approver',
+      'billing',
+      'charge_version_workflow_editor',
+      'charge_version_workflow_reviewer',
+      'manage_agreements',
+      'delete_agreements',
+      'manage_billing_accounts',
+      'manage_gauging_station_licence_links',
+      'view_charge_versions'
+    ]
   },
   wirs: {
     application: 'water_admin',
