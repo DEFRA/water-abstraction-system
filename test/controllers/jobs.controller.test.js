@@ -165,10 +165,10 @@ describe('Jobs controller', () => {
     })
   })
 
-  describe('/jobs/renewal-invitations', () => {
+  describe('/jobs/renewal-invitations/{days}', () => {
     describe('POST', () => {
       beforeEach(() => {
-        options = { method: 'POST', url: '/jobs/renewal-invitations' }
+        options = { method: 'POST', url: '/jobs/renewal-invitations/300' }
       })
 
       describe('when the request succeeds', () => {
