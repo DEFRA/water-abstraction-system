@@ -3,7 +3,6 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
 const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
@@ -15,16 +14,10 @@ const RecipientScenariosSeeder = require('../../../support/seeders/recipient-sce
 const FetchRenewalRecipients = require('../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js')
 
 describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => {
-  let clock
   let expiredDate
   let scenarios
-  let todayDate
 
   before(async () => {
-    todayDate = new Date('2026-04-15')
-
-    clock = Sinon.useFakeTimers(todayDate)
-
     scenarios = []
 
     // 1) Licence holder only
@@ -35,26 +28,27 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
 
   after(async () => {
     await RecipientScenariosSeeder.clean(scenarios)
-
-    clock.restore()
-    Sinon.restore()
   })
 
   describe('when there are renewal invitations to send', () => {
-    it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
+    it('fetches the correct recipient data', async () => {
       const result = await FetchRenewalRecipients.go(new Date('2027-02-09'))
 
-      const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[0])
+      const expectedResults = _transformToResult(scenarios[0])
 
-      _formatScenario(sendingResults[0])
-
-      expect(result).to.equal(sendingResults)
+      expect(result).to.equal(expectedResults)
     })
   })
 })
 
-function _formatScenario(sendingResults) {
-  delete sendingResults.due_date_status
-  delete sendingResults.return_log_ids
-  delete sendingResults.latest_due_date
+function _transformToResult(scenario) {
+  const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenario)
+
+  for (const sendingResult of sendingResults) {
+    delete sendingResult.due_date_status
+    delete sendingResult.return_log_ids
+    delete sendingResult.latest_due_date
+  }
+
+  return sendingResults
 }
