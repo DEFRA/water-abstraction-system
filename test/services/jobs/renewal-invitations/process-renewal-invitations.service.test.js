@@ -15,7 +15,7 @@ const SendRenewalInvitations = require('../../../../app/services/jobs/renewal-in
 const ProcessRenewalInvitationsService = require('../../../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js')
 
 describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () => {
-  const days = 300
+  const days = '300'
 
   let notifierStub
 

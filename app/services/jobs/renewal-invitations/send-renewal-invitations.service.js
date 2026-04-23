@@ -30,7 +30,7 @@ async function go(days) {
 function _expiryDate(futureExpiredDate) {
   const targetDate = new Date()
 
-  targetDate.setDate(targetDate.getDate() + futureExpiredDate)
+  targetDate.setDate(targetDate.getDate() + Number(futureExpiredDate))
 
   targetDate.setHours(0, 0, 0, 0)
 
