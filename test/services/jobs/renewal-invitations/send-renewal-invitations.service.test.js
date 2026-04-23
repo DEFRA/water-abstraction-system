@@ -28,7 +28,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
 
   beforeEach(() => {
     Sinon.stub(FetchRenewalRecipients, 'go').resolves(recipients)
-    Sinon.stub(CreateNoticeService, 'go').resolves()
+    createNoticeStub = Sinon.stub(CreateNoticeService, 'go').resolves()
 
     todayDate = new Date('2026-04-15')
 
@@ -65,7 +65,18 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
       expect(args[1]).to.equal(recipients)
 
       // Argument 3: The issuer email
-      expect(args[2]).to.equal('water_abstractiondigital@environment-agency.gov.uk')
+      // Argument 1: Notice type
+      expect(createNoticeStub.firstCall.args[0]).to.equal({
+        name: 'Returns: invitation',
+        referenceCode: 'RINV-',
+        subType: 'returnInvitation'
+      })
+
+      // Argument 2: The Recipients List
+      expect(createNoticeStub.firstCall.args[1]).to.equal(recipients)
+
+      // Argument 3: The issuer email
+      expect(createNoticeStub.firstCall.args[2]).to.equal('water_abstractiondigital@environment-agency.gov.uk')
     })
 
     describe('the "expiredDate"', () => {
