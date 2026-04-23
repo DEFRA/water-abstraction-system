@@ -324,7 +324,8 @@ const NoticeType = Object.freeze({
   ALTERNATE_INVITATION: 'alternateInvitations',
   INVITATIONS: 'invitations',
   PAPER_RETURN: 'paperReturn',
-  REMINDERS: 'reminders'
+  REMINDERS: 'reminders',
+  RENEWAL_INVITATIONS: 'renewalInvitations'
 })
 
 /**
@@ -355,6 +356,12 @@ const NoticeTypes = Object.freeze({
     prefix: 'RREM-',
     subType: 'returnReminder',
     notificationType: 'Returns reminder'
+  },
+  [NoticeType.RENEWAL_INVITATIONS]: {
+    name: 'Renewals: invitation',
+    prefix: 'REIN-',
+    subType: 'renewalInvitations',
+    notificationType: 'Renewal invitations'
   }
 })
 

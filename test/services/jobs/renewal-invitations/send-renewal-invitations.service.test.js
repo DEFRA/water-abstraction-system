@@ -8,7 +8,11 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+
 // Things we need to stub
+const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
 const FetchRenewalRecipients = require('../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js')
 
 // Thing under test
@@ -16,13 +20,16 @@ const SendRenewalInvitations = require('../../../../app/services/jobs/renewal-in
 
 describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => {
   const days = '300'
+  const recipients = [{ licenceRefs: generateLicenceRef() }]
 
   let clock
+  let createNoticeStub
   let expiredDate
   let todayDate
 
   beforeEach(() => {
-    Sinon.stub(FetchRenewalRecipients, 'go').resolves([])
+    Sinon.stub(FetchRenewalRecipients, 'go').resolves(recipients)
+    createNoticeStub = Sinon.stub(CreateNoticeService, 'go').resolves()
 
     todayDate = new Date('2026-04-15')
 
@@ -41,7 +48,25 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     it('returns the recipients', async () => {
       const result = await SendRenewalInvitations.go(days)
 
-      expect(result).to.equal([])
+      expect(result).to.equal(recipients)
+    })
+
+    it('creates a notice for invitations', async () => {
+      await SendRenewalInvitations.go(days)
+
+      // Argument 1: Notice type
+      expect(createNoticeStub.firstCall.args[0]).to.contain({
+        name: 'Renewals: invitation',
+        subType: 'renewalInvitations'
+      })
+
+      expect(createNoticeStub.firstCall.args[0].referenceCode).to.startWith('REIN-')
+
+      // Argument 2: The Recipients List
+      expect(createNoticeStub.firstCall.args[1]).to.equal(recipients)
+
+      // Argument 3: The issuer email
+      expect(createNoticeStub.firstCall.args[2]).to.equal('water_abstractiondigital@environment-agency.gov.uk')
     })
 
     describe('the "expiredDate"', () => {
