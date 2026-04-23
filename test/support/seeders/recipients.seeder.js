@@ -214,6 +214,8 @@ function transformToDownloadingResult(recipient, returnLog) {
  * @returns {object} The transformed sending result object
  */
 function transformToSendingResult(recipient) {
+  const uniqueSortedRefs = [...new Set(recipient.licenceRefs)].sort()
+
   return {
     contact: recipient.contact,
     contact_hash_id: recipient.contactHashId,
@@ -221,7 +223,7 @@ function transformToSendingResult(recipient) {
     due_date_status: 'all nulls',
     email: recipient.email,
     latest_due_date: null,
-    licence_refs: recipient.licenceRefs,
+    licence_refs: uniqueSortedRefs,
     message_type: recipient.messageType,
     return_log_ids: recipient.returnLogIds
   }

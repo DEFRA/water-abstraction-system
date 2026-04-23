@@ -57,8 +57,10 @@ async function notificationStatus(_request, h) {
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
 
-async function renewalInvitations(_request, h) {
-  ProcessRenewalInvitationsService.go()
+async function renewalInvitations(request, h) {
+  const { days } = request.params
+
+  ProcessRenewalInvitationsService.go(days)
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }
