@@ -15,7 +15,7 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  * > Notices are event records with a type as `notification`. In the future we intend to move them to their own
  * > `water.notices` table. But for now this explains why the `EventModel` suddenly makes an appearance!
  *
- * @param {SessionModel} session - The session instance
+ * @param {object} session - The session instance, or a session-like object with the expected notice data
  * @param {object[]} recipients - List of recipients, each containing details like email or address of the recipient
  * @param {string} issuer - The username of the person issuing the notice
  *

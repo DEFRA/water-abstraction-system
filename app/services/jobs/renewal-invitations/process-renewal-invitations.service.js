@@ -17,9 +17,9 @@ async function go(days) {
   try {
     const startTime = currentTimeInNanoseconds()
 
-    await SendRenewalInvitations.go(days)
+    const invitations = await SendRenewalInvitations.go(days)
 
-    calculateAndLogTimeTaken(startTime, 'Renewal invitations status job complete')
+    calculateAndLogTimeTaken(startTime, 'Renewal invitations status job complete', { count: invitations.length })
   } catch (error) {
     global.GlobalNotifier.omfg('Notification status job failed', null, error)
   }

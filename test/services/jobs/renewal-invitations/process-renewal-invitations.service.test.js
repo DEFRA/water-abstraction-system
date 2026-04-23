@@ -20,7 +20,7 @@ describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () 
   let notifierStub
 
   beforeEach(() => {
-    Sinon.stub(SendRenewalInvitations, 'go').resolves([])
+    Sinon.stub(SendRenewalInvitations, 'go').resolves(['mock invitation'])
 
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
@@ -48,5 +48,6 @@ describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () 
     expect(notifierStub.omg.calledWith('Renewal invitations status job complete')).to.be.true()
     expect(logDataArg.timeTakenMs).to.exist()
     expect(logDataArg.timeTakenSs).to.exist()
+    expect(logDataArg.count).to.equal(1)
   })
 })

@@ -5,7 +5,10 @@
  * @module SendRenewalInvitations
  */
 
+const CreateNoticeService = require('../../notices/setup/create-notice.service.js')
 const FetchRenewalRecipients = require('./fetch-renewal-recipients.service.js')
+const { NoticeTypes, NoticeType } = require('../../../lib/static-lookups.lib.js')
+const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates fetching, sending, and updating renewal invitations notifications
@@ -19,6 +22,8 @@ async function go(days) {
 
   const recipients = await FetchRenewalRecipients.go(expiryDate)
 
+  await _notice(recipients)
+
   return recipients
 }
 
@@ -30,11 +35,23 @@ async function go(days) {
 function _expiryDate(futureExpiredDate) {
   const targetDate = new Date()
 
-  targetDate.setDate(targetDate.getDate() + futureExpiredDate)
+  targetDate.setDate(targetDate.getDate() + Number(futureExpiredDate))
 
   targetDate.setHours(0, 0, 0, 0)
 
   return targetDate
+}
+
+async function _notice(recipients) {
+  const { name, prefix, subType } = NoticeTypes[NoticeType.INVITATIONS]
+
+  const data = {
+    referenceCode: generateNoticeReferenceCode(prefix),
+    subType,
+    name
+  }
+
+  return CreateNoticeService.go(data, recipients, 'water_abstractiondigital@environment-agency.gov.uk')
 }
 
 module.exports = {
