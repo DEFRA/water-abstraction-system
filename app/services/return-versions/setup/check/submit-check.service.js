@@ -9,9 +9,11 @@ const CreateReturnVersionService = require('./create-return-version.service.js')
 const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 const GenerateReturnVersionService = require('./generate-return-version.service.js')
+const ProcessExistingReturnVersionsService = require('./process-existing-return-versions.service.js')
 const ProcessLicenceReturnLogsService = require('../../../return-logs/process-licence-return-logs.service.js')
+const ReturnVersionModel = require('../../../../models/return-version.model.js')
+const UpdateSucceededReturnLogsDal = require('../../../../dal/return-versions/update-succeeded-return-logs.dal.js')
 const VoidReturnLogsService = require('../../../return-logs/void-return-logs.service.js')
-const { db } = require('../../../../../db/db.js')
 
 const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 
@@ -31,87 +33,99 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 async function go(sessionId, userId) {
   const session = await FetchSessionDal.go(sessionId)
 
-  await _processReturnVersion(session, userId)
+  try {
+    const { journey, licence } = session
+    const returnVersionData = await GenerateReturnVersionService.go(session, userId)
 
-  await DeleteSessionDal.go(sessionId)
+    // We wrap all the steps in a transaction to avoid only applying some of the changes
+    await ReturnVersionModel.transaction(async (trx) => {
+      // 1) Figure out where this new return version sits within the existing history. If it falls in the middle,
+      //    existing return versions will need to be updated. The result is we'll determine what end date to apply.
+      await _processEndDate(returnVersionData.returnVersion, licence.id, trx)
 
-  return session.licence.id
-}
+      // 2) Next, persist _all_ the return version data. We do this now so the later steps can access the new return
+      //    version and requirements data
+      const returnVersion = await CreateReturnVersionService.go(returnVersionData, trx)
 
-async function _processReturnVersion(session, userId) {
-  const returnVersionData = await GenerateReturnVersionService.go(session, userId)
+      // 3) If the return version is to declare that no returns are required, we need to void any existing return logs
+      //    within the matching period.
+      if (journey === 'no-returns-required') {
+        await VoidReturnLogsService.go(licence.licenceRef, returnVersion.startDate, returnVersion.endDate, trx)
+      }
 
-  const newReturnVersion = await CreateReturnVersionService.go(returnVersionData)
+      // 4) Process any existing return logs affected by the change. The change date will be the return version's start
+      //    date minus one day. ProcessLicenceReturnLogsService will use this to determine which return logs might be
+      //    impacted by the change, and look to only reissue or void those that are affected.
+      const changeDate = _changeDate(returnVersion.startDate)
 
-  const changeDate = new Date(newReturnVersion.startDate)
-  changeDate.setTime(changeDate.getTime() - ONE_DAY_IN_MILLISECONDS)
+      await ProcessLicenceReturnLogsService.go(licence.id, changeDate, returnVersion.endDate, trx)
 
-  if (session.journey === 'no-returns-required') {
-    await VoidReturnLogsService.go(session.licence.licenceRef, newReturnVersion.startDate, newReturnVersion.endDate)
-  }
+      // 5) Finally, we have a legacy feature to support. If the reason is because the licence was transferred, we have
+      //    to set a flag on those return logs that start prior to the _latest_ 'succession-or-transfer-of-licence'
+      //    return versions start date (refer to the DAL for why its the latest). The flag tells the legacy UI to hide
+      //    the return logs. They become hidden to all users because they never built a way to display return logs a
+      //    previous licence holder.
+      if (returnVersion.reason === 'succession-or-transfer-of-licence') {
+        await UpdateSucceededReturnLogsDal.go(licence.licenceRef, trx)
+      }
+    })
 
-  await ProcessLicenceReturnLogsService.go(newReturnVersion.licenceId, changeDate, newReturnVersion.endDate)
+    await DeleteSessionDal.go(sessionId)
 
-  if (newReturnVersion.reason === 'succession-or-transfer-of-licence') {
-    await _updateSucceededReturnLogs(session.licence.licenceRef)
+    return licence.id
+  } catch (error) {
+    global.GlobalNotifier.omfg('Failed to create return version', session, error)
+
+    throw error
   }
 }
 
 /**
- * Update existing return logs to isCurrent=false when a new succeeded or transferred return version is added
+ * The change date is used when processing the existing return logs for the licence. We know when our new return version
+ * starts, so our change date becomes this minus one day.
  *
- * If the new return version was created because of a succession or transfer of the licence there is a flag
- * (`metadata.isCurrent`) on the existing return logs we need to set to false.
+ * ProcessLicenceReturnLogsService will then use this to determine which return logs might be impacted by the change.
  *
- * The external site filters out any return logs where `isCurrent=false`. The intent is that when a licence is
- * transferred, the new licensee should not be able to see previous return logs. The crude solution the previous team
- * came up with is to use a flag. Whilst `isCurrent=true` return logs can be seen in the external UI.
+ * It doesn't determine the change date, because it is used in a number of scenarios, for example, during the overnight
+ * import when a licence is 'ended'. So, it is the responsibility of the services that call it to determine the change
+ * date.
  *
- * When a new return version with the reason 'succession-or-transfer-of-licence' is added all existing return logs with
- * a start date less than the latest transferred return version's need to have this set to false.
- *
- * > In theory someone could add a historic return version with the reason 'succession-or-transfer-of-licence', _before_
- * > an existing one. Those new return logs generated still need to be set to `isCurrent=false`, because the rule is
- * > _all_ return logs that start before the _latest_ transferred return version need to be flagged as false.
- * > This is why the update query looks for the latest, rather than uses the start date of the return version being
- * > added.
- *
- * Its crude, because it also means the the previous licensee can no longer see them. Only internal users can view and
- * manage them.
- *
- * > This service was added as a 'fix', when we finally realised what `isCurrent` is used for and how it should be set.
- * > We aim to come back and resolve how access to licence and returns information is handled for external users in the
- * > future.
+ * Using this as a filter helps it avoid reviewing return logs that are not impacted by the change.
  *
  * @private
  */
-async function _updateSucceededReturnLogs(licenceRef) {
-  const bindings = [licenceRef]
+function _changeDate(startDate) {
+  const changeDate = new Date(startDate)
 
-  const query = `
-    UPDATE public.return_logs rl
-    SET
-      updated_at = NOW(),
-      metadata = jsonb_set(metadata, '{isCurrent}', 'false')
-    FROM (
-      SELECT DISTINCT ON (rv.licence_id)
-        l.licence_ref,
-        rv.start_date AS latest_start_date
-      FROM
-        public.return_versions rv
-      INNER JOIN public.licences l
-        ON l.id = rv.licence_id
-      WHERE
-        rv.reason = 'succession-or-transfer-of-licence'
-        AND l.licence_ref = ?
-      ORDER BY rv.licence_id, rv.start_date DESC
-    ) latest
-    WHERE
-      rl.licence_ref = latest.licence_ref
-      AND rl.start_date < latest.latest_start_date;
-  `
+  changeDate.setTime(changeDate.getTime() - ONE_DAY_IN_MILLISECONDS)
 
-  await db.raw(query, bindings)
+  return changeDate
+}
+
+/**
+ * If this is the first return version for a licence, then the end date should remain null and there is nothing else
+ * to do.
+ *
+ * If this is not the first return version for the licence, we have to work out where this new return version is being
+ * added to the history, and the impact that will have on existing return versions.
+ *
+ * `ProcessExistingReturnVersionsService` has details on the different scenarios we have to cater for, and the impact
+ * that will have on existing return versions.
+ *
+ * But what we need to know, is what end date to apply to the new return version we are creating. If it has the latest
+ * start date, it will remain null. But if its been added before an existing return version's start date, it will be
+ * the day before that start date.
+ *
+ * We need to determine this before we persist the return version.
+ *
+ * @private
+ */
+async function _processEndDate(returnVersion, licenceId, trx) {
+  const { startDate, version } = returnVersion
+
+  if (version > 1) {
+    returnVersion.endDate = await ProcessExistingReturnVersionsService.go(licenceId, startDate, trx)
+  }
 }
 
 module.exports = {
