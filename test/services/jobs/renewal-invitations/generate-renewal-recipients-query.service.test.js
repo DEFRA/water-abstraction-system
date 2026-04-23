@@ -3,7 +3,6 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
 const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
@@ -15,23 +14,19 @@ const { db } = require('../../../../db/db.js')
 // Thing under test
 const GenerateRenewalRecipientsQueryService = require('../../../../app/services/jobs/renewal-invitations/generate-renewal-recipients-query.service.js')
 
-describe('Jobs - Renewal Invitations - Generate renewal recipients query service', () => {
-  const expiredLicencesQuery = `
-    SELECT l.licence_ref
-    FROM public.licences l
-    WHERE l.expired_date = ?
+describe('Jobs - Renewal Invitations - Generate Renewal Recipients Query Service', () => {
+  const expiringLicencesQuery = `SELECT
+  l.licence_ref
+FROM
+  public.licences l
+WHERE
+  l.expired_date = ?
   `
 
-  let clock
   let expiredDate
   let scenarios
-  let todayDate
 
   before(async () => {
-    todayDate = new Date('2026-04-15')
-
-    clock = Sinon.useFakeTimers(todayDate)
-
     scenarios = []
 
     let scenario
@@ -62,74 +57,88 @@ describe('Jobs - Renewal Invitations - Generate renewal recipients query service
 
   after(async () => {
     await RecipientScenariosSeeder.clean(scenarios)
-
-    clock.restore()
-    Sinon.restore()
   })
 
-  describe('when there are renewal invitations to send', () => {
-    it('(Scenario 1) returns the licence holder when only the licence holder is present', async () => {
-      const query = GenerateRenewalRecipientsQueryService.go(expiredLicencesQuery)
+  // NOTE: Because the query is very large we don't assert the full `query` string here
+  describe('when called', () => {
+    it('returns the expected query', () => {
+      const query = GenerateRenewalRecipientsQueryService.go(expiringLicencesQuery)
 
-      const { rows } = await db.raw(query, [new Date('2027-02-09')])
+      expect(query).to.startWith(`
+    WITH
+      expiring_licences AS (
+        ${expiringLicencesQuery}`)
+    })
+  })
 
-      const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[0])
+  describe('when executed', () => {
+    describe('and only the licence holder is present for a single licence (Scenario 1)', () => {
+      it('returns the expected recipients', async () => {
+        const query = GenerateRenewalRecipientsQueryService.go(expiringLicencesQuery)
 
-      _formatScenario(sendingResults[0])
+        const { rows } = await db.raw(query, [new Date('2027-02-09')])
 
-      expect(rows).to.equal(sendingResults)
+        const expectedResults = _transformToResult(scenarios[0])
+
+        expect(rows).to.equal(expectedResults)
+      })
     })
 
-    it('(Scenario 2) returns the licence holder when only it is present and the same for multiple licences', async () => {
-      const query = GenerateRenewalRecipientsQueryService.go(expiredLicencesQuery)
+    describe('and only the licence holder is present for multiple licences (Scenario 2)', () => {
+      it('returns the expected recipients', async () => {
+        const query = GenerateRenewalRecipientsQueryService.go(expiringLicencesQuery)
 
-      const { rows } = await db.raw(query, [new Date('2027-02-10')])
+        const { rows } = await db.raw(query, [new Date('2027-02-10')])
 
-      const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[1])
+        const expectedResults = _transformToResult(scenarios[1])
 
-      _formatScenario(sendingResults[0])
-      _formatScenario(sendingResults[1])
-
-      expect(rows).to.contain(sendingResults[0])
-      // We could test rows contains the second licence holder recipient recorded in the scenario, but they are the
-      // same so it would also return true and not prove anything
-      expect(sendingResults[0]).to.equal(sendingResults[1])
+        expect(rows).to.contain(expectedResults[0])
+        // We could test rows contains the second licence holder recipient recorded in the scenario, but they are the
+        // same so it would also return true and not prove anything
+        expect(expectedResults[0]).to.equal(expectedResults[1])
+      })
     })
 
-    it('(Scenario 3) returns only the primary user when the licence', async () => {
-      const query = GenerateRenewalRecipientsQueryService.go(expiredLicencesQuery)
+    describe('and a primary user is present for a single licence (Scenario 3)', () => {
+      it('returns the expected recipients', async () => {
+        const query = GenerateRenewalRecipientsQueryService.go(expiringLicencesQuery)
 
-      const { rows } = await db.raw(query, [new Date('2027-02-11')])
+        const { rows } = await db.raw(query, [new Date('2027-02-11')])
 
-      const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[2])
+        const expectedResults = _transformToResult(scenarios[2])
 
-      _formatScenario(sendingResults[1])
+        expect(rows).to.contain(expectedResults[1])
 
-      expect(rows).to.contain(sendingResults[1])
-
-      // NOTE: When a licence is registered sendingResult[0] will always reference the licence holder
-      expect(rows).not.to.contain(sendingResults[0])
+        // NOTE: When a licence is registered expectedResults[0] will always reference the licence holder
+        expect(rows).not.to.contain(expectedResults[0])
+      })
     })
 
-    it('(Scenario 4) returns only the primary user when it is the same for multiple registered licences', async () => {
-      const query = GenerateRenewalRecipientsQueryService.go(expiredLicencesQuery)
+    describe('and a primary user is present for multiple licences (Scenario 4)', () => {
+      it('returns the expected recipients', async () => {
+        const query = GenerateRenewalRecipientsQueryService.go(expiringLicencesQuery)
 
-      const { rows } = await db.raw(query, [new Date('2027-02-12')])
+        const { rows } = await db.raw(query, [new Date('2027-02-12')])
 
-      const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[3])
+        const expectedResults = _transformToResult(scenarios[3])
 
-      _formatScenario(sendingResults[2])
+        expect(rows).to.contain(expectedResults[2])
 
-      expect(rows).to.contain(sendingResults[2])
-
-      // NOTE: When a licence is registered, sendingResult[0] will always reference the licence holder
-      expect(rows).not.to.contain(sendingResults[0])
+        // NOTE: When a licence is registered, expectedResults[0] will always reference the licence holder
+        expect(rows).not.to.contain(expectedResults[0])
+      })
     })
   })
 })
 
-function _formatScenario(sendingResults) {
-  delete sendingResults.due_date_status
-  delete sendingResults.return_log_ids
-  delete sendingResults.latest_due_date
+function _transformToResult(scenario) {
+  const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenario)
+
+  for (const sendingResult of sendingResults) {
+    delete sendingResult.due_date_status
+    delete sendingResult.return_log_ids
+    delete sendingResult.latest_due_date
+  }
+
+  return sendingResults
 }

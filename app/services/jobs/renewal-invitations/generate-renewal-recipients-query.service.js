@@ -26,7 +26,7 @@ function go(expiredLicencesQuery) {
 
   return `
     WITH
-      expired_licences AS (
+      expiring_licences AS (
         ${expiredLicencesQuery}
       ),
       primary_user as (
@@ -100,7 +100,7 @@ function _licenceHolderQuery() {
     ) AS llv ON llv.licence_id = l.id
     INNER JOIN public.companies c ON c.id = llv.company_id
     INNER JOIN public.addresses a ON a.id = llv.address_id
-    INNER JOIN expired_licences el
+    INNER JOIN expiring_licences el
       ON el.licence_ref = l.licence_ref
     LEFT JOIN registered_licences rl
       ON rl.licence_ref = l.licence_ref
@@ -123,7 +123,7 @@ function _primaryUserQuery() {
       ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
     INNER JOIN public.licence_entities le
       ON le.id = ler.licence_entity_id
-    INNER JOIN expired_licences el
+    INNER JOIN expiring_licences el
       ON el.licence_ref = ldh.licence_ref
     `
 }
