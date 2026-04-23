@@ -19,14 +19,14 @@ describe('Notices - Setup - Create Notice service', () => {
   const issuer = 'hello@world.com'
 
   let recipients
-  let session
+  let noticeData
 
   beforeEach(() => {
     const fixtureData = RecipientsFixture.recipients()
 
     recipients = [fixtureData.primaryUser, fixtureData.returnsUser]
 
-    session = {
+    noticeData = {
       returnsPeriod: 'quarterFour',
       removeLicences: [],
       journey: 'invitations',
@@ -43,7 +43,7 @@ describe('Notices - Setup - Create Notice service', () => {
   })
 
   it('creates the notice', async () => {
-    const result = await CreateNoticeService.go(session, recipients, issuer)
+    const result = await CreateNoticeService.go(noticeData, recipients, issuer)
 
     expect(result).to.be.instanceOf(EventModel)
     expect(result).equal(
@@ -62,7 +62,7 @@ describe('Notices - Setup - Create Notice service', () => {
           }
         },
         overallStatus: 'pending',
-        referenceCode: session.referenceCode,
+        referenceCode: noticeData.referenceCode,
         status: 'completed',
         statusCounts: { cancelled: 0, error: 0, pending: 2, returned: 0, sent: 0 },
         subtype: 'returnInvitation',
