@@ -54,17 +54,13 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     it('creates a notice for invitations', async () => {
       await SendRenewalInvitations.go(days)
 
-      const args = CreateNoticeService.go.getCall(0).args
-
-      expect(args[0].referenceCode).to.startWith('RINV-')
-
       // Argument 1: Notice type
       expect(createNoticeStub.firstCall.args[0]).to.contain({
-        name: 'Returns: invitation',
-        subType: 'returnInvitation'
+        name: 'Invitations: renewal',
+        subType: 'renewalInvitations'
       })
 
-      expect(createNoticeStub.firstCall.args[0].referenceCode).to.startWith('RINV-')
+      expect(createNoticeStub.firstCall.args[0].referenceCode).to.startWith('REIN-')
 
       // Argument 2: The Recipients List
       expect(createNoticeStub.firstCall.args[1]).to.equal(recipients)

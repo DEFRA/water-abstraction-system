@@ -43,7 +43,7 @@ function _expiryDate(futureExpiredDate) {
 }
 
 async function _notice(recipients) {
-  const { name, prefix, subType } = NoticeTypes[NoticeType.INVITATIONS]
+  const { name, prefix, subType } = NoticeTypes[NoticeType.RENEWAL_INVITATIONS]
 
   const noticeData = {
     referenceCode: generateNoticeReferenceCode(prefix),
