@@ -45,13 +45,13 @@ function _expiryDate(futureExpiredDate) {
 async function _notice(recipients) {
   const { name, prefix, subType } = NoticeTypes[NoticeType.INVITATIONS]
 
-  const data = {
+  const noticeType = {
     referenceCode: generateNoticeReferenceCode(prefix),
     subType,
     name
   }
 
-  return CreateNoticeService.go(data, recipients, 'water_abstractiondigital@environment-agency.gov.uk')
+  return CreateNoticeService.go(noticeType, recipients, 'water_abstractiondigital@environment-agency.gov.uk')
 }
 
 module.exports = {
