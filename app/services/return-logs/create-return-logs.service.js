@@ -72,7 +72,6 @@ async function _persistReturnLogs(returnLogs, trx) {
       .onConflict('returnId')
       .ignore()
 
-    console.log('🚀🚀🚀 ~ _persistReturnLogs')
     createdIds.push(returnLog.returnId)
   }
 

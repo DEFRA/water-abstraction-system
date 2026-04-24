@@ -53,7 +53,6 @@ async function _generateReturnRequirementPurposes(licenceId, purposes) {
 
   for (const purpose of purposes) {
     const { primaryPurposeId, secondaryPurposeId } = await FetchOtherPurposeIdsDal.go(licenceId, purpose.id)
-    console.log('🚀🚀🚀 ~ FetchOtherPurposeIdsDal')
 
     const returnRequirementPurpose = {
       alias: purpose.alias !== '' ? purpose.alias : null,
