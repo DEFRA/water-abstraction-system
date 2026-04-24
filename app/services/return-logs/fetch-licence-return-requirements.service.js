@@ -114,16 +114,8 @@ async function _fetch(licenceId, changeDate, trx) {
       secondaryPurposeBuilder.select(['description', 'id', 'legacyId'])
     })
 
-  // NOTE: Normally, we would have used `db.raw("regions->>'historicalAreaCode' as areacode")` in the licence part of
-  // the query in order to make areacode more easily accessible to the calling module. However, `db.raw()` in the select
-  // does not work when using `withGraphJoined`. This is because it builds nested objects from one flattened joined
-  // result set using relation-path aliases. Internally, Objection only carries forward columns it can safely map
-  // through its relation join/alias pipeline. Raw computed columns in nested modifyGraph selects are not reliably
-  // tracked through that pipeline, so they can be dropped before final hydration, even though the SQL itself is valid
-  // and does not error.
-  //
-  // Therefore, to normalise the data into the format expected by our calling services, we loop through the results,
-  // copy `historicalAreaCode` to `areacode` and delete then the `regions` object.
+  console.log('🚀🚀🚀 ~ JUST AFTER FetchLicenceReturnRequirementsService')
+
   returnRequirements.forEach((returnRequirement) => {
     const licence = returnRequirement.returnVersion.licence
 

@@ -22,6 +22,7 @@ const { isQuarterlyReturnSubmissions } = require('../../../../lib/dates.lib.js')
  */
 async function go(session, userId) {
   const nextVersionNumber = await DetermineNextVersionNumberDal.go(session.licence.id)
+  console.log('🚀🚀🚀 ~ DetermineNextVersionNumberDal')
 
   const returnVersion = await _generateReturnVersion(nextVersionNumber, session, userId)
   const returnRequirements = await _generateReturnRequirements(session)

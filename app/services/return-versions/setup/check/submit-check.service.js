@@ -32,8 +32,10 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  */
 async function go(sessionId, userId) {
   const session = await FetchSessionDal.go(sessionId)
+  console.log('🚀🚀🚀 ~ session fetch')
 
   await DeleteSessionDal.go(sessionId)
+  console.log('🚀🚀🚀 ~ session delete')
 
   try {
     const { journey, licence } = session
@@ -41,6 +43,7 @@ async function go(sessionId, userId) {
 
     // We wrap all the steps in a transaction to avoid only applying some of the changes
     await ReturnVersionModel.transaction(async (trx) => {
+      console.log('🚀🚀🚀 ~ transaction start')
       // 1) Figure out where this new return version sits within the existing history. If it falls in the middle,
       //    existing return versions will need to be updated. The result is we'll determine what end date to apply.
       await _processEndDate(returnVersionData.returnVersion, licence.id, trx)
@@ -53,6 +56,7 @@ async function go(sessionId, userId) {
       //    within the matching period.
       if (journey === 'no-returns-required') {
         await VoidReturnLogsService.go(licence.licenceRef, returnVersion.startDate, returnVersion.endDate, trx)
+        console.log('🚀🚀🚀 ~ voidReturnLogs')
       }
 
       // 4) Process any existing return logs affected by the change. The change date will be the return version's start
@@ -69,6 +73,7 @@ async function go(sessionId, userId) {
       //    previous licence holder.
       if (returnVersion.reason === 'succession-or-transfer-of-licence') {
         await UpdateSucceededReturnLogsDal.go(licence.licenceRef, trx)
+        console.log('🚀🚀🚀 ~ UpdateSucceededReturnLogsDal')
       }
     })
 
@@ -125,6 +130,7 @@ async function _processEndDate(returnVersion, licenceId, trx) {
 
   if (version > 1) {
     returnVersion.endDate = await ProcessExistingReturnVersionsService.go(licenceId, startDate, trx)
+    console.log('🚀🚀🚀 ~ ProcessExistingReturnVersionsService')
   }
 }
 

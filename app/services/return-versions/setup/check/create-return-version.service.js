@@ -25,6 +25,7 @@ async function go(returnVersionData, trx) {
   const { returnRequirements, returnVersion } = returnVersionData
 
   const persistedReturnVersion = await ReturnVersionModel.query(trx).insert(returnVersion)
+  console.log('🚀🚀🚀 ~ persistReturnVersion')
 
   await _persistReturnRequirements(returnRequirements, persistedReturnVersion.id, trx)
 
@@ -58,6 +59,7 @@ async function _persistReturnRequirements(returnRequirements, returnVersionId, t
 async function _persistReturnRequirementsPoints(points, returnRequirementId, trx) {
   for (const point of points) {
     await ReturnRequirementPointModel.query(trx).insert({ pointId: point, returnRequirementId })
+    console.log('🚀🚀🚀 ~ persistReturnRequirementPoint')
   }
 }
 
@@ -70,6 +72,7 @@ async function _persistReturnRequirementsPurposes(returnRequirementPurposes, ret
       returnRequirementId,
       secondaryPurposeId: returnRequirementPurpose.secondaryPurposeId
     })
+    console.log('🚀🚀🚀 ~ persistReturnRequirementPurpose')
   }
 }
 

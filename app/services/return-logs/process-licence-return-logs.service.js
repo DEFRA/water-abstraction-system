@@ -46,6 +46,7 @@ const { determineEarliestDate } = require('../../lib/dates.lib.js')
  */
 async function go(licenceId, changeDate, returnVersionEndDate = null, trx = null) {
   const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceId, changeDate, trx)
+  console.log('🚀🚀🚀 ~ FetchLicenceReturnRequirementsService')
 
   if (returnRequirements.length === 0) {
     return
@@ -54,6 +55,7 @@ async function go(licenceId, changeDate, returnVersionEndDate = null, trx = null
   const licenceRef = returnRequirements[0].returnVersion.licence.licenceRef
   const licenceEndDate = _endDate(returnRequirements[0].returnVersion)
   const returnCycles = await _fetchReturnCycles(changeDate, returnVersionEndDate, trx)
+  console.log('🚀🚀🚀 ~ _fetchReturnCycles')
 
   for (const returnCycle of returnCycles) {
     await _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef, licenceEndDate, trx)
@@ -107,6 +109,7 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
   }
 
   await VoidLicenceReturnLogsService.go(generatedReturnIds, licenceRef, returnCycle.id, changeDate, trx)
+  console.log('🚀🚀🚀 ~ VoidLicenceReturnLogsService')
 }
 
 module.exports = {

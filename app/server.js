@@ -74,4 +74,24 @@ process.on('unhandledRejection', (err) => {
   process.exit(1)
 })
 
+if (process.env.TRACE_PG_DEPRECATION_WARNING === 'true') {
+  console.log('🚀 ~ pg concurrent query deprecation warning tracing is enabled')
+  process.on('warning', (warning) => {
+    const isPgConcurrentQueryWarning =
+      warning.name === 'DeprecationWarning' &&
+      warning.message.includes('Calling client.query() when the client is already executing a query')
+
+    if (!isPgConcurrentQueryWarning) {
+      return
+    }
+
+    console.error('\n[TRACE_PG_DEPRECATION_WARNING] Captured pg concurrent query deprecation warning')
+    console.error(warning.stack)
+
+    if (typeof process.__tracePgDumpActiveQueries === 'function') {
+      process.__tracePgDumpActiveQueries()
+    }
+  })
+}
+
 module.exports = { init, start }
