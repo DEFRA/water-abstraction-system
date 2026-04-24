@@ -138,7 +138,7 @@ function _standardNoticeTypes(noticeTypes) {
       continue
     }
 
-    if (['paperReturnForms', 'returnInvitation', 'returnReminder'].includes(noticeType)) {
+    if (['paperReturnForms', 'returnInvitation', 'returnReminder', 'renewalInvitations'].includes(noticeType)) {
       standardTypes.push(noticeType)
     }
   }

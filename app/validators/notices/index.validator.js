@@ -14,6 +14,7 @@ const NOTICE_TYPES = [
   'paperReturnForms',
   'reduce',
   'resume',
+  'renewalInvitations',
   'returnReminder',
   'returnInvitation',
   'stop',
