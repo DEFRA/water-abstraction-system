@@ -57,7 +57,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
       // Argument 1: Notice type
       expect(createNoticeStub.firstCall.args[0]).to.contain({
         name: 'Renewals: invitation',
-        subType: 'renewalInvitations'
+        subType: 'renewalInvitation'
       })
 
       expect(createNoticeStub.firstCall.args[0].referenceCode).to.startWith('REIN-')
