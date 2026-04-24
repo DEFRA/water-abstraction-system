@@ -101,7 +101,7 @@ describe('Notices - Index Notices presenter', () => {
           reference: notices[6].referenceCode,
           sentBy: 'admin-internal@wrls.gov.uk',
           status: 'sent',
-          type: 'Renewal invitations'
+          type: 'Renewals invitation'
         },
         {
           createdDate: '25 March 2025',
@@ -155,7 +155,7 @@ describe('Notices - Index Notices presenter', () => {
 
           expect(results.notices[4].type).to.equal('HOF warning')
           expect(results.notices[5].type).to.equal('Renewal')
-          expect(results.notices[6].type).to.equal('Renewal invitations')
+          expect(results.notices[6].type).to.equal('Renewals invitation')
           expect(results.notices[7].type).to.equal('Returns invitation')
           expect(results.notices[8].type).to.equal('Paper return')
           expect(results.notices[9].type).to.equal('Returns reminder')

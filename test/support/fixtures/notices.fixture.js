@@ -203,7 +203,7 @@ function renewalInvitation() {
     recipients: generateRandomInteger(1, 5000)
   }
   data.referenceCode = generateNoticeReferenceCode('REIN-')
-  data.subtype = 'renewalInvitations'
+  data.subtype = 'renewalInvitation'
 
   return data
 }
