@@ -14,7 +14,6 @@ const PrimaryPurposeHelper = require('../../support/helpers/primary-purpose.help
 const PurposeHelper = require('../../support/helpers/purpose.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 const ReturnRequirementHelper = require('../../support/helpers/return-requirement.helper.js')
-const ReturnRequirementModel = require('../../../app/models/return-requirement.model.js')
 const ReturnRequirementPointHelper = require('../../support/helpers/return-requirement-point.helper.js')
 const ReturnRequirementPurposeHelper = require('../../support/helpers/return-requirement-purpose.helper.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
@@ -278,7 +277,7 @@ function _expectedResult(
   _returnRequirement = returnRequirement,
   _returnVersion = returnVersion
 ) {
-  return ReturnRequirementModel.fromJson({
+  return {
     abstractionPeriodEndDay: _returnRequirement.abstractionPeriodEndDay,
     abstractionPeriodEndMonth: _returnRequirement.abstractionPeriodEndMonth,
     abstractionPeriodStartDay: _returnRequirement.abstractionPeriodStartDay,
@@ -341,7 +340,7 @@ function _expectedResult(
         }
       }
     ]
-  })
+  }
 }
 
 function _resultIds(results) {
