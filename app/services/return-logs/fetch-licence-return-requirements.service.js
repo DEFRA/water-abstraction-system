@@ -6,16 +6,10 @@
  */
 
 const LicenceModel = require('../../models/licence.model.js')
-const PointModel = require('../../models/point.model.js')
-const PrimaryPurposeModel = require('../../models/primary-purpose.model.js')
-const PurposeModel = require('../../models/purpose.model.js')
-const RegionModel = require('../../models/region.model.js')
 const ReturnRequirementModel = require('../../models/return-requirement.model.js')
 const ReturnRequirementPointModel = require('../../models/return-requirement-point.model.js')
 const ReturnRequirementPurposeModel = require('../../models/return-requirement-purpose.model.js')
 const ReturnVersionModel = require('../../models/return-version.model.js')
-const SecondaryPurposeModel = require('../../models/secondary-purpose.model.js')
-const { db } = require('../../../db/db.js')
 
 /**
  * Fetches return requirements for a given licence with an end date after the provided date
@@ -37,11 +31,165 @@ const { db } = require('../../../db/db.js')
  * @returns {Promise<module:ReturnRequirementModel[]>} the matching return requirements for the licence and change date
  */
 async function go(licenceId, changeDate, trx = null) {
-  return _fetch(licenceId, changeDate, trx)
+  const returnVersions = await _returnVersions(licenceId, changeDate, trx)
+
+  if (returnVersions.length === 0) {
+    return []
+  }
+
+  const licence = await _licence(licenceId, trx)
+  const returnRequirements = await _returnRequirements(returnVersions, trx)
+  const returnRequirementPurposes = await _returnRequirementPurposes(returnRequirements, trx)
+  const returnRequirementPoints = await _returnRequirementPoints(returnRequirements, trx)
+
+  return _assemble(returnRequirements, returnVersions, licence, returnRequirementPurposes, returnRequirementPoints)
 }
 
-async function _fetch(licenceId, changeDate, trx) {
-  const returnRequirements = await ReturnRequirementModel.query(trx)
+function _assemble(returnRequirements, returnVersions, licence, returnRequirementPurposes, returnRequirementPoints) {
+  return returnRequirements.map((returnRequirement) => {
+    return {
+      abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
+      abstractionPeriodEndMonth: returnRequirement.abstractionPeriodEndMonth,
+      abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
+      abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
+      externalId: returnRequirement.externalId,
+      id: returnRequirement.id,
+      reference: returnRequirement.reference,
+      reportingFrequency: returnRequirement.reportingFrequency,
+      returnVersionId: returnRequirement.returnVersionId,
+      siteDescription: returnRequirement.siteDescription,
+      summer: returnRequirement.summer,
+      twoPartTariff: returnRequirement.twoPartTariff,
+      returnVersion: _assembleReturnVersion(returnRequirement, returnVersions, licence),
+      points: _assemblePoints(returnRequirement, returnRequirementPoints),
+      returnRequirementPurposes: _assembleReturnRequirementPurposes(returnRequirement, returnRequirementPurposes)
+    }
+  })
+}
+
+function _assemblePoints(returnRequirement, returnRequirementPoints) {
+  const matchingReturnRequirementPoints = returnRequirementPoints.filter((returnRequirementPoint) => {
+    return returnRequirementPoint.returnRequirementId === returnRequirement.id
+  })
+
+  return matchingReturnRequirementPoints.map((matchingReturnRequirementPoint) => {
+    return {
+      description: matchingReturnRequirementPoint.description,
+      ngr1: matchingReturnRequirementPoint.ngr1,
+      ngr2: matchingReturnRequirementPoint.ngr2,
+      ngr3: matchingReturnRequirementPoint.ngr3,
+      ngr4: matchingReturnRequirementPoint.ngr4
+    }
+  })
+}
+
+function _assembleReturnRequirementPurposes(returnRequirement, returnRequirementPurposes) {
+  const matchingReturnRequirementPurposes = returnRequirementPurposes.filter((returnRequirementPurpose) => {
+    return returnRequirementPurpose.returnRequirementId === returnRequirement.id
+  })
+
+  return matchingReturnRequirementPurposes.map((matchingReturnRequirementPurpose) => {
+    return {
+      alias: matchingReturnRequirementPurpose.alias,
+      id: matchingReturnRequirementPurpose.id,
+      primaryPurpose: {
+        description: matchingReturnRequirementPurpose.primaryPurposeDescription,
+        id: matchingReturnRequirementPurpose.primaryPurposeId,
+        legacyId: matchingReturnRequirementPurpose.primaryPurposeLegacyId
+      },
+      purpose: {
+        description: matchingReturnRequirementPurpose.purposeDescription,
+        id: matchingReturnRequirementPurpose.purposeId,
+        legacyId: matchingReturnRequirementPurpose.purposeLegacyId
+      },
+      secondaryPurpose: {
+        description: matchingReturnRequirementPurpose.secondaryPurposeDescription,
+        id: matchingReturnRequirementPurpose.secondaryPurposeId,
+        legacyId: matchingReturnRequirementPurpose.secondaryPurposeLegacyId
+      }
+    }
+  })
+}
+
+function _assembleReturnVersion(returnRequirement, returnVersions, licence) {
+  const matchingReturnVersion = returnVersions.find((returnVersion) => {
+    return returnVersion.id === returnRequirement.returnVersionId
+  })
+
+  return {
+    endDate: matchingReturnVersion.endDate,
+    id: matchingReturnVersion.id,
+    reason: matchingReturnVersion.reason,
+    startDate: matchingReturnVersion.startDate,
+    quarterlyReturns: matchingReturnVersion.quarterlyReturns,
+    multipleUpload: matchingReturnVersion.multipleUpload,
+    licence: {
+      expiredDate: licence.expiredDate,
+      id: licence.id,
+      lapsedDate: licence.lapsedDate,
+      licenceRef: licence.licenceRef,
+      revokedDate: licence.revokedDate,
+      areacode: licence.areacode,
+      region: {
+        id: licence.regionId,
+        naldRegionId: licence.naldRegionId
+      }
+    }
+  }
+}
+
+async function _returnRequirementPoints(returnRequirements, trx) {
+  const returnRequirementIds = returnRequirements.map((returnRequirement) => {
+    return returnRequirement.id
+  })
+
+  return ReturnRequirementPointModel.query(trx)
+    .select([
+      'returnRequirementPoints.id',
+      'returnRequirementPoints.returnRequirementId',
+      'returnRequirementPoints.pointId',
+      'point.description',
+      'point.ngr1',
+      'point.ngr2',
+      'point.ngr3',
+      'point.ngr4'
+    ])
+    .innerJoinRelated('point')
+    .whereIn('returnRequirementPoints.returnRequirementId', returnRequirementIds)
+}
+
+async function _returnRequirementPurposes(returnRequirements, trx) {
+  const returnRequirementIds = returnRequirements.map((returnRequirement) => {
+    return returnRequirement.id
+  })
+
+  return ReturnRequirementPurposeModel.query(trx)
+    .select([
+      'returnRequirementPurposes.alias',
+      'returnRequirementPurposes.returnRequirementId',
+      'returnRequirementPurposes.id',
+      'returnRequirementPurposes.primaryPurposeId',
+      'returnRequirementPurposes.purposeId',
+      'returnRequirementPurposes.secondaryPurposeId',
+      ReturnRequirementPurposeModel.raw('purpose.description AS "purposeDescription"'),
+      ReturnRequirementPurposeModel.raw('purpose.legacy_id AS "purposeLegacyId"'),
+      ReturnRequirementPurposeModel.raw('primary_purpose.description AS "primaryPurposeDescription"'),
+      ReturnRequirementPurposeModel.raw('primary_purpose.legacy_id AS "primaryPurposeLegacyId"'),
+      ReturnRequirementPurposeModel.raw('secondary_purpose.description AS "secondaryPurposeDescription"'),
+      ReturnRequirementPurposeModel.raw('secondary_purpose.legacy_id AS "secondaryPurposeLegacyId"')
+    ])
+    .innerJoinRelated('purpose')
+    .innerJoinRelated('primaryPurpose')
+    .innerJoinRelated('secondaryPurpose')
+    .whereIn('returnRequirementPurposes.returnRequirementId', returnRequirementIds)
+}
+
+async function _returnRequirements(returnVersions, trx) {
+  const returnVersionIds = returnVersions.map((returnVersion) => {
+    return returnVersion.id
+  })
+
+  return ReturnRequirementModel.query(trx)
     .select([
       'abstractionPeriodEndDay',
       'abstractionPeriodEndMonth',
@@ -56,150 +204,51 @@ async function _fetch(licenceId, changeDate, trx) {
       'summer',
       'twoPartTariff'
     ])
-    .whereExists(
-      ReturnVersionModel.query()
-        .innerJoinRelated('licence')
-        .where('licence.id', licenceId)
-        .where('returnVersions.status', 'current')
-        .where((builder) => {
-          builder.whereNull('returnVersions.endDate').orWhere('returnVersions.endDate', '>=', changeDate)
-        })
-        .where((builder) => {
-          builder.whereNull('licence.expiredDate').orWhere('licence.expiredDate', '>=', changeDate)
-        })
-        .where((builder) => {
-          builder.whereNull('licence.lapsedDate').orWhere('licence.lapsedDate', '>=', changeDate)
-        })
-        .where((builder) => {
-          builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', changeDate)
-        })
-        .whereColumn('returnVersions.id', 'returnRequirements.returnVersionId')
-    )
+    .whereIn('returnVersionId', returnVersionIds)
+}
 
-  if (returnRequirements.length === 0) {
-    return returnRequirements
-  }
-
-  const returnRequirementIds = returnRequirements.map((rr) => rr.id)
-  const returnVersionIds = [...new Set(returnRequirements.map((rr) => rr.returnVersionId))]
-
-  // Fetch return versions
-  const returnVersions = await ReturnVersionModel.query(trx)
-    .select(['endDate', 'id', 'licenceId', 'reason', 'startDate', 'quarterlyReturns', 'multipleUpload'])
-    .whereIn('id', returnVersionIds)
-
-  // Fetch licences
-  const licenceIds = [...new Set(returnVersions.map((rv) => rv.licenceId))]
-  const licences = await LicenceModel.query(trx)
+async function _returnVersions(licenceId, changeDate, trx) {
+  return ReturnVersionModel.query(trx)
     .select([
-      'expiredDate',
-      'id',
-      'lapsedDate',
-      'licenceRef',
-      'regionId',
-      'revokedDate',
-      db.raw("regions->>'historicalAreaCode' as areacode")
+      'returnVersions.endDate',
+      'returnVersions.id',
+      'returnVersions.licenceId',
+      'returnVersions.reason',
+      'returnVersions.startDate',
+      'returnVersions.quarterlyReturns',
+      'returnVersions.multipleUpload'
     ])
-    .whereIn('id', licenceIds)
-
-  // Fetch regions
-  const regionIds = [...new Set(licences.filter((l) => l.regionId).map((l) => l.regionId))]
-  const regions = await RegionModel.query(trx).select(['id', 'naldRegionId']).whereIn('id', regionIds)
-
-  // Fetch points via the junction table (return_requirement_points joined to points)
-  const pointRows = await ReturnRequirementPointModel.query(trx)
-    .select([
-      'returnRequirementPoints.returnRequirementId',
-      'points.description',
-      'points.ngr1',
-      'points.ngr2',
-      'points.ngr3',
-      'points.ngr4'
-    ])
-    .innerJoin('points', 'points.id', 'returnRequirementPoints.pointId')
-    .whereIn('returnRequirementPoints.returnRequirementId', returnRequirementIds)
-
-  // Fetch return requirement purposes
-  const returnRequirementPurposes = await ReturnRequirementPurposeModel.query(trx)
-    .select(['alias', 'id', 'primaryPurposeId', 'purposeId', 'returnRequirementId', 'secondaryPurposeId'])
-    .whereIn('returnRequirementId', returnRequirementIds)
-
-  // Fetch purpose lookup tables (sequentially to avoid concurrent queries on the transaction connection)
-  const primaryPurposeIds = [...new Set(returnRequirementPurposes.map((p) => p.primaryPurposeId))]
-  const purposeIds = [...new Set(returnRequirementPurposes.map((p) => p.purposeId))]
-  const secondaryPurposeIds = [...new Set(returnRequirementPurposes.map((p) => p.secondaryPurposeId))]
-
-  const primaryPurposes = await PrimaryPurposeModel.query(trx)
-    .select(['description', 'id', 'legacyId'])
-    .whereIn('id', primaryPurposeIds)
-
-  const purposes = await PurposeModel.query(trx).select(['description', 'id', 'legacyId']).whereIn('id', purposeIds)
-
-  const secondaryPurposes = await SecondaryPurposeModel.query(trx)
-    .select(['description', 'id', 'legacyId'])
-    .whereIn('id', secondaryPurposeIds)
-
-  // Build lookup maps for efficient assembly
-  const regionMap = new Map(regions.map((r) => [r.id, r]))
-  const licenceMap = new Map(licences.map((l) => [l.id, l]))
-  const returnVersionMap = new Map(returnVersions.map((rv) => [rv.id, rv]))
-  const primaryPurposeMap = new Map(primaryPurposes.map((p) => [p.id, p]))
-  const purposeMap = new Map(purposes.map((p) => [p.id, p]))
-  const secondaryPurposeMap = new Map(secondaryPurposes.map((p) => [p.id, p]))
-
-  // Mutate LicenceModel instances in place: add region, strip regionId
-  for (const licence of licences) {
-    licence.region = regionMap.get(licence.regionId) ?? null
-    delete licence.regionId
-  }
-
-  // Mutate ReturnVersionModel instances in place: add licence, strip licenceId
-  for (const rv of returnVersions) {
-    rv.licence = licenceMap.get(rv.licenceId) ?? null
-    delete rv.licenceId
-  }
-
-  // Build points map: create PointModel instances (no id) from the joined rows
-  const pointsByReqId = new Map()
-  for (const row of pointRows) {
-    const point = PointModel.fromJson({
-      description: row.description,
-      ngr1: row.ngr1,
-      ngr2: row.ngr2,
-      ngr3: row.ngr3,
-      ngr4: row.ngr4
+    .innerJoinRelated('licence')
+    .where('licenceId', licenceId)
+    .where((builder) => {
+      builder.whereNull('endDate').orWhere('endDate', '>=', changeDate)
     })
-    if (!pointsByReqId.has(row.returnRequirementId)) {
-      pointsByReqId.set(row.returnRequirementId, [])
-    }
-    pointsByReqId.get(row.returnRequirementId).push(point)
-  }
+    .where((builder) => {
+      builder.whereNull('licence.expiredDate').orWhere('licence.expiredDate', '>=', changeDate)
+    })
+    .where((builder) => {
+      builder.whereNull('licence.lapsedDate').orWhere('licence.lapsedDate', '>=', changeDate)
+    })
+    .where((builder) => {
+      builder.whereNull('licence.revokedDate').orWhere('licence.revokedDate', '>=', changeDate)
+    })
+    .orderBy('startDate', 'desc')
+}
 
-  // Mutate ReturnRequirementPurposeModel instances: add nested models, strip FK columns
-  const purposesByReqId = new Map()
-  for (const rrp of returnRequirementPurposes) {
-    const reqId = rrp.returnRequirementId
-    rrp.primaryPurpose = primaryPurposeMap.get(rrp.primaryPurposeId) ?? null
-    rrp.purpose = purposeMap.get(rrp.purposeId) ?? null
-    rrp.secondaryPurpose = secondaryPurposeMap.get(rrp.secondaryPurposeId) ?? null
-    delete rrp.primaryPurposeId
-    delete rrp.purposeId
-    delete rrp.secondaryPurposeId
-    delete rrp.returnRequirementId
-    if (!purposesByReqId.has(reqId)) {
-      purposesByReqId.set(reqId, [])
-    }
-    purposesByReqId.get(reqId).push(rrp)
-  }
-
-  // Assemble final result on the ReturnRequirementModel instances
-  for (const returnRequirement of returnRequirements) {
-    returnRequirement.returnVersion = returnVersionMap.get(returnRequirement.returnVersionId) ?? null
-    returnRequirement.points = pointsByReqId.get(returnRequirement.id) ?? []
-    returnRequirement.returnRequirementPurposes = purposesByReqId.get(returnRequirement.id) ?? []
-  }
-
-  return returnRequirements
+async function _licence(licenceId, trx) {
+  return LicenceModel.query(trx)
+    .select([
+      'licences.expiredDate',
+      'licences.id',
+      'licences.lapsedDate',
+      'licences.licenceRef',
+      'licences.regionId',
+      'licences.revokedDate',
+      LicenceModel.raw("regions->>'historicalAreaCode' as areacode"),
+      LicenceModel.raw('region.nald_region_id AS "naldRegionId"')
+    ])
+    .innerJoinRelated('region')
+    .findById(licenceId)
 }
 
 module.exports = {
