@@ -19,6 +19,8 @@ const FetchOtherPurposeIdsDal = require('../../../../dal/return-versions/fetch-o
  * @returns {Promise<object>} The new return version requirements data for a licence
  */
 async function go(licenceId, requirements) {
+  console.log('🚀🚀🚀 ~ requirements:')
+  console.dir(requirements, { depth: null, colors: true })
   const returnRequirements = []
 
   for (const requirement of requirements) {
@@ -49,6 +51,8 @@ async function go(licenceId, requirements) {
 }
 
 async function _generateReturnRequirementPurposes(licenceId, purposes) {
+console.log('🚀🚀🚀 ~ purposes:')
+console.dir(purposes, { depth: null, colors: true })
   const returnRequirementPurposes = []
 
   for (const purpose of purposes) {

@@ -32,6 +32,8 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
  */
 async function go(sessionId, userId) {
   const session = await FetchSessionDal.go(sessionId)
+  console.log('🚀🚀🚀 ~ session:')
+  console.dir(session, { depth: null, colors: true })
 
   await DeleteSessionDal.go(sessionId)
 
