@@ -10,11 +10,14 @@ const { expect } = Code
 
 // Test helpers
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
+const CreateNotificationsService = require('../../../../app/services/notices/setup/create-notifications.service.js')
 const FetchRenewalRecipients = require('../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
+const SendNoticeService = require('../../../../app/services/notices/setup/send/send-notice.service.js')
 
 // Thing under test
 const SendRenewalInvitations = require('../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js')
@@ -30,7 +33,10 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
 
   beforeEach(() => {
     Sinon.stub(FetchRenewalRecipients, 'go').resolves(recipients)
-    createNoticeStub = Sinon.stub(CreateNoticeService, 'go').resolves()
+    createNoticeStub = Sinon.stub(CreateNoticeService, 'go').resolves({ id: generateUUID() })
+
+    Sinon.stub(CreateNotificationsService, 'go').resolves()
+    Sinon.stub(SendNoticeService, 'go').resolves()
 
     todayDate = new Date('2026-04-15')
 

@@ -6,8 +6,10 @@
  */
 
 const CreateNoticeService = require('../../notices/setup/create-notice.service.js')
+const CreateNotificationsService = require('../../notices/setup/create-notifications.service.js')
 const FetchRenewalRecipients = require('./fetch-renewal-recipients.service.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
+const SendNoticeService = require('../../notices/setup/send/send-notice.service.js')
 const { NoticeTypes, NoticeType } = require('../../../lib/static-lookups.lib.js')
 const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
 
@@ -23,7 +25,13 @@ async function go(days) {
 
   const recipients = await FetchRenewalRecipients.go(expiryDate)
 
-  await _notice(recipients)
+  const noticeData = _noticeData(expiryDate)
+
+  const notice = await _notice(noticeData, recipients)
+
+  const notifications = await _notifications(noticeData, recipients, notice.id)
+
+  await SendNoticeService.go(notice, notifications)
 
   return recipients
 }
@@ -43,16 +51,27 @@ function _expiryDate(futureExpiredDate) {
   return targetDate
 }
 
-async function _notice(recipients) {
+function _noticeData(expiryDate) {
   const { name, prefix, subType } = NoticeTypes[NoticeType.RENEWAL_INVITATIONS]
 
-  const noticeData = {
+  return {
     referenceCode: generateNoticeReferenceCode(prefix),
     subType,
-    name
+    name,
+    journey: 'standard',
+    noticeType: NoticeType.RENEWAL_INVITATIONS,
+    expiryDate,
+    // TODO: renewalDate = expiryDate - 90
+    renewalDate: expiryDate
   }
+}
 
+async function _notice(noticeData, recipients) {
   return CreateNoticeService.go(noticeData, recipients, NotifyConfig.replyTo)
+}
+
+async function _notifications(noticeData, recipients, noticeId) {
+  return CreateNotificationsService.go(noticeData, recipients, noticeId)
 }
 
 module.exports = {
