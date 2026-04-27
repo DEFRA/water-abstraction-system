@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Formats data for internal users on the `/users/internal/{id}` page
+ * Formats data for internal users on the `/users/internal/{id}/details` page
  * @module UserPresenter
  */
 
@@ -10,7 +10,7 @@ const { formatLongDateTime, sentenceCase } = require('../../base.presenter.js')
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 /**
- * Formats data for internal users on the `/users/internal/{id}` page
+ * Formats data for internal users on the `/users/internal/{id}/details` page
  *
  * @param {module:UserModel} user - The user instance
  *

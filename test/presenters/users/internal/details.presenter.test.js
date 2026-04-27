@@ -15,9 +15,9 @@ const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
 
 // Thing under test
-const UserPresenter = require('../../../../app/presenters/users/internal/user.presenter.js')
+const DetailsPresenter = require('../../../../app/presenters/users/internal/details.presenter.js')
 
-describe('Users - Internal - User Presenter', () => {
+describe('Users - Internal - Details Presenter', () => {
   let user
 
   beforeEach(() => {
@@ -31,7 +31,7 @@ describe('Users - Internal - User Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = UserPresenter.go(user)
+    const result = DetailsPresenter.go(user)
 
     expect(result).to.equal({
       backLink: {
@@ -51,7 +51,7 @@ describe('Users - Internal - User Presenter', () => {
   describe('the "lastSignedIn" property', () => {
     describe('when the lastLogin is not "null"', () => {
       it('returns the date and time of the last login', () => {
-        const result = UserPresenter.go(user)
+        const result = DetailsPresenter.go(user)
 
         expect(result.lastSignedIn).to.equal('6 October 2022 at 10:00:00')
       })
@@ -63,7 +63,7 @@ describe('Users - Internal - User Presenter', () => {
       })
 
       it('returns "Never signed in"', () => {
-        const result = UserPresenter.go(user)
+        const result = DetailsPresenter.go(user)
 
         expect(result.lastSignedIn).to.equal('Never signed in')
       })
@@ -73,7 +73,7 @@ describe('Users - Internal - User Presenter', () => {
   describe('the "roles" property', () => {
     describe('when the user has no group or user roles', () => {
       it('returns an empty array', () => {
-        const result = UserPresenter.go(user)
+        const result = DetailsPresenter.go(user)
 
         expect(result.roles).to.equal([])
       })
@@ -87,7 +87,7 @@ describe('Users - Internal - User Presenter', () => {
       })
 
       it('returns the "roles" for the group in sentence case, sorted by name', () => {
-        const result = UserPresenter.go(user)
+        const result = DetailsPresenter.go(user)
 
         expect(result.roles).to.equal([
           {
@@ -110,7 +110,7 @@ describe('Users - Internal - User Presenter', () => {
       })
 
       it('returns all "roles" in sentence case, sorted by name', () => {
-        const result = UserPresenter.go(user)
+        const result = DetailsPresenter.go(user)
 
         expect(result.roles).to.equal([
           {
