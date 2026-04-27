@@ -43,9 +43,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/users/internal/{id}',
+    path: '/users/internal/{id}/details',
     options: {
-      handler: UsersController.viewUserInternal,
+      handler: UsersController.viewInternalDetails,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -55,9 +55,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/users/internal/{id}',
+    path: '/users/internal/{id}/details',
     options: {
-      handler: UsersController.submitUserInternal
+      handler: UsersController.submitInternalDetails
     }
   },
   {
