@@ -14,6 +14,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 // Things we need to stub
 const CreateNoticeService = require('../../../../app/services/notices/setup/create-notice.service.js')
 const FetchRenewalRecipients = require('../../../../app/services/jobs/renewal-invitations/fetch-renewal-recipients.service.js')
+const NotifyConfig = require('../../../../config/notify.config.js')
 
 // Thing under test
 const SendRenewalInvitations = require('../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js')
@@ -37,6 +38,8 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     expiredDate = new Date('2027-02-09')
 
     clock = Sinon.useFakeTimers(todayDate)
+
+    Sinon.stub(NotifyConfig, 'replyTo').value('notify@test.gov.uk')
   })
 
   afterEach(() => {
@@ -66,7 +69,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
       expect(createNoticeStub.firstCall.args[1]).to.equal(recipients)
 
       // Argument 3: The issuer email
-      expect(createNoticeStub.firstCall.args[2]).to.equal('water_abstractiondigital@environment-agency.gov.uk')
+      expect(createNoticeStub.firstCall.args[2]).to.equal('notify@test.gov.uk')
     })
 
     describe('the "expiredDate"', () => {
