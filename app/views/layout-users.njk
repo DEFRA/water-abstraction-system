@@ -1,0 +1,41 @@
+{% extends 'layout.njk' %}
+
+{% set mainClasses = 'sub-navigation-layout-main' %}
+
+{% block beforeContent %}
+{{ super() }}
+
+<div class="govuk-grid-row govuk-!-margin-top-6">
+  <div class="govuk-grid-column-one-quarter">
+    <nav class="x-govuk-sub-navigation" aria-labelledby="sub-navigation-heading">
+      <h2 class="govuk-visually-hidden" id="sub-navigation-heading">Pages in this section</h2>
+      <ul class="x-govuk-sub-navigation__section">
+        <li
+          class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'details' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="details"
+              {% if activeSecondaryNav === 'details' %}aria-current="page"{% endif %}>
+            User details
+          </a>
+        </li>
+
+        <li
+          class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'communications' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="communications"
+              {% if activeSecondaryNav === 'communications' %}aria-current="page"{% endif %}>
+            Communications
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-column-three-quarters">
+    {{ super() }}
+
+    {% block subPageContent %}
+    {% endblock %}
+  </div>
+</div>
+{% endblock %}
