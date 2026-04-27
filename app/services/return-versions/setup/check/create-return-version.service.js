@@ -18,21 +18,22 @@ const ReturnVersionModel = require('../../../../models/return-version.model.js')
  * create a new return version for a licence.
  *
  * @param {object} returnVersionData - The return version data required to persist a new return version for a licence
+ * @param {object} trx - Transaction object
  * @returns {Promise<module:ReturnVersionModel>} The instance of the created return version
  */
-async function go(returnVersionData) {
+async function go(returnVersionData, trx) {
   const { returnRequirements, returnVersion } = returnVersionData
 
-  const persistedReturnVersion = await ReturnVersionModel.query().insert(returnVersion)
+  const persistedReturnVersion = await ReturnVersionModel.query(trx).insert(returnVersion)
 
-  await _persistReturnRequirements(returnRequirements, persistedReturnVersion.id)
+  await _persistReturnRequirements(returnRequirements, persistedReturnVersion.id, trx)
 
   return persistedReturnVersion
 }
 
-async function _persistReturnRequirements(returnRequirements, returnVersionId) {
+async function _persistReturnRequirements(returnRequirements, returnVersionId, trx) {
   for (const returnRequirement of returnRequirements) {
-    const { id: returnRequirementId } = await ReturnRequirementModel.query().insert({
+    const { id: returnRequirementId } = await ReturnRequirementModel.query(trx).insert({
       abstractionPeriodStartDay: returnRequirement.abstractionPeriodStartDay,
       abstractionPeriodStartMonth: returnRequirement.abstractionPeriodStartMonth,
       abstractionPeriodEndDay: returnRequirement.abstractionPeriodEndDay,
@@ -49,20 +50,20 @@ async function _persistReturnRequirements(returnRequirements, returnVersionId) {
       twoPartTariff: returnRequirement.twoPartTariff
     })
 
-    await _persistReturnRequirementsPoints(returnRequirement.points, returnRequirementId)
-    await _persistReturnRequirementsPurposes(returnRequirement.returnRequirementPurposes, returnRequirementId)
+    await _persistReturnRequirementsPoints(returnRequirement.points, returnRequirementId, trx)
+    await _persistReturnRequirementsPurposes(returnRequirement.returnRequirementPurposes, returnRequirementId, trx)
   }
 }
 
-async function _persistReturnRequirementsPoints(points, returnRequirementId) {
+async function _persistReturnRequirementsPoints(points, returnRequirementId, trx) {
   for (const point of points) {
-    await ReturnRequirementPointModel.query().insert({ pointId: point, returnRequirementId })
+    await ReturnRequirementPointModel.query(trx).insert({ pointId: point, returnRequirementId })
   }
 }
 
-async function _persistReturnRequirementsPurposes(returnRequirementPurposes, returnRequirementId) {
+async function _persistReturnRequirementsPurposes(returnRequirementPurposes, returnRequirementId, trx) {
   for (const returnRequirementPurpose of returnRequirementPurposes) {
-    await ReturnRequirementPurposeModel.query().insert({
+    await ReturnRequirementPurposeModel.query(trx).insert({
       alias: returnRequirementPurpose.alias,
       primaryPurposeId: returnRequirementPurpose.primaryPurposeId,
       purposeId: returnRequirementPurpose.purposeId,

@@ -5,7 +5,6 @@
  * @module CreateService
  */
 
-const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
 const LegacyCreateBillRunRequest = require('../../../requests/legacy/create-bill-run.request.js')
 const StartBillRunProcessService = require('../start-bill-run-process.service.js')
 const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
@@ -35,8 +34,6 @@ async function go(session, blockingResults, user) {
   if (trigger === engineTriggers.old || trigger === engineTriggers.both) {
     await LegacyCreateBillRunRequest.send(type, regionId, toFinancialYearEnding, user, season === 'summer')
   }
-
-  await DeleteSessionDal.go(session.id)
 }
 
 module.exports = {

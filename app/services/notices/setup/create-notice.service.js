@@ -15,14 +15,14 @@ const { timestampForPostgres } = require('../../../lib/general.lib.js')
  * > Notices are event records with a type as `notification`. In the future we intend to move them to their own
  * > `water.notices` table. But for now this explains why the `EventModel` suddenly makes an appearance!
  *
- * @param {SessionModel} session - The session instance
+ * @param {object} noticeData - The notice data
  * @param {object[]} recipients - List of recipients, each containing details like email or address of the recipient
  * @param {string} issuer - The username of the person issuing the notice
  *
  * @returns {Promise<module:EventModel>} the new `EventModel` (Notice) instance
  */
-async function go(session, recipients, issuer) {
-  const notice = CreateNoticePresenter.go(session, recipients, issuer)
+async function go(noticeData, recipients, issuer) {
+  const notice = CreateNoticePresenter.go(noticeData, recipients, issuer)
   const timestamp = timestampForPostgres()
 
   return EventModel.query().insert({ ...notice, createdAt: timestamp, updatedAt: timestamp })

@@ -8,6 +8,7 @@
 const AllowedBillRunPresenter = require('../../../presenters/bill-runs/setup/check/allowed-bill-run.presenter.js')
 const BlockedBillRunPresenter = require('../../../../app/presenters/bill-runs/setup/check/blocked-bill-run.presenter.js')
 const CreateService = require('./create.service.js')
+const DeleteSessionDal = require('../../../dal/delete-session.dal.js')
 const DetermineBlockingBillRunService = require('./determine-blocking-bill-run.service.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const NoAnnualBillRunPresenter = require('../../../presenters/bill-runs/setup/check/no-annual-bill-run.presenter.js')
@@ -41,6 +42,8 @@ const { engineTriggers } = require('../../../lib/static-lookups.lib.js')
  */
 async function go(sessionId, auth) {
   const session = await FetchSessionDal.go(sessionId)
+
+  await DeleteSessionDal.go(session.id)
 
   const blockingResults = await DetermineBlockingBillRunService.go(session)
 
