@@ -28,13 +28,6 @@ const routes = [
     }
   },
   {
-    method: 'POST',
-    path: '/users/internal/{id}',
-    options: {
-      handler: UsersController.submitUserInternal
-    }
-  },
-  {
     method: 'GET',
     path: '/users/external/{id}',
     options: {
@@ -58,6 +51,13 @@ const routes = [
           scope: ['manage_accounts']
         }
       }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/users/internal/{id}',
+    options: {
+      handler: UsersController.submitUserInternal
     }
   },
   {
