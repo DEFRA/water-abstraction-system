@@ -60,10 +60,16 @@ async function _fetchExistingAddress(session) {
 }
 
 async function _fetchImpactedLicences(session) {
-  return ChargeVersionModel.query()
+  const licenceRefs = await ChargeVersionModel.query()
     .select(['licenceRef'])
     .where('billingAccountId', session.billingAccount.id)
     .where('status', 'current')
+
+  const impactedLicences = licenceRefs.map((licence) => {
+    return licence.licenceRef
+  })
+
+  return impactedLicences
 }
 
 async function _updateAddressJourneyBackLink(session) {

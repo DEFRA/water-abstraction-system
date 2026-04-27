@@ -494,7 +494,10 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
   describe('the "impactedLicences" property', () => {
     describe('when an array is provided', () => {
       it('returns it for display', () => {
-        const impactedLicences = [LicenceHelper.generateLicenceRef(), LicenceHelper.generateLicenceRef()]
+        const impactedLicences = [
+          { licenceRef: LicenceHelper.generateLicenceRef() },
+          { licenceRef: LicenceHelper.generateLicenceRef() }
+        ]
 
         const result = CheckPresenter.go(
           {
@@ -514,7 +517,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
       it('returns an empty array', () => {
         const result = CheckPresenter.go(
           {
-            ...session,
+            ...session
           },
           companyContacts,
           address,
