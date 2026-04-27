@@ -3,13 +3,17 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
+
+// Things we need to stub
+const NotifyConfig = require('../../../config/notify.config.js')
 
 // Thing under test
 const ViewPresenter = require('../../../app/presenters/licence-versions/view.presenter.js')
@@ -26,7 +30,6 @@ describe('Licence Versions - View presenter', () => {
         scope: []
       }
     }
-
     licenceVersion = ViewLicencesFixture.licenceVersion()
 
     licenceVersionData = {
@@ -35,6 +38,12 @@ describe('Licence Versions - View presenter', () => {
     }
 
     conditions = []
+
+    Sinon.stub(NotifyConfig, 'replyTo').value('notify@test.gov.uk')
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -48,7 +57,7 @@ describe('Licence Versions - View presenter', () => {
         },
         changeType: 'licence issued',
         conditionTypes: [],
-        errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
+        errorInDataEmail: 'notify@test.gov.uk',
         licenceDetails: {
           address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
           applicationNumber: null,
@@ -133,7 +142,7 @@ describe('Licence Versions - View presenter', () => {
       it('returns the email address', () => {
         const result = ViewPresenter.go(licenceVersionData, auth, conditions)
 
-        expect(result.errorInDataEmail).to.equal('water_abstractiondigital@environment-agency.gov.uk')
+        expect(result.errorInDataEmail).to.equal('notify@test.gov.uk')
       })
     })
 

@@ -30,7 +30,8 @@ const config = {
   rateLimitPause: Number.parseInt(process.env.GOV_UK_NOTIFY_RATE_LIMIT_PAUSE) || 90000,
   timeout: Number.parseInt(process.env.GOV_UK_NOTIFY_TIMEOUT) || 10000,
   url: process.env.GOV_UK_NOTIFY_URL,
-  waitForStatus: Number.parseInt(process.env.GOV_UK_NOTIFY_WAIT_FOR_STATUS) || 5000
+  waitForStatus: Number.parseInt(process.env.GOV_UK_NOTIFY_WAIT_FOR_STATUS) || 5000,
+  replyTo: process.env.GOV_UK_NOTIFY_REPLY_TO
 }
 
 module.exports = config
