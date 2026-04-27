@@ -47,7 +47,7 @@ describe('Users - Index Users presenter', () => {
     expect(result).to.equal({
       links: {
         user: {
-          href: '/account/create-user',
+          href: '/system/users/internal/setup',
           text: 'Create a user'
         }
       },
@@ -92,7 +92,7 @@ describe('Users - Index Users presenter', () => {
     })
   })
 
-  describe.only('the "links" property', () => {
+  describe('the "links" property', () => {
     describe('when the user has the "manage_accounts" role', () => {
       it('returns all of the links', () => {
         const result = IndexUsersPresenter.go(users, auth)
