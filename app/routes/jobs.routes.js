@@ -89,7 +89,7 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/jobs/renewal-invitations',
+    path: '/jobs/renewal-invitations/{days}',
     options: {
       handler: JobsController.renewalInvitations,
       app: {

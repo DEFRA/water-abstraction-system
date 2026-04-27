@@ -5,7 +5,9 @@
  * @module ProcessExistingReturnVersionsService
  */
 
-const ReturnVersionModel = require('../../../../models/return-version.model.js')
+const FetchCurrentReturnVersionsDal = require('../../../../dal/return-versions/fetch-current-return-versions.dal.js')
+const UpdateReturnVersionEndDateDal = require('../../../../dal/return-versions/update-return-version-end-date.dal.js')
+const UpdateReturnVersionStatusDal = require('../../../../dal/return-versions/update-return-version-status.dal.js')
 const { sameDate } = require('../../../../lib/dates.lib.js')
 
 /**
@@ -17,27 +19,28 @@ const { sameDate } = require('../../../../lib/dates.lib.js')
  *
  * @param {string} licenceId - The UUID of the licence the requirements are for
  * @param {Date} newVersionStartDate - The date that the new return version starts
+ * @param {object} trx - Transaction object
  *
  * @returns {Promise<Date>} The calculated `endDate` for the new return version if there is one. Null will be returned
  * if there is no `endDate`
  */
-async function go(licenceId, newVersionStartDate) {
-  const previousVersions = await _previousVersions(licenceId)
+async function go(licenceId, newVersionStartDate, trx) {
+  const previousVersions = await FetchCurrentReturnVersionsDal.go(licenceId, trx)
   const previousVersionEndDate = _calculateEndDate(newVersionStartDate)
 
   let result
 
-  result = await _replacePreviousVersion(previousVersions, newVersionStartDate)
+  result = await _replacePreviousVersion(previousVersions, newVersionStartDate, trx)
   if (result) {
     return result
   }
 
-  result = await _endLatestVersion(previousVersions, newVersionStartDate, previousVersionEndDate)
+  result = await _endLatestVersion(previousVersions, newVersionStartDate, previousVersionEndDate, trx)
   if (result) {
     return null
   }
 
-  result = await _insertBetweenVersions(previousVersions, newVersionStartDate, previousVersionEndDate)
+  result = await _insertBetweenVersions(previousVersions, newVersionStartDate, previousVersionEndDate, trx)
   if (result) {
     return result
   }
@@ -47,7 +50,7 @@ async function go(licenceId, newVersionStartDate) {
     return result
   }
 
-  result = await _replaceLatestVersion(previousVersions, newVersionStartDate)
+  result = await _replaceLatestVersion(previousVersions, newVersionStartDate, trx)
   if (result) {
     return null
   }
@@ -80,7 +83,7 @@ async function go(licenceId, newVersionStartDate) {
  *
  * @private
  */
-async function _endLatestVersion(previousVersions, newVersionStartDate, endDate) {
+async function _endLatestVersion(previousVersions, newVersionStartDate, endDate, trx) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
     return previousVersion.startDate < newVersionStartDate && previousVersion.endDate === null
   })
@@ -89,7 +92,9 @@ async function _endLatestVersion(previousVersions, newVersionStartDate, endDate)
     return null
   }
 
-  return matchedReturnVersion.$query().patch({ endDate })
+  await UpdateReturnVersionEndDateDal.go(matchedReturnVersion.id, endDate, trx)
+
+  return endDate
 }
 
 /**
@@ -152,7 +157,7 @@ async function _insertBeforeVersions(previousVersions, newVersionStartDate) {
  *
  * @private
  */
-async function _insertBetweenVersions(previousVersions, newVersionStartDate, endDate) {
+async function _insertBetweenVersions(previousVersions, newVersionStartDate, endDate, trx) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
     return previousVersion.startDate < newVersionStartDate && previousVersion.endDate > newVersionStartDate
   })
@@ -163,7 +168,7 @@ async function _insertBetweenVersions(previousVersions, newVersionStartDate, end
 
   const newVersionEndDate = matchedReturnVersion.endDate
 
-  await matchedReturnVersion.$query().patch({ endDate })
+  await UpdateReturnVersionEndDateDal.go(matchedReturnVersion.id, endDate, trx)
 
   return newVersionEndDate
 }
@@ -175,14 +180,6 @@ function _calculateEndDate(changeDate) {
   newEndDate.setDate(newEndDate.getDate() - 1)
 
   return newEndDate
-}
-
-function _previousVersions(licenceId) {
-  return ReturnVersionModel.query()
-    .select(['endDate', 'id', 'startDate'])
-    .where('licenceId', licenceId)
-    .where('status', 'current')
-    .orderBy('startDate', 'desc')
 }
 
 /**
@@ -210,7 +207,7 @@ function _previousVersions(licenceId) {
  *
  * @private
  */
-async function _replaceLatestVersion(previousVersions, newVersionStartDate) {
+async function _replaceLatestVersion(previousVersions, newVersionStartDate, trx) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
     return sameDate(previousVersion.startDate, newVersionStartDate) && previousVersion.endDate === null
   })
@@ -219,7 +216,9 @@ async function _replaceLatestVersion(previousVersions, newVersionStartDate) {
     return null
   }
 
-  return matchedReturnVersion.$query().patch({ status: 'superseded' })
+  await UpdateReturnVersionStatusDal.go(matchedReturnVersion.id, 'superseded', trx)
+
+  return true
 }
 
 /**
@@ -248,7 +247,7 @@ async function _replaceLatestVersion(previousVersions, newVersionStartDate) {
  *
  * @private
  */
-async function _replacePreviousVersion(previousVersions, newVersionStartDate) {
+async function _replacePreviousVersion(previousVersions, newVersionStartDate, trx) {
   const matchedReturnVersion = previousVersions.find((previousVersion) => {
     return sameDate(previousVersion.startDate, newVersionStartDate) && previousVersion.endDate >= newVersionStartDate
   })
@@ -259,7 +258,7 @@ async function _replacePreviousVersion(previousVersions, newVersionStartDate) {
 
   const newVersionEndDate = matchedReturnVersion.endDate
 
-  await matchedReturnVersion.$query().patch({ status: 'superseded' })
+  await UpdateReturnVersionStatusDal.go(matchedReturnVersion.id, 'superseded', trx)
 
   return newVersionEndDate
 }

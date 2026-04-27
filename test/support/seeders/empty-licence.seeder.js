@@ -17,17 +17,19 @@ const { generateLicenceRef } = require('../helpers/licence.helper.js')
  *
  * @param {string} [existingLicenceRef] - The licence ref to use for the licence
  * @param {string} [existingRegionId] - The region id to use for the licence (defaults to anglian)
+ * @param {Date} [expiredDate] - The date the licence expires
  *
  * @returns {Promise<object>} an object containing all records related to a licence
  */
-async function seed(existingLicenceRef = null, existingRegionId = null) {
+async function seed(existingLicenceRef = null, existingRegionId = null, expiredDate = null) {
   // Set the defaults
   const regionId = existingRegionId ?? RegionHelper.select().id
   const licenceRef = existingLicenceRef ?? generateLicenceRef()
 
   const licence = await LicenceHelper.add({
     licenceRef,
-    regionId
+    regionId,
+    expiredDate
   })
 
   const licenceDocument = await LicenceDocumentHelper.add({

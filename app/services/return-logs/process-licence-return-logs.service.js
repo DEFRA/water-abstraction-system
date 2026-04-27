@@ -42,9 +42,10 @@ const { determineEarliestDate } = require('../../lib/dates.lib.js')
  * return logs to void and reissue
  * @param {Date} [returnVersionEndDate] - An optional end date to use when determining which return logs to void and
  * reissue
+ * @param {object} [trx=null] - Optional transaction object
  */
-async function go(licenceId, changeDate, returnVersionEndDate = null) {
-  const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceId, changeDate)
+async function go(licenceId, changeDate, returnVersionEndDate = null, trx = null) {
+  const returnRequirements = await FetchLicenceReturnRequirementsService.go(licenceId, changeDate, trx)
 
   if (returnRequirements.length === 0) {
     return
@@ -52,10 +53,10 @@ async function go(licenceId, changeDate, returnVersionEndDate = null) {
 
   const licenceRef = returnRequirements[0].returnVersion.licence.licenceRef
   const licenceEndDate = _endDate(returnRequirements[0].returnVersion)
-  const returnCycles = await _fetchReturnCycles(changeDate, returnVersionEndDate)
+  const returnCycles = await _fetchReturnCycles(changeDate, returnVersionEndDate, trx)
 
   for (const returnCycle of returnCycles) {
-    await _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef, licenceEndDate)
+    await _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef, licenceEndDate, trx)
   }
 }
 
@@ -65,8 +66,8 @@ function _endDate(returnVersion) {
   return determineEarliestDate([licence.expiredDate, licence.lapsedDate, licence.revokedDate])
 }
 
-async function _fetchReturnCycles(changeDate, returnVersionEndDate) {
-  const query = ReturnCycleModel.query()
+async function _fetchReturnCycles(changeDate, returnVersionEndDate, trx) {
+  const query = ReturnCycleModel.query(trx)
     .select(['dueDate', 'endDate', 'id', 'startDate', 'summer'])
     .where('endDate', '>', changeDate)
 
@@ -77,7 +78,7 @@ async function _fetchReturnCycles(changeDate, returnVersionEndDate) {
   return query.orderBy('endDate', 'desc')
 }
 
-async function _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef, licenceEndDate) {
+async function _processReturnCycle(returnCycle, returnRequirements, changeDate, licenceRef, licenceEndDate, trx) {
   // Determine if we have any return requirements that match the cycle being processed
   const requirementsToProcess = returnRequirements.filter((returnRequirement) => {
     return (
@@ -100,12 +101,12 @@ async function _processReturnCycle(returnCycle, returnRequirements, changeDate, 
   // Because we've processed _all_ return requirements for the cycle, we know any return logs whose ID is not in
   // `generatedReturnLogIds` have been made redundant by whatever the 'change' was
   for (const returnRequirement of requirementsToProcess) {
-    const returnIds = await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
+    const returnIds = await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate, trx)
 
     generatedReturnIds.push(...returnIds)
   }
 
-  await VoidLicenceReturnLogsService.go(generatedReturnIds, licenceRef, returnCycle.id, changeDate)
+  await VoidLicenceReturnLogsService.go(generatedReturnIds, licenceRef, returnCycle.id, changeDate, trx)
 }
 
 module.exports = {

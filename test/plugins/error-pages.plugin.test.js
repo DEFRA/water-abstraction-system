@@ -145,7 +145,7 @@ describe('Error Pages plugin', () => {
           expect(response.statusCode).to.equal(HTTP_STATUS_GONE)
           expect(response.statusMessage).to.equal('Gone')
           expect(response.payload).startsWith('<!DOCTYPE html>')
-          expect(response.payload).contains('The session no longer exists')
+          expect(response.payload).contains('This session no longer exists')
         })
       })
 

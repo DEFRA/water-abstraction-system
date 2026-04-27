@@ -15,14 +15,14 @@ const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
  * We set the notice 'status' to 'complete' to allow the report to show on the 'notifications/report' page. This is
  * dictated by the legacy code.
  *
- * @param {SessionModel} session - The session instance
+ * @param {object} noticeData - The notice data
  * @param {object[]} recipients - List of recipient objects, each containing recipient details like email or name.
  * @param {string} issuer - The username of the person issuing the notice
  *
  * @returns {object} The data formatted for persisting as a `notice` record
  */
-function go(session, recipients, issuer) {
-  const { referenceCode, subType, name } = session
+function go(noticeData, recipients, issuer) {
+  const { referenceCode, subType, name } = noticeData
 
   const notice = {
     issuer,
@@ -39,11 +39,14 @@ function go(session, recipients, issuer) {
     type: 'notification'
   }
 
-  if (session.journey === NoticeJourney.ALERTS) {
-    notice.metadata.options = { sendingAlertType: session.alertType, monitoringStationId: session.monitoringStationId }
+  if (noticeData.journey === NoticeJourney.ALERTS) {
+    notice.metadata.options = {
+      sendingAlertType: noticeData.alertType,
+      monitoringStationId: noticeData.monitoringStationId
+    }
   } else {
-    notice.metadata.options = { excludeLicences: session.removeLicences ? session.removeLicences : [] }
-    notice.metadata.returnCycle = _returnCycle(session.determinedReturnsPeriod)
+    notice.metadata.options = { excludeLicences: noticeData.removeLicences ? noticeData.removeLicences : [] }
+    notice.metadata.returnCycle = _returnCycle(noticeData.determinedReturnsPeriod)
   }
 
   return notice
