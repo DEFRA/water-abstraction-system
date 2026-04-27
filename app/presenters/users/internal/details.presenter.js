@@ -24,7 +24,7 @@ function go(user) {
     },
     id,
     lastSignedIn: _lastSignedIn(user),
-    pageTitle: `User ${username}`,
+    pageTitle: `User details for ${username}`,
     pageTitleCaption: 'Internal',
     permissions: user.$permissions().label,
     roles: _roles(user),

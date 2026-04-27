@@ -30,7 +30,7 @@ describe('Users - Internal - Details Presenter', () => {
       },
       id: user.id,
       lastSignedIn: '6 October 2022 at 10:00:00',
-      pageTitle: 'User basic.access@wrls.gov.uk',
+      pageTitle: 'User details for basic.access@wrls.gov.uk',
       pageTitleCaption: 'Internal',
       permissions: 'Basic access',
       roles: [],
