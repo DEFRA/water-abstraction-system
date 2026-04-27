@@ -22,6 +22,12 @@ async function go(licenceId, requirements) {
   const returnRequirements = []
 
   for (const requirement of requirements) {
+    // NOTE: We determine a requirement is complete because agreement exceptions is populated and it is the last step in
+    // the journey
+    if (!requirement.agreementsExceptions) {
+      continue
+    }
+
     const returnRequirementPurposes = await _generateReturnRequirementPurposes(licenceId, requirement.purposes)
 
     const returnRequirement = {
