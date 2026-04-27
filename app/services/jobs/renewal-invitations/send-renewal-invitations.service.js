@@ -7,6 +7,7 @@
 
 const CreateNoticeService = require('../../notices/setup/create-notice.service.js')
 const FetchRenewalRecipients = require('./fetch-renewal-recipients.service.js')
+const NotifyConfig = require('../../../../config/notify.config.js')
 const { NoticeTypes, NoticeType } = require('../../../lib/static-lookups.lib.js')
 const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
 
@@ -51,7 +52,7 @@ async function _notice(recipients) {
     name
   }
 
-  return CreateNoticeService.go(noticeData, recipients, 'water_abstractiondigital@environment-agency.gov.uk')
+  return CreateNoticeService.go(noticeData, recipients, NotifyConfig.replyTo)
 }
 
 module.exports = {
