@@ -6,10 +6,10 @@
  * @module ViewCheckService
  */
 
-const AddressModel = require('../../../models/address.model.js')
 const CheckPresenter = require('../../../presenters/billing-accounts/setup/check.presenter.js')
 const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
 const FetchCompanyService = require('./fetch-company.service.js')
+const FetchExistingAddress = require('../../../dal/billing-accounts/fetch-existing-address.dal.js')
 const FetchImpactedLicences = require('../../../dal/billing-accounts/fetch-impacted-licences.dal.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
@@ -54,9 +54,7 @@ async function _fetchExistingAddress(session) {
     return []
   }
 
-  return AddressModel.query()
-    .select(['addresses.id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'postcode'])
-    .findById(session.addressSelected)
+  return FetchExistingAddress.go(session.addressSelected)
 }
 
 async function _updateAddressJourneyBackLink(session) {
