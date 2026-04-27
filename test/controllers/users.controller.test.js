@@ -19,9 +19,9 @@ const FetchLegacyIdService = require('../../app/services/users/fetch-legacy-id.s
 const IndexUsersService = require('../../app/services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
+const ViewInternalDetailsService = require('../../app/services/users/internal/view-details.service.js')
 const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
 const ViewUserExternalService = require('../../app/services/users/external/view-user.service.js')
-const ViewUserInternalService = require('../../app/services/users/internal/view-user.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -206,13 +206,15 @@ describe('Users controller', () => {
     })
   })
 
-  describe('/users/internal/{id}', () => {
+  describe('/users/internal/{id}/details', () => {
     describe('GET', () => {
       beforeEach(async () => {
         id = generateUUID()
-        options = _getOptions(`/users/internal/${id}`, { scope: ['manage_accounts'], user: { id } })
+        options = _getOptions(`/users/internal/${id}/details`, { scope: ['manage_accounts'], user: { id } })
 
-        Sinon.stub(ViewUserInternalService, 'go').resolves({
+        Sinon.stub(ViewInternalDetailsService, 'go').resolves({
+          activeNavBar: 'users',
+          activeSecondaryNav: 'details',
           backLink: {
             href: '/',
             text: 'Go back to search'
@@ -237,7 +239,7 @@ describe('Users controller', () => {
     describe('POST', () => {
       beforeEach(() => {
         id = generateUUID()
-        postOptions = postRequestOptions(`/users/internal/${id}`, {})
+        postOptions = postRequestOptions(`/users/internal/${id}/details`, {})
       })
 
       describe('when the request succeeds', () => {
