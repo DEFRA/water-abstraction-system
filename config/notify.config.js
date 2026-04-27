@@ -28,10 +28,10 @@ const config = {
   // a default of 30ms which results in approx. 2,000 requests per minute, assuming we can send them that fast!
   delay: Number.parseInt(process.env.GOV_UK_NOTIFY_DELAY) || 30,
   rateLimitPause: Number.parseInt(process.env.GOV_UK_NOTIFY_RATE_LIMIT_PAUSE) || 90000,
+  replyTo: process.env.GOV_UK_NOTIFY_REPLY_TO,
   timeout: Number.parseInt(process.env.GOV_UK_NOTIFY_TIMEOUT) || 10000,
   url: process.env.GOV_UK_NOTIFY_URL,
-  waitForStatus: Number.parseInt(process.env.GOV_UK_NOTIFY_WAIT_FOR_STATUS) || 5000,
-  replyTo: process.env.GOV_UK_NOTIFY_REPLY_TO
+  waitForStatus: Number.parseInt(process.env.GOV_UK_NOTIFY_WAIT_FOR_STATUS) || 5000
 }
 
 module.exports = config
