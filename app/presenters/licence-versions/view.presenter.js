@@ -5,6 +5,7 @@
  * @module ViewPresenter
  */
 
+const NotifyConfig = require('../../../config/notify.config.js')
 const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
 const { formatLicencePoints, formatLicencePurposes, formatConditionTypes } = require('../licence.presenter.js')
 const { formatLongDate, formatVersionReason } = require('../base.presenter.js')
@@ -49,7 +50,7 @@ function _errorInDataEmail(billingAndDataRole) {
     return null
   }
 
-  return 'water_abstractiondigital@environment-agency.gov.uk'
+  return NotifyConfig.replyTo
 }
 
 function _licenceDetails(licenceVersion) {

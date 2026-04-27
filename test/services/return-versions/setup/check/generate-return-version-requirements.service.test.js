@@ -43,6 +43,8 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
         frequencyCollected: 'week',
         agreementsExceptions: ['none']
       },
+      // Invalid 1 - a return requirement because user clicked 'Add', but then immediately hit back
+      {},
       {
         points: ['30070341-ef94-4df8-87dd-31d51a046b8b', '916a1320-0f57-43b2-bddc-b609218abf1c'],
         purposes: [
@@ -73,6 +75,17 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
           'two-part-tariff',
           '56-returns-exception'
         ]
+      },
+      // Invalid 2 - a return requirement because user clicked 'Add', but then clicked back from the 'Enter abstraction'
+      // page
+      {
+        purposes: [
+          {
+            id: 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e',
+            alias: ''
+          }
+        ],
+        points: ['796f83bb-d50d-446f-bc47-28daff6bcb78']
       }
     ]
 
@@ -162,7 +175,7 @@ describe('Return Versions - Setup - Generate Return Version Requirements service
       ])
 
       // Because the two session data requirements share the same purpose, but the second has an additional one, we
-      // expect the FetchOtherPurposeIdsService to be called three times - once for each purpose
+      // expect the FetchOtherPurposeIdsService to be called three times - once for each 'valid' purpose
       expect(fetchOtherPurposeIdsStub.callCount).to.equal(3)
       expect(fetchOtherPurposeIdsStub.getCall(0).args).to.equal([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
       expect(fetchOtherPurposeIdsStub.getCall(1).args).to.equal([licenceId, 'ff7cecd5-96ef-4625-b232-54ef7e50ab8e'])
