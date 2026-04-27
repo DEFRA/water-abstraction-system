@@ -7,10 +7,10 @@
  */
 
 const AddressModel = require('../../../models/address.model.js')
-const ChargeVersionModel = require('../../../models/charge-version.model.js')
 const CheckPresenter = require('../../../presenters/billing-accounts/setup/check.presenter.js')
 const FetchCompanyContactsService = require('./fetch-company-contacts.service.js')
 const FetchCompanyService = require('./fetch-company.service.js')
+const FetchImpactedLicences = require('../../../dal/billing-accounts/fetch-impacted-licences.dal.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const { markCheckPageVisited } = require('../../../lib/check-page.lib.js')
 
@@ -26,7 +26,7 @@ async function go(sessionId) {
   const companyContacts = await _fetchCompanyContacts(session)
   const companysHouseResult = await FetchCompanyService.go(session.companiesHouseNumber)
   const existingAddress = await _fetchExistingAddress(session)
-  const impactedLicences = await _fetchImpactedLicences(session)
+  const impactedLicences = await FetchImpactedLicences.go(session.billingAccount.id)
 
   await markCheckPageVisited(session)
   await _updateAddressJourneyBackLink(session)
@@ -57,19 +57,6 @@ async function _fetchExistingAddress(session) {
   return AddressModel.query()
     .select(['addresses.id', 'address1', 'address2', 'address3', 'address4', 'address5', 'address6', 'postcode'])
     .findById(session.addressSelected)
-}
-
-async function _fetchImpactedLicences(session) {
-  const licenceRefs = await ChargeVersionModel.query()
-    .select(['licenceRef'])
-    .where('billingAccountId', session.billingAccount.id)
-    .where('status', 'current')
-
-  const impactedLicences = licenceRefs.map((licence) => {
-    return licence.licenceRef
-  })
-
-  return impactedLicences
 }
 
 async function _updateAddressJourneyBackLink(session) {
