@@ -5,7 +5,6 @@
  * @module UserEmailPresenter
  */
 
-const { checkUrl } = require('../../../../lib/check-page.lib.js')
 const { formatEmail } = require('../../../base.presenter.js')
 
 /**
@@ -18,7 +17,7 @@ const { formatEmail } = require('../../../base.presenter.js')
 function go(session) {
   return {
     backLink: {
-      href: checkUrl(session, '/system/users'),
+      href: '/system/users',
       text: 'Back'
     },
     pageTitle: 'Enter an email address for the user',
