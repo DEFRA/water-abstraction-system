@@ -52,9 +52,11 @@ function _expiryDate(futureExpiredDate) {
 }
 
 function _renewalDate(expiryDate) {
+  const daysPriorToExpiry = 90
+
   const renewalDate = new Date(expiryDate)
 
-  renewalDate.setDate(renewalDate.getDate() - 90)
+  renewalDate.setDate(renewalDate.getDate() - daysPriorToExpiry)
 
   return renewalDate
 }
