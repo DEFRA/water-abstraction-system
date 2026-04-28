@@ -3,17 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
-
-// Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const ContactsPresenter = require('../../../app/presenters/companies/contacts.presenter.js')
@@ -32,12 +28,6 @@ describe('Companies - Contacts presenter', () => {
         contactName: 'Rachael Tyrell'
       }
     ]
-
-    Sinon.stub(FeatureFlagsConfig, 'enableCustomerManage').value(true)
-  })
-
-  afterEach(() => {
-    Sinon.restore()
   })
 
   describe('when called', () => {
@@ -57,8 +47,7 @@ describe('Companies - Contacts presenter', () => {
           }
         ],
         links: {
-          createContact: `/system/company-contacts/setup/${company.id}`,
-          removeContact: null
+          createContact: `/system/company-contacts/setup/${company.id}`
         },
         pageTitle: 'Contacts',
         pageTitleCaption: 'Tyrell Corporation'
