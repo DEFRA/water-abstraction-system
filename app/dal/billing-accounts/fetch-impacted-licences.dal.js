@@ -15,16 +15,17 @@ const ChargeVersionModel = require('../../models/charge-version.model.js')
  *
  * @param {string} billingAccountId - The UUID of the billing account.
  *
- * @returns {Promise<object[]>} An array of charge version objects with their licenceRefs.
+ * @returns {Promise<string[]>} The `licenceRef` of the impacted licences.
  */
 async function go(billingAccountId) {
-  const licenceRefs = await ChargeVersionModel.query()
+  const chargeVersions = await ChargeVersionModel.query()
     .select(['licenceRef'])
     .where('billingAccountId', billingAccountId)
     .where('status', 'current')
+    .distinctOn('licenceRef')
 
-  const impactedLicences = licenceRefs.map((licence) => {
-    return licence.licenceRef
+  const impactedLicences = chargeVersions.map((chargeVersion) => {
+    return chargeVersion.licenceRef
   })
 
   return impactedLicences

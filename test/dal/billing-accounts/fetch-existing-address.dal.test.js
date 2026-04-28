@@ -43,7 +43,7 @@ describe('DAL - Fetch Existing Address dal', () => {
   })
 
   describe('when there are no matching addresses found', () => {
-    it('returns an empty array', async () => {
+    it('returns "undefined', async () => {
       const result = await FetchExistingAddress.go(generateUUID())
 
       expect(result).to.be.undefined()

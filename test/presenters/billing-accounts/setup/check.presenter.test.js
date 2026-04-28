@@ -55,7 +55,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         contactSelected: null,
         existingAccount: '',
         fao: 'no',
-        impactedLicences: [],
+        impactedLicences: undefined,
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
@@ -514,18 +514,17 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
     })
 
     describe('when there was no impacted licences', () => {
-      it('returns an empty array', () => {
+      it('returns undefined', () => {
         const result = CheckPresenter.go(
           {
             ...session
           },
           companyContacts,
           address,
-          companysHouseResult,
-          []
+          companysHouseResult
         )
 
-        expect(result.impactedLicences).to.equal([])
+        expect(result.impactedLicences).to.be.undefined()
       })
     })
   })
