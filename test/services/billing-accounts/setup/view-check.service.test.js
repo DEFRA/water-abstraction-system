@@ -13,6 +13,8 @@ const BillingAccountsFixture = require('../../../support/fixtures/billing-accoun
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things we need to stub
+const FetchExistingAddressDal = require('../../../../app/dal/billing-accounts/fetch-existing-address.dal.js')
+const FetchImpactedLicences = require('../../../../app/dal/billing-accounts/fetch-impacted-licences.dal.js')
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
@@ -31,6 +33,8 @@ describe('Billing Accounts - Setup - View Check Service', () => {
 
     session = SessionModelStub.build(Sinon, sessionData)
 
+    Sinon.stub(FetchExistingAddressDal, 'go').resolves()
+    Sinon.stub(FetchImpactedLicences, 'go').resolves([])
     Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 
@@ -67,6 +71,7 @@ describe('Billing Accounts - Setup - View Check Service', () => {
         },
         pageTitle: 'Check billing account details',
         pageTitleCaption: `Billing account ${session.billingAccount.accountNumber}`,
+        impactedLicences: [],
         individualName: '',
         searchInput: ''
       })

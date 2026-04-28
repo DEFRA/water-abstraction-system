@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const BillingAccountsFixture = require('../../../support/fixtures/billing-accounts.fixture.js')
 const CustomersFixture = require('../../../support/fixtures/customers.fixture.js')
+const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -54,6 +55,7 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         contactSelected: null,
         existingAccount: '',
         fao: 'no',
+        impactedLicences: undefined,
         links: {
           accountSelected: `/system/billing-accounts/setup/${session.id}/account`,
           accountType: `/system/billing-accounts/setup/${session.id}/account-type`,
@@ -485,6 +487,44 @@ describe('Billing Accounts - Setup - Check Presenter', () => {
         )
 
         expect(result.contactName).to.equal('')
+      })
+    })
+  })
+
+  describe('the "impactedLicences" property', () => {
+    describe('when an array is provided', () => {
+      it('returns it for display', () => {
+        const impactedLicences = [
+          { licenceRef: LicenceHelper.generateLicenceRef() },
+          { licenceRef: LicenceHelper.generateLicenceRef() }
+        ]
+
+        const result = CheckPresenter.go(
+          {
+            ...session
+          },
+          companyContacts,
+          address,
+          companysHouseResult,
+          impactedLicences
+        )
+
+        expect(result.impactedLicences).to.equal(impactedLicences)
+      })
+    })
+
+    describe('when there was no impacted licences', () => {
+      it('returns undefined', () => {
+        const result = CheckPresenter.go(
+          {
+            ...session
+          },
+          companyContacts,
+          address,
+          companysHouseResult
+        )
+
+        expect(result.impactedLicences).to.be.undefined()
       })
     })
   })

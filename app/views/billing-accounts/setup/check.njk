@@ -1,6 +1,7 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/inset-text/macro.njk" import govukInsetText %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% from "macros/new-line-array-items.njk" import newLineArrayItems %}
@@ -152,6 +153,20 @@
       } if contactName
     ]
   }) }}
+
+  {% if impactedLicences.length %}
+    <h2 class="govuk-heading-m">You're about to update the billing address for these licences</h2>
+
+    {% set html %}
+      <ul class="govuk-list">
+        {% for licenceRef in impactedLicences %}
+          <li>{{ licenceRef }}</li>
+        {% endfor %}
+      </ul>
+    {% endset %}
+
+    {{ govukInsetText({ html : html }) }}
+  {% endif %}
 
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
