@@ -161,13 +161,12 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
 
     describe('the "renewalDate"', () => {
       describe('when the date is "2026-04-15"', () => {
-          it('sets the renewal date 90 days before the expired date', async () => {
-            await SendRenewalInvitations.go(days)
+        it('sets the renewal date 90 days before the expired date', async () => {
+          await SendRenewalInvitations.go(days)
 
-            const firstArgs = createNoticeStub.firstCall.args[0]
+          const firstArgs = createNoticeStub.firstCall.args[0]
 
-            expect(firstArgs.renewalDate.getTime()).to.equal(expectedRenewalDate.getTime())
-          })
+          expect(firstArgs.renewalDate.getTime()).to.equal(expectedRenewalDate.getTime())
         })
       })
     })
