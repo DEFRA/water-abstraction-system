@@ -13,9 +13,9 @@ const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.j
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
-const ReturnsInvitationNotificationsPresenter = require('../../../../app/presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js')
+const RenewalInvitationNotificationsPresenter = require('../../../../app/presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js')
 
-describe('Notices - Setup - Returns Notice Notifications presenter', () => {
+describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
   const noticeId = 'c1cae668-3dad-4806-94e2-eb3f27222ed9'
 
   let recipients
@@ -33,7 +33,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+    const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
     expect(result).to.equal([
       {
@@ -83,7 +83,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
         })
 
         it('returns the expected "personalisation"', () => {
-          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
           expect(result[0].personalisation).to.equal({
             expiryDate: '1 January 2022',
@@ -95,7 +95,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
 
       describe('and there is only one licence ref', () => {
         it('returns the expected "personalisation"', () => {
-          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
           expect(result[0].personalisation).to.equal({
             expiryDate: '1 January 2022',
@@ -113,7 +113,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
         })
 
         it('returns the expected "personalisation"', () => {
-          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
           expect(result[1].personalisation).to.equal({
             address_line_1: 'Returnsholder',
@@ -132,7 +132,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
 
       describe('and there is only one licence ref', () => {
         it('returns the expected "personalisation"', () => {
-          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
           expect(result[1].personalisation).to.equal({
             address_line_1: 'Returnsholder',
@@ -159,7 +159,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
         })
 
         it('returns the expected "templateId"', () => {
-          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
           expect(result[0].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.standard.email['multiple licences'])
         })
@@ -167,7 +167,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
 
       describe('and there is only one licence ref', () => {
         it('returns the expected "templateId"', () => {
-          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
           expect(result[0].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.standard.email['single licence'])
         })
@@ -181,7 +181,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
         })
 
         it('returns the expected "templateId"', () => {
-          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
           expect(result[1].templateId).to.equal(
             NOTIFY_TEMPLATES.renewalInvitations.standard.letter['multiple licences']
@@ -191,7 +191,7 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
 
       describe('and there is only one licence ref', () => {
         it('returns the expected "templateId"', () => {
-          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
           expect(result[1].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.standard.letter['single licence'])
         })

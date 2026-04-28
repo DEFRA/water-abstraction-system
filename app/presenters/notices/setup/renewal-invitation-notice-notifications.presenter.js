@@ -2,7 +2,7 @@
 
 /**
  * Formats recipients into notifications for a renewal invitation
- * @module ReturnsInvitationNotificationsPresenter
+ * @module RenewalInvitationNotificationsPresenter
  */
 
 const NotifyAddressPresenter = require('./notify-address.presenter.js')
