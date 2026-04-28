@@ -23,6 +23,7 @@ async function go(billingAccountId) {
     .where('billingAccountId', billingAccountId)
     .where('status', 'current')
     .distinctOn('licenceRef')
+    .orderBy('licenceRef')
 
   const impactedLicences = chargeVersions.map((chargeVersion) => {
     return chargeVersion.licenceRef

@@ -17,33 +17,38 @@ const FetchImpactedLicencesDal = require('../../../app/dal/billing-accounts/fetc
 
 describe('DAL - Fetch Impacted Licences dal', () => {
   const billingAccountId = generateUUID()
-  const licenceRef = generateLicenceRef()
 
-  let fristChargeVersion
-  let secondChargeVersion
-  let thirdChargeVersion
-  let fourthChargeVersion
+  let chargeVersions
+  let multiUseLicenceRef
+  let singleUseLicenceRef
 
   before(async () => {
-    fristChargeVersion = await ChargeVersionHelper.add({ billingAccountId })
-    secondChargeVersion = await ChargeVersionHelper.add({ billingAccountId, licenceRef })
-    thirdChargeVersion = await ChargeVersionHelper.add({ billingAccountId, licenceRef })
-    fourthChargeVersion = await ChargeVersionHelper.add({ licenceRef })
+    // NOTE: We want to confirm the results are sorted. So, of the two references generated, we'll use the 'higher'
+    // one to create our first record, to confirm the order isn't a fluke of the order in which the records were created
+    const licenceRefs = [generateLicenceRef(), generateLicenceRef()].sort()
+
+    multiUseLicenceRef = licenceRefs[0]
+    singleUseLicenceRef = licenceRefs[1]
+
+    chargeVersions = [
+      await ChargeVersionHelper.add({ billingAccountId, licenceRef: singleUseLicenceRef }),
+      await ChargeVersionHelper.add({ billingAccountId, licenceRef: multiUseLicenceRef }),
+      await ChargeVersionHelper.add({ billingAccountId, licenceRef: multiUseLicenceRef }),
+      await ChargeVersionHelper.add({ licenceRef: generateLicenceRef() })
+    ]
   })
 
   after(async () => {
-    await fristChargeVersion.$query().delete()
-    await secondChargeVersion.$query().delete()
-    await thirdChargeVersion.$query().delete()
-    await fourthChargeVersion.$query().delete()
+    for (const chargeVersion of chargeVersions) {
+      await chargeVersion.$query().delete()
+    }
   })
 
   describe('when there are charge versions that match the billing account id', () => {
     it('returns an array of unique licence references', async () => {
       const result = await FetchImpactedLicencesDal.go(billingAccountId)
 
-      expect(result.length).to.equal(2)
-      expect(result).to.contain([fristChargeVersion.licenceRef, licenceRef])
+      expect(result).to.equal([multiUseLicenceRef, singleUseLicenceRef])
     })
   })
 
