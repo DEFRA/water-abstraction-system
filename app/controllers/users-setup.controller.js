@@ -2,7 +2,7 @@
 
 /**
  * Controller for /users/internal/setup endpoints
- * @module UsersController
+ * @module UsersSetupController
  */
 
 const InitiateSessionService = require('../services/users/internal/setup/initiate-session.service.js')
