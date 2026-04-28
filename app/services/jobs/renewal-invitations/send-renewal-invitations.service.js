@@ -51,18 +51,24 @@ function _expiryDate(futureExpiredDate) {
   return targetDate
 }
 
+function _renewalDate(expiryDate) {
+  const renewalDate = new Date(expiryDate)
+  renewalDate.setDate(renewalDate.getDate() - 90)
+
+  return renewalDate
+}
+
 function _noticeData(expiryDate) {
   const { name, prefix, subType } = NoticeTypes[NoticeType.RENEWAL_INVITATIONS]
 
   return {
-    referenceCode: generateNoticeReferenceCode(prefix),
-    subType,
-    name,
-    journey: 'standard',
-    noticeType: NoticeType.RENEWAL_INVITATIONS,
     expiryDate,
-    // TODO: renewalDate = expiryDate - 90
-    renewalDate: expiryDate
+    journey: 'standard',
+    name,
+    noticeType: NoticeType.RENEWAL_INVITATIONS,
+    referenceCode: generateNoticeReferenceCode(prefix),
+    renewalDate: _renewalDate(expiryDate),
+    subType
   }
 }
 

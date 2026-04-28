@@ -10,6 +10,7 @@ const { expect } = Code
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 const { NOTIFY_TEMPLATES } = require('../../../../app/lib/notify-templates.lib.js')
+const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const ReturnsInvitationNotificationsPresenter = require('../../../../app/presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js')
@@ -72,5 +73,129 @@ describe('Notices - Setup - Returns Notice Notifications presenter', () => {
         templateId: NOTIFY_TEMPLATES.renewalInvitations.standard.letter['single licence']
       }
     ])
+  })
+
+  describe('the "personalisation" property', () => {
+    describe('when the notification is an email', () => {
+      describe('and there are multiple licence refs', () => {
+        beforeEach(() => {
+          recipients[0].licence_refs.push(generateLicenceRef())
+        })
+
+        it('returns the expected "personalisation"', () => {
+          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[0].personalisation).to.equal({
+            expiryDate: '1 January 2022',
+            licenceRefs: recipients[0].licence_refs,
+            renewalDate: '3 November 2021'
+          })
+        })
+      })
+
+      describe('and there is only one licence ref', () => {
+        it('returns the expected "personalisation"', () => {
+          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[0].personalisation).to.equal({
+            expiryDate: '1 January 2022',
+            licenceRef: recipients[0].licence_refs[0],
+            renewalDate: '3 November 2021'
+          })
+        })
+      })
+    })
+
+    describe('when the notification is a letter', () => {
+      describe('and there are multiple licence refs', () => {
+        beforeEach(() => {
+          recipients[1].licence_refs.push(generateLicenceRef())
+        })
+
+        it('returns the expected "personalisation"', () => {
+          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[1].personalisation).to.equal({
+            address_line_1: 'Returnsholder',
+            address_line_2: '4',
+            address_line_3: 'Privet Drive',
+            address_line_4: 'Little Whinging',
+            address_line_5: 'Surrey',
+            address_line_6: 'WD25 7LR',
+            expiryDate: '1 January 2022',
+            licenceRefs: recipients[1].licence_refs,
+            name: 'Returnsholder',
+            renewalDate: '3 November 2021'
+          })
+        })
+      })
+
+      describe('and there is only one licence ref', () => {
+        it('returns the expected "personalisation"', () => {
+          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[1].personalisation).to.equal({
+            address_line_1: 'Returnsholder',
+            address_line_2: '4',
+            address_line_3: 'Privet Drive',
+            address_line_4: 'Little Whinging',
+            address_line_5: 'Surrey',
+            address_line_6: 'WD25 7LR',
+            expiryDate: '1 January 2022',
+            licenceRef: recipients[1].licence_refs[0],
+            name: 'Returnsholder',
+            renewalDate: '3 November 2021'
+          })
+        })
+      })
+    })
+  })
+
+  describe('the "templateId" property', () => {
+    describe('when the notification is an email', () => {
+      describe('and there are multiple licence refs', () => {
+        beforeEach(() => {
+          recipients[0].licence_refs.push(generateLicenceRef())
+        })
+
+        it('returns the expected "templateId"', () => {
+          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[0].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.standard.email['multiple licences'])
+        })
+      })
+
+      describe('and there is only one licence ref', () => {
+        it('returns the expected "templateId"', () => {
+          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[0].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.standard.email['single licence'])
+        })
+      })
+    })
+
+    describe('when the notification is a letter', () => {
+      describe('and there are multiple licence refs', () => {
+        beforeEach(() => {
+          recipients[1].licence_refs.push(generateLicenceRef())
+        })
+
+        it('returns the expected "templateId"', () => {
+          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[1].templateId).to.equal(
+            NOTIFY_TEMPLATES.renewalInvitations.standard.letter['multiple licences']
+          )
+        })
+      })
+
+      describe('and there is only one licence ref', () => {
+        it('returns the expected "templateId"', () => {
+          const result = ReturnsInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[1].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.standard.letter['single licence'])
+        })
+      })
+    })
   })
 })

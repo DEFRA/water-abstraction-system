@@ -24,28 +24,37 @@ const SendRenewalInvitations = require('../../../../app/services/jobs/renewal-in
 
 describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => {
   const days = '300'
-  const recipients = [{ licenceRefs: generateLicenceRef() }]
+  const recipients = [{ licence_refs: generateLicenceRef() }]
 
   let clock
   let createNoticeStub
+  let createNotificationStub
+  let expectedRenewalDate
   let expiredDate
+  let noticeId
+  let notifications
+  let sendNoticeStub
   let todayDate
 
   beforeEach(() => {
-    Sinon.stub(FetchRenewalRecipients, 'go').resolves(recipients)
-    createNoticeStub = Sinon.stub(CreateNoticeService, 'go').resolves({ id: generateUUID() })
-
-    Sinon.stub(CreateNotificationsService, 'go').resolves()
-    Sinon.stub(SendNoticeService, 'go').resolves()
+    noticeId = generateUUID()
+    notifications = [{ id: generateUUID() }]
 
     todayDate = new Date('2026-04-15')
 
     // 300 days in the future of the test date
     expiredDate = new Date('2027-02-09')
+    // 90 days before the expired date
+    expectedRenewalDate = new Date('2026-11-11')
 
     clock = Sinon.useFakeTimers(todayDate)
 
     Sinon.stub(NotifyConfig, 'replyTo').value('notify@test.gov.uk')
+    Sinon.stub(FetchRenewalRecipients, 'go').resolves(recipients)
+
+    createNoticeStub = Sinon.stub(CreateNoticeService, 'go').resolves({ id: noticeId })
+    createNotificationStub = Sinon.stub(CreateNotificationsService, 'go').resolves(notifications)
+    sendNoticeStub = Sinon.stub(SendNoticeService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -60,22 +69,62 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
       expect(result).to.equal(recipients)
     })
 
-    it('creates a notice for invitations', async () => {
+    it('creates a notice for renewal invitations', async () => {
       await SendRenewalInvitations.go(days)
 
+      const [firstArg, secondArg, thirdArg] = createNoticeStub.firstCall.args
+
       // Argument 1: Notice type
-      expect(createNoticeStub.firstCall.args[0]).to.contain({
+      expect(firstArg).to.contain({
         name: 'Renewals: invitation',
+        noticeType: 'renewalInvitations',
         subType: 'renewalInvitation'
       })
 
-      expect(createNoticeStub.firstCall.args[0].referenceCode).to.startWith('REIN-')
+      expect(firstArg.referenceCode).to.startWith('REIN-')
+      expect(firstArg.expiryDate.getTime()).to.equal(expiredDate.getTime())
+      expect(firstArg.renewalDate.getTime()).to.equal(expectedRenewalDate.getTime())
 
       // Argument 2: The Recipients List
-      expect(createNoticeStub.firstCall.args[1]).to.equal(recipients)
+      expect(secondArg).to.equal(recipients)
 
       // Argument 3: The issuer email
-      expect(createNoticeStub.firstCall.args[2]).to.equal('notify@test.gov.uk')
+      expect(thirdArg).to.equal('notify@test.gov.uk')
+    })
+
+    it('creates the notifications', async () => {
+      await SendRenewalInvitations.go(days)
+
+      const [firstArg, secondArg, thirdArg] = createNotificationStub.firstCall.args
+
+      // Argument 1: Notice type
+      expect(firstArg).to.contain({
+        name: 'Renewals: invitation',
+        noticeType: 'renewalInvitations',
+        subType: 'renewalInvitation'
+      })
+
+      expect(firstArg.referenceCode).to.startWith('REIN-')
+      expect(firstArg.expiryDate.getTime()).to.equal(expiredDate.getTime())
+      expect(firstArg.renewalDate.getTime()).to.equal(expectedRenewalDate.getTime())
+
+      // Argument 2: The Recipients List
+      expect(secondArg).to.equal(recipients)
+
+      // Argument 3: The notice id
+      expect(thirdArg).to.equal(noticeId)
+    })
+
+    it('sends the notice', async () => {
+      await SendRenewalInvitations.go(days)
+
+      const [firstArg, secondArg] = sendNoticeStub.firstCall.args
+
+      // Argument 1: The notice
+      expect(firstArg).to.contain({ id: noticeId })
+
+      // Argument 2: The notifications
+      expect(secondArg).to.equal(notifications)
     })
 
     describe('the "expiredDate"', () => {
@@ -105,6 +154,20 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
             const actualArgs = FetchRenewalRecipients.go.getCall(0).args[0]
 
             expect(actualArgs).to.equal(expiredDate)
+          })
+        })
+      })
+    })
+
+    describe('the "renewalDate"', () => {
+      describe('when the the day is ', () => {
+        describe('"2026-04-15"', () => {
+          it('sets the renewal date 90 days before the expired date', async () => {
+            await SendRenewalInvitations.go(days)
+
+            const firstArgs = createNoticeStub.firstCall.args[0]
+
+            expect(firstArgs.renewalDate.getTime()).to.equal(expectedRenewalDate.getTime())
           })
         })
       })
