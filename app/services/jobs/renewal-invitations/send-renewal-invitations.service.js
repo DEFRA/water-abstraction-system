@@ -25,13 +25,15 @@ async function go(days) {
 
   const recipients = await FetchRenewalRecipients.go(expiryDate)
 
-  const noticeData = _noticeData(expiryDate)
+  if (recipients.length > 0) {
+    const noticeData = _noticeData(expiryDate)
 
-  const notice = await _notice(noticeData, recipients)
+    const notice = await _notice(noticeData, recipients)
 
-  const notifications = await _notifications(noticeData, recipients, notice.id)
+    const notifications = await _notifications(noticeData, recipients, notice.id)
 
-  SendNoticeService.go(notice, notifications)
+    SendNoticeService.go(notice, notifications)
+  }
 
   return recipients
 }
