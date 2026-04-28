@@ -434,7 +434,7 @@ describe('Notices - Setup - Create Notifications service', () => {
       }
     })
 
-    it('returns the created the returns notifications', async () => {
+    it('returns the created returns notifications', async () => {
       const results = await CreateNotificationsService.go(session, recipients, noticeId)
 
       expect(results).to.have.length(2)
