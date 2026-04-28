@@ -31,6 +31,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
   let createNotificationStub
   let expectedRenewalDate
   let expiredDate
+  let fetchRenewalRecipientsStub
   let noticeId
   let notifications
   let sendNoticeStub
@@ -50,8 +51,8 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     clock = Sinon.useFakeTimers(todayDate)
 
     Sinon.stub(NotifyConfig, 'replyTo').value('notify@test.gov.uk')
-    Sinon.stub(FetchRenewalRecipients, 'go').resolves(recipients)
 
+    fetchRenewalRecipientsStub = Sinon.stub(FetchRenewalRecipients, 'go').resolves(recipients)
     createNoticeStub = Sinon.stub(CreateNoticeService, 'go').resolves({ id: noticeId })
     createNotificationStub = Sinon.stub(CreateNotificationsService, 'go').resolves(notifications)
     sendNoticeStub = Sinon.stub(SendNoticeService, 'go').resolves()
@@ -169,6 +170,26 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
           expect(firstArgs.renewalDate.getTime()).to.equal(expectedRenewalDate.getTime())
         })
       })
+    })
+  })
+
+  describe('when there are no renewal invitations to send', () => {
+    beforeEach(() => {
+      fetchRenewalRecipientsStub.resolves([])
+    })
+
+    it('returns the empty recipients', async () => {
+      const result = await SendRenewalInvitations.go(days)
+
+      expect(result).to.equal([])
+    })
+
+    it('does not call the services', async () => {
+      await SendRenewalInvitations.go(days)
+
+      expect(createNoticeStub.called).to.be.false()
+      expect(createNotificationStub.called).to.be.false()
+      expect(sendNoticeStub.called).to.be.false()
     })
   })
 })
