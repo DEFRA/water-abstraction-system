@@ -26,7 +26,7 @@ describe('DAL - Fetch Existing Address dal', () => {
   })
 
   describe('when there is a matching address found', () => {
-    it('returns an array of address lines', async () => {
+    it('returns the matching address', async () => {
       const result = await FetchExistingAddress.go(address.id)
 
       expect(result).to.equal({
