@@ -88,7 +88,6 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
         const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
 
         expect(results).to.equal([
-          _transformReturnVersionToResult(returnVersions[2]),
           _transformReturnVersionToResult(returnVersions[3]),
           _transformReturnVersionToResult(returnVersions[4])
         ])
@@ -108,7 +107,6 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
 
         expect(results).to.equal([
           _transformReturnVersionToResult(returnVersions[1]),
-          _transformReturnVersionToResult(returnVersions[2]),
           _transformReturnVersionToResult(returnVersions[3]),
           _transformReturnVersionToResult(returnVersions[4])
         ])
@@ -144,7 +142,6 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
         const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
 
         expect(results).to.equal([
-          _transformReturnVersionToResult(returnVersions[2]),
           _transformReturnVersionToResult(returnVersions[3]),
           _transformReturnVersionToResult(returnVersions[4])
         ])
@@ -164,7 +161,6 @@ describe('Return Logs - Fetch Licence Return Requirements service', () => {
 
         expect(results).to.equal([
           _transformReturnVersionToResult(returnVersions[1]),
-          _transformReturnVersionToResult(returnVersions[2]),
           _transformReturnVersionToResult(returnVersions[3]),
           _transformReturnVersionToResult(returnVersions[4])
         ])
