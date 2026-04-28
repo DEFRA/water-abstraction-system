@@ -19,7 +19,7 @@ const UserEmailService = require('../../app/services/users/internal/setup/user-e
 // For running our service
 const { init } = require('../../app/server.js')
 
-describe.only('Users Setup controller', () => {
+describe('Users Setup controller', () => {
   const sessionId = generateUUID()
 
   let options
