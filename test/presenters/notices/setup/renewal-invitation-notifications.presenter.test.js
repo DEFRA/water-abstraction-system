@@ -22,7 +22,7 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
   let noticeData
 
   beforeEach(() => {
-    recipients = [RecipientsFixture.returnsNoticePrimaryUser(), RecipientsFixture.returnsNoticeLicenceHolder()]
+    recipients = [RecipientsFixture.renewalInvitationPrimaryUser(), RecipientsFixture.renewalInvitationLicenceHolder()]
 
     noticeData = {
       expiryDate: new Date('2022-01-01'),
@@ -58,13 +58,13 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
         messageRef: 'renewal invitation',
         messageType: 'letter',
         personalisation: {
-          address_line_1: 'Returnsholder',
+          address_line_1: 'Renewal licence holder',
           address_line_2: '4',
           address_line_3: 'Privet Drive',
           address_line_4: 'Little Whinging',
           address_line_5: 'Surrey',
           address_line_6: 'WD25 7LR',
-          name: 'Returnsholder',
+          name: 'Renewal licence holder',
           expiryDate: '1 January 2022',
           licenceRef: recipients[1].licence_refs[0],
           renewalDate: '3 November 2021'
@@ -116,7 +116,7 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
           const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
           expect(result[1].personalisation).to.equal({
-            address_line_1: 'Returnsholder',
+            address_line_1: 'Renewal licence holder',
             address_line_2: '4',
             address_line_3: 'Privet Drive',
             address_line_4: 'Little Whinging',
@@ -124,7 +124,7 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
             address_line_6: 'WD25 7LR',
             expiryDate: '1 January 2022',
             licenceRefs: recipients[1].licence_refs,
-            name: 'Returnsholder',
+            name: 'Renewal licence holder',
             renewalDate: '3 November 2021'
           })
         })
@@ -135,7 +135,7 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
           const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
           expect(result[1].personalisation).to.equal({
-            address_line_1: 'Returnsholder',
+            address_line_1: 'Renewal licence holder',
             address_line_2: '4',
             address_line_3: 'Privet Drive',
             address_line_4: 'Little Whinging',
@@ -143,7 +143,7 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
             address_line_6: 'WD25 7LR',
             expiryDate: '1 January 2022',
             licenceRef: recipients[1].licence_refs[0],
-            name: 'Returnsholder',
+            name: 'Renewal licence holder',
             renewalDate: '3 November 2021'
           })
         })
