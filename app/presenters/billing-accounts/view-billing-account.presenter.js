@@ -5,7 +5,6 @@
  * @module ViewBillingAccountPresenter
  */
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatBillRunType } = require('../billing.presenter.js')
 const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
 
