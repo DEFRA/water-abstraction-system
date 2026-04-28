@@ -423,14 +423,14 @@ describe('Notices - Setup - Create Notifications service', () => {
       const referenceCode = generateNoticeReferenceCode('REIN-')
 
       session = {
+        expiryDate: new Date('2022-01-01'),
         journey: 'standard',
         name: 'Renewals: invitation',
         noticeType: 'renewalInvitations',
         notificationType: 'Renewals invitation',
         referenceCode,
-        subType: 'renewalInvitation',
-        expiryDate: new Date('2022-01-01'),
-        renewalDate: new Date('2021-11-03')
+        renewalDate: new Date('2021-11-03'),
+        subType: 'renewalInvitation'
       }
     })
 
