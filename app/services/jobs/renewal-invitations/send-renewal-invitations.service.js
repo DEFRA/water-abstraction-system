@@ -31,7 +31,7 @@ async function go(days) {
 
   const notifications = await _notifications(noticeData, recipients, notice.id)
 
-  await SendNoticeService.go(notice, notifications)
+  SendNoticeService.go(notice, notifications)
 
   return recipients
 }
@@ -53,6 +53,7 @@ function _expiryDate(futureExpiredDate) {
 
 function _renewalDate(expiryDate) {
   const renewalDate = new Date(expiryDate)
+
   renewalDate.setDate(renewalDate.getDate() - 90)
 
   return renewalDate

@@ -70,7 +70,6 @@ function _notifications(session, recipients, noticeId) {
     return PaperReturnNotificationsPresenter.go(session, recipients, noticeId)
   }
 
-  // TODO: This is not needed in the presenter but is used here ?
   if (noticeType === NoticeType.RENEWAL_INVITATIONS) {
     return ReturnsInvitationNotificationsPresenter.go(session, recipients, noticeId)
   }

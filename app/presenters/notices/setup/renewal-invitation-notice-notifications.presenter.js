@@ -81,8 +81,8 @@ function _letter(recipient, noticeId, noticeData) {
 
 function _personalisation(recipient, noticeData) {
   const personalisation = {
-    renewalDate: formatLongDate(noticeData.renewalDate), // - also calculated - 90 - expiry
-    expiryDate: formatLongDate(noticeData.expiryDate) // this will be the eqpired date 0 this is the calculated
+    renewalDate: formatLongDate(noticeData.renewalDate),
+    expiryDate: formatLongDate(noticeData.expiryDate)
   }
 
   if (recipient.licence_refs.length > 1) {
