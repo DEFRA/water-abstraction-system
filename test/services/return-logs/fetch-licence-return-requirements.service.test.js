@@ -4,7 +4,7 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -18,6 +18,8 @@ const ReturnRequirementPointHelper = require('../../support/helpers/return-requi
 const ReturnRequirementPurposeHelper = require('../../support/helpers/return-requirement-purpose.helper.js')
 const ReturnVersionHelper = require('../../support/helpers/return-version.helper.js')
 const SecondaryPurposeHelper = require('../../support/helpers/secondary-purpose.helper.js')
+const { today } = require('../../../app/lib/general.lib.js')
+const { tomorrow, yesterday } = require('../../support/general.js')
 
 // Thing under test
 const FetchLicenceReturnRequirementsService = require('../../../app/services/return-logs/fetch-licence-return-requirements.service.js')
@@ -29,272 +31,258 @@ const FetchLicenceReturnRequirementsService = require('../../../app/services/ret
 let licence
 let point
 let primaryPurpose
-let previousReturnRequirementPurpose
-let previousReturnRequirement
-let previousReturnVersion
 let purpose
 let region
-let returnRequirement
-let returnRequirementPurpose
-let returnVersion
+let returnVersions
 let secondaryPurpose
 
 describe('Return Logs - Fetch Licence Return Requirements service', () => {
-  const changeDate = new Date('2024-12-04')
-  const dayAfterChangeDate = new Date('2024-12-05')
+  let changeDate
 
-  describe('when the given licence exists', () => {
-    before(async () => {
-      region = RegionHelper.select()
-    })
+  beforeEach(async () => {
+    region = RegionHelper.select()
+    primaryPurpose = PrimaryPurposeHelper.select()
+    purpose = PurposeHelper.select()
+    secondaryPurpose = SecondaryPurposeHelper.select()
 
-    describe('and does not end before the "change date"', () => {
-      before(async () => {
-        licence = await LicenceHelper.add({ regionId: region.id })
-      })
-
-      describe('and it has a return version that has no end date, or ends on or after the change date', () => {
-        before(async () => {
-          returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-        })
-
-        describe('and the return version has a return requirement', () => {
-          before(async () => {
-            returnRequirement = await ReturnRequirementHelper.add({
-              regionId: region.naldRegionId,
-              returnVersionId: returnVersion.id,
-              summer: true
-            })
-
-            primaryPurpose = PrimaryPurposeHelper.select()
-            purpose = PurposeHelper.select()
-            secondaryPurpose = SecondaryPurposeHelper.select()
-
-            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-              alias: 'Summer purpose alias for testing',
-              returnRequirementId: returnRequirement.id,
-              primaryPurposeId: primaryPurpose.id,
-              purposeId: purpose.id,
-              secondaryPurposeId: secondaryPurpose.id
-            })
-
-            point = await PointHelper.add({
-              description: 'Summer cycle - live licence - live return version - summer return requirement'
-            })
-            await ReturnRequirementPointHelper.add({
-              returnRequirementId: returnRequirement.id,
-              pointId: point.id
-            })
-          })
-
-          it('returns the return requirement and all related data needed to generate a return log', async () => {
-            const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
-
-            const expectedResult = _expectedResult()
-
-            expect(results).to.include(expectedResult)
-          })
-        })
-      })
-
-      describe('and it has two return versions that have no end date, or ends on or after the change date', () => {
-        before(async () => {
-          returnVersion = await ReturnVersionHelper.add({ startDate: dayAfterChangeDate, licenceId: licence.id })
-          previousReturnVersion = await ReturnVersionHelper.add({ endDate: changeDate, licenceId: licence.id })
-        })
-
-        describe('and the return version has a return requirement', () => {
-          before(async () => {
-            returnRequirement = await ReturnRequirementHelper.add({
-              regionId: region.naldRegionId,
-              returnVersionId: returnVersion.id,
-              summer: true
-            })
-            previousReturnRequirement = await ReturnRequirementHelper.add({
-              regionId: region.naldRegionId,
-              returnVersionId: previousReturnVersion.id,
-              summer: true
-            })
-
-            primaryPurpose = PrimaryPurposeHelper.select()
-            purpose = PurposeHelper.select()
-            secondaryPurpose = SecondaryPurposeHelper.select()
-
-            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-              alias: 'Summer purpose alias for testing',
-              returnRequirementId: returnRequirement.id,
-              primaryPurposeId: primaryPurpose.id,
-              purposeId: purpose.id,
-              secondaryPurposeId: secondaryPurpose.id
-            })
-            previousReturnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-              alias: 'Summer purpose alias for testing',
-              returnRequirementId: previousReturnRequirement.id,
-              primaryPurposeId: primaryPurpose.id,
-              purposeId: purpose.id,
-              secondaryPurposeId: secondaryPurpose.id
-            })
-
-            point = await PointHelper.add({
-              description: 'Summer cycle - live licence - live return version - summer return requirement'
-            })
-            await ReturnRequirementPointHelper.add({
-              returnRequirementId: returnRequirement.id,
-              pointId: point.id
-            })
-            await ReturnRequirementPointHelper.add({
-              returnRequirementId: previousReturnRequirement.id,
-              pointId: point.id
-            })
-          })
-
-          it('returns the return requirement and all related data needed to generate a return log', async () => {
-            const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
-
-            const returnVersionExpectedResult = _expectedResult()
-            const previousReturnVersionExpectedResult = _expectedResult(
-              previousReturnRequirementPurpose,
-              previousReturnRequirement,
-              previousReturnVersion
-            )
-
-            expect(results).to.includes([returnVersionExpectedResult, previousReturnVersionExpectedResult])
-          })
-        })
-      })
-
-      describe('and it has a return version that ends before the change date', () => {
-        before(async () => {
-          returnVersion = await ReturnVersionHelper.add({ endDate: new Date('2022-04-30'), licenceId: licence.id })
-        })
-
-        describe('and the return version has a return requirement', () => {
-          before(async () => {
-            returnRequirement = await ReturnRequirementHelper.add({
-              regionId: region.naldRegionId,
-              returnVersionId: returnVersion.id,
-              summer: false
-            })
-
-            primaryPurpose = PrimaryPurposeHelper.select()
-            purpose = PurposeHelper.select()
-            secondaryPurpose = SecondaryPurposeHelper.select()
-
-            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-              alias: 'Summer purpose alias for testing',
-              returnRequirementId: returnRequirement.id,
-              primaryPurposeId: primaryPurpose.id,
-              purposeId: purpose.id,
-              secondaryPurposeId: secondaryPurpose.id
-            })
-
-            point = await PointHelper.add({
-              description: 'Summer cycle - live licence - live return version - summer return requirement'
-            })
-            await ReturnRequirementPointHelper.add({
-              returnRequirementId: returnRequirement.id,
-              pointId: point.id
-            })
-          })
-
-          it('does not return that return requirement', async () => {
-            const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
-
-            const resultIds = _resultIds(results)
-
-            expect(resultIds).not.to.include(returnRequirement.id)
-          })
-        })
-      })
-    })
-
-    describe('and it ends before the "change date"', () => {
-      before(async () => {
-        licence = await LicenceHelper.add({ expiredDate: new Date('2022-05-31'), regionId: region.id })
-      })
-
-      describe('and it has a return version that has no end date, or ends on or after the change date', () => {
-        before(async () => {
-          returnVersion = await ReturnVersionHelper.add({ licenceId: licence.id })
-        })
-
-        describe('and the return version has a return requirement', () => {
-          before(async () => {
-            returnRequirement = await ReturnRequirementHelper.add({
-              regionId: region.naldRegionId,
-              returnVersionId: returnVersion.id,
-              summer: true
-            })
-
-            primaryPurpose = PrimaryPurposeHelper.select()
-            purpose = PurposeHelper.select()
-            secondaryPurpose = SecondaryPurposeHelper.select()
-
-            returnRequirementPurpose = await ReturnRequirementPurposeHelper.add({
-              alias: 'Summer purpose alias for testing',
-              returnRequirementId: returnRequirement.id,
-              primaryPurposeId: primaryPurpose.id,
-              purposeId: purpose.id,
-              secondaryPurposeId: secondaryPurpose.id
-            })
-
-            point = await PointHelper.add({
-              description: 'Summer cycle - live licence - live return version - summer return requirement'
-            })
-            await ReturnRequirementPointHelper.add({
-              returnRequirementId: returnRequirement.id,
-              pointId: point.id
-            })
-          })
-
-          it('does not return that return requirement', async () => {
-            const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
-
-            const resultIds = _resultIds(results)
-
-            expect(resultIds).not.to.include(returnRequirement.id)
-          })
-        })
-      })
-    })
+    point = await PointHelper.add()
   })
 
-  describe('when the given licence does not exist', () => {
-    it('returns no results', async () => {
-      const results = await FetchLicenceReturnRequirementsService.go(
-        '9f4a4982-c9dc-4930-bff8-1aa6d2f7e0ae',
-        changeDate,
-        false
-      )
+  afterEach(async () => {
+    for (const returnVersion of returnVersions) {
+      await point.$query().delete()
+
+      await returnVersion.returnRequirements[0].returnRequirementPoints[0].$query().delete()
+      await returnVersion.returnRequirements[0].returnRequirementPurposes[0].$query().delete()
+      await returnVersion.returnRequirements[0].$query().delete()
+
+      await returnVersion.$query().delete()
+    }
+  })
+
+  describe('when the licence ends before the "change date"', () => {
+    beforeEach(async () => {
+      changeDate = today()
+      licence = await LicenceHelper.add({ expiredDate: yesterday(), regionId: region.id })
+
+      await _seedReturnVersions()
+    })
+
+    it('returns no return requirements', async () => {
+      const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
 
       expect(results).to.be.empty()
     })
   })
+
+  describe('when the licence ends after the "change date"', () => {
+    describe('and the change date is equal to when one of the return versions ends', () => {
+      beforeEach(async () => {
+        changeDate = new Date('2023-03-31')
+        licence = await LicenceHelper.add({ expiredDate: tomorrow(), regionId: region.id })
+
+        await _seedReturnVersions()
+      })
+
+      it('only returns requirements linked to "current" return versions that end on or after the change date', async () => {
+        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+
+        expect(results).to.equal([
+          _transformReturnVersionToResult(returnVersions[2]),
+          _transformReturnVersionToResult(returnVersions[3]),
+          _transformReturnVersionToResult(returnVersions[4])
+        ])
+      })
+    })
+
+    describe('and the change date is before one of the return versions ends', () => {
+      beforeEach(async () => {
+        changeDate = new Date('2022-03-30')
+        licence = await LicenceHelper.add({ expiredDate: tomorrow(), regionId: region.id })
+
+        await _seedReturnVersions()
+      })
+
+      it('only returns requirements linked to "current" return versions that end after the change date', async () => {
+        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+
+        expect(results).to.equal([
+          _transformReturnVersionToResult(returnVersions[1]),
+          _transformReturnVersionToResult(returnVersions[2]),
+          _transformReturnVersionToResult(returnVersions[3]),
+          _transformReturnVersionToResult(returnVersions[4])
+        ])
+      })
+    })
+
+    describe('and the change date is after all the return versions end', () => {
+      beforeEach(async () => {
+        changeDate = today()
+        licence = await LicenceHelper.add({ expiredDate: tomorrow(), regionId: region.id })
+
+        await _seedReturnVersions()
+      })
+
+      it('only returns requirements linked to latest "current" return version that has no end date', async () => {
+        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+
+        expect(results).to.equal([_transformReturnVersionToResult(returnVersions[4])])
+      })
+    })
+  })
+
+  describe('when the licence does not have an end date', () => {
+    describe('and the change date is equal to when one of the return versions ends', () => {
+      beforeEach(async () => {
+        changeDate = new Date('2023-03-31')
+        licence = await LicenceHelper.add({ regionId: region.id })
+
+        await _seedReturnVersions()
+      })
+
+      it('only returns requirements linked to "current" return versions that end on or after the change date', async () => {
+        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+
+        expect(results).to.equal([
+          _transformReturnVersionToResult(returnVersions[2]),
+          _transformReturnVersionToResult(returnVersions[3]),
+          _transformReturnVersionToResult(returnVersions[4])
+        ])
+      })
+    })
+
+    describe('and the change date is before one of the return versions ends', () => {
+      beforeEach(async () => {
+        changeDate = new Date('2022-03-30')
+        licence = await LicenceHelper.add({ regionId: region.id })
+
+        await _seedReturnVersions()
+      })
+
+      it('only returns requirements linked to "current" return versions that end after the change date', async () => {
+        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+
+        expect(results).to.equal([
+          _transformReturnVersionToResult(returnVersions[1]),
+          _transformReturnVersionToResult(returnVersions[2]),
+          _transformReturnVersionToResult(returnVersions[3]),
+          _transformReturnVersionToResult(returnVersions[4])
+        ])
+      })
+    })
+
+    describe('and the change date is after all the return versions end', () => {
+      beforeEach(async () => {
+        changeDate = today()
+        licence = await LicenceHelper.add({ regionId: region.id })
+
+        await _seedReturnVersions()
+      })
+
+      it('only returns requirements linked to latest "current" return version that has no end date', async () => {
+        const results = await FetchLicenceReturnRequirementsService.go(licence.id, changeDate)
+
+        expect(results).to.equal([_transformReturnVersionToResult(returnVersions[4])])
+      })
+    })
+  })
 })
 
-function _expectedResult(
-  _returnRequirementPurpose = returnRequirementPurpose,
-  _returnRequirement = returnRequirement,
-  _returnVersion = returnVersion
-) {
+async function _seedReturnVersions() {
+  returnVersions = [
+    await ReturnVersionHelper.add({
+      endDate: new Date('2021-03-31'),
+      licenceId: licence.id,
+      reason: 'new-licence',
+      startDate: new Date('2020-04-01'),
+      status: 'current',
+      version: 1
+    }),
+    await ReturnVersionHelper.add({
+      endDate: new Date('2022-03-31'),
+      licenceId: licence.id,
+      reason: 'returns-exception',
+      startDate: new Date('2021-04-01'),
+      status: 'current',
+      version: 1
+    }),
+    await ReturnVersionHelper.add({
+      endDate: new Date('2023-03-31'),
+      licenceId: licence.id,
+      reason: 'minor-change',
+      startDate: new Date('2022-04-01'),
+      status: 'superseded',
+      version: 2
+    }),
+    await ReturnVersionHelper.add({
+      endDate: new Date('2023-03-31'),
+      licenceId: licence.id,
+      reason: 'error-correction',
+      startDate: new Date('2022-04-01'),
+      status: 'current',
+      version: 3
+    }),
+    await ReturnVersionHelper.add({
+      endDate: null,
+      licenceId: licence.id,
+      reason: 'major-change',
+      startDate: new Date('2024-04-01'),
+      status: 'current',
+      version: 4
+    })
+  ]
+
+  for (const returnVersion of returnVersions) {
+    await _seedReturnVersionChildData(returnVersion)
+  }
+}
+
+async function _seedReturnVersionChildData(returnVersion) {
+  const returnRequirement = await ReturnRequirementHelper.add({ returnVersionId: returnVersion.id })
+
+  returnRequirement.returnRequirementPurposes = [
+    await ReturnRequirementPurposeHelper.add({
+      returnRequirementId: returnRequirement.id,
+      primaryPurposeId: primaryPurpose.id,
+      purposeId: purpose.id,
+      secondaryPurposeId: secondaryPurpose.id
+    })
+  ]
+
+  returnRequirement.returnRequirementPoints = [
+    await ReturnRequirementPointHelper.add({
+      returnRequirementId: returnRequirement.id,
+      pointId: point.id
+    })
+  ]
+
+  returnVersion.returnRequirements = [returnRequirement]
+}
+
+function _transformReturnVersionToResult(returnVersion) {
+  const { returnRequirements } = returnVersion
+  const { returnRequirementPurposes } = returnRequirements[0]
+
   return {
-    abstractionPeriodEndDay: _returnRequirement.abstractionPeriodEndDay,
-    abstractionPeriodEndMonth: _returnRequirement.abstractionPeriodEndMonth,
-    abstractionPeriodStartDay: _returnRequirement.abstractionPeriodStartDay,
-    abstractionPeriodStartMonth: _returnRequirement.abstractionPeriodStartMonth,
-    externalId: _returnRequirement.externalId,
-    id: _returnRequirement.id,
-    reference: _returnRequirement.reference,
-    reportingFrequency: _returnRequirement.reportingFrequency,
-    returnVersionId: _returnRequirement.returnVersionId,
-    siteDescription: _returnRequirement.siteDescription,
-    summer: _returnRequirement.summer,
-    twoPartTariff: _returnRequirement.twoPartTariff,
+    abstractionPeriodEndDay: returnRequirements[0].abstractionPeriodEndDay,
+    abstractionPeriodEndMonth: returnRequirements[0].abstractionPeriodEndMonth,
+    abstractionPeriodStartDay: returnRequirements[0].abstractionPeriodStartDay,
+    abstractionPeriodStartMonth: returnRequirements[0].abstractionPeriodStartMonth,
+    externalId: returnRequirements[0].externalId,
+    id: returnRequirements[0].id,
+    reference: returnRequirements[0].reference,
+    reportingFrequency: returnRequirements[0].reportingFrequency,
+    returnVersionId: returnRequirements[0].returnVersionId,
+    siteDescription: returnRequirements[0].siteDescription,
+    summer: returnRequirements[0].summer,
+    twoPartTariff: returnRequirements[0].twoPartTariff,
     returnVersion: {
-      endDate: _returnVersion.endDate,
-      id: _returnVersion.id,
-      reason: _returnVersion.reason,
-      startDate: _returnVersion.startDate,
+      endDate: returnVersion.endDate,
+      id: returnVersion.id,
+      reason: returnVersion.reason,
+      startDate: returnVersion.startDate,
+      quarterlyReturns: returnVersion.quarterlyReturns,
+      multipleUpload: returnVersion.multipleUpload,
       licence: {
         expiredDate: licence.expiredDate,
         id: licence.id,
@@ -302,13 +290,8 @@ function _expectedResult(
         licenceRef: licence.licenceRef,
         revokedDate: licence.revokedDate,
         areacode: 'SAAR',
-        region: {
-          id: region.id,
-          naldRegionId: region.naldRegionId
-        }
-      },
-      quarterlyReturns: _returnVersion.quarterlyReturns,
-      multipleUpload: returnVersion.multipleUpload
+        region: { id: region.id, naldRegionId: region.naldRegionId }
+      }
     },
     points: [
       {
@@ -321,8 +304,8 @@ function _expectedResult(
     ],
     returnRequirementPurposes: [
       {
-        alias: _returnRequirementPurpose.alias,
-        id: _returnRequirementPurpose.id,
+        alias: returnRequirementPurposes[0].alias,
+        id: returnRequirementPurposes[0].id,
         primaryPurpose: {
           description: primaryPurpose.description,
           id: primaryPurpose.id,
@@ -341,10 +324,4 @@ function _expectedResult(
       }
     ]
   }
-}
-
-function _resultIds(results) {
-  return results.map((result) => {
-    return result.id
-  })
 }
