@@ -160,8 +160,7 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
     })
 
     describe('the "renewalDate"', () => {
-      describe('when the the day is ', () => {
-        describe('"2026-04-15"', () => {
+      describe('when the date is "2026-04-15"', () => {
           it('sets the renewal date 90 days before the expired date', async () => {
             await SendRenewalInvitations.go(days)
 
