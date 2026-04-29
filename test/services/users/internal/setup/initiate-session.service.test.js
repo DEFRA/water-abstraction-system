@@ -24,7 +24,7 @@ describe('Users - Internal - Setup - Initiate Session service', () => {
       })
     })
 
-    it('initiates the session for the standard journey ', async () => {
+    it('initiates the session for the journey ', async () => {
       const result = await InitiateSessionService.go()
 
       const matchingSession = await SessionModel.query().findById(result.id)
