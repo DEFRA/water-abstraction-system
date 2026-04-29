@@ -17,7 +17,7 @@ const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 // Thing under test
 const UserEmailService = require('../../../../../app/services/users/internal/setup/user-email.service.js')
 
-describe('Users - Setup - User Email Service', () => {
+describe('Users - Internal - Setup - User Email Service', () => {
   let session
   let sessionData
 

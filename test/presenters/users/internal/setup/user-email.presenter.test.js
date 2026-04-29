@@ -13,7 +13,7 @@ const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 // Thing under test
 const UserEmailPresenter = require('../../../../../app/presenters/users/internal/setup/user-email.presenter.js')
 
-describe('Company Contacts - Setup - Contact Email Presenter', () => {
+describe('Users - Internal - Setup - User Email Presenter', () => {
   let session
 
   beforeEach(() => {
