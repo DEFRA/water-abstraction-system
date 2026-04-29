@@ -6,7 +6,30 @@
  */
 
 const InitiateSessionService = require('../services/users/internal/setup/initiate-session.service.js')
+const SubmitUserEmailService = require('../services/users/internal/setup/submit-user-email.service.js')
 const UserEmailService = require('../services/users/internal/setup/user-email.service.js')
+
+async function setup(_request, h) {
+  const { id: sessionId } = await InitiateSessionService.go()
+
+  return h.redirect(`/system/users/internal/setup/${sessionId}/user-email`)
+}
+
+async function submitUserEmail(request, h) {
+  const {
+    payload,
+    params: { sessionId },
+    yar
+  } = request
+
+  const pageData = await SubmitUserEmailService.go(sessionId, payload, yar)
+
+  if (pageData.error) {
+    return h.view('users/internal/setup/user-email.njk', pageData)
+  }
+
+  return h.redirect(pageData.redirectUrl)
+}
 
 async function userEmail(request, h) {
   const { sessionId } = request.params
@@ -16,13 +39,8 @@ async function userEmail(request, h) {
   return h.view('users/internal/setup/user-email.njk', pageData)
 }
 
-async function setup(_request, h) {
-  const { id: sessionId } = await InitiateSessionService.go()
-
-  return h.redirect(`/system/users/internal/setup/${sessionId}/user-email`)
-}
-
 module.exports = {
   setup,
+  submitUserEmail,
   userEmail
 }
