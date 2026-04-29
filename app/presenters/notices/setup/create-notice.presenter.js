@@ -5,9 +5,9 @@
  * @module CreateNoticePresenter
  */
 
-const { futureDueDate } = require('../base.presenter.js')
+const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 const { formatDateObjectToISO } = require('../../../lib/dates.lib.js')
-const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
+const { futureDueDate } = require('../base.presenter.js')
 
 /**
  * Formats a notice `SessionModel` instance into the data needed for a 'notice' record
@@ -39,17 +39,25 @@ function go(noticeData, recipients, issuer) {
     type: 'notification'
   }
 
+  _additionalMetaData(notice, noticeData)
+
+  return notice
+}
+
+function _additionalMetaData(notice, noticeData) {
+  const returnsNotices = [NoticeType.INVITATIONS, NoticeType.REMINDERS]
+
   if (noticeData.journey === NoticeJourney.ALERTS) {
     notice.metadata.options = {
       sendingAlertType: noticeData.alertType,
       monitoringStationId: noticeData.monitoringStationId
     }
-  } else {
+  }
+
+  if (returnsNotices.includes(noticeData.noticeType)) {
     notice.metadata.options = { excludeLicences: noticeData.removeLicences ? noticeData.removeLicences : [] }
     notice.metadata.returnCycle = _returnCycle(noticeData.determinedReturnsPeriod)
   }
-
-  return notice
 }
 
 /**
