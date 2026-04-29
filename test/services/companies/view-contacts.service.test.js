@@ -13,7 +13,6 @@ const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchCompanyContactsService = require('../../../app/services/companies/fetch-company-crm-data.service.js')
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
 
@@ -49,8 +48,6 @@ describe('Companies - View Contacts service', () => {
 
     page = '1'
 
-    Sinon.stub(FeatureFlagsConfig, 'enableCustomerManage').value(true)
-
     yarStub = {
       flash: Sinon.stub().returns([
         { titleText: 'Contact removed', text: 'Rachael Tyrell was removed from this company.' }
@@ -80,8 +77,7 @@ describe('Companies - View Contacts service', () => {
           }
         ],
         links: {
-          createContact: `/system/company-contacts/setup/${company.id}`,
-          removeContact: null
+          createContact: `/system/company-contacts/setup/${company.id}`
         },
         notification: {
           text: 'Rachael Tyrell was removed from this company.',

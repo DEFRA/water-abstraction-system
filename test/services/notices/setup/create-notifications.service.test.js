@@ -412,4 +412,85 @@ describe('Notices - Setup - Create Notifications service', () => {
       )
     })
   })
+
+  describe('when the notice is renewal invitation', () => {
+    beforeEach(() => {
+      recipients = [
+        RecipientsFixture.renewalInvitationLicenceHolder(),
+        RecipientsFixture.renewalInvitationPrimaryUser()
+      ]
+
+      const referenceCode = generateNoticeReferenceCode('REIN-')
+
+      session = {
+        expiryDate: new Date('2022-01-01'),
+        journey: 'standard',
+        name: 'Renewals: invitation',
+        noticeType: 'renewalInvitations',
+        notificationType: 'Renewals invitation',
+        referenceCode,
+        renewalDate: new Date('2021-11-03'),
+        subType: 'renewalInvitation'
+      }
+    })
+
+    it('returns the created returns notifications', async () => {
+      const results = await CreateNotificationsService.go(session, recipients, noticeId)
+
+      expect(results).to.have.length(2)
+
+      expect(results[0]).to.equal(
+        {
+          contactType: recipients[0].contact_type,
+          dueDate: null,
+          eventId: noticeId,
+          licenceMonitoringStationId: null,
+          licences: recipients[0].licence_refs,
+          messageRef: 'renewal invitation',
+          messageType: 'letter',
+          pdf: null,
+          personalisation: {
+            address_line_1: 'Renewal licence holder',
+            address_line_2: '4',
+            address_line_3: 'Privet Drive',
+            address_line_4: 'Little Whinging',
+            address_line_5: 'Surrey',
+            address_line_6: 'WD25 7LR',
+            expiryDate: '1 January 2022',
+            licenceRef: recipients[0].licence_refs[0],
+            name: 'Renewal licence holder',
+            renewalDate: '3 November 2021'
+          },
+          recipient: null,
+          returnLogIds: null,
+          status: 'pending',
+          templateId: NOTIFY_TEMPLATES.renewalInvitations.standard.letter['single licence']
+        },
+        { skip: ['createdAt', 'id', 'updatedAt'] }
+      )
+
+      expect(results[1]).to.equal(
+        {
+          contactType: recipients[1].contact_type,
+          dueDate: null,
+          eventId: noticeId,
+          licenceMonitoringStationId: null,
+          licences: recipients[1].licence_refs,
+          messageRef: 'renewal invitation',
+          messageType: 'email',
+          pdf: null,
+          personalisation: {
+            expiryDate: '1 January 2022',
+            licenceRef: recipients[1].licence_refs[0],
+            renewalDate: '3 November 2021'
+          },
+          recipient: recipients[1].email,
+          returnLogIds: null,
+          status: 'pending',
+          templateId: NOTIFY_TEMPLATES.renewalInvitations.standard.email['single licence']
+        },
+        { skip: ['createdAt', 'id', 'updatedAt'] }
+      )
+    })
+  })
 })

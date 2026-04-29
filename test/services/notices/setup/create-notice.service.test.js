@@ -29,7 +29,7 @@ describe('Notices - Setup - Create Notice service', () => {
     noticeData = {
       returnsPeriod: 'quarterFour',
       removeLicences: [],
-      journey: 'invitations',
+      journey: 'standard',
       referenceCode: generateNoticeReferenceCode('RINV-'),
       determinedReturnsPeriod: {
         dueDate: new Date(`2025-07-28`),
@@ -38,7 +38,8 @@ describe('Notices - Setup - Create Notice service', () => {
         summer: 'true'
       },
       subType: 'returnInvitation',
-      name: 'Returns: invitation'
+      name: 'Returns: invitation',
+      noticeType: 'invitations'
     }
   })
 

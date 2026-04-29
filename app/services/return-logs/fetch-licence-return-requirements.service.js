@@ -220,6 +220,7 @@ async function _returnVersions(licenceId, changeDate, trx) {
     ])
     .innerJoinRelated('licence')
     .where('licenceId', licenceId)
+    .where('status', 'current')
     .where((builder) => {
       builder.whereNull('endDate').orWhere('endDate', '>=', changeDate)
     })

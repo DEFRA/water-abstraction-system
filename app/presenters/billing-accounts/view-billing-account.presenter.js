@@ -5,7 +5,6 @@
  * @module ViewBillingAccountPresenter
  */
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatBillRunType } = require('../billing.presenter.js')
 const { formatLongDate, formatMoney, titleCase } = require('../base.presenter.js')
 
@@ -55,13 +54,9 @@ function _backLink(licenceId, chargeVersionId, companyId) {
   }
 
   if (companyId) {
-    const href = FeatureFlagsConfig.enableCustomerView
-      ? `/system/companies/${companyId}/billing-accounts`
-      : `/customer/${companyId}/#billing-accounts`
-
     return {
       title: 'Go back to customer',
-      href
+      href: `/system/companies/${companyId}/billing-accounts`
     }
   }
 

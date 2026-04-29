@@ -7,6 +7,7 @@
 
 const { postcodeValidator } = require('postcode-validator')
 
+const { mapAsNewContact } = require('../conversion.presenter.js')
 const { invalidStartCharacters } = require('../../../validators/helpers/notify-address-line.validator.js')
 
 const MAX_ADDRESS_LINES = 6 // The Notify max is actually 7 but we reserve address line 1 for the contact name
@@ -74,11 +75,13 @@ const CROWN_DEPENDENCIES = ['guernsey', 'isle of man', 'jersey']
  * > For this module we recommend viewing the unit tests to get an understanding of the scenarios the presenter is
  * > handling, and how contact addresses are transformed for Notify
  *
- * @param {object} contact - the contact to determine the Notify address for
+ * @param {object} sourceContact - the contact to determine the Notify address for
  *
  * @returns {object} a Notify compatible address object
  */
-function go(contact) {
+function go(sourceContact) {
+  const contact = mapAsNewContact(sourceContact)
+
   // Contact name will always be address_line_1 in any result we return
   const name = contact.name
 

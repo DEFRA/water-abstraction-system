@@ -142,6 +142,52 @@ function alertNoticePrimaryUser() {
 }
 
 /**
+ * Creates a fixture for a renewal invitation licence holder recipient
+ *
+ * This fixture generates a recipient object representing a licence holder contact for a renewal invitation with
+ * predefined address and associated licence references.
+ *
+ * @returns {object} The renewal invitation licence holder recipient fixture
+ */
+function renewalInvitationLicenceHolder() {
+  const contact = _contact('4', 'Renewal licence holder')
+
+  const recipient = {
+    contact,
+    contact_hash_id: _contactHashId(contact),
+    contact_type: 'licence holder',
+    email: null,
+    licence_ref: generateLicenceRef(),
+    message_type: 'Letter'
+  }
+
+  return _nonDownloadRecipient(recipient)
+}
+
+/**
+ * Creates a fixture for a renewal invitation primary user recipient
+ *
+ * This fixture generates a recipient object representing a primary user for a renewal invitation with predefined
+ * email and associated licence references.
+ *
+ * @returns {object} The renewal invitation primary user recipient fixture
+ */
+function renewalInvitationPrimaryUser() {
+  const email = 'primary.user@renewal-invitation.com'
+
+  const recipient = {
+    contact: null,
+    contact_hash_id: _emailContactHashId(email),
+    contact_type: 'primary user',
+    email,
+    licence_ref: generateLicenceRef(),
+    message_type: 'Email'
+  }
+
+  return _nonDownloadRecipient(recipient)
+}
+
+/**
  * Creates a fixture for a returns notice licence holder recipient
  *
  * This fixture generates a recipient object representing a licence holder contact for a returns notice with
@@ -292,9 +338,31 @@ function returnsNoticeReturnsTo(download = false) {
  * @returns {object} - Returns recipients for primaryUser, licenceHolder and additional contact
  */
 function alertsRecipients() {
+  const newLicenceHolder = _addLicenceHolder()
+
+  const licenceHolder = {
+    ...newLicenceHolder,
+    contact: {
+      name: 'POTTER',
+      role: 'Licence holder',
+      type: 'Person',
+      forename: 'HARRY',
+      initials: 'H',
+      salutation: 'MR',
+      addressLine1: newLicenceHolder.contact.address1,
+      addressLine2: newLicenceHolder.contact.address2,
+      addressLine3: newLicenceHolder.contact.address3,
+      addressLine4: newLicenceHolder.contact.address4,
+      town: newLicenceHolder.contact.address5,
+      county: newLicenceHolder.contact.address6,
+      postcode: newLicenceHolder.contact.postcode,
+      country: null
+    }
+  }
+
   return {
     additionalContact: _addAdditionalContact(),
-    licenceHolder: _addLicenceHolder(),
+    licenceHolder,
     primaryUser: _addPrimaryUser()
   }
 }
@@ -459,6 +527,8 @@ module.exports = {
   alertNoticePrimaryUser,
   alertsRecipients,
   recipients,
+  renewalInvitationLicenceHolder,
+  renewalInvitationPrimaryUser,
   returnsNoticeLicenceHolder,
   returnsNoticePrimaryUser,
   returnsNoticeReturnsAgent,
