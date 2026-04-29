@@ -14,6 +14,7 @@ const ViewLicencesFixture = require('../../support/fixtures/view-licences.fixtur
 // Things we need to stub
 const FetchConditionsService = require('../../../app/services/licences/fetch-conditions.service.js')
 const FetchLicenceVersionService = require('../../../app/services/licence-versions/fetch-licence-version.service.js')
+const NotifyConfig = require('../../../config/notify.config.js')
 
 // Thing under test
 const ViewService = require('../../../app/services/licence-versions/view.service.js')
@@ -40,6 +41,8 @@ describe('Licence Versions - View service', () => {
     })
 
     Sinon.stub(FetchConditionsService, 'go').returns(conditions)
+
+    Sinon.stub(NotifyConfig, 'replyTo').value('notify@test.gov.uk')
   })
 
   afterEach(() => {
@@ -57,7 +60,7 @@ describe('Licence Versions - View service', () => {
         },
         changeType: 'licence issued',
         conditionTypes: [],
-        errorInDataEmail: 'water_abstractiondigital@environment-agency.gov.uk',
+        errorInDataEmail: 'notify@test.gov.uk',
         licenceDetails: {
           address: ['12 GRIMMAULD PLACE', 'ISLINGTON', 'LONDON', 'GREATER LONDON', 'N1 9LX'],
           applicationNumber: null,

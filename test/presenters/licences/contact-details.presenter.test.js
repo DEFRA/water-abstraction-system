@@ -3,17 +3,13 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
-const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test Helpers
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
-
-// Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const ContactDetailsPresenter = require('../../../app/presenters/licences/contact-details.presenter.js')
@@ -43,12 +39,6 @@ describe('Licences - Contact Details presenter', () => {
         contactName: 'Eldon Tyrell'
       }
     ]
-
-    Sinon.stub(FeatureFlagsConfig, 'enableCustomerView').value(true)
-  })
-
-  afterEach(() => {
-    Sinon.restore()
   })
 
   describe('when provided with populated contacts data', () => {

@@ -33,6 +33,8 @@ const ONE_DAY_IN_MILLISECONDS = 24 * 60 * 60 * 1000
 async function go(sessionId, userId) {
   const session = await FetchSessionDal.go(sessionId)
 
+  await DeleteSessionDal.go(sessionId)
+
   try {
     const { journey, licence } = session
     const returnVersionData = await GenerateReturnVersionService.go(session, userId)
@@ -69,8 +71,6 @@ async function go(sessionId, userId) {
         await UpdateSucceededReturnLogsDal.go(licence.licenceRef, trx)
       }
     })
-
-    await DeleteSessionDal.go(sessionId)
 
     return licence.id
   } catch (error) {

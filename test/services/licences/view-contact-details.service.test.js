@@ -13,7 +13,6 @@ const { generateLicenceRef } = require('../../support/helpers/licence.helper.js'
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchLicenceCRMDataService = require('../../../app/services/licences/fetch-licence-crm-data.service.js')
 const FetchLicenceService = require('../../../app/services/licences/fetch-licence.service.js')
 
@@ -59,8 +58,6 @@ describe('Licences - View Contact Details service', () => {
       contacts,
       totalNumber: contacts.length
     })
-
-    Sinon.stub(FeatureFlagsConfig, 'enableCustomerView').value(true)
   })
 
   afterEach(() => {

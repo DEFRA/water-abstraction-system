@@ -5,7 +5,6 @@
  * @module ContactsPresenter
  */
 
-const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const { formatContact } = require('../crm.presenter.js')
 
 /**
@@ -37,23 +36,9 @@ function _contacts(contacts, company) {
   })
 }
 
-/**
- * When the legacy UI navigates to the create page, it uses a 'key' from the URL (https://github.com/DEFRA/water-abstraction-ui/blob/1ffa5f2a9ac481b306506776d43cd63c4ea9143c/src/internal/modules/customers/controllers.js#L260_.
- *
- * The legacy UI builds this key like so:
- * ```js
- *  const key = `newCompanyContact.${request.params.companyId}.${request.defra.userId}`
- * ```
- * We replicate this logic.
- *
- * @private
- */
 function _links(company) {
   return {
-    createContact: FeatureFlagsConfig.enableCustomerManage
-      ? `/system/company-contacts/setup/${company.id}`
-      : `/customer/${company.id}/contacts/new`,
-    removeContact: FeatureFlagsConfig.enableCustomerManage ? null : `/customer/${company.id}/contacts/remove`
+    createContact: `/system/company-contacts/setup/${company.id}`
   }
 }
 
