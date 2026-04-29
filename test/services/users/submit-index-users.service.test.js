@@ -12,6 +12,7 @@ const { expect } = Code
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Things to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchUsersService = require('../../../app/services/users/fetch-users.service.js')
 
 // Thing under test
@@ -27,6 +28,8 @@ describe('Users - Submit Index Users service', () => {
     auth = {
       credentials: { scope: ['manage_accounts'] }
     }
+
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
 
     yarStub = {
       clear: Sinon.stub().returns(),
@@ -155,7 +158,7 @@ describe('Users - Submit Index Users service', () => {
             },
             links: {
               user: {
-                href: '/account/create-user',
+                href: '/system/users/internal/setup',
                 text: 'Create a user'
               }
             },
@@ -235,7 +238,7 @@ describe('Users - Submit Index Users service', () => {
             },
             links: {
               user: {
-                href: '/account/create-user',
+                href: '/system/users/internal/setup',
                 text: 'Create a user'
               }
             },
