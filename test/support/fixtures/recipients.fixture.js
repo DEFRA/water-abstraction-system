@@ -338,9 +338,31 @@ function returnsNoticeReturnsTo(download = false) {
  * @returns {object} - Returns recipients for primaryUser, licenceHolder and additional contact
  */
 function alertsRecipients() {
+  const newLicenceHolder = _addLicenceHolder()
+
+  const licenceHolder = {
+    ...newLicenceHolder,
+    contact: {
+      name: 'POTTER',
+      role: 'Licence holder',
+      type: 'Person',
+      forename: 'HARRY',
+      initials: 'H',
+      salutation: 'MR',
+      addressLine1: newLicenceHolder.contact.address1,
+      addressLine2: newLicenceHolder.contact.address2,
+      addressLine3: newLicenceHolder.contact.address3,
+      addressLine4: newLicenceHolder.contact.address4,
+      town: newLicenceHolder.contact.address5,
+      county: newLicenceHolder.contact.address6,
+      postcode: newLicenceHolder.contact.postcode,
+      country: null
+    }
+  }
+
   return {
     additionalContact: _addAdditionalContact(),
-    licenceHolder: _addLicenceHolder(),
+    licenceHolder,
     primaryUser: _addPrimaryUser()
   }
 }
