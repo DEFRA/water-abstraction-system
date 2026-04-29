@@ -39,7 +39,7 @@ describe('Notices - Setup - Create Notice service', () => {
       },
       subType: 'returnInvitation',
       name: 'Returns: invitation',
-      noticeType: 'reminders'
+      noticeType: 'invitations'
     }
   })
 
