@@ -504,6 +504,87 @@ function returnsReminderLetter(notice) {
   return notification
 }
 
+/**
+ * Generates a new user internal password reset email notification object
+ *
+ * @param {string} username - The username (email) of the new user
+ *
+ * @returns {object} The generated user internal email object
+ */
+function userInternalPasswordResetEmail(username) {
+  const notification = {
+    contactType: null,
+    createdAt: new Date('2025-04-18'),
+    dueDate: null,
+    eventId: null,
+    id: generateUUID(),
+    licenceMonitoringStationId: null,
+    licences: [],
+    messageRef: 'password_reset_email',
+    messageType: 'email',
+    notifyId: generateUUID(),
+    notifyStatus: 'delivered',
+    pdf: null,
+    personalisation: {
+      firstname: '(User)',
+      reset_url: `https://admin.manage-water-abstraction-impoundment-licence.service.gov.uk/reset_password_change_password?resetGuid=${generateUUID()}`
+    },
+    plaintext:
+      'Hello\n' +
+      '\n' +
+      'You requested a password reset to view your water abstraction or impoundment licence(s). No changes have been made to your account yet.\n' +
+      '\n' +
+      'You can reset your password using the link below (this link will only work once):\n',
+    recipient: username,
+    returnedAt: null,
+    returnLogIds: null,
+    status: 'sent',
+    templateId: null
+  }
+
+  return notification
+}
+
+/**
+ * Generates a new internal user email notification object
+ *
+ * @param {string} username - The username (email) of the new user
+ *
+ * @returns {object} The generated user new internal email object
+ */
+function userNewInternalEmail(username) {
+  const notification = {
+    contactType: null,
+    createdAt: new Date('2025-04-18'),
+    dueDate: null,
+    eventId: null,
+    id: generateUUID(),
+    licenceMonitoringStationId: null,
+    licences: [],
+    messageRef: 'new_internal_user_email',
+    messageType: 'email',
+    notifyId: generateUUID(),
+    notifyStatus: 'delivered',
+    pdf: null,
+    personalisation: {
+      unique_create_password_link: `https://admin.manage-water-abstraction-impoundment-licence.service.gov.uk/reset_password_change_password?resetGuid=${generateUUID()}`
+    },
+    plaintext:
+      'Hello\n' +
+      '\n' +
+      'An account has been created for you in the Water Resources Licensing Service.\n' +
+      '\n' +
+      'Please use this link to complete your account set up.\n',
+    recipient: username,
+    returnedAt: null,
+    returnLogIds: null,
+    status: 'sent',
+    templateId: null
+  }
+
+  return notification
+}
+
 module.exports = {
   abstractionAlertEmail,
   abstractionAlertLetter,
@@ -514,5 +595,7 @@ module.exports = {
   returnsInvitationEmail,
   returnsInvitationLetter,
   returnsReminderEmail,
-  returnsReminderLetter
+  returnsReminderLetter,
+  userInternalPasswordResetEmail,
+  userNewInternalEmail
 }
