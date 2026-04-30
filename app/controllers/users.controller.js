@@ -9,6 +9,7 @@ const FetchLegacyIdService = require('../services/users/fetch-legacy-id.service.
 const IndexUsersService = require('../services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../services/users/submit-profile-details.service.js')
+const ViewInternalCommunicationsService = require('../services/users/internal/view-communications.service.js')
 const ViewInternalDetailsService = require('../services/users/internal/view-details.service.js')
 const ViewProfileDetailsService = require('../services/users/view-profile-details.service.js')
 const ViewUserExternalService = require('../services/users/external/view-user.service.js')
@@ -69,6 +70,16 @@ async function submitUserExternal(request, h) {
   return _redirectToLegacy(id, h)
 }
 
+async function viewInternalCommunications(request, h) {
+  const {
+    params: { id }
+  } = request
+
+  const pageData = await ViewInternalCommunicationsService.go(id)
+
+  return h.view('users/internal/communications.njk', pageData)
+}
+
 async function viewInternalDetails(request, h) {
   const {
     params: { id }
@@ -121,5 +132,6 @@ module.exports = {
   submitInternalDetails,
   viewProfileDetails,
   viewUserExternal,
+  viewInternalCommunications,
   viewInternalDetails
 }

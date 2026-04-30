@@ -19,6 +19,7 @@ const FetchLegacyIdService = require('../../app/services/users/fetch-legacy-id.s
 const IndexUsersService = require('../../app/services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
+const ViewInternalCommunicationsService = require('../../app/services/users/internal/view-communications.service.js')
 const ViewInternalDetailsService = require('../../app/services/users/internal/view-details.service.js')
 const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
 const ViewUserExternalService = require('../../app/services/users/external/view-user.service.js')
@@ -202,6 +203,39 @@ describe('Users controller', () => {
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/user/456/status`)
         })
+      })
+    })
+  })
+
+  describe('/users/internal/{id}/communications', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        id = generateUUID()
+        options = _getOptions(`/users/internal/${id}/communications`, { scope: ['manage_accounts'], user: { id } })
+
+        Sinon.stub(ViewInternalCommunicationsService, 'go').resolves({
+          activeNavBar: 'users',
+          activeSecondaryNav: 'communications',
+          pagination: {
+            currentPageNumber: 1,
+            numberOfPages: 0,
+            showingMessage: 'Showing all 0 communications'
+          },
+          backLink: {
+            href: `/system/users`,
+            text: 'Go back to users'
+          },
+          notifications: [],
+          pageTitle: 'Communications for carol.shaw@wrls.gov.uk',
+          pageTitleCaption: 'Internal'
+        })
+      })
+
+      it('returns the internal user page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Communications for carol.shaw@wrls.gov.uk')
       })
     })
   })
