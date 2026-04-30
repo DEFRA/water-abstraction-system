@@ -45,7 +45,7 @@ describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () 
 
     const logDataArg = notifierStub.omg.firstCall.args[1]
 
-    expect(notifierStub.omg.calledWith('Renewal invitations status job complete')).to.be.true()
+    expect(notifierStub.omg.calledWith('Renewals invitation status job complete')).to.be.true()
     expect(logDataArg.timeTakenMs).to.exist()
     expect(logDataArg.timeTakenSs).to.exist()
     expect(logDataArg.count).to.equal(1)

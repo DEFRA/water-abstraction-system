@@ -316,7 +316,8 @@ const noticeMappings = {
   renewal: 'Renewal',
   returnInvitation: 'Returns invitation',
   returnReminder: 'Returns reminder',
-  waterAbstractionAlerts: 'alert'
+  waterAbstractionAlerts: 'alert',
+  renewalInvitation: 'Renewals invitation'
 }
 
 const NoticeType = Object.freeze({
