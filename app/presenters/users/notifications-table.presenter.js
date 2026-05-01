@@ -6,20 +6,7 @@
  */
 
 const { formatLongDate, sentenceCase } = require('../base.presenter.js')
-
-const USER_NOTIFICATION_TYPES = {
-  email_change_email_in_use_email: 'Change email address - email already in use',
-  email_change_verification_code_email: 'Change email address - verification code',
-  existing_user_verification_email: 'Existing user verification',
-  expiry_notification_email: 'Expiry notification',
-  new_internal_user_email: 'New internal user',
-  new_user_verification_email: 'New user verification',
-  password_locked_email: 'Password locked',
-  password_reset_email: 'Password reset',
-  security_code_letter: 'Security code letter',
-  share_existing_user: 'Share existing user',
-  share_new_user: 'Share new user'
-}
+const { userNotificationTypes } = require('../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for display in communications tables on view external and internal user pages
@@ -51,7 +38,7 @@ function _link(notification, sentDate, userId) {
   return {
     hiddenText,
     href: `/system/users/internal/${userId}/notifications/${notificationId}`,
-    text: USER_NOTIFICATION_TYPES[messageRef]
+    text: userNotificationTypes[messageRef].label
   }
 }
 
