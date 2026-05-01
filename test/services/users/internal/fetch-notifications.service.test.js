@@ -10,7 +10,7 @@ const { expect } = Code
 // Test helpers
 const NotificationHelper = require('../../../support/helpers/notification.helper.js')
 const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
-const UserFixture = require('../../../support/fixtures/users.fixture.js')
+const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Thing under test
 const FetchNotificationsService = require('../../../../app/services/users/internal/fetch-notifications.service.js')
@@ -20,7 +20,7 @@ describe('Users - Internal - Fetch Notifications service', () => {
   let user
 
   beforeEach(async () => {
-    user = UserFixture.billingAndData()
+    user = UsersFixture.billingAndData()
 
     notification = await NotificationHelper.add(NotificationsFixture.userInternalPasswordResetEmail(user.username))
   })

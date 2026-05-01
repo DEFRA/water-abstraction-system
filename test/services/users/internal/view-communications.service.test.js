@@ -9,7 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const UserFixture = require('../../../support/fixtures/users.fixture.js')
+const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we need to stub
 const FetchNotificationsService = require('../../../../app/services/users/internal/fetch-notifications.service.js')
@@ -24,7 +24,7 @@ describe('Users - Internal - View Communications Service', () => {
   let user
 
   beforeEach(async () => {
-    const { id, username } = UserFixture.billingAndData()
+    const { id, username } = UsersFixture.billingAndData()
 
     user = { id, username }
 

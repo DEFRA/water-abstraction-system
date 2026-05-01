@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
-const UserFixture = require('../../support/fixtures/users.fixture.js')
+const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Thing under test
 const NotificationsTablePresenter = require('../../../app/presenters/users/notifications-table.presenter.js')
@@ -19,7 +19,7 @@ describe('Users - Notifications Table presenter', () => {
   let user
 
   beforeEach(() => {
-    user = UserFixture.billingAndData()
+    user = UsersFixture.billingAndData()
 
     notifications = [
       NotificationsFixture.userNewInternalEmail(user.username),
