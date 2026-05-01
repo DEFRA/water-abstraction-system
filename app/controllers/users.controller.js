@@ -73,10 +73,11 @@ async function submitUserExternal(request, h) {
 
 async function viewInternalCommunications(request, h) {
   const {
-    params: { id }
+    params: { id },
+    query: { page }
   } = request
 
-  const pageData = await ViewInternalCommunicationsService.go(id)
+  const pageData = await ViewInternalCommunicationsService.go(id, page)
 
   return h.view('users/internal/communications.njk', pageData)
 }
@@ -142,6 +143,7 @@ module.exports = {
   submitProfileDetails,
   submitUserExternal,
   submitInternalDetails,
+  viewNotification,
   viewProfileDetails,
   viewUserExternal,
   viewInternalCommunications,
