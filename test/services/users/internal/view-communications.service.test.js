@@ -13,7 +13,7 @@ const UserFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we need to stub
 const FetchNotificationsService = require('../../../../app/services/users/internal/fetch-notifications.service.js')
-const FetchUserService = require('../../../../app/services/users/internal/fetch-user.service.js')
+const FetchUserService = require('../../../../app/services/users/fetch-user.service.js')
 
 // Thing under test
 const ViewCommunicationsService = require('../../../../app/services/users/internal/view-communications.service.js')

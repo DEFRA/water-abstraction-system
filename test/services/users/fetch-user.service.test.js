@@ -8,10 +8,10 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const UsersFixture = require('../../../support/fixtures/users.fixture.js')
+const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Thing under test
-const FetchUserService = require('../../../../app/services/users/internal/fetch-user.service.js')
+const FetchUserService = require('../../../app/services/users/fetch-user.service.js')
 
 // NOTE: The users are seeded as part of setting up the test database, along with with their groups and roles. So,
 // unlike other fetch tests we don't create any test records and assert they are in our results as we already have

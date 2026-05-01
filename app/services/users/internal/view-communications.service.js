@@ -8,7 +8,7 @@
 
 const CommunicationsPresenter = require('../../../presenters/users/internal/communications.presenter.js')
 const FetchNotificationsService = require('./fetch-notifications.service.js')
-const FetchUserService = require('./fetch-user.service.js')
+const FetchUserService = require('../fetch-user.service.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 
 /**
