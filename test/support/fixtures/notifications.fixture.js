@@ -505,13 +505,56 @@ function returnsReminderLetter(notice) {
 }
 
 /**
+ * Generates a user external share existing email notification object
+ *
+ * @param {string} recipient - The email of the recipient
+ * @param {string} sender - The email of the sender
+ *
+ * @returns {object} The generated user external email object
+ */
+function userExternalShareExistingEmail(recipient, sender) {
+  const notification = {
+    contactType: null,
+    createdAt: new Date('2025-04-18'),
+    dueDate: null,
+    eventId: null,
+    id: generateUUID(),
+    licenceMonitoringStationId: null,
+    licences: [],
+    messageRef: 'share_existing_user',
+    messageType: 'email',
+    notifyId: generateUUID(),
+    notifyStatus: 'delivered',
+    pdf: null,
+    personalisation: {
+      link: 'https://manage-water-abstraction-impoundment-licence.service.gov.uk',
+      email: recipient,
+      sender
+    },
+    plaintext:
+      'Hello\n' +
+      '\n' +
+      `${sender} would like to give you access to view their water abstraction or impoundment licences online.\n` +
+      '\n' +
+      'You will be able to see their licence details the next time you sign in to our online service:\n',
+    recipient,
+    returnedAt: null,
+    returnLogIds: null,
+    status: 'sent',
+    templateId: null
+  }
+
+  return notification
+}
+
+/**
  * Generates a new user internal password reset email notification object
  *
- * @param {string} username - The username (email) of the new user
+ * @param {string} recipient - The email of the recipient
  *
  * @returns {object} The generated user internal email object
  */
-function userInternalPasswordResetEmail(username) {
+function userInternalPasswordResetEmail(recipient) {
   const notification = {
     contactType: null,
     createdAt: new Date('2025-04-18'),
@@ -535,7 +578,7 @@ function userInternalPasswordResetEmail(username) {
       'You requested a password reset to view your water abstraction or impoundment licence(s). No changes have been made to your account yet.\n' +
       '\n' +
       'You can reset your password using the link below (this link will only work once):\n',
-    recipient: username,
+    recipient,
     returnedAt: null,
     returnLogIds: null,
     status: 'sent',
@@ -548,11 +591,11 @@ function userInternalPasswordResetEmail(username) {
 /**
  * Generates a new internal user email notification object
  *
- * @param {string} username - The username (email) of the new user
+ * @param {string} recipient - The email of the recipient
  *
  * @returns {object} The generated user new internal email object
  */
-function userNewInternalEmail(username) {
+function userNewInternalEmail(recipient) {
   const notification = {
     contactType: null,
     createdAt: new Date('2025-04-18'),
@@ -575,7 +618,7 @@ function userNewInternalEmail(username) {
       'An account has been created for you in the Water Resources Licensing Service.\n' +
       '\n' +
       'Please use this link to complete your account set up.\n',
-    recipient: username,
+    recipient,
     returnedAt: null,
     returnLogIds: null,
     status: 'sent',
@@ -596,6 +639,7 @@ module.exports = {
   returnsInvitationLetter,
   returnsReminderEmail,
   returnsReminderLetter,
+  userExternalShareExistingEmail,
   userInternalPasswordResetEmail,
   userNewInternalEmail
 }
