@@ -11,6 +11,7 @@ const SubmitIndexUsersService = require('../services/users/submit-index-users.se
 const SubmitProfileDetailsService = require('../services/users/submit-profile-details.service.js')
 const ViewInternalCommunicationsService = require('../services/users/internal/view-communications.service.js')
 const ViewInternalDetailsService = require('../services/users/internal/view-details.service.js')
+const ViewNotificationService = require('../services/users/view-notification.service.js')
 const ViewProfileDetailsService = require('../services/users/view-profile-details.service.js')
 const ViewUserExternalService = require('../services/users/external/view-user.service.js')
 
@@ -92,6 +93,17 @@ async function viewInternalDetails(request, h) {
   const pageData = await ViewInternalDetailsService.go(id)
 
   return h.view('users/internal/details.njk', pageData)
+}
+
+async function viewNotification(request, h) {
+  const {
+    auth,
+    params: { type, id, notificationId }
+  } = request
+
+  const pageData = await ViewNotificationService.go(notificationId, id, type, auth)
+
+  return h.view('users/notification.njk', pageData)
 }
 
 async function viewProfileDetails(request, h) {

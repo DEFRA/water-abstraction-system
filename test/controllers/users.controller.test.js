@@ -21,6 +21,7 @@ const SubmitIndexUsersService = require('../../app/services/users/submit-index-u
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
 const ViewInternalCommunicationsService = require('../../app/services/users/internal/view-communications.service.js')
 const ViewInternalDetailsService = require('../../app/services/users/internal/view-details.service.js')
+const ViewNotificationService = require('../../app/services/users/view-notification.service.js')
 const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
 const ViewUserExternalService = require('../../app/services/users/external/view-user.service.js')
 
@@ -30,6 +31,7 @@ const { init } = require('../../app/server.js')
 describe('Users controller', () => {
   let id
   let options
+  let notificationId
   let postOptions
   let server
 
@@ -287,6 +289,42 @@ describe('Users controller', () => {
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/user/456/status`)
         })
+      })
+    })
+  })
+
+  describe('/users/internal/{id}/notifications/{notificationId}', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        id = generateUUID()
+        notificationId = generateUUID()
+        options = _getOptions(`/users/internal/${id}/notifications/${notificationId}`, {
+          scope: ['manage_accounts'],
+          user: { id }
+        })
+
+        Sinon.stub(ViewNotificationService, 'go').resolves({
+          activeNavBar: 'users',
+          backLink: {
+            href: `/system/users/internal/${id}/communications`,
+            text: 'Go back to user'
+          },
+          contents: '## This content is protected.',
+          errorDetails: null,
+          messageType: 'email',
+          pageTitle: 'Password reset',
+          pageTitleCaption: 'carol.shaw@wrls.gov.uk',
+          sentDate: '18 April 2025',
+          sentTo: 'carol.shaw@wrls.gov.uk',
+          status: 'sent'
+        })
+      })
+
+      it('returns the internal user page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Password reset')
       })
     })
   })

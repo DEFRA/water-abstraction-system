@@ -74,6 +74,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/users/{type}/{id}/notifications/{notificationId}',
+    options: {
+      handler: UsersController.viewNotification,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/users/me/profile-details',
     options: {
       handler: UsersController.viewProfileDetails,
