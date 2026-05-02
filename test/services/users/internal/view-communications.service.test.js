@@ -57,8 +57,8 @@ describe('Users - Internal - View Communications Service', () => {
           text: 'Go back to users'
         },
         notifications: [],
-        pageTitle: `Communications for ${user.username}`,
-        pageTitleCaption: 'Internal'
+        pageTitle: 'Communications',
+        pageTitleCaption: user.username
       })
     })
   })
