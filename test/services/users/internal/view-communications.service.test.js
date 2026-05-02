@@ -12,7 +12,7 @@ const { expect } = Code
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we need to stub
-const FetchNotificationsService = require('../../../../app/services/users/internal/fetch-notifications.service.js')
+const FetchNotificationsDal = require('../../../../app/dal/users/internal/fetch-notifications.dal.js')
 const FetchUserService = require('../../../../app/services/users/fetch-user.service.js')
 
 // Thing under test
@@ -30,7 +30,7 @@ describe('Users - Internal - View Communications Service', () => {
 
     Sinon.stub(FetchUserService, 'go').returns(user)
 
-    Sinon.stub(FetchNotificationsService, 'go').returns({
+    Sinon.stub(FetchNotificationsDal, 'go').returns({
       notifications: [],
       totalNumber: 0
     })

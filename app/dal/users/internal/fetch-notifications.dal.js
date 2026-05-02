@@ -2,7 +2,7 @@
 
 /**
  * Fetches data needed for the view '/system/users/internal/{id}/communications' page
- * @module FetchNotificationsService
+ * @module FetchNotificationsDal
  */
 
 const NotificationModel = require('../../../models/notification.model.js')

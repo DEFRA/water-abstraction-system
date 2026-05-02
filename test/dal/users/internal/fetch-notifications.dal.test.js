@@ -13,9 +13,9 @@ const NotificationsFixture = require('../../../support/fixtures/notifications.fi
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Thing under test
-const FetchNotificationsService = require('../../../../app/services/users/internal/fetch-notifications.service.js')
+const FetchNotificationsDal = require('../../../../app/dal/users/internal/fetch-notifications.dal.js')
 
-describe('Users - Internal - Fetch Notifications service', () => {
+describe('Users - Internal - Fetch Notifications DAL', () => {
   let notification
   let user
 
@@ -31,7 +31,7 @@ describe('Users - Internal - Fetch Notifications service', () => {
 
   describe('when the user has notifications', () => {
     it('returns the matching notifications and the total', async () => {
-      const result = await FetchNotificationsService.go(user.username)
+      const result = await FetchNotificationsDal.go(user.username)
 
       expect(result).to.equal({
         notifications: [
@@ -50,7 +50,7 @@ describe('Users - Internal - Fetch Notifications service', () => {
 
   describe('when the user has no notifications', () => {
     it('returns an empty array and zero', async () => {
-      const result = await FetchNotificationsService.go('mystery.user@wrls.gov.uk')
+      const result = await FetchNotificationsDal.go('mystery.user@wrls.gov.uk')
 
       expect(result).to.equal({ notifications: [], totalNumber: 0 })
     })
