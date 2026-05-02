@@ -44,8 +44,8 @@ describe('Users - Internal - Communications presenter', () => {
           status: 'sent'
         }
       ],
-      pageTitle: `Communications for ${user.username}`,
-      pageTitleCaption: 'Internal'
+      pageTitle: 'Communications',
+      pageTitleCaption: user.username
     })
   })
 })

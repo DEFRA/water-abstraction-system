@@ -43,8 +43,8 @@ describe('Users - Internal - View Details service', () => {
         },
         id: user.id,
         lastSignedIn: '6 October 2022 at 10:00:00',
-        pageTitle: 'User details for basic.access@wrls.gov.uk',
-        pageTitleCaption: 'Internal',
+        pageTitle: 'User details',
+        pageTitleCaption: user.username,
         permissions: 'Basic access',
         roles: [],
         status: 'enabled'

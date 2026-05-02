@@ -24,8 +24,8 @@ function go(user, notifications) {
       text: 'Go back to users'
     },
     notifications: NotificationsTablePresenter.go(notifications, id),
-    pageTitle: `Communications for ${username}`,
-    pageTitleCaption: 'Internal'
+    pageTitle: 'Communications',
+    pageTitleCaption: username
   }
 }
 
