@@ -13,7 +13,7 @@ const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
-const FetchUserDetailsService = require('../../../../app/services/users/internal/fetch-user-details.service.js')
+const FetchUserDetailsDal = require('../../../../app/dal/users/internal/fetch-user-details.dal.js')
 
 // Thing under test
 const ViewDetailsService = require('../../../../app/services/users/internal/view-details.service.js')
@@ -23,7 +23,7 @@ describe('Users - Internal - View Details service', () => {
 
   beforeEach(() => {
     Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
-    Sinon.stub(FetchUserDetailsService, 'go').resolves(user)
+    Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
   })
 
   afterEach(() => {

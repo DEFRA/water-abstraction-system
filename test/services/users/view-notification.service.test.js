@@ -13,7 +13,7 @@ const NotificationsFixture = require('../../support/fixtures/notifications.fixtu
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Things we need to stub
-const FetchNotificationService = require('../../../app/services/users/fetch-notification.service.js')
+const FetchNotificationDal = require('../../../app/dal/users/fetch-notification.dal.js')
 const FetchUserService = require('../../../app/services/users/fetch-user.service.js')
 
 // Thing under test
@@ -35,7 +35,7 @@ describe('Users - Internal - View Notifications Service', () => {
     notification = NotificationsFixture.userInternalPasswordResetEmail(user.username)
 
     Sinon.stub(FetchUserService, 'go').returns(user)
-    Sinon.stub(FetchNotificationService, 'go').returns(notification)
+    Sinon.stub(FetchNotificationDal, 'go').returns(notification)
   })
 
   afterEach(() => {

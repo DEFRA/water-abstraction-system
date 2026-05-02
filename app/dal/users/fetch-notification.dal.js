@@ -2,7 +2,7 @@
 
 /**
  * Fetches the matching notification needed for the view
- * @module FetchNotificationService
+ * @module FetchNotificationDal
  */
 
 const NotificationModel = require('../../models/notification.model.js')

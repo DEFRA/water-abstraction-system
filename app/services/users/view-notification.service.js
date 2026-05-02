@@ -5,7 +5,7 @@
  * @module ViewNotificationService
  */
 
-const FetchNotificationService = require('./fetch-notification.service.js')
+const FetchNotificationDal = require('../../dal/users/fetch-notification.dal.js')
 const FetchUserService = require('./fetch-user.service.js')
 const NotificationPresenter = require('../../presenters/users/notification.presenter.js')
 
@@ -20,7 +20,7 @@ const NotificationPresenter = require('../../presenters/users/notification.prese
  * @returns {Promise<object>} an object representing the `pageData` needed by the view notification template.
  */
 async function go(notificationId, userId, type, auth) {
-  const notification = await FetchNotificationService.go(notificationId)
+  const notification = await FetchNotificationDal.go(notificationId)
   const user = await FetchUserService.go(userId)
   const superUser = _superUser(auth)
 

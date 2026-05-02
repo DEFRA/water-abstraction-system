@@ -2,7 +2,7 @@
 
 /**
  * Fetches the user details needed for the view `/users/internal/{id}/details` page
- * @module FetchUserService
+ * @module FetchUserDal
  */
 
 const UserModel = require('../../../models/user.model.js')

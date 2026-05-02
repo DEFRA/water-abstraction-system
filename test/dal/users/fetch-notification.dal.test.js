@@ -13,9 +13,9 @@ const NotificationHelper = require('../../support/helpers/notification.helper.js
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Thing under test
-const FetchNotificationService = require('../../../app/services/users/fetch-notification.service.js')
+const FetchNotificationDal = require('../../../app/dal/users/fetch-notification.dal.js')
 
-describe('Users - Fetch Notification service', () => {
+describe('Users - Fetch Notification DAL', () => {
   let notification
   let user
 
@@ -35,7 +35,7 @@ describe('Users - Fetch Notification service', () => {
     })
 
     it('returns the matching notification', async () => {
-      const result = await FetchNotificationService.go(notification.id, user.id)
+      const result = await FetchNotificationDal.go(notification.id, user.id)
 
       expect(result).to.equal({
         createdAt: notification.createdAt,
@@ -54,7 +54,7 @@ describe('Users - Fetch Notification service', () => {
 
   describe('when a matching notification does not exist', () => {
     it('returns undefined', async () => {
-      const result = await FetchNotificationService.go('317aaa08-723d-4cb3-8f3b-5ab6a37b573f', user.id)
+      const result = await FetchNotificationDal.go('317aaa08-723d-4cb3-8f3b-5ab6a37b573f', user.id)
 
       expect(result).to.be.undefined()
     })
