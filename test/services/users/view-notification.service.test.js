@@ -14,7 +14,7 @@ const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Things we need to stub
 const FetchNotificationDal = require('../../../app/dal/users/fetch-notification.dal.js')
-const FetchUserService = require('../../../app/services/users/fetch-user.service.js')
+const FetchUserDal = require('../../../app/dal/users/fetch-user.dal.js')
 
 // Thing under test
 const ViewNotificationService = require('../../../app/services/users/view-notification.service.js')
@@ -34,7 +34,7 @@ describe('Users - Internal - View Notifications Service', () => {
 
     notification = NotificationsFixture.userInternalPasswordResetEmail(user.username)
 
-    Sinon.stub(FetchUserService, 'go').returns(user)
+    Sinon.stub(FetchUserDal, 'go').returns(user)
     Sinon.stub(FetchNotificationDal, 'go').returns(notification)
   })
 

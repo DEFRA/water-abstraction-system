@@ -6,7 +6,7 @@
  */
 
 const FetchNotificationDal = require('../../dal/users/fetch-notification.dal.js')
-const FetchUserService = require('./fetch-user.service.js')
+const FetchUserDal = require('../../dal/users/fetch-user.dal.js')
 const NotificationPresenter = require('../../presenters/users/notification.presenter.js')
 
 /**
@@ -21,7 +21,7 @@ const NotificationPresenter = require('../../presenters/users/notification.prese
  */
 async function go(notificationId, userId, type, auth) {
   const notification = await FetchNotificationDal.go(notificationId)
-  const user = await FetchUserService.go(userId)
+  const user = await FetchUserDal.go(userId)
   const superUser = _superUser(auth)
 
   const pageData = NotificationPresenter.go(notification, user, type, superUser)

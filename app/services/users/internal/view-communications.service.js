@@ -8,7 +8,7 @@
 
 const CommunicationsPresenter = require('../../../presenters/users/internal/communications.presenter.js')
 const FetchNotificationsDal = require('../../../dal/users/internal/fetch-notifications.dal.js')
-const FetchUserService = require('../fetch-user.service.js')
+const FetchUserDal = require('../../../dal/users/fetch-user.dal.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 
 /**
@@ -20,7 +20,7 @@ const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
  * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(id, page) {
-  const user = await FetchUserService.go(id)
+  const user = await FetchUserDal.go(id)
 
   const { notifications, totalNumber } = await FetchNotificationsDal.go(user.username, page)
 

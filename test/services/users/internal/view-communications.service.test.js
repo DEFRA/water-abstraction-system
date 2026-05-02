@@ -13,7 +13,7 @@ const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we need to stub
 const FetchNotificationsDal = require('../../../../app/dal/users/internal/fetch-notifications.dal.js')
-const FetchUserService = require('../../../../app/services/users/fetch-user.service.js')
+const FetchUserDal = require('../../../../app/dal/users/fetch-user.dal.js')
 
 // Thing under test
 const ViewCommunicationsService = require('../../../../app/services/users/internal/view-communications.service.js')
@@ -28,7 +28,7 @@ describe('Users - Internal - View Communications Service', () => {
 
     user = { id, username }
 
-    Sinon.stub(FetchUserService, 'go').returns(user)
+    Sinon.stub(FetchUserDal, 'go').returns(user)
 
     Sinon.stub(FetchNotificationsDal, 'go').returns({
       notifications: [],
