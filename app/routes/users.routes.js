@@ -28,13 +28,6 @@ const routes = [
     }
   },
   {
-    method: 'POST',
-    path: '/users/internal/{id}',
-    options: {
-      handler: UsersController.submitUserInternal
-    }
-  },
-  {
     method: 'GET',
     path: '/users/external/{id}',
     options: {
@@ -50,9 +43,40 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/users/internal/{id}',
+    path: '/users/internal/{id}/communications',
     options: {
-      handler: UsersController.viewUserInternal,
+      handler: UsersController.viewInternalCommunications,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/users/internal/{id}/details',
+    options: {
+      handler: UsersController.viewInternalDetails,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/users/internal/{id}/details',
+    options: {
+      handler: UsersController.submitInternalDetails
+    }
+  },
+  {
+    method: 'GET',
+    path: '/users/{type}/{id}/notifications/{notificationId}',
+    options: {
+      handler: UsersController.viewNotification,
       auth: {
         access: {
           scope: ['manage_accounts']

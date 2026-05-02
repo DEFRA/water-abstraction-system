@@ -12,7 +12,7 @@ const { expect } = Code
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Things to stub
-const FetchUsersService = require('../../../app/services/users/fetch-users.service.js')
+const FetchUsersDal = require('../../../app/dal/users/fetch-users.dal.js')
 
 // Thing under test
 const SubmitIndexUsersService = require('../../../app/services/users/submit-index-users.service.js')
@@ -128,7 +128,7 @@ describe('Users - Submit Index Users service', () => {
 
       describe('and the results are paginated', () => {
         beforeEach(() => {
-          Sinon.stub(FetchUsersService, 'go').resolves({ results, total: 70 })
+          Sinon.stub(FetchUsersDal, 'go').resolves({ results, total: 70 })
         })
 
         it('returns the page data for the view, including any errors', async () => {
@@ -163,7 +163,7 @@ describe('Users - Submit Index Users service', () => {
             users: [
               {
                 email: results[0].username,
-                link: `/system/users/internal/${results[0].id}`,
+                link: `/system/users/internal/${results[0].id}/details`,
                 permissions: 'Basic access',
                 status: 'enabled',
                 type: 'Internal'
@@ -208,7 +208,7 @@ describe('Users - Submit Index Users service', () => {
 
       describe('and the results are not paginated', () => {
         beforeEach(() => {
-          Sinon.stub(FetchUsersService, 'go').resolves({ results, total: 1 })
+          Sinon.stub(FetchUsersDal, 'go').resolves({ results, total: 1 })
         })
 
         it('returns the page data for the view, including any errors', async () => {
@@ -243,7 +243,7 @@ describe('Users - Submit Index Users service', () => {
             users: [
               {
                 email: results[0].username,
-                link: `/system/users/internal/${results[0].id}`,
+                link: `/system/users/internal/${results[0].id}/details`,
                 permissions: 'Basic access',
                 status: 'enabled',
                 type: 'Internal'
