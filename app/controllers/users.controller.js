@@ -5,7 +5,7 @@
  * @module UsersController
  */
 
-const FetchLegacyIdService = require('../services/users/fetch-legacy-id.service.js')
+const FetchLegacyIdDal = require('../dal/users/fetch-legacy-id.dal.js')
 const IndexUsersService = require('../services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../services/users/submit-profile-details.service.js')
@@ -132,7 +132,7 @@ async function viewUserExternal(request, h) {
 }
 
 async function _redirectToLegacy(id, h) {
-  const userId = await FetchLegacyIdService.go(id)
+  const userId = await FetchLegacyIdDal.go(id)
 
   return h.redirect(`/user/${userId}/status`)
 }

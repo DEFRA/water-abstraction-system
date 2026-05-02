@@ -15,7 +15,7 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const FetchLegacyIdService = require('../../app/services/users/fetch-legacy-id.service.js')
+const FetchLegacyIdDal = require('../../app/dal/users/fetch-legacy-id.dal.js')
 const IndexUsersService = require('../../app/services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
@@ -196,7 +196,7 @@ describe('Users controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(FetchLegacyIdService, 'go').returns(456)
+          Sinon.stub(FetchLegacyIdDal, 'go').returns(456)
         })
 
         it('redirects to the legacy user page', async () => {
@@ -280,7 +280,7 @@ describe('Users controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(FetchLegacyIdService, 'go').returns(456)
+          Sinon.stub(FetchLegacyIdDal, 'go').returns(456)
         })
 
         it('redirects to the legacy user page', async () => {
