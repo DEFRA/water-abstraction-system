@@ -5,7 +5,7 @@
  * @module ViewDetailsService
  */
 
-const FetchUserDetailsService = require('./fetch-user-details.service.js')
+const FetchUserDetailsDal = require('../../../dal/users/internal/fetch-user-details.dal.js')
 const DetailsPresenter = require('../../../presenters/users/internal/details.presenter.js')
 
 /**
@@ -16,7 +16,7 @@ const DetailsPresenter = require('../../../presenters/users/internal/details.pre
  * @returns {Promise<object>} The view data for the internal user details page
  */
 async function go(id) {
-  const internalUser = await FetchUserDetailsService.go(id)
+  const internalUser = await FetchUserDetailsDal.go(id)
   const pageData = DetailsPresenter.go(internalUser)
 
   return {
