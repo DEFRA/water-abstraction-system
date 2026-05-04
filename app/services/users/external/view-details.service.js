@@ -19,15 +19,15 @@ const DetailsPresenter = require('../../../presenters/users/external/details.pre
  * @returns {Promise<object>} The view data for the external user page
  */
 async function go(id, auth, back = 'users') {
-  const externalUser = await FetchUserDetailsService.go(id)
+  const user = await FetchUserDetailsService.go(id)
 
   let licences = []
 
-  if (externalUser.licenceEntity) {
-    licences = await FetchLicencesService.go(externalUser.licenceEntity.id)
+  if (user.licenceEntity) {
+    licences = await FetchLicencesService.go(user.licenceEntity.id)
   }
 
-  const pageData = DetailsPresenter.go(externalUser, licences, auth.credentials.scope, back)
+  const pageData = DetailsPresenter.go(user, licences, auth.credentials.scope, back)
 
   return {
     activeNavBar: back === 'users' ? 'users' : 'search',
