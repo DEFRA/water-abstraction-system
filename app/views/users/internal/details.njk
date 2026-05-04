@@ -24,11 +24,13 @@
     ]
   }) }}
 
-  <form method="post">
-    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  {% if status !== 'disabled' %}
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    {{ govukButton({ text: "Edit", preventDoubleClick: true }) }}
-  </form>
+      {{ govukButton({ text: "Edit", preventDoubleClick: true }) }}
+    </form>
+  {% endif %}
 
   <h3 class="govuk-heading-m">Roles</h3>
 
