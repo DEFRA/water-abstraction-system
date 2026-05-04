@@ -5,7 +5,7 @@
  * @module ViewDetailsService
  */
 
-const FetchLicencesService = require('./fetch-licences.service.js')
+const FetchLicencesDal = require('../../../dal/users/external/fetch-licences.dal.js')
 const FetchUserDetailsService = require('./fetch-user-details.service.js')
 const DetailsPresenter = require('../../../presenters/users/external/details.presenter.js')
 
@@ -24,7 +24,7 @@ async function go(id, auth, back = 'users') {
   let licences = []
 
   if (user.licenceEntity) {
-    licences = await FetchLicencesService.go(user.licenceEntity.id)
+    licences = await FetchLicencesDal.go(user.licenceEntity.id)
   }
 
   const pageData = DetailsPresenter.go(user, licences, auth.credentials.scope, back)

@@ -17,9 +17,9 @@ const LicenceVersionHolderHelper = require('../../../support/helpers/licence-ver
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const FetchLicencesService = require('../../../../app/services/users/external/fetch-licences.service.js')
+const FetchLicencesDal = require('../../../../app/dal/users/external/fetch-licences.dal.js')
 
-describe('Users - External - Fetch Licences service', () => {
+describe('Users - External - Fetch Licences DAL', () => {
   let licenceData1
   let licenceData2
   let licenceData3
@@ -51,7 +51,7 @@ describe('Users - External - Fetch Licences service', () => {
 
   describe('when called', () => {
     it('returns the requested user', async () => {
-      const result = await FetchLicencesService.go(userEntity.id)
+      const result = await FetchLicencesDal.go(userEntity.id)
 
       expect(result).to.equal([
         {

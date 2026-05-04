@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches licences linked to a user for display on the `/users/external/{id}` page
- * @module FetchLicencesService
+ * Fetches licences linked to a user for display on the `/users/external/{id}/details` page
+ * @module FetchLicencesDal
  */
 
 const LicenceModel = require('../../../models/licence.model.js')
 
 /**
- * Fetches licences linked to a user for display on the `/users/external/{id}` page
+ * Fetches licences linked to a user for display on the `/users/external/{id}/details` page
  *
  * This includes their related roles and current licence holder, so we can display these alongside the licence.
  *

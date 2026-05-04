@@ -12,7 +12,7 @@ const { expect } = Code
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
-const FetchLicencesService = require('../../../../app/services/users/external/fetch-licences.service.js')
+const FetchLicencesDal = require('../../../../app/dal/users/external/fetch-licences.dal.js')
 const FetchUserDetailsService = require('../../../../app/services/users/external/fetch-user-details.service.js')
 
 // Thing under test
@@ -28,7 +28,7 @@ describe('Users - External - View Details service', () => {
 
   beforeEach(() => {
     Sinon.stub(FetchUserDetailsService, 'go').resolves(user)
-    Sinon.stub(FetchLicencesService, 'go').resolves([])
+    Sinon.stub(FetchLicencesDal, 'go').resolves([])
   })
 
   afterEach(() => {
