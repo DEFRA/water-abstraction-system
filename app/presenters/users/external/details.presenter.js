@@ -1,11 +1,11 @@
 'use strict'
 
 /**
- * Formats data for external users on the `/users/external/{id}` page
- * @module UserPresenter
+ * Formats data for external users on the `/users/external/{id}/details` page
+ * @module DetailsPresenter
  */
 
-const { formatLongDateTime, formatLongDate } = require('../../base.presenter.js')
+const { formatLongDateTime } = require('../../base.presenter.js')
 const { today } = require('../../../lib/general.lib.js')
 
 const EXTERNAL_ROLES = {
@@ -20,19 +20,17 @@ const EXTERNAL_ROLES = {
 }
 
 /**
- * Formats data for external users on the `/users/external/{id}` page
+ * Formats data for external users on the `/users/external/{id}/details` page
  *
  * @param {module:UserModel} user - The user, including their related companies and the licence document headers that
  * are attached to those companies
- * @param {object[]} outstandingVerifications - The outstanding verifications for the user, including details of
- * the licences they relate to
  * @param {module:LicenceModel[]} licences - The licences linked to the user, including their related roles and current licence
  * @param {string[]} viewingUserScope - The 'scope' taken off the `request.auth` object passed to the `ViewUserInternalService`
  * @param {string} back - The 'back' query parameter, used to indicate what back link should be shown on the page
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user, outstandingVerifications, licences, viewingUserScope, back) {
+function go(user, licences, viewingUserScope, back) {
   const permissions = user.$permissions()
 
   const formattedLicences = _userLicences(licences)
@@ -46,7 +44,6 @@ function go(user, outstandingVerifications, licences, viewingUserScope, back) {
     id: user.id,
     lastSignedIn: _lastSignedIn(user),
     licences: formattedLicences,
-    outstandingVerifications: _outstandingVerifications(outstandingVerifications),
     pageTitle: `User ${user.username}`,
     pageTitleCaption: 'External',
     permissions: permissions.label,
@@ -143,25 +140,6 @@ function _lastSignedIn(user) {
   }
 
   return formatLongDateTime(lastLogin)
-}
-
-function _outstandingVerifications(outstandingVerifications) {
-  return outstandingVerifications.map((verification) => {
-    const { verificationCode: code, createdAt, licenceHolder, licenceId, licenceRef } = verification
-
-    const count = outstandingVerifications.filter((verification) => {
-      return verification.verificationCode === code
-    }).length
-
-    return {
-      code,
-      count,
-      createdOn: formatLongDate(createdAt),
-      licenceHolder,
-      licenceRef,
-      link: `/system/licences/${licenceId}/summary`
-    }
-  })
 }
 
 module.exports = {
