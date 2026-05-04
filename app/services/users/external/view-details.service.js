@@ -27,12 +27,12 @@ async function go(id, auth, back = 'users') {
     licences = await FetchLicencesService.go(externalUser.licenceEntity.id)
   }
 
-  const formattedData = DetailsPresenter.go(externalUser, licences, auth.credentials.scope, back)
+  const pageData = DetailsPresenter.go(externalUser, licences, auth.credentials.scope, back)
 
   return {
     activeNavBar: back === 'users' ? 'users' : 'search',
     activeSecondaryNav: 'details',
-    ...formattedData
+    ...pageData
   }
 }
 
