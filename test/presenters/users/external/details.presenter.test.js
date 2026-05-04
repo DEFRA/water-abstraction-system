@@ -43,7 +43,6 @@ describe('Users - External - Details Presenter', () => {
       },
       backQueryString: null,
       displayLicenceEndedMessage: true,
-      id: user.id,
       lastSignedIn: '6 October 2022 at 10:00:00',
       licences: [
         {

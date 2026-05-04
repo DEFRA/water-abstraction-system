@@ -42,7 +42,6 @@ function go(user, licences, viewingUserScope, back) {
     backLink: _backLink(back),
     backQueryString: _backQueryString(back),
     displayLicenceEndedMessage,
-    id: user.id,
     lastSignedIn: _lastSignedIn(user),
     licences: formattedLicences,
     pageTitle: 'User details',
