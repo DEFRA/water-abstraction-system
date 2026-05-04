@@ -286,7 +286,7 @@ describe('Search - Search presenter', () => {
           col3Title: 'Last signed in',
           col3Value: '1 January 2001',
           exact: true,
-          link: '/system/users/external/user-1?back=search',
+          link: '/system/users/external/user-1/details?back=search',
           reference: 'TESTSEARCH01@example.gov.uk',
           statusTag: 'enabled',
           type: 'User'
@@ -352,7 +352,7 @@ describe('Search - Search presenter', () => {
           col3Title: 'Last signed in',
           col3Value: '1 January 2001',
           exact: false,
-          link: '/system/users/external/user-2?back=search',
+          link: '/system/users/external/user-2/details?back=search',
           reference: 'TESTSEARCH02@example.gov.uk',
           statusTag: 'enabled',
           type: 'User'
