@@ -30,7 +30,7 @@ function _link(user) {
     return `/system/users/internal/${id}/details`
   }
 
-  return `/system/users/external/${id}`
+  return `/system/users/external/${id}/details`
 }
 
 function _links(scope) {
