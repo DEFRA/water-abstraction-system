@@ -16,9 +16,9 @@ const UserHelper = require('../../../support/helpers/user.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
-const FetchUserDetailsService = require('../../../../app/services/users/external/fetch-user-details.service.js')
+const FetchUserDetailsDal = require('../../../../app/dal/users/external/fetch-user-details.dal.js')
 
-describe('Users - External - Fetch User Details service', () => {
+describe('Users - External - Fetch User Details DAL', () => {
   let licence
   let licenceDocumentHeader
   let licenceEntityRole
@@ -51,7 +51,7 @@ describe('Users - External - Fetch User Details service', () => {
 
   describe('when called', () => {
     it('returns the requested user', async () => {
-      const result = await FetchUserDetailsService.go(user.id)
+      const result = await FetchUserDetailsDal.go(user.id)
 
       expect(result).to.equal({
         application: user.application,

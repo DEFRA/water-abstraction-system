@@ -6,7 +6,7 @@
  */
 
 const FetchLicencesDal = require('../../../dal/users/external/fetch-licences.dal.js')
-const FetchUserDetailsService = require('./fetch-user-details.service.js')
+const FetchUserDetailsDal = require('../../../dal/users/external/fetch-user-details.dal.js')
 const DetailsPresenter = require('../../../presenters/users/external/details.presenter.js')
 
 /**
@@ -19,7 +19,7 @@ const DetailsPresenter = require('../../../presenters/users/external/details.pre
  * @returns {Promise<object>} The view data for the external user page
  */
 async function go(id, auth, back = 'users') {
-  const user = await FetchUserDetailsService.go(id)
+  const user = await FetchUserDetailsDal.go(id)
 
   let licences = []
 
