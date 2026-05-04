@@ -13,7 +13,7 @@ const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
 const FetchUserDal = require('../../../../app/dal/users/fetch-user.dal.js')
-const FetchVerificationsService = require('../../../../app/services/users/external/fetch-verifications.service.js')
+const FetchVerificationsDal = require('../../../../app/dal/users/external/fetch-verifications.dal.js')
 
 // Thing under test
 const ViewVerificationsService = require('../../../../app/services/users/external/view-verifications.service.js')
@@ -30,7 +30,7 @@ describe('Users - External - View Verifications service', () => {
     user = { id, licenceEntityId: 'b2c55396-9bbb-448d-85e7-2be1dbefc02b', username }
 
     Sinon.stub(FetchUserDal, 'go').resolves(user)
-    Sinon.stub(FetchVerificationsService, 'go').resolves({
+    Sinon.stub(FetchVerificationsDal, 'go').resolves({
       verifications: [],
       totalNumber: 0
     })

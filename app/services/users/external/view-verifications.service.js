@@ -5,7 +5,7 @@
  * @module ViewVerificationsService
  */
 
-const FetchVerificationsService = require('./fetch-verifications.service.js')
+const FetchVerificationsDal = require('../../../dal/users/external/fetch-verifications.dal.js')
 const FetchUserService = require('../../../dal/users/fetch-user.dal.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 const VerificationsPresenter = require('../../../presenters/users/external/verifications.presenter.js')
@@ -22,7 +22,7 @@ const VerificationsPresenter = require('../../../presenters/users/external/verif
 async function go(id, page, back = 'users') {
   const user = await FetchUserService.go(id)
 
-  const { verifications, totalNumber } = await FetchVerificationsService.go(user.licenceEntityId, page)
+  const { verifications, totalNumber } = await FetchVerificationsDal.go(user.licenceEntityId, page)
 
   const pageData = VerificationsPresenter.go(user, verifications, back)
 

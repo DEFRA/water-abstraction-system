@@ -20,9 +20,9 @@ const { today } = require('../../../../app/lib/general.lib.js')
 const { yesterday } = require('../../../support/general.js')
 
 // Thing under test
-const FetchVerificationsService = require('../../../../app/services/users/external/fetch-verifications.service.js')
+const FetchVerificationsDal = require('../../../../app/dal/users/external/fetch-verifications.dal.js')
 
-describe('Users - External - Fetch Verifications service', () => {
+describe('Users - External - Fetch Verifications DAL', () => {
   let licenceData1
   let licenceData2
   let licenceData3
@@ -82,7 +82,7 @@ describe('Users - External - Fetch Verifications service', () => {
 
   describe('when the user has verifications', () => {
     it('returns the matching verifications and the total', async () => {
-      const result = await FetchVerificationsService.go(user.licenceEntityId)
+      const result = await FetchVerificationsDal.go(user.licenceEntityId)
 
       expect(result).to.equal({
         totalNumber: 3,
@@ -206,7 +206,7 @@ describe('Users - External - Fetch Verifications service', () => {
 
   describe('when the user has no verifications', () => {
     it('returns an empty array and zero', async () => {
-      const result = await FetchVerificationsService.go('c02ac8b8-e5d4-41f3-b3df-3a370c95ff0a')
+      const result = await FetchVerificationsDal.go('c02ac8b8-e5d4-41f3-b3df-3a370c95ff0a')
 
       expect(result).to.equal({ verifications: [], totalNumber: 0 })
     })

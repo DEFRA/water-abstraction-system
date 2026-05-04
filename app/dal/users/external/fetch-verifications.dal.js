@@ -2,7 +2,7 @@
 
 /**
  * Fetches verifications for an external user on the `/users/external/{id}/verifications` page
- * @module FetchVerificationsService
+ * @module FetchVerificationsDal
  */
 
 const UserVerificationModel = require('../../../models/user-verification.model.js')
