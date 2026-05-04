@@ -41,6 +41,7 @@ describe('Users - External - Details Presenter', () => {
         href: '/system/users',
         text: 'Go back to users'
       },
+      backQueryString: null,
       displayLicenceEndedMessage: true,
       id: user.id,
       lastSignedIn: '6 October 2022 at 10:00:00',
@@ -103,6 +104,28 @@ describe('Users - External - Details Presenter', () => {
           href: '/',
           text: 'Go back to search'
         })
+      })
+    })
+  })
+
+  describe('the "backQueryString" property', () => {
+    describe('when the "back" query parameter is set to "users"', () => {
+      it('returns null', () => {
+        const result = DetailsPresenter.go(user, licences, viewingUserScope, back)
+
+        expect(result.backQueryString).to.be.null()
+      })
+    })
+
+    describe('when the "back" query parameter is not set to "users"', () => {
+      beforeEach(() => {
+        back = 'search'
+      })
+
+      it('returns a link to the search page', () => {
+        const result = DetailsPresenter.go(user, licences, viewingUserScope, back)
+
+        expect(result.backQueryString).to.equal(`?back=${back}`)
       })
     })
   })

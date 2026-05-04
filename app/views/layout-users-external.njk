@@ -12,7 +12,7 @@
       <ul class="x-govuk-sub-navigation__section">
         <li
           class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'details' %}x-govuk-sub-navigation__section-item--current{% endif %}">
-            <a class="x-govuk-sub-navigation__link" href="details"
+            <a class="x-govuk-sub-navigation__link" href="details{{ backQueryString }}"
               {% if activeSecondaryNav === 'details' %}aria-current="page"{% endif %}>
             User details
           </a>
@@ -20,7 +20,7 @@
 
         <li
           class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'verifications' %}x-govuk-sub-navigation__section-item--current{% endif %}">
-            <a class="x-govuk-sub-navigation__link" href="verifications"
+            <a class="x-govuk-sub-navigation__link" href="verifications{{ backQueryString }}"
               {% if activeSecondaryNav === 'verifications' %}aria-current="page"{% endif %}>
             Verifications
           </a>

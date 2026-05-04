@@ -40,6 +40,7 @@ function go(user, licences, viewingUserScope, back) {
 
   return {
     backLink: _backLink(back),
+    backQueryString: _backQueryString(back),
     displayLicenceEndedMessage,
     id: user.id,
     lastSignedIn: _lastSignedIn(user),
@@ -65,6 +66,14 @@ function _backLink(back) {
     href: '/',
     text: 'Go back to search'
   }
+}
+
+function _backQueryString(back) {
+  if (back === 'users') {
+    return null
+  }
+
+  return `?back=${back}`
 }
 
 function _userLicences(licences) {
