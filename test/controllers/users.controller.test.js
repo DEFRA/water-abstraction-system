@@ -167,15 +167,21 @@ describe('Users controller', () => {
         options = _getOptions(`/users/external/${id}/details`, { scope: [], user: { id } })
 
         Sinon.stub(ViewExternalDetailsService, 'go').resolves({
+          activeNavBar: 'users',
+          activeSecondaryNav: 'details',
           backLink: {
-            href: '/',
-            text: 'Go back to search'
+            href: '/system/users',
+            text: 'Go back to users'
           },
-          companies: [],
+          displayLicenceEndedMessage: false,
           id,
           lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
-          pageTitle: 'User external@example.co.uk',
-          pageTitleCaption: 'External',
+          licences: [],
+          pageTitle: 'User details',
+          pageTitleCaption: 'external@example.co.uk',
+          permissions: 'None',
+          roles: [],
+          showEditButton: true,
           status: 'enabled'
         })
       })
@@ -184,7 +190,7 @@ describe('Users controller', () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('External')
+        expect(response.payload).to.contain('User details')
       })
     })
 
@@ -228,8 +234,8 @@ describe('Users controller', () => {
             text: 'Go back to users'
           },
           notifications: [],
-          pageTitle: 'Communications for carol.shaw@wrls.gov.uk',
-          pageTitleCaption: 'Internal'
+          pageTitle: 'Communications',
+          pageTitleCaption: 'carol.shaw@wrls.gov.uk'
         })
       })
 
@@ -237,7 +243,7 @@ describe('Users controller', () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Communications for carol.shaw@wrls.gov.uk')
+        expect(response.payload).to.contain('Communications')
       })
     })
   })
@@ -252,14 +258,15 @@ describe('Users controller', () => {
           activeNavBar: 'users',
           activeSecondaryNav: 'details',
           backLink: {
-            href: '/',
-            text: 'Go back to search'
+            href: '/system/users',
+            text: 'Go back to users'
           },
           id,
           lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
-          pageTitle: 'User basic.access@wrls.gov.uk',
-          pageTitleCaption: 'Internal',
+          pageTitle: 'User details',
+          pageTitleCaption: 'basic.access@wrls.gov.uk',
           permissions: 'Basic access',
+          roles: [],
           status: 'enabled'
         })
       })
@@ -268,7 +275,7 @@ describe('Users controller', () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Internal')
+        expect(response.payload).to.contain('User details')
       })
     })
 
