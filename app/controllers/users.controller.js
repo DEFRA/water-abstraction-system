@@ -29,6 +29,12 @@ async function index(request, h) {
   return h.view('users/index.njk', pageData)
 }
 
+async function submitExternalDetails(request, h) {
+  const { id } = request.params
+
+  return _redirectToLegacy(id, h)
+}
+
 async function submitIndex(request, h) {
   const {
     auth,
@@ -63,12 +69,6 @@ async function submitProfileDetails(request, h) {
   }
 
   return h.redirect('/system/users/me/profile-details')
-}
-
-async function submitUserExternal(request, h) {
-  const { id } = request.params
-
-  return _redirectToLegacy(id, h)
 }
 
 async function viewExternalDetails(request, h) {
@@ -139,9 +139,9 @@ async function _redirectToLegacy(id, h) {
 
 module.exports = {
   index,
+  submitExternalDetails,
   submitIndex,
   submitProfileDetails,
-  submitUserExternal,
   submitInternalDetails,
   viewExternalDetails,
   viewNotification,

@@ -36,9 +36,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/users/external/{id}',
+    path: '/users/external/{id}/details',
     options: {
-      handler: UsersController.submitUserExternal
+      handler: UsersController.submitExternalDetails
     }
   },
   {

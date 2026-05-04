@@ -191,7 +191,7 @@ describe('Users controller', () => {
     describe('POST', () => {
       beforeEach(() => {
         id = generateUUID()
-        postOptions = postRequestOptions(`/users/external/${id}`, {})
+        postOptions = postRequestOptions(`/users/external/${id}/details`, {})
       })
 
       describe('when the request succeeds', () => {
