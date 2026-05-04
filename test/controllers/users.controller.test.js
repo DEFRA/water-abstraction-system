@@ -20,6 +20,7 @@ const IndexUsersService = require('../../app/services/users/index-users.service.
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
 const ViewExternalDetailsService = require('../../app/services/users/external/view-details.service.js')
+const ViewExternalVerificationsService = require('../../app/services/users/external/view-verifications.service.js')
 const ViewInternalCommunicationsService = require('../../app/services/users/internal/view-communications.service.js')
 const ViewInternalDetailsService = require('../../app/services/users/internal/view-details.service.js')
 const ViewNotificationService = require('../../app/services/users/view-notification.service.js')
@@ -173,8 +174,8 @@ describe('Users controller', () => {
             href: '/system/users',
             text: 'Go back to users'
           },
+          backQueryString: null,
           displayLicenceEndedMessage: false,
-          id,
           lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
           licences: [],
           pageTitle: 'User details',
@@ -211,6 +212,40 @@ describe('Users controller', () => {
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/user/456/status`)
         })
+      })
+    })
+  })
+
+  describe('/users/external/{id}/verifications', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        id = generateUUID()
+        options = _getOptions(`/users/external/${id}/verifications`, { scope: [], user: { id } })
+
+        Sinon.stub(ViewExternalVerificationsService, 'go').resolves({
+          activeNavBar: 'users',
+          activeSecondaryNav: 'verifications',
+          pagination: {
+            currentPageNumber: 1,
+            numberOfPages: 0,
+            showingMessage: 'Showing all 0 verifications'
+          },
+          backLink: {
+            href: '/system/users',
+            text: 'Go back to users'
+          },
+          backQueryString: null,
+          pageTitle: 'Verifications',
+          pageTitleCaption: 'external@example.co.uk',
+          verifications: []
+        })
+      })
+
+      it('returns the external user page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Verifications')
       })
     })
   })

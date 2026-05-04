@@ -10,6 +10,7 @@ const IndexUsersService = require('../services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../services/users/submit-profile-details.service.js')
 const ViewExternalDetailsService = require('../services/users/external/view-details.service.js')
+const ViewExternalVerificationsService = require('../services/users/external/view-verifications.service.js')
 const ViewInternalCommunicationsService = require('../services/users/internal/view-communications.service.js')
 const ViewInternalDetailsService = require('../services/users/internal/view-details.service.js')
 const ViewNotificationService = require('../services/users/view-notification.service.js')
@@ -87,6 +88,17 @@ async function viewExternalDetails(request, h) {
   return h.view('users/external/details.njk', pageData)
 }
 
+async function viewExternalVerifications(request, h) {
+  const {
+    params: { id },
+    query: { back, page }
+  } = request
+
+  const pageData = await ViewExternalVerificationsService.go(id, page, back)
+
+  return h.view('users/external/verifications.njk', pageData)
+}
+
 async function viewInternalCommunications(request, h) {
   const {
     params: { id },
@@ -144,6 +156,7 @@ module.exports = {
   submitProfileDetails,
   submitInternalDetails,
   viewExternalDetails,
+  viewExternalVerifications,
   viewNotification,
   viewProfileDetails,
   viewInternalCommunications,
