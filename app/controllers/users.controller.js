@@ -9,11 +9,11 @@ const FetchLegacyIdDal = require('../dal/users/fetch-legacy-id.dal.js')
 const IndexUsersService = require('../services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../services/users/submit-profile-details.service.js')
+const ViewExternalDetailsService = require('../services/users/external/view-details.service.js')
 const ViewInternalCommunicationsService = require('../services/users/internal/view-communications.service.js')
 const ViewInternalDetailsService = require('../services/users/internal/view-details.service.js')
 const ViewNotificationService = require('../services/users/view-notification.service.js')
 const ViewProfileDetailsService = require('../services/users/view-profile-details.service.js')
-const ViewUserExternalService = require('../services/users/external/view-user.service.js')
 
 const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
 
@@ -71,6 +71,22 @@ async function submitUserExternal(request, h) {
   return _redirectToLegacy(id, h)
 }
 
+async function viewExternalDetails(request, h) {
+  const {
+    auth,
+    params: { id },
+    query: { back }
+  } = request
+
+  if (!FeatureFlagsConfig.enableUsersManagement) {
+    return _redirectToLegacy(id, h)
+  }
+
+  const pageData = await ViewExternalDetailsService.go(id, auth, back)
+
+  return h.view('users/external/details.njk', pageData)
+}
+
 async function viewInternalCommunications(request, h) {
   const {
     params: { id },
@@ -115,22 +131,6 @@ async function viewProfileDetails(request, h) {
   return h.view('users/profile-details.njk', pageData)
 }
 
-async function viewUserExternal(request, h) {
-  const {
-    auth,
-    params: { id },
-    query: { back }
-  } = request
-
-  if (!FeatureFlagsConfig.enableUsersManagement) {
-    return _redirectToLegacy(id, h)
-  }
-
-  const pageData = await ViewUserExternalService.go(id, auth, back)
-
-  return h.view('users/external/view-user.njk', pageData)
-}
-
 async function _redirectToLegacy(id, h) {
   const userId = await FetchLegacyIdDal.go(id)
 
@@ -143,9 +143,9 @@ module.exports = {
   submitProfileDetails,
   submitUserExternal,
   submitInternalDetails,
+  viewExternalDetails,
   viewNotification,
   viewProfileDetails,
-  viewUserExternal,
   viewInternalCommunications,
   viewInternalDetails
 }

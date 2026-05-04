@@ -19,11 +19,11 @@ const FetchLegacyIdDal = require('../../app/dal/users/fetch-legacy-id.dal.js')
 const IndexUsersService = require('../../app/services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
+const ViewExternalDetailsService = require('../../app/services/users/external/view-details.service.js')
 const ViewInternalCommunicationsService = require('../../app/services/users/internal/view-communications.service.js')
 const ViewInternalDetailsService = require('../../app/services/users/internal/view-details.service.js')
 const ViewNotificationService = require('../../app/services/users/view-notification.service.js')
 const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
-const ViewUserExternalService = require('../../app/services/users/external/view-user.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -160,13 +160,13 @@ describe('Users controller', () => {
     })
   })
 
-  describe('/users/external/{id}', () => {
+  describe('/users/external/{id}/details', () => {
     describe('GET', () => {
       beforeEach(async () => {
         id = generateUUID()
-        options = _getOptions(`/users/external/${id}`, { scope: [], user: { id } })
+        options = _getOptions(`/users/external/${id}/details`, { scope: [], user: { id } })
 
-        Sinon.stub(ViewUserExternalService, 'go').resolves({
+        Sinon.stub(ViewExternalDetailsService, 'go').resolves({
           backLink: {
             href: '/',
             text: 'Go back to search'
