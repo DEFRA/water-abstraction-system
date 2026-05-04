@@ -70,8 +70,8 @@ describe('Users - External - Details Presenter', () => {
           status: null
         }
       ],
-      pageTitle: 'User external@example.co.uk',
-      pageTitleCaption: 'External',
+      pageTitle: 'User details',
+      pageTitleCaption: user.username,
       permissions: 'None',
       roles: [],
       showEditButton: true,
