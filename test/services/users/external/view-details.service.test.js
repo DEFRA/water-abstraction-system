@@ -13,13 +13,12 @@ const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
 const FetchLicencesService = require('../../../../app/services/users/external/fetch-licences.service.js')
-const FetchOutstandingVerificationsService = require('../../../../app/services/users/external/fetch-outstanding-verifications.service.js')
-const FetchUserService = require('../../../../app/services/users/external/fetch-user.service.js')
+const FetchUserDetailsService = require('../../../../app/services/users/external/fetch-user-details.service.js')
 
 // Thing under test
-const ViewUserService = require('../../../../app/services/users/external/view-user.service.js')
+const ViewDetailsService = require('../../../../app/services/users/external/view-details.service.js')
 
-describe('Users - External - View User service', () => {
+describe('Users - External - View Details service', () => {
   const auth = {
     credentials: { scope: ['manage_accounts'] }
   }
@@ -28,9 +27,8 @@ describe('Users - External - View User service', () => {
   let back
 
   beforeEach(() => {
-    Sinon.stub(FetchUserService, 'go').resolves(user)
+    Sinon.stub(FetchUserDetailsService, 'go').resolves(user)
     Sinon.stub(FetchLicencesService, 'go').resolves([])
-    Sinon.stub(FetchOutstandingVerificationsService, 'go').resolves([])
   })
 
   afterEach(() => {
@@ -39,10 +37,11 @@ describe('Users - External - View User service', () => {
 
   describe('when called', () => {
     it('returns page data for the external user view', async () => {
-      const result = await ViewUserService.go(user.id, auth)
+      const result = await ViewDetailsService.go(user.id, auth)
 
       expect(result).to.equal({
         activeNavBar: 'users',
+        activeSecondaryNav: 'details',
         backLink: {
           href: '/system/users',
           text: 'Go back to users'
@@ -50,8 +49,6 @@ describe('Users - External - View User service', () => {
         displayLicenceEndedMessage: false,
         id: user.id,
         lastSignedIn: '6 October 2022 at 10:00:00',
-        licences: [],
-        outstandingVerifications: [],
         pageTitle: 'User external@example.co.uk',
         pageTitleCaption: 'External',
         permissions: 'None',
@@ -64,7 +61,7 @@ describe('Users - External - View User service', () => {
     describe('the "activeNavBar" property', () => {
       describe('when the "back" query parameter is "undefined"', () => {
         it('defaults to ""users" and returns "users"', async () => {
-          const result = await ViewUserService.go(user.id, auth, back)
+          const result = await ViewDetailsService.go(user.id, auth, back)
 
           expect(result.activeNavBar).to.equal('users')
         })
@@ -76,7 +73,7 @@ describe('Users - External - View User service', () => {
         })
 
         it('returns "search"', async () => {
-          const result = await ViewUserService.go(user.id, auth, back)
+          const result = await ViewDetailsService.go(user.id, auth, back)
 
           expect(result.activeNavBar).to.equal('search')
         })
