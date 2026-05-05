@@ -101,7 +101,7 @@ describe('Notices - Index Notices presenter', () => {
           reference: notices[6].referenceCode,
           sentBy: 'admin-internal@wrls.gov.uk',
           status: 'sent',
-          type: 'Returns invitation'
+          type: 'Renewals invitation'
         },
         {
           createdDate: '25 March 2025',
@@ -110,13 +110,22 @@ describe('Notices - Index Notices presenter', () => {
           reference: notices[7].referenceCode,
           sentBy: 'admin-internal@wrls.gov.uk',
           status: 'sent',
-          type: 'Paper return'
+          type: 'Returns invitation'
         },
         {
           createdDate: '25 March 2025',
           link: `/system/notices/${notices[8].id}`,
           recipients: notices[8].recipientCount,
           reference: notices[8].referenceCode,
+          sentBy: 'admin-internal@wrls.gov.uk',
+          status: 'sent',
+          type: 'Paper return'
+        },
+        {
+          createdDate: '25 March 2025',
+          link: `/system/notices/${notices[9].id}`,
+          recipients: notices[9].recipientCount,
+          reference: notices[9].referenceCode,
           sentBy: 'admin-internal@wrls.gov.uk',
           status: 'sent',
           type: 'Returns reminder'
@@ -146,9 +155,10 @@ describe('Notices - Index Notices presenter', () => {
 
           expect(results.notices[4].type).to.equal('HOF warning')
           expect(results.notices[5].type).to.equal('Renewal')
-          expect(results.notices[6].type).to.equal('Returns invitation')
-          expect(results.notices[7].type).to.equal('Paper return')
-          expect(results.notices[8].type).to.equal('Returns reminder')
+          expect(results.notices[6].type).to.equal('Renewals invitation')
+          expect(results.notices[7].type).to.equal('Returns invitation')
+          expect(results.notices[8].type).to.equal('Paper return')
+          expect(results.notices[9].type).to.equal('Returns reminder')
         })
       })
     })
