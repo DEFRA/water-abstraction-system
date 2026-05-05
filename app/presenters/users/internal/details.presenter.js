@@ -1,17 +1,15 @@
 'use strict'
 
 /**
- * Formats data for internal users on the `/users/internal/{id}` page
+ * Formats data for internal users on the `/users/internal/{id}/details` page
  * @module UserPresenter
  */
 
 const { compareStrings } = require('../../../lib/general.lib.js')
 const { formatLongDateTime, sentenceCase } = require('../../base.presenter.js')
 
-const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
-
 /**
- * Formats data for internal users on the `/users/internal/{id}` page
+ * Formats data for internal users on the `/users/internal/{id}/details` page
  *
  * @param {module:UserModel} user - The user instance
  *
@@ -21,28 +19,17 @@ function go(user) {
   const { id, username } = user
 
   return {
-    backLink: _backLink(),
+    backLink: {
+      href: '/system/users',
+      text: 'Go back to users'
+    },
     id,
     lastSignedIn: _lastSignedIn(user),
-    pageTitle: `User ${username}`,
-    pageTitleCaption: 'Internal',
+    pageTitle: 'User details',
+    pageTitleCaption: username,
     permissions: user.$permissions().label,
     roles: _roles(user),
     status: user.$status()
-  }
-}
-
-function _backLink() {
-  if (FeatureFlagsConfig.enableUsersView) {
-    return {
-      href: '/system/users',
-      text: 'Go back to users'
-    }
-  }
-
-  return {
-    href: '/',
-    text: 'Go back to search'
   }
 }
 

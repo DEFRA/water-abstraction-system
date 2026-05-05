@@ -15,13 +15,15 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
-const FetchLegacyIdService = require('../../app/services/users/fetch-legacy-id.service.js')
+const FetchLegacyIdDal = require('../../app/dal/users/fetch-legacy-id.dal.js')
 const IndexUsersService = require('../../app/services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
+const ViewInternalCommunicationsService = require('../../app/services/users/internal/view-communications.service.js')
+const ViewInternalDetailsService = require('../../app/services/users/internal/view-details.service.js')
+const ViewNotificationService = require('../../app/services/users/view-notification.service.js')
 const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
 const ViewUserExternalService = require('../../app/services/users/external/view-user.service.js')
-const ViewUserInternalService = require('../../app/services/users/internal/view-user.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -29,6 +31,7 @@ const { init } = require('../../app/server.js')
 describe('Users controller', () => {
   let id
   let options
+  let notificationId
   let postOptions
   let server
 
@@ -193,7 +196,7 @@ describe('Users controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(FetchLegacyIdService, 'go').returns(456)
+          Sinon.stub(FetchLegacyIdDal, 'go').returns(456)
         })
 
         it('redirects to the legacy user page', async () => {
@@ -206,13 +209,48 @@ describe('Users controller', () => {
     })
   })
 
-  describe('/users/internal/{id}', () => {
+  describe('/users/internal/{id}/communications', () => {
     describe('GET', () => {
       beforeEach(async () => {
         id = generateUUID()
-        options = _getOptions(`/users/internal/${id}`, { scope: ['manage_accounts'], user: { id } })
+        options = _getOptions(`/users/internal/${id}/communications`, { scope: ['manage_accounts'], user: { id } })
 
-        Sinon.stub(ViewUserInternalService, 'go').resolves({
+        Sinon.stub(ViewInternalCommunicationsService, 'go').resolves({
+          activeNavBar: 'users',
+          activeSecondaryNav: 'communications',
+          pagination: {
+            currentPageNumber: 1,
+            numberOfPages: 0,
+            showingMessage: 'Showing all 0 communications'
+          },
+          backLink: {
+            href: `/system/users`,
+            text: 'Go back to users'
+          },
+          notifications: [],
+          pageTitle: 'Communications for carol.shaw@wrls.gov.uk',
+          pageTitleCaption: 'Internal'
+        })
+      })
+
+      it('returns the internal user page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Communications for carol.shaw@wrls.gov.uk')
+      })
+    })
+  })
+
+  describe('/users/internal/{id}/details', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        id = generateUUID()
+        options = _getOptions(`/users/internal/${id}/details`, { scope: ['manage_accounts'], user: { id } })
+
+        Sinon.stub(ViewInternalDetailsService, 'go').resolves({
+          activeNavBar: 'users',
+          activeSecondaryNav: 'details',
           backLink: {
             href: '/',
             text: 'Go back to search'
@@ -237,12 +275,12 @@ describe('Users controller', () => {
     describe('POST', () => {
       beforeEach(() => {
         id = generateUUID()
-        postOptions = postRequestOptions(`/users/internal/${id}`, {})
+        postOptions = postRequestOptions(`/users/internal/${id}/details`, {})
       })
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(FetchLegacyIdService, 'go').returns(456)
+          Sinon.stub(FetchLegacyIdDal, 'go').returns(456)
         })
 
         it('redirects to the legacy user page', async () => {
@@ -251,6 +289,42 @@ describe('Users controller', () => {
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/user/456/status`)
         })
+      })
+    })
+  })
+
+  describe('/users/internal/{id}/notifications/{notificationId}', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        id = generateUUID()
+        notificationId = generateUUID()
+        options = _getOptions(`/users/internal/${id}/notifications/${notificationId}`, {
+          scope: ['manage_accounts'],
+          user: { id }
+        })
+
+        Sinon.stub(ViewNotificationService, 'go').resolves({
+          activeNavBar: 'users',
+          backLink: {
+            href: `/system/users/internal/${id}/communications`,
+            text: 'Go back to user'
+          },
+          contents: '## This content is protected.',
+          errorDetails: null,
+          messageType: 'email',
+          pageTitle: 'Password reset',
+          pageTitleCaption: 'carol.shaw@wrls.gov.uk',
+          sentDate: '18 April 2025',
+          sentTo: 'carol.shaw@wrls.gov.uk',
+          status: 'sent'
+        })
+      })
+
+      it('returns the internal user page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Password reset')
       })
     })
   })

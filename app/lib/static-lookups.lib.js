@@ -682,6 +682,53 @@ const userPermissions = Object.freeze({
   }
 })
 
+const userNotificationTypes = Object.freeze({
+  email_change_email_in_use_email: {
+    label: 'Change email address - email already in use',
+    protected: false
+  },
+  email_change_verification_code_email: {
+    label: 'Change email address - verification code',
+    protected: false
+  },
+  existing_user_verification_email: {
+    label: 'Existing user verification',
+    protected: true
+  },
+  expiry_notification_email: {
+    label: 'Expiry notification',
+    protected: false
+  },
+  new_internal_user_email: {
+    label: 'New internal user',
+    protected: true
+  },
+  new_user_verification_email: {
+    label: 'New user verification',
+    protected: true
+  },
+  password_locked_email: {
+    label: 'Password locked',
+    protected: true
+  },
+  password_reset_email: {
+    label: 'Password reset',
+    protected: true
+  },
+  security_code_letter: {
+    label: 'Security code letter',
+    protected: false
+  },
+  share_existing_user: {
+    label: 'Share existing user',
+    protected: false
+  },
+  share_new_user: {
+    label: 'Share new user',
+    protected: true
+  }
+})
+
 module.exports = {
   billRunStatuses,
   billRunTypes,
@@ -710,5 +757,6 @@ module.exports = {
   quarterlyReturnPeriods,
   unitConversion,
   unitNames,
-  userPermissions
+  userPermissions,
+  userNotificationTypes
 }
