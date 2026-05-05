@@ -174,7 +174,7 @@ describe('Users controller', () => {
             href: '/system/users',
             text: 'Go back to users'
           },
-          backQueryString: null,
+          backQueryString: '?back=users',
           displayLicenceEndedMessage: false,
           lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
           licences: [],
@@ -234,7 +234,7 @@ describe('Users controller', () => {
             href: '/system/users',
             text: 'Go back to users'
           },
-          backQueryString: null,
+          backQueryString: '?back=users',
           pageTitle: 'Verifications',
           pageTitleCaption: 'external@example.co.uk',
           verifications: []
