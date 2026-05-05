@@ -21,7 +21,7 @@ describe('Users - Internal - Setup - User Email Presenter', () => {
   })
 
   describe('when called', () => {
-    it('returns page data for the view', () => {
+    it('correctly presents the data', () => {
       const result = UserEmailPresenter.go(session)
 
       expect(result).to.equal({
