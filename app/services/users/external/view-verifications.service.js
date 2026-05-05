@@ -6,7 +6,7 @@
  */
 
 const FetchVerificationsDal = require('../../../dal/users/external/fetch-verifications.dal.js')
-const FetchUserService = require('../../../dal/users/fetch-user.dal.js')
+const FetchUserDal = require('../../../dal/users/fetch-user.dal.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 const VerificationsPresenter = require('../../../presenters/users/external/verifications.presenter.js')
 
@@ -21,7 +21,7 @@ const VerificationsPresenter = require('../../../presenters/users/external/verif
  * @returns {Promise<object>} The view data for the external user page
  */
 async function go(id, auth, page, back = 'users') {
-  const user = await FetchUserService.go(id)
+  const user = await FetchUserDal.go(id)
 
   const { verifications, totalNumber } = await FetchVerificationsDal.go(user.licenceEntityId, page)
 
