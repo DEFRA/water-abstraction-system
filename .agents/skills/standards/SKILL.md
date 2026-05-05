@@ -1,29 +1,28 @@
 ---
-description: Standard skills and patterns the agent should apply when working in this codebase
+name: standards
+description: Standard skills and patterns an agent should apply when working in this codebase
 ---
 
-# Skill
+# Standards skill
 
 ## Context
 
-This document defines the standard skills the agent should apply consistently across all tasks. Skills are repeatable, quality-assured approaches to common engineering activities.
+This document defines the standards an agent must apply when reviewing or writing code in this project.
 
 ## Core principles
 
 - Solve the problem as stated — do not over-engineer or anticipate future requirements
 - Follow existing patterns in the codebase before introducing new ones
-- Verify work with lint and tests before marking a task complete
+- Verify work before marking a task complete
 - Run project commands in Docker (`docker compose exec dev ...`) or via VS Code tasks; do not run Node/NPM commands on the host
 
-## Skills
-
-### Reading code
+## Reading code
 
 - Read the full function and its callers before making changes
 - Check for existing utilities before writing new ones
 - Use `grep` / search to find all usages of a symbol before renaming or removing it
 
-### Writing code
+## Writing code
 
 - Match the style and conventions of the surrounding code
 - Every file must begin with `'use strict'`
@@ -36,21 +35,29 @@ This document defines the standard skills the agent should apply consistently ac
 - No error handling for scenarios that cannot happen
 - No abstractions for a single use case
 
-### Testing
+## Naming conventions
+
+- **Directories, JavaScript files, and Nunjucks templates**: `kebab-case` (e.g. `submit-application.njk`)
+  - JavaScript files include type in file name (e.g. `delete-session.dal.js` and `view-search.service.js`)
+- **Route paths (URLs)**: lowercase with hyphens (e.g. `/submit-application`)
+- **Environment variables**: `UPPER_SNAKE_CASE` (e.g. `DATABASE_HOST`)
+
+## Testing
 
 - Tests live in `test/` mirroring the `app/` structure
+- Test file names match the module they are testing with a `.test.js` extension (e.g. `delete-session.dal.test.js`)
 - Use `@hapi/lab` and `@hapi/code` — not Jest, Mocha, or Chai
 - Never leave `describe.only()` or `it.only()` in committed code — CI will fail on these
 - Test behaviour, not implementation
 - One assertion concept per `it` block
 
-### Database
+## Database
 
 - Migrations go in `db/migrations/`
 - Never modify an existing migration — always add a new one
 - Run `npm run migrate:test` to reset the test database after schema changes
 
-### Refactoring
+## Refactoring
 
 - Refactor in a separate commit from behaviour changes
 - Do not rename or restructure things incidentally while fixing bugs
@@ -59,7 +66,9 @@ This document defines the standard skills the agent should apply consistently ac
 
 Before completing any task:
 
-1. `docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system && npm run lint'` passes
-2. `docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system && npm test'` passes
-3. No `console.log`, `console.dir`, `describe.only`, or `it.only` present
-4. No unintended files changed
+1. Lint checks pass
+2. No 'alanisms' identified
+3. Tests pass
+4. No `console.log`, `console.dir`, `describe.only`, or `it.only` present
+5. No commented out code
+6. No unintended files changed

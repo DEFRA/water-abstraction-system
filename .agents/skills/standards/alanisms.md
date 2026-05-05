@@ -1,12 +1,15 @@
 ---
-description: Alanisms — non-negotiable code conventions that cannot be enforced by automation or linting
+name: alanisms
+description: Non-negotiable code conventions that cannot be enforced by automation or linting
 ---
 
 # Alanisms
 
-Quirky but non-negotiable code conventions from our lead engineer. Every agent must read this file and apply these rules — they cannot be enforced by automation or linting, so they require active judgement on every change.
+Quirky but non-negotiable code conventions from our lead engineer. They cannot be enforced by automation or linting, so they require active judgement on every change.
 
-### 1 — Object keys must be in alphabetical order
+> This file is a living document. New ones will be added as they are identified.
+
+## 1 — Object keys must be in alphabetical order
 
 All object literals must have their keys sorted A–Z.
 
@@ -28,7 +31,7 @@ return {
 
 This applies everywhere: return values, inline objects, `module.exports`, test assertions.
 
-### 2 — `require()` imports must be in alphabetical order by variable name
+## 2 — `require()` imports must be in alphabetical order by variable name
 
 Within each group (see rule 3), sort imports A–Z by variable name.
 
@@ -42,7 +45,7 @@ const express = require('express')
 const path = require('path')
 ```
 
-### 3 — External packages and internal dependencies must be in separate groups
+## 3 — External packages and internal dependencies must be in separate groups
 
 Group 1 is external packages (from `node_modules`). Group 2 is internal dependencies (relative paths). Separate the groups with a blank line. Each group is sorted alphabetically (rule 2).
 
@@ -59,7 +62,7 @@ const homePresenter = require('../presenters/home.presenter.js')
 const homeService = require('../services/home.service.js')
 ```
 
-### 4 — Blank line after variable declarations before the first statement
+## 4 — Blank line after variable declarations before the first statement
 
 A blank line must separate variable declarations from the first non-declaration statement. When mixing `const` and `let` declarations, each declaration kind must also be separated from the next by a blank line.
 
@@ -92,7 +95,7 @@ let lastLogin = new Date()
 await UserModel.query().insert({ lastLogin, username })
 ```
 
-### 5 — File structure order: `'use strict'`, then `@module` JSDoc, then imports
+## 5 — File structure order: `'use strict'`, then `@module` JSDoc, then imports
 
 Every file must follow this top-of-file order:
 
@@ -121,7 +124,3 @@ const FetchSessionDal = require('../../dal/fetch-session.dal.js')
 
 const FetchSessionDal = require('../../dal/fetch-session.dal.js')
 ```
-
----
-
-*This file is a living document. Add new Alanisms as Alan's standards are identified.*
