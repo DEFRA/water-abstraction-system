@@ -36,21 +36,17 @@ async function go(noticeId) {
     returnLogIds.push(...notification.returnLogIds)
   }
 
-  const sortedlicenceRefs = [...new Set(licences)].sort((referenceString, compareString) => {
-    return compareStrings(referenceString, compareString)
-  })
-  const sortedNotificationIds = notificationIds.sort((referenceString, compareString) => {
-    return compareStrings(referenceString, compareString)
-  })
-  const sortedReturnLogIds = [...new Set(returnLogIds)].sort((referenceString, compareString) => {
-    return compareStrings(referenceString, compareString)
-  })
-
   return {
     dueDate,
-    licenceRefs: sortedlicenceRefs,
-    notificationIds: sortedNotificationIds,
-    returnLogIds: sortedReturnLogIds
+    licenceRefs: [...new Set(licences)].sort((referenceString, compareString) => {
+      return compareStrings(referenceString, compareString)
+    }),
+    notificationIds: [...notificationIds].sort((referenceString, compareString) => {
+      return compareStrings(referenceString, compareString)
+    }),
+    returnLogIds: [...new Set(returnLogIds)].sort((referenceString, compareString) => {
+      return compareStrings(referenceString, compareString)
+    })
   }
 }
 
