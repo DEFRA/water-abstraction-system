@@ -15,7 +15,7 @@ const UserModel = require('../../models/user.model.js')
  * @returns {Promise<module:UserModel>} the requested user
  */
 async function go(id) {
-  return UserModel.query().findById(id).select(['id', 'username'])
+  return UserModel.query().findById(id).select(['id', 'licenceEntityId', 'username'])
 }
 
 module.exports = {

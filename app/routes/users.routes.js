@@ -29,16 +29,23 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/users/external/{id}',
+    path: '/users/external/{id}/details',
     options: {
-      handler: UsersController.viewUserExternal
+      handler: UsersController.viewExternalDetails
     }
   },
   {
     method: 'POST',
-    path: '/users/external/{id}',
+    path: '/users/external/{id}/details',
     options: {
-      handler: UsersController.submitUserExternal
+      handler: UsersController.submitExternalDetails
+    }
+  },
+  {
+    method: 'GET',
+    path: '/users/external/{id}/verifications',
+    options: {
+      handler: UsersController.viewExternalVerifications
     }
   },
   {

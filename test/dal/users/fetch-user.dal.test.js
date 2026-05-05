@@ -29,7 +29,7 @@ describe('Users - Internal - Fetch User DAL', () => {
     it('returns the requested user', async () => {
       const result = await FetchUserDal.go(user.id)
 
-      expect(result).to.equal({ id: user.id, username: user.username })
+      expect(result).to.equal({ id: user.id, licenceEntityId: null, username: user.username })
     })
   })
 })

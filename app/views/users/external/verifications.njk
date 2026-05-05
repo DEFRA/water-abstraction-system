@@ -1,0 +1,99 @@
+{% extends 'layout-users-external.njk' %}
+
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block pageContent %}
+  {% if verifications.length === 0 %}
+    <p data-test='no-licences-msg'>This user has no associated verifications.</p>
+  {% else %}
+    {% set rows = [] %}
+
+    {% for verification in verifications %}
+      {% set rowIndex = loop.index0 %}
+
+      {% if rowIndex > 0 %}
+        {% set lastCode = verifications[rowIndex - 1].code %}
+      {% else %}
+        {% set lastCode = null %}
+      {% endif %}
+
+      {% set row = []%}
+
+      {% if lastCode !== verification.code %}
+        {% set codeCell =
+          {
+            attributes: { 'data-test': 'verifications-code-' + rowIndex },
+            html: '<span class="govuk-!-font-weight-bold">' + verification.code + '</span>',
+            rowspan: verification.count
+          } %}
+
+        {% set row = (row.push(codeCell), row) %}
+
+        {% set createdOnCell =
+          {
+            attributes: { 'data-test': 'verifications-created-on' + rowIndex },
+            rowspan: verification.count,
+            text: verification.createdOn
+          } %}
+        {% set row = (row.push(createdOnCell), row) %}
+
+        {% set verifiedOnCell =
+          {
+            attributes: { 'data-test': 'verifications-verified-on' + rowIndex },
+            rowspan: verification.count,
+            text: verification.verifiedOn
+          } %}
+        {% set row = (row.push(verifiedOnCell), row) %}
+      {% endif %}
+
+      {% set verificationLicenceLink %}
+        <a class="govuk-link" href="{{ verification.link }}">{{ verification.licenceRef }}</a>
+      {% endset %}
+
+      {% set licenceRefCell =
+        {
+          attributes: { 'data-test': 'verifications-licence-ref' + rowIndex },
+          html: verificationLicenceLink
+        } %}
+      {% set row = (row.push(licenceRefCell), row) %}
+
+      {% set licenceHolderCell =
+        {
+          attributes: { 'data-test': 'verifications-licence-holder' + rowIndex },
+          text: verification.licenceHolder
+        } %}
+      {% set row = (row.push(licenceHolderCell), row) %}
+
+      {% set rows = (rows.push(row), rows) %}
+    {% endfor %}
+
+    {{ govukTable({
+      attributes: { 'data-test': 'verifications-table' },
+      caption: pagination.showingMessage,
+      firstCellIsHeader: false,
+      head: [
+        {
+          text: "Code"
+        },
+        {
+          text: "Created on"
+        },
+        {
+          text: "Verified on"
+        },
+        {
+          text: "Licence number"
+        },
+        {
+          text: "Licence holder"
+        }
+      ],
+      rows: rows
+    }) }}
+
+    {% if pagination.numberOfPages > 1 %}
+      {{ govukPagination(pagination.component) }}
+    {% endif %}
+  {% endif %}
+{% endblock %}

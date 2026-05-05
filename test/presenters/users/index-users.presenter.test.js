@@ -62,14 +62,14 @@ describe('Users - Index Users presenter', () => {
         },
         {
           email: users[1].username,
-          link: `/system/users/external/${users[1].id}`,
+          link: `/system/users/external/${users[1].id}/details`,
           permissions: 'Returns user',
           status: 'disabled',
           type: 'External'
         },
         {
           email: users[2].username,
-          link: `/system/users/external/${users[2].id}`,
+          link: `/system/users/external/${users[2].id}/details`,
           permissions: 'None',
           status: 'awaiting',
           type: 'External'
@@ -83,7 +83,7 @@ describe('Users - Index Users presenter', () => {
         },
         {
           email: users[4].username,
-          link: `/system/users/external/${users[4].id}`,
+          link: `/system/users/external/${users[4].id}/details`,
           permissions: 'Basic access',
           status: 'locked',
           type: 'External'
