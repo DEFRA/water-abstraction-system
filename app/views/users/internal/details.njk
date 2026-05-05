@@ -1,4 +1,4 @@
-{% extends 'layout.njk' %}
+{% extends 'layout-users.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
@@ -24,11 +24,13 @@
     ]
   }) }}
 
-  <form method="post">
-    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+  {% if status !== 'disabled' %}
+    <form method="post">
+      <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    {{ govukButton({ text: "Edit", preventDoubleClick: true }) }}
-  </form>
+      {{ govukButton({ text: "Edit", preventDoubleClick: true }) }}
+    </form>
+  {% endif %}
 
   <h3 class="govuk-heading-m">Roles</h3>
 

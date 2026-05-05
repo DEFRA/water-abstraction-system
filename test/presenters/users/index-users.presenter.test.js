@@ -55,7 +55,7 @@ describe('Users - Index Users presenter', () => {
       users: [
         {
           email: users[0].username,
-          link: `/system/users/internal/${users[0].id}`,
+          link: `/system/users/internal/${users[0].id}/details`,
           permissions: 'Basic access',
           status: 'enabled',
           type: 'Internal'
@@ -76,7 +76,7 @@ describe('Users - Index Users presenter', () => {
         },
         {
           email: users[3].username,
-          link: `/system/users/internal/${users[3].id}`,
+          link: `/system/users/internal/${users[3].id}/details`,
           permissions: 'Super user',
           status: 'enabled',
           type: 'Internal'

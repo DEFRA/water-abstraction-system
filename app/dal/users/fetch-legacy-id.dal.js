@@ -2,7 +2,7 @@
 
 /**
  * Fetches the legacy `userId` value for a user, needed to link to the legacy user management pages
- * @module FetchLegacyIdService
+ * @module FetchLegacyIdDal
  */
 
 const UserModel = require('../../models/user.model.js')
@@ -17,9 +17,9 @@ const UserModel = require('../../models/user.model.js')
  * So, we added a `id` field to the table, and intend to use that for all work we do in **system**. Until we have
  * migrated _all_ user functionality though, there are times we still need to access it.
  *
- * This service is intended to fetch the legacy ID for those times when only the new UUID has been provided.
+ * This DAL is intended to fetch the legacy ID for those times when only the new UUID has been provided.
  *
- * If all is well this service should be gone before anyone new to the team has to read this note!
+ * If all is well this DAL should be gone before anyone new to the team has to read this note!
  *
  * @param {number} id - The (legacy) numeric ID of the requested user, equating to the `user_id` field in the
  * database

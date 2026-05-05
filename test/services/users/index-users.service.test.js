@@ -13,7 +13,7 @@ const UsersFixture = require('../../support/fixtures/users.fixture.js')
 
 // Things to stub
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
-const FetchUsersService = require('../../../app/services/users/fetch-users.service.js')
+const FetchUsersDal = require('../../../app/dal/users/fetch-users.dal.js')
 
 // Thing under test
 const IndexUsersService = require('../../../app/services/users/index-users.service.js')
@@ -45,7 +45,7 @@ describe('Users - Index Users service', () => {
       const results = [UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess())]
 
       fetchResults = { results, total: 1 }
-      Sinon.stub(FetchUsersService, 'go').resolves(fetchResults)
+      Sinon.stub(FetchUsersDal, 'go').resolves(fetchResults)
     })
 
     it('returns page data for the view', async () => {
@@ -69,7 +69,7 @@ describe('Users - Index Users service', () => {
         users: [
           {
             email: fetchResults.results[0].username,
-            link: `/system/users/internal/${fetchResults.results[0].id}`,
+            link: `/system/users/internal/${fetchResults.results[0].id}/details`,
             permissions: 'Basic access',
             status: 'enabled',
             type: 'Internal'
@@ -84,7 +84,7 @@ describe('Users - Index Users service', () => {
     beforeEach(() => {
       // For the purposes of these tests the results don't matter
       fetchResults = { results: [], total: 0 }
-      Sinon.stub(FetchUsersService, 'go').resolves(fetchResults)
+      Sinon.stub(FetchUsersDal, 'go').resolves(fetchResults)
     })
 
     describe('and none were ever set or they were cleared', () => {

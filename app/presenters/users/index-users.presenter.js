@@ -29,7 +29,7 @@ function _link(user) {
   const { id } = user
 
   if (user.$internal()) {
-    return `/system/users/internal/${id}`
+    return `/system/users/internal/${id}/details`
   }
 
   return `/system/users/external/${id}`
