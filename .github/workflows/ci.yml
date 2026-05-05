@@ -139,7 +139,7 @@ jobs:
           npm test
 
       - name: Code coverage
-        uses: livewing/lcov-job-summary@v1.2.0
+        uses: livewing/lcov-job-summary@v1.3.0
         with:
           lcov: coverage/lcov.info
 
