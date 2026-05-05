@@ -5,6 +5,7 @@
  * @module SummaryPresenter
  */
 
+const { compareStrings } = require('../../lib/general.lib.js')
 const { formatLongDate, formatAbstractionDate } = require('../base.presenter.js')
 const { formatAbstractionAmounts } = require('./base-licences.presenter.js')
 
@@ -71,7 +72,7 @@ function _abstractionConditions(licenceVersionPurposes) {
   const uniqueConditions = [...new Set(allConditions)]
 
   // Sort them alphabetically
-  return uniqueConditions.sort()
+  return uniqueConditions.sort(compareStrings)
 }
 
 function _abstractionPeriods(licenceVersionPurposes) {
@@ -112,7 +113,9 @@ function _abstractionPoints(licenceVersionPurposes) {
   })
   const uniqueAbstractionPoints = [...new Set(abstractionPoints)]
 
-  return uniqueAbstractionPoints.sort()
+  return uniqueAbstractionPoints.sort((referenceString, compareString) => {
+    return compareStrings(referenceString, compareString)
+  })
 }
 
 function _abstractionPointsCaption(abstractionPoints) {

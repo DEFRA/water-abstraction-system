@@ -9,6 +9,7 @@ const NotifyConfig = require('../../../config/notify.config.js')
 const PreviousAndNextPresenter = require('../previous-and-next.presenter.js')
 const { formatLicencePoints, formatLicencePurposes, formatConditionTypes } = require('../licence.presenter.js')
 const { formatLongDate, formatVersionReason } = require('../base.presenter.js')
+const { compareStrings } = require('../../lib/general.lib.js')
 
 /**
  * Formats data for the `/licence-versions/{id}` page
@@ -187,11 +188,8 @@ function _removeDuplicatePointsById(points) {
   })
 }
 
-function _sortPointsByDescription(a, b) {
-  return a.description.localeCompare(b.description, 'en', {
-    sensitivity: 'base',
-    ignorePunctuation: true
-  })
+function _sortPointsByDescription(first, second) {
+  return compareStrings(first.description, second.description)
 }
 
 module.exports = {

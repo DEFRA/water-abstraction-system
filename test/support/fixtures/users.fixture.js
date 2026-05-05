@@ -11,7 +11,7 @@ const UserHelper = require('../helpers/user.helper.js')
 const UserModel = require('../../../app/models/user.model.js')
 const UserGroupHelper = require('../helpers/user-group.helper.js')
 const UserRoleHelper = require('../helpers/user-role.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { compareStrings, generateUUID } = require('../../../app/lib/general.lib.js')
 
 /**
  * Populates a `UserModel` instance as the 'admin-internal@wrls.gov.uk' user for testing purposes
@@ -199,8 +199,8 @@ function transformToFetchUserInternalResult(user) {
   })
 
   // Sort the roles to into alphabetical order
-  roles.sort((a, b) => {
-    return a.role.localeCompare(b.role)
+  roles.sort((first, second) => {
+    return compareStrings(first.role, second.role)
   })
 
   user.groups[0].roles = roles

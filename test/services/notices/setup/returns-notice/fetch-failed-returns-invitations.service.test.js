@@ -13,7 +13,7 @@ const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js'
 const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
 const NotificationHelper = require('../../../../support/helpers/notification.helper.js')
 const { futureDueDate } = require('../../../../../app/presenters/notices/base.presenter.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const { compareStrings, generateUUID } = require('../../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 
 // Thing under test
@@ -63,8 +63,14 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
           beforeEach(async () => {
             // The notifications will share some of the same licence references and return log IDs. We can then test
             // what the service returns doesn't contain duplicates
-            licenceRefs = [generateLicenceRef(), generateLicenceRef(), generateLicenceRef()].sort()
-            returnLogIds = [generateUUID(), generateUUID(), generateUUID()].sort()
+            licenceRefs = [generateLicenceRef(), generateLicenceRef(), generateLicenceRef()].sort(
+              (referenceString, compareString) => {
+                return compareStrings(referenceString, compareString)
+              }
+            )
+            returnLogIds = [generateUUID(), generateUUID(), generateUUID()].sort((referenceString, compareString) => {
+              return compareStrings(referenceString, compareString)
+            })
           })
 
           describe('and where their "due date" was calculated as today plus 28 days', () => {
@@ -98,7 +104,9 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
               expect(result).to.equal({
                 dueDate: futureDueDate('letter'),
                 licenceRefs,
-                notificationIds: [notifications[1].id, notifications[2].id].sort(),
+                notificationIds: [notifications[1].id, notifications[2].id].sort((referenceString, compareString) => {
+                  return compareStrings(referenceString, compareString)
+                }),
                 returnLogIds
               })
             })
@@ -135,7 +143,9 @@ describe('Notices - Setup - Returns Notice - Fetch Failed Returns Invitations se
               expect(result).to.equal({
                 dueDate: new Date('2025-04-28'),
                 licenceRefs,
-                notificationIds: [notifications[1].id, notifications[2].id].sort(),
+                notificationIds: [notifications[1].id, notifications[2].id].sort((referenceString, compareString) => {
+                  return compareStrings(referenceString, compareString)
+                }),
                 returnLogIds
               })
             })

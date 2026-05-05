@@ -7,6 +7,7 @@
 
 const ContactPresenter = require('./contact.presenter.js')
 const DatabaseConfig = require('../../../../config/database.config.js')
+const { compareStrings } = require('../../../lib/general.lib.js')
 const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
 
 const NOTIFICATION_TYPES = {
@@ -176,16 +177,8 @@ function _tableCaption(numberDisplayed, totalNumber) {
  * @private
  */
 function _sortRecipients(recipients) {
-  return recipients.sort((a, b) => {
-    if (a.contact[0] < b.contact[0]) {
-      return -1
-    }
-
-    if (a.contact[0] > b.contact[0]) {
-      return 1
-    }
-
-    return 0
+  return recipients.sort((first, second) => {
+    return compareStrings(first.contact[0], second.contact[0])
   })
 }
 

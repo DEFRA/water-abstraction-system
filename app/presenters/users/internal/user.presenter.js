@@ -5,6 +5,7 @@
  * @module UserPresenter
  */
 
+const { compareStrings } = require('../../../lib/general.lib.js')
 const { formatLongDateTime, sentenceCase } = require('../../base.presenter.js')
 
 const FeatureFlagsConfig = require('../../../../config/feature-flags.config.js')
@@ -87,8 +88,8 @@ function _roles(user) {
     roles.push({ description, name: _convertToSentenceCase(name) })
   }
 
-  roles.sort((a, b) => {
-    return a.name.localeCompare(b.name)
+  roles.sort((first, second) => {
+    return compareStrings(first.name, second.name)
   })
 
   return roles

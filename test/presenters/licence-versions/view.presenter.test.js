@@ -410,9 +410,9 @@ describe('Licence Versions - View presenter', () => {
             bgsReference: 'TL 14/123',
             category: 'Single Point',
             depth: '123',
-            description: 'ABSTRACTION POINT A',
+            description: "ABSTRACTION POINT 'C'",
             gridReference:
-              'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (ABSTRACTION POINT A)',
+              "Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (ABSTRACTION POINT 'C')",
             hydroInterceptDistance: '8.01',
             hydroOffsetDistance: '5.56',
             hydroReference: 'TL 14/133',
@@ -428,9 +428,9 @@ describe('Licence Versions - View presenter', () => {
             bgsReference: 'TL 14/123',
             category: 'Single Point',
             depth: '123',
-            description: "ABSTRACTION POINT 'C'",
+            description: 'ABSTRACTION POINT A',
             gridReference:
-              "Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (ABSTRACTION POINT 'C')",
+              'Within the area formed by the straight lines running between National Grid References SD 963 193, SD 963 193, SD 963 193 and SD 963 193 (ABSTRACTION POINT A)',
             hydroInterceptDistance: '8.01',
             hydroOffsetDistance: '5.56',
             hydroReference: 'TL 14/133',
