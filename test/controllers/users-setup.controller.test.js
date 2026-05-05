@@ -15,7 +15,7 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/users/internal/setup/initiate-session.service.js')
 const SubmitUserEmailService = require('../../app/services/users/internal/setup/submit-user-email.service.js')
-const UserEmailService = require('../../app/services/users/internal/setup/user-email.service.js')
+const ViewUserEmailService = require('../../app/services/users/internal/setup/view-user-email.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -71,7 +71,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/internal/setup/${sessionId}/user-email`, { scope: ['manage_accounts'] })
 
-        Sinon.stub(UserEmailService, 'go').resolves({
+        Sinon.stub(ViewUserEmailService, 'go').resolves({
           pageTitle: 'Enter an email address for the user'
         })
       })

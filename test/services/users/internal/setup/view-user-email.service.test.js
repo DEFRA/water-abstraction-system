@@ -15,9 +15,9 @@ const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
-const UserEmailService = require('../../../../../app/services/users/internal/setup/user-email.service.js')
+const ViewUserEmailService = require('../../../../../app/services/users/internal/setup/view-user-email.service.js')
 
-describe('Users - Internal - Setup - User Email Service', () => {
+describe('Users - Internal - Setup - View User Email Service', () => {
   let session
   let sessionData
 
@@ -35,7 +35,7 @@ describe('Users - Internal - Setup - User Email Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await UserEmailService.go(session.id)
+      const result = await ViewUserEmailService.go(session.id)
 
       expect(result).to.equal({
         backLink: {

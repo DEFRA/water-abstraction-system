@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates fetching and presenting the data for '/users/internal/setup/{sessionId}/user-email' page
- * @module UserEmailService
+ * @module ViewUserEmailService
  */
 
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')

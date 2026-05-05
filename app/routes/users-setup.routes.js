@@ -19,7 +19,7 @@ const routes = [
     method: 'GET',
     path: '/users/internal/setup/{sessionId}/user-email',
     options: {
-      handler: UsersSetupController.userEmail,
+      handler: UsersSetupController.viewUserEmail,
       auth: {
         access: {
           scope: ['manage_accounts']

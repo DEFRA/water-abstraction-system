@@ -7,7 +7,7 @@
 
 const InitiateSessionService = require('../services/users/internal/setup/initiate-session.service.js')
 const SubmitUserEmailService = require('../services/users/internal/setup/submit-user-email.service.js')
-const UserEmailService = require('../services/users/internal/setup/user-email.service.js')
+const ViewUserEmailService = require('../services/users/internal/setup/view-user-email.service.js')
 
 async function setup(_request, h) {
   const { id: sessionId } = await InitiateSessionService.go()
@@ -31,10 +31,10 @@ async function submitUserEmail(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function userEmail(request, h) {
+async function viewUserEmail(request, h) {
   const { sessionId } = request.params
 
-  const pageData = await UserEmailService.go(sessionId)
+  const pageData = await ViewUserEmailService.go(sessionId)
 
   return h.view('users/internal/setup/user-email.njk', pageData)
 }
@@ -42,5 +42,5 @@ async function userEmail(request, h) {
 module.exports = {
   setup,
   submitUserEmail,
-  userEmail
+  viewUserEmail
 }
