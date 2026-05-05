@@ -24,6 +24,7 @@ describe('Notices - Fetch Notices service', () => {
   let filters
   let legacyNotice
   let pageNumber
+  let renewalInvitationNotice
   let returnedInvitationNotice
   let returnsInvitationNotice
 
@@ -52,6 +53,12 @@ describe('Notices - Fetch Notices service', () => {
       overallStatus: 'returned',
       statusCounts: { cancelled: 0, error: 0, pending: 0, returned: 1, sent: 0 }
     })
+
+    renewalInvitationNotice = await EventHelper.add({
+      ...NoticesFixture.renewalInvitation(),
+      createdAt: new Date('2025-07-01T16:01:47.023Z'),
+      issuer: 'user@wrls.gov.uk'
+    })
   })
 
   beforeEach(() => {
@@ -67,6 +74,7 @@ describe('Notices - Fetch Notices service', () => {
     await legacyNotice.$query().delete()
     await returnsInvitationNotice.$query().delete()
     await returnedInvitationNotice.$query().delete()
+    await renewalInvitationNotice.$query().delete()
   })
 
   afterEach(() => {
@@ -91,6 +99,7 @@ describe('Notices - Fetch Notices service', () => {
 
       expect(result.results).contains(_transformNoticeToResult(returnsInvitationNotice))
       expect(result.results).contains(_transformNoticeToResult(returnedInvitationNotice))
+      expect(result.results).contains(_transformNoticeToResult(renewalInvitationNotice))
       expect(result.results).contains(_transformNoticeToResult(legacyNotice))
       expect(result.results).contains(_transformNoticeToResult(abstractionAlertNotice))
     })
