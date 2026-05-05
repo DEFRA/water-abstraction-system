@@ -181,10 +181,31 @@ function notices() {
     alertWarning(),
     legacyHandsOffFlow(),
     legacyRenewal(),
+    renewalInvitation(),
     returnsInvitation(),
     returnsPaperForm(),
     returnsReminder()
   ]
+}
+
+/**
+ * Represents a notice of type 'returns invitation
+ *
+ * @returns {object}
+ */
+function renewalInvitation() {
+  const data = _defaults()
+
+  data.metadata = {
+    name: 'Renewals: invitation',
+    error: 0,
+    options: { excludeLicences: [] },
+    recipients: generateRandomInteger(1, 5000)
+  }
+  data.referenceCode = generateNoticeReferenceCode('REIN-')
+  data.subtype = 'renewalInvitation'
+
+  return data
 }
 
 /**
@@ -281,6 +302,7 @@ module.exports = {
   legacyRenewal,
   mapToFetchNoticesResult,
   notices,
+  renewalInvitation,
   returnsInvitation,
   returnsPaperForm,
   returnsReminder
