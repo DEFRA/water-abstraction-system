@@ -1,8 +1,8 @@
 ---
-description: Alaisms — non-negotiable code conventions that cannot be enforced by automation or linting
+description: Alanisms — non-negotiable code conventions that cannot be enforced by automation or linting
 ---
 
-# Alaisms
+# Alanisms
 
 Quirky but non-negotiable code conventions from our lead engineer. Every agent must read this file and apply these rules — they cannot be enforced by automation or linting, so they require active judgement on every change.
 
@@ -124,4 +124,4 @@ const FetchSessionDal = require('../../dal/fetch-session.dal.js')
 
 ---
 
-*This file is a living document. Add new Alaisms as Alan's standards are identified.*
+*This file is a living document. Add new Alanisms as Alan's standards are identified.*
