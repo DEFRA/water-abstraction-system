@@ -19,11 +19,12 @@ const FetchLegacyIdDal = require('../../app/dal/users/fetch-legacy-id.dal.js')
 const IndexUsersService = require('../../app/services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
+const ViewExternalDetailsService = require('../../app/services/users/external/view-details.service.js')
+const ViewExternalVerificationsService = require('../../app/services/users/external/view-verifications.service.js')
 const ViewInternalCommunicationsService = require('../../app/services/users/internal/view-communications.service.js')
 const ViewInternalDetailsService = require('../../app/services/users/internal/view-details.service.js')
 const ViewNotificationService = require('../../app/services/users/view-notification.service.js')
 const ViewProfileDetailsService = require('../../app/services/users/view-profile-details.service.js')
-const ViewUserExternalService = require('../../app/services/users/external/view-user.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -160,22 +161,28 @@ describe('Users controller', () => {
     })
   })
 
-  describe('/users/external/{id}', () => {
+  describe('/users/external/{id}/details', () => {
     describe('GET', () => {
       beforeEach(async () => {
         id = generateUUID()
-        options = _getOptions(`/users/external/${id}`, { scope: [], user: { id } })
+        options = _getOptions(`/users/external/${id}/details`, { scope: [], user: { id } })
 
-        Sinon.stub(ViewUserExternalService, 'go').resolves({
+        Sinon.stub(ViewExternalDetailsService, 'go').resolves({
+          activeNavBar: 'users',
+          activeSecondaryNav: 'details',
           backLink: {
-            href: '/',
-            text: 'Go back to search'
+            href: '/system/users',
+            text: 'Go back to users'
           },
-          companies: [],
-          id,
+          backQueryString: '?back=users',
+          displayLicenceEndedMessage: false,
           lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
-          pageTitle: 'User external@example.co.uk',
-          pageTitleCaption: 'External',
+          licences: [],
+          pageTitle: 'User details',
+          pageTitleCaption: 'external@example.co.uk',
+          permissions: 'None',
+          roles: [],
+          showEditButton: true,
           status: 'enabled'
         })
       })
@@ -184,14 +191,14 @@ describe('Users controller', () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('External')
+        expect(response.payload).to.contain('User details')
       })
     })
 
     describe('POST', () => {
       beforeEach(() => {
         id = generateUUID()
-        postOptions = postRequestOptions(`/users/external/${id}`, {})
+        postOptions = postRequestOptions(`/users/external/${id}/details`, {})
       })
 
       describe('when the request succeeds', () => {
@@ -205,6 +212,40 @@ describe('Users controller', () => {
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
           expect(response.headers.location).to.equal(`/user/456/status`)
         })
+      })
+    })
+  })
+
+  describe('/users/external/{id}/verifications', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        id = generateUUID()
+        options = _getOptions(`/users/external/${id}/verifications`, { scope: [], user: { id } })
+
+        Sinon.stub(ViewExternalVerificationsService, 'go').resolves({
+          activeNavBar: 'users',
+          activeSecondaryNav: 'verifications',
+          pagination: {
+            currentPageNumber: 1,
+            numberOfPages: 0,
+            showingMessage: 'Showing all 0 verifications'
+          },
+          backLink: {
+            href: '/system/users',
+            text: 'Go back to users'
+          },
+          backQueryString: '?back=users',
+          pageTitle: 'Verifications',
+          pageTitleCaption: 'external@example.co.uk',
+          verifications: []
+        })
+      })
+
+      it('returns the external user page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Verifications')
       })
     })
   })
@@ -228,8 +269,8 @@ describe('Users controller', () => {
             text: 'Go back to users'
           },
           notifications: [],
-          pageTitle: 'Communications for carol.shaw@wrls.gov.uk',
-          pageTitleCaption: 'Internal'
+          pageTitle: 'Communications',
+          pageTitleCaption: 'carol.shaw@wrls.gov.uk'
         })
       })
 
@@ -237,7 +278,7 @@ describe('Users controller', () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Communications for carol.shaw@wrls.gov.uk')
+        expect(response.payload).to.contain('Communications')
       })
     })
   })
@@ -252,14 +293,15 @@ describe('Users controller', () => {
           activeNavBar: 'users',
           activeSecondaryNav: 'details',
           backLink: {
-            href: '/',
-            text: 'Go back to search'
+            href: '/system/users',
+            text: 'Go back to users'
           },
           id,
           lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
-          pageTitle: 'User basic.access@wrls.gov.uk',
-          pageTitleCaption: 'Internal',
+          pageTitle: 'User details',
+          pageTitleCaption: 'basic.access@wrls.gov.uk',
           permissions: 'Basic access',
+          roles: [],
           status: 'enabled'
         })
       })
@@ -268,7 +310,7 @@ describe('Users controller', () => {
         const response = await server.inject(options)
 
         expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Internal')
+        expect(response.payload).to.contain('User details')
       })
     })
 
