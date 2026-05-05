@@ -14,17 +14,18 @@ const VerificationsPresenter = require('../../../presenters/users/external/verif
  * Orchestrates fetching and presenting external user data for `/users/external/{id}/verifications` page
  *
  * @param {number} id - The user's ID
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {string} page - The current page for the pagination service
  * @param {string} back - The 'back' query parameter, used to indicate what back link should be shown on the page
  *
  * @returns {Promise<object>} The view data for the external user page
  */
-async function go(id, page, back = 'users') {
+async function go(id, auth, page, back = 'users') {
   const user = await FetchUserService.go(id)
 
   const { verifications, totalNumber } = await FetchVerificationsDal.go(user.licenceEntityId, page)
 
-  const pageData = VerificationsPresenter.go(user, verifications, back)
+  const pageData = VerificationsPresenter.go(user, verifications, auth.credentials.scope, back)
 
   const pagination = PaginatorPresenter.go(
     totalNumber,
@@ -36,7 +37,6 @@ async function go(id, page, back = 'users') {
   )
 
   return {
-    activeNavBar: back === 'users' ? 'users' : 'search',
     activeSecondaryNav: 'verifications',
     pagination,
     ...pageData

@@ -19,6 +19,9 @@ const FetchVerificationsDal = require('../../../../app/dal/users/external/fetch-
 const ViewVerificationsService = require('../../../../app/services/users/external/view-verifications.service.js')
 
 describe('Users - External - View Verifications service', () => {
+  const auth = {
+    credentials: { scope: ['manage_accounts'] }
+  }
   const page = '1'
 
   let back
@@ -42,7 +45,7 @@ describe('Users - External - View Verifications service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewVerificationsService.go(user.id, page, back)
+      const result = await ViewVerificationsService.go(user.id, auth, page, back)
 
       expect(result).to.equal({
         activeNavBar: 'users',
@@ -56,32 +59,10 @@ describe('Users - External - View Verifications service', () => {
           href: '/system/users',
           text: 'Go back to users'
         },
-        backQueryString: null,
+        backQueryString: '?back=users',
         pageTitle: 'Verifications',
         pageTitleCaption: user.username,
         verifications: []
-      })
-    })
-
-    describe('the "activeNavBar" property', () => {
-      describe('when the "back" query parameter is "undefined"', () => {
-        it('defaults to ""users" and returns "users"', async () => {
-          const result = await ViewVerificationsService.go(user.id, page, back)
-
-          expect(result.activeNavBar).to.equal('users')
-        })
-      })
-
-      describe('when the "back" query parameter is not "users" (for example "search")', () => {
-        beforeEach(() => {
-          back = 'search'
-        })
-
-        it('returns "search"', async () => {
-          const result = await ViewVerificationsService.go(user.id, page, back)
-
-          expect(result.activeNavBar).to.equal('search')
-        })
       })
     })
   })

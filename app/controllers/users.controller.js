@@ -90,11 +90,12 @@ async function viewExternalDetails(request, h) {
 
 async function viewExternalVerifications(request, h) {
   const {
+    auth,
     params: { id },
     query: { back, page }
   } = request
 
-  const pageData = await ViewExternalVerificationsService.go(id, page, back)
+  const pageData = await ViewExternalVerificationsService.go(id, auth, page, back)
 
   return h.view('users/external/verifications.njk', pageData)
 }
