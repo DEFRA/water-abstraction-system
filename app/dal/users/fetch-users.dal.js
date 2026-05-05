@@ -2,7 +2,7 @@
 
 /**
  * Fetches the selected page of users for /users
- * @module FetchUsersService
+ * @module FetchUsersDal
  */
 
 const UserModel = require('../../models/user.model.js')

@@ -6,7 +6,7 @@
  */
 
 const { formatValidationResult } = require('../../presenters/base.presenter.js')
-const FetchUsersService = require('./fetch-users.service.js')
+const FetchUsersDal = require('../../dal/users/fetch-users.dal.js')
 const IndexUsersPresenter = require('../../presenters/users/index-users.presenter.js')
 const IndexValidator = require('../../validators/users/index.validator.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
@@ -46,7 +46,7 @@ async function go(payload, yar, auth, page) {
 }
 
 async function _replayView(payload, error, page, savedFilters, auth) {
-  const { results: users, total: totalNumber } = await FetchUsersService.go(savedFilters, page)
+  const { results: users, total: totalNumber } = await FetchUsersDal.go(savedFilters, page)
 
   const pagination = PaginatorPresenter.go(totalNumber, page, `/system/users`, users.length, 'users')
 
