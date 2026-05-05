@@ -13,7 +13,7 @@ This document defines the standard skills the agent should apply consistently ac
 - Solve the problem as stated — do not over-engineer or anticipate future requirements
 - Follow existing patterns in the codebase before introducing new ones
 - Verify work with lint and tests before marking a task complete
-- Read `workflow.md` before running commands and follow the selected execution mode (`docker` or `host`)
+- Run project commands in Docker (`docker compose exec dev ...`) or via VS Code tasks; do not run Node/NPM commands on the host
 
 ## Skills
 
@@ -59,7 +59,7 @@ This document defines the standard skills the agent should apply consistently ac
 
 Before completing any task:
 
-1. Lint passes in the selected workflow mode from `workflow.md`
-2. Tests pass in the selected workflow mode from `workflow.md`
+1. `docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system && npm run lint'` passes
+2. `docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system && npm test'` passes
 3. No `console.log`, `console.dir`, `describe.only`, or `it.only` present
 4. No unintended files changed

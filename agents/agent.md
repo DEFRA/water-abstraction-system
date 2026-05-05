@@ -38,10 +38,10 @@ docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system &&
 
 ## Execution environment
 
-- Workflow is selected in `workflow.md` (`docker` or `host`)
-- If `docker`, prefer the VS Code tasks in `.vscode/tasks.json` and run commands via Docker
-- If `docker` and `dev` is not running, start it with `docker compose up -d` before running commands
-- If `host`, run `npm`, `node`, and migration commands directly on the host shell
+- Docker-first workflow: treat the host machine as orchestration only
+- Never run `npm`, `node`, or database commands directly on the host for this project
+- Prefer the VS Code tasks in `.vscode/tasks.json` when available, since they already wrap commands correctly for Docker
+- If `dev` is not running, start it with `docker compose up -d` before running commands
 
 ## Rules
 
@@ -49,17 +49,9 @@ Consult these files before starting any task:
 
 | File | When to read |
 |---|---|
-| `workflow.md` | Determine whether command execution must be Docker or host |
 | `skill.md` | Understanding how to apply skills and standard patterns |
 | `personas/alan.md` | Alan's persona and coding philosophy |
 | `alanisms.md` | Non-negotiable conventions that cannot be automated or linted |
-
-Execution mode decision order:
-
-1. Read `workflow.md`
-2. If `workflow: docker`, use Docker/task-based commands
-3. If `workflow: host`, use host shell commands
-4. If missing/invalid, default to Docker and state the assumption in the response
 
 ## Models
 
