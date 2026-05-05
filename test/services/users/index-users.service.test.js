@@ -25,6 +25,7 @@ describe('Users - Index Users service', () => {
   let yarStub
 
   beforeEach(() => {
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
     Sinon.stub(FeatureFlagsConfig, 'enableUsersView').value(true)
 
     auth = {
@@ -60,7 +61,7 @@ describe('Users - Index Users service', () => {
         },
         links: {
           user: {
-            href: '/account/create-user',
+            href: '/system/users/internal/setup',
             text: 'Create a user'
           }
         },
