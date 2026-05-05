@@ -18,8 +18,8 @@ const VerificationsPresenter = require('../../../../app/presenters/users/externa
 
 describe('Users - External - Verifications Presenter', () => {
   let back
-  let verifications
   let user
+  let verifications
   let viewingUserScope
 
   beforeEach(() => {
