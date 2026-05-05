@@ -30,7 +30,6 @@ async function go(id, auth, back = 'users') {
   const pageData = DetailsPresenter.go(user, licences, auth.credentials.scope, back)
 
   return {
-    activeNavBar: back === 'users' ? 'users' : 'search',
     activeSecondaryNav: 'details',
     ...pageData
   }

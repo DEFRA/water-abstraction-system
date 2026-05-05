@@ -37,7 +37,7 @@ describe('Users - External - View Details service', () => {
 
   describe('when called', () => {
     it('returns page data for the external user view', async () => {
-      const result = await ViewDetailsService.go(user.id, auth)
+      const result = await ViewDetailsService.go(user.id, auth, back)
 
       expect(result).to.equal({
         activeNavBar: 'users',
@@ -46,7 +46,7 @@ describe('Users - External - View Details service', () => {
           href: '/system/users',
           text: 'Go back to users'
         },
-        backQueryString: null,
+        backQueryString: '?back=users',
         displayLicenceEndedMessage: false,
         lastSignedIn: '6 October 2022 at 10:00:00',
         licences: [],
@@ -56,28 +56,6 @@ describe('Users - External - View Details service', () => {
         roles: [],
         showEditButton: true,
         status: 'enabled'
-      })
-    })
-
-    describe('the "activeNavBar" property', () => {
-      describe('when the "back" query parameter is "undefined"', () => {
-        it('defaults to ""users" and returns "users"', async () => {
-          const result = await ViewDetailsService.go(user.id, auth, back)
-
-          expect(result.activeNavBar).to.equal('users')
-        })
-      })
-
-      describe('when the "back" query parameter is not "users" (for example "search")', () => {
-        beforeEach(() => {
-          back = 'search'
-        })
-
-        it('returns "search"', async () => {
-          const result = await ViewDetailsService.go(user.id, auth, back)
-
-          expect(result.activeNavBar).to.equal('search')
-        })
       })
     })
   })
