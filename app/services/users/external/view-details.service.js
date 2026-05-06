@@ -5,7 +5,6 @@
  * @module ViewDetailsService
  */
 
-const FetchLicencesDal = require('../../../dal/users/external/fetch-licences.dal.js')
 const FetchUserDetailsDal = require('../../../dal/users/external/fetch-user-details.dal.js')
 const DetailsPresenter = require('../../../presenters/users/external/details.presenter.js')
 
@@ -21,13 +20,7 @@ const DetailsPresenter = require('../../../presenters/users/external/details.pre
 async function go(id, auth, back = 'users') {
   const user = await FetchUserDetailsDal.go(id)
 
-  let licences = []
-
-  if (user.licenceEntity) {
-    licences = await FetchLicencesDal.go(user.licenceEntity.id)
-  }
-
-  const pageData = DetailsPresenter.go(user, licences, auth.credentials.scope, back)
+  const pageData = DetailsPresenter.go(user, auth.credentials.scope, back)
 
   return {
     activeSecondaryNav: 'details',

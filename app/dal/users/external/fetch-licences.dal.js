@@ -1,22 +1,31 @@
 'use strict'
 
 /**
- * Fetches licences linked to a user for display on the `/users/external/{id}/details` page
+ * Fetches licences linked to a user for display on the `/users/external/{id}/licences` page
  * @module FetchLicencesDal
  */
 
 const LicenceModel = require('../../../models/licence.model.js')
 
+const DatabaseConfig = require('../../../../config/database.config.js')
+
 /**
- * Fetches licences linked to a user for display on the `/users/external/{id}/details` page
+ * Fetches licences linked to a user for display on the `/users/external/{id}/licences` page
  *
  * This includes their related roles and current licence holder, so we can display these alongside the licence.
  *
  * @param {number} licenceEntityId - The licence entity ID of the requested user
+ * @param {string} [page=1] - The current page for the pagination service
  *
  * @returns {Promise<module:LicenceModel[]>} the requested user licences
  */
-async function go(licenceEntityId) {
+async function go(licenceEntityId, page = '1') {
+  const { results: licences, total: totalNumber } = await _fetch(licenceEntityId, page)
+
+  return { licences, totalNumber }
+}
+
+async function _fetch(licenceEntityId, page) {
   return LicenceModel.query()
     .select([
       'licences.expiredDate',
@@ -40,6 +49,7 @@ async function go(licenceEntityId) {
       [licenceEntityId]
     )
     .orderBy('licences.licenceRef', 'asc')
+    .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
     .withGraphFetched('licenceVersions')
     .modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
       licenceVersionsBuilder
