@@ -26,6 +26,7 @@ describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipie
     scenarios = []
 
     let scenario
+
     // 1) Licence holder only
     scenario = await RecipientScenariosSeeder.licenceHolderOnly([], null, true)
     scenarios.push(scenario)
@@ -34,6 +35,7 @@ describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipie
     scenario = await RecipientScenariosSeeder.licenceHolderOnly([], null, true)
     scenarios.push(scenario)
     await LicenceDocumentHeaderSeeder.additionalContact(scenario[0].licenceRef)
+    await LicenceDocumentHeaderSeeder.additionalContactEndDatePassed(scenario[0].licenceRef)
   })
 
   after(async () => {

@@ -38,8 +38,8 @@ async function clean(scenarios) {
  *
  * @param {object[]} returnLogs - One or more returns logs sharing the same licence reference tha will be assigned to
  * the recipient
- * @param {Date} [expiredDate] - The date the licence should expire.
- * @param {boolean} alerts - If the recipient os for abstraction alerts
+ * @param {Date} [expiredDate] - The date the licence should expire
+ * @param {boolean} alerts - true if the recipient is for abstraction alerts
  *
  * @returns {Promise<object[]>} The recipients generated for the scenario. In this case there is only the licence holder
  */

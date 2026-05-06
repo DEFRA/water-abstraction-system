@@ -173,19 +173,30 @@ async function _additionalContact(licenceRef = null) {
 }
 
 /**
- * Adds additional contact records to an existing licence document, looked up by licence ref.
+ * Adds an active additional contact record to an existing licence document, looked up by licence ref.
  *
- * Adds both a current additional contact (no end date) and an expired one (end date in the past), matching the
- * structure used by `_additionalContact()`.
+ * @param {string} licenceRef - The licence ref of the existing licence document to add the contact to
  *
- * @param {string} [licenceRef] - The licence ref of the existing licence document to add contacts to
- *
- * @returns {object} The licence document the contacts were added to
+ * @returns {object} The licence document the contact was added to
  */
-async function additionalContact(licenceRef = null) {
+async function additionalContact(licenceRef) {
   const licenceDocument = await LicenceDocumentModel.query().where({ licenceRef }).limit(1).first()
 
   await _addAdditionalContact(additionalContactOne, licenceDocument.id)
+
+  return licenceDocument
+}
+
+/**
+ * Adds an expired additional contact record (end date in the past) to an existing licence document, looked up by
+ * licence ref. Queries filtering for current contacts should not return this record.
+ *
+ * @param {string} licenceRef - The licence ref of the existing licence document to add the contact to
+ *
+ * @returns {object} The licence document the contact was added to
+ */
+async function additionalContactEndDatePassed(licenceRef) {
+  const licenceDocument = await LicenceDocumentModel.query().where({ licenceRef }).limit(1).first()
 
   await _addAdditionalContactEndDatePassed(additionalContactOne, licenceDocument.id)
 
@@ -286,6 +297,7 @@ async function _primaryUserWithAdditionalContact() {
 
 module.exports = {
   additionalContact,
+  additionalContactEndDatePassed,
   licenceHolder,
   primaryUser,
   seed
