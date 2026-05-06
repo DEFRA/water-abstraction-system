@@ -899,4 +899,30 @@ describe('GeneralLib', () => {
       })
     })
   })
+
+  describe('#compareStrings', () => {
+    describe('when "referenceStr" comes before "compareString"', () => {
+      it('returns a negative number', () => {
+        const result = GeneralLib.compareStrings('010', '100')
+
+        expect(result).to.be.below(0)
+      })
+    })
+
+    describe('when "referenceStr" comes after "compareString"', () => {
+      it('returns a postive number', () => {
+        const result = GeneralLib.compareStrings('100', '010')
+
+        expect(result).to.be.above(0)
+      })
+    })
+
+    describe('when "referenceStr" is the same as "compareString"', () => {
+      it('returns zero', () => {
+        const result = GeneralLib.compareStrings('100', '100')
+
+        expect(result).to.equal(0)
+      })
+    })
+  })
 })

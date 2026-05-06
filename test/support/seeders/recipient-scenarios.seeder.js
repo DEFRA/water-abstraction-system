@@ -8,6 +8,7 @@ const CRMContactsSeeder = require('./crm-contacts.seeder.js')
 const EmptyLicence = require('./empty-licence.seeder.js')
 const RecipientsSeeder = require('./recipients.seeder.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
+const { compareStrings } = require('../../../app/lib/general.lib.js')
 
 /**
  * Cleans up records created by the recipient scenarios
@@ -472,7 +473,14 @@ function _aggregatedData(returnLogs) {
   const distinctLicenceRefs = [...new Set(allLicenceRefs)]
   const distinctReturnLogsIds = [...new Set(allReturnLogIds)]
 
-  return { licenceRefs: distinctLicenceRefs.sort(), returnLogIds: distinctReturnLogsIds.sort() }
+  return {
+    licenceRefs: distinctLicenceRefs.sort((referenceString, compareString) => {
+      return compareStrings(referenceString, compareString)
+    }),
+    returnLogIds: distinctReturnLogsIds.sort((referenceString, compareString) => {
+      return compareStrings(referenceString, compareString)
+    })
+  }
 }
 
 module.exports = {

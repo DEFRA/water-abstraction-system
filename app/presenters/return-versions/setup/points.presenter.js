@@ -5,6 +5,8 @@
  * @module PointsPresenter
  */
 
+const { compareStrings } = require('../../../lib/general.lib.js')
+
 /**
  * Formats data for the `/return-versions/setup/{sessionId}/points` page
  *
@@ -52,9 +54,7 @@ function _licencePoints(points) {
 
   // Then sort by the descriptions to give us a consistent display order
   return licencePoints.sort((first, second) => {
-    // NOTE: localeCompare() handles dealing with values in different cases automatically! So we don't have to lowercase
-    // everything before then comparing.
-    return first.description.localeCompare(second.description)
+    return compareStrings(first.description, second.description)
   })
 }
 

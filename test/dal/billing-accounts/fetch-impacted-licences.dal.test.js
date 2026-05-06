@@ -9,7 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const ChargeVersionHelper = require('../../support/helpers/charge-version.helper.js')
-const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { compareStrings, generateUUID } = require('../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
 
 // Thing under test
@@ -25,7 +25,9 @@ describe('DAL - Fetch Impacted Licences dal', () => {
   before(async () => {
     // NOTE: We want to confirm the results are sorted. So, of the two references generated, we'll use the 'higher'
     // one to create our first record, to confirm the order isn't a fluke of the order in which the records were created
-    const licenceRefs = [generateLicenceRef(), generateLicenceRef()].sort()
+    const licenceRefs = [generateLicenceRef(), generateLicenceRef()].sort((referenceString, compareString) => {
+      return compareStrings(referenceString, compareString)
+    })
 
     multiUseLicenceRef = licenceRefs[0]
     singleUseLicenceRef = licenceRefs[1]

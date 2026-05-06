@@ -51,6 +51,33 @@ function calculateAndLogTimeTaken(startTime, message, data = {}) {
 }
 
 /**
+ * Compare two strings and return a number indicating whether `referenceStr` comes before, or after, or is the same
+ *
+ * This function is intended to be passed as the comparison function to `Array.prototype.sort()` when sorting an array
+ * of strings. It uses `localeCompare()`, which is a built-in JavaScript method that compares two strings in the current
+ * locale and returns a number indicating their relative order.
+ *
+ * - -1 if `referenceStr` comes before `compareString`
+ * - 1 if `referenceStr` comes after `compareString`
+ * - 0 if they are the same
+ *
+ * `localeCompare()` also handles dealing with values in different cases automatically! So we don't have to lowercase
+ * everything before comparing, for example, 'FooBar', will be considered equal to 'foobar'.
+ *
+ * > 9 out of 10 times `Array.sort()` would be sufficient. But SonarQube flags it as a high-reliability issue, which
+ * > severely impacts our code quality score. So, you should pass this comparison function to it instead.
+ *
+ * @param {string} referenceStr - the reference string to compare against
+ * @param {string} compareString - the string to compare
+ * @param {object} options - any options to pass to `localeCompare()`
+ *
+ * @returns {number} The result of the comparison: -1, 0, or 1
+ */
+function compareStrings(referenceStr, compareString, options = {}) {
+  return referenceStr.localeCompare(compareString, 'en', options)
+}
+
+/**
  * Converts a quantity from cubic metres to a given unit
  *
  * We use **Big.js** to mitigate issues with
@@ -504,6 +531,7 @@ function transformStringOfLicencesToArray(licences) {
 
 module.exports = {
   calculateAndLogTimeTaken,
+  compareStrings,
   convertFromCubicMetres,
   convertToCubicMetres,
   currentTimeInNanoseconds,

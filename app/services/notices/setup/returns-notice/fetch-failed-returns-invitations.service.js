@@ -8,6 +8,7 @@
 const NotificationModel = require('../../../../models/notification.model.js')
 const { futureDueDate } = require('../../../../presenters/notices/base.presenter.js')
 const { compareDates } = require('../../../../lib/dates.lib.js')
+const { compareStrings } = require('../../../../lib/general.lib.js')
 
 /**
  * Fetches the licence refs and return logs IDs from failed returns invitation notifications to primary users
@@ -37,9 +38,15 @@ async function go(noticeId) {
 
   return {
     dueDate,
-    licenceRefs: [...new Set(licences)].sort(),
-    notificationIds: notificationIds.sort(),
-    returnLogIds: [...new Set(returnLogIds)].sort()
+    licenceRefs: [...new Set(licences)].sort((referenceString, compareString) => {
+      return compareStrings(referenceString, compareString)
+    }),
+    notificationIds: [...notificationIds].sort((referenceString, compareString) => {
+      return compareStrings(referenceString, compareString)
+    }),
+    returnLogIds: [...new Set(returnLogIds)].sort((referenceString, compareString) => {
+      return compareStrings(referenceString, compareString)
+    })
   }
 }
 
