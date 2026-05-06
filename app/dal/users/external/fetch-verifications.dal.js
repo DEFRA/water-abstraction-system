@@ -6,6 +6,7 @@
  */
 
 const UserVerificationModel = require('../../../models/user-verification.model.js')
+
 const DatabaseConfig = require('../../../../config/database.config.js')
 
 /**
