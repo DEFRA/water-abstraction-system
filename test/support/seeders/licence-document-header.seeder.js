@@ -8,6 +8,7 @@ const CompanyContactHelper = require('../helpers/company-contact.helper.js')
 const ContactHelper = require('../helpers/contact.helper.js')
 const LicenceDocumentHeaderHelper = require('../helpers/licence-document-header.helper.js')
 const LicenceDocumentHelper = require('../helpers/licence-document.helper.js')
+const LicenceDocumentModel = require('../../../app/models/licence-document.model.js')
 const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
 const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
@@ -40,8 +41,6 @@ const primaryUserContact = {
 async function seed() {
   return {
     additionalContact: await _additionalContact(),
-    licenceHolder: await licenceHolder(),
-    licenceHolderWithAdditionalContact: await _licenceHolderWithAdditionalContact(),
     multipleAdditionalContact: await _multipleAdditionalContact(),
     multipleAdditionalContactDifferentLicenceRefs: await _multipleAdditionalContactDifferentLicenceRefs(),
     multipleAdditionalContactWithAndWithoutAlerts: await _multipleAdditionalContactWithAndWithoutAlerts(),
@@ -173,6 +172,37 @@ async function _additionalContact(licenceRef = null) {
   return licenceDocument
 }
 
+/**
+ * Adds an active additional contact record to an existing licence document, looked up by licence ref.
+ *
+ * @param {string} licenceRef - The licence ref of the existing licence document to add the contact to
+ *
+ * @returns {object} The licence document the contact was added to
+ */
+async function additionalContact(licenceRef) {
+  const licenceDocument = await LicenceDocumentModel.query().where({ licenceRef }).limit(1).first()
+
+  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
+
+  return licenceDocument
+}
+
+/**
+ * Adds an expired additional contact record (end date in the past) to an existing licence document, looked up by
+ * licence ref. Queries filtering for current contacts should not return this record.
+ *
+ * @param {string} licenceRef - The licence ref of the existing licence document to add the contact to
+ *
+ * @returns {object} The licence document the contact was added to
+ */
+async function additionalContactEndDatePassed(licenceRef) {
+  const licenceDocument = await LicenceDocumentModel.query().where({ licenceRef }).limit(1).first()
+
+  await _addAdditionalContactEndDatePassed(additionalContactOne, licenceDocument.id)
+
+  return licenceDocument
+}
+
 function _contact(name, role) {
   return {
     name,
@@ -199,14 +229,6 @@ function _contact(name, role) {
  */
 async function licenceHolder() {
   return _addLicenceHolder()
-}
-
-async function _licenceHolderWithAdditionalContact() {
-  const licenceHolder = await _addLicenceHolder()
-
-  await _additionalContact(licenceHolder.licenceRef)
-
-  return licenceHolder
 }
 
 async function _multipleAdditionalContact() {
@@ -274,6 +296,8 @@ async function _primaryUserWithAdditionalContact() {
 }
 
 module.exports = {
+  additionalContact,
+  additionalContactEndDatePassed,
   licenceHolder,
   primaryUser,
   seed

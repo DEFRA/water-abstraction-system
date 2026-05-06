@@ -4,10 +4,11 @@
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
-const { describe, it, before, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, before, beforeEach, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
 const LicenceDocumentHeaderSeeder = require('../../../../support/seeders/licence-document-header.seeder.js')
 const { compareStrings } = require('../../../../../app/lib/general.lib.js')
 
@@ -15,11 +16,30 @@ const { compareStrings } = require('../../../../../app/lib/general.lib.js')
 const FetchAbstractionAlertRecipientsService = require('../../../../../app/services/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
 
 describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipients service', () => {
+  let scenarios
   let seedData
   let session
 
   before(async () => {
     seedData = await LicenceDocumentHeaderSeeder.seed()
+
+    scenarios = []
+
+    let scenario
+
+    // 1) Licence holder only
+    scenario = await RecipientScenariosSeeder.licenceHolderOnly([], null, true)
+    scenarios.push(scenario)
+
+    // 2) Licence holder, and an additional contact
+    scenario = await RecipientScenariosSeeder.licenceHolderOnly([], null, true)
+    scenarios.push(scenario)
+    await LicenceDocumentHeaderSeeder.additionalContact(scenario[0].licenceRef)
+    await LicenceDocumentHeaderSeeder.additionalContactEndDatePassed(scenario[0].licenceRef)
+  })
+
+  after(async () => {
+    await RecipientScenariosSeeder.clean(scenarios)
   })
 
   describe('when there is an "additional contact"', () => {
@@ -161,81 +181,39 @@ describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipie
     describe('and there is a "licence holder"', () => {
       beforeEach(async () => {
         session = {
-          licenceRefs: [seedData.licenceHolder.licenceRef]
+          licenceRefs: [scenarios[0][0].licenceRef]
         }
       })
 
       it('returns the "licence holder" ', async () => {
         const result = await FetchAbstractionAlertRecipientsService.go(session)
 
-        expect(result).to.equal([
-          {
-            contact: {
-              addressLine1: '4',
-              addressLine2: 'Privet Drive',
-              addressLine3: null,
-              addressLine4: null,
-              country: null,
-              county: 'Surrey',
-              forename: 'Harry',
-              initials: 'J',
-              name: 'Potter',
-              postcode: 'WD25 7LR',
-              role: 'Licence holder',
-              salutation: null,
-              town: 'Little Whinging',
-              type: 'Person'
-            },
-            contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
-            contact_type: 'licence holder',
-            email: null,
-            licence_refs: [seedData.licenceHolder.licenceRef],
-            message_type: 'Letter'
-          }
-        ])
+        const expectedResults = _transformToResult(scenarios[0])
+
+        expect(result).to.equal(expectedResults)
       })
     })
 
     describe('and there is an "additional contact"', () => {
       beforeEach(() => {
         session = {
-          licenceRefs: [seedData.licenceHolderWithAdditionalContact.licenceRef]
+          licenceRefs: [scenarios[1][0].licenceRef]
         }
       })
 
       it('returns both "additional contact" and the "primary user"', async () => {
         const result = await FetchAbstractionAlertRecipientsService.go(session)
 
+        const expectedResults = _transformToResult(scenarios[1])
+
         expect(result).to.equal([
-          {
-            contact: {
-              addressLine1: '4',
-              addressLine2: 'Privet Drive',
-              addressLine3: null,
-              addressLine4: null,
-              country: null,
-              county: 'Surrey',
-              forename: 'Harry',
-              initials: 'J',
-              name: 'Potter',
-              postcode: 'WD25 7LR',
-              role: 'Licence holder',
-              salutation: null,
-              town: 'Little Whinging',
-              type: 'Person'
-            },
-            contact_hash_id: '940db59e295b5e70d93ecfc3c2940b75',
-            contact_type: 'licence holder',
-            email: null,
-            licence_refs: [seedData.licenceHolderWithAdditionalContact.licenceRef],
-            message_type: 'Letter'
-          },
+          ...expectedResults,
           {
             contact: null,
             contact_hash_id: 'c661b771974504933d79ca64249570d0',
             contact_type: 'additional contact',
             email: 'Ron.Burgundy@news.com',
-            licence_refs: [seedData.licenceHolderWithAdditionalContact.licenceRef],
+            licence_refs: [scenarios[1][0].licenceRef],
             message_type: 'Email'
           }
         ])
@@ -276,3 +254,15 @@ describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipie
     })
   })
 })
+
+function _transformToResult(scenario) {
+  const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenario)
+
+  for (const sendingResult of sendingResults) {
+    delete sendingResult.due_date_status
+    delete sendingResult.return_log_ids
+    delete sendingResult.latest_due_date
+  }
+
+  return sendingResults
+}
