@@ -30,7 +30,7 @@ This document defines the standards an agent must apply when reviewing or writin
 - All `require()` calls must be at the top of the file, after the `@module` JSDoc and before any function definitions — never inside functions
 - Arrow functions must always use braces: `const fn = () => { return x }`
 - No inline comments unless the *why* is genuinely non-obvious
-- JSDoc is required on all public functions — use `@param`, `@returns`, and a description; controllers and seeds are exempt
+- JSDoc is required on all public functions — use `@param`, `@returns`, and a description; controllers, seeds, and routes files are exempt from `@module` JSDoc
 - No `console.log()` or `console.dir()` — CI will fail on these
 - No error handling for scenarios that cannot happen
 - No abstractions for a single use case
