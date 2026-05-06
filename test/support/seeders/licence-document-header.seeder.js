@@ -41,8 +41,6 @@ const primaryUserContact = {
 async function seed() {
   return {
     additionalContact: await _additionalContact(),
-    // licenceHolder: await licenceHolder(),
-    // licenceHolderWithAdditionalContact: await _licenceHolderWithAdditionalContact(),
     multipleAdditionalContact: await _multipleAdditionalContact(),
     multipleAdditionalContactDifferentLicenceRefs: await _multipleAdditionalContactDifferentLicenceRefs(),
     multipleAdditionalContactWithAndWithoutAlerts: await _multipleAdditionalContactWithAndWithoutAlerts(),
@@ -175,8 +173,14 @@ async function _additionalContact(licenceRef = null) {
 }
 
 /**
+ * Adds additional contact records to an existing licence document, looked up by licence ref.
  *
- * @param licenceRef
+ * Adds both a current additional contact (no end date) and an expired one (end date in the past), matching the
+ * structure used by `_additionalContact()`.
+ *
+ * @param {string} [licenceRef] - The licence ref of the existing licence document to add contacts to
+ *
+ * @returns {object} The licence document the contacts were added to
  */
 async function additionalContact(licenceRef = null) {
   const licenceDocument = await LicenceDocumentModel.query().where({ licenceRef }).limit(1).first()
@@ -214,14 +218,6 @@ function _contact(name, role) {
  */
 async function licenceHolder() {
   return _addLicenceHolder()
-}
-
-async function _licenceHolderWithAdditionalContact() {
-  const licenceHolder = await _addLicenceHolder()
-
-  await _additionalContact(licenceHolder.licenceRef)
-
-  return licenceHolder
 }
 
 async function _multipleAdditionalContact() {
