@@ -176,14 +176,11 @@ describe('Users controller', () => {
             text: 'Go back to users'
           },
           backQueryString: '?back=users',
-          displayLicenceEndedMessage: false,
           lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
-          licences: [],
           pageTitle: 'User details',
           pageTitleCaption: 'external@example.co.uk',
           permissions: 'None',
           roles: [],
-          showEditButton: true,
           status: 'enabled'
         })
       })

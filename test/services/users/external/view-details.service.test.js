@@ -12,7 +12,6 @@ const { expect } = Code
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
-const FetchLicencesDal = require('../../../../app/dal/users/external/fetch-licences.dal.js')
 const FetchUserDetailsDal = require('../../../../app/dal/users/external/fetch-user-details.dal.js')
 
 // Thing under test
@@ -28,7 +27,6 @@ describe('Users - External - View Details service', () => {
 
   beforeEach(() => {
     Sinon.stub(FetchUserDetailsDal, 'go').resolves(user)
-    Sinon.stub(FetchLicencesDal, 'go').resolves([])
   })
 
   afterEach(() => {
@@ -47,14 +45,11 @@ describe('Users - External - View Details service', () => {
           text: 'Go back to users'
         },
         backQueryString: '?back=users',
-        displayLicenceEndedMessage: false,
         lastSignedIn: '6 October 2022 at 10:00:00',
-        licences: [],
         pageTitle: 'User details',
         pageTitleCaption: user.username,
         permissions: 'None',
         roles: [],
-        showEditButton: true,
         status: 'enabled'
       })
     })
