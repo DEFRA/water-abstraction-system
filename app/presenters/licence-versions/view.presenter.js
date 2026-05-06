@@ -189,7 +189,10 @@ function _removeDuplicatePointsById(points) {
 }
 
 function _sortPointsByDescription(first, second) {
-  return compareStrings(first.description, second.description)
+  return compareStrings(first.description, second.description, {
+    sensitivity: 'base',
+    ignorePunctuation: true
+  })
 }
 
 module.exports = {

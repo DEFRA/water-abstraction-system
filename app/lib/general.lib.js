@@ -69,11 +69,12 @@ function calculateAndLogTimeTaken(startTime, message, data = {}) {
  *
  * @param {string} referenceStr - the reference string to compare against
  * @param {string} compareString - the string to compare
+ * @param {object} options - any options to pass to `localeCompare()`
  *
  * @returns {number} The result of the comparison: -1, 0, or 1
  */
-function compareStrings(referenceStr, compareString) {
-  return referenceStr.localeCompare(compareString)
+function compareStrings(referenceStr, compareString, options = {}) {
+  return referenceStr.localeCompare(compareString, 'en', options)
 }
 
 /**
