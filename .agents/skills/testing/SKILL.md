@@ -42,6 +42,14 @@ const SubjectUnderTest = require('../../app/services/subject-under-test.service.
   4. `// Thing under test`
 - The Lab destructuring line and `const { expect } = Code` follow immediately after the framework `require()` calls — no blank line between them
 - Alphabetical ordering within each section still applies (alanisms rule 2)
+- The top-level `describe` label must reflect the file's folder path. Each path segment is title-cased and joined with ` - `, followed by the module type:
+
+  ```js
+  // test/services/notices/setup/fetch-notice.service.test.js
+  describe('Notices - Setup - Fetch Notice service', () => {
+    // ...
+  })
+  ```
 
 ## Sinon
 
