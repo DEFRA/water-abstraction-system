@@ -10,9 +10,6 @@ const { db } = require('../../../../../db/db.js')
 /**
  * Fetches the abstraction alert recipients data for the `/notices/setup/check` page
  *
- * > IMPORTANT! The source for notification contacts is `crm.document_headers` (view `licence_document_headers`), not
- * > the tables in `crm_v2`. However, the 'Additional contact' information is stored in `crm_v2`.
- *
  * Our overall goal is that a 'recipient' receives only one notification, irrespective of how many licences they are
  * linked to, or what roles they have.
  *
@@ -36,16 +33,13 @@ const { db } = require('../../../../../db/db.js')
  * - **Registered licences** have been linked to an external email. That initial email will be linked as the 'primary
  * user'.
  *
- * If a licence is registered, we only extract the email contacts. Unregistered licences it's the 'Licence holder'
- * contact from `licence_document_headers.metadata->contacts`.
- *
- * Because we are working with `licence_document_header` we get one row per licence. So, the next step is to group the
- * contacts by their contact information.
+ * If a licence is registered, we only extract the email contacts. For unregistered licences the 'Licence holder'
+ * contact is fetched from `licence_versions`, joined to the `companies` and `addresses` tables.
  *
  * We do this by generating a hash ID using PostgreSQL's
  * {@link https://www.postgresql.org/docs/current/functions-binarystring.html | md5() function}. For email contacts, we
- * simply hash the email address. For letter contacts, we extract key fields out of the JSON in `metadata`, convert them
- * to lowercase, concatenate them, and then generate an `md5()` result from it.
+ * simply hash the email address. For letter contacts, we concatenate the key fields from the `companies` and
+ * `addresses` tables, convert them to lowercase, and then generate an `md5()` result from it.
  *
  * @param {module:SessionModel} session - The session instance
  *
@@ -67,6 +61,8 @@ async function _fetch(session) {
 }
 
 function _query() {
+  const licenceHolderQuery = _licenceHolderQuery()
+
   return `
   WITH additional_contacts AS (
     SELECT
@@ -116,36 +112,9 @@ function _query() {
       ldh.licence_ref = ANY (?)
   ),
 
-  licence_holders AS (
-    SELECT
-      ldh.licence_ref,
-      'licence holder' AS contact_type,
-      NULL AS email,
-      contacts AS contact,
-      md5(LOWER(concat_ws(
-        '',
-        contacts ->> 'salutation',
-        contacts ->> 'forename',
-        contacts ->> 'initials',
-        contacts ->> 'name',
-        contacts ->> 'addressLine1',
-        contacts ->> 'addressLine2',
-        contacts ->> 'addressLine3',
-        contacts ->> 'addressLine4',
-        contacts ->> 'town',
-        contacts ->> 'county',
-        contacts ->> 'postcode',
-        contacts ->> 'country'
-      ))) AS contact_hash_id,
-      ('Letter') as message_type
-    FROM
-      public.licence_document_headers ldh
-      INNER JOIN LATERAL jsonb_array_elements(ldh.metadata -> 'contacts') AS contacts
-        ON TRUE
-    WHERE
-      ldh.licence_ref = ANY (?)
-      AND contacts ->> 'role' = 'Licence holder'
-  ),
+   licence_holders as (
+     ${licenceHolderQuery}
+   ),
 
   primary_or_licence_holder AS (
     SELECT
@@ -213,6 +182,59 @@ function _query() {
   ORDER BY
     licence_refs::text;
 `
+}
+
+function _licenceHolderQuery() {
+  return `
+    SELECT
+      ('licence holder') AS contact_type,
+      2 AS priority,
+      jsonb_build_object(
+        'name', c.name,
+        'address1', a.address_1,
+        'address2', a.address_2,
+        'address3', a.address_3,
+        'address4', a.address_4,
+        'address5', a.address_5,
+        'address6', a.address_6,
+        'postcode', a.postcode,
+        'country', a.country
+      ) AS contact,
+      MD5(LOWER(CONCAT(
+        c.name,
+        a.address_1,
+        a.address_2,
+        a.address_3,
+        a.address_4,
+        a.address_5,
+        a.address_6,
+        a.postcode,
+        a.country
+      ))) AS contact_hash_id,
+      NULL::TEXT AS email,
+      l.licence_ref,
+      ('Letter') AS message_type
+    FROM
+      public.licences l
+    INNER JOIN (
+      SELECT DISTINCT ON (lv.licence_id)
+        lv.licence_id,
+        lv.company_id,
+        lv.address_id
+      FROM
+        public.licence_versions lv
+      WHERE
+        lv.start_date <= CURRENT_DATE
+      ORDER BY
+        lv.licence_id ASC,
+        lv."issue" DESC,
+        lv."increment" DESC,
+        lv.end_date DESC NULLS FIRST
+    ) AS llv ON llv.licence_id = l.id
+    INNER JOIN public.companies c ON c.id = llv.company_id
+    INNER JOIN public.addresses a ON a.id = llv.address_id
+    WHERE l.licence_ref = ANY (?)
+  `
 }
 
 module.exports = {

@@ -8,6 +8,7 @@ const CompanyContactHelper = require('../helpers/company-contact.helper.js')
 const ContactHelper = require('../helpers/contact.helper.js')
 const LicenceDocumentHeaderHelper = require('../helpers/licence-document-header.helper.js')
 const LicenceDocumentHelper = require('../helpers/licence-document.helper.js')
+const LicenceDocumentModel = require('../../../app/models/licence-document.model.js')
 const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
 const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
@@ -40,8 +41,8 @@ const primaryUserContact = {
 async function seed() {
   return {
     additionalContact: await _additionalContact(),
-    licenceHolder: await licenceHolder(),
-    licenceHolderWithAdditionalContact: await _licenceHolderWithAdditionalContact(),
+    // licenceHolder: await licenceHolder(),
+    // licenceHolderWithAdditionalContact: await _licenceHolderWithAdditionalContact(),
     multipleAdditionalContact: await _multipleAdditionalContact(),
     multipleAdditionalContactDifferentLicenceRefs: await _multipleAdditionalContactDifferentLicenceRefs(),
     multipleAdditionalContactWithAndWithoutAlerts: await _multipleAdditionalContactWithAndWithoutAlerts(),
@@ -173,6 +174,20 @@ async function _additionalContact(licenceRef = null) {
   return licenceDocument
 }
 
+/**
+ *
+ * @param licenceRef
+ */
+async function additionalContact(licenceRef = null) {
+  const licenceDocument = await LicenceDocumentModel.query().where({ licenceRef }).limit(1).first()
+
+  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
+
+  await _addAdditionalContactEndDatePassed(additionalContactOne, licenceDocument.id)
+
+  return licenceDocument
+}
+
 function _contact(name, role) {
   return {
     name,
@@ -274,6 +289,7 @@ async function _primaryUserWithAdditionalContact() {
 }
 
 module.exports = {
+  additionalContact,
   licenceHolder,
   primaryUser,
   seed

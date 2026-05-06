@@ -39,10 +39,11 @@ async function clean(scenarios) {
  * @param {object[]} returnLogs - One or more returns logs sharing the same licence reference tha will be assigned to
  * the recipient
  * @param {Date} [expiredDate] - The date the licence should expire.
+ * @param {boolean} alerts - If the recipient os for abstraction alerts
  *
  * @returns {Promise<object[]>} The recipients generated for the scenario. In this case there is only the licence holder
  */
-async function licenceHolderOnly(returnLogs, expiredDate = null) {
+async function licenceHolderOnly(returnLogs, expiredDate = null, alerts = false) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
   const licence = await EmptyLicence.seed(licenceRefs[0], null, expiredDate)
@@ -50,7 +51,7 @@ async function licenceHolderOnly(returnLogs, expiredDate = null) {
 
   const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
 
-  const allLicenceRefs = expiredDate ? [licence.licence.licenceRef] : licenceRefs
+  const allLicenceRefs = expiredDate || alerts ? [licence.licence.licenceRef] : licenceRefs
 
   licenceHolderRecipient.licenceRefs = allLicenceRefs
   licenceHolderRecipient.returnLogIds = returnLogIds
