@@ -112,11 +112,11 @@ function _query() {
       ldh.licence_ref = ANY (?)
   ),
 
-   -- Which licences are registered (have a primary user). This CTE is used in the next CTE to filter out
-   -- records linked to licences that are registered.
-   registered_licences AS (
-     SELECT DISTINCT licence_ref FROM primary_users
-   ),
+  -- Which licences are registered (have a primary user). This CTE is used in the next CTE to filter out
+  -- records linked to licences that are registered.
+  registered_licences AS (
+    SELECT DISTINCT licence_ref FROM primary_users
+  ),
 
   licence_holders as (
     ${licenceHolderQuery}
