@@ -5,6 +5,8 @@
  * @module IndexUsersPresenter
  */
 
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
+
 /**
  * Formats data for the `/users` page
  *
@@ -30,16 +32,18 @@ function _link(user) {
     return `/system/users/internal/${id}/details`
   }
 
-  return `/system/users/external/${id}`
+  return `/system/users/external/${id}/details`
 }
 
 function _links(scope) {
   const links = {}
 
   if (scope.includes('manage_accounts')) {
+    const href = FeatureFlagsConfig.enableUsersManagement ? '/system/users/internal/setup' : '/account/create-user'
+
     links.user = {
       text: 'Create a user',
-      href: '/account/create-user'
+      href
     }
   }
 

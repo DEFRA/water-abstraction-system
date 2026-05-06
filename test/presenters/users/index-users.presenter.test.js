@@ -3,12 +3,16 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
+
+// Things we need to stub
+const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 
 // Thing under test
 const IndexUsersPresenter = require('../../../app/presenters/users/index-users.presenter.js')
@@ -29,6 +33,12 @@ describe('Users - Index Users presenter', () => {
     auth = {
       credentials: { scope: ['manage_accounts'] }
     }
+
+    Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
+  })
+
+  afterEach(() => {
+    Sinon.restore()
   })
 
   it('correctly presents the data', () => {
@@ -37,7 +47,7 @@ describe('Users - Index Users presenter', () => {
     expect(result).to.equal({
       links: {
         user: {
-          href: '/account/create-user',
+          href: '/system/users/internal/setup',
           text: 'Create a user'
         }
       },
@@ -52,14 +62,14 @@ describe('Users - Index Users presenter', () => {
         },
         {
           email: users[1].username,
-          link: `/system/users/external/${users[1].id}`,
+          link: `/system/users/external/${users[1].id}/details`,
           permissions: 'Returns user',
           status: 'disabled',
           type: 'External'
         },
         {
           email: users[2].username,
-          link: `/system/users/external/${users[2].id}`,
+          link: `/system/users/external/${users[2].id}/details`,
           permissions: 'None',
           status: 'awaiting',
           type: 'External'
@@ -73,7 +83,7 @@ describe('Users - Index Users presenter', () => {
         },
         {
           email: users[4].username,
-          link: `/system/users/external/${users[4].id}`,
+          link: `/system/users/external/${users[4].id}/details`,
           permissions: 'Basic access',
           status: 'locked',
           type: 'External'
@@ -89,7 +99,7 @@ describe('Users - Index Users presenter', () => {
 
         expect(result.links).to.equal({
           user: {
-            href: '/account/create-user',
+            href: '/system/users/internal/setup',
             text: 'Create a user'
           }
         })
