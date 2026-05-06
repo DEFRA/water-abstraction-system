@@ -44,7 +44,7 @@ describe('GotWrapperLib', () => {
 
   describe('when called with an options object (eg. for a POST request)', () => {
     beforeEach(() => {
-      Nock('http://example.com').post('/post', 'payload').reply(201, 'created')
+      Nock('http://example.com').post('/post', 'payload').reply(201, 'created', { 'content-length': '7' })
     })
 
     it('calls back with response and body', async () => {
@@ -83,8 +83,9 @@ function wrapRequest(request, opts) {
     request(opts, (err, res, body) => {
       if (err) {
         resolve({ err, res, body })
+      } else {
+        resolve({ res, body })
       }
-      resolve({ res, body })
     })
   })
 }
