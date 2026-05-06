@@ -112,9 +112,9 @@ function _query() {
       ldh.licence_ref = ANY (?)
   ),
 
-   licence_holders as (
-     ${licenceHolderQuery}
-   ),
+  licence_holders as (
+    ${licenceHolderQuery}
+  ),
 
   primary_or_licence_holder AS (
     SELECT
