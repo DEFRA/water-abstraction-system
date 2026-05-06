@@ -13,7 +13,7 @@ In most cases, a new branch will have been created by the developer, containing 
 
 ## Core principles
 
-- PR's are focused and related to specific changes
+- PRs are focused and related to specific changes
 - Code review is simple and manageable
 - The commit history is clean tree of changes
 - There is consistency across the commits
@@ -79,9 +79,9 @@ Refactor all database logic to DAL modules
 
 ```text
 // Bad
-Refactored all database logic to DAL modules
+Refactor all database logic to DAL modules
 
-We moved the query that fetched records from the DB to `fetch-records.dal.js` and the query that updates the return log to `update-return-log.dal.js'.
+We moved the query that fetched records from the DB to `fetch-records.dal.js` and the query that updates the return log to `update-return-log.dal.js`.
 
 // Good
 Refactor all database logic to DAL modules

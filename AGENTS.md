@@ -23,7 +23,7 @@ The project is a single web service using server-side rendering.
 ## Project paths quick reference
 
 ```
-.agents/              # Agentic agent configuration
+.agents/              # Agent configuration
 .github/
 ├── workflows         # GitHub workflows
 .vscode/              # VSCode settings and tasks. Ignored by git
@@ -52,7 +52,7 @@ db/                   # All things related to working with the database
 ├── seeds             # Database seeds primarily for test and non-production environments
 │   └── data          # Source data for our seeds
 templates/            # Works with scaffold.sh to create new boiler-plate pages in the service
-tests/                # Test files mirroring app/ structure
+test/                # Test files mirroring app/ structure
 ```
 
 ## Configuration

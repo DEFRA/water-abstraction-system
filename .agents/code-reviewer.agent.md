@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Core operational framework for the AI coding agent working on this project
+description: Code review agent — systematic review against project conventions and standards
 ---
 
 # Code Reviewer
