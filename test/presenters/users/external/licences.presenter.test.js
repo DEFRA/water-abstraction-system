@@ -50,24 +50,24 @@ describe('Users - External - Licences Presenter', () => {
         {
           currentLicenceHolder: licences[0].licenceVersions[0].licenceVersionHolder.derivedName,
           id: licences[0].id,
-          licenceLink: `/system/licences/${licences[0].id}/summary`,
           licenceRef: licences[0].licenceRef,
+          link: `/system/licences/${licences[0].id}/summary`,
           permissions: 'Basic access',
           status: 'expired'
         },
         {
           currentLicenceHolder: licences[1].licenceVersions[0].licenceVersionHolder.derivedName,
           id: licences[1].id,
-          licenceLink: `/system/licences/${licences[1].id}/summary`,
           licenceRef: licences[1].licenceRef,
+          link: `/system/licences/${licences[1].id}/summary`,
           permissions: 'Returns user',
           status: null
         },
         {
           currentLicenceHolder: licences[2].licenceVersions[0].licenceVersionHolder.derivedName,
           id: licences[2].id,
-          licenceLink: `/system/licences/${licences[2].id}/summary`,
           licenceRef: licences[2].licenceRef,
+          link: `/system/licences/${licences[2].id}/summary`,
           permissions: 'Primary user',
           status: null
         }

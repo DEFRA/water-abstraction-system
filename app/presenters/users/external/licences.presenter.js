@@ -51,8 +51,8 @@ function _userLicences(licences) {
     return {
       currentLicenceHolder: licenceVersions[0].licenceVersionHolder.derivedName,
       id,
-      licenceLink: `/system/licences/${id}/summary`,
       licenceRef,
+      link: `/system/licences/${id}/summary`,
       permissions: _licencePermissions(licence),
       status: _status(licenceEndDetails)
     }

@@ -7,8 +7,8 @@
 
 const FetchLicencesDal = require('../../../dal/users/external/fetch-licences.dal.js')
 const FetchUserDal = require('../../../dal/users/fetch-user.dal.js')
-const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 const LicencesPresenter = require('../../../presenters/users/external/licences.presenter.js')
+const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}/licences` page
