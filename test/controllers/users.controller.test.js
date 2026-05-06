@@ -192,26 +192,6 @@ describe('Users controller', () => {
         expect(response.payload).to.contain('User details')
       })
     })
-
-    describe('POST', () => {
-      beforeEach(() => {
-        id = generateUUID()
-        postOptions = postRequestOptions(`/users/external/${id}/details`, {})
-      })
-
-      describe('when the request succeeds', () => {
-        beforeEach(() => {
-          Sinon.stub(FetchLegacyIdDal, 'go').returns(456)
-        })
-
-        it('redirects to the legacy user page', async () => {
-          const response = await server.inject(postOptions)
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/user/456/status`)
-        })
-      })
-    })
   })
 
   describe('/users/external/{id}/licences', () => {
@@ -246,6 +226,26 @@ describe('Users controller', () => {
 
         expect(response.statusCode).to.equal(HTTP_STATUS_OK)
         expect(response.payload).to.contain('Licences')
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        id = generateUUID()
+        postOptions = postRequestOptions(`/users/external/${id}/licences`, {})
+      })
+
+      describe('when the request succeeds', () => {
+        beforeEach(() => {
+          Sinon.stub(FetchLegacyIdDal, 'go').returns(456)
+        })
+
+        it('redirects to the legacy user page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/user/456/status`)
+        })
       })
     })
   })

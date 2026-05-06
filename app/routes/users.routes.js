@@ -35,17 +35,17 @@ const routes = [
     }
   },
   {
-    method: 'POST',
-    path: '/users/external/{id}/details',
-    options: {
-      handler: UsersController.submitExternalDetails
-    }
-  },
-  {
     method: 'GET',
     path: '/users/external/{id}/licences',
     options: {
       handler: UsersController.viewExternalLicences
+    }
+  },
+  {
+    method: 'POST',
+    path: '/users/external/{id}/licences',
+    options: {
+      handler: UsersController.submitExternalLicences
     }
   },
   {
