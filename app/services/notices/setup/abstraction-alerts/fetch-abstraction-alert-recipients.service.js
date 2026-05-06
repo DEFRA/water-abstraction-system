@@ -112,6 +112,12 @@ function _query() {
       ldh.licence_ref = ANY (?)
   ),
 
+   -- Which licences are registered (have a primary user). This CTE is used in the next CTE to filter out
+   -- records linked to licences that are registered.
+   registered_licences AS (
+     SELECT DISTINCT licence_ref FROM primary_users
+   ),
+
   licence_holders as (
     ${licenceHolderQuery}
   ),
@@ -188,7 +194,6 @@ function _licenceHolderQuery() {
   return `
     SELECT
       ('licence holder') AS contact_type,
-      2 AS priority,
       jsonb_build_object(
         'name', c.name,
         'address1', a.address_1,
@@ -233,7 +238,10 @@ function _licenceHolderQuery() {
     ) AS llv ON llv.licence_id = l.id
     INNER JOIN public.companies c ON c.id = llv.company_id
     INNER JOIN public.addresses a ON a.id = llv.address_id
-    WHERE l.licence_ref = ANY (?)
+    LEFT JOIN registered_licences rl
+    ON rl.licence_ref = l.licence_ref
+    WHERE rl.licence_ref IS NULL
+    AND l.licence_ref = ANY (?)
   `
 }
 
