@@ -9,6 +9,7 @@ const crypto = require('node:crypto')
 const LicenceEntityModel = require('../../../app/models/licence-entity.model.js')
 const LicenceEntityRoleModel = require('../../../app/models/licence-entity-role.model.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
+const { compareStrings } = require('../../../app/lib/general.lib.js')
 
 /**
  * Cleans up records created by the seeder
@@ -214,7 +215,9 @@ function transformToDownloadingResult(recipient, returnLog) {
  * @returns {object} The transformed sending result object
  */
 function transformToSendingResult(recipient) {
-  const uniqueSortedRefs = [...new Set(recipient.licenceRefs)].sort()
+  const uniqueSortedRefs = [...new Set(recipient.licenceRefs)].sort((referenceString, compareString) => {
+    return compareStrings(referenceString, compareString)
+  })
 
   return {
     contact: recipient.contact,

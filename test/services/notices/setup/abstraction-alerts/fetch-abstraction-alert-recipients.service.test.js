@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const LicenceDocumentHeaderSeeder = require('../../../../support/seeders/licence-document-header.seeder.js')
+const { compareStrings } = require('../../../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchAbstractionAlertRecipientsService = require('../../../../../app/services/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
@@ -258,7 +259,9 @@ describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipie
       const combinedLicenceRefs = [
         seedData.multipleAdditionalContactDifferentLicenceRefs.licenceDocument.licenceRef,
         seedData.multipleAdditionalContactDifferentLicenceRefs.licenceDocumentTwo.licenceRef
-      ].sort()
+      ].sort((referenceString, compareString) => {
+        return compareStrings(referenceString, compareString)
+      })
 
       expect(result).to.equal([
         {

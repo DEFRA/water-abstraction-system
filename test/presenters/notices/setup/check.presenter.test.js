@@ -74,6 +74,18 @@ describe('Notices - Setup - Check presenter', () => {
           previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.licenceHolderWithMultipleLicences.contact_hash_id}`
         },
         {
+          contact: ['primary.user@important.com'],
+          licences: testRecipients.primaryUser.licence_refs,
+          method: 'Email - primary user',
+          previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.primaryUser.contact_hash_id}`
+        },
+        {
+          contact: ['returns.agent@important.com'],
+          licences: testRecipients.returnsUser.licence_refs,
+          method: 'Email - returns user',
+          previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.returnsUser.contact_hash_id}`
+        },
+        {
           contact: [
             'Ronald Weasley',
             'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
@@ -85,18 +97,6 @@ describe('Notices - Setup - Check presenter', () => {
           licences: testRecipients.returnsTo.licence_refs,
           method: 'Letter - returns to',
           previewLink: null
-        },
-        {
-          contact: ['primary.user@important.com'],
-          licences: testRecipients.primaryUser.licence_refs,
-          method: 'Email - primary user',
-          previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.primaryUser.contact_hash_id}`
-        },
-        {
-          contact: ['returns.agent@important.com'],
-          licences: testRecipients.returnsUser.licence_refs,
-          method: 'Email - returns user',
-          previewLink: `/system/notices/setup/${session.id}/preview/${testRecipients.returnsUser.contact_hash_id}`
         }
       ],
       tableCaption: 'Showing all 5 recipients',
@@ -235,7 +235,7 @@ describe('Notices - Setup - Check presenter', () => {
         it('should return the email address', () => {
           const result = CheckPresenter.go(recipients, page, session)
 
-          expect(result.recipients[3].contact).to.equal(['primary.user@important.com'])
+          expect(result.recipients[2].contact).to.equal(['primary.user@important.com'])
         })
       })
 
@@ -259,7 +259,7 @@ describe('Notices - Setup - Check presenter', () => {
           it('should return the postal address flagged as INVALID', () => {
             const result = CheckPresenter.go(recipients, page, session)
 
-            expect(result.recipients[2].contact).to.equal([
+            expect(result.recipients[4].contact).to.equal([
               'Ronald Weasley',
               'INVALID ADDRESS - Needs a valid postcode or country outside the UK',
               '2',
@@ -312,7 +312,7 @@ describe('Notices - Setup - Check presenter', () => {
               it('should return null', () => {
                 const result = CheckPresenter.go(recipients, page, session)
 
-                expect(result.recipients[2].previewLink).to.be.null()
+                expect(result.recipients[4].previewLink).to.be.null()
               })
             })
           })
@@ -357,7 +357,7 @@ describe('Notices - Setup - Check presenter', () => {
             it('should return null', () => {
               const result = CheckPresenter.go(recipients, page, session)
 
-              expect(result.recipients[2].previewLink).to.be.null()
+              expect(result.recipients[4].previewLink).to.be.null()
             })
           })
         })
@@ -380,7 +380,7 @@ describe('Notices - Setup - Check presenter', () => {
               it('should return null', () => {
                 const result = CheckPresenter.go(recipients, page, session)
 
-                expect(result.recipients[2].previewLink).to.be.null()
+                expect(result.recipients[4].previewLink).to.be.null()
               })
             })
           })
@@ -407,7 +407,7 @@ describe('Notices - Setup - Check presenter', () => {
               it('should return null', () => {
                 const result = CheckPresenter.go(recipients, page, session)
 
-                expect(result.recipients[2].previewLink).to.be.null()
+                expect(result.recipients[4].previewLink).to.be.null()
               })
             })
           })

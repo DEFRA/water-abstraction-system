@@ -19,6 +19,7 @@ const CompanyHelper = require('../../support/helpers/company.helper.js')
 const LicenceHelper = require('../../support/helpers/licence.helper.js')
 const RegionHelper = require('../../support/helpers/region.helper.js')
 const RegionModel = require('../../../app/models/region.model.js')
+const { compareStrings } = require('../../../app/lib/general.lib.js')
 
 // Thing under test
 const FetchBillRunService = require('../../../app/services/bill-runs/fetch-bill-run.service.js')
@@ -143,7 +144,11 @@ describe('Fetch Bill Run service', () => {
       // NOTE: When we create the licences the helper will generate random licence references. When the service returns
       // them for the first bill though, they are expected to be in ascending order. So, we need to sort them first to
       // then compare against the result
-      const firstBillsLicences = [linkedLicences[0].licenceRef, linkedLicences[1].licenceRef].sort()
+      const firstBillsLicences = [linkedLicences[0].licenceRef, linkedLicences[1].licenceRef].sort(
+        (referenceString, compareString) => {
+          return compareStrings(referenceString, compareString)
+        }
+      )
 
       expect(result).to.have.length(2)
       expect(result).to.include({

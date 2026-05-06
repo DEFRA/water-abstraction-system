@@ -13,7 +13,7 @@ const EmptyLicenceSeeder = require('../../../../support/seeders/empty-licence.se
 const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
 const RecipientsSeeder = require('../../../../support/seeders/recipients.seeder.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const { compareStrings, generateUUID } = require('../../../../../app/lib/general.lib.js')
 const { futureDueDate } = require('../../../../../app/presenters/notices/base.presenter.js')
 
 // Thing under test
@@ -37,7 +37,9 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
     // NOTE: GenerateRecipientsQueryService for downloads will order by return ID (it has to because of the distinct
     // clause). So, we generate two IDs, sort them, and then use them when creating the return logs to ensure our
     // expectations match the order of the results.
-    const returnLogIds = [generateUUID(), generateUUID()].sort()
+    const returnLogIds = [generateUUID(), generateUUID()].sort((referenceString, compareString) => {
+      return compareStrings(referenceString, compareString)
+    })
 
     // Create a return log with a null `dueDate`.
     nullDueDateReturnLog = await ReturnLogHelper.add({
@@ -91,7 +93,9 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
         // query that will fetch any due return logs
         const sendingResult = RecipientsSeeder.transformToSendingResult({
           ...licenceHolder,
-          returnLogIds: [nullDueDateReturnLog.id, setDueDateReturnLog.id].sort()
+          returnLogIds: [nullDueDateReturnLog.id, setDueDateReturnLog.id].sort((referenceString, compareString) => {
+            return compareStrings(referenceString, compareString)
+          })
         })
 
         // In our scenario we have a mix of return logs with and without due dates, so the query will return a

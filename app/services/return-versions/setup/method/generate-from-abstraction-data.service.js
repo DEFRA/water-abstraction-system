@@ -7,6 +7,7 @@
 
 const DetermineTwoPartTariffAgreementService = require('./determine-two-part-tariff-agreement.service.js')
 const FetchAbstractionDataService = require('./fetch-abstraction-data.service.js')
+const { compareStrings } = require('../../../../lib/general.lib.js')
 
 const SUMMER_RETURN_CYCLE = 'summer'
 const WINTER_RETURN_CYCLE = 'winter-and-all-year'
@@ -42,16 +43,8 @@ async function go(licenceId, licenceVersionId, startDate) {
 
   const returnRequirements = _transformForSetup(licence)
 
-  return returnRequirements.sort((requirement1, requirement2) => {
-    if (requirement1.siteDescription < requirement2.siteDescription) {
-      return -1
-    }
-
-    if (requirement1.siteDescription > requirement2.siteDescription) {
-      return 1
-    }
-
-    return 0
+  return returnRequirements.sort((first, second) => {
+    return compareStrings(first.siteDescription, second.siteDescription)
   })
 }
 

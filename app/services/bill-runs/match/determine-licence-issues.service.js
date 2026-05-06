@@ -5,6 +5,7 @@
  * @module DetermineLicenceIssuesService
  */
 
+const { compareStrings } = require('../../../lib/general.lib.js')
 const { twoPartTariffReviewIssues } = require('../../../lib/static-lookups.lib.js')
 
 /**
@@ -197,7 +198,9 @@ function _licenceIssues(allElementIssues, allReturnIssues) {
     uniqueIssues.add('Multiple issues')
   }
 
-  return [...uniqueIssues].sort()
+  return [...uniqueIssues].sort((referenceString, compareString) => {
+    return compareStrings(referenceString, compareString)
+  })
 }
 
 function _returnLogIssues(returnLog, licence) {
