@@ -43,6 +43,13 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/users/external/{id}/licences',
+    options: {
+      handler: UsersController.viewExternalLicences
+    }
+  },
+  {
+    method: 'GET',
     path: '/users/external/{id}/verifications',
     options: {
       handler: UsersController.viewExternalVerifications
