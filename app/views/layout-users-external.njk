@@ -19,6 +19,14 @@
         </li>
 
         <li
+          class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'licences' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="licences{{ backQueryString }}"
+              {% if activeSecondaryNav === 'licences' %}aria-current="page"{% endif %}>
+            Licences
+          </a>
+        </li>
+
+        <li
           class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'verifications' %}x-govuk-sub-navigation__section-item--current{% endif %}">
             <a class="x-govuk-sub-navigation__link" href="verifications{{ backQueryString }}"
               {% if activeSecondaryNav === 'verifications' %}aria-current="page"{% endif %}>
