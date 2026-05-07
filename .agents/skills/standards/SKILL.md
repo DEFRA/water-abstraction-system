@@ -44,12 +44,7 @@ This document defines the standards an agent must apply when reviewing or writin
 
 ## Testing
 
-- Tests live in `test/` mirroring the `app/` structure
-- Test file names match the module they are testing with a `.test.js` extension (e.g. `delete-session.dal.test.js`)
-- Use `@hapi/lab` and `@hapi/code` — not Jest, Mocha, or Chai
-- Never leave `describe.only()` or `it.only()` in committed code — CI will fail on these
-- Test behaviour, not implementation
-- One assertion concept per `it` block
+See `.agents/skills/testing/SKILL.md` for full testing standards.
 
 ## Database
 
