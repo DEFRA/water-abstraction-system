@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches the user details needed for the view `/users/internal/{id}/details` page
- * @module FetchUserDal
+ * Fetches the user details needed for user pages
+ * @module FetchUserDetailsDal
  */
 
 const UserModel = require('../../../models/user.model.js')
 
 /**
- * Fetches the user details needed for the view `/users/internal/{id}/details` page
+ * Fetches the user details needed for user pages
  *
  * @param {number} id - The ID of the requested user
  *
