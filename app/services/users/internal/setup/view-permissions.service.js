@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the '' page
+ * Orchestrates fetching and presenting the data for the '/users/internal/setup/{sessionId}/permissions' page
  *
  * @module ViewPermissionsService
  */
@@ -10,7 +10,7 @@ const PermissionsPresenter = require('../../../../presenters/users/internal/setu
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 
 /**
- * Orchestrates fetching and presenting the data for the '' page
+ * Orchestrates fetching and presenting the data for the '/users/internal/setup/{sessionId}/permissions' page
  *
  * @param {string} sessionId - The UUID of the current session
  *
