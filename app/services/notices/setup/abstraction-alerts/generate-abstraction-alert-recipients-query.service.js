@@ -158,13 +158,13 @@ function _additionalContactsQuery() {
     FROM
       public.licence_documents ld
         INNER JOIN public.licence_document_roles ldr
-                   ON ldr.licence_document_id = ld.id
+          ON ldr.licence_document_id = ld.id
         INNER JOIN public.company_contacts cct
-                   ON cct.company_id = ldr.company_id
+          ON cct.company_id = ldr.company_id
         INNER JOIN public.contacts con
-                   ON con.id = cct.contact_id
+          ON con.id = cct.contact_id
         INNER JOIN public.licence_roles lr
-                   ON lr.id = cct.licence_role_id
+          ON lr.id = cct.licence_role_id
     WHERE
       ld.licence_ref = ANY (?)
       AND (
