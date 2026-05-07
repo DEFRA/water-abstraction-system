@@ -5,6 +5,9 @@
  * @module GenerateRenewalRecipientsQueryService
  */
 
+const { licenceHolderRecipientQuery } = require('../../../dal/licences/licence-holder-recipient-query.dal.js')
+const { primaryUserRecipientQuery } = require('../../../dal/licences/primary-user-recipient-query.dal.js')
+
 /**
  * Generates the SQL query for renewal invitations
  *
@@ -53,53 +56,7 @@ function go(expiredLicencesQuery) {
 
 function _licenceHolderQuery() {
   return `
-    SELECT
-      ('licence holder') AS contact_type,
-      2 AS priority,
-      jsonb_build_object(
-        'name', c.name,
-        'address1', a.address_1,
-        'address2', a.address_2,
-        'address3', a.address_3,
-        'address4', a.address_4,
-        'address5', a.address_5,
-        'address6', a.address_6,
-        'postcode', a.postcode,
-        'country', a.country
-      ) AS contact,
-      MD5(LOWER(CONCAT(
-        c.name,
-        a.address_1,
-        a.address_2,
-        a.address_3,
-        a.address_4,
-        a.address_5,
-        a.address_6,
-        a.postcode,
-        a.country
-      ))) AS contact_hash_id,
-      NULL::TEXT AS email,
-      l.licence_ref,
-      ('Letter') AS message_type
-    FROM
-      public.licences l
-    INNER JOIN (
-      SELECT DISTINCT ON (lv.licence_id)
-        lv.licence_id,
-        lv.company_id,
-        lv.address_id
-      FROM
-        public.licence_versions lv
-      WHERE
-        lv.start_date <= CURRENT_DATE
-      ORDER BY
-        lv.licence_id ASC,
-        lv."issue" DESC,
-        lv."increment" DESC,
-        lv.end_date DESC NULLS FIRST
-    ) AS llv ON llv.licence_id = l.id
-    INNER JOIN public.companies c ON c.id = llv.company_id
-    INNER JOIN public.addresses a ON a.id = llv.address_id
+    ${licenceHolderRecipientQuery}
     INNER JOIN expiring_licences el
       ON el.licence_ref = l.licence_ref
     LEFT JOIN registered_licences rl
@@ -110,22 +67,10 @@ function _licenceHolderQuery() {
 
 function _primaryUserQuery() {
   return `
-    SELECT
-      ('primary user') AS contact_type,
-      1 AS priority,
-      NULL::jsonb AS contact,
-      md5(LOWER(le."name")) AS contact_hash_id,
-      le."name" AS email,
-      ldh.licence_ref,
-      ('Email') as message_type
-    FROM public.licence_document_headers ldh
-    INNER JOIN public.licence_entity_roles ler
-      ON ler.company_entity_id = ldh.company_entity_id AND ler."role" = 'primary_user'
-    INNER JOIN public.licence_entities le
-      ON le.id = ler.licence_entity_id
+    ${primaryUserRecipientQuery}
     INNER JOIN expiring_licences el
       ON el.licence_ref = ldh.licence_ref
-    `
+  `
 }
 
 function _processForSending() {
