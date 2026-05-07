@@ -33,16 +33,28 @@ This applies everywhere: return values, inline objects, `module.exports`, test a
 
 ## 2 — `require()` imports must be in alphabetical order by variable name
 
-Within each group (see rule 3), sort imports A–Z by variable name.
+Within each group (see rule 3), non-destructured imports come first (sorted A–Z), then destructured imports (sorted A–Z). The two kinds are not separated by a blank line — it's one block, ordered by kind then name.
 
 ```js
-// Bad
-const path = require('path')
-const express = require('express')
+// Bad — mixed ordering, destructured before non-destructured
+const { db } = require('../db/db.js')
+const GenerateQueryService = require('./generate-query.service.js')
 
-// Good
-const express = require('express')
-const path = require('path')
+// Bad — alphabetical by name but ignoring destructuring kind
+const { db } = require('../db/db.js')          // d < G, but destructured goes below
+const GenerateQueryService = require('./generate-query.service.js')
+
+// Good — non-destructured first (alpha), then destructured (alpha)
+const GenerateQueryService = require('./generate-query.service.js')
+const { db } = require('../db/db.js')
+```
+
+```js
+// Good — multiple of each kind
+const FetchService = require('./fetch.service.js')
+const GenerateService = require('./generate.service.js')
+const { db } = require('../db/db.js')
+const { licenceHolderQuery } = require('../dal/licence-holder.dal.js')
 ```
 
 ## 3 — External packages and internal dependencies must be in separate groups
