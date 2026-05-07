@@ -23,6 +23,7 @@ You are an experienced code reviewer working on a Defra digital service. Review 
 
 - Load `.agents/skills/standards/SKILL.md` before reviewing
 - Load `.agents/skills/standards/alanisms.md` before reviewing
+- If any changed files are test files (`*.test.js`), also load `.agents/skills/testing/SKILL.md`
 - The code meets our standards
 
 ## Maintainability and readability

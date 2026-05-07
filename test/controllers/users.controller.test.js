@@ -20,6 +20,7 @@ const IndexUsersService = require('../../app/services/users/index-users.service.
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
 const ViewExternalDetailsService = require('../../app/services/users/external/view-details.service.js')
+const ViewExternalLicencesService = require('../../app/services/users/external/view-licences.service.js')
 const ViewExternalVerificationsService = require('../../app/services/users/external/view-verifications.service.js')
 const ViewInternalCommunicationsService = require('../../app/services/users/internal/view-communications.service.js')
 const ViewInternalDetailsService = require('../../app/services/users/internal/view-details.service.js')
@@ -175,14 +176,11 @@ describe('Users controller', () => {
             text: 'Go back to users'
           },
           backQueryString: '?back=users',
-          displayLicenceEndedMessage: false,
           lastSignedIn: 'Last signed in 6 October 2022 at 10:00:00',
-          licences: [],
           pageTitle: 'User details',
           pageTitleCaption: 'external@example.co.uk',
           permissions: 'None',
           roles: [],
-          showEditButton: true,
           status: 'enabled'
         })
       })
@@ -194,11 +192,47 @@ describe('Users controller', () => {
         expect(response.payload).to.contain('User details')
       })
     })
+  })
+
+  describe('/users/external/{id}/licences', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        id = generateUUID()
+        options = _getOptions(`/users/external/${id}/licences`, { scope: [], user: { id } })
+
+        Sinon.stub(ViewExternalLicencesService, 'go').resolves({
+          activeNavBar: 'users',
+          activeSecondaryNav: 'licences',
+          pagination: {
+            currentPageNumber: 1,
+            numberOfPages: 0,
+            showingMessage: 'Showing all 0 licences'
+          },
+          backLink: {
+            href: '/system/users',
+            text: 'Go back to users'
+          },
+          backQueryString: '?back=users',
+          displayLicenceEndedMessage: false,
+          pageTitle: 'Licences',
+          pageTitleCaption: 'external@example.co.uk',
+          licences: [],
+          showUnlinkButton: true
+        })
+      })
+
+      it('returns the external user page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Licences')
+      })
+    })
 
     describe('POST', () => {
       beforeEach(() => {
         id = generateUUID()
-        postOptions = postRequestOptions(`/users/external/${id}/details`, {})
+        postOptions = postRequestOptions(`/users/external/${id}/licences`, {})
       })
 
       describe('when the request succeeds', () => {

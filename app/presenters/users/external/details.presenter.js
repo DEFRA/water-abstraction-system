@@ -7,7 +7,6 @@
 
 const { formatLongDateTime } = require('../../base.presenter.js')
 const { sourceNavigation } = require('../base-users.presenter.js')
-const { today } = require('../../../lib/general.lib.js')
 
 const EXTERNAL_ROLES = {
   primary_user: {
@@ -25,21 +24,14 @@ const EXTERNAL_ROLES = {
  *
  * @param {module:UserModel} user - The user, including their related companies and the licence document headers that
  * are attached to those companies
- * @param {module:LicenceModel[]} licences - The licences linked to the user, including their related roles and current
- * licence
  * @param {string[]} viewingUserScope - The 'scope' taken off the `request.auth` object passed to the
  * `ViewDetailsService`
  * @param {string} back - The 'back' query parameter, used to indicate what back link should be shown on the page
  *
  * @returns {object} The data formatted for the view template
  */
-function go(user, licences, viewingUserScope, back) {
+function go(user, viewingUserScope, back) {
   const permissions = user.$permissions()
-
-  const formattedLicences = _userLicences(licences)
-  const displayLicenceEndedMessage = formattedLicences.some((formattedLicence) => {
-    return formattedLicence.status
-  })
 
   const canManageAccounts = viewingUserScope.includes('manage_accounts')
   const sourceNavigationDetails = sourceNavigation(back, canManageAccounts)
@@ -48,62 +40,13 @@ function go(user, licences, viewingUserScope, back) {
     activeNavBar: sourceNavigationDetails.activeNavBar,
     backLink: sourceNavigationDetails.backLink,
     backQueryString: sourceNavigationDetails.backQueryString,
-    displayLicenceEndedMessage,
     lastSignedIn: _lastSignedIn(user),
-    licences: formattedLicences,
     pageTitle: 'User details',
     pageTitleCaption: user.username,
     permissions: permissions.label,
     roles: _roles(permissions),
-    showEditButton: canManageAccounts,
     status: user.$status()
   }
-}
-
-function _userLicences(licences) {
-  return licences.map((licence) => {
-    const { id, licenceRef, licenceVersions } = licence
-    const licenceEndDetails = licence.$ends()
-
-    return {
-      currentLicenceHolder: licenceVersions[0].licenceVersionHolder.derivedName,
-      id,
-      licenceLink: `/system/licences/${id}/summary`,
-      licenceRef,
-      permissions: _licencePermissions(licence),
-      status: _status(licenceEndDetails)
-    }
-  })
-}
-
-function _licencePermissions(licence) {
-  const { licenceEntityRoles } = licence.licenceDocumentHeader
-
-  let role = licenceEntityRoles.some((licenceEntityRole) => {
-    return licenceEntityRole.role === 'primary_user'
-  })
-
-  if (role) {
-    return 'Primary user'
-  }
-
-  role = licenceEntityRoles.some((licenceEntityRole) => {
-    return licenceEntityRole.role === 'user_returns'
-  })
-
-  if (role) {
-    return 'Returns user'
-  }
-
-  return 'Basic access'
-}
-
-function _status(licenceEndDetails) {
-  if (licenceEndDetails && licenceEndDetails.date <= today()) {
-    return licenceEndDetails.reason
-  }
-
-  return null
 }
 
 function _roles(permissions) {

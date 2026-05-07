@@ -50,99 +50,102 @@ describe('Users - External - Fetch Licences DAL', () => {
   })
 
   describe('when called', () => {
-    it('returns the requested user', async () => {
+    it('returns the matching licences and the total', async () => {
       const result = await FetchLicencesDal.go(userEntity.id)
 
-      expect(result).to.equal([
-        {
-          expiredDate: licenceData1.licence.expiredDate,
-          id: licenceData1.licence.id,
-          lapsedDate: licenceData1.licence.lapsedDate,
-          licenceRef: licenceData1.licence.licenceRef,
-          revokedDate: licenceData1.licence.revokedDate,
-          licenceVersions: [
-            {
-              id: licenceData1.licenceVersion.id,
-              licenceId: licenceData1.licence.id,
-              licenceVersionHolder: {
-                derivedName: licenceData1.licenceVersionHolder.derivedName,
-                id: licenceData1.licenceVersionHolder.id,
-                licenceVersionId: licenceData1.licenceVersionHolder.licenceVersionId
-              }
-            }
-          ],
-          licenceDocumentHeader: {
-            id: licenceData1.licenceDocumentHeader.id,
-            licenceEntityRoles: [
+      expect(result).to.equal({
+        licences: [
+          {
+            expiredDate: licenceData1.licence.expiredDate,
+            id: licenceData1.licence.id,
+            lapsedDate: licenceData1.licence.lapsedDate,
+            licenceRef: licenceData1.licence.licenceRef,
+            revokedDate: licenceData1.licence.revokedDate,
+            licenceVersions: [
               {
-                id: licenceData1.licenceEntityRoles[0].id,
-                role: licenceData1.licenceEntityRoles[0].role
+                id: licenceData1.licenceVersion.id,
+                licenceId: licenceData1.licence.id,
+                licenceVersionHolder: {
+                  derivedName: licenceData1.licenceVersionHolder.derivedName,
+                  id: licenceData1.licenceVersionHolder.id,
+                  licenceVersionId: licenceData1.licenceVersionHolder.licenceVersionId
+                }
               }
             ],
-            licenceRef: licenceData1.licenceDocumentHeader.licenceRef
-          }
-        },
-        {
-          expiredDate: licenceData3.licence.expiredDate,
-          id: licenceData3.licence.id,
-          lapsedDate: licenceData3.licence.lapsedDate,
-          licenceRef: licenceData3.licence.licenceRef,
-          revokedDate: licenceData3.licence.revokedDate,
-          licenceVersions: [
-            {
-              id: licenceData3.licenceVersion.id,
-              licenceId: licenceData3.licence.id,
-              licenceVersionHolder: {
-                derivedName: licenceData3.licenceVersionHolder.derivedName,
-                id: licenceData3.licenceVersionHolder.id,
-                licenceVersionId: licenceData3.licenceVersionHolder.licenceVersionId
-              }
+            licenceDocumentHeader: {
+              id: licenceData1.licenceDocumentHeader.id,
+              licenceEntityRoles: [
+                {
+                  id: licenceData1.licenceEntityRoles[0].id,
+                  role: licenceData1.licenceEntityRoles[0].role
+                }
+              ],
+              licenceRef: licenceData1.licenceDocumentHeader.licenceRef
             }
-          ],
-          licenceDocumentHeader: {
-            id: licenceData3.licenceDocumentHeader.id,
-            licenceEntityRoles: [
+          },
+          {
+            expiredDate: licenceData3.licence.expiredDate,
+            id: licenceData3.licence.id,
+            lapsedDate: licenceData3.licence.lapsedDate,
+            licenceRef: licenceData3.licence.licenceRef,
+            revokedDate: licenceData3.licence.revokedDate,
+            licenceVersions: [
               {
-                id: licenceData3.licenceEntityRoles[0].id,
-                role: licenceData3.licenceEntityRoles[0].role
+                id: licenceData3.licenceVersion.id,
+                licenceId: licenceData3.licence.id,
+                licenceVersionHolder: {
+                  derivedName: licenceData3.licenceVersionHolder.derivedName,
+                  id: licenceData3.licenceVersionHolder.id,
+                  licenceVersionId: licenceData3.licenceVersionHolder.licenceVersionId
+                }
               }
             ],
-            licenceRef: licenceData3.licenceDocumentHeader.licenceRef
-          }
-        },
-        {
-          expiredDate: licenceData4.licence.expiredDate,
-          id: licenceData4.licence.id,
-          lapsedDate: licenceData4.licence.lapsedDate,
-          licenceRef: licenceData4.licence.licenceRef,
-          revokedDate: licenceData4.licence.revokedDate,
-          licenceVersions: [
-            {
-              id: licenceData4.licenceVersion.id,
-              licenceId: licenceData4.licence.id,
-              licenceVersionHolder: {
-                derivedName: licenceData4.licenceVersionHolder.derivedName,
-                id: licenceData4.licenceVersionHolder.id,
-                licenceVersionId: licenceData4.licenceVersionHolder.licenceVersionId
-              }
+            licenceDocumentHeader: {
+              id: licenceData3.licenceDocumentHeader.id,
+              licenceEntityRoles: [
+                {
+                  id: licenceData3.licenceEntityRoles[0].id,
+                  role: licenceData3.licenceEntityRoles[0].role
+                }
+              ],
+              licenceRef: licenceData3.licenceDocumentHeader.licenceRef
             }
-          ],
-          licenceDocumentHeader: {
-            id: licenceData4.licenceDocumentHeader.id,
-            licenceEntityRoles: [
+          },
+          {
+            expiredDate: licenceData4.licence.expiredDate,
+            id: licenceData4.licence.id,
+            lapsedDate: licenceData4.licence.lapsedDate,
+            licenceRef: licenceData4.licence.licenceRef,
+            revokedDate: licenceData4.licence.revokedDate,
+            licenceVersions: [
               {
-                id: licenceData4.licenceEntityRoles[1].id,
-                role: licenceData4.licenceEntityRoles[1].role
-              },
-              {
-                id: licenceData4.licenceEntityRoles[0].id,
-                role: licenceData4.licenceEntityRoles[0].role
+                id: licenceData4.licenceVersion.id,
+                licenceId: licenceData4.licence.id,
+                licenceVersionHolder: {
+                  derivedName: licenceData4.licenceVersionHolder.derivedName,
+                  id: licenceData4.licenceVersionHolder.id,
+                  licenceVersionId: licenceData4.licenceVersionHolder.licenceVersionId
+                }
               }
             ],
-            licenceRef: licenceData4.licenceDocumentHeader.licenceRef
+            licenceDocumentHeader: {
+              id: licenceData4.licenceDocumentHeader.id,
+              licenceEntityRoles: [
+                {
+                  id: licenceData4.licenceEntityRoles[1].id,
+                  role: licenceData4.licenceEntityRoles[1].role
+                },
+                {
+                  id: licenceData4.licenceEntityRoles[0].id,
+                  role: licenceData4.licenceEntityRoles[0].role
+                }
+              ],
+              licenceRef: licenceData4.licenceDocumentHeader.licenceRef
+            }
           }
-        }
-      ])
+        ],
+        totalNumber: 3
+      })
     })
   })
 })
