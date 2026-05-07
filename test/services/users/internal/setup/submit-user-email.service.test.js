@@ -60,7 +60,7 @@ describe('Users - Internal - Setup - User Email Service', () => {
       const result = await SubmitUserEmailService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
-        redirectUrl: `/system/users/internal/setup/${session.id}/select-permissions`
+        redirectUrl: `/system/users/internal/setup/${session.id}/permissions`
       })
     })
 
