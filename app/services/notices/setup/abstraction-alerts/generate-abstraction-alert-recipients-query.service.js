@@ -54,36 +54,12 @@ function go(licenceRefs) {
 }
 
 function _query() {
+  const additionalContactsQuery = _additionalContactsQuery()
   const licenceHolderQuery = _licenceHolderQuery()
 
   return `
   WITH additional_contacts AS (
-    SELECT
-      DISTINCT
-      ld.licence_ref,
-      'additional contact' AS contact_type,
-      con.email,
-      NULL::jsonb AS contact,
-      md5(LOWER(con.email)) AS contact_hash_id,
-      ('Email') as message_type
-    FROM
-      public.licence_documents ld
-      INNER JOIN public.licence_document_roles ldr
-        ON ldr.licence_document_id = ld.id
-      INNER JOIN public.company_contacts cct
-        ON cct.company_id = ldr.company_id
-      INNER JOIN public.contacts con
-        ON con.id = cct.contact_id
-      INNER JOIN public.licence_roles lr
-        ON lr.id = cct.licence_role_id
-    WHERE
-      ld.licence_ref = ANY (?)
-      AND (
-      ldr.end_date IS NULL
-        OR ldr.end_date >= CURRENT_DATE
-      )
-      AND cct.abstraction_alerts = true
-      AND cct.deleted_at IS NULL
+    ${additionalContactsQuery}
   ),
 
   primary_users AS (
@@ -126,11 +102,11 @@ function _query() {
     )
   ),
 
-    all_contacts AS (
-      SELECT * FROM additional_contacts
-      UNION ALL
-      SELECT * FROM primary_or_licence_holder
-    ),
+  all_contacts AS (
+    SELECT * FROM additional_contacts
+    UNION ALL
+    SELECT * FROM primary_or_licence_holder
+  ),
 
   unique_contact AS (
     SELECT DISTINCT ON (contact_hash_id)
@@ -169,13 +145,44 @@ function _query() {
 `
 }
 
+function _additionalContactsQuery() {
+  return `
+    SELECT
+      DISTINCT
+      ld.licence_ref,
+      'additional contact' AS contact_type,
+      con.email,
+      NULL::jsonb AS contact,
+      md5(LOWER(con.email)) AS contact_hash_id,
+      ('Email') as message_type
+    FROM
+      public.licence_documents ld
+        INNER JOIN public.licence_document_roles ldr
+                   ON ldr.licence_document_id = ld.id
+        INNER JOIN public.company_contacts cct
+                   ON cct.company_id = ldr.company_id
+        INNER JOIN public.contacts con
+                   ON con.id = cct.contact_id
+        INNER JOIN public.licence_roles lr
+                   ON lr.id = cct.licence_role_id
+    WHERE
+      ld.licence_ref = ANY (?)
+      AND (
+      ldr.end_date IS NULL
+        OR ldr.end_date >= CURRENT_DATE
+      )
+      AND cct.abstraction_alerts = true
+      AND cct.deleted_at IS NULL
+  `
+}
+
 function _licenceHolderQuery() {
   return `
     ${licenceHolderRecipientQuery}
     LEFT JOIN registered_licences rl
       ON rl.licence_ref = l.licence_ref
     WHERE rl.licence_ref IS NULL
-    AND l.licence_ref = ANY (?)
+      AND l.licence_ref = ANY (?)
   `
 }
 
