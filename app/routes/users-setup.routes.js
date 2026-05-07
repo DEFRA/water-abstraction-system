@@ -17,6 +17,18 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/users/internal/setup/{sessionId}/permissions',
+    options: {
+      handler: UsersSetupController.viewPermissions,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/users/internal/setup/{sessionId}/user-email',
     options: {
       handler: UsersSetupController.viewUserEmail,
