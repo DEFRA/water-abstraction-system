@@ -38,28 +38,33 @@ Within each group (see rule 3), sort imports A–Z by variable name.
 ```js
 // Bad
 const path = require('path')
-const express = require('express')
+const crypto = require('node:crypto')
 
 // Good
-const express = require('express')
+const crypto = require('node:crypto')
 const path = require('path')
 ```
 
-## 3 — External packages and internal dependencies must be in separate groups
+## 3 — External packages, internal dependencies, and config modules must be in separate groups
 
-Group 1 is external packages (from `node_modules`). Group 2 is internal dependencies (relative paths). Separate the groups with a blank line. Each group is sorted alphabetically (rule 2).
+Group 1 is external packages (from `node_modules`). Group 2 is internal dependencies (relative paths). Group 3 is config modules (from `config/`). Separate the groups with a blank line. Each group is sorted alphabetically (rule 2).
 
 ```js
-// Bad — mixed together
-const homePresenter = require('../presenters/home.presenter.js')
-const express = require('express')
+// Bad — external packages and config mixed with other internals, and not in alpha order
+const crypto = require('node:crypto')
+const LicenceModel = require('../../../models/licence.model.js')
+const path = require('path')
+const DatabaseConfig = require('../../../../config/database.config.js')
+const ViewNoticeService = require('../../../services/notices/view-notice.service.js')
 
-// Good — two groups, each in alpha order
-const express = require('express')
+// Good — three groups, each in alpha order
+const crypto = require('node:crypto')
 const path = require('path')
 
-const homePresenter = require('../presenters/home.presenter.js')
-const homeService = require('../services/home.service.js')
+const LicenceModel = require('../../../models/licence.model.js')
+const ViewNoticeService = require('../../../services/notices/view-notice.service.js')
+
+const DatabaseConfig = require('../../../../config/database.config.js')
 ```
 
 ## 4 — Blank line after variable declarations before the first statement
