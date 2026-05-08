@@ -5,8 +5,10 @@
  * @module GenerateAbstractionAlertRecipientsQueryService
  */
 
-const { licenceHolderRecipientQuery } = require('../../../../dal/notices/licence-holder-recipient-query.dal.js')
-const { primaryUserRecipientQuery } = require('../../../../dal/notices/primary-user-recipient-query.dal.js')
+const {
+  licenceHolderRecipientQuery,
+  primaryUserRecipientQuery
+} = require('../../../../dal/notices/recipient-queries.dal.js')
 
 /**
  * Generates the SQL query for abstraction alert recipients
