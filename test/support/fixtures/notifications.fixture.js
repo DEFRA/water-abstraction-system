@@ -505,6 +505,17 @@ function returnsReminderLetter(notice) {
 }
 
 /**
+ * Generates a new user external password reset email notification object
+ *
+ * @param {string} recipient - The email of the recipient
+ *
+ * @returns {object} The generated user external email object
+ */
+function userExternalPasswordResetEmail(recipient) {
+  return _userPasswordResetEmail(recipient, false)
+}
+
+/**
  * Generates a user external share existing email notification object
  *
  * @param {string} recipient - The email of the recipient
@@ -555,37 +566,7 @@ function userExternalShareExistingEmail(recipient, sender) {
  * @returns {object} The generated user internal email object
  */
 function userInternalPasswordResetEmail(recipient) {
-  const notification = {
-    contactType: null,
-    createdAt: new Date('2025-04-18'),
-    dueDate: null,
-    eventId: null,
-    id: generateUUID(),
-    licenceMonitoringStationId: null,
-    licences: [],
-    messageRef: 'password_reset_email',
-    messageType: 'email',
-    notifyId: generateUUID(),
-    notifyStatus: 'delivered',
-    pdf: null,
-    personalisation: {
-      firstname: '(User)',
-      reset_url: `https://admin.manage-water-abstraction-impoundment-licence.service.gov.uk/reset_password_change_password?resetGuid=${generateUUID()}`
-    },
-    plaintext:
-      'Hello\n' +
-      '\n' +
-      'You requested a password reset to view your water abstraction or impoundment licence(s). No changes have been made to your account yet.\n' +
-      '\n' +
-      'You can reset your password using the link below (this link will only work once):\n',
-    recipient,
-    returnedAt: null,
-    returnLogIds: null,
-    status: 'sent',
-    templateId: null
-  }
-
-  return notification
+  return _userPasswordResetEmail(recipient, true)
 }
 
 /**
@@ -628,6 +609,42 @@ function userNewInternalEmail(recipient) {
   return notification
 }
 
+function _userPasswordResetEmail(recipient, internal) {
+  const adminPrefix = internal ? 'admin.' : ''
+
+  const notification = {
+    contactType: null,
+    createdAt: new Date('2025-04-18'),
+    dueDate: null,
+    eventId: null,
+    id: generateUUID(),
+    licenceMonitoringStationId: null,
+    licences: [],
+    messageRef: 'password_reset_email',
+    messageType: 'email',
+    notifyId: generateUUID(),
+    notifyStatus: 'delivered',
+    pdf: null,
+    personalisation: {
+      firstname: '(User)',
+      reset_url: `https://${adminPrefix}manage-water-abstraction-impoundment-licence.service.gov.uk/reset_password_change_password?resetGuid=${generateUUID()}`
+    },
+    plaintext:
+      'Hello\n' +
+      '\n' +
+      'You requested a password reset to view your water abstraction or impoundment licence(s). No changes have been made to your account yet.\n' +
+      '\n' +
+      'You can reset your password using the link below (this link will only work once):\n',
+    recipient,
+    returnedAt: null,
+    returnLogIds: null,
+    status: 'sent',
+    templateId: null
+  }
+
+  return notification
+}
+
 module.exports = {
   abstractionAlertEmail,
   abstractionAlertLetter,
@@ -639,6 +656,7 @@ module.exports = {
   returnsInvitationLetter,
   returnsReminderEmail,
   returnsReminderLetter,
+  userExternalPasswordResetEmail,
   userExternalShareExistingEmail,
   userInternalPasswordResetEmail,
   userNewInternalEmail
