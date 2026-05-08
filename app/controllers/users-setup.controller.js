@@ -33,9 +33,12 @@ async function submitUserEmail(request, h) {
 }
 
 async function viewPermissions(request, h) {
-  const { sessionId } = request.params
+  const {
+    auth,
+    params: { sessionId }
+  } = request
 
-  const pageData = await ViewPermissionsService.go(sessionId)
+  const pageData = await ViewPermissionsService.go(auth, sessionId)
 
   return h.view('users/internal/setup/permissions.njk', pageData)
 }
