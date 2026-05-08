@@ -30,6 +30,12 @@ async function _fetch(username, page) {
     .whereNull('eventId')
     .where('recipient', username)
     .whereIn('messageRef', _messageRefs())
+    .whereRaw(
+      `(
+  notifications.personalisation->>'reset_url' IS NULL
+  OR notifications.personalisation->>'reset_url' LIKE 'https://admin.%'
+)`
+    )
     .orderBy('createdAt', 'DESC')
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
 }
