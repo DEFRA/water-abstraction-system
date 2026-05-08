@@ -6,6 +6,7 @@
  */
 
 const NotificationModel = require('../../../models/notification.model.js')
+const { userNotificationTypes } = require('../../../lib/static-lookups.lib.js')
 
 const DatabaseConfig = require('../../../../config/database.config.js')
 
@@ -28,8 +29,21 @@ async function _fetch(username, page) {
     .select(['createdAt', 'id', 'messageRef', 'messageType', 'status'])
     .whereNull('eventId')
     .where('recipient', username)
+    .whereIn('messageRef', _messageRefs())
     .orderBy('createdAt', 'DESC')
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
+}
+
+function _messageRefs() {
+  const messageRefs = []
+
+  for (const [key, value] of Object.entries(userNotificationTypes)) {
+    if (['both', 'internal'].includes(value.type)) {
+      messageRefs.push(key)
+    }
+  }
+
+  return messageRefs
 }
 
 module.exports = {
