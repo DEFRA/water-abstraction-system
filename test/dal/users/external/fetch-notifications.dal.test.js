@@ -1,0 +1,89 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+
+const { describe, it, beforeEach, after } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Test helpers
+const NotificationHelper = require('../../../support/helpers/notification.helper.js')
+const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
+const UsersFixture = require('../../../support/fixtures/users.fixture.js')
+const { today } = require('../../../../app/lib/general.lib.js')
+const { yesterday } = require('../../../support/general.js')
+
+// Thing under test
+const FetchNotificationsDal = require('../../../../app/dal/users/external/fetch-notifications.dal.js')
+
+describe('Users - External - Fetch Notifications DAL', () => {
+  let notifications
+  let user
+
+  beforeEach(async () => {
+    user = UsersFixture.external()
+
+    // NOTE: Password resets can be sent to both internal and external accounts. We create both in this test to ensure
+    // only the external ones are returned by the DAL. We also set createdAt to ensure the results are ordered as
+    // expected.
+    notifications = [
+      // Should NOT be returned as is 'external' only
+      await NotificationHelper.add(
+        NotificationsFixture.userNewInternalEmail(user.username, { createdAt: yesterday() })
+      ),
+      // Should be returned, but below the external password reset
+      await NotificationHelper.add(
+        NotificationsFixture.userExternalShareExistingEmail(user.username, { createdAt: yesterday() })
+      ),
+      // Should be returned as the first result because it has the latest createdAt date
+      await NotificationHelper.add(
+        NotificationsFixture.userExternalPasswordResetEmail(user.username, { createdAt: today() })
+      ),
+      // Should NOT be returned, even though `password_reset_email` are set to both user types
+      await NotificationHelper.add(
+        NotificationsFixture.userInternalPasswordResetEmail(user.username, { createdAt: today() })
+      )
+    ]
+  })
+
+  after(async () => {
+    for (const notification of notifications) {
+      await notification.$query().delete()
+    }
+  })
+
+  describe('when the user has notifications', () => {
+    it('returns the matching notifications and the total', async () => {
+      const result = await FetchNotificationsDal.go(user.username)
+
+      expect(result).to.equal({
+        notifications: [
+          {
+            createdAt: notifications[2].createdAt,
+            id: notifications[2].id,
+            messageRef: 'password_reset_email',
+            messageType: notifications[2].messageType,
+            status: notifications[2].status
+          },
+          {
+            createdAt: notifications[1].createdAt,
+            id: notifications[1].id,
+            messageRef: 'share_existing_user',
+            messageType: notifications[1].messageType,
+            status: notifications[1].status
+          }
+        ],
+        totalNumber: 2
+      })
+    })
+  })
+
+  describe('when the user has no notifications', () => {
+    it('returns an empty array and zero', async () => {
+      const result = await FetchNotificationsDal.go('mystery.user@example.co.uk')
+
+      expect(result).to.equal({ notifications: [], totalNumber: 0 })
+    })
+  })
+})
