@@ -33,45 +33,38 @@ This applies everywhere: return values, inline objects, `module.exports`, test a
 
 ## 2 — `require()` imports must be in alphabetical order by variable name
 
-Within each group (see rule 3), non-destructured imports come first (sorted A–Z), then destructured imports (sorted A–Z). The two kinds are not separated by a blank line — it's one block, ordered by kind then name.
+Within each group (see rule 3), sort imports A–Z by variable name.
 
 ```js
-// Bad — mixed ordering, destructured before non-destructured
-const { db } = require('../db/db.js')
-const GenerateQueryService = require('./generate-query.service.js')
+// Bad
+const path = require('path')
+const crypto = require('node:crypto')
 
-// Bad — alphabetical by name but ignoring destructuring kind
-const { db } = require('../db/db.js')          // d < G, but destructured goes below
-const GenerateQueryService = require('./generate-query.service.js')
-
-// Good — non-destructured first (alpha), then destructured (alpha)
-const GenerateQueryService = require('./generate-query.service.js')
-const { db } = require('../db/db.js')
+// Good
+const crypto = require('node:crypto')
+const path = require('path')
 ```
 
-```js
-// Good — multiple of each kind
-const FetchService = require('./fetch.service.js')
-const GenerateService = require('./generate.service.js')
-const { db } = require('../db/db.js')
-const { licenceHolderQuery } = require('../dal/licence-holder.dal.js')
-```
+## 3 — External packages, internal dependencies, and config modules must be in separate groups
 
-## 3 — External packages and internal dependencies must be in separate groups
-
-Group 1 is external packages (from `node_modules`). Group 2 is internal dependencies (relative paths). Separate the groups with a blank line. Each group is sorted alphabetically (rule 2).
+Group 1 is external packages (from `node_modules`). Group 2 is internal dependencies (relative paths). Group 3 is config modules (from `config/`). Separate the groups with a blank line. Each group is sorted alphabetically (rule 2).
 
 ```js
-// Bad — mixed together
-const homePresenter = require('../presenters/home.presenter.js')
-const express = require('express')
+// Bad — external packages and config mixed with other internals, and not in alpha order
+const crypto = require('node:crypto')
+const LicenceModel = require('../../../models/licence.model.js')
+const path = require('path')
+const DatabaseConfig = require('../../../../config/database.config.js')
+const ViewNoticeService = require('../../../services/notices/view-notice.service.js')
 
-// Good — two groups, each in alpha order
-const express = require('express')
+// Good — three groups, each in alpha order
+const crypto = require('node:crypto')
 const path = require('path')
 
-const homePresenter = require('../presenters/home.presenter.js')
-const homeService = require('../services/home.service.js')
+const LicenceModel = require('../../../models/licence.model.js')
+const ViewNoticeService = require('../../../services/notices/view-notice.service.js')
+
+const DatabaseConfig = require('../../../../config/database.config.js')
 ```
 
 ## 4 — Blank line after variable declarations before the first statement
