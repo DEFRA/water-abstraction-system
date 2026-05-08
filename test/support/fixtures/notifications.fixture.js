@@ -6,6 +6,8 @@ const NotificationModel = require('../../../app/models/notification.model.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { NOTIFY_TEMPLATES } = require('../../../app/lib/notify-templates.lib.js')
 
+const { domains } = require('../../../config/server.config.js')
+
 const ADDRESS = {
   address_line_1: 'ACME Services Ltd',
   address_line_2: 'ACME Operations Centre',
@@ -540,7 +542,7 @@ function userExternalShareExistingEmail(recipient, sender, overrides = {}) {
     notifyStatus: 'delivered',
     pdf: null,
     personalisation: {
-      link: 'https://manage-water-abstraction-impoundment-licence.service.gov.uk',
+      link: domains.external,
       email: recipient,
       sender
     },
@@ -595,7 +597,7 @@ function userNewInternalEmail(recipient, overrides = {}) {
     notifyStatus: 'delivered',
     pdf: null,
     personalisation: {
-      unique_create_password_link: `https://admin.manage-water-abstraction-impoundment-licence.service.gov.uk/reset_password_change_password?resetGuid=${generateUUID()}`
+      unique_create_password_link: `${domains.internal}/reset_password_change_password?resetGuid=${generateUUID()}`
     },
     plaintext:
       'Hello\n' +
@@ -614,7 +616,7 @@ function userNewInternalEmail(recipient, overrides = {}) {
 }
 
 function _userPasswordResetEmail(recipient, internal, overrides) {
-  const adminPrefix = internal ? 'admin.' : ''
+  const domain = internal ? domains.internal : domains.external
 
   const notification = {
     contactType: null,
@@ -631,7 +633,7 @@ function _userPasswordResetEmail(recipient, internal, overrides) {
     pdf: null,
     personalisation: {
       firstname: '(User)',
-      reset_url: `https://${adminPrefix}manage-water-abstraction-impoundment-licence.service.gov.uk/reset_password_change_password?resetGuid=${generateUUID()}`
+      reset_url: `${domain}/reset_password_change_password?resetGuid=${generateUUID()}`
     },
     plaintext:
       'Hello\n' +

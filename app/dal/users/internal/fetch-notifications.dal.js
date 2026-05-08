@@ -9,6 +9,7 @@ const NotificationModel = require('../../../models/notification.model.js')
 const { userNotificationTypes } = require('../../../lib/static-lookups.lib.js')
 
 const DatabaseConfig = require('../../../../config/database.config.js')
+const ServerConfig = require('../../../../config/server.config.js')
 
 /**
  * Fetches data needed for the view '/system/users/internal/{id}/communications' page
@@ -33,7 +34,7 @@ async function _fetch(username, page) {
     .whereRaw(
       `(
   notifications.personalisation->>'reset_url' IS NULL
-  OR notifications.personalisation->>'reset_url' LIKE 'https://admin.%'
+  OR notifications.personalisation->>'reset_url' LIKE '${ServerConfig.domains.internal}%'
 )`
     )
     .orderBy('createdAt', 'DESC')

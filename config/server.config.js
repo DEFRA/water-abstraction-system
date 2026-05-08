@@ -10,6 +10,10 @@
 require('dotenv').config()
 
 const config = {
+  domains: {
+    external: process.env.EXTERNAL_DOMAIN,
+    internal: process.env.INTERNAL_DOMAIN
+  },
   environment: process.env.NODE_ENV || 'development',
   hapi: {
     port: process.env.PORT,
