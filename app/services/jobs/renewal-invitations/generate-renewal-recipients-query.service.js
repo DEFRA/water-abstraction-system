@@ -5,8 +5,8 @@
  * @module GenerateRenewalRecipientsQueryService
  */
 
-const { licenceHolderRecipientQuery } = require('../../../dal/licences/licence-holder-recipient-query.dal.js')
-const { primaryUserRecipientQuery } = require('../../../dal/licences/primary-user-recipient-query.dal.js')
+const { licenceHolderRecipientQuery } = require('../../../dal/notices/licence-holder-recipient-query.dal.js')
+const { primaryUserRecipientQuery } = require('../../../dal/notices/primary-user-recipient-query.dal.js')
 
 /**
  * Generates the SQL query for renewal invitations
