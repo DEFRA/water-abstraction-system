@@ -508,11 +508,12 @@ function returnsReminderLetter(notice) {
  * Generates a new user external password reset email notification object
  *
  * @param {string} recipient - The email of the recipient
+ * @param {object} overrides - An object of properties to override in the generated notification object
  *
  * @returns {object} The generated user external email object
  */
-function userExternalPasswordResetEmail(recipient) {
-  return _userPasswordResetEmail(recipient, false)
+function userExternalPasswordResetEmail(recipient, overrides = {}) {
+  return _userPasswordResetEmail(recipient, false, overrides)
 }
 
 /**
@@ -520,10 +521,11 @@ function userExternalPasswordResetEmail(recipient) {
  *
  * @param {string} recipient - The email of the recipient
  * @param {string} sender - The email of the sender
+ * @param {object} overrides - An object of properties to override in the generated notification object
  *
  * @returns {object} The generated user external email object
  */
-function userExternalShareExistingEmail(recipient, sender) {
+function userExternalShareExistingEmail(recipient, sender, overrides = {}) {
   const notification = {
     contactType: null,
     createdAt: new Date('2025-04-18'),
@@ -555,28 +557,30 @@ function userExternalShareExistingEmail(recipient, sender) {
     templateId: null
   }
 
-  return notification
+  return { ...notification, ...overrides }
 }
 
 /**
  * Generates a new user internal password reset email notification object
  *
  * @param {string} recipient - The email of the recipient
+ * @param {object} overrides - An object of properties to override in the generated notification object
  *
  * @returns {object} The generated user internal email object
  */
-function userInternalPasswordResetEmail(recipient) {
-  return _userPasswordResetEmail(recipient, true)
+function userInternalPasswordResetEmail(recipient, overrides = {}) {
+  return _userPasswordResetEmail(recipient, true, overrides)
 }
 
 /**
  * Generates a new internal user email notification object
  *
  * @param {string} recipient - The email of the recipient
+ * @param {object} overrides - An object of properties to override in the generated notification object
  *
  * @returns {object} The generated user new internal email object
  */
-function userNewInternalEmail(recipient) {
+function userNewInternalEmail(recipient, overrides = {}) {
   const notification = {
     contactType: null,
     createdAt: new Date('2025-04-18'),
@@ -606,10 +610,10 @@ function userNewInternalEmail(recipient) {
     templateId: null
   }
 
-  return notification
+  return { ...notification, ...overrides }
 }
 
-function _userPasswordResetEmail(recipient, internal) {
+function _userPasswordResetEmail(recipient, internal, overrides) {
   const adminPrefix = internal ? 'admin.' : ''
 
   const notification = {
@@ -642,7 +646,7 @@ function _userPasswordResetEmail(recipient, internal) {
     templateId: null
   }
 
-  return notification
+  return { ...notification, ...overrides }
 }
 
 module.exports = {
