@@ -1,12 +1,14 @@
 'use strict'
 
 /**
- * Formats data for the '' page
+ * Formats data for the '/users/internal/setup/{sessionId}/permissions' page
  * @module PermissionsPresenter
  */
 
+const { checkUrl } = require('../../../../lib/check-page.lib.js')
+
 /**
- * Formats data for the '' page
+ * Formats data for the '/users/internal/setup/{sessionId}/permissions' page
  *
  * @param {object} session - The session instance
  *
@@ -15,10 +17,12 @@
 function go(session) {
   return {
     backLink: {
-      href: '',
+      href: checkUrl(session, `/system/users/internal/setup/${session.id}/user-email`),
       text: 'Back'
     },
-    pageTitle: ''
+    pageTitle: 'Select permissions for the user',
+    pageTitleCaption: 'Internal',
+    permissions: session.permissions
   }
 }
 
