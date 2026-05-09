@@ -49,7 +49,7 @@ function _userLicences(licences) {
     const licenceEndDetails = licence.$ends()
 
     return {
-      currentLicenceHolder: licenceVersions[0].licenceVersionHolder.derivedName,
+      currentLicenceHolder: licenceVersions[0].company.name,
       id,
       licenceRef,
       link: `/system/licences/${id}/summary`,
