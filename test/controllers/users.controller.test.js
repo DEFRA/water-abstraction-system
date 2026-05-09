@@ -11,7 +11,7 @@ const { expect } = Code
 // Test helpers
 const FeatureFlagsConfig = require('../../config/feature-flags.config.js')
 const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
-const { generateUUID } = require('../../app/lib/general.lib.js')
+const { generateUUID, today } = require('../../app/lib/general.lib.js')
 const { postRequestOptions } = require('../support/general.js')
 
 // Things we need to stub
@@ -19,6 +19,7 @@ const FetchLegacyIdDal = require('../../app/dal/users/fetch-legacy-id.dal.js')
 const IndexUsersService = require('../../app/services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
+const ViewExternalCommunicationsService = require('../../app/services/users/external/view-communications.service.js')
 const ViewExternalDetailsService = require('../../app/services/users/external/view-details.service.js')
 const ViewExternalLicencesService = require('../../app/services/users/external/view-licences.service.js')
 const ViewExternalVerificationsService = require('../../app/services/users/external/view-verifications.service.js')
@@ -34,6 +35,7 @@ describe('Users controller', () => {
   let id
   let options
   let notificationId
+  let pageData
   let postOptions
   let server
 
@@ -58,16 +60,35 @@ describe('Users controller', () => {
   })
 
   describe('/users', () => {
+    beforeEach(() => {
+      pageData = {
+        filters: {
+          email: null,
+          openFilter: true,
+          permissions: null,
+          status: null,
+          type: null
+        },
+        links: {
+          user: {
+            href: '/account/create-user',
+            text: 'Create a user'
+          }
+        },
+        pageTitle: 'Users',
+        users: [],
+        pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 0 users' }
+      }
+    })
+
     describe('GET', () => {
       beforeEach(() => {
         options = _getOptions('/users', { scope: ['manage_accounts'] })
       })
 
-      describe('with no pagination', () => {
-        beforeEach(() => {
-          const pageData = _usersPageData()
-
-          Sinon.stub(IndexUsersService, 'go').returns(pageData)
+      describe('with no results', () => {
+        beforeEach(async () => {
+          Sinon.stub(IndexUsersService, 'go').resolves(pageData)
         })
 
         it('returns the page successfully', async () => {
@@ -75,28 +96,57 @@ describe('Users controller', () => {
 
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Users')
-          expect(response.payload).to.contain('Showing all 1 users')
+          expect(response.payload).to.contain('No users found.')
         })
       })
 
-      describe('with pagination', () => {
-        beforeEach(() => {
-          options.url = '/users?page=2'
-
-          const pageData = _usersPageData()
-
-          pageData.pageTitle = 'Users'
-          pageData.pagination.showingMessage = 'Showing 25 of 70 users'
-
-          Sinon.stub(IndexUsersService, 'go').returns(pageData)
+      describe('with results', () => {
+        beforeEach(async () => {
+          pageData.users = [
+            {
+              email: 'basic.access@wrls.gov.uk',
+              link: '/user/10016/status',
+              permissions: 'Basic access',
+              status: 'enabled',
+              type: 'Internal'
+            }
+          ]
         })
 
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
+        describe('and no pagination', () => {
+          beforeEach(() => {
+            pageData.pagination.showingMessage = 'Showing all 1 users'
 
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Users')
-          expect(response.payload).to.contain('Showing 25 of 70 users')
+            Sinon.stub(IndexUsersService, 'go').returns(pageData)
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('Users')
+            expect(response.payload).to.contain('Showing all 1 users')
+          })
+        })
+
+        describe('and pagination', () => {
+          beforeEach(() => {
+            options.url = `${options.url}?page=2`
+
+            pageData.pagination.currentPageNumber = 2
+            pageData.pagination.numberOfPages = 3
+            pageData.pagination.showingMessage = 'Showing 25 of 70 users'
+
+            Sinon.stub(IndexUsersService, 'go').returns(pageData)
+          })
+
+          it('returns the page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('Users')
+            expect(response.payload).to.contain('Showing 25 of 70 users')
+          })
         })
       })
     })
@@ -108,7 +158,9 @@ describe('Users controller', () => {
 
       describe('when the request succeeds', () => {
         beforeEach(() => {
-          Sinon.stub(SubmitIndexUsersService, 'go').returns({})
+          pageData = {}
+
+          Sinon.stub(SubmitIndexUsersService, 'go').returns(pageData)
         })
 
         it('redirects back to the index page', async () => {
@@ -120,10 +172,23 @@ describe('Users controller', () => {
       })
 
       describe('when the request fails', () => {
-        describe('with no pagination', () => {
-          beforeEach(() => {
-            const pageData = _usersPageData(true)
+        beforeEach(() => {
+          pageData.filters.type = 'foo'
+          pageData.error = {
+            errorList: [
+              {
+                href: '#type',
+                text: 'Select a valid type'
+              }
+            ],
+            type: {
+              text: 'Select a valid type'
+            }
+          }
+        })
 
+        describe('with no results', () => {
+          beforeEach(() => {
             Sinon.stub(SubmitIndexUsersService, 'go').returns(pageData)
           })
 
@@ -134,28 +199,152 @@ describe('Users controller', () => {
 
             expect(response.payload).to.contain('There is a problem')
             expect(response.payload).to.contain('Users')
-            expect(response.payload).to.contain('Showing all 1 users')
+            expect(response.payload).to.contain('No users found.')
           })
         })
 
-        describe('with pagination', () => {
+        describe('with results', () => {
           beforeEach(async () => {
-            const pageData = _usersPageData(true)
-
-            pageData.pageTitle = 'Users'
-            pageData.pagination.showingMessage = 'Showing 25 of 70 users'
-
-            Sinon.stub(SubmitIndexUsersService, 'go').returns(pageData)
+            pageData.users = [
+              {
+                email: 'basic.access@wrls.gov.uk',
+                link: '/user/10016/status',
+                permissions: 'Basic access',
+                status: 'enabled',
+                type: 'Internal'
+              }
+            ]
           })
 
-          it('re-renders the index page with pagination and an error', async () => {
-            const response = await server.inject(postOptions)
+          describe('and no pagination', () => {
+            beforeEach(() => {
+              pageData.pagination.showingMessage = 'Showing all 1 users'
+
+              Sinon.stub(SubmitIndexUsersService, 'go').returns(pageData)
+            })
+
+            it('re-renders the index page with no pagination and an error', async () => {
+              const response = await server.inject(postOptions)
+
+              expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+
+              expect(response.payload).to.contain('There is a problem')
+              expect(response.payload).to.contain('Users')
+              expect(response.payload).to.contain('Showing all 1 users')
+            })
+          })
+
+          describe('and pagination', () => {
+            beforeEach(async () => {
+              options.url = `${options.url}?page=2`
+
+              pageData.pagination.currentPageNumber = 2
+              pageData.pagination.numberOfPages = 3
+              pageData.pagination.showingMessage = 'Showing 25 of 70 users'
+
+              Sinon.stub(SubmitIndexUsersService, 'go').returns(pageData)
+            })
+
+            it('re-renders the index page with pagination and an error', async () => {
+              const response = await server.inject(postOptions)
+
+              expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+
+              expect(response.payload).to.contain('There is a problem')
+              expect(response.payload).to.contain('Users')
+              expect(response.payload).to.contain('Showing 25 of 70 users')
+            })
+          })
+        })
+      })
+    })
+  })
+
+  describe('/users/external/{id}/communications', () => {
+    describe('GET', () => {
+      beforeEach(() => {
+        id = generateUUID()
+        options = _getOptions(`/users/external/${id}/communications`, { scope: [], user: { id } })
+
+        pageData = {
+          activeNavBar: 'users',
+          activeSecondaryNav: 'communications',
+          pagination: {
+            currentPageNumber: 1,
+            numberOfPages: 0,
+            showingMessage: 'Showing all 0 communications'
+          },
+          backLink: {
+            href: '/system/users',
+            text: 'Go back to users'
+          },
+          backQueryString: '?back=users',
+          notifications: [],
+          pageTitle: 'Communications',
+          pageTitleCaption: 'external@example.co.uk'
+        }
+      })
+
+      describe('with no results', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewExternalCommunicationsService, 'go').resolves(pageData)
+        })
+
+        it('returns the external user page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Communications')
+          expect(response.payload).to.contain('This user has no associated communications.')
+        })
+      })
+
+      describe('with results', () => {
+        beforeEach(async () => {
+          pageData.notifications = [
+            {
+              createdAt: today(),
+              id: generateUUID(),
+              messageRef: 'password_reset_email',
+              messageType: 'email',
+              status: 'sent'
+            }
+          ]
+        })
+
+        describe('and no pagination', () => {
+          beforeEach(async () => {
+            pageData.pagination.showingMessage = 'Showing all 1 communications'
+
+            Sinon.stub(ViewExternalCommunicationsService, 'go').resolves(pageData)
+          })
+
+          it('returns the external user page successfully', async () => {
+            const response = await server.inject(options)
 
             expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('Communications')
+            expect(response.payload).to.contain('Showing all 1 communications')
+          })
+        })
 
-            expect(response.payload).to.contain('There is a problem')
-            expect(response.payload).to.contain('Users')
-            expect(response.payload).to.contain('Showing 25 of 70 users')
+        describe('and pagination', () => {
+          beforeEach(async () => {
+            options.url = `${options.url}?page=2`
+
+            pageData.pagination.currentPageNumber = 2
+            pageData.pagination.numberOfPages = 3
+            pageData.pagination.showingMessage = 'Showing 25 of 70 communications'
+
+            Sinon.stub(ViewExternalCommunicationsService, 'go').resolves(pageData)
+          })
+
+          it('returns the external user page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('Communications')
+            expect(response.payload).to.contain('Showing 25 of 70 communications')
           })
         })
       })
@@ -200,7 +389,7 @@ describe('Users controller', () => {
         id = generateUUID()
         options = _getOptions(`/users/external/${id}/licences`, { scope: [], user: { id } })
 
-        Sinon.stub(ViewExternalLicencesService, 'go').resolves({
+        pageData = {
           activeNavBar: 'users',
           activeSecondaryNav: 'licences',
           pagination: {
@@ -217,15 +406,93 @@ describe('Users controller', () => {
           pageTitle: 'Licences',
           pageTitleCaption: 'external@example.co.uk',
           licences: [],
-          showUnlinkButton: true
+          showUnlinkButton: false
+        }
+      })
+
+      describe('with no results', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewExternalLicencesService, 'go').resolves(pageData)
+        })
+
+        it('returns the external user page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Licences')
+          expect(response.payload).to.contain('This user has no linked licences.')
         })
       })
 
-      it('returns the external user page successfully', async () => {
-        const response = await server.inject(options)
+      describe('with results', () => {
+        beforeEach(async () => {
+          pageData.licences = [
+            {
+              expiredDate: null,
+              id: generateUUID(),
+              lapsedDate: null,
+              licenceRef: '01/123',
+              revokedDate: null,
+              licenceDocumentHeader: {
+                id: generateUUID(),
+                licenceRef: '01/123',
+                licenceEntityRoles: [
+                  {
+                    id: generateUUID(),
+                    role: 'primary_user'
+                  }
+                ]
+              },
+              licenceVersions: [
+                {
+                  id: generateUUID(),
+                  licenceId: generateUUID(),
+                  licenceVersionHolder: {
+                    derivedName: 'Between Two Ferns Surfacing Limited',
+                    id: generateUUID(),
+                    licenceVersionId: generateUUID()
+                  }
+                }
+              ]
+            }
+          ]
+        })
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Licences')
+        describe('and no pagination', () => {
+          beforeEach(async () => {
+            pageData.pagination.showingMessage = 'Showing all 1 licences'
+
+            Sinon.stub(ViewExternalLicencesService, 'go').resolves(pageData)
+          })
+
+          it('returns the external user page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('Licences')
+            expect(response.payload).to.contain('Showing all 1 licences')
+          })
+        })
+
+        describe('and pagination', () => {
+          beforeEach(async () => {
+            options.url = `${options.url}?page=2`
+
+            pageData.pagination.currentPageNumber = 2
+            pageData.pagination.numberOfPages = 3
+            pageData.pagination.showingMessage = 'Showing 25 of 70 licences'
+
+            Sinon.stub(ViewExternalLicencesService, 'go').resolves(pageData)
+          })
+
+          it('returns the external user page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('Licences')
+            expect(response.payload).to.contain('Showing 25 of 70 licences')
+          })
+        })
       })
     })
 
@@ -256,7 +523,7 @@ describe('Users controller', () => {
         id = generateUUID()
         options = _getOptions(`/users/external/${id}/verifications`, { scope: [], user: { id } })
 
-        Sinon.stub(ViewExternalVerificationsService, 'go').resolves({
+        pageData = {
           activeNavBar: 'users',
           activeSecondaryNav: 'verifications',
           pagination: {
@@ -272,14 +539,94 @@ describe('Users controller', () => {
           pageTitle: 'Verifications',
           pageTitleCaption: 'external@example.co.uk',
           verifications: []
+        }
+      })
+
+      describe('with no results', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewExternalVerificationsService, 'go').resolves(pageData)
+        })
+
+        it('returns the external user page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Verifications')
+          expect(response.payload).to.contain('This user has no associated verifications.')
         })
       })
 
-      it('returns the external user page successfully', async () => {
-        const response = await server.inject(options)
+      describe('with results', () => {
+        beforeEach(async () => {
+          pageData.verifications = [
+            {
+              createdAt: new Date('2025-07-02T19:22:46.000Z'),
+              id: generateUUID(),
+              verifiedAt: new Date('2025-07-02T19:22:51.000Z'),
+              verificationCode: 'A7vdJ',
+              licenceDocumentHeaders: [
+                {
+                  id: generateUUID(),
+                  licenceRef: 'AN/033/0053/130',
+                  licence: {
+                    id: generateUUID(),
+                    licenceRef: 'AN/033/0053/130',
+                    licenceVersions: [
+                      {
+                        id: generateUUID(),
+                        issueDate: new Date('2013-04-01'),
+                        licenceId: generateUUID(),
+                        startDate: new Date('2025-04-01'),
+                        status: 'current',
+                        company: {
+                          id: generateUUID(),
+                          name: 'Rochester Farm Limited',
+                          type: 'organisation'
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        })
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Verifications')
+        describe('and no pagination', () => {
+          beforeEach(async () => {
+            pageData.pagination.showingMessage = 'Showing all 1 verifications'
+
+            Sinon.stub(ViewExternalVerificationsService, 'go').resolves(pageData)
+          })
+
+          it('returns the external user page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('Verifications')
+            expect(response.payload).to.contain('Showing all 1 verifications')
+          })
+        })
+
+        describe('and pagination', () => {
+          beforeEach(async () => {
+            options.url = `${options.url}?page=2`
+
+            pageData.pagination.currentPageNumber = 2
+            pageData.pagination.numberOfPages = 3
+            pageData.pagination.showingMessage = 'Showing 25 of 70 verifications'
+
+            Sinon.stub(ViewExternalVerificationsService, 'go').resolves(pageData)
+          })
+
+          it('returns the external user page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('Verifications')
+            expect(response.payload).to.contain('Showing 25 of 70 verifications')
+          })
+        })
       })
     })
   })
@@ -290,7 +637,7 @@ describe('Users controller', () => {
         id = generateUUID()
         options = _getOptions(`/users/internal/${id}/communications`, { scope: ['manage_accounts'], user: { id } })
 
-        Sinon.stub(ViewInternalCommunicationsService, 'go').resolves({
+        pageData = {
           activeNavBar: 'users',
           activeSecondaryNav: 'communications',
           pagination: {
@@ -305,14 +652,71 @@ describe('Users controller', () => {
           notifications: [],
           pageTitle: 'Communications',
           pageTitleCaption: 'carol.shaw@wrls.gov.uk'
+        }
+      })
+
+      describe('with no results', () => {
+        beforeEach(async () => {
+          Sinon.stub(ViewInternalCommunicationsService, 'go').resolves(pageData)
+        })
+
+        it('returns the internal user page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Communications')
+          expect(response.payload).to.contain('This user has no associated communications.')
         })
       })
 
-      it('returns the internal user page successfully', async () => {
-        const response = await server.inject(options)
+      describe('with results', () => {
+        beforeEach(async () => {
+          pageData.notifications = [
+            {
+              createdAt: today(),
+              id: generateUUID(),
+              messageRef: 'password_reset_email',
+              messageType: 'email',
+              status: 'sent'
+            }
+          ]
+        })
 
-        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-        expect(response.payload).to.contain('Communications')
+        describe('and no pagination', () => {
+          beforeEach(async () => {
+            pageData.pagination.showingMessage = 'Showing all 1 communications'
+
+            Sinon.stub(ViewInternalCommunicationsService, 'go').resolves(pageData)
+          })
+
+          it('returns the internal user page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('Communications')
+            expect(response.payload).to.contain('Showing all 1 communications')
+          })
+        })
+
+        describe('and pagination', () => {
+          beforeEach(async () => {
+            options.url = `${options.url}?page=2`
+
+            pageData.pagination.currentPageNumber = 2
+            pageData.pagination.numberOfPages = 3
+            pageData.pagination.showingMessage = 'Showing 25 of 70 communications'
+
+            Sinon.stub(ViewInternalCommunicationsService, 'go').resolves(pageData)
+          })
+
+          it('returns the internal user page successfully', async () => {
+            const response = await server.inject(options)
+
+            expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+            expect(response.payload).to.contain('Communications')
+            expect(response.payload).to.contain('Showing 25 of 70 communications')
+          })
+        })
       })
     })
   })
@@ -470,50 +874,4 @@ function _getOptions(url, credentials) {
       credentials
     }
   }
-}
-
-function _usersPageData(error = false) {
-  const pageData = {
-    filters: {
-      email: null,
-      openFilter: true,
-      permissions: null,
-      status: null,
-      type: null
-    },
-    links: {
-      user: {
-        href: '/account/create-user',
-        text: 'Create a user'
-      }
-    },
-    pageTitle: 'Users',
-    users: [
-      {
-        email: 'basic.access@wrls.gov.uk',
-        link: '/user/10016/status',
-        permissions: 'Basic access',
-        status: 'enabled',
-        type: 'Internal'
-      }
-    ],
-    pagination: { currentPageNumber: 1, numberOfPages: 1, showingMessage: 'Showing all 1 users' }
-  }
-
-  if (error) {
-    pageData.filters.type = 'foo'
-    pageData.error = {
-      errorList: [
-        {
-          href: '#type',
-          text: 'Select a valid type'
-        }
-      ],
-      type: {
-        text: 'Select a valid type'
-      }
-    }
-  }
-
-  return pageData
 }

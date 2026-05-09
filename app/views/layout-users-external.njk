@@ -27,6 +27,14 @@
         </li>
 
         <li
+          class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'communications' %}x-govuk-sub-navigation__section-item--current{% endif %}">
+            <a class="x-govuk-sub-navigation__link" href="communications{{ backQueryString }}"
+              {% if activeSecondaryNav === 'communications' %}aria-current="page"{% endif %}>
+            Communications
+          </a>
+        </li>
+
+        <li
           class="x-govuk-sub-navigation__section-item {% if activeSecondaryNav === 'verifications' %}x-govuk-sub-navigation__section-item--current{% endif %}">
             <a class="x-govuk-sub-navigation__link" href="verifications{{ backQueryString }}"
               {% if activeSecondaryNav === 'verifications' %}aria-current="page"{% endif %}>

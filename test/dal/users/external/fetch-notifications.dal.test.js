@@ -15,32 +15,32 @@ const { today } = require('../../../../app/lib/general.lib.js')
 const { yesterday } = require('../../../support/general.js')
 
 // Thing under test
-const FetchNotificationsDal = require('../../../../app/dal/users/internal/fetch-notifications.dal.js')
+const FetchNotificationsDal = require('../../../../app/dal/users/external/fetch-notifications.dal.js')
 
-describe('Users - Internal - Fetch Notifications DAL', () => {
+describe('Users - External - Fetch Notifications DAL', () => {
   let notifications
   let user
 
   beforeEach(async () => {
-    user = UsersFixture.billingAndData()
+    user = UsersFixture.external()
 
     // NOTE: Password resets can be sent to both internal and external accounts. We create both in this test to ensure
-    // only the internal ones are returned by the DAL. We also set createdAt to ensure the results are ordered as
+    // only the external ones are returned by the DAL. We also set createdAt to ensure the results are ordered as
     // expected.
     notifications = [
-      // Should be returned, but below the internal password reset
+      // Should NOT be returned as is 'external' only
       await NotificationHelper.add(
         NotificationsFixture.userNewInternalEmail(user.username, { createdAt: yesterday() })
       ),
-      // Should NOT be returned as is 'external' only
+      // Should be returned, but below the external password reset
       await NotificationHelper.add(
         NotificationsFixture.userExternalShareExistingEmail(user.username, { createdAt: yesterday() })
       ),
-      // Should NOT be returned, even though `password_reset_email` are set to both user types
-      await NotificationHelper.add(
-        NotificationsFixture.userExternalPasswordResetEmail(user.username, { createdAt: yesterday() })
-      ),
       // Should be returned as the first result because it has the latest createdAt date
+      await NotificationHelper.add(
+        NotificationsFixture.userExternalPasswordResetEmail(user.username, { createdAt: today() })
+      ),
+      // Should NOT be returned, even though `password_reset_email` are set to both user types
       await NotificationHelper.add(
         NotificationsFixture.userInternalPasswordResetEmail(user.username, { createdAt: today() })
       )
@@ -60,18 +60,18 @@ describe('Users - Internal - Fetch Notifications DAL', () => {
       expect(result).to.equal({
         notifications: [
           {
-            createdAt: notifications[3].createdAt,
-            id: notifications[3].id,
+            createdAt: notifications[2].createdAt,
+            id: notifications[2].id,
             messageRef: 'password_reset_email',
-            messageType: notifications[3].messageType,
-            status: notifications[3].status
+            messageType: notifications[2].messageType,
+            status: notifications[2].status
           },
           {
-            createdAt: notifications[0].createdAt,
-            id: notifications[0].id,
-            messageRef: 'new_internal_user_email',
-            messageType: notifications[0].messageType,
-            status: notifications[0].status
+            createdAt: notifications[1].createdAt,
+            id: notifications[1].id,
+            messageRef: 'share_existing_user',
+            messageType: notifications[1].messageType,
+            status: notifications[1].status
           }
         ],
         totalNumber: 2
@@ -81,7 +81,7 @@ describe('Users - Internal - Fetch Notifications DAL', () => {
 
   describe('when the user has no notifications', () => {
     it('returns an empty array and zero', async () => {
-      const result = await FetchNotificationsDal.go('mystery.user@wrls.gov.uk')
+      const result = await FetchNotificationsDal.go('mystery.user@example.co.uk')
 
       expect(result).to.equal({ notifications: [], totalNumber: 0 })
     })

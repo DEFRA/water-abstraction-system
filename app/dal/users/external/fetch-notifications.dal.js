@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Fetches data needed for the view '/system/users/internal/{id}/communications' page
+ * Fetches data needed for the view '/system/users/external/{id}/communications' page
  * @module FetchNotificationsDal
  */
 
@@ -12,7 +12,7 @@ const DatabaseConfig = require('../../../../config/database.config.js')
 const ServerConfig = require('../../../../config/server.config.js')
 
 /**
- * Fetches data needed for the view '/system/users/internal/{id}/communications' page
+ * Fetches data needed for the view '/system/users/external/{id}/communications' page
  *
  * @param {string} username - The username (email) of the user
  * @param {string} [page=1] - The current page for the pagination service
@@ -34,7 +34,7 @@ async function _fetch(username, page) {
     .whereRaw(
       `(
   notifications.personalisation->>'reset_url' IS NULL
-  OR notifications.personalisation->>'reset_url' LIKE '${ServerConfig.domains.internal}%'
+  OR notifications.personalisation->>'reset_url' LIKE '${ServerConfig.domains.external}%'
 )`
     )
     .orderBy('createdAt', 'DESC')
@@ -45,7 +45,7 @@ function _messageRefs() {
   const messageRefs = []
 
   for (const [key, value] of Object.entries(userNotificationTypes)) {
-    if (['both', 'internal'].includes(value.type)) {
+    if (['both', 'external'].includes(value.type)) {
       messageRefs.push(key)
     }
   }

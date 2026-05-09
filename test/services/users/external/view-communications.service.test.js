@@ -12,13 +12,13 @@ const { expect } = Code
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
-const FetchLicencesDal = require('../../../../app/dal/users/external/fetch-licences.dal.js')
+const FetchNotificationsDal = require('../../../../app/dal/users/external/fetch-notifications.dal.js')
 const FetchUserDal = require('../../../../app/dal/users/fetch-user.dal.js')
 
 // Thing under test
-const ViewLicencesService = require('../../../../app/services/users/external/view-licences.service.js')
+const ViewCommunicationsService = require('../../../../app/services/users/external/view-communications.service.js')
 
-describe('Users - External - View Licences service', () => {
+describe('Users - External - View Communications service', () => {
   const auth = {
     credentials: { scope: ['manage_accounts'] }
   }
@@ -33,8 +33,8 @@ describe('Users - External - View Licences service', () => {
     user = { id, licenceEntityId: 'b2c55396-9bbb-448d-85e7-2be1dbefc02b', username }
 
     Sinon.stub(FetchUserDal, 'go').resolves(user)
-    Sinon.stub(FetchLicencesDal, 'go').resolves({
-      licences: [],
+    Sinon.stub(FetchNotificationsDal, 'go').resolves({
+      notifications: [],
       totalNumber: 0
     })
   })
@@ -45,26 +45,24 @@ describe('Users - External - View Licences service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicencesService.go(user.id, auth, page, back)
+      const result = await ViewCommunicationsService.go(user.id, auth, page, back)
 
       expect(result).to.equal({
         activeNavBar: 'users',
-        activeSecondaryNav: 'licences',
+        activeSecondaryNav: 'communications',
         pagination: {
           currentPageNumber: 1,
           numberOfPages: 0,
-          showingMessage: 'Showing all 0 licences'
+          showingMessage: 'Showing all 0 communications'
         },
         backLink: {
           href: '/system/users',
           text: 'Go back to users'
         },
         backQueryString: '?back=users',
-        displayLicenceEndedMessage: false,
-        pageTitle: 'Licences',
-        pageTitleCaption: user.username,
-        licences: [],
-        showUnlinkButton: true
+        notifications: [],
+        pageTitle: 'Communications',
+        pageTitleCaption: user.username
       })
     })
   })

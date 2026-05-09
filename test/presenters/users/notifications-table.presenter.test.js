@@ -16,10 +16,12 @@ const NotificationsTablePresenter = require('../../../app/presenters/users/notif
 
 describe('Users - Notifications Table presenter', () => {
   let notifications
+  let type
   let user
 
   beforeEach(() => {
     user = UsersFixture.billingAndData()
+    type = 'internal'
 
     notifications = [
       NotificationsFixture.userNewInternalEmail(user.username),
@@ -28,7 +30,7 @@ describe('Users - Notifications Table presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = NotificationsTablePresenter.go(notifications, user.id)
+    const result = NotificationsTablePresenter.go(notifications, user.id, type)
 
     expect(result).to.equal([
       {
@@ -54,9 +56,29 @@ describe('Users - Notifications Table presenter', () => {
     ])
   })
 
+  describe('the "link" property', () => {
+    describe('the "href" property', () => {
+      describe('when the "type" is "internal"', () => {
+        it('links to the internal user notification details page', () => {
+          const result = NotificationsTablePresenter.go(notifications, user.id, 'internal')
+
+          expect(result[0].link.href).to.equal(`/system/users/internal/${user.id}/notifications/${notifications[0].id}`)
+        })
+      })
+
+      describe('when the "type" is "external"', () => {
+        it('links to the external user notification details page', () => {
+          const result = NotificationsTablePresenter.go(notifications, user.id, 'external')
+
+          expect(result[0].link.href).to.equal(`/system/users/external/${user.id}/notifications/${notifications[0].id}`)
+        })
+      })
+    })
+  })
+
   describe('when there are no notifications', () => {
     it('returns an empty array', () => {
-      const result = NotificationsTablePresenter.go([], user.id)
+      const result = NotificationsTablePresenter.go([], user.id, type)
 
       expect(result).to.equal([])
     })

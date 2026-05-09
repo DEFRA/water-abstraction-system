@@ -6,6 +6,8 @@ const NotificationModel = require('../../../app/models/notification.model.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 const { NOTIFY_TEMPLATES } = require('../../../app/lib/notify-templates.lib.js')
 
+const { domains } = require('../../../config/server.config.js')
+
 const ADDRESS = {
   address_line_1: 'ACME Services Ltd',
   address_line_2: 'ACME Operations Centre',
@@ -505,14 +507,27 @@ function returnsReminderLetter(notice) {
 }
 
 /**
+ * Generates a new user external password reset email notification object
+ *
+ * @param {string} recipient - The email of the recipient
+ * @param {object} overrides - An object of properties to override in the generated notification object
+ *
+ * @returns {object} The generated user external email object
+ */
+function userExternalPasswordResetEmail(recipient, overrides = {}) {
+  return _userPasswordResetEmail(recipient, false, overrides)
+}
+
+/**
  * Generates a user external share existing email notification object
  *
  * @param {string} recipient - The email of the recipient
  * @param {string} sender - The email of the sender
+ * @param {object} overrides - An object of properties to override in the generated notification object
  *
  * @returns {object} The generated user external email object
  */
-function userExternalShareExistingEmail(recipient, sender) {
+function userExternalShareExistingEmail(recipient, sender, overrides = {}) {
   const notification = {
     contactType: null,
     createdAt: new Date('2025-04-18'),
@@ -527,7 +542,7 @@ function userExternalShareExistingEmail(recipient, sender) {
     notifyStatus: 'delivered',
     pdf: null,
     personalisation: {
-      link: 'https://manage-water-abstraction-impoundment-licence.service.gov.uk',
+      link: domains.external,
       email: recipient,
       sender
     },
@@ -544,17 +559,65 @@ function userExternalShareExistingEmail(recipient, sender) {
     templateId: null
   }
 
-  return notification
+  return { ...notification, ...overrides }
 }
 
 /**
  * Generates a new user internal password reset email notification object
  *
  * @param {string} recipient - The email of the recipient
+ * @param {object} overrides - An object of properties to override in the generated notification object
  *
  * @returns {object} The generated user internal email object
  */
-function userInternalPasswordResetEmail(recipient) {
+function userInternalPasswordResetEmail(recipient, overrides = {}) {
+  return _userPasswordResetEmail(recipient, true, overrides)
+}
+
+/**
+ * Generates a new internal user email notification object
+ *
+ * @param {string} recipient - The email of the recipient
+ * @param {object} overrides - An object of properties to override in the generated notification object
+ *
+ * @returns {object} The generated user new internal email object
+ */
+function userNewInternalEmail(recipient, overrides = {}) {
+  const notification = {
+    contactType: null,
+    createdAt: new Date('2025-04-18'),
+    dueDate: null,
+    eventId: null,
+    id: generateUUID(),
+    licenceMonitoringStationId: null,
+    licences: [],
+    messageRef: 'new_internal_user_email',
+    messageType: 'email',
+    notifyId: generateUUID(),
+    notifyStatus: 'delivered',
+    pdf: null,
+    personalisation: {
+      unique_create_password_link: `${domains.internal}/reset_password_change_password?resetGuid=${generateUUID()}`
+    },
+    plaintext:
+      'Hello\n' +
+      '\n' +
+      'An account has been created for you in the Water Resources Licensing Service.\n' +
+      '\n' +
+      'Please use this link to complete your account set up.\n',
+    recipient,
+    returnedAt: null,
+    returnLogIds: null,
+    status: 'sent',
+    templateId: null
+  }
+
+  return { ...notification, ...overrides }
+}
+
+function _userPasswordResetEmail(recipient, internal, overrides) {
+  const domain = internal ? domains.internal : domains.external
+
   const notification = {
     contactType: null,
     createdAt: new Date('2025-04-18'),
@@ -570,7 +633,7 @@ function userInternalPasswordResetEmail(recipient) {
     pdf: null,
     personalisation: {
       firstname: '(User)',
-      reset_url: `https://admin.manage-water-abstraction-impoundment-licence.service.gov.uk/reset_password_change_password?resetGuid=${generateUUID()}`
+      reset_url: `${domain}/reset_password_change_password?resetGuid=${generateUUID()}`
     },
     plaintext:
       'Hello\n' +
@@ -585,47 +648,7 @@ function userInternalPasswordResetEmail(recipient) {
     templateId: null
   }
 
-  return notification
-}
-
-/**
- * Generates a new internal user email notification object
- *
- * @param {string} recipient - The email of the recipient
- *
- * @returns {object} The generated user new internal email object
- */
-function userNewInternalEmail(recipient) {
-  const notification = {
-    contactType: null,
-    createdAt: new Date('2025-04-18'),
-    dueDate: null,
-    eventId: null,
-    id: generateUUID(),
-    licenceMonitoringStationId: null,
-    licences: [],
-    messageRef: 'new_internal_user_email',
-    messageType: 'email',
-    notifyId: generateUUID(),
-    notifyStatus: 'delivered',
-    pdf: null,
-    personalisation: {
-      unique_create_password_link: `https://admin.manage-water-abstraction-impoundment-licence.service.gov.uk/reset_password_change_password?resetGuid=${generateUUID()}`
-    },
-    plaintext:
-      'Hello\n' +
-      '\n' +
-      'An account has been created for you in the Water Resources Licensing Service.\n' +
-      '\n' +
-      'Please use this link to complete your account set up.\n',
-    recipient,
-    returnedAt: null,
-    returnLogIds: null,
-    status: 'sent',
-    templateId: null
-  }
-
-  return notification
+  return { ...notification, ...overrides }
 }
 
 module.exports = {
@@ -639,6 +662,7 @@ module.exports = {
   returnsInvitationLetter,
   returnsReminderEmail,
   returnsReminderLetter,
+  userExternalPasswordResetEmail,
   userExternalShareExistingEmail,
   userInternalPasswordResetEmail,
   userNewInternalEmail
