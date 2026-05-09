@@ -5,6 +5,7 @@
  * @module UsersSetupController
  */
 
+const InitiateExternalSessionService = require('../services/users/external/setup/initiate-session.service.js')
 const InitiateInternalSessionService = require('../services/users/internal/setup/initiate-session.service.js')
 const SubmitCheckService = require('../services/users/internal/setup/submit-check.service.js')
 const SubmitEmailService = require('../services/users/internal/setup/submit-email.service.js')
@@ -12,6 +13,16 @@ const SubmitPermissionsService = require('../services/users/internal/setup/submi
 const ViewCheckService = require('../services/users/internal/setup/view-check.service.js')
 const ViewEmailService = require('../services/users/internal/setup/view-email.service.js')
 const ViewPermissionsService = require('../services/users/internal/setup/view-permissions.service.js')
+
+async function setupExternal(request, h) {
+  const {
+    params: { id }
+  } = request
+
+  const { id: sessionId } = await InitiateExternalSessionService.go(id)
+
+  return h.redirect(`/system/users/external/setup/${sessionId}/licences`)
+}
 
 async function setupInternal(_request, h) {
   const { id: sessionId } = await InitiateInternalSessionService.go()
@@ -94,6 +105,7 @@ async function viewPermissions(request, h) {
 }
 
 module.exports = {
+  setupExternal,
   setupInternal,
   submitCheck,
   submitEmail,
