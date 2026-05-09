@@ -19,6 +19,7 @@ const FetchLegacyIdDal = require('../../app/dal/users/fetch-legacy-id.dal.js')
 const IndexUsersService = require('../../app/services/users/index-users.service.js')
 const SubmitIndexUsersService = require('../../app/services/users/submit-index-users.service.js')
 const SubmitProfileDetailsService = require('../../app/services/users/submit-profile-details.service.js')
+const ViewExternalCommunicationsService = require('../../app/services/users/external/view-communications.service.js')
 const ViewExternalDetailsService = require('../../app/services/users/external/view-details.service.js')
 const ViewExternalLicencesService = require('../../app/services/users/external/view-licences.service.js')
 const ViewExternalVerificationsService = require('../../app/services/users/external/view-verifications.service.js')
@@ -158,6 +159,40 @@ describe('Users controller', () => {
             expect(response.payload).to.contain('Showing 25 of 70 users')
           })
         })
+      })
+    })
+  })
+
+  describe('/users/external/{id}/communications', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        id = generateUUID()
+        options = _getOptions(`/users/external/${id}/communications`, { scope: [], user: { id } })
+
+        Sinon.stub(ViewExternalCommunicationsService, 'go').resolves({
+          activeNavBar: 'users',
+          activeSecondaryNav: 'communications',
+          pagination: {
+            currentPageNumber: 1,
+            numberOfPages: 0,
+            showingMessage: 'Showing all 0 communications'
+          },
+          backLink: {
+            href: '/system/users',
+            text: 'Go back to users'
+          },
+          backQueryString: '?back=users',
+          notifications: [],
+          pageTitle: 'Communications',
+          pageTitleCaption: 'external@example.co.uk'
+        })
+      })
+
+      it('returns the external user page successfully', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+        expect(response.payload).to.contain('Communications')
       })
     })
   })
