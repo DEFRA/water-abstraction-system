@@ -691,7 +691,7 @@ const userNotificationTypes = Object.freeze({
   },
   email_change_verification_code_email: {
     label: 'Change email address - verification code',
-    protected: false,
+    protected: true,
     type: 'external'
   },
   existing_user_verification_email: {
