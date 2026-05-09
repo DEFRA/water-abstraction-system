@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting internal user data for `/users/external/{id}/communications` page
+ * Orchestrates fetching and presenting external user data for `/users/external/{id}/communications` page
  *
  * @module ViewCommunicationsService
  */
@@ -12,7 +12,7 @@ const FetchUserDal = require('../../../dal/users/fetch-user.dal.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 
 /**
- * Orchestrates fetching and presenting internal user data for `/users/external/{id}/communications` page
+ * Orchestrates fetching and presenting external user data for `/users/external/{id}/communications` page
  *
  * @param {number} id - The user's ID
  * @param {object} auth - The auth object taken from `request.auth` containing user details
