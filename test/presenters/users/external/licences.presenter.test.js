@@ -48,7 +48,7 @@ describe('Users - External - Licences Presenter', () => {
       pageTitleCaption: user.username,
       licences: [
         {
-          currentLicenceHolder: licences[0].licenceVersions[0].licenceVersionHolder.derivedName,
+          currentLicenceHolder: licences[0].licenceVersions[0].company.name,
           id: licences[0].id,
           licenceRef: licences[0].licenceRef,
           link: `/system/licences/${licences[0].id}/summary`,
@@ -56,7 +56,7 @@ describe('Users - External - Licences Presenter', () => {
           status: 'expired'
         },
         {
-          currentLicenceHolder: licences[1].licenceVersions[0].licenceVersionHolder.derivedName,
+          currentLicenceHolder: licences[1].licenceVersions[0].company.name,
           id: licences[1].id,
           licenceRef: licences[1].licenceRef,
           link: `/system/licences/${licences[1].id}/summary`,
@@ -64,7 +64,7 @@ describe('Users - External - Licences Presenter', () => {
           status: null
         },
         {
-          currentLicenceHolder: licences[2].licenceVersions[0].licenceVersionHolder.derivedName,
+          currentLicenceHolder: licences[2].licenceVersions[0].company.name,
           id: licences[2].id,
           licenceRef: licences[2].licenceRef,
           link: `/system/licences/${licences[2].id}/summary`,
@@ -138,12 +138,11 @@ function _licence(licenceRef, expiredDate, role) {
   licence.licenceVersions = [
     {
       id: licenceVersionId,
+      issueDate: null,
       licenceId: licence.id,
-      licenceVersionHolder: {
-        derivedName: 'Current Holder',
-        id: generateUUID(),
-        licenceVersionId
-      }
+      startDate: new Date('2022-04-01'),
+      status: 'current',
+      company: { id: generateUUID(), name: 'Current Holder', type: 'organisation' }
     }
   ]
 
