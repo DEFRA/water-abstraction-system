@@ -12,8 +12,8 @@ const { expect } = Code
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
 
 // Things we want to stub
-const FetchUserDal = require('../../../../app/dal/users/fetch-user.dal.js')
 const FetchLicencesDal = require('../../../../app/dal/users/external/fetch-licences.dal.js')
+const FetchUserDal = require('../../../../app/dal/users/fetch-user.dal.js')
 
 // Thing under test
 const ViewLicencesService = require('../../../../app/services/users/external/view-licences.service.js')
