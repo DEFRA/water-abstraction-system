@@ -13,6 +13,7 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
+const InitiateExternalSessionService = require('../../app/services/users/external/setup/initiate-session.service.js')
 const InitiateInternalSessionService = require('../../app/services/users/internal/setup/initiate-session.service.js')
 const SubmitCheckService = require('../../app/services/users/internal/setup/submit-check.service.js')
 const SubmitEmailService = require('../../app/services/users/internal/setup/submit-email.service.js')
@@ -32,6 +33,7 @@ describe('Users Setup controller', () => {
   let options
   let postOptions
   let server
+  let userId
 
   // Create server before running the tests
   before(async () => {
@@ -49,6 +51,27 @@ describe('Users Setup controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  describe('/users/external/{id}/setup', () => {
+    describe('GET', () => {
+      const id = generateUUID()
+
+      userId = generateUUID()
+
+      beforeEach(() => {
+        options = _getOptions(`/users/external/${userId}/setup`, { scope: ['manage_accounts'] })
+
+        Sinon.stub(InitiateExternalSessionService, 'go').resolves({ data: { selectedLicences: [], userId }, id })
+      })
+
+      it('initiates a session and redirects to the "Select the licences to unlink" page', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+        expect(response.headers.location).to.equal(`/system/users/external/setup/${id}/licences`)
+      })
+    })
   })
 
   describe('/users/internal/setup', () => {

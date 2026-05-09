@@ -4,6 +4,18 @@ const UsersSetupController = require('../controllers/users-setup.controller.js')
 
 const routes = [
   {
+    method: 'POST',
+    path: '/users/external/{id}/setup',
+    options: {
+      handler: UsersSetupController.setupExternal,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
     method: 'GET',
     path: '/users/internal/setup',
     options: {
