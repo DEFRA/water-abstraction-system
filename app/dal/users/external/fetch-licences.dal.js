@@ -50,19 +50,7 @@ async function _fetch(licenceEntityId, page) {
     )
     .orderBy('licences.licenceRef', 'asc')
     .page(Number(page) - 1, DatabaseConfig.defaultPageSize)
-    .withGraphFetched('licenceVersions')
-    .modifyGraph('licenceVersions', (licenceVersionsBuilder) => {
-      licenceVersionsBuilder
-        .select(['id', 'licenceId'])
-        .distinctOn('licenceId')
-        .orderBy('licenceId')
-        .orderBy('issue', 'desc')
-        .orderBy('increment', 'desc')
-        .withGraphFetched('licenceVersionHolder')
-        .modifyGraph('licenceVersionHolder', (licenceVersionHolderBuilder) => {
-          licenceVersionHolderBuilder.select(['derivedName', 'id', 'licenceVersionId'])
-        })
-    })
+    .modify('licenceHolder')
     .withGraphFetched('licenceDocumentHeader')
     .modifyGraph('licenceDocumentHeader', (licenceDocumentHeaderBuilder) => {
       licenceDocumentHeaderBuilder
