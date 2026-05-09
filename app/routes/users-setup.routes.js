@@ -7,7 +7,7 @@ const routes = [
     method: 'GET',
     path: '/users/internal/setup',
     options: {
-      handler: UsersSetupController.setup,
+      handler: UsersSetupController.setupInternal,
       auth: {
         access: {
           scope: ['manage_accounts']

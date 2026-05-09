@@ -5,7 +5,7 @@
  * @module UsersSetupController
  */
 
-const InitiateSessionService = require('../services/users/internal/setup/initiate-session.service.js')
+const InitiateInternalSessionService = require('../services/users/internal/setup/initiate-session.service.js')
 const SubmitCheckService = require('../services/users/internal/setup/submit-check.service.js')
 const SubmitEmailService = require('../services/users/internal/setup/submit-email.service.js')
 const SubmitPermissionsService = require('../services/users/internal/setup/submit-permissions.service.js')
@@ -13,8 +13,8 @@ const ViewCheckService = require('../services/users/internal/setup/view-check.se
 const ViewEmailService = require('../services/users/internal/setup/view-email.service.js')
 const ViewPermissionsService = require('../services/users/internal/setup/view-permissions.service.js')
 
-async function setup(_request, h) {
-  const { id: sessionId } = await InitiateSessionService.go()
+async function setupInternal(_request, h) {
+  const { id: sessionId } = await InitiateInternalSessionService.go()
 
   return h.redirect(`/system/users/internal/setup/${sessionId}/email`)
 }
@@ -94,7 +94,7 @@ async function viewPermissions(request, h) {
 }
 
 module.exports = {
-  setup,
+  setupInternal,
   submitCheck,
   submitEmail,
   submitPermissions,

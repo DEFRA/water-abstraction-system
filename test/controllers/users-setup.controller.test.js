@@ -13,7 +13,7 @@ const { HTTP_STATUS_FOUND, HTTP_STATUS_OK } = require('node:http2').constants
 const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
-const InitiateSessionService = require('../../app/services/users/internal/setup/initiate-session.service.js')
+const InitiateInternalSessionService = require('../../app/services/users/internal/setup/initiate-session.service.js')
 const SubmitCheckService = require('../../app/services/users/internal/setup/submit-check.service.js')
 const SubmitEmailService = require('../../app/services/users/internal/setup/submit-email.service.js')
 const SubmitPermissionsService = require('../../app/services/users/internal/setup/submit-permissions.service.js')
@@ -58,7 +58,7 @@ describe('Users Setup controller', () => {
       beforeEach(() => {
         options = _getOptions('/users/internal/setup', { scope: ['manage_accounts'] })
 
-        Sinon.stub(InitiateSessionService, 'go').resolves({ data: {}, id })
+        Sinon.stub(InitiateInternalSessionService, 'go').resolves({ data: {}, id })
       })
 
       it('initiates a session and redirects to the "Enter an email address for the user" page', async () => {
