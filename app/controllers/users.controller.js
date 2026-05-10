@@ -32,12 +32,6 @@ async function index(request, h) {
   return h.view('users/index.njk', pageData)
 }
 
-async function submitExternalLicences(request, h) {
-  const { id } = request.params
-
-  return _redirectToLegacy(id, h)
-}
-
 async function submitIndex(request, h) {
   const {
     auth,
@@ -178,7 +172,6 @@ async function _redirectToLegacy(id, h) {
 
 module.exports = {
   index,
-  submitExternalLicences,
   submitIndex,
   submitProfileDetails,
   submitInternalDetails,

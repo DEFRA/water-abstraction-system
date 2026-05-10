@@ -49,13 +49,6 @@ const routes = [
     }
   },
   {
-    method: 'POST',
-    path: '/users/external/{id}/licences',
-    options: {
-      handler: UsersController.submitExternalLicences
-    }
-  },
-  {
     method: 'GET',
     path: '/users/external/{id}/verifications',
     options: {
