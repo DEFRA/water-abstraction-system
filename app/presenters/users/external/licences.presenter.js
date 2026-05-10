@@ -39,7 +39,7 @@ function go(user, licences, viewingUserScope, back) {
     licences: formattedLicences,
     pageTitle: 'Licences',
     pageTitleCaption: username,
-    showUnlinkButton: canManageAccounts
+    showUnlinkButton: _showUnlinkButton(viewingUserScope, formattedLicences)
   }
 }
 
@@ -63,6 +63,18 @@ function _licencePermissions(licence) {
   }
 
   return 'Basic access'
+}
+
+function _showUnlinkButton(viewingUserScope, formattedLicences) {
+  const canUnlinkLicences = viewingUserScope.includes('unlink_licences')
+
+  if (!canUnlinkLicences) {
+    return false
+  }
+
+  return formattedLicences.some((formattedLicence) => {
+    return formattedLicence.permissions === 'Primary user'
+  })
 }
 
 function _status(licenceEndDetails) {

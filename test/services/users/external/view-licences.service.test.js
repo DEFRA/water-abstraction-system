@@ -20,7 +20,7 @@ const ViewLicencesService = require('../../../../app/services/users/external/vie
 
 describe('Users - External - View Licences service', () => {
   const auth = {
-    credentials: { scope: ['manage_accounts'] }
+    credentials: { scope: ['manage_accounts', 'unlink_licences'] }
   }
   const page = '1'
 
@@ -64,7 +64,7 @@ describe('Users - External - View Licences service', () => {
         pageTitle: 'Licences',
         pageTitleCaption: user.username,
         licences: [],
-        showUnlinkButton: true
+        showUnlinkButton: false
       })
     })
   })

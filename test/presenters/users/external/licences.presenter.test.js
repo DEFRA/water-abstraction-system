@@ -30,7 +30,7 @@ describe('Users - External - Licences Presenter', () => {
       _licence('FE/TC/H/US/ER/03', null, 'primary_user')
     ]
     user = UsersFixture.external()
-    viewingUserScope = ['manage_accounts']
+    viewingUserScope = ['manage_accounts', 'unlink_licences']
   })
 
   it('correctly presents the data', () => {
@@ -101,15 +101,41 @@ describe('Users - External - Licences Presenter', () => {
   })
 
   describe('the "showUnlinkButton" property', () => {
-    describe('when the viewing user has "manage_accounts" in their scope', () => {
-      it('returns "true"', () => {
-        const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+    describe('when the viewing user has "unlink_licences" in their scope', () => {
+      describe('and the external user is the "primary user" on at least one licence', () => {
+        it('returns "true"', () => {
+          const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-        expect(result.showUnlinkButton).to.be.true()
+          expect(result.showUnlinkButton).to.be.true()
+        })
+      })
+
+      describe('and the external user is NOT the "primary user" on at least one licence', () => {
+        beforeEach(() => {
+          licences = [licences[0], licences[1]]
+        })
+
+        it('returns "false"', () => {
+          const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+
+          expect(result.showUnlinkButton).to.be.false()
+        })
+      })
+
+      describe('and the external user is not linked to any licences', () => {
+        beforeEach(() => {
+          licences = []
+        })
+
+        it('returns "false"', () => {
+          const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+
+          expect(result.showUnlinkButton).to.be.false()
+        })
       })
     })
 
-    describe('when the viewing user does not have "manage_accounts" in their scope', () => {
+    describe('when the viewing user does not have "unlink_licences" in their scope', () => {
       beforeEach(() => {
         viewingUserScope = []
       })
