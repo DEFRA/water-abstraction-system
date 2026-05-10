@@ -49,11 +49,11 @@
       }) }}
     {% endif %}
 
-    {% if showUnlinkButton %}
+    {% if showUnregisterButton %}
     <form method="post">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-      {{ govukButton({ text: "Unlink licences", preventDoubleClick: true }) }}
+      {{ govukButton({ text: "Unregister licences", preventDoubleClick: true }) }}
     </form>
   {% endif %}
 

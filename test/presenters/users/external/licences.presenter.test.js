@@ -72,7 +72,7 @@ describe('Users - External - Licences Presenter', () => {
           status: null
         }
       ],
-      showUnlinkButton: true
+      showUnregisterButton: true
     })
   })
 
@@ -100,13 +100,13 @@ describe('Users - External - Licences Presenter', () => {
     })
   })
 
-  describe('the "showUnlinkButton" property', () => {
+  describe('the "showUnregisterButton" property', () => {
     describe('when the viewing user has "unlink_licences" in their scope', () => {
       describe('and the external user is the "primary user" on at least one licence', () => {
         it('returns "true"', () => {
           const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-          expect(result.showUnlinkButton).to.be.true()
+          expect(result.showUnregisterButton).to.be.true()
         })
       })
 
@@ -118,7 +118,7 @@ describe('Users - External - Licences Presenter', () => {
         it('returns "false"', () => {
           const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-          expect(result.showUnlinkButton).to.be.false()
+          expect(result.showUnregisterButton).to.be.false()
         })
       })
 
@@ -130,7 +130,7 @@ describe('Users - External - Licences Presenter', () => {
         it('returns "false"', () => {
           const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-          expect(result.showUnlinkButton).to.be.false()
+          expect(result.showUnregisterButton).to.be.false()
         })
       })
     })
@@ -143,7 +143,7 @@ describe('Users - External - Licences Presenter', () => {
       it('returns "false"', () => {
         const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-        expect(result.showUnlinkButton).to.be.false()
+        expect(result.showUnregisterButton).to.be.false()
       })
     })
   })

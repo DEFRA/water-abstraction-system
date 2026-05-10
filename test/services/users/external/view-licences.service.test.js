@@ -64,7 +64,7 @@ describe('Users - External - View Licences service', () => {
         pageTitle: 'Licences',
         pageTitleCaption: user.username,
         licences: [],
-        showUnlinkButton: false
+        showUnregisterButton: false
       })
     })
   })

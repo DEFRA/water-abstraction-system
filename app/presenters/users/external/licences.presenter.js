@@ -39,7 +39,7 @@ function go(user, licences, viewingUserScope, back) {
     licences: formattedLicences,
     pageTitle: 'Licences',
     pageTitleCaption: username,
-    showUnlinkButton: _showUnlinkButton(viewingUserScope, formattedLicences)
+    showUnregisterButton: _showUnregisterButton(viewingUserScope, formattedLicences)
   }
 }
 
@@ -65,10 +65,10 @@ function _licencePermissions(licence) {
   return 'Basic access'
 }
 
-function _showUnlinkButton(viewingUserScope, formattedLicences) {
-  const canUnlinkLicences = viewingUserScope.includes('unlink_licences')
+function _showUnregisterButton(viewingUserScope, formattedLicences) {
+  const canUnregisterLicences = viewingUserScope.includes('unlink_licences')
 
-  if (!canUnlinkLicences) {
+  if (!canUnregisterLicences) {
     return false
   }
 
