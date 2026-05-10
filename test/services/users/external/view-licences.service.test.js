@@ -64,7 +64,7 @@ describe('Users - External - View Licences service', () => {
         pageTitle: 'Licences',
         pageTitleCaption: user.username,
         licences: [],
-        showUnregisterButton: false
+        unregisterActionLink: `/system/users/external/${user.id}/setup`
       })
     })
   })

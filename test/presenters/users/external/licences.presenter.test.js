@@ -72,7 +72,7 @@ describe('Users - External - Licences Presenter', () => {
           status: null
         }
       ],
-      showUnregisterButton: true
+      unregisterActionLink: `/system/users/external/${user.id}/setup`
     })
   })
 
@@ -100,13 +100,13 @@ describe('Users - External - Licences Presenter', () => {
     })
   })
 
-  describe('the "showUnregisterButton" property', () => {
+  describe('the "unregisterActionLink" property', () => {
     describe('when the viewing user has "unlink_licences" in their scope', () => {
       describe('and the external user is the "primary user" on at least one licence', () => {
-        it('returns "true"', () => {
+        it('returns the link to the unlink licences journey', () => {
           const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-          expect(result.showUnregisterButton).to.be.true()
+          expect(result.unregisterActionLink).to.equal(`/system/users/external/${user.id}/setup`)
         })
       })
 
@@ -115,10 +115,10 @@ describe('Users - External - Licences Presenter', () => {
           licences = [licences[0], licences[1]]
         })
 
-        it('returns "false"', () => {
+        it('returns "null"', () => {
           const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-          expect(result.showUnregisterButton).to.be.false()
+          expect(result.unregisterActionLink).to.be.null()
         })
       })
 
@@ -127,10 +127,10 @@ describe('Users - External - Licences Presenter', () => {
           licences = []
         })
 
-        it('returns "false"', () => {
+        it('returns "null"', () => {
           const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-          expect(result.showUnregisterButton).to.be.false()
+          expect(result.unregisterActionLink).to.be.null()
         })
       })
     })
@@ -140,10 +140,10 @@ describe('Users - External - Licences Presenter', () => {
         viewingUserScope = []
       })
 
-      it('returns "false"', () => {
+      it('returns "null"', () => {
         const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-        expect(result.showUnregisterButton).to.be.false()
+        expect(result.unregisterActionLink).to.be.null()
       })
     })
   })
