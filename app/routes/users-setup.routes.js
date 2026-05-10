@@ -4,7 +4,7 @@ const UsersSetupController = require('../controllers/users-setup.controller.js')
 
 const routes = [
   {
-    method: 'GET',
+    method: 'POST',
     path: '/users/external/{id}/setup',
     options: {
       handler: UsersSetupController.setupExternal,
