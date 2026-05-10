@@ -5,6 +5,8 @@
  * @module InitiateSessionService
  */
 
+const FetchLicencesDal = require('../../../../dal/users/external/setup/fetch-licences.dal.js')
+const FetchUserDal = require('../../../../dal/users/fetch-user.dal.js')
 const SessionModel = require('../../../../models/session.model.js')
 
 /**
@@ -23,8 +25,12 @@ const SessionModel = require('../../../../models/session.model.js')
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
 async function go(id) {
+  const user = await FetchUserDal.go(id)
+
+  const licences = await FetchLicencesDal.go(user.licenceEntityId)
+
   return SessionModel.query()
-    .insert({ data: { selectedLicences: [], userId: id } })
+    .insert({ data: { licences, selectedLicences: [], user } })
     .returning('id')
 }
 
