@@ -43,22 +43,6 @@ function go(user, licences, viewingUserScope, back) {
   }
 }
 
-function _userLicences(licences) {
-  return licences.map((licence) => {
-    const { id, licenceRef, licenceVersions } = licence
-    const licenceEndDetails = licence.$ends()
-
-    return {
-      currentLicenceHolder: licenceVersions[0].company.name,
-      id,
-      licenceRef,
-      link: `/system/licences/${id}/summary`,
-      permissions: _licencePermissions(licence),
-      status: _status(licenceEndDetails)
-    }
-  })
-}
-
 function _licencePermissions(licence) {
   const { licenceEntityRoles } = licence.licenceDocumentHeader
 
@@ -87,6 +71,22 @@ function _status(licenceEndDetails) {
   }
 
   return null
+}
+
+function _userLicences(licences) {
+  return licences.map((licence) => {
+    const { id, licenceRef, licenceVersions } = licence
+    const licenceEndDetails = licence.$ends()
+
+    return {
+      currentLicenceHolder: licenceVersions[0].company.name,
+      id,
+      licenceRef,
+      link: `/system/licences/${id}/summary`,
+      permissions: _licencePermissions(licence),
+      status: _status(licenceEndDetails)
+    }
+  })
 }
 
 module.exports = {
