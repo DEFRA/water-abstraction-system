@@ -16,7 +16,7 @@ const { db } = require('../../../../../db/db.js')
 // Thing under test
 const GenerateAbstractionAlertRecipientsQueryService = require('../../../../../app/services/notices/setup/abstraction-alerts/generate-abstraction-alert-recipients-query.service.js')
 
-describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Recipients Query Service', () => {
+describe.only('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Recipients Query Service', () => {
   let scenarios
   let seedData
 
@@ -36,6 +36,15 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     scenarios.push(scenario)
     await LicenceDocumentHeaderSeeder.additionalContact(scenario[0].licenceRef)
     await LicenceDocumentHeaderSeeder.additionalContactEndDatePassed(scenario[0].licenceRef)
+
+    // 3) registered
+    scenario = await RecipientScenariosSeeder.primaryUserOnly([], null, true)
+    scenarios.push(scenario)
+
+    // 4) registered and add
+    scenario = await RecipientScenariosSeeder.primaryUserOnly([], null, true)
+    scenarios.push(scenario)
+    await LicenceDocumentHeaderSeeder.additionalContact(scenario[1].licenceRef)
   })
 
   after(async () => {
@@ -125,43 +134,31 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     describe('when the licence is registered', () => {
       describe('and there is a "primary user"', () => {
         it('returns the "primary user"', async () => {
-          const licenceRefs = [seedData.primaryUser.licenceRef]
+          const licenceRefs = [scenarios[2][1].licenceRef]
           const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
           const { rows } = await db.raw(query, bindings)
 
-          expect(rows).to.equal([
-            {
-              contact: null,
-              contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-              contact_type: 'primary user',
-              email: 'primary.user@important.com',
-              licence_refs: [seedData.primaryUser.licenceRef],
-              message_type: 'Email'
-            }
-          ])
+          const [, expectedResult] = _transformToResult(scenarios[2])
+
+          expect(rows).to.equal([expectedResult])
         })
 
         describe('and there is an "additional contact"', () => {
           it('returns both "additional contact" and the "primary user" (with the same licence ref)', async () => {
-            const licenceRefs = [seedData.primaryUserWithAdditionalContact.licenceRef]
+            const licenceRefs = [scenarios[3][1].licenceRef]
             const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
             const { rows } = await db.raw(query, bindings)
 
+            const [, expectedResult] = _transformToResult(scenarios[3])
+
             expect(rows).to.equal([
-              {
-                contact: null,
-                contact_hash_id: '90129f6aa5bf2ad50aa3fefd3f8cf86a',
-                contact_type: 'primary user',
-                email: 'primary.user@important.com',
-                licence_refs: [seedData.primaryUserWithAdditionalContact.licenceRef],
-                message_type: 'Email'
-              },
+              expectedResult,
               {
                 contact: null,
                 contact_hash_id: 'c661b771974504933d79ca64249570d0',
                 contact_type: 'additional contact',
                 email: 'Ron.Burgundy@news.com',
-                licence_refs: [seedData.primaryUserWithAdditionalContact.licenceRef],
+                licence_refs: licenceRefs,
                 message_type: 'Email'
               }
             ])

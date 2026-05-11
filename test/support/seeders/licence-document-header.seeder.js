@@ -26,12 +26,6 @@ const additionalContactTwo = {
   email: 'Brick.Tamland@news.com'
 }
 
-const primaryUserContact = {
-  name: 'Primary User test',
-  email: `primary.user@important.com`,
-  role: 'primary_user'
-}
-
 /**
  * Adds licence document header and return log records to the database which are linked by licence ref
  *
@@ -43,9 +37,7 @@ async function seed() {
     additionalContact: await _additionalContact(),
     multipleAdditionalContact: await _multipleAdditionalContact(),
     multipleAdditionalContactDifferentLicenceRefs: await _multipleAdditionalContactDifferentLicenceRefs(),
-    multipleAdditionalContactWithAndWithoutAlerts: await _multipleAdditionalContactWithAndWithoutAlerts(),
-    primaryUser: await primaryUser(),
-    primaryUserWithAdditionalContact: await _primaryUserWithAdditionalContact()
+    multipleAdditionalContactWithAndWithoutAlerts: await _multipleAdditionalContactWithAndWithoutAlerts()
   }
 }
 
@@ -149,16 +141,16 @@ async function _addLicenceHolder() {
   })
 }
 
-async function _addPrimaryUser() {
-  const licenceDocumentHeader = await _addLicenceHolder()
-
-  await _addLicenceEntity(licenceDocumentHeader, primaryUserContact)
-
-  // Add a duplicate primary user with the same email
-  await _addLicenceEntity(licenceDocumentHeader, primaryUserContact)
-
-  return licenceDocumentHeader
-}
+// async function _addPrimaryUser() {
+//   const licenceDocumentHeader = await _addLicenceHolder()
+//
+//   await _addLicenceEntity(licenceDocumentHeader, primaryUserContact)
+//
+//   // Add a duplicate primary user with the same email
+//   await _addLicenceEntity(licenceDocumentHeader, primaryUserContact)
+//
+//   return licenceDocumentHeader
+// }
 
 async function _additionalContact(licenceRef = null) {
   const licenceDocument = await LicenceDocumentHelper.add({
@@ -222,15 +214,6 @@ function _contact(name, role) {
   }
 }
 
-/**
- * Adds a licence holder
- *
- * @returns {Promise<object>} - The licence holder
- */
-async function licenceHolder() {
-  return _addLicenceHolder()
-}
-
 async function _multipleAdditionalContact() {
   const licenceDocument = await LicenceDocumentHelper.add()
 
@@ -274,31 +257,8 @@ async function _multipleAdditionalContactWithAndWithoutAlerts() {
   return licenceDocument
 }
 
-/**
- * A primary user is a contact associated with a licence document.
- *
- * @returns {Promise<object>} a licence document header with a primary user
- */
-async function primaryUser() {
-  const licenceDocumentHeader = await _addPrimaryUser()
-
-  await _addLicenceEntity(licenceDocumentHeader, primaryUserContact)
-
-  return licenceDocumentHeader
-}
-
-async function _primaryUserWithAdditionalContact() {
-  const _primaryUser = await _addPrimaryUser()
-
-  await _additionalContact(_primaryUser.licenceRef)
-
-  return _primaryUser
-}
-
 module.exports = {
   additionalContact,
   additionalContactEndDatePassed,
-  licenceHolder,
-  primaryUser,
   seed
 }

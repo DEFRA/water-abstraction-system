@@ -213,11 +213,12 @@ async function licenceHolderWithSameReturnsTo(returnLogs) {
  * @param {object[]} returnLogs - One or more returns logs sharing the same licence reference that will be assigned to
  * the recipient
  * @param {Date} [expiredDate] - The date the licence should expire.
+ * @param {boolean} alerts - true if the recipient is for abstraction alerts
  *
  * @returns {Promise<object[]>} The recipients generated for the scenario. This includes the licence holder and
  * primary user
  */
-async function primaryUserOnly(returnLogs, expiredDate = null) {
+async function primaryUserOnly(returnLogs, expiredDate = null, alerts = false) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
   const licence = await EmptyLicence.seed(licenceRefs[0], null, expiredDate)
@@ -225,7 +226,7 @@ async function primaryUserOnly(returnLogs, expiredDate = null) {
 
   const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
 
-  licenceHolderRecipient.licenceRefs = expiredDate ? [licence.licence.licenceRef] : licenceRefs
+  licenceHolderRecipient.licenceRefs = expiredDate || alerts ? [licence.licence.licenceRef] : licenceRefs
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
@@ -233,7 +234,7 @@ async function primaryUserOnly(returnLogs, expiredDate = null) {
 
   const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
 
-  primaryUserRecipient.licenceRefs = expiredDate ? [licence.licence.licenceRef] : licenceRefs
+  primaryUserRecipient.licenceRefs = expiredDate || alerts ? [licence.licence.licenceRef] : licenceRefs
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
 
