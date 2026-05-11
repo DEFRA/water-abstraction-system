@@ -14,7 +14,7 @@ describe('Users - Internal - Setup - Permissions Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { placeholder: '' }
+    payload = { permissions: 'basic' }
   })
 
   describe('when called with valid data', () => {
@@ -27,16 +27,32 @@ describe('Users - Internal - Setup - Permissions Validator', () => {
   })
 
   describe('when called with invalid data', () => {
-    beforeEach(() => {
-      payload = {}
+    describe('because the "permissions" value is missing', () => {
+      beforeEach(() => {
+        payload = {}
+      })
+
+      it('fails validation', () => {
+        const result = PermissionsValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Select a permission')
+      })
     })
 
-    it('returns with errors', () => {
-      const result = PermissionsValidator.go(payload)
+    describe('because the "permissions" value is not in the allowed list', () => {
+      beforeEach(() => {
+        payload.permissions = 'an-invalid-value'
+      })
 
-      expect(result.value).to.exist()
-      expect(result.error).to.exist()
-      expect(result.error.details[0].message).to.equal('"placeholder" is required')
+      it('fails validation', () => {
+        const result = PermissionsValidator.go(payload)
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('Select a valid permission')
+      })
     })
   })
 })

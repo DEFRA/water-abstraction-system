@@ -8,6 +8,8 @@
 
 const Joi = require('joi')
 
+const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
+
 /**
  * Validates data submitted for the '/users/internal/setup/{sessionId}/permissions' page
  *
@@ -18,7 +20,13 @@ const Joi = require('joi')
  */
 function go(payload) {
   const schema = Joi.object({
-    placeholder: Joi.required()
+    permissions: Joi.string()
+      .required()
+      .valid(...Object.keys(userPermissions))
+      .messages({
+        'any.required': 'Select a permission',
+        'any.only': 'Select a valid permission'
+      })
   })
 
   return schema.validate(payload, { abortEarly: false })
