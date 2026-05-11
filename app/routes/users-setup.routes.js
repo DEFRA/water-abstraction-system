@@ -28,6 +28,18 @@ const routes = [
     }
   },
   {
+    method: 'POST',
+    path: '/users/internal/setup/{sessionId}/permissions',
+    options: {
+      handler: UsersSetupController.submitPermissions,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
     method: 'GET',
     path: '/users/internal/setup/{sessionId}/user-email',
     options: {
