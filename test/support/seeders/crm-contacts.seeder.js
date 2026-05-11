@@ -11,6 +11,57 @@ const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
 const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
+const CompanyContactHelper = require('../helpers/company-contact.helper.js')
+const ContactHelper = require('../helpers/contact.helper.js')
+
+/**
+ * Add an additional contact
+ *
+ * An additional contact is
+ *
+ * @param {object} licenceSeedData - The licence seed data
+ * @param {boolean} alerts - true if the recipient is for abstraction alerts
+ *
+ * @returns {Promise<object>} an object containing all records related to an additional contact
+ */
+async function additionalContact(licenceSeedData, alerts = true) {
+  const additionalContact = {
+    firstName: 'Ron',
+    lastName: 'Burgundy',
+    email: 'Ron.Burgundy@news.com'
+  }
+
+  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
+    licenceDocumentId: licenceSeedData.licenceDocument.id,
+    endDate: null
+  })
+
+  const licenceRole = await LicenceRoleHelper.select('additionalContact')
+
+  const companyContact = await CompanyContactHelper.add({
+    companyId: licenceDocumentRole.companyId,
+    licenceRoleId: licenceRole.id,
+    abstractionAlerts: alerts
+  })
+
+  const contact = await ContactHelper.add({
+    id: companyContact.contactId,
+    ...additionalContact
+  })
+
+  return {
+    companyContact,
+    contact,
+    licenceDocumentRole,
+    licenceRole,
+    clean: async () => {
+      await companyContact.$query().delete()
+      await contact.$query().delete()
+      await licenceDocumentRole.$query().delete()
+      await licenceRole.$query().delete()
+    }
+  }
+}
 
 /**
  * Adds a licence holder (company, address, and licence version holder) to a licence
@@ -187,6 +238,7 @@ async function returnsUser(licenceSeedData, email) {
 }
 
 module.exports = {
+  additionalContact,
   licenceHolder,
   primaryUser,
   returnsTo,

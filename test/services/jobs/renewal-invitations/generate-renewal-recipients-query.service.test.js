@@ -78,7 +78,7 @@ WHERE
 
         const { rows } = await db.raw(query, [new Date('2027-02-09')])
 
-        const expectedResults = _transformToResult(scenarios[0])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[0])
 
         expect(rows).to.equal(expectedResults)
       })
@@ -90,7 +90,7 @@ WHERE
 
         const { rows } = await db.raw(query, [new Date('2027-02-10')])
 
-        const expectedResults = _transformToResult(scenarios[1])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[1])
 
         expect(rows).to.contain(expectedResults[0])
         // We could test rows contains the second licence holder recipient recorded in the scenario, but they are the
@@ -105,7 +105,7 @@ WHERE
 
         const { rows } = await db.raw(query, [new Date('2027-02-11')])
 
-        const expectedResults = _transformToResult(scenarios[2])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[2])
 
         expect(rows).to.contain(expectedResults[1])
 
@@ -120,7 +120,7 @@ WHERE
 
         const { rows } = await db.raw(query, [new Date('2027-02-12')])
 
-        const expectedResults = _transformToResult(scenarios[3])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[3])
 
         expect(rows).to.contain(expectedResults[2])
 
@@ -130,15 +130,3 @@ WHERE
     })
   })
 })
-
-function _transformToResult(scenario) {
-  const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenario)
-
-  for (const sendingResult of sendingResults) {
-    delete sendingResult.due_date_status
-    delete sendingResult.return_log_ids
-    delete sendingResult.latest_due_date
-  }
-
-  return sendingResults
-}

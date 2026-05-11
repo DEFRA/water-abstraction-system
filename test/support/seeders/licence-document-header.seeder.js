@@ -6,12 +6,9 @@
 
 const CompanyContactHelper = require('../helpers/company-contact.helper.js')
 const ContactHelper = require('../helpers/contact.helper.js')
-const LicenceDocumentHeaderHelper = require('../helpers/licence-document-header.helper.js')
 const LicenceDocumentHelper = require('../helpers/licence-document.helper.js')
 const LicenceDocumentModel = require('../../../app/models/licence-document.model.js')
 const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
-const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
-const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
 const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
 
 const additionalContactOne = {
@@ -34,7 +31,6 @@ const additionalContactTwo = {
  */
 async function seed() {
   return {
-    additionalContact: await _additionalContact(),
     multipleAdditionalContact: await _multipleAdditionalContact(),
     multipleAdditionalContactDifferentLicenceRefs: await _multipleAdditionalContactDifferentLicenceRefs(),
     multipleAdditionalContactWithAndWithoutAlerts: await _multipleAdditionalContactWithAndWithoutAlerts()
@@ -117,53 +113,6 @@ async function _addAdditionalContactDeleted(contact, licenceDocumentId, abstract
   return licenceDocumentRole
 }
 
-async function _addLicenceEntity(licenceDocumentHeader, entityRole) {
-  const licenceEntity = await LicenceEntityHelper.add({
-    name: entityRole.email
-  })
-
-  await LicenceEntityRoleHelper.add({
-    companyEntityId: licenceDocumentHeader.companyEntityId,
-    licenceEntityId: licenceEntity.id,
-    role: entityRole.role
-  })
-}
-
-async function _addLicenceHolder() {
-  const companyEntity = await LicenceEntityHelper.add({ type: 'company' })
-
-  // Defaults the contact with a Licence holder
-  return await LicenceDocumentHeaderHelper.add({
-    companyEntityId: companyEntity.id,
-    metadata: {
-      contacts: [_contact('Potter', 'Licence holder')]
-    }
-  })
-}
-
-// async function _addPrimaryUser() {
-//   const licenceDocumentHeader = await _addLicenceHolder()
-//
-//   await _addLicenceEntity(licenceDocumentHeader, primaryUserContact)
-//
-//   // Add a duplicate primary user with the same email
-//   await _addLicenceEntity(licenceDocumentHeader, primaryUserContact)
-//
-//   return licenceDocumentHeader
-// }
-
-async function _additionalContact(licenceRef = null) {
-  const licenceDocument = await LicenceDocumentHelper.add({
-    ...(licenceRef && { licenceRef })
-  })
-
-  await _addAdditionalContact(additionalContactOne, licenceDocument.id)
-
-  await _addAdditionalContactEndDatePassed(additionalContactOne, licenceDocument.id)
-
-  return licenceDocument
-}
-
 /**
  * Adds an active additional contact record to an existing licence document, looked up by licence ref.
  *
@@ -193,25 +142,6 @@ async function additionalContactEndDatePassed(licenceRef) {
   await _addAdditionalContactEndDatePassed(additionalContactOne, licenceDocument.id)
 
   return licenceDocument
-}
-
-function _contact(name, role) {
-  return {
-    name,
-    role,
-    addressLine1: '4',
-    addressLine2: 'Privet Drive',
-    addressLine3: null,
-    addressLine4: null,
-    country: null,
-    county: 'Surrey',
-    forename: 'Harry',
-    initials: 'J',
-    postcode: 'WD25 7LR',
-    salutation: null,
-    town: 'Little Whinging',
-    type: 'Person'
-  }
 }
 
 async function _multipleAdditionalContact() {

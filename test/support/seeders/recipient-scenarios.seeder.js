@@ -61,6 +61,40 @@ async function licenceHolderOnly(returnLogs, expiredDate = null, alerts = false)
 }
 
 /**
+ *
+ * @param {boolean} alerts - true if the recipient is for abstraction alerts
+ *
+ */
+async function licenceHolderWithAdditionalContact(alerts = true) {
+  const licence = await EmptyLicence.seed()
+  const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Holderwithadditionalcontact')
+
+  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
+
+  licenceHolderRecipient.licenceRefs = [licence.licence.licenceRef]
+  licenceHolderRecipient.returnLogIds = []
+  licenceHolderRecipient.returnLogs = []
+
+  const additionalContact = await CRMContactsSeeder.additionalContact(licence, alerts)
+
+  const additionalContactRecipient = await RecipientsSeeder.additionalContact(licence, additionalContact)
+
+  additionalContactRecipient.licenceRefs = [licence.licence.licenceRef]
+  additionalContactRecipient.returnLogIds = []
+  additionalContactRecipient.returnLogs = []
+
+  // const secondAdditionalContact = await CRMContactsSeeder.additionalContact(licence, alerts)
+  //
+  // const secondAdditionalContactRecipient = await RecipientsSeeder.additionalContact(licence, secondAdditionalContact)
+  //
+  // secondAdditionalContactRecipient.licenceRefs = [licence.licence.licenceRef]
+  // secondAdditionalContactRecipient.returnLogIds = []
+  // secondAdditionalContactRecipient.returnLogs = []
+
+  return [licenceHolderRecipient, additionalContactRecipient]
+}
+
+/**
  * Seeds test data where one or more return logs is linked to both a 'licence holder' and 'returns to' recipient
  *
  * > This will only work if the return logs passed in share the _same_ licence reference
@@ -239,6 +273,38 @@ async function primaryUserOnly(returnLogs, expiredDate = null, alerts = false) {
   primaryUserRecipient.returnLogs = returnLogs
 
   return [licenceHolderRecipient, primaryUserRecipient]
+}
+
+/**
+ *
+ */
+async function primaryUserWithAdditionalContact() {
+  const licence = await EmptyLicence.seed()
+  const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Primarywithadditionalcontact')
+
+  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
+
+  licenceHolderRecipient.licenceRefs = [licence.licence.licenceRef]
+  licenceHolderRecipient.returnLogIds = []
+  licenceHolderRecipient.returnLogs = []
+
+  const primaryUser = await CRMContactsSeeder.primaryUser(licence, 'primaryuser@pura.com')
+
+  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
+
+  primaryUserRecipient.licenceRefs = [licence.licence.licenceRef]
+  primaryUserRecipient.returnLogIds = []
+  primaryUserRecipient.returnLogs = []
+
+  const additionalContact = await CRMContactsSeeder.additionalContact(licence)
+
+  const additionalContactRecipient = await RecipientsSeeder.additionalContact(licence, additionalContact)
+
+  additionalContactRecipient.licenceRefs = [licence.licence.licenceRef]
+  additionalContactRecipient.returnLogIds = []
+  additionalContactRecipient.returnLogs = []
+
+  return [licenceHolderRecipient, primaryUserRecipient, additionalContactRecipient]
 }
 
 /**
@@ -488,10 +554,12 @@ function _aggregatedData(returnLogs) {
 module.exports = {
   clean,
   licenceHolderOnly,
+  licenceHolderWithAdditionalContact,
   licenceHolderWithDifferentReturnsTo,
   licenceHolderWithMultipleLicences,
   licenceHolderWithSameReturnsTo,
   primaryUserOnly,
+  primaryUserWithAdditionalContact,
   primaryUserWithDifferentReturnsAgent,
   primaryUserWithMultipleLicences,
   primaryUserWithSameReturnsAgent,
