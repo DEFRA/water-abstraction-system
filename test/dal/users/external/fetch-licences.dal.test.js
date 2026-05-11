@@ -8,12 +8,12 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CompanyHelper = require('../../../support/helpers/company.helper.js')
 const LicenceDocumentHeaderHelper = require('../../../support/helpers/licence-document-header.helper.js')
 const LicenceEntityHelper = require('../../../support/helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../../../support/helpers/licence-entity-role.helper.js')
 const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 const LicenceVersionHelper = require('../../../support/helpers/licence-version.helper.js')
-const LicenceVersionHolderHelper = require('../../../support/helpers/licence-version-holder.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
@@ -64,12 +64,11 @@ describe('Users - External - Fetch Licences DAL', () => {
             licenceVersions: [
               {
                 id: licenceData1.licenceVersion.id,
+                issueDate: null,
                 licenceId: licenceData1.licence.id,
-                licenceVersionHolder: {
-                  derivedName: licenceData1.licenceVersionHolder.derivedName,
-                  id: licenceData1.licenceVersionHolder.id,
-                  licenceVersionId: licenceData1.licenceVersionHolder.licenceVersionId
-                }
+                startDate: licenceData1.licenceVersion.startDate,
+                status: 'current',
+                company: { id: licenceData1.company.id, name: licenceData1.company.name, type: 'organisation' }
               }
             ],
             licenceDocumentHeader: {
@@ -92,12 +91,11 @@ describe('Users - External - Fetch Licences DAL', () => {
             licenceVersions: [
               {
                 id: licenceData3.licenceVersion.id,
+                issueDate: null,
                 licenceId: licenceData3.licence.id,
-                licenceVersionHolder: {
-                  derivedName: licenceData3.licenceVersionHolder.derivedName,
-                  id: licenceData3.licenceVersionHolder.id,
-                  licenceVersionId: licenceData3.licenceVersionHolder.licenceVersionId
-                }
+                startDate: licenceData3.licenceVersion.startDate,
+                status: 'current',
+                company: { id: licenceData3.company.id, name: licenceData3.company.name, type: 'organisation' }
               }
             ],
             licenceDocumentHeader: {
@@ -120,12 +118,11 @@ describe('Users - External - Fetch Licences DAL', () => {
             licenceVersions: [
               {
                 id: licenceData4.licenceVersion.id,
+                issueDate: null,
                 licenceId: licenceData4.licence.id,
-                licenceVersionHolder: {
-                  derivedName: licenceData4.licenceVersionHolder.derivedName,
-                  id: licenceData4.licenceVersionHolder.id,
-                  licenceVersionId: licenceData4.licenceVersionHolder.licenceVersionId
-                }
+                startDate: licenceData4.licenceVersion.startDate,
+                status: 'current',
+                company: { id: licenceData4.company.id, name: licenceData4.company.name, type: 'organisation' }
               }
             ],
             licenceDocumentHeader: {
@@ -160,34 +157,34 @@ async function _licenceData(userEntity, licenceRef, role) {
 
   const licenceEntityRoles = await _licenceEntityRoles(userEntity.id, companyEntityId, role)
 
-  const licenceVersionSuperseded = await LicenceVersionHelper.add({ licenceId: licence.id, status: 'superseded' })
-  const licenceVersionHolderSuperseded = await LicenceVersionHolderHelper.add({
-    derivedName: 'Superseded Holder',
-    licenceVersionId: licenceVersionSuperseded.id
+  const supersededCompany = await CompanyHelper.add({ name: 'Superseded Holder' })
+  const licenceVersionSuperseded = await LicenceVersionHelper.add({
+    companyId: supersededCompany.id,
+    licenceId: licence.id,
+    status: 'superseded'
   })
 
+  const currentCompany = await CompanyHelper.add({ name: 'Current Holder' })
   const licenceVersionCurrent = await LicenceVersionHelper.add({
+    companyId: currentCompany.id,
     issue: licenceVersionSuperseded.issue + 1,
     licenceId: licence.id
   })
-  const licenceVersionHolderCurrent = await LicenceVersionHolderHelper.add({
-    derivedName: 'Current Holder',
-    licenceVersionId: licenceVersionCurrent.id
-  })
 
   return {
+    company: currentCompany,
     licence,
     licenceEntityRoles,
     licenceDocumentHeader,
     licenceVersion: licenceVersionCurrent,
-    licenceVersionHolder: licenceVersionHolderCurrent,
     clean: async () => {
+      await supersededCompany.$query().delete()
+      await currentCompany.$query().delete()
       await licence.$query().delete()
       await licenceDocumentHeader.$query().delete()
       await licenceVersionSuperseded.$query().delete()
-      await licenceVersionHolderSuperseded.$query().delete()
+      await licenceVersionSuperseded.$query().delete()
       await licenceVersionCurrent.$query().delete()
-      await licenceVersionHolderCurrent.$query().delete()
 
       for (const licenceEntityRole of licenceEntityRoles) {
         await licenceEntityRole.$query().delete()

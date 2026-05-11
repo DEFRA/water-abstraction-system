@@ -65,14 +65,14 @@ function _roles(user) {
     for (const role of group.roles) {
       const { description, role: name } = role
 
-      roles.push({ description, name: _convertToSentenceCase(name) })
+      roles.push(_mapRole({ description, role: name }))
     }
   }
 
   for (const role of user.roles) {
     const { description, role: name } = role
 
-    roles.push({ description, name: _convertToSentenceCase(name) })
+    roles.push(_mapRole({ description, role: name }))
   }
 
   roles.sort((first, second) => {
@@ -80,6 +80,24 @@ function _roles(user) {
   })
 
   return roles
+}
+
+/**
+ * This is a hack until such time as we are ready to update the mapped roles and descriptions in the DB, or adopt the
+ * {@link https://github.com/DEFRA/water-abstraction-system/pull/3186 | simplified permissions}.
+ *
+ * > See also {@link https://eaflood.atlassian.net/browse/WATER-5562 | WATER-5562}
+ *
+ * @private
+ */
+function _mapRole(role) {
+  const { description, role: name } = role
+
+  if (name === 'unlink_licences') {
+    return { description: 'Unregister licences registered to users', name: 'Unregister licences' }
+  }
+
+  return { description, name: _convertToSentenceCase(name) }
 }
 
 module.exports = {

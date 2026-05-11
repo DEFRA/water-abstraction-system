@@ -49,6 +49,8 @@ jobs:
       DEFAULT_USER_PASSWORD: P@55word
       # Shut up dot env!
       DOTENV_CONFIG_QUIET: true
+      EXTERNAL_DOMAIN: http://localhost:8000
+      INTERNAL_DOMAIN: http://localhost:8008
 
     # Service containers to run with `runner-job`
     services:

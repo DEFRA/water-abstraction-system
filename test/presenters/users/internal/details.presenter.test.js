@@ -116,8 +116,39 @@ describe('Users - Internal - Details Presenter', () => {
             name: 'Renewal notifications'
           },
           {
-            description: 'Remove licences registered to a company',
-            name: 'Unlink licences'
+            description: 'Unregister licences registered to users',
+            name: 'Unregister licences'
+          },
+          {
+            description: 'View charge information',
+            name: 'View charge versions'
+          }
+        ])
+      })
+    })
+
+    describe('when the user is part of a group linked to the role "unlink_licences"', () => {
+      beforeEach(() => {
+        user = UsersFixture.nationalPermittingService()
+
+        UsersFixture.transformToFetchUserInternalResult(user)
+      })
+
+      it('returns the "roles" for the group in sentence case, sorted by name, with "unlink" mapped to "unregister"', () => {
+        const result = DetailsPresenter.go(user)
+
+        expect(result.roles).to.equal([
+          {
+            description: 'Manage linkages between gauging stations and licences',
+            name: 'Manage gauging station licence links'
+          },
+          {
+            description: 'Send renewal notifications',
+            name: 'Renewal notifications'
+          },
+          {
+            description: 'Unregister licences registered to users',
+            name: 'Unregister licences'
           },
           {
             description: 'View charge information',

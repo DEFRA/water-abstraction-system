@@ -39,24 +39,8 @@ function go(user, licences, viewingUserScope, back) {
     licences: formattedLicences,
     pageTitle: 'Licences',
     pageTitleCaption: username,
-    showUnlinkButton: canManageAccounts
+    showUnregisterButton: _showUnregisterButton(viewingUserScope, formattedLicences)
   }
-}
-
-function _userLicences(licences) {
-  return licences.map((licence) => {
-    const { id, licenceRef, licenceVersions } = licence
-    const licenceEndDetails = licence.$ends()
-
-    return {
-      currentLicenceHolder: licenceVersions[0].licenceVersionHolder.derivedName,
-      id,
-      licenceRef,
-      link: `/system/licences/${id}/summary`,
-      permissions: _licencePermissions(licence),
-      status: _status(licenceEndDetails)
-    }
-  })
 }
 
 function _licencePermissions(licence) {
@@ -81,12 +65,40 @@ function _licencePermissions(licence) {
   return 'Basic access'
 }
 
+function _showUnregisterButton(viewingUserScope, formattedLicences) {
+  const canUnregisterLicences = viewingUserScope.includes('unlink_licences')
+
+  if (!canUnregisterLicences) {
+    return false
+  }
+
+  return formattedLicences.some((formattedLicence) => {
+    return formattedLicence.permissions === 'Primary user'
+  })
+}
+
 function _status(licenceEndDetails) {
   if (licenceEndDetails && licenceEndDetails.date <= today()) {
     return licenceEndDetails.reason
   }
 
   return null
+}
+
+function _userLicences(licences) {
+  return licences.map((licence) => {
+    const { id, licenceRef, licenceVersions } = licence
+    const licenceEndDetails = licence.$ends()
+
+    return {
+      currentLicenceHolder: licenceVersions[0].company.name,
+      id,
+      licenceRef,
+      link: `/system/licences/${id}/summary`,
+      permissions: _licencePermissions(licence),
+      status: _status(licenceEndDetails)
+    }
+  })
 }
 
 module.exports = {

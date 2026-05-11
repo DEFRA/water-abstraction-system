@@ -23,7 +23,7 @@ function go(user, notifications) {
       href: '/system/users',
       text: 'Go back to users'
     },
-    notifications: NotificationsTablePresenter.go(notifications, id),
+    notifications: NotificationsTablePresenter.go(notifications, id, 'internal'),
     pageTitle: 'Communications',
     pageTitleCaption: username
   }

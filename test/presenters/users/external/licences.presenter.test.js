@@ -30,7 +30,7 @@ describe('Users - External - Licences Presenter', () => {
       _licence('FE/TC/H/US/ER/03', null, 'primary_user')
     ]
     user = UsersFixture.external()
-    viewingUserScope = ['manage_accounts']
+    viewingUserScope = ['manage_accounts', 'unlink_licences']
   })
 
   it('correctly presents the data', () => {
@@ -48,7 +48,7 @@ describe('Users - External - Licences Presenter', () => {
       pageTitleCaption: user.username,
       licences: [
         {
-          currentLicenceHolder: licences[0].licenceVersions[0].licenceVersionHolder.derivedName,
+          currentLicenceHolder: licences[0].licenceVersions[0].company.name,
           id: licences[0].id,
           licenceRef: licences[0].licenceRef,
           link: `/system/licences/${licences[0].id}/summary`,
@@ -56,7 +56,7 @@ describe('Users - External - Licences Presenter', () => {
           status: 'expired'
         },
         {
-          currentLicenceHolder: licences[1].licenceVersions[0].licenceVersionHolder.derivedName,
+          currentLicenceHolder: licences[1].licenceVersions[0].company.name,
           id: licences[1].id,
           licenceRef: licences[1].licenceRef,
           link: `/system/licences/${licences[1].id}/summary`,
@@ -64,7 +64,7 @@ describe('Users - External - Licences Presenter', () => {
           status: null
         },
         {
-          currentLicenceHolder: licences[2].licenceVersions[0].licenceVersionHolder.derivedName,
+          currentLicenceHolder: licences[2].licenceVersions[0].company.name,
           id: licences[2].id,
           licenceRef: licences[2].licenceRef,
           link: `/system/licences/${licences[2].id}/summary`,
@@ -72,7 +72,7 @@ describe('Users - External - Licences Presenter', () => {
           status: null
         }
       ],
-      showUnlinkButton: true
+      showUnregisterButton: true
     })
   })
 
@@ -100,16 +100,42 @@ describe('Users - External - Licences Presenter', () => {
     })
   })
 
-  describe('the "showUnlinkButton" property', () => {
-    describe('when the viewing user has "manage_accounts" in their scope', () => {
-      it('returns "true"', () => {
-        const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+  describe('the "showUnregisterButton" property', () => {
+    describe('when the viewing user has "unlink_licences" in their scope', () => {
+      describe('and the external user is the "primary user" on at least one licence', () => {
+        it('returns "true"', () => {
+          const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-        expect(result.showUnlinkButton).to.be.true()
+          expect(result.showUnregisterButton).to.be.true()
+        })
+      })
+
+      describe('and the external user is NOT the "primary user" on at least one licence', () => {
+        beforeEach(() => {
+          licences = [licences[0], licences[1]]
+        })
+
+        it('returns "false"', () => {
+          const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+
+          expect(result.showUnregisterButton).to.be.false()
+        })
+      })
+
+      describe('and the external user is not linked to any licences', () => {
+        beforeEach(() => {
+          licences = []
+        })
+
+        it('returns "false"', () => {
+          const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
+
+          expect(result.showUnregisterButton).to.be.false()
+        })
       })
     })
 
-    describe('when the viewing user does not have "manage_accounts" in their scope', () => {
+    describe('when the viewing user does not have "unlink_licences" in their scope', () => {
       beforeEach(() => {
         viewingUserScope = []
       })
@@ -117,7 +143,7 @@ describe('Users - External - Licences Presenter', () => {
       it('returns "false"', () => {
         const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-        expect(result.showUnlinkButton).to.be.false()
+        expect(result.showUnregisterButton).to.be.false()
       })
     })
   })
@@ -138,12 +164,11 @@ function _licence(licenceRef, expiredDate, role) {
   licence.licenceVersions = [
     {
       id: licenceVersionId,
+      issueDate: null,
       licenceId: licence.id,
-      licenceVersionHolder: {
-        derivedName: 'Current Holder',
-        id: generateUUID(),
-        licenceVersionId
-      }
+      startDate: new Date('2022-04-01'),
+      status: 'current',
+      company: { id: generateUUID(), name: 'Current Holder', type: 'organisation' }
     }
   ]
 

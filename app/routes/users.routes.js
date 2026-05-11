@@ -29,6 +29,13 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/users/external/{id}/communications',
+    options: {
+      handler: UsersController.viewExternalCommunications
+    }
+  },
+  {
+    method: 'GET',
     path: '/users/external/{id}/details',
     options: {
       handler: UsersController.viewExternalDetails

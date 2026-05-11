@@ -13,16 +13,17 @@ const { userNotificationTypes } = require('../../lib/static-lookups.lib.js')
  *
  * @param {module:NotificationModel[]} notifications - All notifications linked to the user
  * @param {string} userId - The id of the user to go back to from the notification details page
+ * @param {string} type - The type of user ('internal' or 'external')
  *
  * @returns {object} The data formatted for the view template
  */
-function go(notifications, userId) {
+function go(notifications, userId, type) {
   return notifications.map((notification) => {
     const { createdAt, messageType, status } = notification
     const sentDate = formatLongDate(createdAt)
 
     return {
-      link: _link(notification, sentDate, userId),
+      link: _link(notification, sentDate, userId, type),
       method: sentenceCase(messageType),
       sentDate,
       status
@@ -30,14 +31,14 @@ function go(notifications, userId) {
   })
 }
 
-function _link(notification, sentDate, userId) {
+function _link(notification, sentDate, userId, type) {
   const { id: notificationId, messageRef, messageType } = notification
 
   const hiddenText = `sent ${sentDate} via ${messageType}`
 
   return {
     hiddenText,
-    href: `/system/users/internal/${userId}/notifications/${notificationId}`,
+    href: `/system/users/${type}/${userId}/notifications/${notificationId}`,
     text: userNotificationTypes[messageRef].label
   }
 }

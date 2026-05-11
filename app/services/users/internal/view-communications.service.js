@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the '/return-logs/{id}/communications' page
+ * Orchestrates fetching and presenting internal user data for `/users/internal/{id}/communications` page
  *
  * @module ViewCommunicationsService
  */
@@ -12,7 +12,7 @@ const FetchUserDal = require('../../../dal/users/fetch-user.dal.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
 
 /**
- * Orchestrates fetching and presenting the data for the '/users/internal/{id}/communications' page
+ * Orchestrates fetching and presenting internal user data for `/users/internal/{id}/communications` page
  *
  * @param {string} id - the UUID of the user
  * @param {string} page - The current page for the pagination service

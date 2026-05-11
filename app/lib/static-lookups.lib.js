@@ -686,47 +686,58 @@ const userPermissions = Object.freeze({
 const userNotificationTypes = Object.freeze({
   email_change_email_in_use_email: {
     label: 'Change email address - email already in use',
-    protected: false
+    protected: false,
+    type: 'external'
   },
   email_change_verification_code_email: {
     label: 'Change email address - verification code',
-    protected: false
+    protected: true,
+    type: 'external'
   },
   existing_user_verification_email: {
     label: 'Existing user verification',
-    protected: true
+    protected: true,
+    type: 'external'
   },
   expiry_notification_email: {
     label: 'Expiry notification',
-    protected: false
+    protected: false,
+    type: 'external'
   },
   new_internal_user_email: {
     label: 'New internal user',
-    protected: true
+    protected: true,
+    type: 'internal'
   },
   new_user_verification_email: {
     label: 'New user verification',
-    protected: true
+    protected: true,
+    type: 'external'
   },
   password_locked_email: {
     label: 'Password locked',
-    protected: true
+    protected: true,
+    type: 'both'
   },
   password_reset_email: {
     label: 'Password reset',
-    protected: true
+    protected: true,
+    type: 'both'
   },
   security_code_letter: {
     label: 'Security code letter',
-    protected: false
+    protected: false,
+    type: 'external'
   },
   share_existing_user: {
     label: 'Share existing user',
-    protected: false
+    protected: false,
+    type: 'external'
   },
   share_new_user: {
     label: 'Share new user',
-    protected: true
+    protected: true,
+    type: 'external'
   }
 })
 

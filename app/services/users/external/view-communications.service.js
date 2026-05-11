@@ -1,0 +1,49 @@
+'use strict'
+
+/**
+ * Orchestrates fetching and presenting external user data for `/users/external/{id}/communications` page
+ *
+ * @module ViewCommunicationsService
+ */
+
+const CommunicationsPresenter = require('../../../presenters/users/external/communications.presenter.js')
+const FetchNotificationsDal = require('../../../dal/users/external/fetch-notifications.dal.js')
+const FetchUserDal = require('../../../dal/users/fetch-user.dal.js')
+const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
+
+/**
+ * Orchestrates fetching and presenting external user data for `/users/external/{id}/communications` page
+ *
+ * @param {number} id - The user's ID
+ * @param {object} auth - The auth object taken from `request.auth` containing user details
+ * @param {string} page - The current page for the pagination service
+ * @param {string} back - The 'back' query parameter, used to indicate what back link should be shown on the page
+ *
+ * @returns {Promise<object>} The data formatted for the view template
+ */
+async function go(id, auth, page, back = 'users') {
+  const user = await FetchUserDal.go(id)
+
+  const { notifications, totalNumber } = await FetchNotificationsDal.go(user.username, page)
+
+  const pageData = CommunicationsPresenter.go(user, notifications, auth.credentials.scope, back)
+
+  const pagination = PaginatorPresenter.go(
+    totalNumber,
+    page,
+    `/system/users/external/${id}/communications`,
+    notifications.length,
+    'communications',
+    { back }
+  )
+
+  return {
+    activeSecondaryNav: 'communications',
+    pagination,
+    ...pageData
+  }
+}
+
+module.exports = {
+  go
+}
