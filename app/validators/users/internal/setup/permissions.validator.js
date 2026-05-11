@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Validates data submitted for the '' page
+ * Validates data submitted for the '/users/internal/setup/{sessionId}/permissions' page
  *
  * @module PermissionsValidator
  */
@@ -9,7 +9,7 @@
 const Joi = require('joi')
 
 /**
- * Validates data submitted for the '' page
+ * Validates data submitted for the '/users/internal/setup/{sessionId}/permissions' page
  *
  * @param {object} payload - The payload from the request to be validated
  *
