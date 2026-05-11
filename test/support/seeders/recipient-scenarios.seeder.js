@@ -62,10 +62,8 @@ async function licenceHolderOnly(returnLogs, expiredDate = null, alerts = false)
 
 /**
  *
- * @param {boolean} alerts - true if the recipient is for abstraction alerts
- *
  */
-async function licenceHolderWithAdditionalContact(alerts = true) {
+async function licenceHolderWithAdditionalContact() {
   const licence = await EmptyLicence.seed()
   const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Holderwithadditionalcontact')
 
@@ -75,21 +73,13 @@ async function licenceHolderWithAdditionalContact(alerts = true) {
   licenceHolderRecipient.returnLogIds = []
   licenceHolderRecipient.returnLogs = []
 
-  const additionalContact = await CRMContactsSeeder.additionalContact(licence, alerts)
+  const additionalContact = await CRMContactsSeeder.additionalContact(licence)
 
   const additionalContactRecipient = await RecipientsSeeder.additionalContact(licence, additionalContact)
 
   additionalContactRecipient.licenceRefs = [licence.licence.licenceRef]
   additionalContactRecipient.returnLogIds = []
   additionalContactRecipient.returnLogs = []
-
-  // const secondAdditionalContact = await CRMContactsSeeder.additionalContact(licence, alerts)
-  //
-  // const secondAdditionalContactRecipient = await RecipientsSeeder.additionalContact(licence, secondAdditionalContact)
-  //
-  // secondAdditionalContactRecipient.licenceRefs = [licence.licence.licenceRef]
-  // secondAdditionalContactRecipient.returnLogIds = []
-  // secondAdditionalContactRecipient.returnLogs = []
 
   return [licenceHolderRecipient, additionalContactRecipient]
 }
