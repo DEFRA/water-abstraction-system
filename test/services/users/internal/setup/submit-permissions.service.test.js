@@ -126,7 +126,6 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
           href: `/system/users/internal/setup/${session.id}/user-email`,
           text: 'Back'
         },
-        permissions: undefined,
         error: {
           permissions: {
             text: 'Select a permission'
@@ -139,7 +138,8 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
           ]
         },
         pageTitle: 'Select permissions for the user',
-        pageTitleCaption: 'Internal'
+        pageTitleCaption: 'Internal',
+        permissions: undefined
       })
     })
   })

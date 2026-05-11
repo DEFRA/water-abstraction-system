@@ -16,7 +16,7 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 const InitiateSessionService = require('../../app/services/users/internal/setup/initiate-session.service.js')
 const SubmitPermissionsService = require('../../app/services/users/internal/setup/submit-permissions.service.js')
 const SubmitUserEmailService = require('../../app/services/users/internal/setup/submit-user-email.service.js')
-const ViewUPermissionsService = require('../../app/services/users/internal/setup/view-permissions.service.js')
+const ViewPermissionsService = require('../../app/services/users/internal/setup/view-permissions.service.js')
 const ViewUserEmailService = require('../../app/services/users/internal/setup/view-user-email.service.js')
 
 // For running our service
@@ -54,7 +54,7 @@ describe('Users Setup controller', () => {
       beforeEach(async () => {
         options = _getOptions(`/users/internal/setup/${sessionId}/permissions`, { scope: ['manage_accounts'] })
 
-        Sinon.stub(ViewUPermissionsService, 'go').resolves({
+        Sinon.stub(ViewPermissionsService, 'go').resolves({
           pageTitle: 'Select permissions for the user'
         })
       })

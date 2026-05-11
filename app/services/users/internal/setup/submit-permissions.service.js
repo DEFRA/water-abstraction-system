@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for the '' page
+ * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/permissions' page
  *
  * @module SubmitPermissionsService
  */
@@ -13,7 +13,7 @@ const PermissionsPresenter = require('../../../../presenters/users/internal/setu
 const PermissionsValidator = require('../../../../validators/users/internal/setup/permissions.validator.js')
 
 /**
- * Orchestrates validating the data for the '' page
+ * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/permissions' page
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
