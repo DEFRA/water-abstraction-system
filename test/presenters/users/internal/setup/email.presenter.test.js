@@ -11,9 +11,9 @@ const { expect } = Code
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Thing under test
-const UserEmailPresenter = require('../../../../../app/presenters/users/internal/setup/user-email.presenter.js')
+const EmailPresenter = require('../../../../../app/presenters/users/internal/setup/email.presenter.js')
 
-describe('Users - Internal - Setup - User Email Presenter', () => {
+describe('Users - Internal - Setup - Email Presenter', () => {
   let session
 
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe('Users - Internal - Setup - User Email Presenter', () => {
   })
 
   it('correctly presents the data', () => {
-    const result = UserEmailPresenter.go(session)
+    const result = EmailPresenter.go(session)
 
     expect(result).to.equal({
       backLink: {
@@ -41,7 +41,7 @@ describe('Users - Internal - Setup - User Email Presenter', () => {
       })
 
       it('returns the email from the session in lowercase', () => {
-        const result = UserEmailPresenter.go(session)
+        const result = EmailPresenter.go(session)
 
         expect(result.email).to.equal('bob@test.com')
       })
@@ -49,7 +49,7 @@ describe('Users - Internal - Setup - User Email Presenter', () => {
 
     describe('when the email has not previously been saved', () => {
       it('returns an empty string', () => {
-        const result = UserEmailPresenter.go(session)
+        const result = EmailPresenter.go(session)
 
         expect(result.email).to.be.null()
       })
