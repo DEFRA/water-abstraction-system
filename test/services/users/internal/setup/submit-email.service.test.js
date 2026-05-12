@@ -16,9 +16,9 @@ const CheckEmailExistsDal = require('../../../../../app/dal/users/check-email-ex
 const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
-const SubmitUserEmailService = require('../../../../../app/services/users/internal/setup/submit-user-email.service.js')
+const SubmitEmailService = require('../../../../../app/services/users/internal/setup/submit-email.service.js')
 
-describe('Users - Internal - Setup - User Email Service', () => {
+describe('Users - Internal - Setup - Submit Email Service', () => {
   let fetchSessionStub
   let payload
   let session
@@ -47,7 +47,7 @@ describe('Users - Internal - Setup - User Email Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitUserEmailService.go(session.id, payload, yarStub)
+      await SubmitEmailService.go(session.id, payload, yarStub)
 
       expect(session).to.equal({
         ...session,
@@ -57,7 +57,7 @@ describe('Users - Internal - Setup - User Email Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitUserEmailService.go(session.id, payload, yarStub)
+      const result = await SubmitEmailService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
         redirectUrl: `/system/users/internal/setup/${session.id}/permissions`
@@ -77,7 +77,7 @@ describe('Users - Internal - Setup - User Email Service', () => {
         })
 
         it('redirects to the Check page', async () => {
-          const result = await SubmitUserEmailService.go(session.id, payload, yarStub)
+          const result = await SubmitEmailService.go(session.id, payload, yarStub)
 
           expect(result).to.equal({
             redirectUrl: `/system/users/internal/setup/${session.id}/check`
@@ -87,7 +87,7 @@ describe('Users - Internal - Setup - User Email Service', () => {
         describe('and the "session" and "payload" value', () => {
           describe('match', () => {
             it('does not set a notification', async () => {
-              await SubmitUserEmailService.go(session.id, payload, yarStub)
+              await SubmitEmailService.go(session.id, payload, yarStub)
 
               expect(yarStub.flash.called).to.be.false()
             })
@@ -99,7 +99,7 @@ describe('Users - Internal - Setup - User Email Service', () => {
             })
 
             it('sets a notification', async () => {
-              await SubmitUserEmailService.go(session.id, payload, yarStub)
+              await SubmitEmailService.go(session.id, payload, yarStub)
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -112,7 +112,7 @@ describe('Users - Internal - Setup - User Email Service', () => {
 
       describe('not been visited', () => {
         it('does not set a notification', async () => {
-          await SubmitUserEmailService.go(session.id, payload, yarStub)
+          await SubmitEmailService.go(session.id, payload, yarStub)
 
           expect(yarStub.flash.called).to.be.false()
         })
@@ -126,7 +126,7 @@ describe('Users - Internal - Setup - User Email Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitUserEmailService.go(session.id, payload, yarStub)
+      const result = await SubmitEmailService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
         backLink: {
