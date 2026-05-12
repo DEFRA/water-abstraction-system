@@ -33,7 +33,7 @@ This applies everywhere: return values, inline objects, `module.exports`, test a
 
 ## 2 — `require()` imports must be in alphabetical order by variable name
 
-Within each group (see rule 3), sort imports A–Z by variable name.
+Within each group (see rule 3), sort imports A–Z by variable name. Destructured imports are an exception: place them after non-destructured imports within the same group, then sort destructured imports alphabetically by file name (not by the variable names being destructured).
 
 ```js
 // Bad
@@ -43,6 +43,18 @@ const crypto = require('node:crypto')
 // Good
 const crypto = require('node:crypto')
 const path = require('path')
+
+// Bad — destructured imports mixed with non-destructured
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+const { flashNotification } = require('../../../../lib/general.lib.js')
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+const PermissionsPresenter = require('../../../../presenters/users/internal/setup/permissions.presenter.js')
+
+// Good — non-destructured first (sorted by variable name), then destructured (sorted by file name)
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+const PermissionsPresenter = require('../../../../presenters/users/internal/setup/permissions.presenter.js')
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+const { flashNotification } = require('../../../../lib/general.lib.js')
 ```
 
 ## 3 — External packages, internal dependencies, and config modules must be in separate groups
