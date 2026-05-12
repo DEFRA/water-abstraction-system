@@ -22,10 +22,11 @@ const ContactHelper = require('../helpers/contact.helper.js')
  * @param {object} licenceSeedData - The licence seed data
  * @param {object} additionalContactSeedData - The additional contact seed data
  * @param {boolean} [abstractionAlerts=true] - Whether the contact has abstraction alerts enabled
+ * @param {Date|null} [endDate=null] - Optional end date for the licence document role
  *
  * @returns {Promise<object>} an object containing all records related to an additional contact
  */
-async function additionalContact(licenceSeedData, additionalContactSeedData = null, abstractionAlerts = true) {
+async function additionalContact(licenceSeedData, additionalContactSeedData = null, abstractionAlerts = true, endDate = null) {
   const additionalContact = additionalContactSeedData || {
     firstName: 'Ron',
     lastName: 'Burgundy',
@@ -34,7 +35,7 @@ async function additionalContact(licenceSeedData, additionalContactSeedData = nu
 
   const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
     licenceDocumentId: licenceSeedData.licenceDocument.id,
-    endDate: null
+    endDate
   })
 
   const licenceRole = await LicenceRoleHelper.select('additionalContact')
