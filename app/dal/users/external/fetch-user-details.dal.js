@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Fetches an external user for display on the `/users/external/{id}` page
+ * Fetches an external user for display on the `/users/external/{id}/details` page
  * @module FetchUserDetailsDal
  */
 
 const UserModel = require('../../../models/user.model.js')
 
 /**
- * Fetches an external user for display on the `/users/external/{id}` page
+ * Fetches an external user for display on the `/users/external/{id}/details` page
  *
  * @param {string} id - The ID of the requested user
  *
