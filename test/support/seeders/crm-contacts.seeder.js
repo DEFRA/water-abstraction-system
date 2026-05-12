@@ -20,11 +20,12 @@ const ContactHelper = require('../helpers/contact.helper.js')
  * An additional contact is
  *
  * @param {object} licenceSeedData - The licence seed data
+ * @param {object} additionalContactSeedData - The additional contact seed data
  *
  * @returns {Promise<object>} an object containing all records related to an additional contact
  */
-async function additionalContact(licenceSeedData) {
-  const additionalContact = {
+async function additionalContact(licenceSeedData, additionalContactSeedData = null) {
+  const additionalContact = additionalContactSeedData || {
     firstName: 'Ron',
     lastName: 'Burgundy',
     email: 'Ron.Burgundy@news.com'
