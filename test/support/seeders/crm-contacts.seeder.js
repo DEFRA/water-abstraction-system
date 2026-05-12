@@ -5,14 +5,14 @@
  */
 
 const AddressHelper = require('../helpers/address.helper.js')
+const CompanyContactHelper = require('../helpers/company-contact.helper.js')
 const CompanyHelper = require('../helpers/company.helper.js')
+const ContactHelper = require('../helpers/contact.helper.js')
 const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
 const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
 const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
-const CompanyContactHelper = require('../helpers/company-contact.helper.js')
-const ContactHelper = require('../helpers/contact.helper.js')
 
 /**
  * Add an additional contact
@@ -26,7 +26,12 @@ const ContactHelper = require('../helpers/contact.helper.js')
  *
  * @returns {Promise<object>} an object containing all records related to an additional contact
  */
-async function additionalContact(licenceSeedData, additionalContactSeedData = null, abstractionAlerts = true, endDate = null) {
+async function additionalContact(
+  licenceSeedData,
+  additionalContactSeedData = null,
+  abstractionAlerts = true,
+  endDate = null
+) {
   const additionalContact = additionalContactSeedData || {
     firstName: 'Ron',
     lastName: 'Burgundy',
