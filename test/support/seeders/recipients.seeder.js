@@ -12,6 +12,31 @@ const ReturnLogModel = require('../../../app/models/return-log.model.js')
 const { compareStrings } = require('../../../app/lib/general.lib.js')
 
 /**
+ * Returns an "Additional contact" recipient
+ *
+ * @param {object} licenceSeedData - The licence seed data
+ * @param {object} additionalContact - The additional contact seed data
+ *
+ * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
+ */
+async function additionalContact(licenceSeedData, additionalContact) {
+  const { email } = additionalContact.contact
+
+  return {
+    contact: null,
+    contactHashId: _emailHashId(email),
+    contactType: 'additional contact',
+    email,
+    licenceRef: licenceSeedData.licence.licenceRef,
+    messageType: 'Email',
+    clean: async () => {
+      await additionalContact.clean()
+      await licenceSeedData.clean()
+    }
+  }
+}
+
+/**
  * Cleans up records created by the seeder
  *
  * It checks each 'recipient' for known records, and using its knowledge of 'recipients' deletes the data created
@@ -97,6 +122,7 @@ async function primaryUser(licenceSeedData, primaryUserSeedData) {
     licenceRef: licenceSeedData.licence.licenceRef,
     messageType: 'Email',
     clean: async () => {
+      await licenceSeedData.clean()
       await primaryUserSeedData.clean()
     }
   }
@@ -219,17 +245,22 @@ function transformToSendingResult(recipient) {
     return compareStrings(referenceString, compareString)
   })
 
-  return {
+  const result = {
     contact: recipient.contact,
     contact_hash_id: recipient.contactHashId,
     contact_type: recipient.contactType,
-    due_date_status: 'all nulls',
     email: recipient.email,
-    latest_due_date: null,
     licence_refs: uniqueSortedRefs,
-    message_type: recipient.messageType,
-    return_log_ids: recipient.returnLogIds
+    message_type: recipient.messageType
   }
+
+  if (recipient.returnLogIds?.length) {
+    result.due_date_status = 'all nulls'
+    result.latest_due_date = null
+    result.return_log_ids = recipient.returnLogIds
+  }
+
+  return result
 }
 
 function _contactHashId(contact) {
@@ -254,6 +285,7 @@ function _emailHashId(email) {
 
 module.exports = {
   clean,
+  additionalContact,
   licenceHolder,
   primaryUser,
   returnsUser,
