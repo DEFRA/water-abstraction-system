@@ -87,7 +87,7 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
 
           expect(result[0].personalisation).to.equal({
             expiryDate: '1 January 2022',
-            licenceRefs: recipients[0].licence_refs,
+            licenceRefs: recipients[0].licence_refs.join(','),
             renewalDate: '3 November 2021'
           })
         })
@@ -123,7 +123,7 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
             address_line_5: 'Surrey',
             address_line_6: 'WD25 7LR',
             expiryDate: '1 January 2022',
-            licenceRefs: recipients[1].licence_refs,
+            licenceRefs: recipients[1].licence_refs.join(','),
             name: 'Renewal licence holder',
             renewalDate: '3 November 2021'
           })
