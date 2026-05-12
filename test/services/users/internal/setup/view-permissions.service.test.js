@@ -55,10 +55,10 @@ describe('Users - Internal - Setup - View Permissions Service', () => {
           href: `/system/users/internal/setup/${session.id}/user-email`,
           text: 'Back'
         },
-        isSuper: true,
         pageTitle: 'Select permissions for the user',
         pageTitleCaption: 'Internal',
-        permissions: undefined
+        permissions: undefined,
+        showSuperPermission: true
       })
     })
   })

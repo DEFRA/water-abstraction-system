@@ -22,21 +22,20 @@ const PermissionsPresenter = require('../../../../presenters/users/internal/setu
 async function go(auth, sessionId) {
   const session = await FetchSessionDal.go(sessionId)
 
-  const isSuper = await _isSuper(auth)
-
   const pageData = PermissionsPresenter.go(session)
+
+  const showSuperPermission = await _showSuperPermission(auth)
 
   return {
     ...pageData,
-    isSuper
+    showSuperPermission
   }
 }
 
-async function _isSuper(auth) {
+async function _showSuperPermission(auth) {
   const currentUser = await FetchUserDetailsDal.go(auth.credentials.user.id)
-  const isSuper = currentUser.$permissions().key === 'super'
 
-  return isSuper
+  return currentUser.$permissions().key === 'super'
 }
 
 module.exports = {
