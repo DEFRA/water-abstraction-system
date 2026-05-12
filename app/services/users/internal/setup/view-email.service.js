@@ -20,9 +20,7 @@ async function go(sessionId) {
 
   const pageData = EmailPresenter.go(session)
 
-  return {
-    ...pageData
-  }
+  return pageData
 }
 
 module.exports = {

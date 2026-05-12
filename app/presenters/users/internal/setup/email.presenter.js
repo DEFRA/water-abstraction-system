@@ -20,9 +20,9 @@ function go(session) {
       href: '/system/users',
       text: 'Back'
     },
+    email: formatEmail(session.email),
     pageTitle: 'Enter an email address for the user',
-    pageTitleCaption: 'Internal',
-    email: formatEmail(session.email)
+    pageTitleCaption: 'Internal'
   }
 }
 
