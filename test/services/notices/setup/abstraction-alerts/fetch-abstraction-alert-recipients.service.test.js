@@ -8,7 +8,10 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const CRMContactsSeeder = require('../../../../support/seeders/crm-contacts.seeder.js')
+const EmptyLicence = require('../../../../support/seeders/empty-licence.seeder.js')
 const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
+const RecipientsSeeder = require('../../../../support/seeders/recipients.seeder.js')
 
 // Thing under test
 const FetchAbstractionAlertRecipientsService = require('../../../../../app/services/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
@@ -21,8 +24,9 @@ describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipie
     scenarios = []
 
     // 1) Licence holder only
-    const scenario = await RecipientScenariosSeeder.licenceHolderOnly([], null, true)
-    scenarios.push(scenario)
+    const licenceHolder = await _licenceHolder()
+    const licenceHolderRecipient = await _licenceHolderRecipient(licenceHolder.licence, licenceHolder.licenceHolder)
+    scenarios.push([licenceHolderRecipient])
 
     session = { licenceRefs: [scenarios[0][0].licenceRef] }
   })
@@ -35,21 +39,27 @@ describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipie
     it('fetches the correct recipient data', async () => {
       const result = await FetchAbstractionAlertRecipientsService.go(session)
 
-      const expectedResults = _transformToResult(scenarios[0])
+      const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[0])
 
       expect(result).to.equal(expectedResults)
     })
   })
 })
 
-function _transformToResult(scenario) {
-  const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenario)
+async function _licenceHolder() {
+  const licence = await EmptyLicence.seed()
+  const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Holderwithadditionalcontact')
 
-  for (const sendingResult of sendingResults) {
-    delete sendingResult.due_date_status
-    delete sendingResult.return_log_ids
-    delete sendingResult.latest_due_date
+  return {
+    licence,
+    licenceHolder
   }
+}
 
-  return sendingResults
+async function _licenceHolderRecipient(licence, licenceHolder) {
+  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
+
+  licenceHolderRecipient.licenceRefs = [licence.licence.licenceRef]
+
+  return licenceHolderRecipient
 }

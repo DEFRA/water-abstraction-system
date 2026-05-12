@@ -18,22 +18,22 @@ const { db } = require('../../../../../db/db.js')
 // Thing under test
 const GenerateAbstractionAlertRecipientsQueryService = require('../../../../../app/services/notices/setup/abstraction-alerts/generate-abstraction-alert-recipients-query.service.js')
 
-describe.only('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Recipients Query Service', () => {
+describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Recipients Query Service', () => {
   let scenarios
 
   before(async () => {
     scenarios = []
 
-    let scenario
+    let additionalContactRecipient
     let licenceHolder
     let licenceHolderRecipient
-    let additionalContactRecipient
     let primaryUser
     let primaryUserRecipient
 
     // 1) Licence holder only
-    scenario = await RecipientScenariosSeeder.licenceHolderOnly([], null, true)
-    scenarios.push(scenario)
+    licenceHolder = await _licenceHolder()
+    licenceHolderRecipient = await _licenceHolderRecipient(licenceHolder.licence, licenceHolder.licenceHolder)
+    scenarios.push([licenceHolderRecipient])
 
     // 2) Licence holder, and an additional contact
     licenceHolder = await _licenceHolder()
@@ -43,8 +43,11 @@ describe.only('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert
 
     // 3) Primary user only. All licences have a licence holder record, but when 'registered' the query will only
     // return the primary user recipient.
-    scenario = await RecipientScenariosSeeder.primaryUserOnly([], null, true)
-    scenarios.push(scenario)
+    licenceHolder = await _licenceHolder()
+    licenceHolderRecipient = await _licenceHolderRecipient(licenceHolder.licence, licenceHolder.licenceHolder)
+    primaryUser = await _primaryUser(licenceHolder.licence)
+    primaryUserRecipient = await _primaryUserRecipient(licenceHolder.licence, primaryUser.primaryUser)
+    scenarios.push([licenceHolderRecipient, primaryUserRecipient])
 
     // 4) Primary user with an additional contact. Similar to scenario 3 - when registered, we expect the primary user
     // and additional contact but not the licence holder.
