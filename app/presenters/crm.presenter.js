@@ -33,7 +33,7 @@ function _contactLink(contact, billingQueryArgs) {
   }
 
   if (userTypes.includes(contact.contactType)) {
-    return `/system/users/external/${contact.id}`
+    return `/system/users/external/${contact.id}/details?back=search`
   }
 
   if (contact.addressId) {
