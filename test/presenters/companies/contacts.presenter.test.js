@@ -143,7 +143,7 @@ describe('Companies - Contacts presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              link: `/system/users/external/${contacts[0].id}`,
+              link: `/system/users/external/${contacts[0].id}/details?back=search`,
               type: 'Basic user',
               name: 'user@test.com'
             }
@@ -167,7 +167,7 @@ describe('Companies - Contacts presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              link: `/system/users/external/${contacts[0].id}`,
+              link: `/system/users/external/${contacts[0].id}/details?back=search`,
               type: 'Primary user',
               name: 'user@test.com'
             }
@@ -191,7 +191,7 @@ describe('Companies - Contacts presenter', () => {
 
           expect(result.contacts).to.equal([
             {
-              link: `/system/users/external/${contacts[0].id}`,
+              link: `/system/users/external/${contacts[0].id}/details?back=search`,
               type: 'Returns user',
               name: 'user@test.com'
             }
