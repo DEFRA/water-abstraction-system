@@ -12,13 +12,14 @@ const { expect } = Code
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 
 // Things we need to stub
-const CheckEmailExistsDal = require('../../../../../app/dal/users/check-email-exists.dal.js')
 const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+const FetchUserDetailsDal = require('../../../../../app/dal/users/internal/fetch-user-details.dal.js')
 
 // Thing under test
-const SubmitUserEmailService = require('../../../../../app/services/users/internal/setup/submit-user-email.service.js')
+const SubmitPermissionsService = require('../../../../../app/services/users/internal/setup/submit-permissions.service.js')
 
-describe('Users - Internal - Setup - User Email Service', () => {
+describe('Users - Internal - Setup - Submit Permissions Service', () => {
+  let auth
   let fetchSessionStub
   let payload
   let session
@@ -26,13 +27,21 @@ describe('Users - Internal - Setup - User Email Service', () => {
   let yarStub
 
   beforeEach(() => {
+    auth = { credentials: { user: { id: 1 } } }
+
     sessionData = {}
 
     session = SessionModelStub.build(Sinon, sessionData)
 
     fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
-    Sinon.stub(CheckEmailExistsDal, 'go').resolves(false)
+    const currentUserPermissions = 'billing_and_data'
+
+    Sinon.stub(FetchUserDetailsDal, 'go').resolves({
+      $permissions: () => {
+        return { key: currentUserPermissions }
+      }
+    })
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -43,24 +52,24 @@ describe('Users - Internal - Setup - User Email Service', () => {
 
   describe('when called with a valid payload', () => {
     beforeEach(() => {
-      payload = { email: 'Bob@environment-agency.GOV.UK' }
+      payload = { permissions: 'basic' }
     })
 
     it('saves the submitted value', async () => {
-      await SubmitUserEmailService.go(session.id, payload, yarStub)
+      await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
       expect(session).to.equal({
         ...session,
-        email: 'bob@environment-agency.gov.uk'
+        permissions: 'basic'
       })
       expect(session.$update.called).to.be.true()
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitUserEmailService.go(session.id, payload, yarStub)
+      const result = await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
       expect(result).to.equal({
-        redirectUrl: `/system/users/internal/setup/${session.id}/permissions`
+        redirectUrl: `/system/users/internal/setup/${session.id}/check`
       })
     })
 
@@ -70,24 +79,20 @@ describe('Users - Internal - Setup - User Email Service', () => {
           session = SessionModelStub.build(Sinon, {
             ...sessionData,
             checkPageVisited: true,
-            email: 'bob@environment-agency.gov.uk'
+            permissions: 'basic'
           })
 
           fetchSessionStub.resolves(session)
         })
 
-        it('redirects to the Check page', async () => {
-          const result = await SubmitUserEmailService.go(session.id, payload, yarStub)
-
-          expect(result).to.equal({
-            redirectUrl: `/system/users/internal/setup/${session.id}/check`
-          })
-        })
-
         describe('and the "session" and "payload" value', () => {
           describe('match', () => {
+            beforeEach(() => {
+              payload = { permissions: 'basic' }
+            })
+
             it('does not set a notification', async () => {
-              await SubmitUserEmailService.go(session.id, payload, yarStub)
+              await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
               expect(yarStub.flash.called).to.be.false()
             })
@@ -95,16 +100,16 @@ describe('Users - Internal - Setup - User Email Service', () => {
 
           describe('do not match', () => {
             beforeEach(() => {
-              payload = { email: 'another.user@environment-agency.gov.uk' }
+              payload = { permissions: 'super' }
             })
 
             it('sets a notification', async () => {
-              await SubmitUserEmailService.go(session.id, payload, yarStub)
+              await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]
 
               expect(flashType).to.equal('notification')
-              expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Email address updated' })
+              expect(bannerMessage).to.equal({ titleText: 'Updated', text: 'Permissions updated' })
             })
           })
         })
@@ -112,7 +117,7 @@ describe('Users - Internal - Setup - User Email Service', () => {
 
       describe('not been visited', () => {
         it('does not set a notification', async () => {
-          await SubmitUserEmailService.go(session.id, payload, yarStub)
+          await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
           expect(yarStub.flash.called).to.be.false()
         })
@@ -126,27 +131,28 @@ describe('Users - Internal - Setup - User Email Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitUserEmailService.go(session.id, payload, yarStub)
+      const result = await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
       expect(result).to.equal({
         backLink: {
-          href: '/system/users',
+          href: `/system/users/internal/setup/${session.id}/user-email`,
           text: 'Back'
         },
-        email: null,
         error: {
-          email: {
-            text: 'Enter an email address for this user'
+          permissions: {
+            text: 'Select a permission'
           },
           errorList: [
             {
-              href: '#email',
-              text: 'Enter an email address for this user'
+              href: '#permissions',
+              text: 'Select a permission'
             }
           ]
         },
-        pageTitle: 'Enter an email address for the user',
-        pageTitleCaption: 'Internal'
+        pageTitle: 'Select permissions for the user',
+        pageTitleCaption: 'Internal',
+        permissions: undefined,
+        showSuperPermission: false
       })
     })
   })

@@ -14,7 +14,9 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/users/internal/setup/initiate-session.service.js')
+const SubmitPermissionsService = require('../../app/services/users/internal/setup/submit-permissions.service.js')
 const SubmitUserEmailService = require('../../app/services/users/internal/setup/submit-user-email.service.js')
+const ViewPermissionsService = require('../../app/services/users/internal/setup/view-permissions.service.js')
 const ViewUserEmailService = require('../../app/services/users/internal/setup/view-user-email.service.js')
 
 // For running our service
@@ -45,6 +47,67 @@ describe('Users Setup controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  describe('/users/internal/setup/{sessionId}/permissions', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions(`/users/internal/setup/${sessionId}/permissions`, { scope: ['manage_accounts'] })
+
+        Sinon.stub(ViewPermissionsService, 'go').resolves({
+          pageTitle: 'Select permissions for the user'
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Select permissions for the user')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        postOptions = postRequestOptions(`/users/internal/setup/${sessionId}/permissions`, {}, ['manage_accounts'])
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitPermissionsService, 'go').resolves({
+            redirectUrl: `/system/users/internal/setup/${sessionId}/check`
+          })
+        })
+
+        it('redirects to the Check page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/users/internal/setup/${sessionId}/check`)
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitPermissionsService, 'go').resolves({
+            error: {
+              errorList: [{ text: 'Select a permission' }]
+            },
+            pageTitle: 'Select permissions for the user'
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Select a permission')
+          expect(response.payload).to.contain('Select permissions for the user')
+        })
+      })
+    })
   })
 
   describe('/users/internal/setup', () => {
@@ -94,7 +157,7 @@ describe('Users Setup controller', () => {
       describe('when a request is valid', () => {
         beforeEach(() => {
           Sinon.stub(SubmitUserEmailService, 'go').resolves({
-            redirectUrl: `/system/users/internal/setup/${sessionId}/select-permissions`
+            redirectUrl: `/system/users/internal/setup/${sessionId}/permissions`
           })
         })
 
@@ -102,7 +165,7 @@ describe('Users Setup controller', () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/users/internal/setup/${sessionId}/select-permissions`)
+          expect(response.headers.location).to.equal(`/system/users/internal/setup/${sessionId}/permissions`)
         })
       })
 

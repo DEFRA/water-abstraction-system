@@ -36,7 +36,7 @@ async function go(sessionId, payload, yar) {
     await _save(session, payload)
 
     return {
-      redirectUrl: checkUrl(session, `/system/users/internal/setup/${sessionId}/select-permissions`)
+      redirectUrl: checkUrl(session, `/system/users/internal/setup/${sessionId}/permissions`)
     }
   }
 

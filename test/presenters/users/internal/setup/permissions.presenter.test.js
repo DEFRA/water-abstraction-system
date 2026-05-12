@@ -1,0 +1,60 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Test helpers
+const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+
+// Thing under test
+const PermissionsPresenter = require('../../../../../app/presenters/users/internal/setup/permissions.presenter.js')
+
+describe('Users - Internal - Setup - Permissions Presenter', () => {
+  let session
+
+  beforeEach(() => {
+    session = { id: generateUUID(), permissions: 'super' }
+  })
+
+  describe('when called', () => {
+    it('returns page data for the view', () => {
+      const result = PermissionsPresenter.go(session)
+
+      expect(result).to.equal({
+        backLink: {
+          href: `/system/users/internal/setup/${session.id}/user-email`,
+          text: 'Back'
+        },
+        pageTitle: 'Select permissions for the user',
+        pageTitleCaption: 'Internal',
+        permissions: 'super'
+      })
+    })
+
+    describe('"backLink" property', () => {
+      describe('when check page has not been visited', () => {
+        it('returns the correct back link', () => {
+          const result = PermissionsPresenter.go(session)
+
+          expect(result.backLink.href).to.equal(`/system/users/internal/setup/${session.id}/user-email`)
+        })
+      })
+
+      describe('when check page has been visited', () => {
+        beforeEach(() => {
+          session.checkPageVisited = true
+        })
+
+        it('returns the correct back link', () => {
+          const result = PermissionsPresenter.go(session)
+
+          expect(result.backLink.href).to.equal(`/system/users/internal/setup/${session.id}/check`)
+        })
+      })
+    })
+  })
+})

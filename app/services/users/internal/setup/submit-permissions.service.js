@@ -1,0 +1,79 @@
+'use strict'
+
+/**
+ * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/permissions' page
+ *
+ * @module SubmitPermissionsService
+ */
+
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+const FetchUserDetailsDal = require('../../../../dal/users/internal/fetch-user-details.dal.js')
+const PermissionsPresenter = require('../../../../presenters/users/internal/setup/permissions.presenter.js')
+const PermissionsValidator = require('../../../../validators/users/internal/setup/permissions.validator.js')
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+const { flashNotification } = require('../../../../lib/general.lib.js')
+
+/**
+ * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/permissions' page
+ *
+ * @param {object} auth - The current user's authentication details from `request.auth`, used to determine which
+ * permissions to show
+ * @param {string} sessionId - The UUID of the current session
+ * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ *
+ * @returns {Promise<object>} The data formatted for the view template
+ */
+async function go(auth, sessionId, payload, yar) {
+  const session = await FetchSessionDal.go(sessionId)
+
+  const validationResult = _validate(payload)
+
+  if (!validationResult) {
+    _notification(session, payload, yar)
+
+    await _save(session, payload)
+
+    return {
+      redirectUrl: `/system/users/internal/setup/${sessionId}/check`
+    }
+  }
+
+  const pageData = PermissionsPresenter.go(session)
+
+  const showSuperPermission = await _showSuperPermission(auth)
+
+  return {
+    error: validationResult,
+    ...pageData,
+    showSuperPermission
+  }
+}
+
+function _notification(session, payload, yar) {
+  if (session.checkPageVisited && session.permissions !== payload.permissions) {
+    flashNotification(yar, 'Updated', 'Permissions updated')
+  }
+}
+
+async function _save(session, payload) {
+  session.permissions = payload.permissions
+
+  return session.$update()
+}
+
+async function _showSuperPermission(auth) {
+  const currentUser = await FetchUserDetailsDal.go(auth.credentials.user.id)
+
+  return currentUser.$permissions().key === 'super'
+}
+
+function _validate(payload) {
+  const validationResult = PermissionsValidator.go(payload)
+
+  return formatValidationResult(validationResult)
+}
+
+module.exports = {
+  go
+}

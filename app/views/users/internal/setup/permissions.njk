@@ -1,0 +1,100 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block pageContent %}
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
+
+    {{ govukRadios({
+      name: 'permissions',
+      errorMessage: error.permissions,
+      items: [
+        {
+          checked: permissions === 'basic',
+          hint: {
+            text: "View licences and returns."
+          },
+          id: "basic",
+          text: "Basic access",
+          value: "basic"
+        },
+        {
+          checked: permissions === 'billing_and_data',
+          hint: {
+            text: "Send returns communications, monitor statistics and edit data."
+          },
+          id: "billingAndData",
+          text: "Billing and Data",
+          value: "billing_and_data"
+        },
+        {
+          checked: permissions === 'environment_officer',
+          hint: {
+            text: "Send hands-off flow notifications."
+          },
+          id: "environmentOfficer",
+          text: "Environment Officer",
+          value: "environment_officer"
+        },
+        {
+          checked: permissions === 'nps',
+          hint: {
+            text: "Send renewals."
+          },
+          id: "nps",
+          text: "National Permitting Service",
+          value: "nps"
+        },
+        {
+          checked: permissions === 'nps_ar_approver',
+          hint: {
+            text: "Send renewals and digitise licence information and approve changes."
+          },
+          id: "npsArApprover",
+          text: "National Permitting Service and Digitise! approver",
+          value: "nps_ar_approver"
+        },
+        {
+          checked: permissions === 'nps_ar_user',
+          hint: {
+            text: "Send renewals and digitise licence information."
+          },
+          id: "npsArUser",
+          text: "National Permitting Service and Digitise! editor",
+          value: "nps_ar_user"
+        },
+        {
+          checked: permissions === 'psc',
+          hint: {
+            text: "Send renewals."
+          },
+          id: "psc",
+          text: "Permitting and Support Centre",
+          value: "psc"
+        },
+        {
+          checked: permissions === 'super',
+          hint: {
+            text: "Full access to all areas of the service."
+          },
+          id: "super",
+          text: "Super user",
+          value: "super"
+        } if showSuperPermission === true,
+        {
+          checked: permissions === 'wirs',
+          hint: {
+            text: "Process returns."
+          },
+          id: "wirs",
+          text: "Waste and Industry Regulatory Service",
+          value: "wirs"
+        }
+      ]
+    }) }}
+
+    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+  </form>
+{% endblock %}
