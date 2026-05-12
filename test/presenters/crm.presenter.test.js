@@ -99,7 +99,7 @@ describe('CRM presenter', () => {
           const result = CRMPresenter.formatContact(contact)
 
           expect(result).to.equal({
-            link: `/system/users/external/${contact.id}`,
+            link: `/system/users/external/${contact.id}/details?back=search`,
             type: 'Basic user',
             name: 'user@test.com'
           })
@@ -119,7 +119,7 @@ describe('CRM presenter', () => {
           const result = CRMPresenter.formatContact(contact)
 
           expect(result).to.equal({
-            link: `/system/users/external/${contact.id}`,
+            link: `/system/users/external/${contact.id}/details?back=search`,
             type: 'Primary user',
             name: 'user@test.com'
           })
@@ -139,7 +139,7 @@ describe('CRM presenter', () => {
           const result = CRMPresenter.formatContact(contact)
 
           expect(result).to.equal({
-            link: `/system/users/external/${contact.id}`,
+            link: `/system/users/external/${contact.id}/details?back=search`,
             type: 'Returns user',
             name: 'user@test.com'
           })
