@@ -20,7 +20,6 @@ const ViewPermissionsService = require('../../../../../app/services/users/intern
 
 describe('Users - Internal - Setup - View Permissions Service', () => {
   let auth
-  let currentUserPermissions
   let session
   let sessionData
 
@@ -33,7 +32,7 @@ describe('Users - Internal - Setup - View Permissions Service', () => {
 
     Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
-    currentUserPermissions = 'super'
+    const currentUserPermissions = 'super'
 
     Sinon.stub(FetchUserDetailsDal, 'go').resolves({
       $permissions: () => {
