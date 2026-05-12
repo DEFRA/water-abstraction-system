@@ -5,12 +5,69 @@
  */
 
 const AddressHelper = require('../helpers/address.helper.js')
+const CompanyContactHelper = require('../helpers/company-contact.helper.js')
 const CompanyHelper = require('../helpers/company.helper.js')
+const ContactHelper = require('../helpers/contact.helper.js')
 const LicenceDocumentRoleHelper = require('../helpers/licence-document-role.helper.js')
 const LicenceEntityHelper = require('../helpers/licence-entity.helper.js')
 const LicenceEntityRoleHelper = require('../helpers/licence-entity-role.helper.js')
 const LicenceRoleHelper = require('../helpers/licence-role.helper.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
+
+/**
+ * Add an additional contact
+ *
+ * An additional contact is
+ *
+ * @param {object} licenceSeedData - The licence seed data
+ * @param {object} additionalContactSeedData - The additional contact seed data
+ * @param {boolean} [abstractionAlerts=true] - Whether the contact has abstraction alerts enabled
+ * @param {Date|null} [endDate=null] - Optional end date for the licence document role
+ *
+ * @returns {Promise<object>} an object containing all records related to an additional contact
+ */
+async function additionalContact(
+  licenceSeedData,
+  additionalContactSeedData = null,
+  abstractionAlerts = true,
+  endDate = null
+) {
+  const additionalContact = additionalContactSeedData || {
+    firstName: 'Ron',
+    lastName: 'Burgundy',
+    email: 'Ron.Burgundy@news.com'
+  }
+
+  const licenceDocumentRole = await LicenceDocumentRoleHelper.add({
+    licenceDocumentId: licenceSeedData.licenceDocument.id,
+    endDate
+  })
+
+  const licenceRole = await LicenceRoleHelper.select('additionalContact')
+
+  const companyContact = await CompanyContactHelper.add({
+    companyId: licenceDocumentRole.companyId,
+    licenceRoleId: licenceRole.id,
+    abstractionAlerts
+  })
+
+  const contact = await ContactHelper.add({
+    id: companyContact.contactId,
+    ...additionalContact
+  })
+
+  return {
+    companyContact,
+    contact,
+    licenceDocumentRole,
+    licenceRole,
+    clean: async () => {
+      await companyContact.$query().delete()
+      await contact.$query().delete()
+      await licenceDocumentRole.$query().delete()
+    }
+  }
+}
 
 /**
  * Adds a licence holder (company, address, and licence version holder) to a licence
@@ -187,6 +244,7 @@ async function returnsUser(licenceSeedData, email) {
 }
 
 module.exports = {
+  additionalContact,
   licenceHolder,
   primaryUser,
   returnsTo,
