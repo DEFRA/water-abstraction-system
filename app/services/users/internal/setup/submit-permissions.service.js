@@ -6,11 +6,11 @@
  * @module SubmitPermissionsService
  */
 
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
-const { flashNotification } = require('../../../../lib/general.lib.js')
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 const PermissionsPresenter = require('../../../../presenters/users/internal/setup/permissions.presenter.js')
 const PermissionsValidator = require('../../../../validators/users/internal/setup/permissions.validator.js')
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+const { flashNotification } = require('../../../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/permissions' page
