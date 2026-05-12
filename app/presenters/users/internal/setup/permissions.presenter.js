@@ -17,7 +17,7 @@ const { checkUrl } = require('../../../../lib/check-page.lib.js')
 function go(session) {
   return {
     backLink: {
-      href: checkUrl(session, `/system/users/internal/setup/${session.id}/user-email`),
+      href: checkUrl(session, `/system/users/internal/setup/${session.id}/email`),
       text: 'Back'
     },
     pageTitle: 'Select permissions for the user',

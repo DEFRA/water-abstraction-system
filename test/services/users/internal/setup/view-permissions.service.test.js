@@ -51,7 +51,7 @@ describe('Users - Internal - Setup - View Permissions Service', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: `/system/users/internal/setup/${session.id}/user-email`,
+          href: `/system/users/internal/setup/${session.id}/email`,
           text: 'Back'
         },
         pageTitle: 'Select permissions for the user',
