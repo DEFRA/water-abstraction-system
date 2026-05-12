@@ -14,10 +14,10 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/users/internal/setup/initiate-session.service.js')
+const SubmitEmailService = require('../../app/services/users/internal/setup/submit-email.service.js')
 const SubmitPermissionsService = require('../../app/services/users/internal/setup/submit-permissions.service.js')
-const SubmitUserEmailService = require('../../app/services/users/internal/setup/submit-user-email.service.js')
+const ViewEmailService = require('../../app/services/users/internal/setup/view-email.service.js')
 const ViewPermissionsService = require('../../app/services/users/internal/setup/view-permissions.service.js')
-const ViewUserEmailService = require('../../app/services/users/internal/setup/view-user-email.service.js')
 
 // For running our service
 const { init } = require('../../app/server.js')
@@ -47,6 +47,86 @@ describe('Users Setup controller', () => {
 
   afterEach(() => {
     Sinon.restore()
+  })
+
+  describe('/users/internal/setup', () => {
+    describe('GET', () => {
+      const id = generateUUID()
+
+      beforeEach(() => {
+        options = _getOptions('/users/internal/setup', { scope: ['manage_accounts'] })
+
+        Sinon.stub(InitiateSessionService, 'go').resolves({ data: {}, id })
+      })
+
+      it('initiates a session and redirects to the "Enter an email address for the user" page', async () => {
+        const response = await server.inject(options)
+
+        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+        expect(response.headers.location).to.equal(`/system/users/internal/setup/${id}/email`)
+      })
+    })
+  })
+
+  describe('/users/internal/setup/{sessionId}/email', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions(`/users/internal/setup/${sessionId}/email`, { scope: ['manage_accounts'] })
+
+        Sinon.stub(ViewEmailService, 'go').resolves({
+          pageTitle: 'Enter an email address for the user'
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Enter an email address for the user')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        postOptions = postRequestOptions(`/users/internal/setup/${sessionId}/email`, {}, ['manage_accounts'])
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitEmailService, 'go').resolves({
+            redirectUrl: `/system/users/internal/setup/${sessionId}/permissions`
+          })
+        })
+
+        it('redirects to the Select permissions for the user page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal(`/system/users/internal/setup/${sessionId}/permissions`)
+        })
+      })
+
+      describe('when a request is invalid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitEmailService, 'go').resolves({
+            error: {
+              errorList: [{ text: 'Enter a gov.uk email address, like name@environment-agency.gov.uk' }]
+            },
+            pageTitle: 'Enter an email address for the user'
+          })
+        })
+
+        it('re-renders the page with an error message', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Enter a gov.uk email address, like name@environment-agency.gov.uk')
+          expect(response.payload).to.contain('Enter an email address for the user')
+        })
+      })
+    })
   })
 
   describe('/users/internal/setup/{sessionId}/permissions', () => {
@@ -105,86 +185,6 @@ describe('Users Setup controller', () => {
           expect(response.statusCode).to.equal(HTTP_STATUS_OK)
           expect(response.payload).to.contain('Select a permission')
           expect(response.payload).to.contain('Select permissions for the user')
-        })
-      })
-    })
-  })
-
-  describe('/users/internal/setup', () => {
-    describe('GET', () => {
-      const id = generateUUID()
-
-      beforeEach(() => {
-        options = _getOptions('/users/internal/setup', { scope: ['manage_accounts'] })
-
-        Sinon.stub(InitiateSessionService, 'go').resolves({ data: {}, id })
-      })
-
-      it('initiates a session and redirects to the "Enter an email address for the user" page', async () => {
-        const response = await server.inject(options)
-
-        expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-        expect(response.headers.location).to.equal(`/system/users/internal/setup/${id}/user-email`)
-      })
-    })
-  })
-
-  describe('/users/internal/setup/{sessionId}/user-email', () => {
-    describe('GET', () => {
-      beforeEach(async () => {
-        options = _getOptions(`/users/internal/setup/${sessionId}/user-email`, { scope: ['manage_accounts'] })
-
-        Sinon.stub(ViewUserEmailService, 'go').resolves({
-          pageTitle: 'Enter an email address for the user'
-        })
-      })
-
-      describe('when the request succeeds', () => {
-        it('returns the page successfully', async () => {
-          const response = await server.inject(options)
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Enter an email address for the user')
-        })
-      })
-    })
-
-    describe('POST', () => {
-      beforeEach(() => {
-        postOptions = postRequestOptions(`/users/internal/setup/${sessionId}/user-email`, {}, ['manage_accounts'])
-      })
-
-      describe('when a request is valid', () => {
-        beforeEach(() => {
-          Sinon.stub(SubmitUserEmailService, 'go').resolves({
-            redirectUrl: `/system/users/internal/setup/${sessionId}/permissions`
-          })
-        })
-
-        it('redirects to the Select permissions for the user page', async () => {
-          const response = await server.inject(postOptions)
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/system/users/internal/setup/${sessionId}/permissions`)
-        })
-      })
-
-      describe('when a request is invalid', () => {
-        beforeEach(() => {
-          Sinon.stub(SubmitUserEmailService, 'go').resolves({
-            error: {
-              errorList: [{ text: 'Enter a gov.uk email address, like name@environment-agency.gov.uk' }]
-            },
-            pageTitle: 'Enter an email address for the user'
-          })
-        })
-
-        it('re-renders the page with an error message', async () => {
-          const response = await server.inject(postOptions)
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
-          expect(response.payload).to.contain('Enter a gov.uk email address, like name@environment-agency.gov.uk')
-          expect(response.payload).to.contain('Enter an email address for the user')
         })
       })
     })
