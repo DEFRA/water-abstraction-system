@@ -19,12 +19,13 @@ async function setup(_request, h) {
 
 async function submitPermissions(request, h) {
   const {
+    auth,
     payload,
     params: { sessionId },
     yar
   } = request
 
-  const pageData = await SubmitPermissionsService.go(sessionId, payload, yar)
+  const pageData = await SubmitPermissionsService.go(auth, sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('users/internal/setup/permissions.njk', pageData)

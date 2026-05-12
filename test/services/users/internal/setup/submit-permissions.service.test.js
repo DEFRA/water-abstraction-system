@@ -13,11 +13,13 @@ const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 
 // Things we need to stub
 const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
+const FetchUserDetailsDal = require('../../../../../app/dal/users/internal/fetch-user-details.dal.js')
 
 // Thing under test
 const SubmitPermissionsService = require('../../../../../app/services/users/internal/setup/submit-permissions.service.js')
 
 describe('Users - Internal - Setup - Submit Permissions Service', () => {
+  let auth
   let fetchSessionStub
   let payload
   let session
@@ -25,11 +27,21 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
   let yarStub
 
   beforeEach(() => {
+    auth = { credentials: { user: { id: 1 } } }
+
     sessionData = {}
 
     session = SessionModelStub.build(Sinon, sessionData)
 
     fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    const currentUserPermissions = 'billing_and_data'
+
+    Sinon.stub(FetchUserDetailsDal, 'go').resolves({
+      $permissions: () => {
+        return { key: currentUserPermissions }
+      }
+    })
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -44,7 +56,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
     })
 
     it('saves the submitted value', async () => {
-      await SubmitPermissionsService.go(session.id, payload, yarStub)
+      await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
       expect(session).to.equal({
         ...session,
@@ -54,7 +66,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
     })
 
     it('continues the journey', async () => {
-      const result = await SubmitPermissionsService.go(session.id, payload, yarStub)
+      const result = await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
       expect(result).to.equal({
         redirectUrl: `/system/users/internal/setup/${session.id}/check`
@@ -80,7 +92,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
             })
 
             it('does not set a notification', async () => {
-              await SubmitPermissionsService.go(session.id, payload, yarStub)
+              await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
               expect(yarStub.flash.called).to.be.false()
             })
@@ -92,7 +104,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
             })
 
             it('sets a notification', async () => {
-              await SubmitPermissionsService.go(session.id, payload, yarStub)
+              await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
               const [flashType, bannerMessage] = yarStub.flash.args[0]
 
@@ -105,7 +117,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
 
       describe('not been visited', () => {
         it('does not set a notification', async () => {
-          await SubmitPermissionsService.go(session.id, payload, yarStub)
+          await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
           expect(yarStub.flash.called).to.be.false()
         })
@@ -119,7 +131,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
     })
 
     it('returns page data for the view, with errors', async () => {
-      const result = await SubmitPermissionsService.go(session.id, payload, yarStub)
+      const result = await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
       expect(result).to.equal({
         backLink: {
@@ -139,7 +151,8 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
         },
         pageTitle: 'Select permissions for the user',
         pageTitleCaption: 'Internal',
-        permissions: undefined
+        permissions: undefined,
+        showSuperPermission: false
       })
     })
   })
