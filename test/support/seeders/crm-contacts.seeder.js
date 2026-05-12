@@ -60,7 +60,6 @@ async function additionalContact(licenceSeedData, additionalContactSeedData = nu
       await companyContact.$query().delete()
       await contact.$query().delete()
       await licenceDocumentRole.$query().delete()
-      await licenceRole.$query().delete()
     }
   }
 }
