@@ -189,7 +189,7 @@ function notices() {
 }
 
 /**
- * Represents a notice of type 'returns invitation
+ * Represents a notice of type 'renewal invitation'
  *
  * @returns {object}
  */
@@ -199,8 +199,10 @@ function renewalInvitation() {
   data.metadata = {
     name: 'Renewals: invitation',
     error: 0,
+    expiryDate: '2026-04-28',
     options: { excludeLicences: [] },
-    recipients: generateRandomInteger(1, 5000)
+    recipients: generateRandomInteger(1, 5000),
+    renewalDate: '2026-01-28'
   }
   data.referenceCode = generateNoticeReferenceCode('REIN-')
   data.subtype = 'renewalInvitation'

@@ -24,12 +24,10 @@ async function go(mainNotice) {
     return null
   }
 
-  const { notice, notifications } = await CreateAlternateNoticeService.go(
-    mainNotice,
+  const { notice, notifications } = await CreateAlternateNoticeService.go(mainNotice, licenceRefs, {
     dueDate,
-    licenceRefs,
     returnLogIds
-  )
+  })
 
   return { notice, notificationIds, notifications }
 }

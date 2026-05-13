@@ -90,7 +90,36 @@ describe('Notices - Setup - Send - Send Notice service', () => {
       })
     })
 
-    describe('and the notice is NOT a returns invitation', () => {
+    describe('and the notice is a renewal invitation', () => {
+      beforeEach(() => {
+        notice = NoticesFixture.renewalInvitation()
+        notifications = [NotificationsFixture.renewalInvitationEmail(notice)]
+      })
+
+      it('sends the main notice', async () => {
+        await SendNoticeService.go(notice, notifications)
+
+        expect(sendMainNoticeStub.calledOnce).to.be.true()
+        expect(sendMainNoticeStub.firstCall.args[0]).to.equal(notice)
+        expect(sendMainNoticeStub.firstCall.args[1]).to.equal(notifications)
+      })
+
+      it('checks the main notice for the need to send an alternate notice', async () => {
+        await SendNoticeService.go(notice, notifications)
+
+        expect(sendAlternateNoticeStub.calledOnce).to.be.true()
+        expect(sendMainNoticeStub.firstCall.args[0]).to.equal(notice)
+      })
+
+      it('updates both the main and alternate notices', async () => {
+        await SendNoticeService.go(notice, notifications)
+
+        expect(updateEventServiceStub.calledOnce).to.be.true()
+        expect(updateEventServiceStub.firstCall.args[0]).to.equal([notice.id, '270d3a69-4cf7-4c90-8459-fbc35d725bd6'])
+      })
+    })
+
+    describe('and the notice is NOT a returns or renewal invitation', () => {
       beforeEach(() => {
         notice = NoticesFixture.returnsReminder()
         notifications = [NotificationsFixture.returnsReminderEmail(notice)]
