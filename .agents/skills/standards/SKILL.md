@@ -22,6 +22,10 @@ This document defines the standards an agent must apply when reviewing or writin
 - Check for existing utilities before writing new ones
 - Use `grep` / search to find all usages of a symbol before renaming or removing it
 
+## Editor config
+
+All files must comply with `.editorconfig`. When creating new files, verify compliance before committing — CI will fail on violations.
+
 ## Writing code
 
 - Match the style and conventions of the surrounding code
