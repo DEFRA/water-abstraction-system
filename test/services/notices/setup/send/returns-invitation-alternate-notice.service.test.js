@@ -15,7 +15,6 @@ const NotificationsFixture = require('../../../../support/fixtures/notifications
 // Things we need to stub
 const CreateAlternateNoticeService = require('../../../../../app/services/notices/setup/create-alternate-notice.service.js')
 const FetchFailedReturnsInvitationsService = require('../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ReturnsInvitationAlternateNoticeService = require('../../../../../app/services/notices/setup/send/returns-invitation-alternate-notice.service.js')
@@ -31,7 +30,6 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
     mainNotice = NoticesFixture.returnsInvitation()
 
     failedNotification = NotificationsFixture.returnsInvitationEmail(mainNotice)
-    failedNotification.id = generateUUID()
     failedNotification.status = 'error'
 
     alternateNotice = NoticesFixture.returnsInvitation()
