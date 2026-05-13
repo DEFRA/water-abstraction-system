@@ -11,14 +11,12 @@ const { expect } = Code
 // Test helpers
 const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
+const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const CreateAlternateNoticeService = require('../../../../../app/services/notices/setup/create-alternate-notice.service.js')
-const FetchFailedReturnsInvitationsService = require('../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js')
 const NotificationModel = require('../../../../../app/models/notification.model.js')
+const ReturnsInvitationAlternateNoticeService = require('../../../../../app/services/notices/setup/send/returns-invitation-alternate-notice.service.js')
 const SendLetterNotificationService = require('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
-const UpdateNoticeService = require('../../../../../app/services/notices/update-notice.service.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Thing under test
 const SendAlternateNoticeService = require('../../../../../app/services/notices/setup/send/send-alternate-notice.service.js')
@@ -33,30 +31,20 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
 
   let alternateNotice
   let alternateNotification
-  let createAlternateNoticeStub
-  let failedNotification
+  let failedNotificationId
   let mainNotice
   let notificationPatchStub
   let sendLetterNotificationStub
-  let updateEventServiceStub
 
   beforeEach(() => {
     mainNotice = NoticesFixture.returnsInvitation()
-
-    failedNotification = NotificationsFixture.returnsInvitationEmail(mainNotice)
-    failedNotification.id = generateUUID()
-    failedNotification.status = 'error'
+    failedNotificationId = generateUUID()
 
     alternateNotice = NoticesFixture.returnsInvitation()
     alternateNotice.licences = mainNotice.licences
     alternateNotice.triggerNoticeId = mainNotice.id
 
     alternateNotification = NotificationsFixture.returnsInvitationLetter(alternateNotice)
-
-    createAlternateNoticeStub = Sinon.stub(CreateAlternateNoticeService, 'go').resolves({
-      notice: alternateNotice,
-      notifications: [alternateNotification]
-    })
 
     sendLetterNotificationStub = Sinon.stub(SendLetterNotificationService, 'go').resolves({
       id: alternateNotification.id,
@@ -73,8 +61,6 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
       whereIn: Sinon.stub().returnsThis(),
       whereNull: Sinon.stub().returnsThis()
     })
-
-    updateEventServiceStub = Sinon.stub(UpdateNoticeService, 'go').resolves()
   })
 
   afterEach(() => {
@@ -83,24 +69,11 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
 
   describe('when the main notice has failed primary user email notifications', () => {
     beforeEach(() => {
-      Sinon.stub(FetchFailedReturnsInvitationsService, 'go').resolves({
-        dueDate: failedNotification.dueDate,
-        licenceRefs: failedNotification.licences,
-        notificationIds: [failedNotification.id],
-        returnLogIds: failedNotification.returnLogIds
+      Sinon.stub(ReturnsInvitationAlternateNoticeService, 'go').resolves({
+        notice: alternateNotice,
+        notificationIds: [failedNotificationId],
+        notifications: [alternateNotification]
       })
-    })
-
-    it('creates the alternate notice and notifications', async () => {
-      await SendAlternateNoticeService.go(mainNotice)
-
-      expect(createAlternateNoticeStub.calledOnce).to.be.true()
-      expect(createAlternateNoticeStub.firstCall.args).to.equal([
-        mainNotice,
-        failedNotification.dueDate,
-        failedNotification.licences,
-        failedNotification.returnLogIds
-      ])
     })
 
     it('sends the alternate notifications to Notify and records the results', async () => {
@@ -109,18 +82,16 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
       expect(sendLetterNotificationStub.calledOnce).to.be.true()
       expect(sendLetterNotificationStub.firstCall.args).to.equal([alternateNotification, alternateNotice.referenceCode])
 
-      // The first call is the recording the result. The second is updating the failed notifications with the alternate
+      // The first call is recording the result. The second is updating the failed notifications with the alternate
       // notice ID (tested elsewhere)
       expect(notificationPatchStub.calledTwice).to.be.true()
-      expect(notificationPatchStub.firstCall.args).to.equal([
-        {
-          plaintext: letterPlaintext,
-          notifyError: undefined,
-          notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
-          notifyStatus: 'created',
-          status: 'pending'
-        }
-      ])
+      expect(notificationPatchStub.firstCall.args[0]).to.equal({
+        notifyError: undefined,
+        notifyId: '8af52d9f-e4ab-4c04-a49a-731439a8697e',
+        notifyStatus: 'created',
+        plaintext: letterPlaintext,
+        status: 'pending'
+      })
     })
 
     it('updates the failed notifications with the alternate notice ID', async () => {
@@ -140,21 +111,15 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
     })
   })
 
-  describe('when the main notice has NO failed primary user email notifications', () => {
+  describe('when the main notice has no failed primary user email notifications', () => {
     beforeEach(() => {
-      Sinon.stub(FetchFailedReturnsInvitationsService, 'go').resolves({
-        licenceRefs: [],
-        notificationIds: [],
-        returnLogIds: []
-      })
+      Sinon.stub(ReturnsInvitationAlternateNoticeService, 'go').resolves(null)
     })
 
-    it('does not proceed with the alternate notice', async () => {
+    it('does not proceed with sending', async () => {
       await SendAlternateNoticeService.go(mainNotice)
 
-      expect(createAlternateNoticeStub.called).to.be.false()
       expect(sendLetterNotificationStub.called).to.be.false()
-      expect(updateEventServiceStub.called).to.be.false()
     })
 
     it('returns null', async () => {
