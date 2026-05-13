@@ -86,7 +86,7 @@ function _personalisation(recipient, noticeData) {
   }
 
   if (recipient.licence_refs.length > 1) {
-    personalisation.licenceRefs = recipient.licence_refs.join(',')
+    personalisation.licenceRefs = recipient.licence_refs.join(', ')
   } else {
     personalisation.licenceRef = recipient.licence_refs[0]
   }
