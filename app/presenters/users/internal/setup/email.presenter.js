@@ -1,14 +1,14 @@
 'use strict'
 
 /**
- * Formats data for the '/users/internal/setup/{sessionId}/user-email' page
- * @module UserEmailPresenter
+ * Formats data for the '/users/internal/setup/{sessionId}/email' page
+ * @module EmailPresenter
  */
 
 const { formatEmail } = require('../../../base.presenter.js')
 
 /**
- * Formats data for the '/users/internal/setup/{sessionId}/user-email' page
+ * Formats data for the '/users/internal/setup/{sessionId}/email' page
  *
  * @param {object} session - The session instance
  *
@@ -20,9 +20,9 @@ function go(session) {
       href: '/system/users',
       text: 'Back'
     },
+    email: formatEmail(session.email),
     pageTitle: 'Enter an email address for the user',
-    pageTitleCaption: 'Internal',
-    email: formatEmail(session.email)
+    pageTitleCaption: 'Internal'
   }
 }
 

@@ -1,21 +1,21 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/user-email' page
+ * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/email' page
  *
- * @module SubmitUserEmailService
+ * @module SubmitEmailService
  */
 
 const CheckEmailExistsDal = require('../../../../dal/users/check-email-exists.dal.js')
+const EmailPresenter = require('../../../../presenters/users/internal/setup/email.presenter.js')
+const EmailValidator = require('../../../../validators/users/internal/setup/email.validator.js')
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const UserEmailPresenter = require('../../../../presenters/users/internal/setup/user-email.presenter.js')
-const UserEmailValidator = require('../../../../validators/users/internal/setup/user-email.validator.js')
+const { formatEmail, formatValidationResult } = require('../../../../presenters/base.presenter.js')
 const { checkUrl } = require('../../../../lib/check-page.lib.js')
 const { flashNotification } = require('../../../../lib/general.lib.js')
-const { formatEmail, formatValidationResult } = require('../../../../presenters/base.presenter.js')
 
 /**
- * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/user-email' page
+ * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/email' page
  *
  * @param {string} sessionId
  * @param {object} payload - The submitted form data
@@ -42,7 +42,7 @@ async function go(sessionId, payload, yar) {
 
   session.email = payload.email
 
-  const pageData = UserEmailPresenter.go(session)
+  const pageData = EmailPresenter.go(session)
 
   return {
     error: validationResult,
@@ -63,7 +63,7 @@ async function _save(session, payload) {
 }
 
 function _validate(payload, emailExists) {
-  const validationResult = UserEmailValidator.go(payload, emailExists)
+  const validationResult = EmailValidator.go(payload, emailExists)
 
   return formatValidationResult(validationResult)
 }

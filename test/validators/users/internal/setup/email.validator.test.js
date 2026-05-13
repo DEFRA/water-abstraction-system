@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const UserEmailValidator = require('../../../../../app/validators/users/internal/setup/user-email.validator.js')
+const EmailValidator = require('../../../../../app/validators/users/internal/setup/email.validator.js')
 
-describe('Users - Internal - Setup - User Email Validator', () => {
+describe('Users - Internal - Setup - Email Validator', () => {
   let emailExists
   let payload
 
@@ -24,7 +24,7 @@ describe('Users - Internal - Setup - User Email Validator', () => {
     })
 
     it('returns with no errors', () => {
-      const result = UserEmailValidator.go(payload, emailExists)
+      const result = EmailValidator.go(payload, emailExists)
 
       expect(result.value).to.exist()
       expect(result.error).not.to.exist()
@@ -38,7 +38,7 @@ describe('Users - Internal - Setup - User Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = UserEmailValidator.go(payload, emailExists)
+        const result = EmailValidator.go(payload, emailExists)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -52,7 +52,7 @@ describe('Users - Internal - Setup - User Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = UserEmailValidator.go(payload, emailExists)
+        const result = EmailValidator.go(payload, emailExists)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -68,7 +68,7 @@ describe('Users - Internal - Setup - User Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = UserEmailValidator.go(payload, emailExists)
+        const result = EmailValidator.go(payload, emailExists)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -82,7 +82,7 @@ describe('Users - Internal - Setup - User Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = UserEmailValidator.go(payload, emailExists)
+        const result = EmailValidator.go(payload, emailExists)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -99,7 +99,7 @@ describe('Users - Internal - Setup - User Email Validator', () => {
       })
 
       it('returns with errors', () => {
-        const result = UserEmailValidator.go(payload, emailExists)
+        const result = EmailValidator.go(payload, emailExists)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()

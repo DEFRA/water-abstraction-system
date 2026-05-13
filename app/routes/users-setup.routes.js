@@ -41,9 +41,9 @@ const routes = [
   },
   {
     method: 'GET',
-    path: '/users/internal/setup/{sessionId}/user-email',
+    path: '/users/internal/setup/{sessionId}/email',
     options: {
-      handler: UsersSetupController.viewUserEmail,
+      handler: UsersSetupController.viewEmail,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -53,9 +53,9 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/users/internal/setup/{sessionId}/user-email',
+    path: '/users/internal/setup/{sessionId}/email',
     options: {
-      handler: UsersSetupController.submitUserEmail,
+      handler: UsersSetupController.submitEmail,
       auth: {
         access: {
           scope: ['manage_accounts']

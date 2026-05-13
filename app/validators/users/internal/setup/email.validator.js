@@ -1,9 +1,9 @@
 'use strict'
 
 /**
- * Validates data submitted for the '/users/internal/setup/{sessionId}/user-email' page
+ * Validates data submitted for the '/users/internal/setup/{sessionId}/email' page
  *
- * @module UserEmailValidator
+ * @module EmailValidator
  */
 
 const Joi = require('joi')
@@ -11,7 +11,7 @@ const Joi = require('joi')
 const { isFalse } = require('../../../helpers/is-false.validator.js')
 
 /**
- * Validates data submitted for the '/users/internal/setup/{sessionId}/user-email' page
+ * Validates data submitted for the '/users/internal/setup/{sessionId}/email' page
  *
  * @param {object} payload - The payload from the request to be validated
  * @param {boolean} emailExists - Indicates if the email already exists in the system
