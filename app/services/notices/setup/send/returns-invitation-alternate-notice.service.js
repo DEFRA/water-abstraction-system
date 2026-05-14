@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Handles the returns-invitation-specific logic for creating an alternate notice
+ * Fetches failed returns invitation notifications and creates an alternate notice for them
  * @module ReturnsInvitationAlternateNoticeService
  */
 

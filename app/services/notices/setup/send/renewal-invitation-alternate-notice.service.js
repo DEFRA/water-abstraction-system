@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Handles the renewal-invitation-specific logic for creating an alternate notice
+ * Fetches failed renewal invitation notifications and creates an alternate notice for them
  * @module RenewalInvitationAlternateNoticeService
  */
 
