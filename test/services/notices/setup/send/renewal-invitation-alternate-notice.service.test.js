@@ -13,7 +13,7 @@ const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js'
 const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
 
 // Things we need to stub
-const CreateAlternateNoticeService = require('../../../../../app/services/notices/setup/create-alternate-notice.service.js')
+const CreateAlternateRenewalNoticeService = require('../../../../../app/services/notices/setup/create-alternate-renewal-notice.service.js')
 const FetchFailedRenewalInvitationsService = require('../../../../../app/services/notices/setup/renewal-notice/fetch-failed-renewal-invitations.service.js')
 
 // Thing under test
@@ -22,7 +22,7 @@ const RenewalInvitationAlternateNoticeService = require('../../../../../app/serv
 describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service', () => {
   let alternateNotice
   let alternateNotification
-  let createAlternateNoticeStub
+  let createAlternateRenewalNoticeStub
   let failedNotification
   let mainNotice
 
@@ -38,7 +38,7 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
 
     alternateNotification = NotificationsFixture.renewalInvitationLetter(alternateNotice)
 
-    createAlternateNoticeStub = Sinon.stub(CreateAlternateNoticeService, 'go').resolves({
+    createAlternateRenewalNoticeStub = Sinon.stub(CreateAlternateRenewalNoticeService, 'go').resolves({
       notice: alternateNotice,
       notifications: [alternateNotification]
     })
@@ -64,8 +64,8 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
         renewalDate: new Date(mainNotice.metadata.renewalDate)
       }
 
-      expect(createAlternateNoticeStub.calledOnce).to.be.true()
-      expect(createAlternateNoticeStub.firstCall.args).to.equal([
+      expect(createAlternateRenewalNoticeStub.calledOnce).to.be.true()
+      expect(createAlternateRenewalNoticeStub.firstCall.args).to.equal([
         mainNotice,
         failedNotification.licences,
         expectedAdditionalNoticeData
@@ -94,7 +94,7 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
     it('does not create the alternate notice', async () => {
       await RenewalInvitationAlternateNoticeService.go(mainNotice)
 
-      expect(createAlternateNoticeStub.called).to.be.false()
+      expect(createAlternateRenewalNoticeStub.called).to.be.false()
     })
 
     it('returns null', async () => {

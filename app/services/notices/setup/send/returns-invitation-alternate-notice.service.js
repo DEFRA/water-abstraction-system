@@ -5,7 +5,7 @@
  * @module ReturnsInvitationAlternateNoticeService
  */
 
-const CreateAlternateNoticeService = require('../create-alternate-notice.service.js')
+const CreateAlternateReturnsNoticeService = require('../create-alternate-returns-notice.service.js')
 const FetchFailedReturnsInvitationsService = require('../returns-notice/fetch-failed-returns-invitations.service.js')
 
 /**
@@ -24,10 +24,12 @@ async function go(mainNotice) {
     return null
   }
 
-  const { notice, notifications } = await CreateAlternateNoticeService.go(mainNotice, licenceRefs, {
+  const { notice, notifications } = await CreateAlternateReturnsNoticeService.go(
+    mainNotice,
+    licenceRefs,
     dueDate,
     returnLogIds
-  })
+  )
 
   return { notice, notificationIds, notifications }
 }

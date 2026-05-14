@@ -5,7 +5,7 @@
  * @module RenewalInvitationAlternateNoticeService
  */
 
-const CreateAlternateNoticeService = require('../create-alternate-notice.service.js')
+const CreateAlternateRenewalNoticeService = require('../create-alternate-renewal-notice.service.js')
 const FetchFailedRenewalInvitationsService = require('../renewal-notice/fetch-failed-renewal-invitations.service.js')
 
 /**
@@ -26,10 +26,12 @@ async function go(mainNotice) {
   const expiryDate = new Date(expiryDateIso)
   const renewalDate = new Date(renewalDateIso)
 
-  const { notice, notifications } = await CreateAlternateNoticeService.go(mainNotice, licenceRefs, {
+  const { notice, notifications } = await CreateAlternateRenewalNoticeService.go(
+    mainNotice,
+    licenceRefs,
     expiryDate,
     renewalDate
-  })
+  )
 
   return { notice, notificationIds, notifications }
 }

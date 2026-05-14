@@ -150,7 +150,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
     })
 
     it('returns an object with empty properties', async () => {
-      const result = await FetchFailedRenewalInvitationsService.go('1f0e0086-7bc4-4ef2-a696-35ea1e79d224')
+      const result = await FetchFailedRenewalInvitationsService.go(generateUUID())
 
       expect(result).to.equal({ licenceRefs: [], notificationIds: [] })
     })

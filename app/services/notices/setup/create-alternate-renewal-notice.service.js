@@ -1,0 +1,71 @@
+'use strict'
+
+/**
+ * Orchestrates creating a new notice and notifications for renewal invitation emails that failed
+ *
+ * @module CreateAlternateRenewalNoticeService
+ */
+
+const CreateNotificationsService = require('./create-notifications.service.js')
+const EventModel = require('../../../models/event.model.js')
+const FetchAlternateRenewalRecipientsService = require('./renewal-notice/fetch-alternate-renewal-recipients.service.js')
+const { generateNoticeReferenceCode, timestampForPostgres } = require('../../../lib/general.lib.js')
+const { NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+
+/**
+ * Orchestrates creating a new notice and notifications for renewal invitation emails that failed
+ *
+ * @param {object} notice - The email notice to check for failed notifications
+ * @param {string[]} licenceRefs - The combined licence references from the failed notifications
+ * @param {Date} expiryDate - The expiry date for the licence
+ * @param {Date} renewalDate - The renewal date for the licence
+ *
+ * @returns {Promise<object>} The created alternate notice and notifications
+ */
+async function go(notice, licenceRefs, expiryDate, renewalDate) {
+  const recipients = await FetchAlternateRenewalRecipientsService.go(licenceRefs)
+  const alternateNotice = await _notice(notice, recipients, licenceRefs)
+  const notifications = await _notifications(alternateNotice, recipients, expiryDate, renewalDate)
+
+  return { notice: alternateNotice, notifications }
+}
+
+async function _notice(notice, recipients, licenceRefs) {
+  const timestamp = timestampForPostgres()
+  const noticeDetails = {
+    issuer: notice.issuer,
+    licences: licenceRefs,
+    metadata: {
+      ...notice.metadata,
+      error: 0,
+      options: { excludedLicences: [] },
+      recipients: recipients.length
+    },
+    overallStatus: 'pending',
+    referenceCode: generateNoticeReferenceCode(NoticeTypes[NoticeType.RENEWAL_INVITATIONS].prefix),
+    status: 'completed',
+    statusCounts: { cancelled: 0, error: 0, pending: recipients.length, sent: 0 },
+    subtype: notice.subtype,
+    triggerNoticeId: notice.id,
+    type: 'notification'
+  }
+
+  return EventModel.query().insert({ ...noticeDetails, createdAt: timestamp, updatedAt: timestamp })
+}
+
+async function _notifications(notice, recipients, expiryDate, renewalDate) {
+  const { id: noticeId } = notice
+
+  const noticeData = {
+    expiryDate,
+    journey: 'standard',
+    noticeType: NoticeType.RENEWAL_INVITATIONS,
+    renewalDate
+  }
+
+  return CreateNotificationsService.go(noticeData, recipients, noticeId)
+}
+
+module.exports = {
+  go
+}

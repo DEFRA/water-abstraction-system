@@ -13,7 +13,7 @@ const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js'
 const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
 
 // Things we need to stub
-const CreateAlternateNoticeService = require('../../../../../app/services/notices/setup/create-alternate-notice.service.js')
+const CreateAlternateReturnsNoticeService = require('../../../../../app/services/notices/setup/create-alternate-returns-notice.service.js')
 const FetchFailedReturnsInvitationsService = require('../../../../../app/services/notices/setup/returns-notice/fetch-failed-returns-invitations.service.js')
 
 // Thing under test
@@ -22,7 +22,7 @@ const ReturnsInvitationAlternateNoticeService = require('../../../../../app/serv
 describe('Notices - Setup - Send - Returns Invitation Alternate Notice service', () => {
   let alternateNotice
   let alternateNotification
-  let createAlternateNoticeStub
+  let createAlternateReturnsNoticeStub
   let failedNotification
   let mainNotice
 
@@ -38,7 +38,7 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
 
     alternateNotification = NotificationsFixture.returnsInvitationLetter(alternateNotice)
 
-    createAlternateNoticeStub = Sinon.stub(CreateAlternateNoticeService, 'go').resolves({
+    createAlternateReturnsNoticeStub = Sinon.stub(CreateAlternateReturnsNoticeService, 'go').resolves({
       notice: alternateNotice,
       notifications: [alternateNotification]
     })
@@ -61,8 +61,8 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
     it('creates the alternate notice and notifications', async () => {
       await ReturnsInvitationAlternateNoticeService.go(mainNotice)
 
-      expect(createAlternateNoticeStub.calledOnce).to.be.true()
-      expect(createAlternateNoticeStub.firstCall.args).to.equal([
+      expect(createAlternateReturnsNoticeStub.calledOnce).to.be.true()
+      expect(createAlternateReturnsNoticeStub.firstCall.args).to.equal([
         mainNotice,
         failedNotification.licences,
         { dueDate: failedNotification.dueDate, returnLogIds: failedNotification.returnLogIds }
@@ -92,7 +92,7 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
     it('does not create the alternate notice', async () => {
       await ReturnsInvitationAlternateNoticeService.go(mainNotice)
 
-      expect(createAlternateNoticeStub.called).to.be.false()
+      expect(createAlternateReturnsNoticeStub.called).to.be.false()
     })
 
     it('returns null', async () => {
