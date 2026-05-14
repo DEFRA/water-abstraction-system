@@ -65,7 +65,8 @@ describe('Notices - Setup - Send - Returns Invitation Alternate Notice service',
       expect(createAlternateReturnsNoticeStub.firstCall.args).to.equal([
         mainNotice,
         failedNotification.licences,
-        { dueDate: failedNotification.dueDate, returnLogIds: failedNotification.returnLogIds }
+        failedNotification.dueDate,
+        failedNotification.returnLogIds
       ])
     })
 
