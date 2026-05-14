@@ -91,6 +91,18 @@ As a team, we've agreed to move all interactions with the DB out of services and
 Prior to changing the logic in `submit-check.service.js`, we're doing this refactor.
 ```
 
+## Branch naming
+
+Branch names use hyphens only — no slashes.
+
+```text
+// Bad
+chore/update-agent-skills
+
+// Good
+chore-update-agent-skills
+```
+
 ## Completion
 
 When all changes are complete and have been verified, create commit messages that follow the rules above.
@@ -100,3 +112,8 @@ Before committing:
 1. Ensure the commit scope is focused on one change
 2. Ensure lint and tests have been run where relevant
 3. Ensure commit subject/body formatting follows this skill
+4. Add a `Co-Authored-By` trailer identifying the AI agent that made the changes, using your own email address
+
+```text
+Co-Authored-By: Agent Name <agent@example.com>
+```

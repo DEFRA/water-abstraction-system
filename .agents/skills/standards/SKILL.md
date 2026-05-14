@@ -35,9 +35,11 @@ All files must comply with `.editorconfig`. When creating new files, verify comp
 - Arrow functions must always use braces: `const fn = () => { return x }`
 - No inline comments unless the *why* is genuinely non-obvious
 - JSDoc is required on all public functions — use `@param`, `@returns`, and a description; controllers, seeds, and routes files are exempt from `@module` JSDoc
+- The `@module` description must exactly match the first line of the `go` function's JSDoc
 - No `console.log()` or `console.dir()` — CI will fail on these
 - No error handling for scenarios that cannot happen
 - No abstractions for a single use case
+- Private functions must be ordered alphabetically by name
 
 ## Naming conventions
 

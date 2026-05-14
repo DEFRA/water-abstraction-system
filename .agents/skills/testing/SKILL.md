@@ -51,10 +51,39 @@ const SubjectUnderTest = require('../../app/services/subject-under-test.service.
   })
   ```
 
+## Hook ordering
+
+Within any `describe` block, always declare hooks in this order: `before`, `beforeEach`, `after`, `afterEach`. Never place an `after`/`afterEach` before a `before`/`beforeEach`.
+
 ## Sinon
 
 - Always call `Sinon.restore()` in `afterEach` whenever stubs are used
 - Never leave stubs active across tests
+
+## Assertions
+
+- Never inline computed values directly in `expect()` — assign them to a variable first, then wrap in the array at the assertion. Always leave a blank line between the assignment and the `expect()`:
+
+  ```js
+  // wrong
+  expect(results).to.equal([SomeSeeder.transform(record)])
+
+  // right
+  const expectedResult = SomeSeeder.transform(record)
+
+  expect(results).to.equal([expectedResult])
+  ```
+
+## Running tests
+
+Use `npm run test` to run tests. You can pass specific files as additional arguments:
+
+```sh
+npm run test -- test/services/notices/setup/my-service.test.js
+npm run test -- test/services/notices/setup/foo.test.js test/services/notices/setup/bar.test.js
+```
+
+Do not use `npx lab` directly.
 
 ## Writing tests
 
