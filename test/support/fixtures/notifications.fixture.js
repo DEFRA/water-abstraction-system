@@ -333,6 +333,92 @@ function paperReturn(notice) {
 }
 
 /**
+ * Generates a renewal invitation email notification object associated to the provided notice
+ *
+ * @param {object} notice - The notice to associate with the renewal invitation email notification
+ *
+ * @returns {object} The generated renewal invitation email object
+ */
+function renewalInvitationEmail(notice) {
+  const notification = {
+    contactType: 'primary user',
+    createdAt: new Date('2025-04-02'),
+    dueDate: null,
+    eventId: notice.id,
+    id: generateUUID(),
+    licenceMonitoringStationId: null,
+    licences: notice.licences,
+    messageRef: 'renewal invitation',
+    messageType: 'email',
+    notifyId: generateUUID(),
+    notifyStatus: 'delivered',
+    pdf: null,
+    personalisation: {
+      expiryDate: '28 April 2026',
+      licenceRef: notice.licences[0],
+      renewalDate: '28 January 2026'
+    },
+    plaintext:
+      'Dear licence holder\n' +
+      '\n' +
+      '^ Your water abstraction licence will expire on 28 April 2026.\n' +
+      '\n' +
+      '^ You can apply to renew your licence from 28 January 2026.\n',
+    recipient: 'grace.hopper@acme.co.uk',
+    returnedAt: null,
+    returnLogIds: null,
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.renewalInvitations.standard.email['single licence']
+  }
+
+  return notification
+}
+
+/**
+ * Generates a renewal invitation letter notification object associated to the provided notice
+ *
+ * @param {object} notice - The notice to associate with the renewal invitation letter notification
+ *
+ * @returns {object} The generated renewal invitation letter object
+ */
+function renewalInvitationLetter(notice) {
+  const notification = {
+    contactType: 'licence holder',
+    createdAt: new Date('2025-04-02'),
+    dueDate: null,
+    eventId: notice.id,
+    id: generateUUID(),
+    licenceMonitoringStationId: null,
+    licences: notice.licences,
+    messageRef: 'renewal invitation',
+    messageType: 'letter',
+    notifyId: generateUUID(),
+    notifyStatus: 'received',
+    pdf: null,
+    personalisation: {
+      ...ADDRESS,
+      expiryDate: '28 April 2026',
+      licenceRef: notice.licences[0],
+      name: 'ACME Services Ltd',
+      renewalDate: '28 January 2026'
+    },
+    plaintext:
+      'Dear ACME Services Ltd\n' +
+      '\n' +
+      '^ Your water abstraction licence will expire on 28 April 2026.\n' +
+      '\n' +
+      '^ You can apply to renew your licence from 28 January 2026.\n',
+    recipient: null,
+    returnedAt: null,
+    returnLogIds: null,
+    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.renewalInvitations.standard.letter['single licence']
+  }
+
+  return notification
+}
+
+/**
  * Generates a returns invitation email notification object associated to the provided notice
  *
  * @param {object} notice - The notice to associate with the returns invitation email notification
@@ -658,6 +744,8 @@ module.exports = {
   legacyRenewal,
   notification,
   paperReturn,
+  renewalInvitationEmail,
+  renewalInvitationLetter,
   returnsInvitationEmail,
   returnsInvitationLetter,
   returnsReminderEmail,
