@@ -22,7 +22,7 @@ describe('Notices - Setup - Renewal Notice - Fetch Alternate Renewal Recipients 
   let licenceSeedData
 
   before(async () => {
-    licenceSeedData = await EmptyLicenceSeeder.seed(licenceRef)
+    licenceSeedData = await EmptyLicenceSeeder.seed()
 
     licenceRef = licenceSeedData.licence.licenceRef
 

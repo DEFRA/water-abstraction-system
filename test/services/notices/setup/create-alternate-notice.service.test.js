@@ -141,9 +141,9 @@ describe('Notices - Setup - Create Alternate Notice service', () => {
           issuer: notice.issuer,
           licences: notice.licences,
           metadata: {
-            name: 'Renewals: invitation',
             error: 0,
             expiryDate: '2026-04-28',
+            name: 'Renewals: invitation',
             options: { excludedLicences: [] },
             recipients: 1,
             renewalDate: '2026-01-28'
