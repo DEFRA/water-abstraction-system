@@ -59,11 +59,16 @@ describe('Notices - Setup - Send - Renewal Invitation Alternate Notice service',
     it('creates the alternate notice and notifications', async () => {
       await RenewalInvitationAlternateNoticeService.go(mainNotice)
 
+      const expectedAdditionalNoticeData = {
+        expiryDate: new Date(mainNotice.metadata.expiryDate),
+        renewalDate: new Date(mainNotice.metadata.renewalDate)
+      }
+
       expect(createAlternateNoticeStub.calledOnce).to.be.true()
       expect(createAlternateNoticeStub.firstCall.args).to.equal([
         mainNotice,
         failedNotification.licences,
-        { expiryDate: new Date(mainNotice.metadata.expiryDate), renewalDate: new Date(mainNotice.metadata.renewalDate) }
+        expectedAdditionalNoticeData
       ])
     })
 

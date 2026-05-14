@@ -89,12 +89,13 @@ describe('Notices - Setup - Renewal Notice - Fetch Failed Renewal Invitations se
           it('returns the failed notification IDs plus the unique licence refs from them', async () => {
             const result = await FetchFailedRenewalInvitationsService.go(notice.id)
 
-            expect(result).to.equal({
-              licenceRefs,
-              notificationIds: [notifications[1].id, notifications[2].id].sort((referenceString, compareString) => {
+            const expectedNotificationIds = [notifications[1].id, notifications[2].id].sort(
+              (referenceString, compareString) => {
                 return compareStrings(referenceString, compareString)
-              })
-            })
+              }
+            )
+
+            expect(result).to.equal({ licenceRefs, notificationIds: expectedNotificationIds })
           })
         })
 

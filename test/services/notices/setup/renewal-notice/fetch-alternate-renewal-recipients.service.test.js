@@ -42,7 +42,9 @@ describe('Notices - Setup - Renewal Notice - Fetch Alternate Renewal Recipients 
     it('fetches the correct recipient data for sending the notice', async () => {
       const results = await FetchAlternateRenewalRecipientsService.go([licenceRef])
 
-      expect(results).to.equal([RecipientsSeeder.transformToSendingResult(licenceHolder)])
+      const expectedResult = RecipientsSeeder.transformToSendingResult(licenceHolder)
+
+      expect(results).to.equal([expectedResult])
     })
   })
 })
