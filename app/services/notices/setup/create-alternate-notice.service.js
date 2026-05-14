@@ -20,33 +20,16 @@ const { NoticeJourney, NoticeType, NoticeTypes } = require('../../../lib/static-
  *
  * @param {module:EventModel} notice - The email notice to check for failed notifications
  * @param {string[]} licenceRefs - The combined licence references from the failed notifications
- * @param {object} params - Type-specific parameters
- * @param {Date} [params.dueDate] - The due date for returns invitations
- * @param {Date} [params.expiryDate] - The licence expiry date for renewal invitations
- * @param {Date} [params.renewalDate] - The renewal date for renewal invitations
- * @param {string[]} [params.returnLogIds] - The return log IDs for returns invitations
+ * @param {object} additionalNoticeData - Type-specific data needed to create the alternate notice
  *
  * @returns {Promise<object>} The created alternate notice and notifications
  */
-async function go(notice, licenceRefs, { dueDate, expiryDate, renewalDate, returnLogIds } = {}) {
+async function go(notice, licenceRefs, additionalNoticeData = {}) {
   if (notice.subtype === NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType) {
-    const recipients = await FetchAlternateRenewalRecipientsService.go(licenceRefs)
-    const alternateNotice = await _notice(
-      notice,
-      recipients,
-      licenceRefs,
-      NoticeTypes[NoticeType.RENEWAL_INVITATIONS].prefix
-    )
-    const notifications = await _renewalNotifications(alternateNotice, recipients, expiryDate, renewalDate)
-
-    return { notice: alternateNotice, notifications }
+    return _renewalInvitation(notice, licenceRefs, additionalNoticeData)
   }
 
-  const recipients = await FetchAlternateReturnsRecipientsService.go(returnLogIds, dueDate)
-  const alternateNotice = await _notice(notice, recipients, licenceRefs, NoticeTypes[NoticeType.INVITATIONS].prefix)
-  const notifications = await _returnsNotifications(alternateNotice, recipients)
-
-  return { notice: alternateNotice, notifications }
+  return _returnsInvitation(notice, licenceRefs, additionalNoticeData)
 }
 
 async function _notice(notice, recipients, licenceRefs, referenceCodePrefix) {
@@ -72,6 +55,21 @@ async function _notice(notice, recipients, licenceRefs, referenceCodePrefix) {
   return EventModel.query().insert({ ...noticeDetails, createdAt: timestamp, updatedAt: timestamp })
 }
 
+async function _renewalInvitation(notice, licenceRefs, additionalNoticeData) {
+  const { expiryDate, renewalDate } = additionalNoticeData
+
+  const recipients = await FetchAlternateRenewalRecipientsService.go(licenceRefs)
+  const alternateNotice = await _notice(
+    notice,
+    recipients,
+    licenceRefs,
+    NoticeTypes[NoticeType.RENEWAL_INVITATIONS].prefix
+  )
+  const notifications = await _renewalNotifications(alternateNotice, recipients, expiryDate, renewalDate)
+
+  return { notice: alternateNotice, notifications }
+}
+
 async function _renewalNotifications(notice, recipients, expiryDate, renewalDate) {
   const { id: noticeId } = notice
 
@@ -83,6 +81,16 @@ async function _renewalNotifications(notice, recipients, expiryDate, renewalDate
   }
 
   return CreateNotificationsService.go(noticeData, recipients, noticeId)
+}
+
+async function _returnsInvitation(notice, licenceRefs, additionalNoticeData) {
+  const { dueDate, returnLogIds } = additionalNoticeData
+
+  const recipients = await FetchAlternateReturnsRecipientsService.go(returnLogIds, dueDate)
+  const alternateNotice = await _notice(notice, recipients, licenceRefs, NoticeTypes[NoticeType.INVITATIONS].prefix)
+  const notifications = await _returnsNotifications(alternateNotice, recipients)
+
+  return { notice: alternateNotice, notifications }
 }
 
 async function _returnsNotifications(notice, recipients) {
