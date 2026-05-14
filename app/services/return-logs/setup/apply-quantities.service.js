@@ -60,7 +60,7 @@ function _readingsUpdate(session) {
 
 function _volumesUpdate(session) {
   session.lines.forEach((line) => {
-    line.quantity = convertFromCubicMetres(line.quantityCubicMetres, session.unitSymbol)
+    line.quantityCubicMetres = convertToCubicMetres(line.quantity, session.unitSymbol)
   })
 
   return session
