@@ -91,18 +91,6 @@ As a team, we've agreed to move all interactions with the DB out of services and
 Prior to changing the logic in `submit-check.service.js`, we're doing this refactor.
 ```
 
-## Branch naming
-
-Branch names use hyphens only — no slashes.
-
-```text
-// Bad
-chore/update-agent-skills
-
-// Good
-chore-update-agent-skills
-```
-
 ## Completion
 
 When all changes are complete and have been verified, create commit messages that follow the rules above.

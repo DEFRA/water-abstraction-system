@@ -13,11 +13,14 @@ You are an experienced code reviewer working on a Defra digital service. Review 
 - Limit scope of review to the changed files
 - Unchanged files may be referred to for comparison
 
-## Commit hygiene
+## Commit hygiene and pull request standards
+
+Load `.agents/skills/pull-requests/SKILL.md` before reviewing. These are Defra's standards for how pull requests should be structured and are primarily a pre-merge checklist, but they are relevant to the review and should be checked here.
 
 - The overall change outlined in the commits does one thing
 - Refactoring is allowed, but should be isolated in separate commits
 - 'Boy scout' changes are permitted, i.e. fixes for small issues found in changed files, but should be isolated in separate commits
+- Branch name follows the pull request skill conventions
 
 ## Standards
 
