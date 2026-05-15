@@ -21,16 +21,19 @@ const SessionModel = require('../../../../models/session.model.js')
  * record itself deleted.
  *
  * @param {string} id - the UUID of the user
+ * @param {string} back - The 'back' query parameter, used to indicate whether the user came from Search or Users
  *
  * @returns {Promise<module:SessionModel>} the newly created session record
  */
-async function go(id) {
+async function go(id, back) {
   const user = await FetchUserDal.go(id)
 
   const licences = await FetchLicencesDal.go(user.licenceEntityId)
 
+  const activeNavBar = back === 'users' ? 'users' : 'search'
+
   return SessionModel.query()
-    .insert({ data: { licences, selectedLicences: [], user } })
+    .insert({ data: { activeNavBar, licences, selectedLicences: [], user } })
     .returning('id')
 }
 

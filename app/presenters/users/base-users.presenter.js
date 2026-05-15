@@ -1,6 +1,29 @@
 'use strict'
 
 /**
+ * Formats for display selected licences to unlink in the external check and cancel pages
+ *
+ * @param {object} session - The session object containing external unlinking licence data
+ *
+ * @returns {string[]} Array of selected licence references or 'All licences' if that option was selected
+ */
+function formatLicencesToUnlink(session) {
+  const { allLicences, licences, selectedLicences } = session
+
+  if (allLicences) {
+    return ['All licences']
+  }
+
+  const filteredLicences = licences.filter((licence) => {
+    return selectedLicences.includes(licence.id)
+  })
+
+  return filteredLicences.map((filteredLicence) => {
+    return filteredLicence.licenceRef
+  })
+}
+
+/**
  * Determines the navigation elements for external user pages, for example, `activeNavBar` and the back link
  *
  * Users can access external user pages from two sources: the **Search** and **Users** pages.
@@ -51,5 +74,6 @@ function sourceNavigation(requestedQueryValue, canManageAccounts) {
 }
 
 module.exports = {
+  formatLicencesToUnlink,
   sourceNavigation
 }

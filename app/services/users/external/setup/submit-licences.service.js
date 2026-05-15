@@ -1,0 +1,110 @@
+'use strict'
+
+/**
+ * Orchestrates validating the data for the '/users/external/setup/{sessionId}/licences' page
+ *
+ * @module SubmitLicencesService
+ */
+
+const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+const LicencesPresenter = require('../../../../presenters/users/external/setup/licences.presenter.js')
+const LicencesValidator = require('../../../../validators/users/external/setup/licences.validator.js')
+const { checkUrl } = require('../../../../lib/check-page.lib.js')
+const { flashNotification } = require('../../../../lib/general.lib.js')
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+const { handleOneOptionSelected } = require('../../../../lib/submit-page.lib.js')
+
+/**
+ * Orchestrates validating the data for the '/users/external/setup/{sessionId}/licences' page
+ *
+ * @param {string} sessionId
+ * @param {object} payload - The submitted form data
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
+ *
+ * @returns {Promise<object>} The data formatted for the view template
+ */
+async function go(sessionId, payload, yar) {
+  const session = await FetchSessionDal.go(sessionId)
+
+  handleOneOptionSelected(payload, 'licences')
+
+  const payloadSelection = _payloadSelection(payload)
+
+  const error = _validate(payload)
+
+  if (!error) {
+    _notification(session, payloadSelection, yar)
+
+    await _save(session, payloadSelection)
+
+    return {
+      redirectUrl: checkUrl(session, `/system/users/external/setup/${sessionId}/check`)
+    }
+  }
+
+  session.allLicences = payloadSelection.allLicences
+  session.selectedLicences = payloadSelection.selectedLicences
+
+  const pageData = LicencesPresenter.go(session)
+
+  return {
+    error,
+    ...pageData
+  }
+}
+
+function _notification(session, payloadSelection, yar) {
+  const selectionDiffers = _payloadDiffers(payloadSelection, session)
+
+  if (session.checkPageVisited && selectionDiffers) {
+    flashNotification(yar, 'Updated', 'Licences to unregister updated')
+  }
+}
+
+function _payloadSelection(payload) {
+  const { licences } = payload
+
+  const allLicences = licences.includes('all')
+  const selectedLicences = licences.filter((licence) => {
+    return licence !== 'all'
+  })
+
+  return { allLicences, selectedLicences }
+}
+
+async function _save(session, payloadSelection) {
+  session.allLicences = payloadSelection.allLicences
+  session.selectedLicences = payloadSelection.selectedLicences
+
+  return session.$update()
+}
+
+function _payloadDiffers(payloadSelection, session) {
+  const allLicencesMatch = session.allLicences === payloadSelection.allLicences
+
+  if (!allLicencesMatch) {
+    return true
+  }
+
+  let selectedLicencesMatch = session.selectedLicences.length === payloadSelection.selectedLicences.length
+
+  if (!selectedLicencesMatch) {
+    return true
+  }
+
+  selectedLicencesMatch = session.selectedLicences.every((licence) => {
+    return payloadSelection.selectedLicences.includes(licence)
+  })
+
+  return !selectedLicencesMatch
+}
+
+function _validate(payload) {
+  const validationResult = LicencesValidator.go(payload)
+
+  return formatValidationResult(validationResult)
+}
+
+module.exports = {
+  go
+}

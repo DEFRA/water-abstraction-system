@@ -9,17 +9,24 @@ const InitiateExternalSessionService = require('../services/users/external/setup
 const InitiateInternalSessionService = require('../services/users/internal/setup/initiate-session.service.js')
 const SubmitCheckService = require('../services/users/internal/setup/submit-check.service.js')
 const SubmitEmailService = require('../services/users/internal/setup/submit-email.service.js')
+const SubmitExternalCancelService = require('../services/users/external/setup/submit-cancel.service.js')
+const SubmitExternalCheckService = require('../services/users/external/setup/submit-check.service.js')
+const SubmitExternalLicencesService = require('../services/users/external/setup/submit-licences.service.js')
 const SubmitPermissionsService = require('../services/users/internal/setup/submit-permissions.service.js')
 const ViewCheckService = require('../services/users/internal/setup/view-check.service.js')
 const ViewEmailService = require('../services/users/internal/setup/view-email.service.js')
+const ViewExternalCancelService = require('../services/users/external/setup/view-cancel.service.js')
+const ViewExternalCheckService = require('../services/users/external/setup/view-check.service.js')
+const ViewExternalLicencesService = require('../services/users/external/setup/view-licences.service.js')
 const ViewPermissionsService = require('../services/users/internal/setup/view-permissions.service.js')
 
 async function setupExternal(request, h) {
   const {
-    params: { id }
+    params: { id },
+    query: { back }
   } = request
 
-  const { id: sessionId } = await InitiateExternalSessionService.go(id)
+  const { id: sessionId } = await InitiateExternalSessionService.go(id, back)
 
   return h.redirect(`/system/users/external/setup/${sessionId}/licences`)
 }
@@ -52,6 +59,48 @@ async function submitEmail(request, h) {
 
   if (pageData.error) {
     return h.view('users/internal/setup/email.njk', pageData)
+  }
+
+  return h.redirect(pageData.redirectUrl)
+}
+
+async function submitExternalCancel(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const { redirectUrl } = await SubmitExternalCancelService.go(sessionId)
+
+  return h.redirect(redirectUrl)
+}
+
+async function submitExternalCheck(request, h) {
+  const {
+    auth,
+    params: { sessionId },
+    yar
+  } = request
+
+  const pageData = await SubmitExternalCheckService.go(sessionId, yar, auth)
+
+  if (pageData.error) {
+    return h.view('users/external/setup/check.njk', pageData)
+  }
+
+  return h.redirect(pageData.redirectUrl)
+}
+
+async function submitExternalLicences(request, h) {
+  const {
+    payload,
+    params: { sessionId },
+    yar
+  } = request
+
+  const pageData = await SubmitExternalLicencesService.go(sessionId, payload, yar)
+
+  if (pageData.error) {
+    return h.view('users/external/setup/licences.njk', pageData)
   }
 
   return h.redirect(pageData.redirectUrl)
@@ -93,6 +142,33 @@ async function viewEmail(request, h) {
   return h.view('users/internal/setup/email.njk', pageData)
 }
 
+async function viewExternalCancel(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewExternalCancelService.go(sessionId)
+
+  return h.view('users/external/setup/cancel.njk', pageData)
+}
+
+async function viewExternalCheck(request, h) {
+  const {
+    params: { sessionId },
+    yar
+  } = request
+
+  const pageData = await ViewExternalCheckService.go(sessionId, yar)
+
+  return h.view('users/external/setup/check.njk', pageData)
+}
+
+async function viewExternalLicences(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewExternalLicencesService.go(sessionId)
+
+  return h.view('users/external/setup/licences.njk', pageData)
+}
+
 async function viewPermissions(request, h) {
   const {
     auth,
@@ -109,8 +185,14 @@ module.exports = {
   setupInternal,
   submitCheck,
   submitEmail,
+  submitExternalCancel,
+  submitExternalCheck,
+  submitExternalLicences,
   submitPermissions,
   viewCheck,
   viewEmail,
+  viewExternalCancel,
+  viewExternalCheck,
+  viewExternalLicences,
   viewPermissions
 }
