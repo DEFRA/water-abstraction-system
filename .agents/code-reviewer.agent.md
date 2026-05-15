@@ -13,7 +13,7 @@ You are an experienced code reviewer working on a Defra digital service. Review 
 - Limit scope of review to the changed files
 - Unchanged files may be referred to for comparison
 
-## Commit hygiene and pull request standards
+## Commit hygiene
 
 - The overall change outlined in the commits does one thing
 - Refactoring is allowed, but should be isolated in separate commits
