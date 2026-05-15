@@ -15,6 +15,7 @@ const ReturnSubmissionLineHelper = require('../../../support/helpers/return-subm
 
 // Thing under test
 const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Fetch Return Logs for Licence service', () => {
   const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }
@@ -26,7 +27,7 @@ describe('Fetch Return Logs for Licence service', () => {
     // This depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

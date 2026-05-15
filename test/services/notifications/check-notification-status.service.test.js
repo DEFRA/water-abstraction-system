@@ -20,6 +20,7 @@ const ViewMessageDataRequest = require('../../../app/requests/notify/view-messag
 
 // Thing under test
 const CheckNotificationStatusService = require('../../../app/services/notifications/check-notification-status.service.js')
+const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
 
 describe('Notifications - Check Notification Status service', () => {
   let licenceMonitoringStationPatchStub
@@ -45,7 +46,7 @@ describe('Notifications - Check Notification Status service', () => {
 
     returnLogPatchStub = Sinon.stub().returnsThis()
 
-    notifierStub = { omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

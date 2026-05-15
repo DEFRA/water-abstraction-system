@@ -18,6 +18,7 @@ const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/g
 
 // Thing under test
 const PreparePaperReturnService = require('../../../../app/services/notices/setup/prepare-paper-return.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Notices - Setup - Prepare Paper Return service', () => {
   const buffer = new TextEncoder().encode('mock file').buffer
@@ -67,7 +68,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
       }
     })
 
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

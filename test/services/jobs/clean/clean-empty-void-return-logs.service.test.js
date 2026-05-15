@@ -15,6 +15,7 @@ const ReturnSubmissionHelper = require('../../../support/helpers/return-submissi
 
 // Thing under test
 const CleanEmptyVoidReturnLogsService = require('../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
   let returnLog
@@ -24,7 +25,7 @@ describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

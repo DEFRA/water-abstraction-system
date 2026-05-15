@@ -19,6 +19,7 @@ const FetchReturnRequirementsService = require('../../../../app/services/jobs/re
 
 // Thing under test
 const ProcessReturnLogsService = require('../../../../app/services/jobs/return-logs/process-return-logs.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Jobs - Return Logs - Process Return Logs service', () => {
   const cycle = 'all-year'
@@ -31,7 +32,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub(), redAlert: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

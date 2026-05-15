@@ -17,6 +17,7 @@ const MatchAndAllocateService = require('../../../../app/services/bill-runs/matc
 
 // Thing under test
 const ProcessBillRunService = require('../../../../app/services/bill-runs/tpt-supplementary/process-bill-run.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
   const billingPeriods = [{ startDate: new Date('2023-04-01'), endDate: new Date('2024-03-31') }]
@@ -39,7 +40,7 @@ describe('Bill Runs - TPT Supplementary - Process Bill Run service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

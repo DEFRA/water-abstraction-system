@@ -22,6 +22,7 @@ const UnflagUnbilledSupplementaryLicencesService = require('../../../../app/serv
 
 // Thing under test
 const ProcessBillRunService = require('../../../../app/services/bill-runs/supplementary/process-bill-run.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Bill Runs - Supplementary - Process Bill Run service', () => {
   const billingPeriods = [
@@ -51,7 +52,7 @@ describe('Bill Runs - Supplementary - Process Bill Run service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

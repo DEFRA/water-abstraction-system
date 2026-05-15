@@ -17,6 +17,7 @@ const SendToS3BucketService = require('../../../../app/services/jobs/export/send
 
 // Thing under test
 const SchemaExportService = require('../../../../app/services/jobs/export/schema-export.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Schema export service', () => {
   let FetchTableNamesServiceStub
@@ -82,7 +83,7 @@ describe('Schema export service', () => {
       CompressSchemaFolderServiceStub = Sinon.stub(CompressSchemaFolderService, 'go')
       DeleteFilesServiceStub = Sinon.stub(DeleteFilesService, 'go').resolves()
 
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      notifierStub = GlobalNotifierStub.build(Sinon)
       global.GlobalNotifier = notifierStub
     })
 

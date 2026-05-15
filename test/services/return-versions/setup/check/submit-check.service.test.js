@@ -23,6 +23,7 @@ const VoidReturnLogsService = require('../../../../../app/services/return-logs/v
 
 // Thing under test
 const SubmitCheckService = require('../../../../../app/services/return-versions/setup/check/submit-check.service.js')
+const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
 
 describe('Return Versions - Setup - Submit Check service', () => {
   let createReturnVersionStub
@@ -148,7 +149,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

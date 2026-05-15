@@ -14,6 +14,7 @@ const LicenceEndDateChangeModel = require('../../../../app/models/licence-end-da
 
 // Thing under test
 const CheckLicenceEndDatesService = require('../../../../app/services/licences/end-dates/check-licence-end-dates.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Licences - End Dates - Check Licence End Dates service', () => {
   let licence
@@ -34,7 +35,7 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

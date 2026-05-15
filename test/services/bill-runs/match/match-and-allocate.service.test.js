@@ -19,6 +19,7 @@ const PersistAllocatedLicenceToResultsService = require('../../../../app/service
 
 // Thing under test
 const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Bill Runs - Match - Match And Allocate service', () => {
   let determineLicenceIssuesServiceStub
@@ -26,7 +27,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
   let licences
 
   beforeEach(() => {
-    notifierStub = { omg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

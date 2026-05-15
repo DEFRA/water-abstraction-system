@@ -17,6 +17,7 @@ const WaterSchemaService = require('../../../../app/services/data/tear-down/wate
 
 // Thing under test
 const TearDownService = require('../../../../app/services/data/tear-down/tear-down.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Tear down service', () => {
   let crmSchemaServiceStub
@@ -36,7 +37,7 @@ describe('Tear down service', () => {
     // TearDownService depends on the GlobalNotifier being set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

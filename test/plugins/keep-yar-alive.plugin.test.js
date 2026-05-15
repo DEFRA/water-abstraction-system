@@ -14,6 +14,7 @@ const Hapi = require('@hapi/hapi')
 
 // Thing under test
 const KeepYarAlivePlugin = require('../../app/plugins/keep-yar-alive.plugin.js')
+const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
 
 describe('Keep Yar Alive plugin', () => {
   let notifierStub
@@ -48,7 +49,7 @@ describe('Keep Yar Alive plugin', () => {
       }
     })
 
-    notifierStub = { omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

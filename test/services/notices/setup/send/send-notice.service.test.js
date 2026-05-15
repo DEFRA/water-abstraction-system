@@ -19,6 +19,7 @@ const UpdateNoticeService = require('../../../../../app/services/notices/update-
 
 // Thing under test
 const SendNoticeService = require('../../../../../app/services/notices/setup/send/send-notice.service.js')
+const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
 
 describe('Notices - Setup - Send - Send Notice service', () => {
   let notice
@@ -35,7 +36,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

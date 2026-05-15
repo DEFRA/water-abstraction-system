@@ -19,6 +19,7 @@ const UpdateNoticeService = require('../../../app/services/notices/update-notice
 
 // Thing under test
 const ProcessReturnedLetterService = require('../../../app/services/notifications/process-returned-letter.service.js')
+const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
 
 describe('Notifications - Process Returned Letter service', () => {
   const todaysDate = today()
@@ -39,7 +40,7 @@ describe('Notifications - Process Returned Letter service', () => {
       status: 'sent'
     })
 
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

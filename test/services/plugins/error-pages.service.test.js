@@ -21,6 +21,7 @@ const SessionNotFoundError = require('../../../app/errors/session-not-found.erro
 
 // Thing under test
 const ErrorPagesService = require('../../../app/services/plugins/error-pages.service.js')
+const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
 
 describe('Error pages service', () => {
   const boom403Response = {
@@ -61,7 +62,7 @@ describe('Error pages service', () => {
   let request
 
   beforeEach(() => {
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

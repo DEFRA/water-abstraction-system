@@ -21,6 +21,7 @@ const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/g
 
 // Thing under test
 const ProcessPreviewPaperReturnService = require('../../../../app/services/notices/setup/process-preview-paper-return.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Notices - Setup - Process Preview Paper Return service', () => {
   let contactHashId
@@ -68,7 +69,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
       }
     ])
 
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     global.GlobalNotifier = notifierStub
   })
 

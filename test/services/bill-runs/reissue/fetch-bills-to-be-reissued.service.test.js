@@ -18,6 +18,7 @@ const TransactionHelper = require('../../../support/helpers/transaction.helper.j
 
 // Thing under test
 const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Fetch Bills To Be Reissued service', () => {
   let billRun
@@ -109,7 +110,7 @@ describe('Fetch Bills To Be Reissued service', () => {
     let notifierStub
 
     beforeEach(() => {
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      notifierStub = GlobalNotifierStub.build(Sinon)
       global.GlobalNotifier = notifierStub
     })
 
