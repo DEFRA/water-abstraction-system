@@ -12,11 +12,11 @@ const { expect } = Code
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
 const CreateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/create-return-version.service.js')
 const DeleteSessionDal = require('../../../../../app/dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 const GenerateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/generate-return-version.service.js')
+const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
 const ProcessExistingReturnVersionsService = require('../../../../../app/services/return-versions/setup/check/process-existing-return-versions.service.js')
 const ProcessLicenceReturnLogsService = require('../../../../../app/services/return-logs/process-licence-return-logs.service.js')
 const UpdateSucceededReturnLogsDal = require('../../../../../app/dal/return-versions/update-succeeded-return-logs.dal.js')

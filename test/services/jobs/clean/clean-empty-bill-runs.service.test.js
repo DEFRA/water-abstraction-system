@@ -12,9 +12,9 @@ const { expect } = Code
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const CancelBillRunService = require('../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js')
 const DeleteBillRunService = require('../../../../app/services/bill-runs/cancel/delete-bill-run.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const UnassignBillRunToLicencesService = require('../../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js')
 
 // Thing under test

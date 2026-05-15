@@ -13,8 +13,8 @@ const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const WorkflowModel = require('../../../../app/models/workflow.model.js')
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const FetchLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 // Thing under test
 const ProcessLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/process-licence-updates.service.js')

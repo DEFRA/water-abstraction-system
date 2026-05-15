@@ -18,8 +18,8 @@ const TransactionHelper = require('../../../support/helpers/transaction.helper.j
 const TransactionModel = require('../../../../app/models/transaction.model.js')
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const ReissueBillService = require('../../../../app/services/bill-runs/reissue/reissue-bill.service.js')
 
 // Thing under test

@@ -9,10 +9,10 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js')
 const DetermineLicenceIssuesService = require('../../../../app/services/bill-runs/match/determine-licence-issues.service.js')
 const FetchLicencesService = require('../../../../app/services/bill-runs/match/fetch-licences.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const MatchReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js')
 const PrepareChargeVersionService = require('../../../../app/services/bill-runs/match/prepare-charge-version.service.js')
 const PrepareReturnLogsService = require('../../../../app/services/bill-runs/match/prepare-return-logs.service.js')

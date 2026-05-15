@@ -9,8 +9,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const FetchLicencesService = require('../../../../app/services/licences/end-dates/fetch-licences.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const LicencesConfig = require('../../../../config/licences.config.js')
 const CheckLicenceEndDatesService = require('../../../../app/services/licences/end-dates/check-licence-end-dates.service.js')
 const { generateUUID, pause } = require('../../../../app/lib/general.lib.js')

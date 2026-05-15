@@ -9,11 +9,11 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const CompressSchemaFolderService = require('../../../../app/services/jobs/export/compress-schema-folder.service.js')
 const DeleteFilesService = require('../../../../app/services/jobs/export/delete-files.service.js')
 const ExportTableService = require('../../../../app/services/jobs/export/export-table.service.js')
 const FetchTableNamesService = require('../../../../app/services/jobs/export/fetch-table-names.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const SendToS3BucketService = require('../../../../app/services/jobs/export/send-to-s3-bucket.service.js')
 
 // Thing under test

@@ -9,8 +9,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const CrmSchemaService = require('../../../../app/services/data/tear-down/crm-schema.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const IdmSchemaService = require('../../../../app/services/data/tear-down/idm-schema.service.js')
 const PermitSchemaService = require('../../../../app/services/data/tear-down/permit-schema.service.js')
 const ReturnsSchemaService = require('../../../../app/services/data/tear-down/returns-schema.service.js')
