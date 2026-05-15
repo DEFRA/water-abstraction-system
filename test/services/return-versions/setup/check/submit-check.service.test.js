@@ -12,6 +12,7 @@ const { expect } = Code
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
 const CreateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/create-return-version.service.js')
 const DeleteSessionDal = require('../../../../../app/dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
@@ -23,7 +24,6 @@ const VoidReturnLogsService = require('../../../../../app/services/return-logs/v
 
 // Thing under test
 const SubmitCheckService = require('../../../../../app/services/return-versions/setup/check/submit-check.service.js')
-const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
 
 describe('Return Versions - Setup - Submit Check service', () => {
   let createReturnVersionStub

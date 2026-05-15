@@ -14,11 +14,11 @@ const BillingAccountHelper = require('../../../support/helpers/billing-account.h
 const BillingAccountModel = require('../../../../app/models/billing-account.model.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const ChargingModuleViewCustomerFilesRequest = require('../../../../app/requests/charging-module/view-customer-files.request.js')
 
 // Thing under test
 const ProcessCustomerFilesService = require('../../../../app/services/jobs/customer-files/process-customer-files.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Jobs - Customer Files - Process Customer Files service', () => {
   const days = 7

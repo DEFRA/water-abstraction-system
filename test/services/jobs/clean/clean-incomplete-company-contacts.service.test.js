@@ -15,9 +15,11 @@ const CompanyContactHelper = require('../../../support/helpers/company-contact.h
 const CompanyContactModel = require('../../../../app/models/company-contact.model.js')
 const ContactHelper = require('../../../support/helpers/contact.helper.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const CleanIncompleteCompanyContactsService = require('../../../../app/services/jobs/clean/clean-incomplete-company-contacts.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Jobs - Clean - Clean Incomplete Company Contacts service', () => {
   let companyContact

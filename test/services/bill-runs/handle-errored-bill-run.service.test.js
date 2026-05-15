@@ -11,9 +11,11 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const HandleErroredBillRunService = require('../../../app/services/bill-runs/handle-errored-bill-run.service.js')
-const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
 
 describe('Handle Errored Bill Run service', () => {
   let billRun

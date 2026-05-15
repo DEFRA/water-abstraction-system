@@ -13,11 +13,11 @@ const WorkflowModel = require('../../../../app/models/workflow.model.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const FetchTimeLimitedLicencesService = require('../../../../app/services/jobs/time-limited/fetch-time-limited-licences.service.js')
 
 // Thing under test
 const ProcessTimeLimitedLicencesService = require('../../../../app/services/jobs/time-limited/process-time-limited-licences.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Process Time Limited Licences service', () => {
   let fetchResults

@@ -12,13 +12,13 @@ const { expect } = Code
 const LicenceEndDateChangeHelper = require('../../../support/helpers/licence-end-date-change.helper.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const LicenceEndDateChangeModel = require('../../../../app/models/licence-end-date-change.model.js')
 const ProcessBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
 const ProcessLicenceReturnLogsService = require('../../../../app/services/return-logs/process-licence-return-logs.service.js')
 
 // Thing under test
 const ProcessLicenceEndDateChangesService = require('../../../../app/services/licences/end-dates/process-licence-end-date-changes.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Licences - End Dates - Process Licence End Date Changes service', () => {
   let licenceEndDateChange

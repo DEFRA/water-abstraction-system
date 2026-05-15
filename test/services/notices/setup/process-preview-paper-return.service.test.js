@@ -15,13 +15,13 @@ const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { formatLongDate } = require('../../../../app/presenters/base.presenter.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/generate-paper-return.request.js')
 
 // Thing under test
 const ProcessPreviewPaperReturnService = require('../../../../app/services/notices/setup/process-preview-paper-return.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Notices - Setup - Process Preview Paper Return service', () => {
   let contactHashId

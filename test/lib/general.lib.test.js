@@ -11,9 +11,11 @@ const { expect } = Code
 // Test helpers
 const TransactionHelper = require('../support/helpers/transaction.helper.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const GeneralLib = require('../../app/lib/general.lib.js')
-const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
 
 describe('GeneralLib', () => {
   let clock

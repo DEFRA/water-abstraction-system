@@ -12,9 +12,11 @@ const { expect } = Code
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const LicenceEndDateChangeModel = require('../../../../app/models/licence-end-date-change.model.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const CheckLicenceEndDatesService = require('../../../../app/services/licences/end-dates/check-licence-end-dates.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Licences - End Dates - Check Licence End Dates service', () => {
   let licence

@@ -13,9 +13,11 @@ const { expect } = Code
 const { HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK } = require('node:http2').constants
 const serverConfig = require('../../config/server.config.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const BaseRequest = require('../../app/requests/base.request.js')
-const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
 
 describe('Base Request', () => {
   const testDomain = 'http://example.com'

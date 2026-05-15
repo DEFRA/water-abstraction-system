@@ -20,9 +20,11 @@ const {
 const Boom = require('@hapi/boom')
 const SessionNotFoundError = require('../../app/errors/session-not-found.error.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
+
 // For running our service
 const { init } = require('../../app/server.js')
-const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
 
 describe('Error Pages plugin', () => {
   let handler

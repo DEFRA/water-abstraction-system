@@ -13,9 +13,11 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SessionModel = require('../../../../app/models/session.model.js')
 const { today } = require('../../../../app/lib/general.lib.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const CleanExpiredSessionsService = require('../../../../app/services/jobs/clean/clean-expired-sessions.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Jobs - Clean - Clean Expired Sessions service', () => {
   const todaysDate = today()

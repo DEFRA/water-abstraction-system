@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js')
 const DetermineLicenceIssuesService = require('../../../../app/services/bill-runs/match/determine-licence-issues.service.js')
 const FetchLicencesService = require('../../../../app/services/bill-runs/match/fetch-licences.service.js')
@@ -19,7 +20,6 @@ const PersistAllocatedLicenceToResultsService = require('../../../../app/service
 
 // Thing under test
 const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Bill Runs - Match - Match And Allocate service', () => {
   let determineLicenceIssuesServiceStub

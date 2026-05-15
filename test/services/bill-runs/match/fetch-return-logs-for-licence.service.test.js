@@ -13,9 +13,11 @@ const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
 const ReturnSubmissionLineHelper = require('../../../support/helpers/return-submission-line.helper.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const FetchReturnLogsForLicenceService = require('../../../../app/services/bill-runs/match/fetch-return-logs-for-licence.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Fetch Return Logs for Licence service', () => {
   const billingPeriod = { startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }

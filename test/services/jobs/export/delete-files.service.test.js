@@ -13,9 +13,11 @@ const fs = require('fs')
 const path = require('path')
 const mockFs = require('mock-fs')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const DeleteFilesService = require('../../../../app/services/jobs/export/delete-files.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Delete Files service', () => {
   let filenameWithPath

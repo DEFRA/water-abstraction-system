@@ -13,6 +13,7 @@ const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../support/fixtures/notifications.fixture.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
 const LicenceMonitoringStationModel = require('../../../app/models/licence-monitoring-station.model.js')
 const NotificationModel = require('../../../app/models/notification.model.js')
 const ReturnLogModel = require('../../../app/models/return-log.model.js')
@@ -20,7 +21,6 @@ const ViewMessageDataRequest = require('../../../app/requests/notify/view-messag
 
 // Thing under test
 const CheckNotificationStatusService = require('../../../app/services/notifications/check-notification-status.service.js')
-const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
 
 describe('Notifications - Check Notification Status service', () => {
   let licenceMonitoringStationPatchStub

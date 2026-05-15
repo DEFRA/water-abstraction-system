@@ -9,13 +9,13 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 const MatchAndAllocateService = require('../../../../app/services/bill-runs/match/match-and-allocate.service.js')
 
 // Thing under test
 const ProcessBillRunService = require('../../../../app/services/bill-runs/two-part-tariff/process-bill-run.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Bill Runs - Two Part Tariff - Process Bill Run service', () => {
   const billingPeriods = [{ startDate: new Date('2022-04-01'), endDate: new Date('2023-03-31') }]

@@ -14,11 +14,11 @@ const { formatLongDate } = require('../../../../app/presenters/base.presenter.js
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/generate-paper-return.request.js')
 
 // Thing under test
 const PreparePaperReturnService = require('../../../../app/services/notices/setup/prepare-paper-return.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Notices - Setup - Prepare Paper Return service', () => {
   const buffer = new TextEncoder().encode('mock file').buffer

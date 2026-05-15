@@ -13,13 +13,13 @@ const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ExpandedError = require('../../../../app/errors/expanded.error.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const ChargingModuleSendBillRunRequest = require('../../../../app/requests/charging-module/send-bill-run.request.js')
 const ChargingModuleViewBillRunRequest = require('../../../../app/requests/charging-module/view-bill-run.request.js')
 const UnflagBilledSupplementaryLicencesService = require('../../../../app/services/bill-runs/unflag-billed-supplementary-licences.service.js')
 
 // Thing under test
 const UpdateInvoiceNumbersService = require('../../../../app/services/bill-runs/send/update-invoice-numbers.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Bill Runs - Send - Update Invoice Numbers service', () => {
   let billRun

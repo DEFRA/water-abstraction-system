@@ -12,6 +12,7 @@ const { expect } = Code
 const BillRunError = require('../../../../app/errors/bill-run.error.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const ChargingModuleGenerateRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/tpt-supplementary/fetch-billing-accounts.service.js')
@@ -22,7 +23,6 @@ const UnflagUnbilledSupplementaryLicencesService = require('../../../../app/serv
 
 // Thing under test
 const GenerateBillRunService = require('../../../../app/services/bill-runs/tpt-supplementary/generate-bill-run.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Bill Runs - TPT Supplementary - Generate Bill Run service', () => {
   const billRun = {

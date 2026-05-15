@@ -15,9 +15,11 @@ const ContactHelper = require('../../../support/helpers/contact.helper.js')
 const ContactModel = require('../../../../app/models/contact.model.js')
 const LicenceDocumentRoleHelper = require('../../../support/helpers/licence-document-role.helper.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const CleanOrphanedContactsService = require('../../../../app/services/jobs/clean/clean-orphaned-contacts.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Jobs - Clean - Clean Orphaned Contacts service', () => {
   let billingAccountAddress

@@ -12,13 +12,13 @@ const { expect } = Code
 const BillRunModel = require('../../../../app/models/bill-run.model.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const CancelBillRunService = require('../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js')
 const DeleteBillRunService = require('../../../../app/services/bill-runs/cancel/delete-bill-run.service.js')
 const UnassignBillRunToLicencesService = require('../../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js')
 
 // Thing under test
 const CleanEmptyBillRunsService = require('../../../../app/services/jobs/clean/clean-empty-bill-runs.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
   const emptyBillRuns = [{ id: 'b1c10417-77bb-421e-a9ef-15a0d1bc05d8' }, { id: 'ddc7f25f-8b83-4ef1-9b10-bf1d968e2f13' }]

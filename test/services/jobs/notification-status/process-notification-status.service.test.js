@@ -13,13 +13,13 @@ const NoticesFixture = require('../../../support/fixtures/notices.fixture.js')
 const NotificationsFixture = require('../../../support/fixtures/notifications.fixture.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const CheckNotificationStatusService = require('../../../../app/services/notifications/check-notification-status.service.js')
 const FetchNotificationsService = require('../../../../app/services/jobs/notification-status/fetch-notifications.service.js')
 const UpdateNoticeService = require('../../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
 const ProcessNotificationStatusService = require('../../../../app/services/jobs/notification-status/process-notification-status.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Job - Notifications - Process Notification Status service', () => {
   let noticeA

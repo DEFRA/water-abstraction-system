@@ -13,13 +13,13 @@ const ReturnCyclesFixture = require('../../../support/fixtures/return-cycles.fix
 const ReturnRequirementsFixture = require('../../../support/fixtures/return-requirements.fixture.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const CreateReturnLogsService = require('../../../../app/services/return-logs/create-return-logs.service.js')
 const CheckReturnCycleService = require('../../../../app/services/jobs/return-logs/check-return-cycle.service.js')
 const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
 
 // Thing under test
 const ProcessReturnLogsService = require('../../../../app/services/jobs/return-logs/process-return-logs.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Jobs - Return Logs - Process Return Logs service', () => {
   const cycle = 'all-year'

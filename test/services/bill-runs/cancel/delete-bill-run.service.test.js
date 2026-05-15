@@ -22,13 +22,13 @@ const ReviewReturnHelper = require('../../../support/helpers/review-return.helpe
 const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const BillLicenceModel = require('../../../../app/models/bill-licence.model.js')
 const ChargingModuleDeleteBillRunRequest = require('../../../../app/requests/charging-module/delete-bill-run.request.js')
 const ReviewLicenceModel = require('../../../../app/models/review-licence.model.js')
 
 // Thing under test
 const DeleteBillBunService = require('../../../../app/services/bill-runs/cancel/delete-bill-run.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Bill Runs - Delete Bill Run service', () => {
   let billRun

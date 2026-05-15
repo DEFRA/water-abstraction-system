@@ -13,9 +13,11 @@ const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const ReturnLogModel = require('../../../../app/models/return-log.model.js')
 const ReturnSubmissionHelper = require('../../../support/helpers/return-submission.helper.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const CleanEmptyVoidReturnLogsService = require('../../../../app/services/jobs/clean/clean-empty-void-return-logs.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Jobs - Clean - Clean Empty Void Return Logs service', () => {
   let returnLog

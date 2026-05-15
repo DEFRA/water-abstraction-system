@@ -13,13 +13,13 @@ const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js'
 const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
 const SendAlternateNoticeService = require('../../../../../app/services/notices/setup/send/send-alternate-notice.service.js')
 const SendMainNoticeService = require('../../../../../app/services/notices/setup/send/send-main-notice.service.js')
 const UpdateNoticeService = require('../../../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
 const SendNoticeService = require('../../../../../app/services/notices/setup/send/send-notice.service.js')
-const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
 
 describe('Notices - Setup - Send - Send Notice service', () => {
   let notice

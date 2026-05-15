@@ -9,11 +9,11 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const SendRenewalInvitations = require('../../../../app/services/jobs/renewal-invitations/send-renewal-invitations.service.js')
 
 // Thing under test
 const ProcessRenewalInvitationsService = require('../../../../app/services/jobs/renewal-invitations/process-renewal-invitations.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Jobs - Renewal Invitations - Process Renewal Invitations service', () => {
   const days = '300'

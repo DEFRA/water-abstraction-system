@@ -15,6 +15,7 @@ const BillRunModel = require('../../../../app/models/bill-run.model.js')
 const { determineCurrentFinancialYear } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const ChargingModuleGenerateRequest = require('../../../../app/requests/charging-module/generate-bill-run.request.js')
 const FetchBillingAccountsService = require('../../../../app/services/bill-runs/annual/fetch-billing-accounts.service.js')
 const HandleErroredBillRunService = require('../../../../app/services/bill-runs/handle-errored-bill-run.service.js')
@@ -23,7 +24,6 @@ const ProcessBillingPeriodService = require('../../../../app/services/bill-runs/
 
 // Thing under test
 const ProcessBillRunService = require('../../../../app/services/bill-runs/annual/process-bill-run.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Annual Process Bill Run service', () => {
   const billingPeriod = determineCurrentFinancialYear()

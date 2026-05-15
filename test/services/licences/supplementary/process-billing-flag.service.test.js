@@ -9,6 +9,7 @@ const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.scrip
 const { expect } = Code
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const DetermineBillLicenceFlagsService = require('../../../../app/services/licences/supplementary/determine-bill-licence-flags.service.js')
 const DetermineChargeVersionFlagsService = require('../../../../app/services/licences/supplementary/determine-charge-version-flags.service.js')
 const DetermineExistingBillRunYearsService = require('../../../../app/services/licences/supplementary/determine-existing-bill-run-years.service.js')
@@ -20,7 +21,6 @@ const PersistSupplementaryBillingFlagsService = require('../../../../app/service
 
 // Thing under test
 const ProcessBillingFlagService = require('../../../../app/services/licences/supplementary/process-billing-flag.service.js')
-const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 describe('Licences - Supplementary - Process Billing Flag service', () => {
   let notifierStub

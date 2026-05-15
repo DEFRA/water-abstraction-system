@@ -15,11 +15,11 @@ const NotificationHelper = require('../../support/helpers/notification.helper.js
 const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
 const UpdateNoticeService = require('../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
 const ProcessReturnedLetterService = require('../../../app/services/notifications/process-returned-letter.service.js')
-const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
 
 describe('Notifications - Process Returned Letter service', () => {
   const todaysDate = today()
