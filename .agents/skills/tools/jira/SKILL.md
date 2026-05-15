@@ -13,16 +13,6 @@ The scripts require three environment variables:
 - **`JIRA_TOKEN`** — a personal API token ([create one here](https://id.atlassian.com/manage-profile/security/api-tokens))
 - **`JIRA_BASE_URL`** — the organisation's Jira base URL, e.g. `https://eaflood.atlassian.net` (no trailing slash)
 
-Export them in your shell before starting your agent session:
-
-```bash
-export JIRA_USER="your-email@example.com"
-export JIRA_TOKEN="your-api-token"
-export JIRA_BASE_URL="https://your-org.atlassian.net"
-```
-
-Or add them to a `.env` file and source it (`source .env`).
-
 Run `bash .agents/skills/tools/jira/auth.sh` to verify the credentials are working before using the skill.
 
 ## Constraints
