@@ -22,7 +22,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { afterEach, beforeEach, describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -51,10 +51,6 @@ const SubjectUnderTest = require('../../app/services/subject-under-test.service.
   })
   ```
 
-## Hook ordering
-
-Within any `describe` block, always declare hooks in this order: `before`, `beforeEach`, `after`, `afterEach`. Never place an `after`/`afterEach` before a `before`/`beforeEach`.
-
 ## Sinon
 
 - Always call `Sinon.restore()` in `afterEach` whenever stubs are used
@@ -76,11 +72,11 @@ Within any `describe` block, always declare hooks in this order: `before`, `befo
 
 ## Running tests
 
-Use `npm run test` to run tests. You can pass specific files as additional arguments:
+Use `docker compose exec dev npm run test` to run tests. You can pass specific files as additional arguments:
 
 ```sh
-npm run test -- test/services/notices/setup/my-service.test.js
-npm run test -- test/services/notices/setup/foo.test.js test/services/notices/setup/bar.test.js
+docker compose exec dev npm run test -- test/services/notices/setup/my-service.test.js
+docker compose exec dev npm run test -- test/services/notices/setup/foo.test.js test/services/notices/setup/bar.test.js
 ```
 
 Do not use `npx lab` directly.
