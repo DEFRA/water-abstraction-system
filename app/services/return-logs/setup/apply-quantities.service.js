@@ -17,13 +17,28 @@ const METER_READINGS_METHOD = 'meterReadings'
  * revisits the check page we recalculate the quantities and update the session to ensure they are correct before
  * presenting the data.
  *
- * When "volumes" are used the line.quantity is calculated from line.quantityCubicMetres in the sessions data as this
- * will always be populated with the correct volume in cubic metres. Whereas the line.quantity may require updating if
- * the UOM has been changed.
+ * ## Meter readings
  *
- * When "meter readings" are used, the line.quantity and line.quantityCubicMetres both need to be calculated based on
- * the difference between the current and previous meter readings. If the meter has a x10 display, the calculated
- * quantity will be multiplied by 10.
+ * When "meter readings" are used, the quantity is not directly entered by the user but calculated based on the
+ * difference between the current and previous meter readings. If the meter has a x10 display, the calculated quantity
+ * will be multiplied by 10.
+ *
+ * We start by first calculating the difference in current and previous reading. This will be the volume in the selected
+ * UOM. We always display the volume in cubic metres, so next we convert this value to cubic metres. This is the value
+ * we'll persist when the submission is confirmed.
+ *
+ * But if the UOM is not cubic metres, we also display that, and this is what `line.quantity` holds. So, to be
+ * absolutely sure it represents what is _actually_ going to be submitted, we convert the calculated cubic metres value
+ * back into the selected UOM and set line.quantity to this value.
+ *
+ * ## Absolute volumes
+ *
+ * When "volumes" are used the `line.quantity` is the volume in the selected UOM. So, we need to convert this to cubic
+ * metres, both so we can display this to the user, but also in readiness for when the submission is confirmed.
+ *
+ * If the user changes the UOM during the journey, `line.quantity` remains the same, but the conversion to cubic metres
+ * will be different. This is why we only calculate and set `line.quantityCubicMetres` when "volumes" is the reporting
+ * method.
  *
  * @param {object} session - Session object containing the return submission data
  *
