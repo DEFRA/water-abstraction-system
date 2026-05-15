@@ -64,11 +64,7 @@ function _agreementsExceptions(returnRequirement) {
     return agreementsExceptions.join(' and ')
   }
 
-  return (
-    agreementsExceptions.slice(0, -1).join(', ') +
-    ', and ' +
-    agreementsExceptions.at(-1)
-  )
+  return agreementsExceptions.slice(0, -1).join(', ') + ', and ' + agreementsExceptions.at(-1)
 }
 
 function _buildAgreementExceptions(returnRequirement) {

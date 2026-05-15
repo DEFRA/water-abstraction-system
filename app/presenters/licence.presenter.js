@@ -136,11 +136,7 @@ function _formatAbstractionMethod(licenceVersionPurposePoints) {
     return uniqueAbstractionMethods.join(' and ')
   }
 
-  return (
-    uniqueAbstractionMethods.slice(0, -1).join(', ') +
-    ', and ' +
-    uniqueAbstractionMethods.at(-1)
-  )
+  return uniqueAbstractionMethods.slice(0, -1).join(', ') + ', and ' + uniqueAbstractionMethods.at(-1)
 }
 
 function _formatAbstractionPoints(points) {
