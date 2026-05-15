@@ -49,12 +49,12 @@ describe('Keep Yar Alive plugin', () => {
     })
 
     notifierStub = { omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
+    delete globalThis.GlobalNotifier
   })
 
   it('registers successfully', () => {
@@ -78,7 +78,7 @@ describe('Keep Yar Alive plugin', () => {
 
       expect(yarStub.touch.called).to.be.true()
 
-      expect(global.GlobalNotifier.omfg.called).to.be.false()
+      expect(globalThis.GlobalNotifier.omfg.called).to.be.false()
     })
   })
 
@@ -99,7 +99,7 @@ describe('Keep Yar Alive plugin', () => {
 
       expect(yarStub.touch.called).to.be.false()
 
-      expect(global.GlobalNotifier.omfg.called).to.be.false()
+      expect(globalThis.GlobalNotifier.omfg.called).to.be.false()
     })
   })
 
@@ -112,7 +112,7 @@ describe('Keep Yar Alive plugin', () => {
 
       expect(yarStub.touch.called).to.be.false()
 
-      expect(global.GlobalNotifier.omfg.called).to.be.false()
+      expect(globalThis.GlobalNotifier.omfg.called).to.be.false()
     })
   })
 
@@ -131,7 +131,7 @@ describe('Keep Yar Alive plugin', () => {
       expect(response.statusCode).to.equal(HTTP_STATUS_OK)
       expect(response.result).to.equal('ok')
 
-      expect(global.GlobalNotifier.omfg.firstCall.args[0]).to.include('Failed to keep session alive')
+      expect(globalThis.GlobalNotifier.omfg.firstCall.args[0]).to.include('Failed to keep session alive')
     })
   })
 })
