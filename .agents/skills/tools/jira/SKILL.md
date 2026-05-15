@@ -11,7 +11,7 @@ The scripts require three environment variables:
 
 - **`JIRA_USER`** — the email address you use to log in to Jira
 - **`JIRA_TOKEN`** — a personal API token ([create one here](https://id.atlassian.com/manage-profile/security/api-tokens))
-- **`JIRA_BASE_URL`** — your organisation's Jira base URL, e.g. `https://eaflood.atlassian.net` (no trailing slash)
+- **`JIRA_BASE_URL`** — the organisation's Jira base URL, e.g. `https://eaflood.atlassian.net` (no trailing slash)
 
 Export them in your shell before starting your agent session:
 
