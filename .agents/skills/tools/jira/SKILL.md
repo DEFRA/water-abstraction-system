@@ -21,7 +21,7 @@ export JIRA_TOKEN="your-api-token"
 export JIRA_BASE_URL="https://your-org.atlassian.net"
 ```
 
-Or add them to a `.env` file and source it (`source .env`). Most AI agent tools also support configuring environment variables in their settings — consult your agent's documentation for the preferred approach.
+Or add them to a `.env` file and source it (`source .env`).
 
 Run `bash .agents/skills/tools/jira/auth.sh` to verify the credentials are working before using the skill.
 
