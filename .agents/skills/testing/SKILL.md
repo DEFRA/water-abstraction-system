@@ -72,11 +72,11 @@ const SubjectUnderTest = require('../../app/services/subject-under-test.service.
 
 ## Running tests
 
-Use `docker compose exec dev npm run test` to run tests. You can pass specific files as additional arguments:
+Use the docker exec wrapper to run tests. You can pass specific files as additional arguments:
 
 ```sh
-docker compose exec dev npm run test -- test/services/notices/setup/my-service.test.js
-docker compose exec dev npm run test -- test/services/notices/setup/foo.test.js test/services/notices/setup/bar.test.js
+docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system && npm run test -- test/services/notices/setup/my-service.test.js'
+docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system && npm run test -- test/services/notices/setup/foo.test.js test/services/notices/setup/bar.test.js'
 ```
 
 Do not use `npx lab` directly.
