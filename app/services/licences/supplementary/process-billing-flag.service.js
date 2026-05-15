@@ -45,7 +45,7 @@ async function go(payload) {
 
     calculateAndLogTimeTaken(startTime, 'Supplementary Billing Flag complete', { licenceId: result.licenceId })
   } catch (error) {
-    global.GlobalNotifier.omfg('Supplementary Billing Flag failed', payload, error)
+    globalThis.GlobalNotifier.omfg('Supplementary Billing Flag failed', payload, error)
   }
 }
 

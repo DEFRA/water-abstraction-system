@@ -20,7 +20,7 @@ const { HTTP_STATUS_NO_CONTENT } = require('node:http2').constants
 async function placeholder(request, h) {
   const { id } = request.payload
 
-  global.GlobalNotifier.omg('Placeholder endpoint called', { id })
+  globalThis.GlobalNotifier.omg('Placeholder endpoint called', { id })
 
   return h.response().code(HTTP_STATUS_NO_CONTENT)
 }

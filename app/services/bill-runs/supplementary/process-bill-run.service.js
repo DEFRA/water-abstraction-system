@@ -104,7 +104,7 @@ async function _finaliseBillRun(billRun, accumulatedLicenceIds, resultsOfProcess
 }
 
 function _logError(billRun, error) {
-  global.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
+  globalThis.GlobalNotifier.omfg('Bill run process errored', { billRun }, error)
 }
 
 async function _updateStatus(billRunId, status) {

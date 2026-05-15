@@ -25,7 +25,7 @@ async function go() {
         ReturnSubmissionModel.query().select(1).whereColumn('returnSubmissions.returnLogId', 'returnLogs.id')
       )
   } catch (error) {
-    global.GlobalNotifier.omfg('Clean job failed', { job: 'clean-empty-void-return-logs' }, error)
+    globalThis.GlobalNotifier.omfg('Clean job failed', { job: 'clean-empty-void-return-logs' }, error)
   }
 
   return deletedCount

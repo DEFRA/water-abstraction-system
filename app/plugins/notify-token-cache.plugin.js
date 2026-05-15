@@ -28,7 +28,7 @@ const NotifyTokenCachePlugin = {
     // > The first way to call server.method() is with the signature `server.method(name, method, [options])`.
     //
     // This plugin is adding a server method called `getNotifyToken()` which we can then access from anywhere in our
-    // app using `await global.HapiServerMethods.getNotifyToken()`.
+    // app using `await globalThis.HapiServerMethods.getNotifyToken()`.
     //
     // The function we're adding will generate a signed JWT token using the GOV.UK Notify API key provided in our
     // config.

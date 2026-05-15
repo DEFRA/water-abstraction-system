@@ -42,7 +42,7 @@ AND NOT EXISTS (
     ldr.contact_id = contacts.id
 )`)
   } catch (error) {
-    global.GlobalNotifier.omfg('Clean job failed', { job: 'clean-orphaned-contacts' }, error)
+    globalThis.GlobalNotifier.omfg('Clean job failed', { job: 'clean-orphaned-contacts' }, error)
   }
 
   return deletedCount

@@ -10,7 +10,7 @@ const GlobalNotifierLib = require('../lib/global-notifier.lib.js')
 const GlobalNotifierPlugin = {
   name: 'global-notifier',
   register: (server, _options) => {
-    global.GlobalNotifier = new GlobalNotifierLib(server.logger, server.app.airbrake)
+    globalThis.GlobalNotifier = new GlobalNotifierLib(server.logger, server.app.airbrake)
   }
 }
 

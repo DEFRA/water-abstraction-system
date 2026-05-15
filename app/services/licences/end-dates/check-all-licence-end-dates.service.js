@@ -49,7 +49,7 @@ async function go() {
     calculateAndLogTimeTaken(startTime, 'Check all licence end dates complete', { count: licences.length })
   } catch (error) {
     // Log any errors that occur
-    global.GlobalNotifier.omfg('Check all licence end dates failed', null, error)
+    globalThis.GlobalNotifier.omfg('Check all licence end dates failed', null, error)
   }
 }
 
