@@ -476,10 +476,12 @@ describe('Notices - Setup - Create Notice presenter', () => {
       recipients = [fixtureData.primaryUser, fixtureData.licenceHolder, fixtureData.licenceHolderWithMultipleLicences]
 
       noticeData = {
+        expiryDate: new Date('2026-04-28'),
         journey: 'standard',
-        referenceCode: 'REIN-123',
         name: 'Renewals: invitation',
         noticeType: 'renewalInvitations',
+        referenceCode: 'REIN-123',
+        renewalDate: new Date('2026-01-28'),
         subType: 'renewalInvitation'
       }
     })
@@ -491,8 +493,10 @@ describe('Notices - Setup - Create Notice presenter', () => {
         issuer: 'hello@world.com',
         licences: [...recipients[0].licence_refs, ...recipients[1].licence_refs, ...recipients[2].licence_refs],
         metadata: {
+          expiryDate: '2026-04-28',
           name: 'Renewals: invitation',
-          recipients: 3
+          recipients: 3,
+          renewalDate: '2026-01-28'
         },
         overallStatus: 'pending',
         referenceCode: 'REIN-123',

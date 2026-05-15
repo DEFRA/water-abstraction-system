@@ -58,6 +58,11 @@ function _additionalMetaData(notice, noticeData) {
     notice.metadata.options = { excludeLicences: noticeData.removeLicences ? noticeData.removeLicences : [] }
     notice.metadata.returnCycle = _returnCycle(noticeData.determinedReturnsPeriod)
   }
+
+  if (noticeData.noticeType === NoticeType.RENEWAL_INVITATIONS) {
+    notice.metadata.expiryDate = formatDateObjectToISO(noticeData.expiryDate)
+    notice.metadata.renewalDate = formatDateObjectToISO(noticeData.renewalDate)
+  }
 }
 
 /**

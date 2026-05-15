@@ -15,6 +15,7 @@ const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const NotificationModel = require('../../../../../app/models/notification.model.js')
+const RenewalInvitationAlternateNoticeService = require('../../../../../app/services/notices/setup/send/renewal-invitation-alternate-notice.service.js')
 const ReturnsInvitationAlternateNoticeService = require('../../../../../app/services/notices/setup/send/returns-invitation-alternate-notice.service.js')
 const SendLetterNotificationService = require('../../../../../app/services/notices/setup/send/send-letter-notification.service.js')
 
@@ -126,6 +127,36 @@ describe('Notices - Setup - Send - Send Alternate Notice service', () => {
       const result = await SendAlternateNoticeService.go(mainNotice)
 
       expect(result).to.be.null()
+    })
+  })
+
+  describe('when the main notice is a renewal invitation with failed primary user email notifications', () => {
+    beforeEach(() => {
+      mainNotice = NoticesFixture.renewalInvitation()
+
+      alternateNotice = NoticesFixture.renewalInvitation()
+      alternateNotice.licences = mainNotice.licences
+      alternateNotice.triggerNoticeId = mainNotice.id
+
+      alternateNotification = NotificationsFixture.renewalInvitationLetter(alternateNotice)
+
+      Sinon.stub(RenewalInvitationAlternateNoticeService, 'go').resolves({
+        notice: alternateNotice,
+        notificationIds: [failedNotificationId],
+        notifications: [alternateNotification]
+      })
+    })
+
+    it('delegates to RenewalInvitationAlternateNoticeService', async () => {
+      await SendAlternateNoticeService.go(mainNotice)
+
+      expect(RenewalInvitationAlternateNoticeService.go.calledOnce).to.be.true()
+    })
+
+    it('returns the sent alternate notice', async () => {
+      const result = await SendAlternateNoticeService.go(mainNotice)
+
+      expect(result).to.equal(alternateNotice)
     })
   })
 })
