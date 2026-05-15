@@ -65,9 +65,9 @@ function _agreementsExceptions(returnRequirement) {
   }
 
   return (
-    agreementsExceptions.slice(0, agreementsExceptions.length - 1).join(', ') +
+    agreementsExceptions.slice(0, -1).join(', ') +
     ', and ' +
-    agreementsExceptions[agreementsExceptions.length - 1]
+    agreementsExceptions.at(-1)
   )
 }
 

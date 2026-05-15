@@ -137,9 +137,9 @@ function _formatAbstractionMethod(licenceVersionPurposePoints) {
   }
 
   return (
-    uniqueAbstractionMethods.slice(0, uniqueAbstractionMethods.length - 1).join(', ') +
+    uniqueAbstractionMethods.slice(0, -1).join(', ') +
     ', and ' +
-    uniqueAbstractionMethods[uniqueAbstractionMethods.length - 1]
+    uniqueAbstractionMethods.at(-1)
   )
 }
 
