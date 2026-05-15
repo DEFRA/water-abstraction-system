@@ -7,21 +7,21 @@ description: Read-only access to WATER project Jira tickets for task context
 
 ## Setup
 
-The scripts require three environment variables. Add them to `.claude/settings.json` in the project root (create the file if it does not exist):
-
-```json
-{
-  "env": {
-    "JIRA_USER": "your-email@example.com",
-    "JIRA_TOKEN": "your-api-token",
-    "JIRA_BASE_URL": "https://your-org.atlassian.net"
-  }
-}
-```
+The scripts require three environment variables:
 
 - **`JIRA_USER`** — the email address you use to log in to Jira
 - **`JIRA_TOKEN`** — a personal API token ([create one here](https://id.atlassian.com/manage-profile/security/api-tokens))
 - **`JIRA_BASE_URL`** — your organisation's Jira base URL, e.g. `https://eaflood.atlassian.net` (no trailing slash)
+
+Export them in your shell before starting your agent session:
+
+```bash
+export JIRA_USER="your-email@example.com"
+export JIRA_TOKEN="your-api-token"
+export JIRA_BASE_URL="https://your-org.atlassian.net"
+```
+
+Or add them to a `.env` file and source it (`source .env`). Most AI agent tools also support configuring environment variables in their settings — consult your agent's documentation for the preferred approach.
 
 Run `bash .agents/skills/tools/jira/auth.sh` to verify the credentials are working before using the skill.
 
