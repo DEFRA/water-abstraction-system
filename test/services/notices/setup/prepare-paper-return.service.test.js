@@ -15,6 +15,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 
 // Things we need to stub
 const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/generate-paper-return.request.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 // Thing under test
 const PreparePaperReturnService = require('../../../../app/services/notices/setup/prepare-paper-return.service.js')
@@ -67,7 +68,7 @@ describe('Notices - Setup - Prepare Paper Return service', () => {
       }
     })
 
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

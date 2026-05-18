@@ -11,6 +11,9 @@ const { expect } = Code
 // Test helpers
 const BillRunHelper = require('../../support/helpers/bill-run.helper.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const HandleErroredBillRunService = require('../../../app/services/bill-runs/handle-errored-bill-run.service.js')
 
@@ -24,7 +27,7 @@ describe('Handle Errored Bill Run service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

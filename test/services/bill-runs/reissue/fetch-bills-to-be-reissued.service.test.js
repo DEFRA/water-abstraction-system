@@ -16,6 +16,9 @@ const BillRunHelper = require('../../../support/helpers/bill-run.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const TransactionHelper = require('../../../support/helpers/transaction.helper.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
 
@@ -109,7 +112,7 @@ describe('Fetch Bills To Be Reissued service', () => {
     let notifierStub
 
     beforeEach(() => {
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      notifierStub = GlobalNotifierStub.build(Sinon)
       globalThis.GlobalNotifier = notifierStub
     })
 

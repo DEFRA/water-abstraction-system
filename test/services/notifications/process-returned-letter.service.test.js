@@ -15,6 +15,7 @@ const NotificationHelper = require('../../support/helpers/notification.helper.js
 const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../support/stubs/global-notifier.stub.js')
 const UpdateNoticeService = require('../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
@@ -39,7 +40,7 @@ describe('Notifications - Process Returned Letter service', () => {
       status: 'sent'
     })
 
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

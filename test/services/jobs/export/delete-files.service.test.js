@@ -13,6 +13,9 @@ const fs = require('fs')
 const path = require('path')
 const mockFs = require('mock-fs')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const DeleteFilesService = require('../../../../app/services/jobs/export/delete-files.service.js')
 
@@ -24,7 +27,7 @@ describe('Delete Files service', () => {
   beforeEach(() => {
     folderNameWithPath = 'testFolder'
     filenameWithPath = path.join(folderNameWithPath, 'testFile')
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
 
     mockFs({

@@ -16,6 +16,7 @@ const ReturnRequirementsFixture = require('../../../support/fixtures/return-requ
 const CreateReturnLogsService = require('../../../../app/services/return-logs/create-return-logs.service.js')
 const CheckReturnCycleService = require('../../../../app/services/jobs/return-logs/check-return-cycle.service.js')
 const FetchReturnRequirementsService = require('../../../../app/services/jobs/return-logs/fetch-return-requirements.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 // Thing under test
 const ProcessReturnLogsService = require('../../../../app/services/jobs/return-logs/process-return-logs.service.js')
@@ -31,7 +32,7 @@ describe('Jobs - Return Logs - Process Return Logs service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub(), redAlert: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

@@ -15,6 +15,7 @@ const NotificationsFixture = require('../../../support/fixtures/notifications.fi
 // Things we need to stub
 const CheckNotificationStatusService = require('../../../../app/services/notifications/check-notification-status.service.js')
 const FetchNotificationsService = require('../../../../app/services/jobs/notification-status/fetch-notifications.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const UpdateNoticeService = require('../../../../app/services/notices/update-notice.service.js')
 
 // Thing under test
@@ -55,7 +56,7 @@ describe('Job - Notifications - Process Notification Status service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub(), redAlert: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

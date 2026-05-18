@@ -14,6 +14,7 @@ const WorkflowModel = require('../../../../app/models/workflow.model.js')
 
 // Things we need to stub
 const FetchLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/fetch-licence-updates.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 // Thing under test
 const ProcessLicenceUpdatesService = require('../../../../app/services/jobs/licence-updates/process-licence-updates.service.js')
@@ -26,7 +27,7 @@ describe('Jobs - Licence Updates - Process Licence Updates service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub(), redAlert: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

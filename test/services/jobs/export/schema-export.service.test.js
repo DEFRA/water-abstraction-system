@@ -13,6 +13,7 @@ const CompressSchemaFolderService = require('../../../../app/services/jobs/expor
 const DeleteFilesService = require('../../../../app/services/jobs/export/delete-files.service.js')
 const ExportTableService = require('../../../../app/services/jobs/export/export-table.service.js')
 const FetchTableNamesService = require('../../../../app/services/jobs/export/fetch-table-names.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const SendToS3BucketService = require('../../../../app/services/jobs/export/send-to-s3-bucket.service.js')
 
 // Thing under test
@@ -82,7 +83,7 @@ describe('Schema export service', () => {
       CompressSchemaFolderServiceStub = Sinon.stub(CompressSchemaFolderService, 'go')
       DeleteFilesServiceStub = Sinon.stub(DeleteFilesService, 'go').resolves()
 
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      notifierStub = GlobalNotifierStub.build(Sinon)
       globalThis.GlobalNotifier = notifierStub
     })
 

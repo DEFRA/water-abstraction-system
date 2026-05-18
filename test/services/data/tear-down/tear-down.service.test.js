@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Things we need to stub
 const CrmSchemaService = require('../../../../app/services/data/tear-down/crm-schema.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const IdmSchemaService = require('../../../../app/services/data/tear-down/idm-schema.service.js')
 const PermitSchemaService = require('../../../../app/services/data/tear-down/permit-schema.service.js')
 const ReturnsSchemaService = require('../../../../app/services/data/tear-down/returns-schema.service.js')
@@ -36,7 +37,7 @@ describe('Tear down service', () => {
     // TearDownService depends on the GlobalNotifier being set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 
