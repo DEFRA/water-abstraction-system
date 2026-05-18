@@ -33,7 +33,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
 
     // 2) Licence holder, and an additional contact
     licenceHolder = await _licenceHolder()
-    licenceHolderRecipient = await _licenceHolderRecipient(licenceHolder.licence, licenceHolder.licenceHolder)
+    licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licenceHolder.licence, licenceHolder.licenceHolder)
     additionalContactRecipient = await _additionalContactRecipient(licenceHolder.licence)
     scenarios.licenceHolderWithAdditionalContact = { licenceHolderRecipient, additionalContactRecipient }
 
@@ -44,9 +44,9 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     // 4) Primary user with an additional contact. Similar to scenario 3 - when registered, we expect the primary user
     // and additional contact but not the licence holder.
     licenceHolder = await _licenceHolder()
-    licenceHolderRecipient = await _licenceHolderRecipient(licenceHolder.licence, licenceHolder.licenceHolder)
+    licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licenceHolder.licence, licenceHolder.licenceHolder)
     const primaryUser = await _primaryUser(licenceHolder.licence)
-    const primaryUserRecipient = await _primaryUserRecipient(licenceHolder.licence, primaryUser.primaryUser)
+    const primaryUserRecipient = await RecipientsSeeder.primaryUser(licenceHolder.licence, primaryUser.primaryUser)
     additionalContactRecipient = await _additionalContactRecipient(licenceHolder.licence)
     scenarios.primaryUserWithAdditionalContact = {
       licenceHolderRecipient,
@@ -56,12 +56,12 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
 
     // 5) Additional contact multiple licence refs
     licenceHolder = await _licenceHolder()
-    licenceHolderRecipient = await _licenceHolderRecipient(licenceHolder.licence, licenceHolder.licenceHolder)
+    licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licenceHolder.licence, licenceHolder.licenceHolder)
     additionalContactRecipient = await _additionalContactRecipient(licenceHolder.licence)
 
     // Second licence
     const licenceHolderTwo = await _licenceHolder()
-    const licenceHolderRecipientTwo = await _licenceHolderRecipient(
+    const licenceHolderRecipientTwo = await RecipientsSeeder.licenceHolder(
       licenceHolderTwo.licence,
       licenceHolderTwo.licenceHolder
     )
@@ -76,7 +76,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     // 6) Licence holder with an additional contact where abstractionAlerts = false. The additional contact should NOT
     // appear in results.
     licenceHolder = await _licenceHolder()
-    licenceHolderRecipient = await _licenceHolderRecipient(licenceHolder.licence, licenceHolder.licenceHolder)
+    licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licenceHolder.licence, licenceHolder.licenceHolder)
     const additionalContactNoAlerts = await _additionalContactRecipient(licenceHolder.licence, false)
     scenarios.additionalContactNoAlerts = { licenceHolderRecipient, additionalContactNoAlerts }
 
@@ -84,14 +84,14 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     // the same contact spans multiple licences and is combined into one row, here each licence has unique contacts so
     // all four recipients are returned separately.
     const firstLicenceHolder = await _licenceHolder('HolderWithUniqueContactA')
-    const firstLicenceHolderRecipient = await _licenceHolderRecipient(
+    const firstLicenceHolderRecipient = await RecipientsSeeder.licenceHolder(
       firstLicenceHolder.licence,
       firstLicenceHolder.licenceHolder
     )
     const firstAdditionalContact = await _additionalContactRecipient(firstLicenceHolder.licence)
 
     const secondLicenceHolder = await _licenceHolder('HolderWithUniqueContactB')
-    const secondLicenceHolderRecipient = await _licenceHolderRecipient(
+    const secondLicenceHolderRecipient = await RecipientsSeeder.licenceHolder(
       secondLicenceHolder.licence,
       secondLicenceHolder.licenceHolder
     )
@@ -111,14 +111,14 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     // 8) Two licences with different licence holders and additional contacts, but one additional contact has
     // abstractionAlerts = false and should NOT appear in results.
     const licenceHolderWithAlert = await _licenceHolder('HolderWithMixedAlertsA')
-    const licenceHolderRecipientWithAlert = await _licenceHolderRecipient(
+    const licenceHolderRecipientWithAlert = await RecipientsSeeder.licenceHolder(
       licenceHolderWithAlert.licence,
       licenceHolderWithAlert.licenceHolder
     )
     const additionalContactWithAlert = await _additionalContactRecipient(licenceHolderWithAlert.licence)
 
     const licenceHolderWithoutAlert = await _licenceHolder('HolderWithMixedAlertsB')
-    const licenceHolderRecipientWithoutAlert = await _licenceHolderRecipient(
+    const licenceHolderRecipientWithoutAlert = await RecipientsSeeder.licenceHolder(
       licenceHolderWithoutAlert.licence,
       licenceHolderWithoutAlert.licenceHolder
     )
@@ -138,7 +138,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     // 9) Licence holder with an additional contact where the end date has passed. The expired contact should NOT
     // appear in results.
     licenceHolder = await _licenceHolder()
-    licenceHolderRecipient = await _licenceHolderRecipient(licenceHolder.licence, licenceHolder.licenceHolder)
+    licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licenceHolder.licence, licenceHolder.licenceHolder)
     const expiredAdditionalContact = await _additionalContactRecipient(
       licenceHolder.licence,
       true,
@@ -171,9 +171,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
-        const expectedResults = RecipientScenariosSeeder.transformToSendingResults([
-          scenarios.licenceHolder.licenceHolderRecipient
-        ])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 
         expect(rows).to.equal(expectedResults)
       })
@@ -185,10 +183,9 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
-        const expectedResults = RecipientScenariosSeeder.transformToSendingResults([
-          scenarios.licenceHolderWithAdditionalContact.licenceHolderRecipient,
-          scenarios.licenceHolderWithAdditionalContact.additionalContactRecipient
-        ])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(
+          scenarios.licenceHolderWithAdditionalContact
+        )
 
         expect(rows).to.equal(expectedResults)
       })
@@ -200,9 +197,9 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
-        const expectedResults = RecipientScenariosSeeder.transformToSendingResults([
-          scenarios.primaryUser.primaryUserRecipient
-        ])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults({
+          primaryUserRecipient: scenarios.primaryUser.primaryUserRecipient
+        })
 
         expect(rows).to.equal(expectedResults)
       })
@@ -214,10 +211,10 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
-        const expectedResults = RecipientScenariosSeeder.transformToSendingResults([
-          scenarios.primaryUserWithAdditionalContact.primaryUserRecipient,
-          scenarios.primaryUserWithAdditionalContact.additionalContactRecipient
-        ])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults({
+          primaryUserRecipient: scenarios.primaryUserWithAdditionalContact.primaryUserRecipient,
+          additionalContactRecipient: scenarios.primaryUserWithAdditionalContact.additionalContactRecipient
+        })
 
         expect(rows).to.equal(expectedResults)
       })
@@ -233,10 +230,10 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
-        const transformedResults = RecipientScenariosSeeder.transformToSendingResults([
-          scenarios.additionalContactMultipleLicences.licenceHolderRecipient,
-          scenarios.additionalContactMultipleLicences.additionalContactRecipient
-        ])
+        const transformedResults = RecipientScenariosSeeder.transformToSendingResults({
+          licenceHolderRecipient: scenarios.additionalContactMultipleLicences.licenceHolderRecipient,
+          additionalContactRecipient: scenarios.additionalContactMultipleLicences.additionalContactRecipient
+        })
         const expectedResults = [
           { ...transformedResults[0], licence_refs: licenceRefs },
           { ...transformedResults[1], licence_refs: licenceRefs }
@@ -252,9 +249,9 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
-        const expectedResults = RecipientScenariosSeeder.transformToSendingResults([
-          scenarios.additionalContactNoAlerts.licenceHolderRecipient
-        ])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults({
+          licenceHolderRecipient: scenarios.additionalContactNoAlerts.licenceHolderRecipient
+        })
 
         expect(rows).to.equal(expectedResults)
       })
@@ -270,12 +267,12 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
-        const transformedResults = RecipientScenariosSeeder.transformToSendingResults([
-          scenarios.differentHoldersAndContacts.firstLicenceHolderRecipient,
-          scenarios.differentHoldersAndContacts.secondLicenceHolderRecipient,
-          scenarios.differentHoldersAndContacts.firstAdditionalContact,
-          scenarios.differentHoldersAndContacts.secondAdditionalContact
-        ])
+        const transformedResults = RecipientScenariosSeeder.transformToSendingResults({
+          firstLicenceHolderRecipient: scenarios.differentHoldersAndContacts.firstLicenceHolderRecipient,
+          secondLicenceHolderRecipient: scenarios.differentHoldersAndContacts.secondLicenceHolderRecipient,
+          firstAdditionalContact: scenarios.differentHoldersAndContacts.firstAdditionalContact,
+          secondAdditionalContact: scenarios.differentHoldersAndContacts.secondAdditionalContact
+        })
         const expectedResults = transformedResults.sort((a, b) => {
           return compareStrings(a.licence_refs[0], b.licence_refs[0])
         })
@@ -294,11 +291,11 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
-        const transformedResults = RecipientScenariosSeeder.transformToSendingResults([
-          scenarios.mixedAlerts.licenceHolderRecipientWithAlert,
-          scenarios.mixedAlerts.licenceHolderRecipientWithoutAlert,
-          scenarios.mixedAlerts.additionalContactWithAlert
-        ])
+        const transformedResults = RecipientScenariosSeeder.transformToSendingResults({
+          licenceHolderRecipientWithAlert: scenarios.mixedAlerts.licenceHolderRecipientWithAlert,
+          licenceHolderRecipientWithoutAlert: scenarios.mixedAlerts.licenceHolderRecipientWithoutAlert,
+          additionalContactWithAlert: scenarios.mixedAlerts.additionalContactWithAlert
+        })
         const expectedResults = transformedResults.sort((a, b) => {
           return compareStrings(a.licence_refs[0], b.licence_refs[0])
         })
@@ -313,9 +310,9 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
-        const expectedResults = RecipientScenariosSeeder.transformToSendingResults([
-          scenarios.expiredAdditionalContact.licenceHolderRecipient
-        ])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults({
+          licenceHolderRecipient: scenarios.expiredAdditionalContact.licenceHolderRecipient
+        })
 
         expect(rows).to.equal(expectedResults)
       })
@@ -326,11 +323,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
 async function _additionalContactRecipient(licence, abstractionAlerts = true, contactData = null, endDate = null) {
   const additionalContact = await CRMContactsSeeder.additionalContact(licence, contactData, abstractionAlerts, endDate)
 
-  const additionalContactRecipient = await RecipientsSeeder.additionalContact(licence, additionalContact)
-
-  additionalContactRecipient.licenceRefss = [licence.licence.licenceRefs]
-
-  return additionalContactRecipient
+  return RecipientsSeeder.additionalContact(licence, additionalContact)
 }
 
 async function _licenceHolder(name = 'Holderwithadditionalcontact') {
@@ -343,28 +336,8 @@ async function _licenceHolder(name = 'Holderwithadditionalcontact') {
   }
 }
 
-async function _licenceHolderRecipient(licence, licenceHolder) {
-  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
-
-  licenceHolderRecipient.licenceRefss = [licence.licence.licenceRefs]
-
-  return licenceHolderRecipient
-}
-
 async function _primaryUser(licence) {
   const primaryUser = await CRMContactsSeeder.primaryUser(licence, 'primaryuser@pura.com')
 
-  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
-
-  primaryUserRecipient.licenceRefss = [licence.licence.licenceRefs]
-
   return { primaryUser }
-}
-
-async function _primaryUserRecipient(licence, primaryUser) {
-  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
-
-  primaryUserRecipient.licenceRefss = [licence.licence.licenceRefs]
-
-  return primaryUserRecipient
 }

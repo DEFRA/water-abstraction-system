@@ -575,17 +575,17 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
             scenarios.primaryUserWithMultipleLicences
           )
 
-          expect(rows).to.contain(sendingResults[2])
+          expect(rows).to.contain(sendingResults[1])
 
-          // sendingResults[2] and [3] reference the two primary users, with the same details. This means the
+          // sendingResults[1] and [3] reference the two primary users, with the same details. This means the
           // sendingResults for each are the same, which we prove here.
-          expect(sendingResults[2]).to.equal(sendingResults[3])
+          expect(sendingResults[1]).to.equal(sendingResults[3])
 
           // NOTE: Because we created two return logs with different licence refs, we have to create two licence
           // document headers with the same 'licence holder' to recreate linking the same primary user across multiple
-          // licences. This means sendingResults[0] references the first licence holder, and [1] the second.
+          // licences. This means sendingResults[0] references the first licence holder, and [2] the second.
           expect(rows).not.to.contain(sendingResults[0])
-          expect(rows).not.to.contain(sendingResults[1])
+          expect(rows).not.to.contain(sendingResults[2])
         })
 
         it('(Scenario 8) returns only the primary user when it and the returns user are the same for a registered licence', async () => {
@@ -719,22 +719,22 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           // Unlike sending, because we want the return log information it means though the recipient details are the
           // same, the return logs are not. So, we get a row per return log for the primary user.
-          expect(rows).to.contain(downloadingResults[4])
-          expect(rows).to.contain(downloadingResults[5])
+          expect(rows).to.contain(downloadingResults[2])
+          expect(rows).to.contain(downloadingResults[3])
 
-          // downloadingResults[4] & [5], and [6] & [7] reference the two primary users, with the same details. This
+          // downloadingResults[2] & [3], and [6] & [7] reference the two primary users, with the same details. This
           // means the downloadingResults for each are the same, which we prove here.
-          expect(downloadingResults[4]).to.equal(downloadingResults[6])
-          expect(downloadingResults[5]).to.equal(downloadingResults[7])
+          expect(downloadingResults[2]).to.equal(downloadingResults[6])
+          expect(downloadingResults[3]).to.equal(downloadingResults[7])
 
           // NOTE: Because we created two return logs with different licence refs, we have to create two licence
           // document headers with the same 'licence holder' to recreate linking the same primary user across multiple
-          // licences. This means downloadingResults[0] and [1] reference the first licence holder, and [2] and [3] the
+          // licences. This means downloadingResults[0] and [1] reference the first licence holder, and [4] and [5] the
           // second.
           expect(rows).not.to.contain(downloadingResults[0])
           expect(rows).not.to.contain(downloadingResults[1])
-          expect(rows).not.to.contain(downloadingResults[2])
-          expect(rows).not.to.contain(downloadingResults[3])
+          expect(rows).not.to.contain(downloadingResults[4])
+          expect(rows).not.to.contain(downloadingResults[5])
         })
 
         it('(Scenario 8) returns only the primary user when it and the returns user are the same for a registered licence', async () => {
@@ -865,14 +865,14 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           // NOTE: Because we created two return logs with different licence refs, we have to create two licence
           // document headers with the same 'licence holder' to recreate linking the same primary user across multiple
-          // licences. This means sendingResults[0] references the first licence holder, and [1] the second. For paper
+          // licences. This means sendingResults[0] references the first licence holder, and [2] the second. For paper
           // returns it's one of these we expect to see in the results. Either will do as they are both the same.
           expect(rows).to.contain(sendingResults[0])
-          expect(sendingResults[0]).to.equal(sendingResults[1])
+          expect(sendingResults[0]).to.equal(sendingResults[2])
 
-          // sendingResults[2] and [3] reference the two primary users, with the same details. We don't send paper
+          // sendingResults[1] and [3] reference the two primary users, with the same details. We don't send paper
           // returns via email so they should not be included
-          expect(rows).not.to.contain(sendingResults[2])
+          expect(rows).not.to.contain(sendingResults[1])
           expect(rows).not.to.contain(sendingResults[3])
         })
 
@@ -1009,17 +1009,17 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           // Because we created two return logs with different licence refs, we have to create two licence
           // document headers with the same 'licence holder' to recreate linking the same primary user across multiple
-          // licences. This means downloadingResults[0] and [1] reference the first licence holder, and [2] and [3] the
+          // licences. This means downloadingResults[0] and [1] reference the first licence holder, and [4] and [5] the
           // second.
           // However, as the licence holder details are the same, the downloadingResults will be the same, though the
           // query will just return one set
-          expect(downloadingResults[0]).to.equal(downloadingResults[2])
-          expect(downloadingResults[1]).to.equal(downloadingResults[3])
+          expect(downloadingResults[0]).to.equal(downloadingResults[4])
+          expect(downloadingResults[1]).to.equal(downloadingResults[5])
 
-          // downloadingResults[4] & [5], and [6] & [7] reference the two primary users, with the same details. We don't
+          // downloadingResults[2] & [3], and [6] & [7] reference the two primary users, with the same details. We don't
           // send paper returns via email so they should not be included
-          expect(rows).not.to.contain(downloadingResults[4])
-          expect(rows).not.to.contain(downloadingResults[5])
+          expect(rows).not.to.contain(downloadingResults[2])
+          expect(rows).not.to.contain(downloadingResults[3])
           expect(rows).not.to.contain(downloadingResults[6])
           expect(rows).not.to.contain(downloadingResults[7])
         })
@@ -1149,14 +1149,14 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
         // NOTE: Because we created two return logs with different licence refs, we have to create two licence
         // document headers with the same 'licence holder' to recreate linking the same primary user across multiple
-        // licences. This means sendingResults[0] references the first licence holder, and [1] the second. For paper
+        // licences. This means sendingResults[0] references the first licence holder, and [2] the second. For paper
         // returns it's one of these we expect to see in the results. Either will do as they are both the same.
         expect(rows).to.contain(sendingResults[0])
-        expect(sendingResults[0]).to.equal(sendingResults[1])
+        expect(sendingResults[0]).to.equal(sendingResults[2])
 
-        // sendingResults[2] and [3] reference the two primary users, with the same details. We don't send paper
+        // sendingResults[1] and [3] reference the two primary users, with the same details. We don't send paper
         // returns via email so they should not be included
-        expect(rows).not.to.contain(sendingResults[2])
+        expect(rows).not.to.contain(sendingResults[1])
         expect(rows).not.to.contain(sendingResults[3])
       })
 
