@@ -11,7 +11,7 @@ const { expect } = Code
 const CRMContactsSeeder = require('../../../../support/seeders/crm-contacts.seeder.js')
 const EmptyLicenceSeeder = require('../../../../support/seeders/empty-licence.seeder.js')
 const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
-const RecipientsSeeder = require('../../../../support/seeders/recipients.seeder.js')
+const RecipientsFormatter = require('../../../../support/seeders/recipients.formatter.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 const { compareStrings, generateUUID } = require('../../../../../app/lib/general.lib.js')
 const { futureDueDate } = require('../../../../../app/presenters/notices/base.presenter.js')
@@ -63,7 +63,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
 
     licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(licenceSeedData, 'Test Licence Holder')
 
-    licenceHolder = await RecipientsSeeder.licenceHolder(licenceSeedData, licenceHolderSeedData)
+    licenceHolder = await RecipientsFormatter.licenceHolder(licenceSeedData, licenceHolderSeedData)
     licenceHolder.licenceRefs = [licenceRef]
   })
 
@@ -73,7 +73,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
 
     await licenceSeedData.clean()
     await licenceHolderSeedData.clean()
-    await RecipientsSeeder.clean(licenceHolder)
+    await RecipientsFormatter.clean(licenceHolder)
   })
 
   describe('when the set up journey is "ad-hoc"', () => {
@@ -91,7 +91,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
 
         // NOTE: We know GenerateReturnLogsByLicenceQueryService when called for a returns invitation will generate a
         // query that will fetch any due return logs
-        const sendingResult = RecipientsSeeder.transformToSendingResult({
+        const sendingResult = RecipientsFormatter.transformToSendingResult({
           ...licenceHolder,
           returnLogIds: [nullDueDateReturnLog.id, setDueDateReturnLog.id].sort((referenceString, compareString) => {
             return compareStrings(referenceString, compareString)
@@ -119,13 +119,13 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
       it('fetches the correct recipient data for the download', async () => {
         const results = await FetchReturnsInvitationRecipients.go(session, download)
 
-        const downloadingResult1 = RecipientsSeeder.transformToDownloadingResult(licenceHolder, nullDueDateReturnLog)
+        const downloadingResult1 = RecipientsFormatter.transformToDownloadingResult(licenceHolder, nullDueDateReturnLog)
 
         downloadingResult1.due_date_status = 'some nulls'
         downloadingResult1.latest_due_date = setDueDateReturnLog.dueDate
         downloadingResult1.notificationDueDate = futureDueDate('letter')
 
-        const downloadingResult2 = RecipientsSeeder.transformToDownloadingResult(licenceHolder, setDueDateReturnLog)
+        const downloadingResult2 = RecipientsFormatter.transformToDownloadingResult(licenceHolder, setDueDateReturnLog)
 
         downloadingResult2.due_date_status = 'some nulls'
         downloadingResult2.notificationDueDate = futureDueDate('letter')
@@ -151,7 +151,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
         // NOTE: We know GenerateReturnLogsByPeriodQueryService when called for a returns invitation will generate a
         // query that will only fetch return logs without due dates. So, we know only the return log with a null due
         // date will feature in the `return_log_ids` property of the result
-        const sendingResult = RecipientsSeeder.transformToSendingResult({
+        const sendingResult = RecipientsFormatter.transformToSendingResult({
           ...licenceHolder,
           returnLogIds: [nullDueDateReturnLog.id]
         })
@@ -177,7 +177,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
       it('fetches the correct recipient data for the download', async () => {
         const results = await FetchReturnsInvitationRecipients.go(session, download)
 
-        const downloadingResult = RecipientsSeeder.transformToDownloadingResult(licenceHolder, nullDueDateReturnLog)
+        const downloadingResult = RecipientsFormatter.transformToDownloadingResult(licenceHolder, nullDueDateReturnLog)
 
         downloadingResult.notificationDueDate = futureDueDate('letter')
 

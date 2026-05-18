@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * @module NoticeRecipientsSeeder
+ * @module RecipientsFormatter
  */
 
 const crypto = require('node:crypto')
@@ -157,6 +157,7 @@ async function returnsUser(licenceSeedData, returnsUserSeedData) {
     licenceRefs: [licenceSeedData.licence.licenceRef],
     messageType: 'Email',
     clean: async () => {
+      await licenceSeedData.clean()
       await returnsUserSeedData.clean()
     }
   }
@@ -193,7 +194,11 @@ async function returnsTo(licenceSeedData, returnsToHolderSeedData) {
     contactType: 'returns to',
     email: null,
     licenceRefs: [licenceSeedData.licence.licenceRef],
-    messageType: 'Letter'
+    messageType: 'Letter',
+    clean: async () => {
+      await licenceSeedData.clean()
+      await returnsToHolderSeedData.clean()
+    }
   }
 }
 

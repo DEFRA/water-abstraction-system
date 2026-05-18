@@ -11,7 +11,7 @@ const { expect } = Code
 const CRMContactsSeeder = require('../../../../support/seeders/crm-contacts.seeder.js')
 const EmptyLicenceSeeder = require('../../../../support/seeders/empty-licence.seeder.js')
 const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
-const RecipientsSeeder = require('../../../../support/seeders/recipients.seeder.js')
+const RecipientsFormatter = require('../../../../support/seeders/recipients.formatter.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 const { compareStrings, generateUUID } = require('../../../../../app/lib/general.lib.js')
 
@@ -62,7 +62,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
 
     licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(licenceSeedData, 'Test Licence Holder')
 
-    licenceHolder = await RecipientsSeeder.licenceHolder(licenceSeedData, licenceHolderSeedData)
+    licenceHolder = await RecipientsFormatter.licenceHolder(licenceSeedData, licenceHolderSeedData)
     licenceHolder.licenceRefs = [licenceRef]
   })
 
@@ -72,7 +72,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
 
     await licenceSeedData.clean()
     await licenceHolderSeedData.clean()
-    await RecipientsSeeder.clean(licenceHolder)
+    await RecipientsFormatter.clean(licenceHolder)
   })
 
   describe('when the set up journey is "ad-hoc"', () => {
@@ -91,7 +91,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
         // NOTE: We know GenerateReturnLogsByLicenceQueryService when called for a returns reminder will generate a
         // query that will only fetch return logs with due dates. So, we know only the return log with the due date will
         // feature in the `return_log_ids` property of the result
-        const sendingResult = RecipientsSeeder.transformToSendingResult({
+        const sendingResult = RecipientsFormatter.transformToSendingResult({
           ...licenceHolder,
           returnLogIds: [setDueDateReturnLog.id]
         })
@@ -117,7 +117,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
       it('fetches the correct recipient data for the download', async () => {
         const results = await FetchReturnsReminderRecipients.go(session, download)
 
-        const downloadingResult = RecipientsSeeder.transformToDownloadingResult(licenceHolder, setDueDateReturnLog)
+        const downloadingResult = RecipientsFormatter.transformToDownloadingResult(licenceHolder, setDueDateReturnLog)
 
         downloadingResult.notificationDueDate = setDueDateReturnLog.dueDate
 
@@ -142,7 +142,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
         // NOTE: We know GenerateReturnLogsByPeriodQueryService when called for a returns reminder will generate a
         // query that will only fetch return logs with due dates. So, we know only the return log with the due date will
         // feature in the `return_log_ids` property of the result
-        const sendingResult = RecipientsSeeder.transformToSendingResult({
+        const sendingResult = RecipientsFormatter.transformToSendingResult({
           ...licenceHolder,
           returnLogIds: [setDueDateReturnLog.id]
         })
@@ -168,7 +168,7 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Reminder Recipients s
       it('fetches the correct recipient data for the download', async () => {
         const results = await FetchReturnsReminderRecipients.go(session, download)
 
-        const downloadingResult = RecipientsSeeder.transformToDownloadingResult(licenceHolder, setDueDateReturnLog)
+        const downloadingResult = RecipientsFormatter.transformToDownloadingResult(licenceHolder, setDueDateReturnLog)
 
         downloadingResult.notificationDueDate = setDueDateReturnLog.dueDate
 

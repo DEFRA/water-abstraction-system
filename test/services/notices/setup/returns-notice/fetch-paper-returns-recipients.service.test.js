@@ -8,10 +8,8 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const CRMContactsSeeder = require('../../../../support/seeders/crm-contacts.seeder.js')
-const EmptyLicenceSeeder = require('../../../../support/seeders/empty-licence.seeder.js')
 const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
-const RecipientsSeeder = require('../../../../support/seeders/recipients.seeder.js')
+const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 
 // Thing under test
@@ -19,36 +17,29 @@ const FetchPaperReturnsRecipientsService = require('../../../../../app/services/
 
 describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients service', () => {
   let download
-  let licenceHolder
-  let licenceHolderSeedData
-  let licenceRef
-  let licenceSeedData
   let session
   let setDueDateReturnLog
+  let scenarios
 
   before(async () => {
-    licenceSeedData = await EmptyLicenceSeeder.seed(licenceRef)
+    scenarios = {}
 
-    licenceRef = licenceSeedData.licence.licenceRef
-
+    // 1) Licence holder only
     // Create a return log with a populated `dueDate`.
-    setDueDateReturnLog = await ReturnLogHelper.add({ dueDate: new Date('2025-04-28'), licenceRef })
+    setDueDateReturnLog = await ReturnLogHelper.add({ dueDate: new Date('2025-04-28') })
 
-    session = NoticeSessionFixture.paperReturn(licenceRef, setDueDateReturnLog)
+    scenarios.licenceHolder = await RecipientScenariosSeeder.licenceHolderOnly([setDueDateReturnLog])
 
-    licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(licenceSeedData, 'Test Licence Holder')
-
-    licenceHolder = await RecipientsSeeder.licenceHolder(licenceSeedData, licenceHolderSeedData)
-    licenceHolder.licenceRefs = [licenceRef]
-    licenceHolder.returnLogIds = [setDueDateReturnLog.id]
+    session = NoticeSessionFixture.paperReturn(
+      scenarios.licenceHolder.licenceHolderRecipient.licenceRefs[0],
+      setDueDateReturnLog
+    )
   })
 
   after(async () => {
     await setDueDateReturnLog.$query().delete()
 
-    await licenceSeedData.clean()
-    await licenceHolderSeedData.clean()
-    await RecipientsSeeder.clean(licenceHolder)
+    await RecipientScenariosSeeder.clean(scenarios)
   })
 
   describe('when service is called for sending or checking recipients', () => {
@@ -64,13 +55,13 @@ describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients serv
       // combination, and the notification due date is determined based on the selected return log. So, the
       // PaperReturnNotificationsPresenter handles it. But the service sets it to null to return an object consistent
       // with FetchReturnsInvitationRecipients and FetchReturnsReminderRecipients.
-      const sendingResult = RecipientsSeeder.transformToSendingResult(licenceHolder)
+      const sendingResult = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 
-      sendingResult.due_date_status = 'all populated'
-      sendingResult.latest_due_date = setDueDateReturnLog.dueDate
-      sendingResult.notificationDueDate = null
+      sendingResult[0].due_date_status = 'all populated'
+      sendingResult[0].latest_due_date = setDueDateReturnLog.dueDate
+      sendingResult[0].notificationDueDate = null
 
-      expect(results).to.equal([sendingResult])
+      expect(results).to.equal(sendingResult)
     })
   })
 
@@ -84,11 +75,11 @@ describe('Notices - Setup - Returns Notice - Fetch Paper Returns Recipients serv
 
       // NOTE: When fetching data for the download, the service _can_ determine the notification due date because each
       // row is distinct to a recipient and return log combination.
-      const downloadingResult = RecipientsSeeder.transformToDownloadingResult(licenceHolder, setDueDateReturnLog)
+      const downloadingResult = RecipientScenariosSeeder.transformToDownloadingResults(scenarios.licenceHolder)
 
-      downloadingResult.notificationDueDate = new Date('2025-04-28')
+      downloadingResult[0].notificationDueDate = new Date('2025-04-28')
 
-      expect(results).to.equal([downloadingResult])
+      expect(results).to.equal(downloadingResult)
     })
   })
 })

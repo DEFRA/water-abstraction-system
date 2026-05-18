@@ -6,7 +6,7 @@
 
 const CRMContactsSeeder = require('./crm-contacts.seeder.js')
 const EmptyLicence = require('./empty-licence.seeder.js')
-const RecipientsSeeder = require('./recipients.seeder.js')
+const RecipientsFormatter = require('./recipients.formatter.js')
 const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const { compareStrings } = require('../../../app/lib/general.lib.js')
 
@@ -21,7 +21,7 @@ const { compareStrings } = require('../../../app/lib/general.lib.js')
 async function clean(scenarios) {
   for (const recipients of Object.values(scenarios)) {
     for (const recipient of Object.values(recipients)) {
-      await RecipientsSeeder.clean(recipient)
+      await RecipientsFormatter.clean(recipient)
     }
   }
 }
@@ -48,7 +48,7 @@ async function licenceHolderOnly(returnLogs = [], expiredDate = null) {
   const licence = await EmptyLicence.seed(licenceRefs[0], null, expiredDate)
   const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Licenceonlyholder')
 
-  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
+  const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
 
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
@@ -80,14 +80,14 @@ async function licenceHolderWithDifferentReturnsTo(returnLogs) {
   const licence = await EmptyLicence.seed(licenceRefs[0])
   const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Holderandreturnsto')
 
-  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
+  const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
 
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
   const returnsToHolder = await CRMContactsSeeder.returnsTo(licence, licenceHolder, 'Returnstoandholder')
 
-  const returnsToRecipient = await RecipientsSeeder.returnsTo(licence, returnsToHolder)
+  const returnsToRecipient = await RecipientsFormatter.returnsTo(licence, returnsToHolder)
 
   returnsToRecipient.returnLogIds = returnLogIds
   returnsToRecipient.returnLogs = returnLogs
@@ -122,7 +122,7 @@ async function licenceHolderWithMultipleLicences(returnLogs, expiredDate) {
   const licence = await EmptyLicence.seed(licenceRefs[0], null, expiredDate)
   const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Multiplelicenceholder')
 
-  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
+  const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
 
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
@@ -137,7 +137,7 @@ async function licenceHolderWithMultipleLicences(returnLogs, expiredDate) {
     licenceId: secondLicence.licence.id
   })
 
-  const secondLicenceHolderRecipient = await RecipientsSeeder.licenceHolder(secondLicence, licenceHolder)
+  const secondLicenceHolderRecipient = await RecipientsFormatter.licenceHolder(secondLicence, licenceHolder)
 
   const allLicenceRefs = expiredDate ? [licence.licence.licenceRef, secondLicence.licence.licenceRef] : licenceRefs
 
@@ -172,14 +172,14 @@ async function licenceHolderWithSameReturnsTo(returnLogs) {
   const licence = await EmptyLicence.seed(licenceRefs[0])
   const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Samelicenceholderreturnsto')
 
-  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
+  const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
 
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
   const returnsToHolder = await CRMContactsSeeder.returnsTo(licence, licenceHolder)
 
-  const returnsToRecipient = await RecipientsSeeder.returnsTo(licence, returnsToHolder)
+  const returnsToRecipient = await RecipientsFormatter.returnsTo(licence, returnsToHolder)
 
   returnsToRecipient.returnLogIds = returnLogIds
   returnsToRecipient.returnLogs = returnLogs
@@ -217,14 +217,14 @@ async function primaryUserOnly(returnLogs = [], expiredDate = null) {
   const licence = await EmptyLicence.seed(licenceRefs[0], null, expiredDate)
   const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Primaryonlyholder')
 
-  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
+  const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
 
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
   const primaryUser = await CRMContactsSeeder.primaryUser(licence, 'primaryuseronly@puonly.com')
 
-  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
+  const primaryUserRecipient = await RecipientsFormatter.primaryUser(licence, primaryUser)
 
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
@@ -264,21 +264,21 @@ async function primaryUserWithDifferentReturnsAgent(returnLogs) {
   const licence = await EmptyLicence.seed(licenceRefs[0])
   const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Primaryandreturnsuser')
 
-  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
+  const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
 
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
   const primaryUser = await CRMContactsSeeder.primaryUser(licence, 'primaryuser@pura.com')
 
-  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
+  const primaryUserRecipient = await RecipientsFormatter.primaryUser(licence, primaryUser)
 
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
 
   const returnsUser = await CRMContactsSeeder.returnsUser(licence, 'returnsuser@pura.com')
 
-  const returnsUserRecipient = await RecipientsSeeder.returnsUser(licence, returnsUser)
+  const returnsUserRecipient = await RecipientsFormatter.returnsUser(licence, returnsUser)
 
   returnsUserRecipient.returnLogIds = returnLogIds
   returnsUserRecipient.returnLogs = returnLogs
@@ -317,14 +317,14 @@ async function primaryUserWithMultipleLicences(returnLogs, expiredDate) {
   const licence = await EmptyLicence.seed(licenceRefs[0], null, expiredDate)
   const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Multipleprimary')
 
-  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
+  const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
 
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
   const primaryUser = await CRMContactsSeeder.primaryUser(licence, 'primaryuser@pumulti.com')
 
-  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
+  const primaryUserRecipient = await RecipientsFormatter.primaryUser(licence, primaryUser)
 
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
@@ -332,14 +332,14 @@ async function primaryUserWithMultipleLicences(returnLogs, expiredDate) {
   const secondLicence = await EmptyLicence.seed(licenceRefs[1], null, expiredDate)
   const secondLicenceHolder = await CRMContactsSeeder.licenceHolder(secondLicence, 'Multipleprimary')
 
-  const secondLicenceHolderRecipient = await RecipientsSeeder.licenceHolder(secondLicence, secondLicenceHolder)
+  const secondLicenceHolderRecipient = await RecipientsFormatter.licenceHolder(secondLicence, secondLicenceHolder)
 
   secondLicenceHolderRecipient.returnLogIds = returnLogIds
   secondLicenceHolderRecipient.returnLogs = returnLogs
 
   const secondPrimaryUser = await CRMContactsSeeder.primaryUser(secondLicence, 'primaryuser@pumulti.com')
 
-  const secondPrimaryUserRecipient = await RecipientsSeeder.primaryUser(secondLicence, secondPrimaryUser)
+  const secondPrimaryUserRecipient = await RecipientsFormatter.primaryUser(secondLicence, secondPrimaryUser)
 
   secondPrimaryUserRecipient.returnLogIds = returnLogIds
   secondPrimaryUserRecipient.returnLogs = returnLogs
@@ -386,21 +386,21 @@ async function primaryUserWithSameReturnsAgent(returnLogs) {
   const licence = await EmptyLicence.seed(licenceRefs[0])
   const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Sameprimaryuserreturnsuser')
 
-  const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
+  const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
 
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
   const primaryUser = await CRMContactsSeeder.primaryUser(licence, 'same@pura.com')
 
-  const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
+  const primaryUserRecipient = await RecipientsFormatter.primaryUser(licence, primaryUser)
 
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
 
   const returnsUser = await CRMContactsSeeder.returnsUser(licence, 'same@pura.com')
 
-  const returnsUserRecipient = await RecipientsSeeder.returnsUser(licence, returnsUser)
+  const returnsUserRecipient = await RecipientsFormatter.returnsUser(licence, returnsUser)
 
   returnsUserRecipient.returnLogIds = returnLogIds
   returnsUserRecipient.returnLogs = returnLogs
@@ -420,7 +420,7 @@ async function primaryUserWithSameReturnsAgent(returnLogs) {
  */
 function transformToSendingResults(scenarios) {
   return Object.values(scenarios).map((recipient) => {
-    return RecipientsSeeder.transformToSendingResult(recipient)
+    return RecipientsFormatter.transformToSendingResult(recipient)
   })
 }
 
@@ -439,7 +439,7 @@ function transformToDownloadingResults(scenarios) {
 
   for (const recipient of Object.values(scenarios)) {
     for (const returnLog of recipient.returnLogs) {
-      const downloadResult = RecipientsSeeder.transformToDownloadingResult(recipient, returnLog)
+      const downloadResult = RecipientsFormatter.transformToDownloadingResult(recipient, returnLog)
 
       downloadResults.push(downloadResult)
     }
