@@ -8,10 +8,8 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const CRMContactsSeeder = require('../../../../support/seeders/crm-contacts.seeder.js')
-const EmptyLicenceSeeder = require('../../../../support/seeders/empty-licence.seeder.js')
 const NoticeSessionFixture = require('../../../../support/fixtures/notice-session.fixture.js')
-const RecipientsFormatter = require('../../../../support/seeders/recipients.formatter.js')
+const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 const { compareStrings, generateUUID } = require('../../../../../app/lib/general.lib.js')
 const { futureDueDate } = require('../../../../../app/presenters/notices/base.presenter.js')
@@ -21,64 +19,51 @@ const FetchReturnsInvitationRecipients = require('../../../../../app/services/no
 
 describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients service', () => {
   let download
-  let licenceHolder
-  let licenceHolderSeedData
-  let licenceRef
-  let licenceSeedData
   let nullDueDateReturnLog
   let session
   let setDueDateReturnLog
+  let scenarios
 
   before(async () => {
-    licenceSeedData = await EmptyLicenceSeeder.seed(licenceRef)
+    scenarios = {}
 
-    licenceRef = licenceSeedData.licence.licenceRef
-
+    // 1) Licence holder only
     // NOTE: GenerateRecipientsQueryService for downloads will order by return ID (it has to because of the distinct
     // clause). So, we generate two IDs, sort them, and then use them when creating the return logs to ensure our
     // expectations match the order of the results.
-    const returnLogIds = [generateUUID(), generateUUID()].sort((referenceString, compareString) => {
-      return compareStrings(referenceString, compareString)
-    })
+    const [nullDueDateReturnLogId, setDueDateReturnLogId] = [generateUUID(), generateUUID()].sort(compareStrings)
 
     // Create a return log with a null `dueDate`.
     nullDueDateReturnLog = await ReturnLogHelper.add({
-      id: returnLogIds[0],
+      id: nullDueDateReturnLogId,
       dueDate: null,
       endDate: new Date('2025-03-01'),
-      licenceRef,
       quarterly: false,
       startDate: new Date('2024-04-01')
     })
 
-    // Create a return log with a populated `dueDate`.
+    // Create a return log with a populated `dueDate` for the same licence.
     setDueDateReturnLog = await ReturnLogHelper.add({
-      id: returnLogIds[1],
+      id: setDueDateReturnLogId,
       dueDate: '2025-04-28',
       endDate: new Date('2025-03-01'),
-      licenceRef,
+      licenceRef: nullDueDateReturnLog.licenceRef,
       quarterly: false,
       startDate: new Date('2024-04-01')
     })
 
-    licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(licenceSeedData, 'Test Licence Holder')
-
-    licenceHolder = await RecipientsFormatter.licenceHolder(licenceSeedData, licenceHolderSeedData)
-    licenceHolder.licenceRefs = [licenceRef]
+    scenarios.licenceHolder = await RecipientScenariosSeeder.licenceHolderOnly([nullDueDateReturnLog, setDueDateReturnLog])
   })
 
   after(async () => {
     await nullDueDateReturnLog.$query().delete()
     await setDueDateReturnLog.$query().delete()
-
-    await licenceSeedData.clean()
-    await licenceHolderSeedData.clean()
-    await RecipientsFormatter.clean(licenceHolder)
+    await RecipientScenariosSeeder.clean(scenarios)
   })
 
   describe('when the set up journey is "ad-hoc"', () => {
     before(() => {
-      session = NoticeSessionFixture.adHocInvitation(licenceRef)
+      session = NoticeSessionFixture.adHocInvitation(scenarios.licenceHolder.licenceHolderRecipient.licenceRefs[0])
     })
 
     describe('and the query is NOT for generating a download', () => {
@@ -91,23 +76,18 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
 
         // NOTE: We know GenerateReturnLogsByLicenceQueryService when called for a returns invitation will generate a
         // query that will fetch any due return logs
-        const sendingResult = RecipientsFormatter.transformToSendingResult({
-          ...licenceHolder,
-          returnLogIds: [nullDueDateReturnLog.id, setDueDateReturnLog.id].sort((referenceString, compareString) => {
-            return compareStrings(referenceString, compareString)
-          })
-        })
+        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 
         // In our scenario we have a mix of return logs with and without due dates, so the query will return a
         // `due_date_status` of 'some nulls', but the latest due date will be set to that of setDueDateReturnLog
-        sendingResult.due_date_status = 'some nulls'
-        sendingResult.latest_due_date = setDueDateReturnLog.dueDate
+        sendingResults[0].due_date_status = 'some nulls'
+        sendingResults[0].latest_due_date = setDueDateReturnLog.dueDate
 
         // Finally, in the case of returns invitations, the service will set the notificationDueDate for each recipient
         // based on the due date status. If there are any nulls, it will calculate the date (today + 28/29 days).
-        sendingResult.notificationDueDate = futureDueDate('letter')
+        sendingResults[0].notificationDueDate = futureDueDate('letter')
 
-        expect(results).to.equal([sendingResult])
+        expect(results).to.equal(sendingResults)
       })
     })
 
@@ -119,25 +99,23 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
       it('fetches the correct recipient data for the download', async () => {
         const results = await FetchReturnsInvitationRecipients.go(session, download)
 
-        const downloadingResult1 = RecipientsFormatter.transformToDownloadingResult(licenceHolder, nullDueDateReturnLog)
+        const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios.licenceHolder)
 
-        downloadingResult1.due_date_status = 'some nulls'
-        downloadingResult1.latest_due_date = setDueDateReturnLog.dueDate
-        downloadingResult1.notificationDueDate = futureDueDate('letter')
+        downloadingResults[0].due_date_status = 'some nulls'
+        downloadingResults[0].latest_due_date = setDueDateReturnLog.dueDate
+        downloadingResults[0].notificationDueDate = futureDueDate('letter')
 
-        const downloadingResult2 = RecipientsFormatter.transformToDownloadingResult(licenceHolder, setDueDateReturnLog)
+        downloadingResults[1].due_date_status = 'some nulls'
+        downloadingResults[1].notificationDueDate = futureDueDate('letter')
 
-        downloadingResult2.due_date_status = 'some nulls'
-        downloadingResult2.notificationDueDate = futureDueDate('letter')
-
-        expect(results).to.equal([downloadingResult1, downloadingResult2])
+        expect(results).to.equal(downloadingResults)
       })
     })
   })
 
   describe('when the set up journey is "standard"', () => {
     before(() => {
-      session = NoticeSessionFixture.standardInvitation(licenceRef)
+      session = NoticeSessionFixture.standardInvitation(scenarios.licenceHolder.licenceHolderRecipient.licenceRefs[0])
     })
 
     describe('and the query is NOT for generating a download', () => {
@@ -151,21 +129,20 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
         // NOTE: We know GenerateReturnLogsByPeriodQueryService when called for a returns invitation will generate a
         // query that will only fetch return logs without due dates. So, we know only the return log with a null due
         // date will feature in the `return_log_ids` property of the result
-        const sendingResult = RecipientsFormatter.transformToSendingResult({
-          ...licenceHolder,
-          returnLogIds: [nullDueDateReturnLog.id]
-        })
+        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
+
+        sendingResults[0].return_log_ids = [nullDueDateReturnLog.id]
 
         // And we know the query will _always_ return a `due_date_status` of 'all nulls', and the latest due date
         // will therefore be null.
-        sendingResult.due_date_status = 'all nulls'
-        sendingResult.latest_due_date = null
+        sendingResults[0].due_date_status = 'all nulls'
+        sendingResults[0].latest_due_date = null
 
         // Because this is a standard notice, only return logs with null due dates will have been selected so it will
         // calculate the date (today + 28/29 days).
-        sendingResult.notificationDueDate = futureDueDate('letter')
+        sendingResults[0].notificationDueDate = futureDueDate('letter')
 
-        expect(results).to.equal([sendingResult])
+        expect(results).to.equal(sendingResults)
       })
     })
 
@@ -177,11 +154,17 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
       it('fetches the correct recipient data for the download', async () => {
         const results = await FetchReturnsInvitationRecipients.go(session, download)
 
-        const downloadingResult = RecipientsFormatter.transformToDownloadingResult(licenceHolder, nullDueDateReturnLog)
+        // NOTE: Standard invitations only fetch return logs with null due dates, so only nullDueDateReturnLog features
+        const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults({
+          licenceHolderRecipient: {
+            ...scenarios.licenceHolder.licenceHolderRecipient,
+            returnLogs: [nullDueDateReturnLog]
+          }
+        })
 
-        downloadingResult.notificationDueDate = futureDueDate('letter')
+        downloadingResults[0].notificationDueDate = futureDueDate('letter')
 
-        expect(results).to.equal([downloadingResult])
+        expect(results).to.equal(downloadingResults)
       })
     })
   })
