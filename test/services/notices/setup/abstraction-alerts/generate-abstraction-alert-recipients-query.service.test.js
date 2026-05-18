@@ -27,13 +27,9 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     let additionalContactRecipient
     let licenceHolder
     let licenceHolderRecipient
-    let primaryUser
-    let primaryUserRecipient
 
     // 1) Licence holder only
-    licenceHolder = await _licenceHolder()
-    licenceHolderRecipient = await _licenceHolderRecipient(licenceHolder.licence, licenceHolder.licenceHolder)
-    scenarios.licenceHolder = { licenceHolderRecipient }
+    scenarios.licenceHolder = await RecipientScenariosSeeder.licenceHolderOnly()
 
     // 2) Licence holder, and an additional contact
     licenceHolder = await _licenceHolder()
@@ -43,18 +39,14 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
 
     // 3) Primary user only. All licences have a licence holder record, but when 'registered' the query will only
     // return the primary user recipient.
-    licenceHolder = await _licenceHolder()
-    licenceHolderRecipient = await _licenceHolderRecipient(licenceHolder.licence, licenceHolder.licenceHolder)
-    primaryUser = await _primaryUser(licenceHolder.licence)
-    primaryUserRecipient = await _primaryUserRecipient(licenceHolder.licence, primaryUser.primaryUser)
-    scenarios.primaryUser = { licenceHolderRecipient, primaryUserRecipient }
+    scenarios.primaryUser = await RecipientScenariosSeeder.primaryUserOnly()
 
     // 4) Primary user with an additional contact. Similar to scenario 3 - when registered, we expect the primary user
     // and additional contact but not the licence holder.
     licenceHolder = await _licenceHolder()
     licenceHolderRecipient = await _licenceHolderRecipient(licenceHolder.licence, licenceHolder.licenceHolder)
-    primaryUser = await _primaryUser(licenceHolder.licence)
-    primaryUserRecipient = await _primaryUserRecipient(licenceHolder.licence, primaryUser.primaryUser)
+    const primaryUser = await _primaryUser(licenceHolder.licence)
+    const primaryUserRecipient = await _primaryUserRecipient(licenceHolder.licence, primaryUser.primaryUser)
     additionalContactRecipient = await _additionalContactRecipient(licenceHolder.licence)
     scenarios.primaryUserWithAdditionalContact = {
       licenceHolderRecipient,
@@ -175,7 +167,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
   describe('when executed', () => {
     describe('and only the licence holder is present for an unregistered licence (Scenario 1)', () => {
       it('returns the expected recipients', async () => {
-        const licenceRefs = [scenarios.licenceHolder.licenceHolderRecipient.licenceRef]
+        const licenceRefs = scenarios.licenceHolder.licenceHolderRecipient.licenceRefs
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
@@ -189,7 +181,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
 
     describe('and both the "additional contact" and the "licence holder" are present for an unregistered licence (Scenario 2)', () => {
       it('returns the expected recipients', async () => {
-        const licenceRefs = [scenarios.licenceHolderWithAdditionalContact.licenceHolderRecipient.licenceRef]
+        const licenceRefs = scenarios.licenceHolderWithAdditionalContact.licenceHolderRecipient.licenceRefs
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
@@ -204,7 +196,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
 
     describe('and only the "primary user" is present for a registered licence (Scenario 3)', () => {
       it('returns the expected recipients', async () => {
-        const licenceRefs = [scenarios.primaryUser.primaryUserRecipient.licenceRef]
+        const licenceRefs = scenarios.primaryUser.primaryUserRecipient.licenceRefs
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
@@ -218,7 +210,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
 
     describe('and both the "primary user" and "additional contact" are present for a registered licence, but not the licence holder (Scenario 4)', () => {
       it('returns the expected recipients', async () => {
-        const licenceRefs = [scenarios.primaryUserWithAdditionalContact.primaryUserRecipient.licenceRef]
+        const licenceRefs = scenarios.primaryUserWithAdditionalContact.primaryUserRecipient.licenceRefs
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
@@ -234,8 +226,8 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     describe('and the same "additional contact" is associated with multiple licence documents (Scenario 5)', () => {
       it('returns the expected recipients', async () => {
         const licenceRefs = [
-          scenarios.additionalContactMultipleLicences.licenceHolderRecipient.licenceRef,
-          scenarios.additionalContactMultipleLicences.licenceHolderRecipientTwo.licenceRef
+          ...scenarios.additionalContactMultipleLicences.licenceHolderRecipient.licenceRefs,
+          ...scenarios.additionalContactMultipleLicences.licenceHolderRecipientTwo.licenceRefs
         ].sort(compareStrings)
 
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
@@ -256,7 +248,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
 
     describe('and an additional contact is present but abstractionAlerts is false (Scenario 6)', () => {
       it('returns only the "licence holder" and not the additional contact', async () => {
-        const licenceRefs = [scenarios.additionalContactNoAlerts.licenceHolderRecipient.licenceRef]
+        const licenceRefs = scenarios.additionalContactNoAlerts.licenceHolderRecipient.licenceRefs
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
@@ -271,8 +263,8 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     describe('and different "licence holders" and "additional contacts" are present for different licences (Scenario 7)', () => {
       it('returns the expected recipients', async () => {
         const licenceRefs = [
-          scenarios.differentHoldersAndContacts.firstLicenceHolderRecipient.licenceRef,
-          scenarios.differentHoldersAndContacts.secondLicenceHolderRecipient.licenceRef
+          ...scenarios.differentHoldersAndContacts.firstLicenceHolderRecipient.licenceRefs,
+          ...scenarios.differentHoldersAndContacts.secondLicenceHolderRecipient.licenceRefs
         ].sort(compareStrings)
 
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
@@ -295,8 +287,8 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     describe('and one of the "additional contacts" has abstractionAlerts set to false across multiple licences (Scenario 8)', () => {
       it('returns both "licence holders" but only the "additional contact" with abstractionAlerts set to true', async () => {
         const licenceRefs = [
-          scenarios.mixedAlerts.licenceHolderRecipientWithAlert.licenceRef,
-          scenarios.mixedAlerts.licenceHolderRecipientWithoutAlert.licenceRef
+          ...scenarios.mixedAlerts.licenceHolderRecipientWithAlert.licenceRefs,
+          ...scenarios.mixedAlerts.licenceHolderRecipientWithoutAlert.licenceRefs
         ].sort(compareStrings)
 
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
@@ -317,7 +309,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
 
     describe('and the additional contact end date has passed (Scenario 9)', () => {
       it('returns only the "licence holder" and not the expired additional contact', async () => {
-        const licenceRefs = [scenarios.expiredAdditionalContact.licenceHolderRecipient.licenceRef]
+        const licenceRefs = scenarios.expiredAdditionalContact.licenceHolderRecipient.licenceRefs
         const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
@@ -336,7 +328,7 @@ async function _additionalContactRecipient(licence, abstractionAlerts = true, co
 
   const additionalContactRecipient = await RecipientsSeeder.additionalContact(licence, additionalContact)
 
-  additionalContactRecipient.licenceRefs = [licence.licence.licenceRef]
+  additionalContactRecipient.licenceRefss = [licence.licence.licenceRefs]
 
   return additionalContactRecipient
 }
@@ -354,7 +346,7 @@ async function _licenceHolder(name = 'Holderwithadditionalcontact') {
 async function _licenceHolderRecipient(licence, licenceHolder) {
   const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
 
-  licenceHolderRecipient.licenceRefs = [licence.licence.licenceRef]
+  licenceHolderRecipient.licenceRefss = [licence.licence.licenceRefs]
 
   return licenceHolderRecipient
 }
@@ -364,7 +356,7 @@ async function _primaryUser(licence) {
 
   const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
 
-  primaryUserRecipient.licenceRefs = [licence.licence.licenceRef]
+  primaryUserRecipient.licenceRefss = [licence.licence.licenceRefs]
 
   return { primaryUser }
 }
@@ -372,7 +364,7 @@ async function _primaryUser(licence) {
 async function _primaryUserRecipient(licence, primaryUser) {
   const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
 
-  primaryUserRecipient.licenceRefs = [licence.licence.licenceRef]
+  primaryUserRecipient.licenceRefss = [licence.licence.licenceRefs]
 
   return primaryUserRecipient
 }

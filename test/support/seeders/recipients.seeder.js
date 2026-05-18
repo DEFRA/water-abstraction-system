@@ -27,7 +27,7 @@ async function additionalContact(licenceSeedData, additionalContact) {
     contactHashId: _emailHashId(email),
     contactType: 'additional contact',
     email,
-    licenceRef: licenceSeedData.licence.licenceRef,
+    licenceRefs: [licenceSeedData.licence.licenceRef],
     messageType: 'Email',
     clean: async () => {
       await additionalContact.clean()
@@ -90,7 +90,7 @@ async function licenceHolder(licenceSeedData, licenceHolderSeedData) {
     contactHashId: _contactHashId(contact),
     contactType: 'licence holder',
     email: null,
-    licenceRef: licenceSeedData.licence.licenceRef,
+    licenceRefs: [licenceSeedData.licence.licenceRef],
     messageType: 'Letter',
     clean: async () => {
       await licenceSeedData.clean()
@@ -119,7 +119,7 @@ async function primaryUser(licenceSeedData, primaryUserSeedData) {
     contactHashId: _emailHashId(email),
     contactType: 'primary user',
     email,
-    licenceRef: licenceSeedData.licence.licenceRef,
+    licenceRefs: [licenceSeedData.licence.licenceRef],
     messageType: 'Email',
     clean: async () => {
       await licenceSeedData.clean()
@@ -154,7 +154,7 @@ async function returnsUser(licenceSeedData, returnsUserSeedData) {
     contactHashId: _emailHashId(email),
     contactType: 'returns user',
     email,
-    licenceRef: licenceSeedData.licence.licenceRef,
+    licenceRefs: [licenceSeedData.licence.licenceRef],
     messageType: 'Email',
     clean: async () => {
       await returnsUserSeedData.clean()
@@ -192,7 +192,7 @@ async function returnsTo(licenceSeedData, returnsToHolderSeedData) {
     contactHashId: _contactHashId(contact),
     contactType: 'returns to',
     email: null,
-    licenceRef: licenceSeedData.licence.licenceRef,
+    licenceRefs: [licenceSeedData.licence.licenceRef],
     messageType: 'Letter'
   }
 }

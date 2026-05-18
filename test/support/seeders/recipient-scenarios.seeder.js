@@ -42,7 +42,7 @@ async function clean(scenarios) {
  *
  * @returns {Promise<object[]>} The recipients generated for the scenario. In this case there is only the licence holder
  */
-async function licenceHolderOnly(returnLogs, expiredDate = null) {
+async function licenceHolderOnly(returnLogs = [], expiredDate = null) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
   const licence = await EmptyLicence.seed(licenceRefs[0], null, expiredDate)
@@ -50,13 +50,12 @@ async function licenceHolderOnly(returnLogs, expiredDate = null) {
 
   const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
 
-  const allLicenceRefs = expiredDate ? [licence.licence.licenceRef] : licenceRefs
-
-  licenceHolderRecipient.licenceRefs = allLicenceRefs
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
-  return [licenceHolderRecipient]
+  return {
+    licenceHolderRecipient
+  }
 }
 
 /**
@@ -83,7 +82,6 @@ async function licenceHolderWithDifferentReturnsTo(returnLogs) {
 
   const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
 
-  licenceHolderRecipient.licenceRefs = licenceRefs
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
@@ -91,7 +89,6 @@ async function licenceHolderWithDifferentReturnsTo(returnLogs) {
 
   const returnsToRecipient = await RecipientsSeeder.returnsTo(licence, returnsToHolder)
 
-  returnsToRecipient.licenceRefs = licenceRefs
   returnsToRecipient.returnLogIds = returnLogIds
   returnsToRecipient.returnLogs = returnLogs
 
@@ -177,7 +174,6 @@ async function licenceHolderWithSameReturnsTo(returnLogs) {
 
   const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
 
-  licenceHolderRecipient.licenceRefs = licenceRefs
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
@@ -185,7 +181,6 @@ async function licenceHolderWithSameReturnsTo(returnLogs) {
 
   const returnsToRecipient = await RecipientsSeeder.returnsTo(licence, returnsToHolder)
 
-  returnsToRecipient.licenceRefs = licenceRefs
   returnsToRecipient.returnLogIds = returnLogIds
   returnsToRecipient.returnLogs = returnLogs
 
@@ -213,10 +208,10 @@ async function licenceHolderWithSameReturnsTo(returnLogs) {
  * the recipient
  * @param {Date} [expiredDate] - The date the licence should expire.
  *
- * @returns {Promise<object[]>} The recipients generated for the scenario. This includes the licence holder and
+ * @returns {object} The recipients generated for the scenario. This includes the licence holder and
  * primary user
  */
-async function primaryUserOnly(returnLogs, expiredDate = null) {
+async function primaryUserOnly(returnLogs = [], expiredDate = null) {
   const { licenceRefs, returnLogIds } = _aggregatedData(returnLogs)
 
   const licence = await EmptyLicence.seed(licenceRefs[0], null, expiredDate)
@@ -224,7 +219,6 @@ async function primaryUserOnly(returnLogs, expiredDate = null) {
 
   const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
 
-  licenceHolderRecipient.licenceRefs = expiredDate ? [licence.licence.licenceRef] : licenceRefs
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
@@ -232,11 +226,10 @@ async function primaryUserOnly(returnLogs, expiredDate = null) {
 
   const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
 
-  primaryUserRecipient.licenceRefs = expiredDate ? [licence.licence.licenceRef] : licenceRefs
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
 
-  return [licenceHolderRecipient, primaryUserRecipient]
+  return { licenceHolderRecipient, primaryUserRecipient }
 }
 
 /**
@@ -273,7 +266,6 @@ async function primaryUserWithDifferentReturnsAgent(returnLogs) {
 
   const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
 
-  licenceHolderRecipient.licenceRefs = licenceRefs
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
@@ -281,7 +273,6 @@ async function primaryUserWithDifferentReturnsAgent(returnLogs) {
 
   const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
 
-  primaryUserRecipient.licenceRefs = licenceRefs
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
 
@@ -289,7 +280,6 @@ async function primaryUserWithDifferentReturnsAgent(returnLogs) {
 
   const returnsUserRecipient = await RecipientsSeeder.returnsUser(licence, returnsUser)
 
-  returnsUserRecipient.licenceRefs = licenceRefs
   returnsUserRecipient.returnLogIds = returnLogIds
   returnsUserRecipient.returnLogs = returnLogs
 
@@ -398,7 +388,6 @@ async function primaryUserWithSameReturnsAgent(returnLogs) {
 
   const licenceHolderRecipient = await RecipientsSeeder.licenceHolder(licence, licenceHolder)
 
-  licenceHolderRecipient.licenceRefs = licenceRefs
   licenceHolderRecipient.returnLogIds = returnLogIds
   licenceHolderRecipient.returnLogs = returnLogs
 
@@ -406,7 +395,6 @@ async function primaryUserWithSameReturnsAgent(returnLogs) {
 
   const primaryUserRecipient = await RecipientsSeeder.primaryUser(licence, primaryUser)
 
-  primaryUserRecipient.licenceRefs = licenceRefs
   primaryUserRecipient.returnLogIds = returnLogIds
   primaryUserRecipient.returnLogs = returnLogs
 
@@ -414,7 +402,6 @@ async function primaryUserWithSameReturnsAgent(returnLogs) {
 
   const returnsUserRecipient = await RecipientsSeeder.returnsUser(licence, returnsUser)
 
-  returnsUserRecipient.licenceRefs = licenceRefs
   returnsUserRecipient.returnLogIds = returnLogIds
   returnsUserRecipient.returnLogs = returnLogs
 
@@ -427,12 +414,14 @@ async function primaryUserWithSameReturnsAgent(returnLogs) {
  * Use when you need to verify the result of executing the `GenerateRecipientsQueryService` with the `download` flag
  * set to false.
  *
- * @param {object[]} scenarios - The scenarios created by a test suite to be transformed
+ * @param {object[]|object} scenarios - The scenarios created by a test suite to be transformed
  *
  * @returns {object[]} The transformed downloading result objects
  */
 function transformToSendingResults(scenarios) {
-  return scenarios.map((recipient) => {
+  const recipients = Array.isArray(scenarios) ? scenarios : Object.values(scenarios)
+
+  return recipients.map((recipient) => {
     return RecipientsSeeder.transformToSendingResult(recipient)
   })
 }
@@ -443,14 +432,15 @@ function transformToSendingResults(scenarios) {
  * Use when you need to verify the result of executing the `GenerateRecipientsQueryService` with the `download` flag
  * set to true.
  *
- * @param {object[]} scenarios - The scenarios created by a test suite to be transformed
+ * @param {object[]|object} scenarios - The scenarios created by a test suite to be transformed
  *
  * @returns {object[]} The transformed downloading result objects
  */
 function transformToDownloadingResults(scenarios) {
+  const recipients = Array.isArray(scenarios) ? scenarios : Object.values(scenarios)
   const downloadResults = []
 
-  for (const recipient of scenarios) {
+  for (const recipient of recipients) {
     for (const returnLog of recipient.returnLogs) {
       const downloadResult = RecipientsSeeder.transformToDownloadingResult(recipient, returnLog)
 
