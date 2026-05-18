@@ -21,14 +21,14 @@ describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipie
   let session
 
   before(async () => {
-    scenarios = []
+    scenarios = {}
 
     // 1) Licence holder only
     const licenceHolder = await _licenceHolder()
     const licenceHolderRecipient = await _licenceHolderRecipient(licenceHolder.licence, licenceHolder.licenceHolder)
-    scenarios.push([licenceHolderRecipient])
+    scenarios.licenceHolder = { licenceHolderRecipient }
 
-    session = { licenceRefs: [scenarios[0][0].licenceRef] }
+    session = { licenceRefs: [scenarios.licenceHolder.licenceHolderRecipient.licenceRef] }
   })
 
   after(async () => {
@@ -39,7 +39,9 @@ describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipie
     it('fetches the correct recipient data', async () => {
       const result = await FetchAbstractionAlertRecipientsService.go(session)
 
-      const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[0])
+      const expectedResults = RecipientScenariosSeeder.transformToSendingResults([
+        scenarios.licenceHolder.licenceHolderRecipient
+      ])
 
       expect(result).to.equal(expectedResults)
     })

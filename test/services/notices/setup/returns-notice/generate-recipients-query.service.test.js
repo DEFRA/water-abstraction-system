@@ -394,11 +394,10 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
   describe('when executed', () => {
     before(async () => {
-      scenarios = []
+      scenarios = {}
       returnLogs = []
 
       let returnLog
-      let scenario
 
       // SCENARIOS
 
@@ -406,57 +405,55 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
       // record with the one licence ref
       await _addReturnLog(returnLogs)
       await _addReturnLog(returnLogs, { licenceRef: returnLogs[0].licenceRef })
-      scenario = await RecipientScenariosSeeder.licenceHolderOnly([returnLogs[0], returnLogs[1]])
-      scenarios.push(scenario)
+      scenarios.licenceHolderOnly = await RecipientScenariosSeeder.licenceHolderOnly([returnLogs[0], returnLogs[1]])
 
       // 2) Licence holder and returns to - all versions of the query will return the licence holder. When the notice
       // type is ALTERNATE_INVITATION, only the licence holder will be returned
       returnLog = await _addReturnLog(returnLogs)
-      scenario = await RecipientScenariosSeeder.licenceHolderWithDifferentReturnsTo([returnLog])
-      scenarios.push(scenario)
+      scenarios.licenceHolderWithDifferentReturnsTo =
+        await RecipientScenariosSeeder.licenceHolderWithDifferentReturnsTo([returnLog])
 
       // 3) Same licence holder, but is linked to multiple licences with due return logs - only one recipient record
       // will be returned with multiple licence refs
       await _addReturnLog(returnLogs)
       await _addReturnLog(returnLogs)
-      scenario = await RecipientScenariosSeeder.licenceHolderWithMultipleLicences([
+      scenarios.licenceHolderWithMultipleLicences = await RecipientScenariosSeeder.licenceHolderWithMultipleLicences([
         returnLogs[returnLogs.length - 2],
         returnLogs[returnLogs.length - 1]
       ])
-      scenarios.push(scenario)
 
       // 4) Licence holder and returns to where they have the same contact details - only one recipient record will be
       // returned
       returnLog = await _addReturnLog(returnLogs)
-      scenario = await RecipientScenariosSeeder.licenceHolderWithSameReturnsTo([returnLog])
-      scenarios.push(scenario)
+      scenarios.licenceHolderWithSameReturnsTo = await RecipientScenariosSeeder.licenceHolderWithSameReturnsTo([
+        returnLog
+      ])
 
       // 5) Primary user only. All licences have a licence holder record, but when 'registered' the query will only
       // return the primary user recipient.
       returnLog = await _addReturnLog(returnLogs)
-      scenario = await RecipientScenariosSeeder.primaryUserOnly([returnLog])
-      scenarios.push(scenario)
+      scenarios.primaryUserOnly = await RecipientScenariosSeeder.primaryUserOnly([returnLog])
 
       // 6) Primary user and returns user. Just like with 5), the query will return the primary user details and not
       // the licence holder. But as a returns user has also been added, it will be returned as well.
       returnLog = await _addReturnLog(returnLogs)
-      scenario = await RecipientScenariosSeeder.primaryUserWithDifferentReturnsAgent([returnLog])
-      scenarios.push(scenario)
+      scenarios.primaryUserWithDifferentReturnsAgent =
+        await RecipientScenariosSeeder.primaryUserWithDifferentReturnsAgent([returnLog])
 
       // 7) Same primary user, but is linked to multiple licences with due return logs - only one recipient record
       // will be returned with multiple licence refs
       await _addReturnLog(returnLogs)
       await _addReturnLog(returnLogs)
-      scenario = await RecipientScenariosSeeder.primaryUserWithMultipleLicences([
+      scenarios.primaryUserWithMultipleLicences = await RecipientScenariosSeeder.primaryUserWithMultipleLicences([
         returnLogs[returnLogs.length - 2],
         returnLogs[returnLogs.length - 1]
       ])
-      scenarios.push(scenario)
 
       // 8) Primary user and returns user with the same email address - only one recipient record will be returned
       returnLog = await _addReturnLog(returnLogs)
-      scenario = await RecipientScenariosSeeder.primaryUserWithSameReturnsAgent([returnLog])
-      scenarios.push(scenario)
+      scenarios.primaryUserWithSameReturnsAgent = await RecipientScenariosSeeder.primaryUserWithSameReturnsAgent([
+        returnLog
+      ])
 
       // Prepare the array of returnLogIds for the query parameter
       returnLogIds = returnLogs.map((returnLog) => {
@@ -494,7 +491,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[0])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolderOnly)
 
           expect(rows).to.contain(sendingResults[0])
         })
@@ -504,7 +501,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[1])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+            scenarios.licenceHolderWithDifferentReturnsTo
+          )
 
           expect(rows).to.contain(sendingResults[0])
           expect(rows).to.contain(sendingResults[1])
@@ -515,7 +514,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[2])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+            scenarios.licenceHolderWithMultipleLicences
+          )
 
           expect(rows).to.contain(sendingResults[0])
           // We could test rows contains the second licence holder recipient recorded in the scenario, but they are the
@@ -528,7 +529,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[3])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+            scenarios.licenceHolderWithSameReturnsTo
+          )
 
           expect(rows).to.contain(sendingResults[0])
 
@@ -540,7 +543,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[4])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.primaryUserOnly)
 
           expect(rows).to.contain(sendingResults[1])
 
@@ -553,7 +556,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[5])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+            scenarios.primaryUserWithDifferentReturnsAgent
+          )
 
           expect(rows).to.contain(sendingResults[1])
           expect(rows).to.contain(sendingResults[2])
@@ -566,7 +571,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[6])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+            scenarios.primaryUserWithMultipleLicences
+          )
 
           expect(rows).to.contain(sendingResults[2])
 
@@ -586,7 +593,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[7])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+            scenarios.primaryUserWithSameReturnsAgent
+          )
 
           expect(rows).to.contain(sendingResults[1])
 
@@ -616,7 +625,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[0])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios.licenceHolderOnly)
 
           // We created two return logs for the same licence  and licence holder. So we expect two results: one for each
           // return log
@@ -629,7 +638,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[1])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(
+            scenarios.licenceHolderWithDifferentReturnsTo
+          )
 
           expect(rows).to.contain(downloadingResults[0])
           expect(rows).to.contain(downloadingResults[1])
@@ -640,7 +651,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[2])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(
+            scenarios.licenceHolderWithMultipleLicences
+          )
 
           // Unlike sending, because we want the return log information it means though the recipient details are the
           // same, the return logs are not. So, we get a row per return log for the licence holder.
@@ -658,7 +671,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[3])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(
+            scenarios.licenceHolderWithSameReturnsTo
+          )
 
           expect(rows).to.contain(downloadingResults[0])
 
@@ -670,7 +685,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[4])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios.primaryUserOnly)
 
           expect(rows).to.contain(downloadingResults[1])
 
@@ -683,7 +698,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[5])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(
+            scenarios.primaryUserWithDifferentReturnsAgent
+          )
 
           expect(rows).to.contain(downloadingResults[1])
           expect(rows).to.contain(downloadingResults[2])
@@ -696,7 +713,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[6])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(
+            scenarios.primaryUserWithMultipleLicences
+          )
 
           // Unlike sending, because we want the return log information it means though the recipient details are the
           // same, the return logs are not. So, we get a row per return log for the primary user.
@@ -723,7 +742,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[7])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(
+            scenarios.primaryUserWithSameReturnsAgent
+          )
 
           expect(rows).to.contain(downloadingResults[1])
 
@@ -759,7 +780,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[0])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolderOnly)
 
           expect(rows).to.contain(sendingResults[0])
         })
@@ -769,7 +790,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[1])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+            scenarios.licenceHolderWithDifferentReturnsTo
+          )
 
           expect(rows).to.contain(sendingResults[0])
           expect(rows).to.contain(sendingResults[1])
@@ -780,7 +803,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[2])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+            scenarios.licenceHolderWithMultipleLicences
+          )
 
           expect(rows).to.contain(sendingResults[0])
           // We could test rows contains the second licence holder recipient recorded in the scenario, but they are the
@@ -793,7 +818,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[3])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+            scenarios.licenceHolderWithSameReturnsTo
+          )
 
           expect(rows).to.contain(sendingResults[0])
 
@@ -805,7 +832,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[4])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.primaryUserOnly)
 
           expect(rows).to.contain(sendingResults[0])
 
@@ -817,7 +844,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[5])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+            scenarios.primaryUserWithDifferentReturnsAgent
+          )
 
           expect(rows).to.contain(sendingResults[0])
 
@@ -830,7 +859,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[6])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+            scenarios.primaryUserWithMultipleLicences
+          )
 
           // NOTE: Because we created two return logs with different licence refs, we have to create two licence
           // document headers with the same 'licence holder' to recreate linking the same primary user across multiple
@@ -850,7 +881,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[7])
+          const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+            scenarios.primaryUserWithSameReturnsAgent
+          )
 
           expect(rows).to.contain(sendingResults[0])
 
@@ -880,7 +913,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[0])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios.licenceHolderOnly)
 
           // We created two return logs for the same licence  and licence holder. So we expect two results: one for each
           // return log
@@ -893,7 +926,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[1])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios.licenceHolderOnly)
 
           expect(rows).to.contain(downloadingResults[0])
           expect(rows).to.contain(downloadingResults[1])
@@ -904,7 +937,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[2])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(
+            scenarios.licenceHolderWithMultipleLicences
+          )
 
           // Unlike sending, because we want the return log information it means though the recipient details are the
           // same, the return logs are not. So, we get a row per return log for the licence holder.
@@ -922,7 +957,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[3])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(
+            scenarios.licenceHolderWithSameReturnsTo
+          )
 
           expect(rows).to.contain(downloadingResults[0])
 
@@ -934,7 +971,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[4])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios.primaryUserOnly)
 
           expect(rows).to.contain(downloadingResults[0])
 
@@ -946,7 +983,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[5])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(
+            scenarios.primaryUserWithDifferentReturnsAgent
+          )
 
           expect(rows).to.contain(downloadingResults[0])
 
@@ -959,7 +998,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[6])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(
+            scenarios.primaryUserWithMultipleLicences
+          )
 
           // Unlike sending, because we want the return log information it means though the recipient details are the
           // same, the return logs are not. So, we get a row per return log for the licence holder.
@@ -988,7 +1029,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
           const { rows } = await db.raw(query, [returnLogIds])
 
-          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(scenarios[7])
+          const downloadingResults = RecipientScenariosSeeder.transformToDownloadingResults(
+            scenarios.primaryUserWithSameReturnsAgent
+          )
 
           expect(rows).to.contain(downloadingResults[0])
 
@@ -1020,7 +1063,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
         const { rows } = await db.raw(query, [returnLogIds])
 
-        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[0])
+        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolderOnly)
 
         expect(rows).to.contain(sendingResults[0])
       })
@@ -1030,7 +1073,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
         const { rows } = await db.raw(query, [returnLogIds])
 
-        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[1])
+        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+          scenarios.licenceHolderWithDifferentReturnsTo
+        )
 
         expect(rows).to.contain(sendingResults[0])
 
@@ -1042,7 +1087,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
         const { rows } = await db.raw(query, [returnLogIds])
 
-        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[2])
+        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+          scenarios.licenceHolderWithMultipleLicences
+        )
 
         expect(rows).to.contain(sendingResults[0])
         // We could test rows contains the second licence holder recipient recorded in the scenario, but they are the
@@ -1055,7 +1102,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
         const { rows } = await db.raw(query, [returnLogIds])
 
-        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[3])
+        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+          scenarios.licenceHolderWithSameReturnsTo
+        )
 
         expect(rows).to.contain(sendingResults[0])
 
@@ -1067,7 +1116,7 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
         const { rows } = await db.raw(query, [returnLogIds])
 
-        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[4])
+        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.primaryUserOnly)
 
         expect(rows).to.contain(sendingResults[0])
 
@@ -1079,7 +1128,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
         const { rows } = await db.raw(query, [returnLogIds])
 
-        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[5])
+        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+          scenarios.primaryUserWithDifferentReturnsAgent
+        )
 
         expect(rows).to.contain(sendingResults[0])
 
@@ -1092,7 +1143,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
         const { rows } = await db.raw(query, [returnLogIds])
 
-        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[6])
+        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+          scenarios.primaryUserWithMultipleLicences
+        )
 
         // NOTE: Because we created two return logs with different licence refs, we have to create two licence
         // document headers with the same 'licence holder' to recreate linking the same primary user across multiple
@@ -1112,7 +1165,9 @@ describe('Notices - Setup - Returns Notice - Generate Recipients Query service',
 
         const { rows } = await db.raw(query, [returnLogIds])
 
-        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[7])
+        const sendingResults = RecipientScenariosSeeder.transformToSendingResults(
+          scenarios.primaryUserWithSameReturnsAgent
+        )
 
         expect(rows).to.contain(sendingResults[0])
 
