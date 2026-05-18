@@ -21,7 +21,7 @@ async function go(days) {
 
     calculateAndLogTimeTaken(startTime, 'Renewals invitation status job complete', { count: recipients.length })
   } catch (error) {
-    global.GlobalNotifier.omfg('Notification status job failed', null, error)
+    globalThis.GlobalNotifier.omfg('Notification status job failed', null, error)
   }
 }
 

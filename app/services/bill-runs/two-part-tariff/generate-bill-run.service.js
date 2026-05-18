@@ -55,7 +55,7 @@ async function go(billRun) {
     calculateAndLogTimeTaken(startTime, 'Generate annual two-part tariff bill run complete', { billRunId })
   } catch (error) {
     await HandleErroredBillRunService.go(billRunId, error.code)
-    global.GlobalNotifier.omfg('Generate annual two-part tariff bill run failed', { billRun }, error)
+    globalThis.GlobalNotifier.omfg('Generate annual two-part tariff bill run failed', { billRun }, error)
   }
 }
 

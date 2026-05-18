@@ -74,7 +74,7 @@ async function go(sessionId, userId) {
 
     return licence.id
   } catch (error) {
-    global.GlobalNotifier.omfg('Failed to create return version', session, error)
+    globalThis.GlobalNotifier.omfg('Failed to create return version', session, error)
 
     throw error
   }

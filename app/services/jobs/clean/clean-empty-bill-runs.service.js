@@ -39,7 +39,7 @@ async function go() {
       deletedCount = deleted ? deletedCount + 1 : deletedCount
     }
   } catch (error) {
-    global.GlobalNotifier.omfg('Clean job failed', { billRunId, job: 'clean-empty-bill-runs' }, error)
+    globalThis.GlobalNotifier.omfg('Clean job failed', { billRunId, job: 'clean-empty-bill-runs' }, error)
   }
 
   return deletedCount

@@ -21,7 +21,7 @@ async function go() {
 
     deletedCount = await SessionModel.query().delete().where('created_at', '<', maxSessionAge)
   } catch (error) {
-    global.GlobalNotifier.omfg('Clean job failed', { job: 'clean-expired-sessions' }, error)
+    globalThis.GlobalNotifier.omfg('Clean job failed', { job: 'clean-expired-sessions' }, error)
   }
 
   return deletedCount

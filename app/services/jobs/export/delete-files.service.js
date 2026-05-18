@@ -16,7 +16,7 @@ async function go(path) {
   try {
     await fsPromises.rm(path, { recursive: true, force: true })
   } catch (error) {
-    global.GlobalNotifier.omfg('Delete file service errored', { path }, error)
+    globalThis.GlobalNotifier.omfg('Delete file service errored', { path }, error)
   }
 }
 

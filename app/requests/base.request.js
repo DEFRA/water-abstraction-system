@@ -159,7 +159,7 @@ async function post(url, additionalOptions = {}) {
 }
 
 function _beforeRetryHook(error, retryCount) {
-  global.GlobalNotifier.omg('Retrying HTTP request', { error, retryCount })
+  globalThis.GlobalNotifier.omg('Retrying HTTP request', { error, retryCount })
 }
 
 async function _importGot() {
@@ -198,7 +198,7 @@ function _logFailure(method, result, url, additionalOptions) {
 
   if (result.response instanceof Error) {
     data.result = result
-    global.GlobalNotifier.omfg(`${method} request errored`, data)
+    globalThis.GlobalNotifier.omfg(`${method} request errored`, data)
 
     return
   }
@@ -211,7 +211,7 @@ function _logFailure(method, result, url, additionalOptions) {
     }
   }
 
-  global.GlobalNotifier.omg(`${method} request failed`, data)
+  globalThis.GlobalNotifier.omg(`${method} request failed`, data)
 }
 
 /**

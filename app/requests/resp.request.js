@@ -28,7 +28,7 @@ async function get(path) {
  * @private
  */
 async function _sendRequest(path, method) {
-  const authentication = await global.HapiServerMethods.getRespToken()
+  const authentication = await globalThis.HapiServerMethods.getRespToken()
   const options = _requestOptions(authentication.accessToken)
 
   const result = await method(path, options)

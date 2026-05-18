@@ -21,12 +21,12 @@ describe('Export Service', () => {
   beforeEach(async () => {
     SchemaExportServiceStub = Sinon.stub(SchemaExportService, 'go').resolves()
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
+    delete globalThis.GlobalNotifier
   })
 
   it('calls the SchemaExportService with the different schema names', async () => {

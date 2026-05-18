@@ -31,7 +31,7 @@ async function go(licence) {
       .onConflict(['licenceId', 'dateType'])
       .merge(['changeDate', 'naldDate', 'wrlsDate', 'updatedAt'])
   } catch (error) {
-    global.GlobalNotifier.omfg('Check licence end dates failed', { id: licence.id, changedDateDetails }, error)
+    globalThis.GlobalNotifier.omfg('Check licence end dates failed', { id: licence.id, changedDateDetails }, error)
   }
 }
 

@@ -15,7 +15,7 @@ const KeepYarAlivePlugin = {
         // with a refreshed TTL.
         request.yar.touch()
       } catch (error) {
-        global.GlobalNotifier.omfg('Failed to keep session alive', {}, error)
+        globalThis.GlobalNotifier.omfg('Failed to keep session alive', {}, error)
       }
 
       return h.continue

@@ -25,7 +25,7 @@ async function go(licenceRef, billingPeriod) {
     // NOTE: The try/catch was added after we found out that it is possible to set up return requirements in NALD with
     // empty abstraction periods. This then causes the return log to also be missing abstraction period data. Our
     // CAST() in the query then causes an error.
-    global.GlobalNotifier.omfg(
+    globalThis.GlobalNotifier.omfg(
       'Bill run process fetch return logs for licence failed',
       { licenceRef, billingPeriod },
       error

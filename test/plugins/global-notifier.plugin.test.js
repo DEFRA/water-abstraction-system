@@ -22,7 +22,7 @@ describe('Global Notifier plugin', () => {
   describe('Global Notifier Plugin', () => {
     describe('when the server is initialised', () => {
       it('makes an instance of GlobalNotifierLib available globally', async () => {
-        const result = global.GlobalNotifier
+        const result = globalThis.GlobalNotifier
 
         expect(result).to.be.an.instanceOf(GlobalNotifierLib)
       })

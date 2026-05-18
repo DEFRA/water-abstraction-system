@@ -94,7 +94,7 @@ async function _notifyStatus(notifyId) {
     return response.body.status
   }
 
-  global.GlobalNotifier.omfg('Check notification status failed', { notifyId, response })
+  globalThis.GlobalNotifier.omfg('Check notification status failed', { notifyId, response })
 
   return null
 }
@@ -164,7 +164,7 @@ async function _recordStatus(notification, notifyStatus, status) {
       await _recordReturnLogs(notification, status, trx)
     })
   } catch (error) {
-    global.GlobalNotifier.omfg('Check notification status failed', notification, error)
+    globalThis.GlobalNotifier.omfg('Check notification status failed', notification, error)
   }
 }
 

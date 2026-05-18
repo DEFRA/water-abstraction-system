@@ -46,7 +46,7 @@ async function go(billRun) {
 
     calculateAndLogTimeTaken(startTime, 'Send bill run complete', { billRun })
   } catch (error) {
-    global.GlobalNotifier.omfg('Send bill run failed', billRun, error)
+    globalThis.GlobalNotifier.omfg('Send bill run failed', billRun, error)
   }
 }
 

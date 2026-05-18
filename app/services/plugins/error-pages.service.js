@@ -70,13 +70,13 @@ function _logError(statusCode, request) {
   const { response } = request
 
   if (statusCode === HTTP_STATUS_NOT_FOUND) {
-    global.GlobalNotifier.omg('Page not found', { path: request.path })
+    globalThis.GlobalNotifier.omg('Page not found', { path: request.path })
   } else if (statusCode === HTTP_STATUS_FORBIDDEN) {
-    global.GlobalNotifier.omg('Not authorised', { path: request.path })
+    globalThis.GlobalNotifier.omg('Not authorised', { path: request.path })
   } else if (statusCode === HTTP_STATUS_GONE) {
-    global.GlobalNotifier.omg('Session not found', { path: request.path })
+    globalThis.GlobalNotifier.omg('Session not found', { path: request.path })
   } else if (response.isBoom) {
-    global.GlobalNotifier.omfg(response.message, {}, response)
+    globalThis.GlobalNotifier.omfg(response.message, {}, response)
   }
 }
 

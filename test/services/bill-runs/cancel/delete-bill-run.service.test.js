@@ -42,12 +42,12 @@ describe('Bill Runs - Delete Bill Run service', () => {
     // creating an instance of Hapi server in this test we recreate the condition by setting it directly with our
     // own stub
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
+    delete globalThis.GlobalNotifier
   })
 
   describe('when the bill run exists', () => {

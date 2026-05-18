@@ -27,12 +27,12 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
 
   beforeEach(() => {
     notifierStub = { omg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(async () => {
     Sinon.restore()
-    delete global.GlobalNotifier
+    delete globalThis.GlobalNotifier
   })
 
   describe('with a given billRun and billingPeriods', () => {

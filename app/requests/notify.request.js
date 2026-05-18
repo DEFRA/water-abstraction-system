@@ -57,7 +57,7 @@ async function post(path, body = {}) {
  * @private
  */
 async function _sendRequest(path, method, body) {
-  const accessToken = await global.HapiServerMethods.getNotifyToken()
+  const accessToken = await globalThis.HapiServerMethods.getNotifyToken()
   const options = _requestOptions(accessToken, body)
 
   const result = await method(path, options)

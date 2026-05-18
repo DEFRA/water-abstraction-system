@@ -44,7 +44,7 @@ async function go(notice, notifications) {
 
     calculateAndLogTimeTaken(startTime, 'Send notice complete', { count: notifications.length, noticeId })
   } catch (error) {
-    global.GlobalNotifier.omfg('Send notice failed', { notice }, error)
+    globalThis.GlobalNotifier.omfg('Send notice failed', { notice }, error)
   }
 }
 
