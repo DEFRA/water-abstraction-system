@@ -121,7 +121,7 @@ function determineLatestDate(dates) {
   })
 
   if (allEmptyValuesRemoved.length === 0) {
-    throw Error('No dates provided to determine earliest')
+    throw new Error('No dates provided to determine earliest')
   }
 
   const valuesAsDates = allEmptyValuesRemoved.map((date) => {
