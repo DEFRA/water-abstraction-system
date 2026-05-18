@@ -19,6 +19,7 @@ const TransactionModel = require('../../../../app/models/transaction.model.js')
 
 // Things we need to stub
 const FetchBillsToBeReissuedService = require('../../../../app/services/bill-runs/reissue/fetch-bills-to-be-reissued.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const ReissueBillService = require('../../../../app/services/bill-runs/reissue/reissue-bill.service.js')
 
 // Thing under test
@@ -34,7 +35,7 @@ describe('Reissue Bills service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

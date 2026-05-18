@@ -11,6 +11,9 @@ const { expect } = Code
 // Test helpers
 const TransactionHelper = require('../support/helpers/transaction.helper.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const GeneralLib = require('../../app/lib/general.lib.js')
 
@@ -37,7 +40,7 @@ describe('GeneralLib', () => {
       // app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered. As we're not
       // creating an instance of Hapi server in this test we recreate the condition by setting it directly with our own
       // stub
-      notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+      notifierStub = GlobalNotifierStub.build(Sinon)
       globalThis.GlobalNotifier = notifierStub
     })
 

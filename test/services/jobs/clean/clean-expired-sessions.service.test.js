@@ -13,6 +13,9 @@ const SessionHelper = require('../../../support/helpers/session.helper.js')
 const SessionModel = require('../../../../app/models/session.model.js')
 const { today } = require('../../../../app/lib/general.lib.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const CleanExpiredSessionsService = require('../../../../app/services/jobs/clean/clean-expired-sessions.service.js')
 
@@ -27,7 +30,7 @@ describe('Jobs - Clean - Clean Expired Sessions service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

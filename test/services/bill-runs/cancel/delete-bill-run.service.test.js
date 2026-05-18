@@ -24,6 +24,7 @@ const TransactionHelper = require('../../../support/helpers/transaction.helper.j
 // Things we need to stub
 const BillLicenceModel = require('../../../../app/models/bill-licence.model.js')
 const ChargingModuleDeleteBillRunRequest = require('../../../../app/requests/charging-module/delete-bill-run.request.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const ReviewLicenceModel = require('../../../../app/models/review-licence.model.js')
 
 // Thing under test
@@ -41,7 +42,7 @@ describe('Bill Runs - Delete Bill Run service', () => {
     // app/plugins/global-notifier.plugin.js when the app starts up and the plugin is registered. As we're not
     // creating an instance of Hapi server in this test we recreate the condition by setting it directly with our
     // own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

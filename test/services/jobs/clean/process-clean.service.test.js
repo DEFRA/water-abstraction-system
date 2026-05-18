@@ -14,6 +14,7 @@ const CleanEmptyVoidReturnLogsService = require('../../../../app/services/jobs/c
 const CleanExpiredSessionsService = require('../../../../app/services/jobs/clean/clean-expired-sessions.service.js')
 const CleanIncompleteCompanyContactsService = require('../../../../app/services/jobs/clean/clean-incomplete-company-contacts.service.js')
 const CleanOrphanedContactsService = require('../../../../app/services/jobs/clean/clean-orphaned-contacts.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 // Thing under test
 const ProcessCleanService = require('../../../../app/services/jobs/clean/process-clean.service.js')
@@ -44,7 +45,7 @@ describe('Jobs - Clean - Process Clean service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

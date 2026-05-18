@@ -20,6 +20,9 @@ const {
 const Boom = require('@hapi/boom')
 const SessionNotFoundError = require('../../app/errors/session-not-found.error.js')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
+
 // For running our service
 const { init } = require('../../app/server.js')
 
@@ -33,7 +36,7 @@ describe('Error Pages plugin', () => {
     // Create server before running the tests
     server = await init()
 
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

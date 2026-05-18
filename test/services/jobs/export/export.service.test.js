@@ -9,6 +9,7 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const SchemaExportService = require('../../../../app/services/jobs/export/schema-export.service.js')
 
 // Thing under test
@@ -20,7 +21,7 @@ describe('Export Service', () => {
 
   beforeEach(async () => {
     SchemaExportServiceStub = Sinon.stub(SchemaExportService, 'go').resolves()
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

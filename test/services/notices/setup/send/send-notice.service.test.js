@@ -13,6 +13,7 @@ const NoticesFixture = require('../../../../support/fixtures/notices.fixture.js'
 const NotificationsFixture = require('../../../../support/fixtures/notifications.fixture.js')
 
 // Things we need to stub
+const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
 const SendAlternateNoticeService = require('../../../../../app/services/notices/setup/send/send-alternate-notice.service.js')
 const SendMainNoticeService = require('../../../../../app/services/notices/setup/send/send-main-notice.service.js')
 const UpdateNoticeService = require('../../../../../app/services/notices/update-notice.service.js')
@@ -35,7 +36,7 @@ describe('Notices - Setup - Send - Send Notice service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

@@ -14,6 +14,7 @@ const BillRunModel = require('../../../../app/models/bill-run.model.js')
 // Things we need to stub
 const CancelBillRunService = require('../../../../app/services/bill-runs/cancel/cancel-bill-run.service.js')
 const DeleteBillRunService = require('../../../../app/services/bill-runs/cancel/delete-bill-run.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const UnassignBillRunToLicencesService = require('../../../../app/services/bill-runs/unassign-bill-run-to-licences.service.js')
 
 // Thing under test
@@ -46,7 +47,7 @@ describe('Jobs - Clean - Clean Empty Bill Runs service', () => {
     // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

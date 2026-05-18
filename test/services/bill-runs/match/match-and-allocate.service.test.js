@@ -12,6 +12,7 @@ const { expect } = Code
 const AllocateReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/allocate-returns-to-charge-element.service.js')
 const DetermineLicenceIssuesService = require('../../../../app/services/bill-runs/match/determine-licence-issues.service.js')
 const FetchLicencesService = require('../../../../app/services/bill-runs/match/fetch-licences.service.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 const MatchReturnsToChargeElementService = require('../../../../app/services/bill-runs/match/match-returns-to-charge-element.service.js')
 const PrepareChargeVersionService = require('../../../../app/services/bill-runs/match/prepare-charge-version.service.js')
 const PrepareReturnLogsService = require('../../../../app/services/bill-runs/match/prepare-return-logs.service.js')
@@ -26,7 +27,7 @@ describe('Bill Runs - Match - Match And Allocate service', () => {
   let licences
 
   beforeEach(() => {
-    notifierStub = { omg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

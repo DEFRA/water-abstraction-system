@@ -18,6 +18,7 @@ const { formatLongDate } = require('../../../../app/presenters/base.presenter.js
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const GeneratePaperReturnRequest = require('../../../../app/requests/gotenberg/generate-paper-return.request.js')
+const GlobalNotifierStub = require('../../../support/stubs/global-notifier.stub.js')
 
 // Thing under test
 const ProcessPreviewPaperReturnService = require('../../../../app/services/notices/setup/process-preview-paper-return.service.js')
@@ -68,7 +69,7 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
       }
     ])
 
-    notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

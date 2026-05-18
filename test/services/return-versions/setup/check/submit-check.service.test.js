@@ -16,6 +16,7 @@ const CreateReturnVersionService = require('../../../../../app/services/return-v
 const DeleteSessionDal = require('../../../../../app/dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 const GenerateReturnVersionService = require('../../../../../app/services/return-versions/setup/check/generate-return-version.service.js')
+const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
 const ProcessExistingReturnVersionsService = require('../../../../../app/services/return-versions/setup/check/process-existing-return-versions.service.js')
 const ProcessLicenceReturnLogsService = require('../../../../../app/services/return-logs/process-licence-return-logs.service.js')
 const UpdateSucceededReturnLogsDal = require('../../../../../app/dal/return-versions/update-succeeded-return-logs.dal.js')
@@ -148,7 +149,7 @@ describe('Return Versions - Setup - Submit Check service', () => {
     // BaseRequest depends on the GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
-    notifierStub = { omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 

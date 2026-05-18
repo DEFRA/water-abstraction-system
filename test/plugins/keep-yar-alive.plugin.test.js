@@ -12,6 +12,9 @@ const { expect } = Code
 const { HTTP_STATUS_OK } = require('node:http2').constants
 const Hapi = require('@hapi/hapi')
 
+// Things we need to stub
+const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
+
 // Thing under test
 const KeepYarAlivePlugin = require('../../app/plugins/keep-yar-alive.plugin.js')
 
@@ -48,7 +51,7 @@ describe('Keep Yar Alive plugin', () => {
       }
     })
 
-    notifierStub = { omfg: Sinon.stub() }
+    notifierStub = GlobalNotifierStub.build(Sinon)
     globalThis.GlobalNotifier = notifierStub
   })
 
