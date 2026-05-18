@@ -43,7 +43,7 @@ async function go() {
     })
   } catch (error) {
     // Log any errors that occur
-    global.GlobalNotifier.omfg('Process licence end date changes failed', null, error)
+    globalThis.GlobalNotifier.omfg('Process licence end date changes failed', null, error)
   }
 }
 
@@ -61,10 +61,10 @@ async function _processLicenceEndDateChanges(licenceEndDateChange) {
 
     await licenceEndDateChange.$query().delete()
 
-    global.GlobalNotifier.omg('Process licence end date change complete', { ...licenceEndDateChange })
+    globalThis.GlobalNotifier.omg('Process licence end date change complete', { ...licenceEndDateChange })
   } catch (error) {
     // Log any errors that occur
-    global.GlobalNotifier.omfg('Process licence end date change failed', { ...licenceEndDateChange }, error)
+    globalThis.GlobalNotifier.omfg('Process licence end date change failed', { ...licenceEndDateChange }, error)
   }
 }
 

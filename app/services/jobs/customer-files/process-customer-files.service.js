@@ -55,8 +55,8 @@ async function go(days) {
   } catch (error) {
     const message = 'Customer files job failed'
 
-    global.GlobalNotifier.omfg(message, null, error)
-    global.GlobalNotifier.redAlert(message)
+    globalThis.GlobalNotifier.omfg(message, null, error)
+    globalThis.GlobalNotifier.redAlert(message)
   }
 }
 

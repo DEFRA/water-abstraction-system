@@ -34,7 +34,7 @@ describe('Error Pages plugin', () => {
     server = await init()
 
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
@@ -42,7 +42,7 @@ describe('Error Pages plugin', () => {
   })
 
   after(() => {
-    delete global.GlobalNotifier
+    delete globalThis.GlobalNotifier
   })
 
   describe('When the response is a Boom error', () => {

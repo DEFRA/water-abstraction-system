@@ -136,11 +136,10 @@ function _formatAbstractionMethod(licenceVersionPurposePoints) {
     return uniqueAbstractionMethods.join(' and ')
   }
 
-  return (
-    uniqueAbstractionMethods.slice(0, uniqueAbstractionMethods.length - 1).join(', ') +
-    ', and ' +
-    uniqueAbstractionMethods[uniqueAbstractionMethods.length - 1]
-  )
+  const abstractionMethodsExceptLast = uniqueAbstractionMethods.slice(0, -1).join(', ')
+  const lastAbstractionMethod = uniqueAbstractionMethods.at(-1)
+
+  return `${abstractionMethodsExceptLast}, and ${lastAbstractionMethod}`
 }
 
 function _formatAbstractionPoints(points) {

@@ -56,12 +56,12 @@ describe('Job - Notifications - Process Notification Status service', () => {
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub(), redAlert: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
+    delete globalThis.GlobalNotifier
   })
 
   describe('when the notification status check does not error', () => {

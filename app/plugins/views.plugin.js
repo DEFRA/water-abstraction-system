@@ -33,7 +33,7 @@ const ServerConfig = require('../../config/server.config.js')
 // the plugin is loaded), and then make it available to the filter by storing it in the global scope. The filter can
 // remain synchronous and we avoid doing some gnarly stuff to Nunjucks and Vision.
 import('marked').then((mod) => {
-  global.GlobalMarked = mod.marked
+  globalThis.GlobalMarked = mod.marked
 })
 
 const { enableBillingAccountChangeAddress } = require('../../config/feature-flags.config.js')

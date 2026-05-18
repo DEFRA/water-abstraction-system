@@ -35,12 +35,12 @@ describe('Licences - End Dates - Check Licence End Dates service', () => {
     // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
     // test we recreate the condition by setting it directly with our own stub
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(async () => {
     Sinon.restore()
-    delete global.GlobalNotifier
+    delete globalThis.GlobalNotifier
 
     if (licenceEndDateChanges) {
       await licenceEndDateChanges.$query().delete()

@@ -6,10 +6,12 @@
  */
 
 const NotificationModel = require('../../../../models/notification.model.js')
+const RenewalInvitationAlternateNoticeService = require('./renewal-invitation-alternate-notice.service.js')
 const ReturnsInvitationAlternateNoticeService = require('./returns-invitation-alternate-notice.service.js')
 const SendLetterNotificationService = require('./send-letter-notification.service.js')
 
 const { timestampForPostgres } = require('../../../../lib/general.lib.js')
+const { NoticeType, NoticeTypes } = require('../../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates sending a 'failed' notice to Notify, recording the results, and checking the status when finished
@@ -19,7 +21,7 @@ const { timestampForPostgres } = require('../../../../lib/general.lib.js')
  * @returns {Promise<object>} The alternate notice that was sent, if one was created and sent else null
  */
 async function go(mainNotice) {
-  const result = await ReturnsInvitationAlternateNoticeService.go(mainNotice)
+  const result = await _alternateNoticeService(mainNotice)
 
   if (!result) {
     return null
@@ -31,6 +33,14 @@ async function go(mainNotice) {
   await _updateFailedEmailInvitations(notice.id, notificationIds)
 
   return notice
+}
+
+function _alternateNoticeService(mainNotice) {
+  if (mainNotice.subtype === NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType) {
+    return RenewalInvitationAlternateNoticeService.go(mainNotice)
+  }
+
+  return ReturnsInvitationAlternateNoticeService.go(mainNotice)
 }
 
 async function _recordResult(sendResult) {

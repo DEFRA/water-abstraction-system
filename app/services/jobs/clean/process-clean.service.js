@@ -39,7 +39,7 @@ async function go() {
       }
     })
   } catch (error) {
-    global.GlobalNotifier.omfg('Clean job failed', {}, error)
+    globalThis.GlobalNotifier.omfg('Clean job failed', {}, error)
   }
 }
 

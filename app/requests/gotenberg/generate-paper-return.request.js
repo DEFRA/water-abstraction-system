@@ -6,7 +6,7 @@
  */
 
 const nunjucks = require('nunjucks')
-const path = require('path')
+const path = require('node:path')
 
 const GotenbergRequest = require('../gotenberg.request.js')
 

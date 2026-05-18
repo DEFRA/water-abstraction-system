@@ -69,12 +69,12 @@ describe('Notices - Setup - Process Preview Paper Return service', () => {
     ])
 
     notifierStub = { omg: Sinon.stub(), omfg: Sinon.stub() }
-    global.GlobalNotifier = notifierStub
+    globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
+    delete globalThis.GlobalNotifier
   })
 
   describe('when called', () => {

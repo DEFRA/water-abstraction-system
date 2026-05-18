@@ -23,7 +23,7 @@ async function go(billRunId, errorCode = null) {
   try {
     await _updateBillRun(billRunId, errorCode)
   } catch (error) {
-    global.GlobalNotifier.omfg('Failed to set error status on bill run', { billRunId, errorCode }, error)
+    globalThis.GlobalNotifier.omfg('Failed to set error status on bill run', { billRunId, errorCode }, error)
   }
 }
 

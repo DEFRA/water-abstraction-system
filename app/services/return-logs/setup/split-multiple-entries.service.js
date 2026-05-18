@@ -34,17 +34,11 @@ function go(multipleEntries) {
   for (const splitEntry of splitEntries) {
     const strippedEntry = splitEntry.replace(/\s/g, '').replace(/,/g, '')
 
-    if (!strippedEntry) {
-      continue
+    if (strippedEntry) {
+      const entry = strippedEntry.toLowerCase() === 'x' ? null : Number(strippedEntry)
+
+      entries.push(entry)
     }
-
-    if (strippedEntry.toLowerCase() === 'x') {
-      entries.push(null)
-
-      continue
-    }
-
-    entries.push(Number(strippedEntry))
   }
 
   return entries

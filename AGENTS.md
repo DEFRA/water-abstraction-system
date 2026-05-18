@@ -131,3 +131,4 @@ You may use whichever model you have access to for any given task. Stronger mode
 - Run an Alan review: "Read `.agents/personas/alan.md` and review as Alan"
 - Apply commit guidance: "Read `.agents/skills/commits/SKILL.md` before committing"
 - Apply standards guidance: "Read `.agents/skills/standards/SKILL.md` before editing"
+- Get ticket context: "Read `.agents/skills/tools/jira/SKILL.md` and get context for WATER-<number>"

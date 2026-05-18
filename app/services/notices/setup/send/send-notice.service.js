@@ -10,6 +10,7 @@ const SendMainNoticeService = require('./send-main-notice.service.js')
 const UpdateNoticeService = require('../../update-notice.service.js')
 
 const { calculateAndLogTimeTaken, currentTimeInNanoseconds } = require('../../../../lib/general.lib.js')
+const { NoticeType, NoticeTypes } = require('../../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates sending the first main notice to Notify, then checking if an alternate needs creating and sending
@@ -27,8 +28,11 @@ async function go(notice, notifications) {
 
     const noticesToUpdate = [noticeId]
 
-    // We only check if a failed notice is needed if the original notice was a returns invitation.
-    if (subtype === 'returnInvitation') {
+    // We only check if a failed notice is needed if the original notice was a returns or renewal invitation.
+    if (
+      subtype === NoticeTypes[NoticeType.INVITATIONS].subType ||
+      subtype === NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType
+    ) {
       const alternateNotice = await SendAlternateNoticeService.go(notice)
 
       if (alternateNotice) {
@@ -40,7 +44,7 @@ async function go(notice, notifications) {
 
     calculateAndLogTimeTaken(startTime, 'Send notice complete', { count: notifications.length, noticeId })
   } catch (error) {
-    global.GlobalNotifier.omfg('Send notice failed', { notice }, error)
+    globalThis.GlobalNotifier.omfg('Send notice failed', { notice }, error)
   }
 }
 

@@ -22,7 +22,7 @@ describe('ReSP API Request', () => {
   before(() => {
     // RespRequest makes use of the getRespToken() server method, which we therefore need to stub
     // Note that we only need to do this once as it is unaffected by the Sinon.restore() in our afterEach()
-    global.HapiServerMethods = {
+    globalThis.HapiServerMethods = {
       getRespToken: Sinon.stub().resolves({
         accessToken: 'ACCESS_TOKEN',
         expiresIn: 3600
@@ -36,7 +36,7 @@ describe('ReSP API Request', () => {
 
   after(() => {
     // Tidy up our global server methods stub once done
-    delete global.HapiServerMethods
+    delete globalThis.HapiServerMethods
   })
 
   describe('#get', () => {

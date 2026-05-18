@@ -22,7 +22,7 @@ const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 const Sinon = require('sinon')
 
-const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
+const { afterEach, beforeEach, describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
@@ -55,6 +55,31 @@ const SubjectUnderTest = require('../../app/services/subject-under-test.service.
 
 - Always call `Sinon.restore()` in `afterEach` whenever stubs are used
 - Never leave stubs active across tests
+
+## Assertions
+
+- Never inline computed values directly in `expect()` — assign them to a variable first, then wrap in the array at the assertion. Always leave a blank line between the assignment and the `expect()`:
+
+  ```js
+  // wrong
+  expect(results).to.equal([SomeSeeder.transform(record)])
+
+  // right
+  const expectedResult = SomeSeeder.transform(record)
+
+  expect(results).to.equal([expectedResult])
+  ```
+
+## Running tests
+
+Use the docker exec wrapper to run tests. You can pass specific files as additional arguments:
+
+```sh
+docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system && npm run test -- test/services/notices/setup/my-service.test.js'
+docker compose exec dev /bin/bash -c 'cd /home/repos/water-abstraction-system && npm run test -- test/services/notices/setup/foo.test.js test/services/notices/setup/bar.test.js'
+```
+
+Do not use `npx lab` directly.
 
 ## Writing tests
 

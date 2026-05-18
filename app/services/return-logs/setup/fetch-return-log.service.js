@@ -17,7 +17,7 @@ const ReturnLogModel = require('../../../models/return-log.model.js')
  * @returns {Promise<module:ReturnLogModel>} the matching `ReturnLogModel` instance and licence data
  */
 async function go(returnLogId) {
-  return await ReturnLogModel.query()
+  return ReturnLogModel.query()
     .findById(returnLogId)
     .select(
       'licence.id AS licenceId',

@@ -30,11 +30,11 @@ function markdown(input = '') {
   const replacedCaret = input.replace(/\^/gm, '>')
 
   // NOTE: See app/plugins/views.plugin.js for details why marked is in the global scope rather than just required().
-  if (!global.GlobalMarked) {
+  if (!globalThis.GlobalMarked) {
     return input
   }
 
-  return global.GlobalMarked.parse(replacedCaret)
+  return globalThis.GlobalMarked.parse(replacedCaret)
 }
 
 module.exports = {

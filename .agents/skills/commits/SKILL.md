@@ -100,3 +100,8 @@ Before committing:
 1. Ensure the commit scope is focused on one change
 2. Ensure lint and tests have been run where relevant
 3. Ensure commit subject/body formatting follows this skill
+4. Add a `Co-Authored-By` trailer identifying the AI agent that made the changes, using your own email address
+
+```text
+Co-Authored-By: Agent Name <agent@example.com>
+```
