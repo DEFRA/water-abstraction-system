@@ -19,8 +19,8 @@ const { compareStrings } = require('../../../app/lib/general.lib.js')
  * @param {object[]} scenarios - The scenarios created by a test suite
  */
 async function clean(scenarios) {
-  for (const recipients of scenarios) {
-    for (const recipient of recipients) {
+  for (const recipients of Object.values(scenarios)) {
+    for (const recipient of Object.values(recipients)) {
       await RecipientsSeeder.clean(recipient)
     }
   }

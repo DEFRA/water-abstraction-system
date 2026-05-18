@@ -18,12 +18,11 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
   let scenarios
 
   before(async () => {
-    scenarios = []
+    scenarios = {}
 
     // 1) Licence holder only
     expiredDate = new Date('2027-02-09')
-    const scenario = await RecipientScenariosSeeder.licenceHolderOnly([], expiredDate)
-    scenarios.push(scenario)
+    scenarios.licenceHolder = await RecipientScenariosSeeder.licenceHolderOnly([], expiredDate)
   })
 
   after(async () => {
@@ -34,7 +33,7 @@ describe('Jobs - Renewal Invitations - Fetch Renewal recipients service', () => 
     it('fetches the correct recipient data', async () => {
       const result = await FetchRenewalRecipients.go(new Date('2027-02-09'))
 
-      const expectedResults = _transformToResult(scenarios[0])
+      const expectedResults = _transformToResult(scenarios.licenceHolder)
 
       expect(result).to.equal(expectedResults)
     })

@@ -27,32 +27,32 @@ WHERE
   let scenarios
 
   before(async () => {
-    scenarios = []
-
-    let scenario
+    scenarios = {}
 
     // 1) Licence holder only
     expiredDate = new Date('2027-02-09')
-    scenario = await RecipientScenariosSeeder.licenceHolderOnly([], expiredDate)
-    scenarios.push(scenario)
+    scenarios.licenceHolder = await RecipientScenariosSeeder.licenceHolderOnly([], expiredDate)
 
     // 2) Same licence holder, but is linked to multiple licences with due return logs - only one recipient record
     // will be returned with multiple licence refs
     expiredDate = new Date('2027-02-10')
-    scenario = await RecipientScenariosSeeder.licenceHolderWithMultipleLicences([], expiredDate)
-    scenarios.push(scenario)
+    scenarios.licenceHolderMultipleLicences = await RecipientScenariosSeeder.licenceHolderWithMultipleLicences(
+      [],
+      expiredDate
+    )
 
     // 3) Primary user only. All licences have a licence holder record, but when 'registered' the query will only
     // return the primary user recipient.
     expiredDate = new Date('2027-02-11')
-    scenario = await RecipientScenariosSeeder.primaryUserOnly([], expiredDate)
-    scenarios.push(scenario)
+    scenarios.primaryUser = await RecipientScenariosSeeder.primaryUserOnly([], expiredDate)
 
-    // 7) Same primary user, but is linked to multiple licences - only one recipient record will be returned with
+    // 4) Same primary user, but is linked to multiple licences - only one recipient record will be returned with
     // multiple licence refs
     expiredDate = new Date('2027-02-12')
-    scenario = await RecipientScenariosSeeder.primaryUserWithMultipleLicences([], expiredDate)
-    scenarios.push(scenario)
+    scenarios.primaryUserMultipleLicences = await RecipientScenariosSeeder.primaryUserWithMultipleLicences(
+      [],
+      expiredDate
+    )
   })
 
   after(async () => {
@@ -78,7 +78,7 @@ WHERE
 
         const { rows } = await db.raw(query, [new Date('2027-02-09')])
 
-        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[0])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 
         expect(rows).to.equal(expectedResults)
       })
@@ -90,7 +90,9 @@ WHERE
 
         const { rows } = await db.raw(query, [new Date('2027-02-10')])
 
-        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[1])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(
+          scenarios.licenceHolderMultipleLicences
+        )
 
         expect(rows).to.contain(expectedResults[0])
         // We could test rows contains the second licence holder recipient recorded in the scenario, but they are the
@@ -105,7 +107,7 @@ WHERE
 
         const { rows } = await db.raw(query, [new Date('2027-02-11')])
 
-        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[2])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.primaryUser)
 
         expect(rows).to.contain(expectedResults[1])
 
@@ -120,7 +122,9 @@ WHERE
 
         const { rows } = await db.raw(query, [new Date('2027-02-12')])
 
-        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios[3])
+        const expectedResults = RecipientScenariosSeeder.transformToSendingResults(
+          scenarios.primaryUserMultipleLicences
+        )
 
         expect(rows).to.contain(expectedResults[2])
 
