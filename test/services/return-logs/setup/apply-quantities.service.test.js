@@ -299,19 +299,19 @@ describe('Return Logs Setup - Update Quantities service', () => {
           lines: [
             {
               endDate: '2023-04-30T00:00:00.000Z',
-              quantity: 100000,
-              quantityCubicMetres: 100000,
+              quantity: 100,
+              quantityCubicMetres: 100,
               startDate: '2023-04-01T00:00:00.000Z'
             },
             {
               endDate: '2023-05-31T00:00:00.000Z',
-              quantity: null,
+              quantityCubicMetres: null,
               startDate: '2023-05-01T00:00:00.000Z'
             },
             {
               endDate: '2023-06-30T00:00:00.000Z',
-              quantity: 300000,
-              quantityCubicMetres: 300000,
+              quantity: 300,
+              quantityCubicMetres: 300,
               startDate: '2023-06-01T00:00:00.000Z'
             }
           ],
