@@ -52,7 +52,10 @@ describe('Notices - Setup - Returns Notice - Fetch Returns Invitation Recipients
       startDate: new Date('2024-04-01')
     })
 
-    scenarios.licenceHolder = await RecipientScenariosSeeder.licenceHolderOnly([nullDueDateReturnLog, setDueDateReturnLog])
+    scenarios.licenceHolder = await RecipientScenariosSeeder.licenceHolderOnly([
+      nullDueDateReturnLog,
+      setDueDateReturnLog
+    ])
   })
 
   after(async () => {
