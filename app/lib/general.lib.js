@@ -47,7 +47,7 @@ function calculateAndLogTimeTaken(startTime, message, data = {}) {
     ...data
   }
 
-  global.GlobalNotifier.omg(message, logData)
+  globalThis.GlobalNotifier.omg(message, logData)
 }
 
 /**

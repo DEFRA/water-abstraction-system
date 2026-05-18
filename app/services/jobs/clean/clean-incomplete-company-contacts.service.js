@@ -23,7 +23,7 @@ async function go() {
       .where('licenceRole.name', 'additionalContact')
       .whereNull('contact.email')
   } catch (error) {
-    global.GlobalNotifier.omfg('Clean job failed', { job: 'clean-incomplete-company-contacts' }, error)
+    globalThis.GlobalNotifier.omfg('Clean job failed', { job: 'clean-incomplete-company-contacts' }, error)
   }
 
   return deletedCount

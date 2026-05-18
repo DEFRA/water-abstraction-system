@@ -41,7 +41,7 @@ async function go(payload) {
       notification: { ...updatedNotifications[0] }
     })
   } catch (error) {
-    global.GlobalNotifier.omfg('Returned letter failed', payload, error)
+    globalThis.GlobalNotifier.omfg('Returned letter failed', payload, error)
   }
 }
 

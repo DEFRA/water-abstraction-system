@@ -84,12 +84,12 @@ describe('Schema export service', () => {
       DeleteFilesServiceStub = Sinon.stub(DeleteFilesService, 'go').resolves()
 
       notifierStub = GlobalNotifierStub.build(Sinon)
-      global.GlobalNotifier = notifierStub
+      globalThis.GlobalNotifier = notifierStub
     })
 
     afterEach(() => {
       Sinon.restore()
-      delete global.GlobalNotifier
+      delete globalThis.GlobalNotifier
     })
 
     it('catches the error', async () => {

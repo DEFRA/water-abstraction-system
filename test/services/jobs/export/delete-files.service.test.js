@@ -28,7 +28,7 @@ describe('Delete Files service', () => {
     folderNameWithPath = 'testFolder'
     filenameWithPath = path.join(folderNameWithPath, 'testFile')
     notifierStub = GlobalNotifierStub.build(Sinon)
-    global.GlobalNotifier = notifierStub
+    globalThis.GlobalNotifier = notifierStub
 
     mockFs({
       testFolder: {
@@ -40,7 +40,7 @@ describe('Delete Files service', () => {
   afterEach(() => {
     mockFs.restore()
     Sinon.restore()
-    delete global.GlobalNotifier
+    delete globalThis.GlobalNotifier
   })
 
   describe('When a valid folder is specified', () => {

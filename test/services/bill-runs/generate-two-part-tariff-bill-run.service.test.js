@@ -48,7 +48,7 @@ describe('Bill Runs - Generate Two Part Tariff Bill Run service', () => {
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
+    delete globalThis.GlobalNotifier
   })
 
   describe('when called', () => {

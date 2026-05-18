@@ -21,16 +21,13 @@ function go(payload) {
     'Select if the licence holder needs to stop abstraction when they reach a certain amount'
 
   const schema = Joi.object({
-    stopOrReduce: Joi.string()
-      .required()
-      .valid(...['reduce', 'stop'])
-      .messages({
-        'any.required': stopOrReduceErrorMessage,
-        'any.only': stopOrReduceErrorMessage,
-        'string.empty': stopOrReduceErrorMessage
-      }),
+    stopOrReduce: Joi.string().required().valid('reduce', 'stop').messages({
+      'any.required': stopOrReduceErrorMessage,
+      'any.only': stopOrReduceErrorMessage,
+      'string.empty': stopOrReduceErrorMessage
+    }),
     reduceAtThreshold: Joi.string()
-      .valid(...['yes', 'no'])
+      .valid('yes', 'no')
       .when('stopOrReduce', { is: 'reduce', then: Joi.required() })
       .messages({
         'any.required': reduceAtThresholdError,

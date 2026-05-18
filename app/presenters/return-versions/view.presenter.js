@@ -64,11 +64,10 @@ function _agreementsExceptions(returnRequirement) {
     return agreementsExceptions.join(' and ')
   }
 
-  return (
-    agreementsExceptions.slice(0, agreementsExceptions.length - 1).join(', ') +
-    ', and ' +
-    agreementsExceptions[agreementsExceptions.length - 1]
-  )
+  const agreementsExceptionsExceptLast = agreementsExceptions.slice(0, -1).join(', ')
+  const lastAgreementsException = agreementsExceptions.at(-1)
+
+  return `${agreementsExceptionsExceptLast}, and ${lastAgreementsException}`
 }
 
 function _buildAgreementExceptions(returnRequirement) {

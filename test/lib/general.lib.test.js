@@ -41,11 +41,11 @@ describe('GeneralLib', () => {
       // creating an instance of Hapi server in this test we recreate the condition by setting it directly with our own
       // stub
       notifierStub = GlobalNotifierStub.build(Sinon)
-      global.GlobalNotifier = notifierStub
+      globalThis.GlobalNotifier = notifierStub
     })
 
     afterEach(() => {
-      delete global.GlobalNotifier
+      delete globalThis.GlobalNotifier
     })
 
     describe('when no additional data is provided', () => {

@@ -57,7 +57,7 @@ async function go(billRun) {
 
     _logResult(startTime, billRun, results)
   } catch (error) {
-    global.GlobalNotifier.omfg('Delete bill run failed', billRun, error)
+    globalThis.GlobalNotifier.omfg('Delete bill run failed', billRun, error)
   }
 }
 
@@ -225,7 +225,7 @@ function _logResult(startTime, billRun, results) {
     return
   }
 
-  global.GlobalNotifier.omfg('Delete bill run failed', billRun, firstError.reason)
+  globalThis.GlobalNotifier.omfg('Delete bill run failed', billRun, firstError.reason)
 }
 
 module.exports = {

@@ -41,12 +41,12 @@ describe('Notifications - Process Returned Letter service', () => {
     })
 
     notifierStub = GlobalNotifierStub.build(Sinon)
-    global.GlobalNotifier = notifierStub
+    globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
+    delete globalThis.GlobalNotifier
 
     if (notification) {
       notification.$query().delete()

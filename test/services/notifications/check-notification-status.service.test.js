@@ -47,12 +47,12 @@ describe('Notifications - Check Notification Status service', () => {
     returnLogPatchStub = Sinon.stub().returnsThis()
 
     notifierStub = GlobalNotifierStub.build(Sinon)
-    global.GlobalNotifier = notifierStub
+    globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
     Sinon.restore()
-    delete global.GlobalNotifier
+    delete globalThis.GlobalNotifier
   })
 
   describe('when the notification is a returns invitation', () => {

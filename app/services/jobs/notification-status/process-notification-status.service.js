@@ -50,8 +50,8 @@ async function go() {
   } catch (error) {
     const message = 'Notification status job failed'
 
-    global.GlobalNotifier.omfg(message, null, error)
-    global.GlobalNotifier.redAlert(message)
+    globalThis.GlobalNotifier.omfg(message, null, error)
+    globalThis.GlobalNotifier.redAlert(message)
   }
 }
 

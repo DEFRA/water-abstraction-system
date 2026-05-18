@@ -25,7 +25,7 @@ describe('Notify Request', () => {
   before(async () => {
     // NotifyRequest makes use of the getNotifyToken() server method, which we therefore need to stub.
     // Note that we only need to do this once as it is unaffected by the Sinon.restore() in our afterEach()
-    global.HapiServerMethods = {
+    globalThis.HapiServerMethods = {
       getNotifyToken: Sinon.stub().resolves('ACCESS_TOKEN')
     }
   })
@@ -45,7 +45,7 @@ describe('Notify Request', () => {
 
   after(() => {
     // Tidy up our global server methods stub once done
-    delete global.HapiServerMethods
+    delete globalThis.HapiServerMethods
   })
 
   describe('#get', () => {

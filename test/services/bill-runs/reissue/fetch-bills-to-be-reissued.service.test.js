@@ -113,12 +113,12 @@ describe('Fetch Bills To Be Reissued service', () => {
 
     beforeEach(() => {
       notifierStub = GlobalNotifierStub.build(Sinon)
-      global.GlobalNotifier = notifierStub
+      globalThis.GlobalNotifier = notifierStub
     })
 
     afterEach(() => {
       Sinon.restore()
-      delete global.GlobalNotifier
+      delete globalThis.GlobalNotifier
     })
 
     it('logs an error', async () => {

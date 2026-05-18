@@ -45,7 +45,7 @@ async function go(cycle) {
       try {
         await CreateReturnLogsService.go(returnRequirement, returnCycle, licenceEndDate)
       } catch (error) {
-        global.GlobalNotifier.omfg('Return logs creation errored', { returnRequirement, returnCycle }, error)
+        globalThis.GlobalNotifier.omfg('Return logs creation errored', { returnRequirement, returnCycle }, error)
       }
     }
 
@@ -53,8 +53,8 @@ async function go(cycle) {
   } catch (error) {
     const message = 'Return logs job failed'
 
-    global.GlobalNotifier.omfg(message, { cycle }, error)
-    global.GlobalNotifier.redAlert(message)
+    globalThis.GlobalNotifier.omfg(message, { cycle }, error)
+    globalThis.GlobalNotifier.redAlert(message)
   }
 }
 
