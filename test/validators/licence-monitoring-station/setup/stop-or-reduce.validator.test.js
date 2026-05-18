@@ -29,17 +29,34 @@ describe('Licence Monitoring Station Setup - Stop Or Reduce validator', () => {
     })
 
     describe('because the user selected the "reduce" option', () => {
-      beforeEach(() => {
-        payload = {
-          stopOrReduce: 'reduce',
-          reduceAtThreshold: 'yes'
-        }
+      describe('and selected "yes" for reduce at threshold', () => {
+        beforeEach(() => {
+          payload = {
+            stopOrReduce: 'reduce',
+            reduceAtThreshold: 'yes'
+          }
+        })
+
+        it('confirms the data is valid', () => {
+          const result = StopOrReduceValidator.go(payload)
+
+          expect(result.error).not.to.exist()
+        })
       })
 
-      it('confirms the data is valid', () => {
-        const result = StopOrReduceValidator.go(payload)
+      describe('and selected "no" for reduce at threshold', () => {
+        beforeEach(() => {
+          payload = {
+            stopOrReduce: 'reduce',
+            reduceAtThreshold: 'no'
+          }
+        })
 
-        expect(result.error).not.to.exist()
+        it('confirms the data is valid', () => {
+          const result = StopOrReduceValidator.go(payload)
+
+          expect(result.error).not.to.exist()
+        })
       })
     })
   })

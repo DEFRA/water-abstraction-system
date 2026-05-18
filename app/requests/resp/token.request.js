@@ -5,7 +5,7 @@
  * @module TokenRequest
  */
 
-const querystring = require('querystring')
+const querystring = require('node:querystring')
 
 const BaseRequest = require('../base.request.js')
 

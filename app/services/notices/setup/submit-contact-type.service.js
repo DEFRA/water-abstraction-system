@@ -6,7 +6,7 @@
  * @module SubmitContactTypeService
  */
 
-const crypto = require('crypto')
+const crypto = require('node:crypto')
 
 const ContactTypePresenter = require('../../../presenters/notices/setup/contact-type.presenter.js')
 const ContactTypeValidator = require('../../../validators/notices/setup/contact-type.validator.js')
