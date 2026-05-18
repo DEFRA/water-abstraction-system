@@ -126,7 +126,7 @@ WHERE
           scenarios.primaryUserMultipleLicences
         )
 
-        expect(rows).to.contain(expectedResults[2])
+        expect(rows).to.contain(expectedResults[1])
 
         // NOTE: When a licence is registered, expectedResults[0] will always reference the licence holder
         expect(rows).not.to.contain(expectedResults[0])

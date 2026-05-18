@@ -210,7 +210,6 @@ async function returnsTo(licenceSeedData, licenceHolderSeedData, name) {
       await company.$query().delete()
       await licenceDocumentRole.$query().delete()
       await licenceHolderSeedData.clean()
-      await licenceRole.$query().delete()
     }
   }
 }

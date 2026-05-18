@@ -8,43 +8,33 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const CRMContactsSeeder = require('../../../../support/seeders/crm-contacts.seeder.js')
-const EmptyLicenceSeeder = require('../../../../support/seeders/empty-licence.seeder.js')
-const RecipientsSeeder = require('../../../../support/seeders/recipients.seeder.js')
+const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
 
 // Thing under test
 const FetchAlternateRenewalRecipientsService = require('../../../../../app/services/notices/setup/renewal-notice/fetch-alternate-renewal-recipients.service.js')
 
 describe('Notices - Setup - Renewal Notice - Fetch Alternate Renewal Recipients service', () => {
-  let licenceHolder
-  let licenceHolderSeedData
-  let licenceRef
-  let licenceSeedData
+  let scenarios
 
   before(async () => {
-    licenceSeedData = await EmptyLicenceSeeder.seed()
+    scenarios = {}
 
-    licenceRef = licenceSeedData.licence.licenceRef
-
-    licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(licenceSeedData, 'Test Licence Holder')
-
-    licenceHolder = await RecipientsSeeder.licenceHolder(licenceSeedData, licenceHolderSeedData)
-    licenceHolder.licenceRefs = [licenceRef]
+    // 1) Licence holder only
+    scenarios.licenceHolder = await RecipientScenariosSeeder.licenceHolderOnly()
   })
 
   after(async () => {
-    await licenceSeedData.clean()
-    await licenceHolderSeedData.clean()
-    await RecipientsSeeder.clean(licenceHolder)
+    await RecipientScenariosSeeder.clean(scenarios)
   })
 
   describe('when service is called for sending the "alternate notice"', () => {
     it('fetches the correct recipient data for sending the notice', async () => {
-      const results = await FetchAlternateRenewalRecipientsService.go([licenceRef])
+      const licenceRefs = scenarios.licenceHolder.licenceHolderRecipient.licenceRefs
+      const results = await FetchAlternateRenewalRecipientsService.go(licenceRefs)
 
-      const expectedResult = RecipientsSeeder.transformToSendingResult(licenceHolder)
+      const expectedResult = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 
-      expect(results).to.equal([expectedResult])
+      expect(results).to.equal(expectedResult)
     })
   })
 })

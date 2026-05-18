@@ -8,9 +8,7 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const CRMContactsSeeder = require('../../../../support/seeders/crm-contacts.seeder.js')
-const EmptyLicenceSeeder = require('../../../../support/seeders/empty-licence.seeder.js')
-const RecipientsSeeder = require('../../../../support/seeders/recipients.seeder.js')
+const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
 const ReturnLogHelper = require('../../../../support/helpers/return-log.helper.js')
 
 // Thing under test
@@ -19,42 +17,31 @@ const FetchAlternateReturnsRecipients = require('../../../../../app/services/not
 describe('Notices - Setup - Returns Notice - Fetch Alternate Returns Recipients service', () => {
   const notificationDueDate = new Date('2025-12-24')
 
-  let licenceHolder
-  let licenceHolderSeedData
-  let licenceRef
-  let licenceSeedData
   let returnLog
+  let scenarios
 
   before(async () => {
-    licenceSeedData = await EmptyLicenceSeeder.seed(licenceRef)
+    scenarios = {}
 
-    licenceRef = licenceSeedData.licence.licenceRef
+    // 1) Licence holder only
+    returnLog = await ReturnLogHelper.add({ dueDate: null })
 
-    returnLog = await ReturnLogHelper.add({ dueDate: null, licenceRef })
-
-    licenceHolderSeedData = await CRMContactsSeeder.licenceHolder(licenceSeedData, 'Test Licence Holder')
-
-    licenceHolder = await RecipientsSeeder.licenceHolder(licenceSeedData, licenceHolderSeedData)
-    licenceHolder.licenceRefs = [licenceRef]
-    licenceHolder.returnLogIds = [returnLog.id]
+    scenarios.licenceHolder = await RecipientScenariosSeeder.licenceHolderOnly([returnLog])
   })
 
   after(async () => {
-    await returnLog.$query().delete()
-
-    await licenceSeedData.clean()
-    await licenceHolderSeedData.clean()
-    await RecipientsSeeder.clean(licenceHolder)
+    await RecipientScenariosSeeder.clean(scenarios)
   })
 
   describe('when service is called for sending the "alternate notice"', () => {
     it('fetches the correct recipient data for sending the notice', async () => {
       const results = await FetchAlternateReturnsRecipients.go([returnLog.id], notificationDueDate)
 
-      const sendingResult = RecipientsSeeder.transformToSendingResult(licenceHolder)
-      sendingResult.notificationDueDate = notificationDueDate
+      const sendingResult = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 
-      expect(results).to.equal([sendingResult])
+      sendingResult[0].notificationDueDate = notificationDueDate
+
+      expect(results).to.equal(sendingResult)
     })
   })
 })
