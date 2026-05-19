@@ -24,6 +24,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
     const result = EmailPresenter.go(session)
 
     expect(result).to.equal({
+      activeNavBar: 'users',
       backLink: {
         href: '/system/users',
         text: 'Back'

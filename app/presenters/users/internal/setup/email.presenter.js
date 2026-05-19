@@ -16,6 +16,7 @@ const { formatEmail } = require('../../../base.presenter.js')
  */
 function go(session) {
   return {
+    activeNavBar: 'users',
     backLink: {
       href: '/system/users',
       text: 'Back'
