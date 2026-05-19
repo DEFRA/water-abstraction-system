@@ -6,8 +6,10 @@
  */
 
 const InitiateSessionService = require('../services/users/internal/setup/initiate-session.service.js')
+const SubmitCheckService = require('../services/users/internal/setup/submit-check.service.js')
 const SubmitEmailService = require('../services/users/internal/setup/submit-email.service.js')
 const SubmitPermissionsService = require('../services/users/internal/setup/submit-permissions.service.js')
+const ViewCheckService = require('../services/users/internal/setup/view-check.service.js')
 const ViewEmailService = require('../services/users/internal/setup/view-email.service.js')
 const ViewPermissionsService = require('../services/users/internal/setup/view-permissions.service.js')
 
@@ -15,6 +17,21 @@ async function setup(_request, h) {
   const { id: sessionId } = await InitiateSessionService.go()
 
   return h.redirect(`/system/users/internal/setup/${sessionId}/email`)
+}
+
+async function submitCheck(request, h) {
+  const {
+    payload,
+    params: { sessionId }
+  } = request
+
+  const pageData = await SubmitCheckService.go(sessionId, payload)
+
+  if (pageData.error) {
+    return h.view('users/internal/setup/check.njk', pageData)
+  }
+
+  return h.redirect(pageData.redirectUrl)
 }
 
 async function submitEmail(request, h) {
@@ -50,6 +67,14 @@ async function submitPermissions(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
+async function viewCheck(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewCheckService.go(sessionId)
+
+  return h.view('users/internal/setup/check.njk', pageData)
+}
+
 async function viewEmail(request, h) {
   const { sessionId } = request.params
 
@@ -71,8 +96,10 @@ async function viewPermissions(request, h) {
 
 module.exports = {
   setup,
+  submitCheck,
   submitEmail,
   submitPermissions,
+  viewCheck,
   viewEmail,
   viewPermissions
 }
