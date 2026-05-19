@@ -17,6 +17,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/users/internal/setup/{sessionId}/check',
+    options: {
+      handler: UsersSetupController.viewCheck,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/users/internal/setup/{sessionId}/check',
+    options: {
+      handler: UsersSetupController.submitCheck,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/users/internal/setup/{sessionId}/permissions',
     options: {
       handler: UsersSetupController.viewPermissions,
