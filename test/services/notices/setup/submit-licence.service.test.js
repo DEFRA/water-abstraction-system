@@ -20,7 +20,7 @@ const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 // Thing under test
 const SubmitLicenceService = require('../../../../app/services/notices/setup/submit-licence.service.js')
 
-describe.only('Notices - Setup - Submit Licence service', () => {
+describe('Notices - Setup - Submit Licence service', () => {
   let clock
   let fetchSessionStub
   let licenceRef
