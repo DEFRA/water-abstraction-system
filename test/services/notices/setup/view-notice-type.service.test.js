@@ -24,7 +24,7 @@ describe('Notices - Setup - View Notice Type service', () => {
 
   beforeEach(() => {
     auth = {
-      credentials: { scope: ['bulk_return_notifications'] }
+      credentials: { scope: ['bulk_return_notifications', 'renewal_notifications'] }
     }
 
     sessionData = {
@@ -65,6 +65,11 @@ describe('Notices - Setup - View Notice Type service', () => {
             checked: false,
             text: 'Paper return',
             value: 'paperReturn'
+          },
+          {
+            checked: false,
+            text: 'Renewals invitation',
+            value: 'renewalInvitations'
           }
         ],
         pageTitle: 'Select the notice type'

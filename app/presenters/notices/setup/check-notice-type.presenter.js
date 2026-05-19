@@ -5,14 +5,15 @@
  * @module CheckNoticeTypePresenter
  */
 
-const { NoticeType } = require('../../../lib/static-lookups.lib.js')
+const { NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
 const { formatLongDate } = require('../../base.presenter.js')
 const { returnsPeriodText } = require('../base.presenter.js')
 
 const NOTICE_TYPE_TEXT = {
-  [NoticeType.INVITATIONS]: 'Returns invitation',
-  [NoticeType.REMINDERS]: 'Returns reminder',
-  [NoticeType.PAPER_RETURN]: 'Paper return'
+  [NoticeType.INVITATIONS]: NoticeTypes[NoticeType.INVITATIONS].notificationType,
+  [NoticeType.PAPER_RETURN]: 'Paper return',
+  [NoticeType.REMINDERS]: NoticeTypes[NoticeType.REMINDERS].notificationType,
+  [NoticeType.RENEWAL_INVITATIONS]: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType
 }
 
 /**
@@ -35,7 +36,7 @@ function go(session) {
   return {
     links: _links(sessionId),
     pageTitle: 'Check the notice type',
-    returnNoticeType: NOTICE_TYPE_TEXT[noticeType],
+    noticeType: _noticeType(noticeType),
     sessionId,
     ..._returns(selectedReturns, dueReturns, noticeType),
     ..._licence(licenceRef),
@@ -54,6 +55,10 @@ function _links(sessionId) {
     noticeType: `/system/notices/setup/${sessionId}/notice-type`,
     returns: `/system/notices/setup/${sessionId}/paper-return`
   }
+}
+
+function _noticeType(noticeType) {
+  return NOTICE_TYPE_TEXT[noticeType]
 }
 
 function _returns(selectedReturns, dueReturns, noticeType) {
