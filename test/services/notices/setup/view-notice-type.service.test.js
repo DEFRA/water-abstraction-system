@@ -24,7 +24,7 @@ describe('Notices - Setup - View Notice Type service', () => {
 
   beforeEach(() => {
     auth = {
-      credentials: { scope: ['bulk_return_notifications'] }
+      credentials: { scope: ['bulk_return_notifications', 'renewal_notifications'] }
     }
 
     sessionData = {
