@@ -20,7 +20,7 @@ const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 // Thing under test
 const SubmitLicenceService = require('../../../../app/services/notices/setup/submit-licence.service.js')
 
-describe('Notices - Setup - Submit Licence service', () => {
+describe.only('Notices - Setup - Submit Licence service', () => {
   let clock
   let fetchSessionStub
   let licenceRef
@@ -69,7 +69,75 @@ describe('Notices - Setup - Submit Licence service', () => {
       it('returns the redirect url', async () => {
         const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-        expect(result).to.equal({ redirectUrl: 'notice-type' })
+        expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+      })
+
+      describe('for a "paper return" notice type', () => {
+        describe('and the check page has not been visited', () => {
+          beforeEach(() => {
+            sessionData = { noticeType: 'paperReturn', checkPageVisited: false }
+
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            fetchSessionStub.resolves(session)
+          })
+
+          it('returns a redirect to the "paper-return" page', async () => {
+            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+
+            expect(result).to.equal({ redirectUrl: 'paper-return' })
+          })
+        })
+
+        describe('and the check page has been visited', () => {
+          beforeEach(() => {
+            sessionData = { noticeType: 'paperReturn', licenceRef, checkPageVisited: true }
+
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            fetchSessionStub.resolves(session)
+          })
+
+          it('returns a redirect to the "check-notice-type" page', async () => {
+            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+
+            expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+          })
+        })
+      })
+
+      describe('and the journey is for "standard"', () => {
+        describe('and the check page has been visited', () => {
+          beforeEach(() => {
+            sessionData = { journey: 'standard', licenceRef, checkPageVisited: true }
+
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            fetchSessionStub.resolves(session)
+          })
+
+          it('returns a redirect to the "check-notice-type" page', async () => {
+            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+
+            expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+          })
+        })
+
+        describe('and the check page has not been visited', () => {
+          beforeEach(() => {
+            sessionData = { journey: 'standard', checkPageVisited: false }
+
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            fetchSessionStub.resolves(session)
+          })
+
+          it('returns a redirect to the "returns-period" page', async () => {
+            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+
+            expect(result).to.equal({ redirectUrl: 'returns-period' })
+          })
+        })
       })
 
       describe('from the check page', () => {
@@ -82,10 +150,10 @@ describe('Notices - Setup - Submit Licence service', () => {
             fetchSessionStub.resolves(session)
           })
 
-          it('redirects to the notice type page', async () => {
+          it('redirects to the check notice type page', async () => {
             const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-            expect(result.redirectUrl).to.equal('notice-type')
+            expect(result.redirectUrl).to.equal('check-notice-type')
           })
 
           it('updates the sessions "checkPageVisited" flag', async () => {
@@ -144,7 +212,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           expect(result).to.equal({
             activeNavBar: 'notices',
             backLink: {
-              href: '/system/notices',
+              href: `/system/notices/setup/${session.id}/notice-type`,
               text: 'Back'
             },
             error: {
@@ -179,7 +247,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           expect(result).to.equal({
             activeNavBar: 'notices',
             backLink: {
-              href: '/system/notices',
+              href: `/system/notices/setup/${session.id}/notice-type`,
               text: 'Back'
             },
             error: {
@@ -216,7 +284,7 @@ describe('Notices - Setup - Submit Licence service', () => {
           expect(result).to.equal({
             activeNavBar: 'notices',
             backLink: {
-              href: '/system/notices',
+              href: `/system/notices/setup/${session.id}/notice-type`,
               text: 'Back'
             },
             error: {

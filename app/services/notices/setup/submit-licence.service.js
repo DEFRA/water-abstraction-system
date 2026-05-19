@@ -10,6 +10,7 @@ const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
 const LicenceValidator = require('../../../validators/notices/setup/licence.validator.js')
+const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
@@ -37,6 +38,8 @@ async function go(sessionId, payload, yar) {
   const validationResult = await _validate(payload, dueReturns)
 
   if (!validationResult) {
+    const hasBeenVisited = session.checkPageVisited
+
     if (session.checkPageVisited && payload.licenceRef !== session.licenceRef) {
       flashNotification(yar, 'Updated', 'Licence number updated')
 
@@ -45,9 +48,7 @@ async function go(sessionId, payload, yar) {
 
     await _save(session, payload, dueReturns)
 
-    return {
-      redirectUrl: _redirect(session.checkPageVisited)
-    }
+    return _redirect(session.noticeType, session.checkPageVisited, session.journey, hasBeenVisited)
   }
 
   session.licenceRef = payload.licenceRef
@@ -83,12 +84,22 @@ async function _save(session, payload, dueReturns) {
   return session.$update()
 }
 
-function _redirect(checkPageVisited) {
-  if (checkPageVisited) {
-    return 'check-notice-type'
+function _redirect(noticeType, checkPageVisited, journey, hasBeenVisited) {
+  if (noticeType === NoticeType.PAPER_RETURN && !checkPageVisited) {
+    return {
+      redirectUrl: 'paper-return'
+    }
   }
 
-  return 'notice-type'
+  if (journey === NoticeJourney.STANDARD && !hasBeenVisited) {
+    return {
+      redirectUrl: 'returns-period'
+    }
+  }
+
+  return {
+    redirectUrl: 'check-notice-type'
+  }
 }
 
 async function _validate(payload, dueReturns) {

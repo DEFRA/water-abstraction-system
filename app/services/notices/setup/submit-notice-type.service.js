@@ -9,7 +9,7 @@
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
 const NoticeTypeValidator = require('../../../validators/notices/setup/notice-type.validator.js')
-const { NoticeJourney, NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+const { NoticeJourney, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
 const { flashNotification, generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
@@ -39,7 +39,7 @@ async function go(sessionId, payload, yar, auth) {
 
     await _save(session, payload)
 
-    return _redirect(payload.noticeType, session.checkPageVisited, session.journey, hasBeenVisited)
+    return _redirect(payload.noticeType, session.journey, hasBeenVisited)
   }
 
   const pageData = NoticeTypePresenter.go(session, auth)
@@ -51,21 +51,21 @@ async function go(sessionId, payload, yar, auth) {
   }
 }
 
-function _redirect(noticeType, checkPageVisited, journey, hasBeenVisited) {
-  if (noticeType === NoticeType.PAPER_RETURN && !checkPageVisited) {
-    return {
-      redirectUrl: 'paper-return'
-    }
-  }
-
+function _redirect(noticeType, journey, hasBeenVisited) {
   if (journey === NoticeJourney.STANDARD && !hasBeenVisited) {
     return {
       redirectUrl: 'returns-period'
     }
   }
 
+  if (hasBeenVisited) {
+    return {
+      redirectUrl: 'check-notice-type'
+    }
+  }
+
   return {
-    redirectUrl: 'check-notice-type'
+    redirectUrl: 'licence'
   }
 }
 

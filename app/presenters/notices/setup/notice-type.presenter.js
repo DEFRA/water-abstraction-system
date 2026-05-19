@@ -19,13 +19,13 @@ function go(session, auth) {
   const { checkPageVisited, id: sessionId, noticeType, journey } = session
 
   return {
-    backLink: _backLink(sessionId, checkPageVisited, journey),
+    backLink: _backLink(sessionId, checkPageVisited),
     options: _options(noticeType, journey, auth),
     pageTitle: 'Select the notice type'
   }
 }
 
-function _backLink(sessionId, checkPageVisited, journey) {
+function _backLink(sessionId, checkPageVisited) {
   if (checkPageVisited) {
     return {
       href: `/system/notices/setup/${sessionId}/check-notice-type`,
@@ -33,15 +33,8 @@ function _backLink(sessionId, checkPageVisited, journey) {
     }
   }
 
-  if (journey === NoticeJourney.STANDARD) {
-    return {
-      href: `/system/notices`,
-      text: 'Back'
-    }
-  }
-
   return {
-    href: `/system/notices/setup/${sessionId}/licence`,
+    href: '/system/notices',
     text: 'Back'
   }
 }
