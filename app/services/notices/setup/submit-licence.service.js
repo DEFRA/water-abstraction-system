@@ -10,9 +10,9 @@ const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const LicenceModel = require('../../../models/licence.model.js')
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
 const LicenceValidator = require('../../../validators/notices/setup/licence.validator.js')
-const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
+const { flashNotification } = require('../../../lib/general.lib.js')
+const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/licence` page

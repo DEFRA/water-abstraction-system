@@ -204,9 +204,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
 
           describe('and the user has the "bulk_return_notifications" scope', () => {
             beforeEach(() => {
-              beforeEach(() => {
-                auth.credentials.scope = ['bulk_return_notifications']
-              })
+              auth.credentials.scope = ['bulk_return_notifications']
             })
 
             it('returns page data for the view', () => {
@@ -267,9 +265,7 @@ describe('Notice - Setup - Notice Type Presenter', () => {
 
           describe('and the user has the "bulk_return_notifications" scope', () => {
             beforeEach(() => {
-              beforeEach(() => {
-                auth.credentials.scope = ['bulk_return_notifications']
-              })
+              auth.credentials.scope = ['bulk_return_notifications']
             })
 
             it('returns page data for the view', () => {

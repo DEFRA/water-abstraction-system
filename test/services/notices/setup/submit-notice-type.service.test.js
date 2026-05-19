@@ -187,7 +187,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           fetchSessionStub.resolves(session)
         })
 
-        it('returns a redirect to the "/check-notice-type" page', async () => {
+        it('returns a redirect to the "licence" page', async () => {
           const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
           expect(result).to.equal({ redirectUrl: 'licence' })
