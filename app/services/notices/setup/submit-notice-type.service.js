@@ -30,8 +30,9 @@ async function go(sessionId, payload, yar, auth) {
 
   if (!validationResult) {
     const hasBeenVisited = session.checkPageVisited
+    const noticeTypeChanged = payload.noticeType !== session.noticeType
 
-    if (session.checkPageVisited && payload.noticeType !== session.noticeType) {
+    if (hasBeenVisited && noticeTypeChanged) {
       flashNotification(yar, 'Updated', 'Notice type updated')
 
       session.checkPageVisited = false
@@ -39,7 +40,7 @@ async function go(sessionId, payload, yar, auth) {
 
     await _save(session, payload)
 
-    return _redirect(session.journey, hasBeenVisited)
+    return _redirect(session.journey, hasBeenVisited, noticeTypeChanged)
   }
 
   const pageData = NoticeTypePresenter.go(session, auth)
@@ -51,14 +52,22 @@ async function go(sessionId, payload, yar, auth) {
   }
 }
 
-function _redirect(journey, hasBeenVisited) {
+/**
+ * Determines where to redirect the user after submitting the notice type.
+ *
+ * If the notice type has changed, we always redirect to the licence page, even if the user came from the check page.
+ * This is because the licence ref needs to be revalidated against the new notice type.
+ *
+ * @private
+ */
+function _redirect(journey, hasBeenVisited, noticeTypeChanged) {
   if (journey === NoticeJourney.STANDARD && !hasBeenVisited) {
     return {
       redirectUrl: 'returns-period'
     }
   }
 
-  if (hasBeenVisited) {
+  if (hasBeenVisited && !noticeTypeChanged) {
     return {
       redirectUrl: 'check-notice-type'
     }

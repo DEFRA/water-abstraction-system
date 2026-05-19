@@ -77,6 +77,12 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           fetchSessionStub.resolves(session)
         })
 
+        it('redirects to the licence page', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'licence' })
+        })
+
         it('updates the sessions "checkPageVisited" flag', async () => {
           await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
@@ -128,6 +134,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
         beforeEach(() => {
           sessionData.journey = 'standard'
           sessionData.checkPageVisited = true
+          sessionData.noticeType = noticeType
 
           session = SessionModelStub.build(Sinon, sessionData)
 
@@ -164,6 +171,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
         beforeEach(() => {
           sessionData.journey = 'adhoc'
           sessionData.checkPageVisited = true
+          sessionData.noticeType = noticeType
 
           session = SessionModelStub.build(Sinon, sessionData)
 
