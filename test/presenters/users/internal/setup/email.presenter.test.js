@@ -35,6 +35,28 @@ describe('Users - Internal - Setup - Email Presenter', () => {
     })
   })
 
+  describe('the "backLink" property', () => {
+    describe('when the check page has previously been visited', () => {
+      beforeEach(() => {
+        session.checkPageVisited = true
+      })
+
+      it('returns the correct href', () => {
+        const result = EmailPresenter.go(session)
+
+        expect(result.backLink.href).to.equal(`/system/users/internal/setup/${session.id}/check`)
+      })
+    })
+
+    describe('when the check page has not previously been visited', () => {
+      it('returns the correct href', () => {
+        const result = EmailPresenter.go(session)
+
+        expect(result.backLink.href).to.equal('/system/users')
+      })
+    })
+  })
+
   describe('the "email" property', () => {
     describe('when the email has previously been saved', () => {
       beforeEach(() => {

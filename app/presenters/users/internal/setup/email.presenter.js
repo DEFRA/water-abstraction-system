@@ -18,13 +18,21 @@ function go(session) {
   return {
     activeNavBar: 'users',
     backLink: {
-      href: '/system/users',
+      href: _checkUrl(session),
       text: 'Back'
     },
     email: formatEmail(session.email),
     pageTitle: 'Enter an email address for the user',
     pageTitleCaption: 'Internal'
   }
+}
+
+function _checkUrl(session) {
+  if (session.checkPageVisited) {
+    return `/system/users/internal/setup/${session.id}/check`
+  }
+
+  return '/system/users'
 }
 
 module.exports = {
