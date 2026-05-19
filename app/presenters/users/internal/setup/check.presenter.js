@@ -5,6 +5,8 @@
  * @module CheckPresenter
  */
 
+const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
+
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/check' page
  *
@@ -14,11 +16,15 @@
  */
 function go(session) {
   return {
-    backLink: {
-      href: '',
-      text: 'Back'
+    activeNavBar: 'users',
+    email: session.email,
+    links: {
+      email: `/system/users/internal/setup/${session.id}/email`,
+      permissions: `/system/users/internal/setup/${session.id}/permissions`
     },
-    pageTitle: ''
+    pageTitle: 'Check user',
+    pageTitleCaption: 'Internal',
+    permissions: userPermissions[session.permissions].label
   }
 }
 
