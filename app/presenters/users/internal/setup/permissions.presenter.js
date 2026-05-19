@@ -16,6 +16,7 @@ const { checkUrl } = require('../../../../lib/check-page.lib.js')
  */
 function go(session) {
   return {
+    activeNavBar: 'users',
     backLink: {
       href: checkUrl(session, `/system/users/internal/setup/${session.id}/email`),
       text: 'Back'

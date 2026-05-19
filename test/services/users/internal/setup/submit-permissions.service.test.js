@@ -134,6 +134,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
       const result = await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
       expect(result).to.equal({
+        activeNavBar: 'users',
         backLink: {
           href: `/system/users/internal/setup/${session.id}/email`,
           text: 'Back'

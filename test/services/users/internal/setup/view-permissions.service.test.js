@@ -50,6 +50,7 @@ describe('Users - Internal - Setup - View Permissions Service', () => {
       const result = await ViewPermissionsService.go(auth, session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'users',
         backLink: {
           href: `/system/users/internal/setup/${session.id}/email`,
           text: 'Back'
