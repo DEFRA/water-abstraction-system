@@ -49,6 +49,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
             checked: false,
             text: 'Paper return',
             value: 'paperReturn'
+          },
+          {
+            checked: false,
+            text: 'Renewals invitation',
+            value: 'renewalInvitations'
           }
         ],
         pageTitle: 'Select the notice type'
@@ -112,6 +117,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                 checked: false,
                 text: 'Paper return',
                 value: 'paperReturn'
+              },
+              {
+                checked: false,
+                text: 'Renewals invitation',
+                value: 'renewalInvitations'
               }
             ])
           })
@@ -140,6 +150,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                 checked: false,
                 text: 'Paper return',
                 value: 'paperReturn'
+              },
+              {
+                checked: false,
+                text: 'Renewals invitation',
+                value: 'renewalInvitations'
               }
             ])
           })
@@ -168,6 +183,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                 checked: true,
                 text: 'Paper return',
                 value: 'paperReturn'
+              },
+              {
+                checked: false,
+                text: 'Renewals invitation',
+                value: 'renewalInvitations'
               }
             ])
           })
@@ -257,6 +277,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                   checked: false,
                   text: 'Paper return',
                   value: 'paperReturn'
+                },
+                {
+                  checked: false,
+                  text: 'Renewals invitation',
+                  value: 'renewalInvitations'
                 }
               ],
               pageTitle: 'Select the notice type'
@@ -291,6 +316,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                     checked: false,
                     text: 'Paper return',
                     value: 'paperReturn'
+                  },
+                  {
+                    checked: false,
+                    text: 'Renewals invitation',
+                    value: 'renewalInvitations'
                   }
                 ],
                 pageTitle: 'Select the notice type'
@@ -311,6 +341,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                   checked: false,
                   text: 'Paper return',
                   value: 'paperReturn'
+                },
+                {
+                  checked: false,
+                  text: 'Renewals invitation',
+                  value: 'renewalInvitations'
                 }
               ])
             })

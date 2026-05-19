@@ -5,7 +5,7 @@
  * @module NoticeTypePresenter
  */
 
-const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.js')
+const { NoticeType, NoticeJourney, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Formats data for the `/notices/setup/{sessionId}/notice-type` page
@@ -60,12 +60,12 @@ function _options(noticeType, journey, auth) {
       {
         checked: noticeType === NoticeType.INVITATIONS,
         value: NoticeType.INVITATIONS,
-        text: 'Returns invitation'
+        text: NoticeTypes[NoticeType.INVITATIONS].notificationType
       },
       {
         checked: noticeType === NoticeType.REMINDERS,
         value: NoticeType.REMINDERS,
-        text: 'Returns reminder'
+        text: NoticeTypes[NoticeType.REMINDERS].notificationType
       }
     ]
   }
@@ -77,6 +77,11 @@ function _options(noticeType, journey, auth) {
         checked: noticeType === NoticeType.PAPER_RETURN,
         value: NoticeType.PAPER_RETURN,
         text: 'Paper return'
+      },
+      {
+        checked: noticeType === NoticeType.RENEWAL_INVITATIONS,
+        value: NoticeType.RENEWAL_INVITATIONS,
+        text: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType
       }
     ]
   }

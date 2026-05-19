@@ -65,6 +65,11 @@ describe('Notices - Setup - View Notice Type service', () => {
             checked: false,
             text: 'Paper return',
             value: 'paperReturn'
+          },
+          {
+            checked: false,
+            text: 'Renewals invitation',
+            value: 'renewalInvitations'
           }
         ],
         pageTitle: 'Select the notice type'
