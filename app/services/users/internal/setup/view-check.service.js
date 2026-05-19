@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates fetching and presenting the data for the '' page
+ * Orchestrates fetching and presenting the data for the '/users/internal/setup/{sessionId}/check' page
  *
  * @module ViewCheckService
  */
@@ -10,7 +10,7 @@ const CheckPresenter = require('../../../../presenters/users/internal/setup/chec
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 
 /**
- * Orchestrates fetching and presenting the data for the '' page
+ * Orchestrates fetching and presenting the data for the '/users/internal/setup/{sessionId}/check' page
  *
  * @param {string} sessionId - The UUID of the current session
  *

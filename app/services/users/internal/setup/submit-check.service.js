@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for the '' page
+ * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/check' page
  *
  * @module SubmitCheckService
  */
@@ -12,7 +12,7 @@ const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
 
 /**
- * Orchestrates validating the data for the '' page
+ * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/check' page
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data

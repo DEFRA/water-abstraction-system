@@ -1,12 +1,12 @@
 'use strict'
 
 /**
- * Formats data for the '' page
+ * Formats data for the '/users/internal/setup/{sessionId}/check' page
  * @module CheckPresenter
  */
 
 /**
- * Formats data for the '' page
+ * Formats data for the '/users/internal/setup/{sessionId}/check' page
  *
  * @param {object} session - The session instance
  *
