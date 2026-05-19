@@ -9,6 +9,13 @@ const { NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js'
 const { formatLongDate } = require('../../base.presenter.js')
 const { returnsPeriodText } = require('../base.presenter.js')
 
+const NOTICE_TYPE_TEXT = {
+  [NoticeType.INVITATIONS]: NoticeTypes[NoticeType.INVITATIONS].notificationType,
+  [NoticeType.PAPER_RETURN]: 'Paper return',
+  [NoticeType.REMINDERS]: NoticeTypes[NoticeType.REMINDERS].notificationType,
+  [NoticeType.RENEWAL_INVITATIONS]: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType
+}
+
 /**
  * Formats data for the `/notices/setup/{sessionId}/check-notice-type` page
  *
@@ -51,13 +58,6 @@ function _links(sessionId) {
 }
 
 function _noticeType(noticeType) {
-  const NOTICE_TYPE_TEXT = {
-    [NoticeType.INVITATIONS]: NoticeTypes[NoticeType.INVITATIONS].notificationType,
-    [NoticeType.PAPER_RETURN]: 'Paper return',
-    [NoticeType.REMINDERS]: NoticeTypes[NoticeType.REMINDERS].notificationType,
-    [NoticeType.RENEWAL_INVITATIONS]: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType
-  }
-
   return NOTICE_TYPE_TEXT[noticeType]
 }
 
