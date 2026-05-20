@@ -37,16 +37,6 @@ describe('Notice - Setup - Notice Type Presenter', () => {
         options: [
           {
             checked: false,
-            text: 'Returns invitation',
-            value: 'invitations'
-          },
-          {
-            checked: false,
-            text: 'Returns reminder',
-            value: 'reminders'
-          },
-          {
-            checked: false,
             text: 'Paper return',
             value: 'paperReturn'
           },
@@ -54,6 +44,16 @@ describe('Notice - Setup - Notice Type Presenter', () => {
             checked: false,
             text: 'Renewals invitation',
             value: 'renewalInvitations'
+          },
+          {
+            checked: false,
+            text: 'Returns invitation',
+            value: 'invitations'
+          },
+          {
+            checked: false,
+            text: 'Returns reminder',
+            value: 'reminders'
           }
         ],
         pageTitle: 'Select the notice type'
@@ -104,16 +104,6 @@ describe('Notice - Setup - Notice Type Presenter', () => {
 
             expect(result.options).to.equal([
               {
-                checked: true,
-                text: 'Returns invitation',
-                value: 'invitations'
-              },
-              {
-                checked: false,
-                text: 'Returns reminder',
-                value: 'reminders'
-              },
-              {
                 checked: false,
                 text: 'Paper return',
                 value: 'paperReturn'
@@ -122,6 +112,16 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                 checked: false,
                 text: 'Renewals invitation',
                 value: 'renewalInvitations'
+              },
+              {
+                checked: true,
+                text: 'Returns invitation',
+                value: 'invitations'
+              },
+              {
+                checked: false,
+                text: 'Returns reminder',
+                value: 'reminders'
               }
             ])
           })
@@ -138,16 +138,6 @@ describe('Notice - Setup - Notice Type Presenter', () => {
             expect(result.options).to.equal([
               {
                 checked: false,
-                text: 'Returns invitation',
-                value: 'invitations'
-              },
-              {
-                checked: true,
-                text: 'Returns reminder',
-                value: 'reminders'
-              },
-              {
-                checked: false,
                 text: 'Paper return',
                 value: 'paperReturn'
               },
@@ -155,6 +145,16 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                 checked: false,
                 text: 'Renewals invitation',
                 value: 'renewalInvitations'
+              },
+              {
+                checked: false,
+                text: 'Returns invitation',
+                value: 'invitations'
+              },
+              {
+                checked: true,
+                text: 'Returns reminder',
+                value: 'reminders'
               }
             ])
           })
@@ -170,16 +170,6 @@ describe('Notice - Setup - Notice Type Presenter', () => {
 
             expect(result.options).to.equal([
               {
-                checked: false,
-                text: 'Returns invitation',
-                value: 'invitations'
-              },
-              {
-                checked: false,
-                text: 'Returns reminder',
-                value: 'reminders'
-              },
-              {
                 checked: true,
                 text: 'Paper return',
                 value: 'paperReturn'
@@ -188,6 +178,16 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                 checked: false,
                 text: 'Renewals invitation',
                 value: 'renewalInvitations'
+              },
+              {
+                checked: false,
+                text: 'Returns invitation',
+                value: 'invitations'
+              },
+              {
+                checked: false,
+                text: 'Returns reminder',
+                value: 'reminders'
               }
             ])
           })
@@ -265,16 +265,6 @@ describe('Notice - Setup - Notice Type Presenter', () => {
               options: [
                 {
                   checked: false,
-                  text: 'Returns invitation',
-                  value: 'invitations'
-                },
-                {
-                  checked: false,
-                  text: 'Returns reminder',
-                  value: 'reminders'
-                },
-                {
-                  checked: false,
                   text: 'Paper return',
                   value: 'paperReturn'
                 },
@@ -282,6 +272,16 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                   checked: false,
                   text: 'Renewals invitation',
                   value: 'renewalInvitations'
+                },
+                {
+                  checked: false,
+                  text: 'Returns invitation',
+                  value: 'invitations'
+                },
+                {
+                  checked: false,
+                  text: 'Returns reminder',
+                  value: 'reminders'
                 }
               ],
               pageTitle: 'Select the notice type'
@@ -306,6 +306,11 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                     options: [
                       {
                         checked: false,
+                        text: 'Paper return',
+                        value: 'paperReturn'
+                      },
+                      {
+                        checked: false,
                         text: 'Returns invitation',
                         value: 'invitations'
                       },
@@ -313,11 +318,6 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                         checked: false,
                         text: 'Returns reminder',
                         value: 'reminders'
-                      },
-                      {
-                        checked: false,
-                        text: 'Paper return',
-                        value: 'paperReturn'
                       }
                     ],
                     pageTitle: 'Select the notice type'
