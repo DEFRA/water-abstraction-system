@@ -214,7 +214,7 @@ const routes = [
       handler: NoticesSetupController.viewCheckNoticeType,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['renewal_notifications', 'returns']
         }
       }
     }
@@ -226,7 +226,7 @@ const routes = [
       handler: NoticesSetupController.submitCheckNoticeType,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['renewal_notifications', 'returns']
         }
       }
     }
@@ -250,7 +250,7 @@ const routes = [
       handler: NoticesSetupController.viewContactType,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['renewal_notifications', 'returns']
         }
       }
     }
@@ -262,7 +262,7 @@ const routes = [
       handler: NoticesSetupController.submitContactType,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['renewal_notifications', 'returns']
         }
       }
     }
@@ -286,7 +286,7 @@ const routes = [
       handler: NoticesSetupController.viewLicence,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['renewal_notifications', 'returns']
         }
       }
     }
@@ -298,7 +298,7 @@ const routes = [
       handler: NoticesSetupController.submitLicence,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['renewal_notifications', 'returns']
         }
       }
     }
@@ -310,7 +310,7 @@ const routes = [
       handler: NoticesSetupController.viewNoticeType,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['renewal_notifications', 'returns']
         }
       }
     }
@@ -322,7 +322,7 @@ const routes = [
       handler: NoticesSetupController.submitNoticeType,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['renewal_notifications', 'returns']
         }
       }
     }
@@ -358,7 +358,7 @@ const routes = [
       handler: NoticesSetupController.viewPreview,
       auth: {
         access: {
-          scope: ['returns']
+          scope: ['renewal_notifications', 'returns']
         }
       }
     }
@@ -370,7 +370,7 @@ const routes = [
       handler: NoticesSetupController.viewPreview,
       auth: {
         access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
+          scope: ['hof_notifications']
         }
       }
     }
@@ -466,7 +466,7 @@ const routes = [
       handler: NoticesSetupController.viewReturnsPeriod,
       auth: {
         access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
+          scope: ['returns']
         }
       }
     }
