@@ -5,12 +5,60 @@ const NoticesSetupController = require('../controllers/notices-setup.controller.
 const routes = [
   {
     method: 'GET',
+    path: '/notices/setup/{sessionId}/add-recipient',
+    options: {
+      handler: NoticesSetupController.processAddRecipient,
+      auth: {
+        access: {
+          scope: ['hof_notifications', 'returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/download',
+    options: {
+      handler: NoticesSetupController.processDownloadRecipients,
+      auth: {
+        access: {
+          scope: ['hof_notifications', 'returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnLogId}',
+    options: {
+      handler: NoticesSetupController.processPreviewPaperReturn,
+      auth: {
+        access: {
+          scope: ['returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}',
+    options: {
+      handler: NoticesSetupController.processRemoveThreshold,
+      auth: {
+        access: {
+          scope: ['hof_notifications']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/notices/setup/{journey}',
     options: {
       handler: NoticesSetupController.setup,
       auth: {
         access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -89,6 +137,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/notices/setup/{sessionId}/cancel',
+    options: {
+      handler: NoticesSetupController.viewCancel,
+      auth: {
+        access: {
+          scope: ['hof_notifications', 'returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/cancel',
+    options: {
+      handler: NoticesSetupController.submitCancel,
+      auth: {
+        access: {
+          scope: ['hof_notifications', 'returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/notices/setup/{sessionId}/abstraction-alerts/cancel',
     options: {
       handler: NoticesSetupController.viewCancelAlerts,
@@ -113,6 +185,30 @@ const routes = [
   },
   {
     method: 'GET',
+    path: '/notices/setup/{sessionId}/check',
+    options: {
+      handler: NoticesSetupController.viewCheck,
+      auth: {
+        access: {
+          scope: ['hof_notifications', 'returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/notices/setup/{sessionId}/check',
+    options: {
+      handler: NoticesSetupController.submitCheck,
+      auth: {
+        access: {
+          scope: ['hof_notifications', 'returns']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
     path: '/notices/setup/{sessionId}/abstraction-alerts/check-licence-matches',
     options: {
       handler: NoticesSetupController.viewCheckLicenceMatches,
@@ -131,78 +227,6 @@ const routes = [
       auth: {
         access: {
           scope: ['hof_notifications']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/notices/setup/{sessionId}/abstraction-alerts/remove-threshold/{licenceMonitoringStationId}',
-    options: {
-      handler: NoticesSetupController.processRemoveThreshold,
-      auth: {
-        access: {
-          scope: ['hof_notifications']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/notices/setup/{sessionId}/add-recipient',
-    options: {
-      handler: NoticesSetupController.processAddRecipient,
-      auth: {
-        access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/notices/setup/{sessionId}/cancel',
-    options: {
-      handler: NoticesSetupController.viewCancel,
-      auth: {
-        access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/notices/setup/{sessionId}/cancel',
-    options: {
-      handler: NoticesSetupController.submitCancel,
-      auth: {
-        access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/notices/setup/{sessionId}/check',
-    options: {
-      handler: NoticesSetupController.viewCheck,
-      auth: {
-        access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/notices/setup/{sessionId}/check',
-    options: {
-      handler: NoticesSetupController.submitCheck,
-      auth: {
-        access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
         }
       }
     }
@@ -238,7 +262,7 @@ const routes = [
       handler: NoticesSetupController.viewConfirmation,
       auth: {
         access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -263,18 +287,6 @@ const routes = [
       auth: {
         access: {
           scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/notices/setup/{sessionId}/download',
-    options: {
-      handler: NoticesSetupController.processDownloadRecipients,
-      auth: {
-        access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
         }
       }
     }
@@ -370,7 +382,7 @@ const routes = [
       handler: NoticesSetupController.viewPreview,
       auth: {
         access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -392,18 +404,6 @@ const routes = [
     path: '/notices/setup/{sessionId}/preview/{contactHashId}/check-paper-return',
     options: {
       handler: NoticesSetupController.viewPreviewCheckPaperReturn,
-      auth: {
-        access: {
-          scope: ['returns']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/notices/setup/{sessionId}/preview/{contactHashId}/paper-return/{returnLogId}',
-    options: {
-      handler: NoticesSetupController.processPreviewPaperReturn,
       auth: {
         access: {
           scope: ['returns']
@@ -466,7 +466,7 @@ const routes = [
       handler: NoticesSetupController.viewReturnsPeriod,
       auth: {
         access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -490,7 +490,7 @@ const routes = [
       handler: NoticesSetupController.viewSelectRecipients,
       auth: {
         access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
@@ -502,7 +502,7 @@ const routes = [
       handler: NoticesSetupController.submitSelectRecipients,
       auth: {
         access: {
-          scope: ['hof_notifications', 'renewal_notifications', 'returns']
+          scope: ['hof_notifications', 'returns']
         }
       }
     }
