@@ -53,16 +53,6 @@ describe('Notices - Setup - View Notice Type service', () => {
         options: [
           {
             checked: false,
-            text: 'Returns invitation',
-            value: 'invitations'
-          },
-          {
-            checked: false,
-            text: 'Returns reminder',
-            value: 'reminders'
-          },
-          {
-            checked: false,
             text: 'Paper return',
             value: 'paperReturn'
           },
@@ -70,6 +60,16 @@ describe('Notices - Setup - View Notice Type service', () => {
             checked: false,
             text: 'Renewals invitation',
             value: 'renewalInvitations'
+          },
+          {
+            checked: false,
+            text: 'Returns invitation',
+            value: 'invitations'
+          },
+          {
+            checked: false,
+            text: 'Returns reminder',
+            value: 'reminders'
           }
         ],
         pageTitle: 'Select the notice type'

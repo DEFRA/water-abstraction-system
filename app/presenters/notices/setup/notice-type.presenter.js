@@ -53,22 +53,7 @@ function _options(noticeType, journey, auth) {
     credentials: { scope }
   } = auth
 
-  let options = []
-
-  if (scope.includes('bulk_return_notifications')) {
-    options = [
-      {
-        checked: noticeType === NoticeType.INVITATIONS,
-        value: NoticeType.INVITATIONS,
-        text: NoticeTypes[NoticeType.INVITATIONS].notificationType
-      },
-      {
-        checked: noticeType === NoticeType.REMINDERS,
-        value: NoticeType.REMINDERS,
-        text: NoticeTypes[NoticeType.REMINDERS].notificationType
-      }
-    ]
-  }
+  const options = []
 
   if (journey === NoticeJourney.ADHOC) {
     options.push({
@@ -84,6 +69,21 @@ function _options(noticeType, journey, auth) {
         text: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType
       })
     }
+  }
+
+  if (scope.includes('bulk_return_notifications')) {
+    options.push(
+      {
+        checked: noticeType === NoticeType.INVITATIONS,
+        value: NoticeType.INVITATIONS,
+        text: NoticeTypes[NoticeType.INVITATIONS].notificationType
+      },
+      {
+        checked: noticeType === NoticeType.REMINDERS,
+        value: NoticeType.REMINDERS,
+        text: NoticeTypes[NoticeType.REMINDERS].notificationType
+      }
+    )
   }
 
   return options
