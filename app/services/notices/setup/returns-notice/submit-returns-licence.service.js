@@ -11,18 +11,17 @@ const LicenceDueReturnsValidator = require('../../../../validators/notices/setup
 const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
 
 /**
- * Orchestrates the returns notice types for the`/notices/setup/{sessionId}/licence` page
+ * Orchestrates the returns notice types for the `/notices/setup/{sessionId}/licence` page
  *
  * It first checks if the licence user has entered a licenceRef. If they haven't entered a licenceRef we return an
- * error. If they have we check if it exists in the database. If it doesn't exist we return an the same error.
+ * error. If they have we check if it exists in the database. If it doesn't exist we return the same error.
  * We then fetch all the due returns for the licence.
- * If there are no due returns then we return an error to the user informing them that there are no due returns the
+ * If there are no due returns then we return an error to the user informing them that there are no due returns for the
  * licence.
  *
  * @param {object} payload - The submitted form data
  *
- * @returns {Promise<object>} An empty object if there are no errors else the page data for the licence page including
- * the validation error details
+ * @returns {Promise<object>} The due returns fetched alongside the validation result (null if valid)
  */
 async function go(payload) {
   const dueReturns = await _dueReturns(payload)

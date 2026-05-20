@@ -14,18 +14,16 @@ const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.j
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/licence` page
  *
- * It first checks if the licence user has entered a licenceRef. If they haven't entered a licenceRef we return an
- * error. If they have we check if it exists in the database. If it doesn't exist we return an the same error.
- * We then fetch all the due returns for the licence.
- * If there are no due returns then we return an error to the user informing them that there are no due returns the
- * licence.
+ * Delegates to the notice-type-specific service to validate the payload and fetch any additional session data.
+ * If valid, saves the result to the session and determines where to redirect the user. If invalid, returns the page
+ * data with the error details so the page can be re-rendered.
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {object} payload - The submitted form data
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
- * @returns {Promise<object>} An empty object if there are no errors else the page data for the licence page including
- * the validation error details
+ * @returns {Promise<object>} An object with a `redirectUrl` property if there are no validation errors, else an object
+ * with the presenter data and an `error` property
  */
 async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal.go(sessionId)
