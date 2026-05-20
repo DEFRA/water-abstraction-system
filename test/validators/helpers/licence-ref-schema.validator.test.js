@@ -1,13 +1,13 @@
 'use strict'
 
+const Joi = require('joi')
+
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
 
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
-
-const Joi = require('joi')
 
 // Thing under test
 const { licenceRefSchema } = require('../../../app/validators/helpers/licence-ref-schema.validator.js')

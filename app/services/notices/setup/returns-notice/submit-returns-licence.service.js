@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Orchestrates validating the data for the returns notice types on the `/notices/setup/{sessionId}/licence` page
+ * Orchestrates the returns notice types for the `/notices/setup/{sessionId}/licence` page
  * @module SubmitReturnsLicenceService
  */
 
@@ -11,7 +11,7 @@ const LicenceDueReturnsValidator = require('../../../../validators/notices/setup
 const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
 
 /**
- * Orchestrates validating the data for the returns notice types on the `/notices/setup/{sessionId}/licence` page
+ * Orchestrates the returns notice types for the`/notices/setup/{sessionId}/licence` page
  *
  * It first checks if the licence user has entered a licenceRef. If they haven't entered a licenceRef we return an
  * error. If they have we check if it exists in the database. If it doesn't exist we return an the same error.
@@ -19,13 +19,12 @@ const { formatValidationResult } = require('../../../../presenters/base.presente
  * If there are no due returns then we return an error to the user informing them that there are no due returns the
  * licence.
  *
- * @param {object} session - The current session
  * @param {object} payload - The submitted form data
  *
  * @returns {Promise<object>} An empty object if there are no errors else the page data for the licence page including
  * the validation error details
  */
-async function go(session, payload) {
+async function go(payload) {
   const dueReturns = await _dueReturns(payload)
 
   const validationResult = await _validate(payload, dueReturns)
@@ -45,13 +44,13 @@ async function _dueReturns(payload) {
 }
 
 async function _validate(payload, dueReturns) {
+  const dueReturnsExist = dueReturns.length > 0
+
   let licenceExists = false
 
   if (payload.licenceRef) {
     licenceExists = await FetchLicenceExistsDal.go(payload.licenceRef)
   }
-
-  const dueReturnsExist = dueReturns.length > 0
 
   const validationResult = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
 

@@ -1,5 +1,10 @@
 'use strict'
 
+/**
+ * Returns a Joi schema for the `licenceRef` field
+ * @module LicenceRefSchemaValidator
+ */
+
 const Joi = require('joi')
 
 const errorMessage = 'Enter a licence number'

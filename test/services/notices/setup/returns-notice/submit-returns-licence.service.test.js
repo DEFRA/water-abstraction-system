@@ -19,17 +19,14 @@ describe('Notices - Setup - returns-notice - Submit Returns Licence service', ()
   let dueReturns
   let licenceRef
   let payload
-  let session
 
   beforeEach(() => {
-    licenceRef = '01/234/R01'
-    session = {}
-
     dueReturns = [{ returnLogId: '123' }]
+    licenceRef = '01/234/R01'
     payload = { licenceRef }
 
-    Sinon.stub(FetchLicenceExistsDal, 'go').resolves(true)
     Sinon.stub(FetchDueReturnsForLicenceService, 'go').resolves(dueReturns)
+    Sinon.stub(FetchLicenceExistsDal, 'go').resolves(true)
   })
 
   afterEach(() => {
@@ -38,14 +35,14 @@ describe('Notices - Setup - returns-notice - Submit Returns Licence service', ()
 
   describe('when called', () => {
     it('returns the due returns as additional session data', async () => {
-      const result = await SubmitReturnsLicenceService.go(session, payload)
+      const result = await SubmitReturnsLicenceService.go(payload)
 
       expect(result.additionalSessionData).to.equal({ dueReturns })
     })
 
     describe('with a valid payload', () => {
       it('returns no validation error', async () => {
-        const result = await SubmitReturnsLicenceService.go(session, payload)
+        const result = await SubmitReturnsLicenceService.go(payload)
 
         expect(result.validationResult).to.be.null()
       })
@@ -57,7 +54,7 @@ describe('Notices - Setup - returns-notice - Submit Returns Licence service', ()
       })
 
       it('returns a validation error', async () => {
-        const result = await SubmitReturnsLicenceService.go(session, payload)
+        const result = await SubmitReturnsLicenceService.go(payload)
 
         expect(result).to.equal({
           additionalSessionData: { dueReturns: [] },
