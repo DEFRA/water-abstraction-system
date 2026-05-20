@@ -8,21 +8,21 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const LicenceValidator = require('../../../../app/validators/notices/setup/licence.validator.js')
+const LicenceDueReturnsValidator = require('../../../../app/validators/notices/setup/licence-due-returns.validator.js')
 
-describe('Notices - Setup - licence validator', () => {
-  let dueReturns
+describe('Notices - Setup - licence due returns validator', () => {
+  let dueReturnsExist
   let licenceExists
   let payload
 
   beforeEach(() => {
-    dueReturns = true
+    dueReturnsExist = true
     licenceExists = true
     payload = { licenceRef: '123/67' }
   })
 
   it('confirms the data is valid', () => {
-    const result = LicenceValidator.go(payload, licenceExists, dueReturns)
+    const result = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
 
     expect(result.value).to.exist()
     expect(result.error).not.to.exist()
@@ -36,7 +36,7 @@ describe('Notices - Setup - licence validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceValidator.go(payload, licenceExists, dueReturns)
+        const result = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -50,7 +50,7 @@ describe('Notices - Setup - licence validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceValidator.go(payload, licenceExists, dueReturns)
+        const result = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -60,11 +60,11 @@ describe('Notices - Setup - licence validator', () => {
 
     describe('because the "licenceRef" does not have any returns due', () => {
       beforeEach(() => {
-        dueReturns = false
+        dueReturnsExist = false
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceValidator.go(payload, licenceExists, dueReturns)
+        const result = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()

@@ -5,14 +5,11 @@
  * @module SubmitLicenceService
  */
 
-const FetchDueReturnsForLicenceService = require('./returns-notice/fetch-due-returns-for-licence.service.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const LicenceModel = require('../../../models/licence.model.js')
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
-const LicenceValidator = require('../../../validators/notices/setup/licence.validator.js')
-const { formatValidationResult } = require('../../../presenters/base.presenter.js')
-const { flashNotification } = require('../../../lib/general.lib.js')
+const SubmitReturnsLicenceService = require('./returns-notice/submit-returns-licence.service.js')
 const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
+const { flashNotification } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/licence` page
@@ -33,9 +30,7 @@ const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.j
 async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal.go(sessionId)
 
-  const dueReturns = await _dueReturns(payload)
-
-  const validationResult = await _validate(payload, dueReturns)
+  const { additionalSessionData, validationResult } = await SubmitReturnsLicenceService.go(session, payload)
 
   if (!validationResult) {
     const hasBeenVisited = session.checkPageVisited
@@ -46,7 +41,7 @@ async function go(sessionId, payload, yar) {
       session.checkPageVisited = false
     }
 
-    await _save(session, payload, dueReturns)
+    await _save(session, payload, additionalSessionData)
 
     return _redirect(session.noticeType, session.checkPageVisited, session.journey, hasBeenVisited)
   }
@@ -62,24 +57,16 @@ async function go(sessionId, payload, yar) {
   }
 }
 
-async function _dueReturns(payload) {
-  if (!payload.licenceRef) {
-    return []
-  }
-
-  return FetchDueReturnsForLicenceService.go(payload.licenceRef)
-}
-
-async function _licenceExists(licenceRef) {
-  const licence = await LicenceModel.query().where('licenceRef', licenceRef).select('licenceRef').first()
-
-  return !!licence
-}
-
-async function _save(session, payload, dueReturns) {
+/**
+ * The 'additionalSessionData' is an extra property returned by the notice-type-specific submitted service to merge
+ * into the session alongside the existing session
+ *
+ * @private
+ */
+async function _save(session, payload, additionalSessionData) {
   session.licenceRef = payload.licenceRef
 
-  session.dueReturns = dueReturns
+  Object.assign(session, additionalSessionData)
 
   return session.$update()
 }
@@ -100,20 +87,6 @@ function _redirect(noticeType, checkPageVisited, journey, hasBeenVisited) {
   return {
     redirectUrl: 'check-notice-type'
   }
-}
-
-async function _validate(payload, dueReturns) {
-  const dueReturnsExist = dueReturns.length > 0
-
-  let licenceExists = false
-
-  if (payload.licenceRef) {
-    licenceExists = await _licenceExists(payload.licenceRef)
-  }
-
-  const validationResult = LicenceValidator.go(payload, licenceExists, dueReturnsExist)
-
-  return formatValidationResult(validationResult)
 }
 
 module.exports = {
