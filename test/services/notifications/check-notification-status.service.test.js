@@ -55,7 +55,7 @@ describe('Notifications - Check Notification Status service', () => {
     delete globalThis.GlobalNotifier
   })
 
-  describe('when the notification is an abstraction alert', () => {
+  describe('when the notification is an "abstraction alert"', () => {
     beforeEach(() => {
       notice = NoticesFixture.alertStop()
     })
@@ -291,7 +291,7 @@ describe('Notifications - Check Notification Status service', () => {
     })
   })
 
-  describe('when the notification is a paper return', () => {
+  describe('when the notification is a "paper return"', () => {
     beforeEach(() => {
       notice = NoticesFixture.returnsPaperForm()
       notification = NotificationsFixture.paperReturn(notice)
@@ -460,7 +460,7 @@ describe('Notifications - Check Notification Status service', () => {
     })
   })
 
-  describe('when the notification is a returns invitation', () => {
+  describe('when the notification is a "returns invitation"', () => {
     beforeEach(() => {
       notice = NoticesFixture.returnsInvitation()
 
@@ -743,7 +743,7 @@ describe('Notifications - Check Notification Status service', () => {
     })
   })
 
-  describe('when the notification is a returns reminder', () => {
+  describe('when the notification is a "returns reminder"', () => {
     beforeEach(() => {
       notice = NoticesFixture.returnsReminder()
     })
