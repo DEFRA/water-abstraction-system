@@ -1026,7 +1026,7 @@ describe('Notifications - Check Notification Status service', () => {
     })
   })
 
-  describe.only('when the notification is a "returns invitation alternate"', () => {
+  describe('when the notification is a "returns invitation alternate"', () => {
     beforeEach(() => {
       notice = NoticesFixture.returnsInvitation()
 
