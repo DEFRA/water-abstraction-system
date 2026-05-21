@@ -757,7 +757,7 @@ describe('Notifications - Check Notification Status service', () => {
 
     describe('and is a letter', () => {
       beforeEach(() => {
-        notification = NotificationsFixture.returnsInvitationLetter(notice, 'ad-hoc')
+        notification = NotificationsFixture.returnsInvitationAdHocLetter(notice)
         notification.status = 'pending'
       })
 
@@ -894,7 +894,7 @@ describe('Notifications - Check Notification Status service', () => {
 
     describe('and is an email', () => {
       beforeEach(() => {
-        notification = NotificationsFixture.returnsInvitationEmail(notice)
+        notification = NotificationsFixture.returnsInvitationAdHocEmail(notice)
         notification.status = 'pending'
       })
 

@@ -419,35 +419,21 @@ function renewalInvitationLetter(notice) {
 }
 
 /**
- * Generates a returns invitation email notification object associated to the provided notice
+ * Generates an ad-hoc returns invitation email notification object associated to the provided notice
  *
  * @param {object} notice - The notice to associate with the returns invitation email notification
- * @param {string} [successor=null] - Specify a successor notice: 'ad-hoc' or 'alternate'. This will be added to the
- * message ref for the notification, allowing us to test the handling of different returns invitation types
  *
  * @returns {object} The generated returns invitation email object
  */
-function returnsInvitationEmail(notice, successor = null) {
-  const messageRef = `returns invitation${successor ? ` ${successor}` : ''}`
+function returnsInvitationAdHocEmail(notice) {
+  const notification = _returnsInvitationDefaults(notice)
 
-  const notification = {
+  return {
+    ...notification,
     contactType: 'primary user',
-    createdAt: new Date('2025-04-02'),
-    dueDate: new Date('2025-04-28'),
-    eventId: notice.id,
-    id: generateUUID(),
-    licenceMonitoringStationId: null,
-    licences: notice.licences,
-    messageRef,
+    messageRef: 'returns invitation ad-hoc',
     messageType: 'email',
-    notifyId: generateUUID(),
     notifyStatus: 'delivered',
-    pdf: null,
-    personalisation: {
-      periodEndDate: '31 March 2025',
-      returnDueDate: '28 April 2025',
-      periodStartDate: '1 April 2024'
-    },
     plaintext:
       'Dear licence holder\n' +
       '\n' +
@@ -455,13 +441,74 @@ function returnsInvitationEmail(notice, successor = null) {
       '\n' +
       '^ You’ll need to submit your returns by 1 April 2025.\n',
     recipient: 'grace.hopper@acme.co.uk',
-    returnedAt: null,
-    returnLogIds: [generateUUID(), generateUUID()],
-    status: 'sent',
+    templateId: NOTIFY_TEMPLATES.invitations.adhoc.email['primary user']
+  }
+}
+
+/**
+ * Generates an ad-hoc returns invitation letter notification object associated to the provided notice
+ *
+ * @param {object} notice - The notice to associate with the returns invitation letter notification
+ *
+ * @returns {object} The generated returns invitation letter object
+ */
+function returnsInvitationAdHocLetter(notice) {
+  const notification = _returnsInvitationDefaults(notice)
+
+  return {
+    ...notification,
+    contactType: 'licence holder',
+    messageRef: 'returns invitation ad-hoc',
+    messageType: 'letter',
+    notifyStatus: 'received',
+    plaintext:
+      'Dear ACME Services Ltd\n' +
+      '\n' +
+      '^ You must submit a record of your water abstraction from 1 April 2024 to 31 March 2025. \n' +
+      '\n' +
+      '^ You’ll need to submit your returns by 1 April 2025.\n',
+    recipient: null,
+    templateId: NOTIFY_TEMPLATES.invitations.adhoc.letter['licence holder']
+  }
+}
+    messageType: 'letter',
+    notifyStatus: 'received',
+    plaintext:
+      'Dear ACME Services Ltd\n' +
+      '\n' +
+      '^ You must submit a record of your water abstraction from 1 April 2024 to 31 March 2025. \n' +
+      '\n' +
+      '^ You’ll need to submit your returns by 1 April 2025.\n',
+    recipient: null,
+    templateId: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
+  }
+}
+
+/**
+ * Generates a returns invitation email notification object associated to the provided notice
+ *
+ * @param {object} notice - The notice to associate with the returns invitation email notification
+ *
+ * @returns {object} The generated returns invitation email object
+ */
+function returnsInvitationEmail(notice) {
+  const notification = _returnsInvitationDefaults(notice)
+
+  return {
+    ...notification,
+    contactType: 'primary user',
+    messageRef: 'returns invitation',
+    messageType: 'email',
+    notifyStatus: 'delivered',
+    plaintext:
+      'Dear licence holder\n' +
+      '\n' +
+      '^ You must submit a record of your water abstraction from 1 April 2024 to 31 March 2025. \n' +
+      '\n' +
+      '^ You’ll need to submit your returns by 1 April 2025.\n',
+    recipient: 'grace.hopper@acme.co.uk',
     templateId: NOTIFY_TEMPLATES.invitations.standard.email['primary user']
   }
-
-  return notification
 }
 
 /**
@@ -472,26 +519,14 @@ function returnsInvitationEmail(notice, successor = null) {
  * @returns {object} The generated returns invitation letter object
  */
 function returnsInvitationLetter(notice) {
-  const notification = {
+  const notification = _returnsInvitationDefaults(notice)
+
+  return {
+    ...notification,
     contactType: 'licence holder',
-    createdAt: new Date('2025-04-02'),
-    dueDate: new Date('2025-04-28'),
-    eventId: notice.id,
-    id: generateUUID(),
-    licenceMonitoringStationId: null,
-    licences: notice.licences,
     messageRef: 'returns invitation',
     messageType: 'letter',
-    notifyId: generateUUID(),
     notifyStatus: 'received',
-    pdf: null,
-    personalisation: {
-      ...ADDRESS,
-      name: 'ACME Services Ltd',
-      periodEndDate: '31 March 2025',
-      returnDueDate: '28 April 2025',
-      periodStartDate: '1 April 2024'
-    },
     plaintext:
       'Dear ACME Services Ltd\n' +
       '\n' +
@@ -499,13 +534,8 @@ function returnsInvitationLetter(notice) {
       '\n' +
       '^ You’ll need to submit your returns by 1 April 2025.\n',
     recipient: null,
-    returnedAt: null,
-    returnLogIds: [generateUUID(), generateUUID()],
-    status: 'sent',
     templateId: NOTIFY_TEMPLATES.invitations.standard.letter['licence holder']
   }
-
-  return notification
 }
 
 /**
@@ -705,6 +735,27 @@ function userNewInternalEmail(recipient, overrides = {}) {
   return { ...notification, ...overrides }
 }
 
+function _returnsInvitationDefaults(notice) {
+  return {
+    createdAt: new Date('2025-04-02'),
+    dueDate: new Date('2025-04-28'),
+    eventId: notice.id,
+    id: generateUUID(),
+    licenceMonitoringStationId: null,
+    licences: notice.licences,
+    notifyId: generateUUID(),
+    pdf: null,
+    personalisation: {
+      periodEndDate: '31 March 2025',
+      returnDueDate: '28 April 2025',
+      periodStartDate: '1 April 2024'
+    },
+    returnedAt: null,
+    returnLogIds: [generateUUID(), generateUUID()],
+    status: 'sent'
+  }
+}
+
 function _userPasswordResetEmail(recipient, internal, overrides) {
   const domain = internal ? domains.internal : domains.external
 
@@ -750,6 +801,8 @@ module.exports = {
   paperReturn,
   renewalInvitationEmail,
   renewalInvitationLetter,
+  returnsInvitationAdHocEmail,
+  returnsInvitationAdHocLetter,
   returnsInvitationEmail,
   returnsInvitationLetter,
   returnsReminderEmail,
