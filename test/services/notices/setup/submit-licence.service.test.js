@@ -14,6 +14,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+const ProcessRenewalsNoticeLicenceSubmission = require('../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js')
 const ProcessReturnsNoticeLicenceSubmission = require('../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js')
 
 // Thing under test
@@ -24,9 +25,10 @@ describe('Notices - Setup - Submit Licence service', () => {
   let fetchSessionStub
   let licenceRef
   let payload
+  let processRenewalsNoticeLicenceSubmissionStub
+  let processReturnsNoticeLicenceSubmissionStub
   let session
   let sessionData
-  let processReturnsNoticeLicenceSubmissionStub
   let yarStub
 
   beforeEach(() => {
@@ -42,6 +44,11 @@ describe('Notices - Setup - Submit Licence service', () => {
 
     processReturnsNoticeLicenceSubmissionStub = Sinon.stub(ProcessReturnsNoticeLicenceSubmission, 'go').resolves({
       additionalSessionData: { dueReturns: [] },
+      validationResult: null
+    })
+
+    processRenewalsNoticeLicenceSubmissionStub = Sinon.stub(ProcessRenewalsNoticeLicenceSubmission, 'go').resolves({
+      additionalSessionData: {},
       validationResult: null
     })
 
@@ -92,6 +99,46 @@ describe('Notices - Setup - Submit Licence service', () => {
         describe('and the check page has been visited', () => {
           beforeEach(() => {
             sessionData = { noticeType: 'paperReturn', licenceRef, checkPageVisited: true }
+
+            session = SessionModelStub.build(Sinon, sessionData)
+
+            fetchSessionStub.resolves(session)
+          })
+
+          it('returns a redirect to the "check-notice-type" page', async () => {
+            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+
+            expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+          })
+        })
+      })
+
+      describe('for a "renewal invitation" notice type', () => {
+        beforeEach(() => {
+          sessionData = { checkPageVisited: false, noticeType: 'renewalInvitations' }
+
+          session = SessionModelStub.build(Sinon, sessionData)
+
+          fetchSessionStub.resolves(session)
+        })
+
+        it('calls the "processRenewalsNoticeLicenceSubmissionStub"', async () => {
+          await SubmitLicenceService.go(session.id, payload, yarStub)
+
+          expect(processRenewalsNoticeLicenceSubmissionStub.calledOnceWithExactly(payload)).to.be.true()
+        })
+
+        describe('and the check page has not been visited', () => {
+          it('returns a redirect to the "check-notice-type" page', async () => {
+            const result = await SubmitLicenceService.go(session.id, payload, yarStub)
+
+            expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+          })
+        })
+
+        describe('and the check page has been visited', () => {
+          beforeEach(() => {
+            sessionData = { checkPageVisited: true, licenceRef, noticeType: 'renewalInvitations' }
 
             session = SessionModelStub.build(Sinon, sessionData)
 

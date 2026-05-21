@@ -7,7 +7,7 @@
 
 const Joi = require('joi')
 
-const { licenceRefSchema } = require('../../schemas/licence-ref.schema.js')
+const { licenceRefSchema } = require('../../../schemas/licence-ref.schema.js')
 
 /**
  * Validates the licence and that it has due returns, for the returns notice types, submitted for the `/notices/setup/{sessionId}/licence` page

@@ -7,6 +7,7 @@
 
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
+const ProcessRenewalsNoticeLicenceSubmission = require('./renewal-notice/process-licence-submission.service.js')
 const ProcessReturnsNoticeLicenceSubmission = require('./returns-notice/process-licence-submission.service.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
 const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
@@ -28,7 +29,7 @@ const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.j
 async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal.go(sessionId)
 
-  const { additionalSessionData, validationResult } = await ProcessReturnsNoticeLicenceSubmission.go(payload)
+  const { additionalSessionData, validationResult } = await _processedLicenceSubmission(session.noticeType, payload)
 
   if (!validationResult) {
     const hasBeenVisited = session.checkPageVisited
@@ -53,6 +54,14 @@ async function go(sessionId, payload, yar) {
     error: validationResult,
     ...pageData
   }
+}
+
+async function _processedLicenceSubmission(noticeType, payload) {
+  if (noticeType === NoticeType.RENEWAL_INVITATIONS) {
+    return ProcessRenewalsNoticeLicenceSubmission.go(payload)
+  }
+
+  return ProcessReturnsNoticeLicenceSubmission.go(payload)
 }
 
 /**

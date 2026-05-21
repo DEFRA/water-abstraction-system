@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const LicenceDueReturnsValidator = require('../../../../app/validators/notices/setup/licence-due-returns.validator.js')
+const LicenceDueReturnsValidator = require('../../../../../app/validators/notices/setup/returns-notice/licence-due-returns.validator.js')
 
-describe('Notices - Setup - licence due returns validator', () => {
+describe('Notices - Setup - Returns Notice - licence due returns validator', () => {
   let dueReturnsExist
   let licenceExists
   let payload
