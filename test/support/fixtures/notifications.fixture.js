@@ -422,10 +422,14 @@ function renewalInvitationLetter(notice) {
  * Generates a returns invitation email notification object associated to the provided notice
  *
  * @param {object} notice - The notice to associate with the returns invitation email notification
+ * @param {string} [successor=null] - Specify a successor notice: 'ad-hoc' or 'alternate'. This will be added to the
+ * message ref for the notification, allowing us to test the handling of different returns invitation types
  *
  * @returns {object} The generated returns invitation email object
  */
-function returnsInvitationEmail(notice) {
+function returnsInvitationEmail(notice, successor = null) {
+  const messageRef = `returns invitation${successor ? ` ${successor}` : ''}`
+
   const notification = {
     contactType: 'primary user',
     createdAt: new Date('2025-04-02'),
@@ -434,7 +438,7 @@ function returnsInvitationEmail(notice) {
     id: generateUUID(),
     licenceMonitoringStationId: null,
     licences: notice.licences,
-    messageRef: 'returns invitation',
+    messageRef,
     messageType: 'email',
     notifyId: generateUUID(),
     notifyStatus: 'delivered',
