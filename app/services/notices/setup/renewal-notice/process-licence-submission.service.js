@@ -6,7 +6,9 @@
  */
 
 const CheckLicenceExistsDal = require('../../../../dal/notices/setup/check-licence-exists.dal.js')
+const FetchLicenceRenewalDal = require('../../../../dal/notices/setup/fetch-renewal-licence.dal.js')
 const LicenceRenewalValidator = require('../../../../validators/notices/setup/renewal-notice/licence-renewal.validator.js')
+const ProcessRenewalDates = require('./process-renewal-dates.service.js')
 const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
 
 /**
@@ -20,22 +22,32 @@ const { formatValidationResult } = require('../../../../presenters/base.presente
  * @returns {Promise<object>} The validation result (null if valid)
  */
 async function go(payload) {
-  const validationResult = await _validate(payload)
+  const { expiryDate, renewalDate } = ProcessRenewalDates.go()
+
+  const validationResult = await _validate(payload, expiryDate)
 
   return {
-    additionalSessionData: {},
+    additionalSessionData: {
+      expiryDate,
+      renewalDate
+    },
     validationResult
   }
 }
 
-async function _validate(payload) {
+async function _validate(payload, expiryDate) {
   let licenceExists = false
+  let licenceRenewal = false
 
   if (payload.licenceRef) {
     licenceExists = await CheckLicenceExistsDal.go(payload.licenceRef)
   }
 
-  const validationResult = LicenceRenewalValidator.go(payload, licenceExists)
+  if (licenceExists) {
+    licenceRenewal = await FetchLicenceRenewalDal.go(payload.licenceRef)
+  }
+
+  const validationResult = LicenceRenewalValidator.go(payload, licenceExists, licenceRenewal, expiryDate)
 
   return formatValidationResult(validationResult)
 }
