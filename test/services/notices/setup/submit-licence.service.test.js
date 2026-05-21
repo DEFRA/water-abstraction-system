@@ -9,13 +9,12 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../../support/helpers/licence.helper.js')
-const ReturnLogHelper = require('../../../support/helpers/return-log.helper.js')
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+const ProcessReturnsNoticeLicenceSubmission = require('../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js')
 
 // Thing under test
 const SubmitLicenceService = require('../../../../app/services/notices/setup/submit-licence.service.js')
@@ -27,6 +26,7 @@ describe('Notices - Setup - Submit Licence service', () => {
   let payload
   let session
   let sessionData
+  let processReturnsNoticeLicenceSubmissionStub
   let yarStub
 
   beforeEach(() => {
@@ -40,6 +40,11 @@ describe('Notices - Setup - Submit Licence service', () => {
 
     fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
+    processReturnsNoticeLicenceSubmissionStub = Sinon.stub(ProcessReturnsNoticeLicenceSubmission, 'go').resolves({
+      additionalSessionData: { dueReturns: [] },
+      validationResult: null
+    })
+
     yarStub = { flash: Sinon.stub() }
   })
 
@@ -50,13 +55,8 @@ describe('Notices - Setup - Submit Licence service', () => {
 
   describe('when called', () => {
     describe('with a valid payload', () => {
-      beforeEach(async () => {
-        await LicenceHelper.add({ licenceRef })
-        await ReturnLogHelper.add({ licenceRef, endDate: '2020-01-01' })
-
-        payload = {
-          licenceRef
-        }
+      beforeEach(() => {
+        payload = { licenceRef }
       })
 
       it('saves the submitted value', async () => {
@@ -165,7 +165,6 @@ describe('Notices - Setup - Submit Licence service', () => {
           it('sets a flash message', async () => {
             await SubmitLicenceService.go(session.id, payload, yarStub)
 
-            // Check we add the flash message
             const [flashType, bannerMessage] = yarStub.flash.args[0]
 
             expect(flashType).to.equal('notification')
@@ -200,107 +199,34 @@ describe('Notices - Setup - Submit Licence service', () => {
       })
     })
 
-    describe('with an invalid payload', () => {
-      describe('because the user has not inputted anything', () => {
-        beforeEach(() => {
-          payload = {}
-        })
+    describe('fails validation', () => {
+      beforeEach(() => {
+        payload = {}
 
-        it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitLicenceService.go(session.id, payload, yarStub)
-
-          expect(result).to.equal({
-            activeNavBar: 'notices',
-            backLink: {
-              href: `/system/notices/setup/${session.id}/notice-type`,
-              text: 'Back'
-            },
-            error: {
-              errorList: [
-                {
-                  href: '#licenceRef',
-                  text: 'Enter a licence number'
-                }
-              ],
-              licenceRef: {
-                text: 'Enter a licence number'
-              }
-            },
-            licenceRef: null,
-            pageTitle: 'Enter a licence number'
-          })
+        processReturnsNoticeLicenceSubmissionStub.resolves({
+          additionalSessionData: { dueReturns: [] },
+          validationResult: {
+            errorList: [{ href: '#licenceRef', text: 'Enter a licence number' }],
+            licenceRef: { text: 'Enter a licence number' }
+          }
         })
       })
 
-      describe('because the user has entered a licence that does not exist', () => {
-        beforeEach(() => {
-          licenceRef = '1111'
+      it('returns page data needed to re-render the view including the validation error', async () => {
+        const result = await SubmitLicenceService.go(session.id, payload, yarStub)
 
-          payload = {
-            licenceRef
-          }
-        })
-
-        it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitLicenceService.go(session.id, payload, yarStub)
-
-          expect(result).to.equal({
-            activeNavBar: 'notices',
-            backLink: {
-              href: `/system/notices/setup/${session.id}/notice-type`,
-              text: 'Back'
-            },
-            error: {
-              errorList: [
-                {
-                  href: '#licenceRef',
-                  text: 'Enter a valid licence number'
-                }
-              ],
-              licenceRef: {
-                text: `Enter a valid licence number`
-              }
-            },
-            licenceRef,
-            pageTitle: 'Enter a licence number'
-          })
-        })
-      })
-
-      describe('because the user has entered a licence that has no due returns', () => {
-        beforeEach(async () => {
-          const licence = await LicenceHelper.add()
-
-          licenceRef = licence.licenceRef
-
-          payload = {
-            licenceRef
-          }
-        })
-
-        it('returns page data needed to re-render the view including the validation error', async () => {
-          const result = await SubmitLicenceService.go(session.id, payload, yarStub)
-
-          expect(result).to.equal({
-            activeNavBar: 'notices',
-            backLink: {
-              href: `/system/notices/setup/${session.id}/notice-type`,
-              text: 'Back'
-            },
-            error: {
-              errorList: [
-                {
-                  href: '#licenceRef',
-                  text: `There are no returns due for licence ${licenceRef}`
-                }
-              ],
-              licenceRef: {
-                text: `There are no returns due for licence ${licenceRef}`
-              }
-            },
-            licenceRef,
-            pageTitle: 'Enter a licence number'
-          })
+        expect(result).to.equal({
+          activeNavBar: 'notices',
+          backLink: {
+            href: `/system/notices/setup/${session.id}/notice-type`,
+            text: 'Back'
+          },
+          error: {
+            errorList: [{ href: '#licenceRef', text: 'Enter a licence number' }],
+            licenceRef: { text: 'Enter a licence number' }
+          },
+          licenceRef: null,
+          pageTitle: 'Enter a licence number'
         })
       })
     })
