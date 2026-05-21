@@ -12,10 +12,14 @@ const { expect } = Code
 const CheckLicenceExistsDal = require('../../../../../app/dal/notices/setup/check-licence-exists.dal.js')
 const FetchRenewalLicenceDal = require('../../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js')
 
+// Helpers
+const LicenceModel = require('../../../../../app/models/licence.model.js')
+const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+
 // Thing under test
 const ProcessRenewalsNoticeLicenceSubmission = require('../../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js')
 
-describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Submission', () => {
+describe.only('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Submission', () => {
   let clock
   let expiryDate
   let licenceRef
@@ -31,12 +35,15 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
     payload = { licenceRef }
 
     Sinon.stub(CheckLicenceExistsDal, 'go').resolves(true)
-    Sinon.stub(FetchRenewalLicenceDal, 'go').resolves({
-      licenceRef,
-      expiredDate: null,
-      revokedDate: null,
-      lapsedDate: null
-    })
+    Sinon.stub(FetchRenewalLicenceDal, 'go').resolves(
+      LicenceModel.fromJson({
+        expiredDate: new Date('2026-09-01'),
+        id: generateUUID(),
+        lapsedDate: null,
+        licenceRef,
+        revokedDate: null
+      })
+    )
   })
 
   afterEach(() => {

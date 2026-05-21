@@ -17,7 +17,7 @@ const LicenceModel = require('../../../models/licence.model.js')
 async function go(licenceRef) {
   return LicenceModel.query()
     .where('licenceRef', licenceRef)
-    .select(['licenceRef', 'expiredDate', 'revokedDate', 'lapsedDate'])
+    .select(['id', 'licenceRef', 'expiredDate', 'revokedDate', 'lapsedDate'])
     .limit(1)
     .first()
 }
