@@ -2,7 +2,7 @@
 
 /**
  * Fetches a licence for the given licence reference with the data for a renewal.
- * @module FetchLicenceRenewalDal
+ * @module FetchRenewalLicenceDal
  */
 
 const LicenceModel = require('../../../models/licence.model.js')
@@ -12,7 +12,7 @@ const LicenceModel = require('../../../models/licence.model.js')
  *
  * @param {string} licenceRef - The licence reference to check
  *
- * @returns {Promise<object>} The licence with the data for a renewal (expirtyDate, revokedDate, lapsedDate)
+ * @returns {Promise<object>} The licence with the data for a renewal (expiredDate, revokedDate, lapsedDate)
  */
 async function go(licenceRef) {
   return LicenceModel.query()

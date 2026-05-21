@@ -19,7 +19,7 @@ const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 // Thing under test
 const ProcessRenewalsNoticeLicenceSubmission = require('../../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js')
 
-describe.only('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Submission', () => {
+describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Submission', () => {
   let clock
   let expiryDate
   let licenceRef

@@ -29,11 +29,11 @@ describe('Notices - Setup - Fetch Renewal Licence DAL', () => {
       const result = await FetchRenewalLicenceDal.go(licence.licenceRef)
 
       expect(result).to.equal({
-        id: result.id,
-        licenceRef: licence.licenceRef,
         expiredDate: null,
-        revokedDate: null,
-        lapsedDate: null
+        id: result.id,
+        lapsedDate: null,
+        licenceRef: licence.licenceRef,
+        revokedDate: null
       })
     })
   })
