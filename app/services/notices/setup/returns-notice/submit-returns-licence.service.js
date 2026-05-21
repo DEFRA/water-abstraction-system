@@ -1,17 +1,17 @@
 'use strict'
 
 /**
- * Orchestrates the returns notice types for the `/notices/setup/{sessionId}/licence` page
+ * Orchestrates validating returns notice types for the `/notices/setup/{sessionId}/licence` page
  * @module SubmitReturnsLicenceService
  */
 
 const FetchDueReturnsForLicenceService = require('../returns-notice/fetch-due-returns-for-licence.service.js')
-const FetchLicenceExistsDal = require('../../../../dal/licences/fetch-licence-exists.dal.js')
+const CheckLicenceExistsDal = require('../../../../dal/notices/setup/check-licence-exists.dal.js')
 const LicenceDueReturnsValidator = require('../../../../validators/notices/setup/licence-due-returns.validator.js')
 const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
 
 /**
- * Orchestrates the returns notice types for the `/notices/setup/{sessionId}/licence` page
+ * Orchestrates validating the returns notice types for the `/notices/setup/{sessionId}/licence` page
  *
  * It first checks if the licence user has entered a licenceRef. If they haven't entered a licenceRef we return an
  * error. If they have we check if it exists in the database. If it doesn't exist we return the same error.
@@ -48,7 +48,7 @@ async function _validate(payload, dueReturns) {
   let licenceExists = false
 
   if (payload.licenceRef) {
-    licenceExists = await FetchLicenceExistsDal.go(payload.licenceRef)
+    licenceExists = await CheckLicenceExistsDal.go(payload.licenceRef)
   }
 
   const validationResult = LicenceDueReturnsValidator.go(payload, licenceExists, dueReturnsExist)

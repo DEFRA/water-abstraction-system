@@ -8,12 +8,12 @@ const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const LicenceHelper = require('../../support/helpers/licence.helper.js')
+const LicenceHelper = require('../../../support/helpers/licence.helper.js')
 
 // Thing under test
-const FetchLicenceExistsDal = require('../../../app/dal/licences/fetch-licence-exists.dal.js')
+const CheckLicenceExistsDal = require('../../../../app/dal/notices/setup/check-licence-exists.dal.js')
 
-describe('DAL - Fetch licence exists dal', () => {
+describe('Notices - Setup - Check Licence Exists DAL', () => {
   let licence
 
   before(async () => {
@@ -26,7 +26,7 @@ describe('DAL - Fetch licence exists dal', () => {
 
   describe('when the licence exists', () => {
     it('returns true', async () => {
-      const result = await FetchLicenceExistsDal.go(licence.licenceRef)
+      const result = await CheckLicenceExistsDal.go(licence.licenceRef)
 
       expect(result).to.equal(true)
     })
@@ -34,7 +34,7 @@ describe('DAL - Fetch licence exists dal', () => {
 
   describe('when the licence does not exist', () => {
     it('returns false', async () => {
-      const result = await FetchLicenceExistsDal.go('does-not-exist')
+      const result = await CheckLicenceExistsDal.go('does-not-exist')
 
       expect(result).to.equal(false)
     })
