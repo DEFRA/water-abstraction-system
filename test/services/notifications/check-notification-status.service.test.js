@@ -97,7 +97,7 @@ describe('Notifications - Check Notification Status service', () => {
         })
       })
 
-      describe('and Notify returns a "sent" status', () => {
+      describe('and Notify returns a "received" status', () => {
         beforeEach(() => {
           // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
           // representation look at test/requests/notify/view-message-data.request.test.js
