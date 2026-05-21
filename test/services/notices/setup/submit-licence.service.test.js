@@ -115,7 +115,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
       describe('for a "renewal invitation" notice type', () => {
         beforeEach(() => {
-          sessionData = { noticeType: 'renewalInvitations', checkPageVisited: false }
+          sessionData = { checkPageVisited: false, noticeType: 'renewalInvitations' }
 
           session = SessionModelStub.build(Sinon, sessionData)
 
@@ -138,7 +138,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
         describe('and the check page has been visited', () => {
           beforeEach(() => {
-            sessionData = { noticeType: 'renewalInvitations', licenceRef, checkPageVisited: true }
+            sessionData = { checkPageVisited: true, licenceRef, noticeType: 'renewalInvitations' }
 
             session = SessionModelStub.build(Sinon, sessionData)
 

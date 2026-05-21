@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const LicenceRenewalValidator = require('../../../../../app/validators/notices/setup/renewal-notice/licence-renewal.validator.js')
 
-describe('Notices - Setup - Returns Notice - licence renewal validator', () => {
+describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   let licenceExists
   let payload
 

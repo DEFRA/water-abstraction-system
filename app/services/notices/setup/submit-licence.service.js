@@ -9,8 +9,8 @@ const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
 const ProcessRenewalsNoticeLicenceSubmission = require('./renewal-notice/process-licence-submission.service.js')
 const ProcessReturnsNoticeLicenceSubmission = require('./returns-notice/process-licence-submission.service.js')
-const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
+const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates validating the data for `/notices/setup/{sessionId}/licence` page

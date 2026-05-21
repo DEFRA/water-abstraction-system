@@ -17,7 +17,7 @@ const { formatValidationResult } = require('../../../../presenters/base.presente
  *
  * @param {object} payload - The submitted form data
  *
- * @returns {Promise<object>} The due returns fetched alongside the validation result (null if valid)
+ * @returns {Promise<object>} The validation result (null if valid)
  */
 async function go(payload) {
   const validationResult = await _validate(payload)

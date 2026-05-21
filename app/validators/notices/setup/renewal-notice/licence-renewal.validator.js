@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Validates the licence and that it has due returns, for the returns notice types, submitted for the `/notices/setup/{sessionId}/licence` page
+ * Validates the licence ref submitted for the `/notices/setup/{sessionId}/licence` page for renewal notice types
  * @module LicenceRenewalValidator
  */
 
@@ -10,7 +10,7 @@ const Joi = require('joi')
 const { licenceRefSchema } = require('../../../schemas/licence-ref.schema.js')
 
 /**
- * Validates the licence and that it has due returns, for the returns notice types, submitted for the `/notices/setup/{sessionId}/licence` page
+ * Validates the licence ref submitted for the `/notices/setup/{sessionId}/licence` page for renewal notice types
  *
  * @param {object} payload - The payload from the request to be validated
  * @param {boolean} licenceExists - the result of checking if the licence ref is present in the database
