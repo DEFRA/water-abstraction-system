@@ -7,7 +7,7 @@
 
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const LicencePresenter = require('../../../presenters/notices/setup/licence.presenter.js')
-const SubmitReturnsLicenceService = require('./returns-notice/submit-returns-licence.service.js')
+const ProcessReturnsNoticeLicenceSubmission = require('./returns-notice/process-licence-submission.service.js')
 const { flashNotification } = require('../../../lib/general.lib.js')
 const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 
@@ -28,7 +28,7 @@ const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.j
 async function go(sessionId, payload, yar) {
   const session = await FetchSessionDal.go(sessionId)
 
-  const { additionalSessionData, validationResult } = await SubmitReturnsLicenceService.go(payload)
+  const { additionalSessionData, validationResult } = await ProcessReturnsNoticeLicenceSubmission.go(payload)
 
   if (!validationResult) {
     const hasBeenVisited = session.checkPageVisited

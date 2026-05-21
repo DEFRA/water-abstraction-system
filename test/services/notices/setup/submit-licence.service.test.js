@@ -14,7 +14,7 @@ const { generateLicenceRef } = require('../../../support/helpers/licence.helper.
 
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
-const SubmitReturnsLicenceService = require('../../../../app/services/notices/setup/returns-notice/submit-returns-licence.service.js')
+const ProcessReturnsNoticeLicenceSubmission = require('../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js')
 
 // Thing under test
 const SubmitLicenceService = require('../../../../app/services/notices/setup/submit-licence.service.js')
@@ -26,7 +26,7 @@ describe('Notices - Setup - Submit Licence service', () => {
   let payload
   let session
   let sessionData
-  let submitReturnsLicenceStub
+  let processReturnsNoticeLicenceSubmissionStub
   let yarStub
 
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe('Notices - Setup - Submit Licence service', () => {
 
     fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
-    submitReturnsLicenceStub = Sinon.stub(SubmitReturnsLicenceService, 'go').resolves({
+    processReturnsNoticeLicenceSubmissionStub = Sinon.stub(ProcessReturnsNoticeLicenceSubmission, 'go').resolves({
       additionalSessionData: { dueReturns: [] },
       validationResult: null
     })
@@ -203,7 +203,7 @@ describe('Notices - Setup - Submit Licence service', () => {
       beforeEach(() => {
         payload = {}
 
-        submitReturnsLicenceStub.resolves({
+        processReturnsNoticeLicenceSubmissionStub.resolves({
           additionalSessionData: { dueReturns: [] },
           validationResult: {
             errorList: [{ href: '#licenceRef', text: 'Enter a licence number' }],

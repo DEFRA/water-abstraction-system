@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates validating returns notice types for the `/notices/setup/{sessionId}/licence` page
- * @module SubmitReturnsLicenceService
+ * @module ProcessReturnsNoticeLicenceSubmission
  */
 
 const FetchDueReturnsForLicenceService = require('../returns-notice/fetch-due-returns-for-licence.service.js')

@@ -13,9 +13,9 @@ const CheckLicenceExistsDal = require('../../../../../app/dal/notices/setup/chec
 const FetchDueReturnsForLicenceService = require('../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js')
 
 // Thing under test
-const SubmitReturnsLicenceService = require('../../../../../app/services/notices/setup/returns-notice/submit-returns-licence.service.js')
+const ProcessReturnsNoticeLicenceSubmission = require('../../../../../app/services/notices/setup/returns-notice/process-licence-submission.service.js')
 
-describe('Notices - Setup - returns-notice - Submit Returns Licence service', () => {
+describe('Notices - Setup - Returns Notice - Process Returns Notice Licence Submission', () => {
   let dueReturns
   let licenceRef
   let payload
@@ -35,14 +35,14 @@ describe('Notices - Setup - returns-notice - Submit Returns Licence service', ()
 
   describe('when called', () => {
     it('returns the due returns as additional session data', async () => {
-      const result = await SubmitReturnsLicenceService.go(payload)
+      const result = await ProcessReturnsNoticeLicenceSubmission.go(payload)
 
       expect(result.additionalSessionData).to.equal({ dueReturns })
     })
 
     describe('with a valid payload', () => {
       it('returns no validation error', async () => {
-        const result = await SubmitReturnsLicenceService.go(payload)
+        const result = await ProcessReturnsNoticeLicenceSubmission.go(payload)
 
         expect(result.validationResult).to.be.null()
       })
@@ -54,7 +54,7 @@ describe('Notices - Setup - returns-notice - Submit Returns Licence service', ()
       })
 
       it('returns a validation error', async () => {
-        const result = await SubmitReturnsLicenceService.go(payload)
+        const result = await ProcessReturnsNoticeLicenceSubmission.go(payload)
 
         expect(result).to.equal({
           additionalSessionData: { dueReturns: [] },
