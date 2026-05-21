@@ -1026,6 +1026,154 @@ describe('Notifications - Check Notification Status service', () => {
     })
   })
 
+  describe.only('when the notification is a "returns invitation alternate"', () => {
+    beforeEach(() => {
+      notice = NoticesFixture.returnsInvitation()
+
+      returnLogWhereInStub = Sinon.stub().resolves()
+      Sinon.stub(ReturnLogModel, 'query').returns({
+        patch: returnLogPatchStub,
+        where: Sinon.stub().returnsThis(),
+        whereIn: returnLogWhereInStub
+      })
+
+      // NOTE: We only create letters for return invitations alternate, so we skip splitting the tests into 'letter' and
+      // 'email'
+      notification = NotificationsFixture.returnsInvitationAlternateLetter(notice)
+      notification.status = 'pending'
+    })
+
+    describe('and Notify returns a "pending" status', () => {
+      beforeEach(() => {
+        // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
+        // representation look at test/requests/notify/view-message-data.request.test.js
+        Sinon.stub(ViewMessageDataRequest, 'send').resolves({
+          succeeded: true,
+          response: {
+            statusCode: 200,
+            body: {
+              status: 'sending'
+            }
+          }
+        })
+      })
+
+      it('does nothing', async () => {
+        await CheckNotificationStatusService.go(notification)
+
+        expect(notificationPatchStub.called).to.be.false()
+        expect(licenceMonitoringStationPatchStub.called).to.be.false()
+        expect(returnLogPatchStub.called).to.be.false()
+      })
+    })
+
+    describe('and Notify returns a "received" status', () => {
+      beforeEach(() => {
+        // NOTE: The service only uses the `status` field from the Notify result. If you want to see a full
+        // representation look at test/requests/notify/view-message-data.request.test.js
+        Sinon.stub(ViewMessageDataRequest, 'send').resolves({
+          succeeded: true,
+          response: {
+            statusCode: 200,
+            body: {
+              status: 'received'
+            }
+          }
+        })
+      })
+
+      it('updates the status of the notification to "sent"', async () => {
+        await CheckNotificationStatusService.go(notification)
+
+        expect(notificationPatchStub.called).to.be.true()
+        expect(notificationPatchStub.firstCall.args[0]).to.equal(
+          { notifyStatus: 'received', status: 'sent' },
+          { skip: ['updatedAt'] }
+        )
+      })
+
+      it('does not attempt to update anything in licence monitoring stations', async () => {
+        await CheckNotificationStatusService.go(notification)
+
+        expect(licenceMonitoringStationPatchStub.called).to.be.false()
+      })
+
+      describe('and the contact type was "licence holder" or "single use"', () => {
+        it('attempts to set the due date for the linked return log records', async () => {
+          await CheckNotificationStatusService.go(notification)
+
+          expect(returnLogPatchStub.called).to.be.true()
+          expect(returnLogPatchStub.firstCall.args[0]).to.equal(
+            { dueDate: notification.dueDate, sentDate: notification.createdAt },
+            { skip: ['updatedAt'] }
+          )
+
+          expect(returnLogWhereInStub.called).to.be.true()
+          expect(returnLogWhereInStub.firstCall.args[0]).to.equal('id')
+          expect(returnLogWhereInStub.firstCall.args[1]).to.equal(notification.returnLogIds)
+        })
+      })
+
+      describe('and the contact type was NOT "licence holder" or "single use"', () => {
+        beforeEach(() => {
+          notification.contactType = 'returns to'
+        })
+
+        it('does not attempt to set the due date for the linked return log records.', async () => {
+          await CheckNotificationStatusService.go(notification)
+
+          expect(returnLogPatchStub.called).to.be.false()
+        })
+      })
+    })
+
+    describe('and Notify returns a "failed" status', () => {
+      beforeEach(() => {
+        Sinon.stub(ViewMessageDataRequest, 'send').resolves({
+          succeeded: true,
+          response: {
+            statusCode: 200,
+            body: {
+              status: 'temporary-failure'
+            }
+          }
+        })
+      })
+
+      it('updates the status of the notification to "error"', async () => {
+        await CheckNotificationStatusService.go(notification)
+
+        expect(notificationPatchStub.called).to.be.true()
+        expect(notificationPatchStub.firstCall.args[0]).to.equal(
+          { notifyStatus: 'temporary-failure', status: 'error' },
+          { skip: ['updatedAt'] }
+        )
+      })
+    })
+
+    describe('and Notify returns an "unknown" status', () => {
+      beforeEach(() => {
+        Sinon.stub(ViewMessageDataRequest, 'send').resolves({
+          succeeded: true,
+          response: {
+            statusCode: 200,
+            body: {
+              status: 'unrecognised'
+            }
+          }
+        })
+      })
+
+      it('does nothing', async () => {
+        await CheckNotificationStatusService.go(notification)
+
+        expect(notificationPatchStub.called).to.be.false()
+        expect(licenceMonitoringStationPatchStub.called).to.be.false()
+        expect(returnLogPatchStub.called).to.be.false()
+      })
+    })
+  })
+
   describe('when the notification is a "returns reminder"', () => {
     beforeEach(() => {
       notice = NoticesFixture.returnsReminder()

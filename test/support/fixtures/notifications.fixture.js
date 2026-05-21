@@ -471,6 +471,23 @@ function returnsInvitationAdHocLetter(notice) {
     templateId: NOTIFY_TEMPLATES.invitations.adhoc.letter['licence holder']
   }
 }
+
+/**
+ * Generates an alternate returns invitation letter notification object associated to the provided notice
+ *
+ * > There is no alternate email notification, as these are generated and sent when the email fails.
+ *
+ * @param {object} notice - The notice to associate with the returns invitation letter notification
+ *
+ * @returns {object} The generated returns invitation letter object
+ */
+function returnsInvitationAlternateLetter(notice) {
+  const notification = _returnsInvitationDefaults(notice)
+
+  return {
+    ...notification,
+    contactType: 'licence holder',
+    messageRef: 'returns invitation alternate',
     messageType: 'letter',
     notifyStatus: 'received',
     plaintext:
@@ -803,6 +820,7 @@ module.exports = {
   renewalInvitationLetter,
   returnsInvitationAdHocEmail,
   returnsInvitationAdHocLetter,
+  returnsInvitationAlternateLetter,
   returnsInvitationEmail,
   returnsInvitationLetter,
   returnsReminderEmail,
