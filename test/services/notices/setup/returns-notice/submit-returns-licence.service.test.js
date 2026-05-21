@@ -9,8 +9,8 @@ const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Things we need to stub
+const CheckLicenceExistsDal = require('../../../../../app/dal/notices/setup/check-licence-exists.dal.js')
 const FetchDueReturnsForLicenceService = require('../../../../../app/services/notices/setup/returns-notice/fetch-due-returns-for-licence.service.js')
-const FetchLicenceExistsDal = require('../../../../../app/dal/licences/fetch-licence-exists.dal.js')
 
 // Thing under test
 const SubmitReturnsLicenceService = require('../../../../../app/services/notices/setup/returns-notice/submit-returns-licence.service.js')
@@ -25,8 +25,8 @@ describe('Notices - Setup - returns-notice - Submit Returns Licence service', ()
     licenceRef = '01/234/R01'
     payload = { licenceRef }
 
+    Sinon.stub(CheckLicenceExistsDal, 'go').resolves(true)
     Sinon.stub(FetchDueReturnsForLicenceService, 'go').resolves(dueReturns)
-    Sinon.stub(FetchLicenceExistsDal, 'go').resolves(true)
   })
 
   afterEach(() => {
