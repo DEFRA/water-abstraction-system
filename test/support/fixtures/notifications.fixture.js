@@ -434,6 +434,11 @@ function returnsInvitationAdHocEmail(notice) {
     messageRef: 'returns invitation ad-hoc',
     messageType: 'email',
     notifyStatus: 'delivered',
+    personalisation: {
+      periodEndDate: '31 March 2025',
+      returnDueDate: '28 April 2025',
+      periodStartDate: '1 April 2024'
+    },
     plaintext:
       'Dear licence holder\n' +
       '\n' +
@@ -461,6 +466,13 @@ function returnsInvitationAdHocLetter(notice) {
     messageRef: 'returns invitation ad-hoc',
     messageType: 'letter',
     notifyStatus: 'received',
+    personalisation: {
+      ...ADDRESS,
+      expiryDate: '28 April 2026',
+      licenceRef: notice.licences[0],
+      name: 'ACME Services Ltd',
+      renewalDate: '28 January 2026'
+    },
     plaintext:
       'Dear ACME Services Ltd\n' +
       '\n' +
@@ -490,6 +502,13 @@ function returnsInvitationAlternateLetter(notice) {
     messageRef: 'returns invitation alternate',
     messageType: 'letter',
     notifyStatus: 'received',
+    personalisation: {
+      ...ADDRESS,
+      expiryDate: '28 April 2026',
+      licenceRef: notice.licences[0],
+      name: 'ACME Services Ltd',
+      renewalDate: '28 January 2026'
+    },
     plaintext:
       'Dear ACME Services Ltd\n' +
       '\n' +
@@ -517,6 +536,11 @@ function returnsInvitationEmail(notice) {
     messageRef: 'returns invitation',
     messageType: 'email',
     notifyStatus: 'delivered',
+    personalisation: {
+      periodEndDate: '31 March 2025',
+      returnDueDate: '28 April 2025',
+      periodStartDate: '1 April 2024'
+    },
     plaintext:
       'Dear licence holder\n' +
       '\n' +
@@ -544,6 +568,13 @@ function returnsInvitationLetter(notice) {
     messageRef: 'returns invitation',
     messageType: 'letter',
     notifyStatus: 'received',
+    personalisation: {
+      ...ADDRESS,
+      expiryDate: '28 April 2026',
+      licenceRef: notice.licences[0],
+      name: 'ACME Services Ltd',
+      renewalDate: '28 January 2026'
+    },
     plaintext:
       'Dear ACME Services Ltd\n' +
       '\n' +
@@ -762,11 +793,6 @@ function _returnsInvitationDefaults(notice) {
     licences: notice.licences,
     notifyId: generateUUID(),
     pdf: null,
-    personalisation: {
-      periodEndDate: '31 March 2025',
-      returnDueDate: '28 April 2025',
-      periodStartDate: '1 April 2024'
-    },
     returnedAt: null,
     returnLogIds: [generateUUID(), generateUUID()],
     status: 'sent'
