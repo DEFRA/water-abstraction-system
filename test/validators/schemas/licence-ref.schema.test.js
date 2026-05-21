@@ -10,9 +10,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const { licenceRefSchema } = require('../../../app/validators/helpers/licence-ref-schema.validator.js')
+const { licenceRefSchema } = require('../../../app/validators/schemas/licence-ref.schema.js')
 
-describe('Validators - Helpers - licence ref schema', () => {
+describe('Validators - Schema - licence ref schema', () => {
   let licenceExists
   let payload
 
