@@ -14,10 +14,10 @@ const { licenceRefSchema } = require('../../../schemas/licence-ref.schema.js')
  * Validates the licence ref submitted for the `/notices/setup/{sessionId}/licence` page for renewal notice types
  *
  * @param {object} payload - The payload from the request to be validated
- * @param {object} licenceRenewal - the licence with renewal date fields fetched from the database (undefined if not found)
+ * @param {object|undefined} licenceRenewal - the licence with renewal date fields fetched from the database (undefined if not found)
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
- * any errors are found the `error:` property will also exist detailing what the issues were
+ * any errors are found, the `error:` property will also exist detailing what the issues were
  */
 function go(payload, licenceRenewal) {
   const schema = Joi.object({
