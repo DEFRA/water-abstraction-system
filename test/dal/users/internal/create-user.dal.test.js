@@ -8,10 +8,10 @@ const { afterEach, beforeEach, describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUserName } = require('../../../support/helpers/user.helper.js')
 const UserGroupModel = require('../../../../app/models/user-group.model.js')
 const UserModel = require('../../../../app/models/user.model.js')
 const UserRoleModel = require('../../../../app/models/user-role.model.js')
+const { generateUserName } = require('../../../support/helpers/user.helper.js')
 
 // Thing under test
 const CreateUserDal = require('../../../../app/dal/users/internal/create-user.dal.js')

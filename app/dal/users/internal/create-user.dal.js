@@ -50,10 +50,10 @@ async function _insertUser(application, email, trx) {
     application,
     badLogins: 0,
     password: hashSync(generateUUID(), 10), // Sets a random password
-    username: email,
     resetGuid: generateUUID(),
     resetGuidCreatedAt: timestampForPostgres(),
-    resetRequired: 1
+    resetRequired: 1,
+    username: email
   }
 
   return UserModel.query(trx).insert(userData).returning('id', 'resetGuid')
