@@ -10,8 +10,8 @@ const { expect } = Code
 
 // Helpers
 const LicenceModel = require('../../../../../app/models/licence.model.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 
 // Thing under test
 const LicenceRenewalValidator = require('../../../../../app/validators/notices/setup/renewal-notice/licence-renewal.validator.js')
@@ -151,9 +151,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
-        expect(result.error.details[0].message).to.equal(
-          'The licence expires in less than 90 days'
-        )
+        expect(result.error.details[0].message).to.equal('The licence expires in less than 90 days')
       })
     })
   })

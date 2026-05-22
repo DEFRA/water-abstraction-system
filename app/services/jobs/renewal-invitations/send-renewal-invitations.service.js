@@ -8,11 +8,12 @@
 const CreateNoticeService = require('../../notices/setup/create-notice.service.js')
 const CreateNotificationsService = require('../../notices/setup/create-notifications.service.js')
 const FetchRenewalRecipients = require('./fetch-renewal-recipients.service.js')
-const NotifyConfig = require('../../../../config/notify.config.js')
-const { renewalExpiryDate, renewalNoticeDate } = require('../../../lib/dates.lib.js')
 const SendNoticeService = require('../../notices/setup/send/send-notice.service.js')
-const { NoticeTypes, NoticeType } = require('../../../lib/static-lookups.lib.js')
+const { renewalExpiryDate, renewalNoticeDate } = require('../../../lib/dates.lib.js')
 const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
+const { NoticeTypes, NoticeType } = require('../../../lib/static-lookups.lib.js')
+
+const NotifyConfig = require('../../../../config/notify.config.js')
 
 /**
  * Orchestrates fetching, sending, and updating renewal invitations notifications

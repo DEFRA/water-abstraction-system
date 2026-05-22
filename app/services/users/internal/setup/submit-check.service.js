@@ -25,7 +25,7 @@ async function go(sessionId, payload) {
   const validationResult = _validate(payload)
 
   if (!validationResult) {
-    await _save(session, payload)
+    await _save(session)
 
     return {}
   }
@@ -38,7 +38,7 @@ async function go(sessionId, payload) {
   }
 }
 
-async function _save(session, payload) {
+async function _save(session) {
   return session.$update()
 }
 
