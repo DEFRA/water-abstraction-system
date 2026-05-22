@@ -60,52 +60,52 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
       })
     })
 
-    describe('fails validation', () => {
-      describe('because no licence ref was entered', () => {
-        beforeEach(() => {
-          payload = {}
+    describe('with an  invalid payload', () => {
+      describe('fails validation', () => {
+        describe('because no licence ref was entered', () => {
+          beforeEach(() => {
+            payload = {}
 
-          fetchRenewalLicenceDalStub.resolves(undefined)
-        })
+            fetchRenewalLicenceDalStub.resolves(undefined)
+          })
 
-        it('returns a validation error', async () => {
-          const result = await ProcessRenewalsNoticeLicenceSubmission.go(payload)
+          it('returns a validation error', async () => {
+            const result = await ProcessRenewalsNoticeLicenceSubmission.go(payload)
 
-          expect(result).to.equal({
-            additionalSessionData: {},
-            validationResult: {
-              errorList: [{ href: '#licenceRef', text: 'Enter a licence number' }],
-              licenceRef: { text: 'Enter a licence number' }
-            }
+            expect(result).to.equal({
+              additionalSessionData: {},
+              validationResult: {
+                errorList: [{ href: '#licenceRef', text: 'Enter a licence number' }],
+                licenceRef: { text: 'Enter a licence number' }
+              }
+            })
           })
         })
-      })
 
-      describe('because the licence ref does not exist', () => {
-        beforeEach(() => {
-          payload = { licenceRef }
+        describe('because the licence ref does not exist', () => {
+          beforeEach(() => {
+            payload = { licenceRef }
 
-          licenceRenewal.expiredDate = null
+            fetchRenewalLicenceDalStub.resolves(undefined)
+          })
 
-          fetchRenewalLicenceDalStub.resolves(licenceRenewal)
-        })
+          it('returns a validation error', async () => {
+            const result = await ProcessRenewalsNoticeLicenceSubmission.go(payload)
 
-        it('returns a validation error', async () => {
-          const result = await ProcessRenewalsNoticeLicenceSubmission.go(payload)
-
-          expect(result).to.equal({
-            additionalSessionData: {},
-            validationResult: {
-              errorList: [
-                {
-                  href: '#licenceRef',
-                  text: 'The licence does not have an expiry date'
+            expect(result).to.equal({
+              additionalSessionData: {},
+              validationResult: {
+                errorList: [
+                  {
+                    href: '#licenceRef',
+                    text: 'Enter a valid licence number'
+                  }
+                ],
+                licenceRef: {
+                  text: 'Enter a valid licence number'
                 }
-              ],
-              licenceRef: {
-                text: 'The licence does not have an expiry date'
               }
-            }
+            })
           })
         })
       })
