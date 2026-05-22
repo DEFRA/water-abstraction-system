@@ -5,8 +5,8 @@
  * @module ProcessReturnsNoticeLicenceSubmission
  */
 
-const FetchDueReturnsForLicenceService = require('../returns-notice/fetch-due-returns-for-licence.service.js')
 const CheckLicenceExistsDal = require('../../../../dal/notices/setup/check-licence-exists.dal.js')
+const FetchDueReturnsForLicenceService = require('../returns-notice/fetch-due-returns-for-licence.service.js')
 const LicenceDueReturnsValidator = require('../../../../validators/notices/setup/returns-notice/licence-due-returns.validator.js')
 const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
 

@@ -32,9 +32,10 @@ async function go(sessionId, payload, yar) {
   const { additionalSessionData, validationResult } = await _processedLicenceSubmission(session.noticeType, payload)
 
   if (!validationResult) {
-    const hasBeenVisited = session.checkPageVisited
+    const checkPageVisited = session.checkPageVisited
+    const licenceChanged = checkPageVisited && payload.licenceRef !== session.licenceRef
 
-    if (session.checkPageVisited && payload.licenceRef !== session.licenceRef) {
+    if (licenceChanged) {
       flashNotification(yar, 'Updated', 'Licence number updated')
 
       session.checkPageVisited = false
@@ -42,7 +43,7 @@ async function go(sessionId, payload, yar) {
 
     await _save(session, payload, additionalSessionData)
 
-    return _redirect(session.noticeType, session.checkPageVisited, session.journey, hasBeenVisited)
+    return _redirect(session.noticeType, session.journey, checkPageVisited, licenceChanged)
   }
 
   session.licenceRef = payload.licenceRef
@@ -78,14 +79,16 @@ async function _save(session, payload, additionalSessionData) {
   return session.$update()
 }
 
-function _redirect(noticeType, checkPageVisited, journey, hasBeenVisited) {
-  if (noticeType === NoticeType.PAPER_RETURN && !checkPageVisited) {
-    return {
-      redirectUrl: 'paper-return'
+function _redirect(noticeType, journey, checkPageVisited, licenceChanged) {
+  if (noticeType === NoticeType.PAPER_RETURN) {
+    if (!checkPageVisited || licenceChanged) {
+      return {
+        redirectUrl: 'paper-return'
+      }
     }
   }
 
-  if (journey === NoticeJourney.STANDARD && !hasBeenVisited) {
+  if (journey === NoticeJourney.STANDARD && !checkPageVisited) {
     return {
       redirectUrl: 'returns-period'
     }

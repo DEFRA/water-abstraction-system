@@ -36,7 +36,7 @@ function go(session) {
   return {
     links: _links(sessionId),
     pageTitle: 'Check the notice type',
-    noticeType: _noticeType(noticeType),
+    noticeType: NOTICE_TYPE_TEXT[noticeType],
     sessionId,
     ..._returns(selectedReturns, dueReturns, noticeType),
     ..._licence(licenceRef),
@@ -55,10 +55,6 @@ function _links(sessionId) {
     noticeType: `/system/notices/setup/${sessionId}/notice-type`,
     returns: `/system/notices/setup/${sessionId}/paper-return`
   }
-}
-
-function _noticeType(noticeType) {
-  return NOTICE_TYPE_TEXT[noticeType]
 }
 
 function _returns(selectedReturns, dueReturns, noticeType) {
