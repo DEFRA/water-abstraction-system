@@ -94,6 +94,34 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       })
     })
 
+    describe('because the licence has lapsed', () => {
+      beforeEach(() => {
+        licenceRenewal.lapsedDate = new Date('2026-05-20')
+      })
+
+      it('confirms the data is invalid', () => {
+        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('The licence has ended')
+      })
+    })
+
+    describe('because the licence has been revoked', () => {
+      beforeEach(() => {
+        licenceRenewal.revokedDate = new Date('2026-05-20')
+      })
+
+      it('confirms the data is invalid', () => {
+        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+
+        expect(result.value).to.exist()
+        expect(result.error).to.exist()
+        expect(result.error.details[0].message).to.equal('The licence has ended')
+      })
+    })
+
     describe('because the licence does not have an expiry date', () => {
       beforeEach(() => {
         licenceRenewal.expiredDate = null
@@ -124,7 +152,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
         expect(result.value).to.exist()
         expect(result.error).to.exist()
         expect(result.error.details[0].message).to.equal(
-          'The licence expiry date must be at least 90 days in the future'
+          'The licence expires in less than 90 days'
         )
       })
     })

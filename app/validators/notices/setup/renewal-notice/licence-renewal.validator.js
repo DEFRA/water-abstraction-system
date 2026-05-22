@@ -38,7 +38,7 @@ function go(payload, licenceRenewal) {
         return _licenceExpiryDateInRange(value, helpers, licenceRenewal)
       }, 'Custom Licence expiry date in range Validation')
       .messages({
-        'expiry-date-too-soon': 'The licence expiry date must be at least 90 days in the future'
+        'expiry-date-too-soon': 'The licence expires in less than 90 days'
       })
   })
 
@@ -81,7 +81,9 @@ function _licenceExpiryDateInRange(value, helpers, licenceRenewal) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  if (renewalNoticeDate(licenceRenewal.expiredDate) >= today) {
+  const renewalDate = renewalNoticeDate(licenceRenewal.expiredDate)
+
+  if (renewalDate >= today) {
     return value
   }
 
