@@ -54,7 +54,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
     describe('because a "licenceRef" has not been provided', () => {
       beforeEach(() => {
         licenceRenewal = undefined
-        payload = { licenceRef: '' }
+        payload = {}
       })
 
       it('confirms the data is invalid', () => {
@@ -81,47 +81,46 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
     })
 
     describe('because the licence has ended', () => {
-      beforeEach(() => {
-        licenceRenewal.expiredDate = new Date('2026-05-20')
+      describe('because the licence has expired', () => {
+        beforeEach(() => {
+          licenceRenewal.expiredDate = new Date('2026-05-20')
+        })
+
+        it('confirms the data is invalid', () => {
+          const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+
+          expect(result.value).to.exist()
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal('The licence has ended')
+        })
       })
 
-      it('confirms the data is invalid with only one error', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+      describe('because the licence has lapsed', () => {
+        beforeEach(() => {
+          licenceRenewal.lapsedDate = new Date('2026-05-20')
+        })
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details).to.have.length(1)
-        expect(result.error.details[0].message).to.equal('The licence has ended')
-      })
-    })
+        it('confirms the data is invalid', () => {
+          const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
-    describe('because the licence has lapsed', () => {
-      beforeEach(() => {
-        licenceRenewal.lapsedDate = new Date('2026-05-20')
-      })
-
-      it('confirms the data is invalid with only one error', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
-
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details).to.have.length(1)
-        expect(result.error.details[0].message).to.equal('The licence has ended')
-      })
-    })
-
-    describe('because the licence has been revoked', () => {
-      beforeEach(() => {
-        licenceRenewal.revokedDate = new Date('2026-05-20')
+          expect(result.value).to.exist()
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal('The licence has ended')
+        })
       })
 
-      it('confirms the data is invalid with only one error', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+      describe('because the licence has been revoked', () => {
+        beforeEach(() => {
+          licenceRenewal.revokedDate = new Date('2026-05-20')
+        })
 
-        expect(result.value).to.exist()
-        expect(result.error).to.exist()
-        expect(result.error.details).to.have.length(1)
-        expect(result.error.details[0].message).to.equal('The licence has ended')
+        it('confirms the data is invalid', () => {
+          const result = LicenceRenewalValidator.go(payload, licenceRenewal)
+
+          expect(result.value).to.exist()
+          expect(result.error).to.exist()
+          expect(result.error.details[0].message).to.equal('The licence has ended')
+        })
       })
     })
 
@@ -142,11 +141,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
 
     describe('because the licence expiry date is less than 90 days in the future', () => {
       beforeEach(() => {
-        const expiredDate = new Date('2026-08-19')
-
-        expiredDate.setDate(expiredDate.getDate() - 1)
-
-        licenceRenewal.expiredDate = expiredDate
+        licenceRenewal.expiredDate = new Date('2026-08-18')
       })
 
       it('confirms the data is invalid', () => {

@@ -9,6 +9,7 @@ const Joi = require('joi')
 
 const { renewalNoticeDate } = require('../../../../lib/dates.lib.js')
 const { licenceRefSchema } = require('../../../schemas/licence-ref.schema.js')
+const { today } = require('../../../../lib/general.lib.js')
 
 /**
  * Validates the licence ref submitted for the `/notices/setup/{sessionId}/licence` page for renewal notice types
@@ -46,16 +47,11 @@ function go(payload, licenceRenewal) {
 }
 
 function _licenceEnded(value, helpers, licenceRenewal) {
-  if (!licenceRenewal) {
-    return value
-  }
-
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const todaysDate = today()
 
   const { expiredDate, lapsedDate, revokedDate } = licenceRenewal
   const hasEnded = [expiredDate, lapsedDate, revokedDate].filter(Boolean).some((date) => {
-    return date <= today
+    return date <= todaysDate
   })
 
   if (hasEnded) {
@@ -66,7 +62,7 @@ function _licenceEnded(value, helpers, licenceRenewal) {
 }
 
 function _licenceHasExpiryDate(value, helpers, licenceRenewal) {
-  if (!licenceRenewal || licenceRenewal.expiredDate) {
+  if (licenceRenewal.expiredDate) {
     return value
   }
 
@@ -74,16 +70,15 @@ function _licenceHasExpiryDate(value, helpers, licenceRenewal) {
 }
 
 function _licenceExpiryDateInRange(value, helpers, licenceRenewal) {
-  if (!licenceRenewal?.expiredDate) {
+  if (!licenceRenewal.expiredDate) {
     return value
   }
 
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
+  const todaysDate = today()
 
   const renewalDate = renewalNoticeDate(licenceRenewal.expiredDate)
 
-  if (renewalDate >= today) {
+  if (renewalDate >= todaysDate) {
     return value
   }
 
