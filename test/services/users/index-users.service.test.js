@@ -40,7 +40,7 @@ describe('Users - Index Users service', () => {
   describe('when called', () => {
     beforeEach(() => {
       // For the purposes of this tests the filter doesn't matter
-      yarStub = { get: Sinon.stub().returns(null) }
+      yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(null) }
 
       const results = [UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess())]
 
@@ -65,6 +65,7 @@ describe('Users - Index Users service', () => {
             text: 'Create a user'
           }
         },
+        notification: undefined,
         pageTitle: 'Users',
         users: [
           {
@@ -89,7 +90,7 @@ describe('Users - Index Users service', () => {
 
     describe('and none were ever set or they were cleared', () => {
       beforeEach(() => {
-        yarStub = { get: Sinon.stub().returns(null) }
+        yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(null) }
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -101,7 +102,7 @@ describe('Users - Index Users service', () => {
 
     describe('and the filters were submitted empty', () => {
       beforeEach(() => {
-        yarStub = { get: Sinon.stub().returns(_filters()) }
+        yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(_filters()) }
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -116,7 +117,7 @@ describe('Users - Index Users service', () => {
         const filters = _filters()
 
         filters.email = 'carol.shaw@wrls.gov.uk'
-        yarStub = { get: Sinon.stub().returns(filters) }
+        yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(filters) }
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
@@ -124,6 +125,18 @@ describe('Users - Index Users service', () => {
 
         expect(result.filters.openFilter).to.be.true()
       })
+    })
+  })
+
+  describe('when there is a notification', () => {
+    beforeEach(() => {
+      yarStub = { flash: Sinon.stub().returns(['Test notification']), get: Sinon.stub().returns(null) }
+    })
+
+    it('sets the notification', async () => {
+      const result = await IndexUsersService.go(yarStub, auth, page)
+
+      expect(result.notification).to.equal('Test notification')
     })
   })
 })
