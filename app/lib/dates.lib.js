@@ -253,7 +253,9 @@ function _isLeapYear(year) {
 function renewalNoticeDate(expiryDate) {
   const noticeDate = new Date(expiryDate)
 
-  noticeDate.setDate(noticeDate.getDate() - 90)
+  const nintyDays = 90
+
+  noticeDate.setDate(noticeDate.getDate() - nintyDays)
 
   return noticeDate
 }

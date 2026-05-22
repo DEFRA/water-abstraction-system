@@ -74,7 +74,7 @@ function _licenceHasExpiryDate(value, helpers, licenceRenewal) {
 }
 
 function _licenceExpiryDateInRange(value, helpers, licenceRenewal) {
-  if (!licenceRenewal || !licenceRenewal.expiredDate) {
+  if (!licenceRenewal?.expiredDate) {
     return value
   }
 
