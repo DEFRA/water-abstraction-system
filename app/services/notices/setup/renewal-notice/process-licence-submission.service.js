@@ -7,8 +7,8 @@
 
 const FetchRenewalLicenceDal = require('../../../../dal/notices/setup/fetch-renewal-licence.dal.js')
 const LicenceRenewalValidator = require('../../../../validators/notices/setup/renewal-notice/licence-renewal.validator.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
 const { renewalNoticeDate } = require('../../../../lib/dates.lib.js')
+const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
 
 /**
  * Orchestrates validating the renewal notice types for the `/notices/setup/{sessionId}/licence` page
@@ -23,7 +23,7 @@ const { renewalNoticeDate } = require('../../../../lib/dates.lib.js')
 async function go(payload) {
   const licenceRenewal = await FetchRenewalLicenceDal.go(payload.licenceRef)
 
-  const validationResult = await _validate(payload, licenceRenewal)
+  const validationResult = _validate(payload, licenceRenewal)
 
   return {
     additionalSessionData: _additionalSessionData(licenceRenewal),
@@ -42,7 +42,7 @@ function _additionalSessionData(licenceRenewal) {
   return {}
 }
 
-async function _validate(payload, licenceRenewal) {
+function _validate(payload, licenceRenewal) {
   const validationResult = LicenceRenewalValidator.go(payload, licenceRenewal)
 
   return formatValidationResult(validationResult)

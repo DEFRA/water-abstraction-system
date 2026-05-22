@@ -16,7 +16,7 @@ const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 // Thing under test
 const LicenceRenewalValidator = require('../../../../../app/validators/notices/setup/renewal-notice/licence-renewal.validator.js')
 
-describe.only('Notices - Setup - Renewal Notice - licence renewal validator', () => {
+describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   let clock
   let licenceRenewal
   let payload
