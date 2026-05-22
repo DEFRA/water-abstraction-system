@@ -42,7 +42,7 @@ function go(payload, licenceRenewal) {
       })
   })
 
-  return schema.validate(payload, { abortEarly: false })
+  return schema.validate(payload, { abortEarly: true })
 }
 
 function _licenceEnded(value, helpers, licenceRenewal) {

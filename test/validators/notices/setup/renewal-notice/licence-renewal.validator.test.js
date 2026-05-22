@@ -85,11 +85,12 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
         licenceRenewal.expiredDate = new Date('2026-05-20')
       })
 
-      it('confirms the data is invalid', () => {
+      it('confirms the data is invalid with only one error', () => {
         const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
+        expect(result.error.details).to.have.length(1)
         expect(result.error.details[0].message).to.equal('The licence has ended')
       })
     })
@@ -99,11 +100,12 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
         licenceRenewal.lapsedDate = new Date('2026-05-20')
       })
 
-      it('confirms the data is invalid', () => {
+      it('confirms the data is invalid with only one error', () => {
         const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
+        expect(result.error.details).to.have.length(1)
         expect(result.error.details[0].message).to.equal('The licence has ended')
       })
     })
@@ -113,11 +115,12 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
         licenceRenewal.revokedDate = new Date('2026-05-20')
       })
 
-      it('confirms the data is invalid', () => {
+      it('confirms the data is invalid with only one error', () => {
         const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
+        expect(result.error.details).to.have.length(1)
         expect(result.error.details[0].message).to.equal('The licence has ended')
       })
     })
