@@ -30,7 +30,7 @@ describe('Notices - Setup - Fetch Renewal Licence DAL', () => {
 
       expect(result).to.equal({
         expiredDate: null,
-        id: result.id,
+        id: licence.id,
         lapsedDate: null,
         licenceRef: licence.licenceRef,
         revokedDate: null
