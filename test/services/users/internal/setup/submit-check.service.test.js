@@ -13,6 +13,7 @@ const SessionModelStub = require('../../../../support/stubs/session.stub.js')
 
 // Things we need to stub
 const CreateUserDal = require('../../../../../app/dal/users/internal/create-user.dal.js')
+const DeleteSessionDal = require('../../../../../app/dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
@@ -31,8 +32,9 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
 
     session = SessionModelStub.build(Sinon, sessionData)
 
-    Sinon.stub(FetchSessionDal, 'go').resolves(session)
     Sinon.stub(CreateUserDal, 'go').resolves()
+    Sinon.stub(DeleteSessionDal, 'go').resolves()
+    Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = { flash: Sinon.stub() }
   })
@@ -59,6 +61,12 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
           titleText: `User "${session.email}" added`,
           text: 'We have emailed the new user instructions to complete their account set up.'
         })
+      })
+
+      it('deletes the session record', async () => {
+        await SubmitCheckService.go(session.id, yarStub)
+
+        expect(DeleteSessionDal.go.calledWith(session.id)).to.be.true()
       })
     })
 

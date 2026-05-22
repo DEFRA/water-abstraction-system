@@ -7,6 +7,7 @@
  */
 
 const CreateUserDal = require('../../../../dal/users/internal/create-user.dal.js')
+const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
 const { flashNotification } = require('../../../../lib/general.lib.js')
 
@@ -20,6 +21,8 @@ const { flashNotification } = require('../../../../lib/general.lib.js')
  */
 async function go(sessionId, yar) {
   const session = await FetchSessionDal.go(sessionId)
+
+  await DeleteSessionDal.go(sessionId)
 
   try {
     await CreateUserDal.go(session)
