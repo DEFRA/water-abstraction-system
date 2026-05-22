@@ -81,10 +81,11 @@ async function _save(session, payload, additionalSessionData) {
 
 function _redirect(noticeType, journey, checkPageVisited, licenceChanged) {
   if (noticeType === NoticeType.PAPER_RETURN) {
-    if (!checkPageVisited || licenceChanged)
+    if (!checkPageVisited || licenceChanged) {
       return {
         redirectUrl: 'paper-return'
       }
+    }
   }
 
   if (journey === NoticeJourney.STANDARD && !checkPageVisited) {
