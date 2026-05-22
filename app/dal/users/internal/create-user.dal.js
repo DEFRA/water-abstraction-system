@@ -27,15 +27,18 @@ async function go(session) {
   // We do this because a "Basic access" user can be both internal and external, so we set it to be internal here
   const resolvedApplication = application === 'both' ? 'water_admin' : application
 
+  const groupIds = await GroupModel.query().select('id').whereIn('group', groups)
+  const roleIds = await RoleModel.query().select('id').whereIn('role', roles)
+
   return await UserModel.transaction(async (trx) => {
     const { id, resetGuid } = await _insertUser(resolvedApplication, session.email, trx)
 
-    if (groups.length > 0) {
-      await _insertUserGroups(groups, id, trx)
+    if (groupIds.length > 0) {
+      await _insertUserGroups(groupIds, id, trx)
     }
 
-    if (roles.length > 0) {
-      await _insertUserRoles(roles, id, trx)
+    if (roleIds.length > 0) {
+      await _insertUserRoles(roleIds, id, trx)
     }
 
     return resetGuid
@@ -56,27 +59,15 @@ async function _insertUser(application, email, trx) {
   return UserModel.query(trx).insert(userData).returning('id', 'resetGuid')
 }
 
-async function _insertUserGroups(groups, id, trx) {
-  for (const group of groups) {
-    const groupRecord = await GroupModel.query().select('id').findOne({ group })
-
-    if (!groupRecord) {
-      continue
-    }
-
-    await UserModel.relatedQuery('userGroups', trx).for(id).insert({ id: generateUUID(), groupId: groupRecord.id })
+async function _insertUserGroups(groupIds, id, trx) {
+  for (const { id: groupId } of groupIds) {
+    await UserModel.relatedQuery('userGroups', trx).for(id).insert({ id: generateUUID(), groupId })
   }
 }
 
-async function _insertUserRoles(roles, id, trx) {
-  for (const role of roles) {
-    const roleRecord = await RoleModel.query().select('id').findOne({ role })
-
-    if (!roleRecord) {
-      continue
-    }
-
-    await UserModel.relatedQuery('userRoles', trx).for(id).insert({ id: generateUUID(), roleId: roleRecord.id })
+async function _insertUserRoles(roleIds, id, trx) {
+  for (const { id: roleId } of roleIds) {
+    await UserModel.relatedQuery('userRoles', trx).for(id).insert({ id: generateUUID(), roleId })
   }
 }
 
