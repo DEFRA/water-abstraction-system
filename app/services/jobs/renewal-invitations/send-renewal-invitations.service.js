@@ -9,7 +9,7 @@ const CreateNoticeService = require('../../notices/setup/create-notice.service.j
 const CreateNotificationsService = require('../../notices/setup/create-notifications.service.js')
 const FetchRenewalRecipients = require('./fetch-renewal-recipients.service.js')
 const NotifyConfig = require('../../../../config/notify.config.js')
-const ProcessRenewalDates = require('../../notices/setup/renewal-notice/process-renewal-dates.service.js')
+const { renewalExpiryDate, renewalNoticeDate } = require('../../../lib/dates.lib.js')
 const SendNoticeService = require('../../notices/setup/send/send-notice.service.js')
 const { NoticeTypes, NoticeType } = require('../../../lib/static-lookups.lib.js')
 const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
@@ -22,7 +22,8 @@ const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
  * @returns {Promise<object[]>} An array of renewal invitation recipients
  */
 async function go(days) {
-  const { expiryDate, renewalDate } = ProcessRenewalDates.go(days)
+  const expiryDate = renewalExpiryDate(days)
+  const renewalDate = renewalNoticeDate(expiryDate)
 
   const recipients = await FetchRenewalRecipients.go(expiryDate)
 

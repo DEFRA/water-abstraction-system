@@ -5,11 +5,10 @@
  * @module ProcessRenewalsNoticeLicenceSubmission
  */
 
-const CheckLicenceExistsDal = require('../../../../dal/notices/setup/check-licence-exists.dal.js')
 const FetchRenewalLicenceDal = require('../../../../dal/notices/setup/fetch-renewal-licence.dal.js')
 const LicenceRenewalValidator = require('../../../../validators/notices/setup/renewal-notice/licence-renewal.validator.js')
-const ProcessRenewalDates = require('./process-renewal-dates.service.js')
 const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+const { renewalNoticeDate } = require('../../../../lib/dates.lib.js')
 
 /**
  * Orchestrates validating the renewal notice types for the `/notices/setup/{sessionId}/licence` page
@@ -22,32 +21,29 @@ const { formatValidationResult } = require('../../../../presenters/base.presente
  * @returns {Promise<object>} The validation result (null if valid)
  */
 async function go(payload) {
-  const { expiryDate, renewalDate } = ProcessRenewalDates.go()
+  const licenceRenewal = await FetchRenewalLicenceDal.go(payload.licenceRef)
 
-  const validationResult = await _validate(payload, expiryDate)
+  const validationResult = await _validate(payload, licenceRenewal)
 
   return {
-    additionalSessionData: {
-      expiryDate,
-      renewalDate
-    },
+    additionalSessionData: _additionalSessionData(licenceRenewal),
     validationResult
   }
 }
 
-async function _validate(payload, expiryDate) {
-  let licenceExists = false
-  let licenceRenewal = false
-
-  if (payload.licenceRef) {
-    licenceExists = await CheckLicenceExistsDal.go(payload.licenceRef)
+function _additionalSessionData(licenceRenewal) {
+  if (licenceRenewal?.expiredDate) {
+    return {
+      expiryDate: licenceRenewal.expiredDate,
+      renewalDate: renewalNoticeDate(licenceRenewal.expiredDate)
+    }
   }
 
-  if (licenceExists) {
-    licenceRenewal = await FetchRenewalLicenceDal.go(payload.licenceRef)
-  }
+  return {}
+}
 
-  const validationResult = LicenceRenewalValidator.go(payload, licenceExists, licenceRenewal, expiryDate)
+async function _validate(payload, licenceRenewal) {
+  const validationResult = LicenceRenewalValidator.go(payload, licenceRenewal)
 
   return formatValidationResult(validationResult)
 }

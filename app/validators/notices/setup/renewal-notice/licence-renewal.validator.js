@@ -7,22 +7,21 @@
 
 const Joi = require('joi')
 
+const { renewalNoticeDate } = require('../../../../lib/dates.lib.js')
 const { licenceRefSchema } = require('../../../schemas/licence-ref.schema.js')
 
 /**
  * Validates the licence ref submitted for the `/notices/setup/{sessionId}/licence` page for renewal notice types
  *
  * @param {object} payload - The payload from the request to be validated
- * @param {boolean} licenceExists - the result of checking if the licence ref is present in the database
- * @param {object} licenceRenewal - the licence with renewal date fields fetched from the database
- * @param {Date} expiryDate - the target expiry date (90 days from today)
+ * @param {object} licenceRenewal - the licence with renewal date fields fetched from the database (undefined if not found)
  *
  * @returns {object} the result from calling Joi's schema.validate(). It will be an object with a `value:` property. If
  * any errors are found the `error:` property will also exist detailing what the issues were
  */
-function go(payload, licenceExists, licenceRenewal, expiryDate) {
+function go(payload, licenceRenewal) {
   const schema = Joi.object({
-    licenceRef: licenceRefSchema(licenceExists)
+    licenceRef: licenceRefSchema(!!licenceRenewal)
       .custom((value, helpers) => {
         return _licenceEnded(value, helpers, licenceRenewal)
       }, 'Custom Licence ended Validation')
@@ -36,7 +35,7 @@ function go(payload, licenceExists, licenceRenewal, expiryDate) {
         'no-expiry-date': 'The licence does not have an expiry date'
       })
       .custom((value, helpers) => {
-        return _licenceExpiryDateInRange(value, helpers, licenceRenewal, expiryDate)
+        return _licenceExpiryDateInRange(value, helpers, licenceRenewal)
       }, 'Custom Licence expiry date in range Validation')
       .messages({
         'expiry-date-too-soon': 'The licence expiry date must be at least 90 days in the future'
@@ -47,25 +46,42 @@ function go(payload, licenceExists, licenceRenewal, expiryDate) {
 }
 
 function _licenceEnded(value, helpers, licenceRenewal) {
-  const endDate = licenceRenewal.$ends()
-
-  if (!endDate || endDate.date > new Date()) {
+  if (!licenceRenewal) {
     return value
   }
 
-  return helpers.error('ended', { licenceRef: value })
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const { expiredDate, lapsedDate, revokedDate } = licenceRenewal
+  const hasEnded = [expiredDate, lapsedDate, revokedDate].filter(Boolean).some((date) => {
+    return date <= today
+  })
+
+  if (hasEnded) {
+    return helpers.error('ended', { licenceRef: value })
+  }
+
+  return value
 }
 
 function _licenceHasExpiryDate(value, helpers, licenceRenewal) {
-  if (licenceRenewal.expiredDate) {
+  if (!licenceRenewal || licenceRenewal.expiredDate) {
     return value
   }
 
   return helpers.error('no-expiry-date', { licenceRef: value })
 }
 
-function _licenceExpiryDateInRange(value, helpers, licenceRenewal, expiryDate) {
-  if (!licenceRenewal.expiredDate || licenceRenewal.expiredDate >= expiryDate) {
+function _licenceExpiryDateInRange(value, helpers, licenceRenewal) {
+  if (!licenceRenewal || !licenceRenewal.expiredDate) {
+    return value
+  }
+
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  if (renewalNoticeDate(licenceRenewal.expiredDate) >= today) {
     return value
   }
 

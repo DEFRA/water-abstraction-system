@@ -8,46 +8,43 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
-// Things we need to stub
-const CheckLicenceExistsDal = require('../../../../../app/dal/notices/setup/check-licence-exists.dal.js')
-const FetchRenewalLicenceDal = require('../../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js')
-
 // Helpers
 const LicenceModel = require('../../../../../app/models/licence.model.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+
+// Things we need to stub
+const FetchRenewalLicenceDal = require('../../../../../app/dal/notices/setup/fetch-renewal-licence.dal.js')
 
 // Thing under test
 const ProcessRenewalsNoticeLicenceSubmission = require('../../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js')
 
 describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Submission', () => {
-  let clock
-  let expiryDate
+  let licenceExpiryDate
   let licenceRef
   let payload
   let renewalDate
+  let fetchRenewalLicenceDalStub
+  let licenceRenewal
 
   beforeEach(() => {
-    clock = Sinon.useFakeTimers(new Date('2026-06-01'))
-
-    expiryDate = new Date('2026-06-01T00:00:00.000Z')
-    renewalDate = new Date('2026-03-03T00:00:00.000Z')
-    licenceRef = '01/234/R01'
+    licenceExpiryDate = new Date('2026-09-01')
+    licenceRef = generateLicenceRef()
     payload = { licenceRef }
+    renewalDate = new Date('2026-06-03')
 
-    Sinon.stub(CheckLicenceExistsDal, 'go').resolves(true)
-    Sinon.stub(FetchRenewalLicenceDal, 'go').resolves(
-      LicenceModel.fromJson({
-        expiredDate: new Date('2026-09-01'),
-        id: generateUUID(),
-        lapsedDate: null,
-        licenceRef,
-        revokedDate: null
-      })
-    )
+    licenceRenewal = LicenceModel.fromJson({
+      expiredDate: licenceExpiryDate,
+      id: generateUUID(),
+      lapsedDate: null,
+      licenceRef,
+      revokedDate: null
+    })
+
+    fetchRenewalLicenceDalStub = Sinon.stub(FetchRenewalLicenceDal, 'go').resolves(licenceRenewal)
   })
 
   afterEach(() => {
-    clock.restore()
     Sinon.restore()
   })
 
@@ -57,7 +54,7 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
         const result = await ProcessRenewalsNoticeLicenceSubmission.go(payload)
 
         expect(result).to.equal({
-          additionalSessionData: { expiryDate, renewalDate },
+          additionalSessionData: { expiryDate: licenceExpiryDate, renewalDate },
           validationResult: null
         })
       })
@@ -67,13 +64,15 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
       describe('because no licence ref was entered', () => {
         beforeEach(() => {
           payload = {}
+
+          fetchRenewalLicenceDalStub.resolves(undefined)
         })
 
         it('returns a validation error', async () => {
           const result = await ProcessRenewalsNoticeLicenceSubmission.go(payload)
 
           expect(result).to.equal({
-            additionalSessionData: { expiryDate, renewalDate },
+            additionalSessionData: {},
             validationResult: {
               errorList: [{ href: '#licenceRef', text: 'Enter a licence number' }],
               licenceRef: { text: 'Enter a licence number' }
@@ -84,17 +83,28 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
 
       describe('because the licence ref does not exist', () => {
         beforeEach(() => {
-          CheckLicenceExistsDal.go.resolves(false)
+          payload = { licenceRef }
+
+          licenceRenewal.expiredDate = null
+
+          fetchRenewalLicenceDalStub.resolves(licenceRenewal)
         })
 
         it('returns a validation error', async () => {
           const result = await ProcessRenewalsNoticeLicenceSubmission.go(payload)
 
           expect(result).to.equal({
-            additionalSessionData: { expiryDate, renewalDate },
+            additionalSessionData: {},
             validationResult: {
-              errorList: [{ href: '#licenceRef', text: 'Enter a valid licence number' }],
-              licenceRef: { text: 'Enter a valid licence number' }
+              errorList: [
+                {
+                  href: '#licenceRef',
+                  text: 'The licence does not have an expiry date'
+                }
+              ],
+              licenceRef: {
+                text: 'The licence does not have an expiry date'
+              }
             }
           })
         })

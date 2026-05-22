@@ -16,27 +16,21 @@ const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 // Thing under test
 const LicenceRenewalValidator = require('../../../../../app/validators/notices/setup/renewal-notice/licence-renewal.validator.js')
 
-describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
+describe.only('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   let clock
-  let licenceExists
   let licenceRenewal
-  let expiryDate
   let payload
   let licenceRef
 
   beforeEach(() => {
     clock = Sinon.useFakeTimers(new Date('2026-05-21'))
 
-    licenceExists = true
-
     licenceRef = generateLicenceRef()
 
     payload = { licenceRef }
 
-    expiryDate = new Date('2026-08-19')
-
     licenceRenewal = LicenceModel.fromJson({
-      expiredDate: expiryDate,
+      expiredDate: new Date('2026-08-19'),
       id: generateUUID(),
       lapsedDate: null,
       licenceRef,
@@ -50,7 +44,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   })
 
   it('confirms the data is valid', () => {
-    const result = LicenceRenewalValidator.go(payload, licenceExists, licenceRenewal, expiryDate)
+    const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
     expect(result.value).to.exist()
     expect(result.error).not.to.exist()
@@ -59,12 +53,12 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
   describe('when invalid data is provided', () => {
     describe('because a "licenceRef" has not been provided', () => {
       beforeEach(() => {
-        licenceExists = false
+        licenceRenewal = undefined
         payload = { licenceRef: '' }
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceExists, licenceRenewal, expiryDate)
+        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -74,11 +68,11 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
 
     describe('because the "licenceRef" does not exist', () => {
       beforeEach(() => {
-        licenceExists = false
+        licenceRenewal = undefined
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceExists, licenceRenewal, expiryDate)
+        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -92,7 +86,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceExists, licenceRenewal, expiryDate)
+        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -107,7 +101,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceExists, licenceRenewal, expiryDate)
+        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
@@ -117,7 +111,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
 
     describe('because the licence expiry date is less than 90 days in the future', () => {
       beforeEach(() => {
-        const expiredDate = new Date(expiryDate)
+        const expiredDate = new Date('2026-08-19')
 
         expiredDate.setDate(expiredDate.getDate() - 1)
 
@@ -125,7 +119,7 @@ describe('Notices - Setup - Renewal Notice - licence renewal validator', () => {
       })
 
       it('confirms the data is invalid', () => {
-        const result = LicenceRenewalValidator.go(payload, licenceExists, licenceRenewal, expiryDate)
+        const result = LicenceRenewalValidator.go(payload, licenceRenewal)
 
         expect(result.value).to.exist()
         expect(result.error).to.exist()
