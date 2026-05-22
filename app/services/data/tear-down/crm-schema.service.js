@@ -115,8 +115,15 @@ async function _deleteAllTestData() {
   DELETE
   FROM
     "crm"."entity_roles"
+      USING "crm"."entity" AS "e"
   WHERE
-    "created_by" = 'acceptance-test-setup';
+    "created_by" = 'acceptance-test-setup'
+    OR "e"."entity_nm" LIKE 'acceptance-test.%'
+    OR "e"."entity_nm" LIKE '%@example.com'
+    OR "e"."entity_nm" LIKE '%@e'
+    OR "e"."entity_nm" LIKE 'regression.tests.%'
+    OR "e"."entity_nm" LIKE 'Big Farm Co Ltd%'
+    OR "e"."source" = 'acceptance-test-setup';
 
   DELETE
   FROM
@@ -124,6 +131,7 @@ async function _deleteAllTestData() {
   WHERE
     "entity_nm" LIKE 'acceptance-test.%'
     OR "entity_nm" LIKE '%@example.com'
+    OR "entity_nm" LIKE '%@e'
     OR "entity_nm" LIKE 'regression.tests.%'
     OR "entity_nm" LIKE 'Big Farm Co Ltd%'
     OR "source" = 'acceptance-test-setup';
@@ -137,7 +145,7 @@ async function _deleteAllTestData() {
       '$.dataType'
     ) #>> '{}' = 'acceptance-test-setup';
 
-    ALTER TABLE crm.document_header ENABLE TRIGGER ALL;
+  ALTER TABLE crm.document_header ENABLE TRIGGER ALL;
   ALTER TABLE crm_v2.addresses ENABLE TRIGGER ALL;
   ALTER TABLE crm_v2.companies ENABLE TRIGGER ALL;
   ALTER TABLE crm_v2.company_addresses ENABLE TRIGGER ALL;
