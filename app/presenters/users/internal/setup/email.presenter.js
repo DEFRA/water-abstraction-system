@@ -18,7 +18,7 @@ function go(session) {
   return {
     activeNavBar: 'users',
     backLink: {
-      href: _checkUrl(session),
+      href: _href(session),
       text: 'Back'
     },
     email: formatEmail(session.email),
@@ -27,7 +27,7 @@ function go(session) {
   }
 }
 
-function _checkUrl(session) {
+function _href(session) {
   if (session.checkPageVisited) {
     return `/system/users/internal/setup/${session.id}/check`
   }
