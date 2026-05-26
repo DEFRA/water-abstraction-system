@@ -125,7 +125,14 @@ async function _recordReturnLogs(notification, status, trx) {
   }
 
   // We only apply the due date for certain notice types
-  if (!['paper return', 'returns invitation', 'returns invitation ad-hoc'].includes(messageRef)) {
+  const dueDateApplicableMessageRefs = [
+    'paper return',
+    'returns invitation',
+    'returns invitation ad-hoc',
+    'returns invitation alternate'
+  ]
+
+  if (!dueDateApplicableMessageRefs.includes(messageRef)) {
     return
   }
 
