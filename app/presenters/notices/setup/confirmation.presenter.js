@@ -5,6 +5,8 @@
  * @module ConfirmationPresenter
  */
 
+const { NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+
 /**
  * Formats data for the `/notices/setup/{eventId}/confirmation` page
  *
@@ -38,17 +40,21 @@ function _monitoringStationLink(metadata) {
  * @private
  */
 function _pageTitle(subType) {
-  if (subType === 'waterAbstractionAlerts') {
+  if (subType === NoticeTypes[NoticeType.ABSTRACTION_ALERTS].subType) {
     return 'Water abstraction alerts sent'
   }
 
-  if (subType === 'paperReturnForms') {
+  if (subType === NoticeTypes[NoticeType.PAPER_RETURN].subType) {
     return 'Paper returns sent'
   }
 
+  if (subType === NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType) {
+    return 'Renewal invitations sent'
+  }
+
   const subTypes = {
-    returnInvitation: 'invitations',
-    returnReminder: 'reminders'
+    [NoticeTypes[NoticeType.INVITATIONS].subType]: 'invitations',
+    [NoticeTypes[NoticeType.REMINDERS].subType]: 'reminders'
   }
 
   return `Returns ${subTypes[subType]} sent`
