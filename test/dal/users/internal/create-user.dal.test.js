@@ -37,7 +37,9 @@ describe('Users - Internal - Create User DAL', () => {
     it('returns a reset GUID', async () => {
       const result = await CreateUserDal.go(session)
 
-      expect(result).to.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
+      const { resetGuid } = await UserModel.query().where('username', session.email).limit(1).first()
+
+      expect(result).to.equal(resetGuid)
     })
 
     it('creates the user with the correct attributes', async () => {
