@@ -13,6 +13,9 @@ const LicenceMonitoringStationModel = require('../../../../app/models/licence-mo
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
+// Test helpers
+const YarStub = require('../../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
@@ -53,7 +56,7 @@ describe('Licence Monitoring Station Setup - Submit Check Service', () => {
 
     Sinon.stub(DeleteSessionDal, 'go').resolves()
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

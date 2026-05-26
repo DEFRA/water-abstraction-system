@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+const YarStub = require('../../../../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
@@ -43,7 +44,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
       }
     })
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

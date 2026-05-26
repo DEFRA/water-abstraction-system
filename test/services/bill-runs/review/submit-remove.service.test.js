@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+const YarStub = require('../../../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const CreateLicenceSupplementaryYearService = require('../../../../app/services/licences/supplementary/create-licence-supplementary-year.service.js')
@@ -39,7 +40,7 @@ describe('Bill Runs - Review - Submit Remove service', () => {
       .withArgs(removeReviewLicence.licenceId, [removeReviewLicence.billRun.toFinancialYearEnding], true)
       .resolves()
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

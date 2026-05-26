@@ -11,6 +11,9 @@ const { expect } = Code
 // Test helpers
 const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js')
 
+// Test helpers
+const YarStub = require('../../support/stubs/yar.stub.js')
+
 // Things to stub
 const FetchNoticeService = require('../../../app/services/notices/fetch-notice.service.js')
 
@@ -97,7 +100,8 @@ describe('Notices - View Notice service', () => {
       page = '1'
 
       // For the purposes of this tests the filter doesn't matter
-      yarStub = { get: Sinon.stub().returns(_noticeFilters()) }
+      yarStub = YarStub.build(Sinon)
+      yarStub.get.returns(_noticeFilters())
 
       Sinon.stub(FetchNoticeService, 'go').resolves(fetchResults)
     })
@@ -167,7 +171,8 @@ describe('Notices - View Notice service', () => {
 
     describe('and none were ever set or they were cleared', () => {
       beforeEach(() => {
-        yarStub = { get: Sinon.stub().returns(null) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns(null)
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -179,7 +184,8 @@ describe('Notices - View Notice service', () => {
 
     describe('and the filters were submitted empty', () => {
       beforeEach(() => {
-        yarStub = { get: Sinon.stub().returns(_noticeFilters()) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns(_noticeFilters())
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -194,7 +200,8 @@ describe('Notices - View Notice service', () => {
         const filters = _noticeFilters()
 
         filters.recipient = 'carol.shaw@wrls.gov.uk'
-        yarStub = { get: Sinon.stub().returns(filters) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns(filters)
       })
 
       it('returns the saved filters and that the controls should be open', async () => {

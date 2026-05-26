@@ -12,6 +12,9 @@ const { expect } = Code
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
+// Test helpers
+const YarStub = require('../../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
@@ -34,7 +37,7 @@ describe('Notices - Setup - Submit Returns Period service', () => {
 
     clock = Sinon.useFakeTimers(testDate)
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   beforeEach(() => {

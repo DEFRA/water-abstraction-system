@@ -11,6 +11,7 @@ const { expect } = Code
 // Test helpers
 const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
 const ReviewLicenceModel = require('../../../../app/models/review-licence.model.js')
+const YarStub = require('../../../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const FetchReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-review-licence.service.js')
@@ -35,7 +36,7 @@ describe('Bill Runs Review - Submit Review Licence Service', () => {
       patch: patchStub
     })
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

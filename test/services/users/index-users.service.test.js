@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
+const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Things to stub
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
@@ -40,7 +41,8 @@ describe('Users - Index Users service', () => {
   describe('when called', () => {
     beforeEach(() => {
       // For the purposes of this tests the filter doesn't matter
-      yarStub = { get: Sinon.stub().returns(null) }
+      yarStub = YarStub.build(Sinon)
+      yarStub.get.returns(null)
 
       const results = [UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess())]
 
@@ -89,7 +91,8 @@ describe('Users - Index Users service', () => {
 
     describe('and none were ever set or they were cleared', () => {
       beforeEach(() => {
-        yarStub = { get: Sinon.stub().returns(null) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns(null)
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -101,7 +104,8 @@ describe('Users - Index Users service', () => {
 
     describe('and the filters were submitted empty', () => {
       beforeEach(() => {
-        yarStub = { get: Sinon.stub().returns(_filters()) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns(_filters())
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -116,7 +120,8 @@ describe('Users - Index Users service', () => {
         const filters = _filters()
 
         filters.email = 'carol.shaw@wrls.gov.uk'
-        yarStub = { get: Sinon.stub().returns(filters) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns(filters)
       })
 
       it('returns the saved filters and that the controls should be open', async () => {

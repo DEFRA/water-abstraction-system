@@ -13,6 +13,9 @@ const CustomersFixtures = require('../../../support/fixtures/customers.fixture.j
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
+// Test helpers
+const YarStub = require('../../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const DeleteSessionDal = require('../../../../app/dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
@@ -49,7 +52,7 @@ describe('Company Contacts - Setup - Submit Restore Service', () => {
 
     fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
 
     Sinon.stub(UpdateCompanyContactService, 'go').resolves()
     Sinon.stub(DeleteSessionDal, 'go').resolves()

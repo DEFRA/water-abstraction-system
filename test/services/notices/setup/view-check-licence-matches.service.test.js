@@ -11,6 +11,7 @@ const { expect } = Code
 // Test helpers
 const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
+const YarStub = require('../../../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
@@ -42,7 +43,8 @@ describe('Notices - Setup - View Check Licence Matches service', () => {
 
     Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
-    yarStub = { flash: Sinon.stub().resolves() }
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.resolves()
   })
 
   afterEach(() => {
@@ -113,7 +115,8 @@ describe('Notices - Setup - View Check Licence Matches service', () => {
 
     describe('when there is a notification', () => {
       beforeEach(() => {
-        yarStub = { flash: Sinon.stub().returns(['Test notification']) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.flash.returns(['Test notification'])
       })
 
       it('should set the notification', async () => {

@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const LicenceMonitoringStationHelper = require('../../support/helpers/licence-monitoring-station.helper.js')
+const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Thing under test
 const SubmitRemoveService = require('../../../app/services/licence-monitoring-station/submit-remove.service.js')
@@ -23,7 +24,7 @@ describe('Licence Monitoring Station - Submit Remove service', () => {
   beforeEach(async () => {
     licenceMonitoringStation = await LicenceMonitoringStationHelper.add()
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   describe('when a user submits the licence monitoring station to be removed', () => {
