@@ -16,8 +16,6 @@ const { flashNotification } = require('../../../../lib/general.lib.js')
  *
  * @param {string} sessionId - The UUID of the current session
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
- *
- * @returns {Promise<object>} The data formatted for the view template
  */
 async function go(sessionId, yar) {
   const session = await FetchSessionDal.go(sessionId)
