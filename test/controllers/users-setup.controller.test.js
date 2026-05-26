@@ -100,7 +100,7 @@ describe('Users Setup controller', () => {
           Sinon.stub(SubmitCheckService, 'go').resolves()
         })
 
-        it('redirects to the Select permissions for the user page', async () => {
+        it('redirects to the Users page', async () => {
           const response = await server.inject(postOptions)
 
           expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
