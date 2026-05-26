@@ -34,40 +34,45 @@ describe('Users - Internal - Create User DAL', () => {
       session = { email: generateUserName(), permission: 'basic' }
     })
 
+    it('creates the user with the correct attributes', async () => {
+      await CreateUserDal.go(session)
+
+      const user = await UserModel.query().where('username', session.email).limit(1).first()
+
+      expect(user.application).to.equal('water_admin')
+      expect(user.badLogins).to.equal(0)
+      expect(user.enabled).to.be.true()
+      expect(user.password).to.exist()
+      expect(user.resetGuid).to.exist()
+      expect(user.resetGuidCreatedAt).to.be.instanceof(Date)
+      expect(user.resetRequired).to.equal(1)
+      expect(user.username).to.equal(session.email)
+    })
+
+    it('does not create any user groups', async () => {
+      await CreateUserDal.go(session)
+
+      const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
+      const userGroup = await UserGroupModel.query().where({ userId })
+
+      expect(userGroup).to.be.empty()
+    })
+
+    it('does not create any user roles', async () => {
+      await CreateUserDal.go(session)
+
+      const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
+      const userRole = await UserRoleModel.query().where({ userId })
+
+      expect(userRole).to.be.empty()
+    })
+
     it('returns a reset GUID', async () => {
       const result = await CreateUserDal.go(session)
 
       const { resetGuid } = await UserModel.query().where('username', session.email).limit(1).first()
 
       expect(result).to.equal(resetGuid)
-    })
-
-    it('creates the user with the correct attributes', async () => {
-      await CreateUserDal.go(session)
-
-      const result = await UserModel.query().where('username', session.email).limit(1).first()
-
-      expect(result.application).to.equal('water_admin')
-      expect(result.username).to.equal(session.email)
-      expect(result.resetRequired).to.equal(1)
-    })
-
-    it('does not create any user groups', async () => {
-      await CreateUserDal.go(session)
-
-      const user = await UserModel.query().where('username', session.email).limit(1).first()
-      const result = await UserGroupModel.query().where({ userId: user.userId })
-
-      expect(result).to.be.empty()
-    })
-
-    it('does not create any user roles', async () => {
-      await CreateUserDal.go(session)
-
-      const user = await UserModel.query().where('username', session.email).limit(1).first()
-      const result = await UserRoleModel.query().where({ userId: user.userId })
-
-      expect(result).to.be.empty()
     })
   })
 
@@ -76,30 +81,24 @@ describe('Users - Internal - Create User DAL', () => {
       session = { email: generateUserName(), permission: 'nps' }
     })
 
-    it('creates the user with "water_admin" as the application', async () => {
-      await CreateUserDal.go(session)
-
-      const result = await UserModel.query().where('username', session.email).limit(1).first()
-
-      expect(result.application).to.equal('water_admin')
-    })
-
     it('creates the user groups', async () => {
       await CreateUserDal.go(session)
 
-      const user = await UserModel.query().where('username', session.email).limit(1).first()
-      const result = await UserGroupModel.query().where({ userId: user.userId })
+      const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
+      const userGroup = await UserGroupModel.query().where({ userId }).withGraphFetched('group')
 
-      expect(result).to.have.length(1)
+      expect(userGroup).to.have.length(1)
+      expect(userGroup[0].userId).to.equal(userId)
+      expect(userGroup[0].group.group).to.equal('nps')
     })
 
     it('does not create any user roles', async () => {
       await CreateUserDal.go(session)
 
-      const user = await UserModel.query().where('username', session.email).limit(1).first()
-      const result = await UserRoleModel.query().where({ userId: user.userId })
+      const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
+      const userRole = await UserRoleModel.query().where({ userId })
 
-      expect(result).to.be.empty()
+      expect(userRole).to.be.empty()
     })
   })
 
@@ -111,19 +110,23 @@ describe('Users - Internal - Create User DAL', () => {
     it('creates the user groups', async () => {
       await CreateUserDal.go(session)
 
-      const user = await UserModel.query().where('username', session.email).limit(1).first()
-      const result = await UserGroupModel.query().where({ userId: user.userId })
+      const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
+      const userGroup = await UserGroupModel.query().where({ userId }).withGraphFetched('group')
 
-      expect(result).to.have.length(1)
+      expect(userGroup).to.have.length(1)
+      expect(userGroup[0].userId).to.equal(userId)
+      expect(userGroup[0].group.group).to.equal('nps')
     })
 
     it('creates the user roles', async () => {
       await CreateUserDal.go(session)
 
-      const user = await UserModel.query().where('username', session.email).limit(1).first()
-      const result = await UserRoleModel.query().where({ userId: user.userId })
+      const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
+      const userRole = await UserRoleModel.query().where({ userId }).withGraphFetched('role')
 
-      expect(result).to.have.length(1)
+      expect(userRole).to.have.length(1)
+      expect(userRole[0].userId).to.equal(userId)
+      expect(userRole[0].role.role).to.equal('ar_approver')
     })
   })
 })
