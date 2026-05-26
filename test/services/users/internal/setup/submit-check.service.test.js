@@ -27,7 +27,7 @@ describe('Users - Internal - Setup - Submit Check Service', () => {
   beforeEach(() => {
     sessionData = {
       email: 'bob.bobbles@environment-agency.gov.uk',
-      permissions: 'billing_and_data'
+      permission: 'billing_and_data'
     }
 
     session = SessionModelStub.build(Sinon, sessionData)

@@ -17,7 +17,7 @@ describe('Users - Internal - Setup - Permissions Presenter', () => {
   let session
 
   beforeEach(() => {
-    session = { id: generateUUID(), permissions: 'super' }
+    session = { id: generateUUID(), permission: 'super' }
   })
 
   describe('when called', () => {
@@ -32,7 +32,7 @@ describe('Users - Internal - Setup - Permissions Presenter', () => {
         },
         pageTitle: 'Select permissions for the user',
         pageTitleCaption: 'Internal',
-        permissions: 'super'
+        permission: 'super'
       })
     })
 

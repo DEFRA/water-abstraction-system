@@ -24,7 +24,7 @@ function go(session) {
     },
     pageTitle: 'Check user',
     pageTitleCaption: 'Internal',
-    permissions: userPermissions[session.permissions].label
+    permission: userPermissions[session.permission].label
   }
 }
 

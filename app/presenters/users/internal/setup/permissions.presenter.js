@@ -23,7 +23,7 @@ function go(session) {
     },
     pageTitle: 'Select permissions for the user',
     pageTitleCaption: 'Internal',
-    permissions: session.permissions
+    permission: session.permission
   }
 }
 

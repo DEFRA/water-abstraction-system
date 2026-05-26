@@ -17,7 +17,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
   let session
 
   beforeEach(() => {
-    session = { email: 'bob.bobbles@environment-agency.gov.uk', id: generateUUID(), permissions: 'billing_and_data' }
+    session = { email: 'bob.bobbles@environment-agency.gov.uk', id: generateUUID(), permission: 'billing_and_data' }
   })
 
   describe('when called', () => {
@@ -33,7 +33,7 @@ describe('Users - Internal - Setup - Check Presenter', () => {
         },
         pageTitle: 'Check user',
         pageTitleCaption: 'Internal',
-        permissions: 'Billing and Data'
+        permission: 'Billing and Data'
       })
     })
   })

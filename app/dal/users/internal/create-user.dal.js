@@ -22,8 +22,8 @@ const { userPermissions } = require('../../../lib/static-lookups.lib.js')
  * user to complete their account set up
  */
 async function go(session) {
-  const { email, permissions } = session
-  const { application, groups, roles } = userPermissions[permissions]
+  const { email, permission } = session
+  const { application, groups, roles } = userPermissions[permission]
 
   // We do this because a "Basic access" user can be both internal and external, so we set it to be internal here
   const resolvedApplication = application === 'both' ? 'water_admin' : application

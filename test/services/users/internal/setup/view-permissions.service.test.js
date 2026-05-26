@@ -57,7 +57,7 @@ describe('Users - Internal - Setup - View Permissions Service', () => {
         },
         pageTitle: 'Select permissions for the user',
         pageTitleCaption: 'Internal',
-        permissions: undefined,
+        permission: undefined,
         showSuperPermission: true
       })
     })

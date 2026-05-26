@@ -25,7 +25,7 @@ describe('Users - Internal - Setup - Check Service', () => {
   beforeEach(() => {
     sessionData = {
       email: 'bob.bobbles@environment-agency.gov.uk',
-      permissions: 'billing_and_data'
+      permission: 'billing_and_data'
     }
 
     session = SessionModelStub.build(Sinon, sessionData)
@@ -53,7 +53,7 @@ describe('Users - Internal - Setup - Check Service', () => {
         notification: undefined,
         pageTitle: 'Check user',
         pageTitleCaption: 'Internal',
-        permissions: 'Billing and Data'
+        permission: 'Billing and Data'
       })
     })
 

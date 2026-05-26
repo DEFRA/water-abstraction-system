@@ -31,7 +31,7 @@ describe('Users - Internal - Create User DAL', () => {
 
   describe('when the permission has no groups or roles', () => {
     beforeEach(() => {
-      session = { email: generateUserName(), permissions: 'basic' }
+      session = { email: generateUserName(), permission: 'basic' }
     })
 
     it('returns a reset GUID', async () => {
@@ -73,7 +73,7 @@ describe('Users - Internal - Create User DAL', () => {
 
   describe('when the permission has groups but no roles', () => {
     beforeEach(() => {
-      session = { email: generateUserName(), permissions: 'nps' }
+      session = { email: generateUserName(), permission: 'nps' }
     })
 
     it('creates the user with "water_admin" as the application', async () => {
@@ -105,7 +105,7 @@ describe('Users - Internal - Create User DAL', () => {
 
   describe('when the permission has both groups and roles', () => {
     beforeEach(() => {
-      session = { email: generateUserName(), permissions: 'nps_ar_approver' }
+      session = { email: generateUserName(), permission: 'nps_ar_approver' }
     })
 
     it('creates the user groups', async () => {
