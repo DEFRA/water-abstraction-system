@@ -37,8 +37,8 @@ async function go(yar, auth, page) {
     activeNavBar: featureFlagsConfig.enableUsersView ? 'users' : 'search',
     filters,
     notification,
-    ...pageData,
-    pagination
+    pagination,
+    ...pageData
   }
 }
 
