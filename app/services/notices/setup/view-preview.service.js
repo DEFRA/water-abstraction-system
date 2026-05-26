@@ -9,6 +9,7 @@ const AbstractionAlertNotificationsPresenter = require('../../../presenters/noti
 const FetchRecipientsService = require('./fetch-recipients.service.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const PreviewPresenter = require('../../../presenters/notices/setup/preview.presenter.js')
+const RenewalInvitationNotificationsPresenter = require('../../../presenters/notices/setup/renewal-invitation-notice-notifications.presenter.js')
 const ReturnsNoticeNotificationsPresenter = require('../../../presenters/notices/setup/returns-notice-notifications.presenter.js')
 const { NoticeType } = require('../../../lib/static-lookups.lib.js')
 
@@ -52,6 +53,8 @@ function _notification(recipient, session, licenceMonitoringStationId) {
     notification = unfilteredNotifications.find((unfilteredNotification) => {
       return unfilteredNotification.personalisation.licenceGaugingStationId === licenceMonitoringStationId
     })
+  } else if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
+    notification = RenewalInvitationNotificationsPresenter.go(session, [recipient], null)[0]
   } else {
     notification = ReturnsNoticeNotificationsPresenter.go(session, [recipient], null)[0]
   }
