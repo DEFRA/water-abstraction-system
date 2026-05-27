@@ -13,6 +13,7 @@ const SessionModelStub = require('../../../support/stubs/session.stub.js')
 
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
+const YarStub = require('../../../support/stubs/yar.stub.js')
 
 // Thing under test
 const SubmitNoteService = require('../../../../app/services/return-versions/setup/submit-note.service.js')
@@ -55,7 +56,7 @@ describe('Return Versions Setup - Submit Note service', () => {
 
     fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

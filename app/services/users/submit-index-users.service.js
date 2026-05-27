@@ -70,7 +70,7 @@ function _save(payload, yar) {
 }
 
 function _savedFilters(payload) {
-  const { clear, get, set, ...usersFilter } = payload
+  const { clear, flash, get, set, touch, ...usersFilter } = payload
 
   return {
     email: null,

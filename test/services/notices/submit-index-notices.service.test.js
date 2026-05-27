@@ -13,6 +13,7 @@ const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
 
 // Things to stub
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
+const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Thing under test
 const SubmitIndexNoticesService = require('../../../app/services/notices/submit-index-notices.service.js')
@@ -29,11 +30,7 @@ describe('Notices - Submit Index Notices service', () => {
       credentials: { scope: ['bulk_return_notifications', 'returns'] }
     }
 
-    yarStub = {
-      clear: Sinon.stub().returns(),
-      get: Sinon.stub(),
-      set: Sinon.stub().returns()
-    }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

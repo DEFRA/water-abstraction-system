@@ -82,7 +82,7 @@ function _save(payload, yar) {
 }
 
 function _savedFilters(payload) {
-  const { clear, get, set, ...noticesFilter } = payload
+  const { clear, flash, get, set, touch, ...noticesFilter } = payload
 
   return {
     sentFromDay: null,

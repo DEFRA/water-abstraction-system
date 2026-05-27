@@ -88,7 +88,7 @@ function _save(payload, yar) {
 }
 
 function _savedFilters(payload) {
-  const { clear, get, set, ...billRunsFilter } = payload
+  const { clear, flash, get, set, touch, ...billRunsFilter } = payload
 
   return {
     number: null,

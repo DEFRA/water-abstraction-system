@@ -12,6 +12,7 @@ const { expect } = Code
 const CheckBusyBillRunsService = require('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
 const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill-runs.service.js')
 const FetchRegionsService = require('../../../app/services/bill-runs/setup/fetch-regions.service.js')
+const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Thing under test
 const SubmitIndexBillRunsService = require('../../../app/services/bill-runs/submit-index-bill-runs.service.js')
@@ -27,11 +28,7 @@ describe('Bill Runs - Submit Index Bill Runs service', () => {
       { id: 'fd3d1154-c83d-4580-bcd6-46bfc380f233', displayName: 'Midlands' }
     ])
 
-    yarStub = {
-      clear: Sinon.stub().returns(),
-      get: Sinon.stub(),
-      set: Sinon.stub().returns()
-    }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

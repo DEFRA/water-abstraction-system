@@ -13,6 +13,7 @@ const { generateNoticeReferenceCode } = require('../../../app/lib/general.lib.js
 
 // Things to stub
 const FetchNoticeService = require('../../../app/services/notices/fetch-notice.service.js')
+const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Thing under test
 const SubmitViewNoticeService = require('../../../app/services/notices/submit-view-notice.service.js')
@@ -86,12 +87,7 @@ describe('Notices - Submit View Notice service', () => {
         status: 'error'
       }
     ]
-
-    yarStub = {
-      clear: Sinon.stub().returns(),
-      get: Sinon.stub(),
-      set: Sinon.stub().returns()
-    }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {
