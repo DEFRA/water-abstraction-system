@@ -32,7 +32,7 @@ const HEADERS = [
  * to an empty string.
  *
  * @param {object[]} recipients - An array of recipients
- * @param {module:SessionModel} session - The session instance
+ * @param {SessionModel} session - The session instance
  *
  * @returns {string} - A CSV-formatted string that includes the recipients' data, with the first row as column headers
  * and subsequent rows corresponding to the recipient details.
@@ -58,8 +58,8 @@ function _transformToCsv(recipients, session) {
 
     const row = [
       recipient.licence_refs.join(', '),
-      new Date(renewalDate),
-      new Date(expiryDate),
+      renewalDate,
+      expiryDate,
       notificationType,
       recipient.message_type,
       recipient.contact_type,

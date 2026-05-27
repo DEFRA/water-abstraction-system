@@ -34,12 +34,12 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
       const result = DownloadRenewalInvitationPresenter.go([recipient], session)
 
       const recipientRow = _transformRecipientToRow(recipient, session)
-
-      expect(result).to.equal(
+      const expected =
         // Headers
         'Licence,Renewal date,Expiry date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
-          recipientRow
-      )
+        recipientRow
+
+      expect(result).to.equal(expected)
     })
   })
 
@@ -52,12 +52,12 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
       const result = DownloadRenewalInvitationPresenter.go([recipient], session)
 
       const recipientRow = _transformRecipientToRow(recipient, session)
-
-      expect(result).to.equal(
+      const expected =
         // Headers
         'Licence,Renewal date,Expiry date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
-          recipientRow
-      )
+        recipientRow
+
+      expect(result).to.equal(expected)
     })
   })
 
@@ -71,12 +71,12 @@ describe('Notices - Setup - Download Renewal Invitation presenter', () => {
       const result = DownloadRenewalInvitationPresenter.go([recipient], session)
 
       const recipientRow = _transformRecipientToRow(recipient, session)
-
-      expect(result).to.equal(
+      const expected =
         // Headers
         'Licence,Renewal date,Expiry date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
-          recipientRow
-      )
+        recipientRow
+
+      expect(result).to.equal(expected)
     })
   })
 })
@@ -87,8 +87,8 @@ function _transformRecipientToRow(recipient, session) {
 
   const row = [
     recipient.licence_refs.join(', '),
-    new Date(renewalDate),
-    new Date(expiryDate),
+    renewalDate,
+    expiryDate,
     notificationType,
     recipient.message_type,
     recipient.contact_type,
