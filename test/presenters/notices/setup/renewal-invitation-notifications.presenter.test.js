@@ -234,9 +234,7 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
           it('returns the expected "templateId"', () => {
             const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
-            expect(result[1].templateId).to.equal(
-              NOTIFY_TEMPLATES.renewalInvitations.adhoc.letter['multiple licences']
-            )
+            expect(result[1].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.adhoc.letter['multiple licences'])
           })
         })
 
