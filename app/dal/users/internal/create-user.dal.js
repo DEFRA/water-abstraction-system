@@ -18,8 +18,7 @@ const { userPermissions } = require('../../../lib/static-lookups.lib.js')
  *
  * @param {object} session - The session instance
  *
- * @returns {Promise<string>} resetGuid - The reset GUID for the created user which is used in the email sent to the
- * user to complete their account set up
+ * @returns {Promise<string>} The reset GUID for the created user
  */
 async function go(session) {
   const { email, permission } = session
