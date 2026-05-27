@@ -6,46 +6,37 @@
  * @module SubmitCheckService
  */
 
-const CheckPresenter = require('../../../../presenters/users/internal/setup/check.presenter.js')
-const CheckValidator = require('../../../../validators/users/internal/setup/check.validator.js')
+const CreateUserDal = require('../../../../dal/users/internal/create-user.dal.js')
+const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
-const { formatValidationResult } = require('../../../../presenters/base.presenter.js')
+const { flashNotification } = require('../../../../lib/general.lib.js')
 
 /**
  * Orchestrates validating the data for the '/users/internal/setup/{sessionId}/check' page
  *
  * @param {string} sessionId - The UUID of the current session
- * @param {object} payload - The submitted form data
- *
- * @returns {Promise<object>} The data formatted for the view template
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  */
-async function go(sessionId, payload) {
+async function go(sessionId, yar) {
   const session = await FetchSessionDal.go(sessionId)
 
-  const validationResult = _validate(payload)
+  await DeleteSessionDal.go(sessionId)
 
-  if (!validationResult) {
-    await _save(session, payload)
+  try {
+    await CreateUserDal.go(session)
 
-    return {}
+    flashNotification(
+      yar,
+      `User "${session.email}" added`,
+      'We have emailed the new user instructions to complete their account set up.'
+    )
+  } catch {
+    flashNotification(
+      yar,
+      `User "${session.email}" not added`,
+      'There was a problem adding the user. Please try again.'
+    )
   }
-
-  const pageData = CheckPresenter.go(session)
-
-  return {
-    error: validationResult,
-    ...pageData
-  }
-}
-
-async function _save(session, payload) {
-  return session.$update()
-}
-
-function _validate(payload) {
-  const validationResult = CheckValidator.go(payload)
-
-  return formatValidationResult(validationResult)
 }
 
 module.exports = {

@@ -20,7 +20,7 @@ const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
  */
 function go(payload) {
   const schema = Joi.object({
-    permissions: Joi.string()
+    permission: Joi.string()
       .required()
       .valid(...Object.keys(userPermissions))
       .messages({

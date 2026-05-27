@@ -15,15 +15,26 @@ const { formatEmail } = require('../../../base.presenter.js')
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
+  const { checkPageVisited, email, id: sessionId } = session
+
   return {
+    activeNavBar: 'users',
     backLink: {
-      href: '/system/users',
+      href: _href(checkPageVisited, sessionId),
       text: 'Back'
     },
-    email: formatEmail(session.email),
+    email: formatEmail(email),
     pageTitle: 'Enter an email address for the user',
     pageTitleCaption: 'Internal'
   }
+}
+
+function _href(checkPageVisited, sessionId) {
+  if (checkPageVisited) {
+    return `/system/users/internal/setup/${sessionId}/check`
+  }
+
+  return '/system/users'
 }
 
 module.exports = {
