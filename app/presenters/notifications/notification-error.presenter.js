@@ -12,7 +12,7 @@ const KNOWN_ERRORS = [
   },
   {
     match: 'must not start',
-    description: 'Address lines must not start with any of the following characters: @ ( ) = [ ] ” \\\\ / , < >'
+    description: String.raw`Address lines must not start with any of the following characters: @ ( ) = [ ] “ \\ / , < >`
   },
   {
     match: 'real UK postcode',
