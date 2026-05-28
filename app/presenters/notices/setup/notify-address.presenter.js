@@ -165,31 +165,36 @@ function _address1(name, address1) {
 
 function _condense(addressParts) {
   const len = addressParts.length
-
   const first = addressParts[0]
   const last = addressParts[len - 1]
   const middle = addressParts.slice(1, -1)
 
-  const reducedMiddle = []
+  return [first, ..._reduceMiddle(middle, len), last]
+}
 
+/**
+ * Returns the middle address parts with some adjacent elements combined to bring the total within Notify's limit
+ *
+ * For an 8-part address (6 middle elements), the two inner pairs are joined: `[a, "b, c", "d, e", f]`
+ * For a 7-part address (5 middle elements), only the two innermost elements are joined: `[a, b, "c, d", ...rest]`
+ *
+ * @param {string[]} middle - the middle address parts (everything except the first and last elements)
+ * @param {number} len - the total number of address parts
+ *
+ * @returns {string[]}
+ *
+ * @private
+ */
+function _reduceMiddle(middle, len) {
   if (len === 8) {
-    // We remove 2 items by combining the 2 middle-most pairs
-    reducedMiddle.push(
-      middle[0], // keep first
-      `${middle[1]}, ${middle[2]}`, // combine next two
-      `${middle[3]}, ${middle[4]}`, // combine next two
-      middle[5] // keep last
-    )
-  } else {
-    // We remove 1 item by combining the 2 middle-most elements
-    reducedMiddle.push(
-      ...middle.slice(0, 2), // keep first two
-      `${middle[2]}, ${middle[3]}`, // combine middle two
-      ...middle.slice(4) // keep rest
-    )
+    const [a, b, c, d, e, f] = middle
+
+    return [a, `${b}, ${c}`, `${d}, ${e}`, f]
   }
 
-  return [first, ...reducedMiddle, last]
+  const [a, b, c, d, ...rest] = middle
+
+  return [a, b, `${c}, ${d}`, ...rest]
 }
 
 /**
