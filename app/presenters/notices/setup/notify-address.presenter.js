@@ -10,8 +10,8 @@ const { postcodeValidator } = require('postcode-validator')
 const { invalidStartCharacters } = require('../../../validators/helpers/notify-address-line.validator.js')
 
 const MAX_ADDRESS_LINES = 6 // The Notify max is actually 7 but we reserve address line 1 for the contact name
-const UK_COUNTRIES = ['england', 'northern ireland', 'scotland', 'wales', 'united kingdom']
-const CROWN_DEPENDENCIES = ['guernsey', 'isle of man', 'jersey']
+const UK_COUNTRIES = new Set(['england', 'northern ireland', 'scotland', 'wales', 'united kingdom'])
+const CROWN_DEPENDENCIES = new Set(['guernsey', 'isle of man', 'jersey'])
 
 /**
  * Formats a licence document header metadata contact record into a valid Notify address
@@ -174,15 +174,19 @@ function _condense(addressParts) {
 
   if (len === 8) {
     // We remove 2 items by combining the 2 middle-most pairs
-    reducedMiddle.push(middle[0]) // keep first
-    reducedMiddle.push(`${middle[1]}, ${middle[2]}`) // combine next two
-    reducedMiddle.push(`${middle[3]}, ${middle[4]}`) // combine next two
-    reducedMiddle.push(middle[5]) // keep last
+    reducedMiddle.push(
+      middle[0], // keep first
+      `${middle[1]}, ${middle[2]}`, // combine next two
+      `${middle[3]}, ${middle[4]}`, // combine next two
+      middle[5] // keep last
+    )
   } else {
     // We remove 1 item by combining the 2 middle-most elements
-    reducedMiddle.push(...middle.slice(0, 2)) // keep first two
-    reducedMiddle.push(`${middle[2]}, ${middle[3]}`) // combine middle two
-    reducedMiddle.push(...middle.slice(4)) // keep rest
+    reducedMiddle.push(
+      ...middle.slice(0, 2), // keep first two
+      `${middle[2]}, ${middle[3]}`, // combine middle two
+      ...middle.slice(4) // keep rest
+    )
   }
 
   return [first, ...reducedMiddle, last]
@@ -225,11 +229,11 @@ function _international(contact) {
 
   const country = contact.country.toLowerCase()
 
-  if (UK_COUNTRIES.includes(country)) {
+  if (UK_COUNTRIES.has(country)) {
     return false
   }
 
-  return !CROWN_DEPENDENCIES.includes(country)
+  return !CROWN_DEPENDENCIES.has(country)
 }
 
 /**
@@ -268,7 +272,7 @@ function _invalidAddressParts(contact) {
   const country = contact.country ? contact.country.toLowerCase() : null
   const postcode = contact.postcode
 
-  const noCountry = !country || UK_COUNTRIES.includes(country) || CROWN_DEPENDENCIES.includes(country)
+  const noCountry = !country || UK_COUNTRIES.has(country) || CROWN_DEPENDENCIES.has(country)
   const noPostcode = !postcode || !postcodeValidator(postcode, 'GB')
   const hasSpecialChars = _specialCharacters(contact)
 
@@ -338,7 +342,7 @@ function _ukAddressParts(contact, defaultAddressParts) {
 
   const country = contact.country ? contact.country.toLowerCase() : null
 
-  if (country && !UK_COUNTRIES.includes(country)) {
+  if (country && !UK_COUNTRIES.has(country)) {
     addressParts[addressParts.length - 1] = contact.country
     addressParts.push(contact.postcode)
   }

@@ -325,23 +325,25 @@ class UserModel extends BaseModel {
   _externalPermissions() {
     const entityRoles = this.licenceEntity?.licenceEntityRoles || []
 
-    const roles = entityRoles.map((entityRole) => {
-      return entityRole.role
-    })
+    const roles = new Set(
+      entityRoles.map((entityRole) => {
+        return entityRole.role
+      })
+    )
 
-    if (roles.includes('admin')) {
+    if (roles.has('admin')) {
       return userPermissions.admin
     }
 
-    if (roles.includes('primary_user')) {
+    if (roles.has('primary_user')) {
       return userPermissions.primary_user
     }
 
-    if (roles.includes('user_returns')) {
+    if (roles.has('user_returns')) {
       return userPermissions.returns_user
     }
 
-    if (roles.includes('user')) {
+    if (roles.has('user')) {
       return userPermissions.basic
     }
 
