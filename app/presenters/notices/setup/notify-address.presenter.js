@@ -186,15 +186,13 @@ function _condense(addressParts) {
  * @private
  */
 function _reduceMiddle(middle, len) {
-  if (len === 8) {
-    const [a, b, c, d, e, f] = middle
+  const [addressPart1, addressPart2, addressPart3, addressPart4, addressPart5, addressPart6] = middle
 
-    return [a, `${b}, ${c}`, `${d}, ${e}`, f]
+  if (len === 8) {
+    return [addressPart1, `${addressPart2}, ${addressPart3}`, `${addressPart4}, ${addressPart5}`, addressPart6]
   }
 
-  const [a, b, c, d, ...rest] = middle
-
-  return [a, b, `${c}, ${d}`, ...rest]
+  return [addressPart1, addressPart2, `${addressPart3}, ${addressPart4}`, addressPart5]
 }
 
 /**
