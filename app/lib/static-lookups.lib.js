@@ -522,7 +522,7 @@ const unitConversion = {
   'l/s': 86_400,
   gpd: 3.78541,
   Mgpd: 3_785_410,
-  'ft3/s': 28_316.8466 * 86400,
+  'ft3/s': 28_316.8466 * 86400, // NOSONAR: S7749 - 5-digit number can't have consistent groups of 3
   m: 1,
   mAOD: 1,
   mASD: 1,
