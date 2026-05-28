@@ -20,6 +20,7 @@ async function go() {
 }
 
 async function _fetch() {
+  // NOSONAR: S7780 - backslashes are SQL string literals, String.raw would change the query semantics
   return db.raw(`
     WITH current_licence_contacts AS (
       SELECT DISTINCT
