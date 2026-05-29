@@ -39,7 +39,12 @@ function go(user, licences, viewingUserScope, back) {
     licences: formattedLicences,
     pageTitle: 'Licences',
     pageTitleCaption: username,
-    unregisterActionLink: _unlinkRegisterLink(viewingUserScope, formattedLicences, user.id)
+    unregisterActionLink: _unregisterActionLink(
+      viewingUserScope,
+      formattedLicences,
+      user.id,
+      sourceNavigationDetails.backQueryString
+    )
   }
 }
 
@@ -73,10 +78,10 @@ function _status(licenceEndDetails) {
   return null
 }
 
-function _unlinkRegisterLink(viewingUserScope, formattedLicences, userId) {
-  const canUnRegisterLicences = viewingUserScope.includes('unlink_licences')
+function _unregisterActionLink(viewingUserScope, formattedLicences, userId, backQueryString) {
+  const canUnregisterLicences = viewingUserScope.includes('unlink_licences')
 
-  if (!canUnRegisterLicences) {
+  if (!canUnregisterLicences) {
     return null
   }
 
@@ -88,7 +93,7 @@ function _unlinkRegisterLink(viewingUserScope, formattedLicences, userId) {
     return null
   }
 
-  return `/system/users/external/${userId}/setup`
+  return `/system/users/external/${userId}/setup${backQueryString}`
 }
 
 function _userLicences(licences) {

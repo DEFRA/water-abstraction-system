@@ -16,10 +16,11 @@ const ViewPermissionsService = require('../services/users/internal/setup/view-pe
 
 async function setupExternal(request, h) {
   const {
-    params: { id }
+    params: { id },
+    query: { back }
   } = request
 
-  const { id: sessionId } = await InitiateExternalSessionService.go(id)
+  const { id: sessionId } = await InitiateExternalSessionService.go(id, back)
 
   return h.redirect(`/system/users/external/setup/${sessionId}/licences`)
 }

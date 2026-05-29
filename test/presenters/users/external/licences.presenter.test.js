@@ -72,7 +72,7 @@ describe('Users - External - Licences Presenter', () => {
           status: null
         }
       ],
-      unregisterActionLink: `/system/users/external/${user.id}/setup`
+      unregisterActionLink: `/system/users/external/${user.id}/setup?back=${back}`
     })
   })
 
@@ -106,7 +106,7 @@ describe('Users - External - Licences Presenter', () => {
         it('returns the link to the unlink licences journey', () => {
           const result = LicencesPresenter.go(user, licences, viewingUserScope, back)
 
-          expect(result.unregisterActionLink).to.equal(`/system/users/external/${user.id}/setup`)
+          expect(result.unregisterActionLink).to.equal(`/system/users/external/${user.id}/setup?back=${back}`)
         })
       })
 

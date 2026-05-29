@@ -50,7 +50,7 @@
     {% endif %}
 
     {% if unregisterActionLink %}
-    <form method="post" action="{{unlinkRegisterLink}}">
+    <form method="post" action="{{unregisterActionLink}}">
       <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
       {{ govukButton({ text: "Unregister licences", preventDoubleClick: true }) }}

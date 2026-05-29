@@ -21,10 +21,13 @@ const FetchUsersDal = require('../../../../../app/dal/users/fetch-user.dal.js')
 const InitiateSessionService = require('../../../../../app/services/users/external/setup/initiate-session.service.js')
 
 describe('Users - External - Setup - Initiate Session service', () => {
+  let back
   let licences
   let user
 
   beforeEach(() => {
+    back = 'users'
+
     const { id, username } = UsersFixture.jonLee()
 
     user = { id, licenceEntityId: generateUUID(), username }
@@ -60,11 +63,12 @@ describe('Users - External - Setup - Initiate Session service', () => {
 
   describe('when called', () => {
     it('returns the session Id and an initialised data object', async () => {
-      const result = await InitiateSessionService.go(user.id)
+      const result = await InitiateSessionService.go(user.id, back)
 
       expect(result).to.equal({
-        data: { licences, selectedLicences: [], user },
+        data: { activeNavBar: back, licences, selectedLicences: [], user },
         id: result.id,
+        activeNavBar: back,
         licences,
         selectedLicences: [],
         user
@@ -72,7 +76,7 @@ describe('Users - External - Setup - Initiate Session service', () => {
     })
 
     it('initiates the session for the journey ', async () => {
-      const result = await InitiateSessionService.go(user.id)
+      const result = await InitiateSessionService.go(user.id, back)
 
       const matchingSession = await SessionModel.query().findById(result.id)
 
@@ -83,6 +87,7 @@ describe('Users - External - Setup - Initiate Session service', () => {
       jsonParsedLicence.licenceVersions[0].startDate = '2022-04-01T00:00:00.000Z'
 
       expect(matchingSession.data).to.equal({
+        activeNavBar: back,
         licences: [jsonParsedLicence],
         selectedLicences: [],
         user
