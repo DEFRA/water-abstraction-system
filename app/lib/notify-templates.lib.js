@@ -99,6 +99,9 @@ const NOTIFY_TEMPLATES = Object.freeze({
   },
   system: {
     statusAlert: 'c34d1b16-694b-4364-8e7e-83e9dbd34a62'
+  },
+  users: {
+    verificationEmail: '45b79d3a-39f2-44cf-b8f9-012c952dbd92'
   }
 })
 
