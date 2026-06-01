@@ -103,7 +103,7 @@ const routes = [
     method: 'GET',
     path: '/users/internal/setup/{sessionId}/check',
     options: {
-      handler: UsersSetupController.viewCheck,
+      handler: UsersSetupController.viewInternalCheck,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -115,31 +115,7 @@ const routes = [
     method: 'POST',
     path: '/users/internal/setup/{sessionId}/check',
     options: {
-      handler: UsersSetupController.submitCheck,
-      auth: {
-        access: {
-          scope: ['manage_accounts']
-        }
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/users/internal/setup/{sessionId}/permissions',
-    options: {
-      handler: UsersSetupController.viewPermissions,
-      auth: {
-        access: {
-          scope: ['manage_accounts']
-        }
-      }
-    }
-  },
-  {
-    method: 'POST',
-    path: '/users/internal/setup/{sessionId}/permissions',
-    options: {
-      handler: UsersSetupController.submitPermissions,
+      handler: UsersSetupController.submitInternalCheck,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -151,7 +127,7 @@ const routes = [
     method: 'GET',
     path: '/users/internal/setup/{sessionId}/email',
     options: {
-      handler: UsersSetupController.viewEmail,
+      handler: UsersSetupController.viewInternalEmail,
       auth: {
         access: {
           scope: ['manage_accounts']
@@ -163,7 +139,31 @@ const routes = [
     method: 'POST',
     path: '/users/internal/setup/{sessionId}/email',
     options: {
-      handler: UsersSetupController.submitEmail,
+      handler: UsersSetupController.submitInternalEmail,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/users/internal/setup/{sessionId}/permissions',
+    options: {
+      handler: UsersSetupController.viewInternalPermissions,
+      auth: {
+        access: {
+          scope: ['manage_accounts']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/users/internal/setup/{sessionId}/permissions',
+    options: {
+      handler: UsersSetupController.submitInternalPermissions,
       auth: {
         access: {
           scope: ['manage_accounts']

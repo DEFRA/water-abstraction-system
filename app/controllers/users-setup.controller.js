@@ -7,18 +7,18 @@
 
 const InitiateExternalSessionService = require('../services/users/external/setup/initiate-session.service.js')
 const InitiateInternalSessionService = require('../services/users/internal/setup/initiate-session.service.js')
-const SubmitCheckService = require('../services/users/internal/setup/submit-check.service.js')
-const SubmitEmailService = require('../services/users/internal/setup/submit-email.service.js')
 const SubmitExternalCancelService = require('../services/users/external/setup/submit-cancel.service.js')
 const SubmitExternalCheckService = require('../services/users/external/setup/submit-check.service.js')
 const SubmitExternalLicencesService = require('../services/users/external/setup/submit-licences.service.js')
-const SubmitPermissionsService = require('../services/users/internal/setup/submit-permissions.service.js')
-const ViewCheckService = require('../services/users/internal/setup/view-check.service.js')
-const ViewEmailService = require('../services/users/internal/setup/view-email.service.js')
+const SubmitInternalCheckService = require('../services/users/internal/setup/submit-check.service.js')
+const SubmitInternalEmailService = require('../services/users/internal/setup/submit-email.service.js')
+const SubmitInternalPermissionsService = require('../services/users/internal/setup/submit-permissions.service.js')
 const ViewExternalCancelService = require('../services/users/external/setup/view-cancel.service.js')
 const ViewExternalCheckService = require('../services/users/external/setup/view-check.service.js')
 const ViewExternalLicencesService = require('../services/users/external/setup/view-licences.service.js')
-const ViewPermissionsService = require('../services/users/internal/setup/view-permissions.service.js')
+const ViewInternalCheckService = require('../services/users/internal/setup/view-check.service.js')
+const ViewInternalEmailService = require('../services/users/internal/setup/view-email.service.js')
+const ViewInternalPermissionsService = require('../services/users/internal/setup/view-permissions.service.js')
 
 async function setupExternal(request, h) {
   const {
@@ -35,33 +35,6 @@ async function setupInternal(_request, h) {
   const { id: sessionId } = await InitiateInternalSessionService.go()
 
   return h.redirect(`/system/users/internal/setup/${sessionId}/email`)
-}
-
-async function submitCheck(request, h) {
-  const {
-    params: { sessionId },
-    yar
-  } = request
-
-  await SubmitCheckService.go(sessionId, yar)
-
-  return h.redirect('/system/users')
-}
-
-async function submitEmail(request, h) {
-  const {
-    payload,
-    params: { sessionId },
-    yar
-  } = request
-
-  const pageData = await SubmitEmailService.go(sessionId, payload, yar)
-
-  if (pageData.error) {
-    return h.view('users/internal/setup/email.njk', pageData)
-  }
-
-  return h.redirect(pageData.redirectUrl)
 }
 
 async function submitExternalCancel(request, h) {
@@ -106,7 +79,34 @@ async function submitExternalLicences(request, h) {
   return h.redirect(pageData.redirectUrl)
 }
 
-async function submitPermissions(request, h) {
+async function submitInternalCheck(request, h) {
+  const {
+    params: { sessionId },
+    yar
+  } = request
+
+  await SubmitInternalCheckService.go(sessionId, yar)
+
+  return h.redirect('/system/users')
+}
+
+async function submitInternalEmail(request, h) {
+  const {
+    payload,
+    params: { sessionId },
+    yar
+  } = request
+
+  const pageData = await SubmitInternalEmailService.go(sessionId, payload, yar)
+
+  if (pageData.error) {
+    return h.view('users/internal/setup/email.njk', pageData)
+  }
+
+  return h.redirect(pageData.redirectUrl)
+}
+
+async function submitInternalPermissions(request, h) {
   const {
     auth,
     payload,
@@ -114,32 +114,13 @@ async function submitPermissions(request, h) {
     yar
   } = request
 
-  const pageData = await SubmitPermissionsService.go(auth, sessionId, payload, yar)
+  const pageData = await SubmitInternalPermissionsService.go(auth, sessionId, payload, yar)
 
   if (pageData.error) {
     return h.view('users/internal/setup/permissions.njk', pageData)
   }
 
   return h.redirect(pageData.redirectUrl)
-}
-
-async function viewCheck(request, h) {
-  const {
-    params: { sessionId },
-    yar
-  } = request
-
-  const pageData = await ViewCheckService.go(sessionId, yar)
-
-  return h.view('users/internal/setup/check.njk', pageData)
-}
-
-async function viewEmail(request, h) {
-  const { sessionId } = request.params
-
-  const pageData = await ViewEmailService.go(sessionId)
-
-  return h.view('users/internal/setup/email.njk', pageData)
 }
 
 async function viewExternalCancel(request, h) {
@@ -169,13 +150,32 @@ async function viewExternalLicences(request, h) {
   return h.view('users/external/setup/licences.njk', pageData)
 }
 
-async function viewPermissions(request, h) {
+async function viewInternalCheck(request, h) {
+  const {
+    params: { sessionId },
+    yar
+  } = request
+
+  const pageData = await ViewInternalCheckService.go(sessionId, yar)
+
+  return h.view('users/internal/setup/check.njk', pageData)
+}
+
+async function viewInternalEmail(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewInternalEmailService.go(sessionId)
+
+  return h.view('users/internal/setup/email.njk', pageData)
+}
+
+async function viewInternalPermissions(request, h) {
   const {
     auth,
     params: { sessionId }
   } = request
 
-  const pageData = await ViewPermissionsService.go(auth, sessionId)
+  const pageData = await ViewInternalPermissionsService.go(auth, sessionId)
 
   return h.view('users/internal/setup/permissions.njk', pageData)
 }
@@ -183,16 +183,16 @@ async function viewPermissions(request, h) {
 module.exports = {
   setupExternal,
   setupInternal,
-  submitCheck,
-  submitEmail,
   submitExternalCancel,
   submitExternalCheck,
   submitExternalLicences,
-  submitPermissions,
-  viewCheck,
-  viewEmail,
+  submitInternalCheck,
+  submitInternalEmail,
+  submitInternalPermissions,
   viewExternalCancel,
   viewExternalCheck,
   viewExternalLicences,
-  viewPermissions
+  viewInternalCheck,
+  viewInternalEmail,
+  viewInternalPermissions
 }
