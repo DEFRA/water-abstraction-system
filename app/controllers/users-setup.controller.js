@@ -13,6 +13,7 @@ const SubmitExternalLicencesService = require('../services/users/external/setup/
 const SubmitPermissionsService = require('../services/users/internal/setup/submit-permissions.service.js')
 const ViewCheckService = require('../services/users/internal/setup/view-check.service.js')
 const ViewEmailService = require('../services/users/internal/setup/view-email.service.js')
+const ViewExternalCancelService = require('../services/users/external/setup/view-cancel.service.js')
 const ViewExternalCheckService = require('../services/users/external/setup/view-check.service.js')
 const ViewExternalLicencesService = require('../services/users/external/setup/view-licences.service.js')
 const ViewPermissionsService = require('../services/users/internal/setup/view-permissions.service.js')
@@ -113,6 +114,14 @@ async function viewEmail(request, h) {
   return h.view('users/internal/setup/email.njk', pageData)
 }
 
+async function viewExternalCancel(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewExternalCancelService.go(sessionId)
+
+  return h.view('users/external/setup/cancel.njk', pageData)
+}
+
 async function viewExternalCheck(request, h) {
   const {
     params: { sessionId },
@@ -152,6 +161,7 @@ module.exports = {
   submitPermissions,
   viewCheck,
   viewEmail,
+  viewExternalCancel,
   viewExternalCheck,
   viewExternalLicences,
   viewPermissions
