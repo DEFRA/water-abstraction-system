@@ -87,9 +87,7 @@ function _save(payload, yar) {
   })
 }
 
-function _savedFilters(payload) {
-  const { clear, flash, get, set, touch, ...billRunsFilter } = payload
-
+function _savedFilters(yar) {
   return {
     number: null,
     openFilter: true,
@@ -97,7 +95,7 @@ function _savedFilters(payload) {
     runTypes: [],
     statuses: [],
     yearCreated: null,
-    ...billRunsFilter
+    ...yar.get('billRunsFilter')
   }
 }
 

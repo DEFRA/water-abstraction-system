@@ -69,16 +69,14 @@ function _save(payload, yar) {
   })
 }
 
-function _savedFilters(payload) {
-  const { clear, flash, get, set, touch, ...usersFilter } = payload
-
+function _savedFilters(yar) {
   return {
     email: null,
     openFilter: true,
     permissions: null,
     status: null,
     type: null,
-    ...usersFilter
+    ...yar.get('usersFilter')
   }
 }
 
