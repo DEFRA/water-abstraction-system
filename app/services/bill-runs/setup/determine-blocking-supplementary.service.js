@@ -64,9 +64,7 @@ async function go(regionId) {
   const presrocMatch = await _fetchPresrocMatch(regionId)
 
   // Return both after filtering out any that is null
-  const matches = [srocMatch, presrocMatch].filter((match) => {
-    return match
-  })
+  const matches = [srocMatch, presrocMatch].filter(Boolean)
 
   const trigger = _trigger(matches, toFinancialYearEnding)
 

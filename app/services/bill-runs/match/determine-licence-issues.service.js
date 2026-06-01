@@ -153,15 +153,17 @@ function _elementIssues(chargeReference, chargeElement, licenceReturnLogs, retur
 }
 
 function _getMatchingReturns(returnLogs, licenceReturnLogs) {
-  const returnLogIds = returnLogs.map((returnLog) => {
-    return returnLog.returnLogId
-  })
+  const returnLogIds = new Set(
+    returnLogs.map((returnLog) => {
+      return returnLog.returnLogId
+    })
+  )
 
   // We need to filter the returnLogs on the licence to find the matching returns for our charge element.
   // The returnLogs on our charge element object lack the return status, so we must retrieve them from the licence where
   // the status is available
   return licenceReturnLogs.filter((licenceReturnLog) => {
-    return returnLogIds.includes(licenceReturnLog.id)
+    return returnLogIds.has(licenceReturnLog.id)
   })
 }
 

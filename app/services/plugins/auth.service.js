@@ -82,28 +82,28 @@ async function go(userId) {
  * @private
  */
 function _permission(scope = []) {
-  const abstractionReformRoles = ['ar_user', 'ar_approver']
+  const abstractionReformRoles = new Set(['ar_user', 'ar_approver'])
   const abstractionReform = scope.some((role) => {
-    return abstractionReformRoles.includes(role)
+    return abstractionReformRoles.has(role)
   })
 
   const billRuns = scope.includes('billing')
 
-  const manageRoles = [
+  const manageRoles = new Set([
     'ar_approver',
     'billing',
     'bulk_return_notifications',
     'hof_notifications',
     'renewal_notifications',
     'returns'
-  ]
+  ])
   const manage = scope.some((role) => {
-    return manageRoles.includes(role)
+    return manageRoles.has(role)
   })
 
-  const noticesRoles = ['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns']
+  const noticesRoles = new Set(['bulk_return_notifications', 'hof_notifications', 'renewal_notifications', 'returns'])
   const notices = scope.some((role) => {
-    return noticesRoles.includes(role)
+    return noticesRoles.has(role)
   })
 
   const users = featureFlagsConfig.enableUsersView && scope.includes('manage_accounts')

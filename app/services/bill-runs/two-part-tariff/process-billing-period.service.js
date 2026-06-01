@@ -69,9 +69,7 @@ async function go(billRun, billingPeriod, billingAccounts) {
     const results = await Promise.all(processes)
 
     if (!billRunIsPopulated) {
-      billRunIsPopulated = results.some((result) => {
-        return result
-      })
+      billRunIsPopulated = results.some(Boolean)
     }
   }
 

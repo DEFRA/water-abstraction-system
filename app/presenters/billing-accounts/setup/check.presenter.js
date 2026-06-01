@@ -20,7 +20,7 @@ function go(session, companyContacts, existingAddress, companysHouseResult, impa
   const { billingAccount } = session
 
   return {
-    accountSelected: session.accountSelected !== 'another' ? billingAccount.company.name : 'Another billing account',
+    accountSelected: session.accountSelected === 'another' ? 'Another billing account' : billingAccount.company.name,
     accountType: session.accountType ?? '',
     address: _address(session),
     addressSelected: _existingAddress(existingAddress),

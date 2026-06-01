@@ -26,7 +26,7 @@ const HapiPinoPlugin = {
     // When not in the production environment we want a 'pretty' version of the JSON to make it easier to grok what
     // has happened
     transport:
-      process.env.NODE_ENV !== 'production' ? { target: 'pino-pretty', options: { colorize: true } } : undefined,
+      process.env.NODE_ENV === 'production' ? undefined : { target: 'pino-pretty', options: { colorize: true } },
     // Redact Authorization headers, see https://getpino.io/#/docs/redaction
     redact: ['req.headers.authorization'],
     // Adding this here means it will be passed to HapiPinoIgnoreRequestService.go() within the `options` arg when
