@@ -11,6 +11,7 @@ const { expect } = Code
 // Test helpers
 const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.js')
 const NoticeSessionFixture = require('../../../support/fixtures/notice-session.fixture.js')
+const YarStub = require('../../../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
@@ -36,7 +37,8 @@ describe('Notices - Setup - View Check service', () => {
       findById: Sinon.stub().resolves(session)
     })
 
-    yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.returns([{ title: 'Test', text: 'Notification' }])
 
     Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
   })

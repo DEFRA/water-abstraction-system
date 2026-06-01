@@ -12,6 +12,9 @@ const { expect } = Code
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
+// Test helpers
+const YarStub = require('../../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 const ProcessRenewalsNoticeLicenceSubmission = require('../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js')
@@ -52,7 +55,7 @@ describe('Notices - Setup - Submit Licence service', () => {
       validationResult: null
     })
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

@@ -208,10 +208,7 @@ function _siteDescription(points) {
     return point.description
   })
 
-  // NOTE: This is doing two things at once. It first filters the descriptions by passing each one to Boolean(). It will
-  // return true or false depending on whether the value is 'truthy'. In our case this means null or undefined will be
-  // stripped from the array. From what's left we select the first one.
-  return descriptions.filter(Boolean)[0]
+  return descriptions.find(Boolean)
 }
 
 /**

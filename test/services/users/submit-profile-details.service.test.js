@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const YarStub = require('../../support/stubs/yar.stub.js')
+
 // Things to stub
 const UserModel = require('../../../app/models/user.model.js')
 
@@ -29,7 +32,7 @@ describe('Users - Submit profile details service', () => {
     patchStub = Sinon.stub().resolves()
     whereStub = Sinon.stub().returns({ patch: patchStub, whereNull: Sinon.stub().returnsThis() })
     userModelQueryStub = Sinon.stub(UserModel, 'query').returns({ where: whereStub })
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

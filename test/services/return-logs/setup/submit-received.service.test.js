@@ -12,6 +12,9 @@ const { expect } = Code
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { today } = require('../../../../app/lib/general.lib.js')
 
+// Test helpers
+const YarStub = require('../../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
@@ -38,7 +41,8 @@ describe('Return Logs - Setup - Submit Received service', () => {
 
     fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
-    yarStub = { flash: Sinon.stub().returns([]) }
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.returns([])
   })
 
   afterEach(() => {

@@ -188,7 +188,7 @@ function isValidDate(dateString) {
 
   const date = new Date(dateString)
 
-  return !isNaN(date.getTime())
+  return !Number.isNaN(date.getTime())
 }
 
 /**
@@ -232,11 +232,7 @@ function _isValidLeapYearDate(dateString) {
 function _isLeapYear(year) {
   const set400 = 400
 
-  if ((year % 4 === 0 && year % 100 !== 0) || year % set400 === 0) {
-    return true
-  }
-
-  return false
+  return (year % 4 === 0 && year % 100 !== 0) || year % set400 === 0
 }
 
 /**

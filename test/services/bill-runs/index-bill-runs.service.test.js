@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const YarStub = require('../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const CheckBusyBillRunsService = require('../../../app/services/bill-runs/check-busy-bill-runs.service.js')
 const FetchBillRunsService = require('../../../app/services/bill-runs/fetch-bill-runs.service.js')
@@ -39,7 +42,8 @@ describe('Index Bill Runs service', () => {
         total: 2
       })
 
-      yarStub = { get: Sinon.stub().returns(null) }
+      yarStub = YarStub.build(Sinon)
+      yarStub.get.returns(null)
     })
 
     it('returns the page data for the view', async () => {
@@ -234,7 +238,8 @@ describe('Index Bill Runs service', () => {
 
     describe('and none were ever set or they were cleared', () => {
       beforeEach(() => {
-        yarStub = { get: Sinon.stub().returns(null) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns(null)
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -253,7 +258,8 @@ describe('Index Bill Runs service', () => {
 
     describe('and the filters were submitted empty', () => {
       beforeEach(() => {
-        yarStub = { get: Sinon.stub().returns(_billRunsFilter()) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns(_billRunsFilter())
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -277,7 +283,8 @@ describe('Index Bill Runs service', () => {
         filters.regions = '1d562e9a-2104-41d9-aa75-c008a7ec9059'
         filters.yearCreated = 2025
 
-        yarStub = { get: Sinon.stub().returns(filters) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns(filters)
       })
 
       it('returns the saved filters and that the controls should be open', async () => {

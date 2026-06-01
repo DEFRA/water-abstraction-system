@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
+const YarStub = require('../../../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const FetchPurposesService = require('../../../../app/services/return-versions/setup/fetch-purposes.service.js')
@@ -72,7 +73,7 @@ describe('Return Versions - Setup - Submit Purpose service', () => {
 
     fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
 
     Sinon.stub(FetchPurposesService, 'go').resolves([
       { id: '14794d57-1acf-4c91-8b48-4b1ec68bfd6f', description: 'Heat Pump' },

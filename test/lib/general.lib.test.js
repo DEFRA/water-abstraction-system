@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const TransactionHelper = require('../support/helpers/transaction.helper.js')
+const YarStub = require('../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
@@ -293,7 +294,7 @@ describe('GeneralLib', () => {
     let yarStub
 
     beforeEach(() => {
-      yarStub = { flash: Sinon.stub() }
+      yarStub = YarStub.build(Sinon)
     })
 
     it('returns the standard notification { titleText: "Updated", text: "Changes made" }', () => {
@@ -319,7 +320,8 @@ describe('GeneralLib', () => {
     let yarStub
 
     beforeEach(() => {
-      yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Changes made' }]) }
+      yarStub = YarStub.build(Sinon)
+      yarStub.flash.returns([{ title: 'Updated', text: 'Changes made' }])
     })
 
     it('returns the flash notification', () => {

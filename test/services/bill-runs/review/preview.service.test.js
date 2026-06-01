@@ -12,6 +12,9 @@ const { expect } = Code
 const { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } = require('node:http2').constants
 const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
 
+// Test helpers
+const YarStub = require('../../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const CalculateChargeRequest = require('../../../../app/requests/charging-module/calculate-charge.request.js')
 const FetchReviewChargeReferenceService = require('../../../../app/services/bill-runs/review/fetch-review-charge-reference.service.js')
@@ -27,7 +30,7 @@ describe('Bill Runs Review - Preview service', () => {
   beforeEach(() => {
     reviewChargeReference = BillRunsReviewFixture.reviewChargeReference()
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

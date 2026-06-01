@@ -14,6 +14,9 @@ const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
+// Test helpers
+const YarStub = require('../../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
@@ -81,7 +84,8 @@ describe('Notices - Setup - Process Add Recipient service', () => {
 
           fetchSessionStub.resolves(session)
 
-          yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+          yarStub = YarStub.build(Sinon)
+          yarStub.flash.returns([{ title: 'Updated', text: 'Additional recipient added' }])
         })
 
         it('adds an `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {
@@ -143,7 +147,8 @@ describe('Notices - Setup - Process Add Recipient service', () => {
 
           fetchSessionStub.resolves(session)
 
-          yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+          yarStub = YarStub.build(Sinon)
+          yarStub.flash.returns([{ title: 'Updated', text: 'Additional recipient added' }])
         })
 
         it('adds the recipient to `additionalRecipients` and pushes its hash ID into `selectedRecipients`', async () => {
@@ -221,7 +226,8 @@ describe('Notices - Setup - Process Add Recipient service', () => {
 
           fetchSessionStub.resolves(session)
 
-          yarStub = { flash: Sinon.stub().returns([{ title: 'Updated', text: 'Additional recipient added' }]) }
+          yarStub = YarStub.build(Sinon)
+          yarStub.flash.returns([{ title: 'Updated', text: 'Additional recipient added' }])
         })
 
         it('adds a `additionalRecipients` property to the session containing the recipient and pushes its hash ID into `selectedRecipients`', async () => {

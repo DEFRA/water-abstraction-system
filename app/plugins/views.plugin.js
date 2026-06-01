@@ -10,7 +10,7 @@
  * @module ViewsPlugin
  */
 
-const path = require('path')
+const path = require('node:path')
 const Nunjucks = require('nunjucks')
 const Vision = require('@hapi/vision')
 

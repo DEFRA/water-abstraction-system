@@ -23,7 +23,7 @@ function go(licence) {
 
   return {
     backLink: {
-      href: '/system/licences/' + id + '/set-up',
+      href: `/system/licences/${id}/set-up`,
       text: 'Back'
     },
     financialYears: _yearsToDisplay(),

@@ -52,9 +52,7 @@ class BillRunVolumeModel extends BaseModel {
   }
 
   $twoPartTariffStatus() {
-    const index = Object.values(BillRunVolumeModel.twoPartTariffStatuses).findIndex((value) => {
-      return value === this.twoPartTariffStatus
-    })
+    const index = Object.values(BillRunVolumeModel.twoPartTariffStatuses).indexOf(this.twoPartTariffStatus)
 
     if (index !== -1) {
       return Object.keys(BillRunVolumeModel.twoPartTariffStatuses)[index]
