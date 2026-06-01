@@ -17,10 +17,10 @@ function go(session, fetchedRecipients) {
   const { selectedRecipients } = session
   const allRecipients = _additionalRecipients(session, fetchedRecipients)
 
-  // TODO: When we first hit the /check page `selectedRecipients` is not initialised. It calls FetchRecipientsService
+  // When we first hit the /check page `selectedRecipients` is not initialised. It calls FetchRecipientsService
   // first, which means it will eventually hit this function without `selectedRecipients` being set.
   // This only happens once, after that in the '/check page it initialises `selectedRecipients` so from there on we'll
-  // never hit this clause. We reckon we can simplify this process when we have the time!
+  // never hit this clause.
   if (!selectedRecipients) {
     return allRecipients
   }

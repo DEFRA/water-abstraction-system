@@ -38,20 +38,29 @@ function _link(notification, licenceId, sentDate, returnLogId, companyContactId)
 
   const hiddenText = `sent ${sentDate} via ${messageType}`
 
-  let href = `/system/notifications/${notificationId}`
-
-  if (licenceId) {
-    href += `?id=${licenceId}`
-  } else if (returnLogId) {
-    href += `?return=${returnLogId}`
-  } else if (companyContactId) {
-    href += `?companyContactId=${companyContactId}`
-  }
+  const queryParam = _queryParam(licenceId, returnLogId, companyContactId)
+  const href = `/system/notifications/${notificationId}${queryParam}`
 
   return {
     hiddenText,
     href
   }
+}
+
+function _queryParam(licenceId, returnLogId, companyContactId) {
+  if (licenceId) {
+    return `?id=${licenceId}`
+  }
+
+  if (returnLogId) {
+    return `?return=${returnLogId}`
+  }
+
+  if (companyContactId) {
+    return `?companyContactId=${companyContactId}`
+  }
+
+  return ''
 }
 
 module.exports = {
