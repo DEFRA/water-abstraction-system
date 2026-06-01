@@ -12,6 +12,7 @@ const SubmitEmailService = require('../services/users/internal/setup/submit-emai
 const SubmitPermissionsService = require('../services/users/internal/setup/submit-permissions.service.js')
 const ViewCheckService = require('../services/users/internal/setup/view-check.service.js')
 const ViewEmailService = require('../services/users/internal/setup/view-email.service.js')
+const ViewExternalLicencesService = require('../services/users/external/setup/view-licences.service.js')
 const ViewPermissionsService = require('../services/users/internal/setup/view-permissions.service.js')
 
 async function setupExternal(request, h) {
@@ -94,6 +95,14 @@ async function viewEmail(request, h) {
   return h.view('users/internal/setup/email.njk', pageData)
 }
 
+async function viewExternalLicences(request, h) {
+  const { sessionId } = request.params
+
+  const pageData = await ViewExternalLicencesService.go(sessionId)
+
+  return h.view('users/external/setup/licences.njk', pageData)
+}
+
 async function viewPermissions(request, h) {
   const {
     auth,
@@ -113,5 +122,6 @@ module.exports = {
   submitPermissions,
   viewCheck,
   viewEmail,
+  viewExternalLicences,
   viewPermissions
 }
