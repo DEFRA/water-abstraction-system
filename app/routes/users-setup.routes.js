@@ -10,7 +10,79 @@ const routes = [
       handler: UsersSetupController.setupExternal,
       auth: {
         access: {
-          scope: ['manage_accounts']
+          scope: ['unlink_licences']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/users/external/setup/{sessionId}/cancel',
+    options: {
+      handler: UsersSetupController.viewExternalCancel,
+      auth: {
+        access: {
+          scope: ['unlink_licences']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/users/external/setup/{sessionId}/cancel',
+    options: {
+      handler: UsersSetupController.submitExternalCancel,
+      auth: {
+        access: {
+          scope: ['unlink_licences']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/users/external/setup/{sessionId}/check',
+    options: {
+      handler: UsersSetupController.viewExternalCheck,
+      auth: {
+        access: {
+          scope: ['unlink_licences']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/users/external/setup/{sessionId}/check',
+    options: {
+      handler: UsersSetupController.submitExternalCheck,
+      auth: {
+        access: {
+          scope: ['unlink_licences']
+        }
+      }
+    }
+  },
+  {
+    method: 'GET',
+    path: '/users/external/setup/{sessionId}/licences',
+    options: {
+      handler: UsersSetupController.viewExternalLicences,
+      auth: {
+        access: {
+          scope: ['unlink_licences']
+        }
+      }
+    }
+  },
+  {
+    method: 'POST',
+    path: '/users/external/setup/{sessionId}/licences',
+    options: {
+      handler: UsersSetupController.submitExternalLicences,
+      auth: {
+        access: {
+          scope: ['unlink_licences']
         }
       }
     }
