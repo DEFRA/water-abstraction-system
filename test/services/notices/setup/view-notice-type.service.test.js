@@ -24,7 +24,7 @@ describe('Notices - Setup - View Notice Type service', () => {
 
   beforeEach(() => {
     auth = {
-      credentials: { scope: ['bulk_return_notifications'] }
+      credentials: { scope: ['bulk_return_notifications', 'renewal_notifications'] }
     }
 
     sessionData = {
@@ -47,10 +47,20 @@ describe('Notices - Setup - View Notice Type service', () => {
       expect(result).to.equal({
         activeNavBar: 'notices',
         backLink: {
-          href: `/system/notices/setup/${session.id}/licence`,
+          href: `/system/notices`,
           text: 'Back'
         },
         options: [
+          {
+            checked: false,
+            text: 'Paper return',
+            value: 'paperReturn'
+          },
+          {
+            checked: false,
+            text: 'Renewals invitation',
+            value: 'renewalInvitations'
+          },
           {
             checked: false,
             text: 'Returns invitation',
@@ -60,11 +70,6 @@ describe('Notices - Setup - View Notice Type service', () => {
             checked: false,
             text: 'Returns reminder',
             value: 'reminders'
-          },
-          {
-            checked: false,
-            text: 'Paper return',
-            value: 'paperReturn'
           }
         ],
         pageTitle: 'Select the notice type'

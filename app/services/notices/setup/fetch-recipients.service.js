@@ -7,6 +7,7 @@
 
 const FetchAbstractionAlertRecipientsService = require('./abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
 const FetchPaperReturnsRecipientsService = require('./returns-notice/fetch-paper-returns-recipients.service.js')
+const FetchRenewalInvitationRecipientsService = require('./renewal-notice/fetch-renewal-invitation-recipients.service.js')
 const FetchReturnsInvitationRecipientsService = require('./returns-notice/fetch-returns-invitation-recipients.service.js')
 const FetchReturnsReminderRecipientsService = require('./returns-notice/fetch-returns-reminder-recipients.service.js')
 const MergeRecipientsService = require('./merge-recipients.service.js')
@@ -40,6 +41,10 @@ async function _recipientsData(session, download) {
 
   if (session.noticeType === NoticeType.INVITATIONS) {
     return FetchReturnsInvitationRecipientsService.go(session, download)
+  }
+
+  if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
+    return FetchRenewalInvitationRecipientsService.go(session)
   }
 
   return FetchReturnsReminderRecipientsService.go(session, download)

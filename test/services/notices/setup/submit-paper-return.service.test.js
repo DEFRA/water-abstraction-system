@@ -147,7 +147,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
       expect(result).to.equal({
         activeNavBar: 'notices',
         backLink: {
-          href: `/system/notices/setup/${session.id}/notice-type`,
+          href: `/system/notices/setup/${session.id}/licence`,
           text: 'Back'
         },
         error: {
@@ -190,7 +190,7 @@ describe('Notices - Setup - Submit Paper Return service', () => {
         expect(result).to.equal({
           activeNavBar: 'notices',
           backLink: {
-            href: `/system/notices/setup/${session.id}/notice-type`,
+            href: `/system/notices/setup/${session.id}/licence`,
             text: 'Back'
           },
           error: {

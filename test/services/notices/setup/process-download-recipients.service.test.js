@@ -17,7 +17,7 @@ const { transformArrayToCSVRow } = require('../../../../app/lib/transform-to-csv
 
 // Things to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
-const SessionModel = require('../../../../app/models/session.model.js')
+const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
 const ProcessDownloadRecipientsService = require('../../../../app/services/notices/setup/process-download-recipients.service.js')
@@ -35,9 +35,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.alertNoticePrimaryUser()
       session = NoticeSessionFixture.abstractionAlertStop(recipient.licence_refs[0])
 
-      Sinon.stub(SessionModel, 'query').returns({
-        findById: Sinon.stub().resolves(session)
-      })
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
       Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
     })
@@ -63,9 +61,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.paperReturn(recipient.licence_refs[0])
 
-      Sinon.stub(SessionModel, 'query').returns({
-        findById: Sinon.stub().resolves(session)
-      })
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
       Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
     })
@@ -91,9 +87,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.standardReminder(recipient.licence_refs[0])
 
-      Sinon.stub(SessionModel, 'query').returns({
-        findById: Sinon.stub().resolves(session)
-      })
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
       Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
     })
@@ -119,9 +113,7 @@ describe('Notices - Setup - Process Download Recipients service', () => {
       recipient = RecipientsFixture.returnsNoticeLicenceHolder()
       session = NoticeSessionFixture.standardInvitation(recipient.licence_refs[0])
 
-      Sinon.stub(SessionModel, 'query').returns({
-        findById: Sinon.stub().resolves(session)
-      })
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
       Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
     })
@@ -135,6 +127,32 @@ describe('Notices - Setup - Process Download Recipients service', () => {
         data:
           // Headers
           'Licence,Return id,Return reference,Return start date,Return end date,Return due date,Notification type,Notification due date,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
+          recipientRow,
+        type: 'text/csv',
+        filename: `${session.notificationType} - ${session.referenceCode}.csv`
+      })
+    })
+  })
+
+  describe('when the notice type is a "renewal invitation"', () => {
+    before(() => {
+      recipient = RecipientsFixture.renewalInvitationLicenceHolder()
+      session = NoticeSessionFixture.adHocRenewalInvitation(recipient.licence_refs[0])
+
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+      Sinon.stub(FetchRecipientsService, 'go').resolves([recipient])
+    })
+
+    it('returns the correct csv string, filename and type', async () => {
+      const result = await ProcessDownloadRecipientsService.go(session.id)
+
+      const recipientRow = _transformRenewalRecipientToRow(recipient, session)
+
+      expect(result).to.equal({
+        data:
+          // Headers
+          'Licence,Renewal date,Expiry date,Notification type,Message type,Contact type,Email,Address line 1,Address line 2,Address line 3,Address line 4,Address line 5,Address line 6,Address line 7\n' +
           recipientRow,
         type: 'text/csv',
         filename: `${session.notificationType} - ${session.referenceCode}.csv`
@@ -180,6 +198,23 @@ function _transformRecipientToRow(recipient, notificationType) {
     recipient.due_date,
     notificationType,
     recipient.notificationDueDate,
+    recipient.message_type,
+    recipient.contact_type,
+    recipient.email || '',
+    ...addressToCSV(recipient.contact)
+  ]
+
+  return transformArrayToCSVRow(row)
+}
+
+function _transformRenewalRecipientToRow(recipient, session) {
+  const { expiryDate, notificationType, renewalDate } = session
+
+  const row = [
+    recipient.licence_refs.join(', '),
+    new Date(renewalDate),
+    new Date(expiryDate),
+    notificationType,
     recipient.message_type,
     recipient.contact_type,
     recipient.email || '',
