@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
+const { generateNoticeReferenceCode, generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const ConfirmationPresenter = require('../../../../app/presenters/notices/setup/confirmation.presenter.js')
@@ -20,7 +20,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
 
   beforeEach(() => {
     event = {
-      id: 'ca6a7546-2365-45a1-9f07-ab9338577e2a',
+      id: generateUUID(),
       subtype: 'returnInvitation',
       referenceCode,
       metadata: {}
@@ -31,14 +31,14 @@ describe('Notices - Setup - Confirmation presenter', () => {
     const result = ConfirmationPresenter.go(event)
 
     expect(result).to.equal({
-      forwardLink: '/system/notices/ca6a7546-2365-45a1-9f07-ab9338577e2a',
+      forwardLink: `/system/notices/${event.id}`,
       monitoringStationLink: null,
       pageTitle: `Returns invitations sent`,
       referenceCode
     })
   })
 
-  describe('and the journey is "invitations"', () => {
+  describe('and the notice type is "returnInvitation"', () => {
     beforeEach(() => {
       event.subtype = 'returnInvitation'
     })
@@ -47,7 +47,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
       const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
-        forwardLink: '/system/notices/ca6a7546-2365-45a1-9f07-ab9338577e2a',
+        forwardLink: `/system/notices/${event.id}`,
         monitoringStationLink: null,
         pageTitle: `Returns invitations sent`,
         referenceCode
@@ -55,7 +55,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
   })
 
-  describe('and the journey is "reminders"', () => {
+  describe('and the notice type is "returnReminder"', () => {
     beforeEach(() => {
       event.subtype = 'returnReminder'
     })
@@ -64,7 +64,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
       const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
-        forwardLink: '/system/notices/ca6a7546-2365-45a1-9f07-ab9338577e2a',
+        forwardLink: `/system/notices/${event.id}`,
         monitoringStationLink: null,
         pageTitle: `Returns reminders sent`,
         referenceCode
@@ -72,7 +72,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
     })
   })
 
-  describe('and the journey is "waterAbstractionAlerts"', () => {
+  describe('and the notice type is "waterAbstractionAlerts"', () => {
     beforeEach(() => {
       event.subtype = 'waterAbstractionAlerts'
 
@@ -83,7 +83,7 @@ describe('Notices - Setup - Confirmation presenter', () => {
       const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
-        forwardLink: '/system/notices/ca6a7546-2365-45a1-9f07-ab9338577e2a',
+        forwardLink: `/system/notices/${event.id}`,
         monitoringStationLink: '/system/monitoring-stations/123',
         pageTitle: 'Water abstraction alerts sent',
         referenceCode
@@ -100,9 +100,26 @@ describe('Notices - Setup - Confirmation presenter', () => {
       const result = ConfirmationPresenter.go(event)
 
       expect(result).to.equal({
-        forwardLink: '/system/notices/ca6a7546-2365-45a1-9f07-ab9338577e2a',
+        forwardLink: `/system/notices/${event.id}`,
         monitoringStationLink: null,
         pageTitle: 'Paper returns sent',
+        referenceCode
+      })
+    })
+  })
+
+  describe('and the notice type is "renewalInvitation"', () => {
+    beforeEach(() => {
+      event.subtype = 'renewalInvitation'
+    })
+
+    it('correctly presents the data', () => {
+      const result = ConfirmationPresenter.go(event)
+
+      expect(result).to.equal({
+        forwardLink: `/system/notices/${event.id}`,
+        monitoringStationLink: null,
+        pageTitle: 'Renewal invitations sent',
         referenceCode
       })
     })

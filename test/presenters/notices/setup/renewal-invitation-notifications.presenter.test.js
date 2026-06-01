@@ -197,5 +197,27 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
         })
       })
     })
+
+    describe('when the journey is "adhoc"', () => {
+      beforeEach(() => {
+        noticeData.journey = 'adhoc'
+      })
+
+      describe('when the notification is an email', () => {
+        it('returns the expected "templateId"', () => {
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[0].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.adhoc.email['single licence'])
+        })
+      })
+
+      describe('when the notification is a letter', () => {
+        it('returns the expected "templateId"', () => {
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[1].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.adhoc.letter['single licence'])
+        })
+      })
+    })
   })
 })
