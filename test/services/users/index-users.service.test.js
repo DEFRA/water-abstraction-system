@@ -32,6 +32,9 @@ describe('Users - Index Users service', () => {
     auth = {
       credentials: { scope: ['manage_accounts'] }
     }
+
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.returns([])
   })
 
   afterEach(() => {
@@ -40,8 +43,6 @@ describe('Users - Index Users service', () => {
 
   describe('when called', () => {
     beforeEach(() => {
-      // For the purposes of this tests the filter doesn't matter
-      yarStub = YarStub.build(Sinon)
       yarStub.get.returns(null)
 
       const results = [UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess())]
@@ -92,7 +93,6 @@ describe('Users - Index Users service', () => {
 
     describe('and none were ever set or they were cleared', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
         yarStub.get.returns(null)
       })
 
@@ -105,7 +105,7 @@ describe('Users - Index Users service', () => {
 
     describe('and the filters were submitted empty', () => {
       beforeEach(() => {
-        yarStub = YarStub.build(Sinon)
+        yarStub.flash.returns([])
         yarStub.get.returns(_filters())
       })
 
@@ -121,7 +121,7 @@ describe('Users - Index Users service', () => {
         const filters = _filters()
 
         filters.email = 'carol.shaw@wrls.gov.uk'
-        yarStub = YarStub.build(Sinon)
+
         yarStub.get.returns(filters)
       })
 
@@ -135,7 +135,8 @@ describe('Users - Index Users service', () => {
 
   describe('when there is a notification', () => {
     beforeEach(() => {
-      yarStub = { flash: Sinon.stub().returns(['Test notification']), get: Sinon.stub().returns(null) }
+      yarStub.flash.returns(['Test notification'])
+      yarStub.get.returns(null)
     })
 
     it('sets the notification', async () => {
