@@ -86,6 +86,39 @@ function abstractionAlertStop(licenceRef = null) {
 }
 
 /**
+ * Creates an ad-hoc renewal invitation notice setup session fixture for testing purposes
+ *
+ * This represents the session at the point the `/check` page has been reached. To represent earlier pages you may need
+ * to remove properties
+ *
+ * @param {string|null} [licenceRef=null] - The licence reference. If not provided, one will be generated
+ *
+ * @returns {object} The notice setup session fixture
+ */
+function adHocRenewalInvitation(licenceRef = null) {
+  if (!licenceRef) {
+    licenceRef = generateLicenceRef()
+  }
+
+  const id = generateUUID()
+  const referenceCode = generateNoticeReferenceCode('REIN-')
+
+  return {
+    checkPageVisited: true,
+    expiryDate: new Date('2025-12-31'),
+    id,
+    journey: NoticeJourney.ADHOC,
+    licenceRef,
+    name: 'Renewals: invitation',
+    noticeType: NoticeType.RENEWAL_INVITATIONS,
+    notificationType: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType,
+    referenceCode,
+    renewalDate: new Date('2025-10-02'),
+    subType: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType
+  }
+}
+
+/**
  * Creates an ad-hoc invitation notice setup session fixture for testing purposes
  *
  * This represents the session at the point the `/check` page has been reached. To represent earlier pages you may need
@@ -366,6 +399,7 @@ module.exports = {
   abstractionAlertStop,
   adHocInvitation,
   adHocReminder,
+  adHocRenewalInvitation,
   paperReturn,
   standardInvitation,
   standardReminder
