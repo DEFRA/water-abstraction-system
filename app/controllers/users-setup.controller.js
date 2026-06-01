@@ -9,6 +9,8 @@ const InitiateExternalSessionService = require('../services/users/external/setup
 const InitiateInternalSessionService = require('../services/users/internal/setup/initiate-session.service.js')
 const SubmitCheckService = require('../services/users/internal/setup/submit-check.service.js')
 const SubmitEmailService = require('../services/users/internal/setup/submit-email.service.js')
+const SubmitExternalCancelService = require('../services/users/external/setup/submit-cancel.service.js')
+const SubmitExternalCheckService = require('../services/users/external/setup/submit-check.service.js')
 const SubmitExternalLicencesService = require('../services/users/external/setup/submit-licences.service.js')
 const SubmitPermissionsService = require('../services/users/internal/setup/submit-permissions.service.js')
 const ViewCheckService = require('../services/users/internal/setup/view-check.service.js')
@@ -57,6 +59,32 @@ async function submitEmail(request, h) {
 
   if (pageData.error) {
     return h.view('users/internal/setup/email.njk', pageData)
+  }
+
+  return h.redirect(pageData.redirectUrl)
+}
+
+async function submitExternalCancel(request, h) {
+  const {
+    params: { sessionId }
+  } = request
+
+  const { redirectUrl } = await SubmitExternalCancelService.go(sessionId)
+
+  return h.redirect(redirectUrl)
+}
+
+async function submitExternalCheck(request, h) {
+  const {
+    auth,
+    params: { sessionId },
+    yar
+  } = request
+
+  const pageData = await SubmitExternalCheckService.go(sessionId, yar, auth)
+
+  if (pageData.error) {
+    return h.view('users/external/setup/check.njk', pageData)
   }
 
   return h.redirect(pageData.redirectUrl)
@@ -157,6 +185,8 @@ module.exports = {
   setupInternal,
   submitCheck,
   submitEmail,
+  submitExternalCancel,
+  submitExternalCheck,
   submitExternalLicences,
   submitPermissions,
   viewCheck,
