@@ -69,13 +69,13 @@ function _transformValueToCSV(value) {
   if (typeof value === 'object') {
     const objectToString = JSON.stringify(value)
 
-    const escapedObjectToString = objectToString.replace(/"/g, '""').replace(/:/g, ': ').replace(/,/g, ', ')
+    const escapedObjectToString = objectToString.replaceAll('"', '""').replaceAll(':', ': ').replaceAll(',', ', ')
 
     return `"${escapedObjectToString}"`
   }
 
   // Return strings by quoting them and escaping any double quotes
-  const stringValue = value.toString().replace(/"/g, '""')
+  const stringValue = value.toString().replaceAll('"', '""')
 
   return `"${stringValue}"`
 }

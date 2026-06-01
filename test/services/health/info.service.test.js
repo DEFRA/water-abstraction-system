@@ -133,7 +133,7 @@ describe('Health - Info service', () => {
         })
       }
 
-      InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
+      InfoService = Proxyquire('../../../app/services/health/info.service', { 'node:util': utilStub })
     })
 
     it('returns details on each', async () => {
@@ -183,7 +183,7 @@ describe('Health - Info service', () => {
         })
       }
 
-      InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
+      InfoService = Proxyquire('../../../app/services/health/info.service', { 'node:util': utilStub })
     })
 
     describe('is not running', () => {
@@ -245,7 +245,7 @@ describe('Health - Info service', () => {
           })
         }
 
-        InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
+        InfoService = Proxyquire('../../../app/services/health/info.service', { 'node:util': utilStub })
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -287,7 +287,7 @@ describe('Health - Info service', () => {
           })
         }
 
-        InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
+        InfoService = Proxyquire('../../../app/services/health/info.service', { 'node:util': utilStub })
       })
 
       it('handles the error and still returns a result for the other services', async () => {
@@ -330,7 +330,7 @@ describe('Health - Info service', () => {
         })
       }
 
-      InfoService = Proxyquire('../../../app/services/health/info.service', { util: utilStub })
+      InfoService = Proxyquire('../../../app/services/health/info.service', { 'node:util': utilStub })
 
       redisStub.returns({ ping: Sinon.stub().resolves(), disconnect: Sinon.stub().resolves() })
     })

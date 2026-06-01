@@ -174,9 +174,7 @@ class BillingAccountModel extends BaseModel {
       address.country
     ]
 
-    return addressParts.filter((part) => {
-      return part
-    })
+    return addressParts.filter(Boolean)
   }
 
   /**

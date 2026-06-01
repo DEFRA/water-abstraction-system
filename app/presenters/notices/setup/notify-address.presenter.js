@@ -10,8 +10,8 @@ const { postcodeValidator } = require('postcode-validator')
 const { invalidStartCharacters } = require('../../../validators/helpers/notify-address-line.validator.js')
 
 const MAX_ADDRESS_LINES = 6 // The Notify max is actually 7 but we reserve address line 1 for the contact name
-const UK_COUNTRIES = ['england', 'northern ireland', 'scotland', 'wales', 'united kingdom']
-const CROWN_DEPENDENCIES = ['guernsey', 'isle of man', 'jersey']
+const UK_COUNTRIES = new Set(['england', 'northern ireland', 'scotland', 'wales', 'united kingdom'])
+const CROWN_DEPENDENCIES = new Set(['guernsey', 'isle of man', 'jersey'])
 
 /**
  * Formats a licence document header metadata contact record into a valid Notify address
@@ -165,27 +165,34 @@ function _address1(name, address1) {
 
 function _condense(addressParts) {
   const len = addressParts.length
-
   const first = addressParts[0]
   const last = addressParts[len - 1]
   const middle = addressParts.slice(1, -1)
 
-  const reducedMiddle = []
+  return [first, ..._reduceMiddle(middle, len), last]
+}
+
+/**
+ * Returns the middle address parts with some adjacent elements combined to bring the total within Notify's limit
+ *
+ * For an 8-part address (6 middle elements), the two inner pairs are joined: `[a, "b, c", "d, e", f]`
+ * For a 7-part address (5 middle elements), only the two innermost elements are joined: `[a, b, "c, d", ...rest]`
+ *
+ * @param {string[]} middle - the middle address parts (everything except the first and last elements)
+ * @param {number} len - the total number of address parts
+ *
+ * @returns {string[]}
+ *
+ * @private
+ */
+function _reduceMiddle(middle, len) {
+  const [addressPart1, addressPart2, addressPart3, addressPart4, addressPart5, addressPart6] = middle
 
   if (len === 8) {
-    // We remove 2 items by combining the 2 middle-most pairs
-    reducedMiddle.push(middle[0]) // keep first
-    reducedMiddle.push(`${middle[1]}, ${middle[2]}`) // combine next two
-    reducedMiddle.push(`${middle[3]}, ${middle[4]}`) // combine next two
-    reducedMiddle.push(middle[5]) // keep last
-  } else {
-    // We remove 1 item by combining the 2 middle-most elements
-    reducedMiddle.push(...middle.slice(0, 2)) // keep first two
-    reducedMiddle.push(`${middle[2]}, ${middle[3]}`) // combine middle two
-    reducedMiddle.push(...middle.slice(4)) // keep rest
+    return [addressPart1, `${addressPart2}, ${addressPart3}`, `${addressPart4}, ${addressPart5}`, addressPart6]
   }
 
-  return [first, ...reducedMiddle, last]
+  return [addressPart1, addressPart2, `${addressPart3}, ${addressPart4}`, addressPart5]
 }
 
 /**
@@ -225,11 +232,11 @@ function _international(contact) {
 
   const country = contact.country.toLowerCase()
 
-  if (UK_COUNTRIES.includes(country)) {
+  if (UK_COUNTRIES.has(country)) {
     return false
   }
 
-  return !CROWN_DEPENDENCIES.includes(country)
+  return !CROWN_DEPENDENCIES.has(country)
 }
 
 /**
@@ -268,7 +275,7 @@ function _invalidAddressParts(contact) {
   const country = contact.country ? contact.country.toLowerCase() : null
   const postcode = contact.postcode
 
-  const noCountry = !country || UK_COUNTRIES.includes(country) || CROWN_DEPENDENCIES.includes(country)
+  const noCountry = !country || UK_COUNTRIES.has(country) || CROWN_DEPENDENCIES.has(country)
   const noPostcode = !postcode || !postcodeValidator(postcode, 'GB')
   const hasSpecialChars = _specialCharacters(contact)
 
@@ -338,7 +345,7 @@ function _ukAddressParts(contact, defaultAddressParts) {
 
   const country = contact.country ? contact.country.toLowerCase() : null
 
-  if (country && !UK_COUNTRIES.includes(country)) {
+  if (country && !UK_COUNTRIES.has(country)) {
     addressParts[addressParts.length - 1] = contact.country
     addressParts.push(contact.postcode)
   }

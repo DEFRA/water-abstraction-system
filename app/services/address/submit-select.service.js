@@ -70,12 +70,12 @@ async function _save(session, address) {
 
   const premisesStreetAddress = `${premises} ${streetAddress}`.trim()
 
-  if (!address.organisation) {
-    mappedAddress.addressLine1 = premisesStreetAddress
-    mappedAddress.addressLine2 = null
-  } else {
+  if (address.organisation) {
     mappedAddress.addressLine1 = address.organisation
     mappedAddress.addressLine2 = premisesStreetAddress
+  } else {
+    mappedAddress.addressLine1 = premisesStreetAddress
+    mappedAddress.addressLine2 = null
   }
 
   mappedAddress.addressLine3 = address.locality ?? null

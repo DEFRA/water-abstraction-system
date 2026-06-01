@@ -6,8 +6,8 @@
  */
 
 // We use promisify to wrap exec in a promise. This allows us to await it without resorting to using callbacks.
-const util = require('util')
-const exec = util.promisify(require('child_process').exec)
+const util = require('node:util')
+const exec = util.promisify(require('node:child_process').exec)
 
 /**
  * Returns information about the `system` repo in the format required by the info service

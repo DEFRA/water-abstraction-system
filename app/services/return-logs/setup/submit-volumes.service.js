@@ -95,8 +95,8 @@ async function _save(payload, session, requestedYear, requestedMonth) {
       // The volumes are always in text format in the payload so we convert to a number before updating the session
       const lineEntry = payload[line.endDate] ? Number(payload[line.endDate]) : null
 
-      line.quantityCubicMetres = lineEntry !== null ? convertToCubicMetres(lineEntry, session.unitSymbol) : null
-      line.quantity = lineEntry !== null ? convertFromCubicMetres(line.quantityCubicMetres, session.unitSymbol) : null
+      line.quantityCubicMetres = lineEntry === null ? null : convertToCubicMetres(lineEntry, session.unitSymbol)
+      line.quantity = lineEntry === null ? null : convertFromCubicMetres(line.quantityCubicMetres, session.unitSymbol)
     }
   })
 
