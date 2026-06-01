@@ -44,6 +44,7 @@ const StopPlugin = {
       } catch (err) {
         // Ensure we exit with a non-zero code so it can be picked up by whatever requested the termination that
         // something went wrong
+        server.logger.error(err)
         process.exit(1)
       }
     }

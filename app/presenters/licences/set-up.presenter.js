@@ -161,7 +161,7 @@ function _endsSixYearsAgo(endDate) {
   yesterday.setDate(yesterday.getDate() - 1)
   yesterday.setHours(timeStamp.hour, timeStamp.minutes, timeStamp.seconds, timeStamp.ms)
 
-  const sixYearsFromYesterday = new Date(yesterday.getTime())
+  const sixYearsFromYesterday = new Date(yesterday)
 
   sixYearsFromYesterday.setFullYear(yesterday.getFullYear() - sixYears)
 
