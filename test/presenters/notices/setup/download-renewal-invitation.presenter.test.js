@@ -87,8 +87,8 @@ function _transformRecipientToRow(recipient, session) {
 
   const row = [
     recipient.licence_refs.join(', '),
-    renewalDate,
-    expiryDate,
+    new Date(renewalDate),
+    new Date(expiryDate),
     notificationType,
     recipient.message_type,
     recipient.contact_type,

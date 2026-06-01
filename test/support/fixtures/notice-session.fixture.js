@@ -105,7 +105,7 @@ function adHocRenewalInvitation(licenceRef = null) {
 
   return {
     checkPageVisited: true,
-    expiryDate: new Date('2025-12-31'),
+    expiryDate: '2025-12-31T00:00:00.000Z',
     id,
     journey: NoticeJourney.ADHOC,
     licenceRef,
@@ -113,7 +113,7 @@ function adHocRenewalInvitation(licenceRef = null) {
     noticeType: NoticeType.RENEWAL_INVITATIONS,
     notificationType: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].notificationType,
     referenceCode,
-    renewalDate: new Date('2025-10-02'),
+    renewalDate: '2025-10-02T00:00:00.000Z',
     subType: NoticeTypes[NoticeType.RENEWAL_INVITATIONS].subType
   }
 }
