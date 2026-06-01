@@ -6,10 +6,10 @@
  */
 
 const { PutObjectCommand, S3Client } = require('@aws-sdk/client-s3')
-const fsPromises = require('fs').promises
+const fsPromises = require('node:fs').promises
 const { HttpsProxyAgent, HttpProxyAgent } = require('hpagent')
 const { NodeHttpHandler } = require('@smithy/node-http-handler')
-const path = require('path')
+const path = require('node:path')
 
 const serverConfig = require('../../../../config/server.config.js')
 const S3Config = require('../../../../config/s3.config.js')
