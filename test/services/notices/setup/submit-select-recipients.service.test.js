@@ -13,6 +13,9 @@ const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
+// Test helpers
+const YarStub = require('../../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const FetchRecipientsService = require('../../../../app/services/notices/setup/fetch-recipients.service.js')
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
@@ -43,7 +46,8 @@ describe('Notices - Setup - Submit Select Recipients service', () => {
 
     Sinon.stub(FetchRecipientsService, 'go').resolves([recipients.primaryUser])
 
-    yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.returns([{ title: 'Test', text: 'Notification' }])
   })
 
   afterEach(() => {

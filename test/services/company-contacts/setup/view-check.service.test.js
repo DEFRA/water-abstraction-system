@@ -11,6 +11,7 @@ const { expect } = Code
 // Test helpers
 const CustomersFixtures = require('../../../support/fixtures/customers.fixture.js')
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
+const YarStub = require('../../../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const FetchCompanyContactsService = require('../../../../app/services/company-contacts/setup/fetch-company-contacts.service.js')
@@ -37,7 +38,8 @@ describe('Company Contacts - Setup - Check Service', () => {
 
     Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
-    yarStub = { flash: Sinon.stub().returns([{ title: 'Test', text: 'Notification' }]) }
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.returns([{ title: 'Test', text: 'Notification' }])
   })
 
   afterEach(() => {

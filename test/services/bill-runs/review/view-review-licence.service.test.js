@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const BillRunsReviewFixture = require('../../../support/fixtures/bill-runs-review.fixture.js')
+const YarStub = require('../../../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const FetchReviewLicenceService = require('../../../../app/services/bill-runs/review/fetch-review-licence.service.js')
@@ -35,7 +36,8 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
   describe('when called', () => {
     describe('and there is a flash message to display', () => {
       beforeEach(() => {
-        yarStub = { flash: Sinon.stub().withArgs('banner').returns(['This licence has been marked.']) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.flash.withArgs('banner').returns(['This licence has been marked.'])
       })
 
       it('returns page data for the view', async () => {
@@ -132,7 +134,8 @@ describe('Bill Runs - Review - View Review Licence Service', () => {
 
     describe('and there is no flash message to display', () => {
       beforeEach(() => {
-        yarStub = { flash: Sinon.stub().withArgs('banner').returns([undefined]) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.flash.withArgs('banner').returns([undefined])
       })
 
       it('returns page data for the view', async () => {

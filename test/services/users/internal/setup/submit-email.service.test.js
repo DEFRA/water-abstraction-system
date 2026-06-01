@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+const YarStub = require('../../../../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const CheckEmailExistsDal = require('../../../../../app/dal/users/check-email-exists.dal.js')
@@ -34,7 +35,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
 
     Sinon.stub(CheckEmailExistsDal, 'go').resolves(false)
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

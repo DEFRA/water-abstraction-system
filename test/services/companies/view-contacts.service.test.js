@@ -12,6 +12,9 @@ const { expect } = Code
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
 const { generateUUID } = require('../../../app/lib/general.lib.js')
 
+// Test helpers
+const YarStub = require('../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const FetchCompanyContactsService = require('../../../app/services/companies/fetch-company-crm-data.service.js')
 const FetchCompanyService = require('../../../app/services/companies/fetch-company.service.js')
@@ -48,11 +51,8 @@ describe('Companies - View Contacts service', () => {
 
     page = '1'
 
-    yarStub = {
-      flash: Sinon.stub().returns([
-        { titleText: 'Contact removed', text: 'Rachael Tyrell was removed from this company.' }
-      ])
-    }
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.returns([{ titleText: 'Contact removed', text: 'Rachael Tyrell was removed from this company.' }])
   })
 
   afterEach(() => {

@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const YarStub = require('../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const FetchMonitoringStationDetailsService = require('../../../app/services/monitoring-stations/fetch-monitoring-station-details.service.js')
 
@@ -57,7 +60,8 @@ describe('Monitoring Stations - View service', () => {
       }
     ]
 
-    yarStub = { flash: Sinon.stub().returns(['Tag removed for 99/999/9999']) }
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.returns(['Tag removed for 99/999/9999'])
 
     Sinon.stub(FetchMonitoringStationDetailsService, 'go').resolves({ licenceMonitoringStations, monitoringStation })
   })

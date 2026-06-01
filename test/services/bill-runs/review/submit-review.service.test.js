@@ -11,6 +11,9 @@ const { expect } = Code
 // Test helpers
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
+// Test helpers
+const YarStub = require('../../../support/stubs/yar.stub.js')
+
 // Thing under test
 const SubmitReviewService = require('../../../../app/services/bill-runs/review/submit-review.service.js')
 
@@ -21,7 +24,7 @@ describe('Bill Runs - Review - Submit Review Service', () => {
   let yarStub
 
   beforeEach(() => {
-    yarStub = { clear: Sinon.stub().returns(), set: Sinon.stub().returns() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

@@ -11,6 +11,7 @@ const { expect } = Code
 // Test helpers
 const AbstractionAlertSessionData = require('../../../support/fixtures/abstraction-alert-session-data.fixture.js')
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
+const YarStub = require('../../../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
@@ -34,7 +35,7 @@ describe('Notices - Setup - Process Remove Threshold service', () => {
 
     fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

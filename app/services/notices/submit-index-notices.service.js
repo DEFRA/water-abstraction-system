@@ -81,9 +81,7 @@ function _save(payload, yar) {
   })
 }
 
-function _savedFilters(payload) {
-  const { clear, get, set, ...noticesFilter } = payload
-
+function _savedFilters(yar) {
   return {
     sentFromDay: null,
     sentFromMonth: null,
@@ -96,7 +94,7 @@ function _savedFilters(payload) {
     reference: null,
     sentBy: null,
     statuses: [],
-    ...noticesFilter
+    ...yar.get('noticesFilter')
   }
 }
 
