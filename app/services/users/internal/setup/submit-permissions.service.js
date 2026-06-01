@@ -51,13 +51,13 @@ async function go(auth, sessionId, payload, yar) {
 }
 
 function _notification(session, payload, yar) {
-  if (session.checkPageVisited && session.permissions !== payload.permissions) {
+  if (session.checkPageVisited && session.permission !== payload.permission) {
     flashNotification(yar, 'Updated', 'Permissions updated')
   }
 }
 
 async function _save(session, payload) {
-  session.permissions = payload.permissions
+  session.permission = payload.permission
 
   return session.$update()
 }

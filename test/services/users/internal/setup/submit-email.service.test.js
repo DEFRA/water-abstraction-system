@@ -130,6 +130,7 @@ describe('Users - Internal - Setup - Submit Email Service', () => {
       const result = await SubmitEmailService.go(session.id, payload, yarStub)
 
       expect(result).to.equal({
+        activeNavBar: 'users',
         backLink: {
           href: '/system/users',
           text: 'Back'

@@ -14,7 +14,7 @@ describe('Users - Internal - Setup - Permissions Validator', () => {
   let payload
 
   beforeEach(() => {
-    payload = { permissions: 'basic' }
+    payload = { permission: 'basic' }
   })
 
   describe('when called with valid data', () => {
@@ -27,7 +27,7 @@ describe('Users - Internal - Setup - Permissions Validator', () => {
   })
 
   describe('when called with invalid data', () => {
-    describe('because the "permissions" value is missing', () => {
+    describe('because the "permission" value is missing', () => {
       beforeEach(() => {
         payload = {}
       })
@@ -41,9 +41,9 @@ describe('Users - Internal - Setup - Permissions Validator', () => {
       })
     })
 
-    describe('because the "permissions" value is not in the allowed list', () => {
+    describe('because the "permission" value is not in the allowed list', () => {
       beforeEach(() => {
-        payload.permissions = 'an-invalid-value'
+        payload.permission = 'an-invalid-value'
       })
 
       it('fails validation', () => {

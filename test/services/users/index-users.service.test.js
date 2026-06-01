@@ -67,6 +67,7 @@ describe('Users - Index Users service', () => {
             text: 'Create a user'
           }
         },
+        notification: undefined,
         pageTitle: 'Users',
         users: [
           {
@@ -129,6 +130,18 @@ describe('Users - Index Users service', () => {
 
         expect(result.filters.openFilter).to.be.true()
       })
+    })
+  })
+
+  describe('when there is a notification', () => {
+    beforeEach(() => {
+      yarStub = { flash: Sinon.stub().returns(['Test notification']), get: Sinon.stub().returns(null) }
+    })
+
+    it('sets the notification', async () => {
+      const result = await IndexUsersService.go(yarStub, auth, page)
+
+      expect(result.notification).to.equal('Test notification')
     })
   })
 })

@@ -38,6 +38,7 @@ describe('Users - Internal - Setup - View Email Service', () => {
       const result = await ViewEmailService.go(session.id)
 
       expect(result).to.equal({
+        activeNavBar: 'users',
         backLink: {
           href: '/system/users',
           text: 'Back'

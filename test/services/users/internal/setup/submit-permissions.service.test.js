@@ -53,7 +53,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
 
   describe('when called with a valid payload', () => {
     beforeEach(() => {
-      payload = { permissions: 'basic' }
+      payload = { permission: 'basic' }
     })
 
     it('saves the submitted value', async () => {
@@ -61,7 +61,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
 
       expect(session).to.equal({
         ...session,
-        permissions: 'basic'
+        permission: 'basic'
       })
       expect(session.$update.called).to.be.true()
     })
@@ -80,7 +80,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
           session = SessionModelStub.build(Sinon, {
             ...sessionData,
             checkPageVisited: true,
-            permissions: 'basic'
+            permission: 'basic'
           })
 
           fetchSessionStub.resolves(session)
@@ -89,7 +89,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
         describe('and the "session" and "payload" value', () => {
           describe('match', () => {
             beforeEach(() => {
-              payload = { permissions: 'basic' }
+              payload = { permission: 'basic' }
             })
 
             it('does not set a notification', async () => {
@@ -101,7 +101,7 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
 
           describe('do not match', () => {
             beforeEach(() => {
-              payload = { permissions: 'super' }
+              payload = { permission: 'super' }
             })
 
             it('sets a notification', async () => {
@@ -135,24 +135,25 @@ describe('Users - Internal - Setup - Submit Permissions Service', () => {
       const result = await SubmitPermissionsService.go(auth, session.id, payload, yarStub)
 
       expect(result).to.equal({
+        activeNavBar: 'users',
         backLink: {
           href: `/system/users/internal/setup/${session.id}/email`,
           text: 'Back'
         },
         error: {
-          permissions: {
+          permission: {
             text: 'Select a permission'
           },
           errorList: [
             {
-              href: '#permissions',
+              href: '#permission',
               text: 'Select a permission'
             }
           ]
         },
         pageTitle: 'Select permissions for the user',
         pageTitleCaption: 'Internal',
-        permissions: undefined,
+        permission: undefined,
         showSuperPermission: false
       })
     })
