@@ -204,22 +204,18 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
       })
 
       describe('when the notification is an email', () => {
-        describe('and there is only one licence ref', () => {
-          it('returns the expected "templateId"', () => {
-            const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+        it('returns the expected "templateId"', () => {
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
-            expect(result[0].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.adhoc.email['single licence'])
-          })
+          expect(result[0].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.adhoc.email['single licence'])
         })
       })
 
       describe('when the notification is a letter', () => {
-        describe('and there is only one licence ref', () => {
-          it('returns the expected "templateId"', () => {
-            const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+        it('returns the expected "templateId"', () => {
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
-            expect(result[1].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.adhoc.letter['single licence'])
-          })
+          expect(result[1].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.adhoc.letter['single licence'])
         })
       })
     })
