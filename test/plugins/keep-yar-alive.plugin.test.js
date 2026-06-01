@@ -12,6 +12,9 @@ const { expect } = Code
 const { HTTP_STATUS_OK } = require('node:http2').constants
 const Hapi = require('@hapi/hapi')
 
+// Test helpers
+const YarStub = require('../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const GlobalNotifierStub = require('../support/stubs/global-notifier.stub.js')
 
@@ -66,9 +69,7 @@ describe('Keep Yar Alive plugin', () => {
 
   describe('when the route does not have the "skipSessionTouch" setting applied', () => {
     beforeEach(() => {
-      yarStub = {
-        touch: Sinon.stub()
-      }
+      yarStub = YarStub.build(Sinon)
 
       _attachYarStub(server, yarStub)
     })
@@ -87,9 +88,7 @@ describe('Keep Yar Alive plugin', () => {
 
   describe('when the route does have the "skipSessionTouch" setting applied', () => {
     beforeEach(() => {
-      yarStub = {
-        touch: Sinon.stub()
-      }
+      yarStub = YarStub.build(Sinon)
 
       _attachYarStub(server, yarStub)
     })
@@ -121,9 +120,8 @@ describe('Keep Yar Alive plugin', () => {
 
   describe('should an error be thrown when trying to keep the session alive', () => {
     beforeEach(() => {
-      yarStub = {
-        touch: Sinon.stub().throws(new Error('boom'))
-      }
+      yarStub = YarStub.build(Sinon)
+      yarStub.touch.throws(new Error('boom'))
 
       _attachYarStub(server, yarStub)
     })

@@ -515,7 +515,7 @@ function transformStringOfLicencesToArray(licences) {
   }
 
   return licences
-    .replace(/\n/g, ',') // Replace newlines with commas
+    .replaceAll('\n', ',') // Replace newlines with commas
     .split(',') // Split by commas
     .map((item) => {
       return item.trim()

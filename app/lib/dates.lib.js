@@ -92,9 +92,7 @@ function determineFinancialYearEnd(date) {
  * @returns {Date} The earliest date
  */
 function determineEarliestDate(dates) {
-  const allEmptyValuesRemoved = dates.filter((date) => {
-    return date
-  })
+  const allEmptyValuesRemoved = dates.filter(Boolean)
 
   if (allEmptyValuesRemoved.length === 0) {
     return null
@@ -116,9 +114,7 @@ function determineEarliestDate(dates) {
  * @returns {Date} The latest date
  */
 function determineLatestDate(dates) {
-  const allEmptyValuesRemoved = dates.filter((date) => {
-    return date
-  })
+  const allEmptyValuesRemoved = dates.filter(Boolean)
 
   if (allEmptyValuesRemoved.length === 0) {
     throw new Error('No dates provided to determine earliest')

@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, before, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const YarStub = require('../support/stubs/yar.stub.js')
+
 // Thing under test
 const SubmitPageLib = require('../../app/lib/submit-page.lib.js')
 
@@ -20,9 +23,7 @@ describe('SubmitPageLib', () => {
     let yarStub
 
     beforeEach(() => {
-      yarStub = {
-        clear: Sinon.stub().returns()
-      }
+      yarStub = YarStub.build(Sinon)
     })
 
     afterEach(() => {
@@ -109,9 +110,8 @@ describe('SubmitPageLib', () => {
 
     describe('when no filters have been saved', () => {
       before(() => {
-        yarStub = {
-          get: Sinon.stub().returns(null)
-        }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns(null)
       })
 
       it('returns the expected results, "openFilter" is set to FALSE', () => {
@@ -123,9 +123,8 @@ describe('SubmitPageLib', () => {
 
     describe('when filters have been saved with empty values', () => {
       before(() => {
-        yarStub = {
-          get: Sinon.stub().returns({ regions: [], status: null })
-        }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns({ regions: [], status: null })
       })
 
       it('returns the expected results, "openFilter" is set to FALSE', () => {
@@ -137,9 +136,8 @@ describe('SubmitPageLib', () => {
 
     describe('when a filter with array values been saved', () => {
       before(() => {
-        yarStub = {
-          get: Sinon.stub().returns({ regions: ['south', 'north'] })
-        }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns({ regions: ['south', 'north'] })
       })
 
       it('returns the expected results, "openFilter" is set to TRUE', () => {
@@ -151,9 +149,8 @@ describe('SubmitPageLib', () => {
 
     describe('when a filter with non array values been saved', () => {
       before(() => {
-        yarStub = {
-          get: Sinon.stub().returns({ status: 'review' })
-        }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns({ status: 'review' })
       })
 
       it('returns the expected results, "openFilter" is set to TRUE', () => {

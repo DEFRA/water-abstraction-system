@@ -13,6 +13,9 @@ const RegionHelper = require('../../../support/helpers/region.helper.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
+// Test helpers
+const YarStub = require('../../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const DatabaseConfig = require('../../../../config/database.config.js')
 const FetchBillRunLicencesService = require('../../../../app/services/bill-runs/review/fetch-bill-run-licences.service.js')
@@ -73,10 +76,9 @@ describe('Bill Runs - Review - View Review Service', () => {
         titleText: 'Licence removed'
       }
 
-      yarStub = {
-        flash: Sinon.stub().returns([notification]),
-        get: Sinon.stub().returns(null)
-      }
+      yarStub = YarStub.build(Sinon)
+      yarStub.flash.returns([notification])
+      yarStub.get.returns(null)
     })
 
     it('returns the page data for the view', async () => {
@@ -142,7 +144,8 @@ describe('Bill Runs - Review - View Review Service', () => {
 
       Sinon.stub(FetchBillRunLicencesService, 'go').resolves(fetchData)
 
-      yarStub = { flash: Sinon.stub().returns([]) }
+      yarStub = YarStub.build(Sinon)
+      yarStub.flash.returns([])
     })
 
     describe('and none were ever set or they were cleared', () => {

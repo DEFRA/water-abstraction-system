@@ -8,6 +8,9 @@ const Sinon = require('sinon')
 const { describe, it, beforeEach, afterEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const YarStub = require('../../support/stubs/yar.stub.js')
+
 // Things we want to stub
 const UserModel = require('../../../app/models/user.model.js')
 
@@ -40,7 +43,8 @@ describe('Users - View profile details service', () => {
       limit: Sinon.stub().returnsThis()
     })
     userModelQueryStub = Sinon.stub(UserModel, 'query').returns({ where: whereStub })
-    yarStub = { flash: Sinon.stub().withArgs('notification').returns([]) }
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.withArgs('notification').returns([])
   })
 
   afterEach(() => {
@@ -69,7 +73,8 @@ describe('Users - View profile details service', () => {
 
     describe('and there is a notification to be displayed', () => {
       beforeEach(() => {
-        yarStub = { flash: Sinon.stub().withArgs('notification').returns([testNotification]) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.flash.withArgs('notification').returns([testNotification])
       })
 
       it('returns the notification', async () => {

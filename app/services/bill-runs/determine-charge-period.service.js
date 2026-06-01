@@ -73,9 +73,7 @@ function go(chargeVersion, billingPeriod) {
     chargeVersion.licence.expiredDate,
     chargeVersion.licence.lapsedDate,
     chargeVersion.licence.revokedDate
-  ].filter((timestamp) => {
-    return timestamp
-  })
+  ].filter(Boolean)
 
   const earliestEndDateTimestamp = Math.min(...endDateTimestamps)
 

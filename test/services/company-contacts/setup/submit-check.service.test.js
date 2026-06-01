@@ -14,6 +14,9 @@ const SessionModel = require('../../../../app/models/session.model.js')
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
+// Test helpers
+const YarStub = require('../../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const CreateCompanyContactService = require('../../../../app/services/company-contacts/setup/create-company-contact.service.js')
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
@@ -39,7 +42,7 @@ describe('Company Contacts - Setup - Check Service', () => {
     Sinon.stub(CreateCompanyContactService, 'go').resolves()
     Sinon.stub(UpdateCompanyContactService, 'go').resolves()
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

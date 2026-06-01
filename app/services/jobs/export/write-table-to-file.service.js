@@ -5,11 +5,11 @@
  * @module WriteTableToFileService
  */
 
-const fs = require('fs')
+const fs = require('node:fs')
 const fsPromises = fs.promises
-const { pipeline, Transform } = require('stream')
-const path = require('path')
-const util = require('util')
+const { pipeline, Transform } = require('node:stream')
+const path = require('node:path')
+const util = require('node:util')
 
 const { transformArrayToCSVRow } = require('../../../lib/transform-to-csv.lib.js')
 
