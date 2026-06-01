@@ -1,0 +1,202 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Test helpers
+const { generateUUID } = require('../../../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+
+// Thing under test
+const LicencesPresenter = require('../../../../../app/presenters/users/external/setup/licences.presenter.js')
+
+describe('Users - External - Setup - Licences Presenter', () => {
+  let session
+
+  beforeEach(() => {
+    session = {
+      activeNavBar: 'users',
+      id: generateUUID(),
+      licences: [
+        {
+          id: generateUUID(),
+          licenceRef: generateLicenceRef(),
+          licenceVersions: [
+            {
+              id: generateUUID(),
+              issueDate: null,
+              licenceId: generateUUID(),
+              startDate: new Date('2022-04-01'),
+              status: 'current',
+              company: {
+                id: generateUUID(),
+                name: 'ACME Farms Ltd',
+                type: 'organisation'
+              }
+            }
+          ]
+        },
+        {
+          id: generateUUID(),
+          licenceRef: generateLicenceRef(),
+          licenceVersions: [
+            {
+              id: generateUUID(),
+              issueDate: null,
+              licenceId: generateUUID(),
+              startDate: new Date('2023-04-01'),
+              status: 'current',
+              company: {
+                id: generateUUID(),
+                name: 'ACME Industry Ltd',
+                type: 'organisation'
+              }
+            }
+          ]
+        }
+      ],
+      selectedLicences: [],
+      user: {
+        id: generateUUID(),
+        licenceEntityId: generateUUID(),
+        username: 'jon.lee@example.co.uk'
+      }
+    }
+  })
+
+  it('correctly presents the data', () => {
+    const result = LicencesPresenter.go(session)
+
+    expect(result).to.equal({
+      activeNavBar: 'users',
+      backLink: {
+        href: `/system/users/external/${session.user.id}/licences`,
+        text: 'Go back to user'
+      },
+      checkBoxItems: [
+        {
+          checked: false,
+          hint: { text: session.licences[0].licenceVersions[0].company.name },
+          text: session.licences[0].licenceRef,
+          value: session.licences[0].id
+        },
+        {
+          checked: false,
+          hint: { text: session.licences[1].licenceVersions[0].company.name },
+          text: session.licences[1].licenceRef,
+          value: session.licences[1].id
+        },
+        {
+          divider: 'or'
+        },
+        {
+          behaviour: 'exclusive',
+          checked: false,
+          text: 'All licences',
+          value: 'all'
+        }
+      ],
+      pageTitle: 'Select licences to unregister',
+      pageTitleCaption: session.user.username,
+      showHint: true
+    })
+  })
+
+  describe('the "checkBoxItems" property', () => {
+    describe('when there is only one licence to unregister', () => {
+      beforeEach(() => {
+        session.licences = [session.licences[0]]
+      })
+
+      it('does not include a divider or an "All licences" option', () => {
+        const result = LicencesPresenter.go(session)
+
+        expect(result.checkBoxItems).to.not.include({ divider: 'or' })
+        expect(result.checkBoxItems).to.not.include({ behaviour: 'exclusive', text: 'All licences', value: 'all' })
+      })
+    })
+
+    describe('when there is more than one licence to unregister', () => {
+      it('includes a divider and an "All licences" option', () => {
+        const result = LicencesPresenter.go(session)
+
+        expect(result.checkBoxItems).to.include({ divider: 'or' })
+        expect(result.checkBoxItems).to.include({
+          behaviour: 'exclusive',
+          checked: false,
+          text: 'All licences',
+          value: 'all'
+        })
+      })
+    })
+
+    describe('the "checked" property', () => {
+      describe('when the user did not select any licences', () => {
+        it('returns the matching licence option as checked', () => {
+          const result = LicencesPresenter.go(session)
+
+          expect(result.checkBoxItems[0].checked).to.be.false()
+          expect(result.checkBoxItems[1].checked).to.be.false()
+
+          // The "All licences" option
+          expect(result.checkBoxItems[result.checkBoxItems.length - 1].checked).to.be.false()
+        })
+      })
+
+      describe('when the user selected a licence', () => {
+        beforeEach(() => {
+          session.selectedLicences = [session.licences[0].id]
+        })
+
+        it('returns the matching licence option as checked', () => {
+          const result = LicencesPresenter.go(session)
+
+          expect(result.checkBoxItems[0].checked).to.be.true()
+          expect(result.checkBoxItems[1].checked).to.be.false()
+
+          // The "All licences" option
+          expect(result.checkBoxItems[result.checkBoxItems.length - 1].checked).to.be.false()
+        })
+      })
+
+      describe('when the user has previously selected "All licences"', () => {
+        beforeEach(() => {
+          session.allLicences = true
+        })
+
+        it('returns the "All licences" option as checked', () => {
+          const result = LicencesPresenter.go(session)
+
+          expect(result.checkBoxItems[result.checkBoxItems.length - 1].text).to.equal('All licences')
+          expect(result.checkBoxItems[result.checkBoxItems.length - 1].checked).to.be.true()
+        })
+      })
+    })
+  })
+
+  describe('the "showHint" property', () => {
+    describe('when there is only one licence to unregister', () => {
+      beforeEach(() => {
+        session.licences = [session.licences[0]]
+      })
+
+      it('returns "false"', () => {
+        const result = LicencesPresenter.go(session)
+
+        expect(result.showHint).to.be.false()
+      })
+    })
+
+    describe('when there is more than one licence to unregister', () => {
+      it('returns "true"', () => {
+        const result = LicencesPresenter.go(session)
+
+        expect(result.showHint).to.be.true()
+      })
+    })
+  })
+})
