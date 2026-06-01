@@ -21,17 +21,13 @@ async function setup(_request, h) {
 
 async function submitCheck(request, h) {
   const {
-    payload,
-    params: { sessionId }
+    params: { sessionId },
+    yar
   } = request
 
-  const pageData = await SubmitCheckService.go(sessionId, payload)
+  await SubmitCheckService.go(sessionId, yar)
 
-  if (pageData.error) {
-    return h.view('users/internal/setup/check.njk', pageData)
-  }
-
-  return h.redirect(pageData.redirectUrl)
+  return h.redirect('/system/users')
 }
 
 async function submitEmail(request, h) {
@@ -68,9 +64,12 @@ async function submitPermissions(request, h) {
 }
 
 async function viewCheck(request, h) {
-  const { sessionId } = request.params
+  const {
+    params: { sessionId },
+    yar
+  } = request
 
-  const pageData = await ViewCheckService.go(sessionId)
+  const pageData = await ViewCheckService.go(sessionId, yar)
 
   return h.view('users/internal/setup/check.njk', pageData)
 }

@@ -15,14 +15,17 @@ const { checkUrl } = require('../../../../lib/check-page.lib.js')
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
+  const { id: sessionId, permission } = session
+
   return {
+    activeNavBar: 'users',
     backLink: {
-      href: checkUrl(session, `/system/users/internal/setup/${session.id}/email`),
+      href: checkUrl(session, `/system/users/internal/setup/${sessionId}/email`),
       text: 'Back'
     },
     pageTitle: 'Select permissions for the user',
     pageTitleCaption: 'Internal',
-    permissions: session.permissions
+    permission
   }
 }
 

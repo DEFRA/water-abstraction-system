@@ -17,7 +17,7 @@ describe('Users - Internal - Setup - Permissions Presenter', () => {
   let session
 
   beforeEach(() => {
-    session = { id: generateUUID(), permissions: 'super' }
+    session = { id: generateUUID(), permission: 'super' }
   })
 
   describe('when called', () => {
@@ -25,13 +25,14 @@ describe('Users - Internal - Setup - Permissions Presenter', () => {
       const result = PermissionsPresenter.go(session)
 
       expect(result).to.equal({
+        activeNavBar: 'users',
         backLink: {
           href: `/system/users/internal/setup/${session.id}/email`,
           text: 'Back'
         },
         pageTitle: 'Select permissions for the user',
         pageTitleCaption: 'Internal',
-        permissions: 'super'
+        permission: 'super'
       })
     })
 

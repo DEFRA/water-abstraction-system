@@ -14,8 +14,10 @@ const { generateUUID } = require('../../app/lib/general.lib.js')
 
 // Things we need to stub
 const InitiateSessionService = require('../../app/services/users/internal/setup/initiate-session.service.js')
+const SubmitCheckService = require('../../app/services/users/internal/setup/submit-check.service.js')
 const SubmitEmailService = require('../../app/services/users/internal/setup/submit-email.service.js')
 const SubmitPermissionsService = require('../../app/services/users/internal/setup/submit-permissions.service.js')
+const ViewCheckService = require('../../app/services/users/internal/setup/view-check.service.js')
 const ViewEmailService = require('../../app/services/users/internal/setup/view-email.service.js')
 const ViewPermissionsService = require('../../app/services/users/internal/setup/view-permissions.service.js')
 
@@ -64,6 +66,46 @@ describe('Users Setup controller', () => {
 
         expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
         expect(response.headers.location).to.equal(`/system/users/internal/setup/${id}/email`)
+      })
+    })
+  })
+
+  describe('/users/internal/setup/{sessionId}/check', () => {
+    describe('GET', () => {
+      beforeEach(async () => {
+        options = _getOptions(`/users/internal/setup/${sessionId}/check`, { scope: ['manage_accounts'] })
+
+        Sinon.stub(ViewCheckService, 'go').resolves({
+          pageTitle: 'Check user'
+        })
+      })
+
+      describe('when the request succeeds', () => {
+        it('returns the page successfully', async () => {
+          const response = await server.inject(options)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_OK)
+          expect(response.payload).to.contain('Check user')
+        })
+      })
+    })
+
+    describe('POST', () => {
+      beforeEach(() => {
+        postOptions = postRequestOptions(`/users/internal/setup/${sessionId}/check`, {}, ['manage_accounts'])
+      })
+
+      describe('when a request is valid', () => {
+        beforeEach(() => {
+          Sinon.stub(SubmitCheckService, 'go').resolves()
+        })
+
+        it('redirects to the Users page', async () => {
+          const response = await server.inject(postOptions)
+
+          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
+          expect(response.headers.location).to.equal('/system/users')
+        })
       })
     })
   })

@@ -20,13 +20,19 @@ const ViewCheckService = require('../../../../../app/services/users/internal/set
 describe('Users - Internal - Setup - Check Service', () => {
   let session
   let sessionData
+  let yarStub
 
   beforeEach(() => {
-    sessionData = {}
+    sessionData = {
+      email: 'bob.bobbles@environment-agency.gov.uk',
+      permission: 'billing_and_data'
+    }
 
     session = SessionModelStub.build(Sinon, sessionData)
 
     Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+    yarStub = { flash: Sinon.stub().returns([]) }
   })
 
   afterEach(() => {
@@ -35,14 +41,38 @@ describe('Users - Internal - Setup - Check Service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewCheckService.go(session.id)
+      const result = await ViewCheckService.go(session.id, yarStub)
 
       expect(result).to.equal({
-        backLink: {
-          href: '',
-          text: 'Back'
+        activeNavBar: 'users',
+        email: session.email,
+        links: {
+          email: `/system/users/internal/setup/${session.id}/email`,
+          permissions: `/system/users/internal/setup/${session.id}/permissions`
         },
-        pageTitle: ''
+        notification: undefined,
+        pageTitle: 'Check user',
+        pageTitleCaption: 'Internal',
+        permission: 'Billing and Data'
+      })
+    })
+
+    it('sets the "checkPageVisited" flag to "true"', async () => {
+      await ViewCheckService.go(session.id, yarStub)
+
+      expect(session.checkPageVisited).to.be.true()
+      expect(session.$update.called).to.be.true()
+    })
+
+    describe('when there is a notification', () => {
+      beforeEach(() => {
+        yarStub = { flash: Sinon.stub().returns(['Test notification']) }
+      })
+
+      it('sets the notification', async () => {
+        const result = await ViewCheckService.go(session.id, yarStub)
+
+        expect(result.notification).to.equal('Test notification')
       })
     })
   })

@@ -8,11 +8,11 @@
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
     {{ govukRadios({
-      name: 'permissions',
-      errorMessage: error.permissions,
+      name: 'permission',
+      errorMessage: error.permission,
       items: [
         {
-          checked: permissions === 'basic',
+          checked: permission === 'basic',
           hint: {
             text: "View licences and returns."
           },
@@ -21,7 +21,7 @@
           value: "basic"
         },
         {
-          checked: permissions === 'billing_and_data',
+          checked: permission === 'billing_and_data',
           hint: {
             text: "Send returns communications, monitor statistics and edit data."
           },
@@ -30,7 +30,7 @@
           value: "billing_and_data"
         },
         {
-          checked: permissions === 'environment_officer',
+          checked: permission === 'environment_officer',
           hint: {
             text: "Send hands-off flow notifications."
           },
@@ -39,7 +39,7 @@
           value: "environment_officer"
         },
         {
-          checked: permissions === 'nps',
+          checked: permission === 'nps',
           hint: {
             text: "Send renewals."
           },
@@ -48,7 +48,7 @@
           value: "nps"
         },
         {
-          checked: permissions === 'nps_ar_approver',
+          checked: permission === 'nps_ar_approver',
           hint: {
             text: "Send renewals and digitise licence information and approve changes."
           },
@@ -57,7 +57,7 @@
           value: "nps_ar_approver"
         },
         {
-          checked: permissions === 'nps_ar_user',
+          checked: permission === 'nps_ar_user',
           hint: {
             text: "Send renewals and digitise licence information."
           },
@@ -66,7 +66,7 @@
           value: "nps_ar_user"
         },
         {
-          checked: permissions === 'psc',
+          checked: permission === 'psc',
           hint: {
             text: "Send renewals."
           },
@@ -75,7 +75,7 @@
           value: "psc"
         },
         {
-          checked: permissions === 'super',
+          checked: permission === 'super',
           hint: {
             text: "Full access to all areas of the service."
           },
@@ -84,7 +84,7 @@
           value: "super"
         } if showSuperPermission === true,
         {
-          checked: permissions === 'wirs',
+          checked: permission === 'wirs',
           hint: {
             text: "Process returns."
           },

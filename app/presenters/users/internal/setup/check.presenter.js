@@ -5,6 +5,8 @@
  * @module CheckPresenter
  */
 
+const { userPermissions } = require('../../../../lib/static-lookups.lib.js')
+
 /**
  * Formats data for the '/users/internal/setup/{sessionId}/check' page
  *
@@ -13,12 +15,18 @@
  * @returns {object} The data formatted for the view template
  */
 function go(session) {
+  const { email, id: sessionId, permission } = session
+
   return {
-    backLink: {
-      href: '',
-      text: 'Back'
+    activeNavBar: 'users',
+    email,
+    links: {
+      email: `/system/users/internal/setup/${sessionId}/email`,
+      permissions: `/system/users/internal/setup/${sessionId}/permissions`
     },
-    pageTitle: ''
+    pageTitle: 'Check user',
+    pageTitleCaption: 'Internal',
+    permission: userPermissions[permission].label
   }
 }
 

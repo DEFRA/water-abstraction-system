@@ -24,6 +24,7 @@ describe('Users - Internal - Setup - Email Presenter', () => {
     const result = EmailPresenter.go(session)
 
     expect(result).to.equal({
+      activeNavBar: 'users',
       backLink: {
         href: '/system/users',
         text: 'Back'
@@ -31,6 +32,28 @@ describe('Users - Internal - Setup - Email Presenter', () => {
       email: null,
       pageTitle: 'Enter an email address for the user',
       pageTitleCaption: 'Internal'
+    })
+  })
+
+  describe('the "backLink" property', () => {
+    describe('when the check page has previously been visited', () => {
+      beforeEach(() => {
+        session.checkPageVisited = true
+      })
+
+      it('returns the correct href', () => {
+        const result = EmailPresenter.go(session)
+
+        expect(result.backLink.href).to.equal(`/system/users/internal/setup/${session.id}/check`)
+      })
+    })
+
+    describe('when the check page has not previously been visited', () => {
+      it('returns the correct href', () => {
+        const result = EmailPresenter.go(session)
+
+        expect(result.backLink.href).to.equal('/system/users')
+      })
     })
   })
 

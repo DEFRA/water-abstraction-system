@@ -8,6 +8,7 @@
 const FetchUsersDal = require('../../dal/users/fetch-users.dal.js')
 const IndexUsersPresenter = require('../../presenters/users/index-users.presenter.js')
 const PaginatorPresenter = require('../../presenters/paginator.presenter.js')
+const { readFlashNotification } = require('../../lib/general.lib.js')
 const { processSavedFilters } = require('../../lib/submit-page.lib.js')
 
 const featureFlagsConfig = require('../../../config/feature-flags.config.js')
@@ -30,11 +31,14 @@ async function go(yar, auth, page) {
 
   const pageData = IndexUsersPresenter.go(users, auth)
 
+  const notification = readFlashNotification(yar)
+
   return {
     activeNavBar: featureFlagsConfig.enableUsersView ? 'users' : 'search',
     filters,
-    ...pageData,
-    pagination
+    notification,
+    pagination,
+    ...pageData
   }
 }
 

@@ -8,20 +8,28 @@
 
 const CheckPresenter = require('../../../../presenters/users/internal/setup/check.presenter.js')
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+const { markCheckPageVisited } = require('../../../../lib/check-page.lib.js')
+const { readFlashNotification } = require('../../../../lib/general.lib.js')
 
 /**
  * Orchestrates fetching and presenting the data for the '/users/internal/setup/{sessionId}/check' page
  *
  * @param {string} sessionId - The UUID of the current session
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  *
  * @returns {Promise<object>} The data formatted for the view template
  */
-async function go(sessionId) {
+async function go(sessionId, yar) {
   const session = await FetchSessionDal.go(sessionId)
+
+  await markCheckPageVisited(session)
 
   const pageData = CheckPresenter.go(session)
 
+  const notification = readFlashNotification(yar)
+
   return {
+    notification,
     ...pageData
   }
 }

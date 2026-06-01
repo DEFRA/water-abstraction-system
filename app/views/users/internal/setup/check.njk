@@ -1,11 +1,43 @@
 {% extends 'layout.njk' %}
 
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
 {% block pageContent %}
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: { text: "Email address" },
+        value: { text: email },
+        actions: {
+          items: [
+            {
+              href: links.email,
+              text: "Change",
+              visuallyHiddenText: "change email address"
+            }
+          ]
+        }
+      },
+      {
+        key: { text: "Permissions" },
+        value: { text: permission },
+        actions: {
+          items: [
+            {
+              href: links.permissions,
+              text: "Change",
+              visuallyHiddenText: "change permissions"
+            }
+          ]
+        }
+      }
+    ]
+  }) }}
+
   <form method="post">
     <input type="hidden" name="wrlsCrumb" value="{{wrlsCrumb}}"/>
 
-    {{ govukButton({ text: "Continue", preventDoubleClick: true }) }}
+    {{ govukButton({ text: "Confirm", preventDoubleClick: true }) }}
   </form>
 {% endblock %}
