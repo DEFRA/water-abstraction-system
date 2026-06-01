@@ -100,10 +100,11 @@ async function viewExternalLicences(request, h) {
   const {
     auth,
     params: { id },
-    query: { back, page }
+    query: { back, page },
+    yar
   } = request
 
-  const pageData = await ViewExternalLicencesService.go(id, auth, page, back)
+  const pageData = await ViewExternalLicencesService.go(id, auth, page, yar, back)
 
   return h.view('users/external/licences.njk', pageData)
 }

@@ -9,6 +9,7 @@ const FetchLicencesDal = require('../../../dal/users/external/fetch-licences.dal
 const FetchUserDal = require('../../../dal/users/fetch-user.dal.js')
 const LicencesPresenter = require('../../../presenters/users/external/licences.presenter.js')
 const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
+const { readFlashNotification } = require('../../../lib/general.lib.js')
 
 /**
  * Orchestrates fetching and presenting external user data for `/users/external/{id}/licences` page
@@ -16,11 +17,12 @@ const PaginatorPresenter = require('../../../presenters/paginator.presenter.js')
  * @param {number} id - The user's ID
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  * @param {string} page - The current page for the pagination service
+ * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {string} back - The 'back' query parameter, used to indicate what back link should be shown on the page
  *
  * @returns {Promise<object>} The view data for the external user page
  */
-async function go(id, auth, page, back = 'users') {
+async function go(id, auth, page, yar, back = 'users') {
   const user = await FetchUserDal.go(id)
 
   const { licences, totalNumber } = await FetchLicencesDal.go(user.licenceEntityId, page)
@@ -36,9 +38,12 @@ async function go(id, auth, page, back = 'users') {
     { back }
   )
 
+  const notification = readFlashNotification(yar)
+
   return {
     activeSecondaryNav: 'licences',
     pagination,
+    notification,
     ...pageData
   }
 }

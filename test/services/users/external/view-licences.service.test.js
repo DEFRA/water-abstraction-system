@@ -26,6 +26,7 @@ describe('Users - External - View Licences service', () => {
 
   let back
   let user
+  let yarStub
 
   beforeEach(() => {
     const { id, username } = UsersFixture.external()
@@ -37,6 +38,8 @@ describe('Users - External - View Licences service', () => {
       licences: [],
       totalNumber: 0
     })
+
+    yarStub = { flash: Sinon.stub().returns([]) }
   })
 
   afterEach(() => {
@@ -45,7 +48,7 @@ describe('Users - External - View Licences service', () => {
 
   describe('when called', () => {
     it('returns page data for the view', async () => {
-      const result = await ViewLicencesService.go(user.id, auth, page, back)
+      const result = await ViewLicencesService.go(user.id, auth, page, yarStub, back)
 
       expect(result).to.equal({
         activeNavBar: 'users',
@@ -55,6 +58,7 @@ describe('Users - External - View Licences service', () => {
           numberOfPages: 0,
           showingMessage: 'Showing all 0 licences'
         },
+        notification: undefined,
         backLink: {
           href: '/system/users',
           text: 'Go back to users'
@@ -64,7 +68,7 @@ describe('Users - External - View Licences service', () => {
         pageTitle: 'Licences',
         pageTitleCaption: user.username,
         licences: [],
-        unregisterActionLink: `/system/users/external/${user.id}/setup`
+        unregisterActionLink: null
       })
     })
   })
