@@ -9,6 +9,7 @@ const InitiateExternalSessionService = require('../services/users/external/setup
 const InitiateInternalSessionService = require('../services/users/internal/setup/initiate-session.service.js')
 const SubmitCheckService = require('../services/users/internal/setup/submit-check.service.js')
 const SubmitEmailService = require('../services/users/internal/setup/submit-email.service.js')
+const SubmitExternalLicencesService = require('../services/users/external/setup/submit-licences.service.js')
 const SubmitPermissionsService = require('../services/users/internal/setup/submit-permissions.service.js')
 const ViewCheckService = require('../services/users/internal/setup/view-check.service.js')
 const ViewEmailService = require('../services/users/internal/setup/view-email.service.js')
@@ -54,6 +55,22 @@ async function submitEmail(request, h) {
 
   if (pageData.error) {
     return h.view('users/internal/setup/email.njk', pageData)
+  }
+
+  return h.redirect(pageData.redirectUrl)
+}
+
+async function submitExternalLicences(request, h) {
+  const {
+    payload,
+    params: { sessionId },
+    yar
+  } = request
+
+  const pageData = await SubmitExternalLicencesService.go(sessionId, payload, yar)
+
+  if (pageData.error) {
+    return h.view('users/external/setup/licences.njk', pageData)
   }
 
   return h.redirect(pageData.redirectUrl)
@@ -119,6 +136,7 @@ module.exports = {
   setupInternal,
   submitCheck,
   submitEmail,
+  submitExternalLicences,
   submitPermissions,
   viewCheck,
   viewEmail,
