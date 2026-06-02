@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+const YarStub = require('../../../../support/stubs/yar.stub.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 
@@ -62,7 +63,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
 
     fetchSessionStub = Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

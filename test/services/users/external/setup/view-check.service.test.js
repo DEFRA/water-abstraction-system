@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+const YarStub = require('../../../../support/stubs/yar.stub.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
 const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 
@@ -61,7 +62,8 @@ describe('Users - External - Setup - View Check Service', () => {
 
     Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
-    yarStub = { flash: Sinon.stub().returns([]) }
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.returns([{ title: 'Updated', text: 'Licences unlinked.' }])
   })
 
   afterEach(() => {
@@ -79,7 +81,10 @@ describe('Users - External - Setup - View Check Service', () => {
           cancel: `/system/users/external/setup/${session.id}/cancel`,
           licences: `/system/users/external/setup/${session.id}/licences`
         },
-        notification: undefined,
+        notification: {
+          text: 'Licences unlinked.',
+          title: 'Updated'
+        },
         pageTitle: 'Check licences to unregister',
         pageTitleCaption: session.user.username,
         warning: {

@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const UsersFixture = require('../../../support/fixtures/users.fixture.js')
+const YarStub = require('../../../support/stubs/yar.stub.js')
 
 // Things we want to stub
 const FetchLicencesDal = require('../../../../app/dal/users/external/fetch-licences.dal.js')
@@ -39,7 +40,8 @@ describe('Users - External - View Licences service', () => {
       totalNumber: 0
     })
 
-    yarStub = { flash: Sinon.stub().returns([]) }
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.returns([])
   })
 
   afterEach(() => {
