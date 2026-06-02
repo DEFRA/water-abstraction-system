@@ -75,6 +75,48 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
     ])
   })
 
+  describe('the "messageRef" property', () => {
+    describe('when the journey is "standard"', () => {
+      describe('and the notification is an email', () => {
+        it('returns the correct "messageRef"', () => {
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[0].messageRef).to.equal('renewal invitation')
+        })
+      })
+
+      describe('when the notification is a letter', () => {
+        it('returns the correct "messageRef"', () => {
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[1].messageRef).to.equal('renewal invitation')
+        })
+      })
+    })
+
+    describe('when the journey is "adhoc"', () => {
+      beforeEach(() => {
+        noticeData.journey = 'adhoc'
+      })
+
+      describe('and the notification is an email', () => {
+        it('returns the correct "messageRef"', () => {
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[0].messageRef).to.equal('renewal invitation ad-hoc')
+        })
+      })
+
+      describe('when the notification is a letter', () => {
+        it('returns the correct "messageRef"', () => {
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[1].messageRef).to.equal('renewal invitation ad-hoc')
+        })
+      })
+    })
+  })
+
   describe('the "personalisation" property', () => {
     describe('when the notification is an email', () => {
       describe('and there are multiple licence refs', () => {
@@ -194,6 +236,28 @@ describe('Notices - Setup - Renewal Invitation Notifications presenter', () => {
           const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
 
           expect(result[1].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.standard.letter['single licence'])
+        })
+      })
+    })
+
+    describe('when the journey is "adhoc"', () => {
+      beforeEach(() => {
+        noticeData.journey = 'adhoc'
+      })
+
+      describe('when the notification is an email', () => {
+        it('returns the expected "templateId"', () => {
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[0].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.adhoc.email['single licence'])
+        })
+      })
+
+      describe('when the notification is a letter', () => {
+        it('returns the expected "templateId"', () => {
+          const result = RenewalInvitationNotificationsPresenter.go(noticeData, recipients, noticeId)
+
+          expect(result[1].templateId).to.equal(NOTIFY_TEMPLATES.renewalInvitations.adhoc.letter['single licence'])
         })
       })
     })

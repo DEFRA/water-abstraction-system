@@ -3,8 +3,9 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
-const { describe, it, before } = (exports.lab = Lab.script())
+const { describe, it, after, before } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
@@ -548,6 +549,53 @@ describe('Dates lib', () => {
           startDate: new Date('2025-02-16'),
           endDate: new Date('2025-02-22')
         })
+      })
+    })
+  })
+
+  describe('renewalExpiryDate', () => {
+    let clock
+    let expiryDate
+
+    before(() => {
+      expiryDate = new Date('2026-04-15')
+
+      clock = Sinon.useFakeTimers(expiryDate)
+    })
+
+    after(() => {
+      clock.restore()
+    })
+
+    describe('when called with no argument', () => {
+      it('returns today at midnight', () => {
+        const result = DateLib.renewalExpiryDate()
+
+        expect(result).to.equal(expiryDate)
+      })
+    })
+
+    describe('when called with a days argument', () => {
+      it('returns a date that many days in the future at midnight', () => {
+        const result = DateLib.renewalExpiryDate(300)
+
+        const expiryDate300DaysInTheFuture = new Date('2027-02-09')
+
+        expect(result).to.equal(expiryDate300DaysInTheFuture)
+      })
+    })
+  })
+
+  describe('renewalNoticeDate', () => {
+    describe('when called with a date', () => {
+      it('returns a date 90 days before the date provided', () => {
+        const date = new Date('2026-04-15')
+
+        const result = DateLib.renewalNoticeDate(date)
+
+        const date300DaysInThePast = new Date('2026-01-15')
+
+        expect(result).to.equal(date300DaysInThePast)
       })
     })
   })

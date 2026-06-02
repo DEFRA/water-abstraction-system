@@ -64,7 +64,7 @@ describe('Notices - Setup - Initiate Session service', () => {
 
         expect(result).to.equal({
           sessionId: result.sessionId,
-          path: 'licence'
+          path: 'notice-type'
         })
 
         const matchingSession = await SessionModel.query().findById(result.sessionId)
