@@ -44,7 +44,7 @@ describe('Notices - Setup - View Licence service', () => {
       expect(result).to.equal({
         activeNavBar: 'notices',
         backLink: {
-          href: '/system/notices',
+          href: `/system/notices/setup/${session.id}/notice-type`,
           text: 'Back'
         },
         licenceRef,

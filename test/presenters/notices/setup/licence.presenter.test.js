@@ -9,6 +9,7 @@ const { expect } = Code
 
 // Test helpers
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Thing under test
 const LicencePresenter = require('../../../../app/presenters/notices/setup/licence.presenter.js')
@@ -17,7 +18,7 @@ describe('Notices - Setup - Licence presenter', () => {
   let session
 
   beforeEach(() => {
-    session = { id: '123' }
+    session = { id: generateUUID() }
   })
 
   it('correctly presents the data', () => {
@@ -25,7 +26,7 @@ describe('Notices - Setup - Licence presenter', () => {
 
     expect(result).to.equal({
       backLink: {
-        href: '/system/notices',
+        href: `/system/notices/setup/${session.id}/notice-type`,
         text: 'Back'
       },
       licenceRef: null,
@@ -47,7 +48,7 @@ describe('Notices - Setup - Licence presenter', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: '/system/notices',
+          href: `/system/notices/setup/${session.id}/notice-type`,
           text: 'Back'
         },
         licenceRef,
@@ -64,7 +65,7 @@ describe('Notices - Setup - Licence presenter', () => {
         const result = LicencePresenter.go(session)
 
         expect(result.backLink).to.equal({
-          href: '/system/notices/setup/123/check-notice-type',
+          href: `/system/notices/setup/${session.id}/check-notice-type`,
           text: 'Back'
         })
       })

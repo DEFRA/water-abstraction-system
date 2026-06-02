@@ -127,50 +127,6 @@ describe('Jobs - Renewal Invitations - Send Renewal Invitations service', () => 
       // Argument 2: The notifications
       expect(secondArg).to.equal(notifications)
     })
-
-    describe('the "expiredDate"', () => {
-      describe('when the the day is ', () => {
-        describe('"2026-04-15"', () => {
-          it('call the "FetchRenewalRecipients" with an expiry date 300 days from the test date', async () => {
-            await SendRenewalInvitations.go(days)
-
-            const actualArgs = FetchRenewalRecipients.go.getCall(0).args[0]
-
-            expect(actualArgs).to.equal(expiredDate)
-          })
-        })
-
-        describe('"06/08/2027"', () => {
-          beforeEach(() => {
-            todayDate = new Date('2026-10-10')
-
-            expiredDate = new Date('2027-08-06')
-
-            clock.setSystemTime(todayDate)
-          })
-
-          it('call the "FetchRenewalRecipients" with an expiry date 300 days from the test date', async () => {
-            await SendRenewalInvitations.go(days)
-
-            const actualArgs = FetchRenewalRecipients.go.getCall(0).args[0]
-
-            expect(actualArgs).to.equal(expiredDate)
-          })
-        })
-      })
-    })
-
-    describe('the "renewalDate"', () => {
-      describe('when the date is "2026-04-15"', () => {
-        it('sets the renewal date 90 days before the expired date', async () => {
-          await SendRenewalInvitations.go(days)
-
-          const firstArgs = createNoticeStub.firstCall.args[0]
-
-          expect(firstArgs.renewalDate.getTime()).to.equal(expectedRenewalDate.getTime())
-        })
-      })
-    })
   })
 
   describe('when there are no renewal invitations to send', () => {

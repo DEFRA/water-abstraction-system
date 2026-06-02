@@ -12,9 +12,10 @@ const { NoticeType, NoticeJourney } = require('../../../lib/static-lookups.lib.j
 
 const NOTIFICATION_TYPES = {
   [NoticeType.ABSTRACTION_ALERTS]: 'Abstraction alerts',
-  [NoticeType.PAPER_RETURN]: 'Return forms',
   [NoticeType.INVITATIONS]: 'Returns invitations',
-  [NoticeType.REMINDERS]: 'Returns reminders'
+  [NoticeType.PAPER_RETURN]: 'Return forms',
+  [NoticeType.REMINDERS]: 'Returns reminders',
+  [NoticeType.RENEWAL_INVITATIONS]: 'Renewal invitations'
 }
 
 /**
