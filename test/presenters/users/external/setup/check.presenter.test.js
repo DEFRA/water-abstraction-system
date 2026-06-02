@@ -1,0 +1,89 @@
+'use strict'
+
+// Test framework dependencies
+const Lab = require('@hapi/lab')
+const Code = require('@hapi/code')
+
+const { describe, it, beforeEach } = (exports.lab = Lab.script())
+const { expect } = Code
+
+// Test helpers
+const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
+
+// Thing under test
+const CheckPresenter = require('../../../../../app/presenters/users/external/setup/check.presenter.js')
+
+describe('Users - External - Setup - Check Presenter', () => {
+  let session
+
+  beforeEach(() => {
+    session = UserSessionsFixture.unregistrationSession()
+    session.allLicences = true
+  })
+
+  describe('when called', () => {
+    it('returns page data for the view', () => {
+      const result = CheckPresenter.go(session)
+
+      expect(result).to.equal({
+        activeNavBar: 'users',
+        licences: ['All licences'],
+        links: {
+          cancel: `/system/users/external/setup/${session.id}/cancel`,
+          licences: `/system/users/external/setup/${session.id}/licences`
+        },
+        pageTitle: 'Check licences to unregister',
+        pageTitleCaption: session.user.username,
+        warning: {
+          iconFallbackText: 'Warning',
+          text: 'All these licences will no longer be accessible to existing users.'
+        }
+      })
+    })
+  })
+
+  describe('the "warning" property', () => {
+    describe('when "all licences" was selected', () => {
+      it('returns a message specific for "All licences"', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.warning).to.equal({
+          iconFallbackText: 'Warning',
+          text: 'All these licences will no longer be accessible to existing users.'
+        })
+      })
+    })
+
+    describe('when a single licence was selected', () => {
+      beforeEach(() => {
+        session.allLicences = false
+        session.selectedLicences = [session.licences[0].id]
+      })
+
+      it('returns a message specific for one licence', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.warning).to.equal({
+          iconFallbackText: 'Warning',
+          text: 'This licence will no longer be accessible to existing users.'
+        })
+      })
+    })
+
+    describe('when licences were selected', () => {
+      beforeEach(() => {
+        session.allLicences = false
+        session.selectedLicences = [session.licences[0].id, session.licences[1].id]
+      })
+
+      it('returns a message specific for one licence', () => {
+        const result = CheckPresenter.go(session)
+
+        expect(result.warning).to.equal({
+          iconFallbackText: 'Warning',
+          text: 'These licences will no longer be accessible to existing users.'
+        })
+      })
+    })
+  })
+})

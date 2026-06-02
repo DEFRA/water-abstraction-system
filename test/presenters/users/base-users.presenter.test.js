@@ -7,10 +7,57 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateUUID } = require('../../../app/lib/general.lib.js')
+const { generateLicenceRef } = require('../../support/helpers/licence.helper.js')
+
 // Thing under test
 const BaseUsersPresenter = require('../../../app/presenters/users/base-users.presenter.js')
 
 describe('Users - Base Users presenter', () => {
+  describe('#formatLicencesToUnlink', () => {
+    let session
+
+    beforeEach(() => {
+      session = {
+        allLicences: true,
+        id: generateUUID(),
+        licences: [
+          {
+            id: generateUUID(),
+            licenceRef: generateLicenceRef()
+          },
+          {
+            id: generateUUID(),
+            licenceRef: generateLicenceRef()
+          }
+        ],
+        selectedLicences: []
+      }
+    })
+
+    describe('when the user selected "All licences"', () => {
+      it('returns "All licences"', () => {
+        const result = BaseUsersPresenter.formatLicencesToUnlink(session)
+
+        expect(result).to.equal(['All licences'])
+      })
+    })
+
+    describe('when the user selected specific licences', () => {
+      beforeEach(() => {
+        session.allLicences = false
+        session.selectedLicences = [session.licences[0].id]
+      })
+
+      it('returns the selected licence references', () => {
+        const result = BaseUsersPresenter.formatLicencesToUnlink(session)
+
+        expect(result).to.equal([session.licences[0].licenceRef])
+      })
+    })
+  })
+
   describe('#sourceNavigation()', () => {
     let canManageAccounts
     let requestedQueryValue

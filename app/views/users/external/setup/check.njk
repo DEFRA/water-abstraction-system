@@ -1,0 +1,60 @@
+{% extends 'layout.njk' %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+
+{% from "macros/new-line-array-items.njk" import newLineArrayItems %}
+
+{% block pageContent %}
+
+  {% set licencesList %}
+    {% if licences.length > 5 %}
+      {{
+        govukDetails({
+          classes: 'govuk-!-margin-bottom-0',
+          summaryText: licences.length + ' licences',
+          html: newLineArrayItems(licences)
+        })
+      }}
+    {% else %}
+      {{ newLineArrayItems(licences) }}
+    {% endif %}
+  {% endset %}
+
+  {{ govukSummaryList({
+    rows: [
+      {
+        key: { text: "Licences to unregister" },
+        value: { html: licencesList },
+        actions: {
+          items: [
+            {
+              href: links.licences,
+              text: "Change",
+              visuallyHiddenText: "licences to unregister"
+            }
+          ]
+        }
+      }
+    ]
+  }) }}
+
+  <form method="post">
+    <input type="hidden" name="wrlsCrumb" value="{{ wrlsCrumb }}" />
+
+    <div class="govuk-button-group">
+      {{ govukButton({
+        text: "Confirm",
+        preventDoubleClick: true
+      }) }}
+
+      {{ govukButton({
+        text: "Cancel",
+        classes: "govuk-button--secondary",
+        preventDoubleClick: true,
+        href: links.cancel
+      }) }}
+    </div>
+  </form>
+{% endblock %}

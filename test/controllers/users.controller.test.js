@@ -495,26 +495,6 @@ describe('Users controller', () => {
         })
       })
     })
-
-    describe('POST', () => {
-      beforeEach(() => {
-        id = generateUUID()
-        postOptions = postRequestOptions(`/users/external/${id}/licences`, {})
-      })
-
-      describe('when the request succeeds', () => {
-        beforeEach(() => {
-          Sinon.stub(FetchLegacyIdDal, 'go').returns(456)
-        })
-
-        it('redirects to the legacy user page', async () => {
-          const response = await server.inject(postOptions)
-
-          expect(response.statusCode).to.equal(HTTP_STATUS_FOUND)
-          expect(response.headers.location).to.equal(`/user/456/status`)
-        })
-      })
-    })
   })
 
   describe('/users/external/{id}/verifications', () => {
