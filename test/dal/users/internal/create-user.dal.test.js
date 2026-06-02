@@ -3,39 +3,54 @@
 // Test framework dependencies
 const Lab = require('@hapi/lab')
 const Code = require('@hapi/code')
+const Sinon = require('sinon')
 
 const { afterEach, beforeEach, describe, it } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
+const EventModel = require('../../../../app/models/event.model.js')
+const NotificationModel = require('../../../../app/models/notification.model.js')
 const UserGroupModel = require('../../../../app/models/user-group.model.js')
 const UserModel = require('../../../../app/models/user.model.js')
 const UserRoleModel = require('../../../../app/models/user-role.model.js')
+const { domains } = require('../../../../config/server.config.js')
 const { generateUserName } = require('../../../support/helpers/user.helper.js')
+
+// Things we need to stub
+const FetchUserDetailsDal = require('../../../../app/dal/users/internal/fetch-user-details.dal.js')
 
 // Thing under test
 const CreateUserDal = require('../../../../app/dal/users/internal/create-user.dal.js')
 
 describe('Users - Internal - Create User DAL', () => {
+  let auth
   let session
 
   beforeEach(() => {
+    auth = { credentials: { user: { id: 1 } } }
     session = { email: generateUserName(), permission: 'basic' }
+
+    Sinon.stub(FetchUserDetailsDal, 'go').resolves({ username: 'internal-user-creator@wrls.gov.uk' })
   })
 
   afterEach(async () => {
     const user = await UserModel.query().where('username', session.email).limit(1).first()
 
     if (user) {
+      await EventModel.query().delete().where({ issuer: 'internal-user-creator@wrls.gov.uk' })
+      await NotificationModel.query().delete().where({ recipient: user.username })
       await UserGroupModel.query().delete().where({ userId: user.userId })
       await UserRoleModel.query().delete().where({ userId: user.userId })
       await user.$query().delete()
     }
+
+    Sinon.restore()
   })
 
   describe('when called', () => {
     it('creates the user with the correct attributes', async () => {
-      await CreateUserDal.go(session)
+      await CreateUserDal.go(auth, session)
 
       const user = await UserModel.query().where('username', session.email).limit(1).first()
 
@@ -49,12 +64,52 @@ describe('Users - Internal - Create User DAL', () => {
       expect(user.username).to.equal(session.email)
     })
 
-    it('returns a reset GUID', async () => {
-      const result = await CreateUserDal.go(session)
+    it('creates an event', async () => {
+      await CreateUserDal.go(auth, session)
 
-      const { resetGuid } = await UserModel.query().where('username', session.email).limit(1).first()
+      const user = await UserModel.query().where('username', session.email).limit(1).first()
+      const event = await EventModel.query().where('issuer', 'internal-user-creator@wrls.gov.uk').limit(1).first()
 
-      expect(result).to.equal(resetGuid)
+      expect(event.createdAt).to.be.instanceof(Date)
+      expect(event.entities).to.equal([])
+      expect(event.issuer).to.equal('internal-user-creator@wrls.gov.uk')
+      expect(event.licences).to.equal([])
+      expect(event.metadata).to.equal({ user: user.username, userId: user.userId })
+      expect(event.subtype).to.equal('internal')
+      expect(event.type).to.equal('new-user')
+      expect(event.updatedAt).to.be.instanceof(Date)
+    })
+
+    it('creates a notification', async () => {
+      await CreateUserDal.go(auth, session)
+
+      const user = await UserModel.query().where('username', session.email).limit(1).first()
+      const notification = await NotificationModel.query().where('recipient', user.username).limit(1).first()
+
+      expect(notification.messageRef).to.equal('new_internal_user_email')
+      expect(notification.messageType).to.equal('email')
+      expect(notification.personalisation).to.equal({
+        unique_create_password_link: `${domains.internal}/reset_password_change_password?resetGuid=${user.resetGuid}`
+      })
+      expect(notification.recipient).to.equal(user.username)
+    })
+
+    it('returns the notification record', async () => {
+      const result = await CreateUserDal.go(auth, session)
+
+      const user = await UserModel.query().where('username', session.email).limit(1).first()
+      const notification = await NotificationModel.query().where('recipient', user.username).limit(1).first()
+
+      expect(result).to.equal({
+        messageRef: 'new_internal_user_email',
+        messageType: 'email',
+        personalisation: {
+          unique_create_password_link: `${domains.internal}/reset_password_change_password?resetGuid=${user.resetGuid}`
+        },
+        recipient: user.username,
+        id: notification.id
+      })
+      expect(result).to.be.an.instanceOf(NotificationModel)
     })
 
     describe('and the permission has no groups or roles', () => {
@@ -63,7 +118,7 @@ describe('Users - Internal - Create User DAL', () => {
       })
 
       it('does not create any user groups', async () => {
-        await CreateUserDal.go(session)
+        await CreateUserDal.go(auth, session)
 
         const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
         const userGroup = await UserGroupModel.query().where({ userId })
@@ -72,7 +127,7 @@ describe('Users - Internal - Create User DAL', () => {
       })
 
       it('does not create any user roles', async () => {
-        await CreateUserDal.go(session)
+        await CreateUserDal.go(auth, session)
 
         const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
         const userRole = await UserRoleModel.query().where({ userId })
@@ -87,7 +142,7 @@ describe('Users - Internal - Create User DAL', () => {
       })
 
       it('creates the user groups', async () => {
-        await CreateUserDal.go(session)
+        await CreateUserDal.go(auth, session)
 
         const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
         const userGroup = await UserGroupModel.query().where({ userId }).withGraphFetched('group')
@@ -98,7 +153,7 @@ describe('Users - Internal - Create User DAL', () => {
       })
 
       it('does not create any user roles', async () => {
-        await CreateUserDal.go(session)
+        await CreateUserDal.go(auth, session)
 
         const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
         const userRole = await UserRoleModel.query().where({ userId })
@@ -113,7 +168,7 @@ describe('Users - Internal - Create User DAL', () => {
       })
 
       it('creates the user groups', async () => {
-        await CreateUserDal.go(session)
+        await CreateUserDal.go(auth, session)
 
         const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
         const userGroup = await UserGroupModel.query().where({ userId }).withGraphFetched('group')
@@ -124,7 +179,7 @@ describe('Users - Internal - Create User DAL', () => {
       })
 
       it('creates the user roles', async () => {
-        await CreateUserDal.go(session)
+        await CreateUserDal.go(auth, session)
 
         const { userId } = await UserModel.query().where('username', session.email).limit(1).first()
         const userRole = await UserRoleModel.query().where({ userId }).withGraphFetched('role')
