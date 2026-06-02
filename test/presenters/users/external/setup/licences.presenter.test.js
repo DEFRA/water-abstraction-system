@@ -8,8 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
 
 // Thing under test
 const LicencesPresenter = require('../../../../../app/presenters/users/external/setup/licences.presenter.js')
@@ -18,54 +17,7 @@ describe('Users - External - Setup - Licences Presenter', () => {
   let session
 
   beforeEach(() => {
-    session = {
-      activeNavBar: 'users',
-      id: generateUUID(),
-      licences: [
-        {
-          id: generateUUID(),
-          licenceRef: generateLicenceRef(),
-          licenceVersions: [
-            {
-              id: generateUUID(),
-              issueDate: null,
-              licenceId: generateUUID(),
-              startDate: new Date('2022-04-01'),
-              status: 'current',
-              company: {
-                id: generateUUID(),
-                name: 'ACME Farms Ltd',
-                type: 'organisation'
-              }
-            }
-          ]
-        },
-        {
-          id: generateUUID(),
-          licenceRef: generateLicenceRef(),
-          licenceVersions: [
-            {
-              id: generateUUID(),
-              issueDate: null,
-              licenceId: generateUUID(),
-              startDate: new Date('2023-04-01'),
-              status: 'current',
-              company: {
-                id: generateUUID(),
-                name: 'ACME Industry Ltd',
-                type: 'organisation'
-              }
-            }
-          ]
-        }
-      ],
-      selectedLicences: [],
-      user: {
-        id: generateUUID(),
-        licenceEntityId: generateUUID(),
-        username: 'jon.lee@example.co.uk'
-      }
-    }
+    session = UserSessionsFixture.unregistrationSession()
   })
 
   it('correctly presents the data', () => {

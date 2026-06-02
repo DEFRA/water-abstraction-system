@@ -10,9 +10,8 @@ const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
 const YarStub = require('../../../../support/stubs/yar.stub.js')
-const { generateUUID } = require('../../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
 const FetchSessionDal = require('../../../../../app/dal/fetch-session.dal.js')
@@ -28,36 +27,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
   let yarStub
 
   beforeEach(() => {
-    sessionData = {
-      activeNavBar: 'users',
-      id: generateUUID(),
-      licences: [
-        {
-          id: generateUUID(),
-          licenceRef: generateLicenceRef(),
-          licenceVersions: [
-            {
-              id: generateUUID(),
-              issueDate: null,
-              licenceId: generateUUID(),
-              startDate: new Date('2022-04-01'),
-              status: 'current',
-              company: {
-                id: generateUUID(),
-                name: 'ACME Farms Ltd',
-                type: 'organisation'
-              }
-            }
-          ]
-        }
-      ],
-      selectedLicences: [],
-      user: {
-        id: generateUUID(),
-        licenceEntityId: generateUUID(),
-        username: 'jon.lee@example.co.uk'
-      }
-    }
+    sessionData = UserSessionsFixture.unregistrationSession()
 
     session = SessionModelStub.build(Sinon, sessionData)
 
@@ -146,7 +116,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
                   ...sessionData,
                   checkPageVisited: true,
                   allLicences: false,
-                  selectedLicences: [generateUUID(), generateUUID()]
+                  selectedLicences: [sessionData.licences[0].id, sessionData.licences[1].id]
                 })
 
                 fetchSessionStub.resolves(session)
@@ -170,7 +140,7 @@ describe('Users - External - Setup - Submit Licences Service', () => {
                   ...sessionData,
                   checkPageVisited: true,
                   allLicences: false,
-                  selectedLicences: [generateUUID()]
+                  selectedLicences: [sessionData.licences[1].id]
                 })
 
                 fetchSessionStub.resolves(session)
@@ -229,14 +199,29 @@ describe('Users - External - Setup - Submit Licences Service', () => {
         checkBoxItems: [
           {
             checked: false,
-            hint: { text: sessionData.licences[0].licenceVersions[0].company.name },
-            text: sessionData.licences[0].licenceRef,
-            value: sessionData.licences[0].id
+            hint: { text: session.licences[0].licenceVersions[0].company.name },
+            text: session.licences[0].licenceRef,
+            value: session.licences[0].id
+          },
+          {
+            checked: false,
+            hint: { text: session.licences[1].licenceVersions[0].company.name },
+            text: session.licences[1].licenceRef,
+            value: session.licences[1].id
+          },
+          {
+            divider: 'or'
+          },
+          {
+            behaviour: 'exclusive',
+            checked: false,
+            text: 'All licences',
+            value: 'all'
           }
         ],
         pageTitle: 'Select licences to unregister',
         pageTitleCaption: sessionData.user.username,
-        showHint: false
+        showHint: true
       })
     })
   })

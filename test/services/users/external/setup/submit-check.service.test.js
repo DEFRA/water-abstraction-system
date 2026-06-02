@@ -10,9 +10,9 @@ const { expect } = Code
 
 // Test helpers
 const SessionModelStub = require('../../../../support/stubs/session.stub.js')
+const UserSessionsFixture = require('../../../../support/fixtures/user-sessions.fixture.js')
 const YarStub = require('../../../../support/stubs/yar.stub.js')
 const { generateUUID } = require('../../../../../app/lib/general.lib.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
 
 // Things we need to stub
 const DeleteSessionDal = require('../../../../../app/dal/delete-session.dal.js')
@@ -31,37 +31,8 @@ describe('Users - External - Setup - Submit Check Service', () => {
   beforeEach(() => {
     auth = { credentials: { user: { id: generateUUID() } } }
 
-    sessionData = {
-      activeNavBar: 'users',
-      allLicences: true,
-      id: generateUUID(),
-      licences: [
-        {
-          id: generateUUID(),
-          licenceRef: generateLicenceRef(),
-          licenceVersions: [
-            {
-              id: generateUUID(),
-              issueDate: null,
-              licenceId: generateUUID(),
-              startDate: new Date('2022-04-01'),
-              status: 'current',
-              company: {
-                id: generateUUID(),
-                name: 'ACME Farms Ltd',
-                type: 'organisation'
-              }
-            }
-          ]
-        }
-      ],
-      selectedLicences: [],
-      user: {
-        id: generateUUID(),
-        licenceEntityId: generateUUID(),
-        username: 'jon.lee@example.co.uk'
-      }
-    }
+    sessionData = UserSessionsFixture.unregistrationSession()
+    sessionData.allLicences = true
 
     session = SessionModelStub.build(Sinon, sessionData)
 
