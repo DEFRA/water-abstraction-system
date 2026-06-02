@@ -27,7 +27,7 @@ async function go(sessionId, yar, auth) {
 
   await UnregisterLicencesDal.go(sessionData, auth.credentials.user)
 
-  flashNotification(yar, 'Updated', 'Licences unlinked.')
+  flashNotification(yar, 'Updated', 'Licences unregistered.')
 
   return { redirectUrl: `/system/users/external/${sessionData.user.id}/licences?back=${sessionData.activeNavBar}` }
 }

@@ -33,7 +33,7 @@ describe('Users - External - Setup - View Check Service', () => {
     Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
     yarStub = YarStub.build(Sinon)
-    yarStub.flash.returns([{ title: 'Updated', text: 'Licences unlinked.' }])
+    yarStub.flash.returns([{ title: 'Updated', text: 'Licences unregistered.' }])
   })
 
   afterEach(() => {
@@ -52,7 +52,7 @@ describe('Users - External - Setup - View Check Service', () => {
           licences: `/system/users/external/setup/${session.id}/licences`
         },
         notification: {
-          text: 'Licences unlinked.',
+          text: 'Licences unregistered.',
           title: 'Updated'
         },
         pageTitle: 'Check licences to unregister',
