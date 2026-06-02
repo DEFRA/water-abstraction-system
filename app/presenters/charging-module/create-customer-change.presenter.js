@@ -5,6 +5,8 @@
  * @module ChargingModuleCreateCustomerChangePresenter
  */
 
+const MAX_ADDRESS_LINE_LENGTH = 240
+
 /**
  * Generates the request data needed for the Charging ModuleAPI  `/customer-changes` endpoint from the instances
  *
@@ -104,15 +106,15 @@ function _formattedAddress(address, contact) {
   }
 
   if (address2) {
-    addressLines.push(_truncate(address2, 240))
+    addressLines.push(_truncate(address2, MAX_ADDRESS_LINE_LENGTH))
   }
 
   if (address3) {
-    addressLines.push(_truncate(address3, 240))
+    addressLines.push(_truncate(address3, MAX_ADDRESS_LINE_LENGTH))
   }
 
   if (address4) {
-    addressLines.push(_truncate(address4, 240))
+    addressLines.push(_truncate(address4, MAX_ADDRESS_LINE_LENGTH))
   }
 
   if (contactName) {
@@ -120,10 +122,10 @@ function _formattedAddress(address, contact) {
 
     if (addressLines.length === 4) {
       // If we already have 4 address lines we have to concatenate FAO and address1 as addressLine1
-      addressLines[0] = _truncate(`${fao}, ${addressLines[0]}`, 240)
+      addressLines[0] = _truncate(`${fao}, ${addressLines[0]}`, MAX_ADDRESS_LINE_LENGTH)
     } else {
       // else if we have less than 4 there is space to make FAO addressLine1 and push the other lines down
-      addressLines.unshift(_truncate(fao, 240))
+      addressLines.unshift(_truncate(fao, MAX_ADDRESS_LINE_LENGTH))
     }
   }
 

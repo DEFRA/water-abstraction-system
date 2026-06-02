@@ -36,9 +36,9 @@ async function view(request, h) {
 
   const pageData = await ViewBillLicenceService.go(id)
 
-  const view = pageData.scheme === 'sroc' ? 'view-sroc.njk' : 'view-presroc.njk'
+  const template = pageData.scheme === 'sroc' ? 'view-sroc.njk' : 'view-presroc.njk'
 
-  return h.view(`bill-licences/${view}`, pageData)
+  return h.view(`bill-licences/${template}`, pageData)
 }
 
 module.exports = {

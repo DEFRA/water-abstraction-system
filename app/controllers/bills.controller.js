@@ -36,9 +36,9 @@ async function view(request, h) {
 
   const pageData = await ViewBillService.go(id)
 
-  const view = _determineView(pageData)
+  const template = _determineView(pageData)
 
-  return h.view(view, pageData)
+  return h.view(template, pageData)
 }
 
 function _determineView(pageData) {
