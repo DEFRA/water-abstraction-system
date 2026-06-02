@@ -85,8 +85,8 @@ const ViewsPlugin = {
 function compile(template, options) {
   const compiledTemplate = Nunjucks.compile(template, options.environment)
 
-  return (context) => {
-    return compiledTemplate.render(context)
+  return (renderContext) => {
+    return compiledTemplate.render(renderContext)
   }
 }
 

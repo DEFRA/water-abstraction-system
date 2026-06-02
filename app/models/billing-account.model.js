@@ -82,8 +82,8 @@ class BillingAccountModel extends BaseModel {
               .select(['id'])
               .whereNull('endDate')
               .withGraphFetched('address')
-              .modifyGraph('address', (builder) => {
-                builder.select([
+              .modifyGraph('address', (addressBuilder) => {
+                addressBuilder.select([
                   'id',
                   'address1',
                   'address2',
@@ -96,12 +96,12 @@ class BillingAccountModel extends BaseModel {
                 ])
               })
               .withGraphFetched('company')
-              .modifyGraph('company', (builder) => {
-                builder.select(['id', 'name', 'type'])
+              .modifyGraph('company', (companyBuilder) => {
+                companyBuilder.select(['id', 'name', 'type'])
               })
               .withGraphFetched('contact')
-              .modifyGraph('contact', (builder) => {
-                builder.select([
+              .modifyGraph('contact', (contactBuilder) => {
+                contactBuilder.select([
                   'id',
                   'contactType',
                   'dataSource',
@@ -157,7 +157,7 @@ class BillingAccountModel extends BaseModel {
     const currentBillingAccountAddress = this?.billingAccountAddresses?.[0]
 
     // Guard clause in case modifier has not been used
-    if (!currentBillingAccountAddress || !currentBillingAccountAddress.address) {
+    if (!currentBillingAccountAddress?.address) {
       return []
     }
 
