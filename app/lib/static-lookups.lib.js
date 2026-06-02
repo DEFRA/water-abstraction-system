@@ -340,29 +340,29 @@ const NoticeTypes = Object.freeze({
     subType: 'waterAbstractionAlerts',
     notificationType: 'Abstraction alert'
   },
-  [NoticeType.INVITATIONS]: {
-    name: 'Returns: invitation',
-    prefix: 'RINV-',
-    subType: 'returnInvitation',
-    notificationType: 'Returns invitation'
-  },
   [NoticeType.PAPER_RETURN]: {
     name: 'Paper returns',
     prefix: 'PRTF-',
     subType: 'paperReturnForms',
     notificationType: 'Paper returns'
   },
-  [NoticeType.REMINDERS]: {
-    name: 'Returns: reminder',
-    prefix: 'RREM-',
-    subType: 'returnReminder',
-    notificationType: 'Returns reminder'
-  },
   [NoticeType.RENEWAL_INVITATIONS]: {
     name: 'Renewals: invitation',
     prefix: 'REIN-',
     subType: 'renewalInvitation',
     notificationType: 'Renewals invitation'
+  },
+  [NoticeType.INVITATIONS]: {
+    name: 'Returns: invitation',
+    prefix: 'RINV-',
+    subType: 'returnInvitation',
+    notificationType: 'Returns invitation'
+  },
+  [NoticeType.REMINDERS]: {
+    name: 'Returns: reminder',
+    prefix: 'RREM-',
+    subType: 'returnReminder',
+    notificationType: 'Returns reminder'
   }
 })
 

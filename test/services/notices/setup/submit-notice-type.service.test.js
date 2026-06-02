@@ -61,50 +61,10 @@ describe('Notices - Setup - Submit Notice Type service', () => {
       expect(session.noticeType).to.equal('invitations')
     })
 
-    it('returns a redirect to the "/check-notice-type" page', async () => {
+    it('returns a redirect to the "licence" page', async () => {
       const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
-      expect(result).to.equal({ redirectUrl: 'check-notice-type' })
-    })
-
-    describe('and the notice types is "paperReturn"', () => {
-      describe('and the check page has been visited', () => {
-        beforeEach(() => {
-          sessionData.checkPageVisited = true
-
-          noticeType = 'paperReturn'
-          payload = { noticeType }
-
-          session = SessionModelStub.build(Sinon, sessionData)
-
-          fetchSessionStub.resolves(session)
-        })
-
-        it('continues the journey', async () => {
-          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
-
-          expect(result).to.equal({ redirectUrl: 'paper-return' })
-        })
-      })
-
-      describe('and the check page has not been visited', () => {
-        beforeEach(() => {
-          sessionData.checkPageVisited = false
-
-          noticeType = 'paperReturn'
-          payload = { noticeType }
-
-          session = SessionModelStub.build(Sinon, sessionData)
-
-          fetchSessionStub.resolves(session)
-        })
-
-        it('continues the journey', async () => {
-          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
-
-          expect(result).to.equal({ redirectUrl: 'paper-return' })
-        })
-      })
+      expect(result).to.equal({ redirectUrl: 'licence' })
     })
 
     describe('and the user comes from the check page', () => {
@@ -116,6 +76,12 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           })
 
           fetchSessionStub.resolves(session)
+        })
+
+        it('redirects to the licence page', async () => {
+          const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
+
+          expect(result).to.equal({ redirectUrl: 'licence' })
         })
 
         it('updates the sessions "checkPageVisited" flag', async () => {
@@ -169,6 +135,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
         beforeEach(() => {
           sessionData.journey = 'standard'
           sessionData.checkPageVisited = true
+          sessionData.noticeType = noticeType
 
           session = SessionModelStub.build(Sinon, sessionData)
 
@@ -200,11 +167,12 @@ describe('Notices - Setup - Submit Notice Type service', () => {
       })
     })
 
-    describe('and the journey is "adhoc"', () => {
+    describe('the "redirect" property', () => {
       describe('and the check page has been visited', () => {
         beforeEach(() => {
           sessionData.journey = 'adhoc'
           sessionData.checkPageVisited = true
+          sessionData.noticeType = noticeType
 
           session = SessionModelStub.build(Sinon, sessionData)
 
@@ -228,10 +196,10 @@ describe('Notices - Setup - Submit Notice Type service', () => {
           fetchSessionStub.resolves(session)
         })
 
-        it('returns a redirect to the "/check-notice-type" page', async () => {
+        it('returns a redirect to the "licence" page', async () => {
           const result = await SubmitNoticeTypeService.go(session.id, payload, yarStub, auth)
 
-          expect(result).to.equal({ redirectUrl: 'check-notice-type' })
+          expect(result).to.equal({ redirectUrl: 'licence' })
         })
       })
     })
@@ -248,7 +216,7 @@ describe('Notices - Setup - Submit Notice Type service', () => {
       expect(result).to.equal({
         activeNavBar: 'notices',
         backLink: {
-          href: `/system/notices/setup/${session.id}/licence`,
+          href: `/system/notices`,
           text: 'Back'
         },
         error: {

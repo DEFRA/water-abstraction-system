@@ -38,7 +38,7 @@ describe('Notices - Setup - Paper Return presenter', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: `/system/notices/setup/${session.id}/notice-type`,
+          href: `/system/notices/setup/${session.id}/licence`,
           text: 'Back'
         },
         pageTitle: 'Select the returns for the paper return',

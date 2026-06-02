@@ -6,10 +6,11 @@
  */
 
 const DownloadAbstractionAlertPresenter = require('../../../presenters/notices/setup/download-abstraction-alert.presenter.js')
+const DownloadRenewalInvitationPresenter = require('../../../presenters/notices/setup/download-renewal-invitation.presenter.js')
 const DownloadReturnsNoticePresenter = require('../../../presenters/notices/setup/download-returns-notice.presenter.js')
 const FetchRecipientsService = require('./fetch-recipients.service.js')
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
-const { NoticeJourney } = require('../../../lib/static-lookups.lib.js')
+const { NoticeJourney, NoticeType } = require('../../../lib/static-lookups.lib.js')
 
 /**
  * Orchestrates fetching and formatting the data needed for the notices setup download link
@@ -40,6 +41,10 @@ async function go(sessionId) {
 async function _formattedData(recipients, session) {
   if (session.journey === NoticeJourney.ALERTS) {
     return DownloadAbstractionAlertPresenter.go(recipients, session)
+  }
+
+  if (session.noticeType === NoticeType.RENEWAL_INVITATIONS) {
+    return DownloadRenewalInvitationPresenter.go(recipients, session)
   }
 
   return DownloadReturnsNoticePresenter.go(recipients, session)

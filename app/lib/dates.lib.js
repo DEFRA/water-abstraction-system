@@ -237,6 +237,41 @@ function _isLeapYear(year) {
 }
 
 /**
+ * Calculates the renewal notice start date, 90 days before the given expiry date
+ *
+ * @param {Date} expiryDate - The expiry date to calculate from
+ *
+ * @returns {Date} The renewal notice start date
+ */
+function renewalNoticeDate(expiryDate) {
+  const noticeDate = new Date(expiryDate)
+
+  const nintyDays = 90
+
+  noticeDate.setDate(noticeDate.getDate() - nintyDays)
+
+  return noticeDate
+}
+
+/**
+ * Calculates the target expiry date for renewal notices
+ *
+ * The target date is `days` days from today, normalised to midnight.
+ *
+ * @param {number} [days=0] - The number of days from today
+ *
+ * @returns {Date} The target expiry date
+ */
+function renewalExpiryDate(days = 0) {
+  const targetDate = new Date()
+
+  targetDate.setDate(targetDate.getDate() + Number(days))
+  targetDate.setHours(0, 0, 0, 0)
+
+  return targetDate
+}
+
+/**
  * Checks if the given date is a quarterly returns submission
  *
  * A quarterly returns submission will be true when the date provided is >= 1 April 2025
@@ -384,6 +419,8 @@ module.exports = {
   isQuarterlyReturnSubmissions,
   isValidDate,
   monthsFromPeriod,
+  renewalExpiryDate,
+  renewalNoticeDate,
   sameDate,
   weeksFromPeriod
 }

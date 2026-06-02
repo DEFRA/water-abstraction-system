@@ -9,7 +9,7 @@
 const FetchSessionDal = require('../../../dal/fetch-session.dal.js')
 const NoticeTypePresenter = require('../../../presenters/notices/setup/notice-type.presenter.js')
 const NoticeTypeValidator = require('../../../validators/notices/setup/notice-type.validator.js')
-const { NoticeJourney, NoticeType, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
+const { NoticeJourney, NoticeTypes } = require('../../../lib/static-lookups.lib.js')
 const { flashNotification, generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
 const { formatValidationResult } = require('../../../presenters/base.presenter.js')
 
@@ -30,8 +30,9 @@ async function go(sessionId, payload, yar, auth) {
 
   if (!validationResult) {
     const hasBeenVisited = session.checkPageVisited
+    const noticeTypeChanged = payload.noticeType !== session.noticeType
 
-    if (session.checkPageVisited && payload.noticeType !== session.noticeType) {
+    if (hasBeenVisited && noticeTypeChanged) {
       flashNotification(yar, 'Updated', 'Notice type updated')
 
       session.checkPageVisited = false
@@ -39,7 +40,7 @@ async function go(sessionId, payload, yar, auth) {
 
     await _save(session, payload)
 
-    return _redirect(payload.noticeType, session.checkPageVisited, session.journey, hasBeenVisited)
+    return _redirect(session.journey, hasBeenVisited, noticeTypeChanged)
   }
 
   const pageData = NoticeTypePresenter.go(session, auth)
@@ -51,21 +52,29 @@ async function go(sessionId, payload, yar, auth) {
   }
 }
 
-function _redirect(noticeType, checkPageVisited, journey, hasBeenVisited) {
-  if (noticeType === NoticeType.PAPER_RETURN && !checkPageVisited) {
-    return {
-      redirectUrl: 'paper-return'
-    }
-  }
-
+/**
+ * Determines where to redirect the user after submitting the notice type.
+ *
+ * If the notice type has changed, we always redirect to the licence page, even if the user came from the check page.
+ * This is because the licence ref needs to be revalidated against the new notice type.
+ *
+ * @private
+ */
+function _redirect(journey, hasBeenVisited, noticeTypeChanged) {
   if (journey === NoticeJourney.STANDARD && !hasBeenVisited) {
     return {
       redirectUrl: 'returns-period'
     }
   }
 
+  if (hasBeenVisited && !noticeTypeChanged) {
+    return {
+      redirectUrl: 'check-notice-type'
+    }
+  }
+
   return {
-    redirectUrl: 'check-notice-type'
+    redirectUrl: 'licence'
   }
 }
 
