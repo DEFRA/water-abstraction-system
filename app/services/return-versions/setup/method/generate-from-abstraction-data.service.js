@@ -14,7 +14,7 @@ const WINTER_RETURN_CYCLE = 'winter-and-all-year'
 
 const DAILY_CUBIC_METRES_THRESHOLD = 2500
 
-const TWO_PART_IRRIGATION_IDS = ['380', '390', '400', '410', '420', '600', '620']
+const TWO_PART_IRRIGATION_IDS = new Set(['380', '390', '400', '410', '420', '600', '620'])
 
 /**
  * Fetches a licence's abstraction data and generates setup return requirements from it
@@ -79,7 +79,7 @@ function _agreementExceptions(purpose) {
  * @private
  */
 function _returnsCycle(startMonth, endMonth) {
-  const summerMonths = [4, 5, 6, 7, 8, 9, 10]
+  const summerMonths = new Set([4, 5, 6, 7, 8, 9, 10])
 
   // If the start month is after the end month it can't be within April to October
   if (startMonth > endMonth) {
@@ -87,12 +87,12 @@ function _returnsCycle(startMonth, endMonth) {
   }
 
   // If the start month is not one of the summer months it can't be wholly in 'summer'
-  if (!summerMonths.includes(startMonth)) {
+  if (!summerMonths.has(startMonth)) {
     return WINTER_RETURN_CYCLE
   }
 
   // If the end month is not one of the summer months it can't be wholly in 'summer'
-  if (!summerMonths.includes(endMonth)) {
+  if (!summerMonths.has(endMonth)) {
     return WINTER_RETURN_CYCLE
   }
 
@@ -142,7 +142,7 @@ function _frequencyCollected(licence, licenceVersionPurpose) {
   }
 
   // Licensee has a two-part tariff agreement and the purpose is two-part tariff
-  if (twoPartTariffAgreement && TWO_PART_IRRIGATION_IDS.includes(purpose.legacyId)) {
+  if (twoPartTariffAgreement && TWO_PART_IRRIGATION_IDS.has(purpose.legacyId)) {
     return 'day'
   }
 
@@ -208,10 +208,7 @@ function _siteDescription(points) {
     return point.description
   })
 
-  // NOTE: This is doing two things at once. It first filters the descriptions by passing each one to Boolean(). It will
-  // return true or false depending on whether the value is 'truthy'. In our case this means null or undefined will be
-  // stripped from the array. From what's left we select the first one.
-  return descriptions.filter(Boolean)[0]
+  return descriptions.find(Boolean)
 }
 
 /**

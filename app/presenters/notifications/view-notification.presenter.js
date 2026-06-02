@@ -62,9 +62,7 @@ function _address(notification) {
     personalisation['postcode']
   ]
 
-  return addressLines.filter((addressLine) => {
-    return addressLine
-  })
+  return addressLines.filter(Boolean)
 }
 
 function _alertDetails(notification) {

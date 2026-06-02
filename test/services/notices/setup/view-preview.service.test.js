@@ -222,4 +222,70 @@ describe('Notices - Setup - View Preview service', () => {
       })
     })
   })
+
+  describe('when previewing a renewal invitation notification', () => {
+    beforeEach(() => {
+      recipients = [RecipientsFixture.renewalInvitationPrimaryUser()]
+
+      const referenceCode = generateNoticeReferenceCode('REIN-')
+      const sessionId = generateUUID()
+
+      sessionData = {
+        id: sessionId,
+        checkPageVisited: true,
+        expiryDate: '2025-09-30T00:00:00.000Z',
+        journey: 'adhoc',
+        licenceRef: recipients[0].licence_refs[0],
+        name: 'Renewals: invitation',
+        noticeType: 'renewalInvitations',
+        notificationType: 'Renewals invitation',
+        referenceCode,
+        renewalDate: '2025-07-31T00:00:00.000Z',
+        subType: 'renewalInvitation'
+      }
+
+      session = SessionModelStub.build(Sinon, sessionData)
+
+      Sinon.stub(FetchSessionDal, 'go').resolves(session)
+
+      licenceMonitoringStationId = null
+
+      Sinon.stub(FetchRecipientsService, 'go').resolves([{ ...recipients[0] }])
+
+      // The Preview Presenter uses Notify to generate the template preview contents, so we need to stub the request.
+      Sinon.stub(GeneratePreviewRequest, 'send').resolves({
+        succeeded: true,
+        response: {
+          statusCode: HTTP_STATUS_OK,
+          body: {
+            body: 'Dear licence holder,\r\n',
+            html: '"<p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">Dear licence holder,</p>',
+            id: '53c34f21-4f2e-43f7-97c6-7a7828079665',
+            postage: null,
+            subject: 'Your water abstraction licence is due to expire',
+            type: 'email',
+            version: 40
+          }
+        }
+      })
+    })
+
+    it('returns page data for the view', async () => {
+      const result = await ViewPreviewService.go(session.id, recipients[0].contact_hash_id, licenceMonitoringStationId)
+
+      expect(result).to.equal({
+        activeNavBar: 'notices',
+        address: recipients[0].email,
+        backLink: {
+          href: `/system/notices/setup/${session.id}/check`,
+          text: 'Back'
+        },
+        contents: 'Dear licence holder,\r\n',
+        messageType: 'email',
+        pageTitle: 'Renewal invitation ad-hoc',
+        pageTitleCaption: `Notice ${session.referenceCode}`,
+        refreshPageLink: `/system/notices/setup/${session.id}/preview/${recipients[0].contact_hash_id}`
+      })
+    })
+  })
 })

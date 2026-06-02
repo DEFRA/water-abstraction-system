@@ -527,12 +527,12 @@ function formatValidationResult(validationResult) {
 
     if (!path) {
       formattedResult.errorList.push({ text: detail.message })
-    } else if (!processedFields.has(path)) {
+    } else if (processedFields.has(path)) {
+      // No action needed for already processed fields
+    } else {
       formattedResult.errorList.push({ href: `#${path}`, text: detail.message })
       formattedResult[path] = { text: detail.message }
       processedFields.add(path)
-    } else {
-      // No action needed for already processed fields
     }
   })
 

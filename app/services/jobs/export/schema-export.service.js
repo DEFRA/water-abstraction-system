@@ -5,8 +5,8 @@
  * @module SchemaExportService
  */
 
-const os = require('os')
-const path = require('path')
+const os = require('node:os')
+const path = require('node:path')
 
 const CompressSchemaFolderService = require('./compress-schema-folder.service.js')
 const DeleteFilesService = require('./delete-files.service.js')

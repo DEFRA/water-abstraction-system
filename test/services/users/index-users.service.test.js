@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const UsersFixture = require('../../support/fixtures/users.fixture.js')
+const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Things to stub
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
@@ -31,6 +32,9 @@ describe('Users - Index Users service', () => {
     auth = {
       credentials: { scope: ['manage_accounts'] }
     }
+
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.returns([])
   })
 
   afterEach(() => {
@@ -39,8 +43,7 @@ describe('Users - Index Users service', () => {
 
   describe('when called', () => {
     beforeEach(() => {
-      // For the purposes of this tests the filter doesn't matter
-      yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(null) }
+      yarStub.get.returns(null)
 
       const results = [UsersFixture.transformToFetchUsersResult(UsersFixture.basicAccess())]
 
@@ -90,7 +93,7 @@ describe('Users - Index Users service', () => {
 
     describe('and none were ever set or they were cleared', () => {
       beforeEach(() => {
-        yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(null) }
+        yarStub.get.returns(null)
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -102,7 +105,8 @@ describe('Users - Index Users service', () => {
 
     describe('and the filters were submitted empty', () => {
       beforeEach(() => {
-        yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(_filters()) }
+        yarStub.flash.returns([])
+        yarStub.get.returns(_filters())
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -117,7 +121,8 @@ describe('Users - Index Users service', () => {
         const filters = _filters()
 
         filters.email = 'carol.shaw@wrls.gov.uk'
-        yarStub = { flash: Sinon.stub().returns([]), get: Sinon.stub().returns(filters) }
+
+        yarStub.get.returns(filters)
       })
 
       it('returns the saved filters and that the controls should be open', async () => {
@@ -130,7 +135,8 @@ describe('Users - Index Users service', () => {
 
   describe('when there is a notification', () => {
     beforeEach(() => {
-      yarStub = { flash: Sinon.stub().returns(['Test notification']), get: Sinon.stub().returns(null) }
+      yarStub.flash.returns(['Test notification'])
+      yarStub.get.returns(null)
     })
 
     it('sets the notification', async () => {

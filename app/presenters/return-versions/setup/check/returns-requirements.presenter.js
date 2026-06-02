@@ -55,11 +55,7 @@ function _agreementsExceptions(agreementsExceptions) {
     return formattedExceptions.join(' and ')
   }
 
-  return (
-    formattedExceptions.slice(0, formattedExceptions.length - 1).join(', ') +
-    ', and ' +
-    formattedExceptions[formattedExceptions.length - 1]
-  )
+  return `${formattedExceptions.slice(0, -1).join(', ')}, and ${formattedExceptions.at(-1)}`
 }
 
 function _requirements(requirements, points) {

@@ -343,11 +343,7 @@ async function pause(pauseInMilliseconds) {
 function periodsOverlap(referencePeriods, checkPeriods) {
   for (const referencePeriod of referencePeriods) {
     const overLappingPeriods = checkPeriods.filter((checkPeriod) => {
-      if (checkPeriod.startDate > referencePeriod.endDate || referencePeriod.startDate > checkPeriod.endDate) {
-        return false
-      }
-
-      return true
+      return !(checkPeriod.startDate > referencePeriod.endDate || referencePeriod.startDate > checkPeriod.endDate)
     })
 
     if (overLappingPeriods.length) {
@@ -519,7 +515,7 @@ function transformStringOfLicencesToArray(licences) {
   }
 
   return licences
-    .replace(/\n/g, ',') // Replace newlines with commas
+    .replaceAll('\n', ',') // Replace newlines with commas
     .split(',') // Split by commas
     .map((item) => {
       return item.trim()

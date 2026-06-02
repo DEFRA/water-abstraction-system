@@ -38,7 +38,7 @@ const LAST_PRESROC_YEAR = 2022
  * when creating it, and which bill run engine to trigger the creation with (if any)
  */
 async function go(regionId, year, summer = false) {
-  const toFinancialYearEnding = _toFinancialYearEnding(year)
+  const toFinancialYearEnding = Number(year)
 
   let match = await _fetchMatches(regionId, toFinancialYearEnding, summer)
 
@@ -70,10 +70,6 @@ async function _fetchMatches(regionId, toFinancialYearEnding, summer) {
     })
     .limit(1)
     .first()
-}
-
-function _toFinancialYearEnding(year) {
-  return Number(year)
 }
 
 function _trigger(match, toFinancialYearEnding) {

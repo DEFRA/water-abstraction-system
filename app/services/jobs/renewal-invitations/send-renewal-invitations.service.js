@@ -8,10 +8,12 @@
 const CreateNoticeService = require('../../notices/setup/create-notice.service.js')
 const CreateNotificationsService = require('../../notices/setup/create-notifications.service.js')
 const FetchRenewalRecipients = require('./fetch-renewal-recipients.service.js')
-const NotifyConfig = require('../../../../config/notify.config.js')
 const SendNoticeService = require('../../notices/setup/send/send-notice.service.js')
-const { NoticeTypes, NoticeType } = require('../../../lib/static-lookups.lib.js')
+const { renewalExpiryDate, renewalNoticeDate } = require('../../../lib/dates.lib.js')
 const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
+const { NoticeTypes, NoticeType } = require('../../../lib/static-lookups.lib.js')
+
+const NotifyConfig = require('../../../../config/notify.config.js')
 
 /**
  * Orchestrates fetching, sending, and updating renewal invitations notifications
@@ -21,12 +23,13 @@ const { generateNoticeReferenceCode } = require('../../../lib/general.lib.js')
  * @returns {Promise<object[]>} An array of renewal invitation recipients
  */
 async function go(days) {
-  const expiryDate = _expiryDate(days)
+  const expiryDate = renewalExpiryDate(days)
+  const renewalDate = renewalNoticeDate(expiryDate)
 
   const recipients = await FetchRenewalRecipients.go(expiryDate)
 
   if (recipients.length > 0) {
-    const noticeData = _noticeData(expiryDate)
+    const noticeData = _noticeData(expiryDate, renewalDate)
 
     const notice = await _notice(noticeData, recipients)
 
@@ -38,32 +41,7 @@ async function go(days) {
   return recipients
 }
 
-/**
- * Calculates the target expiry date
- *
- * @private
- */
-function _expiryDate(futureExpiredDate) {
-  const targetDate = new Date()
-
-  targetDate.setDate(targetDate.getDate() + Number(futureExpiredDate))
-
-  targetDate.setHours(0, 0, 0, 0)
-
-  return targetDate
-}
-
-function _renewalDate(expiryDate) {
-  const daysPriorToExpiry = 90
-
-  const renewalDate = new Date(expiryDate)
-
-  renewalDate.setDate(renewalDate.getDate() - daysPriorToExpiry)
-
-  return renewalDate
-}
-
-function _noticeData(expiryDate) {
+function _noticeData(expiryDate, renewalDate) {
   const { name, prefix, subType } = NoticeTypes[NoticeType.RENEWAL_INVITATIONS]
 
   return {
@@ -72,7 +50,7 @@ function _noticeData(expiryDate) {
     name,
     noticeType: NoticeType.RENEWAL_INVITATIONS,
     referenceCode: generateNoticeReferenceCode(prefix),
-    renewalDate: _renewalDate(expiryDate),
+    renewalDate,
     subType
   }
 }

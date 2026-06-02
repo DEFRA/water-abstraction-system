@@ -7,6 +7,9 @@ const Code = require('@hapi/code')
 const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
+// Test helpers
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
+
 // Thing under test
 const NoticeTypePresenter = require('../../../../app/presenters/notices/setup/notice-type.presenter.js')
 
@@ -16,10 +19,10 @@ describe('Notice - Setup - Notice Type Presenter', () => {
 
   beforeEach(() => {
     auth = {
-      credentials: { scope: ['bulk_return_notifications'] }
+      credentials: { scope: ['bulk_return_notifications', 'renewal_notifications'] }
     }
 
-    session = { id: '123', journey: 'adhoc' }
+    session = { id: generateUUID(), journey: 'adhoc' }
   })
 
   describe('when called', () => {
@@ -28,10 +31,20 @@ describe('Notice - Setup - Notice Type Presenter', () => {
 
       expect(result).to.equal({
         backLink: {
-          href: '/system/notices/setup/123/licence',
+          href: '/system/notices',
           text: 'Back'
         },
         options: [
+          {
+            checked: false,
+            text: 'Paper return',
+            value: 'paperReturn'
+          },
+          {
+            checked: false,
+            text: 'Renewals invitation',
+            value: 'renewalInvitations'
+          },
           {
             checked: false,
             text: 'Returns invitation',
@@ -41,14 +54,41 @@ describe('Notice - Setup - Notice Type Presenter', () => {
             checked: false,
             text: 'Returns reminder',
             value: 'reminders'
-          },
-          {
-            checked: false,
-            text: 'Paper return',
-            value: 'paperReturn'
           }
         ],
         pageTitle: 'Select the notice type'
+      })
+    })
+
+    describe('the "backLink" property', () => {
+      describe('when the page has not been visited', () => {
+        beforeEach(() => {
+          session.checkPageVisited = false
+        })
+
+        it('correctly set the back link to the check page', () => {
+          const result = NoticeTypePresenter.go(session, auth)
+
+          expect(result.backLink).to.equal({
+            href: '/system/notices',
+            text: 'Back'
+          })
+        })
+      })
+
+      describe('when the page has been visited', () => {
+        beforeEach(() => {
+          session.checkPageVisited = true
+        })
+
+        it('correctly set the back link to the check page', () => {
+          const result = NoticeTypePresenter.go(session, auth)
+
+          expect(result.backLink).to.equal({
+            href: `/system/notices/setup/${session.id}/check-notice-type`,
+            text: 'Back'
+          })
+        })
       })
     })
 
@@ -64,6 +104,16 @@ describe('Notice - Setup - Notice Type Presenter', () => {
 
             expect(result.options).to.equal([
               {
+                checked: false,
+                text: 'Paper return',
+                value: 'paperReturn'
+              },
+              {
+                checked: false,
+                text: 'Renewals invitation',
+                value: 'renewalInvitations'
+              },
+              {
                 checked: true,
                 text: 'Returns invitation',
                 value: 'invitations'
@@ -72,11 +122,6 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                 checked: false,
                 text: 'Returns reminder',
                 value: 'reminders'
-              },
-              {
-                checked: false,
-                text: 'Paper return',
-                value: 'paperReturn'
               }
             ])
           })
@@ -93,6 +138,16 @@ describe('Notice - Setup - Notice Type Presenter', () => {
             expect(result.options).to.equal([
               {
                 checked: false,
+                text: 'Paper return',
+                value: 'paperReturn'
+              },
+              {
+                checked: false,
+                text: 'Renewals invitation',
+                value: 'renewalInvitations'
+              },
+              {
+                checked: false,
                 text: 'Returns invitation',
                 value: 'invitations'
               },
@@ -100,11 +155,6 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                 checked: true,
                 text: 'Returns reminder',
                 value: 'reminders'
-              },
-              {
-                checked: false,
-                text: 'Paper return',
-                value: 'paperReturn'
               }
             ])
           })
@@ -120,6 +170,16 @@ describe('Notice - Setup - Notice Type Presenter', () => {
 
             expect(result.options).to.equal([
               {
+                checked: true,
+                text: 'Paper return',
+                value: 'paperReturn'
+              },
+              {
+                checked: false,
+                text: 'Renewals invitation',
+                value: 'renewalInvitations'
+              },
+              {
                 checked: false,
                 text: 'Returns invitation',
                 value: 'invitations'
@@ -128,177 +188,212 @@ describe('Notice - Setup - Notice Type Presenter', () => {
                 checked: false,
                 text: 'Returns reminder',
                 value: 'reminders'
-              },
-              {
-                checked: true,
-                text: 'Paper return',
-                value: 'paperReturn'
               }
             ])
           })
         })
 
-        describe('and the page has been visited', () => {
+        describe('and the journey is for the "standard" journey', () => {
           beforeEach(() => {
-            session.checkPageVisited = true
+            session.journey = 'standard'
           })
 
-          it('correctly set the back link to the check page', () => {
+          it('returns page data for the view', () => {
             const result = NoticeTypePresenter.go(session, auth)
 
-            expect(result.backLink).to.equal({
-              href: '/system/notices/setup/123/check-notice-type',
-              text: 'Back'
+            expect(result).to.equal({
+              backLink: {
+                href: '/system/notices',
+                text: 'Back'
+              },
+              options: [
+                {
+                  checked: false,
+                  text: 'Returns invitation',
+                  value: 'invitations'
+                },
+                {
+                  checked: false,
+                  text: 'Returns reminder',
+                  value: 'reminders'
+                }
+              ],
+              pageTitle: 'Select the notice type'
+            })
+          })
+
+          describe('and the user has the "bulk_return_notifications" scope', () => {
+            beforeEach(() => {
+              auth.credentials.scope = ['bulk_return_notifications']
+            })
+
+            it('returns page data for the view', () => {
+              const result = NoticeTypePresenter.go(session, auth)
+
+              expect(result).to.equal({
+                backLink: {
+                  href: '/system/notices',
+                  text: 'Back'
+                },
+                options: [
+                  {
+                    checked: false,
+                    text: 'Returns invitation',
+                    value: 'invitations'
+                  },
+                  {
+                    checked: false,
+                    text: 'Returns reminder',
+                    value: 'reminders'
+                  }
+                ],
+                pageTitle: 'Select the notice type'
+              })
             })
           })
         })
-      })
-    })
 
-    describe('when journey is for the "standard" journey', () => {
-      beforeEach(() => {
-        session.journey = 'standard'
-      })
+        describe('and the journey is the "adhoc" journey', () => {
+          it('returns page data for the view', () => {
+            const result = NoticeTypePresenter.go(session, auth)
 
-      it('returns page data for the view', () => {
-        const result = NoticeTypePresenter.go(session, auth)
-
-        expect(result).to.equal({
-          backLink: {
-            href: '/system/notices',
-            text: 'Back'
-          },
-          options: [
-            {
-              checked: false,
-              text: 'Returns invitation',
-              value: 'invitations'
-            },
-            {
-              checked: false,
-              text: 'Returns reminder',
-              value: 'reminders'
-            }
-          ],
-          pageTitle: 'Select the notice type'
-        })
-      })
-
-      describe('and the user has the "bulk_return_notifications" scope', () => {
-        beforeEach(() => {
-          beforeEach(() => {
-            auth.credentials.scope = ['bulk_return_notifications']
-          })
-        })
-
-        it('returns page data for the view', () => {
-          const result = NoticeTypePresenter.go(session, auth)
-
-          expect(result).to.equal({
-            backLink: {
-              href: '/system/notices',
-              text: 'Back'
-            },
-            options: [
-              {
-                checked: false,
-                text: 'Returns invitation',
-                value: 'invitations'
+            expect(result).to.equal({
+              backLink: {
+                href: '/system/notices',
+                text: 'Back'
               },
-              {
-                checked: false,
-                text: 'Returns reminder',
-                value: 'reminders'
-              }
-            ],
-            pageTitle: 'Select the notice type'
+              options: [
+                {
+                  checked: false,
+                  text: 'Paper return',
+                  value: 'paperReturn'
+                },
+                {
+                  checked: false,
+                  text: 'Renewals invitation',
+                  value: 'renewalInvitations'
+                },
+                {
+                  checked: false,
+                  text: 'Returns invitation',
+                  value: 'invitations'
+                },
+                {
+                  checked: false,
+                  text: 'Returns reminder',
+                  value: 'reminders'
+                }
+              ],
+              pageTitle: 'Select the notice type'
+            })
           })
-        })
-      })
-    })
 
-    describe('when journey is the "adhoc" journey', () => {
-      it('returns page data for the view', () => {
-        const result = NoticeTypePresenter.go(session, auth)
+          describe('and scope includes', () => {
+            describe('"bulk_return_notifications"', () => {
+              describe('and the user has the "bulk_return_notifications" scope', () => {
+                beforeEach(() => {
+                  auth.credentials.scope = ['bulk_return_notifications']
+                })
 
-        expect(result).to.equal({
-          backLink: {
-            href: '/system/notices/setup/123/licence',
-            text: 'Back'
-          },
-          options: [
-            {
-              checked: false,
-              text: 'Returns invitation',
-              value: 'invitations'
-            },
-            {
-              checked: false,
-              text: 'Returns reminder',
-              value: 'reminders'
-            },
-            {
-              checked: false,
-              text: 'Paper return',
-              value: 'paperReturn'
-            }
-          ],
-          pageTitle: 'Select the notice type'
-        })
-      })
+                it('returns page data for the view', () => {
+                  const result = NoticeTypePresenter.go(session, auth)
 
-      describe('and the user has the "bulk_return_notifications" scope', () => {
-        beforeEach(() => {
-          beforeEach(() => {
-            auth.credentials.scope = ['bulk_return_notifications']
+                  expect(result).to.equal({
+                    backLink: {
+                      href: '/system/notices',
+                      text: 'Back'
+                    },
+                    options: [
+                      {
+                        checked: false,
+                        text: 'Paper return',
+                        value: 'paperReturn'
+                      },
+                      {
+                        checked: false,
+                        text: 'Returns invitation',
+                        value: 'invitations'
+                      },
+                      {
+                        checked: false,
+                        text: 'Returns reminder',
+                        value: 'reminders'
+                      }
+                    ],
+                    pageTitle: 'Select the notice type'
+                  })
+                })
+              })
+
+              describe('and the user does not have the "bulk_return_notifications" scope', () => {
+                beforeEach(() => {
+                  auth.credentials.scope = ['returns']
+                })
+
+                it('returns the appropriate notice option', () => {
+                  const result = NoticeTypePresenter.go(session, auth)
+
+                  expect(result.options).to.equal([
+                    {
+                      checked: false,
+                      text: 'Paper return',
+                      value: 'paperReturn'
+                    }
+                  ])
+                })
+              })
+            })
+
+            describe('"renewal_notifications"', () => {
+              describe('and the user has the "renewal_notifications" scope', () => {
+                beforeEach(() => {
+                  auth.credentials.scope = ['renewal_notifications']
+                })
+
+                it('returns page data for the view', () => {
+                  const result = NoticeTypePresenter.go(session, auth)
+
+                  expect(result).to.equal({
+                    backLink: {
+                      href: '/system/notices',
+                      text: 'Back'
+                    },
+                    options: [
+                      {
+                        checked: false,
+                        text: 'Paper return',
+                        value: 'paperReturn'
+                      },
+                      {
+                        checked: false,
+                        text: 'Renewals invitation',
+                        value: 'renewalInvitations'
+                      }
+                    ],
+                    pageTitle: 'Select the notice type'
+                  })
+                })
+              })
+
+              describe('and the user does not have the "renewal_notifications" scope', () => {
+                beforeEach(() => {
+                  auth.credentials.scope = ['returns']
+                })
+
+                it('returns the appropriate notice option', () => {
+                  const result = NoticeTypePresenter.go(session, auth)
+
+                  expect(result.options).to.equal([
+                    {
+                      checked: false,
+                      text: 'Paper return',
+                      value: 'paperReturn'
+                    }
+                  ])
+                })
+              })
+            })
           })
-        })
-
-        it('returns page data for the view', () => {
-          const result = NoticeTypePresenter.go(session, auth)
-
-          expect(result).to.equal({
-            backLink: {
-              href: '/system/notices/setup/123/licence',
-              text: 'Back'
-            },
-            options: [
-              {
-                checked: false,
-                text: 'Returns invitation',
-                value: 'invitations'
-              },
-              {
-                checked: false,
-                text: 'Returns reminder',
-                value: 'reminders'
-              },
-              {
-                checked: false,
-                text: 'Paper return',
-                value: 'paperReturn'
-              }
-            ],
-            pageTitle: 'Select the notice type'
-          })
-        })
-      })
-
-      describe('and the user does not have the "bulk_return_notifications" scope', () => {
-        beforeEach(() => {
-          auth.credentials.scope = ['returns']
-        })
-
-        it('returns the appropriate notice option', () => {
-          const result = NoticeTypePresenter.go(session, auth)
-
-          expect(result.options).to.equal([
-            {
-              checked: false,
-              text: 'Paper return',
-              value: 'paperReturn'
-            }
-          ])
         })
       })
     })

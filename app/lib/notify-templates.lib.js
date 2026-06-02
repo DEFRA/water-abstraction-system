@@ -60,6 +60,14 @@ const NOTIFY_TEMPLATES = Object.freeze({
     }
   },
   renewalInvitations: {
+    adhoc: {
+      email: {
+        'single licence': '53c34f21-4f2e-43f7-97c6-7a7828079665'
+      },
+      letter: {
+        'single licence': 'c7538f40-2c9e-4b09-b539-4869b1cef2db'
+      }
+    },
     standard: {
       email: {
         'multiple licences': '9ba5065b-6c09-4ca6-8c84-2e68610e3f6e',

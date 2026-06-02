@@ -12,6 +12,9 @@ const { expect } = Code
 const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateLicenceRef } = require('../../../support/helpers/licence.helper.js')
 
+// Test helpers
+const YarStub = require('../../../support/stubs/yar.stub.js')
+
 // Things we need to stub
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
@@ -32,7 +35,8 @@ describe('Notices - Setup - View Check Notice Type service', () => {
 
     Sinon.stub(FetchSessionDal, 'go').resolves(session)
 
-    yarStub = { flash: Sinon.stub().resolves() }
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.resolves()
   })
 
   afterEach(() => {
@@ -54,7 +58,7 @@ describe('Notices - Setup - View Check Notice Type service', () => {
         },
         notification: undefined,
         pageTitle: 'Check the notice type',
-        returnNoticeType: 'Returns invitation',
+        noticeType: 'Returns invitation',
         sessionId: session.id
       })
     })
@@ -68,7 +72,8 @@ describe('Notices - Setup - View Check Notice Type service', () => {
 
     describe('when there is a notification', () => {
       beforeEach(() => {
-        yarStub = { flash: Sinon.stub().returns(['Test notification']) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.flash.returns(['Test notification'])
       })
 
       it('should set the notification', async () => {

@@ -30,7 +30,7 @@ async function go(session) {
   const groupIds = await GroupModel.query().select('id').whereIn('group', groups)
   const roleIds = await RoleModel.query().select('id').whereIn('role', roles)
 
-  return await UserModel.transaction(async (trx) => {
+  return UserModel.transaction(async (trx) => {
     const { id, resetGuid } = await _insertUser(resolvedApplication, email, trx)
 
     if (groupIds.length > 0) {

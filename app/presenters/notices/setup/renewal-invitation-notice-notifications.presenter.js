@@ -9,6 +9,11 @@ const NotifyAddressPresenter = require('./notify-address.presenter.js')
 const { NOTIFY_TEMPLATES } = require('../../../lib/notify-templates.lib.js')
 const { formatLongDate } = require('../../base.presenter.js')
 
+const MESSAGE_REFS = {
+  adhoc: 'renewal invitation ad-hoc',
+  standard: 'renewal invitation'
+}
+
 /**
  * Formats recipients into notifications for a renewal invitation
  *
@@ -46,7 +51,7 @@ function _email(recipient, noticeId, noticeData) {
     eventId: noticeId,
     licences: recipient.licence_refs,
     messageType,
-    messageRef: 'renewal invitation',
+    messageRef: MESSAGE_REFS[journey],
     personalisation: {
       ..._personalisation(recipient, noticeData)
     },
@@ -67,7 +72,7 @@ function _letter(recipient, noticeId, noticeData) {
     eventId: noticeId,
     licences: recipient.licence_refs,
     messageType,
-    messageRef: 'renewal invitation',
+    messageRef: MESSAGE_REFS[journey],
     personalisation: {
       ...address,
       // NOTE: Address line 1 is always set to the recipient's name

@@ -90,11 +90,7 @@ async function _fetchBillingAccounts(billRunId, billingPeriod) {
 }
 
 async function _finaliseBillRun(billRun, billRunPopulated) {
-  // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
-  // this in the UI
-  if (!billRunPopulated) {
-    await BillRunModel.query().findById(billRun.id).patch({ status: 'empty', updatedAt: timestampForPostgres() })
-  } else {
+  if (billRunPopulated) {
     // We now need to tell the Charging Module to run its generate process. This is where the Charging module finalises
     // the debit and credit amounts, and adds any additional transactions needed, for example, minimum charge
     await ChargingModuleGenerateBillRunRequest.send(billRun.externalId)
@@ -102,6 +98,10 @@ async function _finaliseBillRun(billRun, billRunPopulated) {
     // TODO: The legacy service still handles refreshing the billing information on our side after the Charging Module API
     // has finished generating the bill run. We need to take this over when we next get the opportunity.
     await LegacyRefreshBillRunRequest.send(billRun.id)
+  } else {
+    // If there are no bill licences then the bill run is considered empty. We just need to set the status to indicate
+    // this in the UI
+    await BillRunModel.query().findById(billRun.id).patch({ status: 'empty', updatedAt: timestampForPostgres() })
   }
 
   // We unflag any unbilled licences last, just in case any of the other calls error. Should that happen, the bill run

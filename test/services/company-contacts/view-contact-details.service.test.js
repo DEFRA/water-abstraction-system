@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const FetchCompanyContactDetailsService = require('../../../app/services/company-contacts/fetch-company-contact-details.service.js')
@@ -34,9 +35,8 @@ describe('Company Contacts - View Contact Details Service', () => {
     Sinon.stub(FetchCompanyService, 'go').returns(company)
     Sinon.stub(FetchCompanyContactDetailsService, 'go').returns(companyContact)
 
-    yarStub = {
-      flash: Sinon.stub().returns([{ titleText: 'Updated', text: 'Contact details updated.' }])
-    }
+    yarStub = YarStub.build(Sinon)
+    yarStub.flash.returns([{ titleText: 'Updated', text: 'Contact details updated.' }])
   })
 
   afterEach(() => {

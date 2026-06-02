@@ -92,9 +92,7 @@ function determineFinancialYearEnd(date) {
  * @returns {Date} The earliest date
  */
 function determineEarliestDate(dates) {
-  const allEmptyValuesRemoved = dates.filter((date) => {
-    return date
-  })
+  const allEmptyValuesRemoved = dates.filter(Boolean)
 
   if (allEmptyValuesRemoved.length === 0) {
     return null
@@ -116,9 +114,7 @@ function determineEarliestDate(dates) {
  * @returns {Date} The latest date
  */
 function determineLatestDate(dates) {
-  const allEmptyValuesRemoved = dates.filter((date) => {
-    return date
-  })
+  const allEmptyValuesRemoved = dates.filter(Boolean)
 
   if (allEmptyValuesRemoved.length === 0) {
     throw new Error('No dates provided to determine earliest')
@@ -192,7 +188,7 @@ function isValidDate(dateString) {
 
   const date = new Date(dateString)
 
-  return !isNaN(date.getTime())
+  return !Number.isNaN(date.getTime())
 }
 
 /**
@@ -236,11 +232,42 @@ function _isValidLeapYearDate(dateString) {
 function _isLeapYear(year) {
   const set400 = 400
 
-  if ((year % 4 === 0 && year % 100 !== 0) || year % set400 === 0) {
-    return true
-  }
+  return (year % 4 === 0 && year % 100 !== 0) || year % set400 === 0
+}
 
-  return false
+/**
+ * Calculates the renewal notice start date, 90 days before the given expiry date
+ *
+ * @param {Date} expiryDate - The expiry date to calculate from
+ *
+ * @returns {Date} The renewal notice start date
+ */
+function renewalNoticeDate(expiryDate) {
+  const noticeDate = new Date(expiryDate)
+
+  const nintyDays = 90
+
+  noticeDate.setDate(noticeDate.getDate() - nintyDays)
+
+  return noticeDate
+}
+
+/**
+ * Calculates the target expiry date for renewal notices
+ *
+ * The target date is `days` days from today, normalised to midnight.
+ *
+ * @param {number} [days=0] - The number of days from today
+ *
+ * @returns {Date} The target expiry date
+ */
+function renewalExpiryDate(days = 0) {
+  const targetDate = new Date()
+
+  targetDate.setDate(targetDate.getDate() + Number(days))
+  targetDate.setHours(0, 0, 0, 0)
+
+  return targetDate
 }
 
 /**
@@ -389,6 +416,8 @@ module.exports = {
   isQuarterlyReturnSubmissions,
   isValidDate,
   monthsFromPeriod,
+  renewalExpiryDate,
+  renewalNoticeDate,
   sameDate,
   weeksFromPeriod
 }

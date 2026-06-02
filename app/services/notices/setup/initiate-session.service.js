@@ -86,7 +86,7 @@ function _redirect(journey) {
   }
 
   // Ad-hoc
-  return 'licence'
+  return 'notice-type'
 }
 
 module.exports = {

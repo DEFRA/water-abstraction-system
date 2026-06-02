@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const NoticesFixture = require('../../support/fixtures/notices.fixture.js')
+const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Things to stub
 const FetchNoticesService = require('../../../app/services/notices/fetch-notices.service.js')
@@ -36,7 +37,8 @@ describe('Notices - Index Notices service', () => {
   describe('when called', () => {
     beforeEach(() => {
       // For the purposes of this tests the filter doesn't matter
-      yarStub = { get: Sinon.stub().returns(null) }
+      yarStub = YarStub.build(Sinon)
+      yarStub.get.returns(null)
 
       const results = NoticesFixture.mapToFetchNoticesResult([NoticesFixture.alertReduce()])
 
@@ -95,7 +97,8 @@ describe('Notices - Index Notices service', () => {
 
     describe('and none were ever set or they were cleared', () => {
       beforeEach(() => {
-        yarStub = { get: Sinon.stub().returns(null) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns(null)
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -107,7 +110,8 @@ describe('Notices - Index Notices service', () => {
 
     describe('and the filters were submitted empty', () => {
       beforeEach(() => {
-        yarStub = { get: Sinon.stub().returns(_noticeFilters()) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns(_noticeFilters())
       })
 
       it('returns blank filters and that the controls should be closed', async () => {
@@ -122,7 +126,8 @@ describe('Notices - Index Notices service', () => {
         const filters = _noticeFilters()
 
         filters.sentBy = 'carol.shaw@wrls.gov.uk'
-        yarStub = { get: Sinon.stub().returns(filters) }
+        yarStub = YarStub.build(Sinon)
+        yarStub.get.returns(filters)
       })
 
       it('returns the saved filters and that the controls should be open', async () => {

@@ -14,6 +14,7 @@ const UsersFixture = require('../../support/fixtures/users.fixture.js')
 // Things to stub
 const FeatureFlagsConfig = require('../../../config/feature-flags.config.js')
 const FetchUsersDal = require('../../../app/dal/users/fetch-users.dal.js')
+const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Thing under test
 const SubmitIndexUsersService = require('../../../app/services/users/submit-index-users.service.js')
@@ -31,11 +32,7 @@ describe('Users - Submit Index Users service', () => {
 
     Sinon.stub(FeatureFlagsConfig, 'enableUsersManagement').value(true)
 
-    yarStub = {
-      clear: Sinon.stub().returns(),
-      get: Sinon.stub(),
-      set: Sinon.stub().returns()
-    }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

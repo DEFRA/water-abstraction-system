@@ -5,7 +5,7 @@
  * @module DeleteFilesService
  */
 
-const fsPromises = require('fs').promises
+const fsPromises = require('node:fs').promises
 
 /**
  * Deletes a folder and its content or an individual file

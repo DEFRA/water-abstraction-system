@@ -10,6 +10,7 @@ const { expect } = Code
 
 // Test helpers
 const CustomersFixtures = require('../../support/fixtures/customers.fixture.js')
+const YarStub = require('../../support/stubs/yar.stub.js')
 
 // Things we need to stub
 const DeleteCompanyContactService = require('../../../app/services/company-contacts/delete-company-contact.service.js')
@@ -31,7 +32,7 @@ describe('Company Contacts - Submit Remove Company Contact Service', () => {
     Sinon.stub(DeleteCompanyContactService, 'go').resolves()
     Sinon.stub(FetchCompanyContactService, 'go').resolves(companyContact)
 
-    yarStub = { flash: Sinon.stub() }
+    yarStub = YarStub.build(Sinon)
   })
 
   afterEach(() => {

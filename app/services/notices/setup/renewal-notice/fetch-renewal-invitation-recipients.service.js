@@ -1,0 +1,37 @@
+'use strict'
+
+/**
+ * Fetches recipient data for an adhoc renewal invitation notice
+ * @module FetchRenewalInvitationRecipientsService
+ */
+
+const GenerateRenewalInvitationLicenceQueryDal = require('../../../../dal/notices/setup/generate-renewal-invitation-licence-query.dal.js')
+const GenerateRenewalRecipientsQueryService = require('../../../jobs/renewal-invitations/generate-renewal-recipients-query.service.js')
+const { db } = require('../../../../../db/db.js')
+
+/**
+ * Fetches recipient data for an adhoc renewal invitation notice
+ *
+ * For the adhoc renewal journey a single licence reference is stored in the session. This service fetches the
+ * primary user (if the licence is registered) or falls back to the licence holder — the same logic used by the
+ * scheduled renewal invitations job.
+ *
+ * @param {module:SessionModel} session - The notice setup session instance
+ *
+ * @returns {Promise<object[]>} The recipient data for the renewal invitation notice
+ */
+async function go(session) {
+  const { licenceRef } = session
+
+  const { bindings, query: licenceQuery } = GenerateRenewalInvitationLicenceQueryDal.go(licenceRef)
+
+  const query = GenerateRenewalRecipientsQueryService.go(licenceQuery)
+
+  const { rows } = await db.raw(query, bindings)
+
+  return rows
+}
+
+module.exports = {
+  go
+}

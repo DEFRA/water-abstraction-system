@@ -37,7 +37,7 @@ function _groupByLicence(chargeVersions, uniqueLicenceIds) {
   // the number of licences we might be dealing will be in the hundreds, possibly thousands. In these cases we get a
   // performance bump if we create the array sized to our needs first, rather than asking Node to resize the array on
   // each loop. Only applicable here though! Don't go doing this for every new array you declare ;-)
-  const licences = Array(uniqueLicenceIds.length).fill(undefined)
+  const licences = new Array(uniqueLicenceIds.length).fill(undefined)
 
   for (let i = 0; i < uniqueLicenceIds.length; i++) {
     const licenceId = uniqueLicenceIds[i]

@@ -56,8 +56,10 @@ function _factors(reviewChargeReference, canAmend) {
   const factors = []
 
   if (canAmend) {
-    factors.push(`Aggregate factor (${amendedAggregate} / ${aggregate})`)
-    factors.push(`Charge adjustment (${amendedChargeAdjustment} / ${chargeAdjustment})`)
+    factors.push(
+      `Aggregate factor (${amendedAggregate} / ${aggregate})`,
+      `Charge adjustment (${amendedChargeAdjustment} / ${chargeAdjustment})`
+    )
   }
 
   return factors
