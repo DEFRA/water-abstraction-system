@@ -18,7 +18,7 @@ const { flashNotification } = require('../../../../lib/general.lib.js')
  * @param {object} yar - The Hapi `request.yar` session manager passed on by the controller
  * @param {object} auth - The auth object taken from `request.auth` containing user details
  *
- * @returns {Promise<object>} The data formatted for the view template
+ * @returns {Promise<object>} An object containing the URL to redirect the user to after confirming
  */
 async function go(sessionId, yar, auth) {
   const sessionData = await FetchSessionDal.go(sessionId)

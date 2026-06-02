@@ -2,7 +2,7 @@
 
 /**
  * Orchestrates fetching and presenting the data for '/users/external/setup/{sessionId}/licences' page
- * @module ViewUserEmailService
+ * @module ViewLicencesService
  */
 
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
@@ -20,9 +20,7 @@ async function go(sessionId) {
 
   const pageData = LicencesPresenter.go(session)
 
-  return {
-    ...pageData
-  }
+  return pageData
 }
 
 module.exports = {

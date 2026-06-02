@@ -21,9 +21,7 @@ async function go(sessionId) {
 
   const pageData = CancelPresenter.go(session)
 
-  return {
-    ...pageData
-  }
+  return pageData
 }
 
 module.exports = {
