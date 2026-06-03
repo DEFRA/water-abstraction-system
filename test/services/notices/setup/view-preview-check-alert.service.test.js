@@ -15,7 +15,7 @@ const SessionModelStub = require('../../../support/stubs/session.stub.js')
 const { generateNoticeReferenceCode } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
-const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
+const FetchAbstractionAlertRecipientsDal = require('../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
 const FetchSessionDal = require('../../../../app/dal/fetch-session.dal.js')
 
 // Thing under test
@@ -52,7 +52,7 @@ describe('Notices - Setup - View Preview Check Alert service', () => {
     testRecipients[0].licence_refs = licenceMonitoringStations.two.licence.licenceRef
     testRecipient = testRecipients[0]
 
-    Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves(testRecipients)
+    Sinon.stub(FetchAbstractionAlertRecipientsDal, 'go').resolves(testRecipients)
     Sinon.stub(FetchSessionDal, 'go').resolves(session)
   })
 

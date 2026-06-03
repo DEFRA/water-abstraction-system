@@ -13,7 +13,7 @@ const RecipientsFixture = require('../../../support/fixtures/recipients.fixture.
 const { NoticeJourney, NoticeType } = require('../../../../app/lib/static-lookups.lib.js')
 
 // Things we need to stub
-const FetchAbstractionAlertRecipientsService = require('../../../../app/services/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
+const FetchAbstractionAlertRecipientsDal = require('../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
 const FetchPaperReturnsRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-paper-returns-recipients.service.js')
 const FetchRenewalInvitationRecipientsService = require('../../../../app/services/notices/setup/renewal-notice/fetch-renewal-invitation-recipients.service.js')
 const FetchReturnsInvitationRecipientsService = require('../../../../app/services/notices/setup/returns-notice/fetch-returns-invitation-recipients.service.js')
@@ -33,7 +33,7 @@ describe('Notices - Setup - Fetch Recipients service', () => {
   let session
 
   beforeEach(() => {
-    fetchAbstractionAlertRecipientsStub = Sinon.stub(FetchAbstractionAlertRecipientsService, 'go').resolves()
+    fetchAbstractionAlertRecipientsStub = Sinon.stub(FetchAbstractionAlertRecipientsDal, 'go').resolves()
     fetchPaperReturnsRecipientsStub = Sinon.stub(FetchPaperReturnsRecipientsService, 'go').resolves()
     fetchRenewalInvitationRecipientsStub = Sinon.stub(FetchRenewalInvitationRecipientsService, 'go').resolves()
     fetchReturnsInvitationRecipientsStub = Sinon.stub(FetchReturnsInvitationRecipientsService, 'go').resolves()

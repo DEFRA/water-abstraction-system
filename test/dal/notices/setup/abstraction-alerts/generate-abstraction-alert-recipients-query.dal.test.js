@@ -16,9 +16,9 @@ const { compareStrings } = require('../../../../../app/lib/general.lib.js')
 const { db } = require('../../../../../db/db.js')
 
 // Thing under test
-const GenerateAbstractionAlertRecipientsQueryService = require('../../../../../app/services/notices/setup/abstraction-alerts/generate-abstraction-alert-recipients-query.service.js')
+const GenerateAbstractionAlertRecipientsQueryDal = require('../../../../../app/dal/notices/setup/abstraction-alerts/generate-abstraction-alert-recipients-query.dal.js')
 
-describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Recipients Query Service', () => {
+describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Recipients Query DAl', () => {
   let scenarios
 
   before(async () => {
@@ -156,7 +156,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
   describe('when called', () => {
     it('returns the expected query and bindings', () => {
       const licenceRefs = ['01/123']
-      const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
+      const { bindings, query } = GenerateAbstractionAlertRecipientsQueryDal.go(licenceRefs)
 
       expect(bindings).to.equal([licenceRefs, licenceRefs, licenceRefs])
       expect(query).to.startWith(`
@@ -168,7 +168,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     describe('and only the licence holder is present for an unregistered licence (Scenario 1)', () => {
       it('returns the expected recipients', async () => {
         const licenceRefs = scenarios.licenceHolder.licenceHolderRecipient.licenceRefs
-        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
+        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryDal.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
         const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
@@ -180,7 +180,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     describe('and both the "additional contact" and the "licence holder" are present for an unregistered licence (Scenario 2)', () => {
       it('returns the expected recipients', async () => {
         const licenceRefs = scenarios.licenceHolderWithAdditionalContact.licenceHolderRecipient.licenceRefs
-        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
+        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryDal.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
         const expectedResults = RecipientScenariosSeeder.transformToSendingResults(
@@ -194,7 +194,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     describe('and only the "primary user" is present for a registered licence (Scenario 3)', () => {
       it('returns the expected recipients', async () => {
         const licenceRefs = scenarios.primaryUser.primaryUserRecipient.licenceRefs
-        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
+        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryDal.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
         const expectedResults = RecipientScenariosSeeder.transformToSendingResults({
@@ -208,7 +208,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     describe('and both the "primary user" and "additional contact" are present for a registered licence, but not the licence holder (Scenario 4)', () => {
       it('returns the expected recipients', async () => {
         const licenceRefs = scenarios.primaryUserWithAdditionalContact.primaryUserRecipient.licenceRefs
-        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
+        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryDal.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
         const expectedResults = RecipientScenariosSeeder.transformToSendingResults({
@@ -227,7 +227,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
           ...scenarios.additionalContactMultipleLicences.licenceHolderRecipientTwo.licenceRefs
         ].sort(compareStrings)
 
-        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
+        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryDal.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
         const transformedResults = RecipientScenariosSeeder.transformToSendingResults({
@@ -246,7 +246,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     describe('and an additional contact is present but abstractionAlerts is false (Scenario 6)', () => {
       it('returns only the "licence holder" and not the additional contact', async () => {
         const licenceRefs = scenarios.additionalContactNoAlerts.licenceHolderRecipient.licenceRefs
-        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
+        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryDal.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
         const expectedResults = RecipientScenariosSeeder.transformToSendingResults({
@@ -264,7 +264,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
           ...scenarios.differentHoldersAndContacts.secondLicenceHolderRecipient.licenceRefs
         ].sort(compareStrings)
 
-        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
+        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryDal.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
         const transformedResults = RecipientScenariosSeeder.transformToSendingResults({
@@ -288,7 +288,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
           ...scenarios.mixedAlerts.licenceHolderRecipientWithoutAlert.licenceRefs
         ].sort(compareStrings)
 
-        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
+        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryDal.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
         const transformedResults = RecipientScenariosSeeder.transformToSendingResults({
@@ -307,7 +307,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     describe('and the additional contact end date has passed (Scenario 9)', () => {
       it('returns only the "licence holder" and not the expired additional contact', async () => {
         const licenceRefs = scenarios.expiredAdditionalContact.licenceHolderRecipient.licenceRefs
-        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryService.go(licenceRefs)
+        const { bindings, query } = GenerateAbstractionAlertRecipientsQueryDal.go(licenceRefs)
         const { rows } = await db.raw(query, bindings)
 
         const expectedResults = RecipientScenariosSeeder.transformToSendingResults({
