@@ -114,16 +114,19 @@ async function _deleteAllTestData() {
 
   DELETE
   FROM
-    "crm"."entity_roles"
+    "crm"."entity_roles" AS "er"
       USING "crm"."entity" AS "e"
   WHERE
-    "created_by" = 'acceptance-test-setup'
-    OR "e"."entity_nm" LIKE 'acceptance-test.%'
-    OR "e"."entity_nm" LIKE '%@example.com'
-    OR "e"."entity_nm" LIKE '%@e'
-    OR "e"."entity_nm" LIKE 'regression.tests.%'
-    OR "e"."entity_nm" LIKE 'Big Farm Co Ltd%'
-    OR "e"."source" = 'acceptance-test-setup';
+    "er".entity_id = "e".entity_id
+    AND (
+      "er"."created_by" = 'acceptance-test-setup'
+      OR "e"."entity_nm" LIKE 'acceptance-test.%'
+      OR "e"."entity_nm" LIKE '%@example.com'
+      OR "e"."entity_nm" LIKE '%@e'
+      OR "e"."entity_nm" LIKE 'regression.tests.%'
+      OR "e"."entity_nm" LIKE 'Big Farm Co Ltd%'
+      OR "e"."source" = 'acceptance-test-setup'
+    );
 
   DELETE
   FROM
