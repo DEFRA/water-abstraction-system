@@ -21,11 +21,12 @@ async function setup(_request, h) {
 
 async function submitCheck(request, h) {
   const {
+    auth,
     params: { sessionId },
     yar
   } = request
 
-  await SubmitCheckService.go(sessionId, yar)
+  await SubmitCheckService.go(auth, sessionId, yar)
 
   return h.redirect('/system/users')
 }
