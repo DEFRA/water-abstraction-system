@@ -167,7 +167,7 @@ describe('Notices - Index Notices presenter', () => {
   describe('the "links" property', () => {
     describe('when the user has permissions', () => {
       beforeEach(() => {
-        auth.credentials.scope = ['bulk_return_notifications', 'returns']
+        auth.credentials.scope = ['bulk_return_notifications', 'returns', 'renewal_notifications']
       })
 
       it('returns all of the links', () => {
