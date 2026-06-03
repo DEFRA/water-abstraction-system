@@ -47,7 +47,7 @@ async function _licenceRenewal(payload) {
     return null
   }
 
-  return await FetchRenewalLicenceDal.go(payload.licenceRef)
+  return FetchRenewalLicenceDal.go(payload.licenceRef)
 }
 
 function _validate(payload, licenceRenewal) {
