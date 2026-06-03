@@ -56,11 +56,13 @@ function _options(noticeType, journey, auth) {
   const options = []
 
   if (journey === NoticeJourney.ADHOC) {
-    options.push({
-      checked: noticeType === NoticeType.PAPER_RETURN,
-      value: NoticeType.PAPER_RETURN,
-      text: 'Paper return'
-    })
+    if (scope.includes('bulk_return_notifications')) {
+      options.push({
+        checked: noticeType === NoticeType.PAPER_RETURN,
+        value: NoticeType.PAPER_RETURN,
+        text: 'Paper return'
+      })
+    }
 
     if (scope.includes('renewal_notifications')) {
       options.push({
