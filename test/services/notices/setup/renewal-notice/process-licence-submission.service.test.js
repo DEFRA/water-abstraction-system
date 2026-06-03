@@ -65,8 +65,6 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
         describe('because no licence ref was entered', () => {
           beforeEach(() => {
             payload = {}
-
-            fetchRenewalLicenceDalStub.resolves(undefined)
           })
 
           it('returns a validation error', async () => {
