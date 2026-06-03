@@ -11,9 +11,9 @@ const { expect } = Code
 const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
 
 // Thing under test
-const FetchAbstractionAlertRecipientsService = require('../../../../../app/services/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.service.js')
+const FetchAbstractionAlertRecipientsDal = require('../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
 
-describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipients service', () => {
+describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipients DAl', () => {
   let scenarios
   let session
 
@@ -32,7 +32,7 @@ describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipie
 
   describe('when there are abstraction alert recipients to notify', () => {
     it('fetches the correct recipient data', async () => {
-      const result = await FetchAbstractionAlertRecipientsService.go(session)
+      const result = await FetchAbstractionAlertRecipientsDal.go(session)
 
       const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.licenceHolder)
 
