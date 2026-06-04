@@ -7,7 +7,7 @@
 
 const CheckNotificationStatusService = require('../../../notifications/check-notification-status.service.js')
 const CreateEmailRequest = require('../../../../requests/notify/create-email.request.js')
-const NotifyUpdatePresenter = require('../../../../presenters/notices/setup/notify-update.presenter.js')
+const NotifyUpdatePresenter = require('../../../../presenters/notifications/notify-update.presenter.js')
 
 const { pause } = require('../../../../lib/general.lib.js')
 

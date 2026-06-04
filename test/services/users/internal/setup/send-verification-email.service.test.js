@@ -13,7 +13,7 @@ const CheckNotificationStatusService = require('../../../../../app/services/noti
 const CreateEmailRequest = require('../../../../../app/requests/notify/create-email.request.js')
 const GeneralLib = require('../../../../../app/lib/general.lib.js')
 const NotifyConfig = require('../../../../../config/notify.config.js')
-const NotifyUpdatePresenter = require('../../../../../app/presenters/notices/setup/notify-update.presenter.js')
+const NotifyUpdatePresenter = require('../../../../../app/presenters/notifications/notify-update.presenter.js')
 
 // Thing under test
 const SendVerificationEmailService = require('../../../../../app/services/users/internal/setup/send-verification-email.service.js')
