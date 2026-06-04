@@ -26,7 +26,6 @@ const CreateUserDal = require('../../../../app/dal/users/internal/create-user.da
 describe('Users - Internal - Create User DAL', () => {
   let auth
   let notification
-  let notificationStub
   let session
 
   beforeEach(() => {
@@ -45,8 +44,7 @@ describe('Users - Internal - Create User DAL', () => {
     session = { email, permission: 'basic' }
 
     Sinon.stub(FetchUserDetailsDal, 'go').resolves({ username: 'internal-user-creator@wrls.gov.uk' })
-
-    notificationStub = Sinon.stub(InsertNotificationDal, 'go').resolves(notification)
+    Sinon.stub(InsertNotificationDal, 'go').resolves(notification)
   })
 
   afterEach(async () => {
@@ -97,7 +95,7 @@ describe('Users - Internal - Create User DAL', () => {
 
       const user = await UserModel.query().where('username', session.email).limit(1).first()
 
-      expect(notificationStub.calledWith(session.email, user.resetGuid)).to.be.true()
+      expect(InsertNotificationDal.go.calledWith(session.email, user.resetGuid)).to.be.true()
     })
 
     it('returns the notification record', async () => {
