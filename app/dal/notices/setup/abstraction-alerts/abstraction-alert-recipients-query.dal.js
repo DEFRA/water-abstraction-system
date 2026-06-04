@@ -1,10 +1,5 @@
 'use strict'
 
-/**
- * Generates the SQL query for abstraction alert recipients
- * @module GenerateAbstractionAlertRecipientsQueryDal
- */
-
 const {
   additionalContactRecipientQuery,
   licenceHolderRecipientQuery,
@@ -43,16 +38,8 @@ const {
  * simply hash the email address. For letter contacts, we concatenate the key fields from the `companies` and
  * `addresses` tables, convert them to lowercase, and then generate an `md5()` result from it.
  *
- * @returns {string} The query for all abstraction alert recipients
  */
-function go() {
-  const licenceHolderQuery = _licenceHolderQuery()
-
-  return _query(licenceHolderQuery)
-}
-
-function _query(licenceHolderQuery) {
-  return `
+const abstractionAlertRecipientsQuery = `
   WITH additional_contacts AS (
     ${additionalContactRecipientQuery}
   ),
@@ -69,7 +56,11 @@ function _query(licenceHolderQuery) {
   ),
 
   licence_holders as (
-    ${licenceHolderQuery}
+    ${licenceHolderRecipientQuery}
+    LEFT JOIN registered_licences rl
+      ON rl.licence_ref = l.licence_ref
+    WHERE rl.licence_ref IS NULL
+      AND l.licence_ref = ANY (?)
   ),
 
   primary_or_licence_holder AS (
@@ -138,18 +129,7 @@ function _query(licenceHolderQuery) {
   ORDER BY
     licence_refs::text;
 `
-}
-
-function _licenceHolderQuery() {
-  return `
-    ${licenceHolderRecipientQuery}
-    LEFT JOIN registered_licences rl
-      ON rl.licence_ref = l.licence_ref
-    WHERE rl.licence_ref IS NULL
-      AND l.licence_ref = ANY (?)
-  `
-}
 
 module.exports = {
-  go
+  abstractionAlertRecipientsQuery
 }

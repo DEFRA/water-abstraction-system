@@ -5,7 +5,7 @@
  * @module FetchAbstractionAlertRecipientsDal
  */
 
-const GenerateAbstractionAlertRecipientsQueryDal = require('./generate-abstraction-alert-recipients-query.dal.js')
+const { abstractionAlertRecipientsQuery } = require('./abstraction-alert-recipients-query.dal.js')
 const { db } = require('../../../../../db/db.js')
 
 /**
@@ -18,9 +18,7 @@ const { db } = require('../../../../../db/db.js')
 async function go(session) {
   const { licenceRefs } = session
 
-  const query = GenerateAbstractionAlertRecipientsQueryDal.go()
-
-  const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
+  const { rows } = await db.raw(abstractionAlertRecipientsQuery, [licenceRefs, licenceRefs, licenceRefs])
 
   return rows
 }

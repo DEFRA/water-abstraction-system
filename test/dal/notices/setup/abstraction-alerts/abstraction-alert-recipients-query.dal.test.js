@@ -16,9 +16,9 @@ const { compareStrings } = require('../../../../../app/lib/general.lib.js')
 const { db } = require('../../../../../db/db.js')
 
 // Thing under test
-const GenerateAbstractionAlertRecipientsQueryDal = require('../../../../../app/dal/notices/setup/abstraction-alerts/generate-abstraction-alert-recipients-query.dal.js')
+const abstractionAlertRecipientsQueryDal = require('../../../../../app/dal/notices/setup/abstraction-alerts/abstraction-alert-recipients-query.dal.js')
 
-describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Recipients Query DAL', () => {
+describe('Notices - Setup - Abstraction Alerts - Abstraction Alert Recipients Query DAL', () => {
   let scenarios
 
   before(async () => {
@@ -164,7 +164,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
   // NOTE: Because the query is very large we don't assert the full `query` string here
   describe('when called', () => {
     it('returns the expected query and bindings', () => {
-      const query = GenerateAbstractionAlertRecipientsQueryDal.go()
+      const query = abstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
 
       expect(query).to.startWith(`
   WITH additional_contacts AS (`)
@@ -176,7 +176,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
       it('returns the expected recipients', async () => {
         const licenceRefs = scenarios.licenceHolder.licenceHolderRecipient.licenceRefs
 
-        const query = GenerateAbstractionAlertRecipientsQueryDal.go()
+        const query = abstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
 
         const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
 
@@ -190,7 +190,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
       it('returns the expected recipients', async () => {
         const licenceRefs = scenarios.licenceHolderWithAdditionalContact.licenceHolderRecipient.licenceRefs
 
-        const query = GenerateAbstractionAlertRecipientsQueryDal.go()
+        const query = abstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
 
         const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
 
@@ -206,7 +206,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
       it('returns the expected recipients', async () => {
         const licenceRefs = scenarios.primaryUser.primaryUserRecipient.licenceRefs
 
-        const query = GenerateAbstractionAlertRecipientsQueryDal.go()
+        const query = abstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
 
         const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
 
@@ -222,7 +222,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
       it('returns the expected recipients', async () => {
         const licenceRefs = scenarios.primaryUserWithAdditionalContact.primaryUserRecipient.licenceRefs
 
-        const query = GenerateAbstractionAlertRecipientsQueryDal.go()
+        const query = abstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
 
         const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
 
@@ -242,7 +242,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
           ...scenarios.additionalContactMultipleLicences.licenceHolderRecipientTwo.licenceRefs
         ].sort(compareStrings)
 
-        const query = GenerateAbstractionAlertRecipientsQueryDal.go()
+        const query = abstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
 
         const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
 
@@ -263,7 +263,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
       it('returns only the "licence holder" and not the additional contact', async () => {
         const licenceRefs = scenarios.additionalContactNoAlerts.licenceHolderRecipient.licenceRefs
 
-        const query = GenerateAbstractionAlertRecipientsQueryDal.go()
+        const query = abstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
 
         const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
 
@@ -282,7 +282,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
           ...scenarios.differentHoldersAndContacts.secondLicenceHolderRecipient.licenceRefs
         ].sort(compareStrings)
 
-        const query = GenerateAbstractionAlertRecipientsQueryDal.go()
+        const query = abstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
 
         const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
 
@@ -307,7 +307,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
           ...scenarios.mixedAlerts.licenceHolderRecipientWithoutAlert.licenceRefs
         ].sort(compareStrings)
 
-        const query = GenerateAbstractionAlertRecipientsQueryDal.go()
+        const query = abstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
 
         const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
 
@@ -328,7 +328,7 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
       it('returns only the "licence holder" and not the expired additional contact', async () => {
         const licenceRefs = scenarios.expiredAdditionalContact.licenceHolderRecipient.licenceRefs
 
-        const query = GenerateAbstractionAlertRecipientsQueryDal.go()
+        const query = abstractionAlertRecipientsQueryDal.abstractionAlertRecipientsQuery
 
         const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
 

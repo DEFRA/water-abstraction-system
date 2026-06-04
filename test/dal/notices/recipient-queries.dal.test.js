@@ -15,7 +15,7 @@ const { db } = require('../../../db/db.js')
 // Thing under test
 const RecipientQueriesDal = require('../../../app/dal/notices/recipient-queries.dal.js')
 
-describe.only('Notices - Recipient Queries DAL', () => {
+describe('Notices - Recipient Queries DAL', () => {
   describe('#additionalContactRecipientQuery', () => {
     let scenarios
 
