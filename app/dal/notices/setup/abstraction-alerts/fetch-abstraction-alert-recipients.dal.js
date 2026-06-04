@@ -5,7 +5,6 @@
  * @module FetchAbstractionAlertRecipientsDal
  */
 
-const GenerateAbstractionAlertAdditionalContactQueryDal = require('./generate-abstraction-alert-additional-contact.dal.js')
 const GenerateAbstractionAlertRecipientsQueryDal = require('./generate-abstraction-alert-recipients-query.dal.js')
 const { db } = require('../../../../../db/db.js')
 
@@ -17,11 +16,10 @@ const { db } = require('../../../../../db/db.js')
  * @returns {Promise<object[]>} The contact data for all licence refs
  */
 async function go(session) {
-  const additionalContact = GenerateAbstractionAlertAdditionalContactQueryDal.go(session.licenceRefs)
+  const { licenceRefs } = session
+  const GenerateAbstractionAlertRecipientsQuery = GenerateAbstractionAlertRecipientsQueryDal.go()
 
-  const { bindings, query } = GenerateAbstractionAlertRecipientsQueryDal.go(session.licenceRefs, additionalContact)
-
-  const { rows } = await db.raw(query, bindings)
+  const { rows } = await db.raw(GenerateAbstractionAlertRecipientsQuery, [licenceRefs, licenceRefs, licenceRefs])
 
   return rows
 }

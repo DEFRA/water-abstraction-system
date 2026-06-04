@@ -8,15 +8,14 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const CRMContactsSeeder = require('../../../../support/seeders/crm-contacts.seeder.js')
-const EmptyLicence = require('../../../../support/seeders/empty-licence.seeder.js')
-const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-scenarios.seeder.js')
-const RecipientsFormatter = require('../../../../support/seeders/recipients.formatter.js')
-const { db } = require('../../../../../db/db.js')
-const { generateLicenceRef } = require('../../../../support/helpers/licence.helper.js')
+const CRMContactsSeeder = require('../../support/seeders/crm-contacts.seeder.js')
+const EmptyLicence = require('../../support/seeders/empty-licence.seeder.js')
+const RecipientScenariosSeeder = require('../../support/seeders/recipient-scenarios.seeder.js')
+const RecipientsFormatter = require('../../support/seeders/recipients.formatter.js')
+const { db } = require('../../../db/db.js')
 
 // Thing under test
-const GenerateAbstractionAlertAdditionalContactQueryDal = require('../../../../../app/dal/notices/setup/abstraction-alerts/generate-abstraction-alert-additional-contact.dal.js')
+const RecipientQueriesDal = require('../../../app/dal/notices/recipient-queries.dal.js')
 
 describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Additional Contact Query DAL', () => {
   let scenarios
@@ -55,10 +54,8 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Addi
 
   describe('when called', () => {
     it('returns the expected query and bindings', () => {
-      const licenceRefs = [generateLicenceRef()]
-      const { bindings, query } = GenerateAbstractionAlertAdditionalContactQueryDal.go(licenceRefs)
+      const query = RecipientQueriesDal.additionalContactRecipientQuery
 
-      expect(bindings).to.equal([licenceRefs])
       expect(query).to.startWith(`
     SELECT`)
     })
@@ -68,9 +65,9 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Addi
     it('(Scenario 1) returns the additional contact when it is present', async () => {
       const licenceRefs = scenarios.withAdditionalContact.additionalContactRecipient.licenceRefs
 
-      const { bindings, query } = GenerateAbstractionAlertAdditionalContactQueryDal.go(licenceRefs)
+      const query = RecipientQueriesDal.additionalContactRecipientQuery
 
-      const { rows } = await db.raw(query, bindings)
+      const { rows } = await db.raw(query, [licenceRefs])
 
       const expectedResults = RecipientScenariosSeeder.transformToSendingResults(scenarios.withAdditionalContact)
 
@@ -83,9 +80,9 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Addi
     it('(Scenario 2) does not return the additional contact when abstractionAlerts is false', async () => {
       const licenceRefs = scenarios.additionalContactNoAlerts.additionalContactRecipient.licenceRefs
 
-      const { bindings, query } = GenerateAbstractionAlertAdditionalContactQueryDal.go(licenceRefs)
+      const query = RecipientQueriesDal.additionalContactRecipientQuery
 
-      const { rows } = await db.raw(query, bindings)
+      const { rows } = await db.raw(query, [licenceRefs])
 
       expect(rows).to.equal([])
     })
@@ -93,9 +90,9 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Addi
     it('(Scenario 3) does not return the additional contact when the end date has passed', async () => {
       const licenceRefs = scenarios.expiredAdditionalContact.additionalContactRecipient.licenceRefs
 
-      const { bindings, query } = GenerateAbstractionAlertAdditionalContactQueryDal.go(licenceRefs)
+      const query = RecipientQueriesDal.additionalContactRecipientQuery
 
-      const { rows } = await db.raw(query, bindings)
+      const { rows } = await db.raw(query, [licenceRefs])
 
       expect(rows).to.equal([])
     })
@@ -103,9 +100,9 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Addi
     it('(Scenario 4) does not return the additional contact when deleted at is true', async () => {
       const licenceRefs = scenarios.deletedAdditionalContact.additionalContactRecipient.licenceRefs
 
-      const { bindings, query } = GenerateAbstractionAlertAdditionalContactQueryDal.go(licenceRefs)
+      const query = RecipientQueriesDal.additionalContactRecipientQuery
 
-      const { rows } = await db.raw(query, bindings)
+      const { rows } = await db.raw(query, [licenceRefs])
 
       expect(rows).to.equal([])
     })

@@ -5,7 +5,11 @@
  * @module GenerateAbstractionAlertRecipientsQueryDal
  */
 
-const { licenceHolderRecipientQuery, primaryUserRecipientQuery } = require('../../recipient-queries.dal.js')
+const {
+  additionalContactRecipientQuery,
+  licenceHolderRecipientQuery,
+  primaryUserRecipientQuery
+} = require('../../recipient-queries.dal.js')
 
 /**
  * Generates the SQL query for abstraction alert recipients
@@ -39,26 +43,18 @@ const { licenceHolderRecipientQuery, primaryUserRecipientQuery } = require('../.
  * simply hash the email address. For letter contacts, we concatenate the key fields from the `companies` and
  * `addresses` tables, convert them to lowercase, and then generate an `md5()` result from it.
  *
- * @param {string[]} licenceRefs - The licence refs to fetch recipients for
- * @param {object} additionalContact - The query and bindings for the additional contacts CTE
- *
- * @returns {object} The query and bindings for all abstraction alert recipients
+ * @returns {string} The query for all abstraction alert recipients
  */
-function go(licenceRefs, additionalContact) {
-  const bindings = [...additionalContact.bindings, licenceRefs, licenceRefs]
-
-  return {
-    bindings,
-    query: _query(additionalContact.query)
-  }
-}
-
-function _query(additionalContactsQuery) {
+function go() {
   const licenceHolderQuery = _licenceHolderQuery()
 
+  return _query(licenceHolderQuery)
+}
+
+function _query(licenceHolderQuery) {
   return `
   WITH additional_contacts AS (
-    ${additionalContactsQuery}
+    ${additionalContactRecipientQuery}
   ),
 
   primary_users AS (
