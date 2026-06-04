@@ -2,7 +2,7 @@
 
 /**
  * Formats a notification which has errored
- * @module NotificationErrorPresenter
+ * @module NotifyErrorPresenter
  */
 
 /**

@@ -8,9 +8,9 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const NotificationErrorPresenter = require('../../../../app/presenters/notices/setup/notification-error.presenter.js')
+const NotifyErrorPresenter = require('../../../app/presenters/notifications/notify-error.presenter.js')
 
-describe('Notices - Setup - Notification Error presenter', () => {
+describe('Notifications - Notify Error presenter', () => {
   let message
   let errors
   let statusCode
@@ -22,7 +22,7 @@ describe('Notices - Setup - Notification Error presenter', () => {
   })
 
   it('correctly returns an errored notification', () => {
-    const result = NotificationErrorPresenter.go(statusCode, message, errors)
+    const result = NotifyErrorPresenter.go(statusCode, message, errors)
 
     expect(result).to.equal({
       notifyError: '{"status":"ENOTFOUND","message":"An error occurred","errors":["a specific error"]}',

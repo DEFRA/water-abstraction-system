@@ -6,8 +6,8 @@
  */
 
 const CreatePrecompiledFileRequest = require('../../../../requests/notify/create-precompiled-file.request.js')
-const NotificationErrorPresenter = require('../../../../presenters/notices/setup/notification-error.presenter.js')
-const NotifyUpdatePresenter = require('../../../../presenters/notices/setup/notify-update.presenter.js')
+const NotifyErrorPresenter = require('../../../../presenters/notifications/notify-error.presenter.js')
+const NotifyUpdatePresenter = require('../../../../presenters/notifications/notify-update.presenter.js')
 const PreparePaperReturnService = require('../prepare-paper-return.service.js')
 
 /**
@@ -40,11 +40,7 @@ function _returnFromError(notification, returnFormRequest) {
   const errors = [returnFormRequest.response.message]
 
   return {
-    ...NotificationErrorPresenter.go(
-      returnFormRequest.response.code,
-      `Failed to generate the paper return PDF`,
-      errors
-    ),
+    ...NotifyErrorPresenter.go(returnFormRequest.response.code, `Failed to generate the paper return PDF`, errors),
     id: notification.id
   }
 }
