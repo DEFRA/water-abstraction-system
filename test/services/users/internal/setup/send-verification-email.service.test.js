@@ -21,12 +21,12 @@ const SendVerificationEmailService = require('../../../../../app/services/users/
 describe('Users - Internal - Setup - Send Verification Email service', () => {
   const notificationId = '46dd6e22-dfd3-4b2d-a618-ba88662db03e'
   const notifyId = '8af52d9f-e4ab-4c04-a49a-731439a8697e'
-  const resetLink = 'https://internal.example.com/reset_password_change_password?resetGuid=abc-123-def-456'
+  const resetLink = 'https://internal.com/reset_password_change_password?resetGuid=6e7a6b97-f5c4-4c30-965e-ee67ee6d9f25'
   const verificationEmailPlaintext =
     'Dear new user,\r\n' +
     '\r\n' +
     'To complete your account set up, visit:\r\n' +
-    'https://internal.example.com/reset_password_change_password?resetGuid=abc-123-def-456\r\n'
+    'https://internal.com/reset_password_change_password?resetGuid=6e7a6b97-f5c4-4c30-965e-ee67ee6d9f25\r\n'
 
   let checkNotificationStatusStub
   let createEmailRequestStub
@@ -36,6 +36,21 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
   let pauseStub
 
   beforeEach(() => {
+    checkNotificationStatusStub = Sinon.stub(CheckNotificationStatusService, 'go').resolves()
+
+    createEmailRequestStub = Sinon.stub(CreateEmailRequest, 'send').resolves({
+      succeeded: true,
+      response: {
+        statusCode: 200,
+        body: {
+          id: notifyId,
+          content: {
+            body: verificationEmailPlaintext
+          }
+        }
+      }
+    })
+
     notificationPatchStub = Sinon.stub().callsFake(function (updates) {
       Object.assign(notification, updates)
       return this
@@ -54,28 +69,13 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
       recipient: 'new.user@environment-agency.gov.uk'
     }
 
-    checkNotificationStatusStub = Sinon.stub(CheckNotificationStatusService, 'go').resolves()
-
-    createEmailRequestStub = Sinon.stub(CreateEmailRequest, 'send').resolves({
-      succeeded: true,
-      response: {
-        statusCode: 200,
-        body: {
-          id: notifyId,
-          content: {
-            body: verificationEmailPlaintext
-          }
-        }
-      }
-    })
+    notifyUpdatePresenterStub = Sinon.stub(NotifyUpdatePresenter, 'go')
 
     pauseStub = Sinon.stub(GeneralLib, 'pause').resolves()
 
     // We have to set wait for status to 25ms to avoid the tests timing out. By default it would be 5 seconds and is
     // used to give Notify a chance to process the email notifications.
     Sinon.stub(NotifyConfig, 'waitForStatus').value(25)
-
-    notifyUpdatePresenterStub = Sinon.stub(NotifyUpdatePresenter, 'go')
   })
 
   afterEach(() => {
