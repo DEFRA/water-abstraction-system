@@ -6,8 +6,8 @@
  */
 
 const CreatePrecompiledFileRequest = require('../../../../requests/notify/create-precompiled-file.request.js')
-const NotifyErrorPresenter = require('../../../../presenters/notices/setup/notify-error.presenter.js')
-const NotifyUpdatePresenter = require('../../../../presenters/notices/setup/notify-update.presenter.js')
+const NotifyErrorPresenter = require('../../../../presenters/notifications/notify-error.presenter.js')
+const NotifyUpdatePresenter = require('../../../../presenters/notifications/notify-update.presenter.js')
 const PreparePaperReturnService = require('../prepare-paper-return.service.js')
 
 /**

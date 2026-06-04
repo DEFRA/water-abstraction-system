@@ -10,7 +10,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const NotifyUpdatePresenter = require('../../../../app/presenters/notices/setup/notify-update.presenter.js')
+const NotifyUpdatePresenter = require('../../../../app/presenters/notifications/notify-update.presenter.js')
 
 describe('Notices - Setup - Notify Update presenter', () => {
   let notifyResult

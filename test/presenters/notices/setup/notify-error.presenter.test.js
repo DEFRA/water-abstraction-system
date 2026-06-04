@@ -8,7 +8,7 @@ const { describe, it, beforeEach } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Thing under test
-const NotifyErrorPresenter = require('../../../../app/presenters/notices/setup/notify-error.presenter.js')
+const NotifyErrorPresenter = require('../../../../app/presenters/notifications/notify-error.presenter.js')
 
 describe('Notices - Setup - Notify Error presenter', () => {
   let message
