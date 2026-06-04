@@ -36,6 +36,11 @@ async function go(auth, sessionId, yar) {
         `User "${email}" added`,
         'There was a problem sending the new user instructions to complete their account set up.'
       )
+
+      globalThis.GlobalNotifier.omg(
+        'There was a problem sending the new user instructions to complete their account set up.',
+        { email }
+      )
     } else {
       flashNotification(
         yar,
@@ -43,8 +48,10 @@ async function go(auth, sessionId, yar) {
         'We have emailed the new user instructions to complete their account set up.'
       )
     }
-  } catch {
+  } catch (error) {
     flashNotification(yar, `User "${email}" not added`, 'There was a problem adding the user. Please try again.')
+
+    globalThis.GlobalNotifier.omfg(`There was a problem creating internal user ${email}.`, { email, error })
   }
 }
 
