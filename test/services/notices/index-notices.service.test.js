@@ -60,6 +60,7 @@ describe('Notices - Index Notices service', () => {
           statuses: [],
           toDate: null
         },
+        helperText: 'Create a returns invitation, reminder or paper return notice',
         links: {
           adhoc: {
             href: '/system/notices/setup/adhoc',

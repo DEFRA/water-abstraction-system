@@ -29,6 +29,7 @@ describe('Notices - Index Notices presenter', () => {
     const result = IndexNoticesPresenter.go(notices, auth)
 
     expect(result).to.equal({
+      helperText: 'Create a returns invitation, reminder or paper return notice',
       links: {
         adhoc: {
           href: '/system/notices/setup/adhoc',
@@ -133,6 +134,58 @@ describe('Notices - Index Notices presenter', () => {
       ],
       pageSubHeading: 'View a notice',
       pageTitle: 'Notices'
+    })
+  })
+
+  describe('the "helperText" property', () => {
+    describe('when the user has both the "bulk_notifications" and "renewal_notifications" roles', () => {
+      beforeEach(() => {
+        auth.credentials.scope = ['bulk_return_notifications', 'renewal_notifications']
+      })
+
+      it('returns the correct helper text', () => {
+        const result = IndexNoticesPresenter.go(notices, auth)
+
+        expect(result.helperText).to.equal(
+          'Create a renewals invitation, returns invitation, reminder or paper return notice'
+        )
+      })
+    })
+
+    describe('when the user has only the "bulk_notifications" role', () => {
+      beforeEach(() => {
+        auth.credentials.scope = ['bulk_return_notifications']
+      })
+
+      it('returns the correct helper text', () => {
+        const result = IndexNoticesPresenter.go(notices, auth)
+
+        expect(result.helperText).to.equal('Create a returns invitation, reminder or paper return notice')
+      })
+    })
+
+    describe('when the user has only the "renewal_notifications" role', () => {
+      beforeEach(() => {
+        auth.credentials.scope = ['renewal_notifications']
+      })
+
+      it('returns the correct helper text', () => {
+        const result = IndexNoticesPresenter.go(notices, auth)
+
+        expect(result.helperText).to.equal('Create a renewals invitation')
+      })
+    })
+
+    describe('when the user has neither role', () => {
+      beforeEach(() => {
+        auth.credentials.scope = ['returns']
+      })
+
+      it('returns null', () => {
+        const result = IndexNoticesPresenter.go(notices, auth)
+
+        expect(result.helperText).to.be.null()
+      })
     })
   })
 
