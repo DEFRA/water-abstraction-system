@@ -12,7 +12,7 @@ const { expect } = Code
 // Thing under test
 const NotifyUpdatePresenter = require('../../../app/presenters/notifications/notify-update.presenter.js')
 
-describe('Notices - Setup - Notify Update presenter', () => {
+describe('Notifications - Notify Update presenter', () => {
   let notifyResult
 
   beforeEach(() => {
