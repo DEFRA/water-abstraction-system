@@ -6,7 +6,7 @@
  */
 
 const CreateEmailRequest = require('../../../../requests/notify/create-email.request.js')
-const NotifyUpdatePresenter = require('../../../../presenters/notices/setup/notify-update.presenter.js')
+const NotifyUpdatePresenter = require('../../../../presenters/notifications/notify-update.presenter.js')
 
 /**
  * Orchestrates sending an email notification to Notify
