@@ -10,7 +10,6 @@ const { hashSync } = require('bcryptjs')
 const EventModel = require('../../../models/event.model.js')
 const FetchUserDetailsDal = require('./fetch-user-details.dal.js')
 const GroupModel = require('../../../models/group.model.js')
-const InsertNotificationDal = require('./insert-notification.dal.js')
 const RoleModel = require('../../../models/role.model.js')
 const UserModel = require('../../../models/user.model.js')
 const { generateUUID, timestampForPostgres } = require('../../../lib/general.lib.js')
@@ -22,7 +21,7 @@ const { userPermissions } = require('../../../lib/static-lookups.lib.js')
  * @param {object} auth - The current user's authentication details from `request.auth`
  * @param {object} session - The session instance
  *
- * @returns {Promise<object>} The created notification
+ * @returns {Promise<string>} The resetGuid for the new user
  */
 async function go(auth, session) {
   const { email, permission } = session
@@ -47,9 +46,7 @@ async function go(auth, session) {
 
     await _insertEvent(auth, email, trx, userId)
 
-    const notification = await InsertNotificationDal.go(email, resetGuid, trx)
-
-    return notification
+    return resetGuid
   })
 }
 

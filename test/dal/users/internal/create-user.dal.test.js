@@ -14,37 +14,24 @@ const UserGroupModel = require('../../../../app/models/user-group.model.js')
 const UserModel = require('../../../../app/models/user.model.js')
 const UserRoleModel = require('../../../../app/models/user-role.model.js')
 const { generateUserName } = require('../../../support/helpers/user.helper.js')
-const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchUserDetailsDal = require('../../../../app/dal/users/internal/fetch-user-details.dal.js')
-const InsertNotificationDal = require('../../../../app/dal/users/internal/insert-notification.dal.js')
 
 // Thing under test
 const CreateUserDal = require('../../../../app/dal/users/internal/create-user.dal.js')
 
-describe('Users - Internal - Create User DAL', () => {
+describe.only('Users - Internal - Create User DAL', () => {
   let auth
-  let notification
   let session
 
   beforeEach(() => {
     const email = generateUserName()
 
     auth = { credentials: { user: { id: 1 } } }
-    notification = {
-      id: generateUUID(),
-      messageRef: 'new_internal_user_email',
-      messageType: 'email',
-      personalisation: {
-        unique_create_password_link: `https://internal.com/reset_password_change_password?resetGuid=${generateUUID()}`
-      },
-      recipient: email
-    }
     session = { email, permission: 'basic' }
 
     Sinon.stub(FetchUserDetailsDal, 'go').resolves({ username: 'internal-user-creator@wrls.gov.uk' })
-    Sinon.stub(InsertNotificationDal, 'go').resolves(notification)
   })
 
   afterEach(async () => {
@@ -90,18 +77,12 @@ describe('Users - Internal - Create User DAL', () => {
       expect(event.updatedAt).to.be.instanceof(Date)
     })
 
-    it('creates a notification', async () => {
-      await CreateUserDal.go(auth, session)
-
-      const user = await UserModel.query().where('username', session.email).limit(1).first()
-
-      expect(InsertNotificationDal.go.calledWith(session.email, user.resetGuid)).to.be.true()
-    })
-
-    it('returns the notification record', async () => {
+    it('returns the the new users resetGuid', async () => {
       const result = await CreateUserDal.go(auth, session)
 
-      expect(result).to.equal(notification)
+      const { resetGuid } = await UserModel.query().where('username', session.email).limit(1).first()
+
+      expect(result).to.equal(resetGuid)
     })
 
     describe('and the permission has no groups or roles', () => {
