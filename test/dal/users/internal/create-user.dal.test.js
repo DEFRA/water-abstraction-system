@@ -14,6 +14,7 @@ const UserGroupModel = require('../../../../app/models/user-group.model.js')
 const UserModel = require('../../../../app/models/user.model.js')
 const UserRoleModel = require('../../../../app/models/user-role.model.js')
 const { generateUserName } = require('../../../support/helpers/user.helper.js')
+const { generateUUID } = require('../../../../app/lib/general.lib.js')
 
 // Things we need to stub
 const FetchUserDetailsDal = require('../../../../app/dal/users/internal/fetch-user-details.dal.js')
@@ -23,24 +24,25 @@ const InsertNotificationDal = require('../../../../app/dal/users/internal/insert
 const CreateUserDal = require('../../../../app/dal/users/internal/create-user.dal.js')
 
 describe('Users - Internal - Create User DAL', () => {
-  const notification = {
-    id: '06a30477-fbdc-4e62-8f1a-1b6f9b83a454',
-    messageRef: 'new_internal_user_email',
-    messageType: 'email',
-    personalisation: {
-      unique_create_password_link:
-        'https://internal.com/reset_password_change_password?resetGuid=4695078b-1f09-4cb9-80ab-15528d2718d4'
-    },
-    recipient: generateUserName()
-  }
-
   let auth
+  let notification
   let notificationStub
   let session
 
   beforeEach(() => {
+    const email = generateUserName()
+
     auth = { credentials: { user: { id: 1 } } }
-    session = { email: generateUserName(), permission: 'basic' }
+    notification = {
+      id: generateUUID(),
+      messageRef: 'new_internal_user_email',
+      messageType: 'email',
+      personalisation: {
+        unique_create_password_link: `https://internal.com/reset_password_change_password?resetGuid=${generateUUID()}`
+      },
+      recipient: email
+    }
+    session = { email, permission: 'basic' }
 
     Sinon.stub(FetchUserDetailsDal, 'go').resolves({ username: 'internal-user-creator@wrls.gov.uk' })
 
@@ -50,12 +52,10 @@ describe('Users - Internal - Create User DAL', () => {
   afterEach(async () => {
     const user = await UserModel.query().where('username', session.email).limit(1).first()
 
-    if (user) {
-      await EventModel.query().delete().where({ issuer: 'internal-user-creator@wrls.gov.uk' })
-      await UserGroupModel.query().delete().where({ userId: user.userId })
-      await UserRoleModel.query().delete().where({ userId: user.userId })
-      await user.$query().delete()
-    }
+    await EventModel.query().delete().where({ issuer: 'internal-user-creator@wrls.gov.uk' })
+    await UserGroupModel.query().delete().where({ userId: user.userId })
+    await UserRoleModel.query().delete().where({ userId: user.userId })
+    await user.$query().delete()
 
     Sinon.restore()
   })
