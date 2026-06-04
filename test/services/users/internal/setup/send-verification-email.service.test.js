@@ -129,12 +129,6 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
         status: 'pending'
       })
     })
-
-    it('returns the pending status', async () => {
-      const result = await SendVerificationEmailService.go(notification)
-
-      expect(result).to.equal('pending')
-    })
   })
 
   describe('when the email send to Notify fails', () => {
@@ -171,12 +165,6 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
 
       expect(pauseStub.called).to.be.false()
       expect(checkNotificationStatusStub.called).to.be.false()
-    })
-
-    it('returns the error status', async () => {
-      const result = await SendVerificationEmailService.go(notification)
-
-      expect(result).to.equal('error')
     })
   })
 })

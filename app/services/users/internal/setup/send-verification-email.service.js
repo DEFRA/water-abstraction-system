@@ -32,8 +32,6 @@ async function go(notification) {
 
     await CheckNotificationStatusService.go(notification)
   }
-
-  return notificationStatus
 }
 
 async function _createEmailRequest(notification) {
