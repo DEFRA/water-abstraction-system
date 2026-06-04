@@ -24,7 +24,6 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
   before(async () => {
     scenarios = {}
 
-    let additionalContactRecipient
     let licenceHolder
     let licenceHolderRecipient
 
@@ -34,8 +33,10 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     // 2) Licence holder, and an additional contact
     licenceHolder = await _licenceHolder()
     licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licenceHolder.licence, licenceHolder.licenceHolder)
-    additionalContactRecipient = await _additionalContactRecipient(licenceHolder.licence)
-    scenarios.licenceHolderWithAdditionalContact = { licenceHolderRecipient, additionalContactRecipient }
+    scenarios.licenceHolderWithAdditionalContact = {
+      licenceHolderRecipient,
+      ...(await RecipientScenariosSeeder.additionalContactRecipient(licenceHolder.licence))
+    }
 
     // 3) Primary user only. All licences have a licence holder record, but when 'registered' the query will only
     // return the primary user recipient.
@@ -47,17 +48,18 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licenceHolder.licence, licenceHolder.licenceHolder)
     const primaryUser = await _primaryUser(licenceHolder.licence)
     const primaryUserRecipient = await RecipientsFormatter.primaryUser(licenceHolder.licence, primaryUser.primaryUser)
-    additionalContactRecipient = await _additionalContactRecipient(licenceHolder.licence)
     scenarios.primaryUserWithAdditionalContact = {
       licenceHolderRecipient,
       primaryUserRecipient,
-      additionalContactRecipient
+      ...(await RecipientScenariosSeeder.additionalContactRecipient(licenceHolder.licence))
     }
 
     // 5) Additional contact multiple licence refs
     licenceHolder = await _licenceHolder()
     licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licenceHolder.licence, licenceHolder.licenceHolder)
-    additionalContactRecipient = await _additionalContactRecipient(licenceHolder.licence)
+    const { additionalContactRecipient } = await RecipientScenariosSeeder.additionalContactRecipient(
+      licenceHolder.licence
+    )
 
     // Second licence
     const licenceHolderTwo = await _licenceHolder()
@@ -65,7 +67,8 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
       licenceHolderTwo.licence,
       licenceHolderTwo.licenceHolder
     )
-    const additionalContactRecipientTwo = await _additionalContactRecipient(licenceHolderTwo.licence)
+    const { additionalContactRecipient: additionalContactRecipientTwo } =
+      await RecipientScenariosSeeder.additionalContactRecipient(licenceHolderTwo.licence)
     scenarios.additionalContactMultipleLicences = {
       licenceHolderRecipient,
       licenceHolderRecipientTwo,
@@ -77,7 +80,8 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     // appear in results.
     licenceHolder = await _licenceHolder()
     licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licenceHolder.licence, licenceHolder.licenceHolder)
-    const additionalContactNoAlerts = await _additionalContactRecipient(licenceHolder.licence, false)
+    const { additionalContactRecipient: additionalContactNoAlerts } =
+      await RecipientScenariosSeeder.additionalContactRecipient(licenceHolder.licence, false)
     scenarios.additionalContactNoAlerts = { licenceHolderRecipient, additionalContactNoAlerts }
 
     // 7) Different licence holders and different additional contacts for different licences. Unlike scenario 5 where
@@ -88,18 +92,20 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
       firstLicenceHolder.licence,
       firstLicenceHolder.licenceHolder
     )
-    const firstAdditionalContact = await _additionalContactRecipient(firstLicenceHolder.licence)
+    const { additionalContactRecipient: firstAdditionalContact } =
+      await RecipientScenariosSeeder.additionalContactRecipient(firstLicenceHolder.licence)
 
     const secondLicenceHolder = await _licenceHolder('HolderWithUniqueContactB')
     const secondLicenceHolderRecipient = await RecipientsFormatter.licenceHolder(
       secondLicenceHolder.licence,
       secondLicenceHolder.licenceHolder
     )
-    const secondAdditionalContact = await _additionalContactRecipient(secondLicenceHolder.licence, true, {
-      firstName: 'Champ',
-      lastName: 'Kind',
-      email: 'champ.kind@news.com'
-    })
+    const { additionalContactRecipient: secondAdditionalContact } =
+      await RecipientScenariosSeeder.additionalContactRecipient(secondLicenceHolder.licence, true, {
+        firstName: 'Champ',
+        lastName: 'Kind',
+        email: 'champ.kind@news.com'
+      })
 
     scenarios.differentHoldersAndContacts = {
       firstLicenceHolderRecipient,
@@ -115,18 +121,20 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
       licenceHolderWithAlert.licence,
       licenceHolderWithAlert.licenceHolder
     )
-    const additionalContactWithAlert = await _additionalContactRecipient(licenceHolderWithAlert.licence)
+    const { additionalContactRecipient: additionalContactWithAlert } =
+      await RecipientScenariosSeeder.additionalContactRecipient(licenceHolderWithAlert.licence)
 
     const licenceHolderWithoutAlert = await _licenceHolder('HolderWithMixedAlertsB')
     const licenceHolderRecipientWithoutAlert = await RecipientsFormatter.licenceHolder(
       licenceHolderWithoutAlert.licence,
       licenceHolderWithoutAlert.licenceHolder
     )
-    const additionalContactWithoutAlert = await _additionalContactRecipient(licenceHolderWithoutAlert.licence, false, {
-      firstName: 'Champ',
-      lastName: 'Kind',
-      email: 'champ.kind@news.com'
-    })
+    const { additionalContactRecipient: additionalContactWithoutAlert } =
+      await RecipientScenariosSeeder.additionalContactRecipient(licenceHolderWithoutAlert.licence, false, {
+        firstName: 'Champ',
+        lastName: 'Kind',
+        email: 'champ.kind@news.com'
+      })
 
     scenarios.mixedAlerts = {
       licenceHolderRecipientWithAlert,
@@ -139,12 +147,13 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     // appear in results.
     licenceHolder = await _licenceHolder()
     licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licenceHolder.licence, licenceHolder.licenceHolder)
-    const expiredAdditionalContact = await _additionalContactRecipient(
-      licenceHolder.licence,
-      true,
-      null,
-      new Date('2023-01-01')
-    )
+    const { additionalContactRecipient: expiredAdditionalContact } =
+      await RecipientScenariosSeeder.additionalContactRecipient(
+        licenceHolder.licence,
+        true,
+        null,
+        new Date('2023-01-01')
+      )
     scenarios.expiredAdditionalContact = { licenceHolderRecipient, expiredAdditionalContact }
   })
 
@@ -332,12 +341,6 @@ describe('Notices - Setup - Abstraction Alerts - Generate Abstraction Alert Reci
     })
   })
 })
-
-async function _additionalContactRecipient(licence, abstractionAlerts = true, contactData = null, endDate = null) {
-  const additionalContact = await CRMContactsSeeder.additionalContact(licence, contactData, abstractionAlerts, endDate)
-
-  return RecipientsFormatter.additionalContact(licence, additionalContact)
-}
 
 async function _licenceHolder(name = 'Holderwithadditionalcontact') {
   const licence = await EmptyLicence.seed()

@@ -17,9 +17,10 @@ const { db } = require('../../../../../db/db.js')
  */
 async function go(session) {
   const { licenceRefs } = session
-  const GenerateAbstractionAlertRecipientsQuery = GenerateAbstractionAlertRecipientsQueryDal.go()
 
-  const { rows } = await db.raw(GenerateAbstractionAlertRecipientsQuery, [licenceRefs, licenceRefs, licenceRefs])
+  const query = GenerateAbstractionAlertRecipientsQueryDal.go()
+
+  const { rows } = await db.raw(query, [licenceRefs, licenceRefs, licenceRefs])
 
   return rows
 }
