@@ -21,11 +21,28 @@ function go(notices, auth) {
   } = auth
 
   return {
+    helperText: _helperText(scope),
     links: _links(scope),
     notices: _noticeRowData(notices),
     pageSubHeading: 'View a notice',
     pageTitle: 'Notices'
   }
+}
+
+function _helperText(scope) {
+  if (scope.includes('bulk_return_notifications') && scope.includes('renewal_notifications')) {
+    return 'Create a renewals invitation, returns invitation, reminder or paper return notice'
+  }
+
+  if (scope.includes('bulk_return_notifications')) {
+    return 'Create a returns invitation, reminder or paper return notice'
+  }
+
+  if (scope.includes('renewal_notifications')) {
+    return 'Create a renewals invitation'
+  }
+
+  return null
 }
 
 function _links(scope) {
