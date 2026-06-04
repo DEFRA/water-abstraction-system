@@ -12,6 +12,7 @@ const { expect } = Code
 const CheckNotificationStatusService = require('../../../../../app/services/notifications/check-notification-status.service.js')
 const CreateEmailRequest = require('../../../../../app/requests/notify/create-email.request.js')
 const GeneralLib = require('../../../../../app/lib/general.lib.js')
+const GlobalNotifierStub = require('../../../../support/stubs/global-notifier.stub.js')
 const NotifyConfig = require('../../../../../config/notify.config.js')
 const NotifyUpdatePresenter = require('../../../../../app/presenters/notifications/notify-update.presenter.js')
 
@@ -32,6 +33,7 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
   let createEmailRequestStub
   let notification
   let notificationPatchStub
+  let notifierStub
   let notifyUpdatePresenterStub
   let pauseStub
 
@@ -76,6 +78,12 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
     // We have to set wait for status to 25ms to avoid the tests timing out. By default it would be 5 seconds and is
     // used to give Notify a chance to process the email notifications.
     Sinon.stub(NotifyConfig, 'waitForStatus').value(25)
+
+    // The service depends on GlobalNotifier to have been set. This happens in app/plugins/global-notifier.plugin.js
+    // when the app starts up and the plugin is registered. As we're not creating an instance of Hapi server in this
+    // test we recreate the condition by setting it directly with our own stub
+    notifierStub = GlobalNotifierStub.build(Sinon)
+    globalThis.GlobalNotifier = notifierStub
   })
 
   afterEach(() => {
@@ -165,6 +173,22 @@ describe('Users - Internal - Setup - Send Verification Email service', () => {
 
       expect(pauseStub.called).to.be.false()
       expect(checkNotificationStatusStub.called).to.be.false()
+    })
+  })
+
+  describe('when there is an error', () => {
+    beforeEach(() => {
+      checkNotificationStatusStub.rejects()
+    })
+
+    it('handles the error', async () => {
+      await SendVerificationEmailService.go(notification)
+
+      const args = notifierStub.omfg.firstCall.args
+
+      expect(args[0]).to.equal('Failed when trying to send internal user verification email')
+      expect(args[1]).to.equal({ notification })
+      expect(args[2]).to.be.an.error()
     })
   })
 })

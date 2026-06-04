@@ -23,14 +23,22 @@ const { NOTIFY_TEMPLATES } = require('../../../../lib/notify-templates.lib.js')
  * @returns {string} the status of the notification'
  */
 async function go(notification) {
-  const notificationStatus = await _sendEmail(notification)
+  try {
+    const notificationStatus = await _sendEmail(notification)
 
-  if (notificationStatus !== 'error') {
-    // If we rush to check the status too quickly, Notify will respond with a result for emails that is 'still sending'.
-    // The default wait is 5 seconds, which we have found is more than enough time.
-    await pause(notifyConfig.waitForStatus)
+    if (notificationStatus !== 'error') {
+      // If we rush to check the status too quickly, Notify will respond with a result for emails that is 'still sending'.
+      // The default wait is 5 seconds, which we have found is more than enough time.
+      await pause(notifyConfig.waitForStatus)
 
-    await CheckNotificationStatusService.go(notification)
+      await CheckNotificationStatusService.go(notification)
+    }
+  } catch (error) {
+    globalThis.GlobalNotifier.omfg(
+      'Failed when trying to send internal user verification email',
+      { notification },
+      error
+    )
   }
 }
 
