@@ -21,7 +21,7 @@ const FetchUserDetailsDal = require('../../../../app/dal/users/internal/fetch-us
 // Thing under test
 const CreateUserDal = require('../../../../app/dal/users/internal/create-user.dal.js')
 
-describe.only('Users - Internal - Create User DAL', () => {
+describe('Users - Internal - Create User DAL', () => {
   let auth
   let session
 
