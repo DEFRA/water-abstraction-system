@@ -55,7 +55,7 @@ describe('Notices - Recipient Queries DAL', () => {
     })
 
     describe('when called', () => {
-      it('additionalContactRecipientQuery is a valid SQL string', () => {
+      it('returns the expected query', () => {
         const query = RecipientQueriesDal.additionalContactRecipientQuery
 
         expect(query).to.startWith(`
@@ -123,7 +123,7 @@ describe('Notices - Recipient Queries DAL', () => {
     })
 
     describe('when called', () => {
-      it('licenceHolderRecipientQuery is a valid SQL string', () => {
+      it('returns the expected query', () => {
         const query = RecipientQueriesDal.licenceHolderRecipientQuery
 
         expect(query).to.startWith(`
@@ -164,7 +164,7 @@ describe('Notices - Recipient Queries DAL', () => {
     })
 
     describe('when called', () => {
-      it('primaryUserRecipientQuery is a valid SQL string', () => {
+      it('returns the expected query', () => {
         const query = RecipientQueriesDal.primaryUserRecipientQuery
 
         expect(query).to.startWith(`
