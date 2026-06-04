@@ -1,11 +1,10 @@
 'use strict'
 
-/**
- * Generates the SQL query for abstraction alert recipients
- * @module GenerateAbstractionAlertRecipientsQueryDal
- */
-
-const { licenceHolderRecipientQuery, primaryUserRecipientQuery } = require('../../recipient-queries.dal.js')
+const {
+  additionalContactRecipientQuery,
+  licenceHolderRecipientQuery,
+  primaryUserRecipientQuery
+} = require('../../recipient-queries.dal.js')
 
 /**
  * Generates the SQL query for abstraction alert recipients
@@ -39,26 +38,10 @@ const { licenceHolderRecipientQuery, primaryUserRecipientQuery } = require('../.
  * simply hash the email address. For letter contacts, we concatenate the key fields from the `companies` and
  * `addresses` tables, convert them to lowercase, and then generate an `md5()` result from it.
  *
- * @param {string[]} licenceRefs - The licence refs to fetch recipients for
- *
- * @returns {object} The query and bindings for all abstraction alert recipients
  */
-function go(licenceRefs) {
-  const bindings = [licenceRefs, licenceRefs, licenceRefs]
-
-  return {
-    bindings,
-    query: _query()
-  }
-}
-
-function _query() {
-  const additionalContactsQuery = _additionalContactsQuery()
-  const licenceHolderQuery = _licenceHolderQuery()
-
-  return `
+const abstractionAlertRecipientsQuery = `
   WITH additional_contacts AS (
-    ${additionalContactsQuery}
+    ${additionalContactRecipientQuery}
   ),
 
   primary_users AS (
@@ -73,7 +56,11 @@ function _query() {
   ),
 
   licence_holders as (
-    ${licenceHolderQuery}
+    ${licenceHolderRecipientQuery}
+    LEFT JOIN registered_licences rl
+      ON rl.licence_ref = l.licence_ref
+    WHERE rl.licence_ref IS NULL
+      AND l.licence_ref = ANY (?)
   ),
 
   primary_or_licence_holder AS (
@@ -142,49 +129,7 @@ function _query() {
   ORDER BY
     licence_refs::text;
 `
-}
-
-function _additionalContactsQuery() {
-  return `
-    SELECT
-      DISTINCT
-      ld.licence_ref,
-      'additional contact' AS contact_type,
-      con.email,
-      NULL::jsonb AS contact,
-      md5(LOWER(con.email)) AS contact_hash_id,
-      ('Email') as message_type
-    FROM
-      public.licence_documents ld
-        INNER JOIN public.licence_document_roles ldr
-          ON ldr.licence_document_id = ld.id
-        INNER JOIN public.company_contacts cct
-          ON cct.company_id = ldr.company_id
-        INNER JOIN public.contacts con
-          ON con.id = cct.contact_id
-        INNER JOIN public.licence_roles lr
-          ON lr.id = cct.licence_role_id
-    WHERE
-      ld.licence_ref = ANY (?)
-      AND (
-      ldr.end_date IS NULL
-        OR ldr.end_date >= CURRENT_DATE
-      )
-      AND cct.abstraction_alerts = true
-      AND cct.deleted_at IS NULL
-  `
-}
-
-function _licenceHolderQuery() {
-  return `
-    ${licenceHolderRecipientQuery}
-    LEFT JOIN registered_licences rl
-      ON rl.licence_ref = l.licence_ref
-    WHERE rl.licence_ref IS NULL
-      AND l.licence_ref = ANY (?)
-  `
-}
 
 module.exports = {
-  go
+  abstractionAlertRecipientsQuery
 }
