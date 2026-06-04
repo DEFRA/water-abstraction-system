@@ -11,6 +11,37 @@ const LicenceVersionHelper = require('../helpers/licence-version.helper.js')
 const { compareStrings } = require('../../../app/lib/general.lib.js')
 
 /**
+ * Seeds an additional contact recipient for an existing licence
+ *
+ * @param {object} licence - The licence seed data
+ * @param {boolean} [abstractionAlerts] - Whether the contact has abstraction alerts enabled
+ * @param {object|null} [contactData] - Optional contact data overrides
+ * @param {Date|null} [endDate] - Optional end date for the licence document role
+ * @param {Date|null} [deletedAt] - Optional soft-delete date for the company contact
+ *
+ * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
+ */
+async function additionalContactRecipient(
+  licence,
+  abstractionAlerts = true,
+  contactData = null,
+  endDate = null,
+  deletedAt = null
+) {
+  const additionalContact = await CRMContactsSeeder.additionalContact(
+    licence,
+    contactData,
+    abstractionAlerts,
+    endDate,
+    deletedAt
+  )
+
+  const additionalContactRecipient = await RecipientsFormatter.additionalContact(licence, additionalContact)
+
+  return { additionalContactRecipient }
+}
+
+/**
  * Cleans up records created by the recipient scenarios
  *
  * It checks each 'scenario' for known records, and using its knowledge of 'scenarios' deletes the data created
@@ -471,6 +502,7 @@ function _aggregatedData(returnLogs) {
 }
 
 module.exports = {
+  additionalContactRecipient,
   clean,
   licenceHolderOnly,
   licenceHolderWithDifferentReturnsTo,

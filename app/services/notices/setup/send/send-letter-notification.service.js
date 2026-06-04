@@ -6,7 +6,7 @@
  */
 
 const CreateLetterRequest = require('../../../../requests/notify/create-letter.request.js')
-const NotifyUpdatePresenter = require('../../../../presenters/notices/setup/notify-update.presenter.js')
+const NotifyUpdatePresenter = require('../../../../presenters/notifications/notify-update.presenter.js')
 
 /**
  * Orchestrates sending a letter notification to Notify

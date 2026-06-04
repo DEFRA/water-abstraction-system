@@ -13,7 +13,7 @@ const RecipientScenariosSeeder = require('../../../../support/seeders/recipient-
 // Thing under test
 const FetchAbstractionAlertRecipientsDal = require('../../../../../app/dal/notices/setup/abstraction-alerts/fetch-abstraction-alert-recipients.dal.js')
 
-describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipients DAl', () => {
+describe('Notices - Setup - Abstraction Alerts - Fetch Abstraction Alert Recipients DAL', () => {
   let scenarios
   let session
 
