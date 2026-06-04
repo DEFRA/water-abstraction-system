@@ -10,7 +10,7 @@ const { expect } = Code
 // Thing under test
 const NotifyErrorPresenter = require('../../../app/presenters/notifications/notify-error.presenter.js')
 
-describe('Notices - Setup - Notify Error presenter', () => {
+describe('Notifications - Notify Error presenter', () => {
   let message
   let errors
   let statusCode
