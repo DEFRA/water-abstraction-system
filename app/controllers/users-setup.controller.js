@@ -86,7 +86,7 @@ async function submitInternalCheck(request, h) {
     yar
   } = request
 
-  await SubmitInternalCheckService.go(sessionId, yar)
+  await SubmitInternalCheckService.go(auth, sessionId, yar)
 
   return h.redirect('/system/users')
 }
