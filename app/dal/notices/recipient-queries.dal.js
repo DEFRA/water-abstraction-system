@@ -1,5 +1,22 @@
 'use strict'
 
+const currentLicenceVersionsQuery = `
+  SELECT DISTINCT ON (lv.licence_id)
+    lv.licence_id,
+    lv.company_id,
+    lv.address_id,
+    lv.end_date
+  FROM
+    public.licence_versions lv
+  WHERE
+    lv.start_date <= CURRENT_DATE
+  ORDER BY
+    lv.licence_id ASC,
+    lv."issue" DESC,
+    lv."increment" DESC,
+    lv.end_date DESC NULLS FIRST
+`
+
 /**
  * SQL query fragment for fetching additional contact recipient
  *
@@ -8,30 +25,34 @@
 const additionalContactRecipientQuery = `
     SELECT
       DISTINCT
-      ld.licence_ref,
+      l.licence_ref,
       'additional contact' AS contact_type,
       con.email,
       NULL::jsonb AS contact,
       md5(LOWER(con.email)) AS contact_hash_id,
       ('Email') as message_type
     FROM
-      public.licence_documents ld
-        INNER JOIN public.licence_document_roles ldr
-          ON ldr.licence_document_id = ld.id
+      public.licences l
+        INNER JOIN (
+       ${currentLicenceVersionsQuery}
+      ) AS llv ON llv.licence_id = l.id
+        INNER JOIN public.companies c ON c.id = llv.company_id
         INNER JOIN public.company_contacts cct
-          ON cct.company_id = ldr.company_id
+          ON cct.company_id = llv.company_id
         INNER JOIN public.contacts con
           ON con.id = cct.contact_id
-        INNER JOIN public.licence_roles lr
-          ON lr.id = cct.licence_role_id
     WHERE
-      ld.licence_ref = ANY (?)
+      l.licence_ref = ANY (?)
       AND (
-      ldr.end_date IS NULL
-        OR ldr.end_date >= CURRENT_DATE
+      llv.end_date IS NULL
+        OR llv.end_date >= CURRENT_DATE
       )
       AND cct.abstraction_alerts = true
       AND cct.deleted_at IS NULL
+      AND (
+      cct.licences IS NULL
+        OR cct.licences @> jsonb_build_array(l.id::text)
+      )
   `
 
 /**
@@ -70,19 +91,7 @@ const licenceHolderRecipientQuery = `
     FROM
       public.licences l
     INNER JOIN (
-      SELECT DISTINCT ON (lv.licence_id)
-        lv.licence_id,
-        lv.company_id,
-        lv.address_id
-      FROM
-        public.licence_versions lv
-      WHERE
-        lv.start_date <= CURRENT_DATE
-      ORDER BY
-        lv.licence_id ASC,
-        lv."issue" DESC,
-        lv."increment" DESC,
-        lv.end_date DESC NULLS FIRST
+      ${currentLicenceVersionsQuery}
     ) AS llv ON llv.licence_id = l.id
     INNER JOIN public.companies c ON c.id = llv.company_id
     INNER JOIN public.addresses a ON a.id = llv.address_id

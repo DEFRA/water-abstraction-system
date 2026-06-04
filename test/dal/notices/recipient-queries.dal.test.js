@@ -8,7 +8,6 @@ const { describe, it, before, after } = (exports.lab = Lab.script())
 const { expect } = Code
 
 // Test helpers
-const EmptyLicence = require('../../support/seeders/empty-licence.seeder.js')
 const RecipientScenariosSeeder = require('../../support/seeders/recipient-scenarios.seeder.js')
 const { db } = require('../../../db/db.js')
 
@@ -17,36 +16,50 @@ const RecipientQueriesDal = require('../../../app/dal/notices/recipient-queries.
 
 describe('Notices - Recipient Queries DAL', () => {
   describe('#additionalContactRecipientQuery', () => {
+    const query = RecipientQueriesDal.additionalContactRecipientQuery
+
     let scenarios
 
     before(async () => {
       scenarios = {}
 
       // 1) Additional contact present
-      let licence = await EmptyLicence.seed()
-      scenarios.withAdditionalContact = await RecipientScenariosSeeder.additionalContactRecipient(licence)
+      scenarios.withAdditionalContact = await RecipientScenariosSeeder.additionalContactRecipient()
 
       // 2) Additional contact where abstractionAlerts = false. The contact should NOT appear in results.
-      licence = await EmptyLicence.seed()
-      scenarios.additionalContactNoAlerts = await RecipientScenariosSeeder.additionalContactRecipient(licence, false)
+      scenarios.additionalContactNoAlerts = await RecipientScenariosSeeder.additionalContactRecipient(false)
 
       // 3) Additional contact where the end date has passed. The expired contact should NOT appear in results.
-      licence = await EmptyLicence.seed()
       scenarios.expiredAdditionalContact = await RecipientScenariosSeeder.additionalContactRecipient(
-        licence,
         true,
         null,
         new Date('2023-01-01')
       )
 
       // 4) Additional contact where the contact has been soft-deleted. The contact should NOT appear in results.
-      licence = await EmptyLicence.seed()
       scenarios.deletedAdditionalContact = await RecipientScenariosSeeder.additionalContactRecipient(
-        licence,
         true,
         null,
         null,
         new Date('2023-01-01')
+      )
+
+      // 5) Additional contact where there are licences
+      scenarios.additionalContactWithMatchingLicences = await RecipientScenariosSeeder.additionalContactRecipient(
+        true,
+        null,
+        null,
+        null,
+        true
+      )
+
+      // 6) Additional contact where there are bad licences
+      scenarios.additionalContactWithNoMatchingLicences = await RecipientScenariosSeeder.additionalContactRecipient(
+        true,
+        null,
+        null,
+        null,
+        false
       )
     })
 
@@ -65,9 +78,7 @@ describe('Notices - Recipient Queries DAL', () => {
 
     describe('when executed', () => {
       it('(Scenario 1) returns the additional contact when it is present', async () => {
-        const licenceRefs = scenarios.withAdditionalContact.additionalContactRecipient.licenceRefs
-
-        const query = RecipientQueriesDal.additionalContactRecipientQuery
+        const licenceRefs = scenarios.withAdditionalContact.licenceHolderRecipient.licenceRefs
 
         const { rows } = await db.raw(query, [licenceRefs])
 
@@ -79,17 +90,13 @@ describe('Notices - Recipient Queries DAL', () => {
       it('(Scenario 2) does not return the additional contact when abstractionAlerts is false', async () => {
         const licenceRefs = scenarios.additionalContactNoAlerts.additionalContactRecipient.licenceRefs
 
-        const query = RecipientQueriesDal.additionalContactRecipientQuery
-
         const { rows } = await db.raw(query, [licenceRefs])
 
         expect(rows).to.equal([])
       })
 
       it('(Scenario 3) does not return the additional contact when the end date has passed', async () => {
-        const licenceRefs = scenarios.expiredAdditionalContact.additionalContactRecipient.licenceRefs
-
-        const query = RecipientQueriesDal.additionalContactRecipientQuery
+        const licenceRefs = scenarios.expiredAdditionalContact.licenceHolderRecipient.licenceRefs
 
         const { rows } = await db.raw(query, [licenceRefs])
 
@@ -97,9 +104,27 @@ describe('Notices - Recipient Queries DAL', () => {
       })
 
       it('(Scenario 4) does not return the additional contact when the contact has been soft-deleted', async () => {
-        const licenceRefs = scenarios.deletedAdditionalContact.additionalContactRecipient.licenceRefs
+        const licenceRefs = scenarios.deletedAdditionalContact.licenceHolderRecipient.licenceRefs
 
-        const query = RecipientQueriesDal.additionalContactRecipientQuery
+        const { rows } = await db.raw(query, [licenceRefs])
+
+        expect(rows).to.equal([])
+      })
+
+      it('(Scenario 5)', async () => {
+        const licenceRefs = scenarios.additionalContactWithMatchingLicences.licenceHolderRecipient.licenceRefs
+
+        const { rows } = await db.raw(query, [licenceRefs])
+
+        const expectedResult = _transformToRecipient(
+          scenarios.additionalContactWithMatchingLicences.additionalContactRecipient
+        )
+
+        expect(rows).to.equal([expectedResult])
+      })
+
+      it('(Scenario 6) ', async () => {
+        const licenceRefs = scenarios.additionalContactWithNoMatchingLicences.licenceHolderRecipient.licenceRefs
 
         const { rows } = await db.raw(query, [licenceRefs])
 

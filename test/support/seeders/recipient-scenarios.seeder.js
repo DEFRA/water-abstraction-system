@@ -18,27 +18,35 @@ const { compareStrings } = require('../../../app/lib/general.lib.js')
  * @param {object|null} [contactData] - Optional contact data overrides
  * @param {Date|null} [endDate] - Optional end date for the licence document role
  * @param {Date|null} [deletedAt] - Optional soft-delete date for the company contact
+ * @param {object|null} [licences] - Optional licences for the company contact
  *
  * @returns {Promise<object>} An object representing the recipient and its properties for easier testing
  */
 async function additionalContactRecipient(
-  licence,
   abstractionAlerts = true,
   contactData = null,
   endDate = null,
-  deletedAt = null
+  deletedAt = null,
+  licences = null
 ) {
+  const licence = await EmptyLicence.seed()
+  const licenceHolder = await CRMContactsSeeder.licenceHolder(licence, 'Primaryonlyholder', null, endDate)
+
+  const licenceHolderRecipient = await RecipientsFormatter.licenceHolder(licence, licenceHolder)
+
   const additionalContact = await CRMContactsSeeder.additionalContact(
     licence,
+    licenceHolder,
     contactData,
     abstractionAlerts,
     endDate,
-    deletedAt
+    deletedAt,
+    licences
   )
 
   const additionalContactRecipient = await RecipientsFormatter.additionalContact(licence, additionalContact)
 
-  return { additionalContactRecipient }
+  return { licenceHolderRecipient, additionalContactRecipient }
 }
 
 /**
