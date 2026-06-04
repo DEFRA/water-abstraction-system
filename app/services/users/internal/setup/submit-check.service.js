@@ -25,33 +25,14 @@ async function go(auth, sessionId, yar) {
 
   await DeleteSessionDal.go(sessionId)
 
+  const notification = await CreateUserDal.go(auth, session)
+
+  flashNotification(yar, 'User added', `We have emailed ${email} instructions to complete their account set up.`)
+
   try {
-    const notification = await CreateUserDal.go(auth, session)
-
-    const notificationStatus = await SendVerificationEmailService.go(notification)
-
-    if (notificationStatus === 'error') {
-      flashNotification(
-        yar,
-        `User "${email}" added`,
-        'There was a problem sending the new user instructions to complete their account set up.'
-      )
-
-      globalThis.GlobalNotifier.omg(
-        'There was a problem sending the new user instructions to complete their account set up.',
-        { email }
-      )
-    } else {
-      flashNotification(
-        yar,
-        `User "${email}" added`,
-        'We have emailed the new user instructions to complete their account set up.'
-      )
-    }
+    SendVerificationEmailService.go(notification)
   } catch (error) {
-    flashNotification(yar, `User "${email}" not added`, 'There was a problem adding the user. Please try again.')
-
-    globalThis.GlobalNotifier.omfg(`There was a problem creating internal user ${email}.`, { email, error })
+    globalThis.GlobalNotifier.omfg('Failed to send internal user verification email', { email }, error)
   }
 }
 
