@@ -20,12 +20,13 @@ const FetchRenewalLicenceDal = require('../../../../../app/dal/notices/setup/fet
 const ProcessRenewalsNoticeLicenceSubmission = require('../../../../../app/services/notices/setup/renewal-notice/process-licence-submission.service.js')
 
 describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Submission', () => {
+  let clock
+  let fetchRenewalLicenceDalStub
   let licenceExpiryDate
   let licenceRef
+  let licenceRenewal
   let payload
   let renewalDate
-  let fetchRenewalLicenceDalStub
-  let licenceRenewal
 
   beforeEach(() => {
     licenceExpiryDate = new Date('2026-09-01')
@@ -41,10 +42,13 @@ describe('Notices - Setup - Renewal Notice - Process Renewals Notice Licence Sub
       revokedDate: null
     })
 
+    clock = Sinon.useFakeTimers(new Date('2026-05-21'))
+
     fetchRenewalLicenceDalStub = Sinon.stub(FetchRenewalLicenceDal, 'go').resolves(licenceRenewal)
   })
 
   afterEach(() => {
+    clock.restore()
     Sinon.restore()
   })
 
