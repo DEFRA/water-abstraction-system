@@ -9,6 +9,7 @@
 const CreateUserDal = require('../../../../dal/users/internal/create-user.dal.js')
 const DeleteSessionDal = require('../../../../dal/delete-session.dal.js')
 const FetchSessionDal = require('../../../../dal/fetch-session.dal.js')
+const InsertNotificationDal = require('../../../../dal/users/internal/insert-notification.dal.js')
 const SendVerificationEmailService = require('./send-verification-email.service.js')
 const { flashNotification } = require('../../../../lib/general.lib.js')
 
@@ -25,15 +26,13 @@ async function go(auth, sessionId, yar) {
 
   await DeleteSessionDal.go(sessionId)
 
-  const notification = await CreateUserDal.go(auth, session)
+  const resetGuid = await CreateUserDal.go(auth, session)
+
+  const notification = await InsertNotificationDal.go(email, resetGuid)
 
   flashNotification(yar, 'User added', `We have emailed ${email} instructions to complete their account set up.`)
 
-  try {
-    SendVerificationEmailService.go(notification)
-  } catch (error) {
-    globalThis.GlobalNotifier.omfg('Failed to send internal user verification email', { email }, error)
-  }
+  SendVerificationEmailService.go(notification)
 }
 
 module.exports = {
